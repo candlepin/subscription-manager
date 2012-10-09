@@ -79,7 +79,6 @@ class _CertFactory(object):
             redhat_oid = OID(REDHAT_OID_NAMESPACE)
             # Trim down to only the extensions in the Red Hat namespace:
             extensions = extensions.ltrim(len(redhat_oid))
-
             # Check the certificate version, absence of the extension implies v1.0:
             cert_version_str = "1.0"
             if EXT_CERT_VERSION in extensions:
@@ -101,7 +100,7 @@ class _CertFactory(object):
         cert_type = self._get_v1_cert_type(extensions)
 
         if cert_type == IDENTITY_CERT:
-            return self._create_identity_cert(extensions, x509, path)
+            return self._create_identity_cert(version, extensions, x509, path)
         elif cert_type == ENTITLEMENT_CERT:
             return self._create_v1_ent_cert(version, extensions, x509, path)
         elif cert_type == PRODUCT_CERT:
@@ -113,10 +112,11 @@ class _CertFactory(object):
     def _read_subject(self, x509):
         return x509.get_subject()
 
-    def _create_identity_cert(self, extensions, x509, path):
+    def _create_identity_cert(self, version, extensions, x509, path):
         cert = IdentityCertificate(
                 x509=x509,
                 path=path,
+                version=version,
                 serial=x509.get_serial_number(),
                 start=get_datetime_from_x509(x509.get_not_before()),
                 end=get_datetime_from_x509(x509.get_not_after()),

@@ -154,6 +154,10 @@ class IdentityCertTests(unittest.TestCase):
         self.assertEquals("eaadd6ea-852d-4430-94a7-73d5887d48e8", id_cert.subject['CN'])
         self.assertFalse(hasattr(id_cert, 'products'))
 
+    def test_default_version(self):
+        id_cert = create_from_pem(certdata.IDENTITY_CERT)
+        self.assertTrue(isinstance(id_cert, IdentityCertificate))
+        self.assertEquals('1.0', str(id_cert.version))
 
 class ContentTests(unittest.TestCase):
 
