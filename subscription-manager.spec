@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.21
+Version: 1.0.22
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -351,6 +351,37 @@ fi
 %endif
 
 %changelog
+* Tue Oct 09 2012 Alex Wood <awood@redhat.com> 1.0.22-1
+- 863961: Expect id cert Version to be populated in tests (alikins@redhat.com)
+- latest strings and latest fixups of strings from zanata (alikins@redhat.com)
+- 863565: Give focus to the login field during subscription registration.
+  (awood@redhat.com)
+- 838123: remove python2.5ism (alikins@redhat.com)
+- 838123: Omit mac addresses from facts for lot and sit ipaddress types
+  (bkearney@redhat.com)
+- 852630: Suscription manager unsubscribe --all shows error on expired
+  subscriptions (wpoteat@redhat.com)
+- latest strings from zanata (alikins@redhat.com)
+- Use a previously translated string as a prompt since we are past string
+  freeze. (awood@redhat.com)
+- 863428: Add environment support to the migration script. (awood@redhat.com)
+- 855257: fix issues with default contract quantity being wrong
+  (alikins@redhat.com)
+- 862099: Fix several dialog closing issues. (dgoodwin@redhat.com)
+- Updated client handling of imported data. (wpoteat@redhat.com)
+- Add to nosetest to ensure that Cert V3 check for validity passes.
+  (wpoteat@redhat.com)
+- 860344: Subscription-manager import --certificate fails to recognize a new
+  version 3.0 certificate (wpoteat@redhat.com)
+- 861151: make stylish cleanup (alikins@redhat.com)
+- Add test cases for content variant being a sub match of product
+  (alikins@redhat.com)
+- 861151: release should not list for incompatible variants
+  (alikins@redhat.com)
+- 861443: Re-raise GoneException in rhsmcertd-worker (mstead@redhat.com)
+- 854312: Do not install a certificate that has expired. (mstead@redhat.com)
+- 852911: Add padding around firstboot tooltips icon. (dgoodwin@redhat.com)
+
 * Tue Oct 02 2012 Alex Wood <awood@redhat.com> 1.0.21-1
 - 853006: Wrap label in the manually subscribe firstboot screen.
   (dgoodwin@redhat.com)
