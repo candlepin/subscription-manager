@@ -694,6 +694,10 @@ class CredentialsScreen(Screen):
             return False
         return True
 
+    def pre(self):
+        self.account_login.grab_focus()
+        return False
+
     def apply(self):
         self._username = self.account_login.get_text().strip()
         self._password = self.account_password.get_text().strip()
