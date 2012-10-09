@@ -125,6 +125,8 @@ class HardwareProbeTests(unittest.TestCase):
         hw = hwprobe.Hardware()
         net_int = hw.getNetworkInterfaces()
         self.assertEquals(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
+        self.assertFalse('net.interface.lo.mac_address' in net_int)
+        self.assertFalse('net.interface.sit0.mac_address' in net_int)
 
 # FIXME: not real useful as non-root, plus noisy
 #    def test_platform_specific_info(self):

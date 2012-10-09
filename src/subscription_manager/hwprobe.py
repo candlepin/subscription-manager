@@ -289,31 +289,38 @@ class Hardware:
             for info in ethtool.get_interfaces_info(ethtool.get_devices()):
                 for addr in info.get_ipv6_addresses():
                     for mkey in ipv6_metakeys:
-                        # ethtool returns a different scope for "public" IPv6 addresses
-                        # on different versions of RHEL.  EL5 is "global", while EL6 is
-                        # "universe".  Make them consistent.
-                        scope = addr.scope
-                        if scope == 'universe':
-                            scope = 'global'
+                        #Omit mac addresses for sit types. See BZ838123
+                        if not ((info.device.startswith("sit") or info.device == "lo") and \
+                                mkey == 'mac_address'):
+                            # ethtool returns a different scope for "public" IPv6 addresses
+                            # on different versions of RHEL.  EL5 is "global", while EL6 is
+                            # "universe".  Make them consistent.
+                            scope = addr.scope
+                            if scope == 'universe':
+                                scope = 'global'
 
-                        key = '.'.join(['net.interface', info.device, 'ipv6_%s' % (mkey), scope])
-                        attr = getattr(addr, mkey)
-                        if attr:
-                            netinfdict[key] = attr
-                        else:
-                            netinfdict[key] = "Unknown"
+                            key = '.'.join(['net.interface', info.device, 'ipv6_%s' % (mkey), scope])
+                            attr = getattr(addr, mkey)
+                            if attr:
+                                netinfdict[key] = attr
+                            else:
+                                netinfdict[key] = "Unknown"
 
                 # XXX: The kernel supports multiple IPv4 addresses on a single
                 # interface when using iproute2.  However, the ethtool.etherinfo.ipv4_*
                 # members will only return the last retrieved IPv4 configuration.  As
                 # of 25 Jan 2012 work on a patch was in progress.  See BZ 759150.
                 for mkey in metakeys:
-                    key = '.'.join(['net.interface', info.device, mkey])
-                    attr = getattr(info, mkey)
-                    if attr:
-                        netinfdict[key] = attr
-                    else:
-                        netinfdict[key] = "Unknown"
+                    # Omit Loopback mac address
+
+                    if not ((info.device.startswith("sit") or info.device == 'lo') and \
+                            mkey == 'mac_address'):
+                        key = '.'.join(['net.interface', info.device, mkey])
+                        attr = getattr(info, mkey)
+                        if attr:
+                            netinfdict[key] = attr
+                        else:
+                            netinfdict[key] = "Unknown"
         except:
             print _("Error reading network interface information:"), sys.exc_type
         self.allhw.update(netinfdict)
