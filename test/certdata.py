@@ -445,7 +445,7 @@ IDENTITY_CERT_OUTPUT = """
 
 Certificate:
 	Path: 
-	Version: 
+	Version: 1.0
 	Serial: 5412106042110780569
 	Start Date: 2012-07-10 12:21:27+00:00
 	End Date: 2028-07-10 12:21:27+00:00
