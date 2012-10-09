@@ -336,7 +336,7 @@ class Restlib(object):
         else:
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
 
-        if info:
+        if info is not None:
             body = json.dumps(info)
         else:
             body = None
