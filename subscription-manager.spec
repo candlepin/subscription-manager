@@ -26,7 +26,7 @@ Requires:  python-ethtool
 Requires:  python-simplejson
 Requires:  python-iniparse
 Requires:  pygobject2
-Requires:  PyXML
+Requires:  python-dateutil
 Requires:  virt-what
 Requires:  python-rhsm >= 1.1.1
 Requires:  dbus-python
