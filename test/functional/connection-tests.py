@@ -16,6 +16,7 @@
 import unittest
 
 from rhsm.connection import ContentConnection, UEPConnection
+import json
 
 
 class ConnectionTests(unittest.TestCase):
@@ -44,6 +45,7 @@ class ConnectionTests(unittest.TestCase):
     def tearDown(self):
         self.cp.unregisterConsumer(self.consumer_uuid)
 
+
 class ContentConnectionTests(unittest.TestCase):
 
 #    def setUp(self):
@@ -52,3 +54,16 @@ class ContentConnectionTests(unittest.TestCase):
     def testInsecure(self):
         ContentConnection(host="127.0.0.1", insecure=True)
 
+
+class HypervisorCheckinTests(unittest.TestCase):
+
+    def setUp(self):
+        self.cp = UEPConnection(username="admin", password="admin",
+                insecure=True)
+
+    def test_hypervisor_checkin_can_pass_empty_map_and_updates_nothing(self):
+        response = self.cp.hypervisorCheckIn("admin", "", {})
+
+        self.assertEqual(len(response['failedUpdate']), 0)
+        self.assertEqual(len(response['updated']), 0)
+        self.assertEqual(len(response['created']), 0)
