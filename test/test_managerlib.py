@@ -28,8 +28,6 @@ from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
 from rhsm.certificate import create_from_pem, DateRange
-from mock import Mock
-import xml
 
 cfg = rhsm.config.initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
@@ -660,7 +658,27 @@ class TestParseDate(unittest.TestCase):
     def test_server_date_est_timezone(self):
         est_date = "2012-04-10T00:00:00.000-04:00"
         dt = parseDate(est_date)
-        self.assertEquals(timedelta(hours=4), dt.tzinfo.utcoffset(dt))
+        self.assertEquals(timedelta(hours=-4), dt.tzinfo.utcoffset(dt))
+
+    # verify that we can handle dates past 2038
+    # datetime and dateutil modules seem okay with this
+    # even on 32bit platforms
+    def test_2038_bug(self):
+        parsed = parseDate("9999-09-06T00:00:00.000+0000")
+
+        # Simulated a 32-bit date overflow, date should have been
+        # replaced by one that does not overflow:
+        self.assertEquals(9999, parsed.year)
+        self.assertEquals(9, parsed.month)
+        self.assertEquals(6, parsed.day)
+
+    def test_10000_bug(self):
+        # dateutil is okay up to 9999, so we just return
+        # 9999-9-6 after that since that's what datetime/dateutil do
+        parsed = parseDate("10000-09-06T00:00:00.000+0000")
+        self.assertEquals(9999, parsed.year)
+        self.assertEquals(9, parsed.month)
+        self.assertEquals(6, parsed.day)
 
 
 # http://docs.python.org/library/datetime.html
@@ -1002,23 +1020,6 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
             }
             prod_attrs.append(stacking_id_attribute)
         return create_pool(product_id, product_name, productAttributes=prod_attrs)
-
-
-class ParseDateTests(unittest.TestCase):
-
-    def test_2038_bug(self):
-        # About to monkey patch, store a reference to function so we can
-        # restore it.
-        function = xml.utils.iso8601.parse
-        xml.utils.iso8601.parse = Mock(side_effect=OverflowError())
-        parsed = parseDate("9999-09-06T00:00:00.000+0000")
-        xml.utils.iso8601.parse = function
-
-        # Simulated a 32-bit date overflow, date should have been
-        # replaced by one that does not overflow:
-        self.assertEquals(2038, parsed.year)
-        self.assertEquals(1, parsed.month)
-        self.assertEquals(1, parsed.day)
 
 
 class MergedPoolsTests(unittest.TestCase):

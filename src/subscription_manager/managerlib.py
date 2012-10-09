@@ -20,7 +20,7 @@ import stat
 import shutil
 import syslog
 import time
-import xml.utils.iso8601
+import dateutil.parser
 import logging
 import datetime
 from os import linesep as NEW_LINE
@@ -736,32 +736,11 @@ def _sub_dict(datadict, subkeys, default=None):
 
 
 def parseDate(date):
-    # so this get's a little ugly. We want to know the
-    # tz/utc offset of the time, so we can make the datetime
-    # object be not "naive". In theory, we will always get
-    # these timestamps in UTC, but if we can figure it out,
-    # might as well
-    matches = xml.utils.iso8601.__datetime_rx.match(date)
-
-    # parse out the timezone offset
-    offset = xml.utils.iso8601.__extract_tzd(matches)
-
-    # create a new tzinfo using that offset
-    server_tz = ServerTz(offset)
-
-    # create a new datetime this time using the timezone
-    # so we aren't "naive"
     try:
-        posix_time = xml.utils.iso8601.parse(date)
-    except OverflowError:
-        # Handle dates above 2038 on 32-bit systems by swapping it out with
-        # 2038-01-01. (which should be ok) Such a system is quite clearly
-        # in big trouble come that date, we just want to make sure they
-        # can still list such subscription now.
-        log.warning("Date overflow: %s, using Jan 1 2038 instead." % date)
-        posix_time = OVERFLOW_DATE
-
-    dt = datetime.datetime.fromtimestamp(posix_time, tz=server_tz)
+        dt = dateutil.parser.parse(date)
+    except ValueError:
+        log.warning("Date overflow: %s, using 9999-09-06 instead." % date)
+        return dateutil.parser.parse("9999-09-06T00:00:00.000+0000")
     return dt
 
 
