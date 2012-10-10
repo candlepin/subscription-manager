@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.2
+Version: 1.1.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -345,6 +345,65 @@ fi
 %endif
 
 %changelog
+* Wed Oct 10 2012 Adrian Likins <alikins@redhat.com> 1.1.3-1
+- 863961: Expect id cert Version to be populated in tests (alikins@redhat.com)
+- 863565: Give focus to the login field during subscription registration.
+  (awood@redhat.com)
+- 838123: remove python2.5ism (alikins@redhat.com)
+- 844072: remove use and dep of PyXML (alikins@redhat.com)
+- 838123: Omit mac addresses from facts for lot and sit ipaddress types
+  (bkearney@redhat.com)
+- 856236: Do not allow environmenets to be specified during registration if an
+  activation key is used (bkearney@redhat.com)
+- 858289: Rename the desktop file to subscription-manager-gui.deskstop
+  (bkearney@redhat.com)
+- 808217: Add a text banner to the output of release --list
+  (bkearney@redhat.com)
+- 863428: Add environment support to the migration script. (awood@redhat.com)
+- 862099: Fix several dialog closing issues. (dgoodwin@redhat.com)
+- 854374: Removed extra spacing around help, and improved he rct text output a
+  bit. (bkearney@redhat.com)
+- 853572: Fix a typoin the help messages (bkearney@redhat.com)
+- 859090: Remove the word technology from the branding string
+  (bkearney@redhat.com)
+- 862308: Subscription Manager version reports registered to value when system
+  not registered (wpoteat@redhat.com)
+- 861443: Re-raise GoneException in rhsmcertd-worker (mstead@redhat.com)
+- 861151: make stylish cleanup (alikins@redhat.com)
+- 852911: Add padding around firstboot tooltips icon. (dgoodwin@redhat.com)
+- 854312: Do not install a certificate that has expired. (mstead@redhat.com)
+- Make rhsm-icon work on gnome 3 (jbowes@redhat.com)
+- 853885: Fix icon notification popup only displaying once.
+  (dgoodwin@redhat.com)
+- 853006: Wrap label in the manually subscribe firstboot screen.
+  (dgoodwin@redhat.com)
+- 861151: release should not list for incompatible variants
+  (alikins@redhat.com)
+- 861170: re.escape() values provided to the apply_hightlight() function.
+  (awood@redhat.com)
+- 852630: Suscription manager unsubscribe --all shows error on expired
+  subscriptions (wpoteat@redhat.com)
+- Freeze obsoletes version for -gnome to -gui rename (jbowes@redhat.com)
+- 860084: remove unused _x from ja_JP translation (alikins@redhat.com)
+- 860088: remove trailing dot from url in de_DE.po (alikins@redhat.com)
+- Don't reparse entitlement certs on every search filter change
+  (jbowes@redhat.com)
+- 855257: fix issues with default contract quantity being wrong
+  (alikins@redhat.com)
+- 860088: some translations were splitting urls into two lines
+  (alikins@redhat.com)
+- Add to nosetest to ensure that Cert V3 check for validity passes.
+  (wpoteat@redhat.com)
+- 860344: Subscription-manager import --certificate fails to recognize a new
+  version 3.0 certificate (wpoteat@redhat.com)
+- New icon set. (awood@redhat.com)
+- 853035: Fix firstboot "back" issues. (dgoodwin@redhat.com)
+- Check the full version info of the yum api in productid (alikins@redhat.com)
+- 847319: Left align manually subscribe firstboot message (jbowes@redhat.com)
+- 860030: make server_version_check use a non authenticated call
+  (alikins@redhat.com)
+- 847387: Display tooltip for info icon in RHEL 5.9. (awood@redhat.com)
+
 * Mon Sep 24 2012 Adrian Likins <alikins@redhat.com> 1.1.2-1
 - 829825: Adding tests. (awood@redhat.com)
 - 853876: No need to check for GoneException when getting status
