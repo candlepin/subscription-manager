@@ -376,6 +376,15 @@ find-missing-widgets:
 	while read line; do grep -F "$$line" $$DEFINED_WIDGETS > /dev/null ; STAT="$$?"; if [ "$$STAT" -ne "0" ] ; then echo "$$line"; fi;  done < $$USED_WIDGETS | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
+# find any signals defined in glade and make sure we use them somewhere
+# this would be better if we could statically extract the used signals from
+# the code.
+find-missing-signals:
+	@TMPFILE=`mktemp` || exit 1; \
+	DEFINED_SIGNALS=`mktemp` ||exit 1; \
+	perl -n -e "if (/<signal name=\"(.*?)\" handler=\"(.*?)\"/) { print(\"\$$2\n\")}" $(GLADEFILES) > $$DEFINED_SIGNALS; \
+	while read line; do grep -F  "$$line" $(PYFILES) > /dev/null; STAT="$$?"; if [ "$$STAT" -ne "0" ] ; then echo "$$line"; fi;  done < $$DEFINED_SIGNALS | tee $$TMPFILE; \
+	! test -s $$TMPFILE
 # try to clean up the "swapped=no" signal thing in
 # glade files, since rhel6 hates it
 # also remove unneeded 'orientation' property for vbox's
@@ -420,7 +429,7 @@ versionlint:
 	! test -s $$TMPFILE
 
 
-stylish: versionlint polint gladelint find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
+stylish: versionlint polint gladelint find-missing-widgets find-missing-signals pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins
 
