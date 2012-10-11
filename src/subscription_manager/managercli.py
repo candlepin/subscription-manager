@@ -1821,9 +1821,9 @@ class ListCommand(CliCommand):
                 product_name = self._format_name(data['productName'], 24, 80)
 
                 if PoolWrapper(data).is_virt_only():
-                    machine_type = machine_type = _("virtual")
+                    machine_type = machine_type = _("Virtual")
                 else:
-                    machine_type = _("physical")
+                    machine_type = _("Physical")
 
                 print self._none_wrap(AVAILABLE_SUBS_LIST, product_name,
                         data['productId'],
