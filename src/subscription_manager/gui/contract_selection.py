@@ -127,7 +127,7 @@ class ContractSelectionWindow(object):
         # Use unlimited for -1 quanities
         quantity = pool['quantity']
         if quantity < 0:
-            quantity = _('unlimited')
+            quantity = _('Unlimited')
             quantity_available = -1
         else:
             quantity_available = int(pool['quantity']) - int(pool['consumed'])

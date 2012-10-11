@@ -340,7 +340,7 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, get_all=False, acti
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         if int(d['quantity']) < 0:
-            d['quantity'] = 'unlimited'
+            d['quantity'] = _('Unlimited')
         else:
             d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
 
