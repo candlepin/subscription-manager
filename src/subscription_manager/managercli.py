@@ -1383,7 +1383,12 @@ class UnSubscribeCommand(CliCommand):
                     if total is None:
                         print _("This machine has been unsubscribed from all subscriptions.")
                     else:
-                        print _("This machine has been unsubscribed from %s subscriptions" % total['deletedRecords'])
+                        count = total['deletedRecords']
+                        if count == 1:
+                            print _("This machine has been unsubscribed from 1 subscription.")
+                        else:
+                            print _("This machine has been unsubscribed from %s subscriptions." \
+                                % total['deletedRecords'])
                 else:
                     self.cp.unbindBySerial(consumer, self.options.serial)
                     print _("This machine has been unsubscribed from subscription with serial number %s" % (self.options.serial))
