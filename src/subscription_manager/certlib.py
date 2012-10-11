@@ -458,7 +458,11 @@ class UpdateReport:
             for c in certificates:
                 products = c.products
                 if not products:
-                    product = c.order
+                    s.append('%s[sn:%d (%s) @ %s]' % \
+                        (indent,
+                         c.serial,
+                         c.order.name,
+                         c.path))
                 for product in products:
                     s.append('%s[sn:%d (%s,) @ %s]' % \
                         (indent,
