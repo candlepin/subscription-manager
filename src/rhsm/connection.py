@@ -27,6 +27,7 @@ from M2Crypto import SSL, httpslib
 from urllib import urlencode
 
 from config import initConfig
+from version import Versions
 
 # on EL5, there is a really long socket timeout. The
 # best thing we can do is set a process wide default socket timeout.
@@ -274,8 +275,18 @@ class Restlib(object):
         self.ssl_port = ssl_port
         self.apihandler = apihandler
         lc = _get_locale()
+        #collect some version data
+        v = Versions()
+        smVersion = ("%s-%s") % \
+            (v.get_version("subscription-manager"), v.get_release("subscription-manager"))
+        prVersion = ("%s-%s") % \
+            (v.get_version("python-rhsm"), v.get_release("python-rhsm"))
+
         self.headers = {"Content-type": "application/json",
-                        "Accept": "application/json"}
+                        "Accept": "application/json",
+                        "x-python-rhsm-version": prVersion,
+                        "x-subscription-manager-version": smVersion}
+
         if lc:
             self.headers["Accept-Language"] = lc.lower().replace('_', '-')
 

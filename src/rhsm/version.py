@@ -38,13 +38,16 @@ class Versions(object):
 
         # We only want to initialize this data once.
         if not self.__initialized:
-            self._version_info = {}
             self.__initialized = True
+            self._collect_data()
 
-            for package_def in self._get_packages():
-                name = package_def['name']
-                if name in self.__to_collect:
-                    self._version_info[name] = package_def
+    def _collect_data(self):
+        self._version_info = {}
+
+        for package_def in self._get_packages():
+            name = package_def['name']
+            if name in self.__to_collect:
+                self._version_info[name] = package_def
 
     def _get_packages(self):
         profile = RPMProfile()
