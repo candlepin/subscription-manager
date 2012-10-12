@@ -216,7 +216,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             for entry in group.entitlements:
                 quantity_available = 0
                 if entry.quantity < 0:
-                    available = _('unlimited')
+                    available = _('Unlimited')
                     quantity_available = -1
                 else:
                     available = entry.quantity - entry.consumed
