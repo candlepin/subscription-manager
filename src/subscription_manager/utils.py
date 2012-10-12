@@ -17,6 +17,7 @@ import re
 import logging
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
+from subscription_manager.branding import get_branding
 from urlparse import urlparse
 import os
 import signal
@@ -306,10 +307,10 @@ def get_client_versions():
 
 
 def get_server_versions(cp):
-    cp_version = _("Unable to reach server")
+    cp_version = _("Unknown")
     server_type = _("Unknown")
     if cp:
-        server_type = _("subscription management service")
+        server_type = get_branding().REGISTERED_TO_SUBSCRIPTION_MANAGEMENT_SUMMARY
         try:
             if cp.supports_resource("status"):
                 status = cp.getStatus()
@@ -331,8 +332,10 @@ def get_server_versions(cp):
     # this isn't particularly important, so log any exceptions and carry on
     try:
         if ClassicCheck().is_registered_with_classic():
-            server_type = _("RHN Classic")
-            cp_version = _("Unknown")
+            if server_type == _("Unknown"):
+                server_type = _("RHN Classic")
+            else:
+                server_type = get_branding().REGISTERED_TO_BOTH_SUMMARY
     except Exception, e:
         log.debug("Server Versions: Unable to check RHN Classic version")
         log.exception(e)
