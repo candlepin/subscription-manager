@@ -70,7 +70,7 @@ class GladeWidget(object):
 
 
 class SubscriptionManagerTab(GladeWidget):
-    widget_names = ['top_view', 'content', 'next_update_label']
+    widget_names = ['top_view', 'content', 'next_checkin_label']
     # approx gtk version we need for grid lines to work
     # and not throw errors, this relates to basically rhel6
     MIN_GTK_MAJOR_GRID = 2
@@ -103,7 +103,7 @@ class SubscriptionManagerTab(GladeWidget):
         def on_cert_update(filemonitor):
             self._set_next_update()
 
-        # For updating the 'Next Update' time
+        # For updating the 'Next Check-in' time
         file_monitor.Monitor(UPDATE_FILE).connect('changed', on_cert_update)
 
     def get_store(self):
@@ -197,11 +197,11 @@ class SubscriptionManagerTab(GladeWidget):
 
         if next_update:
             update_time = datetime.datetime.fromtimestamp(next_update)
-            self.next_update_label.set_text(_('Next Update: %s') %
+            self.next_checkin_label.set_text(_('Next System Check-in: %s') %
                                             update_time.strftime("%c"))
-            self.next_update_label.show()
+            self.next_checkin_label.show()
         else:
-            self.next_update_label.hide()
+            self.next_checkin_label.hide()
 
     def refresh(self):
         self._set_next_update()
