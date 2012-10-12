@@ -196,8 +196,8 @@ class StubProductCertificate(ProductCertificate):
 class StubEntitlementCertificate(EntitlementCertificate):
 
     def __init__(self, product, provided_products=None, start_date=None, end_date=None,
-            content=None, quantity=1, stacking_id=None, sockets=2,
-            service_level=None):
+            content=None, quantity=1, stacking_id=None, sockets=2, service_level=None,
+            ram=None):
 
         products = []
         if product:
@@ -218,7 +218,8 @@ class StubEntitlementCertificate(EntitlementCertificate):
             name = product.name
         order = Order(name=name, number="592837", sku=sku,
                     stacking_id=stacking_id, socket_limit=sockets,
-                    service_level=service_level, quantity_used=quantity)
+                    service_level=service_level, quantity_used=quantity,
+                    ram_limit=ram)
 
         if content is None:
             content = []

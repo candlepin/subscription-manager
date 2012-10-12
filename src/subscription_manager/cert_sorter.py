@@ -29,6 +29,7 @@ EXPIRED = "expired"
 PARTIALLY_SUBSCRIBED = "partially_subscribed"
 
 SOCKET_FACT = 'cpu.cpu_socket(s)'
+RAM_FACT = 'memory.memtotal'
 
 
 class CertSorter(object):
@@ -101,7 +102,15 @@ class CertSorter(object):
         if SOCKET_FACT in self.facts_dict:
             self.socket_count = safe_int(self.facts_dict[SOCKET_FACT], 1)
         else:
-            log.warn("System has no socket fact, assuming 1.")
+            log.warn("System has no %s fact, assuming 1.", SOCKET_FACT)
+
+        # Amount of RAM on this system - default is 1GB
+        self.total_ram = 1
+        if RAM_FACT in self.facts_dict:
+            self.total_ram = self._convert_system_ram_to_gb(
+                                safe_int(self.facts_dict[RAM_FACT], self.total_ram))
+        else:
+            log.warn("System has no %s fact, assuming 1GB" % RAM_FACT)
 
         log.debug("Sorting product and entitlement cert status for: %s" %
                 on_date)
@@ -117,6 +126,16 @@ class CertSorter(object):
         log.debug("future products: %s" % self.future_products.keys())
         log.debug("partial stacks: %s" % self.partial_stacks.keys())
         log.debug("valid stacks: %s" % self.valid_stacks.keys())
+
+    def _convert_system_ram_to_gb(self, system_ram):
+        """
+        Convert system ram from kilobyes to Gigabytes.
+
+        System RAM will be rounded to the nearest full
+        GB value (i.e 1.3 GB == 1 GB). This is so that
+        we can deal with a common base.
+        """
+        return int(round(system_ram / 1024.0 / 1024.0))
 
     def is_valid(self):
         """
@@ -223,6 +242,8 @@ class CertSorter(object):
                 # socket coverage for the system:
                 elif not stack_id and not self.ent_cert_sockets_valid(ent_cert):
                     self._add_products_to_hash(ent_cert, self.partially_valid_products)
+                elif not stack_id and not self._ent_cert_ram_valid(ent_cert):
+                    self._add_products_to_hash(ent_cert, self.partially_valid_products)
                 # Anything else must be valid:
                 else:
                     self._add_products_to_hash(ent_cert, self.valid_products)
@@ -250,6 +271,8 @@ class CertSorter(object):
         Future and expired certs are filtered out before this is called.
         """
         sockets_covered = 0
+        num_ents_covering_ram = 0
+        ram_covered = 0
         log.debug("Checking stack validity: %s" % stack_id)
 
         date_to_check = on_date or self.on_date
@@ -259,14 +282,47 @@ class CertSorter(object):
               ent.valid_range.begin() <= date_to_check and \
               ent.valid_range.end() >= date_to_check:
                 quantity = safe_int(ent.order.quantity_used, 1)
-                sockets = safe_int(ent.order.socket_limit, 1)
-                sockets_covered += sockets * quantity
+
+                sockets = safe_int(ent.order.socket_limit, None)
+                ent_ram = safe_int(ent.order.ram_limit, None)
+
+                # Default the limiting factor to sockets if nothing
+                # is defined.
+                if sockets is not None and ent_ram is not None:
+                    sockets = 1
+
+                # Process sockets
+                if sockets is not None:
+                    sockets_covered += sockets * quantity
+
+                # Process RAM
+                if ent_ram is not None:
+                    # When stacking for RAM, we don't care about the total
+                    # RAM, we only care that > 1 stacked RAM entitlement
+                    # provides 'unlimited' RAM, and the largest ram in the
+                    # stack (usually 1)
+                    num_ents_covering_ram += quantity
+                    ram_covered += ent_ram * quantity
 
         log.debug("  system has %s sockets, %s covered by entitlements" %
                 (self.socket_count, sockets_covered))
-        if sockets_covered >= self.socket_count or sockets_covered == 0:
-            return True
-        return False
+        log.debug("  system has %s entitlements covering system RAM.")
+
+        # Always consider sockets on stacks.
+        covered = sockets_covered >= self.socket_count or sockets_covered == 0
+
+        # Consider RAM if it was specified on the stack.
+        if num_ents_covering_ram > 0:
+            # TODO Requirement is to make the number of stacked RAM entitlements
+            # that define unlimited configurable -- Since code is duplicated
+            # client and serverside, how will this be done.
+            unlimited_ram = num_ents_covering_ram > 1
+            is_ram_covered = unlimited_ram or self.total_ram <= ram_covered
+            covered = covered and is_ram_covered
+#            print "Unlimited RAM?", unlimited_ram
+#            print "RAM Covered?", self.total_ram, ram_covered, is_ram_covered
+
+        return covered
 
     def ent_cert_sockets_valid(self, ent, on_date=None):
         """
@@ -288,6 +344,24 @@ class CertSorter(object):
         if sockets_covered >= self.socket_count or sockets_covered == 0:
             return True
         return False
+
+    def _ent_cert_ram_valid(self, ent_cert):
+        """
+        Determines if the given entitlement covers the amount of RAM for
+        this system.
+
+        If the entitlement has no RAM restriction, then it is considered
+        valid.
+        """
+        if ent_cert.order.ram_limit is None:
+            return True
+
+        entitlement_ram = safe_int(ent_cert.order.ram_limit, 1)
+        log.debug("  system has %s GB of RAM, %d GB covered by entitlement" %
+                (self.total_ram, entitlement_ram))
+
+        covered = self.total_ram <= entitlement_ram
+        return covered
 
     def _add_products_to_hash(self, ent_cert, product_dict):
         """
@@ -338,6 +412,12 @@ class StackingGroupSorter(object):
     def _get_identity_name(self, entitlement):
         raise NotImplementedError(
                 "Subclasses must implement: _get_identity_name")
+
+
+class StackVerifier(object):
+
+    def __init__(self, entitlements):
+        pass
 
 
 class EntitlementGroup(object):
