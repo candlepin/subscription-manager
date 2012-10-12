@@ -1364,7 +1364,6 @@ class UnSubscribeCommand(CliCommand):
         Executes the command.
         """
         self._validate_options()
-        self.certlib.update()
         if ConsumerIdentity.exists():
             consumer = ConsumerIdentity.read().getConsumerId()
             try:

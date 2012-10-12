@@ -291,7 +291,12 @@ class TestCertmgr(unittest.TestCase):
     def test_expired(self, cert_build_mock):
         cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
 
-        self.stub_entdir.expired = True
+        # this makes the stub_entdir report all ents as being expired
+        # so we fetch new ones
+        self.stub_entdir.listExpired = mock.Mock(
+                return_value=self.stub_entdir.list())
+
+        # we don't want to find replacements, so this forces a delete
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
         mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep)
         mgr.update()

@@ -246,11 +246,6 @@ class StubCertificateDirectory(EntitlementDirectory):
         self.list_called = True
         return self.certs
 
-    def listExpired(self):
-        if self.expired:
-            return self.certs
-        return []
-
     def _check_key(self, cert):
         """
         Fake filesystem access here so we don't try to read real keys.
