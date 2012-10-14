@@ -299,7 +299,7 @@ class TestGetServerVersions(unittest.TestCase):
         instance.is_registered_with_classic.return_value = False
         MockUep.supports_resource.return_value = False
         sv = get_server_versions(MockUep)
-        self.assertEquals(sv['server-type'], 'subscription management service')
+        self.assertEquals(sv['server-type'], 'Red Hat Subscription Management')
         self.assertEquals(sv['candlepin'], "Unknown")
 
     @patch('rhsm.connection.UEPConnection')
@@ -310,7 +310,18 @@ class TestGetServerVersions(unittest.TestCase):
         MockUep.supports_resource.return_value = True
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
-        self.assertEquals(sv['server-type'], 'subscription management service')
+        self.assertEquals(sv['server-type'], 'Red Hat Subscription Management')
+        self.assertEquals(sv['candlepin'], '101-23423c')
+
+    @patch('rhsm.connection.UEPConnection')
+    @patch('subscription_manager.utils.ClassicCheck')
+    def test_get_server_versions_cp_with_status_and_classic(self, MockClassicCheck, MockUep):
+        instance = MockClassicCheck.return_value
+        instance.is_registered_with_classic.return_value = True
+        MockUep.supports_resource.return_value = True
+        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
+        sv = get_server_versions(MockUep)
+        self.assertEquals(sv['server-type'], 'RHN Classic and Red Hat Subscription Management')
         self.assertEquals(sv['candlepin'], '101-23423c')
 
     @patch('rhsm.connection.UEPConnection')
@@ -324,6 +335,19 @@ class TestGetServerVersions(unittest.TestCase):
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
         self.assertEquals(sv['server-type'], "Unknown")
+        self.assertEquals(sv['candlepin'], "Unknown")
+
+    @patch('rhsm.connection.UEPConnection')
+    @patch('subscription_manager.utils.ClassicCheck')
+    def test_get_server_versions_cp_exception_and_classic(self, MockClassicCheck, MockUep):
+        def raise_exception(arg):
+            raise Exception("boom")
+        instance = MockClassicCheck.return_value
+        instance.is_registered_with_classic.return_value = True
+        MockUep.supports_resource.side_effect = raise_exception
+        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
+        sv = get_server_versions(MockUep)
+        self.assertEquals(sv['server-type'], "RHN Classic")
         self.assertEquals(sv['candlepin'], "Unknown")
 
 
