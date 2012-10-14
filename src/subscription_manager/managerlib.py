@@ -465,6 +465,9 @@ class PoolStash(object):
         # All pools:
         self.all_pools = {}
 
+    def all_pools_size(self):
+        return len(self.all_pools)
+
     def refresh(self, active_on):
         """
         Refresh the list of pools from the server, active on the given date.

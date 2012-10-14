@@ -197,6 +197,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 subscribed=True,
                 text=self.get_filter_text())
 
+        if self.pool_stash.all_pools_size() == 0:
+            self.sub_details.clear()
+            self.display_message(_("No subscriptions are available on %s.") % \
+                self.date_picker.date.strftime("%Y-%m-%d"))
+            return
+
         if len(merged_pools) == 0:
             self.sub_details.clear()
             self.display_message(_("No subscriptions match current filters."))

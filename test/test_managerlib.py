@@ -23,7 +23,7 @@ from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
         getInstalledProductStatus, LocalTz, parseDate, \
-        MergedPoolsStackingGroupSorter, MergedPools
+        MergedPoolsStackingGroupSorter, MergedPools, PoolStash
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
@@ -1068,3 +1068,10 @@ class MergedPoolsTests(unittest.TestCase):
                 "true")
         self.assertFalse('virt_only' in merged_pools.pools[2]['attributes'])
         self.assertFalse('virt_only' in merged_pools.pools[3]['attributes'])
+
+
+class PoolStashTest(unittest.TestCase):
+
+    def test_empty_stash_zero_length(self):
+        my_stash = PoolStash(None, None, None)
+        self.assertTrue(my_stash.all_pools_size() == 0)
