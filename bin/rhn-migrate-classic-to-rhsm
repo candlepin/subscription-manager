@@ -680,9 +680,7 @@ def main():
     # get a list of RHN classic channels this machine is subscribed to
     print _("\nRetrieving existing RHN Classic subscription information ...")
     subscribedChannels = getSubscribedChannelsList()
-    print "+----------------------------------+"
-    print _("System is currently subscribed to these RHN Classic Channels:")
-    print "+----------------------------------+"
+    print_banner("\n" + _("System is currently subscribed to these RHN Classic Channels:"))
     for channel in subscribedChannels:
         print channel
 
