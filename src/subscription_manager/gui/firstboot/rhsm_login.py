@@ -8,6 +8,11 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 import rhsm
 
 sys.path.append("/usr/share/rhsm")
+
+# enable logging for firstboot
+from subscription_manager import logutil
+logutil.init_logger()
+
 from subscription_manager.gui import managergui
 from subscription_manager import managerlib
 from subscription_manager.gui import registergui
