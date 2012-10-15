@@ -8,6 +8,11 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 import rhsm
 
 sys.path.append("/usr/share/rhsm")
+
+# enable logging for firstboot
+from subscription_manager import logutil
+logutil.init_logger()
+
 from subscription_manager.gui import managergui
 from subscription_manager import managerlib
 from subscription_manager.gui import registergui
@@ -20,6 +25,8 @@ from subscription_manager.utils import remove_scheme
 from subscription_manager.gui.autobind import \
         ServiceLevelNotSupportedException, NoProductsException, \
         AllProductsCoveredException
+
+from rhsm.connection import RestlibException
 
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
@@ -97,6 +104,15 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
                 self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
             else:
                 self._parent.pre_done(registergui.SELECT_SLA_PAGE)
+
+        # If we get errors related to consumer name on register,
+        # go back to the credentials screen where we set the
+        # consumer name. See bz#865954
+        except RestlibException, e:
+            handle_gui_exception(e, registergui.REGISTER_ERROR,
+                self._parent.window)
+            if e.code == 400:
+                self._parent.pre_done(registergui.CREDENTIALS_PAGE)
 
         except Exception, e:
             handle_gui_exception(e, registergui.REGISTER_ERROR,
