@@ -215,11 +215,12 @@ class UpdateAction(Action):
 
     def perform(self):
         report = UpdateReport()
-        local = self.getLocal(report)
-        expected = self.getExpected(report)
-        missing, rogue = self.bashSerials(local, expected, report)
-        self.delete(rogue, report)
-        exceptions = self.install(missing, report)
+        local = self._get_local_serials(report)
+        expected = self._get_expected_serials(report)
+        missing_serials = self._find_missing_serials(local, expected)
+        rogue_serials = self._find_rogue_serials(local, expected)
+        self.delete(rogue_serials, report)
+        exceptions = self.install(missing_serials, report)
         self.purgeExpired(report)
         log.info('certs updated:\n%s', report)
         self.syslogResults(report)
@@ -227,6 +228,23 @@ class UpdateAction(Action):
         # all other sub-classes return an int, which somewhat defeats
         # the purpose...
         return (report.updates(), exceptions)
+
+    def _find_missing_serials(self, local, expected):
+        """ Find serials from the server we do not have locally. """
+        missing = []
+        for sn in expected:
+            if not sn in local:
+                missing.append(sn)
+        return missing
+
+    def _find_rogue_serials(self, local, expected):
+        """ Find serials we have locally but are not on the server. """
+        rogue = []
+        for sn in local:
+            if not sn in expected:
+                cert = local[sn]
+                rogue.append(cert)
+        return rogue
 
     def syslogResults(self, report):
         for cert in report.added:
@@ -248,7 +266,7 @@ class UpdateAction(Action):
                 system_log("Expired subscription for product '%s'" % \
                     (product.name))
 
-    def getLocal(self, report):
+    def _get_local_serials(self, report):
         local = {}
         #certificates in grace period were being renamed everytime.
         #this makes sure we don't try to re-write certificates in
@@ -279,27 +297,19 @@ class UpdateAction(Action):
             results.append(sn)
         return results
 
-    def getExpected(self, report):
+    def _get_expected_serials(self, report):
         exp = self.getCertificateSerialsList()
         report.expected = exp
         return exp
-
-    def bashSerials(self, local, expected, report):
-        missing = []
-        rogue = []
-        for sn in expected:
-            if not sn in local:
-                missing.append(sn)
-        for sn in local:
-            if not sn in expected:
-                cert = local[sn]
-                rogue.append(cert)
-        return (missing, rogue)
 
     def delete(self, rogue, report):
         for cert in rogue:
             cert.delete()
             report.rogue.append(cert)
+        # If we just deleted certs, we need to refresh the now stale
+        # entitlement directory before we go to delete expired certs.
+        if len(report.rogue) > 0:
+            self.entdir.refresh()
 
     def getCertificatesBySerialList(self, snList):
         result = []
