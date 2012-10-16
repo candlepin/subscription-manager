@@ -240,11 +240,12 @@ def getOrg(cp, username):
 
     org = None
     if len(owner_list) == 0:
-        systemExit(1, "%s cannot register to any organizations." % username)
+        systemExit(1, _("%s cannot register to any organizations.") % username)
 
     if len(owner_list) > 1:
         org = raw_input(_("Org: ")).strip()
 
+    #FIXME: Need to check and see if the org the user entered is in owner_list
     return org
 
 
@@ -261,6 +262,8 @@ def getEnvironment(cp, owner_key):
     environment = None
     if len(environment_list) > 1:
         environment = raw_input(_("Environment") + ": ").strip()
+        if environment not in [x['name'] for x in environment_list]:
+            systemExit(1, _("No such environment: %s") % environment)
 
     return environment
 
