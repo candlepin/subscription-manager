@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.22
+Version: 1.0.23
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -351,6 +351,16 @@ fi
 %endif
 
 %changelog
+* Tue Oct 16 2012 Alex Wood <awood@redhat.com> 1.0.23-1
+- 864092: update translations for es_ES (alikins@redhat.com)
+- Enable logging in firstboot (alikins@redhat.com)
+- 865590: Fix broken offline unsubscribe. (dgoodwin@redhat.com)
+- 866579: Fail fast if the user enters a bad environment. (awood@redhat.com)
+- 865954: Return to creds screen if consumer name is invalid
+  (alikins@redhat.com)
+- 852107: Make the banners the same width (bkearney@redhat.com)
+- 865545: Added report log when cert has no products. (mstead@redhat.com)
+
 * Tue Oct 09 2012 Alex Wood <awood@redhat.com> 1.0.22-1
 - 863961: Expect id cert Version to be populated in tests (alikins@redhat.com)
 - latest strings and latest fixups of strings from zanata (alikins@redhat.com)
