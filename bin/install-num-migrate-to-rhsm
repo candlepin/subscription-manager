@@ -142,6 +142,10 @@ def main():
     for dest_file, path in path_dict.items():
         dest_file = os.path.join(PRODUCT_CERT_DIR, dest_file)
         print _("Installing %s to %s") % (path, dest_file)
+        if not os.path.isdir(PRODUCT_CERT_DIR):
+            print _("No such directory: %s") % PRODUCT_CERT_DIR
+            sys.exit(1)
+
         if not options.dryrun:
             try:
                 shutil.copyfile(path, dest_file)
