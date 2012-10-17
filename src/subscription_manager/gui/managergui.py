@@ -67,8 +67,8 @@ key_file = ConsumerIdentity.keypath()
 
 cfg = config.initConfig()
 
-ONLINE_DOC_URL_TEMPLATE = "http://docs.redhat.com/docs/%s/Red_Hat_Enterprise_Linux/"
-
+ONLINE_DOC_URL_TEMPLATE = "https://access.redhat.com/knowledge/docs/Red_Hat_Subscription_Management/?locale=%s"
+ONLINE_DOC_FALLBACK_URL = "https://access.redhat.com/knowledge/docs/Red_Hat_Subscription_Management/"
 
 class Backend(object):
     """
@@ -467,5 +467,5 @@ class MainWindow(widgets.GladeWidget):
             urllib2.urlopen(url)
         except urllib2.URLError:
             # Use the default if there is no translation.
-            url = ONLINE_DOC_URL_TEMPLATE % ("en-US")
+            url = ONLINE_DOC_FALLBACK_URL
         return url
