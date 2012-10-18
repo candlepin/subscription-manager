@@ -722,7 +722,7 @@ class CredentialsScreen(Screen):
         self._parent.password = self._password
         self._parent.consumername = self._consumername
         self._parent.skip_auto_bind = self._skip_auto_bind
-
+        self._parent.activation_keys = None
         self._backend.create_admin_uep(username=self._username,
                                       password=self._password)
 
