@@ -802,6 +802,9 @@ class ActivationKeyScreen(Screen):
         self._parent.owner_key = self._owner_key
         self._parent.consumername = self._consumername
         self._parent.skip_auto_bind = self._skip_auto_bind
+        # Environments aren't used with activation keys so clear any
+        # cached value.
+        self._parent.environment = None
         self._backend.create_admin_uep()
 
 
