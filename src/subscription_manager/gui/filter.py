@@ -16,6 +16,7 @@
 import logging
 import gettext
 import os
+import gtk
 from subscription_manager.gui import widgets
 
 _ = gettext.gettext
@@ -56,6 +57,7 @@ class FilterOptionsWindow(widgets.GladeWidget):
         # connected.  Otherwise, their callbacks will be triggered when we
         # call set_active().
         self.set_initial_widget_state()
+        self.filter_product_window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_MENU)
         self.glade.signal_autoconnect({
             "on_filter_product_window_delete_event": self.deleted,
             "on_clear_button_clicked": self.clear_button_clicked,
