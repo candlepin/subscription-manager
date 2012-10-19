@@ -245,7 +245,9 @@ def getOrg(cp, username):
     if len(owner_list) > 1:
         org = raw_input(_("Org: ")).strip()
 
-    #FIXME: Need to check and see if the org the user entered is in owner_list
+    if org not in [x['key'] for x in owner_list]:
+        systemExit(1, _("No such org: %s") % org)
+
     return org
 
 
