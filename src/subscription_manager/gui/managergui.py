@@ -70,6 +70,7 @@ cfg = config.initConfig()
 ONLINE_DOC_URL_TEMPLATE = "https://access.redhat.com/knowledge/docs/Red_Hat_Subscription_Management/?locale=%s"
 ONLINE_DOC_FALLBACK_URL = "https://access.redhat.com/knowledge/docs/Red_Hat_Subscription_Management/"
 
+
 class Backend(object):
     """
     Wrapper for sharing UEP connections to Candlepin.
