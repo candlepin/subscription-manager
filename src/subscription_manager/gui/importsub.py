@@ -13,6 +13,7 @@
 # in this software or its documentation.
 #
 
+import os
 import gettext
 import logging
 import gtk
@@ -80,28 +81,38 @@ class ImportSubDialog(object):
         invalid_certs = []
         error_certs = []
         good_certs = []
+        non_cert_files = []
 
         for cert_file in src_cert_files:
-            # Check to see if we have a key included in the cert file
-            try:
-                extractor = ImportFileExtractor(cert_file)
+            if not os.path.exists(cert_file):
+                non_cert_files.append(cert_file)
+            else:
+                # Check to see if we have a key included in the cert file
+                try:
+                    extractor = ImportFileExtractor(cert_file)
 
-                #Verify the entitlement data.
-                if not extractor.verify_valid_entitlement():
-                    log.error("Invalid X509 entitlement certificate.")
-                    log.error("Error parsing manually imported entitlement "
-                        "certificate: %s" % cert_file)
-                    invalid_certs.append(cert_file)
-                else:
-                    extractor.write_to_disk()
-                    good_certs.append(cert_file)
-            except Exception, e:
-                # Should not get here unless something really bad happened.
-                log.exception(e)
-                error_certs.append(cert_file)
+                    #Verify the entitlement data.
+                    if not extractor.verify_valid_entitlement():
+                        log.error("Invalid X509 entitlement certificate.")
+                        log.error("Error parsing manually imported entitlement "
+                            "certificate: %s" % cert_file)
+                        invalid_certs.append(cert_file)
+                    else:
+                        extractor.write_to_disk()
+                        good_certs.append(cert_file)
+                except Exception, e:
+                    # Should not get here unless something really bad happened.
+                    log.exception(e)
+                    error_certs.append(cert_file)
 
-        if len(error_certs) > 0 or len(invalid_certs) > 0:
+        if len(error_certs) > 0 \
+            or len(invalid_certs) > 0 \
+            or len(non_cert_files) > 0:
+
             msg = ""
+            if len(non_cert_files) > 0:
+                msg += _("The following certficate files did not exist:")
+                msg += "\n" + "\n".join(non_cert_files)
             if len(invalid_certs) > 0:
                 msg += _("The following files are not valid certificates and were not imported:")
                 msg += "\n" + "\n".join(invalid_certs)
