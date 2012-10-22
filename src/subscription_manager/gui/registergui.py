@@ -15,6 +15,7 @@
 # in this software or its documentation.
 #
 
+import re
 import socket
 import logging
 import threading
@@ -56,13 +57,14 @@ LIBRARY_ENV_NAME = "library"
 DONT_CHANGE = -2
 PROGRESS_PAGE = -1
 CHOOSE_SERVER_PAGE = 0
-CREDENTIALS_PAGE = 1
-OWNER_SELECT_PAGE = 2
-ENVIRONMENT_SELECT_PAGE = 3
-PERFORM_REGISTER_PAGE = 4
-SELECT_SLA_PAGE = 5
-CONFIRM_SUBS_PAGE = 6
-PERFORM_SUBSCRIBE_PAGE = 7
+ACTIVATION_KEY_PAGE = 1
+CREDENTIALS_PAGE = 2
+OWNER_SELECT_PAGE = 3
+ENVIRONMENT_SELECT_PAGE = 4
+PERFORM_REGISTER_PAGE = 5
+SELECT_SLA_PAGE = 6
+CONFIRM_SUBS_PAGE = 7
+PERFORM_SUBSCRIBE_PAGE = 8
 FINISH = 100
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
@@ -103,10 +105,11 @@ class RegisterScreen(widgets.GladeWidget):
         self.window = self.register_dialog
         self.register_dialog.set_transient_for(self.parent)
 
-        screen_classes = [ChooseServerScreen, CredentialsScreen,
-                          OrganizationScreen, EnvironmentScreen,
-                          PerformRegisterScreen, SelectSLAScreen,
-                          ConfirmSubscriptionsScreen, PerformSubscribeScreen]
+        screen_classes = [ChooseServerScreen, ActivationKeyScreen,
+                          CredentialsScreen, OrganizationScreen,
+                          EnvironmentScreen, PerformRegisterScreen,
+                          SelectSLAScreen, ConfirmSubscriptionsScreen,
+                          PerformSubscribeScreen]
         self._screens = []
         for screen_class in screen_classes:
             screen = screen_class(self, self.backend)
@@ -120,6 +123,7 @@ class RegisterScreen(widgets.GladeWidget):
         # values that will be set by the screens
         self.username = None
         self.consumername = None
+        self.activation_keys = None
         self.owner_key = None
         self.environment = None
         self.current_sla = None
@@ -322,6 +326,7 @@ class PerformRegisterScreen(NoGuiScreen):
                                              self._parent.facts,
                                              self._parent.owner_key,
                                              self._parent.environment,
+                                             self._parent.activation_keys,
                                              self._on_registration_finished_cb)
 
         return True
@@ -729,6 +734,77 @@ class CredentialsScreen(Screen):
         self.skip_auto_bind.set_active(False)
 
 
+class ActivationKeyScreen(Screen):
+    widget_names = Screen.widget_names + [
+                'activation_key_entry',
+                'organization_entry',
+                'consumer_entry',
+        ]
+
+    def __init__(self, parent, backend):
+        super(ActivationKeyScreen, self).__init__("activation_key.glade",
+                                                    parent, backend)
+        self._initialize_consumer_name()
+
+    def _initialize_consumer_name(self):
+        if not self.consumer_entry.get_text():
+            self.consumer_entry.set_text(socket.gethostname())
+
+    def apply(self):
+        self._activation_keys = self._split_activation_keys(
+            self.activation_key_entry.get_text().strip())
+        self._owner_key = self.organization_entry.get_text().strip()
+        self._consumername = self.consumer_entry.get_text().strip()
+        self._skip_auto_bind = True
+
+        if not self._validate_owner_key(self._owner_key):
+            return DONT_CHANGE
+
+        if not self._validate_activation_keys(self._activation_keys):
+            return DONT_CHANGE
+
+        if not self._validate_consumername(self._consumername):
+            return DONT_CHANGE
+
+        return PERFORM_REGISTER_PAGE
+
+    def _split_activation_keys(self, entry):
+        keys = re.split(',\s*|\s+', entry)
+        return [x for x in keys if x]
+
+    def _validate_owner_key(self, owner_key):
+        if not owner_key:
+            errorWindow(_("You must enter an organization."), self._parent.window)
+            self.organization_entry.grab_focus()
+            return False
+        return True
+
+    def _validate_activation_keys(self, activation_keys):
+        if not activation_keys:
+            errorWindow(_("You must enter an activation key."), self._parent.window)
+            self.activation_key_entry.grab_focus()
+            return False
+        return True
+
+    def _validate_consumername(self, consumername):
+        if not consumername:
+            errorWindow(_("You must enter a system name."), self._parent.window)
+            self.consumer_entry.grab_focus()
+            return False
+        return True
+
+    def pre(self):
+        self.organization_entry.grab_focus()
+        return False
+
+    def post(self):
+        self._parent.activation_keys = self._activation_keys
+        self._parent.owner_key = self._owner_key
+        self._parent.consumername = self._consumername
+        self._parent.skip_auto_bind = self._skip_auto_bind
+        self._backend.create_admin_uep()
+
+
 class ChooseServerScreen(Screen):
     # STYLE ME
     widget_names = Screen.widget_names + [
@@ -736,6 +812,7 @@ class ChooseServerScreen(Screen):
                 'proxy_frame',
                 'default_button',
                 'choose_server_label',
+                'activation_key_checkbox',
         ]
 
     def __init__(self, parent, backend):
@@ -748,6 +825,7 @@ class ChooseServerScreen(Screen):
         callbacks = {
                 "on_default_button_clicked": self._on_default_button_clicked,
                 "on_proxy_button_clicked": self._on_proxy_button_clicked,
+                "on_server_entry_changed": self._on_server_entry_changed,
             }
         self.glade.signal_autoconnect(callbacks)
 
@@ -761,6 +839,25 @@ class ChooseServerScreen(Screen):
     def _on_proxy_button_clicked(self, widget):
         self.network_config_dialog.set_parent_window(self._parent.window)
         self.network_config_dialog.show()
+
+    def _on_server_entry_changed(self, widget):
+        """
+        Disable the activation key checkbox if the user is registering
+        to hosted.
+        """
+        server = self.server_entry.get_text()
+        try:
+            (hostname, port, prefix) = parse_server_info(server)
+            if re.search('subscription\.rhn\.(.*\.)*redhat\.com', hostname):
+                sensitive = False
+            else:
+                sensitive = True
+            self.activation_key_checkbox.set_sensitive(sensitive)
+        except ServerUrlParseError:
+            # This may seem like it should be False, but we don't want
+            # the checkbox blinking on and off as the user types a value
+            # that is first unparseable and then later parseable.
+            self.activation_key_checkbox.set_sensitive(True)
 
     def apply(self):
         server = self.server_entry.get_text()
@@ -788,8 +885,10 @@ class ChooseServerScreen(Screen):
         log.info("Writing server data to rhsm.conf")
         CFG.save()
         self._backend.update()
-
-        return CREDENTIALS_PAGE
+        if self.activation_key_checkbox.get_active():
+            return ACTIVATION_KEY_PAGE
+        else:
+            return CREDENTIALS_PAGE
 
     def clear(self):
         # Load the current server values from rhsm.conf:
@@ -847,7 +946,7 @@ class AsyncBackend(object):
             log.exception(e)
             self.queue.put((callback, None, e))
 
-    def _register_consumer(self, name, facts, owner, env, callback):
+    def _register_consumer(self, name, facts, owner, env, activation_keys, callback):
         """
         method run in the worker thread.
         """
@@ -855,6 +954,7 @@ class AsyncBackend(object):
             installed_mgr = InstalledProductsManager()
             retval = self.backend.admin_uep.registerConsumer(name=name,
                     facts=facts.get_facts(), owner=owner, environment=env,
+                    keys=activation_keys,
                     installed_products=installed_mgr.format_for_server())
 
             # Facts and installed products went out with the registration
@@ -985,13 +1085,13 @@ class AsyncBackend(object):
         threading.Thread(target=self._get_environment_list,
                 args=(owner_key, callback)).start()
 
-    def register_consumer(self, name, facts, owner, env, callback):
+    def register_consumer(self, name, facts, owner, env, activation_keys, callback):
         """
         Run consumer registration asyncronously
         """
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._register_consumer,
-                args=(name, facts, owner, env, callback)).start()
+                args=(name, facts, owner, env, activation_keys, callback)).start()
 
     def subscribe(self, uuid, current_sla, dry_run_result, callback):
         gobject.idle_add(self._watch_thread)
