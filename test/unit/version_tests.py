@@ -25,6 +25,10 @@ NOT_COLLECTED = "non-collected-package"
 # only once.
 class VersionsStub(Versions):
 
+    def __init__(self):
+        super(VersionsStub, self).__init__()
+        self._collect_data()
+
     def _get_packages(self):
         package_set = [
             {'name': Versions.SUBSCRIPTION_MANAGER, 'version':'1', 'release': "1"},
