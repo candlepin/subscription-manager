@@ -18,10 +18,13 @@ import sys
 import socket
 import locale
 import urllib
-import simplejson as json
 import base64
 import os
 import logging
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 from M2Crypto import SSL, httpslib
 from urllib import urlencode
