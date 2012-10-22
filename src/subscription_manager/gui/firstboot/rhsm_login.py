@@ -31,7 +31,7 @@ from rhsm.connection import RestlibException
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
 
-MANUALLY_SUBSCRIBE_PAGE = 8
+MANUALLY_SUBSCRIBE_PAGE = 9
 
 
 class SelectSLAScreen(registergui.SelectSLAScreen):
