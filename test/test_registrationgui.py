@@ -7,7 +7,8 @@ rhsm_display.set_display()
 
 from stubs import StubBackend, StubFacts
 from subscription_manager.gui.registergui import RegisterScreen, \
-        CredentialsScreen, CREDENTIALS_PAGE, CHOOSE_SERVER_PAGE
+        CredentialsScreen, ActivationKeyScreen, CREDENTIALS_PAGE, \
+        CHOOSE_SERVER_PAGE
 
 
 class RegisterScreenTests(unittest.TestCase):
@@ -63,3 +64,16 @@ class CredentialsScreenTests(unittest.TestCase):
         self.assertFalse(self.screen.skip_auto_bind.get_active())
         self.assertEquals(default_consumer_name_value,
                           self.screen.consumer_name.get_text())
+
+
+class ActivationKeyScreenTests(unittest.TestCase):
+    def setUp(self):
+        self.backend = StubBackend()
+        self.parent = Mock()
+        self.screen = ActivationKeyScreen(self.backend, self.parent)
+
+    def test_split_activation_keys(self):
+        expected = ['hello', 'world', 'how', 'are', 'you']
+        input = "hello, world,how  are , you"
+        result = self.screen._split_activation_keys(input)
+        self.assertEquals(expected, result)
