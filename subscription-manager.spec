@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.23
+Version: 1.0.24
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -351,6 +351,12 @@ fi
 %endif
 
 %changelog
+* Wed Oct 24 2012 Alex Wood <awood@redhat.com> 1.0.24-1
+- updates for failed-qa issues in bz857195 (dlackey@redhat.com.com)
+- 850870: Update on-line documentation link. (awood@redhat.com)
+- 864095: Fix "System Engine Username" for it.po (alikins@redhat.com)
+- 864092: Fix "Configure Proxy" translation for es_ES (alikins@redhat.com)
+
 * Tue Oct 16 2012 Alex Wood <awood@redhat.com> 1.0.23-1
 - 864092: update translations for es_ES (alikins@redhat.com)
 - Enable logging in firstboot (alikins@redhat.com)
