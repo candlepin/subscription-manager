@@ -319,8 +319,6 @@ class CertSorter(object):
             unlimited_ram = num_ents_covering_ram > 1
             is_ram_covered = unlimited_ram or self.total_ram <= ram_covered
             covered = covered and is_ram_covered
-#            print "Unlimited RAM?", unlimited_ram
-#            print "RAM Covered?", self.total_ram, ram_covered, is_ram_covered
 
         return covered
 
@@ -412,12 +410,6 @@ class StackingGroupSorter(object):
     def _get_identity_name(self, entitlement):
         raise NotImplementedError(
                 "Subclasses must implement: _get_identity_name")
-
-
-class StackVerifier(object):
-
-    def __init__(self, entitlements):
-        pass
 
 
 class EntitlementGroup(object):
