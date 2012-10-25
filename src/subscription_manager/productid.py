@@ -172,6 +172,12 @@ class ProductManager:
 
             # Product cert already exists, no need to write:
             if self.pdir.findByProduct(prod_hash):
+                # check if repo is not in db. This can happen if product cert
+                # was originally laid down outside of sub-man
+                if not self.db.findRepo(prod_hash):
+                    log.info("%s certificate exists, but is not in db. Adding to product db." % prod_hash)
+                    self.db.add(prod_hash, repo)
+                    self.db.write()
                 continue
 
             fn = '%s.pem' % prod_hash
