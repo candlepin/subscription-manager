@@ -216,7 +216,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         for group_idx, group in enumerate(sorter.groups):
             bg_color = get_cell_background_color(group_idx)
             iter = None
-            if group.name:
+            if group.name and len(group.entitlements) > 1:
                 iter = self.store.add_map(iter, self._create_parent_map(group.name, bg_color))
 
             for entry in group.entitlements:
