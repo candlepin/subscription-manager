@@ -31,14 +31,6 @@ PARTIALLY_SUBSCRIBED = "partially_subscribed"
 SOCKET_FACT = 'cpu.cpu_socket(s)'
 RAM_FACT = 'memory.memtotal'
 
-# The number of RAM limited entitlements required in a stack
-# to provide unlimited RAM.
-#
-# TODO Requirement is to make the number of stacked RAM entitlements
-# that define unlimited configurable -- Since code is duplicated
-# client and server side, how will this be done.
-NUM_OF_RAM_ENTITLEMENTS_FOR_UNLIMITED_RAM = 2
-
 
 class CertSorter(object):
     """
@@ -110,7 +102,7 @@ class CertSorter(object):
         if SOCKET_FACT in self.facts_dict:
             self.socket_count = safe_int(self.facts_dict[SOCKET_FACT], 1)
         else:
-            log.warn("System has no %s fact, assuming 1.", SOCKET_FACT)
+            log.warn("System has no socket fact, assuming 1.")
 
         # Amount of RAM on this system - default is 1GB
         self.total_ram = 1
@@ -134,16 +126,6 @@ class CertSorter(object):
         log.debug("future products: %s" % self.future_products.keys())
         log.debug("partial stacks: %s" % self.partial_stacks.keys())
         log.debug("valid stacks: %s" % self.valid_stacks.keys())
-
-    def _convert_system_ram_to_gb(self, system_ram):
-        """
-        Convert system ram from kilobyes to Gigabytes.
-
-        System RAM will be rounded to the nearest full
-        GB value (i.e 1.3 GB == 1 GB). This is so that
-        we can deal with a common base.
-        """
-        return int(round(system_ram / 1024.0 / 1024.0))
 
     def is_valid(self):
         """
@@ -279,8 +261,6 @@ class CertSorter(object):
         Future and expired certs are filtered out before this is called.
         """
         sockets_covered = 0
-        num_ents_covering_ram = 0
-        ram_covered = 0
         log.debug("Checking stack validity: %s" % stack_id)
 
         date_to_check = on_date or self.on_date
@@ -290,56 +270,14 @@ class CertSorter(object):
               ent.valid_range.begin() <= date_to_check and \
               ent.valid_range.end() >= date_to_check:
                 quantity = safe_int(ent.order.quantity_used, 1)
-
-                sockets = safe_int(ent.order.socket_limit, None)
-                ent_ram = safe_int(ent.order.ram_limit, None)
-
-                # Default the limiting factor to sockets if nothing
-                # is defined.
-                if sockets is not None and ent_ram is not None:
-                    sockets = 1
-
-                # Process sockets
-                if sockets is not None:
-                    sockets_covered += sockets * quantity
-
-                # Process RAM. Increment the number of entitlements that specify
-                # a RAM limit by the quantity that it provides. Currently, 2 ram
-                # limiting entitlements will equal unlimited RAM. We track
-                # ram_covered so that we have the total RAM covered by the
-                # entitlements in the case that we increase the number of
-                # RAM limiting entitlements required to get unlimited RAM.
-                if ent_ram is not None:
-                    num_ents_covering_ram += quantity
-                    ram_covered += ent_ram * quantity
+                sockets = safe_int(ent.order.socket_limit, 1)
+                sockets_covered += sockets * quantity
 
         log.debug("  system has %s sockets, %s covered by entitlements" %
                 (self.socket_count, sockets_covered))
-        log.debug("  system has %s entitlements covering system RAM." %
-                  num_ents_covering_ram)
-
-        # Always consider sockets on stacks.
-        covered = sockets_covered >= self.socket_count or sockets_covered == 0
-        log.debug("  Socket requirement met by stack: %s" % covered)
-
-        # Consider RAM if it was specified on the stack. Currently, two or more
-        # RAM limited entitlements means unlimited RAM, otherwise the limit is
-        # the RAM on your 1 entitlement.
-        if num_ents_covering_ram > 0:
-            unlimited_ram = \
-                num_ents_covering_ram >= NUM_OF_RAM_ENTITLEMENTS_FOR_UNLIMITED_RAM
-            is_ram_covered = unlimited_ram or self.total_ram <= ram_covered
-            covered = covered and is_ram_covered
-
-            if unlimited_ram:
-                log.debug("  the stack covers unlimited RAM.")
-            else:
-                log.debug("  the stack covers %sGB of %sGB of RAM." % (ram_covered,
-                                                                       self.total_ram))
-            log.debug("  RAM requirement met by stack: %s" % is_ram_covered)
-
-
-        return covered
+        if sockets_covered >= self.socket_count or sockets_covered == 0:
+            return True
+        return False
 
     def ent_cert_sockets_valid(self, ent, on_date=None):
         """
@@ -402,6 +340,16 @@ class CertSorter(object):
                     (product_id in self.partially_valid_products):
                 continue
             self.unentitled_products[product_id] = self.installed_products[product_id]
+
+    def _convert_system_ram_to_gb(self, system_ram):
+        """
+        Convert system ram from kilobyes to Gigabytes.
+
+        System RAM will be rounded to the nearest full
+        GB value (i.e 1.3 GB == 1 GB). This is so that
+        we can deal with a common base.
+        """
+        return int(round(system_ram / 1024.0 / 1024.0))
 
 
 class StackingGroupSorter(object):

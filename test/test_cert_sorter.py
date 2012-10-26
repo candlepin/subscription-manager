@@ -236,7 +236,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertTrue(INST_PID_1 in sorter.valid_products)
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
 
-    def test_non_stacked_4GB_system_covered_by_1_4GB_ent(self):
+    def test_4GB_system_covered_by_1_4GB_ent(self):
         prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
         # System has 4194304 total memory:
         stub_facts = StubFacts(fact_dict={"memory.memtotal": "4194304"})
@@ -249,7 +249,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertTrue(INST_PID_1 in sorter.valid_products)
         self.assertEquals(1, len(sorter.valid_products))
 
-    def test_non_stacked_8GB_system_partially_covered_by_4GB_ent(self):
+    def test_8GB_system_partially_covered_by_4GB_ent(self):
         prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
         # System has 8388608 total memory:
         stub_facts = StubFacts(fact_dict={"memory.memtotal": "8388608"})
@@ -262,7 +262,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertFalse(INST_PID_1 in sorter.valid_products)
         self.assertEquals(1, len(sorter.partially_valid_products))
 
-    def test_non_stacked_4GB_2_socket_system_covered_by_1_4GB_2_socket_ent(self):
+    def test_4GB_2_socket_system_covered_by_1_4GB_2_socket_ent(self):
         prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
         # System has 4194304 total memory and 2 sockets
         stub_facts = StubFacts(fact_dict={"memory.memtotal": "4194304",
@@ -276,7 +276,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertTrue(INST_PID_1 in sorter.valid_products)
         self.assertEquals(1, len(sorter.valid_products))
 
-    def test_non_stacked_4GB_4_socket_system_partially_covered_by_1_4GB_2_socket_ent(self):
+    def test_4GB_4_socket_system_partially_covered_by_1_4GB_2_socket_ent(self):
         prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
         # System has 4194304 total memory and 4 sockets
         stub_facts = StubFacts(fact_dict={"memory.memtotal": "4194304",
@@ -290,7 +290,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertFalse(INST_PID_1 in sorter.valid_products)
         self.assertEquals(1, len(sorter.partially_valid_products))
 
-    def test_non_stacked_8GB_2_socket_system_partially_covered_by_1_4GB_2_socket_ent(self):
+    def test_8GB_2_socket_system_partially_covered_by_1_4GB_2_socket_ent(self):
         prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
         # System has 8388608 total memory and 2 sockets
         stub_facts = StubFacts(fact_dict={"memory.memtotal": "8388608",
@@ -303,6 +303,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
         self.assertFalse(INST_PID_1 in sorter.valid_products)
         self.assertEquals(1, len(sorter.partially_valid_products))
+
 
 class CertSorterStackingTests(unittest.TestCase):
 
@@ -453,64 +454,6 @@ class CertSorterStackingTests(unittest.TestCase):
         self.assertEquals(0, len(sorter.partially_valid_products))
         self.assertEquals(0, len(sorter.partial_stacks))
 
-    def test_simple_ram_stack_single_entitlement_covering_ram_limit(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
-        # System has 8388608 total memory
-        stub_facts = StubFacts(fact_dict={"memory.memtotal": "8388608"})
-        # Entitlements provide unlimited RAM even though the total ram is 6GB
-        ent_dir = StubCertificateDirectory([
-            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, ram=8)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
-
-        self.assertFalse(INST_PID_1 in sorter.unentitled_products)
-        self.assertTrue(INST_PID_1 in sorter.valid_products)
-        self.assertFalse(INST_PID_1 in sorter.partially_valid_products)
-        self.assertEquals(0, len(sorter.partially_valid_products))
-
-    def test_simple_full_ram_stack_2_ents_equals_unlimited_ram(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
-        # System has 8388608 total memory
-        stub_facts = StubFacts(fact_dict={"memory.memtotal": "8388608"})
-        # Entitlements provide unlimited RAM even though the total ram is 6GB
-        ent_dir = StubCertificateDirectory([
-            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, ram=2),
-            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, ram=4)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
-
-        self.assertFalse(INST_PID_1 in sorter.unentitled_products)
-        self.assertTrue(INST_PID_1 in sorter.valid_products)
-        self.assertFalse(INST_PID_1 in sorter.partially_valid_products)
-        self.assertEquals(0, len(sorter.partially_valid_products))
-
-    def test_sockets_covered_but_not_ram_is_partially_covered(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
-        # System has 8388608 total memory
-        stub_facts = StubFacts(fact_dict={"memory.memtotal": "8388608",
-                                          "cpu.cpu_socket(s)": 2})
-        ent_dir = StubCertificateDirectory([
-            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, ram=4),
-            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=2)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
-
-        self.assertFalse(INST_PID_1 in sorter.unentitled_products)
-        self.assertFalse(INST_PID_1 in sorter.valid_products)
-        self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
-        self.assertEquals(1, len(sorter.partially_valid_products))
-
-    def test_ram_covered_but_not_sockets_is_partially_covered(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
-        # System has 8388608 total memory
-        stub_facts = StubFacts(fact_dict={"memory.memtotal": "8388608",
-                                          "cpu.cpu_socket(s)": 8})
-        ent_dir = StubCertificateDirectory([
-            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, ram=4),
-            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=2)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
-
-        self.assertFalse(INST_PID_1 in sorter.unentitled_products)
-        self.assertFalse(INST_PID_1 in sorter.valid_products)
-        self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
-        self.assertEquals(1, len(sorter.partially_valid_products))
 
 class TestCertSorterStatus(unittest.TestCase):
 
