@@ -482,6 +482,36 @@ class CertSorterStackingTests(unittest.TestCase):
         self.assertFalse(INST_PID_1 in sorter.partially_valid_products)
         self.assertEquals(0, len(sorter.partially_valid_products))
 
+    def test_sockets_covered_but_not_ram_is_partially_covered(self):
+        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        # System has 8388608 total memory
+        stub_facts = StubFacts(fact_dict={"memory.memtotal": "8388608",
+                                          "cpu.cpu_socket(s)": 2})
+        ent_dir = StubCertificateDirectory([
+            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, ram=4),
+            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=2)])
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
+
+        self.assertFalse(INST_PID_1 in sorter.unentitled_products)
+        self.assertFalse(INST_PID_1 in sorter.valid_products)
+        self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
+        self.assertEquals(1, len(sorter.partially_valid_products))
+
+    def test_ram_covered_but_not_sockets_is_partially_covered(self):
+        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        # System has 8388608 total memory
+        stub_facts = StubFacts(fact_dict={"memory.memtotal": "8388608",
+                                          "cpu.cpu_socket(s)": 8})
+        ent_dir = StubCertificateDirectory([
+            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, ram=4),
+            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=2)])
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
+
+        self.assertFalse(INST_PID_1 in sorter.unentitled_products)
+        self.assertFalse(INST_PID_1 in sorter.valid_products)
+        self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
+        self.assertEquals(1, len(sorter.partially_valid_products))
+
 class TestCertSorterStatus(unittest.TestCase):
 
     def test_subscribed(self):

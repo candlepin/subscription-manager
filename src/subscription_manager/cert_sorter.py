@@ -31,6 +31,14 @@ PARTIALLY_SUBSCRIBED = "partially_subscribed"
 SOCKET_FACT = 'cpu.cpu_socket(s)'
 RAM_FACT = 'memory.memtotal'
 
+# The number of RAM limited entitlements required in a stack
+# to provide unlimited RAM.
+#
+# TODO Requirement is to make the number of stacked RAM entitlements
+# that define unlimited configurable -- Since code is duplicated
+# client and server side, how will this be done.
+NUM_OF_RAM_ENTITLEMENTS_FOR_UNLIMITED_RAM = 2
+
 
 class CertSorter(object):
     """
@@ -295,30 +303,41 @@ class CertSorter(object):
                 if sockets is not None:
                     sockets_covered += sockets * quantity
 
-                # Process RAM
+                # Process RAM. Increment the number of entitlements that specify
+                # a RAM limit by the quantity that it provides. Currently, 2 ram
+                # limiting entitlements will equal unlimited RAM. We track
+                # ram_covered so that we have the total RAM covered by the
+                # entitlements in the case that we increase the number of
+                # RAM limiting entitlements required to get unlimited RAM.
                 if ent_ram is not None:
-                    # When stacking for RAM, we don't care about the total
-                    # RAM, we only care that > 1 stacked RAM entitlement
-                    # provides 'unlimited' RAM, and the largest ram in the
-                    # stack (usually 1)
                     num_ents_covering_ram += quantity
                     ram_covered += ent_ram * quantity
 
         log.debug("  system has %s sockets, %s covered by entitlements" %
                 (self.socket_count, sockets_covered))
-        log.debug("  system has %s entitlements covering system RAM.")
+        log.debug("  system has %s entitlements covering system RAM." %
+                  num_ents_covering_ram)
 
         # Always consider sockets on stacks.
         covered = sockets_covered >= self.socket_count or sockets_covered == 0
+        log.debug("  Socket requirement met by stack: %s" % covered)
 
-        # Consider RAM if it was specified on the stack.
+        # Consider RAM if it was specified on the stack. Currently, two or more
+        # RAM limited entitlements means unlimited RAM, otherwise the limit is
+        # the RAM on your 1 entitlement.
         if num_ents_covering_ram > 0:
-            # TODO Requirement is to make the number of stacked RAM entitlements
-            # that define unlimited configurable -- Since code is duplicated
-            # client and serverside, how will this be done.
-            unlimited_ram = num_ents_covering_ram > 1
+            unlimited_ram = \
+                num_ents_covering_ram >= NUM_OF_RAM_ENTITLEMENTS_FOR_UNLIMITED_RAM
             is_ram_covered = unlimited_ram or self.total_ram <= ram_covered
             covered = covered and is_ram_covered
+
+            if unlimited_ram:
+                log.debug("  the stack covers unlimited RAM.")
+            else:
+                log.debug("  the stack covers %sGB of %sGB of RAM." % (ram_covered,
+                                                                       self.total_ram))
+            log.debug("  RAM requirement met by stack: %s" % is_ram_covered)
+
 
         return covered
 
