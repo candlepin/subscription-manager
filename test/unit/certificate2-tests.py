@@ -144,6 +144,15 @@ class V3CertTests(unittest.TestCase):
         self.assertEquals(cert_path, unlink_mock.call_args_list[0][0][0])
         self.assertEquals(key_path, unlink_mock.call_args_list[1][0][0])
 
+    def test_cert_with_carriage_returns(self):
+        # make sure it can parse a cert where the "-----" etc. lines end with
+        # "\r\n" instead of just "\n". Failure to parse in this case was
+        # discovered when trying to parse an employee-sku cert that jbowes
+        # emailed to mhrivnak. the origin of the offending carriage returns is
+        # unknown.
+        crcert = certdata.ENTITLEMENT_CERT_V3_0.replace('-\n', '-\r\n')
+        create_from_pem(crcert)
+
 
 class IdentityCertTests(unittest.TestCase):
 

@@ -233,8 +233,8 @@ class _CertFactory(object):
     def _create_v3_cert(self, version, extensions, x509, path, pem):
         # At this time, we only support v3 entitlement certificates:
         try:
-            entitlement = pem.split("-----BEGIN ENTITLEMENT DATA-----\n")[1]
-            entitlement = entitlement.split("-----END ENTITLEMENT DATA-----")[0]
+            entitlement = pem.split("-----BEGIN ENTITLEMENT DATA-----")[1]
+            entitlement = entitlement.split("-----END ENTITLEMENT DATA-----")[0].strip()
         except IndexError:
             raise CertificateException("Unable to parse non-entitlement v3 certificate")
         payload = self._decompress_payload(base64.b64decode(entitlement))
