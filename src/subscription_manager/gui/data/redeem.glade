@@ -78,12 +78,12 @@ when the redemption is complete.</property>
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
-              <widget class="GtkButton" id="close_button">
-                <property name="label" translatable="yes">Close</property>
+              <widget class="GtkButton" id="cancel_button">
+                <property name="label" translatable="yes">Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_close_button_clicked"/>
+                <signal name="clicked" handler="on_cancel_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
