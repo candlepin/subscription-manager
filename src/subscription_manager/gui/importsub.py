@@ -44,6 +44,7 @@ class ImportSubDialog(object):
 
         self.dialog.set_local_only(True)
         self.dialog.set_select_multiple(True)
+        self.dialog.set_icon_name('subscription-manager')
 
         afilter = gtk.FileFilter()
         afilter.set_name(_("Certificates"))

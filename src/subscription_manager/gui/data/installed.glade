@@ -3,6 +3,7 @@
   <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkWindow" id="window1">
+    <property name="icon-name">subscription-manager</property>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
