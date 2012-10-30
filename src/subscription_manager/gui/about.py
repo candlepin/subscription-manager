@@ -46,6 +46,7 @@ class AboutDialog(object):
         self.dialog.set_website("https://fedorahosted.org/subscription-manager/")
         self.dialog.set_copyright(_("Copyright (c) 2012 Red Hat, Inc."))
         self.dialog.set_logo_icon_name("subscription-manager")
+        self.dialog.set_icon_name("subscription-manager")
 
         rhsm_version_label = Label()
         backend_version_label = Label()

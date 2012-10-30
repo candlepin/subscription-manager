@@ -68,6 +68,7 @@ class MessageWindow(gobject.GObject):
 
         self.dialog.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
         self.dialog.show_all()
+        self.dialog.set_icon_name('subscription-manager')
 
         self.dialog.set_modal(True)
         #this seems spurious, but without it, a ref to this obj gets "lost"
