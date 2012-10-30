@@ -104,7 +104,7 @@ class CLI:
 
             items_primary.sort()
             for (name, cmd) in items_primary:
-                    print("\t%-14s %s" % (name, cmd.shortdesc))
+                    print("  %-14s %s" % (name, cmd.shortdesc))
 
             print("")
 
@@ -112,7 +112,7 @@ class CLI:
             print _("Other Modules:")
             print "\r"
             for (name, cmd) in items_other:
-                print("\t%-14s %s" % (name, cmd.shortdesc))
+                print("  %-14s %s" % (name, cmd.shortdesc))
             print("")
 
     def _find_best_match(self, args):
