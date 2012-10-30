@@ -1825,7 +1825,14 @@ class ListCommand(CliCommand):
             print("+-------------------------------------------+")
             for data in epools:
                 # TODO:  Something about these magic numbers!
-                product_name = self._format_name(data['productName'], 24, 80)
+                columns = 80
+                try:
+                    rows, columns = os.popen('stty size', 'r').read().split()
+                except:
+                    pass
+
+                print columns
+                product_name = self._format_name(data['productName'], 24, int(columns) - 5)
 
                 if PoolWrapper(data).is_virt_only():
                     machine_type = machine_type = _("Virtual")
