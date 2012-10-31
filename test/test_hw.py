@@ -18,7 +18,6 @@ import cStringIO
 
 from mock import patch
 from mock import Mock
-from mock import mock_open
 
 from subscription_manager import hwprobe
 
@@ -183,7 +182,7 @@ class HardwareProbeTests(unittest.TestCase):
         self.assertFalse('net.interface.lo.mac_address' in net_int)
         self.assertFalse('net.interface.sit0.mac_address' in net_int)
 
-    @patch("__builtin__.open", new_callable=mock_open)
+    @patch("__builtin__.open")
     def test_get_slave_hwaddr_rr(self, MockOpen):
         reload(hwprobe)
         MockOpen.return_value = cStringIO.StringIO(PROC_BONDING_RR)
@@ -192,7 +191,7 @@ class HardwareProbeTests(unittest.TestCase):
         # note we .upper the result
         self.assertEquals("52:54:00:07:03:BA", slave_hw)
 
-    @patch("__builtin__.open", new_callable=mock_open)
+    @patch("__builtin__.open")
     def test_get_slave_hwaddr_alb(self, MockOpen):
         reload(hwprobe)
         MockOpen.return_value = cStringIO.StringIO(PROC_BONDING_ALB)
