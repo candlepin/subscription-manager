@@ -42,7 +42,6 @@ class EraseProductCommand:
         pass
 
     def doCommand(self, base, basecmd, extcmds):
-        opts = base.plugins.cmdline[0]
         pkgs = base.rpmdb
         product_dir = ProductDirectory()
         product = {}
@@ -55,18 +54,19 @@ class EraseProductCommand:
         # convert IDs to names in the mapping
         product_repo_mapping = dict((product[k], v) for k, v in product_db.content.iteritems())
 
-        for ipkg in sorted(pkgs):
-            if 'from_repo' in ipkg.yumdb_info and ipkg.yumdb_info.from_repo == product_repo_mapping.get(opts.product_name):
-                # add the package to the erasure queue
-                base.remove(ipkg)
+        for product in extcmds:
+            for ipkg in sorted(pkgs):
+                if 'from_repo' in ipkg.yumdb_info and ipkg.yumdb_info.from_repo == product_repo_mapping.get(product):
+                    # add the package to the erasure transaction
+                    base.remove(ipkg)
 
         if len(base.tsInfo) == 0:
-            return 0, ["No packages found for product %s" % opts.product_name]
+            return 0, ["No packages found for selected products"]
 
         if base.doTransaction() == 0:
-            return 0, ["Removed packages for %s" % opts.product_name]
+            return 0, ["Removed packages for selected products"]
         else:
-            return 0, ["Error occured while removing packages for %s. Please see yum.log for more details." % opts.product_name]
+            return 0, ["Error occured while removing packages. Please see yum.log for more details."]
 
 
 def config_hook(conduit):
@@ -78,6 +78,3 @@ def config_hook(conduit):
         parser = parser.plugin_option_group
 
     conduit.registerCommand(EraseProductCommand())
-
-    parser.add_option('--productname', action="store", dest='product_name',
-                      help='Remove packages for a particular product')
