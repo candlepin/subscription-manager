@@ -479,7 +479,7 @@ class DatePicker(gtk.HBox):
         self._date = datetime.datetime(date.year, date.month, date.day,
                 tzinfo=managerlib.LocalTz())
         self._date_entry = gtk.Entry()
-        self._date_entry.set_width_chars(14)
+        self._date_entry.set_width_chars(10)
 
         self._date_entry.set_text(self._date.date().isoformat())
 
