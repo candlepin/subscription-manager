@@ -330,7 +330,7 @@ class StubUEP:
             self.environment_list = []
             self.called_unregister_uuid = None
             self.called_unbind_uuid = None
-            self.called_unbind_serial = None
+            self.called_unbind_serial = []
             pass
 
     def supports_resource(self, resource):
@@ -377,7 +377,7 @@ class StubUEP:
         self.called_unbind_uuid = consumer
 
     def unbindBySerial(self, consumer, serial):
-        self.called_unbind_serial = serial
+        self.called_unbind_serial.append(serial)
 
     def getCertificateSerials(self, consumer):
         return []
