@@ -14,10 +14,65 @@
 
 import unittest
 
+import cStringIO
+
 from mock import patch
 from mock import Mock
+from mock import mock_open
 
 from subscription_manager import hwprobe
+
+PROC_BONDING_RR = """Ethernet Channel Bonding Driver: v3.6.0 (September 26, 2009)
+
+Bonding Mode: load balancing (round-robin)
+MII Status: up
+MII Polling Interval (ms): 100
+Up Delay (ms): 0
+Down Delay (ms): 0
+
+Slave Interface: eth0
+MII Status: up
+Speed: 100 Mbps
+Duplex: full
+Link Failure Count: 0
+Permanent HW addr: 52:54:00:07:03:ba
+Slave queue ID: 0
+
+Slave Interface: eth1
+MII Status: up
+Speed: 100 Mbps
+Duplex: full
+Link Failure Count: 0
+Permanent HW addr: 52:54:00:66:20:f7
+Slave queue ID: 0
+"""
+
+PROC_BONDING_ALB = """Ethernet Channel Bonding Driver: v3.6.0 (September 26, 2009)
+
+Bonding Mode: adaptive load balancing
+Primary Slave: None
+Currently Active Slave: eth0
+MII Status: up
+MII Polling Interval (ms): 100
+Up Delay (ms): 0
+Down Delay (ms): 0
+
+Slave Interface: eth0
+MII Status: up
+Speed: 100 Mbps
+Duplex: full
+Link Failure Count: 0
+Permanent HW addr: 52:54:00:07:03:ba
+Slave queue ID: 0
+
+Slave Interface: eth1
+MII Status: up
+Speed: 100 Mbps
+Duplex: full
+Link Failure Count: 0
+Permanent HW addr: 52:54:00:66:20:f7
+Slave queue ID: 0
+"""
 
 
 class HardwareProbeTests(unittest.TestCase):
@@ -127,6 +182,24 @@ class HardwareProbeTests(unittest.TestCase):
         self.assertEquals(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
         self.assertFalse('net.interface.lo.mac_address' in net_int)
         self.assertFalse('net.interface.sit0.mac_address' in net_int)
+
+    @patch("__builtin__.open", new_callable=mock_open)
+    def test_get_slave_hwaddr_rr(self, MockOpen):
+        reload(hwprobe)
+        MockOpen.return_value = cStringIO.StringIO(PROC_BONDING_RR)
+        hw = hwprobe.Hardware()
+        slave_hw = hw._get_slave_hwaddr("bond0", "eth0")
+        # note we .upper the result
+        self.assertEquals("52:54:00:07:03:BA", slave_hw)
+
+    @patch("__builtin__.open", new_callable=mock_open)
+    def test_get_slave_hwaddr_alb(self, MockOpen):
+        reload(hwprobe)
+        MockOpen.return_value = cStringIO.StringIO(PROC_BONDING_ALB)
+        hw = hwprobe.Hardware()
+        slave_hw = hw._get_slave_hwaddr("bond0", "eth0")
+        # note we .upper the result
+        self.assertEquals("52:54:00:07:03:BA", slave_hw)
 
 # FIXME: not real useful as non-root, plus noisy
 #    def test_platform_specific_info(self):
