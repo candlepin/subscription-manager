@@ -286,6 +286,17 @@ def get_version(versions, package_name):
     return "%s%s" % (package_version, package_release)
 
 
+def get_terminal_width():
+    # TODO:  Something about these magic numbers!
+    columns = 80
+    try:
+        rows, columns = os.popen('stty size', 'r').read().split()
+    except:
+        pass
+
+    return int(columns)
+
+
 def get_client_versions():
     # It's possible (though unlikely, and kind of broken) to have more
     # than one version of python-rhsm/subscription-manager installed.
