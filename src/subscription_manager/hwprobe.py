@@ -287,6 +287,7 @@ class Hardware:
         ipv6_metakeys = ['address', 'netmask']
         try:
             for info in ethtool.get_interfaces_info(ethtool.get_devices()):
+                master = None
                 for addr in info.get_ipv6_addresses():
                     for mkey in ipv6_metakeys:
                         #Omit mac addresses for sit types. See BZ838123
@@ -321,10 +322,52 @@ class Hardware:
                             netinfdict[key] = attr
                         else:
                             netinfdict[key] = "Unknown"
+
+                # slave devices can have their hwaddr changed
+                #
+                # "master" here refers to the slave's master device.
+                # If we find a master link, we are a  slave, and we need
+                # to check the /proc/net/bonding info to see what the
+                # "permanent" hw address are for this slave
+                try:
+                    master = os.readlink('/sys/class/net/%s/master' % info.device)
+                #FIXME
+                except:
+                    master = None
+
+                if master:
+                    master_interface = os.path.basename(master)
+                    permanent_mac_addr = self._get_slave_hwaddr(master_interface, info.device)
+                    key = '.'.join(['net.interface', info.device, "permanent_mac_address"])
+                    netinfdict[key] = permanent_mac_addr
+
         except:
             print _("Error reading network interface information:"), sys.exc_type
         self.allhw.update(netinfdict)
         return netinfdict
+
+    # from rhn-client-tools  hardware.py
+    # see bz#785666
+    def _get_slave_hwaddr(self, master, slave):
+        hwaddr = ""
+        try:
+            bonding = open('/proc/net/bonding/%s' % master, "r")
+        except:
+            return hwaddr
+
+        slave_found = False
+        for line in bonding.readlines():
+            if slave_found and line.find("Permanent HW addr: ") != -1:
+                hwaddr = line.split()[3].upper()
+                break
+
+            if line.find("Slave Interface: ") != -1:
+                ifname = line.split()[2]
+                if ifname == slave:
+                    slave_found = True
+
+        bonding.close()
+        return hwaddr
 
     def getVirtInfo(self):
         virt_dict = {}
