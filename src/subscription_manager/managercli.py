@@ -50,7 +50,8 @@ from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
-        MissingCaCertException, get_client_versions, get_server_versions, restart_virt_who
+        MissingCaCertException, get_client_versions, get_server_versions, \
+        restart_virt_who, get_terminal_width
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -1825,7 +1826,8 @@ class ListCommand(CliCommand):
             print("+-------------------------------------------+")
             for data in epools:
                 # TODO:  Something about these magic numbers!
-                product_name = self._format_name(data['productName'], 24, 80)
+                columns = get_terminal_width() - 5
+                product_name = self._format_name(data['productName'], 24, columns)
 
                 if PoolWrapper(data).is_virt_only():
                     machine_type = machine_type = _("Virtual")
