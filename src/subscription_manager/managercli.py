@@ -1843,7 +1843,7 @@ class ListCommand(CliCommand):
             print("+-------------------------------------------+")
             for data in epools:
                 # TODO:  Something about these magic numbers!
-                columns = get_terminal_width() - 5
+                columns = get_terminal_width()
                 product_name = self._format_name(data['productName'], 24, columns)
 
                 if PoolWrapper(data).is_virt_only():
@@ -1947,7 +1947,10 @@ class ListCommand(CliCommand):
         # handle emtpty names
         if not words:
             return name
-        line = [words.pop(0)]
+
+        first_word = words.pop(0)
+        line = [first_word]
+        current += len(first_word) + 1
 
         def add_line():
             lines.append(' '.join(line))
@@ -1960,7 +1963,7 @@ class ListCommand(CliCommand):
             else:
                 add_line()
                 line = [' ' * (indent - 1), word]
-                current = indent
+                current = indent + len(word) + 1
 
         add_line()
         return '\n'.join(lines)
