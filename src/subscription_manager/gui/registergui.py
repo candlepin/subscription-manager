@@ -513,9 +513,11 @@ class SelectSLAScreen(Screen):
             log.info("No suitable service levels found.")
             handle_gui_exception(None,
                                  _("No service level will cover all installed "
-                                 "products. Please use the \"All Available "
-                                 "Subscriptions\" tab to manually subscribe "
-                                 "this system."), parent=self._parent.parent)
+                                 "products. Please manually subscribe "
+                                 "using multiple service levels via "
+                                 "the \"All Available Subscriptions\" tab "
+                                 "or purchase additional subscriptions"),
+                                 parent=self._parent.parent)
             self._parent.finish_registration(failed=True)
 
     def pre(self):
