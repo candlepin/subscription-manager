@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.3
+Version: 1.1.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -345,6 +345,69 @@ fi
 %endif
 
 %changelog
+* Wed Oct 31 2012 Adrian Likins <alikins@redhat.com> 1.1.4-1
+- 864177: Add the count for the first word in calculating where to break the
+  line (bkearney@redhat.com)
+- 785666: For bonded interfaces, find mac address of members
+  (alikins@redhat.com)
+- 839779: Add more context around how to cover the machine with a given SLA
+  (bkearney@redhat.com)
+- 864177: Attempt to detect the size of the terminal to influence how product
+  names are split up. (bkearney@redhat.com)
+- 864569: Make the date picker widget 10 characters wide (bkearney@redhat.com)
+- 855050: Set the icon-name property on all dialogs and windows
+  (bkearney@redhat.com)
+- 848095: Reduce the indentation on the help text to improve the layout on
+  smaller terminals. (bkearney@redhat.com)
+  (wpoteat@redhat.com)
+- 862848: Change the name of the button to Cancel instead of Close
+  (bkearney@redhat.com)
+- 867766: Unsubscribe from multiple entitlement certificates using serial
+  numbers (wpoteat@redhat.com)
+- Clear any cached environments when registering with activation keys.
+  (awood@redhat.com)
+  (bryan.kearney@gmail.com)
+- Clear any cached activation key values. (awood@redhat.com)
+- 869729: --autosubscribe and --activationkey should be mutually exclusive
+  (wpoteat@redhat.com)
+- 857191: Stacking shows a useless parent in All Available Subscriptions tab
+  (wpoteat@redhat.com)
+- 863133: Subscription-Manager version command should have server type listed
+  first (wpoteat@redhat.com)
+- updates for failed-qa issues in bz857195 (dlackey@redhat.com.com)
+- Increment the hardcoded page number due to added activation key screen.
+  (awood@redhat.com)
+- 864555: add "menu" window hint to filters.glade (alikins@redhat.com)
+- 850870: Update on-line documentation link. (awood@redhat.com)
+- 817671: Add support for Activation Keys in the GUI. (awood@redhat.com)
+- 840415: Print an error message if the destination directory does not exist.
+  (awood@redhat.com)
+- Fail fast if the user enters a bad org. (awood@redhat.com)
+- Marking a string for translation. (awood@redhat.com)
+- 866579: Fail fast if the user enters a bad environment. (awood@redhat.com)
+- Enable logging in firstboot (alikins@redhat.com)
+- 865954: Return to creds screen if consumer name is invalid
+  (alikins@redhat.com)
+- 852107: Make the banners the same width (bkearney@redhat.com)
+- 748912: Make the error message a bit more friendly when there is no cert file
+  to import (bkearney@redhat.com)
+- 865590: Fix broken offline unsubscribe. (dgoodwin@redhat.com)
+- 852328: Report Classic and Subscription Management consistently in the
+  version and identity commands (bkearney@redhat.com)
+- 864159: Add a new message in the gui when no subscriptions are available on a
+  specific date. (bkearney@redhat.com)
+- 850531: Change the label 'Certificate Status' to 'Status'
+  (bkearney@redhat.com)
+- 850533: Change the label from 'Next Update' to 'Next System Check-in'
+  (bkearney@redhat.com)
+- 855365: Display a singular sentence if only one subscription is removed
+  (bkearney@redhat.com)
+- 862885: Change the text for unlimited to Unlimited (bkearney@redhat.com)
+- 864184: Make the machine type uppercase to be consistent with other output
+  (bkearney@redhat.com)
+- 865545: Added report log when cert has no products. (mstead@redhat.com)
+- update releases.conf (alikins@redhat.com)
+
 * Wed Oct 10 2012 Adrian Likins <alikins@redhat.com> 1.1.3-1
 - 863961: Expect id cert Version to be populated in tests (alikins@redhat.com)
 - 863565: Give focus to the login field during subscription registration.
