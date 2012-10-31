@@ -1356,17 +1356,20 @@ class UnSubscribeCommand(CliCommand):
         super(UnSubscribeCommand, self).__init__("unsubscribe", shortdesc, True,
                                                  ent_dir, prod_dir)
 
-        self.serial_numbers = None
-        self.parser.add_option("--serial", dest="serial",
-                               help=_("Certificate serial to unsubscribe"))
+        self.parser.add_option("--serial", action='append', dest="serials",
+                       help=_("One or more Certificate serials to unsubscribe"))
         self.parser.add_option("--all", dest="all", action="store_true",
                                help=_("Unsubscribe from all subscriptions"))
 
     def _validate_options(self):
-        if self.options.serial:
-            if not self.options.serial.isdigit():
-                msg = _("Error: '%s' is not a valid serial number") % self.options.serial
-                systemExit(-1, msg)
+        if self.options.serials:
+            bad = False
+            for serial in self.options.serials:
+                if not serial.isdigit():
+                    print _("Error: '%s' is not a valid serial number") % serial
+                    bad = True
+            if bad:
+                systemExit(-1)
         elif not self.options.all:
             print _("Error: This command requires that you specify one of --serial or --all.")
             systemExit(-1)
@@ -1393,8 +1396,22 @@ class UnSubscribeCommand(CliCommand):
                             print _("This machine has been unsubscribed from %s subscriptions." \
                                 % total['deletedRecords'])
                 else:
-                    self.cp.unbindBySerial(consumer, self.options.serial)
-                    print _("This machine has been unsubscribed from subscription with serial number %s" % (self.options.serial))
+                    success = []
+                    failure = []
+                    for serial in self.options.serials:
+                        try:
+                            self.cp.unbindBySerial(consumer, serial)
+                            success.append(serial)
+                        except connection.RestlibException, re:
+                            failure.append(re.msg)
+                    if success:
+                        print _("Successfully unsubscribed serial numbers:")
+                        for ser in success:
+                            print "   %s" % ser
+                    if failure:
+                        print _("Unsuccessfully unsubscribed serial numbers:")
+                        for fail in failure:
+                            print "   %s" % fail
                 self.certlib.update()
             except connection.RestlibException, re:
                 log.error(re)
@@ -1412,10 +1429,10 @@ class UnSubscribeCommand(CliCommand):
                     print _("This machine has been unsubscribed from %s subscriptions" % total)
                 else:
                     for ent in self.entitlement_dir.list():
-                        if str(ent.serial) == self.options.serial:
+                        if str(ent.serial) in self.options.serials:
                             ent.delete()
                             print _("This machine has been unsubscribed from subscription "
-                                    "with serial number %s" % (self.options.serial))
+                                    "with serial number %s" % str(ent.serial))
             except Exception, e:
                 handle_exception(_("Unable to perform unsubscribe due to the following exception: %s") % e, e)
 
