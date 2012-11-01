@@ -65,6 +65,7 @@ PERFORM_REGISTER_PAGE = 5
 SELECT_SLA_PAGE = 6
 CONFIRM_SUBS_PAGE = 7
 PERFORM_SUBSCRIBE_PAGE = 8
+REFRESH_SUBSCRIPTIONS_PAGE = 9
 FINISH = 100
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
@@ -109,7 +110,7 @@ class RegisterScreen(widgets.GladeWidget):
                           CredentialsScreen, OrganizationScreen,
                           EnvironmentScreen, PerformRegisterScreen,
                           SelectSLAScreen, ConfirmSubscriptionsScreen,
-                          PerformSubscribeScreen]
+                          PerformSubscribeScreen, RefreshSubscriptionsScreen]
         self._screens = []
         for screen_class in screen_classes:
             screen = screen_class(self, self.backend)
@@ -309,7 +310,9 @@ class PerformRegisterScreen(NoGuiScreen):
 
             managerlib.persist_consumer_cert(new_account)
             self._parent.consumer.reload()
-            if self._parent.skip_auto_bind:
+            if self._parent.activation_keys:
+                self._parent.pre_done(REFRESH_SUBSCRIPTIONS_PAGE)
+            elif self._parent.skip_auto_bind:
                 self._parent.pre_done(FINISH)
             else:
                 self._parent.pre_done(SELECT_SLA_PAGE)
@@ -757,7 +760,6 @@ class ActivationKeyScreen(Screen):
             self.activation_key_entry.get_text().strip())
         self._owner_key = self.organization_entry.get_text().strip()
         self._consumername = self.consumer_entry.get_text().strip()
-        self._skip_auto_bind = True
 
         if not self._validate_owner_key(self._owner_key):
             return DONT_CHANGE
@@ -803,11 +805,32 @@ class ActivationKeyScreen(Screen):
         self._parent.activation_keys = self._activation_keys
         self._parent.owner_key = self._owner_key
         self._parent.consumername = self._consumername
-        self._parent.skip_auto_bind = self._skip_auto_bind
         # Environments aren't used with activation keys so clear any
         # cached value.
         self._parent.environment = None
         self._backend.create_admin_uep()
+
+
+class RefreshSubscriptionsScreen(NoGuiScreen):
+
+    def __init__(self, parent, backend):
+        super(RefreshSubscriptionsScreen, self).__init__(parent, backend)
+        self.pre_message = _("Attaching subscriptions")
+
+    def _on_refresh_cb(self, error=None):
+        try:
+            if error != None:
+                raise error
+            self._parent.pre_done(FINISH)
+
+        except Exception, e:
+            handle_gui_exception(e, _("Error subscribing: %s"),
+                                 self._parent.parent)
+            self._parent.finish_registration(failed=True)
+
+    def pre(self):
+        self._parent.async.refresh(self._on_refresh_cb)
+        return True
 
 
 class ChooseServerScreen(Screen):
@@ -1065,6 +1088,13 @@ class AsyncBackend(object):
         except Exception, e:
             self.queue.put((callback, None, e))
 
+    def _refresh(self, callback):
+        try:
+            managerlib.fetch_certificates(self.backend)
+            self.queue.put((callback, None, None))
+        except Exception, e:
+            self.queue.put((callback, None, e))
+
     def _watch_thread(self):
         """
         glib idle method to watch for thread completion.
@@ -1107,3 +1137,8 @@ class AsyncBackend(object):
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._find_service_levels,
                 args=(consumer, facts, callback)).start()
+
+    def refresh(self, callback):
+        gobject.idle_add(self._watch_thread)
+        threading.Thread(target=self._refresh,
+                args=(callback,)).start()

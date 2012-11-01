@@ -31,7 +31,7 @@ from rhsm.connection import RestlibException
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
 
-MANUALLY_SUBSCRIBE_PAGE = 9
+MANUALLY_SUBSCRIBE_PAGE = 10
 
 
 class SelectSLAScreen(registergui.SelectSLAScreen):
@@ -98,7 +98,9 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
 
             managerlib.persist_consumer_cert(new_account)
             self._parent.consumer.reload()
-            if self._parent.skip_auto_bind:
+            if self._parent.activation_keys:
+                self._parent.pre_done(registergui.REFRESH_SUBSCRIPTIONS_PAGE)
+            elif self._parent.skip_auto_bind:
                 message = _("You have opted to skip auto-subscribe.")
                 self._parent.manual_message = message
                 self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
