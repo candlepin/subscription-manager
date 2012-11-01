@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.1.3
+Version: 1.1.4
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,12 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Nov 01 2012 Adrian Likins <alikins@redhat.com> 1.1.4-1
+- fixing a bug where certificates with carriage returns could not be parsed.
+  (mhrivnak@redhat.com)
+- 790481: Send up headers with the subscription-manager and python-rhsm version
+  info. (bkearney@redhat.com)
+
 * Wed Oct 10 2012 Adrian Likins <alikins@redhat.com> 1.1.3-1
 - 863961: add test case for id cert default version (alikins@redhat.com)
 - 857426: Do not pass None when body is empty collection (mstead@redhat.com)
