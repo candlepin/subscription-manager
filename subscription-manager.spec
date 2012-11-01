@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.4
+Version: 1.1.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -345,6 +345,9 @@ fi
 %endif
 
 %changelog
+* Thu Nov 01 2012 Adrian Likins <alikins@redhat.com> 1.1.5-1
+- latest strings from zanata (alikins@redhat.com)
+
 * Wed Oct 31 2012 Adrian Likins <alikins@redhat.com> 1.1.4-1
 - 864177: Add the count for the first word in calculating where to break the
   line (bkearney@redhat.com)
