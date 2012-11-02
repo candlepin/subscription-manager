@@ -309,6 +309,7 @@ class PerformRegisterScreen(NoGuiScreen):
                 raise error
 
             managerlib.persist_consumer_cert(new_account)
+            managerlib.fetch_certificates(self._backend)
             self._parent.consumer.reload()
             if self._parent.activation_keys:
                 self._parent.pre_done(REFRESH_SUBSCRIPTIONS_PAGE)
@@ -992,7 +993,6 @@ class AsyncBackend(object):
 
             ProfileManager().update_check(self.backend.admin_uep,
                                           retval['uuid'])
-
             # We have new credentials, restart virt-who
             restart_virt_who()
 
