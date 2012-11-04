@@ -238,15 +238,14 @@ def getOrg(cp, username):
         log.error(traceback.format_exc())
         systemExit(1, CONNECTION_FAILURE % e)
 
-    org = None
     if len(owner_list) == 0:
         systemExit(1, _("%s cannot register to any organizations.") % username)
-
-    if len(owner_list) > 1:
+    elif len(owner_list) > 1:
         org = raw_input(_("Org: ")).strip()
-
-    if org not in [x['key'] for x in owner_list]:
-        systemExit(1, _("No such org: %s") % org)
+        if org not in [x['key'] for x in owner_list]:
+            systemExit(1, _("No such org: %s") % org)
+    else:
+        org = owner_list[0]['key']
 
     return org
 
