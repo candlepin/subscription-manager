@@ -321,14 +321,15 @@ class Repo(dict):
         """
         Called when we fetch the items for this yum repo to write to disk.
         """
-        # Skip anything set to 'None', as this is likely not intended for
-        # a yum repo file. None can result here if the default is None,
-        # or the entitlement certificate did not have the value set.
+        # Skip anything set to 'None' or empty string, as this is likely
+        # not intended for a yum repo file. None can result here if the
+        # default is None, or the entitlement certificate did not have the
+        # value set.
         #
         # all values will be in _order, since the key has to have been set
         # to get into our dict.
         return tuple([(k, self[k]) for k in self._order if \
-                k in self and self[k] is not None])
+                k in self and self[k]])
 
     def update(self, new_repo):
         """
@@ -486,10 +487,7 @@ class RepoFile(ConfigParser):
 
     def section(self, section):
         if self.has_section(section):
-            repo = Repo(section, self.items(section))
-            for k, v in self.items(section):
-                repo[k] = v
-            return repo
+            return Repo(section, self.items(section))
 
     def create(self):
         if os.path.exists(self.path) or not self.manage_repos:
