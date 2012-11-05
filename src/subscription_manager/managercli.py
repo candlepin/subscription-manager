@@ -23,7 +23,6 @@ import getpass
 import dbus
 import datetime
 from time import strftime, strptime, localtime
-import urlparse
 from M2Crypto import X509
 from M2Crypto import SSL
 
@@ -1190,15 +1189,10 @@ class ReleaseCommand(CliCommand):
 
     def _do_command(self):
         cdn_url = cfg.get('rhsm', 'baseurl')
-        parsed_url = urlparse.urlparse(cdn_url)
+        # note: parse_baseurl_info will populate with defaults if not found
+        (cdn_hostname, cdn_port, cdn_prefix) = parse_baseurl_info(cdn_url)
 
-        # default to 443 if urlprase can't interpret the port
-        if parsed_url[2]:
-            cdn_port = parsed_url[2]
-        else:
-            cdn_port = 443
-
-        self.cc = connection.ContentConnection(host=parsed_url[1],
+        self.cc = connection.ContentConnection(host=cdn_hostname,
                                                ssl_port=cdn_port,
                                                proxy_hostname=self.proxy_hostname,
                                                proxy_port=self.proxy_port,
