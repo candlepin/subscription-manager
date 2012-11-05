@@ -103,6 +103,13 @@ class RepoTests(unittest.TestCase):
         repo = Repo('testrepo', config)
         self.assertEquals(config, repo.items()[:3])
 
+    def test_empty_strings_not_set_in_file(self):
+        r = Repo('testrepo', (('proxy', ""),))
+        r['proxy'] = ""
+        self.assertFalse(("proxy", "") in r.items())
+        r.update({"proxy": ""})
+        self.assertFalse(("proxy", "") in r.items())
+
 
 class UpdateActionTests(unittest.TestCase):
 
