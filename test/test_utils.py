@@ -220,7 +220,7 @@ class TestParseBaseUrlInfo(unittest.TestCase):
         # this is the default, so test it here
         local_url = "https://cdn.redhat.com"
         (hostname, port, prefix) = parse_baseurl_info(local_url)
-        self.assertEquals("cdn.redhat.com", hostname)
+        self.assertEquals(DEFAULT_CDN_HOSTNAME, hostname)
         self.assertEquals(DEFAULT_CDN_PORT, port)
         self.assertEquals("/", prefix)
 
@@ -233,7 +233,19 @@ class TestParseBaseUrlInfo(unittest.TestCase):
         local_url = "https://cdn.redhat.com:443"
         (hostname, port, prefix) = parse_baseurl_info(local_url)
         self.assertEquals(prefix, DEFAULT_CDN_PREFIX)
-        self.assertEquals("https://%s" % DEFAULT_CDN_HOSTNAME, format_baseurl(hostname, port, prefix))
+        self.assertEquals("https://cdn.redhat.com", format_baseurl(hostname, port, prefix))
+
+    def test_format_thumbslug_url_with_port(self):
+        local_url = "https://someserver.example.com:8088"
+        (hostname, port, prefix) = parse_baseurl_info(local_url)
+        self.assertEquals(prefix, DEFAULT_CDN_PREFIX)
+        self.assertEquals("https://someserver.example.com:8088", format_baseurl(hostname, port, prefix))
+
+    def test_format_not_fqdn_with_port(self):
+        local_url = "https://foo-bar:8088"
+        (hostname, port, prefix) = parse_baseurl_info(local_url)
+        self.assertEquals(prefix, DEFAULT_CDN_PREFIX)
+        self.assertEquals("https://foo-bar:8088", format_baseurl(hostname, port, prefix))
 
 
 class TestRemoveScheme(unittest.TestCase):
