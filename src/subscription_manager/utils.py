@@ -18,6 +18,7 @@ import logging
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 from subscription_manager.branding import get_branding
+from subscription_manager.certlib import ConsumerIdentity
 from urlparse import urlparse
 import os
 import signal
@@ -320,8 +321,18 @@ def get_client_versions():
 def get_server_versions(cp):
     cp_version = _("Unknown")
     server_type = _("Unknown")
+
+    # check for Classic before doing anything else
+    if ClassicCheck().is_registered_with_classic():
+        if ConsumerIdentity.existsAndValid():
+            server_type = get_branding().REGISTERED_TO_BOTH_SUMMARY
+        else:
+            server_type = get_branding().REGISTERED_TO_OTHER_SUMMARY
+    else:
+        if ConsumerIdentity.existsAndValid():
+            server_type = get_branding().REGISTERED_TO_SUBSCRIPTION_MANAGEMENT_SUMMARY
+
     if cp:
-        server_type = get_branding().REGISTERED_TO_SUBSCRIPTION_MANAGEMENT_SUMMARY
         try:
             if cp.supports_resource("status"):
                 status = cp.getStatus()
@@ -336,20 +347,7 @@ def get_server_versions(cp):
                 log.error(("Error while checking server version: %s") % e)
 
             log.exception(e)
-
-            server_type = _("Unknown")
             cp_version = _("Unknown")
-
-    # this isn't particularly important, so log any exceptions and carry on
-    try:
-        if ClassicCheck().is_registered_with_classic():
-            if server_type == _("Unknown"):
-                server_type = _("RHN Classic")
-            else:
-                server_type = get_branding().REGISTERED_TO_BOTH_SUMMARY
-    except Exception, e:
-        log.debug("Server Versions: Unable to check RHN Classic version")
-        log.exception(e)
 
     return {"candlepin": cp_version,
             "server-type": server_type}
