@@ -1403,6 +1403,9 @@ class UnSubscribeCommand(CliCommand):
                             self.cp.unbindBySerial(consumer, serial)
                             success.append(serial)
                         except connection.RestlibException, re:
+                            if re.code == 410:
+                                print re.msg
+                                systemExit(-1)
                             failure.append(re.msg)
                     if success:
                         print _("Successfully unsubscribed serial numbers:")
