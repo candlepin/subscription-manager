@@ -6,6 +6,7 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
     ServerUrlParseErrorNone, ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
     ServerUrlParseErrorJustScheme, get_version, get_client_versions, \
     get_server_versions, Versions
+from subscription_manager import certlib
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 
@@ -282,10 +283,12 @@ class VersionsNoRhsmStub(Versions):
 class TestGetServerVersions(unittest.TestCase):
 
     @patch('subscription_manager.utils.ClassicCheck')
-    def test_get_server_versions_classic(self, MockClassicCheck):
+    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
+    def test_get_server_versions_classic(self, mci_exists_and_valid, MockClassicCheck):
         from subscription_manager import utils
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = True
+        mci_exists_and_valid.return_value = False
         utils.Versions = VersionsStub
 
         sv = get_server_versions(None)
@@ -294,9 +297,11 @@ class TestGetServerVersions(unittest.TestCase):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    def test_get_server_versions_cp_no_status(self, MockClassicCheck, MockUep):
+    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
+    def test_get_server_versions_cp_no_status(self, mci_exists_and_valid, MockClassicCheck, MockUep):
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = False
+        mci_exists_and_valid.return_value = True
         MockUep.supports_resource.return_value = False
         sv = get_server_versions(MockUep)
         self.assertEquals(sv['server-type'], 'Red Hat Subscription Management')
@@ -304,9 +309,11 @@ class TestGetServerVersions(unittest.TestCase):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    def test_get_server_versions_cp_with_status(self, MockClassicCheck, MockUep):
+    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
+    def test_get_server_versions_cp_with_status(self, mci_exists_and_valid, MockClassicCheck, MockUep):
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = False
+        mci_exists_and_valid.return_value = True
         MockUep.supports_resource.return_value = True
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
@@ -315,9 +322,11 @@ class TestGetServerVersions(unittest.TestCase):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    def test_get_server_versions_cp_with_status_and_classic(self, MockClassicCheck, MockUep):
+    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
+    def test_get_server_versions_cp_with_status_and_classic(self, mci_exists_and_valid, MockClassicCheck, MockUep):
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = True
+        mci_exists_and_valid.return_value = True
         MockUep.supports_resource.return_value = True
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
@@ -326,24 +335,28 @@ class TestGetServerVersions(unittest.TestCase):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    def test_get_server_versions_cp_exception(self, MockClassicCheck, MockUep):
+    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
+    def test_get_server_versions_cp_exception(self, mci_exists_and_valid, MockClassicCheck, MockUep):
         def raise_exception(arg):
             raise Exception("boom")
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = False
+        mci_exists_and_valid.return_value = True
         MockUep.supports_resource.side_effect = raise_exception
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
-        self.assertEquals(sv['server-type'], "Unknown")
+        self.assertEquals(sv['server-type'], "Red Hat Subscription Management")
         self.assertEquals(sv['candlepin'], "Unknown")
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    def test_get_server_versions_cp_exception_and_classic(self, MockClassicCheck, MockUep):
+    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
+    def test_get_server_versions_cp_exception_and_classic(self, mci_exists_and_valid, MockClassicCheck, MockUep):
         def raise_exception(arg):
             raise Exception("boom")
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = True
+        mci_exists_and_valid.return_value = False
         MockUep.supports_resource.side_effect = raise_exception
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
