@@ -39,6 +39,7 @@ from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.repolib import RepoLib, RepoFile
 from subscription_manager.certmgr import CertManager
+from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager import managerlib
@@ -1291,6 +1292,7 @@ class SubscribeCommand(CliCommand):
             certmgr = CertManager(uep=self.cp)
             certmgr.update()
             return_code = 0
+            cert_update = True
             if self.options.pool:
                 subscribed = False
                 for pool in self.options.pool:
@@ -1318,19 +1320,30 @@ class SubscribeCommand(CliCommand):
                     return_code = 1
             # must be auto
             else:
-                # If service level specified, make an additional request to
-                # verify service levels are supported on the server:
-                if self.options.service_level:
-                    consumer = self.cp.getConsumer(consumer_uuid)
-                    if 'serviceLevel' not in consumer:
-                        systemExit(-1, _("Error: The --servicelevel option is not "
-                                         "supported by the server. Did not perform "
-                                         "autosubscribe."))
-                autosubscribe(self.cp, consumer_uuid,
-                              service_level=self.options.service_level)
+                # if we are green, we don't need to go to the server
+                self.facts = Facts(ent_dir=self.entitlement_dir, prod_dir=self.product_dir)
+                self.sorter = CertSorter(self.product_dir, self.entitlement_dir, self.facts.get_facts())
 
-            result = self.certlib.update()
-            if result[1]:
+                if self.sorter.is_valid():
+                    print _("All installed products are covered by valid entitlements. "
+                            "No need to update subscriptions at this time.")
+                    cert_update = False
+                else:
+                    # If service level specified, make an additional request to
+                    # verify service levels are supported on the server:
+                    if self.options.service_level:
+                        consumer = self.cp.getConsumer(consumer_uuid)
+                        if 'serviceLevel' not in consumer:
+                            systemExit(-1, _("Error: The --servicelevel option is not "
+                                             "supported by the server. Did not perform "
+                                             "autosubscribe."))
+                    autosubscribe(self.cp, consumer_uuid,
+                                  service_level=self.options.service_level)
+            result = None
+            if cert_update:
+                result = self.certlib.update()
+
+            if result and result[1]:
                 print 'Entitlement Certificate(s) update failed due to the following reasons:'
                 for e in result[1]:
                     print '\t-', str(e)
