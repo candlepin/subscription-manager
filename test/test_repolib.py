@@ -92,6 +92,44 @@ class RepoTests(unittest.TestCase):
         existing_repo.update(incoming_repo)
         self.assertFalse("proxy_username" in existing_repo.keys())
 
+    def test_set_mutable_property_now_empty_value(self):
+        existing_repo = Repo('testrepo')
+        existing_repo['metadata_expire'] = "blah"
+        incoming_repo = {'metadata_expire': ''}
+        existing_repo.update(incoming_repo)
+        # re comments in repolib
+        # Mutable properties should be added if not currently defined,
+        # otherwise left alone.
+        self.assertTrue("metadata_expire" in existing_repo.keys())
+
+    def test_set_immutable_property_now_empty_value(self):
+        existing_repo = Repo('testrepo')
+        existing_repo['proxy_username'] = "blah"
+        incoming_repo = {'proxy_username': ''}
+        existing_repo.update(incoming_repo)
+        # Immutable properties should be always be added/updated,
+        # and removed if undefined in the new repo definition.
+        self.assertFalse("proxy_username" in existing_repo.keys())
+
+    def test_set_mutable_property_now_none(self):
+        existing_repo = Repo('testrepo')
+        existing_repo['metadata_expire'] = "blah"
+        incoming_repo = {'metadata_expire': None}
+        existing_repo.update(incoming_repo)
+        # re comments in repolib
+        # Mutable properties should be added if not currently defined,
+        # otherwise left alone.
+        self.assertTrue("metadata_expire" in existing_repo.keys())
+
+    def test_set_immutable_property_now_none(self):
+        existing_repo = Repo('testrepo')
+        existing_repo['proxy_username'] = "blah"
+        incoming_repo = {'proxy_username': None}
+        existing_repo.update(incoming_repo)
+        # Immutable properties should be always be added/updated,
+        # and removed if undefined in the new repo definition.
+        self.assertFalse("proxy_username" in existing_repo.keys())
+
     def test_unknown_property_is_preserved(self):
         existing_repo = Repo('testrepo')
         existing_repo['fake_prop'] = 'fake'
