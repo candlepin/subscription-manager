@@ -284,46 +284,47 @@ class Hardware:
     def getNetworkInterfaces(self):
         netinfdict = {}
         metakeys = ['mac_address', 'ipv4_address', 'ipv4_netmask', 'ipv4_broadcast']
+        ipv4_metakeys = ['address', 'netmask', 'broadcast']
         ipv6_metakeys = ['address', 'netmask']
         try:
             for info in ethtool.get_interfaces_info(ethtool.get_devices()):
                 master = None
-                for addr in info.get_ipv6_addresses():
-                    for mkey in ipv6_metakeys:
-                        #Omit mac addresses for sit types. See BZ838123
-                        if not ((info.device.startswith("sit") or info.device == "lo") and \
-                                mkey == 'mac_address'):
-                            # ethtool returns a different scope for "public" IPv6 addresses
-                            # on different versions of RHEL.  EL5 is "global", while EL6 is
-                            # "universe".  Make them consistent.
-                            scope = addr.scope
-                            if scope == 'universe':
-                                scope = 'global'
+                mac_address = info.mac_address
+                device = info.device
 
-                            key = '.'.join(['net.interface', info.device, 'ipv6_%s' % (mkey), scope])
+                #Omit mac addresses for sit and lo device types. See BZ838123
+                # mac address are per interface, not per address
+                if not (device.startswith("sit") or device == "lo"):
+                    key = '.'.join(['net.interface', device, 'mac_address'])
+                    netinfdict[key] = mac_address
+
+                for addr in info.get_ipv6_addresses():
+                    # ethtool returns a different scope for "public" IPv6 addresses
+                    # on different versions of RHEL.  EL5 is "global", while EL6 is
+                    # "universe".  Make them consistent.
+                    scope = addr.scope
+                    if scope == 'universe':
+                        scope = 'global'
+
+                    for mkey in ipv6_metakeys:
+                        key = '.'.join(['net.interface', info.device, 'ipv6_%s' % (mkey), scope])
+                        attr = getattr(addr, mkey)
+                        if attr:
+                            netinfdict[key] = attr
+                        else:
+                            netinfdict[key] = "Unknown"
+
+                for addr in info.get_ipv4_addresses():
+                    for mkey in ipv4_metakeys:
+                        if not (device.startswith("sit") or device == "lo"):
+                            key = '.'.join(['net.interface', info.device, 'ipv4_%s' % (mkey)])
                             attr = getattr(addr, mkey)
                             if attr:
                                 netinfdict[key] = attr
                             else:
                                 netinfdict[key] = "Unknown"
 
-                # XXX: The kernel supports multiple IPv4 addresses on a single
-                # interface when using iproute2.  However, the ethtool.etherinfo.ipv4_*
-                # members will only return the last retrieved IPv4 configuration.  As
-                # of 25 Jan 2012 work on a patch was in progress.  See BZ 759150.
-                for mkey in metakeys:
-                    # Omit Loopback mac address
-
-                    if not ((info.device.startswith("sit") or info.device == 'lo') and \
-                            mkey == 'mac_address'):
-                        key = '.'.join(['net.interface', info.device, mkey])
-                        attr = getattr(info, mkey)
-                        if attr:
-                            netinfdict[key] = attr
-                        else:
-                            netinfdict[key] = "Unknown"
-
-                # slave devices can have their hwaddr changed
+                # bonded slave devices can have their hwaddr changed
                 #
                 # "master" here refers to the slave's master device.
                 # If we find a master link, we are a  slave, and we need
