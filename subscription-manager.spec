@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.5
+Version: 1.1.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -345,6 +345,19 @@ fi
 %endif
 
 %changelog
+* Thu Nov 08 2012 Adrian Likins <alikins@redhat.com> 1.1.6-1
+- 872847: Change unsubscribe feedback when consumer has been deleted
+  (wpoteat@redhat.com)
+- 869934: make "release" related cdn usage use proper urlparse
+  (alikins@redhat.com)
+- 852328: Improve the server version checking (bkearney@redhat.com)
+- 871146: Fix proxy errors on first yum operation after registration.
+  (dgoodwin@redhat.com)
+- 850430: Pressing Enter in the password entry now activates registration.
+  (awood@redhat.com)
+- Attach subscriptions after registration with an activation key.
+  (awood@redhat.com)
+
 * Thu Nov 01 2012 Adrian Likins <alikins@redhat.com> 1.1.5-1
 - latest strings from zanata (alikins@redhat.com)
 
