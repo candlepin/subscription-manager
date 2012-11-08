@@ -237,17 +237,24 @@ class _CertFactory(object):
             return IDENTITY_CERT
 
     def _create_v3_cert(self, version, extensions, x509, path, pem):
-        # At this time, we only support v3 entitlement certificates:
+        # At this time, we only support v3 entitlement certificates
         try:
-            entitlement = pem.split("-----BEGIN ENTITLEMENT DATA-----")[1]
-            entitlement = entitlement.split("-----END ENTITLEMENT DATA-----")[0].strip()
+            # this is only expected to be available on the client side
+            entitlement_data = pem.split("-----BEGIN ENTITLEMENT DATA-----")[1]
+            entitlement_data = entitlement_data.split("-----END ENTITLEMENT DATA-----")[0].strip()
         except IndexError:
-            raise CertificateException("Unable to parse non-entitlement v3 certificate")
-        payload = self._decompress_payload(base64.b64decode(entitlement))
+            entitlement_data = None
 
-        order = self._parse_v3_order(payload)
-        content = self._parse_v3_content(payload)
-        products = self._parse_v3_products(payload)
+        if entitlement_data:
+            payload = self._decompress_payload(base64.b64decode(entitlement_data))
+
+            order = self._parse_v3_order(payload)
+            content = self._parse_v3_content(payload)
+            products = self._parse_v3_products(payload)
+        else:
+            order = None
+            content = None
+            products = None
 
         cert = EntitlementCertificate(
                 x509=x509,

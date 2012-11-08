@@ -130,6 +130,13 @@ class V3CertTests(unittest.TestCase):
         self.assertEquals('ff80808139d9e26c0139da23489a0066',
                 self.ent_cert.subject['CN'])
 
+    def test_factory_method_without_ent_data(self):
+        data = certdata.ENTITLEMENT_CERT_V3_0.split('-----BEGIN ENTITLEMENT DATA-----')[0]
+        cert = create_from_pem(data)
+        self.assertTrue(cert.content is None)
+        self.assertTrue(cert.order is None)
+        self.assertEqual(cert.products, [])
+
     def test_is_valid(self):
         self.assertTrue(self.ent_cert.is_valid(on_date=datetime(2012, 12, 1)))
         self.assertFalse(self.ent_cert.is_valid(on_date=datetime(2014, 12, 1)))
