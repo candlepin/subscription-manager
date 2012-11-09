@@ -78,8 +78,8 @@ class DefaultBranding(object):
     """
 
     def __init__(self):
-        self.CLI_REGISTER = _("Register the machine to the server")
-        self.CLI_UNREGISTER = _("Unregister the machine from the server")
+        self.CLI_REGISTER = _("Register the system to the server")
+        self.CLI_UNREGISTER = _("Unregister the system from the server")
         self.RHSMD_REGISTERED_TO_OTHER = \
                 _("This system is registered to spacewalk")
         self.REGISTERED_TO_OTHER_WARNING = _("WARNING") + \
