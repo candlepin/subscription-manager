@@ -192,7 +192,7 @@ def isHosted():
 def checkOkToProceed(secreds, serverurl):
     # check if this machine is already registered to Certicate-based RHN
     if ConsumerIdentity.existsAndValid():
-        print _("\nThis machine appears to be already registered to Red Hat Subscription Management.  Exiting.")
+        print _("\nThis system appears to be already registered to Red Hat Subscription Management.  Exiting.")
         consumer = ConsumerIdentity.read()
         systemExit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % consumer.getConsumerId())
 
