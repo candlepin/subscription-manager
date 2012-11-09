@@ -209,7 +209,7 @@ display_icon (Context * context, StatusType status_type)
 			  "with the Customer Portal. Please enter your Red Hat "
 			  "login to ensure your system is up-to-date.");
 	} else if (status_type == RHSM_EXPIRED) {
-		tooltip = _("Invalid or Missing Entitlement Subscriptions");
+		tooltip = _("Invalid or Missing Subscriptions");
 		notification_title = tooltip;
 		notification_body =
 			_("This system is missing one or more "
