@@ -425,7 +425,7 @@ class CliCommand(AbstractCLICommand):
                 return return_code
         except X509.X509Error, e:
             log.error(e)
-            print _('Consumer certificates corrupted. Please reregister.')
+            print _('System certificates corrupted. Please reregister.')
 
 
 class UserPassCommand(CliCommand):
@@ -483,7 +483,7 @@ class UserPassCommand(CliCommand):
 
 class CleanCommand(CliCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Remove all local consumer and subscription data without affecting the server")
+        shortdesc = _("Remove all local system and subscription data without affecting the server")
 
         super(CleanCommand, self).__init__("clean", shortdesc, False, ent_dir,
                                            prod_dir)
@@ -848,11 +848,11 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--baseurl", dest="base_url",
                               default=None, help=_("base url for content in form of https://hostname:443/prefix"))
         self.parser.add_option("--type", dest="consumertype", default="system",
-                               help=_("the type of consumer to register, defaults to system"))
+                               help=_("the type of unit to register, defaults to system"))
         self.parser.add_option("--name", dest="consumername",
-                               help=_("name of the consumer to register, defaults to the hostname"))
+                               help=_("name of the system to register, defaults to the hostname"))
         self.parser.add_option("--consumerid", dest="consumerid",
-                               help=_("the existing consumer data is pulled from the server"))
+                               help=_("the existing system data is pulled from the server"))
         self.parser.add_option("--org", dest="org",
                                help=_("register to one of multiple organizations for the user"))
         self.parser.add_option("--environment", dest="environment",
@@ -878,7 +878,7 @@ class RegisterCommand(UserPassCommand):
             print(_("This system is already registered. Use --force to override"))
             sys.exit(1)
         elif (self.options.consumername == ''):
-            print(_("Error: consumer name can not be empty."))
+            print(_("Error: system name can not be empty."))
             sys.exit(-1)
         elif (self.options.username and self.options.activation_keys):
             print(_("Error: Activation keys do not require user credentials."))
