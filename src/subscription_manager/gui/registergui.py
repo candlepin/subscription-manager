@@ -372,7 +372,7 @@ class ConfirmSubscriptionsScreen(Screen):
         super(ConfirmSubscriptionsScreen, self).__init__("confirmsubs.glade",
                                                          parent,
                                                          backend)
-        self.button_label = _("Subscribe")
+        self.button_label = _("Attach")
 
         self.store = gtk.ListStore(str)
         # For now just going to set up one product name column, we will need
@@ -474,13 +474,13 @@ class SelectSLAScreen(Screen):
         # BZ #855762.
         if error != None:
             if isinstance(error, ServiceLevelNotSupportedException):
-                OkDialog(_("Unable to auto-subscribe, server does not support service levels."),
+                OkDialog(_("Unable to auto-attach, server does not support service levels."),
                         parent=self._parent.parent)
             elif isinstance(error, NoProductsException):
-                InfoDialog(_("No installed products on system. No need to update subscriptions at this time."),
+                InfoDialog(_("No installed products on system. No need to attach subscriptions at this time."),
                            parent=self._parent.parent)
             elif isinstance(error, AllProductsCoveredException):
-                InfoDialog(_("All installed products are covered by valid entitlements. No need to update subscriptions at this time."),
+                InfoDialog(_("All installed products are covered by valid entitlements. No need to attach subscriptions at this time."),
                            parent=self._parent.parent)
             else:
                 handle_gui_exception(error, _("Error subscribing"),
@@ -501,7 +501,7 @@ class SelectSLAScreen(Screen):
                                      "the current service level: %s. "
                                      "Please use the \"All Available "
                                      "Subscriptions\" tab to manually "
-                                     "subscribe this system.") % current_sla,
+                                     "attach subscriptions.") % current_sla,
                                     self._parent.parent)
                 self._parent.finish_registration(failed=True)
                 return
@@ -516,10 +516,8 @@ class SelectSLAScreen(Screen):
             log.info("No suitable service levels found.")
             handle_gui_exception(None,
                                  _("No service level will cover all installed "
-                                 "products. Please manually subscribe "
-                                 "using multiple service levels via "
-                                 "the \"All Available Subscriptions\" tab "
-                                 "or purchase additional subscriptions"),
+                                 "products. Please run Subscription Manager to "
+                                 "manually attach subscriptions"),
                                  parent=self._parent.parent)
             self._parent.finish_registration(failed=True)
 
