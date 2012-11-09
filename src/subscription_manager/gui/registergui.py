@@ -474,7 +474,7 @@ class SelectSLAScreen(Screen):
         # BZ #855762.
         if error != None:
             if isinstance(error, ServiceLevelNotSupportedException):
-                OkDialog(_("Unable to auto-subscribe, server does not support service levels."),
+                OkDialog(_("Unable to auto-attach, server does not support service levels."),
                         parent=self._parent.parent)
             elif isinstance(error, NoProductsException):
                 InfoDialog(_("No installed products on system. No need to update subscriptions at this time."),
