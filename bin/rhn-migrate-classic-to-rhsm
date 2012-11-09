@@ -73,7 +73,7 @@ options_table = [
            help=_("Service level to subscribe this system to. For no service "
                   "level use --service-level=\"\"")),
     Option("--serverurl", dest='serverurl',
-           help=_("Specify the Subscription Management Server to migrate TO.")),
+           help=_("Specify the subscription management server to migrate to.")),
 ]
 
 parser = OptionParser(usage=_("%prog [OPTIONS]"),
