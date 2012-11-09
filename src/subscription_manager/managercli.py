@@ -530,7 +530,7 @@ class RefreshCommand(CliCommand):
 class IdentityCommand(UserPassCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Display the identity certificate for this machine or " \
+        shortdesc = _("Display the identity certificate for this system or " \
                       "request a new one")
 
         super(IdentityCommand, self).__init__("identity", shortdesc, False,
@@ -1107,7 +1107,7 @@ class UnRegisterCommand(CliCommand):
 class RedeemCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Attempt to redeem a subscription for a preconfigured machine")
+        shortdesc = _("Attempt to redeem a subscription for a preconfigured system")
         super(RedeemCommand, self).__init__("redeem", shortdesc, False, ent_dir,
                                             prod_dir)
 
@@ -1238,7 +1238,7 @@ class ReleaseCommand(CliCommand):
 class SubscribeCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Subscribe the registered machine to a specified product")
+        shortdesc = _("Subscribe the registered system to a specified product")
         super(SubscribeCommand, self).__init__("subscribe", shortdesc, True,
                                                ent_dir, prod_dir)
 
@@ -1346,7 +1346,7 @@ class SubscribeCommand(CliCommand):
 class UnSubscribeCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Unsubscribe the machine from all or specific subscriptions")
+        shortdesc = _("Unsubscribe the system from all or specific subscriptions")
         super(UnSubscribeCommand, self).__init__("unsubscribe", shortdesc, True,
                                                  ent_dir, prod_dir)
 
@@ -1381,13 +1381,13 @@ class UnSubscribeCommand(CliCommand):
                     # total will be None on older Candlepins that don't
                     # support returning the number of subscriptions unsubscribed from
                     if total is None:
-                        print _("This machine has been unsubscribed from all subscriptions.")
+                        print _("This system has been unsubscribed from all subscriptions.")
                     else:
                         count = total['deletedRecords']
                         if count == 1:
-                            print _("This machine has been unsubscribed from 1 subscription.")
+                            print _("This system has been unsubscribed from 1 subscription.")
                         else:
-                            print _("This machine has been unsubscribed from %s subscriptions." \
+                            print _("This system has been unsubscribed from %s subscriptions." \
                                 % total['deletedRecords'])
                 else:
                     success = []
@@ -1423,12 +1423,12 @@ class UnSubscribeCommand(CliCommand):
                     for ent in self.entitlement_dir.list():
                         ent.delete()
                         total = total + 1
-                    print _("This machine has been unsubscribed from %s subscriptions" % total)
+                    print _("This system has been unsubscribed from %s subscriptions" % total)
                 else:
                     for ent in self.entitlement_dir.list():
                         if str(ent.serial) in self.options.serials:
                             ent.delete()
-                            print _("This machine has been unsubscribed from subscription "
+                            print _("This system has been unsubscribed from subscription "
                                     "with serial number %s" % str(ent.serial))
             except Exception, e:
                 handle_exception(_("Unable to perform unsubscribe due to the following exception: %s") % e, e)
@@ -1548,7 +1548,7 @@ class ImportCertCommand(CliCommand):
 class ReposCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List the repos which this machine is entitled to use")
+        shortdesc = _("List the repos which this system is entitled to use")
         super(ReposCommand, self).__init__("repos", shortdesc, False, ent_dir,
                                            prod_dir)
 
@@ -1637,7 +1637,7 @@ class ReposCommand(CliCommand):
 class ConfigCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List, set, or remove the configuration parameters in use by this machine")
+        shortdesc = _("List, set, or remove the configuration parameters in use by this system")
         super(ConfigCommand, self).__init__("config", shortdesc, False, ent_dir,
                                             prod_dir)
 
@@ -1746,7 +1746,7 @@ class ConfigCommand(CliCommand):
 class ListCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List subscription and product information for this machine")
+        shortdesc = _("List subscription and product information for this system")
         super(ListCommand, self).__init__("list", shortdesc, True,
                                           ent_dir, prod_dir)
         self.available = None

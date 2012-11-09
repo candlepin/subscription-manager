@@ -31,7 +31,7 @@ class BrandingTests(unittest.TestCase):
     def test_default_branding(self):
         branding = Branding()
 
-        self.assertEquals("Register the machine to the server",
+        self.assertEquals("Register the system to the server",
                 branding.CLI_REGISTER)
 
     # XXX this test requires the mo files installed
@@ -56,5 +56,5 @@ class BrandingTests(unittest.TestCase):
         custom_branding = TestBranding()
         branding = Branding(custom_branding)
 
-        self.assertEquals("Unregister the machine from the server",
+        self.assertEquals("Unregister the system from the server",
                 branding.CLI_UNREGISTER)
