@@ -847,11 +847,11 @@ class RegisterCommand(UserPassCommand):
         self._add_url_options()
         self.parser.add_option("--baseurl", dest="base_url",
                               default=None, help=_("base url for content in form of https://hostname:443/prefix"))
-        self.parser.add_option("--type", dest="consumertype", default="system",
+        self.parser.add_option("--type", dest="consumertype", default="system", metavar="UNITTYPE",
                                help=_("the type of unit to register, defaults to system"))
-        self.parser.add_option("--name", dest="consumername",
+        self.parser.add_option("--name", dest="consumername", metavar="SYSTEMNAME",
                                help=_("name of the system to register, defaults to the hostname"))
-        self.parser.add_option("--consumerid", dest="consumerid",
+        self.parser.add_option("--consumerid", dest="consumerid", metavar="SYSTEMID",
                                help=_("the existing system data is pulled from the server"))
         self.parser.add_option("--org", dest="org",
                                help=_("register to one of multiple organizations for the user"))
