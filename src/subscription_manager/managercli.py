@@ -859,8 +859,8 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--release", dest="release",
                                help=_("set a release version"))
         self.parser.add_option("--autosubscribe", action='store_true',
-                               help=_("Deprecated, see --autoattach"))
-        self.parser.add_option("--autoattach", action='store_true',
+                               help=_("Deprecated, see --auto-attach"))
+        self.parser.add_option("--auto-attach", action='store_true', dest="autoattach",
                                help=_("automatically attach this system to\
                                      compatible subscriptions."))
         self.parser.add_option("--force", action='store_true',
@@ -892,14 +892,14 @@ class RegisterCommand(UserPassCommand):
             print(_("Error: Activation keys do not allow environments to be specified."))
             sys.exit(-1)
         elif (self.autoattach and self.options.activation_keys):
-            print(_("Error: Activation keys cannot be used with --autoattach."))
+            print(_("Error: Activation keys cannot be used with --auto-attach."))
             sys.exit(-1)
         #746259: Don't allow the user to pass in an empty string as an activation key
         elif (self.options.activation_keys and '' in self.options.activation_keys):
             print(_("Error: Must specify an activation key"))
             sys.exit(-1)
         elif (self.options.service_level and not self.autoattach):
-            print(_("Error: Must use --autoattach with --servicelevel."))
+            print(_("Error: Must use --auto-attach with --servicelevel."))
             sys.exit(-1)
         elif (self.options.activation_keys and not self.options.org):
             print(_("Error: Must provide --org with activation keys."))
@@ -1332,7 +1332,7 @@ class AttachCommand(CliCommand):
                     consumer = self.cp.getConsumer(consumer_uuid)
                     if 'serviceLevel' not in consumer:
                         systemExit(-1, _("Error: The --servicelevel option is not "
-                                         "supported by the server. Did not perform "
+                                         "supported by the server. Did not "
                                          "complete your request."))
                 autosubscribe(self.cp, consumer_uuid,
                               service_level=self.options.service_level)
@@ -1691,7 +1691,7 @@ class ReposCommand(CliCommand):
 class ConfigCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List, set, or remove the configuration parameters in use by this system")
+        shortdesc = _("List, set, or remove the configuration parameters in use by this system.")
         super(ConfigCommand, self).__init__("config", shortdesc, False, ent_dir,
                                             prod_dir)
 
@@ -1800,7 +1800,7 @@ class ConfigCommand(CliCommand):
 class ListCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List subscription and product information for this system")
+        shortdesc = _("List subscription and product information for this system.")
         super(ListCommand, self).__init__("list", shortdesc, True,
                                           ent_dir, prod_dir)
         self.available = None
