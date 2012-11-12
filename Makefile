@@ -196,6 +196,7 @@ install-files: dbus-service-install compile-po desktop-files
 	install -m 644 man/rhsm-icon.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
 	install -m 644 man/subscription-manager.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
 	install -m 644 man/subscription-manager-gui.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
+	install -m 644 man/rct.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
 	if [ ${OS_VERSION} = 5 ]; then install -m 644 man/install-num-migrate-to-rhsm.8 ${PREFIX}/${INSTALL_DIR}/man/man8/; fi
 
 	install -m 644 etc-conf/rhsm-icon.desktop \

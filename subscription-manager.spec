@@ -239,6 +239,7 @@ rm -rf %{buildroot}
 %doc
 %{_mandir}/man8/subscription-manager.8*
 %{_mandir}/man8/rhsmcertd.8*
+%{_mandir}/man8/rct.8*
 %doc LICENSE
 
 
