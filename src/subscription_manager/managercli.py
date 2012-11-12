@@ -866,7 +866,7 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--force", action='store_true',
                                help=_("register the system even if it is already registered"))
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
-                               help=_("one or more activation keys to use for registration"))
+                               help=_("activation key to use for registration (can be specified more than once)"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("system preference used when subscribing automatically"))
 
@@ -1250,7 +1250,7 @@ class AttachCommand(CliCommand):
         self.product = None
         self.substoken = None
         self.parser.add_option("--pool", dest="pool", action='append',
-                               help=_("the id of the pool to attach"))
+                               help=_("the id of the pool to attach (can be specified more than once)"))
         self.parser.add_option("--quantity", dest="quantity",
                                help=_("number of subscriptions to attach"))
         self.parser.add_option("--auto", action='store_true',
@@ -1382,7 +1382,7 @@ class RemoveCommand(CliCommand):
             prod_dir)
 
         self.parser.add_option("--serial", action='append', dest="serials",
-                       help=_("One or more Certificate serials to remove"))
+                       help=_("Certificate serial number to remove (can be specified more than once)"))
         self.parser.add_option("--all", dest="all", action="store_true",
                                help=_("Remove all subscriptions from this system"))
 
