@@ -21,7 +21,11 @@ import rhsm.connection as connection
 from subscription_manager import managercli
 
 
+# This is a dupe of test_remove
 class CliUnSubscribeTests(unittest.TestCase):
+
+    def setUp(self):
+        self.oldCI = managercli.ConsumerIdentity
 
     def test_unsubscribe_registered(self):
         connection.UEPConnection = StubUEP
@@ -79,3 +83,6 @@ class CliUnSubscribeTests(unittest.TestCase):
         self.assertTrue(ent1.is_deleted)
         self.assertFalse(ent2.is_deleted)
         self.assertTrue(ent3.is_deleted)
+
+    def tearDown(self):
+        managercli.ConsumerIdentity = self.oldCI
