@@ -61,13 +61,13 @@
                     <property name="layout_style">end</property>
                     <child>
                       <widget class="GtkButton" id="unsubscribe_button">
-                        <property name="label" translatable="yes">Unsubscribe</property>
+                        <property name="label" translatable="yes">Remove</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="yalign">0.46000000834465027</property>
                         <accessibility>
-                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Unsubscribe</atkproperty>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Remove</atkproperty>
                         </accessibility>
                         <signal name="clicked" handler="on_unsubscribe_button_clicked"/>
                       </widget>

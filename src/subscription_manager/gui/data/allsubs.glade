@@ -217,13 +217,13 @@
                 <property name="layout_style">end</property>
                 <child>
                   <widget class="GtkButton" id="subscribe_button">
-                    <property name="label" translatable="yes">Subscribe</property>
+                    <property name="label" translatable="yes">Attach</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Subscribe</atkproperty>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Attach</atkproperty>
                     </accessibility>
                     <signal name="clicked" handler="on_subscribe_button_clicked"/>
                   </widget>
