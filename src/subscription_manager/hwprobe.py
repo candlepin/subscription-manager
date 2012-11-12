@@ -281,49 +281,83 @@ class Hardware:
         self.allhw.update(self.netinfo)
         return self.netinfo
 
+    def _should_get_mac_address(self, device):
+        if (device.startswith('sit') or device.startswith('lo')):
+            return False
+        return True
+
     def getNetworkInterfaces(self):
         netinfdict = {}
-        metakeys = ['mac_address', 'ipv4_address', 'ipv4_netmask', 'ipv4_broadcast']
+        old_ipv4_metakeys = ['ipv4_address', 'ipv4_netmask', 'ipv4_broadcast']
+        ipv4_metakeys = ['address', 'netmask', 'broadcast']
         ipv6_metakeys = ['address', 'netmask']
         try:
-            for info in ethtool.get_interfaces_info(ethtool.get_devices()):
+            interfaces_info = ethtool.get_interfaces_info(ethtool.get_devices())
+            for info in interfaces_info:
                 master = None
+                mac_address = info.mac_address
+                device = info.device
+                # Omit mac addresses for sit and lo device types. See BZ838123
+                # mac address are per interface, not per address
+                if self._should_get_mac_address(device):
+                    key = '.'.join(['net.interface', device, 'mac_address'])
+                    netinfdict[key] = mac_address
+
+                # all of our supported versions of python-ethtool support
+                # get_ipv6_addresses
                 for addr in info.get_ipv6_addresses():
+                    # ethtool returns a different scope for "public" IPv6 addresses
+                    # on different versions of RHEL.  EL5 is "global", while EL6 is
+                    # "universe".  Make them consistent.
+                    scope = addr.scope
+                    if scope == 'universe':
+                        scope = 'global'
+
+                    # FIXME: this doesn't support multiple addresses per interface
+                    # (it finds them, but collides on the key name and loses all
+                    # but the last write). See bz #874735
                     for mkey in ipv6_metakeys:
-                        #Omit mac addresses for sit types. See BZ838123
-                        if not ((info.device.startswith("sit") or info.device == "lo") and \
-                                mkey == 'mac_address'):
-                            # ethtool returns a different scope for "public" IPv6 addresses
-                            # on different versions of RHEL.  EL5 is "global", while EL6 is
-                            # "universe".  Make them consistent.
-                            scope = addr.scope
-                            if scope == 'universe':
-                                scope = 'global'
+                        key = '.'.join(['net.interface', info.device, 'ipv6_%s' % (mkey), scope])
+                        # we could specify a default here... that could hide
+                        # api breakage though and unit testing hw detect is... meh
+                        attr = getattr(addr, mkey) or 'Unknown'
+                        netinfdict[key] = attr
 
-                            key = '.'.join(['net.interface', info.device, 'ipv6_%s' % (mkey), scope])
-                            attr = getattr(addr, mkey)
-                            if attr:
-                                netinfdict[key] = attr
-                            else:
-                                netinfdict[key] = "Unknown"
-
-                # XXX: The kernel supports multiple IPv4 addresses on a single
-                # interface when using iproute2.  However, the ethtool.etherinfo.ipv4_*
-                # members will only return the last retrieved IPv4 configuration.  As
-                # of 25 Jan 2012 work on a patch was in progress.  See BZ 759150.
-                for mkey in metakeys:
-                    # Omit Loopback mac address
-
-                    if not ((info.device.startswith("sit") or info.device == 'lo') and \
-                            mkey == 'mac_address'):
-                        key = '.'.join(['net.interface', info.device, mkey])
-                        attr = getattr(info, mkey)
-                        if attr:
+                # However, old version of python-ethtool do not support
+                # get_ipv4_address
+                #
+                # python-ethtool's api changed between rhel6.3 and rhel6.4
+                # (0.6-1.el6 to 0.6-2.el6)
+                # (without revving the upstream version... bad python-ethtool!)
+                # note that 0.6-5.el5 (from rhel5.9) has the old api
+                #
+                # previously, we got the 'ipv4_address' from the etherinfo object
+                # directly. In the new api, that isn't exposed, so we get the list
+                # of addresses on the interface, and populate the info from there.
+                #
+                # That api change as to address bz #759150. The bug there was that
+                # python-ethtool only showed one ip address per interface. To
+                # accomdate the finer grained info, the api changed...
+                #
+                # FIXME: see FIXME for get_ipv6_address, we don't record multiple
+                # addresses per interface
+                if hasattr(info, 'get_ipv4_addresses'):
+                    for addr in info.get_ipv4_addresses():
+                        for mkey in ipv4_metakeys:
+                            # append 'ipv4_' to match the older interface and keeps facts
+                            # consistent
+                            key = '.'.join(['net.interface', info.device, 'ipv4_%s' % (mkey)])
+                            attr = getattr(addr, mkey) or 'Unknown'
                             netinfdict[key] = attr
-                        else:
-                            netinfdict[key] = "Unknown"
+                # check to see if we are actually an ipv4 interface
+                elif hasattr(info, 'ipv4_address'):
+                    for mkey in old_ipv4_metakeys:
+                        key = '.'.join(['net.interface', device, mkey])
+                        attr = getattr(info, mkey) or 'Unknown'
+                        netinfdict[key] = attr
+                # otherwise we are ipv6 and we handled that already
 
-                # slave devices can have their hwaddr changed
+                # bonded slave devices can have their hwaddr changed
                 #
                 # "master" here refers to the slave's master device.
                 # If we find a master link, we are a  slave, and we need
@@ -341,7 +375,7 @@ class Hardware:
                     key = '.'.join(['net.interface', info.device, "permanent_mac_address"])
                     netinfdict[key] = permanent_mac_addr
 
-        except:
+        except Exception:
             print _("Error reading network interface information:"), sys.exc_type
         self.allhw.update(netinfdict)
         return netinfdict
