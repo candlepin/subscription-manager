@@ -85,7 +85,7 @@ AVAILABLE_SUBS_LIST = \
     _("Service Type:         \t%s") + "\n" + \
     _("Multi-Entitlement:    \t%s") + "\n" + \
     _("Ends:                 \t%s") + "\n" + \
-    _("Machine Type:         \t%s") + "\n"
+    _("System Type:          \t%s") + "\n"
 
 REPOS_LIST = \
     _("Repo Id:              \t%s") + "\n" + \
@@ -1691,7 +1691,7 @@ class ReposCommand(CliCommand):
 class ConfigCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List, set, or remove the configuration parameters in use by this system")
+        shortdesc = _("List, set, or remove the configuration parameters in use by this system.")
         super(ConfigCommand, self).__init__("config", shortdesc, False, ent_dir,
                                             prod_dir)
 
@@ -1800,7 +1800,7 @@ class ConfigCommand(CliCommand):
 class ListCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List subscription and product information for this system")
+        shortdesc = _("List subscription and product information for this system.")
         super(ListCommand, self).__init__("list", shortdesc, True,
                                           ent_dir, prod_dir)
         self.available = None
