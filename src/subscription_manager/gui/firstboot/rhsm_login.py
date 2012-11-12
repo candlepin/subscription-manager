@@ -101,7 +101,7 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
             if self._parent.activation_keys:
                 self._parent.pre_done(registergui.REFRESH_SUBSCRIPTIONS_PAGE)
             elif self._parent.skip_auto_bind:
-                message = _("You have opted to skip auto-subscribe.")
+                message = _("You have opted to skip auto-attach.")
                 self._parent.manual_message = message
                 self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
             else:
