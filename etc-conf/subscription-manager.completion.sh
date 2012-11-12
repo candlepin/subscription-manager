@@ -32,7 +32,7 @@ _subscription-manager_register()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_subscribe()
+_subscription-manager_attach()
 {
   # try to autocomplete pool id's as well
   # doesn't work well with sudo/non root users though
@@ -55,7 +55,7 @@ _subscription-manager_unregister()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_unsubscribe()
+_subscription-manager_remove()
 {
  # try to autocomplete serial number as well
   case $prev in
@@ -163,15 +163,13 @@ _subscription-manager()
 
   # top-level commands and options
   opts="list refresh register subscribe unregister unsubscribe clean config environments
-  facts identity import orgs release redeem repos service-level"
+  facts identity import orgs release redeem repos service-level attach remove"
 
   case "${first}" in
       list|\
       refresh|\
       register|\
-      subscribe|\
       unregister|\
-      unsubscribe|\
       clean|\
       config|\
       environments|\
@@ -186,7 +184,15 @@ _subscription-manager()
       "_subscription-manager_$first" "${cur}" "${prev}"
       return 0
       ;;
-    *)
+      attach|subscribe)
+      "_subscription-manager_attach" "${cur}" "${prev}"
+      return 0
+      ;;
+      remove|unsubscribe)
+      "_subscription-manager_remove" "${cur}" "${prev}"
+      return 0
+      ;;
+      *)
       ;;
   esac
 
