@@ -29,10 +29,8 @@ from subscription_manager import managerlib
 from subscription_manager.gui import storage
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import utils
-from subscription_manager.gui import file_monitor
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
-UPDATE_FILE = '/var/run/rhsm/update'
 
 WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
 
@@ -70,7 +68,7 @@ class GladeWidget(object):
 
 
 class SubscriptionManagerTab(GladeWidget):
-    widget_names = ['top_view', 'content', 'next_checkin_label']
+    widget_names = ['top_view', 'content']
     # approx gtk version we need for grid lines to work
     # and not throw errors, this relates to basically rhel6
     MIN_GTK_MAJOR_GRID = 2
@@ -99,12 +97,6 @@ class SubscriptionManagerTab(GladeWidget):
 
         selection = self.top_view.get_selection()
         selection.connect('changed', self._selection_callback)
-
-        def on_cert_update(filemonitor):
-            self._set_next_update()
-
-        # For updating the 'Next Check-in' time
-        file_monitor.Monitor(UPDATE_FILE).connect('changed', on_cert_update)
 
     def get_store(self):
         return storage.MappedListStore(self.get_type_map())
@@ -189,22 +181,8 @@ class SubscriptionManagerTab(GladeWidget):
     def on_no_selection(self):
         pass
 
-    def _set_next_update(self):
-        try:
-            next_update = long(file(UPDATE_FILE).read())
-        except:
-            next_update = None
-
-        if next_update:
-            update_time = datetime.datetime.fromtimestamp(next_update)
-            self.next_checkin_label.set_text(_('Next System Check-in: %s') %
-                                            update_time.strftime("%c"))
-            self.next_checkin_label.show()
-        else:
-            self.next_checkin_label.hide()
-
     def refresh(self):
-        self._set_next_update()
+        pass
 
 
 class SelectionWrapper(object):
