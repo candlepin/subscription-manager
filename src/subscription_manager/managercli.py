@@ -1006,7 +1006,7 @@ class RegisterCommand(UserPassCommand):
         if self.autoattach:
             if 'serviceLevel' not in consumer and self.options.service_level:
                 systemExit(-1, _("Error: The --servicelevel option is not supported "
-                                 "by the server. Did not perform autoattach."))
+                                 "by the server. Did not complete your request."))
             autosubscribe(self.cp, consumer['uuid'],
                     service_level=self.options.service_level)
         if (self.options.consumerid or self.options.activation_keys or
@@ -1333,7 +1333,7 @@ class AttachCommand(CliCommand):
                     if 'serviceLevel' not in consumer:
                         systemExit(-1, _("Error: The --servicelevel option is not "
                                          "supported by the server. Did not perform "
-                                         "autoattach."))
+                                         "complete your request."))
                 autosubscribe(self.cp, consumer_uuid,
                               service_level=self.options.service_level)
 
