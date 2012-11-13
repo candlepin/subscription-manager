@@ -18,7 +18,7 @@ Prints the size of the certificate and other details about the certificate. The 
 
 .TP
 .B cat-cert
-Sets the interval to use between checks for the product subscription status. The value is in seconds. Two options, \fB--no-content\fP and \fB--no-products\fP, can be used to shorten the output to include only header and descriptive information.
+Prints the information that is contained in the certificate itself, such as the certificate headers, serial numbers, products, and content sets. Two options, \fB--no-content\fP and \fB--no-products\fP, can be used to shorten the output to include only header and descriptive information.
 
 .SH THE STAT-CERT COMMAND
 The \fBrct\fP tool is used to gather information about the already-issued certificates being used by Subscription Manager. The main reason for that is that certificate sizes, for a number of reasons, impact content delivery service performance. New certificate version (3.0 and later) use more efficient encoding, resulting in smaller certificate content sizes and better performance. If there are problems with the content service timing out or returning errors, then the \fBrct stat-cert\fP command can be used to check the size and version of a given entitlement certificate quickly.
