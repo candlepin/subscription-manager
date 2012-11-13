@@ -457,6 +457,41 @@ class TestConfigCommand(TestCliCommand):
         self.assertRaises(SystemExit, self.cc.main, ['--remove', 'notdotted'])
 
 
+# Test Attach and Subscribe are the same
+class TestAttachCommand(TestCliProxyCommand):
+    command_class = managercli.AttachCommand
+
+    def _test_quantity_exception(self, arg):
+        try:
+            self.cc.main(["--auto", "--quantity", arg])
+            self.cc._validate_options()
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+        else:
+            self.fail("No Exception Raised")
+
+    def test_zero_quantity(self):
+        self._test_quantity_exception("0")
+
+    def test_negative_quantity(self):
+        self._test_quantity_exception("-1")
+
+    def test_text_quantity(self):
+        self._test_quantity_exception("JarJarBinks")
+
+    def test_positive_quantity(self):
+        self.cc.main(["--auto", "--quantity", "1"])
+        self.cc._validate_options()
+
+    def test_positive_quantity_with_plus(self):
+        self.cc.main(["--auto", "--quantity", "+1"])
+        self.cc._validate_options()
+
+    def test_positive_quantity_as_float(self):
+        self._test_quantity_exception("2.0")
+
+
+# Test Attach and Subscribe are the same
 class TestSubscribeCommand(TestCliProxyCommand):
     command_class = managercli.SubscribeCommand
 
@@ -488,6 +523,10 @@ class TestSubscribeCommand(TestCliProxyCommand):
 
     def test_positive_quantity_as_float(self):
         self._test_quantity_exception("2.0")
+
+
+class TestRemoveCommand(TestCliProxyCommand):
+    command_class = managercli.RemoveCommand
 
 
 class TestUnSubscribeCommand(TestCliProxyCommand):

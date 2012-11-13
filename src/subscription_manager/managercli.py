@@ -85,7 +85,7 @@ AVAILABLE_SUBS_LIST = \
     _("Service Type:         \t%s") + "\n" + \
     _("Multi-Entitlement:    \t%s") + "\n" + \
     _("Ends:                 \t%s") + "\n" + \
-    _("Machine Type:         \t%s") + "\n"
+    _("System Type:          \t%s") + "\n"
 
 REPOS_LIST = \
     _("Repo Id:              \t%s") + "\n" + \
@@ -152,7 +152,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
         cp.bind(consumer_uuid)  # new style
 
     except Exception, e:
-        log.warning("Error during auto-subscribe.")
+        log.warning("Error during auto-attach.")
         log.exception(e)
 
 
@@ -160,7 +160,7 @@ def show_autosubscribe_output():
     installed_status = managerlib.getInstalledProductStatus(ProductDirectory(),
             EntitlementDirectory())
 
-    log.info("Attempted to auto-subscribe/heal the system.")
+    log.info("Attempted to auto-attach/heal the system.")
     print _("Installed Product Current Status:")
     subscribed = False
     for prod_status in installed_status:
@@ -425,7 +425,7 @@ class CliCommand(AbstractCLICommand):
                 return return_code
         except X509.X509Error, e:
             log.error(e)
-            print _('Consumer certificates corrupted. Please reregister.')
+            print _('System certificates corrupted. Please reregister.')
 
 
 class UserPassCommand(CliCommand):
@@ -483,7 +483,7 @@ class UserPassCommand(CliCommand):
 
 class CleanCommand(CliCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Remove all local consumer and subscription data without affecting the server")
+        shortdesc = _("Remove all local system and subscription data without affecting the server")
 
         super(CleanCommand, self).__init__("clean", shortdesc, False, ent_dir,
                                            prod_dir)
@@ -528,7 +528,6 @@ class RefreshCommand(CliCommand):
 
 
 class IdentityCommand(UserPassCommand):
-
     def __init__(self, ent_dir=None, prod_dir=None):
         shortdesc = _("Display the identity certificate for this system or " \
                       "request a new one")
@@ -847,12 +846,12 @@ class RegisterCommand(UserPassCommand):
         self._add_url_options()
         self.parser.add_option("--baseurl", dest="base_url",
                               default=None, help=_("base url for content in form of https://hostname:443/prefix"))
-        self.parser.add_option("--type", dest="consumertype", default="system",
-                               help=_("the type of consumer to register, defaults to system"))
-        self.parser.add_option("--name", dest="consumername",
-                               help=_("name of the consumer to register, defaults to the hostname"))
-        self.parser.add_option("--consumerid", dest="consumerid",
-                               help=_("the existing consumer data is pulled from the server"))
+        self.parser.add_option("--type", dest="consumertype", default="system", metavar="UNITTYPE",
+                               help=_("the type of unit to register, defaults to system"))
+        self.parser.add_option("--name", dest="consumername", metavar="SYSTEMNAME",
+                               help=_("name of the system to register, defaults to the hostname"))
+        self.parser.add_option("--consumerid", dest="consumerid", metavar="SYSTEMID",
+                               help=_("the existing system data is pulled from the server"))
         self.parser.add_option("--org", dest="org",
                                help=_("register to one of multiple organizations for the user"))
         self.parser.add_option("--environment", dest="environment",
@@ -860,12 +859,14 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--release", dest="release",
                                help=_("set a release version"))
         self.parser.add_option("--autosubscribe", action='store_true',
-                               help=_("automatically subscribe this system to\
+                               help=_("Deprecated, see --autoattach"))
+        self.parser.add_option("--autoattach", action='store_true',
+                               help=_("automatically attach this system to\
                                      compatible subscriptions."))
         self.parser.add_option("--force", action='store_true',
                                help=_("register the system even if it is already registered"))
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
-                               help=_("one or more activation keys to use for registration"))
+                               help=_("activation key to use for registration (can be specified more than once)"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("system preference used when subscribing automatically"))
 
@@ -874,11 +875,12 @@ class RegisterCommand(UserPassCommand):
         self.installed_mgr = InstalledProductsManager()
 
     def _validate_options(self):
+        self.autoattach = self.options.autosubscribe or self.options.autoattach
         if self.consumerIdentity.exists() and not self.options.force:
             print(_("This system is already registered. Use --force to override"))
             sys.exit(1)
         elif (self.options.consumername == ''):
-            print(_("Error: consumer name can not be empty."))
+            print(_("Error: system name can not be empty."))
             sys.exit(-1)
         elif (self.options.username and self.options.activation_keys):
             print(_("Error: Activation keys do not require user credentials."))
@@ -889,15 +891,15 @@ class RegisterCommand(UserPassCommand):
         elif (self.options.environment and self.options.activation_keys):
             print(_("Error: Activation keys do not allow environments to be specified."))
             sys.exit(-1)
-        elif (self.options.autosubscribe and self.options.activation_keys):
-            print(_("Error: Activation keys cannot be used with --autosubscribe."))
+        elif (self.autoattach and self.options.activation_keys):
+            print(_("Error: Activation keys cannot be used with --autoattach."))
             sys.exit(-1)
         #746259: Don't allow the user to pass in an empty string as an activation key
         elif (self.options.activation_keys and '' in self.options.activation_keys):
             print(_("Error: Must specify an activation key"))
             sys.exit(-1)
-        elif (self.options.service_level and not self.options.autosubscribe):
-            print(_("Error: Must use --autosubscribe with --servicelevel."))
+        elif (self.options.service_level and not self.autoattach):
+            print(_("Error: Must use --autoattach with --servicelevel."))
             sys.exit(-1)
         elif (self.options.activation_keys and not self.options.org):
             print(_("Error: Must provide --org with activation keys."))
@@ -1001,19 +1003,19 @@ class RegisterCommand(UserPassCommand):
             # TODO: grab the list of valid options, and check
             self.cp.updateConsumer(consumer['uuid'], release=self.options.release)
 
-        if self.options.autosubscribe:
+        if self.autoattach:
             if 'serviceLevel' not in consumer and self.options.service_level:
                 systemExit(-1, _("Error: The --servicelevel option is not supported "
-                                 "by the server. Did not perform autosubscribe."))
+                                 "by the server. Did not perform autoattach."))
             autosubscribe(self.cp, consumer['uuid'],
                     service_level=self.options.service_level)
         if (self.options.consumerid or self.options.activation_keys or
-                self.options.autosubscribe):
+                self.autoattach):
             self.certlib.update()
 
         # run this after certlib update, so we have the new entitlements
         return_code = 0
-        if self.options.autosubscribe:
+        if self.autoattach:
             subscribed = show_autosubscribe_output()
             if not subscribed:
                 return_code = 1
@@ -1235,24 +1237,36 @@ class ReleaseCommand(CliCommand):
             self.show_current_release()
 
 
-class SubscribeCommand(CliCommand):
+class AttachCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Subscribe the registered system to a specified product")
-        super(SubscribeCommand, self).__init__("subscribe", shortdesc, True,
-                                               ent_dir, prod_dir)
+        super(AttachCommand, self).__init__(
+            self._command_name(),
+            self._short_description(),
+            self._primary(),
+            ent_dir,
+            prod_dir)
 
         self.product = None
         self.substoken = None
         self.parser.add_option("--pool", dest="pool", action='append',
-                               help=_("the id of the pool to subscribe to"))
+                               help=_("the id of the pool to attach (can be specified more than once)"))
         self.parser.add_option("--quantity", dest="quantity",
-                               help=_("number of subscriptions to consume"))
+                               help=_("number of subscriptions to attach"))
         self.parser.add_option("--auto", action='store_true',
-                               help=_("automatically subscribe this system to\
-                                     compatible subscriptions."))
+                               help=_("automatically attach compatible \
+                               subscriptions to this syste"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("service level to apply to this system"))
+
+    def _short_description(self):
+        return _("Attach a specified subscription to the registered system")
+
+    def _command_name(self):
+        return "attach"
+
+    def _primary(self):
+        return True
 
     def _validate_options(self):
         if not (self.options.pool or self.options.auto):
@@ -1296,8 +1310,8 @@ class SubscribeCommand(CliCommand):
                         # Usually just one, but may as well be safe:
                         for ent in ents:
                             pool_json = ent['pool']
-                            print _("Successfully consumed a subscription for: %s") % pool_json['productName']
-                            log.info("Successfully consumed a subscription for: %s (%s)" %
+                            print _("Successfully attached a subscription for: %s") % pool_json['productName']
+                            log.info("Successfully attached a subscription for: %s (%s)" %
                                     (pool_json['productName'], pool))
                             subscribed = True
                     except connection.RestlibException, re:
@@ -1319,7 +1333,7 @@ class SubscribeCommand(CliCommand):
                     if 'serviceLevel' not in consumer:
                         systemExit(-1, _("Error: The --servicelevel option is not "
                                          "supported by the server. Did not perform "
-                                         "autosubscribe."))
+                                         "autoattach."))
                 autosubscribe(self.cp, consumer_uuid,
                               service_level=self.options.service_level)
 
@@ -1335,7 +1349,7 @@ class SubscribeCommand(CliCommand):
                     return_code = 1
 
         except Exception, e:
-            handle_exception("Unable to subscribe: %s" % e, e)
+            handle_exception("Unable to attach: %s" % e, e)
 
         # it is okay to call this no matter what happens above,
         # it's just a notification to perform a check
@@ -1343,17 +1357,43 @@ class SubscribeCommand(CliCommand):
         return return_code
 
 
-class UnSubscribeCommand(CliCommand):
+class SubscribeCommand(AttachCommand):
+    def __init__(self, ent_dir=None, prod_dir=None):
+        super(SubscribeCommand, self).__init__(ent_dir, prod_dir)
+
+    def _short_description(self):
+        return _("Deprecated, see attach")
+
+    def _command_name(self):
+        return "subscribe"
+
+    def _primary(self):
+        return False
+
+
+class RemoveCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Unsubscribe the system from all or specific subscriptions")
-        super(UnSubscribeCommand, self).__init__("unsubscribe", shortdesc, True,
-                                                 ent_dir, prod_dir)
+        super(RemoveCommand, self).__init__(
+            self._command_name(),
+            self._short_description(),
+            self._primary(),
+            ent_dir,
+            prod_dir)
 
         self.parser.add_option("--serial", action='append', dest="serials",
-                       help=_("One or more Certificate serials to unsubscribe"))
+                       help=_("Certificate serial number to remove (can be specified more than once)"))
         self.parser.add_option("--all", dest="all", action="store_true",
-                               help=_("Unsubscribe from all subscriptions"))
+                               help=_("Remove all subscriptions from this system"))
+
+    def _short_description(self):
+        return _("Remove all or specific subscriptions from this system")
+
+    def _command_name(self):
+        return "remove"
+
+    def _primary(self):
+        return True
 
     def _validate_options(self):
         if self.options.serials:
@@ -1381,13 +1421,13 @@ class UnSubscribeCommand(CliCommand):
                     # total will be None on older Candlepins that don't
                     # support returning the number of subscriptions unsubscribed from
                     if total is None:
-                        print _("This system has been unsubscribed from all subscriptions.")
+                        print _("All subscriptions have been removed from this system.")
                     else:
                         count = total['deletedRecords']
                         if count == 1:
-                            print _("This system has been unsubscribed from 1 subscription.")
+                            print _("1 subscription removed from this system.")
                         else:
-                            print _("This system has been unsubscribed from %s subscriptions." \
+                            print _("%s subscriptions removed from this system." \
                                 % total['deletedRecords'])
                 else:
                     success = []
@@ -1402,11 +1442,11 @@ class UnSubscribeCommand(CliCommand):
                                 systemExit(-1)
                             failure.append(re.msg)
                     if success:
-                        print _("Successfully unsubscribed serial numbers:")
+                        print _("Successfully removed serial numbers:")
                         for ser in success:
                             print "   %s" % ser
                     if failure:
-                        print _("Unsuccessfully unsubscribed serial numbers:")
+                        print _("Unsuccessfully removed serial numbers:")
                         for fail in failure:
                             print "   %s" % fail
                 self.certlib.update()
@@ -1414,7 +1454,7 @@ class UnSubscribeCommand(CliCommand):
                 log.error(re)
                 systemExit(-1, re.msg)
             except Exception, e:
-                handle_exception(_("Unable to perform unsubscribe due to the following exception: %s") % e, e)
+                handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
         else:
             # We never got registered, just remove the cert
             try:
@@ -1423,19 +1463,33 @@ class UnSubscribeCommand(CliCommand):
                     for ent in self.entitlement_dir.list():
                         ent.delete()
                         total = total + 1
-                    print _("This system has been unsubscribed from %s subscriptions" % total)
+                    print _("%s subscriptions removed from this system." % total)
                 else:
                     for ent in self.entitlement_dir.list():
                         if str(ent.serial) in self.options.serials:
                             ent.delete()
-                            print _("This system has been unsubscribed from subscription "
-                                    "with serial number %s" % str(ent.serial))
+                            print _("Subscription with serial number %s removed from this system"
+                                % str(ent.serial))
             except Exception, e:
-                handle_exception(_("Unable to perform unsubscribe due to the following exception: %s") % e, e)
+                handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
 
         # it is okay to call this no matter what happens above,
         # it's just a notification to perform a check
         self._request_validity_check()
+
+
+class UnSubscribeCommand(RemoveCommand):
+    def __init__(self, ent_dir=None, prod_dir=None):
+        super(UnSubscribeCommand, self).__init__(ent_dir, prod_dir)
+
+    def _short_description(self):
+        return _("Deprecated, see remove")
+
+    def _command_name(self):
+        return "unsubscribe"
+
+    def _primary(self):
+        return False
 
 
 class FactsCommand(CliCommand):
@@ -1637,7 +1691,7 @@ class ReposCommand(CliCommand):
 class ConfigCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List, set, or remove the configuration parameters in use by this system")
+        shortdesc = _("List, set, or remove the configuration parameters in use by this system.")
         super(ConfigCommand, self).__init__("config", shortdesc, False, ent_dir,
                                             prod_dir)
 
@@ -1746,7 +1800,7 @@ class ConfigCommand(CliCommand):
 class ListCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List subscription and product information for this system")
+        shortdesc = _("List subscription and product information for this system.")
         super(ListCommand, self).__init__("list", shortdesc, True,
                                           ent_dir, prod_dir)
         self.available = None
@@ -1993,7 +2047,7 @@ class ManagerCLI(CLI):
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
                        RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, ReleaseCommand, \
                        EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand, \
-                       VersionCommand]
+                       VersionCommand, RemoveCommand, AttachCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):

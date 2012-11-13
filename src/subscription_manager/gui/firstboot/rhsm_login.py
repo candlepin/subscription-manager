@@ -41,9 +41,9 @@ class SelectSLAScreen(registergui.SelectSLAScreen):
     def _on_get_service_levels_cb(self, result, error=None):
         if error != None:
             if isinstance(error, ServiceLevelNotSupportedException):
-                message = _("Unable to auto-subscribe, server does not support "
+                message = _("Unable to auto-attach, server does not support "
                             "service levels. Please run 'Subscription Manager' "
-                            "to manually subscribe.")
+                            "to manually attach a subscription.")
                 self._parent.manual_message = message
                 self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
             elif isinstance(error, NoProductsException):
@@ -69,7 +69,7 @@ class SelectSLAScreen(registergui.SelectSLAScreen):
             # when we cannot fix any unentitled products:
             if current_sla is not None and \
                     not self._can_add_more_subs(current_sla, sla_data_map):
-                message = _("Unable to subscribe to any additional products at "
+                message = _("Unable to attach any additional subscriptions at "
                             "current service level: %s") % current_sla
                 self._parent.manual_message = message
                 self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
@@ -84,7 +84,7 @@ class SelectSLAScreen(registergui.SelectSLAScreen):
         else:
             message = _("No service levels will cover all installed products. "
                 "Please run 'Subscription Manager' to manually "
-                "subscribe this system.")
+                "attach subscriptions.")
             self._parent.manual_message = message
             self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
 
@@ -101,7 +101,7 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
             if self._parent.activation_keys:
                 self._parent.pre_done(registergui.REFRESH_SUBSCRIPTIONS_PAGE)
             elif self._parent.skip_auto_bind:
-                message = _("You have opted to skip auto-subscribe.")
+                message = _("You have opted to skip auto-attach.")
                 self._parent.manual_message = message
                 self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
             else:

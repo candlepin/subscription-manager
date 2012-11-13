@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.6
+Version: 1.1.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -239,6 +239,7 @@ rm -rf %{buildroot}
 %doc
 %{_mandir}/man8/subscription-manager.8*
 %{_mandir}/man8/rhsmcertd.8*
+%{_mandir}/man8/rct.8*
 %doc LICENSE
 
 
@@ -345,6 +346,10 @@ fi
 %endif
 
 %changelog
+* Mon Nov 12 2012 Adrian Likins <alikins@redhat.com> 1.1.7-1
+- 873631: Migrate correctly when there is only one org. (awood@redhat.com)
+- 874147: Handle changes in python-ethool api (alikins@redhat.com)
+
 * Thu Nov 08 2012 Adrian Likins <alikins@redhat.com> 1.1.6-1
 - 872847: Change unsubscribe feedback when consumer has been deleted
   (wpoteat@redhat.com)
