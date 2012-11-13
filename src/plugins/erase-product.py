@@ -33,10 +33,10 @@ class EraseProductCommand:
         return ['erase-product']
 
     def getUsage(self):
-        return "usage info here"
+        return "[PRODUCTNAME...]"
 
     def getSummary(self):
-        return "Removes all packages related to a particular product"
+        return _("Removes all packages related to a particular product")
 
     def doCheck(self, base, basecmd, extcmds):
         pass
@@ -61,12 +61,12 @@ class EraseProductCommand:
                     base.remove(ipkg)
 
         if len(base.tsInfo) == 0:
-            return 0, ["No packages found for selected products"]
+            return 0, [_("No packages found for selected products")]
 
         if base.doTransaction() == 0:
-            return 0, ["Removed packages for selected products"]
+            return 0, [_("Removed packages for selected products")]
         else:
-            return 0, ["Error occured while removing packages. Please see yum.log for more details."]
+            return 0, [_("Error occured while removing packages. Please see yum.log for more details.")]
 
 
 def config_hook(conduit):
