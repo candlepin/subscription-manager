@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.7
+Version: 1.1.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,10 @@ fi
 %endif
 
 %changelog
+* Tue Nov 13 2012 Adrian Likins <alikins@redhat.com> 1.1.8-1
+- 862909: install rct man page (alikins@redhat.com)
+- Fix to LocalTz DST determination (cduryee@redhat.com)
+
 * Mon Nov 12 2012 Adrian Likins <alikins@redhat.com> 1.1.7-1
 - 873631: Migrate correctly when there is only one org. (awood@redhat.com)
 - 874147: Handle changes in python-ethool api (alikins@redhat.com)
