@@ -56,7 +56,7 @@ class EraseProductCommand:
 
         for product in extcmds:
             for ipkg in sorted(pkgs):
-                if 'from_repo' in ipkg.yumdb_info and ipkg.yumdb_info.from_repo == product_repo_mapping.get(product):
+                if 'from_repo' in ipkg.yumdb_info and ipkg.yumdb_info.from_repo in product_repo_mapping.get(product):
                     # add the package to the erasure transaction
                     base.remove(ipkg)
 
