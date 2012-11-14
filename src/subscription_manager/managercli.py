@@ -594,7 +594,7 @@ class IdentityCommand(UserPassCommand):
 class OwnersCommand(UserPassCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Display the orgs against which a user can register a system")
+        shortdesc = _("Display the organizations against which a user can register a system")
 
         super(OwnersCommand, self).__init__("orgs", shortdesc, False, ent_dir,
                                             prod_dir)
@@ -1160,7 +1160,7 @@ class RedeemCommand(CliCommand):
 
 class ReleaseCommand(CliCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Configure what os release to use")
+        shortdesc = _("Configure which operating system release to use")
         super(ReleaseCommand, self).__init__("release", shortdesc, True,
                                              ent_dir, prod_dir)
 
@@ -1602,7 +1602,7 @@ class ImportCertCommand(CliCommand):
 class ReposCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List the repos which this system is entitled to use")
+        shortdesc = _("List the repositories which this system is entitled to use")
         super(ReposCommand, self).__init__("repos", shortdesc, False, ent_dir,
                                            prod_dir)
 
@@ -1691,7 +1691,7 @@ class ReposCommand(CliCommand):
 class ConfigCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List, set, or remove the configuration parameters in use by this system.")
+        shortdesc = _("List, set, or remove the configuration parameters in use by this system")
         super(ConfigCommand, self).__init__("config", shortdesc, False, ent_dir,
                                             prod_dir)
 
@@ -1800,7 +1800,7 @@ class ConfigCommand(CliCommand):
 class ListCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List subscription and product information for this system.")
+        shortdesc = _("List subscription and product information for this system")
         super(ListCommand, self).__init__("list", shortdesc, True,
                                           ent_dir, prod_dir)
         self.available = None
