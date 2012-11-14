@@ -4,8 +4,8 @@ _ = gettext.gettext
 
 class Branding(object):
     def __init__(self):
-        self.CLI_REGISTER = _("register the system to the Customer Portal or another subscription management service.")
-        self.CLI_UNREGISTER = _("unregister the system from the Customer Portal or another subscription management service.")
+        self.CLI_REGISTER = _("Register this system to the Customer Portal or another subscription management service")
+        self.CLI_UNREGISTER = _("Unregister this system from the Customer Portal or another subscription management service")
         self.RHSMD_REGISTERED_TO_OTHER = \
                 _("This system is registered to RHN Classic.")
         self.REGISTERED_TO_OTHER_WARNING = _("WARNING") + \
