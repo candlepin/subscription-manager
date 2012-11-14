@@ -639,7 +639,7 @@ class EnvironmentsCommand(UserPassCommand):
 
         self._add_url_options()
         self.parser.add_option("--org", dest="org",
-                               help=_("specify org for environment list"))
+                               help=_("specify organization for environment list"))
 
     def _validate_options(self):
         if not self.options.org:
@@ -1114,12 +1114,12 @@ class RedeemCommand(CliCommand):
                                             prod_dir)
 
         self.parser.add_option("--email", dest="email", action='store',
-                               help=_("Email address to notify when "
-                               "subscription redemption is complete."))
+                               help=_("email address to notify when "
+                               "subscription redemption is complete"))
         self.parser.add_option("--locale", dest="locale", action='store',
-                               help=_("Optional language to use for email "
+                               help=_("optional language to use for email "
                                "notification when subscription redemption is "
-                               "complete. Examples: en-us, de-de"))
+                               "complete (Examples: en-us, de-de)"))
 
     def _validate_options(self):
         if not self.options.email:
@@ -1165,7 +1165,7 @@ class ReleaseCommand(CliCommand):
                                              ent_dir, prod_dir)
 
         self.parser.add_option("--show", dest="show", action="store_true",
-                               help=_("shows current release setting. default command."))
+                               help=_("shows current release setting; default command"))
         self.parser.add_option("--list", dest="list", action="store_true",
                                help=_("list available releases"))
         self.parser.add_option("--set", dest="release", action="store",
@@ -1814,9 +1814,9 @@ class ListCommand(CliCommand):
                                 help=(_("date to search on, defaults to today's date, only used with --available (example: %s)")
                                       % strftime("%Y-%m-%d", localtime())))
         self.parser.add_option("--consumed", action='store_true',
-                               help=_("show the subscriptions being consumed by this system."))
+                               help=_("show the subscriptions being consumed by this system"))
         self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("show only subscriptions matching the specified service level. Only used with --available and --consumed"))
+                               help=_("shows only subscriptions matching the specified service level; only used with --available and --consumed"))
 
         self.facts = Facts(ent_dir=self.entitlement_dir,
                           prod_dir=self.product_dir)
