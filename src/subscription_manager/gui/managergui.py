@@ -197,8 +197,8 @@ class MainWindow(widgets.GladeWidget):
     The new RHSM main window.
     """
     widget_names = ['main_window', 'notebook', 'system_name_label',
-                    'next_checkin_label', 'register_menu_item',
-                    'unregister_menu_item', 'redeem_menu_item']
+                    'register_menu_item', 'unregister_menu_item',
+                    'redeem_menu_item']
 
     def __init__(self, backend=None, consumer=None,
                  facts=None, ent_dir=None, prod_dir=None,
