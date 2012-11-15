@@ -1255,7 +1255,7 @@ class AttachCommand(CliCommand):
                                help=_("number of subscriptions to attach"))
         self.parser.add_option("--auto", action='store_true',
                                help=_("automatically attach compatible \
-                               subscriptions to this syste"))
+                               subscriptions to this system"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("service level to apply to this system"))
 
