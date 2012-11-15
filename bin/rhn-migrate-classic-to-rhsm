@@ -64,16 +64,16 @@ from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelp
 
 options_table = [
     Option("-f", "--force", action="store_true", default=False,
-           help=_("Ignore channels not available on RHSM")),
+           help=_("ignore channels not available on RHSM")),
     Option("-g", "--gui", action="store_true", default=False, dest='gui',
-           help=_("Launch the GUI tool to subscribe the system, instead of autosubscribing")),
+           help=_("launch the GUI tool to attach subsriptions, instead of autoattaching")),
     Option("-n", "--no-auto", action="store_true", default=False, dest='noauto',
-           help=_("Don't execute the autosubscribe option while registering with subscription manager.")),
+           help=_("don't execute the autoattach option while registering with subscription manager")),
     Option("-s", "--servicelevel", dest="servicelevel",
-           help=_("Service level to subscribe this system to. For no service "
+           help=_("service level to follow when attaching subscriptions, For no service "
                   "level use --service-level=\"\"")),
     Option("--serverurl", dest='serverurl',
-           help=_("Specify the subscription management server to migrate to.")),
+           help=_("specify the subscription management server to migrate to")),
 ]
 
 parser = OptionParser(usage=_("%prog [OPTIONS]"),
@@ -475,10 +475,10 @@ def register(credentials, serverurl, org, environment):
 def subscribe(consumer, servicelevel):
     # For subscribing, use the GUI tool if the DISPLAY environment variable is set and the gui tool exists
     if os.getenv('DISPLAY') and os.path.exists('/usr/bin/subscription-manager-gui') and options.gui:
-        print _("Launching the GUI tool to manually subscribe the system ...")
+        print _("Launching the GUI tool to manually attach subscriptions to this system ...")
         result = subprocess.call(['subscription-manager-gui'], stderr=open(os.devnull, 'w'))
     else:
-        print _("Attempting to auto-subscribe to appropriate subscriptions ...")
+        print _("Attempting to auto-attach to appropriate subscriptions ...")
         cmd = ['subscription-manager', 'subscribe', '--auto']
 
         # only add servicelevel if one was passed in
@@ -487,7 +487,7 @@ def subscribe(consumer, servicelevel):
 
         result = subprocess.call(cmd)
         if result != 0:
-            print _("\nUnable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?")
+            print _("\nUnable to auto-attach.  Do your existing subscriptions match the products installed on this system?")
     # don't show url for katello/CFSE/SAM
     if isHosted():
         print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.getConsumerId()
