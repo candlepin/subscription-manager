@@ -348,5 +348,4 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.register_button.set_property('visible', not is_registered)
 
     def refresh(self):
-        self._set_next_update()
         self._set_validity_status()
