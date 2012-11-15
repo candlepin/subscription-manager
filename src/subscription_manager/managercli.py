@@ -1381,10 +1381,10 @@ class RemoveCommand(CliCommand):
             ent_dir,
             prod_dir)
 
-        self.parser.add_option("--serial", action='append', dest="serials",
-                       help=_("Certificate serial number to remove (can be specified more than once)"))
+        self.parser.add_option("--serial", action='append', dest="serial",
+                       help=_("certificate serial number to remove (can be specified more than once)"))
         self.parser.add_option("--all", dest="all", action="store_true",
-                               help=_("Remove all subscriptions from this system"))
+                               help=_("remove all subscriptions from this system"))
 
     def _short_description(self):
         return _("Remove all or specific subscriptions from this system")
@@ -1396,9 +1396,9 @@ class RemoveCommand(CliCommand):
         return True
 
     def _validate_options(self):
-        if self.options.serials:
+        if self.options.serial:
             bad = False
-            for serial in self.options.serials:
+            for serial in self.options.serial:
                 if not serial.isdigit():
                     print _("Error: '%s' is not a valid serial number") % serial
                     bad = True
@@ -1432,7 +1432,7 @@ class RemoveCommand(CliCommand):
                 else:
                     success = []
                     failure = []
-                    for serial in self.options.serials:
+                    for serial in self.options.serial:
                         try:
                             self.cp.unbindBySerial(consumer, serial)
                             success.append(serial)
@@ -1466,7 +1466,7 @@ class RemoveCommand(CliCommand):
                     print _("%s subscriptions removed from this system." % total)
                 else:
                     for ent in self.entitlement_dir.list():
-                        if str(ent.serial) in self.options.serials:
+                        if str(ent.serial) in self.options.serial:
                             ent.delete()
                             print _("Subscription with serial number %s removed from this system"
                                 % str(ent.serial))
