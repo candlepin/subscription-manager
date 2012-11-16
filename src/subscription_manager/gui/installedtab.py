@@ -29,7 +29,6 @@ import os
 
 _ = gettext.gettext
 
-
 prefix = os.path.dirname(__file__)
 VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
 PARTIAL_IMG = os.path.join(prefix, "data/icons/partial.svg")
@@ -179,6 +178,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                             product_id, compliant_range)
                     name = ", ".join(sub_names)
                     contract = ", ".join(contract_ids)
+                    num_of_contracts = len(contract_ids)
 
                     entry['subscription'] = name
 
@@ -210,7 +210,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['image'] = self._render_icon('green')
                         entry['status'] = _('Subscribed')
                         entry['validity_note'] = \
-                            _('Covered by contract(s) %s through %s') % \
+                            gettext.ngettext("Covered by contract %s through %s",
+                                             'Covered by contracts %s through %s',
+                                             num_of_contracts) % \
                             (contract,
                              managerlib.formatDate(entry['expiration_date']))
                 else:
