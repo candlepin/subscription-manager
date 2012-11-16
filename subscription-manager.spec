@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.8
+Version: 1.1.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,26 @@ fi
 %endif
 
 %changelog
+* Fri Nov 16 2012 Adrian Likins <alikins@redhat.com> 1.1.9-1
+- latest strings from zanata (alikins@redhat.com)
+- 864207: mark these strings for translation (alikins@redhat.com)
+- 854388: use ngettext to specify contract/contracts (alikins@redhat.com)
+- 876753: change rhsmcertd --heal-interval to --auto-attach-interval
+  (alikins@redhat.com)
+- We require python-rhsm-1.1.5 now (ram) (alikins@redhat.com)
+- 876340: Move the last of the commands and help string to --auto-attach
+  (bkearney@redhat.com)
+- 876294: Use attach instead of subscirbe in the rhn migration tooling
+  (bkearney@redhat.com)
+- 856735: Move the Next Update notification to the About dialog.
+  (awood@redhat.com)
+- Removed stacking from RAM (mstead@redhat.com)
+- Improved comments/logging/tests for RAM (mstead@redhat.com)
+- Updated the entitlement_version of client (mstead@redhat.com)
+- Added RAM limit to rct cat-cert output (mstead@redhat.com)
+- Removing dead code (mstead@redhat.com)
+- Check RAM when determining status (mstead@redhat.com)
+
 * Tue Nov 13 2012 Adrian Likins <alikins@redhat.com> 1.1.8-1
 - 862909: install rct man page (alikins@redhat.com)
 - Fix to LocalTz DST determination (cduryee@redhat.com)
