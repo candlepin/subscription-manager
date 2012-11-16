@@ -69,6 +69,9 @@
             <property name="can_focus">True</property>
             <property name="tooltip" translatable="yes">This must be the organization key, not the name.</property>
             <property name="invisible_char">&#x25CF;</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">organization_entry</atkproperty>
+            </accessibility>
           </widget>
           <packing>
             <property name="left_attach">1</property>
@@ -81,6 +84,9 @@
             <property name="can_focus">True</property>
             <property name="tooltip" translatable="yes">Multiple Activation Keys can be entered by separating them with a comma or a space.</property>
             <property name="invisible_char">&#x25CF;</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">activation_key_entry</atkproperty>
+            </accessibility>
           </widget>
           <packing>
             <property name="left_attach">1</property>
@@ -94,6 +100,9 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="invisible_char">&#x25CF;</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">consumer_entry</atkproperty>
+            </accessibility>
           </widget>
           <packing>
             <property name="left_attach">1</property>
