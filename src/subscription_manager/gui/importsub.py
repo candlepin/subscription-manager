@@ -112,7 +112,7 @@ class ImportSubDialog(object):
 
             msg = ""
             if len(non_cert_files) > 0:
-                msg += _("The following certficate files did not exist:")
+                msg += _("The following certificate files did not exist:")
                 msg += "\n" + "\n".join(non_cert_files)
             if len(invalid_certs) > 0:
                 msg += _("The following files are not valid certificates and were not imported:")
