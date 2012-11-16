@@ -1258,6 +1258,9 @@ class AttachCommand(CliCommand):
                                subscriptions to this system"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("service level to apply to this system"))
+        # re bz #864207
+        _("All installed products are covered by valid entitlements.")
+        _("No need to update subscriptions at this time.")
 
     def _short_description(self):
         return _("Attach a specified subscription to the registered system")
