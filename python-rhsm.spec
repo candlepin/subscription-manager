@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.1.4
+Version: 1.1.5
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,9 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Nov 16 2012 Adrian Likins <alikins@redhat.com> 1.1.5-1
+- Added ram_limit to certificate Order (mstead@redhat.com)
+
 * Thu Nov 01 2012 Adrian Likins <alikins@redhat.com> 1.1.4-1
 - fixing a bug where certificates with carriage returns could not be parsed.
   (mhrivnak@redhat.com)
