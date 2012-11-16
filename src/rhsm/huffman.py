@@ -110,7 +110,7 @@ class HuffmanNode(object):
         # the one most recently added gets chosen
         counter = itertools.count()
         # We use the heapq module to make a min priority queue
-        queue = [(node, next(counter)) for node in nodes]
+        queue = [(node, counter.next()) for node in nodes]
         heapq.heapify(queue)
         while True:
             left, count = heapq.heappop(queue)

@@ -11,6 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
+import itertools
 import zlib
 
 from bitstream import GhettoBitStream
@@ -126,10 +127,12 @@ class PathTree(object):
         # ordered list of words that will be composed into a huffman tree
         words = decompressed_data.split('\0')
 
+        # enumerate() would be better here, but lacks a 'start' arg in 2.4
+        weighted_words = zip(itertools.count(1), words)
         # huffman nodes, without having put them in a tree. These will all be
         # leaves in the tree.
         nodes = [
-            HuffmanNode(weight, value) for weight, value in enumerate(words, 1)
+            HuffmanNode(weight, value) for weight, value in weighted_words
         ]
         return nodes, decompress.unused_data
 

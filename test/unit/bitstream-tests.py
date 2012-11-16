@@ -35,7 +35,7 @@ class TestGhettoBitStream(unittest.TestCase):
         self.assertEqual(len(self.bs.bytes), length - 1)
 
     def test_as_iterator(self):
-        next(self.bs)
+        self.bs.next()
         self.assertTrue(list(self.bs))
 
     def test_bit_buffer(self):
