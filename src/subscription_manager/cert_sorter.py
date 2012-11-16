@@ -311,7 +311,7 @@ class CertSorter(object):
         if ent_cert.order.ram_limit is None:
             return True
 
-        entitlement_ram = safe_int(ent_cert.order.ram_limit, 1)
+        entitlement_ram = ent_cert.order.ram_limit
         log.debug("  system has %s GB of RAM, %d GB covered by entitlement" %
                 (self.total_ram, entitlement_ram))
 
