@@ -309,8 +309,14 @@ class TestListCommand(TestCliProxyCommand):
         self.cc._format_name(name, self.indent, self.max_length)
 
     def test_format_name_empty(self):
-        name = 'e'
-        self.cc._format_name(name, self.indent, self.max_length)
+        name = ''
+        new_name = self.cc._format_name(name, self.indent, self.max_length)
+        self.assertEquals(name, new_name)
+
+    def test_format_name_none(self):
+        name = None
+        new_name = self.cc._format_name(name, self.indent, self.max_length)
+        self.assertTrue(new_name is None)
 
     def test_print_consumed_no_ents(self):
         ent_dir = StubEntitlementDirectory([])

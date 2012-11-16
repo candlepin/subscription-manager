@@ -1849,7 +1849,7 @@ class ListCommand(CliCommand):
         """
 
         self._validate_options()
-
+        columns = get_terminal_width()
         if self.options.installed:
             iproducts = managerlib.getInstalledProductStatus(self.product_dir,
                     self.entitlement_dir, self.facts.get_facts())
@@ -1861,7 +1861,8 @@ class ListCommand(CliCommand):
             print "+-------------------------------------------+"
             for product in iproducts:
                 status = STATUS_MAP[product[4]]
-                print self._none_wrap(INSTALLED_PRODUCT_STATUS, product[0],
+                product_name = self._format_name(product[0], 24, columns)
+                print self._none_wrap(INSTALLED_PRODUCT_STATUS, product_name,
                                 product[1], product[2], product[3], status,
                                 product[5], product[6])
 
@@ -1894,7 +1895,6 @@ class ListCommand(CliCommand):
             print("+-------------------------------------------+")
             for data in epools:
                 # TODO:  Something about these magic numbers!
-                columns = get_terminal_width()
                 product_name = self._format_name(data['productName'], 24, columns)
 
                 if PoolWrapper(data).is_virt_only():
@@ -1952,14 +1952,16 @@ class ListCommand(CliCommand):
         print("   " + _("Consumed Subscriptions"))
         print("+-------------------------------------------+\n")
 
+        columns = get_terminal_width()
         for cert in certs:
             order = cert.order
+            order_name = self._format_name(order.name, 24, columns)
             print(self._none_wrap(_("Subscription Name:    \t%s"),
-                  order.name))
+                  order_name))
 
             prefix = _("Provides:             \t%s")
             for product in cert.products:
-                print(self._none_wrap(prefix, product.name))
+                print(self._none_wrap(prefix, self._format_name(product.name, 24, columns)))
                 prefix = _("                      \t%s")
             # print an empty provides line for certs with no provided products
             if len(cert.products) == 0:
@@ -1992,6 +1994,10 @@ class ListCommand(CliCommand):
         Formats a potentially long name for multi-line display, giving
         it a columned effect.
         """
+
+        if not name:
+            return name
+
         words = name.split()
         current = indent
         lines = []
