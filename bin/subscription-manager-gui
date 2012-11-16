@@ -103,9 +103,9 @@ class SubscriptionManagerService(dbus.service.Object):
         self.window.present()
 
 if __name__ == '__main__':
-    parser = OptionParser()
+    parser = OptionParser(usage=_("%prog [OPTIONS]"))
     parser.add_option("--register", action='store_true',
-                      help=_("Launches the registration dialog on startup."))
+                      help=_("launches the registration dialog on startup."))
     options, args = parser.parse_args(args=sys.argv)
 
     logutil.init_logger()
