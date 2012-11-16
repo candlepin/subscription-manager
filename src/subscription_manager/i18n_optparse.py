@@ -32,6 +32,9 @@ from optparse import OptionParser as _OptionParser
 from optparse import IndentedHelpFormatter as _IndentedHelpFormatter
 import textwrap
 
+# note default is lower caps
+USAGE = _("%prog [OPTIONS]")
+
 
 #
 # This is pulled from the python dist, in optparse.py
