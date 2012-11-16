@@ -66,9 +66,9 @@ options_table = [
     Option("-f", "--force", action="store_true", default=False,
            help=_("ignore channels not available on RHSM")),
     Option("-g", "--gui", action="store_true", default=False, dest='gui',
-           help=_("launch the GUI tool to attach subsriptions, instead of autoattaching")),
+           help=_("launch the GUI tool to attach subsriptions, instead of auto-attaching")),
     Option("-n", "--no-auto", action="store_true", default=False, dest='noauto',
-           help=_("don't execute the autoattach option while registering with subscription manager")),
+           help=_("don't execute the auto-attach option while registering with subscription manager")),
     Option("-s", "--servicelevel", dest="servicelevel",
            help=_("service level to follow when attaching subscriptions, For no service "
                   "level use --service-level=\"\"")),
