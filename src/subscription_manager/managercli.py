@@ -1691,7 +1691,7 @@ class ReposCommand(CliCommand):
 class ConfigCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List, set, or remove the configuration parameters in use by this system.")
+        shortdesc = _("List, set, or remove the configuration parameters in use by this system")
         super(ConfigCommand, self).__init__("config", shortdesc, False, ent_dir,
                                             prod_dir)
 
@@ -1800,7 +1800,7 @@ class ConfigCommand(CliCommand):
 class ListCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List subscription and product information for this system.")
+        shortdesc = _("List subscription and product information for this system")
         super(ListCommand, self).__init__("list", shortdesc, True,
                                           ent_dir, prod_dir)
         self.available = None
