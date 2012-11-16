@@ -1381,10 +1381,10 @@ class RemoveCommand(CliCommand):
             ent_dir,
             prod_dir)
 
-        self.parser.add_option("--serial", action='append', dest="serials",
-                       help=_("Certificate serial number to remove (can be specified more than once)"))
+        self.parser.add_option("--serial", action='append', dest="serials", metavar="SERIAL",
+                       help=_("certificate serial number to remove (can be specified more than once)"))
         self.parser.add_option("--all", dest="all", action="store_true",
-                               help=_("Remove all subscriptions from this system"))
+                               help=_("remove all subscriptions from this system"))
 
     def _short_description(self):
         return _("Remove all or specific subscriptions from this system")
