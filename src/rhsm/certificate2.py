@@ -17,17 +17,22 @@ import zlib
 import logging
 import os
 import base64
+import re
 
 log = logging.getLogger(__name__)
 
 from datetime import datetime
-import simplejson as json
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 from rhsm import _certificate
 
 from rhsm.connection import safe_int
 from rhsm.certificate import Extensions, OID, DateRange, GMT, \
         get_datetime_from_x509, parse_tags, CertificateException
+from rhsm.pathtree import PathTree
 
 REDHAT_OID_NAMESPACE = "1.3.6.1.4.1.2312.9"
 ORDER_NAMESPACE = "4"
@@ -155,6 +160,7 @@ class _CertFactory(object):
                 order=order,
                 content=content,
                 products=products,
+                extensions=extensions,
             )
         return cert
 
@@ -231,22 +237,30 @@ class _CertFactory(object):
             return IDENTITY_CERT
 
     def _create_v3_cert(self, version, extensions, x509, path, pem):
-        # At this time, we only support v3 entitlement certificates:
+        # At this time, we only support v3 entitlement certificates
         try:
-            entitlement = pem.split("-----BEGIN ENTITLEMENT DATA-----")[1]
-            entitlement = entitlement.split("-----END ENTITLEMENT DATA-----")[0].strip()
+            # this is only expected to be available on the client side
+            entitlement_data = pem.split("-----BEGIN ENTITLEMENT DATA-----")[1]
+            entitlement_data = entitlement_data.split("-----END ENTITLEMENT DATA-----")[0].strip()
         except IndexError:
-            raise CertificateException("Unable to parse non-entitlement v3 certificate")
-        payload = self._decompress_payload(base64.b64decode(entitlement))
+            entitlement_data = None
 
-        order = self._parse_v3_order(payload)
-        content = self._parse_v3_content(payload)
-        products = self._parse_v3_products(payload)
+        if entitlement_data:
+            payload = self._decompress_payload(base64.b64decode(entitlement_data))
+
+            order = self._parse_v3_order(payload)
+            content = self._parse_v3_content(payload)
+            products = self._parse_v3_products(payload)
+        else:
+            order = None
+            content = None
+            products = None
 
         cert = EntitlementCertificate(
                 x509=x509,
                 path=path,
                 version=version,
+                extensions=extensions,
                 serial=x509.get_serial_number(),
                 start=get_datetime_from_x509(x509.get_not_before()),
                 end=get_datetime_from_x509(x509.get_not_after()),
@@ -463,10 +477,93 @@ class ProductCertificate(Certificate):
 
 class EntitlementCertificate(ProductCertificate):
 
-    def __init__(self, order=None, content=None, **kwargs):
+    def __init__(self, order=None, content=None, extensions=None, **kwargs):
         ProductCertificate.__init__(self, **kwargs)
         self.order = order
         self.content = content
+        self.extensions = extensions
+        self._path_tree_object = None
+
+    @property
+    def _path_tree(self):
+        """
+        :return:    PathTree object built from this cert's extensions
+        :rtype:     rhsm.pathtree.PathTree
+
+        :raise: AttributeError if self.version.major < 3
+        """
+        # This data was not present in certificates prior to v3.
+        if self.version.major < 3:
+            raise AttributeError(
+                'path tree not used for v%d certs' % self.version.major)
+        if not self._path_tree_object:
+            # generate and cache the tree
+            data = self.extensions[EXT_ENT_PAYLOAD]
+            self._path_tree_object = PathTree(data)
+        return self._path_tree_object
+
+    def check_path(self, path):
+        """
+        Checks the given path against the list of entitled paths as encoded in
+        extensions. See PathTree for more detailed docs.
+
+        :param path:    path to which access is being requested
+        :type  path:    basestring
+
+        :return:    True iff the path matches, else False
+        :rtype:     bool
+
+        :raise:    ValueError when self.version.major < 3
+        """
+        if self.version.major < 3:
+            return self._check_v1_path(path)
+        else:
+            return self._path_tree.match_path(path)
+
+    def _check_v1_path(self, path):
+        """
+        Check the requested path against a v1 certificate
+
+        :param path:    requested path
+        :type  path:    basestring
+        :return:    True iff the path matches, else False
+        :rtype:     bool
+        """
+        path = path.strip('/')
+        valid = False
+        for ext_oid, oid_url in self.extensions.iteritems():
+            # if this is a download URL
+            if ext_oid.match('2.') and ext_oid.match('.1.6'):
+                if self._validate_v1_url(oid_url, path):
+                    valid = True
+                    break
+        return valid
+
+    @staticmethod
+    def _validate_v1_url(oid_url, dest):
+        """
+        Determines if the destination URL matches the OID's URL.
+
+        Swaps out all $ variables (e.g. $basearch, $version) for a reg ex
+        wildcard in that location. For example, the following entitlement:
+          content/dist/rhel/server/$version/$basearch/os
+
+        Should allow any value for the variables:
+          content/dist/rhel/server/.+?/.+?/os
+
+        :param oid_url: path associated with an entitlement OID, as pulled from
+                        the cert's extensions.
+        :type  oid_url: basestring
+        :param dest:    path requested by a client
+        :type  dest:    basestring
+
+        :return: True iff the OID permits the destination else False
+        :rtype:  bool
+        """
+        # Remove initial and trailing '/', and substitute the $variables for
+        # equivalent regular expressions in oid_url.
+        oid_re = re.sub(r'\$[^/]+(/|$)', '[^/]+/', oid_url.strip('/'))
+        return re.match(oid_re, dest) is not None
 
     def delete(self):
         """

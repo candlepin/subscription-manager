@@ -77,6 +77,37 @@ class V1CertTests(unittest.TestCase):
         self.assertEquals("/foo/path/always/$releasever", content.url)
         self.assertEquals("/foo/path/always/gpg", content.gpg)
 
+    def test_access_path_tree_fails(self):
+        # not supported for v3 certs
+        self.assertRaises(AttributeError, getattr, self.ent_cert, '_path_tree')
+
+    def test_check_path(self):
+        # matches /foo/path/never
+        self.assertTrue(self.ent_cert.check_path('/foo/path/never'))
+        self.assertTrue(self.ent_cert.check_path('/foo/path/never/'))
+        self.assertTrue(self.ent_cert.check_path('/foo/path/never/bar/a/b/c'))
+
+    def test_check_path_with_var(self):
+        # matches /path/to/$basearch/$releasever/awesomeos
+        self.assertTrue(self.ent_cert.check_path('/path/to/foo/bar/awesomeos'))
+        self.assertTrue(self.ent_cert.check_path('/path/to/foo/bar/awesomeos/'))
+        self.assertTrue(self.ent_cert.check_path('/path/to/foo/bar/awesomeos/a/b/c'))
+
+    def test_check_path_fail(self):
+        self.assertFalse(self.ent_cert.check_path('foo'))
+        self.assertFalse(self.ent_cert.check_path('/foo'))
+        self.assertFalse(self.ent_cert.check_path('/foo/'))
+        self.assertFalse(self.ent_cert.check_path('/foo/path/'))
+
+    @patch('rhsm.certificate2.EntitlementCertificate._validate_v1_url')
+    def test_download_url_identification(self, mock_validate):
+        # there are 4 OIDs in the testing cert that should be checked, and
+        # many others that should not. This verifies that exactly 4 OIDs get
+        # checked.
+        mock_validate.return_value = False
+        self.ent_cert.check_path('/foo')
+        self.assertEqual(mock_validate.call_count, 4)
+
     # TODO: test exception when cert major version is newer than we can handle
 
 
@@ -98,6 +129,13 @@ class V3CertTests(unittest.TestCase):
                 self.ent_cert.products[0].name)
         self.assertEquals('ff80808139d9e26c0139da23489a0066',
                 self.ent_cert.subject['CN'])
+
+    def test_factory_method_without_ent_data(self):
+        data = certdata.ENTITLEMENT_CERT_V3_0.split('-----BEGIN ENTITLEMENT DATA-----')[0]
+        cert = create_from_pem(data)
+        self.assertTrue(cert.content is None)
+        self.assertTrue(cert.order is None)
+        self.assertEqual(cert.products, [])
 
     def test_is_valid(self):
         self.assertTrue(self.ent_cert.is_valid(on_date=datetime(2012, 12, 1)))
@@ -152,6 +190,12 @@ class V3CertTests(unittest.TestCase):
         # unknown.
         crcert = certdata.ENTITLEMENT_CERT_V3_0.replace('-\n', '-\r\n')
         create_from_pem(crcert)
+
+    def test_match_path(self):
+        self.assertTrue(self.ent_cert.check_path('/path/to/awesomeos/x86_64'))
+
+    def test_match_deep_path(self):
+        self.assertTrue(self.ent_cert.check_path('/path/to/awesomeos/x86_64/foo/bar'))
 
 
 class IdentityCertTests(unittest.TestCase):
