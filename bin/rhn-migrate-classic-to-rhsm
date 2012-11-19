@@ -72,7 +72,7 @@ options_table = [
            help=_("don't execute the auto-attach option while registering with subscription manager")),
     Option("-s", "--servicelevel", dest="servicelevel",
            help=_("service level to follow when attaching subscriptions, for no service "
-                  "level use --service-level=\"\"")),
+                  "level use --servicelevel=\"\"")),
     Option("--serverurl", dest='serverurl',
            help=_("specify the subscription management server to migrate to")),
 ]
