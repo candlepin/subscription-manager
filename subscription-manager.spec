@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.9
+Version: 1.1.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,12 @@ fi
 %endif
 
 %changelog
+* Mon Nov 19 2012 Adrian Likins <alikins@redhat.com> 1.1.10-1
+- latest strings from zanata (alikins@redhat.com)
+- 874623: Tell users running the version command if they are not registered.
+  (awood@redhat.com)
+- 873418: Add at-spi locators to the activation key window. (awood@redhat.com)
+
 * Fri Nov 16 2012 Adrian Likins <alikins@redhat.com> 1.1.9-1
 - latest strings from zanata (alikins@redhat.com)
 - 864207: mark these strings for translation (alikins@redhat.com)
