@@ -1548,7 +1548,7 @@ class ImportCertCommand(CliCommand):
                                                 ent_dir, prod_dir)
 
         self.parser.add_option("--certificate", action="append", dest="certificate_file",
-                               help=_("certificate file to import (for multiple imports, specify this option more than once)"))
+                               help=_("certificate file to import (can be specified more than once)"))
 
     def _validate_options(self):
         if not self.options.certificate_file:
