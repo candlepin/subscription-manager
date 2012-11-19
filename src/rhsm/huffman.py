@@ -55,7 +55,7 @@ class HuffmanNode(object):
         :return:        new node that is the combination of left and right
         :rtype:         rhsm.huffman.HuffmanNode
         """
-        node = cls(left.weight+right.weight, None, left, right)
+        node = cls(left.weight + right.weight, None, left, right)
         left.parent = node
         right.parent = node
         return node

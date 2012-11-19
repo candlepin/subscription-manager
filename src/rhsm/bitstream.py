@@ -93,7 +93,7 @@ class GhettoBitStream(object):
         """
         chars = []
         for n in range(7, -1, -1):
-            y = x - 2**n
+            y = x - 2 ** n
             if y >= 0:
                 chars.append('1')
                 x = y
@@ -119,5 +119,4 @@ class GhettoBitStream(object):
         """
         copy = data[:]
         copy.reverse()
-        return sum(x << n*8 for n, x in enumerate(copy))
-
+        return sum(x << n * 8 for n, x in enumerate(copy))

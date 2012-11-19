@@ -500,7 +500,7 @@ class EntitlementCertificate(ProductCertificate):
             data = self.extensions[EXT_ENT_PAYLOAD]
             self._path_tree_object = PathTree(data)
         return self._path_tree_object
-        
+
     def check_path(self, path):
         """
         Checks the given path against the list of entitled paths as encoded in
@@ -546,7 +546,7 @@ class EntitlementCertificate(ProductCertificate):
         Swaps out all $ variables (e.g. $basearch, $version) for a reg ex
         wildcard in that location. For example, the following entitlement:
           content/dist/rhel/server/$version/$basearch/os
-        
+
         Should allow any value for the variables:
           content/dist/rhel/server/.+?/.+?/os
 

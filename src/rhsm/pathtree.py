@@ -164,7 +164,7 @@ class PathTree(object):
             count_bytes = [bitstream.pop_byte() for x in range(num_bytes)]
             node_count = bitstream.combine_bytes(count_bytes)
             return node_count
-        
+
     @classmethod
     def _generate_path_leaves(cls, bitstream):
         """
@@ -247,6 +247,5 @@ class PathTree(object):
         for value in values:
             if not value:
                 value[PATH_END] = None
-        
-        return root
 
+        return root
