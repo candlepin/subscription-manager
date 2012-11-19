@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-16 15:11-0500\n"
+"POT-Creation-Date: 2012-11-19 10:48-0500\n"
 "PO-Revision-Date: 2012-09-20 10:13-0400\n"
 "Last-Translator: samfreemanz <sfriedma@redhat.com>\n"
 "Language-Team: French\n"
@@ -63,7 +63,7 @@ msgstr "Abonnement"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
 #: ../src/subscription_manager/gui/allsubs.py:82
-#: ../src/subscription_manager/managercli.py:1896
+#: ../src/subscription_manager/managercli.py:1897
 msgid "Available Subscriptions"
 msgstr "Abonnements disponibles"
 
@@ -263,22 +263,27 @@ msgstr "Date de début"
 msgid "End Date"
 msgstr "Date de fin"
 
+#: ../src/subscription_manager/gui/installedtab.py:180
+#: ../src/subscription_manager/gui/installedtab.py:182
+msgid " and"
+msgstr ""
+
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/installedtab.py:190
+#: ../src/subscription_manager/gui/installedtab.py:192
 #: ../src/subscription_manager/managercli.py:63
 msgid "Future Subscription"
 msgstr "Futur abonnement"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/installedtab.py:191
+#: ../src/subscription_manager/gui/installedtab.py:193
 msgid "Future Subscribed"
 msgstr "Futur abonné"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/installedtab.py:194
+#: ../src/subscription_manager/gui/installedtab.py:196
 #: ../src/subscription_manager/managercli.py:66
 #: ../src/subscription_manager/managerlib.py:81
 msgid "Expired"
@@ -286,28 +291,28 @@ msgstr "Expiré"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/installedtab.py:204
+#: ../src/subscription_manager/gui/installedtab.py:206
 #, python-format
 msgid "Subscription %s is expired"
 msgstr "L'abonnement %s a expiré"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/installedtab.py:207
-#: ../src/subscription_manager/gui/installedtab.py:208
+#: ../src/subscription_manager/gui/installedtab.py:209
+#: ../src/subscription_manager/gui/installedtab.py:210
 #: ../src/subscription_manager/managercli.py:67
 msgid "Partially Subscribed"
 msgstr "Partiellement abonné"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/installedtab.py:211
+#: ../src/subscription_manager/gui/installedtab.py:213
 #: ../src/subscription_manager/managercli.py:64
 #: ../src/subscription_manager/managerlib.py:81
 msgid "Subscribed"
 msgstr "Abonné"
 
-#: ../src/subscription_manager/gui/installedtab.py:213
+#: ../src/subscription_manager/gui/installedtab.py:215
 #, python-format
 msgid "Covered by contract %s through %s"
 msgid_plural "Covered by contracts %s through %s"
@@ -316,8 +321,8 @@ msgstr[1] ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/installedtab.py:220
-#: ../src/subscription_manager/gui/installedtab.py:221
+#: ../src/subscription_manager/gui/installedtab.py:222
+#: ../src/subscription_manager/gui/installedtab.py:223
 #: ../src/subscription_manager/managercli.py:65
 #: ../src/subscription_manager/managerlib.py:81
 msgid "Not Subscribed"
@@ -325,14 +330,14 @@ msgstr "Non abonné"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
-#: ../src/subscription_manager/gui/installedtab.py:274
+#: ../src/subscription_manager/gui/installedtab.py:276
 msgid "My Installed Products"
 msgstr "Mes produits installés"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
 #. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:313
+#: ../src/subscription_manager/gui/installedtab.py:315
 #, python-format
 msgid "%s installed products do not have valid subscriptions."
 msgstr "%s produits installés ne possèdent pas d'abonnement valide."
@@ -340,21 +345,21 @@ msgstr "%s produits installés ne possèdent pas d'abonnement valide."
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
 #. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:318
+#: ../src/subscription_manager/gui/installedtab.py:320
 msgid "1 installed product does not have a valid subscription."
 msgstr "1 produit installé ne possède pas d'abonnement valide."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
 #. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:324
+#: ../src/subscription_manager/gui/installedtab.py:326
 msgid "This system does not match subscription limits."
 msgstr "Ce système ne correspond pas aux limites des abonnements."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
 #. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:333
+#: ../src/subscription_manager/gui/installedtab.py:335
 #, python-format
 msgid "System is properly subscribed through %s."
 msgstr "Système correctement abonné via %s."
@@ -362,14 +367,14 @@ msgstr "Système correctement abonné via %s."
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
 #. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:341
+#: ../src/subscription_manager/gui/installedtab.py:343
 msgid "No installed products detected."
 msgstr "Aucun produit installé détecté."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
 #. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:346
+#: ../src/subscription_manager/gui/installedtab.py:348
 msgid "Keep your system up to date by registering."
 msgstr "Gardez votre système à jour en vous enregistrant."
 
@@ -627,7 +632,6 @@ msgstr "Aucune précédente mise à jour"
 #: ../src/subscription_manager/utils.py:306
 #: ../src/subscription_manager/utils.py:307
 #: ../src/subscription_manager/utils.py:322
-#: ../src/subscription_manager/utils.py:323
 #: ../src/subscription_manager/utils.py:341
 #: ../src/subscription_manager/utils.py:350
 msgid "Unknown"
@@ -1384,7 +1388,7 @@ msgstr "Statut :               \t%s"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
 #: ../src/subscription_manager/managercli.py:76
-#: ../src/subscription_manager/managercli.py:1987
+#: ../src/subscription_manager/managercli.py:1989
 #, python-format
 msgid "Starts:               \t%s"
 msgstr "Démarre :               \t%s"
@@ -1393,7 +1397,7 @@ msgstr "Démarre :               \t%s"
 # document keys, author samfreemanz
 #: ../src/subscription_manager/managercli.py:77
 #: ../src/subscription_manager/managercli.py:87
-#: ../src/subscription_manager/managercli.py:1989
+#: ../src/subscription_manager/managercli.py:1991
 #, python-format
 msgid "Ends:                 \t%s"
 msgstr "Termine :                 \t%s"
@@ -1401,7 +1405,7 @@ msgstr "Termine :                 \t%s"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
 #: ../src/subscription_manager/managercli.py:80
-#: ../src/subscription_manager/managercli.py:1960
+#: ../src/subscription_manager/managercli.py:1962
 #, python-format
 msgid "Subscription Name:    \t%s"
 msgstr "Nom de l'abonnement :    \t%s"
@@ -1409,7 +1413,7 @@ msgstr "Nom de l'abonnement :    \t%s"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
 #: ../src/subscription_manager/managercli.py:81
-#: ../src/subscription_manager/managercli.py:1971
+#: ../src/subscription_manager/managercli.py:1973
 #, python-format
 msgid "SKU:                  \t%s"
 msgstr "SKU :                  \t%s"
@@ -1431,7 +1435,7 @@ msgstr "Quantité :             \t%s"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
 #: ../src/subscription_manager/managercli.py:84
-#: ../src/subscription_manager/managercli.py:1983
+#: ../src/subscription_manager/managercli.py:1985
 #, python-format
 msgid "Service Level:        \t%s"
 msgstr "Niveau de service :        \t%s"
@@ -1439,7 +1443,7 @@ msgstr "Niveau de service :        \t%s"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
 #: ../src/subscription_manager/managercli.py:85
-#: ../src/subscription_manager/managercli.py:1985
+#: ../src/subscription_manager/managercli.py:1987
 #, python-format
 msgid "Service Type:         \t%s"
 msgstr "Type de service :         \t%s"
@@ -1668,7 +1672,7 @@ msgstr "--username et --password peuvent uniquement être utilisés avec --force
 #. but then show "unknown" here.
 #: ../src/subscription_manager/managercli.py:557
 #: ../src/subscription_manager/managercli.py:560
-#: ../src/subscription_manager/managercli.py:2040
+#: ../src/subscription_manager/managercli.py:2046
 #, python-format
 msgid "server type: %s"
 msgstr "type de serveur : %s"
@@ -2050,6 +2054,7 @@ msgstr "Pas de tel environnement : %s"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
 #: ../src/subscription_manager/managercli.py:1081
+#: ../src/subscription_manager/utils.py:323
 msgid "This system is currently not registered."
 msgstr "Ce système n'est pas enregistré actuellement."
 
@@ -2323,15 +2328,9 @@ msgstr "Mise à jour des faits système réussie."
 msgid "Import certificates which were provided outside of the tool"
 msgstr "Importe des certificats fournis en-dehors de l'outil"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
 #: ../src/subscription_manager/managercli.py:1551
-msgid ""
-"certificate file to import (for multiple imports, specify this option more "
-"than once)"
+msgid "certificate file to import (can be specified more than once)"
 msgstr ""
-"fichier certificat à importer (pour de multiples imports, veuillez spécifier "
-"cette option plusieurs fois)"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
@@ -2589,7 +2588,7 @@ msgstr "    Statut des produits installés"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1880
+#: ../src/subscription_manager/managercli.py:1881
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr ""
 "La date saisie est invalide. La date doit être sous le format AAAA-MM-JJ "
@@ -2597,7 +2596,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1893
+#: ../src/subscription_manager/managercli.py:1894
 msgid "No available subscription pools to list"
 msgstr "Aucun pool d'abonnement disponible à répertorier"
 
@@ -2615,74 +2614,74 @@ msgstr "Abonnements consommés"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:1963
+#: ../src/subscription_manager/managercli.py:1965
 #, python-format
 msgid "Provides:             \t%s"
 msgstr "Fournit :             \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:1966
+#: ../src/subscription_manager/managercli.py:1968
 #, python-format
 msgid "                      \t%s"
 msgstr "                      \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:1973
+#: ../src/subscription_manager/managercli.py:1975
 #, python-format
 msgid "Contract:             \t%s"
 msgstr "Contrat :             \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:1975
+#: ../src/subscription_manager/managercli.py:1977
 #, python-format
 msgid "Account:              \t%s"
 msgstr "Compte :              \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:1977
+#: ../src/subscription_manager/managercli.py:1979
 #, python-format
 msgid "Serial Number:        \t%s"
 msgstr "Numéro de série :        \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:1979
+#: ../src/subscription_manager/managercli.py:1981
 #, python-format
 msgid "Active:               \t%s"
 msgstr "Actif :               \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:1981
+#: ../src/subscription_manager/managercli.py:1983
 #, python-format
 msgid "Quantity Used:        \t%s"
 msgstr "Quantité utilisée :        \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:2029
+#: ../src/subscription_manager/managercli.py:2035
 msgid "Print version information"
 msgstr "Imprimer les informations de version"
 
-#: ../src/subscription_manager/managercli.py:2041
+#: ../src/subscription_manager/managercli.py:2047
 #, python-format
 msgid "subscription management server: %s"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:2042
+#: ../src/subscription_manager/managercli.py:2048
 #, python-format
 msgid "subscription-manager: %s"
 msgstr "subscription-manager : %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:2043
+#: ../src/subscription_manager/managercli.py:2049
 #, python-format
 msgid "python-rhsm: %s"
 msgstr "python-rhsm : %s"
@@ -2940,6 +2939,18 @@ msgstr "Nom du système :"
 
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:6
 msgid "This must be the organization key, not the name."
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/activation_key.glade.h:7
+msgid "activation_key_entry"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/activation_key.glade.h:8
+msgid "consumer_entry"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/activation_key.glade.h:9
+msgid "organization_entry"
 msgstr ""
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:1
@@ -3812,7 +3823,7 @@ msgstr ""
 #: ../bin/rhn-migrate-classic-to-rhsm:74
 msgid ""
 "service level to follow when attaching subscriptions, for no service level "
-"use --service-level=\"\""
+"use --servicelevel=\"\""
 msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:77
@@ -4272,7 +4283,7 @@ msgid "interval to run auto-attach (in minutes)"
 msgstr ""
 
 #: ../src/rhsmcertd.c:64
-msgid "run the initial checks immediately, with no delay."
+msgid "run the initial checks immediately, with no delay"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,

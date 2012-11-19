@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-16 15:11-0500\n"
+"POT-Creation-Date: 2012-11-19 10:48-0500\n"
 "PO-Revision-Date: 2012-09-20 10:17-0400\n"
 "Last-Translator: shanky <shanky@fedoraproject.org>\n"
 "Language-Team: Kannada\n"
@@ -63,7 +63,7 @@ msgstr "ಚಂದಾದಾರಿಕೆ"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
 #: ../src/subscription_manager/gui/allsubs.py:82
-#: ../src/subscription_manager/managercli.py:1896
+#: ../src/subscription_manager/managercli.py:1897
 msgid "Available Subscriptions"
 msgstr "ಲಭ್ಯವಿರುವ ಚಂದಾದಾರಿಕೆಗಳು"
 
@@ -249,22 +249,27 @@ msgstr "ಆರಂಭದ ದಿನ"
 msgid "End Date"
 msgstr "ಮುಕ್ತಾಯದ ದಿನ"
 
+#: ../src/subscription_manager/gui/installedtab.py:180
+#: ../src/subscription_manager/gui/installedtab.py:182
+msgid " and"
+msgstr ""
+
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/installedtab.py:190
+#: ../src/subscription_manager/gui/installedtab.py:192
 #: ../src/subscription_manager/managercli.py:63
 msgid "Future Subscription"
 msgstr "ಭವಿಷ್ಯದ ಚಂದಾದಾರಿಕೆ"
 
 # translation auto-copied from project Subscription Manager, version 0.98.X,
 # document keys, author shanky
-#: ../src/subscription_manager/gui/installedtab.py:191
+#: ../src/subscription_manager/gui/installedtab.py:193
 msgid "Future Subscribed"
 msgstr "ಭವಿಷ್ಯದಲ್ಲಿನ ಚಂದಾದಾರಿಕೆ"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/installedtab.py:194
+#: ../src/subscription_manager/gui/installedtab.py:196
 #: ../src/subscription_manager/managercli.py:66
 #: ../src/subscription_manager/managerlib.py:81
 msgid "Expired"
@@ -272,28 +277,28 @@ msgstr "ವಾಯಿದೆ ತೀರಿದೆ"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/installedtab.py:204
+#: ../src/subscription_manager/gui/installedtab.py:206
 #, python-format
 msgid "Subscription %s is expired"
 msgstr "%s ಎಂಬ ಚಂದಾದಾರಿಕೆಯ ವಾಯಿದೆ ಪೂರ್ಣಗೊಂಡಿದೆ"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/installedtab.py:207
-#: ../src/subscription_manager/gui/installedtab.py:208
+#: ../src/subscription_manager/gui/installedtab.py:209
+#: ../src/subscription_manager/gui/installedtab.py:210
 #: ../src/subscription_manager/managercli.py:67
 msgid "Partially Subscribed"
 msgstr "ಆಂಶಿಕವಾಗಿ ಚಂದಾದಾರಗೊಳಿಸಲಾದ"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/installedtab.py:211
+#: ../src/subscription_manager/gui/installedtab.py:213
 #: ../src/subscription_manager/managercli.py:64
 #: ../src/subscription_manager/managerlib.py:81
 msgid "Subscribed"
 msgstr "ಚಂದಾದಾರಗೊಳಿಸಲಾಗಿದೆ"
 
-#: ../src/subscription_manager/gui/installedtab.py:213
+#: ../src/subscription_manager/gui/installedtab.py:215
 #, python-format
 msgid "Covered by contract %s through %s"
 msgid_plural "Covered by contracts %s through %s"
@@ -302,8 +307,8 @@ msgstr[1] ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/installedtab.py:220
-#: ../src/subscription_manager/gui/installedtab.py:221
+#: ../src/subscription_manager/gui/installedtab.py:222
+#: ../src/subscription_manager/gui/installedtab.py:223
 #: ../src/subscription_manager/managercli.py:65
 #: ../src/subscription_manager/managerlib.py:81
 msgid "Not Subscribed"
@@ -311,39 +316,39 @@ msgstr "ಚಂದಾದಾರಗೊಳಿಸಲಾಗಿಲ್ಲ"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
-#: ../src/subscription_manager/gui/installedtab.py:274
+#: ../src/subscription_manager/gui/installedtab.py:276
 msgid "My Installed Products"
 msgstr "ನನ್ನ ಅನುಸ್ಥಾಪಿಸಲಾದ ಉತ್ಪನ್ನಗಳು"
 
 #. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:313
+#: ../src/subscription_manager/gui/installedtab.py:315
 #, python-format
 msgid "%s installed products do not have valid subscriptions."
 msgstr ""
 
 #. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:318
+#: ../src/subscription_manager/gui/installedtab.py:320
 msgid "1 installed product does not have a valid subscription."
 msgstr ""
 
 #. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:324
+#: ../src/subscription_manager/gui/installedtab.py:326
 msgid "This system does not match subscription limits."
 msgstr ""
 
 #. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:333
+#: ../src/subscription_manager/gui/installedtab.py:335
 #, python-format
 msgid "System is properly subscribed through %s."
 msgstr ""
 
 #. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:341
+#: ../src/subscription_manager/gui/installedtab.py:343
 msgid "No installed products detected."
 msgstr ""
 
 #. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:346
+#: ../src/subscription_manager/gui/installedtab.py:348
 msgid "Keep your system up to date by registering."
 msgstr ""
 
@@ -602,7 +607,6 @@ msgstr "ಹಿಂದಿನ ಯಾವುದೆ ಅಪ್‌ಡೇಟ್ ಇಲ್
 #: ../src/subscription_manager/utils.py:306
 #: ../src/subscription_manager/utils.py:307
 #: ../src/subscription_manager/utils.py:322
-#: ../src/subscription_manager/utils.py:323
 #: ../src/subscription_manager/utils.py:341
 #: ../src/subscription_manager/utils.py:350
 msgid "Unknown"
@@ -1324,7 +1328,7 @@ msgstr "ಸ್ಥಿತಿ:               \t%s"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
 #: ../src/subscription_manager/managercli.py:76
-#: ../src/subscription_manager/managercli.py:1987
+#: ../src/subscription_manager/managercli.py:1989
 #, python-format
 msgid "Starts:               \t%s"
 msgstr "ಆರಂಭ:               \t%s"
@@ -1333,7 +1337,7 @@ msgstr "ಆರಂಭ:               \t%s"
 # document keys, author shanky
 #: ../src/subscription_manager/managercli.py:77
 #: ../src/subscription_manager/managercli.py:87
-#: ../src/subscription_manager/managercli.py:1989
+#: ../src/subscription_manager/managercli.py:1991
 #, python-format
 msgid "Ends:                 \t%s"
 msgstr "ಅಂತ್ಯ:                 \t%s"
@@ -1341,13 +1345,13 @@ msgstr "ಅಂತ್ಯ:                 \t%s"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
 #: ../src/subscription_manager/managercli.py:80
-#: ../src/subscription_manager/managercli.py:1960
+#: ../src/subscription_manager/managercli.py:1962
 #, python-format
 msgid "Subscription Name:    \t%s"
 msgstr "ಚಂದಾದಾರಿಕೆ ಹೆಸರು:    \t%s"
 
 #: ../src/subscription_manager/managercli.py:81
-#: ../src/subscription_manager/managercli.py:1971
+#: ../src/subscription_manager/managercli.py:1973
 #, python-format
 msgid "SKU:                  \t%s"
 msgstr ""
@@ -1369,7 +1373,7 @@ msgstr "ಪ್ರಮಾಣ:             \t%s"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
 #: ../src/subscription_manager/managercli.py:84
-#: ../src/subscription_manager/managercli.py:1983
+#: ../src/subscription_manager/managercli.py:1985
 #, python-format
 msgid "Service Level:        \t%s"
 msgstr "ಸೇವಾ ಮಟ್ಟ:        \t%s"
@@ -1377,7 +1381,7 @@ msgstr "ಸೇವಾ ಮಟ್ಟ:        \t%s"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
 #: ../src/subscription_manager/managercli.py:85
-#: ../src/subscription_manager/managercli.py:1985
+#: ../src/subscription_manager/managercli.py:1987
 #, python-format
 msgid "Service Type:         \t%s"
 msgstr "ಸೇವೆಯ ಬಗೆ:         \t%s"
@@ -1601,7 +1605,7 @@ msgstr "--username ಹಾಗು --password ಅನ್ನು --force ನೊಂದ�
 #. but then show "unknown" here.
 #: ../src/subscription_manager/managercli.py:557
 #: ../src/subscription_manager/managercli.py:560
-#: ../src/subscription_manager/managercli.py:2040
+#: ../src/subscription_manager/managercli.py:2046
 #, python-format
 msgid "server type: %s"
 msgstr ""
@@ -1964,6 +1968,7 @@ msgstr "ಅಂತಹ ಯಾವುದೆ ಪರಿಸರಗಳಿಲ್ಲ: %s"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
 #: ../src/subscription_manager/managercli.py:1081
+#: ../src/subscription_manager/utils.py:323
 msgid "This system is currently not registered."
 msgstr "ಈ ವ್ಯವಸ್ಥೆಯನ್ನು ಪ್ರಸಕ್ತ ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ."
 
@@ -2234,15 +2239,9 @@ msgstr "ವ್ಯವಸ್ಥೆಯ ವಸ್ತುಸ್ಥಿತಿಗಳನ�
 msgid "Import certificates which were provided outside of the tool"
 msgstr "ಉಪಕರಣದ ಹೊರಗೆ ಒದಗಿಸಲಾದ ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ಆಮದು ಮಾಡು"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
 #: ../src/subscription_manager/managercli.py:1551
-msgid ""
-"certificate file to import (for multiple imports, specify this option more "
-"than once)"
+msgid "certificate file to import (can be specified more than once)"
 msgstr ""
-"ಆಮದು ಮಾಡಬೇಕಿರುವ ಪ್ರಮಾಣಪತ್ರ ಕಡತ (ಅನೇಕ ಆಮದುಗಳಿಗಾಗಿ, ಈ ಆಯ್ಕೆಯನ್ನು ಒಂದಕ್ಕಿಂತ ಹೆಚ್ಚು "
-"ಬಾರಿ ಸೂಚಿಸಿ)"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
@@ -2492,7 +2491,7 @@ msgstr "    ಅನುಸ್ಥಾಪಿಸಲಾದ ಉತ್ಪನ್ನದ ಸ
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1880
+#: ../src/subscription_manager/managercli.py:1881
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr ""
 "ನಮೂದಿಸಲಾದ ದಿನಾಂಕವು ಅಸಿಂಧುವಾಗಿದೆ. ದಿನಾಂಕವು YYYY-MM-DD  ಶೈಲಿಯಲ್ಲಿ ಇರಬೇಕು "
@@ -2500,7 +2499,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.98.X,
 # document keys, author shanky
-#: ../src/subscription_manager/managercli.py:1893
+#: ../src/subscription_manager/managercli.py:1894
 msgid "No available subscription pools to list"
 msgstr "ಪಟ್ಟಿ ಮಾಡಲು ಲಭ್ಯವಿರುವ ಯಾವುದೆ ಚಂದಾದಾರಿಕೆ ಇಲ್ಲ"
 
@@ -2519,74 +2518,74 @@ msgstr "ಬಳಸಲಾದ ಚಂದಾದಾರಿಕೆಗಳು"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
-#: ../src/subscription_manager/managercli.py:1963
+#: ../src/subscription_manager/managercli.py:1965
 #, python-format
 msgid "Provides:             \t%s"
 msgstr "ಇದನ್ನು ಒದಗಿಸುತ್ತದೆ:             \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
-#: ../src/subscription_manager/managercli.py:1966
+#: ../src/subscription_manager/managercli.py:1968
 #, python-format
 msgid "                      \t%s"
 msgstr "                      \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
-#: ../src/subscription_manager/managercli.py:1973
+#: ../src/subscription_manager/managercli.py:1975
 #, python-format
 msgid "Contract:             \t%s"
 msgstr "ಒಪ್ಪಂದ:             \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
-#: ../src/subscription_manager/managercli.py:1975
+#: ../src/subscription_manager/managercli.py:1977
 #, python-format
 msgid "Account:              \t%s"
 msgstr "ಖಾತೆ:              \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
-#: ../src/subscription_manager/managercli.py:1977
+#: ../src/subscription_manager/managercli.py:1979
 #, python-format
 msgid "Serial Number:        \t%s"
 msgstr "ಅನುಕ್ರಮ ಸಂಖ್ಯೆ:        \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
-#: ../src/subscription_manager/managercli.py:1979
+#: ../src/subscription_manager/managercli.py:1981
 #, python-format
 msgid "Active:               \t%s"
 msgstr "ಸಕ್ರಿಯ:               \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
-#: ../src/subscription_manager/managercli.py:1981
+#: ../src/subscription_manager/managercli.py:1983
 #, python-format
 msgid "Quantity Used:        \t%s"
 msgstr "ಬಳಸಿದ ಪ್ರಮಾಣ:        \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
-#: ../src/subscription_manager/managercli.py:2029
+#: ../src/subscription_manager/managercli.py:2035
 msgid "Print version information"
 msgstr "ಆವೃತ್ತಿಯ ಮಾಹಿತಿಯನ್ನು ಮುದ್ರಿಸು"
 
-#: ../src/subscription_manager/managercli.py:2041
+#: ../src/subscription_manager/managercli.py:2047
 #, python-format
 msgid "subscription management server: %s"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
-#: ../src/subscription_manager/managercli.py:2042
+#: ../src/subscription_manager/managercli.py:2048
 #, python-format
 msgid "subscription-manager: %s"
 msgstr "ಚಂದಾದಾರಿಕೆ-ವ್ಯವಸ್ಥಾಪಕ: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author shanky
-#: ../src/subscription_manager/managercli.py:2043
+#: ../src/subscription_manager/managercli.py:2049
 #, python-format
 msgid "python-rhsm: %s"
 msgstr "python-rhsm: %s"
@@ -2828,6 +2827,18 @@ msgstr "ಗಣಕದ ಹೆಸರು:"
 
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:6
 msgid "This must be the organization key, not the name."
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/activation_key.glade.h:7
+msgid "activation_key_entry"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/activation_key.glade.h:8
+msgid "consumer_entry"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/activation_key.glade.h:9
+msgid "organization_entry"
 msgstr ""
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:1
@@ -3649,7 +3660,7 @@ msgstr ""
 #: ../bin/rhn-migrate-classic-to-rhsm:74
 msgid ""
 "service level to follow when attaching subscriptions, for no service level "
-"use --service-level=\"\""
+"use --servicelevel=\"\""
 msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:77
@@ -4046,7 +4057,7 @@ msgid "interval to run auto-attach (in minutes)"
 msgstr ""
 
 #: ../src/rhsmcertd.c:64
-msgid "run the initial checks immediately, with no delay."
+msgid "run the initial checks immediately, with no delay"
 msgstr ""
 
 #: ../src/rhsmcertd.c:259
