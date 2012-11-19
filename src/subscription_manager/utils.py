@@ -320,7 +320,7 @@ def get_client_versions():
 
 def get_server_versions(cp):
     cp_version = _("Unknown")
-    server_type = _("Unknown")
+    server_type = _("This system is currently not registered.")
 
     # check for Classic before doing anything else
     if ClassicCheck().is_registered_with_classic():
