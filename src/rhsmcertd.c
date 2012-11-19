@@ -61,7 +61,7 @@ static GOptionEntry entries[] = {
      N_("interval to run auto-attach (in minutes)"),
 	 "MINUTES"},
 	{"now", 'n', 0, G_OPTION_ARG_NONE, &run_now,
-	 N_("run the initial checks immediately, with no delay."),
+	 N_("run the initial checks immediately, with no delay"),
 	 NULL},
 	{"debug", 'd', 0, G_OPTION_ARG_NONE, &show_debug,
 	 N_("show debug messages"), NULL},
