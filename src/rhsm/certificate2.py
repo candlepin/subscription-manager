@@ -18,14 +18,11 @@ import logging
 import os
 import base64
 import re
+import simplejson as json
 
 log = logging.getLogger(__name__)
 
 from datetime import datetime
-try:
-    import json
-except ImportError:
-    import simplejson as json
 
 from rhsm import _certificate
 

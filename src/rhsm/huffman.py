@@ -119,7 +119,7 @@ class HuffmanNode(object):
             except IndexError:
                 # no more nodes to compare, so a is the root node of the tree
                 return left
-            heapq.heappush(queue, (cls.combine(left, right), next(counter)))
+            heapq.heappush(queue, (cls.combine(left, right), counter.next()))
 
     def __cmp__(self, other):
         return cmp(self.weight, other.weight)
