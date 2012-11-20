@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.10
+Version: 1.8.0
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,9 @@ fi
 %endif
 
 %changelog
+* Tue Nov 20 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.0-1
+- Reversioning to 1.8.x stream.
+
 * Mon Nov 19 2012 Adrian Likins <alikins@redhat.com> 1.1.10-1
 - latest strings from zanata (alikins@redhat.com)
 - 874623: Tell users running the version command if they are not registered.
