@@ -21,7 +21,7 @@ import gtk
 import gtk.glade
 import gettext
 from subscription_manager.jsonwrapper import PoolWrapper
-from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn
+from subscription_manager.gui.widgets import MachineTypeColumn
 _ = gettext.gettext
 
 from subscription_manager.gui import widgets
@@ -109,9 +109,6 @@ class ContractSelectionWindow(object):
         column = gtk.TreeViewColumn(_("End Date"), renderer, date=3)
         column.set_sort_column_id(3)
         self.model.set_sort_func(3, self._sort_date, None)
-        self.contract_selection_treeview.append_column(column)
-
-        column = MultiEntitlementColumn(8)
         self.contract_selection_treeview.append_column(column)
 
         column = widgets.QuantitySelectionColumn(_("Quantity"), self.model, 4, 8, 9)
