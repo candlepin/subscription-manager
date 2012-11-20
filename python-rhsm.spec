@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.1.6
+Version: 1.8.0
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,9 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Tue Nov 20 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.0-1
+- Reversioning to 1.8.x stream.
+
 * Mon Nov 19 2012 Adrian Likins <alikins@redhat.com> 1.1.6-1
 - Making product and order info optional for a v3 EntitlementCertificate, since
   the server side will never have that data. (mhrivnak@redhat.com)
