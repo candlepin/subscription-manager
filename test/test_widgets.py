@@ -28,9 +28,9 @@ from rhsm.certificate import GMT
 from subscription_manager.managerlib import LocalTz
 
 from subscription_manager.gui.storage import MappedTreeStore
-from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn, \
-                                             QuantitySelectionColumn, SubDetailsWidget, \
-                                             ContractSubDetailsWidget, DatePicker
+from subscription_manager.gui.widgets import MachineTypeColumn, QuantitySelectionColumn, \
+                                             SubDetailsWidget, ContractSubDetailsWidget, \
+                                             DatePicker
 
 
 class TestSubDetailsWidget(unittest.TestCase):
@@ -153,17 +153,6 @@ class TestMachineTypeColumn(BaseColumnTest):
     def test_render_physical_when_not_virt_only(self):
         self._assert_column_value(MachineTypeColumn, False,
                                    MachineTypeColumn.PHYSICAL_MACHINE)
-
-
-class TestMultiEntitlementColumn(BaseColumnTest):
-
-    def test_render_astrisk_when_multi_entitled(self):
-        self._assert_column_value(MultiEntitlementColumn, True,
-                                  MultiEntitlementColumn.MULTI_ENTITLEMENT_STRING)
-
-    def test_render_empty_string_when_not_multi_entitled(self):
-        self._assert_column_value(MultiEntitlementColumn, False,
-                                  MultiEntitlementColumn.NOT_MULTI_ENTITLEMENT_STRING)
 
 
 class TestQuantitySelectionColumnTests(unittest.TestCase):
