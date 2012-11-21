@@ -18,8 +18,7 @@ import logging
 import gobject
 
 import gettext
-from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn, \
-                                             QuantitySelectionColumn
+from subscription_manager.gui.widgets import MachineTypeColumn, QuantitySelectionColumn
 from subscription_manager.jsonwrapper import PoolWrapper
 import gtk
 from subscription_manager.managerlib import MergedPoolsStackingGroupSorter
@@ -81,9 +80,6 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         column = self.add_text_column(_('Available Subscriptions'), 'available')
         cols.append((column, 'text', 'available'))
-
-        multi_entitle_col = MultiEntitlementColumn(self.store['multi-entitlement'])
-        self.top_view.append_column(multi_entitle_col)
 
         # Set up the quantity column.
         quantity_column = QuantitySelectionColumn(_("Quantity"),

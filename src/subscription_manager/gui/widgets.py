@@ -622,29 +622,6 @@ class ToggleTextColumn(gtk.TreeViewColumn):
         raise NotImplementedError("Subclasses must implement _get_none_text(self).")
 
 
-class MultiEntitlementColumn(ToggleTextColumn):
-    MULTI_ENTITLEMENT_STRING = "*"
-    NOT_MULTI_ENTITLEMENT_STRING = ""
-
-    def __init__(self, multi_entitle_model_idx):
-        """
-        A table column that renders an * character if model specifies a
-        multi-entitled attribute to be True
-
-        @param multi_entitle_model_idx: the model index containing a bool value used to
-                                        mark the row with an *.
-        """
-        ToggleTextColumn.__init__(self, "", multi_entitle_model_idx)
-        self.renderer.set_property('xpad', 2)
-        self.renderer.set_property('weight', 800)
-
-    def _get_true_text(self):
-        return self.MULTI_ENTITLEMENT_STRING
-
-    def _get_false_text(self):
-        return self.NOT_MULTI_ENTITLEMENT_STRING
-
-
 class MachineTypeColumn(ToggleTextColumn):
 
     PHYSICAL_MACHINE = _("Physical")
@@ -674,7 +651,7 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
         self.available_store_idx = available_store_idx
 
         self.quantity_renderer = gtk.CellRendererSpin()
-        self.quantity_renderer.set_property("xalign", 0.5)
+        self.quantity_renderer.set_property("xalign", 0)
         self.quantity_renderer.set_property("adjustment",
             gtk.Adjustment(lower=1, upper=100, step_incr=1))
         self.quantity_renderer.set_property("editable", editable)
@@ -745,6 +722,10 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
         # Disable editor if not multi-entitled.
         is_multi_entitled = tree_model.get_value(iter, self.is_multi_entitled_store_idx)
         cell_renderer.set_property("editable", is_multi_entitled)
+
+        if is_multi_entitled:
+            quantity = tree_model.get_value(iter, self.quantity_store_idx)
+            cell_renderer.set_property("text", "%s *" % quantity)
 
         if self.available_store_idx != None:
             available = tree_model.get_value(iter, self.available_store_idx)
