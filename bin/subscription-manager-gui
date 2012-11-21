@@ -85,7 +85,8 @@ try:
 
     from subscription_manager.gui import managergui
     from subscription_manager import logutil
-    from subscription_manager.i18n_optparse import OptionParser
+    from subscription_manager.i18n_optparse import OptionParser, \
+        WrappedIndentedHelpFormatter, USAGE
 except ImportError, e:
     systemExit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
@@ -103,9 +104,10 @@ class SubscriptionManagerService(dbus.service.Object):
         self.window.present()
 
 if __name__ == '__main__':
-    parser = OptionParser()
+    parser = OptionParser(usage=USAGE,
+                          formatter=WrappedIndentedHelpFormatter())
     parser.add_option("--register", action='store_true',
-                      help=_("Launches the registration dialog on startup."))
+                      help=_("launches the registration dialog on startup."))
     options, args = parser.parse_args(args=sys.argv)
 
     logutil.init_logger()

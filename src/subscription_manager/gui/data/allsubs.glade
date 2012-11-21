@@ -3,7 +3,7 @@
   <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkWindow" id="window1">
-    <property name="icon-name">subscription-manager</property>
+    <property name="icon_name">subscription-manager</property>
     <child>
       <widget class="GtkVBox" id="content">
         <property name="visible">True</property>
@@ -202,28 +202,18 @@
           <widget class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
             <child>
-              <widget class="GtkLabel" id="next_checkin_label">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Next System Check-in:</property>
-              </widget>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
               <widget class="GtkHButtonBox" id="subscribe_button_box">
                 <property name="visible">True</property>
                 <property name="layout_style">end</property>
                 <child>
                   <widget class="GtkButton" id="subscribe_button">
-                    <property name="label" translatable="yes">Subscribe</property>
+                    <property name="label" translatable="yes">Attach</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Subscribe</atkproperty>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Attach</atkproperty>
                     </accessibility>
                     <signal name="clicked" handler="on_subscribe_button_clicked"/>
                   </widget>
@@ -238,7 +228,7 @@
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="pack_type">end</property>
-                <property name="position">1</property>
+                <property name="position">0</property>
               </packing>
             </child>
           </widget>

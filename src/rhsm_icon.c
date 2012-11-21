@@ -76,14 +76,14 @@ static bool check_immediately = false;
 
 static GOptionEntry entries[] = {
 	{"check-period", 'c', 0, G_OPTION_ARG_INT, &check_period,
-	 N_("How often to check for validity (in seconds)"), NULL},
+	 N_("how often to check for validity (in seconds)"), NULL},
 	{"debug", 'd', 0, G_OPTION_ARG_NONE, &debug,
-	 N_("Show debug messages"), NULL},
+	 N_("show debug messages"), NULL},
 	{"force-icon", 'f', 0, G_OPTION_ARG_STRING, &force_icon,
-	 N_("Force display of the icon (expired, partial or warning)"),
+	 N_("force display of the icon (expired, partial or warning)"),
 	 "TYPE"},
 	{"check-immediately", 'i', 0, G_OPTION_ARG_NONE, &check_immediately,
-	 N_("Run the first status check right away"), NULL},
+	 N_("run the first status check right away"), NULL},
 	{NULL}
 };
 
@@ -209,7 +209,7 @@ display_icon (Context * context, StatusType status_type)
 			  "with the Customer Portal. Please enter your Red Hat "
 			  "login to ensure your system is up-to-date.");
 	} else if (status_type == RHSM_EXPIRED) {
-		tooltip = _("Invalid or Missing Entitlement Subscriptions");
+		tooltip = _("Invalid or Missing Subscriptions");
 		notification_title = tooltip;
 		notification_body =
 			_("This system is missing one or more "

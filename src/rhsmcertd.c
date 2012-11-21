@@ -51,16 +51,20 @@ static gint arg_heal_interval_minutes = -1;
 
 static GOptionEntry entries[] = {
 	{"cert-interval", 'c', 0, G_OPTION_ARG_INT, &arg_cert_interval_minutes,
-	 N_("Interval to run cert check (in minutes)"),
+	 N_("interval to run cert check (in minutes)"),
 	 "MINUTES"},
-	{"heal-interval", 'i', 0, G_OPTION_ARG_INT, &arg_heal_interval_minutes,
-	 N_("Interval to run healing (in minutes)"),
+    /* marked deprecated as of 11-16-2012, needs to be removed...? */
+	{"heal-interval", 0, 0, G_OPTION_ARG_INT, &arg_heal_interval_minutes,
+	 N_("deprecated, see auto-attach-interval"),
+	 "MINUTES"},
+    {"auto-attach-interval", 'i', 0, G_OPTION_ARG_INT, &arg_heal_interval_minutes,
+     N_("interval to run auto-attach (in minutes)"),
 	 "MINUTES"},
 	{"now", 'n', 0, G_OPTION_ARG_NONE, &run_now,
-	 N_("Run the initial checks immediatley, with no delay."),
+	 N_("run the initial checks immediately, with no delay"),
 	 NULL},
 	{"debug", 'd', 0, G_OPTION_ARG_NONE, &show_debug,
-	 N_("Show debug messages"), NULL},
+	 N_("show debug messages"), NULL},
 	{NULL}
 };
 

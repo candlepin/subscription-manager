@@ -24,7 +24,8 @@ from subscription_manager import certmgr
 from subscription_manager import logutil
 from subscription_manager import managerlib
 from subscription_manager.certlib import ConsumerIdentity
-from subscription_manager.i18n_optparse import OptionParser
+from subscription_manager.i18n_optparse import OptionParser, \
+    WrappedIndentedHelpFormatter, USAGE
 
 import gettext
 _ = gettext.gettext
@@ -60,7 +61,8 @@ if __name__ == '__main__':
     logutil.init_logger()
     log = logging.getLogger('rhsm-app.' + __name__)
 
-    parser = OptionParser()
+    parser = OptionParser(usage=USAGE,
+                          formatter=WrappedIndentedHelpFormatter())
     parser.add_option("--autoheal", dest="autoheal", action="store_true",
             default=False, help="perform an autoheal check")
     (options, args) = parser.parse_args()

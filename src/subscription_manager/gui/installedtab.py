@@ -29,7 +29,6 @@ import os
 
 _ = gettext.gettext
 
-
 prefix = os.path.dirname(__file__)
 VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
 PARTIAL_IMG = os.path.join(prefix, "data/icons/partial.svg")
@@ -177,8 +176,11 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
                     contract_ids, sub_names = self._calc_subs_providing(
                             product_id, compliant_range)
-                    name = ", ".join(sub_names)
-                    contract = ", ".join(contract_ids)
+                    name = self.rreplace((", ").join(sub_names), \
+                        ',', _(' and'), 1)
+                    contract = self.rreplace((", ").join(contract_ids), \
+                        ',', _(' and'), 1)
+                    num_of_contracts = len(contract_ids)
 
                     entry['subscription'] = name
 
@@ -210,7 +212,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['image'] = self._render_icon('green')
                         entry['status'] = _('Subscribed')
                         entry['validity_note'] = \
-                            _('Covered by contract(s) %s through %s') % \
+                            gettext.ngettext("Covered by contract %s through %s",
+                                             'Covered by contracts %s through %s',
+                                             num_of_contracts) % \
                             (contract,
                              managerlib.formatDate(entry['expiration_date']))
                 else:
@@ -348,5 +352,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.register_button.set_property('visible', not is_registered)
 
     def refresh(self):
-        self._set_next_update()
         self._set_validity_status()
+
+    def rreplace(self, s, old, new, occurrence):
+        li = s.rsplit(old, occurrence)
+        return new.join(li)

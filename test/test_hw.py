@@ -182,6 +182,121 @@ class HardwareProbeTests(unittest.TestCase):
         self.assertFalse('net.interface.lo.mac_address' in net_int)
         self.assertFalse('net.interface.sit0.mac_address' in net_int)
 
+    # simulate some wacky interfaces
+    @patch("ethtool.get_devices")
+    @patch("ethtool.get_interfaces_info")
+    def test_network_interfaces_none(self, MockGetInterfacesInfo, MockGetDevices):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        net_int = hw.getNetworkInterfaces()
+        self.assertEquals(net_int, {})
+
+    @patch("ethtool.get_devices")
+    @patch("ethtool.get_interfaces_info")
+    def test_network_interfaces_multiple_ipv4(self, MockGetInterfacesInfo, MockGetDevices):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+
+        MockGetDevices.return_value = ['eth0']
+        mock_info = Mock(mac_address="00:00:00:00:00:00",
+                         device="eth0")
+        mock_info.get_ipv6_addresses.return_value = []
+        mock_ipv4s = [Mock(address="10.0.0.1", netmask="24", broadcast="Unknown"),
+                      Mock(address="10.0.0.2", netmask="24", broadcast="Unknown")]
+        mock_info.get_ipv4_addresses = Mock(return_value=mock_ipv4s)
+        MockGetInterfacesInfo.return_value = [mock_info]
+
+        net_int = hw.getNetworkInterfaces()
+
+        # FIXME/TODO/NOTE: We currently expect to get just the last interface
+        # listed in this scenario. But... that is wrong. We should really
+        # be supporting multiple addresses per interface in some yet
+        # undetermined fashion
+        self.assertEquals(net_int['net.interface.eth0.ipv4_address'], '10.0.0.2')
+
+    @patch("ethtool.get_devices")
+    @patch("ethtool.get_interfaces_info")
+    def test_network_interfaces_just_lo(self, MockGetInterfacesInfo, MockGetDevices):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        MockGetDevices.return_value = ['lo']
+        mock_info = Mock(mac_address="00:00:00:00:00:00",
+                         device="lo")
+
+        mock_info.get_ipv6_addresses.return_value = []
+        mock_ipv4 = Mock(address="127.0.0.1",
+                         netmask="24",
+                         broadcase="Unknown")
+        mock_info.get_ipv4_addresses = Mock(return_value=[mock_ipv4])
+        MockGetInterfacesInfo.return_value = [mock_info]
+        net_int = hw.getNetworkInterfaces()
+        self.assertEquals(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
+        self.assertFalse('net.interface.lo.mac_address' in net_int)
+
+    @patch("ethtool.get_devices")
+    @patch("ethtool.get_interfaces_info")
+    def test_network_interfaces_sit(self, MockGetInterfacesInfo, MockGetDevices):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        MockGetDevices.return_value = ['sit0']
+        mock_ipv6 = Mock(address="::1",
+                         netmask="/128",
+                         scope="global")
+
+        mock_info = Mock(mac_address="00:00:00:00:00:00",
+                         device="sit0")
+        mock_info.get_ipv6_addresses.return_value = [mock_ipv6]
+        mock_info.get_ipv4_addresses.return_value = []
+        MockGetInterfacesInfo.return_value = [mock_info]
+
+        net_int = hw.getNetworkInterfaces()
+        # ignore mac address for sit* interfaces (bz #838123)
+        self.assertFalse('net.interface.sit0.mac_address' in net_int)
+
+    @patch("ethtool.get_devices")
+    @patch("ethtool.get_interfaces_info")
+    def test_network_interfaces_just_lo_ethtool_no_get_ipv4_addresses(self,
+                                                                      MockGetInterfacesInfo,
+                                                                      MockGetDevices):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        MockGetDevices.return_value = ['lo']
+        mock_info = Mock(mac_address="00:00:00:00:00:00",
+                         device="lo",
+                         ipv4_address="127.0.0.1",
+                         ipv4_netmask="24",
+                         ipv4_broadcast="Unknown")
+        mock_info.get_ipv6_addresses.return_value = []
+
+        # mock etherinfo not having a get_ipv4_addresses method
+        del mock_info.get_ipv4_addresses
+        MockGetInterfacesInfo.return_value = [mock_info]
+
+        net_int = hw.getNetworkInterfaces()
+        self.assertEquals(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
+        self.assertFalse('net.interface.lo.mac_address' in net_int)
+
+    @patch("ethtool.get_devices")
+    @patch("ethtool.get_interfaces_info")
+    def test_network_interfaces_just_lo_ipv6(self, MockGetInterfacesInfo, MockGetDevices):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        MockGetDevices.return_value = ['lo']
+
+        mock_ipv6 = Mock(address="::1",
+                         netmask="/128",
+                         scope="global")
+
+        mock_info = Mock(mac_address="00:00:00:00:00:00",
+                         device="lo")
+        mock_info.get_ipv6_addresses.return_value = [mock_ipv6]
+        mock_info.get_ipv4_addresses.return_value = []
+        MockGetInterfacesInfo.return_value = [mock_info]
+
+        net_int = hw.getNetworkInterfaces()
+        self.assertEquals(net_int['net.interface.lo.ipv6_address.global'], '::1')
+        self.assertFalse('net.interface.lo.mac_address' in net_int)
+
     @patch("__builtin__.open")
     def test_get_slave_hwaddr_rr(self, MockOpen):
         reload(hwprobe)

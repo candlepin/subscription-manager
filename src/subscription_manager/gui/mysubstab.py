@@ -128,7 +128,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             try:
                 self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
             except Exception, e:
-                handle_gui_exception(e, _("There was an error unsubscribing from %s with serial number %s") % (selection['subscription'], serial), self.parent_win, formatMsg=False)
+                handle_gui_exception(e, _("There was an error removing %s with serial number %s") % (selection['subscription'], serial), self.parent_win, formatMsg=False)
 
             try:
                 self.backend.certlib.update()
@@ -147,7 +147,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         if not selection.is_valid():
             return
 
-        prompt = messageWindow.YesNoDialog(_("Are you sure you want to unsubscribe from %s?") % selection['subscription'],
+        prompt = messageWindow.YesNoDialog(_("Are you sure you want to remove %s?") % selection['subscription'],
                 self.content.get_toplevel())
         prompt.connect('response', self._on_unsubscribe_prompt_response, selection)
 

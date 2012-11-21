@@ -29,6 +29,7 @@ EXPIRED = "expired"
 PARTIALLY_SUBSCRIBED = "partially_subscribed"
 
 SOCKET_FACT = 'cpu.cpu_socket(s)'
+RAM_FACT = 'memory.memtotal'
 
 
 class CertSorter(object):
@@ -102,6 +103,14 @@ class CertSorter(object):
             self.socket_count = safe_int(self.facts_dict[SOCKET_FACT], 1)
         else:
             log.warn("System has no socket fact, assuming 1.")
+
+        # Amount of RAM on this system - default is 1GB
+        self.total_ram = 1
+        if RAM_FACT in self.facts_dict:
+            self.total_ram = self._convert_system_ram_to_gb(
+                                safe_int(self.facts_dict[RAM_FACT], self.total_ram))
+        else:
+            log.warn("System has no %s fact, assuming 1GB" % RAM_FACT)
 
         log.debug("Sorting product and entitlement cert status for: %s" %
                 on_date)
@@ -223,6 +232,8 @@ class CertSorter(object):
                 # socket coverage for the system:
                 elif not stack_id and not self.ent_cert_sockets_valid(ent_cert):
                     self._add_products_to_hash(ent_cert, self.partially_valid_products)
+                elif not stack_id and not self._ent_cert_ram_valid(ent_cert):
+                    self._add_products_to_hash(ent_cert, self.partially_valid_products)
                 # Anything else must be valid:
                 else:
                     self._add_products_to_hash(ent_cert, self.valid_products)
@@ -289,6 +300,24 @@ class CertSorter(object):
             return True
         return False
 
+    def _ent_cert_ram_valid(self, ent_cert):
+        """
+        Determines if the given entitlement covers the amount of RAM for
+        this system.
+
+        If the entitlement has no RAM restriction, then it is considered
+        valid.
+        """
+        if ent_cert.order.ram_limit is None:
+            return True
+
+        entitlement_ram = ent_cert.order.ram_limit
+        log.debug("  system has %s GB of RAM, %d GB covered by entitlement" %
+                (self.total_ram, entitlement_ram))
+
+        covered = self.total_ram <= entitlement_ram
+        return covered
+
     def _add_products_to_hash(self, ent_cert, product_dict):
         """
         Adds any installed product IDs provided by the entitlement cert to
@@ -311,6 +340,16 @@ class CertSorter(object):
                     (product_id in self.partially_valid_products):
                 continue
             self.unentitled_products[product_id] = self.installed_products[product_id]
+
+    def _convert_system_ram_to_gb(self, system_ram):
+        """
+        Convert system ram from kilobyes to Gigabytes.
+
+        System RAM will be rounded to the nearest full
+        GB value (i.e 1.3 GB == 1 GB). This is so that
+        we can deal with a common base.
+        """
+        return int(round(system_ram / 1024.0 / 1024.0))
 
 
 class StackingGroupSorter(object):

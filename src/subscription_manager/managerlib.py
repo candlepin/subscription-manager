@@ -776,17 +776,17 @@ class LocalTz(datetime.tzinfo):
     """
 
     def utcoffset(self, dt):
-        if time.daylight:
+        if time.daylight and time.localtime().tm_isdst:
             return datetime.timedelta(seconds=-time.altzone)
         return datetime.timedelta(seconds=-time.timezone)
 
     def dst(self, dt):
-        if time.daylight:
+        if time.daylight and time.localtime().tm_isdst:
             return datetime.timedelta(seconds=(time.timezone - time.altzone))
         return datetime.timedelta(seconds=0)
 
     def tzname(self, dt):
-        if time.daylight:
+        if time.daylight and time.localtime().tm_isdst:
             return time.tzname[1]
 
         return time.tzname[0]

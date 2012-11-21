@@ -23,8 +23,6 @@ import dbus
 import dbus.service
 import dbus.glib
 
-from optparse import OptionParser
-
 import sys
 sys.path.append("/usr/share/rhsm")
 from subscription_manager.certlib import ConsumerIdentity
@@ -33,6 +31,8 @@ from subscription_manager import certdirectory
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.facts import Facts
+from subscription_manager.i18n_optparse import OptionParser, \
+    WrappedIndentedHelpFormatter, USAGE
 import rhsm.certificate as certificate
 
 enable_debug = False
@@ -172,7 +172,8 @@ def parse_force_signal(cli_arg):
 
 
 def main():
-    parser = OptionParser()
+    parser = OptionParser(usage=USAGE,
+                          formatter=WrappedIndentedHelpFormatter())
     parser.add_option("-d", "--debug", dest="debug",
             help="Display debug messages", action="store_true", default=False)
     parser.add_option("-k", "--keep-alive", dest="keep_alive",

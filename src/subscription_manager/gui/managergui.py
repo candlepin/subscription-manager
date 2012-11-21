@@ -20,7 +20,6 @@
 import locale
 import logging
 import subprocess
-import urlparse
 
 import gtk
 import gtk.glade
@@ -38,7 +37,7 @@ from subscription_manager.certdirectory import ProductDirectory, EntitlementDire
 from subscription_manager.certlib import ConsumerIdentity, CertLib
 from subscription_manager.branding import get_branding
 from subscription_manager.utils import get_client_versions, get_server_versions, \
-restart_virt_who
+restart_virt_who, parse_baseurl_info
 
 from subscription_manager.gui import redeem
 from subscription_manager.gui import factsgui
@@ -141,8 +140,9 @@ class Backend(object):
         self.content_connection = self._create_content_connection()
 
     def _create_content_connection(self):
-        return connection.ContentConnection(host=urlparse.urlparse(cfg.get('rhsm', 'baseurl'))[1],
-                                            ssl_port=443,
+        (cdn_hostname, cdn_port, cdn_prefix) = parse_baseurl_info(cfg.get('rhsm', 'baseurl'))
+        return connection.ContentConnection(host=cdn_hostname,
+                                            ssl_port=cdn_port,
                                             proxy_hostname=cfg.get('server', 'proxy_hostname'),
                                             proxy_port=cfg.get('server', 'proxy_port'),
                                             proxy_user=cfg.get('server', 'proxy_user'),
@@ -197,8 +197,8 @@ class MainWindow(widgets.GladeWidget):
     The new RHSM main window.
     """
     widget_names = ['main_window', 'notebook', 'system_name_label',
-                    'next_checkin_label', 'register_menu_item',
-                    'unregister_menu_item', 'redeem_menu_item']
+                    'register_menu_item', 'unregister_menu_item',
+                    'redeem_menu_item']
 
     def __init__(self, backend=None, consumer=None,
                  facts=None, ent_dir=None, prod_dir=None,

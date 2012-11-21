@@ -21,8 +21,8 @@ import rhsm.connection as connection
 from subscription_manager import managercli
 
 
-# This is a dupe of test_remove
-class CliUnSubscribeTests(unittest.TestCase):
+# This is a copy of CliUnSubscribeTests for the new name.
+class CliRemoveTests(unittest.TestCase):
 
     def setUp(self):
         self.oldCI = managercli.ConsumerIdentity
@@ -30,7 +30,7 @@ class CliUnSubscribeTests(unittest.TestCase):
     def test_unsubscribe_registered(self):
         connection.UEPConnection = StubUEP
 
-        cmd = managercli.UnSubscribeCommand(ent_dir=StubEntitlementDirectory([]),
+        cmd = managercli.RemoveCommand(ent_dir=StubEntitlementDirectory([]),
                               prod_dir=StubProductDirectory([]))
 
         managercli.ConsumerIdentity = StubConsumerIdentity
@@ -38,16 +38,16 @@ class CliUnSubscribeTests(unittest.TestCase):
         StubConsumerIdentity.exists = classmethod(lambda cls: True)
         managercli.CertLib = StubCertLib
 
-        cmd.main(['unsubscribe', '--all'])
+        cmd.main(['remove', '--all'])
         self.assertEquals(cmd.cp.called_unbind_uuid,
                           StubConsumerIdentity.CONSUMER_ID)
 
         serial1 = '123456'
-        cmd.main(['unsubscribe', '--serial=%s' % serial1])
+        cmd.main(['remove', '--serial=%s' % serial1])
         self.assertEquals(cmd.cp.called_unbind_serial, [serial1])
 
         serial2 = '789012'
-        cmd.main(['unsubscribe', '--serial=%s' % serial1, '--serial=%s' % serial2])
+        cmd.main(['remove', '--serial=%s' % serial1, '--serial=%s' % serial2])
         self.assertEquals(cmd.cp.called_unbind_serial, [serial1, serial2])
 
     def test_unsubscribe_unregistered(self):
@@ -56,14 +56,14 @@ class CliUnSubscribeTests(unittest.TestCase):
         prod = StubProduct('stub_product')
         ent = StubEntitlementCertificate(prod)
 
-        cmd = managercli.UnSubscribeCommand(ent_dir=StubEntitlementDirectory([ent]),
+        cmd = managercli.RemoveCommand(ent_dir=StubEntitlementDirectory([ent]),
                               prod_dir=StubProductDirectory([]))
 
         managercli.ConsumerIdentity = StubConsumerIdentity
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
         StubConsumerIdentity.exists = classmethod(lambda cls: False)
 
-        cmd.main(['unsubscribe', '--all'])
+        cmd.main(['remove', '--all'])
         self.assertTrue(cmd.entitlement_dir.list_called)
         self.assertTrue(ent.is_deleted)
 
@@ -72,13 +72,13 @@ class CliUnSubscribeTests(unittest.TestCase):
         ent2 = StubEntitlementCertificate(prod)
         ent3 = StubEntitlementCertificate(prod)
 
-        cmd = managercli.UnSubscribeCommand(ent_dir=StubEntitlementDirectory([ent1, ent2, ent3]),
+        cmd = managercli.RemoveCommand(ent_dir=StubEntitlementDirectory([ent1, ent2, ent3]),
                               prod_dir=StubProductDirectory([]))
         managercli.ConsumerIdentity = StubConsumerIdentity
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
         StubConsumerIdentity.exists = classmethod(lambda cls: False)
 
-        cmd.main(['unsubscribe', '--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial])
+        cmd.main(['remove', '--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial])
         self.assertTrue(cmd.entitlement_dir.list_called)
         self.assertTrue(ent1.is_deleted)
         self.assertFalse(ent2.is_deleted)

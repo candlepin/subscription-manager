@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.5
+Version: 1.8.0
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -28,7 +28,7 @@ Requires:  python-iniparse
 Requires:  pygobject2
 Requires:  python-dateutil
 Requires:  virt-what
-Requires:  python-rhsm >= 1.1.1
+Requires:  python-rhsm >= 1.1.5
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 
@@ -239,6 +239,7 @@ rm -rf %{buildroot}
 %doc
 %{_mandir}/man8/subscription-manager.8*
 %{_mandir}/man8/rhsmcertd.8*
+%{_mandir}/man8/rct.8*
 %doc LICENSE
 
 
@@ -345,6 +346,56 @@ fi
 %endif
 
 %changelog
+* Tue Nov 20 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.0-1
+- Reversioning to 1.8.x stream.
+
+* Mon Nov 19 2012 Adrian Likins <alikins@redhat.com> 1.1.10-1
+- latest strings from zanata (alikins@redhat.com)
+- 874623: Tell users running the version command if they are not registered.
+  (awood@redhat.com)
+- 873418: Add at-spi locators to the activation key window. (awood@redhat.com)
+
+* Fri Nov 16 2012 Adrian Likins <alikins@redhat.com> 1.1.9-1
+- latest strings from zanata (alikins@redhat.com)
+- 864207: mark these strings for translation (alikins@redhat.com)
+- 854388: use ngettext to specify contract/contracts (alikins@redhat.com)
+- 876753: change rhsmcertd --heal-interval to --auto-attach-interval
+  (alikins@redhat.com)
+- We require python-rhsm-1.1.5 now (ram) (alikins@redhat.com)
+- 876340: Move the last of the commands and help string to --auto-attach
+  (bkearney@redhat.com)
+- 876294: Use attach instead of subscirbe in the rhn migration tooling
+  (bkearney@redhat.com)
+- 856735: Move the Next Update notification to the About dialog.
+  (awood@redhat.com)
+- Removed stacking from RAM (mstead@redhat.com)
+- Improved comments/logging/tests for RAM (mstead@redhat.com)
+- Updated the entitlement_version of client (mstead@redhat.com)
+- Added RAM limit to rct cat-cert output (mstead@redhat.com)
+- Removing dead code (mstead@redhat.com)
+- Check RAM when determining status (mstead@redhat.com)
+
+* Tue Nov 13 2012 Adrian Likins <alikins@redhat.com> 1.1.8-1
+- 862909: install rct man page (alikins@redhat.com)
+- Fix to LocalTz DST determination (cduryee@redhat.com)
+
+* Mon Nov 12 2012 Adrian Likins <alikins@redhat.com> 1.1.7-1
+- 873631: Migrate correctly when there is only one org. (awood@redhat.com)
+- 874147: Handle changes in python-ethool api (alikins@redhat.com)
+
+* Thu Nov 08 2012 Adrian Likins <alikins@redhat.com> 1.1.6-1
+- 872847: Change unsubscribe feedback when consumer has been deleted
+  (wpoteat@redhat.com)
+- 869934: make "release" related cdn usage use proper urlparse
+  (alikins@redhat.com)
+- 852328: Improve the server version checking (bkearney@redhat.com)
+- 871146: Fix proxy errors on first yum operation after registration.
+  (dgoodwin@redhat.com)
+- 850430: Pressing Enter in the password entry now activates registration.
+  (awood@redhat.com)
+- Attach subscriptions after registration with an activation key.
+  (awood@redhat.com)
+
 * Thu Nov 01 2012 Adrian Likins <alikins@redhat.com> 1.1.5-1
 - latest strings from zanata (alikins@redhat.com)
 

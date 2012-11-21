@@ -31,7 +31,8 @@ if _LIBPATH not in sys.path:
     sys.path.append(_LIBPATH)
 
 from subscription_manager.i18n import configure_i18n
-from subscription_manager.i18n_optparse import OptionParser
+from subscription_manager.i18n_optparse import OptionParser, \
+     WrappedIndentedHelpFormatter, USAGE
 
 configure_i18n()
 
@@ -48,14 +49,15 @@ _("Unsupported string length")
 _("Checksum verification failed")
 
 # Set up command line options
-parser = OptionParser()
+parser = OptionParser(usage=USAGE,
+                      formatter=WrappedIndentedHelpFormatter())
 parser.add_option('-i',
                   '--instnumber',
-                  help=_("Install number to run against"))
+                  help=_("install number to run against"))
 parser.add_option('-d',
                   '--dryrun', action="store_true",
                   default=False,
-                  help=_("Only print the files which would be copied over"))
+                  help=_("only print the files which would be copied over"))
 (options, args) = parser.parse_args()
 
 

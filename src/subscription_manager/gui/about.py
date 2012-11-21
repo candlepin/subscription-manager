@@ -14,6 +14,7 @@
 #
 
 import os
+import datetime
 from gtk import RESPONSE_DELETE_EVENT, RESPONSE_CANCEL, \
                 AboutDialog as GtkAboutDialog, Label
 from subscription_manager.utils import get_client_versions, get_server_versions
@@ -30,6 +31,8 @@ LICENSE = _("\nThis software is licensed to you under the GNU General Public Lic
             "Red Hat trademarks are not licensed under GPLv2. No permission is " \
             "granted to use or replicate Red Hat trademarks that are incorporated " \
             "in this software or its documentation.\n")
+
+UPDATE_FILE = '/var/run/rhsm/update'
 
 prefix = os.path.dirname(__file__)
 
@@ -48,11 +51,15 @@ class AboutDialog(object):
         self.dialog.set_logo_icon_name("subscription-manager")
         self.dialog.set_icon_name("subscription-manager")
 
+        next_update_label = Label()
         rhsm_version_label = Label()
         backend_version_label = Label()
         context_box = self.dialog.vbox.get_children()[0]
+        context_box.pack_end(next_update_label)
         context_box.pack_end(rhsm_version_label)
         context_box.pack_end(backend_version_label)
+
+        self._set_next_update(next_update_label)
 
         # Set the component versions.
         server_versions = get_server_versions(self.backend.uep)
@@ -73,3 +80,17 @@ class AboutDialog(object):
     def _handle_response(self, dialog, response):
         if response == RESPONSE_DELETE_EVENT or response == RESPONSE_CANCEL:
             self.dialog.destroy()
+
+    def _set_next_update(self, next_update_label):
+        try:
+            next_update = long(file(UPDATE_FILE).read())
+        except:
+            next_update = None
+
+        if next_update:
+            update_time = datetime.datetime.fromtimestamp(next_update)
+            next_update_label.set_markup(_('<b>Next System Check-in:</b> %s') %
+                update_time.strftime("%c"))
+            next_update_label.show()
+        else:
+            next_update_label.hide()

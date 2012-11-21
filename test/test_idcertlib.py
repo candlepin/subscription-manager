@@ -44,6 +44,9 @@ class InvalidConsumerIdentity(certlib.ConsumerIdentity):
 
 class TestIdentityCertlib(unittest.TestCase):
 
+    def setUp(self):
+        self.old_ci = certlib.ConsumerIdentity
+
     def _get_idcertlib(self):
         self.stub_uep = stubs.StubUEP()
         self.stub_uep.getConsumer = getConsumerData
@@ -71,3 +74,6 @@ class TestIdentityCertlib(unittest.TestCase):
         idcertlib = self._get_idcertlib()
         ret = idcertlib._do_update()
         self.assertEquals(ret, 0)
+
+    def tearDown(self):
+        certlib.ConsumerIdentity = self.old_ci
