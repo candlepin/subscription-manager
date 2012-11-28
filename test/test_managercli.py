@@ -313,6 +313,11 @@ class TestListCommand(TestCliProxyCommand):
         new_name = self.cc._format_name(name, self.indent, self.max_length)
         self.assertEquals(name, new_name)
 
+    def test_format_name_null_width(self):
+        name = "This is a Really Long Name For A Product That We Do Not Want To See But Should Be Able To Deal With"
+        new_name = self.cc._format_name(name, self.indent, None)
+        self.assertEquals(name, new_name)
+
     def test_format_name_none(self):
         name = None
         new_name = self.cc._format_name(name, self.indent, self.max_length)
