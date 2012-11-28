@@ -2011,7 +2011,7 @@ class ListCommand(CliCommand):
         it a columned effect.
         """
 
-        if not name:
+        if not name or not max_length:
             return name
 
         words = name.split()
