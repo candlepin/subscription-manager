@@ -14,7 +14,15 @@ class TestProductManager(unittest.TestCase):
                 product_db=self.prod_db_mock)
 
     def test_removed(self):
-        self.prod_db_mock.findRepo.return_value = "repo1"
+        self.firstcall = True
+
+        def _my_retval(*args):
+            if self.firstcall:
+                self.firstcall = False
+                return ["repo1"]
+            return []
+
+        self.prod_db_mock.findRepos.side_effect = _my_retval
         cert = self._create_desktop_cert()
         self.prod_dir.certs.append(cert)
         self.prod_mgr.updateRemoved([])
@@ -119,3 +127,62 @@ class TestProductManager(unittest.TestCase):
 
         yum_mock.__version_info__ = (3, 2, 28)
         self.assertTrue(self.prod_mgr._check_yum_version_tracks_repos())
+
+    @patch("simplejson.load")
+    def test_convert_on_open(self, load_mock):
+        json_data = {}
+        json_data["10"] = "foo"
+        load_mock.return_value = json_data
+        prod_db = productid.ProductDatabase()
+        prod_db.read()
+        self.assertEquals(type(prod_db.findRepos("10")), list)
+
+    @patch("simplejson.load")
+    def test_add_to_existing(self, load_mock):
+        json_data = {}
+        json_data["10"] = "foo"
+        load_mock.return_value = json_data
+        prod_db = productid.ProductDatabase()
+        prod_db.read()
+        prod_db.add("10", "bar")
+        self.assertEquals(len(prod_db.findRepos("10")), 2)
+
+    @patch("simplejson.load")
+    def test_add_to_new(self, load_mock):
+        json_data = {}
+        json_data["10"] = "foo"
+        load_mock.return_value = json_data
+        prod_db = productid.ProductDatabase()
+        prod_db.read()
+        prod_db.add("11", "bar")
+        self.assertEquals(len(prod_db.findRepos("11")), 1)
+
+    @patch("simplejson.load")
+    def test_remove_entry(self, load_mock):
+        json_data = {}
+        json_data["10"] = "foo"
+        load_mock.return_value = json_data
+        prod_db = productid.ProductDatabase()
+        prod_db.read()
+        prod_db.delete("10", "bar")
+        self.assertEquals(prod_db.findRepos("10"), None)
+
+    @patch("simplejson.load")
+    def test_remove_single(self, load_mock):
+        json_data = {}
+        json_data["10"] = ["foo", "bar"]
+        load_mock.return_value = json_data
+        prod_db = productid.ProductDatabase()
+        prod_db.read()
+        prod_db.delete("10", "bar")
+        self.assertEquals(prod_db.findRepos("10"), ["foo"])
+
+    @patch("simplejson.load")
+    def test_remove_all(self, load_mock):
+        json_data = {}
+        json_data["10"] = "foo"
+        load_mock.return_value = json_data
+        prod_db = productid.ProductDatabase()
+        prod_db.read()
+        prod_db.delete("10")
+        self.assertEquals(prod_db.findRepos("10"), None)
