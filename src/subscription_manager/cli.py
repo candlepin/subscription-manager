@@ -85,7 +85,6 @@ class CLI:
         self.cli_commands[cmd.name] = cmd
 
     def _usage(self):
-        print "\r"
         print _("Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0])
         print "\r"
         items = self.cli_commands.items()
