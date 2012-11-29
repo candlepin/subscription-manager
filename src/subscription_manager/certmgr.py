@@ -102,7 +102,6 @@ class CertManager:
                 except Exception, e:
                     log.warning("Exception caught while running %s update" % lib)
                     log.exception(e)
-                    print e
 
             # NOTE: with no consumer cert, most of these actually
             # fail
