@@ -31,6 +31,7 @@ Requires:  virt-what
 Requires:  python-rhsm >= 1.1.5
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
+Requires:  usermode
 
 # There's no dmi to read on these arches, so don't pull in this dep.
 %ifnarch ppc ppc64 s390 s390x
@@ -69,7 +70,6 @@ Summary: A GUI interface to manage Red Hat product subscriptions
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
-Requires: usermode
 Requires: usermode-gtk
 Requires: dbus-x11
 Requires(post): scrollkeeper
