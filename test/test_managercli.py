@@ -452,6 +452,10 @@ class TestConfigCommand(TestCliCommand):
         self.cc.main(['--rhsm.baseurl', baseurl])
         self.assertEquals(managercli.cfg.store['rhsm.baseurl'], baseurl)
 
+    def test_set_empty(self):
+        self.cc._do_command = self._orig_do_command
+        self.assertRaises(SystemExit, self.cc.main, ['--rhsm.baseurl', ''])
+
     def test_remove_config_default(self):
         self.cc._do_command = self._orig_do_command
         self.cc.main(['--remove', 'rhsm.baseurl'])

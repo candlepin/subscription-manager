@@ -1748,6 +1748,12 @@ class ConfigCommand(CliCommand):
                 for name, value in cfg.items(section):
                     test = "%s" % getattr(self.options, section + "." + name)
                     has = has or (test != 'None')
+                    if (test != 'None') and len(test) == 0:
+                        sys.stderr.write(
+                            _("To remove the value for %s.%s, use the --remove option.") % (section, name)
+                        )
+                        sys.stderr.write("\n")
+                        sys.exit(-1)
             if not has:
                 # if no options are given, default to --list
                 self.options.list = True
