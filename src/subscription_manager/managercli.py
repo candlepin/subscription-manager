@@ -1432,6 +1432,7 @@ class RemoveCommand(CliCommand):
         Executes the command.
         """
         self._validate_options()
+        return_code = 0
         if ConsumerIdentity.exists():
             consumer = ConsumerIdentity.read().getConsumerId()
             try:
@@ -1468,6 +1469,8 @@ class RemoveCommand(CliCommand):
                         print _("Unsuccessfully removed serial numbers:")
                         for fail in failure:
                             print "   %s" % fail
+                    if not success:
+                        return_code = 1
                 self.certlib.update()
             except connection.RestlibException, re:
                 log.error(re)
@@ -1484,17 +1487,22 @@ class RemoveCommand(CliCommand):
                         total = total + 1
                     print _("%s subscriptions removed from this system." % total)
                 else:
+                    count = 0
                     for ent in self.entitlement_dir.list():
                         if str(ent.serial) in self.options.serials:
                             ent.delete()
                             print _("Subscription with serial number %s removed from this system"
                                 % str(ent.serial))
+                            count = count + 1
+                    if count == 0:
+                        return_code = 1
             except Exception, e:
                 handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
 
         # it is okay to call this no matter what happens above,
         # it's just a notification to perform a check
         self._request_validity_check()
+        return return_code
 
 
 class UnSubscribeCommand(RemoveCommand):
