@@ -13,6 +13,7 @@
 # in this software or its documentation.
 #
 import unittest
+import mock
 
 from stubs import StubUEP, StubEntitlementDirectory, StubProductDirectory
 from stubs import StubConsumerIdentity, StubCertLib, StubEntitlementCertificate
@@ -30,7 +31,12 @@ class CliUnSubscribeTests(unittest.TestCase):
     def test_unsubscribe_registered(self):
         connection.UEPConnection = StubUEP
 
-        cmd = managercli.UnSubscribeCommand(ent_dir=StubEntitlementDirectory([]),
+        prod = StubProduct('stub_product')
+        ent1 = StubEntitlementCertificate(prod)
+        ent2 = StubEntitlementCertificate(prod)
+        ent3 = StubEntitlementCertificate(prod)
+
+        cmd = managercli.UnSubscribeCommand(ent_dir=StubEntitlementDirectory([ent1, ent2, ent3]),
                               prod_dir=StubProductDirectory([]))
 
         managercli.ConsumerIdentity = StubConsumerIdentity
@@ -42,13 +48,18 @@ class CliUnSubscribeTests(unittest.TestCase):
         self.assertEquals(cmd.cp.called_unbind_uuid,
                           StubConsumerIdentity.CONSUMER_ID)
 
-        serial1 = '123456'
-        cmd.main(['unsubscribe', '--serial=%s' % serial1])
-        self.assertEquals(cmd.cp.called_unbind_serial, [serial1])
+        cmd.main(['unsubscribe', '--serial=%s' % ent1.serial])
+        self.assertEquals(cmd.cp.called_unbind_serial, ['%s' % ent1.serial])
 
-        serial2 = '789012'
-        cmd.main(['unsubscribe', '--serial=%s' % serial1, '--serial=%s' % serial2])
-        self.assertEquals(cmd.cp.called_unbind_serial, [serial1, serial2])
+        code = cmd.main(['unsubscribe', '--serial=%s' % ent2.serial, '--serial=%s' % ent3.serial])
+        self.assertEquals(cmd.cp.called_unbind_serial, ['%s' % ent2.serial, '%s' % ent3.serial])
+        self.assertEquals(code, 0)
+
+        connection.UEPConnection.unbindBySerial = mock.Mock(side_effect=connection.RestlibException \
+                                    ("Entitlement Certificate with serial \
+                                     number 2300922701043065601 could not be found."))
+        code = cmd.main(['unsubscribe', '--serial=%s' % '2300922701043065601'])
+        self.assertEquals(code, 1)
 
     def test_unsubscribe_unregistered(self):
         connection.UEPConnection = StubUEP
@@ -78,11 +89,15 @@ class CliUnSubscribeTests(unittest.TestCase):
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
         StubConsumerIdentity.exists = classmethod(lambda cls: False)
 
-        cmd.main(['unsubscribe', '--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial])
+        code = cmd.main(['unsubscribe', '--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial])
         self.assertTrue(cmd.entitlement_dir.list_called)
         self.assertTrue(ent1.is_deleted)
         self.assertFalse(ent2.is_deleted)
         self.assertTrue(ent3.is_deleted)
+        self.assertEquals(code, 0)
+
+        code = cmd.main(['unsubscribe', '--serial=%s' % '33333333'])
+        self.assertEquals(code, 1)
 
     def tearDown(self):
         managercli.ConsumerIdentity = self.oldCI
