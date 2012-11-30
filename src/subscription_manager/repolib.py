@@ -461,6 +461,10 @@ class RepoFile(ConfigParser):
             log.debug("Skipping write due to manage_repos setting: %s" %
                     self.path)
             return
+        if not os.path.exists(self.PATH):
+            log.debug("Skipping write because %s does not exist." %
+                    self.PATH)
+            return
         f = open(self.path, 'w')
         tidy_writer = TidyWriter(f)
         ConfigParser.write(self, tidy_writer)
@@ -490,7 +494,11 @@ class RepoFile(ConfigParser):
             return Repo(section, self.items(section))
 
     def create(self):
-        if os.path.exists(self.path) or not self.manage_repos:
+        # Don't create the file if it already exists, we're not managing
+        # repos, or if the actual yum.repos.d dir doesn't exist. (implies
+        # yum is probably not installed so no need to manage repos)
+        if os.path.exists(self.path) or not self.manage_repos \
+                or not os.path.exists(self.PATH):
             return
         f = open(self.path, 'w')
         s = []
