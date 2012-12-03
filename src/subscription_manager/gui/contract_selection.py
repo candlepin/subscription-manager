@@ -130,8 +130,9 @@ class ContractSelectionWindow(object):
             quantity_available = int(pool['quantity']) - int(pool['consumed'])
 
         # cap the default selected quantity at the max available
-        # for that pool. See #855257
-        if default_quantity_value > quantity_available:
+        # for that pool. See #855257. Watch out for quantity_available
+        # being -1 (unlimited).
+        if default_quantity_value > quantity_available and quantity_available >= 0:
             default_quantity_value = quantity_available
 
         row = [pool['contractNumber'],

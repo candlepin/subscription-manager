@@ -95,6 +95,14 @@ class TestQuantityDefaultValueCalculator(unittest.TestCase):
         # 10 are already consumed, so 4/2 - 10 = -8
         self.assertEquals(0, qty)
 
+    def test_unlimited_pool_quantity(self):
+        facts = StubFacts({})
+        calculator = QuantityDefaultValueCalculator(facts, [])
+
+        pool = create_pool("my-test-product", "My Test Product", quantity=-1)
+        qty = calculator.calculate(pool)
+        self.assertEquals(1, qty)
+
     def test_total_consumed_does_not_include_future_entitlements(self):
         calculator = QuantityDefaultValueCalculator(StubFacts({}), entitlements)
         self.assertEquals(9, calculator._get_total_consumed(product_id_2))
