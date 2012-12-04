@@ -53,6 +53,14 @@ class PreferencesDialog(object):
         self.release_combobox = GLADE_XML.get_widget('release_combobox')
         self.sla_combobox = GLADE_XML.get_widget('sla_combobox')
 
+        # The first string is the displayed service level; the second is
+        # the value sent to Candlepin.
+        self.release_model = gtk.ListStore(str, str)
+        self.sla_model = gtk.ListStore(str, str)
+
+        self.release_combobox.set_model(self.release_model)
+        self.sla_combobox.set_model(self.sla_model)
+
         GLADE_XML.signal_autoconnect({
             "on_close_button_clicked": self._close_button_clicked,
             "on_sla_combobox_changed": self._sla_changed,
@@ -80,6 +88,11 @@ class PreferencesDialog(object):
         self.load_servicelevel(consumer_json)
 
     def load_servicelevel(self, consumer_json):
+        # The combo box you get from the widget tree already has a
+        # CellRendererText that renders the first column in the ListStore. If
+        # you needed to change the ListStore column used you would write:
+        #    combo.set_attribute(combo.get_cells()[0], 'text', column_number)
+
         if 'serviceLevel' not in consumer_json:
             log.warn("Disabling service level dropdown, server does not support service levels.")
             self.sla_combobox.set_sensitive(False)
@@ -89,12 +102,14 @@ class PreferencesDialog(object):
         owner_key = consumer_json['owner']['key']
         available_slas = self.backend.uep.getServiceLevelList(owner_key)
 
-        # An empty string entry is available for "un-setting" the system's SLA:
+        # An empty string entry is used for "un-setting" the system's SLA:
+        self.sla_model.append((_("Not Set"), ""))
         available_slas.insert(0, "")
 
         i = 0
         for sla in available_slas:
-            self.sla_combobox.append_text(sla)
+            if sla:
+                self.sla_model.append((sla, sla))
             if sla.lower() == current_sla.lower():
                 self.sla_combobox.set_active(i)
             i += 1
@@ -116,11 +131,13 @@ class PreferencesDialog(object):
             available_releases.insert(0, current_release)
 
         # for unsetting
+        self.release_model.append((_("Not Set"), ""))
         available_releases.insert(0, "")
 
         i = 0
         for available_release in available_releases:
-            self.release_combobox.append_text(available_release)
+            if available_release:
+                self.release_model.append((available_release, available_release))
             if available_release == current_release:
                 self.release_combobox.set_active(i)
             i += 1
@@ -135,7 +152,7 @@ class PreferencesDialog(object):
             log.info("SLA changed but nothing selected? Ignoring.")
             return
 
-        new_sla = model[active][0]
+        new_sla = model[active][1]
         log.info("SLA changed to: %s" % new_sla)
         self.backend.uep.updateConsumer(self.consumer.uuid,
                                         service_level=new_sla)
@@ -146,7 +163,7 @@ class PreferencesDialog(object):
         if active < 0:
             log.info("release changed but nothing selected? Ignoring.")
             return
-        new_release = model[active][0]
+        new_release = model[active][1]
         log.info("release changed to: %s" % new_release)
         self.backend.uep.updateConsumer(self.consumer.uuid,
                                         release=new_release)

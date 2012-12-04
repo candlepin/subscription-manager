@@ -14,6 +14,7 @@
 #
 
 import unittest
+import mock
 
 import stubs
 import rhsm_display
@@ -97,27 +98,37 @@ class TestPreferencesDialog(unittest.TestCase):
         self._getPrefDialog()
         self.preferences_dialog.show()
 
-    def testSlaChanged(self):
+    @mock.patch.object(stubs.StubUEP, 'updateConsumer')
+    def testSlaChanged(self, MockUep):
         self._getPrefDialog()
-        # monkey patch update consumer so we can see if it got triggered
-        # and if so, that the right value got set, in this case, the
-        # first service level "Pro"
-
-        def updateConsumer(consumer, service_level=None, release=None):
-            self.assertEquals(service_level, "Pro")
 
         self.preferences_dialog.show()
-        self.preferences_dialog.backend.uep.updateConsumer = updateConsumer
         self.preferences_dialog.sla_combobox.set_active(1)
+        MockUep.assert_called_with("not_actually_a_uuid", service_level="Pro")
 
-    def testReleaseChanged(self):
+    def testSlaUnset(self):
         self._getPrefDialog()
+        self.preferences_dialog.show()
+        self.preferences_dialog.sla_combobox.set_active(0)
+        iter = self.preferences_dialog.sla_combobox.get_active_iter()
+        display_text = self.preferences_dialog.sla_model.get_value(iter, 0)
+        self.assertEquals("Not Set", display_text)
 
-        def updateConsumer(consumer, service_level=None, release=None):
-            # from monkeypatched getConsumer
-            self.assertEquals(release, "123123")
+    @mock.patch.object(stubs.StubUEP, 'updateConsumer')
+    def testReleaseChanged(self, MockUep):
+        self._getPrefDialog()
 
         self.preferences_dialog.release_backend.get_releases = get_releases
         self.preferences_dialog.show()
-        self.preferences_dialog.backend.uep.updateConsumer = updateConsumer
         self.preferences_dialog.release_combobox.set_active(1)
+        MockUep.assert_called_with("not_actually_a_uuid", release="123123")
+
+    def testReleaseUnset(self):
+        self._getPrefDialog()
+
+        self.preferences_dialog.release_backend.get_releases = get_releases
+        self.preferences_dialog.show()
+        self.preferences_dialog.release_combobox.set_active(0)
+        iter = self.preferences_dialog.release_combobox.get_active_iter()
+        display_text = self.preferences_dialog.release_model.get_value(iter, 0)
+        self.assertEquals("Not Set", display_text)
