@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.10
+Version: 1.1.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,19 @@ fi
 %endif
 
 %changelog
+* Tue Dec 04 2012 Adrian Likins <alikins@redhat.com> 1.1.11-1
+- 839772: Display "Not Set" instead of "" in SLA and release preferences.
+  (awood@redhat.com)
+- 854702: Place the asterisk indicating editability into the quantity cell.
+  (awood@redhat.com)
+- 864207: Autosubscribe should not run when all products are already
+  subscribed. (wpoteat@redhat.com)
+- 881117: Add at-spi locator to redemption dialog. (awood@redhat.com)
+- 878648: Make the help usage formatting consistent for the rct and
+  subscription manager commands (bkearney@redhat.com)
+- 878986: Default to no line breaking if no stty is available
+  (bkearney@redhat.com)
+
 * Mon Nov 19 2012 Adrian Likins <alikins@redhat.com> 1.1.10-1
 - latest strings from zanata (alikins@redhat.com)
 - 874623: Tell users running the version command if they are not registered.
