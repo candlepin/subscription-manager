@@ -375,7 +375,17 @@ def unRegisterSystemFromRhnClassic(sc, sk):
     systemId = getSystemId()
 
     log.info("Deleting system %s from RHN Classic...", systemId)
-    result = sc.system.deleteSystems(sk, systemId)
+    try:
+        result = sc.system.deleteSystems(sk, systemId)
+    except:
+        log.error("Could not delete system %s from RHN Classic" % systemId)
+        log.error(traceback.format_exc())
+        shutil.move(systemIdPath, systemIdPath + ".save")
+        disableYumRhnPlugin()
+        print _("Did not receive a completed unregistration message from RHN Classic for system %s.\n"
+                "Please investigate on the Customer Portal at https://access.redhat.com.") % systemId
+        return
+
     if result:
         log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", systemId)
         os.remove(systemIdPath)
