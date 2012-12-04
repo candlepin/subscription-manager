@@ -22,7 +22,6 @@ import socket
 import getpass
 import dbus
 import datetime
-import textwrap
 from time import strftime, strptime, localtime
 from M2Crypto import X509
 from M2Crypto import SSL
@@ -192,8 +191,6 @@ class CliCommand(AbstractCLICommand):
 
         self.client_versions = self._default_client_version()
         self.server_versions = self._default_server_version()
-
-        self.columns = get_terminal_width()
 
     def _request_validity_check(self):
         try:
@@ -1868,6 +1865,7 @@ class ListCommand(CliCommand):
         """
 
         self._validate_options()
+        columns = get_terminal_width()
         if self.options.installed:
             iproducts = managerlib.getInstalledProductStatus(self.product_dir,
                     self.entitlement_dir, self.facts.get_facts())
@@ -1879,7 +1877,7 @@ class ListCommand(CliCommand):
             print "+-------------------------------------------+"
             for product in iproducts:
                 status = STATUS_MAP[product[4]]
-                product_name = self._format_name(product[0], 24)
+                product_name = self._format_name(product[0], 24, columns)
                 print self._none_wrap(INSTALLED_PRODUCT_STATUS, product_name,
                                 product[1], product[2], product[3], status,
                                 product[5], product[6])
@@ -1913,7 +1911,7 @@ class ListCommand(CliCommand):
             print("+-------------------------------------------+")
             for data in epools:
                 # TODO:  Something about these magic numbers!
-                product_name = self._format_name(data['productName'], 24)
+                product_name = self._format_name(data['productName'], 24, columns)
 
                 if PoolWrapper(data).is_virt_only():
                     machine_type = machine_type = _("Virtual")
@@ -1970,15 +1968,16 @@ class ListCommand(CliCommand):
         print("   " + _("Consumed Subscriptions"))
         print("+-------------------------------------------+\n")
 
+        columns = get_terminal_width()
         for cert in certs:
             order = cert.order
-            order_name = self._format_name(order.name, 24)
+            order_name = self._format_name(order.name, 24, columns)
             print(self._none_wrap(_("Subscription Name:    \t%s"),
                   order_name))
 
             prefix = _("Provides:             \t%s")
             for product in cert.products:
-                print(self._none_wrap(prefix, self._format_name(product.name, 24)))
+                print(self._none_wrap(prefix, self._format_name(product.name, 24, columns)))
                 prefix = _("                      \t%s")
             # print an empty provides line for certs with no provided products
             if len(cert.products) == 0:
@@ -2006,22 +2005,41 @@ class ListCommand(CliCommand):
                   managerlib.formatDate(cert.valid_range.end()))
             print("")
 
-    def _format_name(self, name, indent, max_width=None):
+    def _format_name(self, name, indent, max_length):
         """
         Formats a potentially long name for multi-line display, giving
         it a columned effect.
         """
-        width = self.columns
-        if max_width:
-            width = max_width
 
-        if not name or not self.columns:
+        if not name or not max_length:
             return name
 
-        return textwrap.fill(width=width - indent, initial_indent='',
-                             subsequent_indent=' ' * indent,
-                             break_long_words=False,
-                             text=name)
+        words = name.split()
+        current = indent
+        lines = []
+        # handle emtpty names
+        if not words:
+            return name
+
+        first_word = words.pop(0)
+        line = [first_word]
+        current += len(first_word) + 1
+
+        def add_line():
+            lines.append(' '.join(line))
+
+        # Split here and build it back up by word, this way we get word wrapping
+        for word in words:
+            if current + len(word) < max_length:
+                current += len(word) + 1  # Have to account for the extra space
+                line.append(word)
+            else:
+                add_line()
+                line = [' ' * (indent - 1), word]
+                current = indent + len(word) + 1
+
+        add_line()
+        return '\n'.join(lines)
 
 
 class VersionCommand(CliCommand):
