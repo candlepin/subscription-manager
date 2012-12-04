@@ -106,7 +106,7 @@ class MockStdout:
         self.buffer = self.buffer + buf
 
     @staticmethod
-    def isatty():
+    def isatty(buf):
         return False
 
 
