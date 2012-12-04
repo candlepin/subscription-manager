@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
@@ -12,8 +12,8 @@
     <property name="default_width">600</property>
     <property name="default_height">600</property>
     <property name="destroy_with_parent">True</property>
+    <property name="icon_name">subscription-manager</property>
     <property name="type_hint">dialog</property>
-    <property name="icon-name">subscription-manager</property>
     <accessibility>
       <atkproperty name="AtkObject::accessible-name">facts_dialog</atkproperty>
     </accessibility>
@@ -105,6 +105,43 @@
               </packing>
             </child>
             <child>
+              <widget class="GtkHBox" id="environment_hbox">
+                <property name="visible">True</property>
+                <child>
+                  <widget class="GtkLabel" id="environment_title">
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="xpad">10</property>
+                    <property name="label" translatable="yes">Environment:</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="environment_label">
+                    <property name="visible">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Environment</atkproperty>
+                    </accessibility>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
               <widget class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -125,7 +162,7 @@
               </widget>
               <packing>
                 <property name="padding">10</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </widget>

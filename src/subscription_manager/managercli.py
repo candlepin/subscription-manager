@@ -570,10 +570,16 @@ class IdentityCommand(UserPassCommand):
                 owner = self.cp.getOwner(consumerid)
                 ownername = owner['displayName']
                 ownerid = owner['key']
+
                 print _('Current identity is: %s') % consumerid
                 print _('name: %s') % consumer_name
                 print _('org name: %s') % ownername
                 print _('org id: %s') % ownerid
+
+                if self.cp.supports_resource('environments'):
+                    consumer = self.cp.getConsumer(consumerid)
+                    print _('environment name: %s') % consumer['environment']['name']
+
             else:
                 if self.options.force:
                     # get an UEP with basic auth
