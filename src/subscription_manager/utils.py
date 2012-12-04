@@ -22,8 +22,6 @@ from subscription_manager.certlib import ConsumerIdentity
 from urlparse import urlparse
 import os
 import signal
-import sys
-import curses
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -289,15 +287,42 @@ def get_version(versions, package_name):
     return "%s%s" % (package_version, package_release)
 
 
-# find the width of the current console
+# This code was modified by from
+# http://stackoverflow.com/questions/566746/how-to-get-console-window-width-in-python
 def get_terminal_width():
+    """
+    Attempt to determine the current terminal size.
+    """
+    dim = None
+    try:
+        def ioctl_GWINSZ(fd):
+            try:
+                import fcntl
+                import termios
+                import struct
+                cr = struct.unpack('hh',
+                                fcntl.ioctl(fd,
+                                    termios.TIOCGWINSZ,
+                                    '1234'))
+            except:
+                return
+            return cr
 
-    # TODO:  Something about these magic numbers!
-    if not sys.stdout.isatty():
+        dim = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
+        if not dim:
+            try:
+                fd = os.open(os.ctermid(), os.O_RDONLY)
+                dim = ioctl_GWINSZ(fd)
+                os.close(fd)
+            except:
+                pass
+    except:
+        pass
+
+    if dim:
+        return int(dim[1])
+    else:
         return None
-
-    curses.setupterm()
-    return curses.tigetnum('cols')
 
 
 def get_client_versions():
