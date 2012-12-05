@@ -4,9 +4,9 @@ import unittest
 import rhsm_display
 rhsm_display.set_display()
 
-from stubs import MockStderr, MockStdout, StubUEP, StubFacts
+from stubs import MockStderr, MockStdout, StubUEP, StubBackend, StubFacts
 from subscription_manager.gui import factsgui, managergui
-from mock import Mock
+from mock import Mock, patch
 
 
 class FactDialogTests(unittest.TestCase):
@@ -21,7 +21,7 @@ class FactDialogTests(unittest.TestCase):
         self.expected_facts = expected_facts
         self.stub_facts = StubFacts(expected_facts)
 
-        self.uep = StubUEP()
+        self.backend = StubBackend()
 
         self.consumer = Mock()
         self.consumer.uuid = "MOCKUUID"
@@ -40,12 +40,40 @@ class FactDialogTests(unittest.TestCase):
         def check_facts(parent, facts):
             found_facts[facts[0]] = facts[1]
 
-        dialog = factsgui.SystemFactsDialog(self.uep, self.consumer,
+        dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
                 self.stub_facts)
         dialog.facts_store.append = check_facts
         dialog.display_facts()
 
         self.assertEquals(self.expected_facts, found_facts)
+
+    def test_hides_environment_when_not_supported(self):
+        dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
+                self.stub_facts)
+        dialog.display_facts()
+        self.assertEquals(False, dialog.environment_hbox.get_property("visible"))
+
+    @patch.object(StubUEP, 'supports_resource')
+    @patch.object(StubUEP, 'getConsumer')
+    def test_shows_environment_when_supported(self, mock_getConsumer, mock_supports_resource):
+        mock_supports_resource.return_value = True
+        mock_getConsumer.return_value = {'environment': {'name': 'foobar'}}
+        dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
+                self.stub_facts)
+        dialog.display_facts()
+        self.assertEquals(True, dialog.environment_hbox.get_property("visible"))
+        self.assertEquals("foobar", dialog.environment_label.get_text())
+
+    @patch.object(StubUEP, 'supports_resource')
+    @patch.object(StubUEP, 'getConsumer')
+    def test_shows_environment_when_empty(self, mock_getConsumer, mock_supports_resource):
+        mock_supports_resource.return_value = True
+        mock_getConsumer.return_value = {'environment': None}
+        dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
+                self.stub_facts)
+        dialog.display_facts()
+        self.assertEquals(True, dialog.environment_hbox.get_property("visible"))
+        self.assertEquals("None", dialog.environment_label.get_text())
 
     def test_update_button_disabled(self):
         # Need an unregistered consumer object:
@@ -53,7 +81,7 @@ class FactDialogTests(unittest.TestCase):
         unregistered_consumer.uuid = None
         unregistered_consumer.name = None
 
-        dialog = factsgui.SystemFactsDialog(self.uep, unregistered_consumer,
+        dialog = factsgui.SystemFactsDialog(self.backend, unregistered_consumer,
                 self.stub_facts)
         dialog.show()
 
@@ -65,7 +93,7 @@ class FactDialogTests(unittest.TestCase):
         managergui.consumer = {'uuid': 'Random UUID',
                                'consumer_name': 'system'}
 
-        dialog = factsgui.SystemFactsDialog(self.uep, self.consumer,
+        dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
                 self.stub_facts)
         dialog.show()
 

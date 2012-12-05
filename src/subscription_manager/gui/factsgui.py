@@ -32,7 +32,8 @@ class SystemFactsDialog(widgets.GladeWidget):
     system facts.
     """
     widget_names = ['system_facts_dialog', 'facts_view', 'update_button',
-                        'last_update_label', 'owner_label']
+                    'last_update_label', 'owner_label', 'environment_label',
+                    'environment_hbox']
 
     def __init__(self, backend, consumer, facts):
 
@@ -111,6 +112,24 @@ class SystemFactsDialog(widgets.GladeWidget):
         except Exception, e:
             log.error("Could not get owner name \nError: %s" % e)
         self.owner_label.set_text(owner)
+
+        try:
+            if self.backend.uep.supports_resource('environments'):
+                consumer = self.backend.uep.getConsumer(self.consumer.uuid)
+                environment = consumer['environment']
+                if environment:
+                    environment_name = environment['name']
+                else:
+                    environment_name = _("None")
+
+                log.info("Environment is %s" % environment_name)
+                self.environment_label.set_text(environment_name)
+                self.environment_hbox.show()
+            else:
+                self.environment_hbox.hide()
+        except Exception, e:
+            log.error("Could not get environment \nError: %s" % e)
+            self.environment_hbox.hide()
 
     def update_facts(self):
         """Sends the current system facts to the UEP server."""
