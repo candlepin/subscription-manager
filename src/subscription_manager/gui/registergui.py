@@ -241,12 +241,15 @@ class RegisterScreen(widgets.GladeWidget):
 
 
 class AutobindWizard(RegisterScreen):
+    widget_names = RegisterScreen.widget_names + ['progress_label']
 
     def __init__(self, backend, consumer, facts, parent):
         super(AutobindWizard, self).__init__(backend, consumer, facts, parent)
 
     def show(self):
         super(AutobindWizard, self).show()
+        self.progress_label.set_markup(_("<b>Subscribing</b>"))
+        self.register_dialog.set_title(_("System Subscription"))
         self._run_pre(SELECT_SLA_PAGE)
 
 
