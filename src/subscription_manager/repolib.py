@@ -448,6 +448,13 @@ class RepoFile(ConfigParser):
         self.manage_repos = 1
         if CFG.has_option('rhsm', 'manage_repos'):
             self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
+        # Simulate manage repos turned off if no yum.repos.d directory exists.
+        # This indicates yum is not installed so clearly no need for us to
+        # manage repos.
+        if not os.path.exists(self.PATH):
+            log.warn("%s does not exist, turning manage_repos off." %
+                    self.PATH)
+            self.manage_repos = 0
         self.create()
 
     def exists(self):
