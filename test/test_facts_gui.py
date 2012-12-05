@@ -62,6 +62,18 @@ class FactDialogTests(unittest.TestCase):
                 self.stub_facts)
         dialog.display_facts()
         self.assertEquals(True, dialog.environment_hbox.get_property("visible"))
+        self.assertEquals("foobar", dialog.environment_label.get_text())
+
+    @patch.object(StubUEP, 'supports_resource')
+    @patch.object(StubUEP, 'getConsumer')
+    def test_shows_environment_when_empty(self, mock_getConsumer, mock_supports_resource):
+        mock_supports_resource.return_value = True
+        mock_getConsumer.return_value = {'environment': None}
+        dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
+                self.stub_facts)
+        dialog.display_facts()
+        self.assertEquals(True, dialog.environment_hbox.get_property("visible"))
+        self.assertEquals("None", dialog.environment_label.get_text())
 
     def test_update_button_disabled(self):
         # Need an unregistered consumer object:

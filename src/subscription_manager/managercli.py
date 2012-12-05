@@ -578,8 +578,12 @@ class IdentityCommand(UserPassCommand):
 
                 if self.cp.supports_resource('environments'):
                     consumer = self.cp.getConsumer(consumerid)
-                    print _('environment name: %s') % consumer['environment']['name']
-
+                    environment = consumer['environment']
+                    if environment:
+                        environment_name = environment['name']
+                    else:
+                        environment_name = _("None")
+                    print _('environment name: %s') % environment_name
             else:
                 if self.options.force:
                     # get an UEP with basic auth

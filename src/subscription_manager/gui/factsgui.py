@@ -116,9 +116,14 @@ class SystemFactsDialog(widgets.GladeWidget):
         try:
             if self.backend.uep.supports_resource('environments'):
                 consumer = self.backend.uep.getConsumer(self.consumer.uuid)
-                environment = consumer['environment']['name']
-                log.info("Environment is %s" % environment)
-                self.environment_label.set_text(environment)
+                environment = consumer['environment']
+                if environment:
+                    environment_name = environment['name']
+                else:
+                    environment_name = _("None")
+
+                log.info("Environment is %s" % environment_name)
+                self.environment_label.set_text(environment_name)
                 self.environment_hbox.show()
             else:
                 self.environment_hbox.hide()
