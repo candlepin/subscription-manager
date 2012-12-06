@@ -1643,9 +1643,9 @@ class ReposCommand(CliCommand):
         self.parser.add_option("--list", action="store_true",
                                help=_("list known repos for this system"))
         self.parser.add_option("--enable", dest="enable", metavar="REPOID",
-                               action='append', help=_("repo to enable"))
+                               action='append', help=_("repo to enable (can be specified more than once)"))
         self.parser.add_option("--disable", dest="disable", metavar="REPOID",
-                               action='append', help=_("repo to disable"))
+                               action='append', help=_("repo to disable (can be specified more than once)"))
 
     def _do_command(self):
         self._validate_options()
