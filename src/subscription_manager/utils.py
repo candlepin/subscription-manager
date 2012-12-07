@@ -216,7 +216,7 @@ def parse_url(local_server_entry,
             port = str(netloc[1])
         else:
             raise ServerUrlParseErrorPort(local_server_entry,
-                                      msg=_("Server url port could not be parsed"))
+                                      msg=_("Server URL port could not be parsed"))
 
     # path can be None?
     prefix = default_prefix
@@ -233,7 +233,7 @@ def parse_url(local_server_entry,
         int(port)
     except ValueError:
         raise ServerUrlParseErrorPort(local_server_entry,
-                                      msg=_("Server url port should be numeric"))
+                                      msg=_("Server URL port should be numeric"))
 
     return (hostname, port, prefix)
 

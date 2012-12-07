@@ -80,7 +80,7 @@ INSTALLED_PRODUCT_STATUS = \
 AVAILABLE_SUBS_LIST = \
     _("Subscription Name:    \t%s") + "\n" + \
     _("SKU:                  \t%s") + "\n" + \
-    _("Pool Id:              \t%s") + "\n" + \
+    _("Pool ID:              \t%s") + "\n" + \
     _("Quantity:             \t%s") + "\n" + \
     _("Service Level:        \t%s") + "\n" + \
     _("Service Type:         \t%s") + "\n" + \
@@ -89,9 +89,9 @@ AVAILABLE_SUBS_LIST = \
     _("System Type:          \t%s") + "\n"
 
 REPOS_LIST = \
-    _("Repo Id:              \t%s") + "\n" + \
+    _("Repo ID:              \t%s") + "\n" + \
     _("Repo Name:            \t%s") + "\n" + \
-    _("Repo Url:             \t%s") + "\n" + \
+    _("Repo URL:             \t%s") + "\n" + \
     _("Enabled:              \t%s") + "\n"
 
 PRODUCT_STATUS = \
@@ -215,16 +215,16 @@ class CliCommand(AbstractCLICommand):
     def _add_url_options(self):
         """ Add options that allow the setting of the server URL."""
         self.parser.add_option("--serverurl", dest="server_url",
-                               default=None, help=_("server url in the form of https://hostname:443/prefix"))
+                               default=None, help=_("server URL in the form of https://hostname:443/prefix"))
 
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """
         self.parser.add_option("--proxy", dest="proxy_url",
-                               default=None, help=_("proxy url in the form of proxy_hostname:proxy_port"))
+                               default=None, help=_("proxy URL in the form of proxy_hostname:proxy_port"))
         self.parser.add_option("--proxyuser", dest="proxy_user",
-                                default=None, help=_("user for http proxy with basic authentication"))
+                                default=None, help=_("user for HTTP proxy with basic authentication"))
         self.parser.add_option("--proxypassword", dest="proxy_password",
-                                default=None, help=_("password for http proxy with basic authentication"))
+                                default=None, help=_("password for HTTP proxy with basic authentication"))
 
     def _do_command(self):
         pass
@@ -856,7 +856,7 @@ class RegisterCommand(UserPassCommand):
 
         self._add_url_options()
         self.parser.add_option("--baseurl", dest="base_url",
-                              default=None, help=_("base url for content in form of https://hostname:443/prefix"))
+                              default=None, help=_("base URL for content in form of https://hostname:443/prefix"))
         self.parser.add_option("--type", dest="consumertype", default="system", metavar="UNITTYPE",
                                help=_("the type of unit to register, defaults to system"))
         self.parser.add_option("--name", dest="consumername", metavar="SYSTEMNAME",
@@ -1261,7 +1261,7 @@ class AttachCommand(CliCommand):
         self.product = None
         self.substoken = None
         self.parser.add_option("--pool", dest="pool", action='append',
-                               help=_("the id of the pool to attach (can be specified more than once)"))
+                               help=_("the ID of the pool to attach (can be specified more than once)"))
         self.parser.add_option("--quantity", dest="quantity",
                                help=_("number of subscriptions to attach"))
         self.parser.add_option("--auto", action='store_true',
@@ -1320,7 +1320,7 @@ class AttachCommand(CliCommand):
                     try:
                         # odd html strings will cause issues, reject them here.
                         if (pool.find("#") >= 0):
-                            systemExit(-1, _("Please enter a valid numeric pool id."))
+                            systemExit(-1, _("Please enter a valid numeric pool ID."))
                         ents = self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
                         # Usually just one, but may as well be safe:
                         for ent in ents:
@@ -1706,7 +1706,7 @@ class ReposCommand(CliCommand):
                     break
             if not found:
                 rc = 1
-                print _("Error: %s is not a valid repo id. "
+                print _("Error: %s is not a valid repo ID. "
                         "Use --list option to see valid repos." % item)
         if change_repos:
             repo_file = RepoFile()
