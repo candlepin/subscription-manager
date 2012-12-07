@@ -252,7 +252,7 @@ class Hardware:
                 nkey = '.'.join(["lscpu", key.lower().strip().replace(" ", "_")])
                 self.lscpuinfo[nkey] = "%s" % value.strip()
         except:
-            print _("Error reading system cpu information:"), sys.exc_type
+            print _("Error reading system CPU information:"), sys.exc_type
         self.allhw.update(self.lscpuinfo)
         return self.lscpuinfo
 
