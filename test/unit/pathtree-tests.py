@@ -22,9 +22,10 @@ from rhsm.pathtree import PathTree, PATH_END
 DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                     'entitlement_data.bin')
 
+
 class TestPathTree(unittest.TestCase):
     def test_get_leaf_from_dict(self):
-        codes = {'1010' : 'abc'}
+        codes = {'1010': 'abc'}
         bitstream = '10101111110000'
         ret = PathTree._get_leaf_from_dict(codes, bitstream)
         self.assertEqual(ret, 'abc')
@@ -44,14 +45,14 @@ class TestPathTree(unittest.TestCase):
         bs.bytes = deque([129, 150])
         ret = PathTree._get_node_count(bs)
         self.assertEqual(ret, 150)
-        
+
     def test_get_node_count_big(self):
         bs = GhettoBitStream([])
         # count bigger than 127, need next 2 bytes to represent it
         bs.bytes = deque([130, 1, 17])
         ret = PathTree._get_node_count(bs)
         self.assertEqual(ret, 273)
-        
+
     def test_unpack_data(self):
         data = open(DATA).read()
         nodes, bits = PathTree._unpack_data(data)
@@ -71,7 +72,7 @@ class TestPathTree(unittest.TestCase):
         self.assertEqual(len(ret), 4)
         for node in ret:
             self.assertTrue(isinstance(node, HuffmanNode))
-    
+
     def test_generate_path_tree(self):
         data = open(DATA).read()
         pt = PathTree(data).path_tree

@@ -70,7 +70,7 @@ class ExceptionTest(unittest.TestCase):
         self.assertTrue(isinstance("%s" % str(e), basestring))
         self.assertTrue(isinstance("%s" % repr(e), basestring))
 
-    def _create_exception(self,*args, **kwargs):
+    def _create_exception(self, *args, **kwargs):
         return self.exception(args, kwargs)
 
     def _test(self):
@@ -79,6 +79,7 @@ class ExceptionTest(unittest.TestCase):
 
     def test_exception_str(self):
         self._test()
+
 
 # not all our exceptions take a msg arg
 class ExceptionMsgTest(ExceptionTest):

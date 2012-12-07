@@ -21,7 +21,7 @@ class TestHuffmanNode(unittest.TestCase):
         self.node1 = HuffmanNode(1)
         self.node2 = HuffmanNode(2)
         self.parent = HuffmanNode.combine(self.node1, self.node2)
-    
+
     def test_combine(self):
         self.assertEqual(self.parent.weight, 3)
         self.assertEqual(self.parent.left, self.node1)
@@ -30,7 +30,7 @@ class TestHuffmanNode(unittest.TestCase):
         self.assertEqual(self.node2.parent, self.parent)
 
     def test_build_tree(self):
-        leaves = [HuffmanNode(weight) for weight in range(1,5)]
+        leaves = [HuffmanNode(weight) for weight in range(1, 5)]
         root = HuffmanNode.build_tree(leaves)
 
         # assertions based on calculating these by hand

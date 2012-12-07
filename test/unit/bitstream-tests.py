@@ -24,6 +24,7 @@ decompresser = zlib.decompressobj()
 decompresser.decompress(entitlement_data)
 tree_data = decompresser.unused_data
 
+
 class TestGhettoBitStream(unittest.TestCase):
     def setUp(self):
         self.bs = GhettoBitStream(tree_data)
@@ -72,4 +73,3 @@ class TestGhettoBitStream(unittest.TestCase):
         self.assertEqual(self.bs.combine_bytes([1, 3]), 259)
         self.assertEqual(self.bs.combine_bytes([3]), 3)
         self.assertEqual(self.bs.combine_bytes([1, 1, 3]), 65795)
-        

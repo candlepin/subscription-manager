@@ -18,6 +18,7 @@ import unittest
 
 NOT_COLLECTED = "non-collected-package"
 
+
 # NOTE: Because the super class will only initialize version data
 # the first time an instance is created, calling the c'tor with
 # different package data will not reset the data in the new instance.
