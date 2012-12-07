@@ -30,13 +30,13 @@ class ProfileTests(unittest.TestCase):
         self.assertTrue(len(pkg_dicts) > 10)
 
         for pkg in pkg_dicts:
-            self.assertTrue(pkg.has_key('name'))
-            self.assertTrue(pkg.has_key('version'))
-            self.assertTrue(pkg.has_key('version'))
-            self.assertTrue(pkg.has_key('release'))
-            self.assertTrue(pkg.has_key('epoch'))
-            self.assertTrue(pkg.has_key('arch'))
-            self.assertTrue(pkg.has_key('vendor'))
+            self.assertTrue('name' in pkg)
+            self.assertTrue('version' in pkg)
+            self.assertTrue('version' in pkg)
+            self.assertTrue('release' in pkg)
+            self.assertTrue('epoch' in pkg)
+            self.assertTrue('arch' in pkg)
+            self.assertTrue('vendor' in pkg)
 
     def test_package_objects(self):
         profile = get_profile("rpm")

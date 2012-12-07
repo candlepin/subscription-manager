@@ -23,6 +23,7 @@ from rhsm.certificate2 import *
 
 from mock import patch
 
+
 class V1CertTests(unittest.TestCase):
 
     def setUp(self):
@@ -212,6 +213,7 @@ class IdentityCertTests(unittest.TestCase):
         self.assertTrue(isinstance(id_cert, IdentityCertificate))
         self.assertEquals('1.0', str(id_cert.version))
 
+
 class ContentTests(unittest.TestCase):
 
     def test_enabled(self):
@@ -233,6 +235,7 @@ class ContentTests(unittest.TestCase):
                           name="testcontent", label="testcontent", enabled=True)
         self.assertRaises(CertificateException, Content, content_type="",
                           name="testcontent", label="testcontent", enabled=True)
+
 
 class ProductTests(unittest.TestCase):
 
