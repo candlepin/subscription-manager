@@ -942,10 +942,10 @@ class RegisterCommand(UserPassCommand):
                 old_uuid = ConsumerIdentity.read().getConsumerId()
                 try:
                     managerlib.unregister(self.cp, old_uuid)
-                    log.info("--force specified, un-registered old consumer: %s" % old_uuid)
+                    log.info("--force specified, unregistered old consumer: %s" % old_uuid)
                     print(_("The system with UUID %s has been unregistered") % old_uuid)
                 except Exception, e:
-                    log.error("Unable to un-register consumer: %s" % old_uuid)
+                    log.error("Unable to unregister consumer: %s" % old_uuid)
                     log.exception(e)
 
         # Proceed with new registration:
@@ -1114,7 +1114,7 @@ class UnRegisterCommand(CliCommand):
         # We have new credentials, restart virt-who
         restart_virt_who()
 
-        print(_("System has been un-registered."))
+        print(_("System has been unregistered."))
 
 
 class RedeemCommand(CliCommand):
