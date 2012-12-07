@@ -70,6 +70,7 @@ install-conf:
 	install -T etc-conf/logrotate.conf ${PREFIX}/etc/logrotate.d/subscription-manager
 	install etc-conf/plugin/*.conf ${PREFIX}/etc/yum/pluginconf.d/
 	install -m 644 etc-conf/subscription-manager.completion.sh ${PREFIX}/etc/bash_completion.d/subscription-manager
+	install -m 644 etc-conf/rct.completion.sh ${PREFIX}/etc/bash_completion.d/rct
 
 install-help-files:
 	install -d ${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager
