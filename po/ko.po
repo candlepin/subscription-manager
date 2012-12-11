@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 10:48-0500\n"
-"PO-Revision-Date: 2012-09-23 10:12-0400\n"
+"POT-Creation-Date: 2012-12-11 16:38-0500\n"
+"PO-Revision-Date: 2012-12-11 11:26-0500\n"
 "Last-Translator: eukim <eukim@fedoraproject.org>\n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -21,9 +21,7 @@ msgstr ""
 msgid ""
 "Error in preferences dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
-msgstr ""
-"설정 대화 상자에서 오류 발생. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 "
-"참조하십시오."
+msgstr "설정 대화 상자에서 오류 발생. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조하십시오."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -35,7 +33,7 @@ msgstr "<b>등록 해제 도중 오류가 발생했습니다.</b>"
 # document keys, author eukim
 #: ../src/subscription_manager/gui/managergui.py:385
 #: ../src/subscription_manager/gui/registergui.py:73
-#: ../src/subscription_manager/managercli.py:118
+#: ../src/subscription_manager/managercli.py:119
 msgid "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr "보다 자세한 내용은 /var/log/rhsm/rhsm.log 에서 참조하십시오."
 
@@ -53,7 +51,7 @@ msgstr "이미 등록된 시스템"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/allsubs.py:70
+#: ../src/subscription_manager/gui/allsubs.py:69
 #: ../src/subscription_manager/gui/mysubstab.py:68
 #: ../src/subscription_manager/gui/registergui.py:381
 #: ../src/rct/printing.py:60
@@ -62,92 +60,92 @@ msgstr "서브스크립션"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/allsubs.py:82
-#: ../src/subscription_manager/managercli.py:1897
+#: ../src/subscription_manager/gui/allsubs.py:81
+#: ../src/subscription_manager/managercli.py:1918
 msgid "Available Subscriptions"
 msgstr "사용 가능한 서브스크립션"
 
+#. Set up the quantity column.
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#. Set up the quantity column.
-#: ../src/subscription_manager/gui/allsubs.py:89
-#: ../src/subscription_manager/gui/contract_selection.py:117
+#: ../src/subscription_manager/gui/allsubs.py:85
+#: ../src/subscription_manager/gui/contract_selection.py:114
 #: ../src/subscription_manager/gui/mysubstab.py:100 ../src/rct/printing.py:54
 msgid "Quantity"
 msgstr "수량"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/allsubs.py:165
+#: ../src/subscription_manager/gui/allsubs.py:161
 msgid "Press Update to search for subscriptions."
 msgstr "업데이트를 클릭하여 서브스크립션을 검색합니다."
 
-#: ../src/subscription_manager/gui/allsubs.py:202
+#: ../src/subscription_manager/gui/allsubs.py:198
 #, python-format
 msgid "No subscriptions are available on %s."
-msgstr ""
+msgstr "%s에서 사용 가능한 서브스크립션이 없습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/allsubs.py:208
+#: ../src/subscription_manager/gui/allsubs.py:204
 msgid "No subscriptions match current filters."
 msgstr "현재 필터와 일치하는 서브스크립션이 없습니다."
 
-#: ../src/subscription_manager/gui/allsubs.py:225
-#: ../src/subscription_manager/gui/contract_selection.py:130
+#: ../src/subscription_manager/gui/allsubs.py:221
+#: ../src/subscription_manager/gui/contract_selection.py:127
 #: ../src/subscription_manager/managerlib.py:343
 msgid "Unlimited"
-msgstr ""
+msgstr "제한 없음 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/allsubs.py:327
+#: ../src/subscription_manager/gui/allsubs.py:323
 msgid "All Available Subscriptions"
 msgstr "사용 가능한 모든 서브스크립션"
 
+#. show pulsating progress bar while we wait for results
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#. show pulsating progress bar while we wait for results
-#: ../src/subscription_manager/gui/allsubs.py:340
+#: ../src/subscription_manager/gui/allsubs.py:336
 msgid "Searching"
 msgstr "검색 중"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/allsubs.py:341
+#: ../src/subscription_manager/gui/allsubs.py:337
 msgid "Searching for subscriptions. Please wait."
 msgstr "서브스크립션 검색 중. 잠시만 기다려 주십시오."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/allsubs.py:345
+#: ../src/subscription_manager/gui/allsubs.py:341
 #, python-format
 msgid "Error fetching subscriptions from server:  %s"
 msgstr "서버에서 서브스크립션을 가져오는 도중 오류 발생:  %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/allsubs.py:356
+#: ../src/subscription_manager/gui/allsubs.py:352
 #, python-format
 msgid "Unable to search for subscriptions:  %s"
 msgstr "서브스크립션을 검색할 수 없음:  %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/allsubs.py:363
+#: ../src/subscription_manager/gui/allsubs.py:359
 msgid "Quantity must be a positive number."
 msgstr "수량은 반드시 양수여야 합니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/allsubs.py:374
+#: ../src/subscription_manager/gui/allsubs.py:370
 #, python-format
 msgid "Error getting subscription: %s"
 msgstr "서브스크립션을 가져오는 도중 오류 발생: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/allsubs.py:386
+#: ../src/subscription_manager/gui/allsubs.py:382
 #, python-format
 msgid "%s applied"
 msgstr "%s 적용됨"
@@ -157,30 +155,18 @@ msgstr "%s 적용됨"
 #: ../src/subscription_manager/gui/about.py:25
 msgid ""
 "\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
+"This software is licensed to you under the GNU General Public License, version 2 (GPLv2). There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with this software; if not, see:\n"
 "\n"
 "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
 "\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to use or replicate Red Hat trademarks that are incorporated in this software or its documentation.\n"
 msgstr ""
 "\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
+"This software is licensed to you under the GNU General Public License, version 2 (GPLv2). There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with this software; if not, see:\n"
 "\n"
 "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
 "\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to use or replicate Red Hat trademarks that are incorporated in this software or its documentation.\n"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -214,6 +200,16 @@ msgstr "<b>서브스크립션 관리 서비스 버전:</b> %s"
 #, python-format
 msgid "<b>Next System Check-in:</b> %s"
 msgstr ""
+
+#. An empty string entry is used for "un-setting" the system's SLA:
+#. for unsetting
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author eukim
+#: ../src/subscription_manager/gui/preferences.py:106
+#: ../src/subscription_manager/gui/preferences.py:134
+#: ../src/subscription_manager/gui/widgets.py:294
+msgid "Not Set"
+msgstr "설정되지 않음 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -258,7 +254,7 @@ msgstr ""
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
 #: ../src/subscription_manager/gui/installedtab.py:192
-#: ../src/subscription_manager/managercli.py:63
+#: ../src/subscription_manager/managercli.py:64
 msgid "Future Subscription"
 msgstr "차후 서브스크립션"
 
@@ -271,7 +267,7 @@ msgstr "차후 등록됨"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
 #: ../src/subscription_manager/gui/installedtab.py:196
-#: ../src/subscription_manager/managercli.py:66
+#: ../src/subscription_manager/managercli.py:67
 #: ../src/subscription_manager/managerlib.py:81
 msgid "Expired"
 msgstr "만료됨"
@@ -287,14 +283,14 @@ msgstr "%s 서브스크립션은 만료됨"
 # document keys, author eukim
 #: ../src/subscription_manager/gui/installedtab.py:209
 #: ../src/subscription_manager/gui/installedtab.py:210
-#: ../src/subscription_manager/managercli.py:67
+#: ../src/subscription_manager/managercli.py:68
 msgid "Partially Subscribed"
 msgstr "부분적으로 등록됨"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
 #: ../src/subscription_manager/gui/installedtab.py:213
-#: ../src/subscription_manager/managercli.py:64
+#: ../src/subscription_manager/managercli.py:65
 #: ../src/subscription_manager/managerlib.py:81
 msgid "Subscribed"
 msgstr "등록됨"
@@ -303,14 +299,13 @@ msgstr "등록됨"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgid_plural "Covered by contracts %s through %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr "%s 통한 계약 %s의 범위 안에 있음 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
 #: ../src/subscription_manager/gui/installedtab.py:222
 #: ../src/subscription_manager/gui/installedtab.py:223
-#: ../src/subscription_manager/managercli.py:65
+#: ../src/subscription_manager/managercli.py:66
 #: ../src/subscription_manager/managerlib.py:81
 msgid "Not Subscribed"
 msgstr "등록되지 않음"
@@ -321,46 +316,46 @@ msgstr "등록되지 않음"
 msgid "My Installed Products"
 msgstr "내 설치된 제품"
 
+#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:315
 #, python-format
 msgid "%s installed products do not have valid subscriptions."
 msgstr "%s 설치된 제품에는 유효한 서브스크립션이 없습니다."
 
+#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:320
 msgid "1 installed product does not have a valid subscription."
 msgstr "설치된 제품 중 하나에 유효한 서브스크립션이 없습니다."
 
+#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:326
 msgid "This system does not match subscription limits."
 msgstr "이 시스템은 서브스크립션 제한과 일치하지 않습니다."
 
+#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:335
 #, python-format
 msgid "System is properly subscribed through %s."
 msgstr "시스템이 %s를 통해 올바르게 등록되어 있습니다."
 
+#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:343
 msgid "No installed products detected."
 msgstr "설치된 제품이 감지되지 않았습니다."
 
+#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:348
 msgid "Keep your system up to date by registering."
 msgstr "등록하여 시스템을 최신 상태로 유지합니다."
@@ -429,7 +424,7 @@ msgstr "모든 파일"
 
 #: ../src/subscription_manager/gui/importsub.py:115
 msgid "The following certificate files did not exist:"
-msgstr ""
+msgstr "다음과 같은 인증서 파일이 존재하지 않습니다:"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -443,9 +438,7 @@ msgstr "다음 파일은 유효한 인증서가 아니므로 불러오지 않습
 msgid ""
 "An error occurred while importing the following certificates. Please check "
 "the log file for more information."
-msgstr ""
-"다음과 같은 인증서를 가져오기하는 동안 오류가 발생했습니다. 자세한 내용은 로"
-"그 파일에서 확인하십시오."
+msgstr "다음과 같은 인증서를 가져오기하는 동안 오류가 발생했습니다. 자세한 내용은 로그 파일에서 확인하십시오."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -453,9 +446,9 @@ msgstr ""
 msgid "The following certificates were successfully imported:"
 msgstr "다음과 같은 인증서를 성공적으로 가져왔습니다:"
 
+#. if we get to this point, the import was successful
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#. if we get to this point, the import was successful
 #: ../src/subscription_manager/gui/importsub.py:132
 msgid "Certificate import was successful."
 msgstr "성공적으로 인증서를 가져왔습니다."
@@ -466,16 +459,10 @@ msgstr "성공적으로 인증서를 가져왔습니다."
 msgid "Installed"
 msgstr "설치됨"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author eukim
-#: ../src/subscription_manager/gui/widgets.py:294
-msgid "Not Set"
-msgstr "설정되지 않음 "
-
 # translation auto-copied from project CFSE-cli, version 1.1, document keys,
 # author eukim
 #: ../src/subscription_manager/gui/widgets.py:314
-#: ../src/subscription_manager/managercli.py:1845
+#: ../src/subscription_manager/managercli.py:1866
 msgid "None"
 msgstr "없음"
 
@@ -499,36 +486,36 @@ msgstr "오늘"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/widgets.py:650
+#: ../src/subscription_manager/gui/widgets.py:627
 #: ../src/subscription_manager/gui/mysubstab.py:259
-#: ../src/subscription_manager/managercli.py:1906
+#: ../src/subscription_manager/managercli.py:1927
 msgid "Physical"
 msgstr "물리 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/widgets.py:651
+#: ../src/subscription_manager/gui/widgets.py:628
 #: ../src/subscription_manager/gui/mysubstab.py:257
-#: ../src/subscription_manager/managercli.py:1904
+#: ../src/subscription_manager/managercli.py:1925
 msgid "Virtual"
 msgstr "가상"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/widgets.py:652
+#: ../src/subscription_manager/gui/widgets.py:629
 msgid "Both"
 msgstr "모두"
 
+#. content-type is required, no need to xstr
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#. content-type is required, no need to xstr
-#: ../src/subscription_manager/gui/widgets.py:655 ../src/rct/printing.py:74
+#: ../src/subscription_manager/gui/widgets.py:632 ../src/rct/printing.py:74
 msgid "Type"
 msgstr "유형"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/widgets.py:725
+#: ../src/subscription_manager/gui/widgets.py:702
 msgid "Click to Adjust Quantity"
 msgstr "수량 조정을 위해 클릭"
 
@@ -541,12 +528,12 @@ msgstr "설치된 제품"
 #: ../src/subscription_manager/gui/mysubstab.py:131
 #, python-format
 msgid "There was an error removing %s with serial number %s"
-msgstr ""
+msgstr "일련 번호 %s와 함께 %s를 삭제하는 도중 오류가 발생했습니다 "
 
 #: ../src/subscription_manager/gui/mysubstab.py:150
 #, python-format
 msgid "Are you sure you want to remove %s?"
-msgstr ""
+msgstr "정말로 %s를 삭제하시겠습니까?"
 
 #: ../src/subscription_manager/gui/mysubstab.py:177
 #, python-format
@@ -581,9 +568,9 @@ msgstr "예"
 msgid "No"
 msgstr "아니요"
 
+#. Set up columns on the view
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:55
 msgid "Fact"
 msgstr "정보 "
@@ -600,25 +587,25 @@ msgstr "값"
 msgid "No previous update"
 msgstr "이전 업데이트가 없음"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author eukim
 #. TODO: could stand to check if registered before trying to do this:
 #. It's possible (though unlikely, and kind of broken) to have more
 #. than one version of python-rhsm/subscription-manager installed.
 #. Versions() will only return one (and I suspect it's not predictable
 #. which it will return).
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author eukim
 #: ../src/subscription_manager/gui/factsgui.py:104
 #: ../src/subscription_manager/gui/factsgui.py:108
-#: ../src/subscription_manager/managercli.py:243
 #: ../src/subscription_manager/managercli.py:244
-#: ../src/subscription_manager/managercli.py:247
+#: ../src/subscription_manager/managercli.py:245
 #: ../src/subscription_manager/managercli.py:248
-#: ../src/subscription_manager/managercli.py:1532
-#: ../src/subscription_manager/utils.py:306
-#: ../src/subscription_manager/utils.py:307
-#: ../src/subscription_manager/utils.py:322
-#: ../src/subscription_manager/utils.py:341
-#: ../src/subscription_manager/utils.py:350
+#: ../src/subscription_manager/managercli.py:249
+#: ../src/subscription_manager/managercli.py:1553
+#: ../src/subscription_manager/utils.py:333
+#: ../src/subscription_manager/utils.py:334
+#: ../src/subscription_manager/utils.py:349
+#: ../src/subscription_manager/utils.py:368
+#: ../src/subscription_manager/utils.py:377
 msgid "Unknown"
 msgstr "알 수 없음"
 
@@ -627,6 +614,8 @@ msgid ""
 "Unable to auto-attach, server does not support service levels. Please run "
 "'Subscription Manager' to manually attach a subscription."
 msgstr ""
+"자동 첨부할 수 없습니다. 서버는 서비스 레벨을 지원하지 않습니다. 'Subscription Manager'를 실행하여 수동으로 "
+"서브스크립션을 첨부하십시오."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -634,9 +623,7 @@ msgstr ""
 msgid ""
 "No installed products on system. No need to update subscriptions at this "
 "time."
-msgstr ""
-"시스템에 설치된 제품이 없습니다. 현재로서는 서브스크립션을 업데이트할 필요가 "
-"없습니다."
+msgstr "시스템에 설치된 제품이 없습니다. 현재로서는 서브스크립션을 업데이트할 필요가 없습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -655,7 +642,7 @@ msgstr "등록 도중 오류 발생"
 #, python-format
 msgid ""
 "Unable to attach any additional subscriptions at current service level: %s"
-msgstr ""
+msgstr "현재 서비스 레벨에서 추가 서브스크립션을 첨부할 수 없습니다: %s"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:85
 msgid ""
@@ -665,7 +652,7 @@ msgstr ""
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:104
 msgid "You have opted to skip auto-attach."
-msgstr ""
+msgstr "자동 첨부를 건너 뛰기하도록 선택하셨습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -673,11 +660,11 @@ msgstr ""
 msgid "Finish"
 msgstr "완료"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author eukim
 #. Firstboot module title
 #. Note: translated title needs to be unique across all
 #. firstboot modules, not just the rhsm ones. See bz #828042
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author eukim
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:170
 msgid "Subscription Management Registration"
 msgstr "서브스크립션 관리 등록"
@@ -699,11 +686,9 @@ msgstr "서브스크립션 상환 중 오류 발생: %s"
 # document keys, author eukim
 #: ../src/subscription_manager/gui/utils.py:60
 msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"네트워크 오류, 서버에 연결할 수 없음. 보다 자세한 정보는 /var/log/rhsm/rhsm."
-"log에서 확인하십시오."
+"Network error, unable to connect to server. Please see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr "네트워크 오류, 서버에 연결할 수 없음. 보다 자세한 정보는 /var/log/rhsm/rhsm.log에서 확인하십시오."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -712,31 +697,32 @@ msgstr ""
 msgid "Unable to verify server's identity: %s"
 msgstr "서버 ID를 확인할 수 없음: %s"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author eukim
 #. NOTE: yes this looks a lot like the socket error, but I think these
 #. were actually intended to display slightly different messages:
-#: ../src/subscription_manager/gui/utils.py:68
-#: ../src/subscription_manager/managercli.py:123
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr "네트워크 오류. 연결 정보 또는 /var/log/rhsm/rhsm.log 를 확인하십시오."
-
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#. This is what happens when there's an issue with the server on the other side of the wire
-#: ../src/subscription_manager/gui/utils.py:71
-#: ../src/subscription_manager/managercli.py:127
+#: ../src/subscription_manager/gui/utils.py:68
+#: ../src/subscription_manager/managercli.py:124
 msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
+"Network error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr "네트워크 오류. 연결 정보 또는 /var/log/rhsm/rhsm.log 를 확인하십시오."
+
+#. This is what happens when there's an issue with the server on the other
+#. side of the wire
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author eukim
+#: ../src/subscription_manager/gui/utils.py:71
+#: ../src/subscription_manager/managercli.py:128
+msgid ""
+"Remote server error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr "원격 서버 오류. 연결 정보 또는 /var/log/rhsm/rhsm.log 를 확인하십시오."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
 #: ../src/subscription_manager/gui/utils.py:92
-#: ../src/subscription_manager/managercli.py:136
+#: ../src/subscription_manager/managercli.py:137
 #, python-format
 msgid "Bad CA certificate: %s"
 msgstr "잘못된 CA 인증서: %s"
@@ -780,7 +766,7 @@ msgstr "등록 도중 오류 발생: %s"
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:4
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
 msgid "Attach"
-msgstr ""
+msgstr "첨부 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -797,13 +783,13 @@ msgstr "다음"
 
 #: ../src/subscription_manager/gui/registergui.py:477
 msgid "Unable to auto-attach, server does not support service levels."
-msgstr ""
+msgstr "자동 첨부할 수 없습니다. 서버는 서비스 레벨을 지원하지 않습니다. "
 
 #: ../src/subscription_manager/gui/registergui.py:480
 msgid ""
 "No installed products on system. No need to attach subscriptions at this "
 "time."
-msgstr ""
+msgstr "시스템에 설치된 제품이 없습니다. 현재로서는 서브스크립션을 첨부할 필요가 없습니다."
 
 #: ../src/subscription_manager/gui/registergui.py:483
 msgid ""
@@ -817,6 +803,8 @@ msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
 "\"All Available Subscriptions\" tab to manually attach subscriptions."
 msgstr ""
+"현재 서비스 레벨에서 사용 가능한 서브스크립션이 없습니다: %s. 수동으로 서브스크립션을 첨부하려면 \"사용 가능한 모든 서브스크립션\""
+" 탭을 사용하십시오."
 
 #: ../src/subscription_manager/gui/registergui.py:518
 msgid ""
@@ -877,16 +865,16 @@ msgstr "암호를 입력하셔야 합니다."
 
 #: ../src/subscription_manager/gui/registergui.py:779
 msgid "You must enter an organization."
-msgstr ""
+msgstr "조직을 입력해야 합니다."
 
 #: ../src/subscription_manager/gui/registergui.py:786
 msgid "You must enter an activation key."
-msgstr ""
+msgstr "활성키를 입력해야 합니다. "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
 #: ../src/subscription_manager/gui/registergui.py:898
-#: ../src/subscription_manager/managercli.py:350
+#: ../src/subscription_manager/managercli.py:351
 #, python-format
 msgid "Unable to reach the server at %s:%s%s"
 msgstr "%s에 있는 서버에 연결할 수 없습니다:%s%s"
@@ -901,10 +889,9 @@ msgstr "서브스크립션 서비스의 CA 인증서가 설치되지 않았습�
 # document keys, author eukim
 #: ../src/subscription_manager/gui/registergui.py:907
 msgid ""
-"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
-"prefix]"
-msgstr ""
-"옵션 포트와 접두어로 호스트 이름을 지정하십시오: 호스트이름[:포트][/접두사]"
+"Please provide a hostname with optional port and/or prefix: "
+"hostname[:port][/prefix]"
+msgstr "옵션 포트와 접두어로 호스트 이름을 지정하십시오: 호스트이름[:포트][/접두사]"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -971,16 +958,15 @@ msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
-"서버에서 시스템 데이터를 업데이트하는 도중 오류 발생. 보다 자세한 내용은 /"
-"var/log/rhsm/rhsm.log에서 확인하십시오. "
+"서버에서 시스템 데이터를 업데이트하는 도중 오류 발생. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 확인하십시오. "
 
 #: ../src/subscription_manager/branding/__init__.py:81
 msgid "Register the system to the server"
-msgstr ""
+msgstr "시스템에 서버에 등록합니다 "
 
 #: ../src/subscription_manager/branding/__init__.py:82
 msgid "Unregister the system from the server"
-msgstr ""
+msgstr "시스템을 서버에서 등록 해제합니다 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -1019,13 +1005,13 @@ msgstr "로그인이나 암호를 잊어버리신 경우 시스템 관리자에�
 msgid ""
 "Register this system to the Customer Portal or another subscription "
 "management service"
-msgstr ""
+msgstr "이 시스템을 고객 포털이나 다른 서브스크립션 관리 서비스에 등록합니다 "
 
 #: ../src/subscription_manager/branding/redhat_branding.py:8
 msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
-msgstr ""
+msgstr "이 시스템을 고객 포털이나 다른 서브스크립션 관리 서비스에서 등록 해제합니다 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -1034,8 +1020,9 @@ msgid "This system is registered to RHN Classic."
 msgstr "이 시스템은 RHN 클래식에 등록됩니다."
 
 #: ../src/subscription_manager/branding/redhat_branding.py:13
-msgid "This system has already been registered with Red Hat using RHN Classic."
-msgstr ""
+msgid ""
+"This system has already been registered with Red Hat using RHN Classic."
+msgstr "이 시스템은 RHN 클래식을 사용하여 이미 Red Hat에 등록되었습니다. "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -1045,18 +1032,18 @@ msgid ""
 "Subscription Management technology. Red Hat recommends that customers only "
 "register once."
 msgstr ""
-"사용하고 있는 도구는 Red Hat 서브스크립션 관리 기술을 사용하여 다시 등록하려"
-"고 합니다. Red Hat은 고객이 한 번만 등록할 것을 권장합니다."
+"사용하고 있는 도구는 Red Hat 서브스크립션 관리 기술을 사용하여 다시 등록하려고 합니다. Red Hat은 고객이 한 번만 등록할 "
+"것을 권장합니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
-"To learn how to unregister from either service please consult this Knowledge "
-"Base Article: https://access.redhat.com/kb/docs/DOC-45563"
+"To learn how to unregister from either service please consult this Knowledge"
+" Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"서비스로 부터 등록 해제하는 방법을 습득하려면  Knowledge Base 문서를 참조하십"
-"시오: https://access.redhat.com/kb/docs/DOC-45563"
+"서비스로 부터 등록 해제하는 방법을 습득하려면  Knowledge Base 문서를 참조하십시오: "
+"https://access.redhat.com/kb/docs/DOC-45563"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -1066,7 +1053,7 @@ msgstr "RHN 클래식"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:19
 msgid "Red Hat Subscription Management"
-msgstr ""
+msgstr "Red Hat 서브스크립션 관리 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -1080,9 +1067,7 @@ msgstr "Red Hat 계정 정보를 입력하십시오:"
 msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
-msgstr ""
-"이 시스템은 RHN 클래식과 Red Hat 서브스크립션 관리를 모두 사용하여 등록되어 "
-"있습니다."
+msgstr "이 시스템은 RHN 클래식과 Red Hat 서브스크립션 관리를 모두 사용하여 등록되어 있습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -1097,45 +1082,44 @@ msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"RHN 등록 및 기술에 대한 보다 자세한 내용은 Knowledge Base 문서를 참조하십시"
-"오: https://access.redhat.com/kb/docs/DOC-45563"
+"RHN 등록 및 기술에 대한 보다 자세한 내용은 Knowledge Base 문서를 참조하십시오: "
+"https://access.redhat.com/kb/docs/DOC-45563"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:28
 msgid "RHN Classic and Red Hat Subscription Management"
-msgstr ""
+msgstr "RHN 클래식 및 Red Hat 서브스크립션 관리"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
 #: ../src/subscription_manager/branding/redhat_branding.py:30
 msgid ""
-"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
-msgstr ""
-"정보: 로그인 또는 암호를 잊어버리셨습니까? http://red.ht/lost_password에서 찾"
-"아보십시오."
+"Tip: Forgot your login or password? Look it up at "
+"http://red.ht/lost_password"
+msgstr "정보: 로그인 또는 암호를 잊어버리셨습니까? http://red.ht/lost_password에서 찾아보십시오."
 
+#. note default is lower caps
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#. note default is lower caps
 #: ../src/subscription_manager/i18n_optparse.py:36
 msgid "%prog [OPTIONS]"
 msgstr "%prog [OPTIONS]"
 
+#. For older versions of optparse
 # translation auto-copied from project CFSE-cli, version 1.1, document keys,
 # author bkearney
-#. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:126
 #: ../src/subscription_manager/i18n_optparse.py:138
 #, python-format
 msgid "Usage: %s\n"
 msgstr "사용법: %s\n"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
 #. so we get it picked up. for local translation, and then optparse will
 #. use them.
 #. translators: this should have the same translation as "Usage: %s\n"
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
 #: ../src/subscription_manager/i18n_optparse.py:137
 #, python-format
 msgid "usage: %s\n"
@@ -1170,8 +1154,8 @@ msgstr "옵션  "
 msgid "options:"
 msgstr "옵션:"
 
-# translation auto-copied from project CFSE-cli, version 1.1, document keys
 #. stuff for option value sanity checking
+# translation auto-copied from project CFSE-cli, version 1.1, document keys
 #: ../src/subscription_manager/i18n_optparse.py:146
 #, python-format
 msgid "no such option: %s"
@@ -1240,9 +1224,9 @@ msgstr "옵션 %s: 유효하지 않은 %s 값: %r"
 msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr "옵션 %s: 유효하지 않은 선택: %r (%s에서 선택)"
 
+#. default options
 # translation auto-copied from project CFSE-cli, version 1.1, document keys,
 # author eukim
-#. default options
 #: ../src/subscription_manager/i18n_optparse.py:159
 msgid "show this help message and exit"
 msgstr "도움말 보기 및 종료"
@@ -1253,9 +1237,9 @@ msgstr "도움말 보기 및 종료"
 msgid "show program's version number and exit"
 msgstr "프로그램의 버전 번호 보기 및 종료"
 
+#. translators: arg 1 is the program name, arg 2 is the error message
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#. translators: arg 1 is the program name, arg 2 is the error message
 #: ../src/subscription_manager/i18n_optparse.py:173
 #, python-format
 msgid "%s: error: %s"
@@ -1321,222 +1305,222 @@ msgstr "완료"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:58
+#: ../src/subscription_manager/managercli.py:59
 msgid ""
-"This system is not yet registered. Try 'subscription-manager register --"
-"help' for more information."
+"This system is not yet registered. Try 'subscription-manager register "
+"--help' for more information."
 msgstr ""
-"이 시스템은 아직 등록되어 있지 않습니다. 보다 자세한 내용은 'subscription-"
-"manager register --help'를 사용하여 살펴보십시오."
+"이 시스템은 아직 등록되어 있지 않습니다. 보다 자세한 내용은 'subscription-manager register --help'를 "
+"사용하여 살펴보십시오."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:71
-#: ../src/subscription_manager/managercli.py:97
+#: ../src/subscription_manager/managercli.py:72
+#: ../src/subscription_manager/managercli.py:98
 #, python-format
 msgid "Product Name:         \t%s"
 msgstr "제품 이름:         \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:72
+#: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Product ID:           \t%s"
 msgstr "제품 ID:           \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:73
+#: ../src/subscription_manager/managercli.py:74
 #, python-format
 msgid "Version:              \t%s"
 msgstr "버전:              \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:74
+#: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Arch:                 \t%s"
 msgstr "아키텍처:                 \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:75
-#: ../src/subscription_manager/managercli.py:98
+#: ../src/subscription_manager/managercli.py:76
+#: ../src/subscription_manager/managercli.py:99
 #, python-format
 msgid "Status:               \t%s"
 msgstr "상태:               \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:76
-#: ../src/subscription_manager/managercli.py:1989
+#: ../src/subscription_manager/managercli.py:77
+#: ../src/subscription_manager/managercli.py:2010
 #, python-format
 msgid "Starts:               \t%s"
 msgstr "시작:               \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:77
-#: ../src/subscription_manager/managercli.py:87
-#: ../src/subscription_manager/managercli.py:1991
+#: ../src/subscription_manager/managercli.py:78
+#: ../src/subscription_manager/managercli.py:88
+#: ../src/subscription_manager/managercli.py:2012
 #, python-format
 msgid "Ends:                 \t%s"
 msgstr "종료:                 \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:80
-#: ../src/subscription_manager/managercli.py:1962
+#: ../src/subscription_manager/managercli.py:81
+#: ../src/subscription_manager/managercli.py:1983
 #, python-format
 msgid "Subscription Name:    \t%s"
 msgstr "서브스크립션 이름:    \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:81
-#: ../src/subscription_manager/managercli.py:1973
+#: ../src/subscription_manager/managercli.py:82
+#: ../src/subscription_manager/managercli.py:1994
 #, python-format
 msgid "SKU:                  \t%s"
 msgstr "SKU:                  \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:82
+#: ../src/subscription_manager/managercli.py:83
 #, python-format
 msgid "Pool Id:              \t%s"
 msgstr "풀 Id:              \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:83
+#: ../src/subscription_manager/managercli.py:84
 #, python-format
 msgid "Quantity:             \t%s"
 msgstr "수량:             \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:84
-#: ../src/subscription_manager/managercli.py:1985
+#: ../src/subscription_manager/managercli.py:85
+#: ../src/subscription_manager/managercli.py:2006
 #, python-format
 msgid "Service Level:        \t%s"
 msgstr "서비스 레벨:        \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:85
-#: ../src/subscription_manager/managercli.py:1987
+#: ../src/subscription_manager/managercli.py:86
+#: ../src/subscription_manager/managercli.py:2008
 #, python-format
 msgid "Service Type:         \t%s"
 msgstr "서비스 유형:         \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:86
+#: ../src/subscription_manager/managercli.py:87
 #, python-format
 msgid "Multi-Entitlement:    \t%s"
 msgstr "멀티-인타이틀먼트:    \t%s"
 
-#: ../src/subscription_manager/managercli.py:88
+#: ../src/subscription_manager/managercli.py:89
 #, python-format
 msgid "System Type:          \t%s"
-msgstr ""
+msgstr "시스템 유형:          \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:91
+#: ../src/subscription_manager/managercli.py:92
 #, python-format
 msgid "Repo Id:              \t%s"
 msgstr "리포지터리 Id:              \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:92
+#: ../src/subscription_manager/managercli.py:93
 #, python-format
 msgid "Repo Name:            \t%s"
 msgstr "리포지터리 이름:            \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:93
+#: ../src/subscription_manager/managercli.py:94
 #, python-format
 msgid "Repo Url:             \t%s"
 msgstr "리포지터리 Url:             \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:94
+#: ../src/subscription_manager/managercli.py:95
 #, python-format
 msgid "Enabled:              \t%s"
 msgstr "활성화됨:              \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:101
+#: ../src/subscription_manager/managercli.py:102
 #, python-format
 msgid "Name:                 \t%s"
 msgstr "이름:                 \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:102
+#: ../src/subscription_manager/managercli.py:103
 #, python-format
 msgid "Description:          \t%s"
 msgstr "설명:          \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:117
+#: ../src/subscription_manager/managercli.py:118
 msgid "Network error, unable to connect to server."
 msgstr "네트워크 오류, 서버에 연결할 수 없습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:149
-#: ../src/subscription_manager/managercli.py:791
+#: ../src/subscription_manager/managercli.py:150
+#: ../src/subscription_manager/managercli.py:792
 #, python-format
 msgid "Service level set to: %s"
 msgstr "서비스 레벨 설정: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:164
+#: ../src/subscription_manager/managercli.py:165
 msgid "Installed Product Current Status:"
 msgstr "설치된 제품의 현재 상태:"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:217
+#: ../src/subscription_manager/managercli.py:218
 msgid "server url in the form of https://hostname:443/prefix"
 msgstr "https://hostname:443/prefix 형식의 서버 url"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:222
+#: ../src/subscription_manager/managercli.py:223
 msgid "proxy url in the form of proxy_hostname:proxy_port"
 msgstr "proxy_hostname:proxy_port 형식의 프록시 url"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:224
+#: ../src/subscription_manager/managercli.py:225
 msgid "user for http proxy with basic authentication"
 msgstr "기본 인증을 갖는 http proxy 사용자"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:226
+#: ../src/subscription_manager/managercli.py:227
 msgid "password for http proxy with basic authentication"
 msgstr "기본 인증을 갖는 http proxy 암호"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:327
+#: ../src/subscription_manager/managercli.py:328
 #, python-format
 msgid "cannot parse argument: %s"
 msgstr "인수를 해석할 수 없음: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:342
+#: ../src/subscription_manager/managercli.py:343
 #: ../bin/rhn-migrate-classic-to-rhsm:208
 #, c-format, python-format
 msgid "Error parsing serverurl: %s"
@@ -1544,183 +1528,183 @@ msgstr "서버 url을 구문 분석하는 도중 오류 발생: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:356
+#: ../src/subscription_manager/managercli.py:357
 #: ../bin/rhn-migrate-classic-to-rhsm:225
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr "오류: 서브스크립션 서비스의 CA 인증서가 설치되어 있지 않습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:373
+#: ../src/subscription_manager/managercli.py:374
 #, python-format
 msgid "Error parsing baseurl: %s"
 msgstr "기반 url을 구문 분석하는 도중 오류 발생: %s"
 
-#: ../src/subscription_manager/managercli.py:428
+#: ../src/subscription_manager/managercli.py:429
 msgid "System certificates corrupted. Please reregister."
-msgstr ""
+msgstr "시스템 인증서가 손상되었습니다. 다시 등록하시기 바랍니다. "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:445
+#: ../src/subscription_manager/managercli.py:446
 msgid "username to use when authorizing against the server"
 msgstr "서버 인증시 사용할 사용자 이름"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:447
+#: ../src/subscription_manager/managercli.py:448
 msgid "password to use when authorizing against the server"
 msgstr "서버 인증시 사용할 암호"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:459
+#: ../src/subscription_manager/managercli.py:460
 msgid "Username: "
 msgstr "사용자 이름:"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:462
+#: ../src/subscription_manager/managercli.py:463
 msgid "Password: "
 msgstr "암호:"
 
-#: ../src/subscription_manager/managercli.py:486
+#: ../src/subscription_manager/managercli.py:487
 msgid ""
 "Remove all local system and subscription data without affecting the server"
-msgstr ""
+msgstr "서버에 영향을 주지 않고 모든 로컬 시스템과 서브스크립션 데이터를 제거합니다 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:497
+#: ../src/subscription_manager/managercli.py:498
 msgid "All local data removed"
 msgstr "로컬 데이터가 모두 삭제되었습니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:510
+#: ../src/subscription_manager/managercli.py:511
 msgid "Pull the latest subscription data from the server"
 msgstr "서버에서 최신 서브스크립션 데이터를 풀(pull) 합니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:520
+#: ../src/subscription_manager/managercli.py:521
 msgid "All local data refreshed"
 msgstr "로컬 데이터가 모두 재생되었습니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:525
+#: ../src/subscription_manager/managercli.py:526
 #, python-format
 msgid "Unable to perform refresh due to the following exception: %s"
 msgstr "다음과 같은 예외 사항이 발생하면 새로 고침을 실행할 수 없습니다: %s"
 
-#: ../src/subscription_manager/managercli.py:532
+#: ../src/subscription_manager/managercli.py:533
 msgid "Display the identity certificate for this system or request a new one"
-msgstr ""
+msgstr "이 시스템의 ID 인증서를 표시하거나 새로 요청합니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:539
+#: ../src/subscription_manager/managercli.py:540
 msgid "request a new certificate be generated"
 msgstr "생성된 새 인증서를 요청합니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:541
+#: ../src/subscription_manager/managercli.py:542
 msgid "force certificate regeneration (requires username and password)"
 msgstr "인증서 재생성을 강제합니다 (사용자 이름 및 암호 필요)"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:546
+#: ../src/subscription_manager/managercli.py:547
 msgid "--force can only be used with --regenerate"
 msgstr "--force는 --regenerate와 함께 사용될 수 있습니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:550
+#: ../src/subscription_manager/managercli.py:551
 msgid "--username and --password can only be used with --force"
 msgstr "--username 및 --password는 --force와만 함께 사용될 수 있습니다"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author eukim
 #. no need to continue if user is only registered to Classic
 #. FIXME: slightly odd in that we log that we can't get the version,
 #. but then show "unknown" here.
-#: ../src/subscription_manager/managercli.py:557
-#: ../src/subscription_manager/managercli.py:560
-#: ../src/subscription_manager/managercli.py:2046
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author eukim
+#: ../src/subscription_manager/managercli.py:558
+#: ../src/subscription_manager/managercli.py:561
+#: ../src/subscription_manager/managercli.py:2067
 #, python-format
 msgid "server type: %s"
 msgstr "서버 유형: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:572
+#: ../src/subscription_manager/managercli.py:573
 #, python-format
 msgid "Current identity is: %s"
 msgstr "현재 ID: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:573
+#: ../src/subscription_manager/managercli.py:574
 #, python-format
 msgid "name: %s"
 msgstr "이름: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:574
+#: ../src/subscription_manager/managercli.py:575
 #, python-format
 msgid "org name: %s"
 msgstr "조직 이름: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:575
+#: ../src/subscription_manager/managercli.py:576
 #, python-format
 msgid "org id: %s"
 msgstr "조직 ID: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:583
+#: ../src/subscription_manager/managercli.py:584
 msgid "Identity certificate has been regenerated."
 msgstr "ID 인증서가 다시 생성되었습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:591
+#: ../src/subscription_manager/managercli.py:592
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "오류: 시스템에 새로운 id를 생성할 수 없습니다."
 
-#: ../src/subscription_manager/managercli.py:597
+#: ../src/subscription_manager/managercli.py:598
 msgid "Display the organizations against which a user can register a system"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:614
+#: ../src/subscription_manager/managercli.py:615
 msgid "Organizations"
 msgstr "조직"
 
 # translation auto-copied from project CFSE-cli, version 1.1, document keys,
 # author eukim
-#: ../src/subscription_manager/managercli.py:618 ../src/rct/printing.py:35
+#: ../src/subscription_manager/managercli.py:619 ../src/rct/printing.py:35
 #: ../src/rct/printing.py:47 ../src/rct/printing.py:75
 msgid "Name"
 msgstr "이름"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:619
+#: ../src/subscription_manager/managercli.py:620
 msgid "Key"
 msgstr "키"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:622
-#: ../src/subscription_manager/managercli.py:1059
+#: ../src/subscription_manager/managercli.py:623
+#: ../src/subscription_manager/managercli.py:1060
 #: ../bin/rhn-migrate-classic-to-rhsm:243
 #, c-format, python-format
 msgid "%s cannot register to any organizations."
@@ -1728,198 +1712,196 @@ msgstr "%s은(는) 어떤 조직에도 등록할 수 없습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:629
+#: ../src/subscription_manager/managercli.py:630
 msgid "Error: Unable to retrieve org list from server"
 msgstr "오류: 서버에서 조직 목록을 검색할 수 없음"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:635
+#: ../src/subscription_manager/managercli.py:636
 msgid "Display the environments available for a user"
 msgstr "사용자에 대해 사용가능한 환경 표시"
 
-#: ../src/subscription_manager/managercli.py:642
+#: ../src/subscription_manager/managercli.py:643
 msgid "specify organization for environment list"
-msgstr ""
+msgstr "환경 목록의 조직을 지정 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:646
+#: ../src/subscription_manager/managercli.py:647
 msgid ""
 "Error: This command requires that you specify an organization with --org"
 msgstr "오류: 이 명령에서는 --org를 사용하여 조직을 지정해야 합니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:669
+#: ../src/subscription_manager/managercli.py:670
 msgid "Environments"
 msgstr "환경"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:675
+#: ../src/subscription_manager/managercli.py:676
 msgid "Error: This org does not have environments."
 msgstr "오류: 이 조직에는 환경이 없습니다. "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:677
-#: ../src/subscription_manager/managercli.py:1040
+#: ../src/subscription_manager/managercli.py:678
+#: ../src/subscription_manager/managercli.py:1041
 msgid "Error: Server does not support environments."
 msgstr "오류: 서버가 환경을 지원하지 않습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:685
+#: ../src/subscription_manager/managercli.py:686
 msgid "Error: Unable to retrieve environment list from server"
 msgstr "오류: 서버에서 환경 목록을 검색할 수 없음"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:693
+#: ../src/subscription_manager/managercli.py:694
 msgid "Manage service levels for this system"
 msgstr "이 시스템의 서비스 레벨 관리"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:700
+#: ../src/subscription_manager/managercli.py:701
 msgid "show this system's current service level"
 msgstr "시스템의 현재 서비스 레벨을 표시"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:703
+#: ../src/subscription_manager/managercli.py:704
 msgid "specify org for service level list"
 msgstr "서비스 레벨 목록의 조직을 지정"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:705
+#: ../src/subscription_manager/managercli.py:706
 msgid "list all service levels available"
 msgstr "사용 가능한 모든 서비스 레벨 목록 나열"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:707
-#: ../src/subscription_manager/managercli.py:1260
+#: ../src/subscription_manager/managercli.py:708
+#: ../src/subscription_manager/managercli.py:1261
 msgid "service level to apply to this system"
 msgstr "시스템에 적용할 서비스 레벨"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:710
+#: ../src/subscription_manager/managercli.py:711
 msgid "unset the service level for this system"
 msgstr "이 시스템의 서버스 레벨 설정 해제"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:716
-#: ../src/subscription_manager/managercli.py:801
-#: ../src/subscription_manager/managercli.py:810
+#: ../src/subscription_manager/managercli.py:717
+#: ../src/subscription_manager/managercli.py:802
+#: ../src/subscription_manager/managercli.py:811
 #: ../bin/rhn-migrate-classic-to-rhsm:284
 msgid "Error: The service-level command is not supported by the server."
 msgstr "오류: service-level 명령은 서버에서 지원하지 않습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:735
+#: ../src/subscription_manager/managercli.py:736
 msgid "Error: --org is only supported with the --list option"
 msgstr "오류: --org는 --list 옵션을 사용해서만 지원됩니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:741
+#: ../src/subscription_manager/managercli.py:742
 msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
-msgstr ""
-"오류: 서비스 레벨을 나열하려면 --username 및 --password를 등록하거나 지정해"
-"야 합니다."
+msgstr "오류: 서비스 레벨을 나열하려면 --username 및 --password를 등록하거나 지정해야 합니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:744
+#: ../src/subscription_manager/managercli.py:745
 msgid "Error: you must register or specify --org."
 msgstr "오류: 등록하거나  --org를 지정하셔야 합니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:784
+#: ../src/subscription_manager/managercli.py:785
 msgid "Error: Unable to retrieve service levels."
 msgstr "오류: 서비스 레벨을 검색할 수 없습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:795
+#: ../src/subscription_manager/managercli.py:796
 msgid "Service level preference has been unset"
 msgstr "서비스 레벨 환경 설정이 해제되었습니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:805
+#: ../src/subscription_manager/managercli.py:806
 #, python-format
 msgid "Current service level: %s"
 msgstr "현재 서비스 레벨: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:807
+#: ../src/subscription_manager/managercli.py:808
 msgid "Service level preference not set"
 msgstr "서비스 레벨 환경 설정이 구성되지 않았습니다"
 
 # translation auto-copied from project CFSE-cli, version 1.1, document keys,
 # author eukim
-#: ../src/subscription_manager/managercli.py:822
+#: ../src/subscription_manager/managercli.py:823
 msgid "Available Service Levels"
 msgstr "사용 가능한 서비스 레벨"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:827
+#: ../src/subscription_manager/managercli.py:828
 msgid "This org does not have any subscriptions with service levels."
 msgstr "이 조직에는 서비스 레벨이 있는 서브스크립션이 없습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:848
+#: ../src/subscription_manager/managercli.py:849
 msgid "base url for content in form of https://hostname:443/prefix"
 msgstr "https://hostname:443/prefix 형식의 컨텐츠 기반 url"
 
-#: ../src/subscription_manager/managercli.py:850
+#: ../src/subscription_manager/managercli.py:851
 msgid "the type of unit to register, defaults to system"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:852
+#: ../src/subscription_manager/managercli.py:853
 msgid "name of the system to register, defaults to the hostname"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:854
+#: ../src/subscription_manager/managercli.py:855
 msgid "the existing system data is pulled from the server"
-msgstr ""
+msgstr "기존 시스템 데이터가 서버에서 풀(pull) 되었습니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:856
+#: ../src/subscription_manager/managercli.py:857
 msgid "register to one of multiple organizations for the user"
 msgstr "사용자에 대한 여러 조직 중 하나에 등록"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:858
+#: ../src/subscription_manager/managercli.py:859
 msgid "register to a specific environment in the destination org"
 msgstr "대상 조직에 있는 특정 환경에 등록"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:860
+#: ../src/subscription_manager/managercli.py:861
 msgid "set a release version"
 msgstr "릴리즈 버전 설정"
 
-#: ../src/subscription_manager/managercli.py:862
+#: ../src/subscription_manager/managercli.py:863
 msgid "Deprecated, see --auto-attach"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:864
+#: ../src/subscription_manager/managercli.py:865
 msgid ""
 "automatically attach this system to                                     "
 "compatible subscriptions."
@@ -1927,86 +1909,86 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:867
+#: ../src/subscription_manager/managercli.py:868
 msgid "register the system even if it is already registered"
 msgstr "이미 등록되어 있어도 시스템을 등록"
 
-#: ../src/subscription_manager/managercli.py:869
+#: ../src/subscription_manager/managercli.py:870
 msgid ""
 "activation key to use for registration (can be specified more than once)"
-msgstr ""
+msgstr "등록에 사용할 활성키 (두 번 이상 지정할 수 있음)"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:871
+#: ../src/subscription_manager/managercli.py:872
 msgid "system preference used when subscribing automatically"
 msgstr "자동 등록 시 사용되는 시스템 환경 설정"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:880
+#: ../src/subscription_manager/managercli.py:881
 msgid "This system is already registered. Use --force to override"
 msgstr "이 시스템은 이미 등록되어 있습니다. 무시하시려면 --force를 사용합니다"
 
-#: ../src/subscription_manager/managercli.py:883
+#: ../src/subscription_manager/managercli.py:884
 msgid "Error: system name can not be empty."
-msgstr ""
+msgstr "오류: 시스템 이름은 비워둘 수 없습니다. "
 
-#: ../src/subscription_manager/managercli.py:886
+#: ../src/subscription_manager/managercli.py:887
 msgid "Error: Activation keys do not require user credentials."
-msgstr ""
+msgstr "오류: 활성키는 사용자 인증을 필요로 하지 않습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:889
+#: ../src/subscription_manager/managercli.py:890
 msgid "Error: Activation keys can not be used with previously registered ids."
 msgstr "오류: 활성키는 이전에 등록된 ID와 함께 사용할 수 없습니다."
 
-#: ../src/subscription_manager/managercli.py:892
+#: ../src/subscription_manager/managercli.py:893
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:895
+#: ../src/subscription_manager/managercli.py:896
 msgid "Error: Activation keys cannot be used with --auto-attach."
-msgstr ""
+msgstr "오류: 활성키는 --auto-attach와 함께 사용할 수 없습니다. "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:899
+#: ../src/subscription_manager/managercli.py:900
 msgid "Error: Must specify an activation key"
 msgstr "오류: 활성키를 지정해야 합니다"
 
-#: ../src/subscription_manager/managercli.py:902
+#: ../src/subscription_manager/managercli.py:903
 msgid "Error: Must use --auto-attach with --servicelevel."
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:905
+#: ../src/subscription_manager/managercli.py:906
 msgid "Error: Must provide --org with activation keys."
 msgstr "오류: 활성키와 함께 --org를 지정하셔야 합니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:935
+#: ../src/subscription_manager/managercli.py:936
 #, python-format
 msgid "The system with UUID %s has been unregistered"
 msgstr "UUID %s 시스템은 등록 취소되었습니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:970
+#: ../src/subscription_manager/managercli.py:971
 #, python-format
 msgid "Error during registration: %s"
 msgstr "등록 도중 오류 발생: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:977
+#: ../src/subscription_manager/managercli.py:978
 #, python-format
 msgid "The system has been registered with id: %s "
 msgstr "시스템 id가 등록되었습니다: %s"
 
-#: ../src/subscription_manager/managercli.py:1008
-#: ../src/subscription_manager/managercli.py:1337
+#: ../src/subscription_manager/managercli.py:1009
+#: ../src/subscription_manager/managercli.py:1348
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
@@ -2014,7 +1996,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1044
+#: ../src/subscription_manager/managercli.py:1045
 #: ../bin/rhn-migrate-classic-to-rhsm:268
 #, c-format, python-format
 msgid "No such environment: %s"
@@ -2022,488 +2004,489 @@ msgstr "해당 환경이 없음: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1081
-#: ../src/subscription_manager/utils.py:323
+#: ../src/subscription_manager/managercli.py:1082
+#: ../src/subscription_manager/utils.py:350
 msgid "This system is currently not registered."
 msgstr "현재 시스템은 등록되어 있지 않습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1106
+#: ../src/subscription_manager/managercli.py:1107
 msgid "System has been un-registered."
 msgstr "시스템이 등록 취소되었습니다."
 
-#: ../src/subscription_manager/managercli.py:1112
+#: ../src/subscription_manager/managercli.py:1113
 msgid "Attempt to redeem a subscription for a preconfigured system"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1117
+#: ../src/subscription_manager/managercli.py:1118
 msgid "email address to notify when subscription redemption is complete"
-msgstr ""
+msgstr "서브스크립션 교환 완료 시 통지하기 위한 이메일 주소 "
 
-#: ../src/subscription_manager/managercli.py:1120
+#: ../src/subscription_manager/managercli.py:1121
 msgid ""
-"optional language to use for email notification when subscription redemption "
-"is complete (Examples: en-us, de-de)"
-msgstr ""
+"optional language to use for email notification when subscription redemption"
+" is complete (Examples: en-us, de-de)"
+msgstr "서브스크립션 교환 완료 시 이메일 통지에 사용할 언어 옵션 (예: en-us, de-de)"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1126
+#: ../src/subscription_manager/managercli.py:1127
 msgid ""
 "Error: This command requires that you specify an email address with --email."
 msgstr "오류: 이 명령에서는 --email을 사용하여 이메일 주소를 지정해야 합니다."
 
-#: ../src/subscription_manager/managercli.py:1163
+#: ../src/subscription_manager/managercli.py:1164
 msgid "Configure which operating system release to use"
-msgstr ""
+msgstr "사용할 운영 체제 릴리즈 설정 "
 
-#: ../src/subscription_manager/managercli.py:1168
+#: ../src/subscription_manager/managercli.py:1169
 msgid "shows current release setting; default command"
-msgstr ""
+msgstr "현재 릴리즈 설정을 표시합니다; 디폴트 명령"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1170
+#: ../src/subscription_manager/managercli.py:1171
 msgid "list available releases"
 msgstr "사용 가능한 릴리즈 목록 나열"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1173
+#: ../src/subscription_manager/managercli.py:1174
 msgid "set the release for this system"
 msgstr "이 시스템의 릴리즈를 설정"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1176
+#: ../src/subscription_manager/managercli.py:1177
 msgid "unset the release for this system"
 msgstr "이 시스템의 릴리즈를 설정 해제"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1179
+#: ../src/subscription_manager/managercli.py:1180
 msgid "Error: The 'release' command is not supported by the server."
 msgstr "오류: 'release' 명령은 서버에서 지원되지 않습니다."
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1188
+#: ../src/subscription_manager/managercli.py:1189
 #, python-format
 msgid "Release: %s"
 msgstr "릴리즈: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1190
+#: ../src/subscription_manager/managercli.py:1191
 msgid "Release not set"
 msgstr "릴리즈가 설정되지 않음"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1212
+#: ../src/subscription_manager/managercli.py:1213
 msgid "Release preference has been unset"
 msgstr "릴리즈 환경 설정이 해제되었습니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1221
+#: ../src/subscription_manager/managercli.py:1222
 #, python-format
 msgid "No releases match '%s'.  Consult 'release --list' for a full listing."
-msgstr ""
-"'%s'와 일치하는 릴리즈가 없습니다. 전체 목록은 'release --list'로 확인합니다."
+msgstr "'%s'와 일치하는 릴리즈가 없습니다. 전체 목록은 'release --list'로 확인합니다."
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1223
+#: ../src/subscription_manager/managercli.py:1224
 #, python-format
 msgid "Release set to: %s"
 msgstr "릴리즈가 설정됨: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1228
+#: ../src/subscription_manager/managercli.py:1229
 msgid "No release versions available, please check subscriptions."
 msgstr "사용 가능한 릴리즈 버전이 없습니다. 서브스크립션을 확인하십시오."
 
-#: ../src/subscription_manager/managercli.py:1231
+#: ../src/subscription_manager/managercli.py:1232
 msgid "Available Releases"
-msgstr ""
+msgstr "사용 가능한 릴리즈 "
 
-#: ../src/subscription_manager/managercli.py:1253
+#: ../src/subscription_manager/managercli.py:1254
 msgid "the id of the pool to attach (can be specified more than once)"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1255
+#: ../src/subscription_manager/managercli.py:1256
 msgid "number of subscriptions to attach"
-msgstr ""
+msgstr "첨부할 서브스크립션 수 "
 
-#: ../src/subscription_manager/managercli.py:1257
+#: ../src/subscription_manager/managercli.py:1258
 msgid ""
-"automatically attach compatible                                subscriptions "
-"to this system"
+"automatically attach compatible                                subscriptions"
+" to this system"
 msgstr ""
 
 #. re bz #864207
-#: ../src/subscription_manager/managercli.py:1262
+#: ../src/subscription_manager/managercli.py:1263
 msgid "All installed products are covered by valid entitlements."
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1263
+#: ../src/subscription_manager/managercli.py:1264
 msgid "No need to update subscriptions at this time."
-msgstr ""
+msgstr "현재로서는 서브스크립션을 업데이트할 필요가 없습니다."
 
-#: ../src/subscription_manager/managercli.py:1266
+#: ../src/subscription_manager/managercli.py:1267
 msgid "Attach a specified subscription to the registered system"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1276
+#: ../src/subscription_manager/managercli.py:1277
 msgid ""
-"Error: This command requires that you specify a pool with --pool or use --"
-"auto."
-msgstr ""
-"오류: 이 명령에서는 --pool 또는 --auto를 사용하여 풀을 지정해야 합니다."
+"Error: This command requires that you specify a pool with --pool or use "
+"--auto."
+msgstr "오류: 이 명령에서는 --pool 또는 --auto를 사용하여 풀을 지정해야 합니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1279
+#: ../src/subscription_manager/managercli.py:1280
 msgid "Error: Only one of --pool or --auto may be used with this command."
-msgstr ""
-"오류: --pool 또는 --auto 중 하나만이 이 명령과 함께 사용될 수 있습니다."
+msgstr "오류: --pool 또는 --auto 중 하나만이 이 명령과 함께 사용될 수 있습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1286
+#: ../src/subscription_manager/managercli.py:1287
 msgid "Error: Quantity must be a positive integer."
 msgstr "오류: 수량은 양의 정수이어야 합니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1292
+#: ../src/subscription_manager/managercli.py:1293
 msgid "Error: Must use --auto with --servicelevel."
 msgstr "오류: --servicelevel과 함께 --auto를 사용해야 합니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1311
+#: ../src/subscription_manager/managercli.py:1313
 msgid "Please enter a valid numeric pool id."
 msgstr "유효한 숫자 풀 id를 입력하십시오."
 
-#: ../src/subscription_manager/managercli.py:1316
+#: ../src/subscription_manager/managercli.py:1318
 #, python-format
 msgid "Successfully attached a subscription for: %s"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1368
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author eukim
+#: ../src/subscription_manager/managercli.py:1339
+msgid ""
+"All installed products are covered by valid entitlements. No need to update "
+"subscriptions at this time."
+msgstr "설치된 모든 제품에는 유효한 인타이틀먼트가 적용됩니다. 서브스크립션을 업데이트할 필요가 없습니다. "
+
+#: ../src/subscription_manager/managercli.py:1381
 msgid "Deprecated, see attach"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1388
+#: ../src/subscription_manager/managercli.py:1401
 msgid "certificate serial number to remove (can be specified more than once)"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1390
+#: ../src/subscription_manager/managercli.py:1403
 msgid "remove all subscriptions from this system"
-msgstr ""
+msgstr "시스템에서 모든 서브스크립션을 삭제 "
 
-#: ../src/subscription_manager/managercli.py:1393
+#: ../src/subscription_manager/managercli.py:1406
 msgid "Remove all or specific subscriptions from this system"
-msgstr ""
+msgstr "시스템에서 모든 또는 특정 서브스크립션을 삭제 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1406
+#: ../src/subscription_manager/managercli.py:1419
 #, python-format
 msgid "Error: '%s' is not a valid serial number"
 msgstr "오류: '%s'는 유효한 일련 번호가 아닙니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1411
-msgid "Error: This command requires that you specify one of --serial or --all."
+#: ../src/subscription_manager/managercli.py:1424
+msgid ""
+"Error: This command requires that you specify one of --serial or --all."
 msgstr "오류: 이 명령에서는 --serial 또는 --all 중 하나를 지정해야 합니다."
 
-#: ../src/subscription_manager/managercli.py:1427
+#: ../src/subscription_manager/managercli.py:1441
 msgid "All subscriptions have been removed from this system."
-msgstr ""
+msgstr "모든 서브스크립션이 시스템에서 삭제되었습니다. "
 
-#: ../src/subscription_manager/managercli.py:1431
+#: ../src/subscription_manager/managercli.py:1445
 msgid "1 subscription removed from this system."
-msgstr ""
+msgstr "서브스크립션을 시스템에서 삭제했습니다. "
 
-#: ../src/subscription_manager/managercli.py:1433
-#: ../src/subscription_manager/managercli.py:1469
+#: ../src/subscription_manager/managercli.py:1447
+#: ../src/subscription_manager/managercli.py:1485
 #, python-format
 msgid "%s subscriptions removed from this system."
-msgstr ""
+msgstr "%s 서브스크립션을 시스템에서 삭제했습니다. "
 
-#: ../src/subscription_manager/managercli.py:1448
+#: ../src/subscription_manager/managercli.py:1462
 msgid "Successfully removed serial numbers:"
-msgstr ""
+msgstr "일련 번호가 성공적으로 삭제되었습니다: "
 
-#: ../src/subscription_manager/managercli.py:1452
+#: ../src/subscription_manager/managercli.py:1466
 msgid "Unsuccessfully removed serial numbers:"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1460
-#: ../src/subscription_manager/managercli.py:1477
+#: ../src/subscription_manager/managercli.py:1476
+#: ../src/subscription_manager/managercli.py:1497
 #, python-format
 msgid "Unable to perform remove due to the following exception: %s"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1474
+#: ../src/subscription_manager/managercli.py:1491
 #, python-format
 msgid "Subscription with serial number %s removed from this system"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1489
+#: ../src/subscription_manager/managercli.py:1510
 msgid "Deprecated, see remove"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1501
+#: ../src/subscription_manager/managercli.py:1522
 msgid "View or update the detected system information"
 msgstr "검색된 시스템 정보를 표시하거나 업데이트"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1506
+#: ../src/subscription_manager/managercli.py:1527
 msgid "list known facts for this system"
 msgstr "이 시스템의 알려진 정보를 나열"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1508
+#: ../src/subscription_manager/managercli.py:1529
 msgid "update the system facts"
 msgstr "시스템 정보 업데이트"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1540
+#: ../src/subscription_manager/managercli.py:1561
 msgid "Successfully updated the system facts."
 msgstr "시스템 정보가 성공적으로 업데이트됨."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1546
+#: ../src/subscription_manager/managercli.py:1567
 msgid "Import certificates which were provided outside of the tool"
 msgstr "도구 외부에서 제공된 인증서를 가져옵니다"
 
-#: ../src/subscription_manager/managercli.py:1551
+#: ../src/subscription_manager/managercli.py:1572
 msgid "certificate file to import (can be specified more than once)"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1555
+#: ../src/subscription_manager/managercli.py:1576
 msgid ""
-"Error: This command requires that you specify a certificate with --"
-"certificate."
+"Error: This command requires that you specify a certificate with "
+"--certificate."
 msgstr "오류: 이 명령에서는 --certificate를 사용하여 인증서를 지정해야 합니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1574
+#: ../src/subscription_manager/managercli.py:1595
 #, python-format
 msgid "Successfully imported certificate %s"
 msgstr "인증서 %s을(를) 성공적으로 가져왔습니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1580
-#: ../src/subscription_manager/managercli.py:1590
+#: ../src/subscription_manager/managercli.py:1601
+#: ../src/subscription_manager/managercli.py:1611
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
 msgstr "%s은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 사용하십시오."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1586
+#: ../src/subscription_manager/managercli.py:1607
 msgid ""
-"An error occurred while importing the certificate. Please check log file for "
-"more information."
-msgstr ""
-"인증서를 가져오기하는 동안 오류가 발생했습니다. 자세한 내용은 로그 파일에서 "
-"확인하십시오."
+"An error occurred while importing the certificate. Please check log file for"
+" more information."
+msgstr "인증서를 가져오기하는 동안 오류가 발생했습니다. 자세한 내용은 로그 파일에서 확인하십시오."
 
-#: ../src/subscription_manager/managercli.py:1608
+#: ../src/subscription_manager/managercli.py:1629
 msgid "List the repositories which this system is entitled to use"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1621
+#: ../src/subscription_manager/managercli.py:1642
 msgid "list known repos for this system"
 msgstr "이 시스템의 알려진 리포지터리를 나열"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1623
+#: ../src/subscription_manager/managercli.py:1644
 msgid "repo to enable"
 msgstr "활성화할 리포지터리"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1625
+#: ../src/subscription_manager/managercli.py:1646
 msgid "repo to disable"
 msgstr "비활성화할 리포지터리"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1635
+#: ../src/subscription_manager/managercli.py:1656
 msgid "Repositories disabled by configuration."
 msgstr "설정에 의해 리포지터리가 비활성화되었습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1646
+#: ../src/subscription_manager/managercli.py:1667
 #, python-format
 msgid "    Available Repositories in %s"
 msgstr "%s에서 사용 가능한 리포지터리"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1654
+#: ../src/subscription_manager/managercli.py:1675
 msgid "This system has no repositories available through subscriptions."
 msgstr "이 시스템에는 서브스크립션을 통해 사용 가능한 리포지터리가 없습니다."
 
-#: ../src/subscription_manager/managercli.py:1678
+#: ../src/subscription_manager/managercli.py:1699
 #, python-format
-msgid "Error: %s is not a valid repo id. Use --list option to see valid repos."
-msgstr ""
+msgid ""
+"Error: %s is not a valid repo id. Use --list option to see valid repos."
+msgstr "오류: %s는 유효한 리포지터리 ID가 아닙니다. --list 옵션을 사용하여 유효한 리포지터리를 확인합니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1688
+#: ../src/subscription_manager/managercli.py:1709
 #, python-format
 msgid "Repo %s is enabled for this system."
 msgstr "리포지터리 %s가 이 시스템에 활성화되어 있습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1690
+#: ../src/subscription_manager/managercli.py:1711
 #, python-format
 msgid "Repo %s is disabled for this system."
 msgstr "리포지터리 %s가 이 시스템에 비활성화되어 있습니다."
 
-#: ../src/subscription_manager/managercli.py:1697
-msgid "List, set, or remove the configuration parameters in use by this system"
+#: ../src/subscription_manager/managercli.py:1718
+msgid ""
+"List, set, or remove the configuration parameters in use by this system"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1703
+#: ../src/subscription_manager/managercli.py:1724
 msgid "list the configuration for this system"
 msgstr "시스템에 대한 설정을 나열합니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1705
+#: ../src/subscription_manager/managercli.py:1726
 msgid "remove configuration entry by section.name"
 msgstr "section.name에 따라 설정 항목을 삭제"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1709
+#: ../src/subscription_manager/managercli.py:1730
 #, python-format
 msgid "Section: %s, Name: %s"
 msgstr "섹션: %s, 이름: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1724
+#: ../src/subscription_manager/managercli.py:1745
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
-msgstr ""
-"오류: 설정을 구성 또는 삭제할 경우 --list는 다른 옵션과 함께 사용하지 않는 것"
-"이 좋습니다."
+msgstr "오류: 설정을 구성 또는 삭제할 경우 --list는 다른 옵션과 함께 사용하지 않는 것이 좋습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1743
+#: ../src/subscription_manager/managercli.py:1764
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
-msgstr ""
-"오류: 삭제하기 위한 설정 항목은 [section.name] 형식으로 지정해야 합니다"
+msgstr "오류: 삭제하기 위한 설정 항목은 [section.name] 형식으로 지정해야 합니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1755
+#: ../src/subscription_manager/managercli.py:1776
 #, python-format
 msgid "Error: Section %s and name %s does not exist."
 msgstr "오류: 섹션 %s 및 이름 %s 는 존재하지 않습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1774
+#: ../src/subscription_manager/managercli.py:1795
 msgid "[] - Default value in use"
 msgstr "[] - 사용 중인 기본값"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1783
-#: ../src/subscription_manager/managercli.py:1786
+#: ../src/subscription_manager/managercli.py:1804
+#: ../src/subscription_manager/managercli.py:1807
 #, python-format
 msgid "You have removed the value for section %s and name %s."
 msgstr "섹션 %s 및 이름 %s에 대한 값이 삭제되었습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1787
+#: ../src/subscription_manager/managercli.py:1808
 #, python-format
 msgid "The default value for %s will now be used."
 msgstr "%s에 대한 기본값은 현재 사용되고 있습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1789
+#: ../src/subscription_manager/managercli.py:1810
 #, python-format
 msgid "Section %s and name %s cannot be removed."
 msgstr "섹션 %s 및 이름 %s은 삭제될 수 없습니다."
 
-#: ../src/subscription_manager/managercli.py:1806
+#: ../src/subscription_manager/managercli.py:1827
 msgid "List subscription and product information for this system"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1811
+#: ../src/subscription_manager/managercli.py:1832
 msgid "list shows those products which are installed (default)"
 msgstr "목록에는 설치된 제품이 표시됩니다 (디폴트)"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1813
+#: ../src/subscription_manager/managercli.py:1834
 msgid "show those subscriptions which are available"
 msgstr "사용 가능한 서브스크립션을 표시합니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1815
+#: ../src/subscription_manager/managercli.py:1836
 msgid "used with --available to ensure all subscriptions are returned"
 msgstr " 모든 서브스크립션이 반환되었는지 확인하려면 --available과 함께 사용함"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1817
+#: ../src/subscription_manager/managercli.py:1838
 #, python-format
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
 "(example: %s)"
-msgstr ""
-"검색일, 기본값은 오늘로 되어 있으며, --available과 함께 사용해야 합니다 (예: "
-"%s)"
+msgstr "검색일, 기본값은 오늘로 되어 있으며, --available과 함께 사용해야 합니다 (예: %s)"
 
-#: ../src/subscription_manager/managercli.py:1820
+#: ../src/subscription_manager/managercli.py:1841
 msgid "show the subscriptions being consumed by this system"
-msgstr ""
+msgstr "이 시스템에서 사용되고 있는 서브스크립션을 보여줍니다"
 
-#: ../src/subscription_manager/managercli.py:1822
+#: ../src/subscription_manager/managercli.py:1843
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
@@ -2511,138 +2494,138 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1829
+#: ../src/subscription_manager/managercli.py:1850
 msgid "Error: --all is only applicable with --available"
 msgstr "오류: --all은 --available과만 사용 가능"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1832
+#: ../src/subscription_manager/managercli.py:1853
 msgid "Error: --ondate is only applicable with --available"
 msgstr "오류: --ondate는 --available과만 사용 가능"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1836
-msgid "Error: --servicelevel is only applicable with --available or --consumed"
+#: ../src/subscription_manager/managercli.py:1857
+msgid ""
+"Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "오류: --servicelevel은  --available 또는 --consumed와만 사용 가능"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1860
+#: ../src/subscription_manager/managercli.py:1881
 msgid "No installed products to list"
 msgstr "나열할 설치된 제품이 없음"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1863
+#: ../src/subscription_manager/managercli.py:1884
 msgid "    Installed Product Status"
 msgstr "설치된 제품 상태"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1881
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-msgstr ""
-"입력하신 날짜가 유효하지 않습니다. YYYY-MM-DD 형식으로 날짜를 입력해 주십시"
-"오. (예:"
+#: ../src/subscription_manager/managercli.py:1902
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgstr "입력하신 날짜가 유효하지 않습니다. YYYY-MM-DD 형식으로 날짜를 입력해 주십시오. (예:"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1894
+#: ../src/subscription_manager/managercli.py:1915
 msgid "No available subscription pools to list"
 msgstr "나열할 사용 가능한 서브스크립션 풀이 없음"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1951
+#: ../src/subscription_manager/managercli.py:1972
 msgid "No consumed subscription pools to list"
 msgstr "나열하기 위한 사용되는 서브스크립션 풀이 없음"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1955
+#: ../src/subscription_manager/managercli.py:1976
 msgid "Consumed Subscriptions"
 msgstr "소비된 서브스크립션 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1965
+#: ../src/subscription_manager/managercli.py:1986
 #, python-format
 msgid "Provides:             \t%s"
 msgstr "제공:             \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1968
+#: ../src/subscription_manager/managercli.py:1989
 #, python-format
 msgid "                      \t%s"
 msgstr "                      \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1975
+#: ../src/subscription_manager/managercli.py:1996
 #, python-format
 msgid "Contract:             \t%s"
 msgstr "계약:             \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1977
+#: ../src/subscription_manager/managercli.py:1998
 #, python-format
 msgid "Account:              \t%s"
 msgstr "계정:              \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1979
+#: ../src/subscription_manager/managercli.py:2000
 #, python-format
 msgid "Serial Number:        \t%s"
 msgstr "일련 번호:        \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1981
+#: ../src/subscription_manager/managercli.py:2002
 #, python-format
 msgid "Active:               \t%s"
 msgstr "활성:               \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:1983
+#: ../src/subscription_manager/managercli.py:2004
 #, python-format
 msgid "Quantity Used:        \t%s"
 msgstr "사용 수량:        \t%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:2035
+#: ../src/subscription_manager/managercli.py:2056
 msgid "Print version information"
 msgstr "버전 정보 표시"
 
-#: ../src/subscription_manager/managercli.py:2047
+#: ../src/subscription_manager/managercli.py:2068
 #, python-format
 msgid "subscription management server: %s"
-msgstr ""
+msgstr "서브스크립션 관리 서버: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:2048
+#: ../src/subscription_manager/managercli.py:2069
 #, python-format
 msgid "subscription-manager: %s"
 msgstr "subscription-manager: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/managercli.py:2049
+#: ../src/subscription_manager/managercli.py:2070
 #, python-format
 msgid "python-rhsm: %s"
 msgstr "python-rhsm: %s"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author eukim
 #. usage format strips any leading 'usage' so
 #. do not iclude it
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author eukim
 #: ../src/subscription_manager/cli.py:60
 #, python-format
 msgid "%%prog %s [OPTIONS]"
@@ -2650,18 +2633,18 @@ msgstr "%%prog %s [OPTIONS]"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/cli.py:89
+#: ../src/subscription_manager/cli.py:88
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 msgstr "사용법: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/cli.py:102
+#: ../src/subscription_manager/cli.py:101
 msgid "Primary Modules:"
 msgstr "주요 모듈:"
 
-#: ../src/subscription_manager/cli.py:112
+#: ../src/subscription_manager/cli.py:111
 msgid "Other Modules:"
 msgstr ""
 
@@ -2853,7 +2836,7 @@ msgstr "내 서브스크립션 보기"
 
 #: ../src/subscription_manager/gui/data/mysubs.glade.h:2
 msgid "Remove"
-msgstr ""
+msgstr "삭제 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -2864,12 +2847,12 @@ msgstr "<b>시스템에 다음과 같은 사항을 입력해 주십시오:</b>"
 
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:2
 msgid "Activation Key:"
-msgstr ""
+msgstr "활성키:"
 
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:3
 msgid ""
-"Multiple Activation Keys can be entered by separating them with a comma or a "
-"space."
+"Multiple Activation Keys can be entered by separating them with a comma or a"
+" space."
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
@@ -2892,15 +2875,15 @@ msgstr ""
 
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:7
 msgid "activation_key_entry"
-msgstr ""
+msgstr "activation_key_entry"
 
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:8
 msgid "consumer_entry"
-msgstr ""
+msgstr "consumer_entry"
 
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:9
 msgid "organization_entry"
-msgstr ""
+msgstr "organization_entry"
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:1
 msgid "<b>Attach subscriptions with service level:</b>"
@@ -2922,12 +2905,9 @@ msgstr "<b>검색된 제품:</b>"
 # document keys, author eukim
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:4
 msgid ""
-"We have detected that you have multiple service levels on various products. "
-"Please select how you\n"
+"We have detected that you have multiple service levels on various products. Please select how you\n"
 "want them assigned."
-msgstr ""
-"여러 제품에서 여러 서비스 레벨이 있음이 검색되었습니다. 원하시는 할당 방법을 "
-"선택하십시오."
+msgstr "여러 제품에서 여러 서비스 레벨이 있음이 검색되었습니다. 원하시는 할당 방법을 선택하십시오."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -2949,21 +2929,25 @@ msgstr "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 msgid "Cancel"
 msgstr "취소"
 
+#: ../src/subscription_manager/gui/data/redeem.glade.h:2
+msgid "Email Address Text"
+msgstr ""
+
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/data/redeem.glade.h:2
+#: ../src/subscription_manager/gui/data/redeem.glade.h:3
 msgid "Email Address:"
 msgstr "이메일 주소:"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/data/redeem.glade.h:3
+#: ../src/subscription_manager/gui/data/redeem.glade.h:4
 msgid "Redeem"
 msgstr "상환"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/data/redeem.glade.h:4
+#: ../src/subscription_manager/gui/data/redeem.glade.h:5
 msgid ""
 "Redeeming the subscription may take a few minutes.\n"
 "Please provide an email address to receive notification\n"
@@ -2974,7 +2958,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../src/subscription_manager/gui/data/redeem.glade.h:7
+#: ../src/subscription_manager/gui/data/redeem.glade.h:8
 msgid "Subscription Redemption"
 msgstr "서브스크립션 교환"
 
@@ -3115,9 +3099,8 @@ msgid ""
 "System Engine or Candlepin servers can be used to provide your system with "
 "updates and allow management through the selected server's interface."
 msgstr ""
-"고객 포털, 서브스크립션 자산 관리자, CloudForms 시스템 엔진, Candlepin 서버"
-"에 등록하면 시스템에 업데이트가 제공되어 선택한 서버의 인터페이스를 통해 관리"
-"할 수 있습니다. "
+"고객 포털, 서브스크립션 자산 관리자, CloudForms 시스템 엔진, Candlepin 서버에 등록하면 시스템에 업데이트가 제공되어 "
+"선택한 서버의 인터페이스를 통해 관리할 수 있습니다. "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -3129,7 +3112,7 @@ msgstr "고객 포털에 등록하기 위해 리셋"
 msgid ""
 "The subscription management service you register with will provide your "
 "system with updates and allow additional management."
-msgstr ""
+msgstr "등록에 사용한 서브스크립션 관리 서비스는 시스템에 업데이트를 제공하고 추가 관리를 가능하게 합니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -3499,7 +3482,7 @@ msgstr "<b>제품:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:4
 msgid "<b>Status:</b>"
-msgstr ""
+msgstr "<b>상태:</b>"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -3509,7 +3492,7 @@ msgstr "아키텍처 텍스트"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:7
 msgid "Auto-attach"
-msgstr ""
+msgstr "자동 첨부 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -3606,12 +3589,14 @@ msgid ""
 "After opening Red Hat Subscription Manager, manually attach subscriptions "
 "via the <b>All Available Subscriptions</b> tab."
 msgstr ""
+"Red Hat 서브스크립션 관리자를 연 다음 <b>사용 가능한 모든 서브스크립션</b> 탭에서 서브스크립션을 수동으로 첨부합니다. "
 
 #: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
 msgid ""
 "You will need to use Red Hat Subscription Manager to manually attach "
 "subscriptions to this system after completing firstboot."
 msgstr ""
+"firstboot를 완료한 후 Red Hat 서브스크립션 관리자를 사용하여 수동으로 시스템에 서브스크립션을 첨부해야 합니다. "
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
@@ -3619,9 +3604,7 @@ msgstr ""
 msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
-msgstr ""
-"<small>패키지를 설치 및 업데이트할 때 시스템의 릴리즈 환경 설정은 다음과 같습"
-"니다.</small>"
+msgstr "<small>패키지를 설치 및 업데이트할 때 시스템의 릴리즈 환경 설정은 다음과 같습니다.</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -3629,9 +3612,7 @@ msgstr ""
 msgid ""
 "<small>Your system's service level preference is followed when subscribing "
 "automatically.</small>"
-msgstr ""
-"<small>자동으로 등록할 때 시스템의 서비스 레벨 환경 설정은 다음과 같습니다</"
-"small>"
+msgstr "<small>자동으로 등록할 때 시스템의 서비스 레벨 환경 설정은 다음과 같습니다</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -3665,7 +3646,7 @@ msgstr "로그인:"
 
 #: ../src/subscription_manager/gui/data/credentials.glade.h:4
 msgid "Manually attach subscriptions after registration"
-msgstr ""
+msgstr "등록 후 서브스크립션을 수동으로 첨부 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -3711,11 +3692,11 @@ msgstr "체크섬 유효성 검사 실패"
 
 #: ../bin/install-num-migrate-to-rhsm:56
 msgid "install number to run against"
-msgstr ""
+msgstr "실행하려는 설치 번호 "
 
 #: ../bin/install-num-migrate-to-rhsm:60
 msgid "only print the files which would be copied over"
-msgstr ""
+msgstr "복사될 파일만을 인쇄 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -3729,8 +3710,7 @@ msgstr "root 사용자로 실행해야 함\n"
 msgid ""
 "Could not read installation number from /etc/sysconfig/rhn/install-num.  "
 "Aborting."
-msgstr ""
-"/etc/sysconfig/rhn/install-num 에서 설치 번호를 읽을 수 없습니다. 중지 중"
+msgstr "/etc/sysconfig/rhn/install-num 에서 설치 번호를 읽을 수 없습니다. 중지 중"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -3749,15 +3729,15 @@ msgstr "%s에 %s 설치 중"
 #: ../bin/install-num-migrate-to-rhsm:148
 #, c-format
 msgid "No such directory: %s"
-msgstr ""
+msgstr "이러한 디렉토리가 없음: %s"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:68
 msgid "ignore channels not available on RHSM"
-msgstr ""
+msgstr "RHSM에서 사용 가능하지 않은 채널 무시 "
 
 #: ../bin/rhn-migrate-classic-to-rhsm:70
 msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
-msgstr ""
+msgstr "자동 첨부 대신 GUI 도구를 시작하여 서브스크립션을 첨부 "
 
 #: ../bin/rhn-migrate-classic-to-rhsm:72
 msgid ""
@@ -3773,18 +3753,16 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:77
 msgid "specify the subscription management server to migrate to"
-msgstr ""
+msgstr "마이그레이션할 서브스크립션 관리 서버를 지정합니다"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
 #: ../bin/rhn-migrate-classic-to-rhsm:105
 #, c-format
 msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"인증서 서버에 연결할 수 없습니다: %s. 보다 자세한 내용은 /var/log/rhsm/rhsm."
-"log에서 참조하십시오. "
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for"
+" more details."
+msgstr "인증서 서버에 연결할 수 없습니다: %s. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조하십시오. "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -3795,8 +3773,7 @@ msgstr "잘못된 선택을 입력했습니다."
 #: ../bin/rhn-migrate-classic-to-rhsm:196
 msgid ""
 "\n"
-"This system appears to be already registered to Red Hat Subscription "
-"Management.  Exiting."
+"This system appears to be already registered to Red Hat Subscription Management.  Exiting."
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
@@ -3805,12 +3782,10 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"profile details."
+"Please visit https://access.redhat.com/management/consumers/%s to view the profile details."
 msgstr ""
 "\n"
-"https://access.redhat.com/management/consumers/%s에서 프로파일 정보를 확인하"
-"십시오."
+"https://access.redhat.com/management/consumers/%s에서 프로파일 정보를 확인하십시오."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -3821,15 +3796,13 @@ msgstr "조직: "
 #: ../bin/rhn-migrate-classic-to-rhsm:247
 #, c-format
 msgid "No such org: %s"
-msgstr ""
+msgstr "이러한 조직이 없음: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
 #: ../bin/rhn-migrate-classic-to-rhsm:278
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
-msgstr ""
-"RHN 클래식에서 사용자 역할을 지정하는 도중 문제가 발생했습니다. 종료하고 있습"
-"니다."
+msgstr "RHN 클래식에서 사용자 역할을 지정하는 도중 문제가 발생했습니다. 종료하고 있습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -3870,25 +3843,21 @@ msgstr "이 시스템은 어느 채널에도 연결되어 있지 않습니다."
 # document keys, author eukim
 #: ../bin/rhn-migrate-classic-to-rhsm:324
 msgid "Unable to locate SystemId file. Is this system registered?"
-msgstr ""
-"SystemId 파일 위치를 지정할 수 없습니다. 이 시스템은 등록되어 있습니까?"
+msgstr "SystemId 파일 위치를 지정할 수 없습니다. 이 시스템은 등록되어 있습니까?"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
 #: ../bin/rhn-migrate-classic-to-rhsm:327
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."
-msgstr ""
-"등록된 채널 목록을 가져오는 도중 문제가 발생했습니다. 종료하고 있습니다."
+msgstr "등록된 채널 목록을 가져오는 도중 문제가 발생했습니다. 종료하고 있습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
 #: ../bin/rhn-migrate-classic-to-rhsm:336
 msgid ""
-"You are subscribed to more than one jbappplatform channel.  This script does "
-"not support that configuration.  Exiting."
-msgstr ""
-"하나 이상의 jbappplatform 채널에 등록되어 있습니다. 이 스크립트는 해당 설정"
-"을 지원하지 않습니다. 종료합니다."
+"You are subscribed to more than one jbappplatform channel.  This script does"
+" not support that configuration.  Exiting."
+msgstr "하나 이상의 jbappplatform 채널에 등록되어 있습니다. 이 스크립트는 해당 설정을 지원하지 않습니다. 종료합니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -3896,31 +3865,36 @@ msgstr ""
 msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
+msgstr "RHN 클래식에 인증할 수 없습니다. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조하십시오."
+
+#: ../bin/rhn-migrate-classic-to-rhsm:385
+#, c-format
+msgid ""
+"Did not receive a completed unregistration message from RHN Classic for system %s.\n"
+"Please investigate on the Customer Portal at https://access.redhat.com."
 msgstr ""
-"RHN 클래식에 인증할 수 없습니다. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에"
-"서 참조하십시오."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:383
+#: ../bin/rhn-migrate-classic-to-rhsm:393
 msgid "System successfully unregistered from RHN Classic."
 msgstr "시스템이 성공적으로 RHN 클래식에서 등록해제되었습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:385
+#: ../bin/rhn-migrate-classic-to-rhsm:395
 msgid "Unable to unregister system from RHN Classic.  Exiting."
 msgstr "시스템을 RHN 클래식에서 등록해제할 수 없습니다. 종료하고 있습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:436
+#: ../bin/rhn-migrate-classic-to-rhsm:446
 msgid "Unable to read RHN proxy settings."
 msgstr "RHN proxy 설정을 읽을 수 없습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:454
+#: ../bin/rhn-migrate-classic-to-rhsm:464
 msgid ""
 "\n"
 "Attempting to register system to Red Hat Subscription Management ..."
@@ -3930,7 +3904,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:469
+#: ../bin/rhn-migrate-classic-to-rhsm:479
 msgid ""
 "\n"
 "Unable to register.\n"
@@ -3942,57 +3916,56 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:472
+#: ../bin/rhn-migrate-classic-to-rhsm:482
 #, c-format
 msgid ""
 "System '%s' successfully registered to Red Hat Subscription Management.\n"
 msgstr "시스템 '%s'는 성공적으로 Red Hat 서브스크립션 관리에 등록되었습니다.\n"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:479
+#: ../bin/rhn-migrate-classic-to-rhsm:489
 msgid ""
 "Launching the GUI tool to manually attach subscriptions to this system ..."
-msgstr ""
+msgstr "시스템에 수동으로 서브스크립션을 첨부하기 위해 GUI  도구를 시작하고 있습니다 ..."
 
-#: ../bin/rhn-migrate-classic-to-rhsm:482
+#: ../bin/rhn-migrate-classic-to-rhsm:492
 msgid "Attempting to auto-attach to appropriate subscriptions ..."
-msgstr ""
+msgstr "적절한 서브스크립션에 자동 첨부를 시도하고 있습니다 ..."
 
-#: ../bin/rhn-migrate-classic-to-rhsm:491
+#: ../bin/rhn-migrate-classic-to-rhsm:501
 msgid ""
 "\n"
-"Unable to auto-attach.  Do your existing subscriptions match the products "
-"installed on this system?"
+"Unable to auto-attach.  Do your existing subscriptions match the products installed on this system?"
 msgstr ""
+"\n"
+"자동 첨부할 수 없습니다. 기존 서브스크립션이 시스템에 설치된 제품과 일치합니까? "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:494
+#: ../bin/rhn-migrate-classic-to-rhsm:504
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"details, and to make changes if necessary."
+"Please visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary."
 msgstr ""
 "\n"
-"https://access.redhat.com/management/consumers/%s에서 정보를 확인하고 필요한 "
-"사항을 변경하십시오."
+"https://access.redhat.com/management/consumers/%s에서 정보를 확인하고 필요한 사항을 변경하십시오."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:512
+#: ../bin/rhn-migrate-classic-to-rhsm:522
 #, c-format
 msgid "Unable to read mapping file: %s"
 msgstr "매핑 파일을 읽을 수 없음: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:533
+#: ../bin/rhn-migrate-classic-to-rhsm:543
 msgid "Channels not available on RHSM:"
 msgstr "RHSM에서 사용 가능하지 않은 채널:"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:538
+#: ../bin/rhn-migrate-classic-to-rhsm:548
 msgid ""
 "\n"
 "No product certificates are mapped to these RHN Classic channels:"
@@ -4002,7 +3975,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:544
+#: ../bin/rhn-migrate-classic-to-rhsm:554
 msgid ""
 "\n"
 "Use --force to ignore these channels and continue the migration.\n"
@@ -4012,7 +3985,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:549
+#: ../bin/rhn-migrate-classic-to-rhsm:559
 msgid ""
 "\n"
 "Installing product certificates for these RHN Classic channels:"
@@ -4022,7 +3995,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:563
+#: ../bin/rhn-migrate-classic-to-rhsm:573
 #, c-format
 msgid ""
 "\n"
@@ -4033,7 +4006,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:607
+#: ../bin/rhn-migrate-classic-to-rhsm:617
 msgid ""
 "\n"
 "Unable to enable extra repositories."
@@ -4043,35 +4016,35 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:608
+#: ../bin/rhn-migrate-classic-to-rhsm:618
 msgid ""
 "Please ensure system has subscriptions attached, and see 'subscription-"
 "manager repos --help' to enable additional repositories"
 msgstr ""
-"시스템에 서브스크립션이 첨부되어 있느지 확인하십시오. 추가 리포지터리를 활성"
-"화하려면 'subscription-manager repos --help'에서 참조하십시오."
+"시스템에 서브스크립션이 첨부되어 있느지 확인하십시오. 추가 리포지터리를 활성화하려면 'subscription-manager repos "
+"--help'에서 참조하십시오."
 
-#: ../bin/rhn-migrate-classic-to-rhsm:659
+#: ../bin/rhn-migrate-classic-to-rhsm:669
 msgid "The --servicelevel and --no-auto options cannot be used together."
 msgstr "--servicelevel 및 --no-auto 옵션은 함께 사용할 수 없습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:666
-#: ../bin/rhn-migrate-classic-to-rhsm:670
+#: ../bin/rhn-migrate-classic-to-rhsm:676
+#: ../bin/rhn-migrate-classic-to-rhsm:680
 msgid "Red Hat account: "
 msgstr "Red Hat 계정: "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:667
-#: ../bin/rhn-migrate-classic-to-rhsm:672
+#: ../bin/rhn-migrate-classic-to-rhsm:677
+#: ../bin/rhn-migrate-classic-to-rhsm:682
 msgid "System Engine Username: "
 msgstr "System Engine 사용자 이름: "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:686
+#: ../bin/rhn-migrate-classic-to-rhsm:696
 msgid ""
 "\n"
 "Retrieving existing RHN Classic subscription information ..."
@@ -4081,13 +4054,13 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:688
+#: ../bin/rhn-migrate-classic-to-rhsm:698
 msgid "System is currently subscribed to these RHN Classic Channels:"
 msgstr "현재 시스템은 RHN 클래식 채널에 등록되어 있습니다: "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
-#: ../bin/rhn-migrate-classic-to-rhsm:697
+#: ../bin/rhn-migrate-classic-to-rhsm:707
 msgid ""
 "\n"
 "Preparing to unregister system from RHN Classic ..."
@@ -4097,19 +4070,19 @@ msgstr ""
 
 #: ../src/rhsm_icon.c:79
 msgid "how often to check for validity (in seconds)"
-msgstr ""
+msgstr "유효성 확인 빈도 (초 단위)  "
 
 #: ../src/rhsm_icon.c:81 ../src/rhsmcertd.c:67
 msgid "show debug messages"
-msgstr ""
+msgstr "디버그 메세지 보기 "
 
 #: ../src/rhsm_icon.c:83
 msgid "force display of the icon (expired, partial or warning)"
-msgstr ""
+msgstr "아이콘을 강제로 표시 (만료됨, 부분적 또는 경고) "
 
 #: ../src/rhsm_icon.c:86
 msgid "run the first status check right away"
-msgstr ""
+msgstr "첫 번째 상태 확인을 바로 실행 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -4125,13 +4098,12 @@ msgid ""
 "system must be registered with the Customer Portal. Please enter your Red "
 "Hat login to ensure your system is up-to-date."
 msgstr ""
-"서브스크립션 관리자가 시스템을 업데이트하게 하려면 시스템을 반드시 RHN으로 등"
-"록해야 합니다. Red Hat 로그인을 입력하여 시스템이 업데이트되어 있는지 확인하"
-"십시오. "
+"서브스크립션 관리자가 시스템을 업데이트하게 하려면 시스템을 반드시 RHN으로 등록해야 합니다. Red Hat 로그인을 입력하여 시스템이 "
+"업데이트되어 있는지 확인하십시오. "
 
 #: ../src/rhsm_icon.c:212
 msgid "Invalid or Missing Subscriptions"
-msgstr ""
+msgstr "잘못되거나 누락된 서브스크립션"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -4149,10 +4121,9 @@ msgstr "부분적 권한을 갖는 제품"
 # document keys, author eukim
 #: ../src/rhsm_icon.c:221
 msgid ""
-"This system is missing one or more subscriptions to fully cover its products."
-msgstr ""
-"이 시스템에는 제품을 완전하게 커버할 하나 이상의 서브스크립션이 누락되어 있습"
-"니다."
+"This system is missing one or more subscriptions to fully cover its "
+"products."
+msgstr "이 시스템에는 제품을 완전하게 커버할 하나 이상의 서브스크립션이 누락되어 있습니다."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -4207,7 +4178,7 @@ msgstr "옵션 구문 분석 실패: %s\n"
 
 #: ../src/rhsmcertd.c:54
 msgid "interval to run cert check (in minutes)"
-msgstr ""
+msgstr "인증서 확인을 실행하는 간격 (분 단위)"
 
 #: ../src/rhsmcertd.c:58
 msgid "deprecated, see auto-attach-interval"
@@ -4215,7 +4186,7 @@ msgstr ""
 
 #: ../src/rhsmcertd.c:61
 msgid "interval to run auto-attach (in minutes)"
-msgstr ""
+msgstr "자동 첨부를 실행하는 간격 (분 단위)"
 
 #: ../src/rhsmcertd.c:64
 msgid "run the initial checks immediately, with no delay"
@@ -4233,11 +4204,11 @@ msgstr "자세한 정보를 보려면 rhsmcertd --help를 실행하십시오\n"
 msgid "Wrong number of arguments specified.\n"
 msgstr "잘못된 인수 번호가 지정되어 있습니다.\n"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author eukim
 #. New style args were used, assume error.
 #. We do not support both at once, other than
 #. debug and wait.
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author eukim
 #: ../src/rhsmcertd.c:343
 msgid "Invalid argument specified.\n"
 msgstr "잘못된 인수가 지정되어 있습니다.\n"
@@ -4348,7 +4319,7 @@ msgstr "소켓 제한"
 
 #: ../src/rct/printing.py:57
 msgid "RAM Limit"
-msgstr ""
+msgstr "RAM 제한 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -4508,7 +4479,7 @@ msgstr "%%prog %s [OPTIONS] CERT_FILE"
 
 #: ../src/rct/commands.py:78
 msgid "Print certificate information"
-msgstr ""
+msgstr "인증서 정보 출력 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author eukim
@@ -4518,11 +4489,11 @@ msgstr "인증서 제품 정보를 표시하지 않음 "
 
 #: ../src/rct/commands.py:84
 msgid "do not show the cert's content info"
-msgstr ""
+msgstr "인증서 내용 정보를 표시하지 않음"
 
 #: ../src/rct/commands.py:99
 msgid "Print certificate statistics and sizes"
-msgstr ""
+msgstr "인증서 통계 및 크기를 출력합니다"
 
 #: ../src/rct/commands.py:105
 #, python-format
