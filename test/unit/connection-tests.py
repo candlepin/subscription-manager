@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # Copyright (c) 2011 - 2012 Red Hat, Inc.
 #
@@ -15,13 +16,13 @@
 
 import unittest
 
-from rhsm.connection import UEPConnection, ConnectionException, ConnectionSetupException, \
+from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
         BadCertificateException, RestlibException, GoneException, NetworkException, \
         RemoteServerException
 
 from mock import Mock
 from datetime import date
-
+import simplejson as json
 
 class ConnectionTests(unittest.TestCase):
 
@@ -54,6 +55,30 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.request_post = Mock(return_value=[])
         self.cp.bind("abcd")
         self.cp.conn.request_post.assert_called_with("/consumers/abcd/entitlements")
+
+
+class RestlibTests(unittest.TestCase):
+
+    def test_json_uft8_encoding(self):
+        # A unicode string containing JSON
+        test_json = u"""
+            {
+                "firstName": "John",
+                "message": "こんにちは世界",
+                "address": { "street": "21 2nd Street" },
+                "phoneNumbers": [
+                    [
+                        { "type": "home", "number": "212 555-1234" },
+                        { "type": "fax", "number": "646 555-4567" }
+                    ]
+                ]
+            }
+        """
+        restlib = Restlib("somehost", "123", "somehandler")
+        data = json.loads(test_json, object_hook=restlib._decode_dict)
+        self.assertTrue(isinstance(data["message"], str))
+        # Access a value deep in the structure to make sure we recursed down.
+        self.assertTrue(isinstance(data["phoneNumbers"][0][0]["type"], str))
 
 
 # see #830767 and #842885 for examples of why this is
