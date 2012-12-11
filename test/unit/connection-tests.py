@@ -18,7 +18,7 @@ import unittest
 
 from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
         BadCertificateException, RestlibException, GoneException, NetworkException, \
-        RemoteServerException
+        RemoteServerException, ExpiredIdentityCertException
 
 from mock import Mock
 from datetime import date
@@ -159,3 +159,10 @@ class GoneExceptionTest(ExceptionTest):
     def test_even_less_int_code(self):
         self.code = "asdfzczcvzcv"
         self._test()
+
+
+class ExpiredIdentityCertTest(ExceptionTest):
+    exception = ExpiredIdentityCertException
+
+    def _create_exception(self, *args, **kwargs):
+        return self.exception(*args, **kwargs)
