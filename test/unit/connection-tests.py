@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # Copyright (c) 2011 - 2012 Red Hat, Inc.
 #
@@ -63,6 +64,7 @@ class RestlibTests(unittest.TestCase):
         test_json = u"""
             {
                 "firstName": "John",
+                "message": "こんにちは世界",
                 "address": { "street": "21 2nd Street" },
                 "phoneNumbers": [
                     [
@@ -74,7 +76,7 @@ class RestlibTests(unittest.TestCase):
         """
         restlib = Restlib("somehost", "123", "somehandler")
         data = json.loads(test_json, object_hook=restlib._decode_dict)
-        self.assertTrue(isinstance(data["firstName"], str))
+        self.assertTrue(isinstance(data["message"], str))
         # Access a value deep in the structure to make sure we recursed down.
         self.assertTrue(isinstance(data["phoneNumbers"][0][0]["type"], str))
 
