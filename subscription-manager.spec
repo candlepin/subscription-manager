@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.11
+Version: 1.1.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,22 @@ fi
 %endif
 
 %changelog
+* Tue Dec 11 2012 Adrian Likins <alikins@redhat.com> 1.1.12-1
+- Latest strings as from zanata. (alikins@redhat.com)
+- 880070: require latest python-rhsm to handle unicode issues
+  (alikins@redhat.com)
+- 873791: Expected exit codes from unsubscribe with multiple serial numbers
+  (wpoteat@redhat.com)
+- 878820: Fix console error when yum.repos.d does not exist.
+  (dgoodwin@redhat.com)
+- 877579: Fix -1 quantity to consume for unlimited pools. (dgoodwin@redhat.com)
+- 862852: Fix double separator in redeem dialog. (dgoodwin@redhat.com)
+- 800323: Set default output stream encoding to UTF-8. (awood@redhat.com)
+- 867070: Adjust default sizing of subscriptions pane in Installed Products
+  tab. (awood@redhat.com)
+- 881952: Warn and continue if encountering a failure during system deletion.
+  (awood@redhat.com)
+
 * Tue Dec 04 2012 Adrian Likins <alikins@redhat.com> 1.1.11-1
 - 839772: Display "Not Set" instead of "" in SLA and release preferences.
   (awood@redhat.com)
