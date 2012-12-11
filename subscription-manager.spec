@@ -28,7 +28,7 @@ Requires:  python-iniparse
 Requires:  pygobject2
 Requires:  python-dateutil
 Requires:  virt-what
-Requires:  python-rhsm >= 1.1.5
+Requires:  python-rhsm >= 1.1.7
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 Requires:  usermode
