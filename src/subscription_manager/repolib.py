@@ -444,6 +444,7 @@ class RepoFile(ConfigParser):
 
     def __init__(self, name='redhat.repo'):
         ConfigParser.__init__(self)
+        # note PATH get's expanded with chroot info, etc
         self.path = Path.join(self.PATH, name)
         self.manage_repos = 1
         if CFG.has_option('rhsm', 'manage_repos'):
@@ -451,9 +452,9 @@ class RepoFile(ConfigParser):
         # Simulate manage repos turned off if no yum.repos.d directory exists.
         # This indicates yum is not installed so clearly no need for us to
         # manage repos.
-        if not os.path.exists(self.PATH):
+        if not os.path.exists(self.path):
             log.warn("%s does not exist, turning manage_repos off." %
-                    self.PATH)
+                    self.path)
             self.manage_repos = 0
         self.create()
 
