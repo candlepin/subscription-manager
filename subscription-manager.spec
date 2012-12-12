@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.13
+Version: 1.1.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,9 @@ fi
 %endif
 
 %changelog
+* Wed Dec 12 2012 Adrian Likins <alikins@redhat.com> 1.1.14-1
+- 886604: Fix incorrect path in repos.d check (alikins@redhat.com)
+
 * Wed Dec 12 2012 Adrian Likins <alikins@redhat.com> 1.1.13-1
 - 883123: Have the migration code use the name and the label for org and
   environment lookup. (bkearney@redhat.com)
