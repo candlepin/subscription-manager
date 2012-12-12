@@ -62,6 +62,8 @@ def handle_gui_exception(e, msg, parent, formatMsg=True, logMsg=None):
     elif isinstance(e, SSL.SSLError):
         errorWindow(_('Unable to verify server\'s identity: %s') % str(e),
                 parent=parent)
+    elif isinstance(e, connection.ExpiredIdentityCertException):
+        errorWindow(_('Your identity certificate has expired'), parent=parent)
     elif isinstance(e, connection.NetworkException):
         # NOTE: yes this looks a lot like the socket error, but I think these
         # were actually intended to display slightly different messages:
