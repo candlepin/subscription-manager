@@ -1069,10 +1069,11 @@ class RegisterCommand(UserPassCommand):
             systemExit(-1, _("%s cannot register to any organizations.") % self.username)
         if len(owners) == 1:
             return owners[0]['key']
-        # TODO: should we let the None key go, or just assume the server will
-        # reject it (it will today, but maybe it would try to guess in the
-        # future?)
-        return None
+
+        owner_key = None
+        while not owner_key:
+            owner_key = raw_input(_("Organization: "))
+        return owner_key
 
 
 class UnRegisterCommand(CliCommand):
