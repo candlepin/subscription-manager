@@ -1,9 +1,9 @@
-.TH rhsm-icon 8 "September 5, 2012" "version 1.2" "Subscription Status Daemon"  Deon Lackey 
+.TH rhsm-icon 8 "December 12, 2012" "version 1.3" "Subscription Status Daemon"  Deon Lackey 
 .SH NAME
 rhsm-icon \- Periodically checks installed products against active subscriptions to check their status.
 
 .SH SYNOPSIS
-rhsm-icon
+rhsm-icon [--check-period] [--force-icon=warning|expired] [--check-immediately]
 
 .SH DESCRIPTION
 Red Hat provides content updates and support by issuing 
@@ -77,12 +77,12 @@ rhsm-icon --check-immediately
 .PP
 If you just want to know what the different subscription status messages look like, then use the 
 .B --force-icon
-option.
+option. (Also use the \fB--check-immediately\fP option, or the scan will take the standard four minutes to run and display the icon.)
 
 .nf
-rhsm-icon --force-icon=warning
+rhsm-icon --force-icon=warning --check-immediately
 
-rhsm-icon --force-icon=expired
+rhsm-icon --force-icon=expired --check-immediately
 .fi
 
 .SH BUGS
@@ -93,4 +93,4 @@ This daemon is part of Red Hat Subscription Manager. To file bugs against this d
 Deon Lackey, <dlackey@redhat.com>, and James Bowes, <jbowes@redhat.com>. rhsm-icon was written by James Bowes.
 
 .SH COPYRIGHT
-Copyright (c) 2010 Red Hat, Inc. This is licensed under the GNU General Public License, version 2 (GPLv2). A copy of this license is available at http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+Copyright (c) 2010-2012 Red Hat, Inc. This is licensed under the GNU General Public License, version 2 (GPLv2). A copy of this license is available at http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.

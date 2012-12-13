@@ -3,7 +3,7 @@
 subscription-manager-gui \- Launches the UI client of the Subscription Manager.
 
 .SH SYNOPSIS
-subscription-manager-gui
+subscription-manager-gui [--register]
 
 .SH DESCRIPTION
 .B subscription-manager-gui
@@ -22,7 +22,9 @@ menu in RHEL 6.x.
 
 
 .SH OPTIONS
-This command has no options. 
+.TP
+.B --register
+If a system has not yet been registered, then the GUI registration page can be opened immediately, as the Subscription Manager GUI comes up. This is only relevant for unregistered systemsl; if this is used after a system is registered, the option is ignored.
 
 
 .SH REFERENCES

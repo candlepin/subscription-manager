@@ -1,4 +1,4 @@
-.TH rct 8 "November 8, 2012" "version 1.0" "Certificate Information Tool"  Deon Lackey 
+.TH rct 8 "December 12, 2012" "version 1.1" "Certificate Information Tool"  Deon Lackey 
 .SH NAME
 rct \- Displays information (headers) about or size and statistics of a entitlement, product, or identity certificate used by Red Hat Subscription Manager.
 
@@ -21,19 +21,23 @@ Prints the size of the certificate and other details about the certificate. The 
 Prints the information that is contained in the certificate itself, such as the certificate headers, serial numbers, products, and content sets. Two options, \fB--no-content\fP and \fB--no-products\fP, can be used to shorten the output to include only header and descriptive information.
 
 .SH THE STAT-CERT COMMAND
-The \fBrct\fP tool is used to gather information about the already-issued certificates being used by Subscription Manager. The main reason for that is that certificate sizes, for a number of reasons, impact content delivery service performance. New certificate version (3.0 and later) use more efficient encoding, resulting in smaller certificate content sizes and better performance. If there are problems with the content service timing out or returning errors, then the \fBrct stat-cert\fP command can be used to check the size and version of a given entitlement certificate quickly.
+The \fBrct\fP tool is used to gather information about the already-issued certificates being used by Subscription Manager. The main reason for that is that certificate sizes, for a number of reasons, impact content delivery service performance. 
 
 .PP
 This command has no options.
 
 .PP
-For large accounts and organizations, there can be a very large number of products and content sets available. Older versions of entitlement certificates (version 1.0) used different (less efficient) DER encoding, so that large amounts of information results in very large certificates. (This is what caused timeouts or crashes when dealing with some content services.) Newer entitlement certificate versions (version 3.0) use more efficient encoding on large content sets, which improves overall subscription service performance.
+For large accounts and organizations, there can be a very large number of products and content sets available. Older versions of entitlement certificates (version 1.0) used different (less efficient) DER encoding, so that large amounts of information results in very large certificates. (This is what caused timeouts or crashes when dealing with some content services.) Newer entitlement certificate versions (version 3.0) use more efficient encoding on large content sets, , resulting in smaller certificate content sizes and better service performance. 
+
+.PP
+If there are problems with the content service timing out or returning errors, then the \fBrct stat-cert\fP command can be used to check the size and version of a given entitlement certificate quickly.
 
 .PP 
 A large number of content sets is anything over 185 total sets. Both the total number of content sets and the size of the DER encoding in the certificate could affect performance.
 
 .PP 
 The statistics for an entitlement certificate show both the DER size and the number of content sets, among other information:
+.IP
 * Type (entitlement certificate)
 .IP
 * Version (of the certificate style); newer versions will be 3.x, with better performance for handling large content sets
@@ -104,15 +108,15 @@ Subject Key ID size: 20b
 .RE
 
 .SH CAT-CERT COMMAND
-Each certificate contains a complete set of information that contains all of the details for whatever element is being identified. That information can be displayed, in pretty-print form, using the \fBcat-cert\fP command.
+Each certificate contains a complete set of information with all of the details for whatever element is being identified. That information can be displayed, in pretty-print form, using the \fBcat-cert\fP command.
 
 .PP
-The most basic information is the information about the certificate its, such as its directory path, its serial umber and subject name, and its validity period (start and end dates). The information about the certificate itself is in the \fICertificate\fP section:
+The command returns the most basic information about the certificate -- such as its directory path, its serial number and subject name, and its validity period (start and end dates) -- in the \fICertificate\fP section:
 .IP
 * Path -- the filesystem location where the certificate is installed
 .IP
 * Version -- the certificate format version
-.IP
+.I -- P
 * Serial -- the serial number for the certificate
 .IP
 * Start/End Date -- the validity period for the certificate
@@ -178,7 +182,7 @@ The most information is contained in the entitlement certficate. Along with the 
 .PP
 Then, it contains an \fBOrder\fP section that details everything related to the purchase of the subscription (such as the contract number, service level, total quantity, quantities assigned to the system, and other details on the subscription). 
 .PP
-A subscription for a product covers the version purchased \fIand\fP every previous version of the product. For example, when a subscription is purchased for Red Hat Enterprise Linux 6.4, the subscription provides full access to all RHEL 6 repositories, \fBplus\fP access to all RHEL 5 repositories and then other included product content repositories, like Subscription Asset Manager. Every available content repository is lised in a \fBContent\fP section that contains the repository name, associated tags, its URL, and a notice on whether the yum repository is enabled by default. For example:
+A subscription for a product covers the version purchased \fIand\fP every previous version of the product. For example, when a subscription is purchased for Red Hat Enterprise Linux 6.4, the subscription provides full access to all RHEL 6 repositories, \fBplus\fP access to all RHEL 5 repositories and then other included product content repositories, like Subscription Asset Manager. Every available content repository is listed in a \fBContent\fP section that contains the repository name, associated tags, its URL, and a notice on whether the yum repository is enabled by default. For example:
 .RS
 .nf
 [root@server ~]# rct cat-cert /etc/pki/entitlement/2027912482659389239.pem  
