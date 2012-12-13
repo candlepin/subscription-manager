@@ -22,7 +22,7 @@ from subscription_manager.factlib import FactLib
 from subscription_manager.facts import Facts
 from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
 
-from rhsm.connection import GoneException
+from rhsm.connection import GoneException, ExpiredIdentityCertException
 
 import logging
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -87,6 +87,9 @@ class CertManager:
             # consumer cert deletion works
             except GoneException, e:
                 raise
+            # raise this so it can be exposed clearly
+            except ExpiredIdentityCertException, e:
+                raise
             except Exception, e:
                 log.warning("Exception caught while running certlib update")
                 log.exception(e)
@@ -98,6 +101,9 @@ class CertManager:
                 try:
                     updates += lib.update()
                 except GoneException, e:
+                    raise
+                # raise this so it can be exposed clearly
+                except ExpiredIdentityCertException, e:
                     raise
                 except Exception, e:
                     log.warning("Exception caught while running %s update" % lib)

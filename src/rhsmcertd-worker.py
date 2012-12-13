@@ -46,6 +46,9 @@ def main(options, log):
 
         print _('%d updates required') % updates
         print _('done')
+    except connection.ExpiredIdentityCertException, e:
+        log.critical(_("Your identity certificate has expired"))
+        raise e
     except connection.GoneException, ge:
         uuid = ConsumerIdentity.read().getConsumerId()
         if ge.deleted_id == uuid:
