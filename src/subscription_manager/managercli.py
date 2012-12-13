@@ -482,6 +482,33 @@ class UserPassCommand(CliCommand):
         return self._password
 
 
+class OrgCommand(UserPassCommand):
+    """
+    Abstract class for commands that require an org.
+    """
+    def __init__(self, name, shortdesc=None, primary=False, ent_dir=None,
+                prod_dir=None):
+        super(OrgCommand, self).__init__(name, shortdesc, primary, ent_dir,
+                                        prod_dir)
+        self._org = None
+        if not hasattr(self, "_org_help_text"):
+            self._org_help_text = _("specify organization")
+        self.parser.add_option("--org", dest="org", help=self._org_help_text)
+
+    @staticmethod
+    def _get_org(org):
+        if not org:
+            while not org:
+                org = raw_input(_("Organization: "))
+        return org
+
+    @property
+    def org(self):
+        if not self._org:
+            self._org = self._get_org(self.options.org)
+        return self._org
+
+
 class CleanCommand(CliCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
         shortdesc = _("Remove all local system and subscription data without affecting the server")
@@ -640,22 +667,15 @@ class OwnersCommand(UserPassCommand):
             handle_exception(_("Error: Unable to retrieve org list from server"), e)
 
 
-class EnvironmentsCommand(UserPassCommand):
+class EnvironmentsCommand(OrgCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
         shortdesc = _("Display the environments available for a user")
+        self._org_help_text = _("specify organization for environment list")
 
         super(EnvironmentsCommand, self).__init__("environments", shortdesc,
                                                   False, ent_dir, prod_dir)
-
         self._add_url_options()
-        self.parser.add_option("--org", dest="org",
-                               help=_("specify organization for environment list"))
-
-    def _validate_options(self):
-        if not self.options.org:
-            print(_("Error: This command requires that you specify an organization with --org"))
-            sys.exit(-1)
 
     def _get_enviornments(self, org):
         raw_environments = self.cp.getEnvironmentList(org)
@@ -673,7 +693,7 @@ class EnvironmentsCommand(UserPassCommand):
             self.cp = self._get_UEP(username=self.username,
                                     password=self.password)
             if self.cp.supports_resource('environments'):
-                environments = self._get_enviornments(self.options.org)
+                environments = self._get_enviornments(self.org)
 
                 if len(environments):
                     print("+-------------------------------------------+")
@@ -696,22 +716,19 @@ class EnvironmentsCommand(UserPassCommand):
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
 
-class ServiceLevelCommand(UserPassCommand):
+class ServiceLevelCommand(OrgCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
         self.consumerIdentity = ConsumerIdentity
 
         shortdesc = _("Manage service levels for this system")
-
+        self._org_help_text = _("specify org for service level list")
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
                                                   False, ent_dir, prod_dir)
 
         self._add_url_options()
         self.parser.add_option("--show", dest="show", action='store_true',
                 help=_("show this system's current service level"))
-
-        self.parser.add_option("--org", dest="org",
-                help=_("specify org for service level list"))
         self.parser.add_option("--list", dest="list", action='store_true',
                 help=_("list all service levels available"))
         self.parser.add_option("--set", dest="service_level",
@@ -750,9 +767,6 @@ class ServiceLevelCommand(UserPassCommand):
             if self.options.list:
                 if not (self.options.username and self.options.password):
                     print(_("Error: you must register or specify --username and --password to list service levels"))
-                    sys.exit(-1)
-                if not self.options.org:
-                    print(_("Error: you must register or specify --org."))
                     sys.exit(-1)
             else:
                 print(NOT_REGISTERED)
@@ -823,8 +837,11 @@ class ServiceLevelCommand(UserPassCommand):
 
         org_key = self.options.org
         if not org_key:
-            consumer_uuid = self.consumerIdentity.read().getConsumerId()
-            org_key = self.cp.getOwner(consumer_uuid)['key']
+            if self.consumerIdentity.existsAndValid():
+                consumer_uuid = self.consumerIdentity.read().getConsumerId()
+                org_key = self.cp.getOwner(consumer_uuid)['key']
+            else:
+                org_key = self.org
 
         try:
             slas = self.cp.getServiceLevelList(org_key)
@@ -1058,7 +1075,7 @@ class RegisterCommand(UserPassCommand):
         """
         If given an owner in the options, use it. Otherwise ask the server
         for all the owners this user has access too. If there is just one,
-        use it's key. If multiple, return None and let the server error out.
+        use its key. If multiple, ask the user.
         """
         if self.options.org:
             return self.options.org
