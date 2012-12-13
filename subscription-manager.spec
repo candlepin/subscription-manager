@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.14
+Version: 1.1.15
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,14 @@ fi
 %endif
 
 %changelog
+* Thu Dec 13 2012 Adrian Likins <alikins@redhat.com> 1.1.15-1
+- 841496: Do not use hyphens in bash completion files as these are invalid for
+  identifiers in the sh shell. (bkearney@redhat.com)
+- matt reid's edits to rct; bz886280; bz878257; bz878269; bz878264
+  (dlackey@redhat.com.com)
+- 886992: Fix for bad fix for 886604, wrong path for yum repos
+  (alikins@redhat.com)
+
 * Wed Dec 12 2012 Adrian Likins <alikins@redhat.com> 1.1.14-1
 - 886604: Fix incorrect path in repos.d check (alikins@redhat.com)
 
