@@ -1,11 +1,14 @@
-# snowlet <snowlet@fedoraproject.org>, 2012. #zanata
-# tchuang <tchuang@redhat.com>, 2012. #zanata
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-11 16:38-0500\n"
-"PO-Revision-Date: 2012-12-11 01:57-0500\n"
+"PO-Revision-Date: 2012-12-11 08:12-0500\n"
 "Last-Translator: tchuang <tchuang@redhat.com>\n"
 "Language-Team: Chinese (Traditional, Taiwan)\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +24,8 @@ msgstr ""
 msgid ""
 "Error in preferences dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
-msgstr "偏好設定對話方塊中含有錯誤。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+msgstr ""
+"偏好設定對話方塊中含有錯誤。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -65,9 +69,9 @@ msgstr "訂閱"
 msgid "Available Subscriptions"
 msgstr "可用的訂閱"
 
-#. Set up the quantity column.
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
+#. Set up the quantity column.
 #: ../src/subscription_manager/gui/allsubs.py:85
 #: ../src/subscription_manager/gui/contract_selection.py:114
 #: ../src/subscription_manager/gui/mysubstab.py:100 ../src/rct/printing.py:54
@@ -103,9 +107,9 @@ msgstr "無限制"
 msgid "All Available Subscriptions"
 msgstr "所有可用訂閱"
 
-#. show pulsating progress bar while we wait for results
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
+#. show pulsating progress bar while we wait for results
 #: ../src/subscription_manager/gui/allsubs.py:336
 msgid "Searching"
 msgstr "正在搜尋"
@@ -155,18 +159,30 @@ msgstr "%s 已套用"
 #: ../src/subscription_manager/gui/about.py:25
 msgid ""
 "\n"
-"This software is licensed to you under the GNU General Public License, version 2 (GPLv2). There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with this software; if not, see:\n"
+"This software is licensed to you under the GNU General Public License, "
+"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
+"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
+"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
+"this software; if not, see:\n"
 "\n"
 "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
 "\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to use or replicate Red Hat trademarks that are incorporated in this software or its documentation.\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
+"use or replicate Red Hat trademarks that are incorporated in this software "
+"or its documentation.\n"
 msgstr ""
 "\n"
-"This software is licensed to you under the GNU General Public License, version 2 (GPLv2). There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with this software; if not, see:\n"
+"This software is licensed to you under the GNU General Public License, "
+"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
+"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
+"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
+"this software; if not, see:\n"
 "\n"
 "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
 "\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to use or replicate Red Hat trademarks that are incorporated in this software or its documentation.\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
+"use or replicate Red Hat trademarks that are incorporated in this software "
+"or its documentation.\n"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -201,10 +217,10 @@ msgstr "<b>訂閱管理服務版本：</b> %s"
 msgid "<b>Next System Check-in:</b> %s"
 msgstr "<b>下次系統簽入：</b> %s"
 
-#. An empty string entry is used for "un-setting" the system's SLA:
-#. for unsetting
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
+#. An empty string entry is used for "un-setting" the system's SLA:
+#. for unsetting
 #: ../src/subscription_manager/gui/preferences.py:106
 #: ../src/subscription_manager/gui/preferences.py:134
 #: ../src/subscription_manager/gui/widgets.py:294
@@ -299,7 +315,7 @@ msgstr "已訂閱"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgid_plural "Covered by contracts %s through %s"
-msgstr[0] "由合約 %s 至 %s 所涵蓋"
+msgstr[0] "合約有效日期乃 %s 至 %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -316,46 +332,46 @@ msgstr "未訂閱"
 msgid "My Installed Products"
 msgstr "已安裝的產品"
 
-#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
+#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:315
 #, python-format
 msgid "%s installed products do not have valid subscriptions."
 msgstr "%s 項已安裝的產品沒有有效的訂閱。"
 
-#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
+#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:320
 msgid "1 installed product does not have a valid subscription."
 msgstr "1 項已安裝的產品沒有有效的訂閱。"
 
-#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
+#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:326
 msgid "This system does not match subscription limits."
 msgstr "這部系統與訂閱限制不符。"
 
-#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
+#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:335
 #, python-format
 msgid "System is properly subscribed through %s."
 msgstr "系統已透過 %s 正確訂閱。"
 
-#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
+#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:343
 msgid "No installed products detected."
 msgstr "未偵測到已安裝的產品。"
 
-#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
+#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:348
 msgid "Keep your system up to date by registering."
 msgstr "透過註冊來將您的系統保持在最新狀態。"
@@ -446,9 +462,9 @@ msgstr "匯入下列憑證時發生了一項錯誤。請檢查日誌檔案以取
 msgid "The following certificates were successfully imported:"
 msgstr "下列憑證已成功匯入："
 
-#. if we get to this point, the import was successful
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
+#. if we get to this point, the import was successful
 #: ../src/subscription_manager/gui/importsub.py:132
 msgid "Certificate import was successful."
 msgstr "成功匯入認證。"
@@ -506,9 +522,9 @@ msgstr "虛擬"
 msgid "Both"
 msgstr "兩者"
 
-#. content-type is required, no need to xstr
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
+#. content-type is required, no need to xstr
 #: ../src/subscription_manager/gui/widgets.py:632 ../src/rct/printing.py:74
 msgid "Type"
 msgstr "類型"
@@ -568,9 +584,9 @@ msgstr "是"
 msgid "No"
 msgstr "否"
 
-#. Set up columns on the view
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
+#. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:55
 msgid "Fact"
 msgstr "詳情"
@@ -587,13 +603,13 @@ msgstr "值"
 msgid "No previous update"
 msgstr "先前沒有更新"
 
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
 #. TODO: could stand to check if registered before trying to do this:
 #. It's possible (though unlikely, and kind of broken) to have more
 #. than one version of python-rhsm/subscription-manager installed.
 #. Versions() will only return one (and I suspect it's not predictable
 #. which it will return).
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
 #: ../src/subscription_manager/gui/factsgui.py:104
 #: ../src/subscription_manager/gui/factsgui.py:108
 #: ../src/subscription_manager/managercli.py:244
@@ -613,7 +629,9 @@ msgstr "未知"
 msgid ""
 "Unable to auto-attach, server does not support service levels. Please run "
 "'Subscription Manager' to manually attach a subscription."
-msgstr "無法自動連接，伺服器不支援服務等級。請執行「訂閱管理程式」，以手動式連接訂閱服務。"
+msgstr ""
+"無法自動連接，伺服器不支援服務等級。請執行「訂閱管理程式」，以手動式連接訂閱"
+"服務。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -646,7 +664,9 @@ msgstr "現有的服務等級無法連接任何額外訂閱服務：%s"
 msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually attach subscriptions."
-msgstr "沒有服務等級可涵蓋所有已安裝的產品。請執行「訂閱管理程式」，以手動式連接訂閱服務。"
+msgstr ""
+"沒有服務等級可涵蓋所有已安裝的產品。請執行「訂閱管理程式」，以手動式連接訂閱"
+"服務。"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:104
 msgid "You have opted to skip auto-attach."
@@ -658,11 +678,11 @@ msgstr "您已選擇跳過自動連接。"
 msgid "Finish"
 msgstr "完成"
 
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author tchuang
 #. Firstboot module title
 #. Note: translated title needs to be unique across all
 #. firstboot modules, not just the rhsm ones. See bz #828042
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author tchuang
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:170
 msgid "Subscription Management Registration"
 msgstr "訂閱管理註冊"
@@ -684,9 +704,10 @@ msgstr "取得訂閱時發生錯誤：%s"
 # document keys
 #: ../src/subscription_manager/gui/utils.py:60
 msgid ""
-"Network error, unable to connect to server. Please see "
-"/var/log/rhsm/rhsm.log for more information."
-msgstr "發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
+msgstr ""
+"發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -695,27 +716,29 @@ msgstr "發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhs
 msgid "Unable to verify server's identity: %s"
 msgstr "無法驗證伺服器的身份：%s"
 
-#. NOTE: yes this looks a lot like the socket error, but I think these
-#. were actually intended to display slightly different messages:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
+#. NOTE: yes this looks a lot like the socket error, but I think these
+#. were actually intended to display slightly different messages:
 #: ../src/subscription_manager/gui/utils.py:68
 #: ../src/subscription_manager/managercli.py:124
 msgid ""
-"Network error. Please check the connection details, or see "
-"/var/log/rhsm/rhsm.log for more information."
-msgstr "發生網路錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
+msgstr ""
+"發生網路錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
-#. This is what happens when there's an issue with the server on the other
-#. side of the wire
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
+#. This is what happens when there's an issue with the server on the other side of the wire
 #: ../src/subscription_manager/gui/utils.py:71
 #: ../src/subscription_manager/managercli.py:128
 msgid ""
-"Remote server error. Please check the connection details, or see "
-"/var/log/rhsm/rhsm.log for more information."
-msgstr "遠端伺服器錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
+msgstr ""
+"遠端伺服器錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資"
+"訊。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -800,13 +823,17 @@ msgstr "所有已安裝產品皆由正確的權利所支援。目前無需連接
 msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
 "\"All Available Subscriptions\" tab to manually attach subscriptions."
-msgstr "目前訂閱服務等級沒有可用的訂閱服務：%s。請使用「所有可用訂閱」分頁，以手動式連接訂閱服務。"
+msgstr ""
+"目前訂閱服務等級沒有可用的訂閱服務：%s。請使用「所有可用訂閱」分頁，以手動式"
+"連接訂閱服務。"
 
 #: ../src/subscription_manager/gui/registergui.py:518
 msgid ""
 "No service level will cover all installed products. Please run Subscription "
 "Manager to manually attach subscriptions"
-msgstr "沒有服務等級可涵蓋所有已安裝的產品。請執行「訂閱管理程式」，以手動式連接訂閱服務"
+msgstr ""
+"沒有服務等級可涵蓋所有已安裝的產品。請執行「訂閱管理程式」，以手動式連接訂閱"
+"服務"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -885,9 +912,10 @@ msgstr "訂閱服務的 CA 憑證尚未安裝。"
 # document keys, author tchuang
 #: ../src/subscription_manager/gui/registergui.py:907
 msgid ""
-"Please provide a hostname with optional port and/or prefix: "
-"hostname[:port][/prefix]"
-msgstr "請提供一組主機名稱，以及選用性的連接埠與/或前綴字元：hostname[:port][/prefix]"
+"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
+"prefix]"
+msgstr ""
+"請提供一組主機名稱，以及選用性的連接埠與/或前綴字元：hostname[:port][/prefix]"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -953,7 +981,8 @@ msgstr "找不到 UUID: %s"
 msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
-msgstr "更新伺服器上的系統資料時發生了錯誤，詳情請查看 /var/log/rhsm/rhsm.log。"
+msgstr ""
+"更新伺服器上的系統資料時發生了錯誤，詳情請查看 /var/log/rhsm/rhsm.log。"
 
 #: ../src/subscription_manager/branding/__init__.py:81
 msgid "Register the system to the server"
@@ -1015,8 +1044,7 @@ msgid "This system is registered to RHN Classic."
 msgstr "這部系統已向 RHN Classic 註冊。"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:13
-msgid ""
-"This system has already been registered with Red Hat using RHN Classic."
+msgid "This system has already been registered with Red Hat using RHN Classic."
 msgstr "這部系統已透過 RHN Classic 向 Red Hat 註冊。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
@@ -1026,15 +1054,19 @@ msgid ""
 "The tool you are using is attempting to re-register using Red Hat "
 "Subscription Management technology. Red Hat recommends that customers only "
 "register once."
-msgstr "您使用的工具正試圖使用 Red Hat 訂閱管理技術來重新註冊。Red Hat 建議顧客註冊一次即可。"
+msgstr ""
+"您使用的工具正試圖使用 Red Hat 訂閱管理技術來重新註冊。Red Hat 建議顧客註冊一"
+"次即可。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
-"To learn how to unregister from either service please consult this Knowledge"
-" Base Article: https://access.redhat.com/kb/docs/DOC-45563"
-msgstr "欲知如何由這些服務取消註冊，請參閱此知識庫文件：https://access.redhat.com/kb/docs/DOC-45563"
+"To learn how to unregister from either service please consult this Knowledge "
+"Base Article: https://access.redhat.com/kb/docs/DOC-45563"
+msgstr ""
+"欲知如何由這些服務取消註冊，請參閱此知識庫文件：https://access.redhat.com/kb/"
+"docs/DOC-45563"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -1073,7 +1105,8 @@ msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"欲知更多關於 RHN 的註冊問題與技術資訊，請參閱此知識庫文章：https://access.redhat.com/kb/docs/DOC-45563"
+"欲知更多關於 RHN 的註冊問題與技術資訊，請參閱此知識庫文章：https://access."
+"redhat.com/kb/docs/DOC-45563"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:28
 msgid "RHN Classic and Red Hat Subscription Management"
@@ -1083,32 +1116,31 @@ msgstr "RHN Classic 與 Red Hat 訂閱管理程式"
 # document keys, author tchuang
 #: ../src/subscription_manager/branding/redhat_branding.py:30
 msgid ""
-"Tip: Forgot your login or password? Look it up at "
-"http://red.ht/lost_password"
+"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
 msgstr "提示：您是否忘了您的登錄名稱或密碼？請查看 http://red.ht/lost_password"
 
-#. note default is lower caps
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
+#. note default is lower caps
 #: ../src/subscription_manager/i18n_optparse.py:36
 msgid "%prog [OPTIONS]"
 msgstr "%prog [OPTIONS]"
 
-#. For older versions of optparse
 # translation auto-copied from project CFSE-cli, version 1.1, document keys
+#. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:126
 #: ../src/subscription_manager/i18n_optparse.py:138
 #, python-format
 msgid "Usage: %s\n"
 msgstr "使用方法：%s\n"
 
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
 #. so we get it picked up. for local translation, and then optparse will
 #. use them.
 #. translators: this should have the same translation as "Usage: %s\n"
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
 #: ../src/subscription_manager/i18n_optparse.py:137
 #, python-format
 msgid "usage: %s\n"
@@ -1141,8 +1173,8 @@ msgstr "選項"
 msgid "options:"
 msgstr "選項："
 
-#. stuff for option value sanity checking
 # translation auto-copied from project CFSE-cli, version 1.1, document keys
+#. stuff for option value sanity checking
 #: ../src/subscription_manager/i18n_optparse.py:146
 #, python-format
 msgid "no such option: %s"
@@ -1204,8 +1236,8 @@ msgstr "選項 %s：無效的 %s 值：%r"
 msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr "選項 %s：無效的選擇：%r（由 %s 選擇）"
 
-#. default options
 # translation auto-copied from project CFSE-cli, version 1.1, document keys
+#. default options
 #: ../src/subscription_manager/i18n_optparse.py:159
 msgid "show this help message and exit"
 msgstr "顯示此協助訊息並退出"
@@ -1215,9 +1247,9 @@ msgstr "顯示此協助訊息並退出"
 msgid "show program's version number and exit"
 msgstr "顯示程式的版本號碼並退出"
 
-#. translators: arg 1 is the program name, arg 2 is the error message
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
+#. translators: arg 1 is the program name, arg 2 is the error message
 #: ../src/subscription_manager/i18n_optparse.py:173
 #, python-format
 msgid "%s: error: %s"
@@ -1285,9 +1317,11 @@ msgstr "完成"
 # document keys
 #: ../src/subscription_manager/managercli.py:59
 msgid ""
-"This system is not yet registered. Try 'subscription-manager register "
-"--help' for more information."
-msgstr "這部系統尚未註冊。請嘗試 'subscription-manager register --help' 以取得更多資訊。"
+"This system is not yet registered. Try 'subscription-manager register --"
+"help' for more information."
+msgstr ""
+"這部系統尚未註冊。請嘗試 'subscription-manager register --help' 以取得更多資"
+"訊。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -1602,11 +1636,11 @@ msgstr "--force 只可與 --regenerate 搭配使用"
 msgid "--username and --password can only be used with --force"
 msgstr "--username 與 --password 只可與 --force 搭配使用"
 
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author tchuang
 #. no need to continue if user is only registered to Classic
 #. FIXME: slightly odd in that we log that we can't get the version,
 #. but then show "unknown" here.
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author tchuang
 #: ../src/subscription_manager/managercli.py:558
 #: ../src/subscription_manager/managercli.py:561
 #: ../src/subscription_manager/managercli.py:2067
@@ -1880,7 +1914,8 @@ msgstr "已淘汰，詳情請參閱 --auto-attach"
 msgid ""
 "automatically attach this system to                                     "
 "compatible subscriptions."
-msgstr "自動將此系統連至與                                     相容的訂閱服務。"
+msgstr ""
+"自動將此系統連至與                                     相容的訂閱服務。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -2000,8 +2035,8 @@ msgstr "取得訂閱服務後，欲發送提示的電子郵件位址。"
 
 #: ../src/subscription_manager/managercli.py:1121
 msgid ""
-"optional language to use for email notification when subscription redemption"
-" is complete (Examples: en-us, de-de)"
+"optional language to use for email notification when subscription redemption "
+"is complete (Examples: en-us, de-de)"
 msgstr "取得訂閱服務後，欲發送提示的電子郵件之選用語言。（例如 en-us、de-de）"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
@@ -2092,33 +2127,33 @@ msgstr "欲連接至的集區之 id（可多次指定）"
 
 #: ../src/subscription_manager/managercli.py:1256
 msgid "number of subscriptions to attach"
-msgstr ""
+msgstr "欲連接的訂閱服務數量"
 
 #: ../src/subscription_manager/managercli.py:1258
 msgid ""
-"automatically attach compatible                                subscriptions"
-" to this system"
-msgstr ""
+"automatically attach compatible                                subscriptions "
+"to this system"
+msgstr "自動連接相容"
 
 #. re bz #864207
 #: ../src/subscription_manager/managercli.py:1263
 msgid "All installed products are covered by valid entitlements."
-msgstr ""
+msgstr "所有已安裝的產品，皆擁有有效的權利。"
 
 #: ../src/subscription_manager/managercli.py:1264
 msgid "No need to update subscriptions at this time."
-msgstr ""
+msgstr "目前無需更新訂閱服務。"
 
 #: ../src/subscription_manager/managercli.py:1267
 msgid "Attach a specified subscription to the registered system"
-msgstr ""
+msgstr "連接特定訂閱服務至已註冊的系統"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
 #: ../src/subscription_manager/managercli.py:1277
 msgid ""
-"Error: This command requires that you specify a pool with --pool or use "
-"--auto."
+"Error: This command requires that you specify a pool with --pool or use --"
+"auto."
 msgstr "錯誤：這指令需要透過 --pool 指定集區，或使用 --auto 選項。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
@@ -2148,7 +2183,7 @@ msgstr "請輸入一組有效的數字集區 id。"
 #: ../src/subscription_manager/managercli.py:1318
 #, python-format
 msgid "Successfully attached a subscription for: %s"
-msgstr ""
+msgstr "已成功為此項目連接了訂閱服務：%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -2160,19 +2195,19 @@ msgstr "所有已安裝產品皆由正確的權利所支援。目前不需要更
 
 #: ../src/subscription_manager/managercli.py:1381
 msgid "Deprecated, see attach"
-msgstr ""
+msgstr "已淘汰，詳情請參閱 attach"
 
 #: ../src/subscription_manager/managercli.py:1401
 msgid "certificate serial number to remove (can be specified more than once)"
-msgstr ""
+msgstr "欲移除的憑證序列號碼（可指定多次）"
 
 #: ../src/subscription_manager/managercli.py:1403
 msgid "remove all subscriptions from this system"
-msgstr ""
+msgstr "由此系統移除所有訂閱服務"
 
 #: ../src/subscription_manager/managercli.py:1406
 msgid "Remove all or specific subscriptions from this system"
-msgstr ""
+msgstr "由此系統移除所有或特定訂閱服務"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -2184,46 +2219,45 @@ msgstr "錯誤：「%s」非有效的序列號碼"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
 #: ../src/subscription_manager/managercli.py:1424
-msgid ""
-"Error: This command requires that you specify one of --serial or --all."
+msgid "Error: This command requires that you specify one of --serial or --all."
 msgstr "錯誤：這項指令需要您指定 --serial 或是 --all 其中之一。"
 
 #: ../src/subscription_manager/managercli.py:1441
 msgid "All subscriptions have been removed from this system."
-msgstr ""
+msgstr "所有訂閱服務皆已由此系統上移除。"
 
 #: ../src/subscription_manager/managercli.py:1445
 msgid "1 subscription removed from this system."
-msgstr ""
+msgstr "訂閱服務已由此系統上移除。"
 
 #: ../src/subscription_manager/managercli.py:1447
 #: ../src/subscription_manager/managercli.py:1485
 #, python-format
 msgid "%s subscriptions removed from this system."
-msgstr ""
+msgstr "%s 項訂閱服務已由此系統上移除。"
 
 #: ../src/subscription_manager/managercli.py:1462
 msgid "Successfully removed serial numbers:"
-msgstr ""
+msgstr "已成功移除了序列號碼："
 
 #: ../src/subscription_manager/managercli.py:1466
 msgid "Unsuccessfully removed serial numbers:"
-msgstr ""
+msgstr "未成功移除序列號碼："
 
 #: ../src/subscription_manager/managercli.py:1476
 #: ../src/subscription_manager/managercli.py:1497
 #, python-format
 msgid "Unable to perform remove due to the following exception: %s"
-msgstr ""
+msgstr "基於下列例外狀況，無法進行移除動作：%s"
 
 #: ../src/subscription_manager/managercli.py:1491
 #, python-format
 msgid "Subscription with serial number %s removed from this system"
-msgstr ""
+msgstr "序列號碼為 %s 的訂閱服務，已由此系統上移除"
 
 #: ../src/subscription_manager/managercli.py:1510
 msgid "Deprecated, see remove"
-msgstr ""
+msgstr "已淘汰，詳情請參閱 remove"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -2257,14 +2291,14 @@ msgstr "匯入工具以外提供的認證"
 
 #: ../src/subscription_manager/managercli.py:1572
 msgid "certificate file to import (can be specified more than once)"
-msgstr ""
+msgstr "欲匯入的憑證檔案（可多次指定）"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
 #: ../src/subscription_manager/managercli.py:1576
 msgid ""
-"Error: This command requires that you specify a certificate with "
-"--certificate."
+"Error: This command requires that you specify a certificate with --"
+"certificate."
 msgstr "錯誤：這項指令需要您以 --certificate 來指定一組憑證。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
@@ -2286,13 +2320,13 @@ msgstr "%s 不是正確的認證檔案。請使用正確的認證。"
 # document keys, author tchuang
 #: ../src/subscription_manager/managercli.py:1607
 msgid ""
-"An error occurred while importing the certificate. Please check log file for"
-" more information."
+"An error occurred while importing the certificate. Please check log file for "
+"more information."
 msgstr "匯入憑證時發生了一項錯誤。請檢查日誌檔案以取得更多資訊。"
 
 #: ../src/subscription_manager/managercli.py:1629
 msgid "List the repositories which this system is entitled to use"
-msgstr ""
+msgstr "列出此系統允許使用的軟體庫"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -2333,9 +2367,8 @@ msgstr "這部系統沒有可透過訂閱服務使用的軟體庫。"
 
 #: ../src/subscription_manager/managercli.py:1699
 #, python-format
-msgid ""
-"Error: %s is not a valid repo id. Use --list option to see valid repos."
-msgstr ""
+msgid "Error: %s is not a valid repo id. Use --list option to see valid repos."
+msgstr "錯誤：%s 不是組有效的軟體庫 id。請使用 --list 選項來查看有效的軟體庫。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -2352,9 +2385,8 @@ msgid "Repo %s is disabled for this system."
 msgstr "這部系統的軟體庫 %s 已停用。"
 
 #: ../src/subscription_manager/managercli.py:1718
-msgid ""
-"List, set, or remove the configuration parameters in use by this system"
-msgstr ""
+msgid "List, set, or remove the configuration parameters in use by this system"
+msgstr "列出、設置或移除此系統所使用的配置參數"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -2428,7 +2460,7 @@ msgstr "無法移除分節 %s 與名稱 %s。"
 
 #: ../src/subscription_manager/managercli.py:1827
 msgid "List subscription and product information for this system"
-msgstr ""
+msgstr "列出此系統的訂閱與產品資訊"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -2459,13 +2491,14 @@ msgstr "要搜尋的日期，預設值為今天，只與 --available 選項合�
 
 #: ../src/subscription_manager/managercli.py:1841
 msgid "show the subscriptions being consumed by this system"
-msgstr ""
+msgstr "顯示此系統正在使用的訂閱服務"
 
 #: ../src/subscription_manager/managercli.py:1843
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
 msgstr ""
+"僅顯示與特定服務等級相符的訂閱服務；僅能與 --available 和 --consumed 搭配使用"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -2482,8 +2515,7 @@ msgstr "錯誤：--ondate 僅適用於 --available"
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
 #: ../src/subscription_manager/managercli.py:1857
-msgid ""
-"Error: --servicelevel is only applicable with --available or --consumed"
+msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "錯誤：--servicelevel 只能與 --available 或 --consumed 合用"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
@@ -2501,8 +2533,7 @@ msgstr "...已安裝之產品的狀態"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
 #: ../src/subscription_manager/managercli.py:1902
-msgid ""
-"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "輸入的日期無效。日期格式應為 YYYY-MM-DD（例如："
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
@@ -2581,7 +2612,7 @@ msgstr "列印版本資訊"
 #: ../src/subscription_manager/managercli.py:2068
 #, python-format
 msgid "subscription management server: %s"
-msgstr ""
+msgstr "訂閱服務管理伺服器：%s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -2597,10 +2628,10 @@ msgstr "subscription-manager：%s"
 msgid "python-rhsm: %s"
 msgstr "python-rhsm：%s"
 
-#. usage format strips any leading 'usage' so
-#. do not iclude it
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
+#. usage format strips any leading 'usage' so
+#. do not iclude it
 #: ../src/subscription_manager/cli.py:60
 #, python-format
 msgid "%%prog %s [OPTIONS]"
@@ -2621,7 +2652,7 @@ msgstr "主模組："
 
 #: ../src/subscription_manager/cli.py:111
 msgid "Other Modules:"
-msgstr ""
+msgstr "其它模組："
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -2811,7 +2842,7 @@ msgstr "我的訂閱"
 
 #: ../src/subscription_manager/gui/data/mysubs.glade.h:2
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -2822,13 +2853,13 @@ msgstr "<b>請為這部系統輸入下列內容：</b>"
 
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:2
 msgid "Activation Key:"
-msgstr ""
+msgstr "啟動金鑰："
 
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:3
 msgid ""
-"Multiple Activation Keys can be entered by separating them with a comma or a"
-" space."
-msgstr ""
+"Multiple Activation Keys can be entered by separating them with a comma or a "
+"space."
+msgstr "可透過將啟動金鑰已逗號或空格區隔開來，以輸入多重啟動金鑰。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -2846,23 +2877,23 @@ msgstr "系統名稱："
 
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:6
 msgid "This must be the organization key, not the name."
-msgstr ""
+msgstr "這必須是組織金鑰，而非名稱。"
 
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:7
 msgid "activation_key_entry"
-msgstr ""
+msgstr "activation_key_entry"
 
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:8
 msgid "consumer_entry"
-msgstr ""
+msgstr "consumer_entry"
 
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:9
 msgid "organization_entry"
-msgstr ""
+msgstr "organization_entry"
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:1
 msgid "<b>Attach subscriptions with service level:</b>"
-msgstr ""
+msgstr "<b>連接訂閱服務至服務等級：</b>"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -2880,7 +2911,8 @@ msgstr "<b>已偵測到的產品：</b>"
 # document keys, author tchuang
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:4
 msgid ""
-"We have detected that you have multiple service levels on various products. Please select how you\n"
+"We have detected that you have multiple service levels on various products. "
+"Please select how you\n"
 "want them assigned."
 msgstr ""
 "我們偵測到您所擁有的各項產品上，皆有多重的服務等級。請選擇您\n"
@@ -2908,7 +2940,7 @@ msgstr "取消"
 
 #: ../src/subscription_manager/gui/data/redeem.glade.h:2
 msgid "Email Address Text"
-msgstr ""
+msgstr "電子郵件地址文字"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -2929,7 +2961,8 @@ msgid ""
 "Redeeming the subscription may take a few minutes.\n"
 "Please provide an email address to receive notification\n"
 "when the redemption is complete."
-msgstr "兌換訂閱服務可能會花上幾分鐘。請提供電子郵件信箱，好在兌換服務完成時通知您。"
+msgstr ""
+"兌換訂閱服務可能會花上幾分鐘。請提供電子郵件信箱，好在兌換服務完成時通知您。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -3023,7 +3056,7 @@ msgstr "SLA"
 
 #: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
 msgid "The following subscriptions will be attached:"
-msgstr ""
+msgstr "下列訂閱服務將會被連接："
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -3037,6 +3070,8 @@ msgid ""
 "system administrators to automatically register your system and attach all "
 "necessary subscriptions."
 msgstr ""
+"啟動金鑰乃您的系統管理員所預配置的數字字母字串，以用來自動註冊您的系統，並連"
+"接所有必要的訂閱服務。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -3058,7 +3093,7 @@ msgstr "我將以...進行註冊："
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:5
 msgid "I will use an Activation Key"
-msgstr ""
+msgstr "我將使用一組啟動金鑰"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -3074,8 +3109,9 @@ msgid ""
 "System Engine or Candlepin servers can be used to provide your system with "
 "updates and allow management through the selected server's interface."
 msgstr ""
-"向客戶端入口網站、訂閱資產管理程式、CloudForms System Engine 或 Candlepin "
-"伺服器進行註冊，可為您的系統提供更新，並能讓您透過您所選擇的伺服器介面來進行管理。"
+"向客戶端入口網站、訂閱資產管理程式、CloudForms System Engine 或 Candlepin 伺"
+"服器進行註冊，可為您的系統提供更新，並能讓您透過您所選擇的伺服器介面來進行管"
+"理。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -3087,7 +3123,7 @@ msgstr "請重新啟動以向客戶端入口網站註冊。"
 msgid ""
 "The subscription management service you register with will provide your "
 "system with updates and allow additional management."
-msgstr ""
+msgstr "您所註冊的訂閱管理服務，將會為您的系統提供更新，以及額外的管理功能。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -3457,7 +3493,7 @@ msgstr "<b>產品：</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:4
 msgid "<b>Status:</b>"
-msgstr ""
+msgstr "<b>狀態：</b>"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -3467,7 +3503,7 @@ msgstr "架構文字"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:7
 msgid "Auto-attach"
-msgstr ""
+msgstr "Auto-attach"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -3539,7 +3575,7 @@ msgstr "帳號文字"
 # document keys
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:13
 msgid "Contract Number"
-msgstr "聯絡號碼"
+msgstr "合約號碼"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -3564,12 +3600,16 @@ msgid ""
 "After opening Red Hat Subscription Manager, manually attach subscriptions "
 "via the <b>All Available Subscriptions</b> tab."
 msgstr ""
+"在開啟了 Red Hat Subscription Manager 之後，請透過<b>所有可用訂閱服務</b>分"
+"頁，手動式連接訂閱服務。"
 
 #: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
 msgid ""
 "You will need to use Red Hat Subscription Manager to manually attach "
 "subscriptions to this system after completing firstboot."
 msgstr ""
+"您將需要使用 Red Hat Subscription Manager，以在完成 firstboot 之後，手動式連"
+"接訂閱服務至此系統。"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
@@ -3619,7 +3659,7 @@ msgstr "登入："
 
 #: ../src/subscription_manager/gui/data/credentials.glade.h:4
 msgid "Manually attach subscriptions after registration"
-msgstr ""
+msgstr "註冊完成後，手動式連接訂閱服務"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -3665,11 +3705,11 @@ msgstr "校驗檢查碼失敗"
 
 #: ../bin/install-num-migrate-to-rhsm:56
 msgid "install number to run against"
-msgstr ""
+msgstr "欲執行的安裝號碼"
 
 #: ../bin/install-num-migrate-to-rhsm:60
 msgid "only print the files which would be copied over"
-msgstr ""
+msgstr "僅印出會被複製的檔案"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -3702,39 +3742,39 @@ msgstr "將 %s 安裝至 %s"
 #: ../bin/install-num-migrate-to-rhsm:148
 #, c-format
 msgid "No such directory: %s"
-msgstr ""
+msgstr "無此目錄：%s"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:68
 msgid "ignore channels not available on RHSM"
-msgstr ""
+msgstr "忽略 RHSM 上無法使用的頻道"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:70
 msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
-msgstr ""
+msgstr "啟用 GUI 工具來連接訂閱服務，而非進行 auto-attaching"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:72
 msgid ""
 "don't execute the auto-attach option while registering with subscription "
 "manager"
-msgstr ""
+msgstr "請勿在向訂閱管理程式註冊時，執行 auto-attach 選項"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:74
 msgid ""
 "service level to follow when attaching subscriptions, for no service level "
 "use --servicelevel=\"\""
-msgstr ""
+msgstr "連接訂閱時所採用的服務等級，若無服務等級，請使用 --servicelevel=\"\""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:77
 msgid "specify the subscription management server to migrate to"
-msgstr ""
+msgstr "指定欲遷移至哪個訂閱服務管理伺服器"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
 #: ../bin/rhn-migrate-classic-to-rhsm:105
 #, c-format
 msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for"
-" more details."
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
+"more details."
 msgstr "無法連上憑證伺服器：%s。詳情請見 /var/log/rhsm/rhsm.log。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
@@ -3746,8 +3786,11 @@ msgstr "您輸入了無效的選擇。"
 #: ../bin/rhn-migrate-classic-to-rhsm:196
 msgid ""
 "\n"
-"This system appears to be already registered to Red Hat Subscription Management.  Exiting."
+"This system appears to be already registered to Red Hat Subscription "
+"Management.  Exiting."
 msgstr ""
+"\n"
+"這部系統已向 Red Hat Subscription Management 註冊過。即將退出。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -3755,10 +3798,12 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the profile details."
+"Please visit https://access.redhat.com/management/consumers/%s to view the "
+"profile details."
 msgstr ""
 "\n"
-"請參閱 https://access.redhat.com/management/consumers/%s 以檢視設定檔的詳細資料。"
+"請參閱 https://access.redhat.com/management/consumers/%s 以檢視設定檔的詳細資"
+"料。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -3769,7 +3814,7 @@ msgstr "Org："
 #: ../bin/rhn-migrate-classic-to-rhsm:247
 #, c-format
 msgid "No such org: %s"
-msgstr ""
+msgstr "無此組織：%s"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
@@ -3828,9 +3873,10 @@ msgstr "取得已訂閱頻道清單時發生錯誤。退出中。"
 # document keys, author tchuang
 #: ../bin/rhn-migrate-classic-to-rhsm:336
 msgid ""
-"You are subscribed to more than one jbappplatform channel.  This script does"
-" not support that configuration.  Exiting."
-msgstr "您已向超過一個 jbappplatform 頻道訂閱。此 script 不支援該配置。即將退出。"
+"You are subscribed to more than one jbappplatform channel.  This script does "
+"not support that configuration.  Exiting."
+msgstr ""
+"您已向超過一個 jbappplatform 頻道訂閱。此 script 不支援該配置。即將退出。"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
@@ -3843,9 +3889,12 @@ msgstr "無法登入 RHN Classic。詳情請參見 /var/log/rhsm/rhsm.log。"
 #: ../bin/rhn-migrate-classic-to-rhsm:385
 #, c-format
 msgid ""
-"Did not receive a completed unregistration message from RHN Classic for system %s.\n"
+"Did not receive a completed unregistration message from RHN Classic for "
+"system %s.\n"
 "Please investigate on the Customer Portal at https://access.redhat.com."
 msgstr ""
+"未從 RHN Classic 取得有關於系統 %s 已完成取消註冊的訊息。\n"
+"請至 https://access.redhat.com 查看客戶端入口網站。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -3896,17 +3945,20 @@ msgstr "系統「%s」已成功向 Red Hat Subscription Managerment 註冊。\n"
 #: ../bin/rhn-migrate-classic-to-rhsm:489
 msgid ""
 "Launching the GUI tool to manually attach subscriptions to this system ..."
-msgstr ""
+msgstr "正在啟用 GUI 工具，以手動式連接訂閱服務至此系統上..."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:492
 msgid "Attempting to auto-attach to appropriate subscriptions ..."
-msgstr ""
+msgstr "正在嘗試 auto-attach 至適當的訂閱服務..."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:501
 msgid ""
 "\n"
-"Unable to auto-attach.  Do your existing subscriptions match the products installed on this system?"
+"Unable to auto-attach.  Do your existing subscriptions match the products "
+"installed on this system?"
 msgstr ""
+"\n"
+"無法 auto-attach。您既有的訂閱服務，是否與安裝在這部系統上的產品相符？"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -3914,10 +3966,12 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary."
+"Please visit https://access.redhat.com/management/consumers/%s to view the "
+"details, and to make changes if necessary."
 msgstr ""
 "\n"
-"要檢視詳情，並視需要變更，請參閱 https://access.redhat.com/management/consumers/%s。"
+"要檢視詳情，並視需要變更，請參閱 https://access.redhat.com/management/"
+"consumers/%s。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -3981,7 +4035,9 @@ msgstr ""
 msgid ""
 "Please ensure system has subscriptions attached, and see 'subscription-"
 "manager repos --help' to enable additional repositories"
-msgstr "請確定系統已經附有訂閱服務，詳見「subscription-manager repos --help」來啟動額外的軟體庫"
+msgstr ""
+"請確定系統已經附有訂閱服務，詳見「subscription-manager repos --help」來啟動額"
+"外的軟體庫"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:669
 msgid "The --servicelevel and --no-auto options cannot be used together."
@@ -4023,19 +4079,19 @@ msgstr ""
 
 #: ../src/rhsm_icon.c:79
 msgid "how often to check for validity (in seconds)"
-msgstr ""
+msgstr "檢查有效性的頻率（秒）"
 
 #: ../src/rhsm_icon.c:81 ../src/rhsmcertd.c:67
 msgid "show debug messages"
-msgstr ""
+msgstr "顯示除錯訊息"
 
 #: ../src/rhsm_icon.c:83
 msgid "force display of the icon (expired, partial or warning)"
-msgstr ""
+msgstr "強制顯示圖像（已過期、部分或警告）"
 
 #: ../src/rhsm_icon.c:86
 msgid "run the first status check right away"
-msgstr ""
+msgstr "立即執行第一次狀態檢查"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -4048,11 +4104,13 @@ msgid ""
 "In order for Subscription Manager to provide your system with updates, your "
 "system must be registered with the Customer Portal. Please enter your Red "
 "Hat login to ensure your system is up-to-date."
-msgstr "為了要讓訂閱管理員為系統提供更新，系統必須向客戶入口網站註冊。請輸入您的 Red Hat 登入帳號，確保您的系統處於最新狀態。"
+msgstr ""
+"為了要讓訂閱管理員為系統提供更新，系統必須向客戶入口網站註冊。請輸入您的 Red "
+"Hat 登入帳號，確保您的系統處於最新狀態。"
 
 #: ../src/rhsm_icon.c:212
 msgid "Invalid or Missing Subscriptions"
-msgstr ""
+msgstr "訂閱服務遺失或無效"
 
 #: ../src/rhsm_icon.c:215
 msgid "This system is missing one or more subscriptions."
@@ -4066,8 +4124,7 @@ msgstr "部分享有權利的產品"
 
 #: ../src/rhsm_icon.c:221
 msgid ""
-"This system is missing one or more subscriptions to fully cover its "
-"products."
+"This system is missing one or more subscriptions to fully cover its products."
 msgstr "這台系統上找不到一或多組訂閱服務，無法提供產品的完整服務。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
@@ -4123,19 +4180,19 @@ msgstr "選項剖析失敗：%s\n"
 
 #: ../src/rhsmcertd.c:54
 msgid "interval to run cert check (in minutes)"
-msgstr ""
+msgstr "執行憑證檢查的時間間隔（分鐘）"
 
 #: ../src/rhsmcertd.c:58
 msgid "deprecated, see auto-attach-interval"
-msgstr ""
+msgstr "已淘汰，詳情請參閱 auto-attach-interval"
 
 #: ../src/rhsmcertd.c:61
 msgid "interval to run auto-attach (in minutes)"
-msgstr ""
+msgstr "執行 auto-attach 的時間間隔（分鐘）"
 
 #: ../src/rhsmcertd.c:64
 msgid "run the initial checks immediately, with no delay"
-msgstr ""
+msgstr "即刻執行初始檢查，不延緩"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -4149,11 +4206,11 @@ msgstr "欲取得更多資訊，請執行：rhsmcertd --help\n"
 msgid "Wrong number of arguments specified.\n"
 msgstr "指定了錯誤的引數數量。\n"
 
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author tchuang
 #. New style args were used, assume error.
 #. We do not support both at once, other than
 #. debug and wait.
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author tchuang
 #: ../src/rhsmcertd.c:343
 msgid "Invalid argument specified.\n"
 msgstr "指定了無效的引數。\n"
@@ -4264,7 +4321,7 @@ msgstr "Socket 限制"
 
 #: ../src/rct/printing.py:57
 msgid "RAM Limit"
-msgstr ""
+msgstr "RAM 限制"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -4424,7 +4481,7 @@ msgstr "%%prog %s [OPTIONS] CERT_FILE"
 
 #: ../src/rct/commands.py:78
 msgid "Print certificate information"
-msgstr ""
+msgstr "印出憑證資訊"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author tchuang
@@ -4434,11 +4491,11 @@ msgstr "不顯示憑證的產品資訊"
 
 #: ../src/rct/commands.py:84
 msgid "do not show the cert's content info"
-msgstr ""
+msgstr "不顯示憑證的內容資訊"
 
 #: ../src/rct/commands.py:99
 msgid "Print certificate statistics and sizes"
-msgstr ""
+msgstr "印出憑證的統計資料與大小"
 
 #: ../src/rct/commands.py:105
 #, python-format
