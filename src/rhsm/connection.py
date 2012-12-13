@@ -394,7 +394,6 @@ class Restlib(object):
         try:
             conn.request(request_type, handler, body=body, headers=headers)
         except SSLError, e:
-            log.exception(e)
             if self.cert_file:
                 id_cert = certificate.create_from_file(self.cert_file)
                 if not id_cert.is_valid():
