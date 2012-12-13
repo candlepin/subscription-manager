@@ -1,14 +1,14 @@
-.TH rhsmcertd 8 "September 6, 2012" "version 1.3" "Subscription Management Certificate Daemon"  Deon Lackey 
+.TH rhsmcertd 8 "December 12, 2012" "version 1.4" "Subscription Management Certificate Daemon"  Deon Lackey 
 .SH NAME
 rhsmcertd \- Periodically scans and updates the entitlement certificates on a registered system.
 
 .SH SYNOPSIS
-rhsmcertd [--cert-interval=MINUTES] [--heal-interval=MINUTES] [--now] [--debug] [--help]
+rhsmcertd [--cert-interval=MINUTES] [--auto-attach-interval=MINUTES] [--now] [--debug] [--help]
 
 .PP
 .I Deprecated usage
 .PP
-rhsmcertd [\fIcertInterval healInterval\fP]
+rhsmcertd [\fIcertInterval autoattachInterval\fP]
 
 .SH DESCRIPTION
 Red Hat provides content updates and support by issuing 
@@ -21,7 +21,7 @@ When subscriptions are applied to a system or when new subscriptions are availab
 process runs periodically to check for changes in the subscriptions available to a machine by updating the entitlement certificates installed on the machine and by installing new entitlement certificates as they're available.
 
 .PP
-At a defined interval, the process checks with the subscription management service to see if any new subscriptions are available to the system. If there are, it pulls in the associated subscription certificates. If any subscriptions have expired and new subscriptions are available, then the \fBrhsmcertd\fP process will automatically request those subscriptions (this is called \fIautohealing\fP). 
+At a defined interval, the process checks with the subscription management service to see if any new subscriptions are available to the system. If there are, it pulls in the associated subscription certificates. If any subscriptions have expired and new subscriptions are available, then the \fBrhsmcertd\fP process will automatically request those subscriptions. 
 
 .PP
 This \fBrhsmcertd\fP process invokes the 
@@ -30,7 +30,7 @@ certmgr.py
 script to perform the certificate add and update operations.
 
 .PP
-Both the certificate interval and the healing interval are configurable and can be reset through the \fBrhsmcertd\fP daemon itself or by editing the Subscription Manager \fB/etc/rhsm/rhsm.conf\fP file.
+Both the certificate interval and the auto-attach interval are configurable and can be reset through the \fBrhsmcertd\fP daemon itself or by editing the Subscription Manager \fB/etc/rhsm/rhsm.conf\fP file.
 
 .PP
 .B rhsmcertd
@@ -56,7 +56,7 @@ Resets the interval for checking for new subscription certificates. This value i
 file are used (unless the argument is passed again).
 
 .TP 
-.B -i, --heal-interval=MINUTES
+.B -i, --auto-attach-interval=MINUTES
 Resets the interval for checking for and replacing expired subscriptions. This value is in minutes. The default is 1440, or 24 hours. This interval is in effect until the daemon restarts, and then the values in the 
 .B /etc/rhsm/rhsm.conf
 file are used (unless the argument is passed again).
@@ -67,14 +67,14 @@ file are used (unless the argument is passed again).
 .B rhsmcertd --cert-interval=1440
 
 .SS RUNNING CERTIFICATE AND HEALING SCANS IMMEDIATELY
-Normally, the certificate and healing scans are run periodically, on a schedule defined in the \fBrhsmcertd\fP configuration. The scans can be run immediately -- which is useful if an administrator knows that there are new subscriptions available -- and then the scans resume their schedules.
+Normally, the certificate and auto-attach scans are run periodically, on a schedule defined in the \fBrhsmcertd\fP configuration. The scans can be run immediately -- which is useful if an administrator knows that there are new subscriptions available -- and then the scans resume their schedules.
 .PP
 .B rhsmcertd -n
 
 .SS DEPRECATED USAGE
-\fBrhsmcertd\fP used to allow the certificate and healing intervals to be reset simply by passing two integers as arguments.
+\fBrhsmcertd\fP used to allow the certificate and auto-attach intervals to be reset simply by passing two integers as arguments.
 .PP
-\fBrhsmcertd\fP \fIcertInterval healInterval\fP
+\fBrhsmcertd\fP \fIcertInterval autoattachInterval\fP
 .PP
 For example:
 .nf

@@ -1,4 +1,4 @@
-.TH subscription-manager 8 "November 8, 2012" "version 2.3" "Subscription Management"  Deon Lackey 
+.TH subscription-manager 8 "December 12, 2012" "version 2.4" "Subscription Management"  Deon Lackey 
 .SH NAME
 subscription-manager \- Registers systems to a subscription management service and then attaches and manages subscriptions for software products.
 
@@ -65,10 +65,10 @@ has specific options available for each command, depending on what operation is 
 2. unregister
 
 .IP
-3. subscribe
+3. attach
 
 .IP
-4. unsubscribe
+4. remove
 
 .IP
 5. release
@@ -201,14 +201,14 @@ Giving the org name is not necessary when there is a single organization or when
 
 
 .TP
-.B --autosubscribe
+.B --auto-attach
 Automatically attaches the best-matched, compatible subscriptions to this system.
 
 
 .TP
 .B --servicelevel=LEVEL
 Sets the preferred service level to use with subscriptions added to the system. Service levels are commonly premium, standard, and none, though other levels may be available depending on the product and the contract. This preference can only be used in conjunction with the 
-.B --autosubscribe
+.B --auto-attach
 option, and then it is used as one of the factors for matching subscriptions.
 
 .TP
@@ -248,9 +248,9 @@ command removes a system's subscriptions and removes it from the subscription ma
 .PP
 This command has no options.
 
-.SS SUBSCRIBE OPTIONS
+.SS ATTACH OPTIONS
 The 
-.B subscribe
+.B attach
 command applies a specific subscription to the system. 
 
 .TP
@@ -275,9 +275,9 @@ Sets the preferred service level to use with subscriptions attached to the syste
 .B --auto
 option, and then it is used as one of the factors for matching subscriptions.
 
-.SS UNSUBSCRIBE OPTIONS
+.SS REMOVE OPTIONS
 The 
-.B unsubscribe
+.B remove
 command removes a subscription from the system. (This does not uninstall the associated products.)
 
 .TP
@@ -709,12 +709,12 @@ subscription-manager unregister
 
 .PP
 An option with registration, 
-.B --autosubscribe,
+.B --auto-attach,
 will automatically attach the subscriptions pool which best matches the system architecture and configuration to the newly-registered system. This option attaches subscriptions as part of the registration process, rather than separately managing subscriptions.
 .RS
 .nf
 subscription-manager register --username=admin --password=secret 
---autosubscribe
+--auto-attach
 .fi
 .RE
 
@@ -728,11 +728,11 @@ option sets a preference that helps the autoattach process select appropriate su
 .RS
 .nf
 subscription-manager register --username=admin --password=secret 
---autosubscribe --servicelevel=premium
+--auto-attach --servicelevel=premium
 .fi
 .RE
 
-.SS LISTING, SUBSCRIBING, AND UNSUBSCRIBING TO PRODUCTS
+.SS LISTING, ATTACHING, AND REMOVING SUBSCRIPTIONS FOR PRODUCTS
 A 
 .I subscription
 is essentially the right to install, use, and receive updates for a Red Hat product. (Sometimes multiple individual software products are bundled together into a single subscription.) When a system is registered, the subscription management service is aware of the system and has a list of all of the possible product subscriptions that the system can install and use. A subscription is applied to a system when the system is 
@@ -793,7 +793,7 @@ Attaching a subscription requires the ID for the subscription pool (the
 option). For example:
 .RS
 .nf
-subscription-manager subscribe 
+subscription-manager attach 
 --pool=ff8080812bc382e3012bc3845da100d2
 .fi
 .RE
@@ -806,7 +806,7 @@ command, the system can be autoattached to the best-fitting subscriptions using 
 option:
 .RS
 .nf
-subscription-manager subscribe --auto
+subscription-manager attach --auto
 .fi
 .RE
 
@@ -820,20 +820,18 @@ option sets a preference that helps the autoattach process select appropriate su
 
 .RS
 .nf
-subscription-manager subscribe --auto --servicelevel=premium
+subscription-manager attach --auto --servicelevel=premium
 .fi
 .RE
 
 .PP
-Some subscriptions define a count based on attributes of the system itself, like the number of sockets or the number of virtual guests on a host. You can 
-.I stack
-multiple subscriptions together to cover the count. For example, if there is a four socket server, you can use two subscriptions for "RHEL Server for Two Sockets" to cover the socket count. To specify the number of subscriptions to use, 
+Some subscriptions define a count based on attributes of the system itself, like the number of sockets or the number of virtual guests on a host. You can combine multiple subscriptions together to cover the count. For example, if there is a four socket server, you can use two subscriptions for "RHEL Server for Two Sockets" to cover the socket count. To specify the number of subscriptions to use, 
 use the 
 .B --quantity
 option. For example:
 .RS
 .nf
-subscription-manager subscribe 
+subscription-manager attach 
 --pool=ff8080812bc382e3012bc3845da100d2
 --quantity=2
 .fi
@@ -843,13 +841,13 @@ subscription-manager subscribe
 Removing subscription from a system releases the subscription back into the pool. The system remains registered with the subscription management service. Each product has an identifying X.509 certificate installed with it. To remove a subscription for a specific product, specify the serial number (or numbers, in multiple \fB--serial\fP options) of the certificate:
 .RS
 .nf
-subscription-manager unsubscribe --serial=1128750306742160
+subscription-manager remove --serial=1128750306742160
 .fi
 .RE
 
 .PP
 Giving the 
-.B unsubscribe
+.B remove
 command with the 
 .B --all
 option removes every subscription the system has used.
@@ -892,7 +890,7 @@ subscription-manager orgs --username=jsmith
 .SS CHANGING SUBSCRIPTION MANAGER CONFIGURATION
 The Subscription Manager CLI and GUI both use the 
 .B /etc/rhsm/rhsm.conf
-file for configuration, including what content and subscription management services to use and management settings like autohealing. This configuration file can be edited directly, or it can be edited using the 
+file for configuration, including what content and subscription management services to use and management settings like auto-attaching. This configuration file can be edited directly, or it can be edited using the 
 .B config 
 command. Parameters and values are passed as arguments with the 
 .B config
@@ -950,7 +948,7 @@ tool can be run as a post-install script as part of the kickstart installation p
 .RS
 .nf
 %post --log=/root/ks-post.log
-/usr/sbin/subscription-manager register --username admin --password secret --org 'east colo' --autosubscribe --servicelevel=premium --force
+/usr/sbin/subscription-manager register --username admin --password secret --org 'east colo' --auto-attach --servicelevel=premium --force
 .fi
 .RE
 
