@@ -9,7 +9,7 @@ _subscription_manager_common_opts="-h --help --proxy --proxyuser --proxypassword
 
 # complete functions for subcommands ($1 - current opt, $2 - previous opt)
 
-_subscription-manager_list()
+_subscription_manager_list()
 {
   local opts="--installed --available --ondate --consumed --all
               ${_subscription_manager_common_opts}"
@@ -17,13 +17,13 @@ _subscription-manager_list()
 }
 
 
-_subscription-manager_refresh()
+_subscription_manager_refresh()
 {
   local opts="${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_register()
+_subscription_manager_register()
 {
   local opts="--username --password --type --name --consumerid
               --org --environment --autosubscribe --force --activationkey
@@ -32,7 +32,7 @@ _subscription-manager_register()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_attach()
+_subscription_manager_attach()
 {
   # try to autocomplete pool id's as well
   # doesn't work well with sudo/non root users though
@@ -49,13 +49,13 @@ _subscription-manager_attach()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_unregister()
+_subscription_manager_unregister()
 {
   local opts="${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_remove()
+_subscription_manager_remove()
 {
  # try to autocomplete serial number as well
   case $prev in
@@ -69,13 +69,13 @@ _subscription-manager_remove()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_clean()
+_subscription_manager_clean()
 {
   local opts="${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_config()
+_subscription_manager_config()
 {
   # TODO: we could probably generate the options from the help
   CONFIG_OPTS=$(subscription-manager config --help | sed -ne "s|\s*\(\-\-.*\..*\)\=.*\..*|\1|p")
@@ -85,28 +85,28 @@ _subscription-manager_config()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_environments()
+_subscription_manager_environments()
 {
   local opts="--username --password --org
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_facts()
+_subscription_manager_facts()
 {
   local opts="--list --update
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_identity()
+_subscription_manager_identity()
 {
   local opts="--username --password --regenerate --force
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_import()
+_subscription_manager_import()
 {
   # TODO: auto complete *.pem?
   local opts="--certificate
@@ -114,21 +114,21 @@ _subscription-manager_import()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_orgs()
+_subscription_manager_orgs()
 {
   local opts="--username --password
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_redeem()
+_subscription_manager_redeem()
 {
   local opts="--email --locale
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_release()
+_subscription_manager_release()
 {
     # we could autocomplete the release version for
     # --set
@@ -137,14 +137,14 @@ _subscription-manager_release()
     COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_repos()
+_subscription_manager_repos()
 {
   local opts="--list
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription-manager_service-level()
+_subscription_manager_service_level()
 {
     local opts="--show --org --list
                   ${_subscription_manager_common_opts}"
@@ -153,7 +153,7 @@ _subscription-manager_service-level()
 
 
 # main complete function
-_subscription-manager()
+_subscription_manager()
 {
   local first cur prev opts base
   COMPREPLY=()
@@ -181,15 +181,15 @@ _subscription-manager()
       release|\
       repos|\
       service-level)
-      "_subscription-manager_$first" "${cur}" "${prev}"
+      "_subscription_manager_$first" "${cur}" "${prev}"
       return 0
       ;;
       attach|subscribe)
-      "_subscription-manager_attach" "${cur}" "${prev}"
+      "_subscription_manager_attach" "${cur}" "${prev}"
       return 0
       ;;
       remove|unsubscribe)
-      "_subscription-manager_remove" "${cur}" "${prev}"
+      "_subscription_manager_remove" "${cur}" "${prev}"
       return 0
       ;;
       *)
@@ -200,4 +200,4 @@ _subscription-manager()
   return 0
 }
 
-complete -F _subscription-manager subscription-manager
+complete -F _subscription_manager subscription-manager
