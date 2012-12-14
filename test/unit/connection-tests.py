@@ -31,7 +31,7 @@ class ConnectionTests(unittest.TestCase):
         # is to mock the actual server responses and just test logic in the
         # UEPConnection:
         self.cp = UEPConnection(username="dummy", password="dummy",
-                insecure=True)
+                handler="/Test/", insecure=True)
 
     def test_get_environment_by_name_requires_owner(self):
         self.assertRaises(Exception, self.cp.getEnvironment, None, {"name": "env name"})
@@ -55,6 +55,9 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.request_post = Mock(return_value=[])
         self.cp.bind("abcd")
         self.cp.conn.request_post.assert_called_with("/consumers/abcd/entitlements")
+
+    def test_clean_up_prefix(self):
+        self.assertTrue(self.cp.handler == "/Test")
 
 
 class RestlibTests(unittest.TestCase):

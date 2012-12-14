@@ -481,6 +481,10 @@ class UEPConnection:
         self.ssl_port = ssl_port or safe_int(config.get('server', 'port'))
         self.handler = handler or config.get('server', 'prefix')
 
+        # remove trailing "/" from the prefix if it is there
+        # BZ848836
+        self.handler = self.handler.rstrip("/")
+
         self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname')
         self.proxy_port = proxy_port or config.get('server', 'proxy_port')
         self.proxy_user = proxy_user or config.get('server', 'proxy_user')
