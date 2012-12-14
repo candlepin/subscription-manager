@@ -885,9 +885,11 @@ class UEPConnection:
         method = "/subscriptions?consumer_uuid=%s" % consumerId
         if email:
             method += "&email=%s" % email
-            if not lang:
+            if (not lang) and (locale.getdefaultlocale()[0] is not None):
                 lang = locale.getdefaultlocale()[0].lower().replace('_', '-')
-            method += "&email_locale=%s" % lang
+
+            if lang:
+                method += "&email_locale=%s" % lang
         return self.conn.request_post(method)
 
     def sanitize(self, urlParam, plus=False):
