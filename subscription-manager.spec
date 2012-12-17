@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.15
+Version: 1.1.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,11 @@ fi
 %endif
 
 %changelog
+* Mon Dec 17 2012 Adrian Likins <alikins@redhat.com> 1.1.16-1
+- 887434,887431,887433,886917,887923,887433: latest strings
+  (alikins@redhat.com)
+- 863572: Make forward/back insensitive when registering (alikins@redhat.com)
+
 * Thu Dec 13 2012 Adrian Likins <alikins@redhat.com> 1.1.15-1
 - 841496: Do not use hyphens in bash completion files as these are invalid for
   identifiers in the sh shell. (bkearney@redhat.com)
