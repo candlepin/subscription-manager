@@ -289,10 +289,9 @@ def checkIsOrgAdmin(sc, sk, username):
         systemExit(1, _("You must be an org admin to successfully run this script."))
 
 
-def selectServiceLevel(cp, consumer, org, servicelevel):
+def selectServiceLevel(cp, org, servicelevel):
     not_supported = _("Error: The service-level command is not supported by "
                       "the server.")
-    uuid = consumer.getConsumerId()
     try:
         levels = cp.getServiceLevelList(org)
     except RemoteServerException, e:
@@ -719,7 +718,7 @@ def main():
     consumer = register(secreds, serverurl, org, environment)
     if not options.noauto:
         if options.servicelevel:
-            servicelevel = selectServiceLevel(cp, consumer, org, options.servicelevel)
+            servicelevel = selectServiceLevel(cp, org, options.servicelevel)
             subscribe(consumer, servicelevel)
         else:
             subscribe(consumer, None)
