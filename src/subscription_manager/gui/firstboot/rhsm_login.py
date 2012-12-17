@@ -197,6 +197,8 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         self._cached_credentials = None
         self._registration_finished = False
 
+        self.interface = None
+
     def _read_rhn_proxy_settings(self):
         # Read and store rhn-setup's proxy settings, as they have been set
         # on the prior screen (which is owned by rhn-setup)
@@ -333,6 +335,22 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         """
         widget = self.glade.get_widget(widget_name)
         widget.destroy()
+
+    def _set_navigation_sensitive(self, sensitive):
+        # we are setting the firstboot next/back buttons
+        # insensitive here, instead of the register/cancel
+        # buttons this calls if shown in standalone gui.
+        # But, to get to those, we need a reference to the
+        # firstboot interface instance.
+        # In rhel6.4, we don't get a handle on interface, until we
+        # module.apply(). We call _set_navigation_sensitive from
+        # module.show() (to set these back if they have changed in
+        # the standalone gui flow), which is before apply(). So
+        # do nothing here if we haven't set a ref to self.interface
+        # yet. See bz#863572
+        if self.interface is not None:
+            self.interface.backButton.set_sensitive(sensitive)
+            self.interface.nextButton.set_sensitive(sensitive)
 
     def _get_credentials_hash(self):
         """
