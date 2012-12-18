@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.16
+Version: 1.1.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,12 @@ fi
 %endif
 
 %changelog
+* Tue Dec 18 2012 Adrian Likins <alikins@redhat.com> 1.1.17-1
+- 825950: updating SAM registration procedure; other term edits and updated
+  screenshot (dlackey@redhat.com.com)
+- 887966: es_ES.po fixups from zanata (alikins@redhat.com)
+- 887989,887995,887997,888006,887890,888010: new strings (alikins@redhat.com)
+
 * Mon Dec 17 2012 Adrian Likins <alikins@redhat.com> 1.1.16-1
 - 887434,887431,887433,886917,887923,887433: latest strings
   (alikins@redhat.com)
