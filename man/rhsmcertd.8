@@ -62,14 +62,22 @@ Resets the interval for checking for and replacing expired subscriptions. This v
 file are used (unless the argument is passed again).
 
 .SH USAGE EXAMPLES
+.TP
+\fBNOTE\fP
+Be sure to stop the running \fBrhsmcertd\fP daemon before making any configuration changes, or the new configuration is not applied.
 
 .SS RESETTING THE CERTIFICATE SCAN INTERVAL
-.B rhsmcertd --cert-interval=1440
+.nf
+service rhsmcertd stop
+rhsmcertd --cert-interval=240
+.fi
 
 .SS RUNNING CERTIFICATE AND HEALING SCANS IMMEDIATELY
 Normally, the certificate and auto-attach scans are run periodically, on a schedule defined in the \fBrhsmcertd\fP configuration. The scans can be run immediately -- which is useful if an administrator knows that there are new subscriptions available -- and then the scans resume their schedules.
-.PP
-.B rhsmcertd -n
+.nf
+service rhsmcertd stop
+rhsmcertd -n
+.fi
 
 .SS DEPRECATED USAGE
 \fBrhsmcertd\fP used to allow the certificate and auto-attach intervals to be reset simply by passing two integers as arguments.
@@ -78,6 +86,7 @@ Normally, the certificate and auto-attach scans are run periodically, on a sched
 .PP
 For example:
 .nf
+service rhsmcertd stop
 rhsmcertd 180 480
 .fi
 .PP 
