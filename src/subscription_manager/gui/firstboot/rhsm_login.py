@@ -113,6 +113,8 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
         except RestlibException, e:
             handle_gui_exception(e, registergui.REGISTER_ERROR,
                 self._parent.window)
+            if e.code == 404 and self._parent.activation_keys:
+                self._parent.pre_done(registergui.ACTIVATION_KEY_PAGE)
             if e.code == 400:
                 self._parent.pre_done(registergui.CREDENTIALS_PAGE)
 
