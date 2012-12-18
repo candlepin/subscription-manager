@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.17
+Version: 1.1.18
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,13 @@ fi
 %endif
 
 %changelog
+* Tue Dec 18 2012 Adrian Likins <alikins@redhat.com> 1.1.18-1
+- 814378: disable linkify if we are running as firstboot (alikins@redhat.com)
+- 886280,878257,878264,878269: man page updates (dlackey@redhat.com.com)
+- 886887: Take the user back to the activation key page if he enters an invalid
+  key. (awood@redhat.com)
+- 886280: Add info about 'partial' type for --force-icon (alikins@redhat.com)
+
 * Tue Dec 18 2012 Adrian Likins <alikins@redhat.com> 1.1.17-1
 - 825950: updating SAM registration procedure; other term edits and updated
   screenshot (dlackey@redhat.com.com)
