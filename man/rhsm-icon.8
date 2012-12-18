@@ -3,7 +3,7 @@
 rhsm-icon \- Periodically checks installed products against active subscriptions to check their status.
 
 .SH SYNOPSIS
-rhsm-icon [--check-period] [--force-icon=warning|expired] [--check-immediately]
+rhsm-icon [--check-period] [--force-icon=warning|partial|expired] [--check-immediately]
 
 .SH DESCRIPTION
 Red Hat provides content updates and support by issuing 
@@ -28,9 +28,11 @@ Sets the interval to use between checks for the product subscription status. The
 .B -f, --force-icon=TYPE
 Manually displays the given type of icon in the start menu. The 
 .I TYPE
-can be 
+can be
 .I warning
-or 
+,
+.I partial
+, or
 .I expired
 and uses a different icon for each type of message.
 
@@ -83,6 +85,8 @@ option. (Also use the \fB--check-immediately\fP option, or the scan will take th
 rhsm-icon --force-icon=warning --check-immediately
 
 rhsm-icon --force-icon=expired --check-immediately
+
+rhsm-icon --force-icon=partial --check-immediately
 .fi
 
 .SH BUGS
