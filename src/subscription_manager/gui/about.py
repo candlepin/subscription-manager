@@ -18,6 +18,7 @@ import datetime
 from gtk import RESPONSE_DELETE_EVENT, RESPONSE_CANCEL, \
                 AboutDialog as GtkAboutDialog, Label
 from subscription_manager.utils import get_client_versions, get_server_versions
+from subscription_manager.gui.utils import get_running_as_firstboot
 
 import gettext
 _ = gettext.gettext
@@ -46,7 +47,8 @@ class AboutDialog(object):
         self.dialog.set_name(_("Subscription Manager"))
         self.dialog.set_license(LICENSE)
         self.dialog.set_wrap_license(True)
-        self.dialog.set_website("https://fedorahosted.org/subscription-manager/")
+        if not get_running_as_firstboot():
+            self.dialog.set_website("https://fedorahosted.org/subscription-manager/")
         self.dialog.set_copyright(_("Copyright (c) 2012 Red Hat, Inc."))
         self.dialog.set_logo_icon_name("subscription-manager")
         self.dialog.set_icon_name("subscription-manager")
