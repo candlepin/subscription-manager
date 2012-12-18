@@ -13,6 +13,10 @@ sys.path.append("/usr/share/rhsm")
 from subscription_manager import logutil
 logutil.init_logger()
 
+# neuter linkify in firstboot
+from subscription_manager.gui.utils import running_as_firstboot
+running_as_firstboot()
+
 from subscription_manager.gui import managergui
 from subscription_manager import managerlib
 from subscription_manager.gui import registergui

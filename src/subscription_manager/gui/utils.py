@@ -39,6 +39,18 @@ MIN_GTK_MICRO = 0
 
 EVEN_ROW_COLOR = '#eeeeee'
 
+# set if we are in firstboot, to disable linkify, see bz#814378
+FIRSTBOOT = False
+
+
+def running_as_firstboot():
+    global FIRSTBOOT
+    FIRSTBOOT = True
+
+
+def get_running_as_firstboot():
+    return FIRSTBOOT
+
 
 def handle_gui_exception(e, msg, parent, formatMsg=True, logMsg=None):
     """
@@ -114,6 +126,10 @@ def linkify(msg):
     url_regex = re.compile("""https?://[\w\.\?\(\)\-\/]*""")
 
     if gtk.check_version(MIN_GTK_MAJOR, MIN_GTK_MINOR, MIN_GTK_MICRO):
+        return msg
+
+    # dont linkify in firstboot
+    if FIRSTBOOT:
         return msg
 
     def add_markup(mo):
