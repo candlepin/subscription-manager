@@ -988,8 +988,18 @@ class AsyncBackend(object):
             facts.write_cache()
             installed_mgr.write_cache()
 
-            ProfileManager().update_check(self.backend.admin_uep,
-                                          retval['uuid'])
+            cp = self.backend.admin_uep
+
+            # In practice, the only time this condition should be true is
+            # when we are working with activation keys.  See BZ #888790.
+            if not self.backend.admin_uep.username and \
+                not self.backend.admin_uep.password:
+                # Write the identity cert to disk
+                managerlib.persist_consumer_cert(retval)
+                self.backend.update()
+                cp = self.backend.uep
+
+            ProfileManager().update_check(cp, retval['uuid'])
 
             # We have new credentials, restart virt-who
             restart_virt_who()
