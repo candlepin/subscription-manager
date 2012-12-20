@@ -374,18 +374,19 @@ class ConfirmSubscriptionsScreen(Screen):
                                                          backend)
         self.button_label = _("Attach")
 
-        self.store = gtk.ListStore(str)
-        # For now just going to set up one product name column, we will need
-        # to display more information though.
+        self.store = gtk.ListStore(str, str)
         self.subs_treeview.set_model(self.store)
-        column = gtk.TreeViewColumn(_("Subscription"))
+        self.add_text_column(_("Subscription"), 0, True)
+        self.add_text_column(_("Quantity"), 1)
+
+    def add_text_column(self, name, index, expand=False):
+        text_renderer = gtk.CellRendererText()
+        column = gtk.TreeViewColumn(name, text_renderer, text=index)
+        column.set_expand(expand)
+
         self.subs_treeview.append_column(column)
-        # create a CellRendererText to render the data
-        self.cell = gtk.CellRendererText()
-        column.pack_start(self.cell, True)
-        column.add_attribute(self.cell, 'text', 0)
-        column.set_sort_column_id(0)
-        self.subs_treeview.set_search_column(0)
+        column.set_sort_column_id(index)
+        return column
 
     def apply(self):
         return PERFORM_SUBSCRIBE_PAGE
@@ -401,7 +402,8 @@ class ConfirmSubscriptionsScreen(Screen):
                 "</b>")
 
         for pool_quantity in self._dry_run_result.json:
-            self.store.append([pool_quantity['pool']['productName']])
+            self.store.append([pool_quantity['pool']['productName'],
+                pool_quantity['quantity']])
 
     def pre(self):
         self.set_model()
