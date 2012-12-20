@@ -150,7 +150,7 @@ class CLI:
         cmd = self._find_best_match(sys.argv)
         if len(sys.argv) < 2 or not cmd:
             self._usage()
-            sys.exit(0)
+            sys.exit(1)
 
         try:
             return cmd.main()
