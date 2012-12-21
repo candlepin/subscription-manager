@@ -124,6 +124,9 @@ if __name__ == '__main__':
     if bus and ((request_name_res != REQUEST_NAME_REPLY_PRIMARY_OWNER) and \
        (request_name_res != REQUEST_NAME_REPLY_ALREADY_OWNER)):
         print _("subscription-manager-gui is already running")
+        # Attempt to raise the running instance to the forefront
+        remote_object = bus.get_object(BUS_NAME, BUS_PATH)
+        remote_object.show_window(dbus_interface=BUS_NAME)
     else:
         try:
             main = managergui.MainWindow(auto_launch_registration=options.register)
