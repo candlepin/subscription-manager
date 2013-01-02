@@ -1471,7 +1471,7 @@ class RemoveCommand(CliCommand):
                         if count == 1:
                             print _("1 subscription removed from this system.")
                         else:
-                            print _("%s subscriptions removed from this system." \
+                            print (_("%s subscriptions removed from this system.") \
                                 % total['deletedRecords'])
                 else:
                     success = []
@@ -1509,7 +1509,7 @@ class RemoveCommand(CliCommand):
                     for ent in self.entitlement_dir.list():
                         ent.delete()
                         total = total + 1
-                    print _("%s subscriptions removed from this system." % total)
+                    print (_("%s subscriptions removed from this system.") % total)
                 else:
                     count = 0
                     for ent in self.entitlement_dir.list():
