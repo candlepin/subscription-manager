@@ -37,7 +37,7 @@ cfg = initConfig()
 
 def system_log(message, priority=syslog.LOG_NOTICE):
     syslog.openlog("subscription-manager")
-    syslog.syslog(priority, message)
+    syslog.syslog(priority, message.encode("utf-8"))
 
 
 class ActionLock(Lock):
