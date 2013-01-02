@@ -256,13 +256,17 @@ class TestRegisterCommand(TestCliProxyCommand):
     def test_no_commands(self):
         self._test_no_exception([])
 
-    def test_main_server_url(self):
+    @patch.object(managercli.cfg, "save")
+    def test_main_server_url(self, mock_save):
         server_url = "https://subscription.rhn.redhat.com/subscription"
         self._test_no_exception(["--serverurl", server_url])
+        mock_save.assert_called_with()
 
-    def test_main_base_url(self):
+    @patch.object(managercli.cfg, "save")
+    def test_main_base_url(self, mock_save):
         base_url = "https://cdn.redhat.com"
         self._test_no_exception(["--baseurl", base_url])
+        mock_save.assert_called_with()
 
 
 class TestListCommand(TestCliProxyCommand):
