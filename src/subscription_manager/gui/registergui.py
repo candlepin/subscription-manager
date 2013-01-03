@@ -880,6 +880,7 @@ class ChooseServerScreen(Screen):
             (hostname, port, prefix) = parse_server_info(server)
             if re.search('subscription\.rhn\.(.*\.)*redhat\.com', hostname):
                 sensitive = False
+                self.activation_key_checkbox.set_active(False)
             else:
                 sensitive = True
             self.activation_key_checkbox.set_sensitive(sensitive)
