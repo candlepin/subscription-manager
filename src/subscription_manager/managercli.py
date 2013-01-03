@@ -237,6 +237,14 @@ class CliCommand(AbstractCLICommand):
     def is_registered(self):
         return ConsumerIdentity.existsAndValid()
 
+    def persist_server_options(self):
+        """
+        Whether to persist options like --serverurl or --baseurl to the
+        rhsm.conf file when used.  For modules like register, we want this to
+        be true.  For modules like orgs or environments, we want false.
+        """
+        return False
+
     def require_connection(self):
         return True
 
@@ -363,7 +371,8 @@ class CliCommand(AbstractCLICommand):
 
             # seems like cfg.save() could raise any wide variety of
             # exceptions
-            cfg.save()
+            if self.persist_server_options():
+                cfg.save()
 
         if hasattr(self.options, "base_url") and self.options.base_url:
             try:
@@ -377,7 +386,8 @@ class CliCommand(AbstractCLICommand):
             cfg.set("rhsm", "baseurl", format_baseurl(baseurl_server_hostname,
                                                       baseurl_server_port,
                                                       baseurl_server_prefix))
-            cfg.save()
+            if self.persist_server_options():
+                cfg.save()
 
         # support foo.example.com:3128 format
         if hasattr(self.options, "proxy_url") and self.options.proxy_url:
@@ -931,6 +941,13 @@ class RegisterCommand(UserPassCommand):
         elif (self.options.activation_keys and not self.options.org):
             print(_("Error: Must provide --org with activation keys."))
             sys.exit(-1)
+
+    def persist_server_options(self):
+        """
+        If the user provides a --serverurl or --baseurl, we want to persist it
+        to the config file so that future commands will use the value.
+        """
+        return True
 
     def _do_command(self):
         """
