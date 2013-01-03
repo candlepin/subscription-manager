@@ -7,8 +7,8 @@ rhsm_display.set_display()
 
 from stubs import StubBackend, StubFacts
 from subscription_manager.gui.registergui import RegisterScreen, \
-        CredentialsScreen, ActivationKeyScreen, CREDENTIALS_PAGE, \
-        CHOOSE_SERVER_PAGE
+        CredentialsScreen, ActivationKeyScreen, ChooseServerScreen, \
+        CREDENTIALS_PAGE, CHOOSE_SERVER_PAGE
 
 
 class RegisterScreenTests(unittest.TestCase):
@@ -77,3 +77,25 @@ class ActivationKeyScreenTests(unittest.TestCase):
         input = "hello, world,how  are , you"
         result = self.screen._split_activation_keys(input)
         self.assertEquals(expected, result)
+
+
+class ChooseServerScreenTests(unittest.TestCase):
+    def setUp(self):
+        self.backend = StubBackend()
+        self.parent = Mock()
+        self.screen = ChooseServerScreen(self.backend, self.parent)
+
+    def test_activation_key_checkbox_sensitive(self):
+        self.screen.server_entry.set_text("foo.bar:443/baz")
+        self.assertTrue(self.screen.activation_key_checkbox.get_property('sensitive'))
+
+    def test_activation_key_checkbox_insensitive(self):
+        self.screen.server_entry.set_text("subscription.rhn.redhat.com:443/baz")
+        self.assertFalse(self.screen.activation_key_checkbox.get_property('sensitive'))
+
+    def test_activation_key_checkbox_inactive_when_insensitive(self):
+        self.screen.server_entry.set_text("foo.bar:443/baz")
+        self.screen.activation_key_checkbox.set_active(True)
+        self.screen.server_entry.set_text("subscription.rhn.redhat.com:443/baz")
+        self.assertFalse(self.screen.activation_key_checkbox.get_property('sensitive'))
+        self.assertFalse(self.screen.activation_key_checkbox.get_property('active'))
