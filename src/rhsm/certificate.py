@@ -887,24 +887,23 @@ class OID(object):
         i = 0
         if isinstance(oid, str):
             oid = OID(oid)
-        try:
-            if not oid[0]:
-                oid = OID(oid[1:])
-                parts = self.part[-len(oid):]
-            elif not oid[-1]:
-                oid = OID(oid[:-1])
-                parts = self.part[:len(oid)]
-            else:
-                parts = self.part
-            if len(parts) != len(oid):
-                raise Exception()
-            for x in parts:
-                if (x == oid[i] or oid[i] == self.WILDCARD):
-                    i += 1
-                else:
-                    raise Exception()
-        except:
+
+        if not oid[0]:
+            oid = OID(oid[1:])
+            parts = self.part[-len(oid):]
+        elif not oid[-1]:
+            oid = OID(oid[:-1])
+            parts = self.part[:len(oid)]
+        else:
+            parts = self.part
+        if len(parts) != len(oid):
             return False
+        for x in parts:
+            if (x == oid[i] or oid[i] == self.WILDCARD):
+                i += 1
+            else:
+                return False
+
         return True
 
     def __len__(self):
