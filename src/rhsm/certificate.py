@@ -730,7 +730,13 @@ class Extensions(dict):
         ext = []
         if isinstance(oid, str):
             oid = OID(oid)
-        keyset = sorted(self.keys())
+
+        # Only order the keys if we want more than a singel return avalue
+        if limit == 1:
+            keyset = self.keys()
+        else:
+            keyset = sorted(self.keys())
+
         for k in keyset:
             v = self[k]
             if k.match(oid):
@@ -829,7 +835,9 @@ class OID(object):
         else:
             self.part = oid
 
-        self._len = len(self.part)
+        self._len = None
+        self._str = None
+        self._hash = None
 
     def parent(self):
         """
@@ -888,18 +896,25 @@ class OID(object):
         """
         i = 0
 
+        # Matching the end
         if not oid[0]:
             oid = OID(oid[1:])
             parts = self.part[-len(oid):]
+        # Macthing the beginning
         elif not oid[-1]:
             oid = OID(oid[:-1])
             parts = self.part[:len(oid)]
+        # Full on match
         else:
             parts = self.part
+
+        # The lengths do not match, fail.
         if len(parts) != len(oid):
             return False
+
         for x in parts:
-            if (x == oid[i] or oid[i] == self.WILDCARD):
+            val = oid[i]
+            if (x == val or val == self.WILDCARD):
                 i += 1
             else:
                 return False
@@ -907,6 +922,9 @@ class OID(object):
         return True
 
     def __len__(self):
+        if not self._len:
+            self._len = len(self.part)
+
         return self._len
 
     def __getitem__(self, index):
@@ -916,13 +934,19 @@ class OID(object):
         return str(self)
 
     def __hash__(self):
-        return hash(str(self))
+        if not self._hash:
+            self._hash = hash(str(self))
+
+        return self._hash
 
     def __eq__(self, other):
         return (str(self) == str(other))
 
     def __str__(self):
-        return '.'.join(self.part)
+        if not self._str:
+            self._str = '.'.join(self.part)
+
+        return self._str
 
 
 class Order:
