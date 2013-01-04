@@ -881,12 +881,10 @@ class OID(object):
           -    5.6.74. (match only first 4)
           - 1.4.*.6.*  (wildcard pattern)
         @param oid: An OID string or object.
-        @type oid: str|L{OID}
+        @type oid: L{OID}
         @return: True if matched
         """
         i = 0
-        if isinstance(oid, str):
-            oid = OID(oid)
 
         if not oid[0]:
             oid = OID(oid[1:])
