@@ -22,6 +22,9 @@ import simplejson as json
 import base64
 import os
 import logging
+import email.utils as eut
+import datetime
+import time
 
 from M2Crypto import SSL, httpslib
 from urllib import urlencode
@@ -49,6 +52,9 @@ def safe_int(value, safe_value=None):
         return safe_value
 
 
+
+
+
 h = NullHandler()
 logging.getLogger("rhsm").addHandler(h)
 
@@ -56,6 +62,24 @@ log = logging.getLogger(__name__)
 
 config = initConfig()
 
+
+def drift_check(utc_time_string, hours = 6):
+    """
+    Takes in a RFC 1123 date and returns True if the currnet time
+    is greater then the supplied number of hours
+    """
+    drift = False
+    if utc_time_string:
+        try:
+            utc_timestamp = time.mktime(eut.parsedate(utc_time_string))
+            utc_datetime=datetime.datetime.fromtimestamp(utc_timestamp)
+            local_datetime=datetime.datetime.utcnow()
+            delta = datetime.timedelta(hours=1)
+            drift = abs((utc_datetime - local_datetime)) > delta
+        except Exception, e:
+            log.error(e)
+
+        return drift
 
 class ConnectionException(Exception):
     pass
@@ -392,6 +416,10 @@ class Restlib(object):
             "status": response.status,
         }
         log.debug('Response status: ' + str(result['status']))
+
+        # Look for server drift, and log a warning
+        if drift_check(response.getheader('date')):
+            log.warn("Clock skew detected, please check your system time")
 
         # FIXME: we should probably do this in a wrapper method
         # so we can use the request method for normal http

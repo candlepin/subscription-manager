@@ -18,10 +18,11 @@ import unittest
 
 from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
         BadCertificateException, RestlibException, GoneException, NetworkException, \
-        RemoteServerException
+        RemoteServerException, drift_check
 
 from mock import Mock
 from datetime import date
+from time import strftime, gmtime
 import simplejson as json
 
 class ConnectionTests(unittest.TestCase):
@@ -140,6 +141,15 @@ class RestlibExceptionTest(ExceptionTest):
         kwargs['code'] = 404
         return self.exception(*args, **kwargs)
 
+
+class DriftTest(unittest.TestCase):
+
+    def test_big_drift(self):
+        self.assertTrue(drift_check("Fri, 14 Dec 3012 19:10:56 GMT", 6))
+
+    def test_no_drift(self):
+        header = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime())
+        self.assertFalse(drift_check(header))
 
 class GoneExceptionTest(ExceptionTest):
     exception = GoneException
