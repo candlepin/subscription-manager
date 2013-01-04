@@ -738,8 +738,8 @@ class Extensions(dict):
             keyset = sorted(self.keys())
 
         for k in keyset:
-            v = self[k]
             if k.match(oid):
+                v = self[k]
                 ext.append((k, v))
             if limit and len(ext) == limit:
                 break
