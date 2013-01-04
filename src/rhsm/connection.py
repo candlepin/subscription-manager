@@ -22,7 +22,6 @@ import simplejson as json
 import base64
 import os
 import logging
-import email.utils as eut
 import datetime
 import time
 
@@ -38,6 +37,12 @@ from version import Versions
 # problems the default timeout might cause.
 if sys.version_info[0] == 2 and sys.version_info[0] <= 4:
     socket.setdefaulttimeout(60)
+
+# The module name changes between el5 and el6
+try:
+    import email.utils as eut
+except ImportError:
+    import email.Utils as eut
 
 
 class NullHandler(logging.Handler):
