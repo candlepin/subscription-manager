@@ -216,6 +216,8 @@ class CliCommand(AbstractCLICommand):
         """ Add options that allow the setting of the server URL."""
         self.parser.add_option("--serverurl", dest="server_url",
                                default=None, help=_("server URL in the form of https://hostname:443/prefix"))
+        self.parser.add_option("--insecure", action="store_true",
+                                default=False, help=_("do not check the server SSL certificate against available certificate authorities"))
 
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """
@@ -341,6 +343,11 @@ class CliCommand(AbstractCLICommand):
         self.proxy_port = cfg.get('server', 'proxy_port')
         self.proxy_user = cfg.get('server', 'proxy_user')
         self.proxy_password = cfg.get('server', 'proxy_password')
+
+        if hasattr(self.options, "insecure") and self.options.insecure:
+            cfg.set("server", "insecure", "1")
+            if self.persist_server_options():
+                cfg.save()
 
         if hasattr(self.options, "server_url") and self.options.server_url:
             try:
