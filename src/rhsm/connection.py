@@ -52,9 +52,6 @@ def safe_int(value, safe_value=None):
         return safe_value
 
 
-
-
-
 h = NullHandler()
 logging.getLogger("rhsm").addHandler(h)
 
@@ -63,7 +60,7 @@ log = logging.getLogger(__name__)
 config = initConfig()
 
 
-def drift_check(utc_time_string, hours = 6):
+def drift_check(utc_time_string, hours=6):
     """
     Takes in a RFC 1123 date and returns True if the currnet time
     is greater then the supplied number of hours
@@ -72,14 +69,15 @@ def drift_check(utc_time_string, hours = 6):
     if utc_time_string:
         try:
             utc_timestamp = time.mktime(eut.parsedate(utc_time_string))
-            utc_datetime=datetime.datetime.fromtimestamp(utc_timestamp)
-            local_datetime=datetime.datetime.utcnow()
+            utc_datetime = datetime.datetime.fromtimestamp(utc_timestamp)
+            local_datetime = datetime.datetime.utcnow()
             delta = datetime.timedelta(hours=1)
             drift = abs((utc_datetime - local_datetime)) > delta
         except Exception, e:
             log.error(e)
 
         return drift
+
 
 class ConnectionException(Exception):
     pass
