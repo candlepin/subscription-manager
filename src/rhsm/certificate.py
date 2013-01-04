@@ -829,6 +829,8 @@ class OID(object):
         else:
             self.part = oid
 
+        self._len = len(self.part)
+
     def parent(self):
         """
         Get the parent OID.
@@ -905,7 +907,7 @@ class OID(object):
         return True
 
     def __len__(self):
-        return len(self.part)
+        return self._len
 
     def __getitem__(self, index):
         return self.part[index]
