@@ -14,7 +14,7 @@
 .\" along with this man page; if not, write to the Free Software
 .\" Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 .\"
-.TH "rhn-migrate-classic-to-rhsm" "8" "November 8, 2012" "Version 0.6" ""
+.TH "rhn-migrate-classic-to-rhsm" "8" "January 7, 2013" "Version 0.7" ""
 
 .SH NAME
 
@@ -33,16 +33,16 @@ This script migrates configuration, from a channel-based subscription framework 
 Access to support and updates for products is determined through 
 .I subscriptions.
 Subscriptions are attached to a system, which means that the system has the right to install and update a product with full support. Subscriptions for an entire account are tracked through a 
-.I subscription service.
+.I subscription management service.
 
 .PP
-With the channel-based framework, a subscription service was either an on-premise Satellite or hosted Red Hat Network Classic. With the new certificate-based subscriptions, the subscription service is either Customer Portal Subscription Management or Subscription Asset Manager. The differences between the two types of subscription services are described in this Knowledgebase article: <https://access.redhat.com/knowledge/articles/63269>
+With the channel-based framework, a subscription management service was either an on-premise Satellite or hosted Red Hat Network Classic. With the new certificate-based subscriptions, the subscription management service is either Customer Portal Subscription Management or Subscription Asset Manager. The differences between the two types of subscription management services are described in this Knowledgebase article: <https://access.redhat.com/knowledge/articles/63269>
 
 .PP
-The system registers with the subscription service and receives an inventory ID number. When subscriptions are applied to a system, that association is noted in the subscription service. 
+The system registers with the subscription management service and receives an inventory ID number. When subscriptions are attached to a system, that association is noted in the subscription management service. 
 
 .PP
-Registering with a subscription service is exclusive. If a system is registered with Red Hat Network Classic, it cannot simultaneously be registered with Customer Portal Subscription Management. The 
+Registering with a subscription management service is exclusive. If a system is registered with Red Hat Network Classic, it cannot simultaneously be registered with Customer Portal Subscription Management. The 
 .B rhn-migrate-classic-to-rhsm
 tool is provided specifically so that there is a way to transition from the deprecated Red Hat Network Classic to Customer Portal Subscription Management or an on-premise Subscription Asset Manager.
 
@@ -70,10 +70,10 @@ Sets a preferred service level for the system, such as premium or standard. This
 
 .TP
 .B --serverurl=URL
-Gives the URL of the subscription management service to which to register the system. This is used for environments which have an on-premise subscription service such as Subscription Asset Manager. If no URL is given, the migration tool uses the Customer Portal Subscription Management Service. 
+Gives the URL of the subscription management service to which to register the system. This is used for environments which have an on-premise subscription management service such as Subscription Asset Manager. If no URL is given, the migration tool uses the Customer Portal Subscription Management Service. 
 
 .SH USAGE
-The migration process moves the system from the inventory in one subscription service (Red Hat Network Classic) to the new subscription service (Customer Portal Subscription Management), and then re-applies the subscriptions to the system. The script runs through these steps:
+The migration process moves the system from the inventory in one subscription management service (Red Hat Network Classic) to the new subscription management service (Customer Portal Subscription Management), and then re-applies the subscriptions to the system. The script runs through these steps:
 
 .IP
 1. Authenticate to both Red Hat Network Classic and Customer Portal Subscription Management to verify the account settings.
@@ -109,10 +109,10 @@ migration.migration_date: 2012-09-14T14:55:29.280519
 The \fBrhn-migrate-classic-to-rhsm\fP tool, by default, autoattaches the best-matching subscriptions to the system. This allows migrations to be automated.
 .nf
 [root@server ~]# rhn-migrate-classic-to-rhsm
-RHN Username: jsmith@example.com
+Red Hat account: jsmith@example.com
 Password:
 
-Retrieving existing RHN classic subscription information ...
+Retrieving existing RHN Classic subscription information ...
 +----------------------------------+
 System is currently subscribed to:
 +----------------------------------+
@@ -123,7 +123,7 @@ rhel-i386-client-5
 
 Product Certificates copied successfully to /etc/pki/product !!
 
-Preparing to unregister system from RHN classic ...
+Preparing to unregister system from RHN Classic ...
 System successfully unregistered from RHN Classic.
 
 Attempting to register system to RHN ...
@@ -148,19 +148,19 @@ Optionally, the \fB--servicelevel\fP argument sets an SLA preference to use with
 
 .nf
 [root@server ~]# rhn-migrate-classic-to-rhsm --servicelevel=premium
-RHN Username: jsmith@example.com
+Red Hat account: jsmith@example.com
 Password:
 .fi
 
 .SS MIGRATION TO ON-PREMISE SERVICES
-The \fBrhn-migrate-classic-to-rhsm\fP tool migrates the system to Customer Portal Subscription Management (hosted) services by default. This uses the default configuration for Subscription Manager, which points to the subscription services for the Customer Portal. For infrastructures which have an on-premise subscription management service such as Subscription Asset Manager, this configuration can be changed so that the migration process registers the systems to the on-premise subscription service and attaches the appropriate subscriptions.
+The \fBrhn-migrate-classic-to-rhsm\fP tool migrates the system to Customer Portal Subscription Management (hosted) services by default. This uses the default configuration for Subscription Manager, which points to the subscription management services for the Customer Portal. For infrastructures which have an on-premise subscription management service such as Subscription Asset Manager, this configuration can be changed so that the migration process registers the systems to the on-premise subscription management service and attaches the appropriate subscriptions.
 
 .PP
 This is done by using the \fB--serverurl\fP option, which specifies the URL of the on-premise service. In this case, the authorization credentials must also be given for the on-premise subscription management service account (which is independent of the RHN account).
 
 .nf
 [root@server ~]# rhn-migrate-classic-to-rhsm --serverurl=sam.example.com
-Username: jsmith@example.com
+Red Hat account: jsmith@example.com
 Password:
 .fi
 
@@ -172,10 +172,10 @@ As with the autoattach process, the script prompts for the RHN username and pass
 
 .nf
 [root@server ~]# rhn-migrate-classic-to-rhsm --gui 
-RHN Username: jsmith@example.com
+Red Hat account: jsmith@example.com
 Password:
 
-Retrieving existing RHN classic subscription information ...
+Retrieving existing RHN Classic subscription information ...
 +----------------------------------+
 System is currently subscribed to:
 +----------------------------------+
@@ -186,7 +186,7 @@ rhel-i386-client-5
 
 Product Certificates copied successfully to /etc/pki/product !!
 
-Preparing to unregister system from RHN classic ...
+Preparing to unregister system from RHN Classic ...
 System successfully unregistered from RHN Classic.
 
 Attempting to register system to RHN ...
