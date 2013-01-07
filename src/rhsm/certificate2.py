@@ -227,7 +227,7 @@ class _CertFactory(object):
         if EXT_ORDER_NAME in extensions:
             return ENTITLEMENT_CERT
         # If there is no order, but there are products, must be a product cert:
-        elif len(extensions.find('1.*.1', 1)) > 0:
+        elif len(extensions.find('1.*.1', 1, True)) > 0:
             return PRODUCT_CERT
         # Otherwise we assume it's a plain identity certificate:
         else:

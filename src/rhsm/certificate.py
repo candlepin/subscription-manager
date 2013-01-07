@@ -425,7 +425,7 @@ class EntitlementCertificate(ProductCertificate):
         ProductCertificate._update(self, content)
 
         rhns = self.redhat()
-        order = rhns.find('4.1', 1)
+        order = rhns.find('4.1', 1, True)
         if order:
             p = order[0]
             oid = p[0]
@@ -709,13 +709,13 @@ class Extensions(dict):
         @return: The value of the first extension matched.
         @rtype: str
         """
-        ext = self.find(oid, 1)
+        ext = self.find(oid, 1, True)
         if ext:
             return ext[0][1]
         else:
             return default
 
-    def find(self, oid, limit=0):
+    def find(self, oid, limit=0, ignoreOrder=False):
         """
         Find all extensions matching the I{oid}.
         Note: The I{oid} may contain (*) wildcards.
@@ -723,16 +723,18 @@ class Extensions(dict):
         @type oid: str|L{OID}
         @param limit: Limit the number returned, 0=unlimited
         @type limit: int
+        @type ignoreOrder: bool
         @return: A list of matching items.
         @rtype: (OID, value)
         @see: OID.match()
         """
         ext = []
+        found = 0
         if isinstance(oid, str):
             oid = OID(oid)
 
         # Only order the keys if we want more than a singel return avalue
-        if limit == 1:
+        if ignoreOrder:
             keyset = self.keys()
         else:
             keyset = sorted(self.keys())
@@ -741,7 +743,8 @@ class Extensions(dict):
             if k.match(oid):
                 v = self[k]
                 ext.append((k, v))
-            if limit and len(ext) == limit:
+                found = found + 1
+            if limit and found == limit:
                 break
         return ext
 
@@ -898,11 +901,13 @@ class OID(object):
 
         # Matching the end
         if not oid[0]:
-            oid = OID(oid[1:])
+            #oid = OID(oid[1:])
+            oid = oid[1:]
             parts = self.part[-len(oid):]
         # Macthing the beginning
         elif not oid[-1]:
-            oid = OID(oid[:-1])
+            #oid = OID(oid[:-1])
+            oid = oid[:-1]
             parts = self.part[:len(oid)]
         # Full on match
         else:
