@@ -283,6 +283,8 @@ po/POTFILES.in:
 	find ${SRC_DIR}/ -name "*.py" > po/POTFILES.in
 	find ${SRC_DIR}/gui/data/ -name "*.glade" >> po/POTFILES.in
 	find ${BIN_DIR} -name "*-to-rhsm" >> po/POTFILES.in
+	find ${BIN_DIR} -name "subscription-manager*" >> po/POTFILES.in
+	find ${BIN_DIR} -name "rct" >> po/POTFILES.in
 	find src/ -name "*.c" >> po/POTFILES.in
 	find etc-conf/ -name "*.desktop.in" >> po/POTFILES.in
 	find ${RCT_SRC_DIR}/ -name "*.py" >> po/POTFILES.in
