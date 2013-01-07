@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.18
+Version: 1.1.19
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,18 @@ fi
 %endif
 
 %changelog
+* Mon Jan 07 2013 Adrian Likins <alikins@redhat.com> 1.1.19-1
+- 891375,888971,888868: pt_BR translation fixes (alikins@redhat.com)
+- 890296: Unicode characters with a - are causing printing issues for rct
+  printing (bkearney@redhat.com)
+- 891398,887966,888864,891402,888964,888936,891391, (alikins@redhat.com)
+- 889204: Encode the unicode string to utf-8 to avoid syslog errors
+  (bkearney@redhat.com)
+- 889621: String substitution inside gettext causes message translations to
+  never be found (bkearney@redhat.com)
+- 888790: Rebuild UEP connection after registering with activation keys.
+  (awood@redhat.com)
+
 * Tue Dec 18 2012 Adrian Likins <alikins@redhat.com> 1.1.18-1
 - 814378: disable linkify if we are running as firstboot (alikins@redhat.com)
 - 886280,878257,878264,878269: man page updates (dlackey@redhat.com.com)
