@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.19
+Version: 1.1.20
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,10 @@ fi
 %endif
 
 %changelog
+* Tue Jan 08 2013 Adrian Likins <alikins@redhat.com> 1.1.20-1
+- 888971,891375,891394: translation fixes (alikins@redhat.com)
+- 851303: additional term updates (dlackey@redhat.com.com)
+
 * Mon Jan 07 2013 Adrian Likins <alikins@redhat.com> 1.1.19-1
 - 891375,888971,888868: pt_BR translation fixes (alikins@redhat.com)
 - 890296: Unicode characters with a - are causing printing issues for rct
