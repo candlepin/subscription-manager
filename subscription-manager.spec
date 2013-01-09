@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.20
+Version: 1.1.21
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -346,6 +346,9 @@ fi
 %endif
 
 %changelog
+* Wed Jan 09 2013 Adrian Likins <alikins@redhat.com> 1.1.21-1
+- 888971: latest strings (pt_BR and ru cleanups) (alikins@redhat.com)
+
 * Tue Jan 08 2013 Adrian Likins <alikins@redhat.com> 1.1.20-1
 - 888971,891375,891394: translation fixes (alikins@redhat.com)
 - 851303: additional term updates (dlackey@redhat.com.com)
