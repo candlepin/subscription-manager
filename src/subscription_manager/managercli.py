@@ -53,6 +53,9 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width
 
+
+this_is_not_really_a_thing?!!!
+
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
 
