@@ -22,6 +22,8 @@ import simplejson as json
 import base64
 import os
 import logging
+import datetime
+import time
 import certificate
 
 from M2Crypto import SSL, httpslib
@@ -37,6 +39,12 @@ from version import Versions
 # problems the default timeout might cause.
 if sys.version_info[0] == 2 and sys.version_info[0] <= 4:
     socket.setdefaulttimeout(60)
+
+# The module name changes between el5 and el6
+try:
+    import email.utils as eut
+except ImportError:
+    import email.Utils as eut
 
 
 class NullHandler(logging.Handler):
@@ -57,6 +65,25 @@ logging.getLogger("rhsm").addHandler(h)
 log = logging.getLogger(__name__)
 
 config = initConfig()
+
+
+def drift_check(utc_time_string, hours=6):
+    """
+    Takes in a RFC 1123 date and returns True if the currnet time
+    is greater then the supplied number of hours
+    """
+    drift = False
+    if utc_time_string:
+        try:
+            utc_timestamp = time.mktime(eut.parsedate(utc_time_string))
+            utc_datetime = datetime.datetime.fromtimestamp(utc_timestamp)
+            local_datetime = datetime.datetime.utcnow()
+            delta = datetime.timedelta(hours=1)
+            drift = abs((utc_datetime - local_datetime)) > delta
+        except Exception, e:
+            log.error(e)
+
+        return drift
 
 
 class ConnectionException(Exception):
@@ -407,6 +434,10 @@ class Restlib(object):
         }
         log.debug('Response status: ' + str(result['status']))
 
+        # Look for server drift, and log a warning
+        if drift_check(response.getheader('date')):
+            log.warn("Clock skew detected, please check your system time")
+
         # FIXME: we should probably do this in a wrapper method
         # so we can use the request method for normal http
 
@@ -494,6 +525,10 @@ class UEPConnection:
         self.host = host or config.get('server', 'hostname')
         self.ssl_port = ssl_port or safe_int(config.get('server', 'port'))
         self.handler = handler or config.get('server', 'prefix')
+
+        # remove trailing "/" from the prefix if it is there
+        # BZ848836
+        self.handler = self.handler.rstrip("/")
 
         self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname')
         self.proxy_port = proxy_port or config.get('server', 'proxy_port')
@@ -899,9 +934,11 @@ class UEPConnection:
         method = "/subscriptions?consumer_uuid=%s" % consumerId
         if email:
             method += "&email=%s" % email
-            if not lang:
+            if (not lang) and (locale.getdefaultlocale()[0] is not None):
                 lang = locale.getdefaultlocale()[0].lower().replace('_', '-')
-            method += "&email_locale=%s" % lang
+
+            if lang:
+                method += "&email_locale=%s" % lang
         return self.conn.request_post(method)
 
     def sanitize(self, urlParam, plus=False):
