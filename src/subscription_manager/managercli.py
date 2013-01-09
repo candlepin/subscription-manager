@@ -1918,6 +1918,11 @@ class ListCommand(CliCommand):
             arglist.append(arg)
         return template_str % tuple(arglist)
 
+
+
+ # this is not how we code
+ testthisthingout
+
     def _do_command(self):
         """
         Executes the command.
