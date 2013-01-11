@@ -24,8 +24,10 @@ import os
 import logging
 import datetime
 import time
+import certificate
 
 from M2Crypto import SSL, httpslib
+from M2Crypto.SSL import SSLError
 from urllib import urlencode
 
 from config import initConfig
@@ -140,6 +142,11 @@ class RemoteServerException(ConnectionException):
 
     def __str__(self):
         return "Server returned %s" % self.code
+
+
+class ExpiredIdentityCertException(ConnectionException):
+
+    pass
 
 
 class NoOpChecker:
@@ -411,7 +418,14 @@ class Restlib(object):
         if body is None:
             headers = dict(self.headers.items() + \
                     {"Content-Length": "0"}.items())
-        conn.request(request_type, handler, body=body, headers=headers)
+        try:
+            conn.request(request_type, handler, body=body, headers=headers)
+        except SSLError, e:
+            if self.cert_file:
+                id_cert = certificate.create_from_file(self.cert_file)
+                if not id_cert.is_valid():
+                    raise ExpiredIdentityCertException()
+            raise e
 
         response = conn.getresponse()
         result = {
