@@ -24,6 +24,7 @@ import os
 import simplejson as json
 import gettext
 _ = gettext.gettext
+import rhsm.connection as connection
 
 from rhsm.profile import get_profile, RPMProfile
 from subscription_manager.certlib import DataLib, ConsumerIdentity
@@ -166,6 +167,8 @@ class CacheManager(object):
                 # Return the number of 'updates' we did, assuming updating all
                 # packages at once is one update.
                 return 1
+            except connection.RestlibException, re:
+                raise re
             except Exception, e:
                 log.error("Error updating system data on the server")
                 log.exception(e)

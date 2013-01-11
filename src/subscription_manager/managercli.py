@@ -1608,7 +1608,11 @@ class FactsCommand(CliCommand):
             facts = Facts(ent_dir=self.entitlement_dir,
                           prod_dir=self.product_dir)
             consumer = check_registration()['uuid']
-            facts.update_check(self.cp, consumer, force=True)
+            try:
+                facts.update_check(self.cp, consumer, force=True)
+            except connection.RestlibException, re:
+                log.exception(re)
+                systemExit(-1, re.msg)
             print _("Successfully updated the system facts.")
 
 
