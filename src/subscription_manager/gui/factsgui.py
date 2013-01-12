@@ -33,7 +33,7 @@ class SystemFactsDialog(widgets.GladeWidget):
     """
     widget_names = ['system_facts_dialog', 'facts_view', 'update_button',
                     'last_update_label', 'owner_label', 'environment_label',
-                    'environment_hbox']
+                    'environment_hbox', 'owner_id_label', 'owner_id_hbox']
 
     def __init__(self, backend, consumer, facts):
 
@@ -106,12 +106,17 @@ class SystemFactsDialog(widgets.GladeWidget):
             self.facts_store.append(parent, [fact, value])
 
         # TODO: could stand to check if registered before trying to do this:
-        owner = _('Unknown')
+        displayName = _('Unknown')
         try:
-            owner = self.backend.uep.getOwner(self.consumer.uuid)['displayName']
+            owner = self.backend.uep.getOwner(self.consumer.uuid)
+            displayName = owner['displayName']
+            key = owner['key']
+            self.owner_id_label.set_text(key)
+            self.owner_id_hbox.show()
         except Exception, e:
             log.error("Could not get owner name \nError: %s" % e)
-        self.owner_label.set_text(owner)
+            self.owner_id_hbox.hide()
+        self.owner_label.set_text(displayName)
 
         try:
             if self.backend.uep.supports_resource('environments'):
