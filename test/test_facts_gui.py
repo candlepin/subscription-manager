@@ -53,6 +53,23 @@ class FactDialogTests(unittest.TestCase):
         dialog.display_facts()
         self.assertEquals(False, dialog.environment_hbox.get_property("visible"))
 
+    def test_shows_unknown_for_no_org(self):
+        dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
+                self.stub_facts)
+        dialog.display_facts()
+        #No owner id should show if we have no owner
+        self.assertEquals(False, dialog.owner_id_hbox.get_property("visible"))
+        self.assertEquals('Unknown', dialog.owner_label.get_label())
+
+    @patch.object(StubUEP, 'getOwner')
+    def test_shows_org_id(self, mock_getOwner):
+        mock_getOwner.return_value = {'displayName': 'foo', 'key': 'bar'}
+        dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
+                self.stub_facts)
+        dialog.display_facts()
+        self.assertEquals(True, dialog.owner_id_hbox.get_property("visible"))
+        self.assertEquals('bar', dialog.owner_id_label.get_label())
+
     @patch.object(StubUEP, 'supports_resource')
     @patch.object(StubUEP, 'getConsumer')
     def test_shows_environment_when_supported(self, mock_getConsumer, mock_supports_resource):

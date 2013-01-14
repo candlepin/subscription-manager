@@ -347,6 +347,9 @@ class StubUEP:
     def getOwnerList(self, username):
         return [{'key': 'dummyowner'}]
 
+    def getOwner(self):
+        return {'key': 'dummyowner'}
+
     def updatePackageProfile(self, uuid, pkg_dicts):
         pass
 
