@@ -208,7 +208,7 @@ display_icon (Context * context, StatusType status_type)
 			  "system with updates, your system must be registered "
 			  "with the Customer Portal. Please enter your Red Hat "
 			  "login to ensure your system is up-to-date.");
-	} else if (status_type == RHSM_EXPIRED) {
+	} else if (status_type == RHSM_WARNING) {
 		tooltip = _("Invalid or Missing Subscriptions");
 		notification_title = tooltip;
 		notification_body =
