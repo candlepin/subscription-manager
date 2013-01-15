@@ -209,11 +209,11 @@ display_icon (Context * context, StatusType status_type)
 			  "with the Customer Portal. Please enter your Red Hat "
 			  "login to ensure your system is up-to-date.");
 	} else if (status_type == RHSM_EXPIRED) {
-		tooltip = _("Invalid or Missing Subscriptions");
+		tooltip = _("This System's Subscriptions Are About to Expire");
 		notification_title = tooltip;
 		notification_body =
-			_("This system is missing one or more "
-			  "subscriptions.");
+			_("One or more of this system's "
+			  "subscriptions are about to expire.");
 	} else if (status_type == RHSM_PARTIALLY_VALID) {
 		tooltip = _("Partially Entitled Products");
 		notification_title = tooltip;
@@ -222,11 +222,11 @@ display_icon (Context * context, StatusType status_type)
 			  "subscriptions to fully cover its "
 			  "products.");
 	} else {
-		tooltip = _("This System's Subscriptions Are About to Expire");
+		tooltip = _("Invalid or Missing Subscriptions");
 		notification_title = tooltip;
 		notification_body =
-			_("One or more of this system's "
-			  "subscriptions are about to expire.");
+			_("This system is missing one or more "
+			  "subscriptions.");
 	}
 
 	gtk_status_icon_set_tooltip (context->icon, tooltip);
