@@ -190,13 +190,7 @@ def isHosted():
         return False
 
 
-def checkOkToProceed(secreds, serverurl):
-    # check if this machine is already registered to Certicate-based RHN
-    if ConsumerIdentity.existsAndValid():
-        print _("\nThis system appears to be already registered to Red Hat Subscription Management.  Exiting.")
-        consumer = ConsumerIdentity.read()
-        systemExit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % consumer.getConsumerId())
-
+def getCandlepinConnection(secreds, serverurl, basic_auth=True):
     try:
         if serverurl is None:
             hostname = rhsmcfg.get('server', 'hostname')
@@ -208,19 +202,43 @@ def checkOkToProceed(secreds, serverurl):
         print _("Error parsing serverurl: %s" % e.msg)
         sys.exit(-1)
 
-    # Check to make sure we can connect to the certificate server.
-    cp = UEPConnection(host=hostname,
-            ssl_port=int(port),
-            handler=prefix,
-            username=secreds.username,
-            password=secreds.password,
-            proxy_hostname=rhsmcfg.get('server', 'proxy_hostname'),
-            proxy_port=rhsmcfg.get('server', 'proxy_port'),
-            proxy_user=rhsmcfg.get('server', 'proxy_user'),
-            proxy_password=rhsmcfg.get('server', 'proxy_password'))
+    proxy_hostname = rhsmcfg.get('server', 'proxy_hostname')
+    proxy_port = rhsmcfg.get('server', 'proxy_port')
+    proxy_user = rhsmcfg.get('server', 'proxy_user')
+    proxy_password = rhsmcfg.get('server', 'proxy_password')
+
+    if basic_auth:
+        cp = UEPConnection(host=hostname,
+                ssl_port=int(port),
+                handler=prefix,
+                username=secreds.username,
+                password=secreds.password,
+                proxy_hostname=proxy_hostname,
+                proxy_port=proxy_port,
+                proxy_user=proxy_user,
+                proxy_password=proxy_password)
+    else:
+        cp = UEPConnection(host=hostname,
+                ssl_port=int(port),
+                handler=prefix,
+                cert_file=ConsumerIdentity.certpath(),
+                key_file=ConsumerIdentity.keypath(),
+                proxy_hostname=proxy_hostname,
+                proxy_port=proxy_port,
+                proxy_user=proxy_user,
+                proxy_password=proxy_password)
+    return cp
+
+
+def checkOkToProceed(cp, username):
+    # check if this machine is already registered to Certicate-based RHN
+    if ConsumerIdentity.existsAndValid():
+        print _("\nThis system appears to be already registered to Red Hat Subscription Management.  Exiting.")
+        consumer = ConsumerIdentity.read()
+        systemExit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % consumer.getConsumerId())
 
     try:
-        cp.getOwnerList(secreds.username)
+        cp.getOwnerList(username)
     except SSLError, e:
         print _("Error: CA certificate for subscription service has not been installed.")
         systemExit(1, CONNECTION_FAILURE % e)
@@ -228,7 +246,6 @@ def checkOkToProceed(secreds, serverurl):
         log.error(e)
         log.error(traceback.format_exc())
         systemExit(1, CONNECTION_FAILURE % e)
-    return cp
 
 
 def getOrg(cp, username):
@@ -691,7 +708,8 @@ def main():
             secreds = rhncreds  # make them the same
 
     transferHttpProxySettings()
-    cp = checkOkToProceed(secreds, serverurl)
+    cp = getCandlepinConnection(secreds, serverurl)
+    checkOkToProceed(cp, secreds.username)
 
     org = getOrg(cp, secreds.username)
     environment = getEnvironment(cp, org)
@@ -716,6 +734,9 @@ def main():
 
     # register the system to Certificate-based RHN and consume a subscription
     consumer = register(secreds, serverurl, org, environment)
+
+    # fetch new Candlepin connection using the identity cert created by register
+    cp = getCandlepinConnection(secreds, serverurl, basic_auth=False)
     if not options.noauto:
         if options.servicelevel:
             servicelevel = selectServiceLevel(cp, org, options.servicelevel)
