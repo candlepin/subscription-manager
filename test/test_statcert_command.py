@@ -17,7 +17,7 @@ import sys
 import unittest
 import certdata
 from rhsm.certificate import create_from_pem
-from rct.commands import StatCertCommand
+from rct.cert_commands import StatCertCommand
 
 from stubs import MockStdout, MockStderr
 
