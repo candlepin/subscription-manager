@@ -1709,11 +1709,12 @@ class ReposCommand(CliCommand):
         certmgr.update()
         rl = RepoLib(uep=self.cp)
         repos = rl.get_repos()
+        rc = 0
         if cfg.has_option('rhsm', 'manage_repos') and \
                 not int(cfg.get('rhsm', 'manage_repos')):
             print _("Repositories disabled by configuration.")
+            return rc
 
-        rc = 0
         if self.options.enable:
             rc = rc or self._set_repo_status(repos, self.options.enable, True)
         if self.options.disable:
