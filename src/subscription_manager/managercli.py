@@ -68,39 +68,64 @@ STATUS_MAP = {
         PARTIALLY_SUBSCRIBED: _("Partially Subscribed")
 }
 
-INSTALLED_PRODUCT_STATUS = \
-    _("Product Name:         \t%s") + "\n" + \
-    _("Product ID:           \t%s") + "\n" + \
-    _("Version:              \t%s") + "\n" + \
-    _("Arch:                 \t%s") + "\n" + \
-    _("Status:               \t%s") + "\n" + \
-    _("Starts:               \t%s") + "\n" + \
-    _("Ends:                 \t%s") + "\n"
+INSTALLED_PRODUCT_STATUS = [
+    _("Product Name:"),
+    _("Product ID:"),
+    _("Version:"),
+    _("Arch:"),
+    _("Status:"),
+    _("Starts:"),
+    _("Ends:")
+]
 
-AVAILABLE_SUBS_LIST = \
-    _("Subscription Name:    \t%s") + "\n" + \
-    _("SKU:                  \t%s") + "\n" + \
-    _("Pool ID:              \t%s") + "\n" + \
-    _("Quantity:             \t%s") + "\n" + \
-    _("Service Level:        \t%s") + "\n" + \
-    _("Service Type:         \t%s") + "\n" + \
-    _("Multi-Entitlement:    \t%s") + "\n" + \
-    _("Ends:                 \t%s") + "\n" + \
-    _("System Type:          \t%s") + "\n"
+AVAILABLE_SUBS_LIST = [
+    _("Subscription Name:"),
+    _("SKU:"),
+    _("Pool ID:"),
+    _("Quantity:"),
+    _("Service Level:"),
+    _("Service Type:"),
+    _("Multi-Entitlement:"),
+    _("Ends:"),
+    _("System Type:")
+]
 
-REPOS_LIST = \
-    _("Repo ID:              \t%s") + "\n" + \
-    _("Repo Name:            \t%s") + "\n" + \
-    _("Repo URL:             \t%s") + "\n" + \
-    _("Enabled:              \t%s") + "\n"
+REPOS_LIST = [
+    _("Repo ID:"),
+    _("Repo Name:"),
+    _("Repo URL:"),
+    _("Enabled:"),
+]
 
-PRODUCT_STATUS = \
-    _("Product Name:         \t%s") + "\n" + \
-    _("Status:               \t%s") + "\n"
+PRODUCT_STATUS = [
+    _("Product Name:"),
+    _("Status:")
+]
 
-ENVIRONMENT_LIST = \
-    _("Name:                 \t%s") + "\n" + \
-    _("Description:          \t%s") + "\n"
+ENVIRONMENT_LIST = [
+    _("Name:"),
+    _("Description:")
+]
+
+ORG_LIST = [
+    _("Name:"),
+    _("Key:")
+]
+
+CONSUMED_LIST = [
+    _("Subscription Name:"),
+    _("Provides:"),
+    _("SKU:"),
+    _("Contract:"),
+    _("Account:"),
+    _("Serial Number:"),
+    _("Active:"),
+    _("Quantity Used:"),
+    _("Service Level:"),
+    _("Service Type:"),
+    _("Starts:"),
+    _("Ends:")
+]
 
 
 def handle_exception(msg, ex):
@@ -170,7 +195,7 @@ def show_autosubscribe_output():
     for prod_status in installed_status:
         subscribed = subscribed or prod_status[4] == SUBSCRIBED
         status = STATUS_MAP[prod_status[4]]
-        print (PRODUCT_STATUS % (prod_status[0], status))
+        print columnize(PRODUCT_STATUS, _echo, prod_status[0], status) + "\n"
     return subscribed
 
 
@@ -673,9 +698,8 @@ class OwnersCommand(UserPassCommand):
                 print("+-------------------------------------------+")
                 print("")
                 for owner in owners:
-                    print("%s: \t%s" % (_("Name"), owner['displayName']))
-                    print("%s: \t%s" % (_("Key"), owner['key']))
-                    print("")
+                    print columnize(ORG_LIST, _echo,
+                            owner['displayName'], owner['key']) + "\n"
             else:
                 print(_("%s cannot register to any organizations.") % self.username)
 
@@ -720,8 +744,8 @@ class EnvironmentsCommand(OrgCommand):
                     print("          %s" % (_("Environments")))
                     print("+-------------------------------------------+")
                     for env in environments:
-                        print ENVIRONMENT_LIST % (env['name'],
-                            env['description'])
+                        print columnize(ENVIRONMENT_LIST, _echo, env['name'],
+                                env['description']) + "\n"
                 else:
                     print _("Error: This org does not have environments.")
             else:
@@ -1726,10 +1750,11 @@ class ReposCommand(CliCommand):
                 print _("    Available Repositories in %s") % rl.get_repo_file()
                 print("+----------------------------------------------------------+")
                 for repo in repos:
-                    print REPOS_LIST % (repo.id,
+                    print columnize(REPOS_LIST, _echo,
+                        repo.id,
                         repo["name"],
                         repo["baseurl"],
-                        repo["enabled"])
+                        repo["enabled"]) + "\n"
             else:
                 print _("This system has no repositories available through subscriptions.")
         return rc
@@ -1918,21 +1943,12 @@ class ListCommand(CliCommand):
         if not (self.options.available or self.options.consumed):
             self.options.installed = True
 
-    def _none_wrap(self, template_str, *args):
-        arglist = []
-        for arg in args:
-            if arg is None:
-                arg = _("None")
-            arglist.append(arg)
-        return template_str % tuple(arglist)
-
     def _do_command(self):
         """
         Executes the command.
         """
 
         self._validate_options()
-        columns = get_terminal_width()
         if self.options.installed:
             iproducts = managerlib.getInstalledProductStatus(self.product_dir,
                     self.entitlement_dir, self.facts.get_facts())
@@ -1944,10 +1960,9 @@ class ListCommand(CliCommand):
             print "+-------------------------------------------+"
             for product in iproducts:
                 status = STATUS_MAP[product[4]]
-                product_name = self._format_name(product[0], 24, columns)
-                print self._none_wrap(INSTALLED_PRODUCT_STATUS, product_name,
-                                product[1], product[2], product[3], status,
-                                product[5], product[6])
+                print columnize(INSTALLED_PRODUCT_STATUS, _none_wrap,
+                                product[0], product[1], product[2], product[3],
+                                status, product[5], product[6]) + "\n"
 
         if self.options.available:
             consumer = check_registration()['uuid']
@@ -1977,15 +1992,13 @@ class ListCommand(CliCommand):
             print("    " + _("Available Subscriptions"))
             print("+-------------------------------------------+")
             for data in epools:
-                # TODO:  Something about these magic numbers!
-                product_name = self._format_name(data['productName'], 24, columns)
-
                 if PoolWrapper(data).is_virt_only():
                     machine_type = machine_type = _("Virtual")
                 else:
                     machine_type = _("Physical")
 
-                print self._none_wrap(AVAILABLE_SUBS_LIST, product_name,
+                print columnize(AVAILABLE_SUBS_LIST, _none_wrap,
+                        data['productName'],
                         data['productId'],
                         data['id'],
                         data['quantity'],
@@ -1993,7 +2006,7 @@ class ListCommand(CliCommand):
                         data['service_type'] or "",
                         data['multi-entitlement'],
                         data['endDate'],
-                        machine_type)
+                        machine_type) + "\n"
 
         if self.options.consumed:
             self.print_consumed(service_level=self.options.service_level)
@@ -2035,78 +2048,24 @@ class ListCommand(CliCommand):
         print("   " + _("Consumed Subscriptions"))
         print("+-------------------------------------------+\n")
 
-        columns = get_terminal_width()
         for cert in certs:
             order = cert.order
-            order_name = self._format_name(order.name, 24, columns)
-            print(self._none_wrap(_("Subscription Name:    \t%s"),
-                  order_name))
-
-            prefix = _("Provides:             \t%s")
-            for product in cert.products:
-                print(self._none_wrap(prefix, self._format_name(product.name, 24, columns)))
-                prefix = _("                      \t%s")
-            # print an empty provides line for certs with no provided products
-            if len(cert.products) == 0:
-                print(prefix % "")
-
-            print(self._none_wrap(_("SKU:                  \t%s"),
-                  order.sku))
-            print(self._none_wrap(_("Contract:             \t%s"),
-                  order.contract))
-            print(self._none_wrap(_("Account:              \t%s"),
-                  order.account))
-            print(self._none_wrap(_("Serial Number:        \t%s"),
-                  cert.serial))
-            print(self._none_wrap(_("Active:               \t%s"),
-                  cert.is_valid()))
-            print(self._none_wrap(_("Quantity Used:        \t%s"),
-                  order.quantity_used))
-            print(_("Service Level:        \t%s") %
-                  (order.service_level or ""))
-            print(_("Service Type:         \t%s") %
-                  (order.service_type or ""))
-            print(_("Starts:               \t%s") %
-                  managerlib.formatDate(cert.valid_range.begin()))
-            print(_("Ends:                 \t%s") %
-                  managerlib.formatDate(cert.valid_range.end()))
-            print("")
-
-    def _format_name(self, name, indent, max_length):
-        """
-        Formats a potentially long name for multi-line display, giving
-        it a columned effect.
-        """
-
-        if not name or not max_length:
-            return name
-
-        words = name.split()
-        current = indent
-        lines = []
-        # handle emtpty names
-        if not words:
-            return name
-
-        first_word = words.pop(0)
-        line = [first_word]
-        current += len(first_word) + 1
-
-        def add_line():
-            lines.append(' '.join(line))
-
-        # Split here and build it back up by word, this way we get word wrapping
-        for word in words:
-            if current + len(word) < max_length:
-                current += len(word) + 1  # Have to account for the extra space
-                line.append(word)
-            else:
-                add_line()
-                line = [' ' * (indent - 1), word]
-                current = indent + len(word) + 1
-
-        add_line()
-        return '\n'.join(lines)
+            service_level = order.service_level or ""
+            service_type = order.service_type or ""
+            product_names = [p.name for p in cert.products]
+            print columnize(CONSUMED_LIST, _none_wrap,
+                    order.name,
+                    product_names,
+                    order.sku,
+                    order.contract,
+                    order.account,
+                    cert.serial,
+                    cert.is_valid(),
+                    order.quantity_used,
+                    service_level,
+                    service_type,
+                    managerlib.formatDate(cert.valid_range.begin()),
+                    managerlib.formatDate(cert.valid_range.end())) + "\n"
 
 
 class VersionCommand(CliCommand):
@@ -2142,6 +2101,104 @@ class ManagerCLI(CLI):
     def main(self):
         managerlib.check_identity_cert_perms()
         return CLI.main(self)
+
+
+def columnize(caption_list, callback, *args):
+    """
+    Take a list of captions and values and columnize the output so that
+    shorter captions are padded to be the same length as the longest caption.
+    For example:
+        Foo:            Bar
+        Something Else: Baz
+
+    This function also takes a callback which is used to render the final line.
+    The callback gives us the ability to do things like replacing None values
+    with the string "None" (see _none_wrap()).
+    """
+    #Add one so that the longest string has a space after it
+    padding = sorted(map(len, caption_list))[-1] + 1
+    padded_list = [caption.ljust(padding) + "%s" for caption in caption_list]
+
+    lines = zip(padded_list, args)
+    columns = get_terminal_width()
+    output = []
+    for line in lines:
+        (caption, value) = line
+        if isinstance(value, list):
+            if value:
+                # Put the first value on the same line as the caption
+                formatted_arg = format_name(value[0], padding, columns)
+                output.append(callback(caption, formatted_arg))
+
+                for val in value[1:]:
+                    formatted_arg = format_name(val, padding, columns)
+                    output.append(callback((" " * padding) + "%s", formatted_arg))
+            else:
+                # Degenerate case of an empty list
+                output.append(callback(caption, ""))
+        else:
+            formatted_arg = format_name(value, padding, columns)
+            output.append(callback(caption, formatted_arg))
+    return '\n'.join(output)
+
+
+def format_name(name, indent, max_length):
+    """
+    Formats a potentially long name for multi-line display, giving
+    it a columned effect.
+    """
+
+    if not name or not max_length or not isinstance(name, basestring):
+        return name
+
+    words = name.split()
+    current = indent
+    lines = []
+    # handle emtpty names
+    if not words:
+        return name
+
+    first_word = words.pop(0)
+    line = [first_word]
+    current += len(first_word) + 1
+
+    def add_line():
+        lines.append(' '.join(line))
+
+    # Split here and build it back up by word, this way we get word wrapping
+    for word in words:
+        if current + len(word) < max_length:
+            current += len(word) + 1  # Have to account for the extra space
+            line.append(word)
+        else:
+            add_line()
+            line = [' ' * (indent - 1), word]
+            current = indent + len(word) + 1
+
+    add_line()
+    return '\n'.join(lines)
+
+
+def _none_wrap(template_str, *args):
+    """
+    Takes a template string and arguments and replaces any None arguments
+    with the word "None" before rendering the template.  Mainly this is
+    a callback meant to be used by columnize().
+    """
+    arglist = []
+    for arg in args:
+        if arg is None:
+            arg = _("None")
+        arglist.append(arg)
+    return template_str % tuple(arglist)
+
+
+def _echo(template_str, *args):
+    """
+    Just takes a template string and arguments and renders it.  Mainly
+    this is a callback meant to be used by columnize().
+    """
+    return template_str % tuple(args)
 
 
 # from http://farmdev.com/talks/unicode/
