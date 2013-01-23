@@ -904,7 +904,7 @@ class OID(object):
             #oid = OID(oid[1:])
             oid = oid[1:]
             parts = self.part[-len(oid):]
-        # Macthing the beginning
+        # Matching the beginning
         elif not oid[-1]:
             #oid = OID(oid[:-1])
             oid = oid[:-1]

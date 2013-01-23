@@ -530,7 +530,7 @@ class EntitlementCertificate(ProductCertificate):
         valid = False
         for ext_oid, oid_url in self.extensions.iteritems():
             # if this is a download URL
-            if ext_oid.match('2.') and ext_oid.match('.1.6'):
+            if ext_oid.match(OID('2.')) and ext_oid.match(OID('.1.6')):
                 if self._validate_v1_url(oid_url, path):
                     valid = True
                     break
