@@ -14,11 +14,21 @@
 #
 
 from subscription_manager.cli import CLI
-from rct.commands import CatCertCommand, StatCertCommand
+from rct.cert_commands import CatCertCommand, StatCertCommand
+from rct.manifest_commands import CatManifestCommand, DumpManifestCommand
 
 
 class RctCLI(CLI):
 
     def __init__(self):
-        commands = [CatCertCommand, StatCertCommand]
+        commands = [CatCertCommand, CatManifestCommand, StatCertCommand, DumpManifestCommand]
         CLI.__init__(self, commands)
+
+
+def xstr(value):
+    if value is None:
+        return ''
+    elif isinstance(value, unicode):
+        return value.encode('utf-8')
+    else:
+        return str(value)

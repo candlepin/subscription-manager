@@ -6,7 +6,7 @@
 # main complete function
 _rct()
 {
-  local opts="cat-cert stat-cert"
+  local opts="cat-cert stat-cert cat-man dump-man"
   local cur="${COMP_WORDS[COMP_CWORD]}"
   local first="${COMP_WORDS[1]}"
 
@@ -17,6 +17,12 @@ _rct()
         opts="--no-products --no-content"
         ;;
     stat-cert)
+        opts=""
+        ;;
+    cat-man)
+        opts=""
+        ;;
+    dump-man)
         opts=""
         ;;
   esac

@@ -17,14 +17,14 @@ import unittest
 
 from mock import patch
 from rhsm.certificate import CertificateException
-from rct.commands import RCTCliCommand
+from rct.cert_commands import RCTCertCommand
 from subscription_manager.cli import InvalidCLIOptionError
 
 
-class RCTCliCommandTests(unittest.TestCase):
+class RCTCertCommandTests(unittest.TestCase):
 
     def test_file_arg_required(self):
-        command = RCTCliCommand()
+        command = RCTCertCommand()
         try:
             command.main([])
             self.fail("Expected InvalidCLIOptionError since no file arg.")
@@ -33,7 +33,7 @@ class RCTCliCommandTests(unittest.TestCase):
                              str(e))
 
     def test_invalid_file_arg(self):
-        command = RCTCliCommand()
+        command = RCTCertCommand()
         try:
             command.main(["this_file_does_not_exist.crt"])
             self.fail("Expected InvalidCLIOptionError since no file does not exist.")
@@ -45,7 +45,7 @@ class RCTCliCommandTests(unittest.TestCase):
     def test_valid_x509_required(self, mock_create, mock_isfile):
         mock_create.side_effect = CertificateException("error!")
         mock_isfile.return_value = True
-        command = RCTCliCommand()
+        command = RCTCertCommand()
 
         command._do_command = lambda: command._create_cert()
         try:

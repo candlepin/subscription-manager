@@ -16,7 +16,7 @@ import sys
 import unittest
 import certdata
 from rhsm.certificate import create_from_pem
-from rct.commands import CatCertCommand
+from rct.cert_commands import CatCertCommand
 from rct.printing import xstr
 
 from stubs import MockStdout, MockStderr
