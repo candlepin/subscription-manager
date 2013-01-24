@@ -13,14 +13,44 @@
 # in this software or its documentation.
 #
 
-
 import unittest
+import sys
 import re
+import stubs
+import rhsm.config
+from mock import patch, MagicMock, call
+from M2Crypto import SSL
+from subscription_manager.migrate import migrate
+from subscription_manager import certlib
+
+
+class TestMenu(unittest.TestCase):
+    def setUp(self):
+        self.menu = migrate.Menu([
+            ("displayed-hello", "Hello"),
+            ("displayed-world", "World"),
+            ], "")
+
+    def test_enter_negative(self):
+        self.assertRaises(migrate.InvalidChoiceError, self.menu.getItem, -1)
+
+    def test_enter_nonnumber(self):
+        self.assertRaises(migrate.InvalidChoiceError, self.menu.getItem, "a")
+
+    def test_getItem(self):
+        self.assertEqual("Hello", self.menu.getItem(1))
 
 
 class TestMigration(unittest.TestCase):
-
     def setUp(self):
+        self.engine = migrate.MigrationEngine()
+        self.engine.cp = stubs.StubUEP()
+
+        # These tests print a lot to stdout and stderr
+        # so quiet them.
+        sys.stdout = stubs.MockStdout()
+        sys.stderr = stubs.MockStderr()
+
         self.double_mapped_channels = (
             "rhel-i386-client-dts-5-beta",
             "rhel-i386-client-dts-5-beta-debuginfo",
@@ -42,8 +72,350 @@ class TestMigration(unittest.TestCase):
             "rhel-x86_64-server-dts-5-debuginfo",
             )
 
+    def _restore_stdout(self):
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+
+    def tearDown(self):
+        self._restore_stdout()
+
+    def test_mutually_exclusive_options(self):
+        try:
+            self.engine.main(["--no-auto", "--servicelevel", "foo"])
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
+    @patch.object(rhsm.config.RhsmConfigParser, "get")
+    def test_is_hosted(self, mock_get):
+        mock_get.return_value = "subscription.rhn.redhat.com"
+        self.assertTrue(self.engine.is_hosted())
+
+    @patch.object(rhsm.config.RhsmConfigParser, "get")
+    def test_is_not_hosted(self, mock_get):
+        mock_get.return_value = "subscription.example.com"
+        self.assertFalse(self.engine.is_hosted())
+
+    def test_setting_unauthenticated_proxy(self):
+        self.engine.rhsmcfg = MagicMock()
+
+        rhn_config = {
+            "enableProxy": True,
+            "httpProxy": "proxy.example.com:123",
+            "enableProxyAuth": False,
+            }
+        self.engine.rhncfg = rhn_config
+        self.engine.transfer_http_proxy_settings()
+        expected = [call("server", "proxy_hostname", "proxy.example.com"),
+            call("server", "proxy_port", "123"),
+            call("server", "proxy_user", ""),
+            call("server", "proxy_password", ""),
+            ]
+        self.assertTrue(self.engine.rhsmcfg.set.call_args_list == expected)
+        self.engine.rhsmcfg.save.assert_called_once_with()
+
+    def test_setting_authenticated_proxy(self):
+        self.engine.rhsmcfg = MagicMock()
+
+        rhn_config = {
+            "enableProxy": True,
+            "httpProxy": "proxy.example.com:123",
+            "enableProxyAuth": True,
+            "proxyUser": "foo",
+            "proxyPassword": "bar",
+            }
+        self.engine.rhncfg = rhn_config
+        self.engine.transfer_http_proxy_settings()
+        expected = [call("server", "proxy_hostname", "proxy.example.com"),
+            call("server", "proxy_port", "123"),
+            call("server", "proxy_user", "foo"),
+            call("server", "proxy_password", "bar"),
+            ]
+        self.assertTrue(self.engine.rhsmcfg.set.call_args_list == expected)
+        self.engine.rhsmcfg.save.assert_called_once_with()
+
+    def test_setting_prefixed_proxy(self):
+        self.engine.rhsmcfg = MagicMock()
+
+        rhn_config = {
+            "enableProxy": True,
+            "httpProxy": "http://proxy.example.com:123",
+            "enableProxyAuth": False,
+            }
+        self.engine.rhncfg = rhn_config
+        self.engine.transfer_http_proxy_settings()
+        expected = [call("server", "proxy_hostname", "proxy.example.com"),
+            call("server", "proxy_port", "123"),
+            call("server", "proxy_user", ""),
+            call("server", "proxy_password", ""),
+            ]
+        self.assertTrue(self.engine.rhsmcfg.set.call_args_list == expected)
+        self.engine.rhsmcfg.save.assert_called_once_with()
+
+    @patch("rhsm.connection.UEPConnection")
+    def test_no_server_url_provided(self, mock_uep):
+        self.engine.options = MagicMock()
+        self.engine.options.serverurl = None
+
+        self.engine.rhsmcfg = MagicMock()
+        self.engine.rhsmcfg.get = MagicMock(side_effect=[
+            "candlepin.example.com",
+            "443",
+            "/candlepin",
+            ])
+
+        expected = [call("server", "hostname"),
+            call("server", "port"),
+            call("server", "prefix"),
+            ]
+
+        self.engine.get_candlepin_connection("some_username", "some_password")
+        self.assertTrue(self.engine.rhsmcfg.get.call_args_list == expected)
+
+    def test_bad_server_url(self):
+        try:
+            self.engine.options = MagicMock()
+            self.engine.options.serverurl = "http://"
+            self.engine.get_candlepin_connection("some_username", "some_password")
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+        else:
+            self.fail("No exception raised")
+
+    @patch.object(certlib.ConsumerIdentity, "existsAndValid")
+    @patch.object(certlib.ConsumerIdentity, "read")
+    def test_already_registered_to_rhsm(self, mock_read, mock_exists):
+        mock_read.return_value = MagicMock()
+        try:
+            mock_exists.return_value = True
+            self.engine.check_ok_to_proceed("some_username")
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
+    @patch.object(certlib.ConsumerIdentity, "existsAndValid")
+    def test_ssl_error(self, mock_exists):
+        self.engine.cp.getOwnerList = MagicMock(side_effect=SSL.SSLError)
+        try:
+            mock_exists.return_value = False
+            self.engine.check_ok_to_proceed("some_username")
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
+    def test_no_orgs(self):
+        self.engine.cp.getOwnerList = MagicMock()
+        self.engine.cp.getOwnerList.return_value = []
+        try:
+            self.engine.get_org("some_username")
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
+    def test_one_org(self):
+        self.engine.cp.getOwnerList = MagicMock()
+        self.engine.cp.getOwnerList.return_value = [{"key": "my_org"}]
+        org = self.engine.get_org("some_username")
+        self.assertEquals(org, "my_org")
+
+    @patch("__builtin__.raw_input")
+    def test_enter_org_key(self, mock_input):
+        self.engine.cp.getOwnerList = MagicMock()
+        self.engine.cp.getOwnerList.return_value = [
+            {"key": "my_org", "displayName": "My Org"},
+            {"key": "second_org", "displayName": "Second Org"},
+            ]
+        mock_input.return_value = "my_org"
+        org = self.engine.get_org("some_username")
+        self.assertEquals(org, "my_org")
+
+    @patch("__builtin__.raw_input")
+    def test_enter_org_name(self, mock_input):
+        self.engine.cp.getOwnerList = MagicMock()
+        self.engine.cp.getOwnerList.return_value = [
+            {"key": "my_org", "displayName": "My Org"},
+            {"key": "second_org", "displayName": "Second Org"},
+            ]
+        mock_input.return_value = "My Org"
+        org = self.engine.get_org("some_username")
+        self.assertEquals(org, "my_org")
+
+    @patch("__builtin__.raw_input")
+    def test_enter_bad_org(self, mock_input):
+        self.engine.cp.getOwnerList = MagicMock()
+        self.engine.cp.getOwnerList.return_value = [
+            {"key": "my_org", "displayName": "My Org"},
+            {"key": "second_org", "displayName": "Second Org"},
+            ]
+        mock_input.return_value = "Some other org"
+        try:
+            self.engine.get_org("some_username")
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
+    def test_environment_not_supported(self):
+        self.engine.cp.supports_resource = MagicMock(side_effect=Exception)
+        try:
+            self.engine.get_environment("some_org")
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
+    @patch("__builtin__.raw_input")
+    def test_enter_environment_name(self, mock_input):
+        self.engine.cp.supports_resource = MagicMock()
+        self.engine.cp.supports_resource.return_value = True
+
+        self.engine.cp.getEnvironmentList = MagicMock()
+        self.engine.cp.getEnvironmentList.return_value = [
+            {"name": "My Environment", "label": "my_environment"},
+            {"name": "Another Environment", "label": "another_environment"},
+            ]
+
+        mock_input.return_value = "My Environment"
+        env = self.engine.get_environment("some_org")
+        self.assertEquals(env, "My Environment")
+
+    @patch("__builtin__.raw_input")
+    def test_enter_environment_label(self, mock_input):
+        self.engine.cp.supports_resource = MagicMock()
+        self.engine.cp.supports_resource.return_value = True
+
+        self.engine.cp.getEnvironmentList = MagicMock()
+        self.engine.cp.getEnvironmentList.return_value = [
+            {"name": "My Environment", "label": "my_environment"},
+            {"name": "Another Environment", "label": "another_environment"},
+            ]
+
+        mock_input.return_value = "my_environment"
+        env = self.engine.get_environment("some_org")
+        self.assertEquals(env, "My Environment")
+
+    @patch("__builtin__.raw_input")
+    def test_enter_bad_environment(self, mock_input):
+        self.engine.cp.supports_resource = MagicMock()
+        self.engine.cp.supports_resource.return_value = True
+
+        self.engine.cp.getEnvironmentList = MagicMock()
+        self.engine.cp.getEnvironmentList.return_value = [
+            {"name": "My Environment", "label": "my_environment"},
+            {"name": "Another Environment", "label": "another_environment"},
+            ]
+
+        mock_input.return_value = "something else"
+        try:
+            self.engine.get_environment("some_org")
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
+    def test_check_is_org_admin(self):
+        sc = MagicMock()
+        sc.user.listRoles.return_value = ["org_admin"]
+        self.engine.check_is_org_admin(sc, None, "some_username")
+
+    def test_check_is_org_admin_failure(self):
+        sc = MagicMock()
+        sc.user.listRoles.return_value = ["bogus_role"]
+        try:
+            self.engine.check_is_org_admin(sc, None, "some_username")
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
+    def test_conflicting_channels(self):
+        channels = ["jbappplatform-4.3.0-i386-server-5-rpm",
+            "jbappplatform-5-i386-server-5-rpm",
+            ]
+        try:
+            self.engine.check_for_conflicting_channels(channels)
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
+    @patch("__builtin__.open")
+    def test_get_release(self, mock_open):
+        mock_open.return_value.readlines.return_value = "Red Hat Enterprise Linux Server release 6.3 (Santiago)"
+        release = self.engine.get_release()
+        self.assertEquals(release, "RHEL-6")
+
+    @patch("__builtin__.open")
+    def test_read_channel_cert_mapping(self, mock_open):
+        mock_open.return_value.readlines.return_value = [
+            "xyz: abc\n",
+            "#some comment\n",
+            ]
+        data_dict = self.engine.read_channel_cert_mapping(None)
+        self.assertEquals(data_dict, {"xyz": "abc"})
+
+    def test_require_force(self):
+        def stub_read_channel_cert_mapping(mappingfile):
+            return {"a": "a-1.pem", "b": "b-2.pem"}
+
+        subscribed_channels = ["a", "b", "c"]
+        self.engine.read_channel_cert_mapping = stub_read_channel_cert_mapping
+        self.engine.options = MagicMock()
+        self.engine.options.force = None
+
+        try:
+            self.engine.deploy_prod_certificates(subscribed_channels)
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
+    @patch("subscription_manager.migrate.migrate.ProductDirectory")
+    @patch("shutil.copy2")
+    def test_deploy_prod_certificates(self, mock_shutil, mock_product_directory):
+        mock_product_directory.return_value = "/some/path"
+        mock_shutil.return_value = True
+
+        def stub_read_channel_cert_mapping(mappingfile):
+            return {"a": "a-1.pem"}
+
+        def stub_get_release():
+            return "RHEL-6"
+
+        subscribed_channels = ["a"]
+        self.engine.read_channel_cert_mapping = stub_read_channel_cert_mapping
+        self.engine.get_release = stub_get_release
+
+        self.engine.deploy_prod_certificates(subscribed_channels)
+        mock_shutil.assert_called_with("/usr/share/rhsm/product/RHEL-6/a-1.pem", "/some/path/1.pem")
+
+    @patch("subscription_manager.migrate.migrate.ProductDirectory")
+    @patch("os.path.isfile")
+    @patch("os.remove")
+    def test_clean_up_remove_68_pem(self, mock_remove, mock_isfile, mock_product_directory):
+        mock_product_directory.return_value = "/some/path"
+        mock_isfile.side_effect = [True, True]
+        self.engine.clean_up([])
+        mock_remove.assert_called_with("/some/path/68.pem")
+
+    @patch("subscription_manager.migrate.migrate.ProductDirectory")
+    @patch("os.path.isfile")
+    @patch("os.remove")
+    def test_clean_up_remove_180_pem(self, mock_remove, mock_isfile, mock_product_directory):
+        mock_product_directory.return_value = "/some/path"
+        mock_isfile.side_effect = [False, False]
+        self.engine.clean_up([
+            "rhel-i386-client-dts-5-beta",
+            "rhel-i386-client-dts-5",
+            ])
+        mock_remove.assert_called_with("/some/path/180.pem")
+
     def test_double_mapping_regex(self):
-        regex = "rhel-.*?-(client|server)-dts-(5|6)-beta(-debuginfo)?"
+        regex = migrate.DOUBLE_MAPPED
         for channel in self.double_mapped_channels:
             self.assertTrue(re.match(regex, channel))
 
@@ -51,9 +423,130 @@ class TestMigration(unittest.TestCase):
             self.assertFalse(re.match(regex, channel))
 
     def test_single_mapping_regex(self):
-        regex = "rhel-.*?-(client|server)-dts-(5|6)(?!-beta)(-debuginfo)?"
+        regex = migrate.SINGLE_MAPPED
         for channel in self.double_mapped_channels:
             self.assertFalse(re.match(regex, channel))
 
         for channel in self.single_mapped_channels:
             self.assertTrue(re.match(regex, channel))
+
+    @patch("shutil.move")
+    def test_unregister_from_rhn_exception(self, mock_shutil):
+        rhn_config = {"systemIdPath": "/some/path"}
+        self.engine.rhncfg = rhn_config
+        sc = MagicMock()
+        sc.system.deleteSystems.side_effect = Exception
+
+        def stub_get_system_id():
+            pass
+
+        def stub_disable_yum_rhn_plugin():
+            pass
+
+        self.engine.get_system_id = stub_get_system_id
+        self.engine.disable_yum_rhn_plugin = stub_disable_yum_rhn_plugin
+
+        self.engine.unregister_system_from_rhn_classic(sc, None)
+        mock_shutil.assert_called_with("/some/path", "/some/path.save")
+
+    @patch("os.remove")
+    def test_unregister_from_rhn(self, mock_remove):
+        rhn_config = {"systemIdPath": "/some/path"}
+        self.engine.rhncfg = rhn_config
+        sc = MagicMock()
+        sc.system.deleteSystems.return_value = True
+
+        def stub_get_system_id():
+            pass
+
+        def stub_disable_yum_rhn_plugin():
+            pass
+
+        self.engine.get_system_id = stub_get_system_id
+        self.engine.disable_yum_rhn_plugin = stub_disable_yum_rhn_plugin
+
+        self.engine.unregister_system_from_rhn_classic(sc, None)
+        mock_remove.assert_called_with("/some/path")
+
+    @patch("subprocess.call")
+    def test_register_failure(self, mock_subprocess):
+        self.engine.options = MagicMock()
+        self.engine.options.serverurl = "foobar"
+
+        credentials = MagicMock()
+        credentials.username = "foo"
+        credentials.password = "bar"
+
+        mock_subprocess.return_value = 1
+        try:
+            self.engine.register(credentials, "", "")
+        except SystemExit, e:
+            self.assertEquals(e.code, 2)
+        else:
+            self.fail("No exception raised")
+
+    @patch("subprocess.call")
+    @patch.object(certlib.ConsumerIdentity, "read")
+    def test_register(self, mock_read, mock_subprocess):
+        self.engine.options = MagicMock()
+        self.engine.options.serverurl = "foobar"
+
+        credentials = MagicMock()
+        credentials.username = "foo"
+        credentials.password = "bar"
+
+        mock_subprocess.return_value = 0
+        mock_read.return_value = MagicMock()
+        self.engine.register(credentials, "org", "env")
+
+        arg_list = ['subscription-manager',
+            'register',
+            '--serverurl=foobar',
+            '--username=foo',
+            '--password=bar',
+            '--org=org',
+            '--environment=env',
+            ]
+
+        mock_subprocess.assert_called_with(arg_list)
+
+    @patch("subprocess.call")
+    @patch("os.getenv")
+    @patch("os.path.exists")
+    def test_subscribe(self, mock_exists, mock_getenv, mock_subprocess):
+        self.engine.options = MagicMock()
+        self.engine.options.gui = False
+        mock_getenv.return_value = True
+        mock_exists.return_value = True
+
+        mock_consumer = MagicMock()
+        self.engine.subscribe(mock_consumer, "foobar")
+        arg_list = [
+            'subscription-manager',
+            'subscribe',
+            '--auto',
+            '--servicelevel=foobar',
+            ]
+        mock_subprocess.assert_called_with(arg_list)
+
+    @patch("subscription_manager.repolib.RepoLib")
+    @patch("subscription_manager.repolib.RepoFile")
+    def test_enable_extra_channels(self, mock_repofile, mock_repolib):
+        mrf = mock_repofile.return_value
+        subscribed_channels = [
+            "rhel-i386-client-supplementary-5",
+            "rhel-i386-client-optional-6",
+            "rhel-i386-server-productivity-5",
+            ]
+        mrf.sections.return_value = [
+            "supplementary",
+            "optional-rpms",
+            "productivity-rpms",
+            ]
+        self.engine.enable_extra_channels(subscribed_channels)
+        expected = [call("supplementary", "enabled", "1"),
+            call("optional-rpms", "enabled", "1"),
+            call("productivity-rpms", "enabled", "1"),
+            ]
+        self.assertTrue(mrf.set.call_args_list == expected)
+        mrf.write.assert_called_with()

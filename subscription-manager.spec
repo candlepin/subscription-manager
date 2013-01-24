@@ -290,6 +290,9 @@ rm -rf %{buildroot}
 
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)
+%dir %{_datadir}/rhsm/subscription_manager/migrate
+%{_datadir}/rhsm/subscription_manager/migrate/__init__.py*
+%{_datadir}/rhsm/subscription_manager/migrate/migrate.py*
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
 # Install num migration is only for RHEL 5:
 %{?el5:%attr(755,root,root) %{_sbindir}/install-num-migrate-to-rhsm}
