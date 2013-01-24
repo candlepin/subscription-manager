@@ -19,10 +19,10 @@ _rct()
     stat-cert)
         opts=""
         ;;
-    cat-man)
+    cat-manifest)
         opts=""
         ;;
-    dump-man)
+    dump-manifest)
         opts=""
         ;;
   esac
