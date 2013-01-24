@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.8.0
+Version: 1.8.1
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,29 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Jan 24 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.1-1
+- Do not retrieve the value unless the match is valid (bkearney@redhat.com)
+- Only look for a single item as it is quicker and all we care about is zero or
+  not zero (bkearney@redhat.com)
+- Several small tweaks: (bkearney@redhat.com)
+- Store off the len of the oid to save recalculating it more that once
+  (bkearney@redhat.com)
+- certificate.match will now only accept oids. (bkearney@redhat.com)
+- Remove the use of exceptions to denote a return value of false.
+  (bkearney@redhat.com)
+- The email.utils module was named email.Utils in RHEL5 (bkearney@redhat.com)
+- Make stylish issues resolved (bkearney@redhat.com)
+- 772936: Warn the user when clock skew is detected. (bkearney@redhat.com)
+- Improve logging for rhsmcertd scenarios (wpoteat@redhat.com)
+- 845622: If an identity certificate has expired, there should be a friendly
+  error message (wpoteat@redhat.com)
+- Add international text to test automatic JSON encoding. (awood@redhat.com)
+- 880070: Adding unicode encoding hook for simplejson. (awood@redhat.com)
+- 848836: Remove trailing / from the handler in UEPConnection
+  (bkearney@redhat.com)
+- 884259: If LANG is unset, do not attempt to send up a default locale in
+  redeem call (bkearney@redhat.com)
+
 * Tue Nov 20 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.0-1
 - Reversioning to 1.8.x stream.
 
