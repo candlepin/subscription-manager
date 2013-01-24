@@ -227,7 +227,7 @@ class _CertFactory(object):
         if EXT_ORDER_NAME in extensions:
             return ENTITLEMENT_CERT
         # If there is no order, but there are products, must be a product cert:
-        elif len(extensions.find('1.*.1')) > 0:
+        elif len(extensions.find('1.*.1', 1, True)) > 0:
             return PRODUCT_CERT
         # Otherwise we assume it's a plain identity certificate:
         else:
@@ -530,7 +530,7 @@ class EntitlementCertificate(ProductCertificate):
         valid = False
         for ext_oid, oid_url in self.extensions.iteritems():
             # if this is a download URL
-            if ext_oid.match('2.') and ext_oid.match('.1.6'):
+            if ext_oid.match(OID('2.')) and ext_oid.match(OID('.1.6')):
                 if self._validate_v1_url(oid_url, path):
                     valid = True
                     break

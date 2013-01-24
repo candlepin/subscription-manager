@@ -425,7 +425,7 @@ class EntitlementCertificate(ProductCertificate):
         ProductCertificate._update(self, content)
 
         rhns = self.redhat()
-        order = rhns.find('4.1', 1)
+        order = rhns.find('4.1', 1, True)
         if order:
             p = order[0]
             oid = p[0]
@@ -709,13 +709,13 @@ class Extensions(dict):
         @return: The value of the first extension matched.
         @rtype: str
         """
-        ext = self.find(oid, 1)
+        ext = self.find(oid, 1, True)
         if ext:
             return ext[0][1]
         else:
             return default
 
-    def find(self, oid, limit=0):
+    def find(self, oid, limit=0, ignoreOrder=False):
         """
         Find all extensions matching the I{oid}.
         Note: The I{oid} may contain (*) wildcards.
@@ -723,19 +723,28 @@ class Extensions(dict):
         @type oid: str|L{OID}
         @param limit: Limit the number returned, 0=unlimited
         @type limit: int
+        @type ignoreOrder: bool
         @return: A list of matching items.
         @rtype: (OID, value)
         @see: OID.match()
         """
         ext = []
+        found = 0
         if isinstance(oid, str):
             oid = OID(oid)
-        keyset = sorted(self.keys())
+
+        # Only order the keys if we want more than a singel return avalue
+        if ignoreOrder:
+            keyset = self.keys()
+        else:
+            keyset = sorted(self.keys())
+
         for k in keyset:
-            v = self[k]
             if k.match(oid):
+                v = self[k]
                 ext.append((k, v))
-            if limit and len(ext) == limit:
+                found = found + 1
+            if limit and found == limit:
                 break
         return ext
 
@@ -829,6 +838,10 @@ class OID(object):
         else:
             self.part = oid
 
+        self._len = None
+        self._str = None
+        self._hash = None
+
     def parent(self):
         """
         Get the parent OID.
@@ -881,34 +894,43 @@ class OID(object):
           -    5.6.74. (match only first 4)
           - 1.4.*.6.*  (wildcard pattern)
         @param oid: An OID string or object.
-        @type oid: str|L{OID}
+        @type oid: L{OID}
         @return: True if matched
         """
         i = 0
-        if isinstance(oid, str):
-            oid = OID(oid)
-        try:
-            if not oid[0]:
-                oid = OID(oid[1:])
-                parts = self.part[-len(oid):]
-            elif not oid[-1]:
-                oid = OID(oid[:-1])
-                parts = self.part[:len(oid)]
-            else:
-                parts = self.part
-            if len(parts) != len(oid):
-                raise Exception()
-            for x in parts:
-                if (x == oid[i] or oid[i] == self.WILDCARD):
-                    i += 1
-                else:
-                    raise Exception()
-        except:
+
+        # Matching the end
+        if not oid[0]:
+            #oid = OID(oid[1:])
+            oid = oid[1:]
+            parts = self.part[-len(oid):]
+        # Matching the beginning
+        elif not oid[-1]:
+            #oid = OID(oid[:-1])
+            oid = oid[:-1]
+            parts = self.part[:len(oid)]
+        # Full on match
+        else:
+            parts = self.part
+
+        # The lengths do not match, fail.
+        if len(parts) != len(oid):
             return False
+
+        for x in parts:
+            val = oid[i]
+            if (x == val or val == self.WILDCARD):
+                i += 1
+            else:
+                return False
+
         return True
 
     def __len__(self):
-        return len(self.part)
+        if not self._len:
+            self._len = len(self.part)
+
+        return self._len
 
     def __getitem__(self, index):
         return self.part[index]
@@ -917,13 +939,19 @@ class OID(object):
         return str(self)
 
     def __hash__(self):
-        return hash(str(self))
+        if not self._hash:
+            self._hash = hash(str(self))
+
+        return self._hash
 
     def __eq__(self, other):
         return (str(self) == str(other))
 
     def __str__(self):
-        return '.'.join(self.part)
+        if not self._str:
+            self._str = '.'.join(self.part)
+
+        return self._str
 
 
 class Order:
