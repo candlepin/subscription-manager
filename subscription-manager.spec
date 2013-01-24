@@ -233,7 +233,7 @@ rm -rf %{buildroot}
 %dir %{_datadir}/rhsm/rct
 %{_datadir}/rhsm/rct/__init__.py*
 %{_datadir}/rhsm/rct/cli.py*
-%{_datadir}/rhsm/rct/commands.py*
+%{_datadir}/rhsm/rct/*commands.py*
 %{_datadir}/rhsm/rct/printing.py*
 %attr(755,root,root) %{_bindir}/rct
 
