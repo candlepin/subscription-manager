@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.0
+Version: 1.8.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -347,6 +347,118 @@ fi
 %endif
 
 %changelog
+* Thu Jan 24 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.1-1
+- Add two manifest commands to rct. (bkearney@redhat.com)
+- latest translations from zanata (alikins@redhat.com)
+- 895447: The count of subscriptions removed is zero for certs that have been
+  imported. (wpoteat@redhat.com)
+- 895462: Message for subscription-manager repos --list for disabled repo needs
+  to be modified (wpoteat@redhat.com)
+- 885964: After registration, recreate the UEP connection using the identity
+  cert. (awood@redhat.com)
+- 869306: Add org ID to facts dialog. (awood@redhat.com)
+- 888853: Put output into proper columns regardless of the output language.
+  (awood@redhat.com)
+- Update python-rhsm requires version (wpoteat@redhat.com)
+- 888052: Add all binaries to the makefile path for gettext string extraction
+  (bkearney@redhat.com)
+- 851303: additional term updates (dlackey@redhat.com.com)
+- 844411: Add an --insecure option to subscription-manager. (awood@redhat.com)
+- 891621: Users can incorrectly enter activation keys when registering to
+  hosted. (awood@redhat.com)
+- 889573: Only persist serverurl and baseurl when registering.
+  (awood@redhat.com)
+- 889204: Encode the unicode string to utf-8 to avoid syslog errors
+  (bkearney@redhat.com)
+- 889621: String substitution inside gettext causes message translations to
+  never be found (bkearney@redhat.com)
+- 890296: Unicode characters with a - are causing printing issues for rct
+  printing (bkearney@redhat.com)
+- 878269 (dlackey@redhat.com.com)
+- 784056: Raise a running instance of the GUI to the forefront.
+  (awood@redhat.com)
+- 888968: Improve the gui message formatting for SLA selection
+  (bkearney@redhat.com)
+- 873601: Return a non zero code if subscription manager is run with an
+  incorrect command name (bkearney@redhat.com)
+- 839779: Improve messaging when autosubscribe does not work because of SLA
+  (bkearney@redhat.com)
+- 867603: Add quantity to confirm subscriptions dialog. (awood@redhat.com)
+- 888790: Rebuild UEP connection after registering with activation keys.
+  (awood@redhat.com)
+- 886280; 878257; 878264; 878269 (dlackey@redhat.com.com)
+- 814378: disable linkify if we are running as firstboot (alikins@redhat.com)
+- 886887: Take the user back to the activation key page if he enters an invalid
+  key. (awood@redhat.com)
+- 863572: Make forward/back insensitive when registering (alikins@redhat.com)
+- 825950: updating SAM registration procedure; other term edits and updated
+  screenshot (dlackey@redhat.com.com)
+- 885964: Do not make a getOwner call when not necessary. (awood@redhat.com)
+- Ask for the org in environments and service-level modules. (awood@redhat.com)
+- 886992: Fix for bad fix for 886604, wrong path for yum repos
+  (alikins@redhat.com)
+- matt reid's edits to rct; bz886280; bz878257; bz878269; bz878264
+  (dlackey@redhat.com.com)
+- 841496: Do not use hyphens in bash completion files as these are invalid for
+  identifiers in the sh shell. (bkearney@redhat.com)
+- Improve logging for rhsmcertd scenarios (wpoteat@redhat.com)
+- 878609: Do not use public url redirectors, instead use a redhat.com address
+  (bkearney@redhat.com)
+- 886604: Fix incorrect path in repos.d check (alikins@redhat.com)
+- 727092: Read in the org key during registration if none is given.
+  (awood@redhat.com)
+- 845622: If an identity certificate has expired, there should be a friendly
+  error message (wpoteat@redhat.com)
+- 883123: Have the migration code use the name and the label for org and
+  environment lookup. (bkearney@redhat.com)
+- 886110: help blurb for --auto-attach formatted poorly (alikins@redhat.com)
+- 880070: require latest python-rhsm to handle unicode issues
+  (alikins@redhat.com)
+- 798788: Results from subscription-manager facts --update after a server-side
+  consumer was deleted. (wpoteat@redhat.com)
+- 878634: Improve the consistency of capitalization of URL, ID, HTTP, and CPU
+  (bkearney@redhat.com)
+- 878657: Make consistent use of the term unregister instead of un-register
+  (bkearney@redhat.com)
+- 883735: load branding module slightly differently (jesusr@redhat.com)
+- Stylish fix. (dgoodwin@redhat.com)
+- 878664: Add bash completion script for rct (bkearney@redhat.com)
+- 880764: Command line options which can be specified more than once should use
+  the same help text (bkearney@redhat.com)
+- 867070: Adjust default sizing of subscriptions pane in Installed Products
+  tab. (awood@redhat.com)
+- 873791: Expected exit codes from unsubscribe with multiple serial numbers
+  (wpoteat@redhat.com)
+- 800323: Set default output stream encoding to UTF-8. (awood@redhat.com)
+- 862852: Fix double separator in redeem dialog. (dgoodwin@redhat.com)
+- Display "None" if environments value is empty on consumer. (awood@redhat.com)
+- 872351: Display environment in GUI facts dialog and CLI identity command.
+  (awood@redhat.com)
+- 881091: Remove punctuation in the help message (bkearney@redhat.com)
+- Revert "878986: refactor to use curses/textwrap for format"
+  (alikins@redhat.com)
+- 877579: Fix -1 quantity to consume for unlimited pools. (dgoodwin@redhat.com)
+- 881117: Add at-spi locator to redemption dialog. (awood@redhat.com)
+- 881952: Warn and continue if encountering a failure during system deletion.
+  (awood@redhat.com)
+- 878820: Fix console error when yum.repos.d does not exist.
+  (dgoodwin@redhat.com)
+- 839772: Display "Not Set" instead of "" in SLA and release preferences.
+  (awood@redhat.com)
+- rev zanata branch version to 1.8.X (alikins@redhat.com)
+- 878986: refactor to use curses/textwrap for format (alikins@redhat.com)
+- 878986: Default to no line breaking if no stty is available
+  (bkearney@redhat.com)
+- 878588: Move the requires on usermode from subscription-manager-gui to
+  subscription-manager (bkearney@redhat.com)
+- 878648: Make the help usage formatting consistent for the rct and
+  subscription manager commands (bkearney@redhat.com)
+- 869046: Remove stray 'print' (jbowes@redhat.com)
+- 864207: Autosubscribe should not run when all products are already
+  subscribed. (wpoteat@redhat.com)
+- 854702: Place the asterisk indicating editability into the quantity cell.
+  (awood@redhat.com)
+
 * Tue Nov 20 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.0-1
 - Reversioning to 1.8.x stream.
 
