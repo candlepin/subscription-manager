@@ -55,7 +55,7 @@ static GOptionEntry entries[] = {
 	 "MINUTES"},
     /* marked deprecated as of 11-16-2012, needs to be removed...? */
 	{"heal-interval", 0, 0, G_OPTION_ARG_INT, &arg_heal_interval_minutes,
-	 N_("deprecated, see auto-attach-interval"),
+	 N_("deprecated, see --auto-attach-interval"),
 	 "MINUTES"},
     {"auto-attach-interval", 'i', 0, G_OPTION_ARG_INT, &arg_heal_interval_minutes,
      N_("interval to run auto-attach (in minutes)"),
