@@ -53,6 +53,7 @@ DEFAULTS = {
                 'consumerCertDir': '/etc/pki/consumer',
                 'certFrequency': '240',
                 'healFrequency': '1440',
+                'report_package_profile': '1',
             }
 
 
