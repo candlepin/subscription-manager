@@ -701,7 +701,7 @@ class OwnersCommand(UserPassCommand):
                     print columnize(ORG_LIST, _echo,
                             owner['displayName'], owner['key']) + "\n"
             else:
-                print(_("%s cannot register to any organizations.") % self.username)
+                print(_("%s cannot register with any organizations.") % self.username)
 
         except connection.RestlibException, re:
             log.exception(re)
@@ -925,9 +925,9 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--consumerid", dest="consumerid", metavar="SYSTEMID",
                                help=_("the existing system data is pulled from the server"))
         self.parser.add_option("--org", dest="org",
-                               help=_("register to one of multiple organizations for the user"))
+                               help=_("register with one of multiple organizations for the user"))
         self.parser.add_option("--environment", dest="environment",
-                               help=_("register to a specific environment in the destination org"))
+                               help=_("register with a specific environment in the destination org"))
         self.parser.add_option("--release", dest="release",
                                help=_("set a release version"))
         self.parser.add_option("--autosubscribe", action='store_true',
@@ -1134,7 +1134,7 @@ class RegisterCommand(UserPassCommand):
         owners = cp.getOwnerList(self.username)
 
         if len(owners) == 0:
-            systemExit(-1, _("%s cannot register to any organizations.") % self.username)
+            systemExit(-1, _("%s cannot register with any organizations.") % self.username)
         if len(owners) == 1:
             return owners[0]['key']
 
