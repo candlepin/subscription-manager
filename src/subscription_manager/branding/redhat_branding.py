@@ -22,7 +22,7 @@ class Branding(object):
         self.REGISTERED_TO_BOTH_WARNING = \
                 _("This system is registered using both RHN Classic and Red Hat Subscription Management.") + \
                 "\n\n" + \
-                _("Red Hat recommends that customers only register to one service.") + \
+                _("Red Hat recommends that customers only register with one service.") + \
                 "\n\n" + \
                 _("To learn more about RHN registration and technologies please consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563")
         self.REGISTERED_TO_BOTH_SUMMARY = _("RHN Classic and Red Hat Subscription Management")
