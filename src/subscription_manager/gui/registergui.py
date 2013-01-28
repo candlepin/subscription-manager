@@ -960,7 +960,7 @@ class AsyncBackend(object):
             # If environments aren't supported, don't bother trying to list:
             if self.backend.admin_uep.supports_resource('environments'):
                 log.info("Server supports environments, checking for "
-                         "environment to register to.")
+                         "environment to register with.")
                 retval = []
                 for env in self.backend.admin_uep.getEnvironmentList(owner_key):
                     # We need to ignore the "locker" environment, you can't
