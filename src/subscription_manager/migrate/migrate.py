@@ -52,9 +52,18 @@ _RHNLIBPATH = "/usr/share/rhn"
 if _RHNLIBPATH not in sys.path:
     sys.path.append(_RHNLIBPATH)
 
-import up2date_client.config
-from up2date_client import up2dateErrors
-from up2date_client.rhnChannel import getChannels
+# Don't raise ImportErrors so we can run the unit tests on Fedora.
+try:
+    from up2date_client.config import initUp2dateConfig
+except ImportError:
+    def initUp2dateConfig():
+        raise NotImplementedError(_("Could not find up2date_client.config module!"))
+
+try:
+    from up2date_client.rhnChannel import getChannels
+except ImportError:
+    def getChannels():
+        raise NotImplementedError(_("Could not find up2date_client.rhnChannel module!"))
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -135,7 +144,7 @@ class UserCredentials(object):
 
 class MigrationEngine(object):
     def __init__(self):
-        self.rhncfg = up2date_client.config.initUp2dateConfig()
+        self.rhncfg = initUp2dateConfig()
         self.rhsmcfg = rhsm.config.initConfig()
 
         self.proxy_host = None
@@ -346,10 +355,6 @@ class MigrationEngine(object):
     def get_subscribed_channels_list(self):
         try:
             subscribedChannels = map(lambda x: x['label'], getChannels().channels())
-        except up2dateErrors.NoChannelsError:
-            systemExit(1, _("This system is not associated with any channel."))
-        except up2dateErrors.NoSystemIdError:
-            systemExit(1, _("Unable to locate SystemId file. Is this system registered?"))
         except:
             log.error(traceback.format_exc())
             systemExit(1, _("Problem encountered getting the list of subscribed channels.  Exiting."))

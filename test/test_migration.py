@@ -43,6 +43,7 @@ class TestMenu(unittest.TestCase):
 
 class TestMigration(unittest.TestCase):
     def setUp(self):
+        migrate.initUp2dateConfig = lambda: {}
         self.engine = migrate.MigrationEngine()
         self.engine.cp = stubs.StubUEP()
 
@@ -362,8 +363,12 @@ class TestMigration(unittest.TestCase):
         def stub_read_channel_cert_mapping(mappingfile):
             return {"a": "a-1.pem", "b": "b-2.pem"}
 
+        def stub_get_release():
+            return "6"
+
         subscribed_channels = ["a", "b", "c"]
         self.engine.read_channel_cert_mapping = stub_read_channel_cert_mapping
+        self.engine.get_release = stub_get_release
         self.engine.options = MagicMock()
         self.engine.options.force = None
 
