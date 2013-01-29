@@ -26,6 +26,7 @@ import gettext
 _ = gettext.gettext
 import rhsm.connection as connection
 
+from rhsm.config import initConfig
 from rhsm.profile import get_profile, RPMProfile
 from subscription_manager.certlib import DataLib, ConsumerIdentity
 from subscription_manager.certdirectory import ProductDirectory
@@ -33,6 +34,8 @@ from subscription_manager.certdirectory import ProductDirectory
 log = logging.getLogger('rhsm-app.' + __name__)
 
 PACKAGES_RESOURCE = "packages"
+
+cfg = initConfig()
 
 
 class PackageProfileLib(DataLib):
@@ -190,6 +193,7 @@ class ProfileManager(CacheManager):
         # Could be None, we'll read the system's current profile later once
         # we're sure we actually need the data.
         self._current_profile = current_profile
+        self._report_package_profile = cfg.get('rhsm', 'report_package_profile')
 
     def _get_current_profile(self):
         # If we weren't given a profile, load the current systems packages:
@@ -199,6 +203,9 @@ class ProfileManager(CacheManager):
 
     def _set_current_profile(self, value):
         self._current_profile = value
+
+    def _set_report_package_profile(self, value):
+        self._report_package_profile = value
 
     current_profile = property(_get_current_profile, _set_current_profile)
 
@@ -216,6 +223,10 @@ class ProfileManager(CacheManager):
         # If the server doesn't support packages, don't try to send the profile:
         if not uep.supports_resource(PACKAGES_RESOURCE):
             log.info("Server does not support packages, skipping profile upload.")
+            return 0
+
+        if not self._report_package_profile:
+            log.info("Skipping package profile upload due to report_package_profile setting.")
             return 0
 
         return CacheManager.update_check(self, uep, consumer_uuid, force)
