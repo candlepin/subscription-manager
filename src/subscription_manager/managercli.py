@@ -1950,6 +1950,7 @@ class ListCommand(CliCommand):
 
         self._validate_options()
         if self.options.installed:
+            self.certlib.update()
             iproducts = managerlib.getInstalledProductStatus(self.product_dir,
                     self.entitlement_dir, self.facts.get_facts())
             if not len(iproducts):
@@ -2009,6 +2010,7 @@ class ListCommand(CliCommand):
                         machine_type) + "\n"
 
         if self.options.consumed:
+            self.certlib.update()
             self.print_consumed(service_level=self.options.service_level)
 
     def _filter_pool_json_by_service_level(self, pools, service_level):
