@@ -39,6 +39,7 @@ repo_ca_cert = %(ca_cert_dir)sredhat-uep.pem
 productCertDir = /etc/pki/product
 entitlementCertDir = /etc/pki/entitlement
 consumerCertDir = /etc/pki/consumer
+report_package_profile = 1
 
 [rhsmcertd]
 certFrequency = 240
