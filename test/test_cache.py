@@ -78,6 +78,20 @@ class TestProfileManager(unittest.TestCase):
         uep.supports_resource.assert_called_with('packages')
         self.assertEquals(0, self.profile_mgr.write_cache.call_count)
 
+    def test_update_check_packages_disabled(self):
+        uuid = 'FAKEUUID'
+        uep = Mock()
+        self.profile_mgr._set_report_package_profile(0)
+        uep.updatePackageProfile = Mock()
+        self.profile_mgr.has_changed = Mock(return_value=True)
+        self.profile_mgr.write_cache = Mock()
+
+        self.profile_mgr.update_check(uep, uuid)
+
+        self.assertEquals(0, uep.updatePackageProfile.call_count)
+        uep.supports_resource.assert_called_with('packages')
+        self.assertEquals(0, self.profile_mgr.write_cache.call_count)
+
     def test_update_check_error_uploading(self):
         uuid = 'FAKEUUID'
         uep = Mock()
