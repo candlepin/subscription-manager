@@ -87,7 +87,7 @@ def warnExpired(conduit):
             products.add(m)
     if products:
         msg = expired_warning % '\n'.join(sorted(products))
-        conduit.info(2, msg)
+        conduit.error(2, msg)
 
 
 def warnOrGiveUsageMessage(conduit):
@@ -111,7 +111,7 @@ def warnOrGiveUsageMessage(conduit):
         except:
             msg = not_registered_warning
     finally:
-        conduit.info(2, msg)
+        conduit.error(2, msg)
 
 
 def config_hook(conduit):
