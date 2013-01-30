@@ -51,8 +51,8 @@ DEFAULTS = {
                 'productCertDir': '/etc/pki/product',
                 'entitlementCertDir': '/etc/pki/entitlement',
                 'consumerCertDir': '/etc/pki/consumer',
-                'certFrequency': '240',
-                'healFrequency': '1440',
+                'certCheckInterval': '240',
+                'autoAttachInterval': '1440',
                 'report_package_profile': '1',
             }
 
