@@ -50,7 +50,7 @@ static gint arg_cert_interval_minutes = -1;
 static gint arg_heal_interval_minutes = -1;
 
 static GOptionEntry entries[] = {
-	{"cert-interval", 'c', 0, G_OPTION_ARG_INT, &arg_cert_interval_minutes,
+	{"cert-check-interval", 'c', 0, G_OPTION_ARG_INT, &arg_cert_interval_minutes,
 	 N_("interval to run cert check (in minutes)"),
 	 "MINUTES"},
     /* marked deprecated as of 11-16-2012, needs to be removed...? */
@@ -193,7 +193,7 @@ cert_check (gboolean heal)
 
 	char *action = "Cert Check";
 	if (heal) {
-		action = "Healing";
+		action = "Auto-attach";
 	}
 
 	if (status == 0) {
@@ -265,13 +265,13 @@ key_file_init_config (Config * config, GKeyFile * key_file)
 {
 	// g_key_file_get_integer defaults to 0 if not found.
 	int cert_frequency = get_int_from_config_file (key_file, "rhsmcertd",
-						       "certFrequency");
+						       "certCheckInterval");
 	if (cert_frequency > 0) {
 		config->cert_interval_seconds = cert_frequency * 60;
 	}
 
 	int heal_frequency = get_int_from_config_file (key_file, "rhsmcertd",
-						       "healFrequency");
+						       "autoAttachInterval");
 	if (heal_frequency > 0) {
 		config->heal_interval_seconds = heal_frequency * 60;
 	}
@@ -408,7 +408,7 @@ main (int argc, char *argv[])
 	}
 
 	info ("Starting rhsmcertd...");
-	info ("Healing interval: %.1f minute(s) [%d second(s)]",
+	info ("Auto-attach interval: %.1f minute(s) [%d second(s)]",
 	      heal_interval_seconds / 60.0, heal_interval_seconds);
 	info ("Cert check interval: %.1f minute(s) [%d second(s)]",
 	      cert_interval_seconds / 60.0, cert_interval_seconds);

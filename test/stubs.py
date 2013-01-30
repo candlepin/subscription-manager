@@ -42,7 +42,7 @@ entitlementCertDir = /etc/pki/entitlement
 consumerCertDir = /etc/pki/consumer
 
 [rhsmcertd]
-certFrequency = 240
+certCheckInterval = 240
 """
 
 test_config = StringIO.StringIO(cfg_buf)
