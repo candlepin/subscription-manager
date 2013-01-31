@@ -145,7 +145,9 @@ class RestlibExceptionTest(ExceptionTest):
 class DriftTest(unittest.TestCase):
 
     def test_big_drift(self):
-        self.assertTrue(drift_check("Fri, 14 Dec 3012 19:10:56 GMT", 6))
+        # let's move this back to just a few hours before the
+        # end of time, so this test doesn't fail on 32bit machines
+        self.assertTrue(drift_check("Mon, 18 Jan 2038 19:10:56 GMT", 6))
 
     def test_no_drift(self):
         header = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime())
