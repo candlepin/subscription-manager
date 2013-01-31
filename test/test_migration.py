@@ -572,6 +572,24 @@ class TestMigration(unittest.TestCase):
         self.engine.unregister_system_from_rhn_classic(sc, None)
         mock_shutil.assert_called_with("/some/path", "/some/path.save")
 
+    @patch("__builtin__.open")
+    def test_disable_yum_rhn_plugin(self, mock_open):
+        mo = mock_open.return_value
+        mo.readlines.return_value = [
+            "[channel]",
+            "enabled = 1",
+            "[main]",
+            "enabled = 1",
+            ]
+        self.engine.disable_yum_rhn_plugin()
+
+        expected = [call('[channel]'),
+            call('enabled = 1'),
+            call('[main]'),
+            call('enabled = 0'),  # Note that enabled is now 0.
+            ]
+        self.assertTrue(mo.write.call_args_list == expected)
+
     @patch("os.remove")
     def test_unregister_from_rhn(self, mock_remove):
         rhn_config = {"systemIdPath": "/some/path"}
