@@ -221,10 +221,14 @@ get_int_from_config_file (GKeyFile * key_file, const char *group,
 			  const char *key)
 {
 	GError *error = NULL;
+	int value = g_key_file_get_integer (key_file, group, key, &error);
+    // If key does not exist in config file, return NULL
+	if (error != NULL && error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND) {
+	    value = NULL;
+    }
 	// Get the integer value from the config file. If value is 0 (due
 	// to any unhandled errors), the default value will be used.
-	int value = g_key_file_get_integer (key_file, group, key, &error);
-	if (error != NULL && error->code == G_KEY_FILE_ERROR_INVALID_VALUE) {
+	else if (error != NULL && error->code == G_KEY_FILE_ERROR_INVALID_VALUE) {
 		// There is a bug that was fixed in glib 2.31.0 that deals with
 		// handling trailing white space for a config file value. Since
 		// we are on a lesser version, we have to deal with it ourselves
@@ -263,18 +267,28 @@ print_argument_error (const char *message, ...)
 void
 key_file_init_config (Config * config, GKeyFile * key_file)
 {
-	// g_key_file_get_integer defaults to 0 if not found.
+    // non-existent entries will return NULL
 	int cert_frequency = get_int_from_config_file (key_file, "rhsmcertd",
+						       "certFrequency");
+    int cert_check_interval = get_int_from_config_file (key_file, "rhsmcertd",
 						       "certCheckInterval");
-	if (cert_frequency > 0) {
+	if (cert_check_interval != NULL && cert_check_interval > 0) {
+		config->cert_interval_seconds = cert_check_interval * 60;
+    }
+	else if (cert_frequency != NULL && cert_frequency > 0) {
 		config->cert_interval_seconds = cert_frequency * 60;
-	}
+    }
 
 	int heal_frequency = get_int_from_config_file (key_file, "rhsmcertd",
+						       "healFrequency");
+	int auto_attach_interval = get_int_from_config_file (key_file, "rhsmcertd",
 						       "autoAttachInterval");
-	if (heal_frequency > 0) {
-		config->heal_interval_seconds = heal_frequency * 60;
+	if (auto_attach_interval != NULL && auto_attach_interval > 0) {
+		config->heal_interval_seconds = auto_attach_interval * 60;
 	}
+	else if (heal_frequency != NULL && heal_frequency > 0) {
+		config->heal_interval_seconds = heal_frequency * 60;
+    }
 }
 
 void
