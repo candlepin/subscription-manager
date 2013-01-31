@@ -30,15 +30,49 @@ class TestMenu(unittest.TestCase):
             ("displayed-hello", "Hello"),
             ("displayed-world", "World"),
             ], "")
+        sys.stdout = stubs.MockStdout()
+        sys.stderr = stubs.MockStderr()
+
+    def _restore_stdout(self):
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+
+    def tearDown(self):
+        self._restore_stdout()
 
     def test_enter_negative(self):
-        self.assertRaises(migrate.InvalidChoiceError, self.menu.getItem, -1)
+        self.assertRaises(migrate.InvalidChoiceError, self.menu._get_item, -1)
 
     def test_enter_nonnumber(self):
-        self.assertRaises(migrate.InvalidChoiceError, self.menu.getItem, "a")
+        self.assertRaises(migrate.InvalidChoiceError, self.menu._get_item, "a")
 
-    def test_getItem(self):
-        self.assertEqual("Hello", self.menu.getItem(1))
+    def test_get_item(self):
+        self.assertEqual("Hello", self.menu._get_item(1))
+
+    @patch("__builtin__.raw_input")
+    @patch.object(migrate.Menu, "display_invalid")
+    def test_choose(self, mock_display_invalid, mock_input):
+        mock_input.side_effect = ["9000", "1"]
+        choice = self.menu.choose()
+
+        mock_display_invalid.assert_called_once_with()
+        self.assertEqual(choice, "Hello")
+
+
+class TestProxiedTransport(unittest.TestCase):
+    def setUp(self):
+        self.transport = migrate.ProxiedTransport()
+
+    def test_set_proxy(self):
+        self.transport.set_proxy("proxy", "credentials")
+        self.assertEquals(self.transport.proxy, "proxy")
+        self.assertEquals(self.transport.credentials, "credentials")
+
+    def test_make_connection(self):
+        self.transport.proxy = "proxy"
+        http = self.transport.make_connection("host")
+        self.assertEquals(self.transport.realhost, "host")
+        self.assertEquals(http._conn.host, "proxy")
 
 
 class TestMigration(unittest.TestCase):
@@ -97,6 +131,62 @@ class TestMigration(unittest.TestCase):
     def test_is_not_hosted(self, mock_get):
         mock_get.return_value = "subscription.example.com"
         self.assertFalse(self.engine.is_hosted())
+
+    @patch("__builtin__.raw_input")
+    @patch("getpass.getpass")
+    def test_authenticate(self, mock_getpass, mock_input):
+        mock_input.return_value = "username"
+        mock_getpass.return_value = "password"
+        creds = self.engine.authenticate("Some prompt")
+        self.assertEquals(creds.username, "username")
+        self.assertEquals(creds.password, "password")
+
+    @patch("__builtin__.raw_input")
+    @patch("getpass.getpass")
+    def test_get_auth_with_serverurl(self, mock_getpass, mock_input):
+        self.engine.options = MagicMock()
+        self.engine.options.serverurl = "foobar"
+
+        mock_input.side_effect = ["rhn_username", "se_username"]
+        mock_getpass.side_effect = ["rhn_password", "se_password"]
+
+        self.engine.get_auth()
+        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
+        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
+        self.assertEquals(self.engine.secreds.username, "se_username")
+        self.assertEquals(self.engine.secreds.password, "se_password")
+
+    @patch("__builtin__.raw_input")
+    @patch("getpass.getpass")
+    def test_get_auth_without_serverurl_and_not_hosted(self, mock_getpass, mock_input):
+        self.engine.options = MagicMock()
+        self.engine.options.serverurl = None
+
+        mock_input.side_effect = ["rhn_username", "se_username"]
+        mock_getpass.side_effect = ["rhn_password", "se_password"]
+
+        self.engine.is_hosted = lambda: False
+        self.engine.get_auth()
+        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
+        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
+        self.assertEquals(self.engine.secreds.username, "se_username")
+        self.assertEquals(self.engine.secreds.password, "se_password")
+
+    @patch("__builtin__.raw_input")
+    @patch("getpass.getpass")
+    def test_get_auth_without_serverurl_and_is_hosted(self, mock_getpass, mock_input):
+        self.engine.options = MagicMock()
+        self.engine.options.serverurl = None
+
+        mock_input.return_value = "rhn_username"
+        mock_getpass.return_value = "rhn_password"
+
+        self.engine.is_hosted = lambda: True
+        self.engine.get_auth()
+        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
+        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
+        self.assertEquals(self.engine.secreds.username, "rhn_username")
+        self.assertEquals(self.engine.secreds.password, "rhn_password")
 
     def test_setting_unauthenticated_proxy(self):
         self.engine.rhsmcfg = MagicMock()
@@ -318,6 +408,28 @@ class TestMigration(unittest.TestCase):
         else:
             self.fail("No exception raised")
 
+    @patch("xmlrpclib.Server")
+    def test_connect_to_rhn(self, mock_server):
+        pass
+        rhn_config = {
+            "serverURL": "https://some.host.example.com/XMLRPC",
+            "enableProxy": True,
+            "enableProxyAuth": True,
+            }
+        self.engine.rhncfg = rhn_config
+        self.engine.proxy_user = "proxy_user"
+        self.engine.proxy_pass = "proxy_pass"
+        self.engine.proxy_host = "proxy.example.com"
+        self.engine.proxy_port = "3128"
+
+        credentials = MagicMock()
+        credentials.username = "username"
+        credentials.password = "password"
+
+        ms = mock_server.return_value
+        self.engine.connect_to_rhn(credentials)
+        ms.auth.login.assert_called_with("username", "password")
+
     def test_check_is_org_admin(self):
         sc = MagicMock()
         sc.user.listRoles.return_value = ["org_admin"]
@@ -344,6 +456,12 @@ class TestMigration(unittest.TestCase):
         else:
             self.fail("No exception raised")
 
+    def test_no_conflicting_channels(self):
+        channels = ["some-other-channel-i386-server-5-rpm",
+            "jbappplatform-5-i386-server-5-rpm",
+            ]
+        self.engine.check_for_conflicting_channels(channels)
+
     @patch("__builtin__.open")
     def test_get_release(self, mock_open):
         mock_open.return_value.readlines.return_value = "Red Hat Enterprise Linux Server release 6.3 (Santiago)"
@@ -361,12 +479,12 @@ class TestMigration(unittest.TestCase):
 
     def test_require_force(self):
         def stub_read_channel_cert_mapping(mappingfile):
-            return {"a": "a-1.pem", "b": "b-2.pem"}
+            return {"a": "a-1.pem", "b": "b-2.pem", "c": "none"}
 
         def stub_get_release():
-            return "6"
+            return "RHEL-6"
 
-        subscribed_channels = ["a", "b", "c"]
+        subscribed_channels = ["a", "b", "c", "d"]
         self.engine.read_channel_cert_mapping = stub_read_channel_cert_mapping
         self.engine.get_release = stub_get_release
         self.engine.options = MagicMock()
@@ -514,6 +632,20 @@ class TestMigration(unittest.TestCase):
             ]
 
         mock_subprocess.assert_called_with(arg_list)
+
+    def test_select_service_level(self):
+        self.engine.cp.getServiceLevelList = MagicMock()
+        self.engine.cp.getServiceLevelList.return_value = ["Premium", "Standard"]
+        service_level = self.engine.select_service_level("my_org", "Premium")
+        self.assertEquals(service_level, "Premium")
+
+    @patch("subscription_manager.migrate.migrate.Menu")
+    def test_select_service_level_with_menu(self, mock_menu):
+        self.engine.cp.getServiceLevelList = MagicMock()
+        self.engine.cp.getServiceLevelList.return_value = ["Premium", "Standard"]
+        mock_menu.return_value.choose.return_value = "Premium"
+        service_level = self.engine.select_service_level("my_org", "Something Else")
+        self.assertEquals(service_level, "Premium")
 
     @patch("subprocess.call")
     @patch("os.getenv")

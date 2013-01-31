@@ -14,19 +14,19 @@
 # in this software or its documentation.
 #
 
-import sys
-import os
-import xmlrpclib
-import httplib
-import getpass
-import libxml2
-import subprocess
-import re
-import simplejson as json
-import shutil
-import logging
-import traceback
 import base64
+import getpass
+import httplib
+import libxml2
+import logging
+import os
+import re
+import shutil
+import simplejson as json
+import subprocess
+import sys
+import traceback
+import xmlrpclib
 from datetime import datetime
 from M2Crypto.SSL import SSLError
 
@@ -92,16 +92,19 @@ class Menu(object):
             self.display()
             selection = raw_input("? ").strip()
             try:
-                return self.getItem(selection)
+                return self._get_item(selection)
             except InvalidChoiceError:
-                print _("You have entered an invalid choice.")
+                self.display_invalid()
 
     def display(self):
         print self.header
         for index, entry in enumerate(self.choices):
             print "%s. %s" % (index + 1, entry[0])
 
-    def getItem(self, selection):
+    def display_invalid(self):
+        print _("You have entered an invalid choice.")
+
+    def _get_item(self, selection):
         try:
             index = int(selection) - 1
             # In case some joker enters zero or a negative number
@@ -361,7 +364,7 @@ class MigrationEngine(object):
         return subscribedChannels
 
     def print_banner(self, msg):
-        print "\n+-----------------------------------------------------+",
+        print "\n+-----------------------------------------------------+"
         print msg
         print "+-----------------------------------------------------+"
 
@@ -386,9 +389,12 @@ class MigrationEngine(object):
         lines = f.readlines()
         dic_data = {}
         for line in lines:
+            # Lines should be of the format
+            # key: value
+            # Lines beginning with non-letters will be ignored
             if re.match("^[a-zA-Z]", line):
                 line = line.replace("\n", "")
-                key, val = line.split(": ")
+                key, val = line.strip().split(": ")
                 dic_data[key] = val
         return dic_data
 
@@ -412,22 +418,22 @@ class MigrationEngine(object):
             try:
                 if dic_data[channel] != 'none':
                     validRhsmChannels.append(channel)
-                    log.info("mapping found for : %s = %s", channel, dic_data[channel])
+                    log.info("mapping found for: %s = %s", channel, dic_data[channel])
                     if dic_data[channel] not in applicableCerts:
                         applicableCerts.append(dic_data[channel])
                 else:
                     invalidRhsmChannels.append(channel)
-                    log.info("%s None", channel)
+                    log.info("%s is not mapped to any certificates", channel)
             except:
                 unrecognizedChannels.append(channel)
 
         if invalidRhsmChannels:
-            self.print_banner("\n" + _("Channels not available on RHSM:"))
+            self.print_banner(_("Channels not available on RHSM:"))
             for i in invalidRhsmChannels:
                 print i
 
         if unrecognizedChannels:
-            self.print_banner(_("\nNo product certificates are mapped to these RHN Classic channels:"))
+            self.print_banner(_("No product certificates are mapped to these RHN Classic channels:"))
             for i in unrecognizedChannels:
                 print i
 
@@ -438,7 +444,7 @@ class MigrationEngine(object):
 
         log.info("certs to be installed: %s", applicableCerts)
 
-        self.print_banner(_("\nInstalling product certificates for these RHN Classic channels:"))
+        self.print_banner(_("Installing product certificates for these RHN Classic channels:"))
         for i in validRhsmChannels:
             print i
 
@@ -673,7 +679,7 @@ class MigrationEngine(object):
         # get a list of RHN classic channels this machine is subscribed to
         print _("\nRetrieving existing RHN Classic subscription information...")
         subscribed_channels = self.get_subscribed_channels_list()
-        self.print_banner("\n" + _("System is currently subscribed to these RHN Classic Channels:"))
+        self.print_banner(_("System is currently subscribed to these RHN Classic Channels:"))
         for channel in subscribed_channels:
             print channel
 
