@@ -14,18 +14,36 @@
 #
 
 
+import os
 import unittest
 from subscription_manager.plugins import api_version_ok, parse_version, \
-        PluginManager
+        PluginManager, PluginImportException, PluginImportApiVersionException
 
 
 class TestPluginManager(unittest.TestCase):
     def setUp(self):
         self.manager = PluginManager("some/search/path", "some/config/path")
+        self.module_dir = os.path.join(os.path.dirname(__file__), "plugins")
 
     def test_load_plugin_with_no_api_version(self):
-        self.manager._load_plugin("no_api_version.py")
+        module = os.path.join(self.module_dir, "no_api_version.py")
+        self.assertRaises(PluginImportException, self.manager._load_plugin, module)
 
+    def test_load_plugin_with_old_api_version(self):
+        module = os.path.join(self.module_dir, "old_api_version.py")
+        self.assertRaises(PluginImportApiVersionException, self.manager._load_plugin, module)
+
+    def test_load_plugins_with_same_class_name(self):
+        module = os.path.join(self.module_dir, "dummy_plugin.py")
+        module2 = os.path.join(self.module_dir, "dummy_plugin_2.py")
+        self.manager._load_plugin(module)
+        self.manager._load_plugin(module2)
+
+    def test_load_plugin(self):
+        module = os.path.join(self.module_dir, "dummy_plugin.py")
+        self.manager._load_plugin(module)
+        self.assertEquals(1, len(self.manager._plugin_funcs['post_product_id_install']))
+        self.assertEquals(0, len(self.manager._plugin_funcs['pre_product_id_install']))
 
 class TestVersionChecks(unittest.TestCase):
     def test_parse_version(self):
