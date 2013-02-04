@@ -426,7 +426,6 @@ class Restlib(object):
                 if not id_cert.is_valid():
                     raise ExpiredIdentityCertException()
             raise e
-
         response = conn.getresponse()
         result = {
             "content": response.read(),
@@ -481,13 +480,13 @@ class Restlib(object):
     def request_get(self, method):
         return self._request("GET", method)
 
-    def request_post(self, method, params=""):
+    def request_post(self, method, params=None):
         return self._request("POST", method, params)
 
     def request_head(self, method):
         return self._request("HEAD", method)
 
-    def request_put(self, method, params=""):
+    def request_put(self, method, params=None):
         return self._request("PUT", method, params)
 
     def request_delete(self, method):
