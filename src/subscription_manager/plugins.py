@@ -20,6 +20,8 @@ import inspect
 import os
 import sys
 
+from iniparse import SafeConfigParser
+
 from subscription_manager.base_plugin import SubManPlugin
 
 import logging
@@ -51,7 +53,10 @@ SLOTS = [
 
 
 class PluginException(Exception):
-    pass
+    def _add_message(self, repr):
+        if hasattr(self, "msg") and self.msg:
+            repr = "\n".join([repr, "Message: %s" % self.msg])
+        return repr
 
 
 class PluginImportException(PluginException):
@@ -60,10 +65,10 @@ class PluginImportException(PluginException):
         self.module_name = module_name
         self.msg = msg
 
-    def __repr__(self):
-        repr = "Plugin \"%s\" can't be imported from file %s" % (module_name, module_file)
-        if self.msg:
-            "\n".join(repr, "Message: %s" % self.msg)
+    def __str__(self):
+        repr = "Plugin \"%s\" can't be imported from file %s" % \
+            (self.module_name, self.module_file)
+        return self._add_message(repr)
 
 
 class PluginImportApiVersionException(PluginImportException):
@@ -74,16 +79,26 @@ class PluginImportApiVersionException(PluginImportException):
         self.api_ver = api_ver
         self.msg = msg
 
-    def __repr__(self):
-        repr = "Plugin \"%s\" requires API version %s. Supported API is %s." % (module_name, module_ver, api_ver)
-        if self.msg:
-            "\n".join(repr, "Message: %s" % self.msg)
+    def __str__(self):
+        repr = "Plugin \"%s\" requires API version %s. Supported API is %s" % \
+            (self.module_name, self.module_ver, self.api_ver)
+        return self._add_message(repr)
+
+
+class PluginConfigException(PluginException):
+    def __init__(self, plugin_name, msg=None):
+        self.plugin_name = plugin_name
+        self.msg = msg
+
+    def __str__(self):
+        repr = "Cannot load configuration for plugin \"%s\"" % (self.plugin_name)
+        return self._add_message(repr)
 
 
 class BaseConduit(object):
     slots = []
     def __init__(self, clazz):
-        self.logger = logging.getLogger("rhsm-app." + clazz.__name__)
+        self.log = logging.getLogger("rhsm-app." + clazz.__name__)
 
     def confValue(self, section, option, default=None):
         pass
@@ -91,7 +106,6 @@ class BaseConduit(object):
 
 class ProductConduit(BaseConduit):
     slots = ['pre_product_id_install', 'post_product_id_install']
-    pass
 
 
 class PluginManager(object):
@@ -116,13 +130,12 @@ class PluginManager(object):
             self._plugin_funcs[slot] = []
 
     def run(self, slot_name, **kwargs):
-        #TODO figure out which conduit to send in
         for func in self._plugin_funcs[slot_name]:
-            log.debug("Running %s plugin" % func)
+            class_and_module = ".".join([func.im_class.__module__, func.im_class.__name__])
+            log.debug("Running %s in %s" % (func.im_func.func_name, class_and_module))
             # resolve slot_name to conduit
-            print self._slot_to_conduit
             conduit = self._slot_to_conduit[slot_name]
-            func(conduit(func.im_class))
+            func(conduit(func.im_class, **kwargs))
 
     def _import_plugins(self):
         """Load all the plugins in the search path."""
@@ -135,6 +148,8 @@ class PluginManager(object):
                 self._load_plugin(module_file)
             except PluginException, e:
                 log.error(e)
+        loaded_plugins = ", ".join(self._plugins)
+        log.debug("Loaded plugins: %s" % loaded_plugins)
 
     def _load_plugin(self, module_file):
         """Load an individual plugin."""
@@ -160,11 +175,19 @@ class PluginManager(object):
 
         plugin_classes = inspect.getmembers(sys.modules[module_name], is_plugin)
         for name, clazz in sorted(plugin_classes):
-            conf = self._get_plugin_conf(name)
-            #TODO check if plugin is disabled
+            plugin_key = ".".join([module_name, name])
+            conf = self._get_plugin_conf(plugin_key)
+
+            try:
+                enabled = conf.getboolean('main', 'enabled')
+            except Exception, e:
+                raise PluginConfigException(plugin_key, e)
+
+            if not enabled:
+                log.debug("Not loading \"%s\" plugin as it is disabled" % plugin_key)
+                return
 
             instance = clazz()
-            plugin_key = ".".join([module_name, name])
             if plugin_key not in self._plugins:
                 self._plugins[plugin_key] = (instance, conf)
             else:
@@ -177,8 +200,17 @@ class PluginManager(object):
                 if hasattr(instance, func_name):
                     self._plugin_funcs[slot].append(getattr(instance, func_name))
 
-    def _get_plugin_conf(self, module_name):
-        pass
+    def _get_plugin_conf(self, plugin_key):
+        conf_file = os.path.join(self.plugin_conf_path, plugin_key + ".conf")
+        if not os.access(conf_file, os.R_OK):
+            raise PluginConfigException(plugin_key, "Unable to find configuration file")
+
+        parser = SafeConfigParser()
+        try:
+            parser.read(conf_file)
+        except Exception, e:
+            raise PluginConfigException(plugin_key, e)
+        return parser
 
     def get_plugins(self):
         return self._plugins.keys()
@@ -211,7 +243,7 @@ def api_version_ok(a, b):
 if __name__ == "__main__":
     from subscription_manager import logutil
     logutil.init_logger()
-    subman_plugins = PluginManager("/tmp/my_plugins")
+    subman_plugins = PluginManager("/tmp/my_plugins", "/tmp/my_plugins")
     subman_plugins._import_plugins()
     print "Plugins imported..."
     print subman_plugins.get_plugins()

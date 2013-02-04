@@ -4,5 +4,5 @@ from subscription_manager.base_plugin import SubManPlugin
 
 requires_api_version = "0.0"
 
-class NoApiVersionPlugin(SubManPlugin):
+class OldApiVersionPlugin(SubManPlugin):
     pass

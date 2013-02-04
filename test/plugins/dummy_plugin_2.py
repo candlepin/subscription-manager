@@ -9,4 +9,8 @@ requires_api_version = "1.0"
 # We should be able to load both plugins since they are in different
 # modules.
 class DummyPlugin(SubManPlugin):
-    pass
+    def __init__(self):
+        pass
+
+    def post_product_id_install_hook(self, conduit):
+        conduit.log.error("Hello World")

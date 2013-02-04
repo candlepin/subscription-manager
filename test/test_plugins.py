@@ -17,13 +17,15 @@
 import os
 import unittest
 from subscription_manager.plugins import api_version_ok, parse_version, \
-        PluginManager, PluginImportException, PluginImportApiVersionException
+        PluginManager, PluginImportException, PluginImportApiVersionException, \
+        PluginConfigException
 
 
 class TestPluginManager(unittest.TestCase):
     def setUp(self):
         self.manager = PluginManager("some/search/path", "some/config/path")
         self.module_dir = os.path.join(os.path.dirname(__file__), "plugins")
+        self.manager.plugin_conf_path = self.module_dir
 
     def test_load_plugin_with_no_api_version(self):
         module = os.path.join(self.module_dir, "no_api_version.py")
@@ -38,12 +40,31 @@ class TestPluginManager(unittest.TestCase):
         module2 = os.path.join(self.module_dir, "dummy_plugin_2.py")
         self.manager._load_plugin(module)
         self.manager._load_plugin(module2)
+        self.assertEquals(2, len(self.manager._plugin_funcs['post_product_id_install']))
 
     def test_load_plugin(self):
         module = os.path.join(self.module_dir, "dummy_plugin.py")
         self.manager._load_plugin(module)
         self.assertEquals(1, len(self.manager._plugin_funcs['post_product_id_install']))
         self.assertEquals(0, len(self.manager._plugin_funcs['pre_product_id_install']))
+
+    def test_no_config_plugin(self):
+        self.assertRaises(PluginConfigException, self.manager._get_plugin_conf, "config_plugin.NoConfigPlugin")
+
+    def test_bad_config_plugin(self):
+        self.assertRaises(PluginConfigException, self.manager._get_plugin_conf, "config_plugin.BadConfigPlugin")
+
+    def test_good_config_plugin(self):
+        parser = self.manager._get_plugin_conf("config_plugin.GoodConfigPlugin")
+        self.assertTrue(parser)
+
+    def test_disabled_plugin(self):
+        module = os.path.join(self.module_dir, "disabled_plugin.py")
+        self.manager._load_plugin(module)
+        self.assertEquals(0, len(self.manager._plugins))
+
+
+
 
 class TestVersionChecks(unittest.TestCase):
     def test_parse_version(self):
