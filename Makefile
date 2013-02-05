@@ -328,12 +328,12 @@ just-strings:
 	-@ scripts/just_strings.py po/keys.pot
 
 zanata-pull:
-	cd po && zanata po pull --srcdir  ..
+	cd po && zanata pull --transdir .
 
 zanata-push:
 	cd po
 	if [ -z $(shell find -name "*.pot" | grep -v keys.pot) ] ; then \
-		zanata po push --srcdir . ; \
+		zanata push ; \
 	else 	\
 		echo "po/ has more than one *.pot file, please clean up" ; \
 	fi
