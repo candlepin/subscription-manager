@@ -652,7 +652,7 @@ class MigrationEngine(object):
                 (extraChannels['productivity']  and re.search('productivity-rpms$', rhsmChannel))):
                     log.info("Enabling extra channel '%s'" % rhsmChannel)
                     repofile.set(rhsmChannel, 'enabled', '1')
-                    repofile.write()
+            repofile.write()
         except:
             print _("\nUnable to enable extra repositories.")
             print _("Please ensure system has subscriptions attached, and see 'subscription-manager repos --help' to enable additional repositories")
