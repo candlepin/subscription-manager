@@ -21,6 +21,7 @@ import os
 import sys
 
 from iniparse import SafeConfigParser
+from iniparse.compat import NoSectionError, NoOptionError
 
 from subscription_manager.base_plugin import SubManPlugin
 
@@ -97,11 +98,50 @@ class PluginConfigException(PluginException):
 
 class BaseConduit(object):
     slots = []
-    def __init__(self, clazz):
+
+    def __init__(self, clazz, conf):
+        self._conf = conf
+
         self.log = logging.getLogger("rhsm-app." + clazz.__name__)
 
-    def confValue(self, section, option, default=None):
-        pass
+    def confString(self, section, option, default=None):
+        try:
+            self._conf.get(section, option)
+        except (NoSectionError, NoOptionError):
+            if default is None:
+                return None
+            return str(default)
+
+    def confBool(self, section, option, default=None):
+        try:
+            self._conf.getboolean(section, option)
+        except (NoSectionError, NoOptionError):
+            if default is True:
+                return True
+            elif default is False:
+                return False
+            else:
+                raise ValueError("Boolean value expected")
+
+    def confInt(self, section, option, default=None):
+        try:
+            self._conf.getint(section, option)
+        except (NoSectionError, NoOptionError):
+            try:
+                val = int(default)
+            except (ValueError, TypeError):
+                raise ValueError("Integer value expected")
+            return val
+
+    def confFloat(self, section, option, default=None):
+        try:
+            self._conf.getfloat(section, option)
+        except (NoSectionError, NoOptionError):
+            try:
+                val = float(default)
+            except (ValueError, TypeError):
+                raise ValueError("Float value expected")
+            return val
 
 
 class ProductConduit(BaseConduit):
@@ -131,11 +171,13 @@ class PluginManager(object):
 
     def run(self, slot_name, **kwargs):
         for func in self._plugin_funcs[slot_name]:
-            class_and_module = ".".join([func.im_class.__module__, func.im_class.__name__])
-            log.debug("Running %s in %s" % (func.im_func.func_name, class_and_module))
+            plugin_key = ".".join([func.im_class.__module__, func.im_class.__name__])
+            log.debug("Running %s in %s" % (func.im_func.func_name, plugin_key))
             # resolve slot_name to conduit
             conduit = self._slot_to_conduit[slot_name]
-            func(conduit(func.im_class, **kwargs))
+
+            instance, conf = self._plugins[plugin_key]
+            func(conduit(func.im_class, conf, **kwargs))
 
     def _import_plugins(self):
         """Load all the plugins in the search path."""
@@ -212,12 +254,6 @@ class PluginManager(object):
             raise PluginConfigException(plugin_key, e)
         return parser
 
-    def get_plugins(self):
-        return self._plugins.keys()
-
-    def get_hooks(self):
-        return self._plugin_funcs
-
 
 def parse_version(api_version):
     maj, min = api_version.split('.')
@@ -238,15 +274,3 @@ def api_version_ok(a, b):
         return True
 
     return False
-
-
-if __name__ == "__main__":
-    from subscription_manager import logutil
-    logutil.init_logger()
-    subman_plugins = PluginManager("/tmp/my_plugins", "/tmp/my_plugins")
-    subman_plugins._import_plugins()
-    print "Plugins imported..."
-    print subman_plugins.get_plugins()
-    print "Hooks registered..."
-    print subman_plugins.get_hooks()
-    subman_plugins.run("post_product_id_install")

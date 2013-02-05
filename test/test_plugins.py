@@ -16,9 +16,12 @@
 
 import os
 import unittest
+
+from iniparse import SafeConfigParser
+from StringIO import StringIO
 from subscription_manager.plugins import api_version_ok, parse_version, \
         PluginManager, PluginImportException, PluginImportApiVersionException, \
-        PluginConfigException
+        PluginConfigException, BaseConduit
 
 
 class TestPluginManager(unittest.TestCase):
@@ -64,6 +67,37 @@ class TestPluginManager(unittest.TestCase):
         self.assertEquals(0, len(self.manager._plugins))
 
 
+class TestBaseConduit(unittest.TestCase):
+    def setUp(self):
+        conf_string = StringIO("")
+        self.conf = SafeConfigParser()
+        self.conf.readfp(conf_string)
+        self.conduit = BaseConduit(BaseConduit, self.conf)
+
+    def test_default_boolean(self):
+        val = self.conduit.confBool("main", "enabled", False)
+        self.assertEquals(False, val)
+
+    def test_bad_default_boolean(self):
+        self.assertRaises(ValueError, self.conduit.confBool, "main", "enabled", "not a bool")
+
+    def test_default_int(self):
+        val = self.conduit.confInt("main", "enabled", 1)
+        self.assertEquals(1, val)
+
+    def test_bad_default_int(self):
+        self.assertRaises(ValueError, self.conduit.confInt, "main", "enabled", "not an int")
+
+    def test_default_float(self):
+        val = self.conduit.confFloat("main", "enabled", 1.0)
+        self.assertEquals(1.0, val)
+
+    def test_bad_default_float(self):
+        self.assertRaises(ValueError, self.conduit.confFloat, "main", "enabled", "not a float")
+
+    def test_default_string(self):
+        val = self.conduit.confString("main", "enabled", "a string")
+        self.assertEquals("a string", val)
 
 
 class TestVersionChecks(unittest.TestCase):

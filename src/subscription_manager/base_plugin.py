@@ -14,5 +14,6 @@
 # in this software or its documentation.
 #
 
+
 class SubManPlugin(object):
     pass
