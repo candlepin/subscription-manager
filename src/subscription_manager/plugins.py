@@ -149,10 +149,7 @@ class ProductConduit(BaseConduit):
 
 
 class PluginManager(object):
-    def __init__(self, search_path, plugin_conf_path=None):
-        if not plugin_conf_path:
-            plugin_conf_path = "/etc/rhsm/pluginconf.d"
-
+    def __init__(self, search_path, plugin_conf_path):
         self.search_path = search_path
         self.plugin_conf_path = plugin_conf_path
 
@@ -169,6 +166,8 @@ class PluginManager(object):
         for slot in SLOTS:
             self._plugin_funcs[slot] = []
 
+        self._import_plugins()
+
     def run(self, slot_name, **kwargs):
         for func in self._plugin_funcs[slot_name]:
             plugin_key = ".".join([func.im_class.__module__, func.im_class.__name__])
@@ -182,6 +181,7 @@ class PluginManager(object):
     def _import_plugins(self):
         """Load all the plugins in the search path."""
         if not os.path.isdir(self.search_path):
+            log.error("Could not find %s for plugin import" % self.search_path)
             return
 
         mask = os.path.join(self.search_path, "*.py")

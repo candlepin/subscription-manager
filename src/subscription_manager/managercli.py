@@ -43,6 +43,7 @@ from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
+from subscription_manager.plugins import PluginManager
 from subscription_manager.quantity import valid_quantity
 from subscription_manager.release import ReleaseBackend
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
@@ -55,6 +56,7 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
+plugin_manager = PluginManager(cfg.get("rhsm", "pluginDir"), cfg.get("rhsm", "pluginConfDir"))
 
 NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
 LIBRARY_ENV_NAME = "library"
