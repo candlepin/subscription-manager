@@ -94,6 +94,7 @@ install: install-files install-conf install-help-files
 install-files: dbus-service-install compile-po desktop-files
 	install -d ${CODE_DIR}/gui/data/icons
 	install -d ${CODE_DIR}/branding
+	install -d ${CODE_DIR}/migrate
 	install -d ${PREFIX}/${INSTALL_DIR}/locale/
 	install -d ${PREFIX}/usr/lib/yum-plugins/
 	install -d ${PREFIX}/usr/sbin
@@ -131,6 +132,7 @@ install-files: dbus-service-install compile-po desktop-files
 
 	install -m 644 -p ${SRC_DIR}/*.py ${CODE_DIR}
 	install -m 644 -p ${SRC_DIR}/gui/*.py ${CODE_DIR}/gui
+	install -m 644 -p ${SRC_DIR}/migrate/*.py ${CODE_DIR}/migrate
 	install -m 644 -p ${SRC_DIR}/branding/*.py ${CODE_DIR}/branding
 	install -m 644 -p src/plugins/*.py ${PREFIX}/usr/lib/yum-plugins/
 
