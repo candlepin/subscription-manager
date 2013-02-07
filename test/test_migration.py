@@ -13,13 +13,16 @@
 # in this software or its documentation.
 #
 
-import unittest
-import sys
-import re
-import stubs
-import rhsm.config
 from mock import patch, MagicMock, call
 from M2Crypto import SSL
+import re
+import sys
+import StringIO
+import unittest
+
+import stubs
+
+import rhsm.config
 from subscription_manager.migrate import migrate
 from subscription_manager import certlib
 
@@ -464,7 +467,7 @@ class TestMigration(unittest.TestCase):
 
     @patch("__builtin__.open")
     def test_get_release(self, mock_open):
-        mock_open.return_value.readlines.return_value = "Red Hat Enterprise Linux Server release 6.3 (Santiago)"
+        mock_open.return_value = StringIO.StringIO("Red Hat Enterprise Linux Server release 6.3 (Santiago)")
         release = self.engine.get_release()
         self.assertEquals(release, "RHEL-6")
 
