@@ -43,6 +43,7 @@
 
 #define _(STRING) gettext(STRING)
 #define N_(x) x
+#define CONFIG_KEY_NOT_FOUND (0)
 
 static gboolean show_debug = FALSE;
 static gboolean run_now = FALSE;
@@ -216,15 +217,17 @@ initial_cert_check (gboolean heal)
 }
 
 // FIXME Remove when glib is updated to >= 2.31.0 (see comment below).
+// NOTE: 0 is used for error, so this can't return 0. For out cases, that
+//       ok
 int
 get_int_from_config_file (GKeyFile * key_file, const char *group,
 			  const char *key)
 {
 	GError *error = NULL;
 	int value = g_key_file_get_integer (key_file, group, key, &error);
-    // If key does not exist in config file, return NULL
+    // If key does not exist in config file, return CONFIG_KEY_NOT_FOUND, aka 0
 	if (error != NULL && error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND) {
-	    value = NULL;
+	    value = CONFIG_KEY_NOT_FOUND;
     }
 	// Get the integer value from the config file. If value is 0 (due
 	// to any unhandled errors), the default value will be used.
@@ -272,10 +275,13 @@ key_file_init_config (Config * config, GKeyFile * key_file)
 						       "certFrequency");
     int cert_check_interval = get_int_from_config_file (key_file, "rhsmcertd",
 						       "certCheckInterval");
-	if (cert_check_interval != NULL && cert_check_interval > 0) {
+
+    // unfound or invalid entries return CONFIG_KEY_NOT_FOUND, (aka, 0)
+    // so let it fall back to the default
+	if (cert_check_interval > 0) {
 		config->cert_interval_seconds = cert_check_interval * 60;
     }
-	else if (cert_frequency != NULL && cert_frequency > 0) {
+	else if (cert_frequency > 0) {
 		config->cert_interval_seconds = cert_frequency * 60;
     }
 
@@ -283,10 +289,10 @@ key_file_init_config (Config * config, GKeyFile * key_file)
 						       "healFrequency");
 	int auto_attach_interval = get_int_from_config_file (key_file, "rhsmcertd",
 						       "autoAttachInterval");
-	if (auto_attach_interval != NULL && auto_attach_interval > 0) {
+	if (auto_attach_interval > 0) {
 		config->heal_interval_seconds = auto_attach_interval * 60;
 	}
-	else if (heal_frequency != NULL && heal_frequency > 0) {
+	else if (heal_frequency > 0) {
 		config->heal_interval_seconds = heal_frequency * 60;
     }
 }
