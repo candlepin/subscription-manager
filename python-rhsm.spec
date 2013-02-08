@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.8.1
+Version: 1.8.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,11 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Jan 31 2013 Bryan Kearney <bkearney@redhat.com> 1.8.2-1
+- Add a default value for the report_package_profile setting
+  (bkearney@redhat.com)
+- Remove F16 releasers, add F18. (dgoodwin@redhat.com)
+
 * Thu Jan 24 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.1-1
 - Do not retrieve the value unless the match is valid (bkearney@redhat.com)
 - Only look for a single item as it is quicker and all we care about is zero or
