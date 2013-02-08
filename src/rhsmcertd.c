@@ -217,7 +217,7 @@ initial_cert_check (gboolean heal)
 }
 
 // FIXME Remove when glib is updated to >= 2.31.0 (see comment below).
-// NOTE: 0 is used for error, so this can't return 0. For out cases, that
+// NOTE: 0 is used for error, so this can't return 0. For our cases, that
 //       ok
 int
 get_int_from_config_file (GKeyFile * key_file, const char *group,
@@ -270,7 +270,7 @@ print_argument_error (const char *message, ...)
 void
 key_file_init_config (Config * config, GKeyFile * key_file)
 {
-    // non-existent entries will return NULL
+    // non-existent entries will return 0
 	int cert_frequency = get_int_from_config_file (key_file, "rhsmcertd",
 						       "certFrequency");
     int cert_check_interval = get_int_from_config_file (key_file, "rhsmcertd",
