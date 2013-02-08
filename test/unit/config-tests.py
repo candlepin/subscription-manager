@@ -42,7 +42,7 @@ consumerCertDir = /etc/pki/consumer
 report_package_profile = 1
 
 [rhsmcertd]
-certFrequency = 240
+certCheckInterval = 240
 """
 
 
