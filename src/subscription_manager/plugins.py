@@ -53,6 +53,8 @@ API_VERSION = "1.0"
 SLOTS = [
     "pre_product_id_install",
     "post_product_id_install",
+    "pre_register_consumer",
+    "post_register_consumer",
     ]
 
 
@@ -158,6 +160,21 @@ class ProductConduit(BaseConduit):
         return self.product_list
 
 
+class RegistrationConduit(BaseConduit):
+    slots = ['pre_register_consumer', 'post_register_consumer']
+
+    def __init__(self, clazz, conf, name, facts):
+        super(RegistrationConduit, self).__init__(clazz, conf)
+        self.name = name
+        self.facts = facts
+
+    def getName(self):
+        return self.name
+
+    def getFacts(self):
+        return self.facts
+
+
 class BasePluginManager(object):
     def __init__(self, search_path, plugin_conf_path):
         self.search_path = search_path
@@ -165,7 +182,7 @@ class BasePluginManager(object):
 
         self._plugins = {}
         self._plugin_funcs = {}
-        self.conduits = [BaseConduit, ProductConduit]
+        self.conduits = [BaseConduit, ProductConduit, RegistrationConduit]
         self._slot_to_conduit = {}
 
         for conduit_class in self.conduits:

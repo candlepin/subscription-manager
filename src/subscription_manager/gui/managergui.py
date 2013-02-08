@@ -36,6 +36,7 @@ from subscription_manager.facts import Facts
 from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
 from subscription_manager.certlib import ConsumerIdentity, CertLib
 from subscription_manager.branding import get_branding
+from subscription_manager.plugins import PluginManager
 from subscription_manager.utils import get_client_versions, get_server_versions, \
 restart_virt_who, parse_baseurl_info
 
@@ -205,6 +206,8 @@ class MainWindow(widgets.GladeWidget):
                  auto_launch_registration=False):
         super(MainWindow, self).__init__('mainwindow.glade')
 
+        self.plugin_manager = PluginManager()
+
         self.backend = backend or Backend()
         self.consumer = consumer or Consumer()
         self.facts = facts or Facts(self.backend.entitlement_dir,
@@ -220,7 +223,7 @@ class MainWindow(widgets.GladeWidget):
                 self.facts)
 
         self.registration_dialog = registergui.RegisterScreen(self.backend,
-                self.consumer, self.facts, self._get_window(),
+                self.consumer, self.plugin_manager, self.facts, self._get_window(),
                 callbacks=[self.registration_changed])
 
         self.preferences_dialog = PreferencesDialog(self.backend, self.consumer,

@@ -56,7 +56,7 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
-plugin_manager = PluginManager(cfg.get("rhsm", "pluginDir"), cfg.get("rhsm", "pluginConfDir"))
+plugin_manager = PluginManager()
 
 NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
 LIBRARY_ENV_NAME = "library"
@@ -1025,6 +1025,10 @@ class RegisterCommand(UserPassCommand):
             else:
                 admin_cp = self._get_UEP()
 
+            facts_dic = self.facts.get_facts()
+
+            plugin_manager.run("pre_register_consumer", name=consumername,
+                facts=facts_dic)
             if self.options.consumerid:
                 #TODO remove the username/password
                 log.info("Registering as existing consumer: %s" %
@@ -1038,11 +1042,12 @@ class RegisterCommand(UserPassCommand):
                         self.options.environment)
 
                 consumer = admin_cp.registerConsumer(name=consumername,
-                     type=self.options.consumertype, facts=self.facts.get_facts(),
+                     type=self.options.consumertype, facts=facts_dic,
                      owner=owner_key, environment=environment_id,
                      keys=self.options.activation_keys,
                      installed_products=self.installed_mgr.format_for_server())
-
+            plugin_manager.run("pre_register_consumer", name=consumername,
+                facts=facts_dic)
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)

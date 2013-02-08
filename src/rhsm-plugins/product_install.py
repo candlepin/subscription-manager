@@ -16,6 +16,7 @@
 from subscription_manager.base_plugin import SubManPlugin
 requires_api_version = "1.0"
 
+
 class ProductInstallPlugin(SubManPlugin):
     def post_product_id_install_hook(self, conduit):
         conduit.log.info("post product id called")
