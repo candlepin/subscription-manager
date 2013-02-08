@@ -28,6 +28,9 @@ from subscription_manager.base_plugin import SubManPlugin
 import logging
 log = logging.getLogger('rhsm-app.' + __name__)
 
+from rhsm.config import initConfig
+cfg = initConfig()
+
 import gettext
 _ = gettext.gettext
 
@@ -147,8 +150,15 @@ class BaseConduit(object):
 class ProductConduit(BaseConduit):
     slots = ['pre_product_id_install', 'post_product_id_install']
 
+    def __init__(self, clazz, conf, product_list):
+        super(ProductConduit, self).__init__(clazz, conf)
+        self.product_list = product_list
 
-class PluginManager(object):
+    def getProductList(self):
+        return self.product_list
+
+
+class BasePluginManager(object):
     def __init__(self, search_path, plugin_conf_path):
         self.search_path = search_path
         self.plugin_conf_path = plugin_conf_path
@@ -169,6 +179,7 @@ class PluginManager(object):
         self._import_plugins()
 
     def run(self, slot_name, **kwargs):
+        log.debug("PluginManager.run called for %s with args: %s" % (slot_name, kwargs))
         for func in self._plugin_funcs[slot_name]:
             plugin_key = ".".join([func.im_class.__module__, func.im_class.__name__])
             log.debug("Running %s in %s" % (func.im_func.func_name, plugin_key))
@@ -253,6 +264,16 @@ class PluginManager(object):
         except Exception, e:
             raise PluginConfigException(plugin_key, e)
         return parser
+
+
+#NOTE: need to be super paranoid here about existing of cfg variables
+# BasePluginManager with our default config info
+class PluginManager(BasePluginManager):
+    def __init__(self, search_path=None, plugin_conf_path=None):
+        init_search_path = search_path or cfg.get("rhsm", "pluginDir")
+        init_plugin_conf_path = plugin_conf_path or cfg.get("rhsm", "pluginConfDir")
+        super(PluginManager, self).__init__(search_path=init_search_path,
+                                            plugin_conf_path=init_plugin_conf_path)
 
 
 def parse_version(api_version):
