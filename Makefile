@@ -89,9 +89,17 @@ install-help-files:
 	install docs/subscription-manager-C.omf \
 		${PREFIX}/${INSTALL_DIR}/omf/subscription-manager
 
-install: install-files install-conf install-help-files
+install-plugins:
+	install -d ${PREFIX}/usr/lib/rhsm-plugins/
+	install -m 644 -p src/rhsm-plugins/*.py ${PREFIX}/usr/lib/rhsm-plugins/
 
-install-files: dbus-service-install compile-po desktop-files
+install-plugins-conf:
+	install -d ${PREFIX}/etc/rhsm/pluginconf.d/
+	install -m 644 -p src/rhsm-plugins/*.conf ${PREFIX}/etc/rhsm/pluginconf.d/
+
+install: install-files install-conf install-plugins-conf install-help-files
+
+install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d ${CODE_DIR}/gui/data/icons
 	install -d ${CODE_DIR}/branding
 	install -d ${PREFIX}/${INSTALL_DIR}/locale/
