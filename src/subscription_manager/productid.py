@@ -26,6 +26,8 @@ from gzip import GzipFile
 from rhsm.certificate import create_from_pem
 from subscription_manager.certdirectory import Directory, ProductDirectory
 
+from subscription_manager.plugins import PluginManager
+
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
@@ -100,6 +102,8 @@ class ProductManager:
         self.db.read()
         self.meta_data_errors = []
 
+        self.plugin_manager = PluginManager()
+
     def update(self, yb):
         if yb is None:
             yb = yum.YumBase()
@@ -139,6 +143,7 @@ class ProductManager:
 
     def updateInstalled(self, enabled, active):
         log.debug("Updating installed certificates")
+        products_installed = []
         for cert, repo in enabled:
             log.debug("product cert: %s repo: %s" % (cert.products[0].id, repo))
             #nothing from this repo is installed
@@ -181,6 +186,13 @@ class ProductManager:
             log.info("Installed product cert: %s %s" % (p.name, cert.path))
             self.db.add(prod_hash, repo)
             self.db.write()
+
+            # return associated repo's as well?
+            products_installed.append(cert)
+
+        log.debug("about to run post_product_id_install")
+        self.plugin_manager.run('post_product_id_install', product_list=products_installed)
+        return products_installed
 
     def _workstation_cert_exists(self):
         for pc in self.pdir.list():
