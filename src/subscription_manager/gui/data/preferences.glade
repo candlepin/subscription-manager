@@ -38,6 +38,9 @@
               <widget class="GtkComboBox" id="sla_combobox">
                 <property name="visible">True</property>
                 <property name="items" translatable="yes"></property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">sla_selection_combobox</atkproperty>
+                </accessibility>
                 <signal name="changed" handler="on_sla_combobox_changed"/>
               </widget>
               <packing>
@@ -82,6 +85,9 @@
               <widget class="GtkComboBox" id="release_combobox">
                 <property name="visible">True</property>
                 <property name="items" translatable="yes"></property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">release_selection_combobox</atkproperty>
+                </accessibility>
                 <signal name="changed" handler="on_release_combobox_changed"/>
               </widget>
               <packing>
