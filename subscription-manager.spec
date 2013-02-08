@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.1
+Version: 1.8.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -350,6 +350,25 @@ fi
 %endif
 
 %changelog
+* Fri Feb 08 2013 Bryan Kearney <bkearney@redhat.com> 1.8.2-1
+- Update tito for RHEL 7.0 (bkearney@redhat.com)
+- Small cleanups for test_migrate (alikins@redhat.com)
+- Write repofile once instead of during every iteration. (awood@redhat.com)
+- Add unit test for migration script. (awood@redhat.com)
+- Adding more tests for the migration script. (awood@redhat.com)
+- Bump the required version of python-rhsm to pick up the new config file
+  defaults (bkearney@redhat.com)
+- Modify migration script tests to run on Fedora. (awood@redhat.com)
+- Give users the ability to disable package reporting (bkearney@redhat.com)
+- 891377: Note in deprecated string that auto-attach-interval is a command
+  option (bkearney@redhat.com)
+- 901612: Yum plugin warnings should go to stderr, not stdout
+  (bkearney@redhat.com)
+- 903298: Replace use of 'Register to' with 'Register with'
+  (bkearney@redhat.com)
+- Rewrite of the migration script featuring unit tests. (awood@redhat.com)
+- Remove F16 and old cvs releasers, add F18. (dgoodwin@redhat.com)
+
 * Thu Jan 24 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.1-1
 - Add two manifest commands to rct. (bkearney@redhat.com)
 - latest translations from zanata (alikins@redhat.com)
