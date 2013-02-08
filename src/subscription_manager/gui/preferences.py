@@ -133,6 +133,7 @@ class PreferencesDialog(object):
         # for unsetting
         self.release_model.append((_("Not Set"), ""))
         available_releases.insert(0, "")
+        self.release_combobox.set_active(0)
 
         i = 0
         for available_release in available_releases:
