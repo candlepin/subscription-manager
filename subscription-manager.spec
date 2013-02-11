@@ -178,33 +178,35 @@ rm -rf %{buildroot}
 
 %dir %{_datadir}/rhsm
 %dir %{_datadir}/rhsm/subscription_manager
-%{_datadir}/rhsm/subscription_manager/__init__.py*
-%{_datadir}/rhsm/subscription_manager/i18n.py*
-%{_datadir}/rhsm/subscription_manager/i18n_optparse.py*
+
+%{_datadir}/rhsm/subscription_manager/async.py*
+%{_datadir}/rhsm/subscription_manager/base_plugin.py*
+%{_datadir}/rhsm/subscription_manager/branding
+%{_datadir}/rhsm/subscription_manager/cache.py*
+%{_datadir}/rhsm/subscription_manager/certdirectory.py*
+%{_datadir}/rhsm/subscription_manager/certlib.py*
+%{_datadir}/rhsm/subscription_manager/certmgr.py*
+%{_datadir}/rhsm/subscription_manager/cert_sorter.py*
 %{_datadir}/rhsm/subscription_manager/cli.py*
+%{_datadir}/rhsm/subscription_manager/factlib.py*
+%{_datadir}/rhsm/subscription_manager/facts.py*
+%{_datadir}/rhsm/subscription_manager/hwprobe.py*
+%{_datadir}/rhsm/subscription_manager/i18n_optparse.py*
+%{_datadir}/rhsm/subscription_manager/i18n.py*
+%{_datadir}/rhsm/subscription_manager/__init__.py*
+%{_datadir}/rhsm/subscription_manager/jsonwrapper.py*
+%{_datadir}/rhsm/subscription_manager/listing.py*
+%{_datadir}/rhsm/subscription_manager/lock.py*
+%{_datadir}/rhsm/subscription_manager/logutil.py*
 %{_datadir}/rhsm/subscription_manager/managercli.py*
 %{_datadir}/rhsm/subscription_manager/managerlib.py*
-%{_datadir}/rhsm/subscription_manager/async.py*
-%{_datadir}/rhsm/subscription_manager/logutil.py*
-%{_datadir}/rhsm/subscription_manager/repolib.py*
-
-%{_datadir}/rhsm/subscription_manager/certlib.py*
-%{_datadir}/rhsm/subscription_manager/certdirectory.py*
-%{_datadir}/rhsm/subscription_manager/cert_sorter.py*
-%{_datadir}/rhsm/subscription_manager/validity.py*
-%{_datadir}/rhsm/subscription_manager/hwprobe.py*
-%{_datadir}/rhsm/subscription_manager/lock.py*
-%{_datadir}/rhsm/subscription_manager/facts.py*
-%{_datadir}/rhsm/subscription_manager/factlib.py*
+%{_datadir}/rhsm/subscription_manager/plugins.py*
 %{_datadir}/rhsm/subscription_manager/productid.py*
-%{_datadir}/rhsm/subscription_manager/cache.py*
-%{_datadir}/rhsm/subscription_manager/branding
 %{_datadir}/rhsm/subscription_manager/quantity.py*
-%{_datadir}/rhsm/subscription_manager/jsonwrapper.py*
-%{_datadir}/rhsm/subscription_manager/certmgr.py*
-%{_datadir}/rhsm/subscription_manager/listing.py*
 %{_datadir}/rhsm/subscription_manager/release.py*
+%{_datadir}/rhsm/subscription_manager/repolib.py*
 %{_datadir}/rhsm/subscription_manager/utils.py*
+%{_datadir}/rhsm/subscription_manager/validity.py*
 
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
