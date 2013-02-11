@@ -209,7 +209,8 @@ rm -rf %{buildroot}
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
 %dir %{_sysconfdir}/rhsm/pluginconf.d
-%{rhsm_plugins_dir}/productid_install.py*
+# we could probably just glob these dirs
+%{rhsm_plugins_dir}/product_install.py*
 %config(noreplace) %{_sysconfdir}/rhsm/pluginconf.d/product_install.ProductInstallPlugin.conf
 
 # yum plugins
