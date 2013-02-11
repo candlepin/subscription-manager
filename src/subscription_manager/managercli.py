@@ -180,7 +180,9 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
         print(_("Service level set to: %s") % service_level)
 
     try:
+        plugin_manager.run("pre_subscribe", consumer_uuid=consumer_uuid)
         cp.bind(consumer_uuid)  # new style
+        plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid)
 
     except Exception, e:
         log.warning("Error during auto-attach.")
@@ -1396,7 +1398,9 @@ class AttachCommand(CliCommand):
                         # odd html strings will cause issues, reject them here.
                         if (pool.find("#") >= 0):
                             systemExit(-1, _("Please enter a valid numeric pool ID."))
+                        plugin_manager.run("pre_subscribe", consumer_uuid=consumer_uuid)
                         ents = self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
+                        plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid)
                         # Usually just one, but may as well be safe:
                         for ent in ents:
                             pool_json = ent['pool']

@@ -59,6 +59,8 @@ SLOTS = [
     "pre_register_consumer",
     "post_register_consumer",
     "post_facts_collection",
+    "pre_subscribe",
+    "post_subscribe",
     ]
 
 
@@ -199,6 +201,17 @@ class FactsConduit(BaseConduit):
         return self.facts
 
 
+class SubscriptionConduit(BaseConduit):
+    slots = ['pre_subscribe', 'post_subscribe']
+
+    def __init__(self, clazz, conf, consumer_uuid):
+        super(SubscriptionConduit, self).__init__(clazz, conf)
+        self.consumer_uuid = consumer_uuid
+
+    def getUuid(self):
+        return self.consumer_uuid
+
+
 class BasePluginManager(object):
     def __init__(self, search_path, plugin_conf_path):
         self.search_path = search_path
@@ -208,7 +221,8 @@ class BasePluginManager(object):
         self._plugin_funcs = {}
         # TODO: we should also be able to collect this for all subclasses of
         # BaseConduit
-        self.conduits = [BaseConduit, ProductConduit, RegistrationConduit, FactsConduit]
+        self.conduits = [BaseConduit, ProductConduit, RegistrationConduit, FactsConduit,
+            SubscriptionConduit]
         self._slot_to_conduit = {}
 
         for conduit_class in self.conduits:
