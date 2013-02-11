@@ -1,6 +1,9 @@
 # Prefer systemd over sysv on Fedora 17+ and RHEL 7+
 %define use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
 
+
+%define rhsm_pluginslib   /usr/share/rhsm-plugins
+
 # A couple files are for RHEL 5 only:
 %if 0%{?rhel} == 5
 %define el5 1
@@ -185,11 +188,6 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/logutil.py*
 %{_datadir}/rhsm/subscription_manager/repolib.py*
 
-# Using _prefix + lib here instead of libdir as that evaluates to /usr/lib64 on x86_64,
-# but yum plugins seem to normally be sent to /usr/lib/:
-%{_prefix}/lib/yum-plugins/subscription-manager.py*
-%{_prefix}/lib/yum-plugins/product-id.py*
-
 %{_datadir}/rhsm/subscription_manager/certlib.py*
 %{_datadir}/rhsm/subscription_manager/certdirectory.py*
 %{_datadir}/rhsm/subscription_manager/cert_sorter.py*
@@ -207,6 +205,18 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/listing.py*
 %{_datadir}/rhsm/subscription_manager/release.py*
 %{_datadir}/rhsm/subscription_manager/utils.py*
+
+# subscription-manager plugins
+%dir %{rhsm_pluginsshare}
+%dir %{_sysconfdir}/rhsm/pluginconf.d
+%{rhsm_pluginsshare}/productid_install.py*
+%config(noreplace) %{_sysconfdir}/rhsm/pluginconf.d/product_install.ProductInstallPlugin.conf
+
+# yum plugins
+# Using _prefix + lib here instead of libdir as that evaluates to /usr/lib64 on x86_64,
+# but yum plugins seem to normally be sent to /usr/lib/:
+%{_prefix}/lib/yum-plugins/subscription-manager.py*
+%{_prefix}/lib/yum-plugins/product-id.py*
 
 
 %attr(755,root,root) %{_sbindir}/subscription-manager
