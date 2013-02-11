@@ -54,7 +54,8 @@ DEFAULTS = {
                 'certCheckInterval': '240',
                 'autoAttachInterval': '1440',
                 'report_package_profile': '1',
-                'pluginDir': '/usr/lib/rhsm-plugins',
+                'pluginDir': '/usr/share/rhsm-plugins',
+                'pluginConfDir': '/etc/rhsm/pluginconf.d/'
             }
 
 
