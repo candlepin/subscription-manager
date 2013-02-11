@@ -2,7 +2,7 @@
 %define use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
 
 
-%define rhsm_pluginslib   /usr/share/rhsm-plugins
+%define rhsm_plugins_dir   /usr/share/rhsm-plugins
 
 # A couple files are for RHEL 5 only:
 %if 0%{?rhel} == 5
@@ -207,9 +207,9 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/utils.py*
 
 # subscription-manager plugins
-%dir %{rhsm_pluginsshare}
+%dir %{rhsm_plugins_dir}
 %dir %{_sysconfdir}/rhsm/pluginconf.d
-%{rhsm_pluginsshare}/productid_install.py*
+%{rhsm_plugins_dir}/productid_install.py*
 %config(noreplace) %{_sysconfdir}/rhsm/pluginconf.d/product_install.ProductInstallPlugin.conf
 
 # yum plugins
