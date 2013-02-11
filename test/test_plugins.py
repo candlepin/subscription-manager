@@ -21,14 +21,15 @@ from iniparse import SafeConfigParser
 from StringIO import StringIO
 from subscription_manager.plugins import api_version_ok, parse_version, \
         PluginManager, PluginImportException, PluginImportApiVersionException, \
-        PluginConfigException, BaseConduit
+        PluginConfigException, BaseConduit, SlotNameException
 
 
 class TestPluginManager(unittest.TestCase):
     def setUp(self):
-        self.manager = PluginManager("some/search/path", "some/config/path")
         self.module_dir = os.path.join(os.path.dirname(__file__), "plugins")
+        self.manager = PluginManager("some/search/path", "some/config/path")
         self.manager.plugin_conf_path = self.module_dir
+        self.manager.search_path = self.module_dir
 
     def test_load_plugin_with_no_api_version(self):
         module = os.path.join(self.module_dir, "no_api_version.py")
@@ -65,6 +66,13 @@ class TestPluginManager(unittest.TestCase):
         module = os.path.join(self.module_dir, "disabled_plugin.py")
         self.manager._load_plugin(module)
         self.assertEquals(0, len(self.manager._plugins))
+
+    def test_run_no_such_slot(self):
+        module = os.path.join(self.module_dir, "dummy_plugin.py")
+        self.manager.search_path = self.module_dir
+        self.manager.plugin_conf_path = self.module_dir
+        self.manager._load_plugin(module)
+        self.assertRaises(SlotNameException, self.manager.run, 'this_is_a_slot_that_doesnt_exist')
 
 
 class TestBaseConduit(unittest.TestCase):
