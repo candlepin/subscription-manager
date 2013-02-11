@@ -16,6 +16,8 @@ BIN_FILES = $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui 
 			$(BIN_DIR)/install-num-migrate-to-rhsm \
 			$(BIN_DIR)/rct
 SYSTEMD_INST_DIR=${PREFIX}/usr/lib/systemd/system
+RHSM_PLUGIN_DIR=${PREFIX}/usr/share/rhsm-plugins/
+RHSM_PLUGIN_CONF_DIR=${PREFIX}/etc/rhsm/pluginconf.d/
 
 SRC_DIR = src/subscription_manager
 
@@ -90,12 +92,12 @@ install-help-files:
 		${PREFIX}/${INSTALL_DIR}/omf/subscription-manager
 
 install-plugins:
-	install -d ${PREFIX}/usr/lib/rhsm-plugins/
-	install -m 644 -p src/rhsm-plugins/*.py ${PREFIX}/usr/lib/rhsm-plugins/
+	install -d ${RHSM_PLUGIN_DIR}
+	install -m 644 -p src/rhsm-plugins/*.py ${RHSM_PLUGIN_DIR}
 
 install-plugins-conf:
-	install -d ${PREFIX}/etc/rhsm/pluginconf.d/
-	install -m 644 -p src/rhsm-plugins/*.conf ${PREFIX}/etc/rhsm/pluginconf.d/
+	install -d ${RHSM_PLUGIN_CONF_DIR}
+	install -m 644 -p src/rhsm-plugins/*.conf ${RHSM_PLUGIN_CONF_DIR}
 
 install: install-files install-conf install-plugins-conf install-help-files
 
