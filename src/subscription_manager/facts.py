@@ -23,6 +23,7 @@ from subscription_manager import certdirectory
 from subscription_manager import cert_sorter
 from subscription_manager.cache import CacheManager
 from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager import plugins
 from datetime import datetime
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -54,6 +55,9 @@ class Facts(CacheManager):
         # fact churn, so we report it, but ignore it as an indicator
         # that we need to update
         self.graylist = ['cpu.cpu_mhz']
+
+        # plugin manager so we can add custom facst via plugin
+        self.plugin_manager = plugins.PluginManager()
 
     def get_last_update(self):
         try:
@@ -102,6 +106,7 @@ class Facts(CacheManager):
 
             facts.update(self._load_custom_facts())
             facts.update(self._get_validity_facts(facts))
+            self.plugin_manager.run('post_facts_collection', facts=facts)
             self.facts = facts
         return self.facts
 
