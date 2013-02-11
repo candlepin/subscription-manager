@@ -50,11 +50,15 @@ _ = gettext.gettext
 # then the minor number must be incremented.
 API_VERSION = "1.0"
 
+
+# TODO: we should be able to just collect slots class attributes
+# from classes derived from BaseConduit, perhaps ala metaclasses...
 SLOTS = [
     "pre_product_id_install",
     "post_product_id_install",
     "pre_register_consumer",
     "post_register_consumer",
+    "post_facts_collection",
     ]
 
 
@@ -99,6 +103,15 @@ class PluginConfigException(PluginException):
     def __str__(self):
         repr = "Cannot load configuration for plugin \"%s\"" % (self.plugin_name)
         return self._add_message(repr)
+
+
+# if code try's to run a hook for a slot_name that doesn't exist
+class SlotNameException(Exception):
+    def __init__(self, slot_name):
+        self.slot_name = slot_name
+
+    def __str__(self):
+        return "slot name %s does not have a conduit to handle it" % self.slot_name
 
 
 class BaseConduit(object):
@@ -175,6 +188,17 @@ class RegistrationConduit(BaseConduit):
         return self.facts
 
 
+class FactsConduit(BaseConduit):
+    slots = ['post_facts_collection']
+
+    def __init__(self, clazz, conf, facts):
+        super(FactsConduit, self).__init__(clazz, conf)
+        self.facts = facts
+
+    def getFacts(self):
+        return self.facts
+
+
 class BasePluginManager(object):
     def __init__(self, search_path, plugin_conf_path):
         self.search_path = search_path
@@ -182,7 +206,9 @@ class BasePluginManager(object):
 
         self._plugins = {}
         self._plugin_funcs = {}
-        self.conduits = [BaseConduit, ProductConduit, RegistrationConduit]
+        # TODO: we should also be able to collect this for all subclasses of
+        # BaseConduit
+        self.conduits = [BaseConduit, ProductConduit, RegistrationConduit, FactsConduit]
         self._slot_to_conduit = {}
 
         for conduit_class in self.conduits:
@@ -191,12 +217,17 @@ class BasePluginManager(object):
                 self._slot_to_conduit[slot] = conduit_class
 
         for slot in SLOTS:
+            # FIXME: should we detect missing conduits here?
             self._plugin_funcs[slot] = []
 
         self._import_plugins()
 
     def run(self, slot_name, **kwargs):
         log.debug("PluginManager.run called for %s with args: %s" % (slot_name, kwargs))
+        # slot's called should always exist here, if not
+        if slot_name not in self._plugin_funcs:
+            raise SlotNameException(slot_name)
+
         for func in self._plugin_funcs[slot_name]:
             plugin_key = ".".join([func.im_class.__module__, func.im_class.__name__])
             log.debug("Running %s in %s" % (func.im_func.func_name, plugin_key))
@@ -210,6 +241,8 @@ class BasePluginManager(object):
         """Load all the plugins in the search path."""
         if not os.path.isdir(self.search_path):
             log.error("Could not find %s for plugin import" % self.search_path)
+            # NOTE: if this is not found, we don't load any plugins
+            # so self._plugins/_plugins_funcs are empty
             return
 
         mask = os.path.join(self.search_path, "*.py")
@@ -218,6 +251,7 @@ class BasePluginManager(object):
                 self._load_plugin(module_file)
             except PluginException, e:
                 log.error(e)
+
         loaded_plugins = ", ".join(self._plugins)
         log.debug("Loaded plugins: %s" % loaded_plugins)
 
