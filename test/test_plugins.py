@@ -14,6 +14,7 @@
 #
 
 
+import mock
 import os
 import unittest
 
@@ -21,7 +22,8 @@ from iniparse import SafeConfigParser
 from StringIO import StringIO
 from subscription_manager.plugins import api_version_ok, parse_version, \
         PluginManager, PluginImportException, PluginImportApiVersionException, \
-        PluginConfigException, BaseConduit, SlotNameException
+        PluginConfigException, BaseConduit, SlotNameException, FactsConduit
+from subscription_manager.base_plugin import SubManPlugin
 
 
 class TestPluginManager(unittest.TestCase):
@@ -44,22 +46,23 @@ class TestPluginManager(unittest.TestCase):
         module2 = os.path.join(self.module_dir, "dummy_plugin_2.py")
         self.manager._load_plugin(module)
         self.manager._load_plugin(module2)
-        self.assertEquals(2, len(self.manager._plugin_funcs['post_product_id_install']))
+        self.assertEquals(2, len(self.manager._slot_to_funcs['post_product_id_install']))
 
     def test_load_plugin(self):
         module = os.path.join(self.module_dir, "dummy_plugin.py")
         self.manager._load_plugin(module)
-        self.assertEquals(1, len(self.manager._plugin_funcs['post_product_id_install']))
-        self.assertEquals(0, len(self.manager._plugin_funcs['pre_product_id_install']))
+        print self.manager._slot_to_funcs
+        self.assertEquals(1, len(self.manager._slot_to_funcs['post_product_id_install']))
+        self.assertEquals(0, len(self.manager._slot_to_funcs['pre_product_id_install']))
 
     def test_no_config_plugin(self):
-        self.assertRaises(PluginConfigException, self.manager._get_plugin_conf, "config_plugin.NoConfigPlugin")
+        self.assertRaises(PluginConfigException, self.manager.get_plugin_conf, "config_plugin.NoConfigPlugin")
 
     def test_bad_config_plugin(self):
-        self.assertRaises(PluginConfigException, self.manager._get_plugin_conf, "config_plugin.BadConfigPlugin")
+        self.assertRaises(PluginConfigException, self.manager.get_plugin_conf, "config_plugin.BadConfigPlugin")
 
     def test_good_config_plugin(self):
-        parser = self.manager._get_plugin_conf("config_plugin.GoodConfigPlugin")
+        parser = self.manager.get_plugin_conf("config_plugin.GoodConfigPlugin")
         self.assertTrue(parser)
 
     def test_disabled_plugin(self):
@@ -125,3 +128,19 @@ class TestVersionChecks(unittest.TestCase):
 
     def test_api_version_new(self):
         self.assertFalse(api_version_ok("1.0", "1.1"))
+
+
+#class TestFactsPlugin(unittest.TestCase):
+#    def setUp(self):
+#        self.module_dir = os.path.join(os.path.dirname(__file__), "plugins")
+#        self.manager = PluginManager("some/search/path", "some/config/path")
+#        self.manager.plugin_conf_path = self.module_dir
+#        self.manager.search_path = self.module_dir
+#        # reload plugins
+#        self.manager._import_plugins()
+#
+#    @mock.patch.object(FactsConduit, 'getFacts')
+#    def test_post_fact_collection(self, mock_facts_gf):
+#        mock_facts_gf.return_value = {}
+#        self.manager.run('post_facts_collection', facts={})
+#        mock_facts_gf.assert_called_once_with()
