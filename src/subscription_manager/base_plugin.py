@@ -20,4 +20,7 @@ class SubManPlugin(object):
 
     Plugins need to subclass SubManPlugin() to be found
     """
-    pass
+    name = None
+
+    def __str__(self):
+        return self.name or self.__class__.__name__
