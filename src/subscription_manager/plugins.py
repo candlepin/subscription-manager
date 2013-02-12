@@ -295,6 +295,23 @@ class PluginConfig(object):
         return True
 
 
+# mostly for presentation, maybe fold this back into base classes
+class PluginInfo(object):
+    """Bundles Plugin() class and it's PluginConf() class"""
+    def __init__(self, plugin_clazz, plugin_conf):
+        self.plugin_clazz = plugin_clazz
+        self.plugin_conf = plugin_conf
+
+    def getName(self):
+        return self.plugin_clazz.name
+
+    def isEnabled(self):
+        return self.plugin_conf.is_plugin_enabled()
+
+    def getHooks(self):
+        pass
+
+
 class SubscriptionConduit(BaseConduit):
     slots = ['pre_subscribe', 'post_subscribe']
 
@@ -523,6 +540,19 @@ class BasePluginManager(object):
                 func(conduit_instance)
             except Exception, e:
                 raise e
+
+    def get_plugins(self):
+        """list of plugins"""
+        plugin_infos = []
+        for plugin_key in self._plugins:
+            plugin_infos.append(PluginInfo(self._plugins[plugin_key],
+                                          self._plugins_conf[plugin_key]))
+        return plugin_infos
+
+    def get_slots(self):
+        """list of slots"""
+
+        return sorted(self._slot_to_conduit.keys())
 
     def get_plugin_conf(self, plugin_key):
         """Return a PluginConfig object for plugin identifie by plugin_key.
