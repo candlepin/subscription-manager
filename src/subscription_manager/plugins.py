@@ -19,7 +19,6 @@ import imp
 import inspect
 import os
 import sys
-import traceback
 
 from iniparse import SafeConfigParser
 from iniparse.compat import NoSectionError, NoOptionError
@@ -297,6 +296,17 @@ class PluginConfig(object):
         return True
 
 
+class SubscriptionConduit(BaseConduit):
+    slots = ['pre_subscribe', 'post_subscribe']
+
+    def __init__(self, clazz, conf, consumer_uuid):
+        super(SubscriptionConduit, self).__init__(clazz, conf)
+        self.consumer_uuid = consumer_uuid
+
+    def getUuid(self):
+        return self.consumer_uuid
+
+
 #NOTE: need to be super paranoid here about existing of cfg variables
 # BasePluginManager with our default config info
 class BasePluginManager(object):
@@ -351,7 +361,8 @@ class BasePluginManager(object):
             log.debug("already loaded conduits")
             return self.conduits
         # we should be able to collect this from the sub classes of BaseConduit
-        return [BaseConduit, ProductConduit, RegistrationConduit, FactsConduit]
+        return [BaseConduit, ProductConduit, RegistrationConduit, 
+                FactsConduit, SubscriptionConduit]
 
     def _populate_slots(self):
         # already loaded..
