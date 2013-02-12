@@ -18,7 +18,13 @@ requires_api_version = "1.0"
 
 
 class ProductInstallPlugin(SubManPlugin):
+    """Plugin triggered when product id certs are installed"""
     def post_product_id_install_hook(self, conduit):
+        """`post_product_id_install` hook
+
+        Args:
+            conduit: A ProductConduit()
+        """
         conduit.log.info("post product id called")
 
         # we need to know what product/product cert

@@ -16,4 +16,8 @@
 
 
 class SubManPlugin(object):
+    """Base class for all subscription-manager "rhsm-plugins"
+
+    Plugins need to subclass SubManPlugin() to be found
+    """
     pass

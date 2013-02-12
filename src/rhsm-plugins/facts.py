@@ -21,7 +21,13 @@ import simplejson as json
 
 
 class FactsPlugin(SubManPlugin):
+    """Plugin for adding additional facts to subscription-manager facts"""
     def post_facts_collection_hook(self, conduit):
+        """'post_facts_collection' hook to add facter facts
+
+        Args:
+            conduit: A FactsConduit()
+        """
         conduit.log.info("post_facts_collection called")
         facts = conduit.getFacts()
 
