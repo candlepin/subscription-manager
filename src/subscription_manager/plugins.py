@@ -360,10 +360,6 @@ class BasePluginManager(object):
         return []
 
     def _populate_slots(self):
-        # already loaded..
-        if self._slot_to_conduit and self._slot_to_funcs:
-            log.debug("already loaded slots")
-            return
         for conduit_class in self.conduits:
             slots = conduit_class.slots
             for slot in slots:
@@ -376,9 +372,7 @@ class BasePluginManager(object):
         Raise:
             PluginException: plugin load fails
         """
-        if self._plugins:
-            log.debug("already loaded plugins")
-            return
+
         if not os.path.isdir(self.search_path):
             log.error("Could not find %s for plugin import" % self.search_path)
             # NOTE: if this is not found, we don't load any plugins
@@ -506,9 +500,28 @@ class BasePluginManager(object):
             plugin_key = ".".join([func.im_class.__module__, func.im_class.__name__])
             log.debug("Running %s in %s" % (func.im_func.func_name, plugin_key))
             # resolve slot_name to conduit
+            # FIXME: handle cases where we don't have a conduit for a slot_name
+            #   (should be able to handle this since we map those at the same time)
             conduit = self._slot_to_conduit[slot_name]
+
+            #FIXME: handle cases where we can't find the conf
             conf = self._plugins_conf[plugin_key]
-            func(conduit(func.im_class, conf, **kwargs))
+            try:
+                # create a Conduit
+                # FIXME: handle cases where we can't create a Conduit()
+                conduit_instance = conduit(func.im_class, conf, **kwargs)
+            # TypeError tends to mean we provided the wrong kwargs for this
+            # conduit
+            except Exception, e:
+                raise e
+
+            # If we wanted to allow a plugin or conduit to provide 
+            # exception handlers, this is probably where we would go.
+            try:
+                # invoke the method with the conduit
+                func(conduit_instance)
+            except Exception, e:
+                raise e
 
     def get_plugin_conf(self, plugin_key):
         """return a PluginConfig object for plugin identifie by plugin_key
