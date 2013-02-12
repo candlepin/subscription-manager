@@ -179,6 +179,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
         cp.updateConsumer(consumer_uuid, service_level=service_level)
         print(_("Service level set to: %s") % service_level)
 
+    plugin_manager = plugins.getPluginManager()
     try:
         plugin_manager.run("pre_subscribe", consumer_uuid=consumer_uuid)
         cp.bind(consumer_uuid)  # new style
@@ -224,7 +225,7 @@ class CliCommand(AbstractCLICommand):
         self.client_versions = self._default_client_version()
         self.server_versions = self._default_server_version()
 
-        self.plugin_manager = plugin_manager = plugins.getPluginManager()
+        self.plugin_manager = plugins.getPluginManager()
 
     def _request_validity_check(self):
         try:
@@ -1400,9 +1401,9 @@ class AttachCommand(CliCommand):
                         # odd html strings will cause issues, reject them here.
                         if (pool.find("#") >= 0):
                             systemExit(-1, _("Please enter a valid numeric pool ID."))
-                        plugin_manager.run("pre_subscribe", consumer_uuid=consumer_uuid)
+                        self.plugin_manager.run("pre_subscribe", consumer_uuid=consumer_uuid)
                         ents = self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
-                        plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid)
+                        self.plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid)
                         # Usually just one, but may as well be safe:
                         for ent in ents:
                             pool_json = ent['pool']

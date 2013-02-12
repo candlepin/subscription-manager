@@ -18,7 +18,6 @@ import glob
 import imp
 import inspect
 import os
-import sys
 
 from iniparse import SafeConfigParser
 from iniparse.compat import NoSectionError, NoOptionError
@@ -355,14 +354,10 @@ class BasePluginManager(object):
         log.debug("Calling PluginManager init")
 
     def _get_conduits(self):
-        """can be overridden by subclasses to add Conduit()'s
+        """Needs to be implemented in subclass
+        Returns: A list of Conduit classes
         """
-        if self.conduits:
-            log.debug("already loaded conduits")
-            return self.conduits
-        # we should be able to collect this from the sub classes of BaseConduit
-        return [BaseConduit, ProductConduit, RegistrationConduit, 
-                FactsConduit, SubscriptionConduit]
+        return []
 
     def _populate_slots(self):
         # already loaded..
@@ -546,6 +541,15 @@ class PluginManager(BasePluginManager):
         super(PluginManager, self).__init__(search_path=init_search_path,
                                             plugin_conf_path=init_plugin_conf_path)
 
+    def _get_conduits(self):
+        """can be overridden by subclasses to add Conduit()'s
+        """
+        if self.conduits:
+            log.debug("already loaded conduits")
+            return self.conduits
+        # we should be able to collect this from the sub classes of BaseConduit
+        return [BaseConduit, ProductConduit, RegistrationConduit,
+                FactsConduit, SubscriptionConduit]
 
 # we really only want one PluginManager instance, so share it
 plugin_manager = None

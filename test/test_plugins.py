@@ -14,7 +14,6 @@
 #
 
 
-import mock
 import os
 import unittest
 
@@ -22,8 +21,7 @@ from iniparse import SafeConfigParser
 from StringIO import StringIO
 from subscription_manager.plugins import api_version_ok, parse_version, \
         PluginManager, PluginImportException, PluginImportApiVersionException, \
-        PluginConfigException, BaseConduit, SlotNameException, FactsConduit
-from subscription_manager.base_plugin import SubManPlugin
+        PluginConfigException, BaseConduit, SlotNameException
 
 
 class TestPluginManager(unittest.TestCase):
