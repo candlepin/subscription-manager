@@ -43,7 +43,7 @@ from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
-from subscription_manager.plugins import PluginManager
+from subscription_manager import plugins
 from subscription_manager.quantity import valid_quantity
 from subscription_manager.release import ReleaseBackend
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
@@ -56,7 +56,7 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
-plugin_manager = PluginManager()
+
 
 NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
 LIBRARY_ENV_NAME = "library"
@@ -179,6 +179,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
         cp.updateConsumer(consumer_uuid, service_level=service_level)
         print(_("Service level set to: %s") % service_level)
 
+    plugin_manager = plugins.getPluginManager()
     try:
         plugin_manager.run("pre_subscribe", consumer_uuid=consumer_uuid)
         cp.bind(consumer_uuid)  # new style
@@ -223,6 +224,8 @@ class CliCommand(AbstractCLICommand):
 
         self.client_versions = self._default_client_version()
         self.server_versions = self._default_server_version()
+
+        self.plugin_manager = plugins.getPluginManager()
 
     def _request_validity_check(self):
         try:
@@ -1029,8 +1032,8 @@ class RegisterCommand(UserPassCommand):
 
             facts_dic = self.facts.get_facts()
 
-            plugin_manager.run("pre_register_consumer", name=consumername,
-                facts=facts_dic)
+            self.plugin_manager.run("pre_register_consumer", name=consumername,
+                                    facts=facts_dic)
             if self.options.consumerid:
                 #TODO remove the username/password
                 log.info("Registering as existing consumer: %s" %
@@ -1048,8 +1051,8 @@ class RegisterCommand(UserPassCommand):
                      owner=owner_key, environment=environment_id,
                      keys=self.options.activation_keys,
                      installed_products=self.installed_mgr.format_for_server())
-            plugin_manager.run("pre_register_consumer", name=consumername,
-                facts=facts_dic)
+            self.plugin_manager.run("pre_register_consumer", name=consumername,
+                                    facts=facts_dic)
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)
@@ -1398,9 +1401,9 @@ class AttachCommand(CliCommand):
                         # odd html strings will cause issues, reject them here.
                         if (pool.find("#") >= 0):
                             systemExit(-1, _("Please enter a valid numeric pool ID."))
-                        plugin_manager.run("pre_subscribe", consumer_uuid=consumer_uuid)
+                        self.plugin_manager.run("pre_subscribe", consumer_uuid=consumer_uuid)
                         ents = self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
-                        plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid)
+                        self.plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid)
                         # Usually just one, but may as well be safe:
                         for ent in ents:
                             pool_json = ent['pool']

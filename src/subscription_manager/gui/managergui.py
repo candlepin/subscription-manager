@@ -36,7 +36,7 @@ from subscription_manager.facts import Facts
 from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
 from subscription_manager.certlib import ConsumerIdentity, CertLib
 from subscription_manager.branding import get_branding
-from subscription_manager.plugins import PluginManager
+from subscription_manager import plugins
 from subscription_manager.utils import get_client_versions, get_server_versions, \
 restart_virt_who, parse_baseurl_info
 
@@ -206,7 +206,7 @@ class MainWindow(widgets.GladeWidget):
                  auto_launch_registration=False):
         super(MainWindow, self).__init__('mainwindow.glade')
 
-        self.plugin_manager = PluginManager()
+        self.plugin_manager = plugins.getPluginManager()
 
         self.backend = backend or Backend()
         self.consumer = consumer or Consumer()

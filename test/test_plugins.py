@@ -33,46 +33,53 @@ class TestPluginManager(unittest.TestCase):
 
     def test_load_plugin_with_no_api_version(self):
         module = os.path.join(self.module_dir, "no_api_version.py")
-        self.assertRaises(PluginImportException, self.manager._load_plugin, module)
+        self.assertRaises(PluginImportException, self.manager._load_plugin_module, module)
 
     def test_load_plugin_with_old_api_version(self):
         module = os.path.join(self.module_dir, "old_api_version.py")
-        self.assertRaises(PluginImportApiVersionException, self.manager._load_plugin, module)
+        self.assertRaises(PluginImportApiVersionException, self.manager._load_plugin_module, module)
 
     def test_load_plugins_with_same_class_name(self):
         module = os.path.join(self.module_dir, "dummy_plugin.py")
         module2 = os.path.join(self.module_dir, "dummy_plugin_2.py")
-        self.manager._load_plugin(module)
-        self.manager._load_plugin(module2)
-        self.assertEquals(2, len(self.manager._plugin_funcs['post_product_id_install']))
+        self.manager._load_plugin_module(module)
+        self.manager._load_plugin_module(module2)
+        self.assertEquals(2, len(self.manager._slot_to_funcs['post_product_id_install']))
 
     def test_load_plugin(self):
         module = os.path.join(self.module_dir, "dummy_plugin.py")
-        self.manager._load_plugin(module)
-        self.assertEquals(1, len(self.manager._plugin_funcs['post_product_id_install']))
-        self.assertEquals(0, len(self.manager._plugin_funcs['pre_product_id_install']))
+        self.manager._load_plugin_module(module)
+        print self.manager._slot_to_funcs
+        self.assertEquals(1, len(self.manager._slot_to_funcs['post_product_id_install']))
+        self.assertEquals(0, len(self.manager._slot_to_funcs['pre_product_id_install']))
 
     def test_no_config_plugin(self):
-        self.assertRaises(PluginConfigException, self.manager._get_plugin_conf, "config_plugin.NoConfigPlugin")
+        self.assertRaises(PluginConfigException, self.manager.get_plugin_conf, "config_plugin.NoConfigPlugin")
 
     def test_bad_config_plugin(self):
-        self.assertRaises(PluginConfigException, self.manager._get_plugin_conf, "config_plugin.BadConfigPlugin")
+        self.assertRaises(PluginConfigException, self.manager.get_plugin_conf, "config_plugin.BadConfigPlugin")
 
     def test_good_config_plugin(self):
-        parser = self.manager._get_plugin_conf("config_plugin.GoodConfigPlugin")
+        parser = self.manager.get_plugin_conf("config_plugin.GoodConfigPlugin")
         self.assertTrue(parser)
 
     def test_disabled_plugin(self):
         module = os.path.join(self.module_dir, "disabled_plugin.py")
-        self.manager._load_plugin(module)
+        self.manager._load_plugin_module(module)
         self.assertEquals(0, len(self.manager._plugins))
 
     def test_run_no_such_slot(self):
         module = os.path.join(self.module_dir, "dummy_plugin.py")
         self.manager.search_path = self.module_dir
         self.manager.plugin_conf_path = self.module_dir
-        self.manager._load_plugin(module)
+        self.manager._load_plugin_module(module)
         self.assertRaises(SlotNameException, self.manager.run, 'this_is_a_slot_that_doesnt_exist')
+
+#    def test_add_plugin_class(self):
+#        class TestPlugin(SubManPlugin):
+##            def pre_product_id_install_hook(self, conduit):
+#                pass
+#        self.
 
 
 class TestBaseConduit(unittest.TestCase):
@@ -125,3 +132,19 @@ class TestVersionChecks(unittest.TestCase):
 
     def test_api_version_new(self):
         self.assertFalse(api_version_ok("1.0", "1.1"))
+
+
+#class TestFactsPlugin(unittest.TestCase):
+#    def setUp(self):
+#        self.module_dir = os.path.join(os.path.dirname(__file__), "plugins")
+#        self.manager = PluginManager("some/search/path", "some/config/path")
+#        self.manager.plugin_conf_path = self.module_dir
+#        self.manager.search_path = self.module_dir
+#        # reload plugins
+#        self.manager._import_plugins()
+#
+#    @mock.patch.object(FactsConduit, 'getFacts')
+#    def test_post_fact_collection(self, mock_facts_gf):
+#        mock_facts_gf.return_value = {}
+#        self.manager.run('post_facts_collection', facts={})
+#        mock_facts_gf.assert_called_once_with()

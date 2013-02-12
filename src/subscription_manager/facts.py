@@ -28,7 +28,6 @@ from datetime import datetime
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-
 # Hardcoded value for the version of certificates this version of the client
 # prefers:
 CERT_VERSION = "3.1"
@@ -57,7 +56,7 @@ class Facts(CacheManager):
         self.graylist = ['cpu.cpu_mhz']
 
         # plugin manager so we can add custom facst via plugin
-        self.plugin_manager = plugins.PluginManager()
+        self.plugin_manager = plugins.getPluginManager()
 
     def get_last_update(self):
         try:
