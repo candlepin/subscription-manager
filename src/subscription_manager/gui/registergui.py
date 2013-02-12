@@ -81,7 +81,7 @@ class RegisterScreen(widgets.GladeWidget):
                     'register_progressbar', 'register_details_label',
                     'cancel_button', 'register_button']
 
-    def __init__(self, backend, consumer, facts=None, parent=None, callbacks=[]):
+    def __init__(self, backend, consumer, plugin_manager, facts=None, parent=None, callbacks=[]):
         """
         Callbacks will be executed when registration status changes.
         """
@@ -90,11 +90,12 @@ class RegisterScreen(widgets.GladeWidget):
 
         self.backend = backend
         self.consumer = consumer
+        self.plugin_manager = plugin_manager
         self.facts = facts
         self.parent = parent
         self.callbacks = callbacks
 
-        self.async = AsyncBackend(self.backend)
+        self.async = AsyncBackend(self.backend, plugin_manager)
 
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self._on_register_button_clicked,
@@ -937,8 +938,9 @@ class ChooseServerScreen(Screen):
 
 class AsyncBackend(object):
 
-    def __init__(self, backend):
+    def __init__(self, backend, plugin_manager):
         self.backend = backend
+        self.plugin_manager = plugin_manager
         self.queue = Queue.Queue()
 
     def _get_owner_list(self, username, callback):
@@ -983,10 +985,15 @@ class AsyncBackend(object):
         """
         try:
             installed_mgr = InstalledProductsManager()
+
+            self.plugin_manager.run("pre_register_consumer", name=name,
+                facts=facts.get_facts())
             retval = self.backend.admin_uep.registerConsumer(name=name,
                     facts=facts.get_facts(), owner=owner, environment=env,
                     keys=activation_keys,
                     installed_products=installed_mgr.format_for_server())
+            self.plugin_manager.run("post_register_consumer", name=name,
+                facts=facts.get_facts())
 
             # Facts and installed products went out with the registration
             # request, manually write caches to disk:
@@ -1029,7 +1036,9 @@ class AsyncBackend(object):
                 pool_id = pool_quantity['pool']['id']
                 quantity = pool_quantity['quantity']
                 log.info("  pool %s quantity %s" % (pool_id, quantity))
+                self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid)
                 self.backend.uep.bindByEntitlementPool(uuid, pool_id, quantity)
+                self.plugin_manager.run("post_subscribe", consumer_uuid=uuid)
             managerlib.fetch_certificates(self.backend)
         except Exception, e:
             # Going to try to update certificates just in case we errored out
