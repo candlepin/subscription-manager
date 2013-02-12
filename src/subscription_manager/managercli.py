@@ -43,7 +43,7 @@ from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
-from subscription_manager.plugins import PluginManager
+from subscription_manager import plugins
 from subscription_manager.quantity import valid_quantity
 from subscription_manager.release import ReleaseBackend
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
@@ -56,7 +56,7 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
-plugin_manager = PluginManager()
+
 
 NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
 LIBRARY_ENV_NAME = "library"
@@ -221,6 +221,8 @@ class CliCommand(AbstractCLICommand):
 
         self.client_versions = self._default_client_version()
         self.server_versions = self._default_server_version()
+
+        self.plugin_manager = plugin_manager = plugins.getPluginManager()
 
     def _request_validity_check(self):
         try:
@@ -1027,8 +1029,8 @@ class RegisterCommand(UserPassCommand):
 
             facts_dic = self.facts.get_facts()
 
-            plugin_manager.run("pre_register_consumer", name=consumername,
-                facts=facts_dic)
+            self.plugin_manager.run("pre_register_consumer", name=consumername,
+                                    facts=facts_dic)
             if self.options.consumerid:
                 #TODO remove the username/password
                 log.info("Registering as existing consumer: %s" %
@@ -1046,8 +1048,8 @@ class RegisterCommand(UserPassCommand):
                      owner=owner_key, environment=environment_id,
                      keys=self.options.activation_keys,
                      installed_products=self.installed_mgr.format_for_server())
-            plugin_manager.run("pre_register_consumer", name=consumername,
-                facts=facts_dic)
+            self.plugin_manager.run("pre_register_consumer", name=consumername,
+                                    facts=facts_dic)
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)
