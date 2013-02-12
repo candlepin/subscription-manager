@@ -51,7 +51,7 @@ API_VERSION = "1.0"
 
 
 class PluginException(Exception):
-    """Base exception for rhsm plugins"""
+    """Base exception for rhsm plugins."""
     def _add_message(self, repr):
         if hasattr(self, "msg") and self.msg:
             repr = "\n".join([repr, "Message: %s" % self.msg])
@@ -59,7 +59,7 @@ class PluginException(Exception):
 
 
 class PluginImportException(PluginException):
-    """Raised when a SubManPlugin derived class can not be imported"""
+    """Raised when a SubManPlugin derived class can not be imported."""
     def __init__(self, module_file, module_name, msg=None):
         self.module_file = module_file
         self.module_name = module_name
@@ -72,7 +72,7 @@ class PluginImportException(PluginException):
 
 
 class PluginImportApiVersionMissingException(PluginImportException):
-    """Raised when a plugin module does not include a 'requires_api_version'"""
+    """Raised when a plugin module does not include a 'requires_api_version'."""
     def __str__(self):
         repr = """Plugin module "%s" in %s has no API version.
                 'requires_api_version' should be set.""" % \
@@ -81,7 +81,7 @@ class PluginImportApiVersionMissingException(PluginImportException):
 
 
 class PluginImportApiVersionException(PluginImportException):
-    """Raised when a plugin module's 'requires_api_version' can not be met"""
+    """Raised when a plugin module's 'requires_api_version' can not be met."""
     def __init__(self, module_file, module_name, module_ver, api_ver, msg=None):
         self.module_file = module_file
         self.module_name = module_name
@@ -96,7 +96,7 @@ class PluginImportApiVersionException(PluginImportException):
 
 
 class PluginConfigException(PluginException):
-    """Raised when a PluginConfig fails to load or read a config file"""
+    """Raised when a PluginConfig fails to load or read a config file."""
     def __init__(self, plugin_name, msg=None):
         self.plugin_name = plugin_name
         self.msg = msg
@@ -108,7 +108,7 @@ class PluginConfigException(PluginException):
 
 # if code try's to run a hook for a slot_name that doesn't exist
 class SlotNameException(Exception):
-    """Raised when PluginManager.run() is called with a unknown slot_name"""
+    """Raised when PluginManager.run() is called with a unknown slot_name."""
     def __init__(self, slot_name):
         self.slot_name = slot_name
 
@@ -117,7 +117,7 @@ class SlotNameException(Exception):
 
 
 class BaseConduit(object):
-    """An API entry point for rhsm plugins
+    """An API entry point for rhsm plugins.
 
     Conduit()'s are used to provide access to the data a SubManPlugin may need.
     Each 'slot_name' has a BaseConduit() subclass associated with it by PluginManager().
@@ -187,7 +187,7 @@ class BaseConduit(object):
 
 
 class ProductConduit(BaseConduit):
-    """Conduit for uses with plugins that handle product id functions"""
+    """Conduit for uses with plugins that handle product id functions."""
     slots = ['pre_product_id_install', 'post_product_id_install']
 
     def __init__(self, clazz, conf, product_list):
@@ -205,7 +205,7 @@ class ProductConduit(BaseConduit):
 
 
 class RegistrationConduit(BaseConduit):
-    """Conduit for uses with registration"""
+    """Conduit for uses with registration."""
     slots = ['pre_register_consumer', 'post_register_consumer']
 
     def __init__(self, clazz, conf, name, facts):
@@ -227,7 +227,7 @@ class RegistrationConduit(BaseConduit):
 
 
 class FactsConduit(BaseConduit):
-    """Conduit for collecting facts"""
+    """Conduit for collecting facts."""
     slots = ['post_facts_collection']
 
     def __init__(self, clazz, conf, facts):
@@ -244,7 +244,7 @@ class FactsConduit(BaseConduit):
 
 
 class PluginConfig(object):
-    """Represents configuation for each rhsm plugin
+    """Represents configuation for each rhsm plugin.
 
     Attributes:
         plugin_conf_path: where plugin config files are found
@@ -261,7 +261,7 @@ class PluginConfig(object):
 
     def __init__(self, plugin_conf_path,
                  plugin_key=None):
-        """init for PluginConfig
+        """init for PluginConfig.
 
         Args:
             plugin_conf_path: string file path to where plugin config files are found
@@ -283,7 +283,7 @@ class PluginConfig(object):
             raise PluginConfigException(self.plugin_key, e)
 
     def is_plugin_enabled(self):
-        """returns True if the plugin is enabled in it's config"""
+        """returns True if the plugin is enabled in it's config."""
         try:
             enabled = self.parser.getboolean('main', 'enabled')
         except Exception, e:
@@ -293,6 +293,23 @@ class PluginConfig(object):
             log.debug("Not loading \"%s\" plugin as it is disabled" % self.plugin_key)
             return False
         return True
+
+
+# mostly for presentation, maybe fold this back into base classes
+class PluginInfo(object):
+    """Bundles Plugin() class and it's PluginConf() class"""
+    def __init__(self, plugin_clazz, plugin_conf):
+        self.plugin_clazz = plugin_clazz
+        self.plugin_conf = plugin_conf
+
+    def getName(self):
+        return self.plugin_clazz.name
+
+    def isEnabled(self):
+        return self.plugin_conf.is_plugin_enabled()
+
+    def getHooks(self):
+        pass
 
 
 class SubscriptionConduit(BaseConduit):
@@ -311,7 +328,7 @@ class SubscriptionConduit(BaseConduit):
 class BasePluginManager(object):
     """Finds, load, and provides acccess to subscription-manager plugins"""
     def __init__(self, search_path=None, plugin_conf_path=None):
-        """init for BasePluginManager()
+        """init for BasePluginManager().
 
         attributes:
             conduits: BaseConduit subclasses that can register slots
@@ -354,16 +371,14 @@ class BasePluginManager(object):
         log.debug("Calling PluginManager init")
 
     def _get_conduits(self):
-        """Needs to be implemented in subclass
-        Returns: A list of Conduit classes
+        """Needs to be implemented in subclass.
+
+        Returns:
+             A list of Conduit classes
         """
         return []
 
     def _populate_slots(self):
-        # already loaded..
-        if self._slot_to_conduit and self._slot_to_funcs:
-            log.debug("already loaded slots")
-            return
         for conduit_class in self.conduits:
             slots = conduit_class.slots
             for slot in slots:
@@ -371,14 +386,11 @@ class BasePluginManager(object):
                 self._slot_to_funcs[slot] = []
 
     def _import_plugins(self):
-        """Load all the plugins in the search path
+        """Load all the plugins in the search path.
 
         Raise:
             PluginException: plugin load fails
         """
-        if self._plugins:
-            log.debug("already loaded plugins")
-            return
         if not os.path.isdir(self.search_path):
             log.error("Could not find %s for plugin import" % self.search_path)
             # NOTE: if this is not found, we don't load any plugins
@@ -396,7 +408,7 @@ class BasePluginManager(object):
         log.debug("Loaded plugins: %s" % loaded_plugins)
 
     def _load_plugin_module(self, module_file):
-        """Loads SubManPlugin class from a module file
+        """Loads SubManPlugin class from a module file.
 
         Args:
             module_file: file path to a python module containing SubManPlugin based classes
@@ -455,7 +467,7 @@ class BasePluginManager(object):
                 self.add_plugin_class(clazz, plugin_conf)
 
     def add_plugin_class(self, plugin_clazz, conf):
-        """Add a SubManPlugin and PluginConfig class to PluginManager
+        """Add a SubManPlugin and PluginConfig class to PluginManager.
 
         Args:
             plugin_class: A SubManPlugin child class
@@ -506,12 +518,44 @@ class BasePluginManager(object):
             plugin_key = ".".join([func.im_class.__module__, func.im_class.__name__])
             log.debug("Running %s in %s" % (func.im_func.func_name, plugin_key))
             # resolve slot_name to conduit
+            # FIXME: handle cases where we don't have a conduit for a slot_name
+            #   (should be able to handle this since we map those at the same time)
             conduit = self._slot_to_conduit[slot_name]
+
+            #FIXME: handle cases where we can't find the conf
             conf = self._plugins_conf[plugin_key]
-            func(conduit(func.im_class, conf, **kwargs))
+            try:
+                # create a Conduit
+                # FIXME: handle cases where we can't create a Conduit()
+                conduit_instance = conduit(func.im_class, conf, **kwargs)
+            # TypeError tends to mean we provided the wrong kwargs for this
+            # conduit
+            except Exception, e:
+                raise e
+
+            # If we wanted to allow a plugin or conduit to provide
+            # exception handlers, this is probably where we would go.
+            try:
+                # invoke the method with the conduit
+                func(conduit_instance)
+            except Exception, e:
+                raise e
+
+    def get_plugins(self):
+        """list of plugins"""
+        plugin_infos = []
+        for plugin_key in self._plugins:
+            plugin_infos.append(PluginInfo(self._plugins[plugin_key],
+                                          self._plugins_conf[plugin_key]))
+        return plugin_infos
+
+    def get_slots(self):
+        """list of slots"""
+
+        return sorted(self._slot_to_conduit.keys())
 
     def get_plugin_conf(self, plugin_key):
-        """return a PluginConfig object for plugin identifie by plugin_key
+        """Return a PluginConfig object for plugin identifie by plugin_key.
 
         Args:
             plugin_key: string identitifier for plugin class
@@ -542,11 +586,7 @@ class PluginManager(BasePluginManager):
                                             plugin_conf_path=init_plugin_conf_path)
 
     def _get_conduits(self):
-        """can be overridden by subclasses to add Conduit()'s
-        """
-        if self.conduits:
-            log.debug("already loaded conduits")
-            return self.conduits
+        """get subscription-manager specific plugin conduits."""
         # we should be able to collect this from the sub classes of BaseConduit
         return [BaseConduit, ProductConduit, RegistrationConduit,
                 FactsConduit, SubscriptionConduit]
@@ -556,10 +596,10 @@ plugin_manager = None
 
 
 def getPluginManager():
-    """Create or retrieve a PluginManager()
+    """Create or retrieve a PluginManager().
 
     Use this instead of creating PluginManager() directly
-    so we don't re import plugins
+    so we don't re import plugins.
 
     Returns:
         A PluginManager object. If one has already been created, it
@@ -574,7 +614,7 @@ def getPluginManager():
 
 
 def parse_version(api_version):
-    """parse an API version string into major and minor version strings"""
+    """parse an API version string into major and minor version strings."""
     maj, min = api_version.split('.')
     return int(maj), int(min)
 

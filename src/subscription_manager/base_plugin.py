@@ -16,4 +16,11 @@
 
 
 class SubManPlugin(object):
-    pass
+    """Base class for all subscription-manager "rhsm-plugins"
+
+    Plugins need to subclass SubManPlugin() to be found
+    """
+    name = None
+
+    def __str__(self):
+        return self.name or self.__class__.__name__
