@@ -33,6 +33,7 @@ from subscription_manager.certmgr import CertManager
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
         is_valid_server_info, MissingCaCertException, restart_virt_who
+from subscription_manager import plugins
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
 
@@ -81,7 +82,7 @@ class RegisterScreen(widgets.GladeWidget):
                     'register_progressbar', 'register_details_label',
                     'cancel_button', 'register_button']
 
-    def __init__(self, backend, consumer, plugin_manager, facts=None, parent=None, callbacks=[]):
+    def __init__(self, backend, consumer, facts=None, parent=None, callbacks=[]):
         """
         Callbacks will be executed when registration status changes.
         """
@@ -90,12 +91,11 @@ class RegisterScreen(widgets.GladeWidget):
 
         self.backend = backend
         self.consumer = consumer
-        self.plugin_manager = plugin_manager
         self.facts = facts
         self.parent = parent
         self.callbacks = callbacks
 
-        self.async = AsyncBackend(self.backend, plugin_manager)
+        self.async = AsyncBackend(self.backend)
 
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self._on_register_button_clicked,
@@ -938,9 +938,9 @@ class ChooseServerScreen(Screen):
 
 class AsyncBackend(object):
 
-    def __init__(self, backend, plugin_manager):
+    def __init__(self, backend):
         self.backend = backend
-        self.plugin_manager = plugin_manager
+        self.plugin_manager = plugins.getPluginManager()
         self.queue = Queue.Queue()
 
     def _get_owner_list(self, username, callback):
