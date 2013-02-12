@@ -1719,6 +1719,34 @@ class ImportCertCommand(CliCommand):
         return False
 
 
+class PluginsCommand(CliCommand):
+    def __init__(self, ent_dir=None, prod_dir=None):
+        shortdesc = _("View and configure subscription-manager plugins")
+        super(PluginsCommand, self).__init__("plugins", shortdesc, False, ent_dir,
+                                           prod_dir)
+
+        self.parser.add_option("--list", action="store_true",
+                                help=_("list subscription-manager plugins"))
+        self.parser.add_option("--listslots", action="store_true",
+                                help=_("list subscription-manager plugin hooks"))
+
+    def _validation_options(self):
+        # default to list
+        if not (self.options.list or self.options.listslots):
+            self.options.list = True
+
+    def _do_command(self):
+        if self.options.list:
+            for plugin_info in self.plugin_manager.get_plugins():
+                enabled = "disabled"
+                if plugin_info.isEnabled():
+                    enabled = "enabled"
+                print "%s: %s" % (plugin_info.getName(), enabled)
+
+        if self.options.listslots:
+            for slot in self.plugin_manager.get_slots():
+                print slot
+
 class ReposCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
@@ -2109,7 +2137,7 @@ class ManagerCLI(CLI):
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
                        RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, ReleaseCommand, \
                        EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand, \
-                       VersionCommand, RemoveCommand, AttachCommand]
+                       VersionCommand, RemoveCommand, AttachCommand, PluginsCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):
