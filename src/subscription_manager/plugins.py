@@ -199,10 +199,6 @@ class ProductConduit(BaseConduit):
         super(ProductConduit, self).__init__(clazz, conf)
         self.product_list = product_list
 
-    def getProductList(self):
-        """returns a list of ProductCertificate objects"""
-        return self.product_list
-
 
 class RegistrationConduit(BaseConduit):
     """Conduit for uses with registration."""
@@ -219,12 +215,6 @@ class RegistrationConduit(BaseConduit):
         self.name = name
         self.facts = facts
 
-    def getName(self):
-        return self.name
-
-    def getFacts(self):
-        return self.facts
-
 
 class FactsConduit(BaseConduit):
     """Conduit for collecting facts."""
@@ -239,8 +229,32 @@ class FactsConduit(BaseConduit):
         super(FactsConduit, self).__init__(clazz, conf)
         self.facts = facts
 
-    def getFacts(self):
-        return self.facts
+
+class SubscriptionConduit(BaseConduit):
+    slots = ['pre_subscribe']
+
+    def __init__(self, clazz, conf, consumer_uuid):
+        """init for SubscriptionConduit
+
+        Args:
+            consumer_uuid: the UUID of the consumer being subscribed
+        """
+        super(SubscriptionConduit, self).__init__(clazz, conf)
+        self.consumer_uuid = consumer_uuid
+
+
+class PostSubscriptionConduit(SubscriptionConduit):
+    slots = ['post_subscribe']
+
+    def __init__(self, clazz, conf, consumer_uuid, entitlement_data):
+        """init for PostSubscriptionConduit
+
+        Args:
+            consumer_uuid: the UUID of the consumer subscribed
+            entitlement_data: the data returned by the server
+        """
+        super(PostSubscriptionConduit, self).__init__(clazz, conf, consumer_uuid)
+        self.entitlement_data = entitlement_data
 
 
 class PluginConfig(object):
@@ -310,17 +324,6 @@ class PluginInfo(object):
 
     def getHooks(self):
         pass
-
-
-class SubscriptionConduit(BaseConduit):
-    slots = ['pre_subscribe', 'post_subscribe']
-
-    def __init__(self, clazz, conf, consumer_uuid):
-        super(SubscriptionConduit, self).__init__(clazz, conf)
-        self.consumer_uuid = consumer_uuid
-
-    def getUuid(self):
-        return self.consumer_uuid
 
 
 #NOTE: need to be super paranoid here about existing of cfg variables
@@ -589,7 +592,7 @@ class PluginManager(BasePluginManager):
         """get subscription-manager specific plugin conduits."""
         # we should be able to collect this from the sub classes of BaseConduit
         return [BaseConduit, ProductConduit, RegistrationConduit,
-                FactsConduit, SubscriptionConduit]
+                FactsConduit, SubscriptionConduit, PostSubscriptionConduit]
 
 # we really only want one PluginManager instance, so share it
 plugin_manager = None

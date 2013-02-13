@@ -1037,8 +1037,8 @@ class AsyncBackend(object):
                 quantity = pool_quantity['quantity']
                 log.info("  pool %s quantity %s" % (pool_id, quantity))
                 self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid)
-                self.backend.uep.bindByEntitlementPool(uuid, pool_id, quantity)
-                self.plugin_manager.run("post_subscribe", consumer_uuid=uuid)
+                ents = self.backend.uep.bindByEntitlementPool(uuid, pool_id, quantity)
+                self.plugin_manager.run("post_subscribe", consumer_uuid=uuid, entitlement_data=ents)
             managerlib.fetch_certificates(self.backend)
         except Exception, e:
             # Going to try to update certificates just in case we errored out
