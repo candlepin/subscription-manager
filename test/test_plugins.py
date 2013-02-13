@@ -21,7 +21,9 @@ from iniparse import SafeConfigParser
 from StringIO import StringIO
 from subscription_manager.plugins import api_version_ok, parse_version, \
         PluginManager, PluginImportException, PluginImportApiVersionException, \
-        PluginConfigException, BaseConduit, SlotNameException
+        PluginConfigException, BaseConduit, SlotNameException, PluginConfig
+
+from subscription_manager import base_plugin
 
 
 class TestPluginManager(unittest.TestCase):
@@ -53,14 +55,23 @@ class TestPluginManager(unittest.TestCase):
         self.assertEquals(1, len(self.manager._slot_to_funcs['post_product_id_install']))
         self.assertEquals(0, len(self.manager._slot_to_funcs['pre_product_id_install']))
 
+    def test_load_plugin_from_module_bad_config(self):
+        module = os.path.join(self.module_dir, "config_plugin.py")
+        self.assertRaises(PluginConfigException, self.manager._load_plugin_module, module)
+
+    def test_load_plugin_from_module_disabled_config(self):
+        module = os.path.join(self.module_dir, "disabled_plugin.py")
+        # no exceptions, but we should see something in disabled
+#        self.assertRaises(PluginConfigException, self.manager._load_plugin_module, module)
+
     def test_no_config_plugin(self):
-        self.assertRaises(PluginConfigException, self.manager.get_plugin_conf, "config_plugin.NoConfigPlugin")
+        self.assertRaises(PluginConfigException, PluginConfig, "config_plugin.BadConfigPlugin", self.module_dir)
 
     def test_bad_config_plugin(self):
-        self.assertRaises(PluginConfigException, self.manager.get_plugin_conf, "config_plugin.BadConfigPlugin")
+        self.assertRaises(PluginConfigException, PluginConfig, "config_plugin.BadConfigPlugin", self.module_dir)
 
     def test_good_config_plugin(self):
-        parser = self.manager.get_plugin_conf("config_plugin.GoodConfigPlugin")
+        parser = PluginConfig("config_plugin.GoodConfigPlugin", self.module_dir)
         self.assertTrue(parser)
 
     def test_disabled_plugin(self):
@@ -77,7 +88,7 @@ class TestPluginManager(unittest.TestCase):
 
 #    def test_add_plugin_class(self):
 #        class TestPlugin(SubManPlugin):
-##            def pre_product_id_install_hook(self, conduit):
+#            def pre_product_id_install_hook(self, conduit):
 #                pass
 #        self.
 

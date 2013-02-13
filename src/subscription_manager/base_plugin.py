@@ -21,6 +21,21 @@ class SubManPlugin(object):
     Plugins need to subclass SubManPlugin() to be found
     """
     name = None
+    conf = None
+    # did we have hooks that match provided slots? aka
+    # is this plugin going to be used
+    found_slots_for_hooks = False
+
+    def __init__(self, conf=None):
+        if conf:
+            self.conf = conf
+        if self.conf is None:
+            raise TypeError("SubManPlugin can not be constructed with conf=None")
 
     def __str__(self):
         return self.name or self.__class__.__name__
+
+    @classmethod
+    def get_plugin_key(cls):
+        return ".".join([cls.__module__, cls.__name__])
+    #plugin_key = property(get_plugin_key)

@@ -141,8 +141,12 @@ class BaseConduit(object):
     """
     slots = []
 
-    def __init__(self, clazz, conf):
-        self._conf = conf
+    # clazz is the class object for class instance of the object the hook method maps too
+    def __init__(self, clazz, conf=None):
+        if conf:
+            self._conf = conf
+        else:
+            self._conf = clazz.conf
 
         self.log = logging.getLogger("rhsm-app." + clazz.__name__)
 
@@ -190,13 +194,13 @@ class ProductConduit(BaseConduit):
     """Conduit for uses with plugins that handle product id functions."""
     slots = ['pre_product_id_install', 'post_product_id_install']
 
-    def __init__(self, clazz, conf, product_list):
+    def __init__(self, clazz, product_list):
         """init for ProductConduit
 
         Args:
             product_list: A list of ProductCertificate objects
         """
-        super(ProductConduit, self).__init__(clazz, conf)
+        super(ProductConduit, self).__init__(clazz)
         self.product_list = product_list
 
 
@@ -204,14 +208,14 @@ class RegistrationConduit(BaseConduit):
     """Conduit for uses with registration."""
     slots = ['pre_register_consumer', 'post_register_consumer']
 
-    def __init__(self, clazz, conf, name, facts):
+    def __init__(self, clazz, name, facts):
         """init for RegistrationConduit
 
         Args:
             name: ??
             facts: a dictionary of system facts
         """
-        super(RegistrationConduit, self).__init__(clazz, conf)
+        super(RegistrationConduit, self).__init__(clazz)
         self.name = name
         self.facts = facts
 
@@ -220,13 +224,13 @@ class FactsConduit(BaseConduit):
     """Conduit for collecting facts."""
     slots = ['post_facts_collection']
 
-    def __init__(self, clazz, conf, facts):
+    def __init__(self, clazz, facts):
         """init for FactsConduit
 
         Args:
             facts: a dictionary of system facts
         """
-        super(FactsConduit, self).__init__(clazz, conf)
+        super(FactsConduit, self).__init__(clazz)
         self.facts = facts
 
 
@@ -267,34 +271,34 @@ class PluginConfig(object):
         conf_file: configuration file associated with plugin represented by plugin_key
         parser: a iniparser.SafeConfigParser for the config file
     """
-    @classmethod
-    def fromClass(cls, plugin_conf_path, plugin_clazz):
-        """construct a PluginConfig from a conf path and a plugin class"""
-        plugin_key = ".".join([plugin_clazz.__module__, plugin_clazz.__name__])
-        return cls(plugin_conf_path, plugin_key)
+    plugin_key = None
 
-    def __init__(self, plugin_conf_path,
-                 plugin_key=None):
+    def __init__(self, plugin_key,
+                 plugin_conf_path=None):
         """init for PluginConfig.
 
         Args:
+            plugin_key: string id for class
             plugin_conf_path: string file path to where plugin config files are found
-            plugin_key: a string identifier for plugins
         Raises:
             PluginConfigException: error when finding or loading plugin config
         """
         self.plugin_conf_path = plugin_conf_path
         self.plugin_key = plugin_key
 
-        self.conf_file = os.path.join(plugin_conf_path, self.plugin_key + ".conf")
-        if not os.access(self.conf_file, os.R_OK):
-            raise PluginConfigException(self.plugin_key, "Unable to find configuration file")
-
         self.parser = SafeConfigParser()
+        if self.plugin_conf_path:
+            self._get_config_parser()
+
         try:
             self.parser.read(self.conf_file)
         except Exception, e:
             raise PluginConfigException(self.plugin_key, e)
+
+    def _get_config_parser(self):
+        self.conf_file = os.path.join(self.plugin_conf_path, self.plugin_key + ".conf")
+        if not os.access(self.conf_file, os.R_OK):
+            raise PluginConfigException(self.plugin_key, "Unable to find configuration file")
 
     def is_plugin_enabled(self):
         """returns True if the plugin is enabled in it's config."""
@@ -309,21 +313,10 @@ class PluginConfig(object):
         return True
 
 
-# mostly for presentation, maybe fold this back into base classes
-class PluginInfo(object):
-    """Bundles Plugin() class and it's PluginConf() class"""
-    def __init__(self, plugin_clazz, plugin_conf):
-        self.plugin_clazz = plugin_clazz
-        self.plugin_conf = plugin_conf
-
-    def getName(self):
-        return self.plugin_clazz.name
-
-    def isEnabled(self):
-        return self.plugin_conf.is_plugin_enabled()
-
-    def getHooks(self):
-        pass
+class PluginReport(object):
+    """Format info reports about all plugins"""
+    def __init__(self, plugins):
+        self.plugins = plugins
 
 
 #NOTE: need to be super paranoid here about existing of cfg variables
@@ -354,7 +347,10 @@ class BasePluginManager(object):
         #      plugin_conf is a Config object created from
         #     the plugin classes config file
         self._plugins = {}
-        self._plugins_conf = {}
+
+        # all found plugin classes, including classes that
+        # are disable, and will not be instantiated
+        self._plugin_classes = []
 
         self.conduits = []
 
@@ -432,6 +428,7 @@ class BasePluginManager(object):
         except:
             raise PluginImportException(module_file, module_name)
 
+        # FIXME: look up module conf, so we can enable entire plugin modules
         if not hasattr(module, "requires_api_version"):
             raise PluginImportApiVersionMissingException(module_file, module_name, "Plugin doesn't specify required API version")
         if not api_version_ok(API_VERSION, module.requires_api_version):
@@ -463,13 +460,38 @@ class BasePluginManager(object):
         # note we sort the list of plugin classes, since that potentially
         # alters order hooks are mapped to slots
         plugin_classes = sorted(inspect.getmembers(module, is_plugin))
+
+        # find all the plugin classes with valid configs first
+        # then add them, so we skip the module if a class has a bad config
+        found_plugin_classes = []
         for name, clazz in sorted(plugin_classes):
-            plugin_conf = self._get_plugin_conf(clazz)
 
-            if plugin_conf.is_plugin_enabled():
-                self.add_plugin_class(clazz, plugin_conf)
+            # We could have the module conf here, and check in that
+            # instead of a per class config. We would not be able to
+            # override a disable module per class, but that's probably okay
+            # plugin_conf = self._get_plugin_conf(module, name)
 
-    def add_plugin_class(self, plugin_clazz, conf):
+            # if any of the plugins raise exceptions finding
+            # config, we fail the whole module
+            plugin_conf = PluginConfig(clazz.get_plugin_key(), self.plugin_conf_path)
+
+            # set the classes config to the found config
+            clazz.conf = plugin_conf
+            found_plugin_classes.append(clazz)
+
+        # all the plugins had configs, some were enabled
+        for plugin_class in found_plugin_classes:
+            self._plugin_classes.append(plugin_class)
+            if plugin_class.conf.is_plugin_enabled():
+                self.add_plugin_class(plugin_class)
+            else:
+                # NOTE: we could be tracking a plugin class that
+                # is disabled, but also can't be instantiated. We
+                # should never instantiate disabled plugin classes,
+                # so should be okay
+                self._plugin_classes.append(plugin_class)
+
+    def add_plugin_class(self, plugin_clazz):
         """Add a SubManPlugin and PluginConfig class to PluginManager.
 
         Args:
@@ -478,24 +500,36 @@ class BasePluginManager(object):
         Raises:
             PluginException: multiple plugins with the same name
         """
-        plugin_key = ".".join([plugin_clazz.__module__, plugin_clazz.__name__])
+        plugin_key = plugin_clazz.conf.plugin_key
 
+        # if we fail to init any plugin classes, the exceptions should bubble
+        # back up to _load_plugin_module, and we will skip the module
         instance = plugin_clazz()
+
+        # track it's instance
         if plugin_key not in self._plugins:
             self._plugins[plugin_key] = instance
-            self._plugins_conf[plugin_key] = conf
         else:
             # This shouldn't ever happen
             raise PluginException("Two or more plugins with the name \"%s\" exist " \
                 "in the plugin search path" % plugin_clazz.__name__)
 
+        # this is a valid plugin, with config, that instantiates, and no dupe
+        self._plugin_classes.append(plugin_clazz)
+
         # look for any plugin class methods that match the name
         # format of slot_name_hook
         # only look for func's that match slot's we have in our conduits
+        class_is_used = False
         for slot in self._slot_to_funcs.keys():
             func_name = slot + "_hook"
             if hasattr(instance, func_name):
                 self._slot_to_funcs[slot].append(getattr(instance, func_name))
+                class_is_used = True
+
+        # if we don't find any place to use this class, note that on the plugin class
+        if not class_is_used:
+            plugin_clazz.found_slots_for_hooks = True
 
     def run(self, slot_name, **kwargs):
         """For slot_name, run the registered hooks with kwargs.
@@ -525,12 +559,10 @@ class BasePluginManager(object):
             #   (should be able to handle this since we map those at the same time)
             conduit = self._slot_to_conduit[slot_name]
 
-            #FIXME: handle cases where we can't find the conf
-            conf = self._plugins_conf[plugin_key]
             try:
                 # create a Conduit
                 # FIXME: handle cases where we can't create a Conduit()
-                conduit_instance = conduit(func.im_class, conf, **kwargs)
+                conduit_instance = conduit(func.im_class, **kwargs)
             # TypeError tends to mean we provided the wrong kwargs for this
             # conduit
             except Exception, e:
@@ -544,32 +576,21 @@ class BasePluginManager(object):
             except Exception, e:
                 raise e
 
+    def get_plugin_conf(self, plugin_key):
+        if plugin_key in self._plugins:
+            return self._plugins.conf
+
     def get_plugins(self):
         """list of plugins"""
         plugin_infos = []
         for plugin_key in self._plugins:
-            plugin_infos.append(PluginInfo(self._plugins[plugin_key],
-                                          self._plugins_conf[plugin_key]))
+            plugin_infos.append(self._plugins[plugin_key])
         return plugin_infos
 
     def get_slots(self):
         """list of slots"""
 
         return sorted(self._slot_to_conduit.keys())
-
-    def get_plugin_conf(self, plugin_key):
-        """Return a PluginConfig object for plugin identifie by plugin_key.
-
-        Args:
-            plugin_key: string identitifier for plugin class
-        Returns:
-            A PluginConfig object
-        """
-        return PluginConfig(self.plugin_conf_path, plugin_key)
-
-    def _get_plugin_conf(self, plugin_clazz):
-        """return a PluginConfig object for plugin class plugin_clazz"""
-        return PluginConfig.fromClass(self.plugin_conf_path, plugin_clazz)
 
 
 class PluginManager(BasePluginManager):
