@@ -235,6 +235,7 @@ class FactsConduit(BaseConduit):
 
 
 class SubscriptionConduit(BaseConduit):
+    """Conduit for subscription info"""
     slots = ['pre_subscribe']
 
     def __init__(self, clazz, conf, consumer_uuid):
@@ -268,8 +269,6 @@ class PluginConfig(object):
         plugin_conf_path: where plugin config files are found
         plugin_key: a string identifier for plugins, For ex, 'facts.FactsPlugin'
                     Used to find the configuration file.
-        conf_file: configuration file associated with plugin represented by plugin_key
-        parser: a iniparser.SafeConfigParser for the config file
     """
     plugin_key = None
 
@@ -331,7 +330,7 @@ class BasePluginManager(object):
             search_path: where to find plugin modules
             plugin_conf_path: where to find plugin config files
             _plugins: map of a plugin_key to a SubManPlugin instance
-            _plugins_conf: map of a plugin_key to a PluginConfig instance
+            _plugin_classes: list of plugin classes found
             _slot_to_funcs: map of a slotname to a list of plugin methods that handle it
             _slot_to_conduit: map of a slotname to a Conduit() that is passed to the slot
                               associated
@@ -343,9 +342,6 @@ class BasePluginManager(object):
         # that maps 'plugin_key':instance
         #     'plugin_key', aka plugin_module.plugin_class
         #      instance is the instaniated plugin class
-        # self._plugins_conf maps 'plugin_key' to a plugin Config object
-        #      plugin_conf is a Config object created from
-        #     the plugin classes config file
         self._plugins = {}
 
         # all found plugin classes, including classes that
@@ -416,11 +412,11 @@ class BasePluginManager(object):
             PluginImportApiVersionMissingException: module_file has not api version requirement
             PluginImportApiVersionException: modules api version requirement can not be met
         """
-        dir, module_name = os.path.split(module_file)
+        dir_path, module_name = os.path.split(module_file)
         module_name = module_name.split(".py")[0]
 
         try:
-            fp, pathname, description = imp.find_module(module_name, [dir])
+            fp, pathname, description = imp.find_module(module_name, [dir_path])
             try:
                 module = imp.load_module(module_name, fp, pathname, description)
             finally:
@@ -496,7 +492,6 @@ class BasePluginManager(object):
 
         Args:
             plugin_class: A SubManPlugin child class
-            conf: A PluginConfig instance
         Raises:
             PluginException: multiple plugins with the same name
         """

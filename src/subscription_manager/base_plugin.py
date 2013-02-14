@@ -22,6 +22,7 @@ class SubManPlugin(object):
     """
     name = None
     conf = None
+
     # did we have hooks that match provided slots? aka
     # is this plugin going to be used
     found_slots_for_hooks = False
@@ -38,4 +39,3 @@ class SubManPlugin(object):
     @classmethod
     def get_plugin_key(cls):
         return ".".join([cls.__module__, cls.__name__])
-    #plugin_key = property(get_plugin_key)
