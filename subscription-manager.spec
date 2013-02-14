@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.2
+Version: 1.8.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -350,6 +350,21 @@ fi
 %endif
 
 %changelog
+* Thu Feb 14 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.3-1
+- string and string catalog update from zanata (alikins@redhat.com)
+- 908954: Ensure that 'Not Set' is shown in the preferences dialog if it is not
+  set (bkearney@redhat.com)
+- 906214: rct --help should return 0. (bkearney@redhat.com)
+- 909294: Add accessibility names to the preferences combo boxes
+  (bkearney@redhat.com)
+- 878097: Clarify that the --org option is ORG_KEY and not ORG_NAME
+  (bkearney@redhat.com)
+- Just use 0 as error for reading int keys (alikins@redhat.com)
+- Old version of config entries considered to make changes backwards compatible
+  (wpoteat@redhat.com)
+- 882459: aftermath of bug 876753 - Change --heal-interval to --attach-interval
+  in rhsmcertd (wpoteat@redhat.com)
+
 * Fri Feb 08 2013 Bryan Kearney <bkearney@redhat.com> 1.8.2-1
 - Update tito for RHEL 7.0 (bkearney@redhat.com)
 - Small cleanups for test_migrate (alikins@redhat.com)
