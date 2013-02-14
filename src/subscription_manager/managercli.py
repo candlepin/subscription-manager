@@ -1737,9 +1737,9 @@ class PluginsCommand(CliCommand):
 
     def _list_plugins(self):
         for plugin_class in self.plugin_manager.get_plugins().values():
-            enabled = "disabled"
+            enabled = _("disabled")
             if plugin_class.conf.is_plugin_enabled():
-                enabled = "enabled"
+                enabled = _("enabled")
             print "%s: %s" % (plugin_class.get_plugin_key(), enabled)
 
     def _do_command(self):
