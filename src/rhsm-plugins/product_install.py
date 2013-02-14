@@ -30,6 +30,6 @@ class ProductInstallPlugin(SubManPlugin):
         conduit.log.info("post product id called")
 
         # we need to know what product/product cert
-        products = conduit.getProductList()
+        products = conduit.product_list
         for product in products:
             print "product ", product

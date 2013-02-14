@@ -31,7 +31,7 @@ class FactsPlugin(SubManPlugin):
             conduit: A FactsConduit()
         """
         conduit.log.info("post_facts_collection called")
-        facts = conduit.getFacts()
+        facts = conduit.facts
 
         # FIXME: remove this
         # TODO: ditto

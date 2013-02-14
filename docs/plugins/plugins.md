@@ -83,7 +83,7 @@ Every plugin has its own configuration file located in
 `/etc/rhsm/pluginconf.d`.  These configuration files follow the standard INI
 file conventions used by subscription manager's own configuration file.  The
 configuration file for a plugin should follow the convention 
-`module\_name`.`class\_name`.conf.  For example, if our Hello World plugin
+`module_name`.`class_name`.conf.  For example, if our Hello World plugin
 seen above were in a file named `hello.py`, the configuration file should be
 named `hello.HelloWorldPlugin.conf`.
 
