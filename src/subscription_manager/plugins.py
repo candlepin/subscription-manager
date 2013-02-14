@@ -238,13 +238,13 @@ class SubscriptionConduit(BaseConduit):
     """Conduit for subscription info"""
     slots = ['pre_subscribe']
 
-    def __init__(self, clazz,  consumer_uuid):
+    def __init__(self, clazz, consumer_uuid):
         """init for SubscriptionConduit
 
         Args:
             consumer_uuid: the UUID of the consumer being subscribed
         """
-        super(SubscriptionConduit, self).__init__(clazz, conf)
+        super(SubscriptionConduit, self).__init__(clazz)
         self.consumer_uuid = consumer_uuid
 
 
@@ -258,7 +258,7 @@ class PostSubscriptionConduit(SubscriptionConduit):
             consumer_uuid: the UUID of the consumer subscribed
             entitlement_data: the data returned by the server
         """
-        super(PostSubscriptionConduit, self).__init__(clazz, conf, consumer_uuid)
+        super(PostSubscriptionConduit, self).__init__(clazz, consumer_uuid)
         self.entitlement_data = entitlement_data
 
 
