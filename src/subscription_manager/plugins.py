@@ -238,7 +238,7 @@ class SubscriptionConduit(BaseConduit):
     """Conduit for subscription info"""
     slots = ['pre_subscribe']
 
-    def __init__(self, clazz, conf, consumer_uuid):
+    def __init__(self, clazz,  consumer_uuid):
         """init for SubscriptionConduit
 
         Args:
@@ -251,7 +251,7 @@ class SubscriptionConduit(BaseConduit):
 class PostSubscriptionConduit(SubscriptionConduit):
     slots = ['post_subscribe']
 
-    def __init__(self, clazz, conf, consumer_uuid, entitlement_data):
+    def __init__(self, clazz, consumer_uuid, entitlement_data):
         """init for PostSubscriptionConduit
 
         Args:
