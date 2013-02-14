@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.8.2
+Version: 1.8.3
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,11 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Feb 14 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.3-1
+- 907536: Don't send body if it's just "" (alikins@redhat.com)
+- 882459: Change --heal-interval to --attach-interval in rhsmcertd
+  (wpoteat@redhat.com)
+
 * Thu Jan 31 2013 Bryan Kearney <bkearney@redhat.com> 1.8.2-1
 - Add a default value for the report_package_profile setting
   (bkearney@redhat.com)
