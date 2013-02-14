@@ -287,14 +287,14 @@ class PluginConfig(object):
 
         self.parser = SafeConfigParser()
         if self.plugin_conf_path:
-            self._get_config_parser()
+            self._get_config_file_path()
 
         try:
             self.parser.read(self.conf_file)
         except Exception, e:
             raise PluginConfigException(self.plugin_key, e)
 
-    def _get_config_parser(self):
+    def _get_config_file_path(self):
         self.conf_file = os.path.join(self.plugin_conf_path, self.plugin_key + ".conf")
         if not os.access(self.conf_file, os.R_OK):
             raise PluginConfigException(self.plugin_key, "Unable to find configuration file")
@@ -346,7 +346,7 @@ class BasePluginManager(object):
 
         # all found plugin classes, including classes that
         # are disable, and will not be instantiated
-        self._plugin_classes = []
+        self._plugin_classes = {}
 
         self.conduits = []
 
@@ -477,7 +477,8 @@ class BasePluginManager(object):
 
         # all the plugins had configs, some were enabled
         for plugin_class in found_plugin_classes:
-            self._plugin_classes.append(plugin_class)
+            plugin_key = plugin_class.get_plugin_key()
+
             if plugin_class.conf.is_plugin_enabled():
                 self.add_plugin_class(plugin_class)
             else:
@@ -485,7 +486,7 @@ class BasePluginManager(object):
                 # is disabled, but also can't be instantiated. We
                 # should never instantiate disabled plugin classes,
                 # so should be okay
-                self._plugin_classes.append(plugin_class)
+                self._plugin_classes[plugin_key] = plugin_class
 
     def add_plugin_class(self, plugin_clazz):
         """Add a SubManPlugin and PluginConfig class to PluginManager.
@@ -510,7 +511,7 @@ class BasePluginManager(object):
                 "in the plugin search path" % plugin_clazz.__name__)
 
         # this is a valid plugin, with config, that instantiates, and no dupe
-        self._plugin_classes.append(plugin_clazz)
+        self._plugin_classes[plugin_key] = plugin_clazz
 
         # look for any plugin class methods that match the name
         # format of slot_name_hook
@@ -577,10 +578,7 @@ class BasePluginManager(object):
 
     def get_plugins(self):
         """list of plugins"""
-        plugin_infos = []
-        for plugin_key in self._plugins:
-            plugin_infos.append(self._plugins[plugin_key])
-        return plugin_infos
+        return self._plugin_classes
 
     def get_slots(self):
         """list of slots"""

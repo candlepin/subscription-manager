@@ -1735,17 +1735,21 @@ class PluginsCommand(CliCommand):
         if not (self.options.list or self.options.listslots):
             self.options.list = True
 
+    def _list_plugins(self):
+        for plugin_class in self.plugin_manager.get_plugins().values():
+            enabled = "disabled"
+            if plugin_class.conf.is_plugin_enabled():
+                enabled = "enabled"
+            print "%s: %s" % (plugin_class.get_plugin_key(), enabled)
+
     def _do_command(self):
         if self.options.list:
-            for plugin_info in self.plugin_manager.get_plugins():
-                enabled = "disabled"
-                if plugin_info.isEnabled():
-                    enabled = "enabled"
-                print "%s: %s" % (plugin_info.getName(), enabled)
+            self._list_plugins()
 
         if self.options.listslots:
             for slot in self.plugin_manager.get_slots():
                 print slot
+
 
 class ReposCommand(CliCommand):
 
