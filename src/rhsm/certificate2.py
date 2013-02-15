@@ -244,14 +244,15 @@ class _CertFactory(object):
 
         if entitlement_data:
             payload = self._decompress_payload(base64.b64decode(entitlement_data))
-
             order = self._parse_v3_order(payload)
             content = self._parse_v3_content(payload)
             products = self._parse_v3_products(payload)
+            pool = self._parse_v3_pool(payload)
         else:
             order = None
             content = None
             products = None
+            pool = None
 
         cert = EntitlementCertificate(
                 x509=x509,
@@ -265,6 +266,7 @@ class _CertFactory(object):
                 order=order,
                 content=content,
                 products=products,
+                pool=pool,
                 pem=pem
             )
         return cert
@@ -333,6 +335,12 @@ class _CertFactory(object):
                     required_tags=c.get('required_tags', []),
                 ))
         return content
+
+    def _parse_v3_pool(self, payload):
+        pool = payload.get('pool', None)
+        if pool:
+            return Pool(id=pool['id'])
+        return None
 
     def _decompress_payload(self, payload):
         """
@@ -474,10 +482,11 @@ class ProductCertificate(Certificate):
 
 class EntitlementCertificate(ProductCertificate):
 
-    def __init__(self, order=None, content=None, extensions=None, **kwargs):
+    def __init__(self, order=None, content=None, pool=None, extensions=None, **kwargs):
         ProductCertificate.__init__(self, **kwargs)
         self.order = order
         self.content = content
+        self.pool = pool
         self.extensions = extensions
         self._path_tree_object = None
 
@@ -692,3 +701,16 @@ class Content(object):
     def __str__(self):
         return "<Content: content_type=%s name=%s label=%s enabled=%s>" % \
                 (self.content_type, self.name, self.label, self.enabled)
+
+
+class Pool(object):
+    """
+    Represents the pool an entitlement originates from.
+    """
+    def __init__(self, id=None):
+        if id is None:
+            raise CertificateException("Pool is missing ID")
+        self.id = id
+
+    def __eq__(self, other):
+        return (self.id == other.id)
