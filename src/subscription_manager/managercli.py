@@ -119,6 +119,7 @@ CONSUMED_LIST = [
     _("Contract:"),
     _("Account:"),
     _("Serial Number:"),
+    _("Pool ID:"),
     _("Active:"),
     _("Quantity Used:"),
     _("Service Level:"),
@@ -2052,6 +2053,9 @@ class ListCommand(CliCommand):
 
         for cert in certs:
             order = cert.order
+            pool_id = _("Not Available")
+            if hasattr(cert.pool, "id"):
+                pool_id = cert.pool.id
             service_level = order.service_level or ""
             service_type = order.service_type or ""
             product_names = [p.name for p in cert.products]
@@ -2062,6 +2066,7 @@ class ListCommand(CliCommand):
                     order.contract,
                     order.account,
                     cert.serial,
+                    pool_id,
                     cert.is_valid(),
                     order.quantity_used,
                     service_level,
