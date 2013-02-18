@@ -416,7 +416,11 @@ class BasePluginManager(object):
 
     def add_plugins_from_modules(self, modules):
         for module in modules:
-            self.add_plugins_from_module(module)
+            try:
+                self.add_plugins_from_module(module)
+            except PluginException, e:
+                log.exception(e)
+                log.error(e)
 
     def add_plugins_from_module(self, module):
         """add SubManPlugin based plugins from a module.
