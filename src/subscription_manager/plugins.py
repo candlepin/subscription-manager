@@ -71,7 +71,11 @@ class PluginImportException(PluginException):
         return self._add_message(repr)
 
 
-class PluginImportApiVersionMissingException(PluginImportException):
+class PluginModuleImportException(PluginImportException):
+    """Raise when a plugin module can not be imported"""
+
+
+class PluginModuleImportApiVersionMissingException(PluginImportException):
     """Raised when a plugin module does not include a 'requires_api_version'."""
     def __str__(self):
         repr = """Plugin module "%s" in %s has no API version.
@@ -80,7 +84,7 @@ class PluginImportApiVersionMissingException(PluginImportException):
         return self._add_message(repr)
 
 
-class PluginImportApiVersionException(PluginImportException):
+class PluginModuleImportApiVersionException(PluginImportException):
     """Raised when a plugin module's 'requires_api_version' can not be met."""
     def __init__(self, module_file, module_name, module_ver, api_ver, msg=None):
         self.module_file = module_file
@@ -148,6 +152,7 @@ class BaseConduit(object):
         else:
             self._conf = clazz.conf
 
+        # maybe useful to have a per conduit/per plugin logger space
         self.log = logging.getLogger("rhsm-app." + clazz.__name__)
 
     def confString(self, section, option, default=None):
@@ -284,20 +289,26 @@ class PluginConfig(object):
         """
         self.plugin_conf_path = plugin_conf_path
         self.plugin_key = plugin_key
+        self.conf_files = []
 
         self.parser = SafeConfigParser()
+
+        # no plugin_conf_path uses the default empty list of conf files
         if self.plugin_conf_path:
             self._get_config_file_path()
 
         try:
-            self.parser.read(self.conf_file)
+            self.parser.read(self.conf_files)
         except Exception, e:
             raise PluginConfigException(self.plugin_key, e)
 
     def _get_config_file_path(self):
-        self.conf_file = os.path.join(self.plugin_conf_path, self.plugin_key + ".conf")
-        if not os.access(self.conf_file, os.R_OK):
+        conf_file = os.path.join(self.plugin_conf_path, self.plugin_key + ".conf")
+        if not os.access(conf_file, os.R_OK):
             raise PluginConfigException(self.plugin_key, "Unable to find configuration file")
+        # iniparse can handle a list of files, inc an empty list
+        # reading an empty list is basically the None constructor
+        self.conf_files.append(conf_file)
 
     def is_plugin_enabled(self):
         """returns True if the plugin is enabled in it's config."""
@@ -338,6 +349,11 @@ class BasePluginManager(object):
         self.search_path = search_path
         self.plugin_conf_path = plugin_conf_path
 
+        # list of modules to load plugins from
+        self.modules = self._get_modules()
+        # we track which modules we try to load plugins from
+        self._modules = {}
+
         # self._plugins is mostly for bookkeeping, it's a dict
         # that maps 'plugin_key':instance
         #     'plugin_key', aka plugin_module.plugin_class
@@ -361,7 +377,7 @@ class BasePluginManager(object):
         # and create keys for self._slot_to_func
         self._populate_slots()
 
-        # populate self._plugins with
+        # populate self._plugins with plugins in modules in self.modules
         self._import_plugins()
         log.debug("Calling PluginManager init")
 
@@ -373,6 +389,24 @@ class BasePluginManager(object):
         """
         return []
 
+    def _get_modules(self):
+        """Needs to be implemented in subclass.
+
+        Returns:
+            A list of modules to load plugins classes from
+        """
+        return []
+
+    def _import_plugins(self):
+        """Needs to be implemented in subclass.
+
+        This loads plugin modules, checks them, and loads plugins
+        from them with self.add_plugins_from_module
+        """
+        self.add_plugins_from_modules(self.modules)
+        log.debug("loaded plugin modules: %s" % self.modules)
+        log.debug("loaded plugins: %s" % self._plugins)
+
     def _populate_slots(self):
         for conduit_class in self.conduits:
             slots = conduit_class.slots
@@ -380,57 +414,9 @@ class BasePluginManager(object):
                 self._slot_to_conduit[slot] = conduit_class
                 self._slot_to_funcs[slot] = []
 
-    def _import_plugins(self):
-        """Load all the plugins in the search path.
-
-        Raise:
-            PluginException: plugin load fails
-        """
-        if not os.path.isdir(self.search_path):
-            log.error("Could not find %s for plugin import" % self.search_path)
-            # NOTE: if this is not found, we don't load any plugins
-            # so self._plugins/_plugins_funcs are empty
-            return
-
-        mask = os.path.join(self.search_path, "*.py")
-        for module_file in sorted(glob.glob(mask)):
-            try:
-                self._load_plugin_module(module_file)
-            except PluginException, e:
-                log.error(e)
-
-        loaded_plugins = ", ".join(self._plugins)
-        log.debug("Loaded plugins: %s" % loaded_plugins)
-
-    def _load_plugin_module(self, module_file):
-        """Loads SubManPlugin class from a module file.
-
-        Args:
-            module_file: file path to a python module containing SubManPlugin based classes
-        Raises:
-            PluginImportException: module_file could not be imported
-            PluginImportApiVersionMissingException: module_file has not api version requirement
-            PluginImportApiVersionException: modules api version requirement can not be met
-        """
-        dir_path, module_name = os.path.split(module_file)
-        module_name = module_name.split(".py")[0]
-
-        try:
-            fp, pathname, description = imp.find_module(module_name, [dir_path])
-            try:
-                module = imp.load_module(module_name, fp, pathname, description)
-            finally:
-                fp.close()
-        except:
-            raise PluginImportException(module_file, module_name)
-
-        # FIXME: look up module conf, so we can enable entire plugin modules
-        if not hasattr(module, "requires_api_version"):
-            raise PluginImportApiVersionMissingException(module_file, module_name, "Plugin doesn't specify required API version")
-        if not api_version_ok(API_VERSION, module.requires_api_version):
-            raise PluginImportApiVersionException(module_file, module_name, module_ver=module.requires_api_version, api_ver=API_VERSION)
-
-        self.add_plugins_from_module(module)
+    def add_plugins_from_modules(self, modules):
+        for module in modules:
+            self.add_plugins_from_module(module)
 
     def add_plugins_from_module(self, module):
         """add SubManPlugin based plugins from a module.
@@ -440,14 +426,18 @@ class BasePluginManager(object):
         and named in the format "moduleName.plugin_class_name.conf"
 
         Args:
-            module: a SubManPlugin derived classes. These
-            classes will be found, and added to PluginManager()
+            module: an import python module object, that contains
+                    SubManPlugin subclasses.
 
         Raises:
             PluginException: multiple plugins with the same name
 
 
         """
+        # track the modules we try to load plugins from
+        # we'll add plugin classes if we find them
+        self._modules[module] = []
+
         # verify we are a class, and in particular, a subclass
         # of SubManPlugin
         def is_plugin(c):
@@ -480,7 +470,10 @@ class BasePluginManager(object):
             plugin_key = plugin_class.get_plugin_key()
 
             if plugin_class.conf.is_plugin_enabled():
+
                 self.add_plugin_class(plugin_class)
+                # track which plugin_clasess are found in each module
+                self._modules[module].append(plugin_class)
             else:
                 # NOTE: we could be tracking a plugin class that
                 # is disabled, but also can't be instantiated. We
@@ -509,7 +502,6 @@ class BasePluginManager(object):
             # This shouldn't ever happen
             raise PluginException("Two or more plugins with the name \"%s\" exist " \
                 "in the plugin search path" % plugin_clazz.__name__)
-
         # this is a valid plugin, with config, that instantiates, and no dupe
         self._plugin_classes[plugin_key] = plugin_clazz
 
@@ -524,7 +516,7 @@ class BasePluginManager(object):
                 class_is_used = True
 
         # if we don't find any place to use this class, note that on the plugin class
-        if not class_is_used:
+        if class_is_used:
             plugin_clazz.found_slots_for_hooks = True
 
     def run(self, slot_name, **kwargs):
@@ -548,6 +540,7 @@ class BasePluginManager(object):
             raise SlotNameException(slot_name)
 
         for func in self._slot_to_funcs[slot_name]:
+            # can this use plugin_class.plugin_key?
             plugin_key = ".".join([func.im_class.__module__, func.im_class.__name__])
             log.debug("Running %s in %s" % (func.im_func.func_name, plugin_key))
             # resolve slot_name to conduit
@@ -561,6 +554,9 @@ class BasePluginManager(object):
                 conduit_instance = conduit(func.im_class, **kwargs)
             # TypeError tends to mean we provided the wrong kwargs for this
             # conduit
+            # if we get an Exception above, should we exit early, or
+            # continue onto other hooks. A conduit could fail for
+            # something specific to func.im_class, but unlikely
             except Exception, e:
                 raise e
 
@@ -571,6 +567,8 @@ class BasePluginManager(object):
                 func(conduit_instance)
             except Exception, e:
                 raise e
+        # FIXME: need to note if a slot is not found?
+        # debug logging maybe
 
     def get_plugin_conf(self, plugin_key):
         if plugin_key in self._plugins:
@@ -608,6 +606,74 @@ class PluginManager(BasePluginManager):
         return [BaseConduit, ProductConduit, RegistrationConduit,
                 FactsConduit, SubscriptionConduit, PostSubscriptionConduit]
 
+    def _get_modules(self):
+        module_files = self._find_plugin_module_files(self.search_path)
+        plugin_modules = self._load_plugin_module_files(module_files)
+        return plugin_modules
+
+    # subman specific module/plugin loading
+    def _find_plugin_module_files(self, search_path):
+        """Load all the plugins in the search path.
+
+        Raise:
+            PluginException: plugin load fails
+        """
+        module_files = []
+        if not os.path.isdir(search_path):
+            log.error("Could not find %s for plugin import" % search_path)
+            # NOTE: if this is not found, we don't load any plugins
+            # so self._plugins/_plugins_funcs are empty
+            return []
+        mask = os.path.join(search_path, "*.py")
+        for module_file in sorted(glob.glob(mask)):
+            module_files.append(module_file)
+
+        # for consistency
+        module_files.sort()
+        return module_files
+
+    def _load_plugin_module_files(self, module_files):
+        modules = []
+        for module_file in module_files:
+            try:
+                modules.append(self._load_plugin_module_file(module_file))
+            except PluginException, e:
+                log.error(e)
+
+        return modules
+
+    def _load_plugin_module_file(self, module_file):
+        """Loads SubManPlugin class from a module file.
+
+        Args:
+            module_file: file path to a python module containing SubManPlugin based classes
+        Raises:
+            PluginImportException: module_file could not be imported
+            PluginImportApiVersionMissingException: module_file has not api version requirement
+            PluginImportApiVersionException: modules api version requirement can not be met
+        """
+        dir_path, module_name = os.path.split(module_file)
+        module_name = module_name.split(".py")[0]
+
+        try:
+            fp, pathname, description = imp.find_module(module_name, [dir_path])
+            try:
+                loaded_module = imp.load_module(module_name, fp, pathname, description)
+            finally:
+                fp.close()
+        except:
+            raise PluginModuleImportException(module_file, module_name)
+
+        # FIXME: look up module conf, so we can enable entire plugin modules
+        if not hasattr(loaded_module, "requires_api_version"):
+            raise PluginModuleImportApiVersionMissingException(module_file, module_name, "Plugin doesn't specify required API version")
+        if not api_version_ok(API_VERSION, loaded_module.requires_api_version):
+            raise PluginModuleImportApiVersionException(module_file, module_name,
+                                                        module_ver=loaded_module.requires_api_version, api_ver=API_VERSION)
+
+        return loaded_module
+
+
 # we really only want one PluginManager instance, so share it
 plugin_manager = None
 
@@ -626,6 +692,8 @@ def getPluginManager():
     log.debug("callling getPluginManager, plugin_manager is: %s" % plugin_manager)
     if plugin_manager:
         return plugin_manager
+    # FIXME: should we aggressively catch exceptions here? If we can't
+    # create a PluginManager we should probably raise an exception all the way up
     plugin_manager = PluginManager()
     return plugin_manager
 
