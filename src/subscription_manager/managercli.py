@@ -1518,13 +1518,15 @@ class RemoveCommand(CliCommand):
                     # total will be None on older Candlepins that don't
                     # support returning the number of subscriptions unsubscribed from
                     if total is None:
-                        print _("All subscriptions have been removed from this system.")
+                        print _("All subscriptions have been removed at the server.")
                     else:
                         count = total['deletedRecords']
-                        if count == 1:
-                            print _("1 subscription removed from this system.")
+                        if count == 0:
+                            print _("No subscriptions existed at the server.")
+                        elif count == 1:
+                            print _("1 subscription removed at the server.")
                         else:
-                            print (_("%s subscriptions removed from this system.") \
+                            print (_("%s subscriptions removed at the server.") \
                                 % total['deletedRecords'])
                 else:
                     success = []
@@ -1539,11 +1541,11 @@ class RemoveCommand(CliCommand):
                                 systemExit(-1)
                             failure.append(re.msg)
                     if success:
-                        print _("Successfully removed serial numbers:")
+                        print _("Serial numbers successfully removed at the server:")
                         for ser in success:
                             print "   %s" % ser
                     if failure:
-                        print _("Unsuccessfully removed serial numbers:")
+                        print _("Serial numbers unsuccessfully removed at the server:")
                         for fail in failure:
                             print "   %s" % fail
                     if not success:
