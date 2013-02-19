@@ -99,6 +99,15 @@ install-plugins-conf:
 	install -d ${RHSM_PLUGIN_CONF_DIR}
 	install -m 644 -p src/rhsm-plugins/*.conf ${RHSM_PLUGIN_CONF_DIR}
 
+install-example-plugins:
+	install -d ${RHSM_PLUGIN_DIR}
+	install -m 644 -p example-plugins/*.py ${RHSM_PLUGIN_DIR}
+
+install-example-plugins-conf:
+	install -d ${RHSM_PLUGIN_CONF_DIR}
+	install -m 644 -p example-plugins/*.conf ${RHSM_PLUGIN_CONF_DIR}
+
+
 install: install-files install-conf install-plugins-conf install-help-files
 
 install-files: dbus-service-install compile-po desktop-files install-plugins
