@@ -292,7 +292,12 @@ class SubDetailsWidget(GladeWidget):
         display_level = support_level
         if support_level == "":
             display_level = _("Not Set")
-        self._set(self.support_level_and_type_text, ", ".join([display_level, support_type]))
+        if support_type != "":
+            display_level_and_type = ", ".join([display_level, support_type])
+        else:
+            display_level_and_type = display_level
+
+        self._set(self.support_level_and_type_text, display_level_and_type)
 
         self._show_other_details(name, contract, start, end, account,
                                  management, support_level, support_type,
