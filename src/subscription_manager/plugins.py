@@ -323,10 +323,11 @@ class PluginConfig(object):
         return True
 
     def __str__(self):
-        buf = "%s\n" % (self.__class__)
-        buf = buf + "plugin_key: %s\n" % (self.plugin_key)
+        buf = "plugin_key: %s\n" % (self.plugin_key)
         for conf_file in self.conf_files:
             buf = buf + "config file: %s\n" % conf_file
+        # config file entries
+        buf = buf + str(self.parser.data)
         return buf
 
 
@@ -637,7 +638,6 @@ class BasePluginManager(object):
 
     def get_slots(self):
         """list of slots"""
-
         return sorted(self._slot_to_conduit.keys())
 
 
