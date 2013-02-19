@@ -17,7 +17,7 @@
 import os
 import mock
 import unittest
-#import log_config
+
 
 from iniparse import SafeConfigParser
 from StringIO import StringIO
