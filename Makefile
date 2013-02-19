@@ -108,9 +108,9 @@ install-example-plugins-conf:
 	install -m 644 -p example-plugins/*.conf ${RHSM_PLUGIN_CONF_DIR}
 
 
-install: install-files install-conf install-plugins-conf install-help-files
+install: install-files install-conf install-help-files
 
-install-files: dbus-service-install compile-po desktop-files install-plugins
+install-files: dbus-service-install compile-po desktop-files
 	install -d ${CODE_DIR}/gui/data/icons
 	install -d ${CODE_DIR}/branding
 	install -d ${PREFIX}/${INSTALL_DIR}/locale/
