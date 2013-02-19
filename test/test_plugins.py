@@ -17,6 +17,7 @@
 import os
 import mock
 import unittest
+#import log_config
 
 from iniparse import SafeConfigParser
 from StringIO import StringIO
@@ -116,6 +117,11 @@ from subscription_manager import base_plugin
 #   multiple invocations of getPluginManager returnt he same PluginManager object
 #   can we test that getPluginManager is not imported into a local namespace?
 
+
+# this test class heavily uses mock to simulate the "default" case
+# through PluginManager. The main issue being that PluginConfigs
+# init'ed based on the PluginClass passed in, and by defaults, looks
+# for a real config file somewhere. 
 class TestBasePluginManager(unittest.TestCase):
 
     def setUp(self):
@@ -431,14 +437,11 @@ class TestBasePluginManager(unittest.TestCase):
         self.assertFalse('post_facts_collection_hook' in [x.__name__ for x in funcs])
 
 
-# This is more of a functional test, but for plugins I think that is okay
+# This is more of a functional test, but for plugins I think that this is okay
 class TestPluginManager(unittest.TestCase):
     def setUp(self):
         self.module_dir = os.path.join(os.path.dirname(__file__), "plugins")
         self.manager = PluginManager(self.module_dir, self.module_dir)
- #       self.manager = PluginManager("some/search/path", "some/config/path")
-#        self.manager.plugin_conf_path = self.module_dir
-#        self.manager.search_path = self.module_dir
 
     def test_load_plugin_with_no_api_version(self):
         module = os.path.join(self.module_dir, "no_api_version.py")
@@ -509,6 +512,92 @@ class TestPluginManagerLoadPlugins(unittest.TestCase):
         self.assertRaises(SlotNameException, self.manager.run, 'this_is_a_slot_that_doesnt_exist')
 
 
+# sub class for testing just for easier init
+class PluginConfigForTest(PluginConfig):
+    def __init__(self, plugin_key, enabled):
+        super(PluginConfigForTest, self).__init__(plugin_key)
+        self.parser.add_section("main")
+        self.parser.set("main", "enabled", enabled)
+
+
+class TestPluginManagerConfigMap(unittest.TestCase):
+    class PluginClass(base_plugin.SubManPlugin):
+        __module__ = "some_module"
+
+    def setUp(self):
+        self.manager = PluginManager()
+        self.plugin_config = PluginConfigForTest(self.PluginClass.get_plugin_key(),
+                                           enabled='1')
+        self.plugin_to_config_map = {self.PluginClass.get_plugin_key(): self.plugin_config}
+
+    def test_plugin(self):
+        self.manager.add_plugin_class(self.PluginClass,
+                                      plugin_to_config_map=self.plugin_to_config_map)
+
+    def test_plugin_no_config_in_map(self):
+        # we look in the map, but can't find anything, so we
+        # get a PluginConfigException
+        broken_map = {'you_wont_find_this': self.plugin_config}
+        self.assertRaises(PluginConfigException,
+                          self.manager.add_plugin_class,
+                          self.PluginClass,
+                          plugin_to_config_map=broken_map)
+
+
+class NotTestPluginManagerReporting(unittest.TestCase):
+    class ConduitPluginManager(BasePluginManager):
+        _conduit_list = []
+
+        def _get_conduits(self):
+            return self._conduit_list
+
+    def _plugin_class_factory(self, cls_name):
+        return type(cls_name, (base_plugin.SubManPlugin,), {})
+
+    def setUp(self):
+        #plugin_class_names = ['Plugin1', 'Plugin2', 'Plugin3']
+        plugin_class_names = [str(x) for x in xrange(1, 10)]
+        self.plugin_classes = []
+
+        def test_hook(self):
+            pass
+
+        conduit_classes = []
+        plugin_classes = []
+        for plugin_class_name in plugin_class_names:
+            plugin_class = type('PluginClass%s' % plugin_class_name,
+                                (base_plugin.SubManPlugin,),
+                                 {'test_%s_hook' % plugin_class_name: test_hook})
+            conduit_class = type('Conduit%s' % plugin_class_name,
+                                 (BaseConduit,),
+                                 {'slots': ['test_%s' % plugin_class_name]})
+            plugin_classes.append(plugin_class)
+            conduit_classes.append(conduit_class)
+
+        for plugin_class in plugin_classes:
+            self.plugin_classes.append(plugin_class)
+
+        self.ConduitPluginManager._conduit_list = conduit_classes
+        self.manager = self.ConduitPluginManager()
+
+    def test_factory(self):
+        plugin_objs = []
+        plugin_to_config_map = {}
+        for plugin_class in self.plugin_classes:
+            plugin_config = PluginConfigForTest(plugin_class.get_plugin_key(),
+                                                enabled='1')
+            plugin_to_config_map[plugin_class.get_plugin_key()] = plugin_config
+
+        for plugin_class in self.plugin_classes:
+            self.manager.add_plugin_class(plugin_class,
+                                          plugin_to_config_map=plugin_to_config_map)
+
+        print self.manager.get_plugins()
+        print self.manager.get_slots()
+        print self.manager._slot_to_conduit
+        print self.manager._slot_to_funcs
+
+
 #functional
 class TestPluginManagerRun(unittest.TestCase):
     def setUp(self):
@@ -516,7 +605,6 @@ class TestPluginManagerRun(unittest.TestCase):
         self.manager = PluginManager("some/search/path", "some/config/path")
         self.manager.conduits = [ProductConduit]
         self.manager._populate_slots()
-        #self.manager._import_plugins()
         self.manager.plugin_conf_path = self.module_dir
         self.manager.search_path = self.module_dir
         module = os.path.join(self.module_dir, "dummy_plugin.py")
@@ -531,20 +619,19 @@ class TestPluginManagerRun(unittest.TestCase):
                           "post_product_id_install",
                            not_an_actual_arg=None)
 
-    @mock.patch('subscription_manager.plugins.PluginConfig')
-    def test_hook_raises_exception(self, mock_plugin_conf):
+    def test_hook_raises_exception(self):
         class ExceptionalPluginClass(base_plugin.SubManPlugin):
             __module__ = "mock_module"
 
             def post_product_id_install_hook(self, conduit):
                 raise IndexError
 
-        mock_conf_instance = mock_plugin_conf.return_value
-        mock_conf_instance.is_plugin_enabled.return_value = True
-        ExceptionalPluginClass.conf = mock_conf_instance
-        mock_conf_instance.plugin_key = ExceptionalPluginClass.get_plugin_key()
+        plugin_config = PluginConfigForTest(ExceptionalPluginClass.get_plugin_key(),
+                                            enabled='1')
 
-        self.manager.add_plugin_class(ExceptionalPluginClass)
+        plugin_to_config_map = {ExceptionalPluginClass.get_plugin_key(): plugin_config}
+        self.manager.add_plugin_class(ExceptionalPluginClass,
+                                      plugin_to_config_map=plugin_to_config_map)
         self.assertRaises(IndexError, self.manager.run,
                           'post_product_id_install', product_list=[])
 
