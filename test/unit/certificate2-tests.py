@@ -198,6 +198,21 @@ class V3CertTests(unittest.TestCase):
     def test_match_deep_path(self):
         self.assertTrue(self.ent_cert.check_path('/path/to/awesomeos/x86_64/foo/bar'))
 
+    def test_missing_pool(self):
+        self.assertEquals(None, self.ent_cert.pool)
+
+
+class V3_2CertTests(unittest.TestCase):
+
+    def setUp(self):
+        self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V3_2)
+
+    def test_read_pool(self):
+        self.assertEquals("3.2", str(self.ent_cert.version))
+        self.assertTrue(isinstance(self.ent_cert, EntitlementCertificate))
+        self.assertEquals('8a8d01f53cda9dd0013cda9ed5100475',
+                self.ent_cert.pool.id)
+
 
 class IdentityCertTests(unittest.TestCase):
 
