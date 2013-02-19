@@ -51,6 +51,10 @@ static gint arg_cert_interval_minutes = -1;
 static gint arg_heal_interval_minutes = -1;
 
 static GOptionEntry entries[] = {
+    /* marked deprecated as of 02-19-2013, needs to be removed...? */
+	{"cert-interval", 0, 0, G_OPTION_ARG_INT, &arg_heal_interval_minutes,
+	 N_("deprecated, see --cert-check-interval"),
+	 "MINUTES"},
 	{"cert-check-interval", 'c', 0, G_OPTION_ARG_INT, &arg_cert_interval_minutes,
 	 N_("interval to run cert check (in minutes)"),
 	 "MINUTES"},
