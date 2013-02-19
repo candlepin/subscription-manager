@@ -322,11 +322,12 @@ class PluginConfig(object):
             return False
         return True
 
-
-class PluginReport(object):
-    """Format info reports about all plugins"""
-    def __init__(self, plugins):
-        self.plugins = plugins
+    def __str__(self):
+        buf = "%s\n" % (self.__class__)
+        buf = buf + "plugin_key: %s\n" % (self.plugin_key)
+        for conf_file in self.conf_files:
+            buf = buf + "config file: %s\n" % conf_file
+        return buf
 
 
 #NOTE: need to be super paranoid here about existing of cfg variables
@@ -403,6 +404,8 @@ class BasePluginManager(object):
         This loads plugin modules, checks them, and loads plugins
         from them with self.add_plugins_from_module
         """
+        # by default, we create PluginConfig's as needed, so no need for
+        # plugin_to_config_map to be passed in
         self.add_plugins_from_modules(self.modules)
         log.debug("loaded plugin modules: %s" % self.modules)
         log.debug("loaded plugins: %s" % self._plugins)
@@ -414,15 +417,27 @@ class BasePluginManager(object):
                 self._slot_to_conduit[slot] = conduit_class
                 self._slot_to_funcs[slot] = []
 
-    def add_plugins_from_modules(self, modules):
+    def add_plugins_from_modules(self, modules, plugin_to_config_map=None):
+        """Add SubMan plugins from a list of modules
+
+        Args:
+            modules: a list of python module objects
+            plugin_to_config_map: a dict mapping a plugin_key to a PluginConfig
+                                  object. If a plugin finds it's config in here,
+                                  that is used instead of creating a new PluginConfig()
+                                  (which needs an actual file in plugin_conf_dir)
+        Side effects:
+            whatever add_plugins_from_module does to self
+        """
         for module in modules:
             try:
-                self.add_plugins_from_module(module)
+                self.add_plugins_from_module(module,
+                                            plugin_to_config_map=plugin_to_config_map)
             except PluginException, e:
                 log.exception(e)
                 log.error(e)
 
-    def add_plugins_from_module(self, module):
+    def add_plugins_from_module(self, module, plugin_to_config_map=None):
         """add SubManPlugin based plugins from a module.
 
         Will also look for a PluginConfig() associated with the
@@ -432,11 +447,14 @@ class BasePluginManager(object):
         Args:
             module: an import python module object, that contains
                     SubManPlugin subclasses.
-
+            plugin_to_config_map: a dict mapping a plugin_key to a PluginConfig
+                                  object.If a plugin finds it's config in here,
+                                  that is used instead of creating a new PluginConfig()
+        Side Effects:
+            self._modules is populated
+            whatever add_plugin_class does
         Raises:
             PluginException: multiple plugins with the same name
-
-
         """
         # track the modules we try to load plugins from
         # we'll add plugin classes if we find them
@@ -459,44 +477,55 @@ class BasePluginManager(object):
             # We could have the module conf here, and check in that
             # instead of a per class config. We would not be able to
             # override a disable module per class, but that's probably okay
-            # plugin_conf = self._get_plugin_conf(module, name)
 
-            # if any of the plugins raise exceptions finding
-            # config, we fail the whole module
-            plugin_conf = PluginConfig(clazz.get_plugin_key(), self.plugin_conf_path)
-
-            # set the classes config to the found config
-            clazz.conf = plugin_conf
             found_plugin_classes.append(clazz)
 
-        # all the plugins had configs, some were enabled
         for plugin_class in found_plugin_classes:
-            plugin_key = plugin_class.get_plugin_key()
+            # NOTE: we currently do not catch plugin init exceptions
+            # here, and let them bubble. But we could...? that would
+            # let some classes from a module fail
+            self.add_plugin_class(plugin_class,
+                                  plugin_to_config_map=plugin_to_config_map)
 
-            if plugin_class.conf.is_plugin_enabled():
-
-                self.add_plugin_class(plugin_class)
-                # track which plugin_clasess are found in each module
-                self._modules[module].append(plugin_class)
-            else:
-                # NOTE: we could be tracking a plugin class that
-                # is disabled, but also can't be instantiated. We
-                # should never instantiate disabled plugin classes,
-                # so should be okay
-                self._plugin_classes[plugin_key] = plugin_class
-
-    def add_plugin_class(self, plugin_clazz):
+    def add_plugin_class(self, plugin_clazz, plugin_to_config_map=None):
         """Add a SubManPlugin and PluginConfig class to PluginManager.
 
         Args:
-            plugin_class: A SubManPlugin child class
+            plugin_clazz: A SubManPlugin child class, with a
+                          .conf PluginConfig() class
+            plugin_to_config_map: a dict mapping a plugin_key to a PluginConfig
+                                  object.If a plugin finds it's config in here,
+                                  that is used instead of creating a new PluginConfig()
+        Side effects:
+            self._plugin_classes is populated with all found plugin classes
+            self._modules is populated with plugin classes per plugin module
+            self._plugins is populated with valid and enabled plugin instances
         Raises:
             PluginException: multiple plugins with the same name
         """
+        # either look up what we were passed, or create a new PluginConfig
+        # default is to create a PluginConfig
+        plugin_conf = self._get_plugin_config(plugin_clazz,
+                                              plugin_to_config_map=plugin_to_config_map)
+
+        # associate config with plugin class
+        plugin_clazz.conf = plugin_conf
+
         plugin_key = plugin_clazz.conf.plugin_key
 
-        # if we fail to init any plugin classes, the exceptions should bubble
-        # back up to _load_plugin_module, and we will skip the module
+        # if plugin is not enabled, it doesnt get added, but
+        # we do track it as a plugin_class we looked at
+        if not plugin_clazz.conf.is_plugin_enabled():
+            self._plugin_classes[plugin_key] = plugin_clazz
+            log.debug("%s was disabled via it's config: %s" % (plugin_clazz, plugin_clazz.conf))
+            return
+
+        # this is an enabled plugin, so track it's module as well
+        # if we havent already
+        self._track_plugin_class_to_modules(plugin_clazz)
+
+        # if we fail to init any plugin classes, the exceptions are not
+        # caught
         instance = plugin_clazz()
 
         # track it's instance
@@ -506,7 +535,8 @@ class BasePluginManager(object):
             # This shouldn't ever happen
             raise PluginException("Two or more plugins with the name \"%s\" exist " \
                 "in the plugin search path" % plugin_clazz.__name__)
-        # this is a valid plugin, with config, that instantiates, and no dupe
+
+        # this is a valid plugin, with config, that instantiates, and is not a  dupe
         self._plugin_classes[plugin_key] = plugin_clazz
 
         # look for any plugin class methods that match the name
@@ -522,6 +552,12 @@ class BasePluginManager(object):
         # if we don't find any place to use this class, note that on the plugin class
         if class_is_used:
             plugin_clazz.found_slots_for_hooks = True
+
+    def _track_plugin_class_to_modules(self, plugin_clazz):
+        """Keep a map of plugin classes loaded from each plugin module"""
+        if plugin_clazz.__module__ not in self._modules:
+            self._modules[plugin_clazz.__module__] = []
+        self._modules[plugin_clazz.__module__].append(plugin_clazz)
 
     def run(self, slot_name, **kwargs):
         """For slot_name, run the registered hooks with kwargs.
@@ -574,9 +610,26 @@ class BasePluginManager(object):
         # FIXME: need to note if a slot is not found?
         # debug logging maybe
 
-    def get_plugin_conf(self, plugin_key):
-        if plugin_key in self._plugins:
-            return self._plugins.conf
+    def _get_plugin_config(self, plugin_clazz, plugin_to_config_map=None):
+        """Get a PluginConfig for plugin_class, creating it if need be.
+
+        If we have an entry in plugin_to_config_map for plugin_class,
+        return that PluginConfig. Otherwise, we create a PluginConfig()
+
+        Mote that PluginConfig() will expect to find a config file in
+        self.plugin_conf_path, and will fail if that is not the case.
+
+        Args:
+            plugin_clazz: A SubManPlugin subclass
+            plugin_to_config_map: A map of plugin_key to PluginConfig objects
+        Returns:
+            A PluginConfig() object
+        """
+        if plugin_to_config_map:
+            if plugin_clazz.get_plugin_key() in plugin_to_config_map:
+                return plugin_to_config_map[plugin_clazz.get_plugin_key()]
+
+        return PluginConfig(plugin_clazz.get_plugin_key(), self.plugin_conf_path)
 
     def get_plugins(self):
         """list of plugins"""
@@ -693,7 +746,6 @@ def getPluginManager():
         is returned, otherwise a new one is created.
     """
     global plugin_manager
-    log.debug("callling getPluginManager, plugin_manager is: %s" % plugin_manager)
     if plugin_manager:
         return plugin_manager
     # FIXME: should we aggressively catch exceptions here? If we can't
