@@ -121,7 +121,7 @@ from subscription_manager import base_plugin
 # this test class heavily uses mock to simulate the "default" case
 # through PluginManager. The main issue being that PluginConfigs
 # init'ed based on the PluginClass passed in, and by defaults, looks
-# for a real config file somewhere. 
+# for a real config file somewhere.
 class TestBasePluginManager(unittest.TestCase):
 
     def setUp(self):
@@ -591,6 +591,7 @@ class TestPluginManagerReporting(unittest.TestCase):
         self.assertEquals(10, len(self.manager.get_plugins()))
         self.assertEquals(10, len(self.manager.get_slots()))
 
+
 #functional
 class TestPluginManagerRun(unittest.TestCase):
     def setUp(self):
@@ -674,6 +675,7 @@ class TestBaseConduit(unittest.TestCase):
     def test_string_no_section(self):
         val = self.conduit.confString('this_section_is_not_real', 'enabled')
         self.assertTrue(val is None)
+
 
 class TestVersionChecks(unittest.TestCase):
     def test_parse_version(self):
