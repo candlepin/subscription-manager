@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.8.3
+Version: 1.8.5
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,12 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Tue Feb 19 2013 Alex Wood <awood@redhat.com> 1.8.5-1
+- 908671: Adding pool id to entitlement certificate. (awood@redhat.com)
+
+* Tue Feb 19 2013 Alex Wood <awood@redhat.com>
+- 908671: Adding pool id to entitlement certificate. (awood@redhat.com)
+
 * Thu Feb 14 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.3-1
 - 907536: Don't send body if it's just "" (alikins@redhat.com)
 - 882459: Change --heal-interval to --attach-interval in rhsmcertd
