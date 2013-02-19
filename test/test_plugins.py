@@ -544,19 +544,16 @@ class TestPluginManagerConfigMap(unittest.TestCase):
                           plugin_to_config_map=broken_map)
 
 
-class NotTestPluginManagerReporting(unittest.TestCase):
+class TestPluginManagerReporting(unittest.TestCase):
     class ConduitPluginManager(BasePluginManager):
         _conduit_list = []
 
         def _get_conduits(self):
             return self._conduit_list
 
-    def _plugin_class_factory(self, cls_name):
-        return type(cls_name, (base_plugin.SubManPlugin,), {})
-
     def setUp(self):
         #plugin_class_names = ['Plugin1', 'Plugin2', 'Plugin3']
-        plugin_class_names = [str(x) for x in xrange(1, 10)]
+        plugin_class_names = [str(x) for x in xrange(0, 10)]
         self.plugin_classes = []
 
         def test_hook(self):
@@ -581,7 +578,6 @@ class NotTestPluginManagerReporting(unittest.TestCase):
         self.manager = self.ConduitPluginManager()
 
     def test_factory(self):
-        plugin_objs = []
         plugin_to_config_map = {}
         for plugin_class in self.plugin_classes:
             plugin_config = PluginConfigForTest(plugin_class.get_plugin_key(),
@@ -592,11 +588,8 @@ class NotTestPluginManagerReporting(unittest.TestCase):
             self.manager.add_plugin_class(plugin_class,
                                           plugin_to_config_map=plugin_to_config_map)
 
-        print self.manager.get_plugins()
-        print self.manager.get_slots()
-        print self.manager._slot_to_conduit
-        print self.manager._slot_to_funcs
-
+        self.assertEquals(10, len(self.manager.get_plugins()))
+        self.assertEquals(10, len(self.manager.get_slots()))
 
 #functional
 class TestPluginManagerRun(unittest.TestCase):
@@ -643,12 +636,22 @@ class TestBaseConduit(unittest.TestCase):
         self.conf.readfp(conf_string)
         self.conduit = BaseConduit(BaseConduit, self.conf)
 
-    def test_default_boolean(self):
+    def test_default_boolean_false(self):
         val = self.conduit.confBool("main", "enabled", False)
         self.assertEquals(False, val)
 
+    def test_default_boolean_true(self):
+        val = self.conduit.confBool("main", "enabled", True)
+        self.assertEquals(True, val)
+
     def test_bad_default_boolean(self):
         self.assertRaises(ValueError, self.conduit.confBool, "main", "enabled", "not a bool")
+
+    def test_boolean_no_section(self):
+        self.assertRaises(ValueError,
+                          self.conduit.confBool,
+                          'this_section_is_not_real',
+                           'enabled')
 
     def test_default_int(self):
         val = self.conduit.confInt("main", "enabled", 1)
@@ -668,6 +671,9 @@ class TestBaseConduit(unittest.TestCase):
         val = self.conduit.confString("main", "enabled", "a string")
         self.assertEquals("a string", val)
 
+    def test_string_no_section(self):
+        val = self.conduit.confString('this_section_is_not_real', 'enabled')
+        self.assertTrue(val is None)
 
 class TestVersionChecks(unittest.TestCase):
     def test_parse_version(self):
