@@ -22,6 +22,9 @@ class SubManPlugin(object):
     """
     name = None
     conf = None
+    # if all_slots is set, the plugin will get registered to all slots
+    # it is up to the plugin to handle providing callables
+    all_slots = None
 
     # did we have hooks that match provided slots? aka
     # is this plugin going to be used
