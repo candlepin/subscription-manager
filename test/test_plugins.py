@@ -21,13 +21,14 @@ import unittest
 
 from iniparse import SafeConfigParser
 from StringIO import StringIO
-from subscription_manager.plugins import api_version_ok, parse_version, \
-        PluginManager, PluginModuleImportApiVersionException, \
-        PluginConfigException, BaseConduit, SlotNameException, PluginConfig, \
-        BasePluginManager, FactsConduit, ProductConduit, \
-        PluginModuleImportApiVersionMissingException, RegistrationConduit, \
-        SubscriptionConduit, FactsConduit, PostSubscriptionConduit
+#from subscription_manager.plugins import api_version_ok, parse_version, \
+#        PluginManager, PluginModuleImportApiVersionException, \
+#        PluginConfigException, BaseConduit, SlotNameException, PluginConfig, \
+ #       BasePluginManager, FactsConduit, ProductConduit, \
+ #       PluginModuleImportApiVersionMissingException, RegistrationConduit, \
+ #       SubscriptionConduit, FactsConduit, PostSubscriptionConduit
 
+from subscription_manager import plugins
 from subscription_manager import base_plugin
 
 
@@ -125,8 +126,8 @@ from subscription_manager import base_plugin
 class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
 
     def setUp(self):
-        self.base_manager = BasePluginManager()
-        self.assertTrue(isinstance(self.base_manager, BasePluginManager))
+        self.base_manager = plugins.BasePluginManager()
+        self.assertTrue(isinstance(self.base_manager, plugins.BasePluginManager))
 
     def test_empty_mock_module(self):
         mock_module = mock.Mock()
@@ -172,7 +173,9 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
 
         # there is no config for this plugin, so it should raise a
         # PluginConfigException
-        self.assertRaises(PluginConfigException, self.base_manager.add_plugins_from_module, mock_module)
+        self.assertRaises(plugins.PluginConfigException,
+                          self.base_manager.add_plugins_from_module,
+                          mock_module)
 
         # we try to load a plugin class for this module, so it should
         # be in the list of tracked modules
@@ -196,7 +199,9 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         # this config is empty, so we will fail to read its config
 #        plugin_conf = PluginConfig(PluginClass.get_plugin_key())
 
-        self.assertRaises(PluginConfigException, self.base_manager.add_plugins_from_module, mock_module)
+        self.assertRaises(plugins.PluginConfigException,
+                          self.base_manager.add_plugins_from_module,
+                           mock_module)
 
         # we try to load a plugin class for this module, so it should
         # be in the list of tracked modules
@@ -327,7 +332,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
 
     @mock.patch('subscription_manager.plugins.PluginConfig')
     def test_plugin_hooks_with_conduits(self, mock_plugin_conf):
-        self.base_manager.conduits = [FactsConduit]
+        self.base_manager.conduits = [plugins.FactsConduit]
         # to refill these
         self.base_manager._populate_slots()
 
@@ -366,7 +371,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         # we provide conduits with slots, so we should have known slots now
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_funcs)
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_conduit)
-        self.assertEquals(FactsConduit,
+        self.assertEquals(plugins.FactsConduit,
                           self.base_manager._slot_to_conduit['post_facts_collection'])
 
         # we should be in _plugins, since this plugin was enabled
@@ -384,7 +389,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
 
     @mock.patch('subscription_manager.plugins.PluginConfig')
     def test_with_conduits_no_matching_hooks(self, mock_plugin_conf):
-        self.base_manager.conduits = [FactsConduit]
+        self.base_manager.conduits = [plugins.FactsConduit]
         # to refill these
         self.base_manager._populate_slots()
 
@@ -420,7 +425,57 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         # we provide conduits with slots, so we should have known slots now
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_funcs)
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_conduit)
-        self.assertEquals(FactsConduit,
+        self.assertEquals(plugins.FactsConduit,
+                          self.base_manager._slot_to_conduit['post_facts_collection'])
+
+        # we should be in _plugins, since this plugin was enabled
+        self.assertTrue(PluginClass.get_plugin_key() in self.base_manager._plugins)
+
+        # and we account the plugin class
+        self.assertTrue(PluginClass.get_plugin_key() in self.base_manager._plugin_classes)
+
+        # we found no hooks that map to slots
+        self.assertFalse(PluginClass.found_slots_for_hooks)
+
+        funcs = self.base_manager._slot_to_funcs['post_facts_collection']
+        # we dont find a hook mapped to this slot
+        self.assertFalse('post_facts_collection_hook' in [x.__name__ for x in funcs])
+
+    @mock.patch('subscription_manager.plugins.PluginConfig')
+    def test_with_conduits_non_callable_hooks(self, mock_plugin_conf):
+        self.base_manager.conduits = [plugins.FactsConduit]
+        # to refill these
+        self.base_manager._populate_slots()
+
+        mock_module = mock.Mock()
+        mock_module.__name__ = 'mock_module'
+
+        mock_conf_instance = mock_plugin_conf.return_value
+        mock_conf_instance.is_plugin_enabled.return_value = True
+
+        # we check that the plugin's thinks it is from the same
+        # module as the module we pass
+        class PluginClass(base_plugin.SubManPlugin):
+            __module__ = "mock_module"
+
+            # attr with a hook name, that is not callable
+            post_facts_collection_hook = True
+
+        # we validate the plugins_conf plugin key matches...
+        mock_conf_instance.plugin_key = PluginClass.get_plugin_key()
+        mock_module.PluginClass = PluginClass
+
+        # should be able to load this guy
+        self.base_manager.add_plugins_from_module(mock_module)
+
+        # we try to load a plugin class for this module, so it should
+        # be in the list of tracked modules
+        self.assertTrue(mock_module in self.base_manager._modules)
+
+        # we provide conduits with slots, so we should have known slots now
+        self.assertTrue('post_facts_collection' in self.base_manager._slot_to_funcs)
+        self.assertTrue('post_facts_collection' in self.base_manager._slot_to_conduit)
+        self.assertEquals(plugins.FactsConduit,
                           self.base_manager._slot_to_conduit['post_facts_collection'])
 
         # we should be in _plugins, since this plugin was enabled
@@ -442,15 +497,19 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
 class TestPluginManager(unittest.TestCase):
     def setUp(self):
         self.module_dir = os.path.join(os.path.dirname(__file__), "plugins")
-        self.manager = PluginManager(self.module_dir, self.module_dir)
+        self.manager = plugins.PluginManager(self.module_dir, self.module_dir)
 
     def test_load_plugin_with_no_api_version(self):
         module = os.path.join(self.module_dir, "no_api_version.py")
-        self.assertRaises(PluginModuleImportApiVersionMissingException, self.manager._load_plugin_module_file, module)
+        self.assertRaises(plugins.PluginModuleImportApiVersionMissingException,
+                          self.manager._load_plugin_module_file,
+                           module)
 
     def test_load_plugin_with_old_api_version(self):
         module = os.path.join(self.module_dir, "old_api_version.py")
-        self.assertRaises(PluginModuleImportApiVersionException, self.manager._load_plugin_module_file, module)
+        self.assertRaises(plugins.PluginModuleImportApiVersionException,
+                          self.manager._load_plugin_module_file,
+                        module)
 
     def test_load_plugin(self):
         module = os.path.join(self.module_dir, "dummy_plugin.py")
@@ -458,21 +517,27 @@ class TestPluginManager(unittest.TestCase):
         self.assertEquals("dummy_plugin", plugin_module.__name__)
 
     def test_no_config_plugin(self):
-        self.assertRaises(PluginConfigException, PluginConfig, "config_plugin.BadConfigPlugin", self.module_dir)
+        self.assertRaises(plugins.PluginConfigException,
+                          plugins.PluginConfig,
+                          "config_plugin.BadConfigPlugin",
+                           self.module_dir)
 
     def test_bad_config_plugin(self):
-        self.assertRaises(PluginConfigException, PluginConfig, "config_plugin.BadConfigPlugin", self.module_dir)
+        self.assertRaises(plugins.PluginConfigException,
+                          plugins.PluginConfig,
+                          "config_plugin.BadConfigPlugin",
+                          self.module_dir)
 
     def test_good_config_plugin(self):
-        parser = PluginConfig("config_plugin.GoodConfigPlugin", self.module_dir)
+        parser = plugins.PluginConfig("config_plugin.GoodConfigPlugin",
+                                      self.module_dir)
         self.assertTrue(parser)
 
 
 class TestPluginManagerLoadPluginsFromModule(unittest.TestCase):
     def setUp(self):
         self.module_dir = os.path.join(os.path.dirname(__file__), "plugins")
-        self.manager = PluginManager("some/search/path", "some/config/path")
-#        self.manager = PluginManager(self.module_dir, self.module_dir)
+        self.manager = plugins.PluginManager("some/search/path", "some/config/path")
         self.manager.plugin_conf_path = self.module_dir
         self.manager.search_path = self.module_dir
 
@@ -496,7 +561,9 @@ class TestPluginManagerLoadPluginsFromModule(unittest.TestCase):
     def test_load_plugin_from_module_bad_config(self):
         module_file = os.path.join(self.module_dir, "config_plugin.py")
         module = self.manager._load_plugin_module_file(module_file)
-        self.assertRaises(PluginConfigException, self.manager.add_plugins_from_module, module)
+        self.assertRaises(plugins.PluginConfigException,
+                          self.manager.add_plugins_from_module,
+                          module)
 
     def test_disabled_plugin(self):
         module_file = os.path.join(self.module_dir, "disabled_plugin.py")
@@ -510,11 +577,13 @@ class TestPluginManagerLoadPluginsFromModule(unittest.TestCase):
         self.manager.plugin_conf_path = self.module_dir
         module = self.manager._load_plugin_module_file(module_file)
         self.manager.add_plugins_from_module(module)
-        self.assertRaises(SlotNameException, self.manager.run, 'this_is_a_slot_that_doesnt_exist')
+        self.assertRaises(plugins.SlotNameException,
+                          self.manager.run,
+                        'this_is_a_slot_that_doesnt_exist')
 
 
 # sub class for testing just for easier init
-class PluginConfigForTest(PluginConfig):
+class PluginConfigForTest(plugins.PluginConfig):
     def __init__(self, plugin_key, enabled):
         super(PluginConfigForTest, self).__init__(plugin_key)
         self.parser.add_section("main")
@@ -526,20 +595,16 @@ class TestPluginManagerConfigMap(unittest.TestCase):
         __module__ = "some_module"
 
     def setUp(self):
-        self.manager = BasePluginManager()
+        self.manager = plugins.BasePluginManager()
         self.plugin_config = PluginConfigForTest(self.PluginClass.get_plugin_key(),
                                            enabled='1')
         self.plugin_to_config_map = {self.PluginClass.get_plugin_key(): self.plugin_config}
-
-    def test_plugin(self):
-        self.manager.add_plugin_class(self.PluginClass,
-                                      plugin_to_config_map=self.plugin_to_config_map)
 
     def test_plugin_no_config_in_map(self):
         # we look in the map, but can't find anything, so we
         # get a PluginConfigException
         broken_map = {'you_wont_find_this': self.plugin_config}
-        self.assertRaises(PluginConfigException,
+        self.assertRaises(plugins.PluginConfigException,
                           self.manager.add_plugin_class,
                           self.PluginClass,
                           plugin_to_config_map=broken_map)
@@ -560,8 +625,21 @@ class TestPluginManagerConfigMapAllHooks(TestPluginManagerConfigMap):
             pass
 
 
+class TestPluginManagerConfigMapNotCallable(TestPluginManagerConfigMap):
+    # example of how a all_hooks class might work
+    class PluginClass(base_plugin.SubManPlugin):
+        __module__ = "some_module"
+
+        # non callable hook
+        some_non_callable_hook = True
+
+    def test_plugin(self):
+        self.manager.add_plugin_class(self.PluginClass,
+                                      plugin_to_config_map=self.plugin_to_config_map)
+
+
 class TestPluginManagerReporting(unittest.TestCase):
-    class ConduitPluginManager(BasePluginManager):
+    class ConduitPluginManager(plugins.BasePluginManager):
         _conduit_list = []
 
         def _get_conduits(self):
@@ -582,7 +660,7 @@ class TestPluginManagerReporting(unittest.TestCase):
                                 (base_plugin.SubManPlugin,),
                                  {'test_%s_hook' % plugin_class_name: test_hook})
             conduit_class = type('Conduit%s' % plugin_class_name,
-                                 (BaseConduit,),
+                                 (plugins.BaseConduit,),
                                  {'slots': ['test_%s' % plugin_class_name]})
             plugin_classes.append(plugin_class)
             conduit_classes.append(conduit_class)
@@ -612,8 +690,8 @@ class TestPluginManagerReporting(unittest.TestCase):
 class TestPluginManagerRun(unittest.TestCase):
     def setUp(self):
         self.module_dir = os.path.join(os.path.dirname(__file__), "plugins")
-        self.manager = PluginManager("some/search/path", "some/config/path")
-        self.manager.conduits = [ProductConduit]
+        self.manager = plugins.PluginManager("some/search/path", "some/config/path")
+        self.manager.conduits = [plugins.ProductConduit]
         self.manager._populate_slots()
         self.manager.plugin_conf_path = self.module_dir
         self.manager.search_path = self.module_dir
@@ -651,7 +729,8 @@ class TestBaseConduit(unittest.TestCase):
         conf_string = StringIO("")
         self.conf = SafeConfigParser()
         self.conf.readfp(conf_string)
-        self.conduit = BaseConduit(BaseConduit, self.conf)
+        self.conduit = plugins.BaseConduit(plugins.BaseConduit,
+                                           self.conf)
 
     def test_default_boolean_false(self):
         val = self.conduit.confBool("main", "enabled", False)
@@ -662,27 +741,32 @@ class TestBaseConduit(unittest.TestCase):
         self.assertEquals(True, val)
 
     def test_bad_default_boolean(self):
-        self.assertRaises(ValueError, self.conduit.confBool, "main", "enabled", "not a bool")
+        self.assertRaises(ValueError,
+                          self.conduit.confBool,
+                           "main", "enabled", "not a bool")
 
     def test_boolean_no_section(self):
         self.assertRaises(ValueError,
                           self.conduit.confBool,
-                          'this_section_is_not_real',
-                           'enabled')
+                          'this_section_is_not_real', 'enabled')
 
     def test_default_int(self):
         val = self.conduit.confInt("main", "enabled", 1)
         self.assertEquals(1, val)
 
     def test_bad_default_int(self):
-        self.assertRaises(ValueError, self.conduit.confInt, "main", "enabled", "not an int")
+        self.assertRaises(ValueError,
+                          self.conduit.confInt,
+                          "main", "enabled", "not an int")
 
     def test_default_float(self):
         val = self.conduit.confFloat("main", "enabled", 1.0)
         self.assertEquals(1.0, val)
 
     def test_bad_default_float(self):
-        self.assertRaises(ValueError, self.conduit.confFloat, "main", "enabled", "not a float")
+        self.assertRaises(ValueError,
+                          self.conduit.confFloat,
+                          "main", "enabled", "not a float")
 
     def test_default_string(self):
         val = self.conduit.confString("main", "enabled", "a string")
@@ -695,21 +779,21 @@ class TestBaseConduit(unittest.TestCase):
 
 class TestVersionChecks(unittest.TestCase):
     def test_parse_version(self):
-        maj, min = parse_version("1.0")
+        maj, min = plugins.parse_version("1.0")
         self.assertEquals(1, maj)
         self.assertEquals(0, min)
 
     def test_api_versions_equal(self):
-        self.assertTrue(api_version_ok("1.0", "1.0"))
+        self.assertTrue(plugins.api_version_ok("1.0", "1.0"))
 
     def test_api_version_old_minor(self):
-        self.assertTrue(api_version_ok("1.1", "1.0"))
+        self.assertTrue(plugins.api_version_ok("1.1", "1.0"))
 
     def test_api_version_old_major(self):
-        self.assertFalse(api_version_ok("1.0", "0.9"))
+        self.assertFalse(plugins.api_version_ok("1.0", "0.9"))
 
     def test_api_version_new(self):
-        self.assertFalse(api_version_ok("1.0", "1.1"))
+        self.assertFalse(plugins.api_version_ok("1.0", "1.1"))
 
 
 class StubPluginClass(base_plugin.SubManPlugin):
@@ -718,52 +802,137 @@ class StubPluginClass(base_plugin.SubManPlugin):
 
 class TestProductConduit(unittest.TestCase):
     def test_product_conduit(self):
-        conduit = ProductConduit(StubPluginClass, product_list=[])
+        conduit = plugins.ProductConduit(StubPluginClass, product_list=[])
         self.assertEquals([], conduit.product_list)
 
 
 class TestFactsConduit(unittest.TestCase):
     def test_facts_conduit(self):
-        conduit = FactsConduit(StubPluginClass, facts={})
+        conduit = plugins.FactsConduit(StubPluginClass, facts={})
         self.assertEquals({}, conduit.facts)
 
 
 class TestRegistrationConduit(unittest.TestCase):
     def test_registration_conduit(self):
-        conduit = RegistrationConduit(StubPluginClass,
-                                      name="name",
-                                      facts={})
+        conduit = plugins.RegistrationConduit(StubPluginClass,
+                                              name="name",
+                                              facts={})
         self.assertEquals("name", conduit.name)
         self.assertEquals({}, conduit.facts)
 
 
 class TestSubscriptionConduit(unittest.TestCase):
     def test_subscription_conduit(self):
-        conduit = SubscriptionConduit(StubPluginClass,
-                                      consumer_uuid="123456789")
+        conduit = plugins.SubscriptionConduit(StubPluginClass,
+                                              consumer_uuid="123456789")
         self.assertEquals("123456789", conduit.consumer_uuid)
 
 
 class TestPostSubscriptionConduit(unittest.TestCase):
     def test_post_subscription_conduit(self):
-        conduit = PostSubscriptionConduit(StubPluginClass,
-                                          consumer_uuid="123456789",
-                                          entitlement_data={})
+        conduit = plugins.PostSubscriptionConduit(StubPluginClass,
+                                                  consumer_uuid="123456789",
+                                                  entitlement_data={})
         self.assertEquals("123456789", conduit.consumer_uuid)
         self.assertEquals({}, conduit.entitlement_data)
 
 
-#class TestFactsPlugin(unittest.TestCase):
-#    def setUp(self):
-#        self.module_dir = os.path.join(os.path.dirname(__file__), "plugins")
-#        self.manager = PluginManager("some/search/path", "some/config/path")
-#        self.manager.plugin_conf_path = self.module_dir
-#        self.manager.search_path = self.module_dir
-#        # reload plugins
-#        self.manager._import_plugins()
-#
-#    @mock.patch.object(FactsConduit, 'getFacts')
-#    def test_post_fact_collection(self, mock_facts_gf):
-#        mock_facts_gf.return_value = {}
-#        self.manager.run('post_facts_collection', facts={})
-#        mock_facts_gf.assert_called_once_with()
+class BasePluginException(unittest.TestCase):
+    """At least create and raise all the exceptions"""
+    e = plugins.PluginException
+
+    def raise_exception(self):
+        raise self.e
+
+    def test_exception(self):
+        self.assertRaises(self.e,
+                          self.raise_exception)
+
+
+class TestPluginException(BasePluginException):
+    def test_PluginException_add_message(self):
+        # the base PluginException is expect to just ignore any args
+        # so just tested we dont raise anything in this case
+        pe = self.e("hello exception")
+
+
+class TestPluginImportException(BasePluginException):
+    e = plugins.PluginImportException
+
+    def raise_exception(self):
+        raise self.e("module_file", "module_name", "import failed")
+
+    def test(self):
+        try:
+            self.raise_exception()
+        except self.e, exp:
+            self.assertEquals("module_file", exp.module_file)
+            self.assertEquals("module_name", exp.module_name)
+
+    def test_str(self):
+        try:
+            self.raise_exception()
+        except self.e, exp:
+            buf = str(exp)
+            lines = buf.splitlines()
+            # last line is Message:...
+            self.assertEquals("Message: import failed", lines[-1])
+
+
+class TestPluginModuleImportException(TestPluginImportException):
+    e = plugins.PluginModuleImportException
+    pass
+
+
+class TestPluginModuleImportApiVersionMissingException(TestPluginImportException):
+    e = plugins.PluginModuleImportApiVersionMissingException
+
+
+class TestPluginModuleImportApiVersionException(TestPluginImportException):
+    e = plugins.PluginModuleImportApiVersionException
+
+    def raise_exception(self):
+        raise self.e("module_file",
+                     "module_name",
+                     "module_ver",
+                     "api_ver",
+                     "import failed")
+
+
+class TestPluginConfigException(BasePluginException):
+    e = plugins.PluginConfigException
+
+    def raise_exception(self):
+        raise self.e("plugin_name",
+                     "msg")
+
+    def test_str(self):
+        try:
+            self.raise_exception()
+        except self.e, exp:
+            buf = str(exp)
+            lines = buf.splitlines()
+            # last line is Message:...
+            self.assertEquals("Message: msg", lines[-1])
+
+
+class TestSlotNameException(BasePluginException):
+    e = plugins.SlotNameException
+
+    def raise_exception(self):
+        raise self.e("slot_name")
+
+    def test(self):
+        try:
+            self.raise_exception()
+        except self.e, exp:
+            self.assertEquals("slot_name", exp.slot_name)
+            self.assertTrue("slot_name" in str(exp))
+
+
+class TestGetPluginManager(unittest.TestCase):
+    def test(self):
+        pm = plugins.getPluginManager()
+        pm2 = plugins.getPluginManager()
+        self.assertEquals(pm, pm2)
+        self.assertTrue(pm is pm2)
