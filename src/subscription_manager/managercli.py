@@ -1762,9 +1762,10 @@ class PluginsCommand(CliCommand):
                 print slot
 
         if self.options.listhooks:
-            for slot in self.plugin_manager._slot_to_funcs:
+            # get_slots is nicely sorted for presentation
+            for slot in self.plugin_manager.get_slots():
                 print slot
-                for hook in self.plugin_manager._slot_to_funcs[slot]:
+                for hook in sorted(self.plugin_manager._slot_to_funcs[slot]):
                     print "\t%s.%s" % (hook.im_class.get_plugin_key(), hook.__name__)
 
 

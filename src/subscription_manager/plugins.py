@@ -637,8 +637,25 @@ class BasePluginManager(object):
         return self._plugin_classes
 
     def get_slots(self):
-        """list of slots"""
-        return sorted(self._slot_to_conduit.keys())
+        """list of slots
+
+        Ordered by conduit name, for presentation.
+        """
+        # I'm sure a clever list comprension could replace this with one line
+        # why? default sort of slots is pure lexical, so all the pre's come
+        # first, which is weird. So this just sorts the slots by conduit name,
+        # then by slot name
+        conduit_to_slots = {}
+        for slot, conduit in self._slot_to_conduit.items():
+            # sigh, no defaultdict on 2.4
+            if conduit not in conduit_to_slots:
+                conduit_to_slots[conduit] = []
+            conduit_to_slots[conduit].append(slot)
+        sorted_slots = []
+        for conduit in sorted(conduit_to_slots.keys()):
+            for slot in sorted(conduit_to_slots[conduit]):
+                sorted_slots.append(slot)
+        return sorted_slots
 
 
 class PluginManager(BasePluginManager):
