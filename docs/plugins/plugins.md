@@ -110,4 +110,5 @@ determining whether or not to load a plugin.
 
 ## Examples
 The best way to learn more about plugins is by looking at some examples.
-Subscription manager has several plugins available at _TBD_
+Subscription manager has several plugins available in the
+example-plugins/ directory._
