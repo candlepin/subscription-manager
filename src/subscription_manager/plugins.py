@@ -13,6 +13,8 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import gettext
+_ = gettext.gettext
 
 import glob
 import imp
@@ -22,16 +24,13 @@ import os
 from iniparse import SafeConfigParser
 from iniparse.compat import NoSectionError, NoOptionError
 
-from subscription_manager.base_plugin import SubManPlugin
-
 import logging
 log = logging.getLogger('rhsm-app.' + __name__)
 
 from rhsm.config import initConfig
 cfg = initConfig()
 
-import gettext
-_ = gettext.gettext
+from subscription_manager.base_plugin import SubManPlugin
 
 # The API_VERSION constant defines the current plugin API version. It is used
 # to decided whether or not plugins can be loaded. It is compared against the
@@ -217,20 +216,6 @@ class BaseConduit(object):
             return val
 
 
-class ProductConduit(BaseConduit):
-    """Conduit for uses with plugins that handle product id functions."""
-    slots = ['pre_product_id_install', 'post_product_id_install']
-
-    def __init__(self, clazz, product_list):
-        """init for ProductConduit
-
-        Args:
-            product_list: A list of ProductCertificate objects
-        """
-        super(ProductConduit, self).__init__(clazz)
-        self.product_list = product_list
-
-
 class RegistrationConduit(BaseConduit):
     """Conduit for uses with registration."""
     slots = ['pre_register_consumer', 'post_register_consumer']
@@ -245,6 +230,20 @@ class RegistrationConduit(BaseConduit):
         super(RegistrationConduit, self).__init__(clazz)
         self.name = name
         self.facts = facts
+
+
+class ProductConduit(BaseConduit):
+    """Conduit for uses with plugins that handle product id functions."""
+    slots = ['pre_product_id_install', 'post_product_id_install']
+
+    def __init__(self, clazz, product_list):
+        """init for ProductConduit
+
+        Args:
+            product_list: A list of ProductCertificate objects
+        """
+        super(ProductConduit, self).__init__(clazz)
+        self.product_list = product_list
 
 
 class FactsConduit(BaseConduit):
