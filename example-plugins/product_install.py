@@ -27,9 +27,17 @@ class ProductInstallPlugin(SubManPlugin):
         Args:
             conduit: A ProductConduit()
         """
-        conduit.log.info("post product id called")
+        conduit.log.info("post product id install called")
 
         # we need to know what product/product cert
         products = conduit.product_list
         for product in products:
             print "product ", product
+
+    def pre_product_id_install_hook(self, conduit):
+        """pre_product_id_install hook
+
+        Args:
+            conduit: A ProductConduit()
+        """
+        conduit.log.info("pre product id install called")
