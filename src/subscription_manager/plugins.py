@@ -610,7 +610,8 @@ class BasePluginManager(object):
             # continue onto other hooks. A conduit could fail for
             # something specific to func.im_class, but unlikely
             except Exception, e:
-                raise e
+                log.exception(e)
+                raise
 
             # If we wanted to allow a plugin or conduit to provide
             # exception handlers, this is probably where we would go.
@@ -619,7 +620,7 @@ class BasePluginManager(object):
                 func(conduit_instance)
             except Exception, e:
                 log.exception(e)
-                raise e
+                raise
         # FIXME: need to note if a slot is not found?
         # debug logging maybe
 
