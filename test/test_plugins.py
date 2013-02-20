@@ -850,10 +850,10 @@ class BasePluginException(unittest.TestCase):
 
 
 class TestPluginException(BasePluginException):
-    def test_PluginException_add_message(self):
-        # the base PluginException is expect to just ignore any args
+    def test_add_message(self):
+        # the base PluginException is expected to just ignore any args
         # so just tested we dont raise anything in this case
-        pe = self.e("hello exception")
+        self.e("hello exception")
 
 
 class TestPluginImportException(BasePluginException):
