@@ -545,7 +545,8 @@ class OrgCommand(UserPassCommand):
         self._org = None
         if not hasattr(self, "_org_help_text"):
             self._org_help_text = _("specify organization")
-        self.parser.add_option("--org", dest="org", help=self._org_help_text)
+        self.parser.add_option("--org", dest="org", metavar="ORG_KEY",
+            help=self._org_help_text)
 
     @staticmethod
     def _get_org(org):
@@ -722,7 +723,8 @@ class EnvironmentsCommand(OrgCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
         shortdesc = _("Display the environments available for a user")
-        self._org_help_text = _("specify organization for environment list")
+        self._org_help_text = \
+            _("specify organization for environment list, using organization key")
 
         super(EnvironmentsCommand, self).__init__("environments", shortdesc,
                                                   False, ent_dir, prod_dir)
@@ -931,8 +933,8 @@ class RegisterCommand(UserPassCommand):
                                help=_("name of the system to register, defaults to the hostname"))
         self.parser.add_option("--consumerid", dest="consumerid", metavar="SYSTEMID",
                                help=_("the existing system data is pulled from the server"))
-        self.parser.add_option("--org", dest="org",
-                               help=_("register with one of multiple organizations for the user"))
+        self.parser.add_option("--org", dest="org", metavar="ORG_KEY",
+                               help=_("register to one of multiple organizations for the user, using organization key"))
         self.parser.add_option("--environment", dest="environment",
                                help=_("register with a specific environment in the destination org"))
         self.parser.add_option("--release", dest="release",

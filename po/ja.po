@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-23 12:15-0500\n"
+"POT-Creation-Date: 2013-02-14 10:04-0500\n"
 "PO-Revision-Date: 2013-01-23 12:49-0500\n"
 "Last-Translator: khasida <khasida@fedoraproject.org>\n"
 "Language-Team: Japanese\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Zanata 2.0.2\n"
+"X-Generator: Zanata 2.0.3\n"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
@@ -37,7 +37,7 @@ msgstr "<b>登録解除中にエラーが発生しました。</b>"
 # document keys
 #: ../src/subscription_manager/gui/managergui.py:385
 #: ../src/subscription_manager/gui/registergui.py:73
-#: ../src/subscription_manager/managercli.py:119
+#: ../src/subscription_manager/managercli.py:144
 msgid "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr "詳細は /var/log/rhsm/rhsm.log をご覧下さい。"
 
@@ -65,7 +65,7 @@ msgstr "サブスクリプション"
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
 #: ../src/subscription_manager/gui/allsubs.py:81
-#: ../src/subscription_manager/managercli.py:1977
+#: ../src/subscription_manager/managercli.py:1994
 msgid "Available Subscriptions"
 msgstr "利用可能なサブスクリプション"
 
@@ -76,7 +76,7 @@ msgstr "利用可能なサブスクリプション"
 #: ../src/subscription_manager/gui/contract_selection.py:114
 #: ../src/subscription_manager/gui/mysubstab.py:100
 #: ../src/subscription_manager/gui/registergui.py:380
-#: ../src/rct/printing.py:56
+#: ../src/rct/printing.py:56 ../src/rct/manifest_commands.py:129
 msgid "Quantity"
 msgstr "数量"
 
@@ -259,7 +259,7 @@ msgstr "状態"
 # document keys, author khasida
 #: ../src/subscription_manager/gui/installedtab.py:92
 #: ../src/subscription_manager/gui/contract_selection.py:103
-#: ../src/rct/printing.py:100
+#: ../src/rct/printing.py:100 ../src/rct/manifest_commands.py:131
 msgid "Start Date"
 msgstr "開始日"
 
@@ -268,6 +268,7 @@ msgstr "開始日"
 #: ../src/subscription_manager/gui/installedtab.py:95
 #: ../src/subscription_manager/gui/contract_selection.py:109
 #: ../src/subscription_manager/gui/mysubstab.py:93 ../src/rct/printing.py:101
+#: ../src/rct/manifest_commands.py:132
 msgid "End Date"
 msgstr "終了期日"
 
@@ -417,7 +418,7 @@ msgstr "プロキシへの接続に失敗しました"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
 #: ../src/subscription_manager/gui/contract_selection.py:84
-#: ../src/rct/printing.py:52
+#: ../src/rct/printing.py:52 ../src/rct/manifest_commands.py:137
 msgid "Contract"
 msgstr "コントラクト"
 
@@ -496,8 +497,8 @@ msgstr "インストール済み"
 # document keys
 #: ../src/subscription_manager/gui/widgets.py:314
 #: ../src/subscription_manager/gui/factsgui.py:128
-#: ../src/subscription_manager/managercli.py:632
-#: ../src/subscription_manager/managercli.py:1925
+#: ../src/subscription_manager/managercli.py:658
+#: ../src/subscription_manager/managercli.py:2193
 msgid "None"
 msgstr "なし"
 
@@ -523,7 +524,7 @@ msgstr "今日"
 # document keys
 #: ../src/subscription_manager/gui/widgets.py:627
 #: ../src/subscription_manager/gui/mysubstab.py:259
-#: ../src/subscription_manager/managercli.py:1986
+#: ../src/subscription_manager/managercli.py:2000
 msgid "Physical"
 msgstr "物理"
 
@@ -531,7 +532,7 @@ msgstr "物理"
 # document keys
 #: ../src/subscription_manager/gui/widgets.py:628
 #: ../src/subscription_manager/gui/mysubstab.py:257
-#: ../src/subscription_manager/managercli.py:1984
+#: ../src/subscription_manager/managercli.py:1998
 msgid "Virtual"
 msgstr "仮想"
 
@@ -545,6 +546,7 @@ msgstr "両方"
 # document keys, author nnakakit
 #. content-type is required, no need to xstr
 #: ../src/subscription_manager/gui/widgets.py:632 ../src/rct/printing.py:76
+#: ../src/rct/manifest_commands.py:109
 msgid "Type"
 msgstr "タイプ"
 
@@ -641,11 +643,11 @@ msgstr "以前の更新はありません"
 #. which it will return).
 #: ../src/subscription_manager/gui/factsgui.py:105
 #: ../src/subscription_manager/gui/factsgui.py:109
-#: ../src/subscription_manager/managercli.py:257
-#: ../src/subscription_manager/managercli.py:258
-#: ../src/subscription_manager/managercli.py:261
-#: ../src/subscription_manager/managercli.py:262
-#: ../src/subscription_manager/managercli.py:1607
+#: ../src/subscription_manager/managercli.py:282
+#: ../src/subscription_manager/managercli.py:283
+#: ../src/subscription_manager/managercli.py:286
+#: ../src/subscription_manager/managercli.py:287
+#: ../src/subscription_manager/managercli.py:1633
 #: ../src/subscription_manager/utils.py:333
 #: ../src/subscription_manager/utils.py:334
 #: ../src/subscription_manager/utils.py:349
@@ -760,7 +762,7 @@ msgid "Unable to verify server's identity: %s"
 msgstr "サーバーの識別子を確認できません: %s"
 
 #: ../src/subscription_manager/gui/utils.py:78
-#: ../src/subscription_manager/managercli.py:140
+#: ../src/subscription_manager/managercli.py:165
 msgid "Your identity certificate has expired"
 msgstr ""
 
@@ -769,7 +771,7 @@ msgstr ""
 #. NOTE: yes this looks a lot like the socket error, but I think these
 #. were actually intended to display slightly different messages:
 #: ../src/subscription_manager/gui/utils.py:82
-#: ../src/subscription_manager/managercli.py:124
+#: ../src/subscription_manager/managercli.py:149
 msgid ""
 "Network error. Please check the connection details, or see /var/log/rhsm/"
 "rhsm.log for more information."
@@ -781,7 +783,7 @@ msgstr ""
 # document keys
 #. This is what happens when there's an issue with the server on the other side of the wire
 #: ../src/subscription_manager/gui/utils.py:85
-#: ../src/subscription_manager/managercli.py:128
+#: ../src/subscription_manager/managercli.py:153
 msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
@@ -792,7 +794,7 @@ msgstr ""
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
 #: ../src/subscription_manager/gui/utils.py:106
-#: ../src/subscription_manager/managercli.py:137
+#: ../src/subscription_manager/managercli.py:162
 #, python-format
 msgid "Bad CA certificate: %s"
 msgstr "不正な CA 証明書です: %s"
@@ -909,7 +911,6 @@ msgstr "可能性のある環境一覧の取り込み"
 # document keys, author khasida
 #: ../src/subscription_manager/gui/registergui.py:554
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:3
-#: ../bin/rhn-migrate-classic-to-rhsm:288
 msgid "Environment"
 msgstr "環境"
 
@@ -966,7 +967,7 @@ msgstr "アクティベーションキーを入力してください。"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
 #: ../src/subscription_manager/gui/registergui.py:903
-#: ../src/subscription_manager/managercli.py:369
+#: ../src/subscription_manager/managercli.py:394
 #, python-format
 msgid "Unable to reach the server at %s:%s%s"
 msgstr "%s にあるサーバーに到達できません:%s%s"
@@ -992,6 +993,414 @@ msgstr ""
 #: ../src/subscription_manager/gui/registergui.py:971
 msgid "Server supports environments, but none are available."
 msgstr "サーバーは環境をサポートしますが、どれも利用できません。"
+
+#: ../src/subscription_manager/migrate/migrate.py:60
+msgid "Could not find up2date_client.config module!"
+msgstr ""
+
+#: ../src/subscription_manager/migrate/migrate.py:66
+msgid "Could not find up2date_client.rhnChannel module!"
+msgstr ""
+
+# translation auto-copied from project Subscription Manager, version 0.99.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:70
+#, python-format
+msgid ""
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
+"証明書サーバーに接続できません: %s。 詳細を /var/log/rhsm/rhsm.log で確認して"
+"ください。"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author khasida
+#: ../src/subscription_manager/migrate/migrate.py:105
+msgid "You have entered an invalid choice."
+msgstr "無効な選択肢を入力しました。"
+
+# translation auto-copied from project Subscription Manager, version 1.1.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:165
+msgid "ignore channels not available on RHSM"
+msgstr ""
+"Red Hat サブスクリプションマネージャーで利用できないチャンネルは無視します"
+
+# translation auto-copied from project Subscription Manager, version 1.1.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:167
+msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
+msgstr ""
+"サブスクリプションの割り当てに自動割り当てではない GUI ツールを起動します"
+
+# translation auto-copied from project Subscription Manager, version 1.1.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:169
+msgid ""
+"don't execute the auto-attach option while registering with subscription "
+"manager"
+msgstr ""
+"サブスクリプションマネージャーで登録中は自動割り当てのオプションを実行しませ"
+"ん"
+
+# translation auto-copied from project Subscription Manager, version 1.1.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:171
+msgid ""
+"service level to follow when attaching subscriptions, for no service level "
+"use --servicelevel=\"\""
+msgstr ""
+"サブスクリプションを割り当てる際に従うサービスレベル、 サービスレベルがない場"
+"合は --servicelevel=\"\" を使用する"
+
+# translation auto-copied from project Subscription Manager, version 1.1.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:174
+msgid "specify the subscription management server to migrate to"
+msgstr "移行先となるサブスクリプション管理サーバーを指定"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:178
+msgid "The --servicelevel and --no-auto options cannot be used together."
+msgstr " --servicelevel と --no-auto のオプションは同時に使用できません。"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:194
+#: ../src/subscription_manager/migrate/migrate.py:197
+msgid "Red Hat account: "
+msgstr "Red Hat アカウント: "
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:195
+#: ../src/subscription_manager/migrate/migrate.py:199
+msgid "System Engine Username: "
+msgstr "System Engine ユーザー名: "
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:212
+msgid "Unable to read RHN proxy settings."
+msgstr "RHN プロキシ設定を読み取りできません。"
+
+#: ../src/subscription_manager/migrate/migrate.py:239
+#, python-format
+msgid "Error parsing server URL: %s"
+msgstr ""
+
+# translation auto-copied from project Subscription Manager, version 1.1.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:265
+msgid ""
+"\n"
+"This system appears to be already registered to Red Hat Subscription "
+"Management.  Exiting."
+msgstr ""
+"\n"
+"このシステムはすでに Red Hat サブスクリプション管理に登録されているようで"
+"す。 終了します。"
+
+# translation auto-copied from project Subscription Manager, version 0.97.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:267
+#, python-format
+msgid ""
+"\n"
+"Please visit https://access.redhat.com/management/consumers/%s to view the "
+"profile details."
+msgstr ""
+"\n"
+"プロファイルの詳細を表示するには、https://access.redhat.com/management/"
+"consumers/%s にアクセスして下さい。"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author khasida
+#: ../src/subscription_manager/migrate/migrate.py:272
+#: ../src/subscription_manager/managercli.py:400
+msgid "Error: CA certificate for subscription service has not been installed."
+msgstr ""
+"エラー: サブスクリプションサービス用の CA 証明書はインスト─ルされていません。"
+
+# translation auto-copied from project Subscription Manager, version 0.96.X,
+# document keys, author khasida
+#: ../src/subscription_manager/migrate/migrate.py:288
+#, python-format
+msgid "%s cannot register to any organizations."
+msgstr "%s はどの組織にも登録できません。"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:290
+msgid "Org: "
+msgstr "組織:"
+
+# translation auto-copied from project Subscription Manager, version 1.1.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:297
+#, python-format
+msgid "No such org: %s"
+msgstr "そのような組織はありません: %s"
+
+#: ../src/subscription_manager/migrate/migrate.py:316
+msgid "Environment: "
+msgstr ""
+
+# translation auto-copied from project Subscription Manager, version 0.96.X,
+# document keys, author khasida
+#: ../src/subscription_manager/migrate/migrate.py:322
+#: ../src/subscription_manager/managercli.py:1124
+#, python-format
+msgid "No such environment: %s"
+msgstr "そのような環境はありません: %s"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author khasida
+#: ../src/subscription_manager/migrate/migrate.py:347
+msgid ""
+"Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
+"details."
+msgstr ""
+"RHN Classic への認証ができません。詳細について、/var/log/rhsm/rhsm.log をご覧"
+"下さい。"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author khasida
+#: ../src/subscription_manager/migrate/migrate.py:354
+msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
+msgstr ""
+"RHN Classic でのユーザーの役割判定で問題が発生しました。終了しています。"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author khasida
+#: ../src/subscription_manager/migrate/migrate.py:356
+msgid "You must be an org admin to successfully run this script."
+msgstr "このスクリプトを正しく実行するには組織管理者でなければなりません。"
+
+# translation auto-copied from project Subscription Manager, version 0.97.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:363
+msgid "Problem encountered getting the list of subscribed channels.  Exiting."
+msgstr ""
+"サブスクライブしたチャンネル一覧の取得時に問題が発生しました。終了していま"
+"す。"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:376
+msgid ""
+"You are subscribed to more than one jbappplatform channel.  This script does "
+"not support that configuration.  Exiting."
+msgstr ""
+"複数の jbappplatform チャンネルがサブスクライブされていますが、このスクリプト"
+"はその設定に対応していません。終了しています。"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author khasida
+#: ../src/subscription_manager/migrate/migrate.py:410
+#, python-format
+msgid "Unable to read mapping file: %s"
+msgstr "マッピングファイルを読み込めません: %s"
+
+# translation auto-copied from project Subscription Manager, version 0.99.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:431
+msgid "Channels not available on RHSM:"
+msgstr "RHSM では使用できないチャンネル:"
+
+#: ../src/subscription_manager/migrate/migrate.py:436
+msgid "No product certificates are mapped to these RHN Classic channels:"
+msgstr ""
+
+# translation auto-copied from project Subscription Manager, version 0.97.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:442
+msgid ""
+"\n"
+"Use --force to ignore these channels and continue the migration.\n"
+msgstr ""
+"\n"
+"--force を使用して、これらのチャンネルを無視して移行を続行します。\n"
+
+#: ../src/subscription_manager/migrate/migrate.py:447
+msgid "Installing product certificates for these RHN Classic channels:"
+msgstr ""
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:461
+#, python-format
+msgid ""
+"\n"
+"Product certificates installed successfully to %s."
+msgstr ""
+"\n"
+"製品証明書が %s に正しくインストールされました。"
+
+# translation auto-copied from project Subscription Manager, version 1.1.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:539
+#, python-format
+msgid ""
+"Did not receive a completed unregistration message from RHN Classic for "
+"system %s.\n"
+"Please investigate on the Customer Portal at https://access.redhat.com."
+msgstr ""
+"RHN Classic よりシステム %s に関する登録取り消し完了のメッセージを受け取って"
+"いませんでした。\n"
+"カスタマーポータル (https://access.redhat.com) で詳細を確認してください。"
+
+# translation auto-copied from project Subscription Manager, version 0.97.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:547
+msgid "System successfully unregistered from RHN Classic."
+msgstr "システムが RHN Classic から正常に登録解除されました。"
+
+# translation auto-copied from project Subscription Manager, version 0.97.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:549
+msgid "Unable to unregister system from RHN Classic.  Exiting."
+msgstr "RHN Classic からシステムを登録解除できません。終了しています。"
+
+#. For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
+#: ../src/subscription_manager/migrate/migrate.py:553
+msgid ""
+"\n"
+"Attempting to register system to Red Hat Subscription Management..."
+msgstr ""
+
+# translation auto-copied from project Subscription Manager, version 0.97.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:566
+msgid ""
+"\n"
+"Unable to register.\n"
+"For further assistance, please contact Red Hat Global Support Services."
+msgstr ""
+"\n"
+"登録できません。\n"
+"詳細は、Red Hat グローバルサポートサービスに問い合わせて下さい。"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:569
+#, python-format
+msgid ""
+"System '%s' successfully registered to Red Hat Subscription Management.\n"
+msgstr ""
+"システム '%s' は Red Hat サブスクリプション管理に正しく登録されました。\n"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author khasida
+#: ../src/subscription_manager/migrate/migrate.py:573
+#: ../src/subscription_manager/managercli.py:790
+#: ../src/subscription_manager/managercli.py:872
+#: ../src/subscription_manager/managercli.py:881
+msgid "Error: The service-level command is not supported by the server."
+msgstr "エラー:  service-level コマンドはサーバーでサポートされていません。"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author khasida
+#. Display an actual message for the empty string level.
+#: ../src/subscription_manager/migrate/migrate.py:592
+msgid "No service level preference"
+msgstr "サービスレベルの詳細設定がありません"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author khasida
+#: ../src/subscription_manager/migrate/migrate.py:599
+#, python-format
+msgid ""
+"\n"
+"Service level \"%s\" is not available."
+msgstr ""
+"\n"
+"サービスレベル \"%s\" は利用できません。"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author khasida
+#: ../src/subscription_manager/migrate/migrate.py:600
+msgid "Please select a service level agreement for this system."
+msgstr "このシステム用のサービスレベル同意書を選択して下さい。"
+
+# translation auto-copied from project Subscription Manager, version 1.1.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:607
+msgid ""
+"Launching the GUI tool to manually attach subscriptions to this system ..."
+msgstr ""
+"このシステムに手作業でサブスクリプションを割り当てるため GUI ツールを起動"
+"中..."
+
+#: ../src/subscription_manager/migrate/migrate.py:610
+msgid "Attempting to auto-attach to appropriate subscriptions..."
+msgstr ""
+
+# translation auto-copied from project Subscription Manager, version 1.1.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:619
+msgid ""
+"\n"
+"Unable to auto-attach.  Do your existing subscriptions match the products "
+"installed on this system?"
+msgstr ""
+"\n"
+"自動割り当てを行えませんでした。このシステムにインストールしている製品と既存"
+"のサブスクリプションは一致していますか?"
+
+# translation auto-copied from project Subscription Manager, version 0.97.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:623
+#, python-format
+msgid ""
+"\n"
+"Please visit https://access.redhat.com/management/consumers/%s to view the "
+"details, and to make changes if necessary."
+msgstr ""
+"\n"
+"詳細を表示するには https://access.redhat.com/management/consumers/%s にアクセ"
+"スし、必要に応じて変更して下さい。"
+
+# translation auto-copied from project Subscription Manager, version 0.98.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:657
+msgid ""
+"\n"
+"Unable to enable extra repositories."
+msgstr ""
+"\n"
+"余分なレポジトリを有効にできません"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:658
+msgid ""
+"Please ensure system has subscriptions attached, and see 'subscription-"
+"manager repos --help' to enable additional repositories"
+msgstr ""
+"システムにサブスクリプションがあることを確認してください。追加でリポジトリを"
+"有効にするには「subscription-manager repos --help」を参照してください。"
+
+#. get a list of RHN classic channels this machine is subscribed to
+#: ../src/subscription_manager/migrate/migrate.py:680
+msgid ""
+"\n"
+"Retrieving existing RHN Classic subscription information..."
+msgstr ""
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
+#: ../src/subscription_manager/migrate/migrate.py:682
+msgid "System is currently subscribed to these RHN Classic Channels:"
+msgstr ""
+"システムは現在これらの RHN Classic チャンネルにサブスクライブされています:"
+
+#: ../src/subscription_manager/migrate/migrate.py:692
+msgid ""
+"\n"
+"Preparing to unregister system from RHN Classic..."
+msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
@@ -1045,7 +1454,7 @@ msgstr "UUID の検索でエラー: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/cache.py:175
+#: ../src/subscription_manager/cache.py:178
 msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
@@ -1182,12 +1591,9 @@ msgstr ""
 "このシステムは、RHN Classic と Red Hat サブスクリプション管理の両方を使用して"
 "登録されています。"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:25
-msgid "Red Hat recommends that customers only register to one service."
+msgid "Red Hat recommends that customers only register with one service."
 msgstr ""
-"Red Hat では、お客様は１つのサービスにのみ登録されることを推奨しています。"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
@@ -1436,270 +1842,233 @@ msgstr ""
 "このシステムはまだ登録されていません。 詳細については「subscription-manager "
 "register --help」をご覧ください。"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
 #: ../src/subscription_manager/managercli.py:72
-#: ../src/subscription_manager/managercli.py:98
-#, python-format
-msgid "Product Name:         \t%s"
-msgstr "製品名:         \t%s"
+#: ../src/subscription_manager/managercli.py:101
+msgid "Product Name:"
+msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
 #: ../src/subscription_manager/managercli.py:73
-#, python-format
-msgid "Product ID:           \t%s"
-msgstr "製品 ID:           \t%s"
+msgid "Product ID:"
+msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
 #: ../src/subscription_manager/managercli.py:74
-#, python-format
-msgid "Version:              \t%s"
-msgstr "バージョン:              \t%s"
+msgid "Version:"
+msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
 #: ../src/subscription_manager/managercli.py:75
-#, python-format
-msgid "Arch:                 \t%s"
-msgstr "アーキテクチャ:                 \t%s"
+msgid "Arch:"
+msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
 #: ../src/subscription_manager/managercli.py:76
-#: ../src/subscription_manager/managercli.py:99
-#, python-format
-msgid "Status:               \t%s"
-msgstr "状態:               \t%s"
+#: ../src/subscription_manager/managercli.py:102
+msgid "Status:"
+msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
 #: ../src/subscription_manager/managercli.py:77
-#: ../src/subscription_manager/managercli.py:2069
-#, python-format
-msgid "Starts:               \t%s"
-msgstr "開始日:               \t%s"
+#: ../src/subscription_manager/managercli.py:126
+msgid "Starts:"
+msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
 #: ../src/subscription_manager/managercli.py:78
-#: ../src/subscription_manager/managercli.py:88
-#: ../src/subscription_manager/managercli.py:2071
-#, python-format
-msgid "Ends:                 \t%s"
-msgstr "終了日:                 \t%s"
+#: ../src/subscription_manager/managercli.py:89
+#: ../src/subscription_manager/managercli.py:127
+msgid "Ends:"
+msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:81
-#: ../src/subscription_manager/managercli.py:2042
-#, python-format
-msgid "Subscription Name:    \t%s"
-msgstr "サブスクリプション名:    \t%s"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
 #: ../src/subscription_manager/managercli.py:82
-#: ../src/subscription_manager/managercli.py:2053
-#, python-format
-msgid "SKU:                  \t%s"
-msgstr "SKU:                  \t%s"
+#: ../src/subscription_manager/managercli.py:116
+msgid "Subscription Name:"
+msgstr ""
 
 #: ../src/subscription_manager/managercli.py:83
-#, python-format
-msgid "Pool ID:              \t%s"
+#: ../src/subscription_manager/managercli.py:118
+msgid "SKU:"
 msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
 #: ../src/subscription_manager/managercli.py:84
-#, python-format
-msgid "Quantity:             \t%s"
-msgstr "数量:             \t%s"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:85
-#: ../src/subscription_manager/managercli.py:2065
-#, python-format
-msgid "Service Level:        \t%s"
-msgstr "サービスレベル:        \t%s"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:86
-#: ../src/subscription_manager/managercli.py:2067
-#, python-format
-msgid "Service Type:         \t%s"
-msgstr "サービスタイプ:         \t%s"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:87
-#, python-format
-msgid "Multi-Entitlement:    \t%s"
-msgstr "複数エンタイトルメント:    \t%s"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../src/subscription_manager/managercli.py:89
-#, python-format
-msgid "System Type:          \t%s"
-msgstr "システムのタイプ:          \t%s"
-
-#: ../src/subscription_manager/managercli.py:92
-#, python-format
-msgid "Repo ID:              \t%s"
+msgid "Pool ID:"
 msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:93
-#, python-format
-msgid "Repo Name:            \t%s"
-msgstr "レポジトリ名:            \t%s"
+#: ../src/subscription_manager/managercli.py:85
+msgid "Quantity:"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:86
+#: ../src/subscription_manager/managercli.py:124
+msgid "Service Level:"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:87
+#: ../src/subscription_manager/managercli.py:125
+msgid "Service Type:"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:88
+msgid "Multi-Entitlement:"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:90
+msgid "System Type:"
+msgstr ""
 
 #: ../src/subscription_manager/managercli.py:94
-#, python-format
-msgid "Repo URL:             \t%s"
+msgid "Repo ID:"
 msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
 #: ../src/subscription_manager/managercli.py:95
-#, python-format
-msgid "Enabled:              \t%s"
-msgstr "有効:              \t%s"
+msgid "Repo Name:"
+msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:102
-#, python-format
-msgid "Name:                 \t%s"
-msgstr "名前:                 \t%s"
+#: ../src/subscription_manager/managercli.py:96
+msgid "Repo URL:"
+msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:103
-#, python-format
-msgid "Description:          \t%s"
-msgstr "説明:          \t%s"
+#: ../src/subscription_manager/managercli.py:97
+msgid "Enabled:"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:106
+#: ../src/subscription_manager/managercli.py:111
+msgid "Name:"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:107
+msgid "Description:"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:112
+msgid "Key:"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:117
+msgid "Provides:"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:119
+msgid "Contract:"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:120
+msgid "Account:"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:121
+msgid "Serial Number:"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:122
+msgid "Active:"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:123
+msgid "Quantity Used:"
+msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:118
+#: ../src/subscription_manager/managercli.py:143
 msgid "Network error, unable to connect to server."
 msgstr "ネットワークエラーです。サーバーに接続できません。"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:153
-#: ../src/subscription_manager/managercli.py:836
+#: ../src/subscription_manager/managercli.py:178
+#: ../src/subscription_manager/managercli.py:862
 #, python-format
 msgid "Service level set to: %s"
 msgstr "サービスレベルをセットします: %s"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:168
+#: ../src/subscription_manager/managercli.py:193
 msgid "Installed Product Current Status:"
 msgstr "インストール済み製品の現在の状態:"
 
-#: ../src/subscription_manager/managercli.py:221
+#: ../src/subscription_manager/managercli.py:246
 msgid "server URL in the form of https://hostname:443/prefix"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:223
+#: ../src/subscription_manager/managercli.py:248
 msgid ""
 "do not check the server SSL certificate against available certificate "
 "authorities"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:228
+#: ../src/subscription_manager/managercli.py:253
 msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:230
+#: ../src/subscription_manager/managercli.py:255
 msgid "user for HTTP proxy with basic authentication"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:232
+#: ../src/subscription_manager/managercli.py:257
 msgid "password for HTTP proxy with basic authentication"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:341
+#: ../src/subscription_manager/managercli.py:366
 #, python-format
 msgid "cannot parse argument: %s"
 msgstr "引数を解析できません: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:361
-#: ../bin/rhn-migrate-classic-to-rhsm:202
-#, c-format, python-format
+#: ../src/subscription_manager/managercli.py:386
+#, python-format
 msgid "Error parsing serverurl: %s"
 msgstr "サーバー url のパーシング中にエラー:  %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:375
-#: ../bin/rhn-migrate-classic-to-rhsm:243
-msgid "Error: CA certificate for subscription service has not been installed."
-msgstr ""
-"エラー: サブスクリプションサービス用の CA 証明書はインスト─ルされていません。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:393
+#: ../src/subscription_manager/managercli.py:418
 #, python-format
 msgid "Error parsing baseurl: %s"
 msgstr "ベース url のパーシング中にエラー: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:449
+#: ../src/subscription_manager/managercli.py:474
 msgid "System certificates corrupted. Please reregister."
 msgstr "システムの証明書が破損しています。 再登録を行ってください。"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:466
+#: ../src/subscription_manager/managercli.py:491
 msgid "username to use when authorizing against the server"
 msgstr "サーバーに対して認可する時に使用するユーザー名"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:468
+#: ../src/subscription_manager/managercli.py:493
 msgid "password to use when authorizing against the server"
 msgstr "サーバーに対して認可する時に使用するパスワード"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:480
+#: ../src/subscription_manager/managercli.py:505
 msgid "Username: "
 msgstr "ユーザー名: "
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:483
+#: ../src/subscription_manager/managercli.py:508
 msgid "Password: "
 msgstr "パスワード: "
 
-#: ../src/subscription_manager/managercli.py:515
+#: ../src/subscription_manager/managercli.py:540
 msgid "specify organization"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:522
-#: ../src/subscription_manager/managercli.py:1119
+#: ../src/subscription_manager/managercli.py:548
+#: ../src/subscription_manager/managercli.py:1145
 msgid "Organization: "
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:534
+#: ../src/subscription_manager/managercli.py:560
 msgid ""
 "Remove all local system and subscription data without affecting the server"
 msgstr ""
@@ -1708,56 +2077,56 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:545
+#: ../src/subscription_manager/managercli.py:571
 msgid "All local data removed"
 msgstr "ローカルデータが全て削除されました"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:558
+#: ../src/subscription_manager/managercli.py:584
 msgid "Pull the latest subscription data from the server"
 msgstr "サーバーから最新のサブスクリプションデータを引き出す"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:568
+#: ../src/subscription_manager/managercli.py:594
 msgid "All local data refreshed"
 msgstr "ローカルデータは全てリフレッシュされました"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys, author nnakakit
-#: ../src/subscription_manager/managercli.py:573
+#: ../src/subscription_manager/managercli.py:599
 #, python-format
 msgid "Unable to perform refresh due to the following exception: %s"
 msgstr "次の例外のためリフレッシュを実行できません: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:580
+#: ../src/subscription_manager/managercli.py:606
 msgid "Display the identity certificate for this system or request a new one"
 msgstr "このシステムの識別証明書を表示するか、 新しい証明書を要求してください"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:587
+#: ../src/subscription_manager/managercli.py:613
 msgid "request a new certificate be generated"
 msgstr "新規証明書の生成を要求します"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:589
+#: ../src/subscription_manager/managercli.py:615
 msgid "force certificate regeneration (requires username and password)"
 msgstr "証明書の再生成を強制（ユーザー名とパスワードが必要）"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:594
+#: ../src/subscription_manager/managercli.py:620
 msgid "--force can only be used with --regenerate"
 msgstr "--force は  --regenerate との併用でのみ使用できます"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:598
+#: ../src/subscription_manager/managercli.py:624
 msgid "--username and --password can only be used with --force"
 msgstr "--username と --password は --force との併用でのみ使用できます"
 
@@ -1766,190 +2135,163 @@ msgstr "--username と --password は --force との併用でのみ使用でき�
 #. no need to continue if user is only registered to Classic
 #. FIXME: slightly odd in that we log that we can't get the version,
 #. but then show "unknown" here.
-#: ../src/subscription_manager/managercli.py:605
-#: ../src/subscription_manager/managercli.py:608
-#: ../src/subscription_manager/managercli.py:2126
+#: ../src/subscription_manager/managercli.py:631
+#: ../src/subscription_manager/managercli.py:634
+#: ../src/subscription_manager/managercli.py:2087
 #, python-format
 msgid "server type: %s"
 msgstr "サーバータイプ: %s"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:621
+#: ../src/subscription_manager/managercli.py:647
 #, python-format
 msgid "Current identity is: %s"
 msgstr "現在の ID: %s"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:622
+#: ../src/subscription_manager/managercli.py:648
 #, python-format
 msgid "name: %s"
 msgstr "名前: %s"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:623
+#: ../src/subscription_manager/managercli.py:649
 #, python-format
 msgid "org name: %s"
 msgstr "組織名: %s"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:624
+#: ../src/subscription_manager/managercli.py:650
 #, python-format
 msgid "org id: %s"
 msgstr "組織 ID: %s"
 
-#: ../src/subscription_manager/managercli.py:633
+#: ../src/subscription_manager/managercli.py:659
 #, python-format
 msgid "environment name: %s"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:641
+#: ../src/subscription_manager/managercli.py:667
 msgid "Identity certificate has been regenerated."
 msgstr "識別証明書は再生成されました。"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:649
+#: ../src/subscription_manager/managercli.py:675
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "エラー: システム用に新規の識別子を生成できません"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:655
+#: ../src/subscription_manager/managercli.py:681
 msgid "Display the organizations against which a user can register a system"
 msgstr "ユーザーがシステムの登録を行うことができる組織を表示します"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:672
+#: ../src/subscription_manager/managercli.py:698
 msgid "Organizations"
 msgstr "組織"
 
-# translation auto-copied from project Subscription Manager, version 0.99.X,
-# document keys
-#: ../src/subscription_manager/managercli.py:676 ../src/rct/printing.py:37
-#: ../src/rct/printing.py:49 ../src/rct/printing.py:77
-msgid "Name"
-msgstr "名前"
-
-# translation auto-copied from project Subscription Manager, version 0.99.X,
-# document keys
-#: ../src/subscription_manager/managercli.py:677
-msgid "Key"
-msgstr "キー"
-
-# translation auto-copied from project Subscription Manager, version 0.96.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:680
-#: ../src/subscription_manager/managercli.py:1113
-#: ../bin/rhn-migrate-classic-to-rhsm:260
-#, c-format, python-format
-msgid "%s cannot register to any organizations."
-msgstr "%s はどの組織にも登録できません。"
+#: ../src/subscription_manager/managercli.py:705
+#: ../src/subscription_manager/managercli.py:1139
+#, python-format
+msgid "%s cannot register with any organizations."
+msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:687
+#: ../src/subscription_manager/managercli.py:712
 msgid "Error: Unable to retrieve org list from server"
 msgstr "エラー: サーバーから組織一覧を取り込むことが出来ません"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:693
+#: ../src/subscription_manager/managercli.py:718
 msgid "Display the environments available for a user"
 msgstr "ユーザーに使用可能な環境の表示"
 
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../src/subscription_manager/managercli.py:694
-msgid "specify organization for environment list"
-msgstr "環境一覧の組織を指定"
+#: ../src/subscription_manager/managercli.py:720
+msgid "specify organization for environment list, using organization key"
+msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:720
+#: ../src/subscription_manager/managercli.py:746
 msgid "Environments"
 msgstr "環境"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:726
+#: ../src/subscription_manager/managercli.py:752
 msgid "Error: This org does not have environments."
 msgstr "エラー: この組織には環境がありません。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:728
-#: ../src/subscription_manager/managercli.py:1094
+#: ../src/subscription_manager/managercli.py:754
+#: ../src/subscription_manager/managercli.py:1120
 msgid "Error: Server does not support environments."
 msgstr "エラー: サーバーは環境をサポートしません。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:736
+#: ../src/subscription_manager/managercli.py:762
 msgid "Error: Unable to retrieve environment list from server"
 msgstr "エラー: サーバーから環境一覧を取りこめません"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:744
+#: ../src/subscription_manager/managercli.py:770
 msgid "Manage service levels for this system"
 msgstr "このシステム用のサービスレベルを管理"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys, author noriko
-#: ../src/subscription_manager/managercli.py:745
+#: ../src/subscription_manager/managercli.py:771
 msgid "specify org for service level list"
 msgstr "サービスレベル一覧に組織を指定"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys, author noriko
-#: ../src/subscription_manager/managercli.py:751
+#: ../src/subscription_manager/managercli.py:777
 msgid "show this system's current service level"
 msgstr "このシステムの現在のサービスレベルを表示"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys, author noriko
-#: ../src/subscription_manager/managercli.py:753
+#: ../src/subscription_manager/managercli.py:779
 msgid "list all service levels available"
 msgstr "使用可能なサービスレベルをすべて表示"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:755
-#: ../src/subscription_manager/managercli.py:1315
+#: ../src/subscription_manager/managercli.py:781
+#: ../src/subscription_manager/managercli.py:1341
 msgid "service level to apply to this system"
 msgstr "このシステムに適用するサービスレベル"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:758
+#: ../src/subscription_manager/managercli.py:784
 msgid "unset the service level for this system"
 msgstr "このシステム用のサービスレベルの設定解除"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:764
-#: ../src/subscription_manager/managercli.py:846
-#: ../src/subscription_manager/managercli.py:855
-#: ../bin/rhn-migrate-classic-to-rhsm:310
-msgid "Error: The service-level command is not supported by the server."
-msgstr "エラー:  service-level コマンドはサーバーでサポートされていません。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:783
+#: ../src/subscription_manager/managercli.py:809
 msgid "Error: --org is only supported with the --list option"
 msgstr "エラー: --org は、 --list オプションと併用でのみサポートされます"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:789
+#: ../src/subscription_manager/managercli.py:815
 msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
@@ -1959,143 +2301,141 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:829
+#: ../src/subscription_manager/managercli.py:855
 msgid "Error: Unable to retrieve service levels."
 msgstr "エラー: サービスレベルを読み出せません。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:840
+#: ../src/subscription_manager/managercli.py:866
 msgid "Service level preference has been unset"
 msgstr "サービスレベルの詳細設定は解除されました"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:850
+#: ../src/subscription_manager/managercli.py:876
 #, python-format
 msgid "Current service level: %s"
 msgstr "現在のサービスレベル: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:852
+#: ../src/subscription_manager/managercli.py:878
 msgid "Service level preference not set"
 msgstr "サービスレベルの詳細設定はされていません"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:870
+#: ../src/subscription_manager/managercli.py:896
 msgid "Available Service Levels"
 msgstr "利用可能なサービスレベル"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:875
+#: ../src/subscription_manager/managercli.py:901
 msgid "This org does not have any subscriptions with service levels."
 msgstr "この組織にはサービスレベルのあるサブスクリプションがありません。"
 
-#: ../src/subscription_manager/managercli.py:896
+#: ../src/subscription_manager/managercli.py:922
 msgid "base URL for content in form of https://hostname:443/prefix"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:898
+#: ../src/subscription_manager/managercli.py:924
 msgid "the type of unit to register, defaults to system"
 msgstr "登録単位のタイプ、 デフォルトではシステムに設定"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:900
+#: ../src/subscription_manager/managercli.py:926
 msgid "name of the system to register, defaults to the hostname"
 msgstr "登録するシステム名、 デフォルトではホスト名に設定"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:902
+#: ../src/subscription_manager/managercli.py:928
 msgid "the existing system data is pulled from the server"
 msgstr "既存のシステムデータはサーバーから取り込まれます"
 
-# translation auto-copied from project Subscription Manager, version 0.96.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:904
-msgid "register to one of multiple organizations for the user"
-msgstr "ユーザー用に複数組織の１つを登録"
+#: ../src/subscription_manager/managercli.py:930
+msgid ""
+"register to one of multiple organizations for the user, using organization "
+"key"
+msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 0.96.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:906
-msgid "register to a specific environment in the destination org"
-msgstr "目的組織内の特定の環境に登録"
+#: ../src/subscription_manager/managercli.py:932
+msgid "register with a specific environment in the destination org"
+msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:908
+#: ../src/subscription_manager/managercli.py:934
 msgid "set a release version"
 msgstr "リリースバージョンの設定"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:910
+#: ../src/subscription_manager/managercli.py:936
 msgid "Deprecated, see --auto-attach"
 msgstr "廃止予定、 --auto-attach を参照"
 
-#: ../src/subscription_manager/managercli.py:912
+#: ../src/subscription_manager/managercli.py:938
 msgid "automatically attach this system to compatible subscriptions."
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:914
+#: ../src/subscription_manager/managercli.py:940
 msgid "register the system even if it is already registered"
 msgstr "既に登録済みでもシステムを登録します"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:916
+#: ../src/subscription_manager/managercli.py:942
 msgid ""
 "activation key to use for registration (can be specified more than once)"
 msgstr "登録に使用するアクティベーションキー (複数回指定が可能)"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:918
+#: ../src/subscription_manager/managercli.py:944
 msgid "system preference used when subscribing automatically"
 msgstr "自動サブスクリプションの際に使用されるシステムの詳細設定"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:927
+#: ../src/subscription_manager/managercli.py:953
 msgid "This system is already registered. Use --force to override"
 msgstr "このシステムは既に登録済みです。上書きするには  --force を使用します"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:930
+#: ../src/subscription_manager/managercli.py:956
 msgid "Error: system name can not be empty."
 msgstr "エラー: システム名は空白のままにはできません。"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:933
+#: ../src/subscription_manager/managercli.py:959
 msgid "Error: Activation keys do not require user credentials."
 msgstr "エラー: アクティベーションキーにはユーザーの認証情報は必要ありません。"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:936
+#: ../src/subscription_manager/managercli.py:962
 msgid "Error: Activation keys can not be used with previously registered ids."
 msgstr "エラー: アクティベーションキーは以前に登録した id では使用できません。"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:939
+#: ../src/subscription_manager/managercli.py:965
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr "エラー: アクティベーションキーでは環境の指定は許可していません。"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:942
+#: ../src/subscription_manager/managercli.py:968
 msgid "Error: Activation keys cannot be used with --auto-attach."
 msgstr ""
 "エラー: --auto-attach を付けてアクティベーションキーを使用することはできませ"
@@ -2103,47 +2443,47 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:946
+#: ../src/subscription_manager/managercli.py:972
 msgid "Error: Must specify an activation key"
 msgstr "エラー: アクティベーションキーを指定する必要があります。"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:949
+#: ../src/subscription_manager/managercli.py:975
 msgid "Error: Must use --auto-attach with --servicelevel."
 msgstr "エラー: --auto-attach は --servicelevel を付けて使用してください。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:952
+#: ../src/subscription_manager/managercli.py:978
 msgid "Error: Must provide --org with activation keys."
 msgstr "エラー:  アクティベーションキーと供に --org を適用する必要があります"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:989
+#: ../src/subscription_manager/managercli.py:1015
 #, python-format
 msgid "The system with UUID %s has been unregistered"
 msgstr "UUID %s を持つシステムの登録は解除されました"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1024
+#: ../src/subscription_manager/managercli.py:1050
 #, python-format
 msgid "Error during registration: %s"
 msgstr "登録中にエラーです: %s"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1031
+#: ../src/subscription_manager/managercli.py:1057
 #, python-format
 msgid "The system has been registered with id: %s "
 msgstr "システムは id で登録されています: %s "
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1062
-#: ../src/subscription_manager/managercli.py:1402
+#: ../src/subscription_manager/managercli.py:1088
+#: ../src/subscription_manager/managercli.py:1428
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
@@ -2152,33 +2492,25 @@ msgstr ""
 "完了できませんでした。"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1098
-#: ../bin/rhn-migrate-classic-to-rhsm:294
-#, c-format, python-format
-msgid "No such environment: %s"
-msgstr "そのような環境はありません: %s"
-
-# translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1136
+#: ../src/subscription_manager/managercli.py:1162
 #: ../src/subscription_manager/utils.py:350
 msgid "This system is currently not registered."
 msgstr "このシステムは現在登録されていません"
 
-#: ../src/subscription_manager/managercli.py:1161
+#: ../src/subscription_manager/managercli.py:1187
 msgid "System has been unregistered."
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1167
+#: ../src/subscription_manager/managercli.py:1193
 msgid "Attempt to redeem a subscription for a preconfigured system"
 msgstr "事前設定済みシステムにサブスクリプションの再利用を試行します"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1172
+#: ../src/subscription_manager/managercli.py:1198
 msgid "email address to notify when subscription redemption is complete"
 msgstr ""
 "サブスクリプションの再利用が完了した時に通知を送信するための電子メールアドレ"
@@ -2186,7 +2518,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1175
+#: ../src/subscription_manager/managercli.py:1201
 msgid ""
 "optional language to use for email notification when subscription redemption "
 "is complete (Examples: en-us, de-de)"
@@ -2196,7 +2528,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1181
+#: ../src/subscription_manager/managercli.py:1207
 msgid ""
 "Error: This command requires that you specify an email address with --email."
 msgstr ""
@@ -2205,62 +2537,62 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1218
+#: ../src/subscription_manager/managercli.py:1244
 msgid "Configure which operating system release to use"
 msgstr "使用するオペレーティングシステムを設定"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1223
+#: ../src/subscription_manager/managercli.py:1249
 msgid "shows current release setting; default command"
 msgstr "現在のリリース設定を表示、 デフォルトのコマンド"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1225
+#: ../src/subscription_manager/managercli.py:1251
 msgid "list available releases"
 msgstr "使用可能なリリースを表示する"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1228
+#: ../src/subscription_manager/managercli.py:1254
 msgid "set the release for this system"
 msgstr "このシステム用のリリースをセット"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1231
+#: ../src/subscription_manager/managercli.py:1257
 msgid "unset the release for this system"
 msgstr "このシステム用のリリースをセット解除"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1234
+#: ../src/subscription_manager/managercli.py:1260
 msgid "Error: The 'release' command is not supported by the server."
 msgstr "エラー: 'release' コマンドはサーバーでサポートされていません。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1243
+#: ../src/subscription_manager/managercli.py:1269
 #, python-format
 msgid "Release: %s"
 msgstr "リリース: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1245
+#: ../src/subscription_manager/managercli.py:1271
 msgid "Release not set"
 msgstr "リリースはセットされていません"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1267
+#: ../src/subscription_manager/managercli.py:1293
 msgid "Release preference has been unset"
 msgstr "リリースの詳細設定は解除されました"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1276
+#: ../src/subscription_manager/managercli.py:1302
 #, python-format
 msgid "No releases match '%s'.  Consult 'release --list' for a full listing."
 msgstr ""
@@ -2269,37 +2601,37 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1278
+#: ../src/subscription_manager/managercli.py:1304
 #, python-format
 msgid "Release set to: %s"
 msgstr "リリースは次のようにセットされています: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1283
+#: ../src/subscription_manager/managercli.py:1309
 msgid "No release versions available, please check subscriptions."
 msgstr ""
 "リリースバージョンがありません。サブスクリプションをチェックして下さい。"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1286
+#: ../src/subscription_manager/managercli.py:1312
 msgid "Available Releases"
 msgstr "利用可能なリリース"
 
-#: ../src/subscription_manager/managercli.py:1308
+#: ../src/subscription_manager/managercli.py:1334
 msgid "the ID of the pool to attach (can be specified more than once)"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1310
+#: ../src/subscription_manager/managercli.py:1336
 msgid "number of subscriptions to attach"
 msgstr "割り当てるサブスクリプション数"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1312
+#: ../src/subscription_manager/managercli.py:1338
 msgid ""
 "automatically attach compatible                                subscriptions "
 "to this system"
@@ -2308,7 +2640,7 @@ msgstr "適合するサブスクリプションをこのシステムに自動的
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
 #. re bz #864207
-#: ../src/subscription_manager/managercli.py:1317
+#: ../src/subscription_manager/managercli.py:1343
 msgid "All installed products are covered by valid entitlements."
 msgstr ""
 "インストールされている製品にはすべて有効なエンタイトルメントが適用されていま"
@@ -2316,19 +2648,19 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1318
+#: ../src/subscription_manager/managercli.py:1344
 msgid "No need to update subscriptions at this time."
 msgstr "この時点ではサブスクリプションの更新は必要ありません。"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1321
+#: ../src/subscription_manager/managercli.py:1347
 msgid "Attach a specified subscription to the registered system"
 msgstr "指定したサブスクリプションを登録済みのシステムに割り当てる"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1331
+#: ../src/subscription_manager/managercli.py:1357
 msgid ""
 "Error: This command requires that you specify a pool with --pool or use --"
 "auto."
@@ -2338,36 +2670,36 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1334
+#: ../src/subscription_manager/managercli.py:1360
 msgid "Error: Only one of --pool or --auto may be used with this command."
 msgstr "エラー: このコマンドには、--pool か --auto の一方のみが使用できます。"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1341
+#: ../src/subscription_manager/managercli.py:1367
 msgid "Error: Quantity must be a positive integer."
 msgstr "エラー: 数量は正の整数でなければなりません。"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1347
+#: ../src/subscription_manager/managercli.py:1373
 msgid "Error: Must use --auto with --servicelevel."
 msgstr "エラー: --auto は --servicelevel を付けて使用しなければなりません。"
 
-#: ../src/subscription_manager/managercli.py:1367
+#: ../src/subscription_manager/managercli.py:1393
 msgid "Please enter a valid numeric pool ID."
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1372
+#: ../src/subscription_manager/managercli.py:1398
 #, python-format
 msgid "Successfully attached a subscription for: %s"
 msgstr "サブスクリプションが正しく割り当てられました: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1393
+#: ../src/subscription_manager/managercli.py:1419
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
@@ -2377,38 +2709,38 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1435
+#: ../src/subscription_manager/managercli.py:1461
 msgid "Deprecated, see attach"
 msgstr "廃止予定、 attach を参照"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1455
+#: ../src/subscription_manager/managercli.py:1481
 msgid "certificate serial number to remove (can be specified more than once)"
 msgstr "削除する証明書のシリアル番号 (複数回の指定が可能)"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1457
+#: ../src/subscription_manager/managercli.py:1483
 msgid "remove all subscriptions from this system"
 msgstr "このシステムからすべてのサブスクリプションを削除"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1460
+#: ../src/subscription_manager/managercli.py:1486
 msgid "Remove all or specific subscriptions from this system"
 msgstr "このシステムからすべてまたは特定のサブスクリプションを削除"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1473
+#: ../src/subscription_manager/managercli.py:1499
 #, python-format
 msgid "Error: '%s' is not a valid serial number"
 msgstr "エラー: '%s' は有効なシリアル番号ではありません"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1478
+#: ../src/subscription_manager/managercli.py:1504
 msgid "Error: This command requires that you specify one of --serial or --all."
 msgstr ""
 "エラー: このコマンドでは、 --serial か --all のどちらかを指定する必要がありま"
@@ -2416,96 +2748,96 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1495
+#: ../src/subscription_manager/managercli.py:1521
 msgid "All subscriptions have been removed from this system."
 msgstr "このシステムからはすべてのサブスクリプションが削除されています。"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1499
+#: ../src/subscription_manager/managercli.py:1525
 msgid "1 subscription removed from this system."
 msgstr "このシステムから 1 サブスクリプションが削除されました。"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1501
-#: ../src/subscription_manager/managercli.py:1539
+#: ../src/subscription_manager/managercli.py:1527
+#: ../src/subscription_manager/managercli.py:1565
 #, python-format
 msgid "%s subscriptions removed from this system."
 msgstr "このシステムから %s サブスクリプションが削除されました。"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1516
+#: ../src/subscription_manager/managercli.py:1542
 msgid "Successfully removed serial numbers:"
 msgstr "シリアル番号が正しく削除されました:"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1520
+#: ../src/subscription_manager/managercli.py:1546
 msgid "Unsuccessfully removed serial numbers:"
 msgstr "シリアル番号の削除に失敗しました:"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1530
-#: ../src/subscription_manager/managercli.py:1551
+#: ../src/subscription_manager/managercli.py:1556
+#: ../src/subscription_manager/managercli.py:1577
 #, python-format
 msgid "Unable to perform remove due to the following exception: %s"
 msgstr "次の例外のため削除の動作を行うことができません: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1545
+#: ../src/subscription_manager/managercli.py:1571
 #, python-format
 msgid "Subscription with serial number %s removed from this system"
 msgstr "このシステムからシリアル番号が %s のサブスクリプションが削除されました"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1564
+#: ../src/subscription_manager/managercli.py:1590
 msgid "Deprecated, see remove"
 msgstr "廃止予定、 remove を参照"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1576
+#: ../src/subscription_manager/managercli.py:1602
 msgid "View or update the detected system information"
 msgstr "検出したシステム情報を表示、又は更新"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1581
+#: ../src/subscription_manager/managercli.py:1607
 msgid "list known facts for this system"
 msgstr "このシステムの既知の情報を一覧表示"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1583
+#: ../src/subscription_manager/managercli.py:1609
 msgid "update the system facts"
 msgstr "システムの情報を更新"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1619
+#: ../src/subscription_manager/managercli.py:1645
 msgid "Successfully updated the system facts."
 msgstr "正常にシステムの情報を更新しました。"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author mospina
-#: ../src/subscription_manager/managercli.py:1625
+#: ../src/subscription_manager/managercli.py:1651
 msgid "Import certificates which were provided outside of the tool"
 msgstr "ツール外で用意された証明書をインポート"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1630
+#: ../src/subscription_manager/managercli.py:1656
 msgid "certificate file to import (can be specified more than once)"
 msgstr "インポートする証明書ファイル (複数回の指定が可能)"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1634
+#: ../src/subscription_manager/managercli.py:1660
 msgid ""
 "Error: This command requires that you specify a certificate with --"
 "certificate."
@@ -2515,15 +2847,15 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1653
+#: ../src/subscription_manager/managercli.py:1679
 #, python-format
 msgid "Successfully imported certificate %s"
 msgstr "正常に証明書 %s をインポートしました"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1659
-#: ../src/subscription_manager/managercli.py:1669
+#: ../src/subscription_manager/managercli.py:1685
+#: ../src/subscription_manager/managercli.py:1695
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
 msgstr ""
@@ -2531,7 +2863,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1665
+#: ../src/subscription_manager/managercli.py:1691
 msgid ""
 "An error occurred while importing the certificate. Please check log file for "
 "more information."
@@ -2541,91 +2873,91 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1687
+#: ../src/subscription_manager/managercli.py:1713
 msgid "List the repositories which this system is entitled to use"
 msgstr "このシステムでの使用権限があるリポジトリを表示"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1700
+#: ../src/subscription_manager/managercli.py:1726
 msgid "list known repos for this system"
 msgstr "このシステム用の既知のレポジトリを一覧表示"
 
-#: ../src/subscription_manager/managercli.py:1702
+#: ../src/subscription_manager/managercli.py:1728
 msgid "repo to enable (can be specified more than once)"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1704
+#: ../src/subscription_manager/managercli.py:1730
 msgid "repo to disable (can be specified more than once)"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1715
+#: ../src/subscription_manager/managercli.py:1741
 msgid "Repositories disabled by configuration."
 msgstr "リポジトリは無効の設定になっています。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1726
+#: ../src/subscription_manager/managercli.py:1752
 #, python-format
 msgid "    Available Repositories in %s"
 msgstr "%s 内の利用可能なレポジトリ"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1734
+#: ../src/subscription_manager/managercli.py:1761
 msgid "This system has no repositories available through subscriptions."
 msgstr ""
 "このシステムにはサブスクリプション経由で利用できるレポジトリがありません。"
 
-#: ../src/subscription_manager/managercli.py:1758
+#: ../src/subscription_manager/managercli.py:1785
 #, python-format
 msgid "Error: %s is not a valid repo ID. Use --list option to see valid repos."
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1768
+#: ../src/subscription_manager/managercli.py:1795
 #, python-format
 msgid "Repo %s is enabled for this system."
 msgstr "レポジトリ %s はこのシステム用に有効になっています。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1770
+#: ../src/subscription_manager/managercli.py:1797
 #, python-format
 msgid "Repo %s is disabled for this system."
 msgstr "レポジトリ %s はこのシステム用に無効になっています"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1777
+#: ../src/subscription_manager/managercli.py:1804
 msgid "List, set, or remove the configuration parameters in use by this system"
 msgstr "このシステムで使用中の設定パラメータの表示、 設定、 削除"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1783
+#: ../src/subscription_manager/managercli.py:1810
 msgid "list the configuration for this system"
 msgstr "このシステム用の設定の一覧表示"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys, author nnakakit
-#: ../src/subscription_manager/managercli.py:1785
+#: ../src/subscription_manager/managercli.py:1812
 msgid "remove configuration entry by section.name"
 msgstr "「セクション.名前」により設定エントリを削除"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys, author nnakakit
-#: ../src/subscription_manager/managercli.py:1789
+#: ../src/subscription_manager/managercli.py:1816
 #, python-format
 msgid "Section: %s, Name: %s"
 msgstr "セクション: %s、名前: %s"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1804
+#: ../src/subscription_manager/managercli.py:1831
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
@@ -2635,7 +2967,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1823
+#: ../src/subscription_manager/managercli.py:1850
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
@@ -2645,67 +2977,67 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1835
+#: ../src/subscription_manager/managercli.py:1862
 #, python-format
 msgid "Error: Section %s and name %s does not exist."
 msgstr "エラー: セクション %s と名前 %s は存在しません。"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1854
+#: ../src/subscription_manager/managercli.py:1881
 msgid "[] - Default value in use"
 msgstr "[] - 使用中のデフォルト値"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1863
-#: ../src/subscription_manager/managercli.py:1866
+#: ../src/subscription_manager/managercli.py:1890
+#: ../src/subscription_manager/managercli.py:1893
 #, python-format
 msgid "You have removed the value for section %s and name %s."
 msgstr "セクション %s と名前 %s の値を削除しています。"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1867
+#: ../src/subscription_manager/managercli.py:1894
 #, python-format
 msgid "The default value for %s will now be used."
 msgstr "%s のデフォルト値は今使用されます。"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1869
+#: ../src/subscription_manager/managercli.py:1896
 #, python-format
 msgid "Section %s and name %s cannot be removed."
 msgstr "セクション %s と名前 %s は削除できません。"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1886
+#: ../src/subscription_manager/managercli.py:1913
 msgid "List subscription and product information for this system"
 msgstr "このシステムのサブスクリプションと製品情報を表示"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1891
+#: ../src/subscription_manager/managercli.py:1918
 msgid "list shows those products which are installed (default)"
 msgstr "一覧はインスト─ル済みのそれらの製品を表示します (デフォルト)"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1893
+#: ../src/subscription_manager/managercli.py:1920
 msgid "show those subscriptions which are available"
 msgstr "利用可能なそれらのサブスクリプションを表示します。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1895
+#: ../src/subscription_manager/managercli.py:1922
 msgid "used with --available to ensure all subscriptions are returned"
 msgstr ""
 " --available と併用すると、全てのサブスクリプションが確実に返されます。"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys, author nnakakit
-#: ../src/subscription_manager/managercli.py:1897
+#: ../src/subscription_manager/managercli.py:1924
 #, python-format
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
@@ -2714,13 +3046,13 @@ msgstr "検索日。デフォルトは本日の日付です。--available との
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1900
+#: ../src/subscription_manager/managercli.py:1927
 msgid "show the subscriptions being consumed by this system"
 msgstr "このシステムで消費しているサブスクリプションを表示"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1902
+#: ../src/subscription_manager/managercli.py:1929
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
@@ -2730,19 +3062,19 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1909
+#: ../src/subscription_manager/managercli.py:1936
 msgid "Error: --all is only applicable with --available"
 msgstr "エラー: --all は --available との併用でのみ適用可能"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1912
+#: ../src/subscription_manager/managercli.py:1939
 msgid "Error: --ondate is only applicable with --available"
 msgstr "エラー: --ondate は  --available との併用でのみ適用可能"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:1916
+#: ../src/subscription_manager/managercli.py:1943
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr ""
 "エラー: --servicelevel は --available か --consumed との併用でのみ適用できま"
@@ -2750,112 +3082,63 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1940
+#: ../src/subscription_manager/managercli.py:1958
 msgid "No installed products to list"
 msgstr "表示できるインストール済み製品はありません"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1943
+#: ../src/subscription_manager/managercli.py:1961
 msgid "    Installed Product Status"
 msgstr "    インストール済み製品のステータス"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1961
+#: ../src/subscription_manager/managercli.py:1978
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "入力した日付は無効です。日付は YYYY-MM-DD の形式にして下さい（例えば:"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:1974
+#: ../src/subscription_manager/managercli.py:1991
 msgid "No available subscription pools to list"
 msgstr "表示できる使用可能なサブスクリプションプールはありません"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:2031
+#: ../src/subscription_manager/managercli.py:2046
 msgid "No consumed subscription pools to list"
 msgstr "表示できる割り当て済みサブスクリプションプールはありません"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:2035
+#: ../src/subscription_manager/managercli.py:2050
 msgid "Consumed Subscriptions"
 msgstr "割り当て済みのサブスクリプション"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:2045
-#, python-format
-msgid "Provides:             \t%s"
-msgstr "提供:             \t%s"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:2048
-#, python-format
-msgid "                      \t%s"
-msgstr "                      \t%s"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:2055
-#, python-format
-msgid "Contract:             \t%s"
-msgstr "コントラクト:             \t%s"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:2057
-#, python-format
-msgid "Account:              \t%s"
-msgstr "アカウント:              \t%s"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:2059
-#, python-format
-msgid "Serial Number:        \t%s"
-msgstr "シリアル番号:        \t%s"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:2061
-#, python-format
-msgid "Active:               \t%s"
-msgstr "アクティブ:               \t%s"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:2063
-#, python-format
-msgid "Quantity Used:        \t%s"
-msgstr "使用数量:        \t%s"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../src/subscription_manager/managercli.py:2115
+#: ../src/subscription_manager/managercli.py:2076
 msgid "Print version information"
 msgstr "バージョン情報を表示"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/subscription_manager/managercli.py:2127
+#: ../src/subscription_manager/managercli.py:2088
 #, python-format
 msgid "subscription management server: %s"
 msgstr "サブスクリプション管理サーバー: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:2128
+#: ../src/subscription_manager/managercli.py:2089
 #, python-format
 msgid "subscription-manager: %s"
 msgstr "subscription-manager: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author khasida
-#: ../src/subscription_manager/managercli.py:2129
+#: ../src/subscription_manager/managercli.py:2090
 #, python-format
 msgid "python-rhsm: %s"
 msgstr "python-rhsm: %s"
@@ -3927,6 +4210,14 @@ msgstr "サービスレベルの詳細設定:"
 msgid "System Preferences"
 msgstr "システムの設定"
 
+#: ../src/subscription_manager/gui/data/preferences.glade.h:6
+msgid "release_selection_combobox"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/preferences.glade.h:7
+msgid "sla_selection_combobox"
+msgstr ""
+
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
 #: ../src/subscription_manager/gui/data/credentials.glade.h:2
@@ -4001,7 +4292,7 @@ msgstr "コピーされるファイルのみを表示"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
-#: ../bin/install-num-migrate-to-rhsm:99 ../bin/rhn-migrate-classic-to-rhsm:48
+#: ../bin/install-num-migrate-to-rhsm:99
 msgid "Must be root user to execute\n"
 msgstr "実行するには root ユーザーでなければなりません\n"
 
@@ -4036,400 +4327,6 @@ msgstr "%s を %s にインストール中"
 msgid "No such directory: %s"
 msgstr "そのようなディレクトリはありません: %s"
 
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:68
-msgid "ignore channels not available on RHSM"
-msgstr ""
-"Red Hat サブスクリプションマネージャーで利用できないチャンネルは無視します"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:70
-msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
-msgstr ""
-"サブスクリプションの割り当てに自動割り当てではない GUI ツールを起動します"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:72
-msgid ""
-"don't execute the auto-attach option while registering with subscription "
-"manager"
-msgstr ""
-"サブスクリプションマネージャーで登録中は自動割り当てのオプションを実行しませ"
-"ん"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:74
-msgid ""
-"service level to follow when attaching subscriptions, for no service level "
-"use --servicelevel=\"\""
-msgstr ""
-"サブスクリプションを割り当てる際に従うサービスレベル、 サービスレベルがない場"
-"合は --servicelevel=\"\" を使用する"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:77
-msgid "specify the subscription management server to migrate to"
-msgstr "移行先となるサブスクリプション管理サーバーを指定"
-
-# translation auto-copied from project Subscription Manager, version 0.99.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:105
-#, c-format
-msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"証明書サーバーに接続できません: %s。 詳細を /var/log/rhsm/rhsm.log で確認して"
-"ください。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../bin/rhn-migrate-classic-to-rhsm:133
-msgid "You have entered an invalid choice."
-msgstr "無効な選択肢を入力しました。"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:236
-msgid ""
-"\n"
-"This system appears to be already registered to Red Hat Subscription "
-"Management.  Exiting."
-msgstr ""
-"\n"
-"このシステムはすでに Red Hat サブスクリプション管理に登録されているようで"
-"す。 終了します。"
-
-# translation auto-copied from project Subscription Manager, version 0.97.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:238
-#, c-format
-msgid ""
-"\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"profile details."
-msgstr ""
-"\n"
-"プロファイルの詳細を表示するには、https://access.redhat.com/management/"
-"consumers/%s にアクセスして下さい。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:262
-msgid "Org: "
-msgstr "組織:"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:269
-#, c-format
-msgid "No such org: %s"
-msgstr "そのような組織はありません: %s"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../bin/rhn-migrate-classic-to-rhsm:304
-msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
-msgstr ""
-"RHN Classic でのユーザーの役割判定で問題が発生しました。終了しています。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../bin/rhn-migrate-classic-to-rhsm:306
-msgid "You must be an org admin to successfully run this script."
-msgstr "このスクリプトを正しく実行するには組織管理者でなければなりません。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../bin/rhn-migrate-classic-to-rhsm:329
-msgid "No service level preference"
-msgstr "サービスレベルの詳細設定がありません"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../bin/rhn-migrate-classic-to-rhsm:336
-#, c-format
-msgid ""
-"\n"
-"Service level \"%s\" is not available."
-msgstr ""
-"\n"
-"サービスレベル \"%s\" は利用できません。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../bin/rhn-migrate-classic-to-rhsm:337
-msgid "Please select a service level agreement for this system."
-msgstr "このシステム用のサービスレベル同意書を選択して下さい。"
-
-# translation auto-copied from project Subscription Manager, version 0.97.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:346
-msgid "This system is not associated with any channel."
-msgstr "このシステムはどのチャンネルにも関連付けされていません。"
-
-# translation auto-copied from project Subscription Manager, version 0.97.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:348
-msgid "Unable to locate SystemId file. Is this system registered?"
-msgstr "SystemId ファイルが見つかりません。このシステムは登録されていますか?"
-
-# translation auto-copied from project Subscription Manager, version 0.97.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:351
-msgid "Problem encountered getting the list of subscribed channels.  Exiting."
-msgstr ""
-"サブスクライブしたチャンネル一覧の取得時に問題が発生しました。終了していま"
-"す。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:360
-msgid ""
-"You are subscribed to more than one jbappplatform channel.  This script does "
-"not support that configuration.  Exiting."
-msgstr ""
-"複数の jbappplatform チャンネルがサブスクライブされていますが、このスクリプト"
-"はその設定に対応していません。終了しています。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../bin/rhn-migrate-classic-to-rhsm:393
-msgid ""
-"Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
-"details."
-msgstr ""
-"RHN Classic への認証ができません。詳細について、/var/log/rhsm/rhsm.log をご覧"
-"下さい。"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:409
-#, c-format
-msgid ""
-"Did not receive a completed unregistration message from RHN Classic for "
-"system %s.\n"
-"Please investigate on the Customer Portal at https://access.redhat.com."
-msgstr ""
-"RHN Classic よりシステム %s に関する登録取り消し完了のメッセージを受け取って"
-"いませんでした。\n"
-"カスタマーポータル (https://access.redhat.com) で詳細を確認してください。"
-
-# translation auto-copied from project Subscription Manager, version 0.97.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:417
-msgid "System successfully unregistered from RHN Classic."
-msgstr "システムが RHN Classic から正常に登録解除されました。"
-
-# translation auto-copied from project Subscription Manager, version 0.97.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:419
-msgid "Unable to unregister system from RHN Classic.  Exiting."
-msgstr "RHN Classic からシステムを登録解除できません。終了しています。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:470
-msgid "Unable to read RHN proxy settings."
-msgstr "RHN プロキシ設定を読み取りできません。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:488
-msgid ""
-"\n"
-"Attempting to register system to Red Hat Subscription Management ..."
-msgstr ""
-"\n"
-"Red Hat サブスクリプション管理へのシステムの登録を試行しています..."
-
-# translation auto-copied from project Subscription Manager, version 0.97.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:503
-msgid ""
-"\n"
-"Unable to register.\n"
-"For further assistance, please contact Red Hat Global Support Services."
-msgstr ""
-"\n"
-"登録できません。\n"
-"詳細は、Red Hat グローバルサポートサービスに問い合わせて下さい。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:506
-#, c-format
-msgid ""
-"System '%s' successfully registered to Red Hat Subscription Management.\n"
-msgstr ""
-"システム '%s' は Red Hat サブスクリプション管理に正しく登録されました。\n"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:513
-msgid ""
-"Launching the GUI tool to manually attach subscriptions to this system ..."
-msgstr ""
-"このシステムに手作業でサブスクリプションを割り当てるため GUI ツールを起動"
-"中..."
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:516
-msgid "Attempting to auto-attach to appropriate subscriptions ..."
-msgstr "該当サブスクリプションへの自動割り当てを試行中..."
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:525
-msgid ""
-"\n"
-"Unable to auto-attach.  Do your existing subscriptions match the products "
-"installed on this system?"
-msgstr ""
-"\n"
-"自動割り当てを行えませんでした。このシステムにインストールしている製品と既存"
-"のサブスクリプションは一致していますか?"
-
-# translation auto-copied from project Subscription Manager, version 0.97.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:528
-#, c-format
-msgid ""
-"\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"details, and to make changes if necessary."
-msgstr ""
-"\n"
-"詳細を表示するには https://access.redhat.com/management/consumers/%s にアクセ"
-"スし、必要に応じて変更して下さい。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author khasida
-#: ../bin/rhn-migrate-classic-to-rhsm:546
-#, c-format
-msgid "Unable to read mapping file: %s"
-msgstr "マッピングファイルを読み込めません: %s"
-
-# translation auto-copied from project Subscription Manager, version 0.99.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:567
-msgid "Channels not available on RHSM:"
-msgstr "RHSM では使用できないチャンネル:"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:572
-msgid ""
-"\n"
-"No product certificates are mapped to these RHN Classic channels:"
-msgstr ""
-"\n"
-"これらの RHN Classic チャンネルにマッピングされている製品証明書はありません:"
-
-# translation auto-copied from project Subscription Manager, version 0.97.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:578
-msgid ""
-"\n"
-"Use --force to ignore these channels and continue the migration.\n"
-msgstr ""
-"\n"
-"--force を使用して、これらのチャンネルを無視して移行を続行します。\n"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:583
-msgid ""
-"\n"
-"Installing product certificates for these RHN Classic channels:"
-msgstr ""
-"\n"
-"これらの RHN Classic チャンネルの製品証明書をインストール:"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:597
-#, c-format
-msgid ""
-"\n"
-"Product certificates installed successfully to %s."
-msgstr ""
-"\n"
-"製品証明書が %s に正しくインストールされました。"
-
-# translation auto-copied from project Subscription Manager, version 0.98.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:641
-msgid ""
-"\n"
-"Unable to enable extra repositories."
-msgstr ""
-"\n"
-"余分なレポジトリを有効にできません"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:642
-msgid ""
-"Please ensure system has subscriptions attached, and see 'subscription-"
-"manager repos --help' to enable additional repositories"
-msgstr ""
-"システムにサブスクリプションがあることを確認してください。追加でリポジトリを"
-"有効にするには「subscription-manager repos --help」を参照してください。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:693
-msgid "The --servicelevel and --no-auto options cannot be used together."
-msgstr " --servicelevel と --no-auto のオプションは同時に使用できません。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:700
-#: ../bin/rhn-migrate-classic-to-rhsm:704
-msgid "Red Hat account: "
-msgstr "Red Hat アカウント: "
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:701
-#: ../bin/rhn-migrate-classic-to-rhsm:706
-msgid "System Engine Username: "
-msgstr "System Engine ユーザー名: "
-
-# translation auto-copied from project Subscription Manager, version 0.99.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:721
-msgid ""
-"\n"
-"Retrieving existing RHN Classic subscription information ..."
-msgstr ""
-"\n"
-"既存の RHN Classic サブスクリプション情報を取得中…"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:723
-msgid "System is currently subscribed to these RHN Classic Channels:"
-msgstr ""
-"システムは現在これらの RHN Classic チャンネルにサブスクライブされています:"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../bin/rhn-migrate-classic-to-rhsm:732
-msgid ""
-"\n"
-"Preparing to unregister system from RHN Classic ..."
-msgstr ""
-"\n"
-"RHN Classic からシステムを登録解除する準備をしています..."
-
 #: ../bin/subscription-manager-gui.py:110 ../bin/subscription-manager-gui:110
 msgid "launches the registration dialog on startup"
 msgstr ""
@@ -4450,7 +4347,7 @@ msgstr "有効性のチェックを行う頻度 (秒単位)"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/rhsm_icon.c:81 ../src/rhsmcertd.c:67
+#: ../src/rhsm_icon.c:81 ../src/rhsmcertd.c:68
 msgid "show debug messages"
 msgstr "デバッグメッセージの表示"
 
@@ -4564,37 +4461,35 @@ msgstr "オプションの構文解析失敗: %s\n"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/rhsmcertd.c:54
+#: ../src/rhsmcertd.c:55
 msgid "interval to run cert check (in minutes)"
 msgstr "証明書チェックを実行する間隔 (分単位)"
 
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../src/rhsmcertd.c:58
-msgid "deprecated, see auto-attach-interval"
-msgstr "廃止予定、 auto-attach-interval を参照"
+#: ../src/rhsmcertd.c:59
+msgid "deprecated, see --auto-attach-interval"
+msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/rhsmcertd.c:61
+#: ../src/rhsmcertd.c:62
 msgid "interval to run auto-attach (in minutes)"
 msgstr "自動割り当てを実行する間隔 (分単位)"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/rhsmcertd.c:64
+#: ../src/rhsmcertd.c:65
 msgid "run the initial checks immediately, with no delay"
 msgstr "初期チェックを遅延なしで直ちに実行"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/rhsmcertd.c:259
+#: ../src/rhsmcertd.c:266
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "詳しい情報を参照するには rhsmcertd --help を実行してください\n"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/rhsmcertd.c:285
+#: ../src/rhsmcertd.c:305
 msgid "Wrong number of arguments specified.\n"
 msgstr "無効な引数の番号が指定されています。\n"
 
@@ -4603,26 +4498,26 @@ msgstr "無効な引数の番号が指定されています。\n"
 #. New style args were used, assume error.
 #. We do not support both at once, other than
 #. debug and wait.
-#: ../src/rhsmcertd.c:343
+#: ../src/rhsmcertd.c:363
 msgid "Invalid argument specified.\n"
 msgstr "無効な引数が指定されています。\n"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/rhsmcertd.c:349
+#: ../src/rhsmcertd.c:369
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "警告: 非推奨の CLI 引数が使用されています。\n"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/rhsmcertd.c:364
+#: ../src/rhsmcertd.c:384
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "無効なオプション: %s\n"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/rhsmcertd.c:378
+#: ../src/rhsmcertd.c:398
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "無効な引数が指定されています: %s\n"
@@ -4650,6 +4545,14 @@ msgstr "サブスクリプション有効性アプレット"
 #: ../src/rct/printing.py:36
 msgid "ID"
 msgstr "ID"
+
+# translation auto-copied from project Subscription Manager, version 0.99.X,
+# document keys
+#: ../src/rct/printing.py:37 ../src/rct/printing.py:49
+#: ../src/rct/printing.py:77 ../src/rct/manifest_commands.py:107
+#: ../src/rct/manifest_commands.py:128
+msgid "Name"
+msgstr "名前"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author khasida
@@ -4851,85 +4754,199 @@ msgstr "不明な証明書タイプ"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/rct/commands.py:51
-msgid "You must specify a certificate file."
-msgstr "証明書ファイルを指定してください。"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../src/rct/commands.py:54
-msgid "The specified certificate file does not exist."
-msgstr "指定した証明書ファイルは存在しません。"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#: ../src/rct/commands.py:62
-#, python-format
-msgid "Unable to read certificate file '%s': %s"
-msgstr "証明書ファイル '%s' を読み込めません: %s"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#: ../src/rct/commands.py:66
+#: ../src/rct/cert_commands.py:35
 #, python-format
 msgid "%%prog %s [OPTIONS] CERT_FILE"
 msgstr "%%prog %s [オプション] CERT_FILE"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/rct/commands.py:78
+#: ../src/rct/cert_commands.py:43 ../src/rct/manifest_commands.py:153
+#, python-format
+msgid "Unable to read certificate file '%s': %s"
+msgstr "証明書ファイル '%s' を読み込めません: %s"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
+#: ../src/rct/cert_commands.py:49
+msgid "You must specify a certificate file."
+msgstr "証明書ファイルを指定してください。"
+
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
+#: ../src/rct/cert_commands.py:52
+msgid "The specified certificate file does not exist."
+msgstr "指定した証明書ファイルは存在しません。"
+
+# translation auto-copied from project Subscription Manager, version 1.1.X,
+# document keys
+#: ../src/rct/cert_commands.py:59
 msgid "Print certificate information"
 msgstr "証明書の詳細を表示"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/rct/commands.py:82
+#: ../src/rct/cert_commands.py:63
 msgid "do not show the cert's product information"
 msgstr "証明書の製品情報を表示しない"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/rct/commands.py:84
+#: ../src/rct/cert_commands.py:65
 msgid "do not show the cert's content info"
 msgstr "証明書の内容情報を表示しない"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/rct/commands.py:99
+#: ../src/rct/cert_commands.py:80
 msgid "Print certificate statistics and sizes"
 msgstr "証明書の統計情報およびサイズを表示"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/rct/commands.py:105
+#: ../src/rct/cert_commands.py:86
 #, python-format
 msgid "Type: %s"
 msgstr "タイプ: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/rct/commands.py:106
+#: ../src/rct/cert_commands.py:87
 #, python-format
 msgid "Version: %s"
 msgstr "バージョン: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/rct/commands.py:107
+#: ../src/rct/cert_commands.py:88
 #, python-format
 msgid "DER size: %db"
 msgstr "DER サイズ: %db"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/rct/commands.py:111
+#: ../src/rct/cert_commands.py:92
 #, python-format
 msgid "Subject Key ID size: %db"
 msgstr "サブジェクトキー ID サイズ: %db"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#: ../src/rct/commands.py:114
+#: ../src/rct/cert_commands.py:95
 #, python-format
 msgid "Content sets: %s"
 msgstr "コンテンツセット: %s"
+
+#: ../src/rct/manifest_commands.py:40
+#, python-format
+msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:45
+msgid "You must specify a manifest file."
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:48
+msgid "The specified manifest file does not exist."
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:72
+msgid "Print manifest information"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:95
+msgid "Server"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:96
+msgid "Server Version"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:97
+msgid "Date Created"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:98
+msgid "Creator"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:99
+msgid "General:"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:108
+msgid "UUID"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:110
+msgid "Consumer:"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:130
+msgid "Created"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:133
+msgid "Suport Level"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:134
+msgid "Suport Type"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:135
+msgid "Architectures"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:136
+msgid "Product Id"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:138
+msgid "Subscription Id"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:141
+msgid "Entitlement File"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:146
+msgid "Certificate File"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:155
+msgid "Certificate Version"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:157
+msgid "Subscription:"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:164
+msgid "Provided Products:"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:170
+msgid "Content Sets:"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:181
+msgid "\tManifest"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:195
+msgid "Dump the contents of a manifest"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:199
+msgid "directory to extract the manifest to"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:207
+#, python-format
+msgid "The manifest has been dumped to the %s directory"
+msgstr ""
+
+#: ../src/rct/manifest_commands.py:209
+msgid "The manifest has been dumped to the current directory"
+msgstr ""

@@ -150,7 +150,11 @@ class CLI:
         cmd = self._find_best_match(sys.argv)
         if len(sys.argv) < 2 or not cmd:
             self._usage()
-            sys.exit(1)
+            # Allow for a 0 return code if just calling --help
+            return_code = 1
+            if (len(sys.argv) > 1) and (sys.argv[1] == "--help"):
+                return_code = 0
+            sys.exit(return_code)
 
         try:
             return cmd.main()

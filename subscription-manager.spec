@@ -10,7 +10,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.1
+Version: 1.8.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -31,7 +31,7 @@ Requires:  python-iniparse
 Requires:  pygobject2
 Requires:  python-dateutil
 Requires:  virt-what
-Requires:  python-rhsm >= 1.8.0
+Requires:  python-rhsm >= 1.8.2
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 Requires:  usermode
@@ -303,6 +303,9 @@ rm -rf %{buildroot}
 
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)
+%dir %{_datadir}/rhsm/subscription_manager/migrate
+%{_datadir}/rhsm/subscription_manager/migrate/__init__.py*
+%{_datadir}/rhsm/subscription_manager/migrate/migrate.py*
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
 # Install num migration is only for RHEL 5:
 %{?el5:%attr(755,root,root) %{_sbindir}/install-num-migrate-to-rhsm}
@@ -360,6 +363,40 @@ fi
 %endif
 
 %changelog
+* Thu Feb 14 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.3-1
+- string and string catalog update from zanata (alikins@redhat.com)
+- 908954: Ensure that 'Not Set' is shown in the preferences dialog if it is not
+  set (bkearney@redhat.com)
+- 906214: rct --help should return 0. (bkearney@redhat.com)
+- 909294: Add accessibility names to the preferences combo boxes
+  (bkearney@redhat.com)
+- 878097: Clarify that the --org option is ORG_KEY and not ORG_NAME
+  (bkearney@redhat.com)
+- Just use 0 as error for reading int keys (alikins@redhat.com)
+- Old version of config entries considered to make changes backwards compatible
+  (wpoteat@redhat.com)
+- 882459: aftermath of bug 876753 - Change --heal-interval to --attach-interval
+  in rhsmcertd (wpoteat@redhat.com)
+
+* Fri Feb 08 2013 Bryan Kearney <bkearney@redhat.com> 1.8.2-1
+- Update tito for RHEL 7.0 (bkearney@redhat.com)
+- Small cleanups for test_migrate (alikins@redhat.com)
+- Write repofile once instead of during every iteration. (awood@redhat.com)
+- Add unit test for migration script. (awood@redhat.com)
+- Adding more tests for the migration script. (awood@redhat.com)
+- Bump the required version of python-rhsm to pick up the new config file
+  defaults (bkearney@redhat.com)
+- Modify migration script tests to run on Fedora. (awood@redhat.com)
+- Give users the ability to disable package reporting (bkearney@redhat.com)
+- 891377: Note in deprecated string that auto-attach-interval is a command
+  option (bkearney@redhat.com)
+- 901612: Yum plugin warnings should go to stderr, not stdout
+  (bkearney@redhat.com)
+- 903298: Replace use of 'Register to' with 'Register with'
+  (bkearney@redhat.com)
+- Rewrite of the migration script featuring unit tests. (awood@redhat.com)
+- Remove F16 and old cvs releasers, add F18. (dgoodwin@redhat.com)
+
 * Thu Jan 24 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.1-1
 - Add two manifest commands to rct. (bkearney@redhat.com)
 - latest translations from zanata (alikins@redhat.com)
