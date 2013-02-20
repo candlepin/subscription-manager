@@ -122,13 +122,13 @@ from subscription_manager import base_plugin
 # through PluginManager. The main issue being that PluginConfigs
 # init'ed based on the PluginClass passed in, and by defaults, looks
 # for a real config file somewhere.
-class TestBasePluginManager(unittest.TestCase):
+class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
 
     def setUp(self):
         self.base_manager = BasePluginManager()
         self.assertTrue(isinstance(self.base_manager, BasePluginManager))
 
-    def test_add_plugins_from_empty_mock_module(self):
+    def test_empty_mock_module(self):
         mock_module = mock.Mock()
         self.base_manager.add_plugins_from_module(mock_module)
         # that was not a module, nor a plugin module, nor had any plugin classes
@@ -136,7 +136,7 @@ class TestBasePluginManager(unittest.TestCase):
         self.assertEquals({}, self.base_manager._slot_to_funcs)
         self.assertEquals({}, self.base_manager._plugin_classes)
 
-    def test_add_plugins_from_module_no_classes(self):
+    def test_no_classes(self):
         mock_module = mock.Mock()
         mock_module.__name__ = 'mock_module'
 
@@ -146,7 +146,7 @@ class TestBasePluginManager(unittest.TestCase):
         self.assertEquals({}, self.base_manager._slot_to_funcs)
         self.assertEquals({}, self.base_manager._plugin_classes)
 
-    def test_add_plugins_from_module_unrelated_classes(self):
+    def test_unrelated_classes(self):
         mock_module = mock.Mock()
         mock_module.__name__ = 'mock_module'
 
@@ -158,7 +158,7 @@ class TestBasePluginManager(unittest.TestCase):
         self.assertEquals({}, self.base_manager._slot_to_funcs)
         self.assertEquals({}, self.base_manager._plugin_classes)
 
-    def test_add_plugins_from_module_plugin_class_no_conf(self):
+    def test_plugin_class_no_conf(self):
         mock_module = mock.Mock()
         mock_module.__name__ = 'mock_module'
 
@@ -182,7 +182,7 @@ class TestBasePluginManager(unittest.TestCase):
         self.assertEquals({}, self.base_manager._slot_to_funcs)
         self.assertEquals({}, self.base_manager._plugin_classes)
 
-    def test_add_plugins_from_module_plugin_config_fail(self):
+    def test_plugin_config_fail(self):
         mock_module = mock.Mock()
         mock_module.__name__ = 'mock_module'
 
@@ -206,7 +206,7 @@ class TestBasePluginManager(unittest.TestCase):
         self.assertEquals({}, self.base_manager._plugin_classes)
 
     @mock.patch('subscription_manager.plugins.PluginConfig')
-    def test_add_plugins_from_module_plugin_config_disabled(self, mock_plugin_conf):
+    def test_plugin_config_disabled(self, mock_plugin_conf):
         mock_module = mock.Mock()
         mock_module.__name__ = 'mock_module'
 
@@ -240,7 +240,7 @@ class TestBasePluginManager(unittest.TestCase):
         self.assertTrue(PluginClass.get_plugin_key() in self.base_manager._plugin_classes)
 
     @mock.patch('subscription_manager.plugins.PluginConfig')
-    def test_add_plugins_from_module_plugin_config_enabled(self, mock_plugin_conf):
+    def test_plugin_config_enabled(self, mock_plugin_conf):
         mock_module = mock.Mock()
         mock_module.__name__ = 'mock_module'
 
@@ -282,7 +282,7 @@ class TestBasePluginManager(unittest.TestCase):
         self.assertFalse(PluginClass.found_slots_for_hooks)
 
     @mock.patch('subscription_manager.plugins.PluginConfig')
-    def test_add_plugins_from_module_plugin_unmatch_hooks(self, mock_plugin_conf):
+    def test_plugin_unmatch_hooks(self, mock_plugin_conf):
         mock_module = mock.Mock()
         mock_module.__name__ = 'mock_module'
 
@@ -326,7 +326,7 @@ class TestBasePluginManager(unittest.TestCase):
         self.assertFalse(PluginClass.found_slots_for_hooks)
 
     @mock.patch('subscription_manager.plugins.PluginConfig')
-    def test_add_plugins_from_module_plugin_hooks_with_conduits(self, mock_plugin_conf):
+    def test_plugin_hooks_with_conduits(self, mock_plugin_conf):
         self.base_manager.conduits = [FactsConduit]
         # to refill these
         self.base_manager._populate_slots()
@@ -383,7 +383,7 @@ class TestBasePluginManager(unittest.TestCase):
         self.assertTrue('post_facts_collection_hook' in [x.__name__ for x in funcs])
 
     @mock.patch('subscription_manager.plugins.PluginConfig')
-    def test_add_plugins_from_module_with_conduits_no_matching_hooks(self, mock_plugin_conf):
+    def test_with_conduits_no_matching_hooks(self, mock_plugin_conf):
         self.base_manager.conduits = [FactsConduit]
         # to refill these
         self.base_manager._populate_slots()
@@ -438,6 +438,7 @@ class TestBasePluginManager(unittest.TestCase):
 
 
 # This is more of a functional test, but for plugins I think that this is okay
+# uses test plugins from test/plugins
 class TestPluginManager(unittest.TestCase):
     def setUp(self):
         self.module_dir = os.path.join(os.path.dirname(__file__), "plugins")
@@ -467,7 +468,7 @@ class TestPluginManager(unittest.TestCase):
         self.assertTrue(parser)
 
 
-class TestPluginManagerLoadPlugins(unittest.TestCase):
+class TestPluginManagerLoadPluginsFromModule(unittest.TestCase):
     def setUp(self):
         self.module_dir = os.path.join(os.path.dirname(__file__), "plugins")
         self.manager = PluginManager("some/search/path", "some/config/path")
@@ -525,7 +526,7 @@ class TestPluginManagerConfigMap(unittest.TestCase):
         __module__ = "some_module"
 
     def setUp(self):
-        self.manager = PluginManager()
+        self.manager = BasePluginManager()
         self.plugin_config = PluginConfigForTest(self.PluginClass.get_plugin_key(),
                                            enabled='1')
         self.plugin_to_config_map = {self.PluginClass.get_plugin_key(): self.plugin_config}
@@ -542,6 +543,21 @@ class TestPluginManagerConfigMap(unittest.TestCase):
                           self.manager.add_plugin_class,
                           self.PluginClass,
                           plugin_to_config_map=broken_map)
+
+
+class TestPluginManagerConfigMapAllHooks(TestPluginManagerConfigMap):
+    # example of how a all_hooks class might work
+    class PluginClass(base_plugin.SubManPlugin):
+        all_hooks = True
+        __module__ = "some_module"
+
+        def __getattr__(self, name):
+            if name.endswith('_hook'):
+                return self.generic_hook_handler
+            raise AttributeError
+
+        def generic_hook_handler(self, conduit):
+            pass
 
 
 class TestPluginManagerReporting(unittest.TestCase):
