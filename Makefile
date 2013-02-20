@@ -99,14 +99,15 @@ install-plugins-conf:
 	install -d ${RHSM_PLUGIN_CONF_DIR}
 	install -m 644 -p src/rhsm-plugins/*.conf ${RHSM_PLUGIN_CONF_DIR}
 
-install-example-plugins:
+install-example-plugins: install-example-plugins-files install-example-plugins-conf
+
+install-example-plugins-files:
 	install -d ${RHSM_PLUGIN_DIR}
 	install -m 644 -p example-plugins/*.py ${RHSM_PLUGIN_DIR}
 
 install-example-plugins-conf:
 	install -d ${RHSM_PLUGIN_CONF_DIR}
 	install -m 644 -p example-plugins/*.conf ${RHSM_PLUGIN_CONF_DIR}
-
 
 install: install-files install-conf install-help-files
 
