@@ -544,11 +544,22 @@ class BasePluginManager(object):
         # format of slot_name_hook
         # only look for func's that match slot's we have in our conduits
         class_is_used = False
+
         for slot in self._slot_to_funcs.keys():
             func_name = slot + "_hook"
-            if hasattr(instance, func_name):
-                self._slot_to_funcs[slot].append(getattr(instance, func_name))
-                class_is_used = True
+            if instance.all_slots or hasattr(instance, func_name):
+                # FIXME: document that all_hooks could result in calls to
+                # plugin class for methods that map to slots that it may
+                # not have known about. aka, all_hooks is complicated
+
+                # verify the hook is a callable
+                if callable(getattr(instance, func_name)):
+                    self._slot_to_funcs[slot].append(getattr(instance, func_name))
+                    class_is_used = True
+                else:
+                    # found the attribute, but it is not callable
+                    # note we let AttributeErrors bubble up
+                    log.debug("%s plugin does not have a callable() method %s" % (plugin_key, func_name))
 
         # if we don't find any place to use this class, note that on the plugin class
         if class_is_used:
@@ -607,6 +618,7 @@ class BasePluginManager(object):
                 # invoke the method with the conduit
                 func(conduit_instance)
             except Exception, e:
+                log.exception(e)
                 raise e
         # FIXME: need to note if a slot is not found?
         # debug logging maybe
@@ -642,7 +654,8 @@ class BasePluginManager(object):
         Ordered by conduit name, for presentation.
         """
         # I'm sure a clever list comprension could replace this with one line
-        # why? default sort of slots is pure lexical, so all the pre's come
+        #
+        # The default sort of slots is pure lexical, so all the pre's come
         # first, which is weird. So this just sorts the slots by conduit name,
         # then by slot name
         conduit_to_slots = {}
