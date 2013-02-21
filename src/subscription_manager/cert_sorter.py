@@ -58,7 +58,7 @@ class CertSorter(object):
 
         # All products installed on this machine, regardless of status. Maps
         # installed product ID to product certificate.
-        self.installed_products = {}
+        self.installed_products = self.product_dir.get_installed_products()
 
         # Installed products which do not have an entitlement that is valid,
         # or expired. They may however have entitlements for the future.
@@ -115,7 +115,6 @@ class CertSorter(object):
         log.debug("Sorting product and entitlement cert status for: %s" %
                 on_date)
 
-        self._populate_installed_products()
         self._scan_entitlement_certs()
         self._scan_for_unentitled_products()
 
@@ -158,15 +157,6 @@ class CertSorter(object):
                 if product_hash == cert_product.id:
                     entitlements.append(cert)
         return entitlements
-
-    def _populate_installed_products(self):
-        """ Build the dict of all installed products. """
-        prod_certs = self.product_dir.list()
-        for product_cert in prod_certs:
-            product = product_cert.products[0]
-            self.installed_products[product.id] = product_cert
-
-        log.debug("Installed product IDs: %s" % self.installed_products.keys())
 
     # pass in list to update, like installed_products
     # keep duplicate lists for future dates, to find first_invalid

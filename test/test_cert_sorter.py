@@ -14,7 +14,7 @@
 
 import unittest
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
-    StubCertificateDirectory, StubEntitlementDirectory, StubFacts
+    StubCertificateDirectory, StubEntitlementDirectory, StubFacts, StubProductDirectory
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter, \
     CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 from datetime import timedelta, datetime
@@ -47,7 +47,7 @@ class CertSorterTests(unittest.TestCase):
 
     def setUp(self):
         # Setup mock product and entitlement certs:
-        self.prod_dir = StubCertificateDirectory([
+        self.prod_dir = StubProductDirectory([
             # Will be unentitled:
             StubProductCertificate(StubProduct(INST_PID_1)),
             # Will be entitled:
@@ -206,7 +206,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertEquals(SUBSCRIBED, self.sorter.get_status(INST_PID_3))
 
     def test_non_stacked_lacking_sockets(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        prod_dir = StubProductDirectory([stub_prod_cert(INST_PID_1)])
         # System has 8 sockets:
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
         # Only 2 sockets covered by a non-stacked entitlement:
@@ -222,7 +222,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertEquals(1, len(sorter.partially_valid_products[INST_PID_1]))
 
     def test_non_stacked_0_sockets(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        prod_dir = StubProductDirectory([stub_prod_cert(INST_PID_1)])
         # System has 8 sockets:
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
         # 0 sockets is basically "unlimited" sockets
@@ -237,7 +237,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
 
     def test_4GB_system_covered_by_1_4GB_ent(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        prod_dir = StubProductDirectory([stub_prod_cert(INST_PID_1)])
         # System has 4194304 total memory:
         stub_facts = StubFacts(fact_dict={"memory.memtotal": "4194304"})
         ent_dir = StubCertificateDirectory([
@@ -250,7 +250,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertEquals(1, len(sorter.valid_products))
 
     def test_8GB_system_partially_covered_by_4GB_ent(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        prod_dir = StubProductDirectory([stub_prod_cert(INST_PID_1)])
         # System has 8388608 total memory:
         stub_facts = StubFacts(fact_dict={"memory.memtotal": "8388608"})
         ent_dir = StubCertificateDirectory([
@@ -263,7 +263,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertEquals(1, len(sorter.partially_valid_products))
 
     def test_4GB_2_socket_system_covered_by_1_4GB_2_socket_ent(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        prod_dir = StubProductDirectory([stub_prod_cert(INST_PID_1)])
         # System has 4194304 total memory and 2 sockets
         stub_facts = StubFacts(fact_dict={"memory.memtotal": "4194304",
                                           "cpu.cpu_socket(s)": 2})
@@ -277,7 +277,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertEquals(1, len(sorter.valid_products))
 
     def test_4GB_4_socket_system_partially_covered_by_1_4GB_2_socket_ent(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        prod_dir = StubProductDirectory([stub_prod_cert(INST_PID_1)])
         # System has 4194304 total memory and 4 sockets
         stub_facts = StubFacts(fact_dict={"memory.memtotal": "4194304",
                                           "cpu.cpu_socket(s)": 4})
@@ -291,7 +291,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertEquals(1, len(sorter.partially_valid_products))
 
     def test_8GB_2_socket_system_partially_covered_by_1_4GB_2_socket_ent(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        prod_dir = StubProductDirectory([stub_prod_cert(INST_PID_1)])
         # System has 8388608 total memory and 2 sockets
         stub_facts = StubFacts(fact_dict={"memory.memtotal": "8388608",
                                           "cpu.cpu_socket(s)": 2})
@@ -308,7 +308,7 @@ class CertSorterTests(unittest.TestCase):
 class CertSorterStackingTests(unittest.TestCase):
 
     def test_simple_partial_stack(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        prod_dir = StubProductDirectory([stub_prod_cert(INST_PID_1)])
         # System has 8 sockets:
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
         # Only 2 sockets covered:
@@ -323,7 +323,7 @@ class CertSorterStackingTests(unittest.TestCase):
         self.assertEquals(1, len(sorter.partially_valid_products[INST_PID_1]))
 
     def test_simple_full_stack_multicert(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        prod_dir = StubProductDirectory([stub_prod_cert(INST_PID_1)])
         # System has 8 sockets:
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
         # 2 ent certs providing 4 sockets each means we're valid:
@@ -338,7 +338,7 @@ class CertSorterStackingTests(unittest.TestCase):
         self.assertEquals(0, len(sorter.partially_valid_products))
 
     def test_simple_full_stack_0_sockets(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        prod_dir = StubProductDirectory([stub_prod_cert(INST_PID_1)])
         # System has 1 sockets:
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 1})
         # 0 sockets is basically "unlimited" sockets
@@ -352,7 +352,7 @@ class CertSorterStackingTests(unittest.TestCase):
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
 
     def test_simple_full_stack_singlecert_with_quantity(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        prod_dir = StubProductDirectory([stub_prod_cert(INST_PID_1)])
         # System has 8 sockets:
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
         # 1 ent cert providing 4 sockets with quantity 2 means we're valid:
@@ -369,7 +369,7 @@ class CertSorterStackingTests(unittest.TestCase):
     # This is still technically invalid:
     def test_partial_stack_for_uninstalled_products(self):
         # No products installed:
-        prod_dir = StubCertificateDirectory([])
+        prod_dir = StubProductDirectory([])
 
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 42})
         ents = []
@@ -389,7 +389,7 @@ class CertSorterStackingTests(unittest.TestCase):
     # Entitlements with the same stack ID will not necessarily have the same
     # first product, thus why we key off stacking_id attribute:
     def test_partial_stack_different_first_product(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        prod_dir = StubProductDirectory([stub_prod_cert(INST_PID_1)])
 
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 4})
         ents = []
@@ -410,7 +410,7 @@ class CertSorterStackingTests(unittest.TestCase):
 
     # Edge case, but technically two stacks could have same first product
     def test_multiple_partial_stacks_same_first_product(self):
-        prod_dir = StubCertificateDirectory([
+        prod_dir = StubProductDirectory([
             stub_prod_cert(INST_PID_1)])
 
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 4})
@@ -433,7 +433,7 @@ class CertSorterStackingTests(unittest.TestCase):
         self.assertTrue(STACK_2 in sorter.partial_stacks)
 
     def test_valid_stack_different_first_products(self):
-        prod_dir = StubCertificateDirectory([stub_prod_cert(INST_PID_1)])
+        prod_dir = StubProductDirectory([stub_prod_cert(INST_PID_1)])
 
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 4})
         # Two entitlements, same stack, different first products, each
@@ -603,6 +603,6 @@ def create_prod_cert(pid):
 
 def create_cert_sorter(product_certs, entitlement_certs, machine_sockets=8):
     stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": machine_sockets})
-    return CertSorter(StubCertificateDirectory(product_certs),
+    return CertSorter(StubProductDirectory(product_certs),
                       StubEntitlementDirectory(entitlement_certs),
                       stub_facts.get_facts())

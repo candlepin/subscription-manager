@@ -18,8 +18,10 @@ import os
 
 from mock import patch
 
-from stubs import StubProduct, StubEntitlementCertificate
-from subscription_manager.certdirectory import Path, EntitlementDirectory
+from stubs import StubProduct, StubEntitlementCertificate, \
+    StubProductCertificate
+from subscription_manager.certdirectory import Path, EntitlementDirectory, \
+    ProductDirectory
 from subscription_manager.repolib import RepoFile
 from subscription_manager.productid import ProductDatabase
 
@@ -112,3 +114,17 @@ class TestEntitlementDirectoryCheckKey(unittest.TestCase):
         ent_cert = StubEntitlementCertificate(product)
         ret = ent_dir._check_key(ent_cert)
         self.assertFalse(ret)
+
+
+class ProductDirectoryTest(unittest.TestCase):
+    def setUp(self):
+        ProductDirectory.PATH = "/some/path"
+
+    def test_get_installed_products(self):
+        ProductDirectory.__init__ = lambda x: None
+        pd = ProductDirectory()
+        top_product = StubProduct("top")
+        provided_products = [StubProduct("provided")]
+        pd.list = lambda: [StubProductCertificate(top_product, provided_products)]
+        installed_products = pd.get_installed_products()
+        self.assertTrue("top" in installed_products)
