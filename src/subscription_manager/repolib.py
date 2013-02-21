@@ -209,6 +209,16 @@ class UpdateAction:
                 repo['enabled'] = "0"
             repo['baseurl'] = self.join(baseurl, self._use_release_for_releasever(content.url))
 
+            # Extract the variables from thr url
+            repo_parts = repo['baseurl'].split("/")
+            repoid_vars = []
+
+            for part in repo_parts:
+                if part.startswith("$"):
+                    repoid_vars.append(part[1:])
+            if len(repoid_vars):
+                repo['ui_repoid_vars'] = " ".join(repoid_vars)
+
             # If no GPG key URL is specified, turn gpgcheck off:
             gpg_url = content.gpg
             if not gpg_url:
@@ -280,6 +290,7 @@ class Repo(dict):
         ('proxy', 0, None),
         ('proxy_username', 0, None),
         ('proxy_password', 0, None),
+        ('ui_repoid_vars', 0, None),
     )
 
     def __init__(self, repo_id, existing_values={}):
