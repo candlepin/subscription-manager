@@ -48,6 +48,9 @@ from subscription_manager.base_plugin import SubManPlugin
 # then the minor number must be incremented.
 API_VERSION = "1.0"
 
+DEFAULT_SEARCH_PATH = "/usr/share/rhsm-plugins/"
+DEFAULT_CONF_PATH = "/etc/rhsm/pluginconf.d/"
+
 # we really only want one PluginManager instance, so share it
 plugin_manager = None
 
@@ -697,6 +700,9 @@ class PluginManager(BasePluginManager):
     """Finds, load, and provides acccess to subscription-manager plugins
     using subscription-manager default plugin search path and plugin
     conf path."""
+    default_search_path = DEFAULT_SEARCH_PATH
+    default_conf_path = DEFAULT_CONF_PATH
+
     def __init__(self, search_path=None, plugin_conf_path=None):
         """init PluginManager
 
@@ -704,8 +710,21 @@ class PluginManager(BasePluginManager):
             search_path: if not specified, use the configured 'pluginDir'
             plugin_conf_path: if not specified, use the configured 'pluginConfDir'
         """
-        init_search_path = search_path or cfg.get("rhsm", "pluginDir")
-        init_plugin_conf_path = plugin_conf_path or cfg.get("rhsm", "pluginConfDir")
+        cfg_search_path = None
+        cfg_conf_path = None
+
+        try:
+            cfg_search_path = cfg.get("rhsm", "pluginDir")
+            cfg_conf_path = cfg.get("rhsm", "pluginConfDir")
+        except NoOptionError:
+            log.warning("no config options found for plugin paths, using defaults")
+            cfg_search_path = None
+            cfg_conf_path = None
+
+        init_search_path = search_path or cfg_search_path or self.default_search_path
+        init_plugin_conf_path = plugin_conf_path or cfg_conf_path \
+            or self.default_conf_path
+
         super(PluginManager, self).__init__(search_path=init_search_path,
                                             plugin_conf_path=init_plugin_conf_path)
 
