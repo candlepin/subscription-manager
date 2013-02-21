@@ -121,10 +121,29 @@ class RepoTests(unittest.TestCase):
         # otherwise left alone.
         self.assertTrue("metadata_expire" in existing_repo.keys())
 
+    def test_set_mutable_property_now_not_in_cert(self):
+        existing_repo = Repo('testrepo')
+        existing_repo['metadata_expire'] = "blah"
+        incoming_repo = {}
+        existing_repo.update(incoming_repo)
+        # re comments in repolib
+        # Mutable properties should be added if not currently defined,
+        # otherwise left alone.
+        self.assertTrue("metadata_expire" in existing_repo.keys())
+
     def test_set_immutable_property_now_none(self):
         existing_repo = Repo('testrepo')
         existing_repo['proxy_username'] = "blah"
         incoming_repo = {'proxy_username': None}
+        existing_repo.update(incoming_repo)
+        # Immutable properties should be always be added/updated,
+        # and removed if undefined in the new repo definition.
+        self.assertFalse("proxy_username" in existing_repo.keys())
+
+    def test_set_immutable_property_now_not_in_cert(self):
+        existing_repo = Repo('testrepo')
+        existing_repo['proxy_username'] = "blah"
+        incoming_repo = {}
         existing_repo.update(incoming_repo)
         # Immutable properties should be always be added/updated,
         # and removed if undefined in the new repo definition.
@@ -164,7 +183,7 @@ class UpdateActionTests(unittest.TestCase):
                 StubContent("c2", required_tags="TAG1", gpg=""),
                 StubContent("c3", required_tags="TAG1,TAG2,TAG3"),  # should get skipped
                 StubContent("c4", required_tags="TAG1,TAG2,TAG4,TAG5,TAG6",
-                    gpg="/gpg.key"),
+                    gpg="/gpg.key", url="/$some/$path"),
                 StubContent("c5", content_type="file", required_tags="", gpg=None),
                 StubContent("c6", content_type="file", required_tags="", gpg=None),
         ]
@@ -202,6 +221,14 @@ class UpdateActionTests(unittest.TestCase):
         c4 = self._find_content(content, 'c4')
         self.assertEquals('http://example.com/gpg.key', c4['gpgkey'])
         self.assertEquals('1', c4['gpgcheck'])
+
+    def test_ui_repoid_vars(self):
+        content = self.update_action.get_content(self.stub_ent_cert,
+                "http://example.com", None)
+        c4 = self._find_content(content, 'c4')
+        self.assertEquals('some path', c4['ui_repoid_vars'])
+        c2 = self._find_content(content, 'c2')
+        self.assertEquals(None, c2['ui_repoid_vars'])
 
     def test_tags_found(self):
         content = self.update_action.get_unique_content()
