@@ -17,7 +17,7 @@ import unittest
 from datetime import timedelta, datetime
 
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
-    StubCertificateDirectory, StubFacts, StubEntitlementDirectory
+    StubCertificateDirectory, StubFacts, StubEntitlementDirectory, StubProductDirectory
 from subscription_manager.validity import find_first_invalid_date, \
     ValidProductDateRangeCalculator
 
@@ -37,14 +37,14 @@ class FindFirstInvalidDateTests(unittest.TestCase):
                     start_date=datetime(2010, 1, 1),
                     end_date=datetime(2060, 1, 1))
         ent_dir = StubCertificateDirectory([cert1, cert2])
-        prod_dir = StubCertificateDirectory([])
+        prod_dir = StubProductDirectory([])
 
         last_valid_date = find_first_invalid_date(ent_dir, prod_dir, {})
         self.assertTrue(last_valid_date is None)
 
     def test_currently_unentitled_products(self):
         cert = StubProductCertificate(StubProduct('unentitledProduct'))
-        prod_dir = StubCertificateDirectory([cert])
+        prod_dir = StubProductDirectory([cert])
 
         cert1 = StubEntitlementCertificate(
                 StubProduct('product1'), start_date=datetime(2010, 1, 1),
@@ -65,7 +65,7 @@ class FindFirstInvalidDateTests(unittest.TestCase):
 
     def test_entitled_products(self):
         cert = StubProductCertificate(StubProduct('product1'))
-        prod_dir = StubCertificateDirectory([cert])
+        prod_dir = StubProductDirectory([cert])
 
         cert1 = StubEntitlementCertificate(
                 StubProduct('product1'), start_date=datetime(2010, 1, 1),
@@ -83,7 +83,7 @@ class FindFirstInvalidDateTests(unittest.TestCase):
     # for when the first expires:
     def test_future_entitled_products(self):
         cert = StubProductCertificate(StubProduct('product1'))
-        prod_dir = StubCertificateDirectory([cert])
+        prod_dir = StubProductDirectory([cert])
 
         cert1 = StubEntitlementCertificate(
                 StubProduct('product1'), start_date=datetime(2010, 1, 1, tzinfo=GMT()),
@@ -101,7 +101,7 @@ class FindFirstInvalidDateTests(unittest.TestCase):
 
     def test_all_expired_entitlements(self):
         cert = StubProductCertificate(StubProduct('product1'))
-        prod_dir = StubCertificateDirectory([cert])
+        prod_dir = StubProductDirectory([cert])
 
         cert1 = StubEntitlementCertificate(
                 StubProduct('product1'), start_date=datetime(2000, 1, 1, tzinfo=GMT()),
@@ -526,7 +526,7 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
 
 def create_cert_sorter(product_certs, entitlement_certs, machine_sockets=8):
     stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": machine_sockets})
-    return CertSorter(StubCertificateDirectory(product_certs),
+    return CertSorter(StubProductDirectory(product_certs),
                       StubEntitlementDirectory(entitlement_certs),
                       stub_facts.get_facts())
 
