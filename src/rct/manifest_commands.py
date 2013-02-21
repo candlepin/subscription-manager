@@ -28,6 +28,17 @@ from subscription_manager.cli import InvalidCLIOptionError
 _ = gettext.gettext
 
 
+def get_value(json_dict, path):
+    current = json_dict
+    for item in path.split("."):
+        if item in current:
+            current = current[item]
+        else:
+            return ""
+
+    return current
+
+
 class RCTManifestCommand(RCTCliCommand):
 
     INNER_FILE = "consumer_export.zip"
@@ -92,10 +103,10 @@ class CatManifestCommand(RCTManifestCommand):
         part = open(os.path.join(location, "export", "meta.json"))
         data = json.loads(part.read())
         to_print = []
-        to_print.append((_("Server"), data["webAppPrefix"]))
-        to_print.append((_("Server Version"), data["version"]))
-        to_print.append((_("Date Created"), data["created"]))
-        to_print.append((_("Creator"), data["principalName"]))
+        to_print.append((_("Server"), get_value(data, "webAppPrefix")))
+        to_print.append((_("Server Version"), get_value(data, "version")))
+        to_print.append((_("Date Created"), get_value(data, "created")))
+        to_print.append((_("Creator"), get_value(data, "principalName")))
         self._print_section(_("General:"), to_print)
         part.close()
 
@@ -104,15 +115,15 @@ class CatManifestCommand(RCTManifestCommand):
         part = open(os.path.join(location, "export", "consumer.json"))
         data = json.loads(part.read())
         to_print = []
-        to_print.append((_("Name"), data["name"]))
-        to_print.append((_("UUID"), data["uuid"]))
-        to_print.append((_("Type"), data["type"]["label"]))
+        to_print.append((_("Name"), get_value(data, "name")))
+        to_print.append((_("UUID"), get_value(data, "uuid")))
+        to_print.append((_("Type"), get_value(data, "type.label")))
         self._print_section(_("Consumer:"), to_print)
         part.close()
 
     def _get_product_attribute(self, name, data):
         return_value = None
-        for attr in data["pool"]["productAttributes"]:
+        for attr in get_value(data, "pool.productAttributes"):
             if attr["name"] == name:
                 return_value = attr["value"]
                 break
@@ -125,17 +136,17 @@ class CatManifestCommand(RCTManifestCommand):
             part = open(os.path.join(ent_dir, ent_file))
             data = json.loads(part.read())
             to_print = []
-            to_print.append((_("Name"), data["pool"]["productName"]))
-            to_print.append((_("Quantity"), data["quantity"]))
-            to_print.append((_("Created"), data["created"]))
-            to_print.append((_("Start Date"), data["startDate"]))
-            to_print.append((_("End Date"), data["endDate"]))
+            to_print.append((_("Name"), get_value(data, "pool.productName")))
+            to_print.append((_("Quantity"), get_value(data, "quantity")))
+            to_print.append((_("Created"), get_value(data, "created")))
+            to_print.append((_("Start Date"), get_value(data, "startDate")))
+            to_print.append((_("End Date"), get_value(data, "endDate")))
             to_print.append((_("Suport Level"), self._get_product_attribute("support_level", data)))
             to_print.append((_("Suport Type"), self._get_product_attribute("support_type", data)))
             to_print.append((_("Architectures"), self._get_product_attribute("arch", data)))
-            to_print.append((_("Product Id"), data["pool"]["productId"]))
-            to_print.append((_("Contract"), data["pool"]["contractNumber"]))
-            to_print.append((_("Subscription Id"), data["pool"]["subscriptionId"]))
+            to_print.append((_("Product Id"), get_value(data, "pool.productId")))
+            to_print.append((_("Contract"), get_value(data, "pool.contractNumber")))
+            to_print.append((_("Subscription Id"), get_value(data, "pool.subscriptionId")))
 
             entitlement_file = os.path.join("export", "entitlements", "%s.json" % data["id"])
             to_print.append((_("Entitlement File"), entitlement_file))
