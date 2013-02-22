@@ -992,7 +992,7 @@ class AsyncBackend(object):
                     facts=facts.get_facts(), owner=owner, environment=env,
                     keys=activation_keys,
                     installed_products=installed_mgr.format_for_server())
-            self.plugin_manager.run("post_register_consumer", name=name,
+            self.plugin_manager.run("post_register_consumer", consumer=retval,
                 facts=facts.get_facts())
 
             # Facts and installed products went out with the registration

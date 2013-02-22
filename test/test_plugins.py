@@ -842,6 +842,15 @@ class TestRegistrationConduit(unittest.TestCase):
         self.assertEquals({}, conduit.facts)
 
 
+class TestPostRegistrationConduit(unittest.TestCase):
+    def test_post_registration_conduit(self):
+        conduit = plugins.PostRegistrationConduit(StubPluginClass,
+                                                  consumer={'uuid': 'some_uuid'},
+                                                  facts={})
+        self.assertEquals("some_uuid", conduit.consumer['uuid'])
+        self.assertEquals({}, conduit.facts)
+
+
 class TestSubscriptionConduit(unittest.TestCase):
     def test_subscription_conduit(self):
         conduit = plugins.SubscriptionConduit(StubPluginClass,

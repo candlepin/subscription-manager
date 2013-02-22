@@ -221,7 +221,7 @@ class BaseConduit(object):
 
 class RegistrationConduit(BaseConduit):
     """Conduit for uses with registration."""
-    slots = ['pre_register_consumer', 'post_register_consumer']
+    slots = ['pre_register_consumer']
 
     def __init__(self, clazz, name, facts):
         """init for RegistrationConduit
@@ -232,6 +232,23 @@ class RegistrationConduit(BaseConduit):
         """
         super(RegistrationConduit, self).__init__(clazz)
         self.name = name
+        self.facts = facts
+
+
+class PostRegistrationConduit(BaseConduit):
+    """Conduit for use with post registration"""
+    slots = ['post_register_consumer']
+
+    def __init__(self, clazz, consumer, facts):
+        """init for PostRegistrationConduit
+
+        Args:
+            consumer: an object representing the
+                    registered consumer
+            facts: a dictionary of system facts
+        """
+        super(PostRegistrationConduit, self).__init__(clazz)
+        self.consumer = consumer
         self.facts = facts
 
 
@@ -731,8 +748,10 @@ class PluginManager(BasePluginManager):
     def _get_conduits(self):
         """get subscription-manager specific plugin conduits."""
         # we should be able to collect this from the sub classes of BaseConduit
-        return [BaseConduit, ProductConduit, RegistrationConduit,
-                FactsConduit, SubscriptionConduit, PostSubscriptionConduit]
+        return [BaseConduit, ProductConduit,
+                RegistrationConduit, PostRegistrationConduit,
+                FactsConduit, SubscriptionConduit,
+                PostSubscriptionConduit]
 
     def _get_modules(self):
         module_files = self._find_plugin_module_files(self.search_path)
