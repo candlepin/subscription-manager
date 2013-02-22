@@ -28,6 +28,9 @@ NOT_SUBSCRIBED = "not_subscribed"
 EXPIRED = "expired"
 PARTIALLY_SUBSCRIBED = "partially_subscribed"
 
+# Used when we are unregistered, or offline for a long period of time:
+UNKNOWN = "unknown"
+
 SOCKET_FACT = 'cpu.cpu_socket(s)'
 RAM_FACT = 'memory.memtotal'
 
@@ -138,8 +141,14 @@ class CertSorter(object):
 
         return True
 
+    def is_registered(self):
+        # TODO: implement
+        return True
+
     def get_status(self, product_id):
         """Return the status of a given product"""
+        if not self.is_registered():
+            return UNKNOWN
         if product_id in self.partially_valid_products:
             return PARTIALLY_SUBSCRIBED
         if product_id in self.valid_products:
