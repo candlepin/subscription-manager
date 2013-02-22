@@ -21,14 +21,31 @@ import dbus.glib
 from subscription_manager.base_plugin import SubManPlugin
 requires_api_version = "1.0"
 
+# This connects to the dbus system bus and emits dbus
+# signals for each hook we run. At the moment, the signals
+# are just strings that match the hook name.
+#
+# To see the events being emitted, you can run:
+#
+#   dbus-monitor --system
+#
+# or to just monitor the subman plugin event signals:
+#
+#         dbus-monitor --system "type='signal', interface='com.redhat.SubscriptionManager.PluginEvent'"
+#
+
 
 # FIXME: this dbus stuff is almost surely not complete
 # or correct
 class SubManEventDbus(dbus.service.Object):
-    def __init__(self, conn, object_path='/com/redhat/SubscriptionManager/object'):
+    def __init__(self, conn, object_path='/PluginEvent'):
         dbus.service.Object.__init__(self, conn, object_path)
 
-
+    # we probably want to have a proxy object of some sort so we can
+    # decorate methods corresponding  to hook names, and potentially
+    # pass other info as the signal payload.
+    # maybe the dbus.service.Object works as a mixin and we can
+    # inherit from it and SubManPlugin?
     @dbus.service.signal('com.redhat.SubscriptionManager.PluginEvent')
     def SubManPluginEvent(self, message):
         # The signal is emitted when this method exits
@@ -44,8 +61,11 @@ class DbusEventPlugin(SubManPlugin):
 
     def __init__(self, conf=None):
         super(DbusEventPlugin, self).__init__(conf)
+        # pick a bus
         self.system_bus = dbus.SystemBus()
-        self.dbus_object = SubManEventDbus(self.system_bus)
+        # choose a name for ourselves on that bus
+        self.bus_name = dbus.service.BusName("com.redhat.SubscriptionManager.PluginEvent", self.system_bus)
+        self.dbus_object = SubManEventDbus(self.bus_name)
         #self.called_as = None
 
     def _dbus_event(self, message, conduit):
