@@ -117,7 +117,9 @@ class TestEntitlementDirectoryCheckKey(unittest.TestCase):
 
 
 class ProductDirectoryTest(unittest.TestCase):
-    def test_get_installed_products(self):
+    @patch('os.path.exists')
+    def test_get_installed_products(self, MockExists):
+        MockExists.return_value = True
         pd = ProductDirectory()
         top_product = StubProduct("top")
         provided_products = [StubProduct("provided")]
