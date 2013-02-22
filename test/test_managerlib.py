@@ -20,7 +20,7 @@ import os
 from os import linesep as NEW_LINE
 
 from stubs import StubCertificateDirectory, StubProductCertificate, \
-        StubProduct, StubEntitlementCertificate
+        StubProduct, StubEntitlementCertificate, StubProductDirectory
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
         getInstalledProductStatus, LocalTz, parseDate, \
         MergedPoolsStackingGroupSorter, MergedPools, PoolStash
@@ -482,7 +482,7 @@ class PoolFilterTests(unittest.TestCase):
 class InstalledProductStatusTests(unittest.TestCase):
 
     def test_entitlement_for_not_installed_product_shows_not_installed(self):
-        product_directory = StubCertificateDirectory([])
+        product_directory = StubProductDirectory([])
         entitlement_directory = StubCertificateDirectory([
             StubEntitlementCertificate(StubProduct("product1"))])
 
@@ -494,7 +494,7 @@ class InstalledProductStatusTests(unittest.TestCase):
 
     def test_entitlement_for_installed_product_shows_subscribed(self):
         product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
+        product_directory = StubProductDirectory([
             StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
             StubEntitlementCertificate(product, sockets=10)])
@@ -507,7 +507,7 @@ class InstalledProductStatusTests(unittest.TestCase):
 
     def test_expired_entitlement_for_installed_product_shows_expired(self):
         product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
+        product_directory = StubProductDirectory([
             StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
             StubEntitlementCertificate(product,
@@ -521,7 +521,7 @@ class InstalledProductStatusTests(unittest.TestCase):
 
     def test_no_entitlement_for_installed_product_shows_no_subscribed(self):
         product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
+        product_directory = StubProductDirectory([
             StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([])
 
@@ -533,7 +533,7 @@ class InstalledProductStatusTests(unittest.TestCase):
 
     def test_future_dated_entitlement_shows_future_subscribed(self):
         product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
+        product_directory = StubProductDirectory([
                 StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
                 StubEntitlementCertificate(product,
@@ -546,7 +546,7 @@ class InstalledProductStatusTests(unittest.TestCase):
 
     def test_one_product_with_two_entitlements_lists_product_twice(self):
         product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
+        product_directory = StubProductDirectory([
             StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
             StubEntitlementCertificate(product),
@@ -563,7 +563,7 @@ class InstalledProductStatusTests(unittest.TestCase):
         product1 = StubProduct("product1")
         product2 = StubProduct("product2")
         product3 = StubProduct("product3")
-        product_directory = StubCertificateDirectory([
+        product_directory = StubProductDirectory([
             StubProductCertificate(product1)])
         entitlement_directory = StubCertificateDirectory([
             StubEntitlementCertificate(product1, [product2, product3],
@@ -586,7 +586,7 @@ class InstalledProductStatusTests(unittest.TestCase):
         product1 = StubProduct("product1")
         product2 = StubProduct("product2")
         product3 = StubProduct("product3")
-        product_directory = StubCertificateDirectory([
+        product_directory = StubProductDirectory([
             StubProductCertificate(product1), StubProductCertificate(product2)])
         entitlement_directory = StubCertificateDirectory([
             StubEntitlementCertificate(product1, [product2, product3],
