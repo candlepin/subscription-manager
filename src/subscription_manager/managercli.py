@@ -603,8 +603,8 @@ class RefreshCommand(CliCommand):
 
 class IdentityCommand(UserPassCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Display the identity certificate for this system or " \
-                      "request a new one")
+        shortdesc = \
+            _("Display the identity certificate for this system or request a new one")
 
         super(IdentityCommand, self).__init__("identity", shortdesc, False,
                                               ent_dir, prod_dir)
@@ -1335,8 +1335,7 @@ class AttachCommand(CliCommand):
         self.parser.add_option("--quantity", dest="quantity",
                                help=_("number of subscriptions to attach"))
         self.parser.add_option("--auto", action='store_true',
-                               help=_("automatically attach compatible \
-                               subscriptions to this system"))
+            help=_("automatically attach compatible subscriptions to this system"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("service level to apply to this system"))
         # re bz #864207
