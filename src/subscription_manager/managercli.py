@@ -1053,7 +1053,7 @@ class RegisterCommand(UserPassCommand):
                      owner=owner_key, environment=environment_id,
                      keys=self.options.activation_keys,
                      installed_products=self.installed_mgr.format_for_server())
-            self.plugin_manager.run("pre_register_consumer", name=consumername,
+            self.plugin_manager.run("post_register_consumer", name=consumername,
                                     facts=facts_dic)
         except connection.RestlibException, re:
             log.exception(re)
