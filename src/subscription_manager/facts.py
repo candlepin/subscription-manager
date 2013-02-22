@@ -43,11 +43,12 @@ class Facts(CacheManager):
     """
     CACHE_FILE = "/var/lib/rhsm/facts/facts.json"
 
-    def __init__(self, ent_dir=None, prod_dir=None):
+    def __init__(self, ent_dir=None, prod_dir=None, uep=None):
         self.facts = {}
 
         self.entitlement_dir = ent_dir or certdirectory.EntitlementDirectory()
         self.product_dir = prod_dir or certdirectory.ProductDirectory()
+        self.uep = uep
         # see bz #627962
         # we would like to have this info, but for now, since it
         # can change constantly on laptops, it makes for a lot of
@@ -133,7 +134,7 @@ class Facts(CacheManager):
         validity_facts = {'system.entitlements_valid': 'valid'}
         if not ClassicCheck().is_registered_with_classic():
             sorter = cert_sorter.CertSorter(self.product_dir,
-                    self.entitlement_dir, facts_dict)
+                    self.entitlement_dir, facts_dict, self.uep)
             if (len(sorter.partially_valid_products) > 0) or \
                 (len(sorter.partial_stacks) > 0):
                 validity_facts['system.entitlements_valid'] = 'partial'

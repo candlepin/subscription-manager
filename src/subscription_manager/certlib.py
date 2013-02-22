@@ -118,7 +118,7 @@ class HealingLib(DataLib):
                 # us valid:
                 ent_dir = EntitlementDirectory()
                 cs = cert_sorter.CertSorter(self._product_dir, ent_dir,
-                        self.facts_dict, on_date=today)
+                        self.facts_dict, self.uep, on_date=today)
                 cert_updater = CertLib(lock=self.lock, uep=self.uep)
                 if not cs.is_valid():
                     log.warn("Found invalid entitlements for today: %s" %
@@ -130,7 +130,7 @@ class HealingLib(DataLib):
                             today)
 
                     cs = cert_sorter.CertSorter(self._product_dir, ent_dir,
-                            self.facts_dict, on_date=tomorrow)
+                            self.facts_dict, self.uep, on_date=tomorrow)
                     if not cs.is_valid():
                         log.warn("Found invalid entitlements for tomorrow: %s" %
                                 tomorrow)

@@ -14,7 +14,8 @@
 
 import unittest
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
-    StubCertificateDirectory, StubEntitlementDirectory, StubFacts, StubProductDirectory
+    StubCertificateDirectory, StubEntitlementDirectory, StubFacts, StubProductDirectory, \
+    StubUEP
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter, \
     CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 from datetime import timedelta, datetime
@@ -70,14 +71,14 @@ class CertSorterTests(unittest.TestCase):
             ])
 
     def test_unentitled_product_certs(self):
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, StubUEP())
         self.assertEqual(1, len(self.sorter.unentitled_products.keys()))
         self.assertTrue(INST_PID_1 in self.sorter.unentitled_products)
         self.assertFalse(self.sorter.is_valid())
         self.assertEqual(NOT_SUBSCRIBED, self.sorter.get_status(INST_PID_1))
 
     def test_ent_cert_no_installed_product(self):
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, StubUEP())
         # TODO: looks like this test was never completed
 
     def test_ent_cert_no_product(self):
@@ -87,12 +88,12 @@ class CertSorterTests(unittest.TestCase):
 
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 42})
         self.sorter = CertSorter(self.prod_dir, self.ent_dir,
-                stub_facts.get_facts())
+                stub_facts.get_facts(), StubUEP())
 
         self.assertEqual(0, len(self.sorter.partially_valid_products))
 
     def test_expired(self):
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, StubUEP())
         self.assertEqual(1, len(self.sorter.expired_entitlement_certs))
 
         self.assertTrue(cert_list_has_product(
@@ -104,7 +105,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertEquals(EXPIRED, self.sorter.get_status(INST_PID_3))
 
     def test_expired_in_future(self):
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {},
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, StubUEP(),
                 on_date=datetime(2050, 1, 1, tzinfo=GMT()))
         self.assertEqual(5, len(self.sorter.expired_entitlement_certs))
         self.assertTrue(INST_PID_2 in self.sorter.expired_products)
@@ -120,7 +121,7 @@ class CertSorterTests(unittest.TestCase):
         self.ent_dir = StubCertificateDirectory([
             StubEntitlementCertificate(StubProduct(INST_PID_5),
                 provided_products=provided)])
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, StubUEP())
         self.assertEquals(3, len(self.sorter.valid_products.keys()))
         self.assertTrue(INST_PID_1 not in self.sorter.partially_valid_products)
         self.assertTrue(INST_PID_1 in self.sorter.valid_products)
@@ -138,7 +139,7 @@ class CertSorterTests(unittest.TestCase):
                 provided_products=[StubProduct(INST_PID_3)]),
             StubEntitlementCertificate(StubProduct(INST_PID_4))
         ])
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, StubUEP())
         self.assertEquals(1, len(self.sorter.valid_products.keys()))
         self.assertTrue(INST_PID_3 in self.sorter.valid_products)
         self.assertEquals(0, len(self.sorter.expired_products.keys()))
@@ -150,7 +151,7 @@ class CertSorterTests(unittest.TestCase):
         self.ent_dir = StubCertificateDirectory([
             StubEntitlementCertificate(StubProduct(INST_PID_5),
                 provided_products=provided)])
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {},
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, StubUEP(),
                 on_date=datetime(2050, 1, 1, tzinfo=GMT()))
 
         self.assertEquals(1, len(self.sorter.expired_entitlement_certs))
@@ -172,7 +173,7 @@ class CertSorterTests(unittest.TestCase):
                 end_date=datetime.now() + timedelta(days=120)),
             ])
 
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, StubUEP())
 
         self.assertEquals(0, len(self.sorter.valid_products))
         self.assertEquals(2, len(self.sorter.future_products))
@@ -193,7 +194,7 @@ class CertSorterTests(unittest.TestCase):
                 provided_products=provided),
             ])
 
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, StubUEP())
 
         self.assertEquals(2, len(self.sorter.valid_products))
         self.assertEquals(2, len(self.sorter.future_products))
@@ -213,7 +214,7 @@ class CertSorterTests(unittest.TestCase):
         ent_dir = StubCertificateDirectory([
             stub_ent_cert(INST_PID_5, [INST_PID_1], sockets=2,
             quantity=5)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts(), StubUEP())
 
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
         self.assertFalse(INST_PID_1 in sorter.valid_products)
@@ -230,7 +231,7 @@ class CertSorterTests(unittest.TestCase):
         ent_dir = StubCertificateDirectory([
             stub_ent_cert(INST_PID_5, [INST_PID_1], sockets=0,
             quantity=5)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts(), StubUEP())
 
         self.assertFalse(INST_PID_1 in sorter.partially_valid_products)
         self.assertTrue(INST_PID_1 in sorter.valid_products)
@@ -242,7 +243,7 @@ class CertSorterTests(unittest.TestCase):
         stub_facts = StubFacts(fact_dict={"memory.memtotal": "4194304"})
         ent_dir = StubCertificateDirectory([
             stub_ent_cert(INST_PID_5, [INST_PID_1], ram=4)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts(), StubUEP())
 
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
         self.assertFalse(INST_PID_1 in sorter.partially_valid_products)
@@ -255,7 +256,7 @@ class CertSorterTests(unittest.TestCase):
         stub_facts = StubFacts(fact_dict={"memory.memtotal": "8388608"})
         ent_dir = StubCertificateDirectory([
             stub_ent_cert(INST_PID_5, [INST_PID_1], ram=4)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts(), StubUEP())
 
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
         self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
@@ -269,7 +270,7 @@ class CertSorterTests(unittest.TestCase):
                                           "cpu.cpu_socket(s)": 2})
         ent_dir = StubCertificateDirectory([
             stub_ent_cert(INST_PID_5, [INST_PID_1], ram=4, sockets=2)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts(), StubUEP())
 
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
         self.assertFalse(INST_PID_1 in sorter.partially_valid_products)
@@ -283,7 +284,7 @@ class CertSorterTests(unittest.TestCase):
                                           "cpu.cpu_socket(s)": 4})
         ent_dir = StubCertificateDirectory([
             stub_ent_cert(INST_PID_5, [INST_PID_1], ram=4, sockets=2)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts(), StubUEP())
 
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
         self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
@@ -297,7 +298,7 @@ class CertSorterTests(unittest.TestCase):
                                           "cpu.cpu_socket(s)": 2})
         ent_dir = StubCertificateDirectory([
             stub_ent_cert(INST_PID_5, [INST_PID_1], ram=4, sockets=2)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts(), StubUEP())
 
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
         self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
@@ -314,7 +315,7 @@ class CertSorterStackingTests(unittest.TestCase):
         # Only 2 sockets covered:
         ent_dir = StubCertificateDirectory([
             stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=2)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts(), StubUEP())
 
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
         self.assertFalse(INST_PID_1 in sorter.valid_products)
@@ -330,7 +331,7 @@ class CertSorterStackingTests(unittest.TestCase):
         ent_dir = StubCertificateDirectory([
             stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=4),
             stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=4)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts(), StubUEP())
 
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
         self.assertTrue(INST_PID_1 in sorter.valid_products)
@@ -345,7 +346,7 @@ class CertSorterStackingTests(unittest.TestCase):
         # see bz#805415
         ent_dir = StubCertificateDirectory([
                 stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=0)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts(), StubUEP())
 
         self.assertTrue(INST_PID_1 in sorter.valid_products)
         self.assertFalse(INST_PID_1 in sorter.partially_valid_products)
@@ -359,7 +360,7 @@ class CertSorterStackingTests(unittest.TestCase):
         ent_dir = StubCertificateDirectory([
             stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1,
                 sockets=4, quantity=2)])
-        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts(), StubUEP())
 
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
         self.assertTrue(INST_PID_1 in sorter.valid_products)
@@ -377,7 +378,7 @@ class CertSorterStackingTests(unittest.TestCase):
             stack_id=STACK_1, quantity=2))
         ent_dir = StubCertificateDirectory(ents)
         sorter = CertSorter(prod_dir, ent_dir,
-                stub_facts.get_facts())
+                stub_facts.get_facts(), StubUEP())
 
         # No installed products, so nothing should show up as partially valid:
         self.assertEquals(0, len(sorter.partially_valid_products))
@@ -400,7 +401,7 @@ class CertSorterStackingTests(unittest.TestCase):
         ent_dir = StubCertificateDirectory(ents)
 
         sorter = CertSorter(prod_dir, ent_dir,
-                stub_facts.get_facts())
+                stub_facts.get_facts(), StubUEP())
 
         # Installed product should show up as partially valid:
         self.assertEquals(1, len(sorter.partially_valid_products))
@@ -422,7 +423,7 @@ class CertSorterStackingTests(unittest.TestCase):
             stack_id=STACK_2, sockets=1))
         ent_dir = StubCertificateDirectory(ents)
         sorter = CertSorter(prod_dir, ent_dir,
-                stub_facts.get_facts())
+                stub_facts.get_facts(), StubUEP())
 
         # Our installed product should be partially valid:
         self.assertEquals(1, len(sorter.partially_valid_products))
@@ -446,7 +447,7 @@ class CertSorterStackingTests(unittest.TestCase):
         ent_dir = StubCertificateDirectory(ents)
 
         sorter = CertSorter(prod_dir, ent_dir,
-                stub_facts.get_facts())
+                stub_facts.get_facts(), StubUEP())
 
         # Installed product should show up as valid:
         self.assertEquals(1, len(sorter.valid_products))
@@ -605,4 +606,5 @@ def create_cert_sorter(product_certs, entitlement_certs, machine_sockets=8):
     stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": machine_sockets})
     return CertSorter(StubProductDirectory(product_certs),
                       StubEntitlementDirectory(entitlement_certs),
-                      stub_facts.get_facts())
+                      stub_facts.get_facts(),
+                      StubUEP())

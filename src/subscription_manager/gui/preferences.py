@@ -44,7 +44,8 @@ class PreferencesDialog(object):
         self.consumer = consumer
         self.release_backend = release.ReleaseBackend(ent_dir=self.backend.entitlement_dir,
                                                       prod_dir=self.backend.product_dir,
-                                                      content_connection=self.backend.content_connection)
+                                                      content_connection=self.backend.content_connection,
+                                                      uep=self.backend.uep)
 
         self.dialog = GLADE_XML.get_widget('preferences_dialog')
         self.dialog.set_transient_for(parent)

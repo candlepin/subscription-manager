@@ -34,11 +34,12 @@ class ReleaseBackend(object):
 
     # all the proxy info too?
     def __init__(self, ent_dir=None, prod_dir=None,
-                 content_connection=None, facts=None):
+                 content_connection=None, facts=None, uep=None):
         self.entitlement_dir = ent_dir
         self.product_dir = prod_dir
         self.content_connection = content_connection
         self.facts = facts
+        self.uep = uep
 
     def get_releases(self):
         # cdn base url
@@ -51,7 +52,8 @@ class ReleaseBackend(object):
         # find entitlements for rhel product? (or vice versa)
         sorter = CertSorter(self.product_dir,
                             self.entitlement_dir,
-                            self.facts.get_facts())
+                            self.facts.get_facts(),
+                            self.uep)
 
         # find the rhel product
         rhel_product = None

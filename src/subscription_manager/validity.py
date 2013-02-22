@@ -21,7 +21,7 @@ from rhsm.certificate import GMT, DateRange
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-def find_first_invalid_date(ent_dir, product_dir, facts_dict):
+def find_first_invalid_date(ent_dir, product_dir, facts_dict, uep):
     """
     Find the first date when the system is invalid at midnight
     GMT.
@@ -47,7 +47,7 @@ def find_first_invalid_date(ent_dir, product_dir, facts_dict):
     # change _scan_entitlement_certs to take product lists,
     # run it for the future to figure this out
     # First check if we have anything installed but not entitled *today*:
-    cs = cert_sorter.CertSorter(product_dir, ent_dir, facts_dict,
+    cs = cert_sorter.CertSorter(product_dir, ent_dir, facts_dict, uep,
             on_date=current_date)
     if not cs.is_valid():
         log.debug("Found unentitled products or partial stacks.")
@@ -77,7 +77,7 @@ def find_first_invalid_date(ent_dir, product_dir, facts_dict):
 
         # new cert_sort stuff, use _scan_for_entitled_products, since
         # we just need to know if stuff is expired
-        cs = cert_sorter.CertSorter(product_dir, ent_dir, facts_dict,
+        cs = cert_sorter.CertSorter(product_dir, ent_dir, facts_dict, uep,
                 on_date=end_date)
         if not cs.is_valid():
             log.debug("Found non-valid status on %s" % end_date)

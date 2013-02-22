@@ -20,7 +20,8 @@ import os
 from os import linesep as NEW_LINE
 
 from stubs import StubCertificateDirectory, StubProductCertificate, \
-        StubProduct, StubEntitlementCertificate, StubProductDirectory
+        StubProduct, StubEntitlementCertificate, StubProductDirectory, \
+        StubUEP
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
         getInstalledProductStatus, LocalTz, parseDate, \
         MergedPoolsStackingGroupSorter, MergedPools, PoolStash
@@ -487,7 +488,7 @@ class InstalledProductStatusTests(unittest.TestCase):
             StubEntitlementCertificate(StubProduct("product1"))])
 
         product_status = getInstalledProductStatus(product_directory,
-                entitlement_directory)
+                entitlement_directory, StubUEP())
 
         # no product certs installed...
         self.assertEquals(0, len(product_status))
@@ -500,7 +501,7 @@ class InstalledProductStatusTests(unittest.TestCase):
             StubEntitlementCertificate(product, sockets=10)])
 
         product_status = getInstalledProductStatus(product_directory,
-                entitlement_directory)
+                entitlement_directory, StubUEP())
 
         self.assertEquals(1, len(product_status))
         self.assertEquals("subscribed", product_status[0][4])
@@ -514,7 +515,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 end_date=(datetime.now() - timedelta(days=2)))])
 
         product_status = getInstalledProductStatus(product_directory,
-                entitlement_directory)
+                entitlement_directory, StubUEP())
 
         self.assertEquals(1, len(product_status))
         self.assertEquals("expired", product_status[0][4])
@@ -526,7 +527,7 @@ class InstalledProductStatusTests(unittest.TestCase):
         entitlement_directory = StubCertificateDirectory([])
 
         product_status = getInstalledProductStatus(product_directory,
-                entitlement_directory)
+                entitlement_directory, StubUEP())
 
         self.assertEquals(1, len(product_status))
         self.assertEquals("not_subscribed", product_status[0][4])
@@ -540,7 +541,8 @@ class InstalledProductStatusTests(unittest.TestCase):
                     start_date=(datetime.now() + timedelta(days=1365)))])
 
         product_status = getInstalledProductStatus(product_directory,
-                                                   entitlement_directory)
+                                                   entitlement_directory,
+                                                   StubUEP())
         self.assertEquals(1, len(product_status))
         self.assertEquals("future_subscribed", product_status[0][4])
 
@@ -554,7 +556,7 @@ class InstalledProductStatusTests(unittest.TestCase):
         ])
 
         product_status = getInstalledProductStatus(product_directory,
-                entitlement_directory)
+                entitlement_directory, StubUEP())
 
         # only "product" is installed
         self.assertEquals(1, len(product_status))
@@ -571,7 +573,7 @@ class InstalledProductStatusTests(unittest.TestCase):
         ])
 
         product_status = getInstalledProductStatus(product_directory,
-                entitlement_directory)
+                entitlement_directory, StubUEP())
 
         # neither product3 or product 2 are installed
         self.assertEquals(1, len(product_status))
@@ -594,7 +596,7 @@ class InstalledProductStatusTests(unittest.TestCase):
         ])
 
         product_status = getInstalledProductStatus(product_directory,
-                entitlement_directory)
+                entitlement_directory, StubUEP())
 
         # product3 isn't installed
         self.assertEquals(2, len(product_status))

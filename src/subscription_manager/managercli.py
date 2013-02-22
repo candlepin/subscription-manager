@@ -185,9 +185,9 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
         log.exception(e)
 
 
-def show_autosubscribe_output():
+def show_autosubscribe_output(uep):
     installed_status = managerlib.getInstalledProductStatus(ProductDirectory(),
-            EntitlementDirectory())
+            EntitlementDirectory(), uep)
 
     log.info("Attempted to auto-attach/heal the system.")
     print _("Installed Product Current Status:")
@@ -1096,7 +1096,7 @@ class RegisterCommand(UserPassCommand):
         # run this after certlib update, so we have the new entitlements
         return_code = 0
         if self.autoattach:
-            subscribed = show_autosubscribe_output()
+            subscribed = show_autosubscribe_output(self.cp)
             if not subscribed:
                 return_code = 1
 
@@ -1284,7 +1284,8 @@ class ReleaseCommand(CliCommand):
 
         self.release_backend = ReleaseBackend(ent_dir=self.entitlement_dir,
                                               prod_dir=self.product_dir,
-                                              content_connection=self.cc)
+                                              content_connection=self.cc,
+                                              uep=self.cp)
 
         self.consumer = check_registration()
         if self.options.unset:
@@ -1413,7 +1414,7 @@ class AttachCommand(CliCommand):
             else:
                 # if we are green, we don't need to go to the server
                 self.facts = Facts(ent_dir=self.entitlement_dir, prod_dir=self.product_dir)
-                self.sorter = CertSorter(self.product_dir, self.entitlement_dir, self.facts.get_facts())
+                self.sorter = CertSorter(self.product_dir, self.entitlement_dir, self.facts.get_facts(), self.cp)
 
                 if self.sorter.is_valid():
                     print _("All installed products are covered by valid entitlements. "
@@ -1440,7 +1441,7 @@ class AttachCommand(CliCommand):
                     print '\t-', str(e)
             elif self.options.auto:
                 # run this after certlib update, so we have the new entitlements
-                subscribed = show_autosubscribe_output()
+                subscribed = show_autosubscribe_output(self.cp)
                 if not subscribed:
                     return_code = 1
 
@@ -1953,7 +1954,7 @@ class ListCommand(CliCommand):
         self._validate_options()
         if self.options.installed:
             iproducts = managerlib.getInstalledProductStatus(self.product_dir,
-                    self.entitlement_dir, self.facts.get_facts())
+                    self.entitlement_dir, self.cp, self.facts.get_facts())
             if not len(iproducts):
                 print(_("No installed products to list"))
                 sys.exit(0)

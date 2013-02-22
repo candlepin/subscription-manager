@@ -82,7 +82,7 @@ def map_status(status):
     return smap[status]
 
 
-def getInstalledProductStatus(product_directory, entitlement_directory,
+def getInstalledProductStatus(product_directory, entitlement_directory, uep,
         facts=None):
     """
      Returns the Installed products and their subscription states
@@ -93,7 +93,7 @@ def getInstalledProductStatus(product_directory, entitlement_directory,
 
     product_status = []
 
-    sorter = CertSorter(product_directory, entitlement_directory, facts)
+    sorter = CertSorter(product_directory, entitlement_directory, facts, uep)
 
     for installed_product in sorter.installed_products:
         product_cert = sorter.installed_products[installed_product]

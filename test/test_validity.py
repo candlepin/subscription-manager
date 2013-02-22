@@ -17,7 +17,8 @@ import unittest
 from datetime import timedelta, datetime
 
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
-    StubCertificateDirectory, StubFacts, StubEntitlementDirectory, StubProductDirectory
+    StubCertificateDirectory, StubFacts, StubEntitlementDirectory, StubProductDirectory, \
+    StubUEP
 from subscription_manager.validity import find_first_invalid_date, \
     ValidProductDateRangeCalculator
 
@@ -39,7 +40,7 @@ class FindFirstInvalidDateTests(unittest.TestCase):
         ent_dir = StubCertificateDirectory([cert1, cert2])
         prod_dir = StubProductDirectory([])
 
-        last_valid_date = find_first_invalid_date(ent_dir, prod_dir, {})
+        last_valid_date = find_first_invalid_date(ent_dir, prod_dir, {}, StubUEP())
         self.assertTrue(last_valid_date is None)
 
     def test_currently_unentitled_products(self):
@@ -58,7 +59,7 @@ class FindFirstInvalidDateTests(unittest.TestCase):
         # Because we have an unentitled product, we should get back the current
         # date as the last date of valid entitlements:
         today = datetime.now(GMT())
-        last_valid_date = find_first_invalid_date(ent_dir, prod_dir, {})
+        last_valid_date = find_first_invalid_date(ent_dir, prod_dir, {}, StubUEP())
         self.assertEqual(today.year, last_valid_date.year)
         self.assertEqual(today.month, last_valid_date.month)
         self.assertEqual(today.day, last_valid_date.day)
@@ -76,7 +77,7 @@ class FindFirstInvalidDateTests(unittest.TestCase):
                 end_date=datetime(2060, 1, 1))
         ent_dir = StubCertificateDirectory([cert1, cert2])
 
-        last_valid_date = find_first_invalid_date(ent_dir, prod_dir, {})
+        last_valid_date = find_first_invalid_date(ent_dir, prod_dir, {}, StubUEP())
         self.assertEqual(2050, last_valid_date.year)
 
     # Checking scenario when we have an entitlement to cover us now, and another
@@ -94,7 +95,7 @@ class FindFirstInvalidDateTests(unittest.TestCase):
                 end_date=datetime(2070, 1, 1, tzinfo=GMT()))
         ent_dir = StubCertificateDirectory([cert1, cert2])
 
-        last_valid_date = find_first_invalid_date(ent_dir, prod_dir, {})
+        last_valid_date = find_first_invalid_date(ent_dir, prod_dir, {}, StubUEP())
         self.assertEqual(2070, last_valid_date.year)
         self.assertEqual(1, last_valid_date.month)
         self.assertEqual(2, last_valid_date.day)
@@ -115,7 +116,7 @@ class FindFirstInvalidDateTests(unittest.TestCase):
         # Because all entitlements have expired, we should get back the current
         # date as the last date of valid entitlements:
         today = datetime.now(GMT())
-        last_valid_date = find_first_invalid_date(ent_dir, prod_dir, {})
+        last_valid_date = find_first_invalid_date(ent_dir, prod_dir, {}, StubUEP())
         self.assertEqual(today.year, last_valid_date.year)
         self.assertEqual(today.month, last_valid_date.month)
         self.assertEqual(today.day, last_valid_date.day)
@@ -528,7 +529,7 @@ def create_cert_sorter(product_certs, entitlement_certs, machine_sockets=8):
     stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": machine_sockets})
     return CertSorter(StubProductDirectory(product_certs),
                       StubEntitlementDirectory(entitlement_certs),
-                      stub_facts.get_facts())
+                      stub_facts.get_facts(), StubUEP())
 
 
 def create_prod_cert(pid):

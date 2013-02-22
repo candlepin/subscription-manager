@@ -64,8 +64,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.entitlement_dir = ent_dir
 
         self.facts = facts
+        self.backend = backend
         self.cs = cert_sorter.CertSorter(prod_dir, ent_dir,
-                self.facts.get_facts())
+                self.facts.get_facts(), self.backend.uep)
 
         # Product column
         text_renderer = gtk.CellRendererText()
@@ -148,7 +149,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
     def update_products(self):
         self.store.clear()
         self.cs = cert_sorter.CertSorter(self.product_dir,
-                self.entitlement_dir, self.facts.get_facts())
+                self.entitlement_dir, self.facts.get_facts(), self.backend.uep)
         for product_cert in self.product_dir.list():
             for product in product_cert.products:
                 product_id = product.id
@@ -299,7 +300,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         # Look for products which have invalid entitlements
         sorter = CertSorter(self.product_dir, self.entitlement_dir,
-                self.facts.get_facts())
+                self.facts.get_facts(), self.backend.uep)
 
         warn_count = len(sorter.expired_products) + \
                 len(sorter.unentitled_products)
@@ -327,7 +328,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         else:
             first_invalid = find_first_invalid_date(self.entitlement_dir,
-                    self.product_dir, self.facts.get_facts())
+                    self.product_dir, self.facts.get_facts(), self.backend.uep)
             self._set_status_icons(VALID)
             if first_invalid:
                 self.subscription_status_label.set_markup(

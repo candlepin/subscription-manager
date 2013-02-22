@@ -46,9 +46,10 @@ class CertSorter(object):
     The date can be used to examine the state this system will likely be in
     at some point in the future.
     """
-    def __init__(self, product_dir, entitlement_dir, facts_dict, on_date=None):
+    def __init__(self, product_dir, entitlement_dir, facts_dict, uep, on_date=None):
         self.product_dir = product_dir
         self.entitlement_dir = entitlement_dir
+        self.uep = uep
         if not on_date:
             on_date = datetime.now(GMT())
         self.on_date = on_date
