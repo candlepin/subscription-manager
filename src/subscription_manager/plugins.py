@@ -179,7 +179,20 @@ class BaseConduit(object):
         # maybe useful to have a per conduit/per plugin logger space
         self.log = logging.getLogger("rhsm-app." + clazz.__name__)
 
-    def confString(self, section, option, default=None):
+    def conf_string(self, section, option, default=None):
+        """get string from plugin config
+
+        Args:
+            section: config section name
+            option: config option name
+            default: if section or option are not found,
+                     return default. None if not
+                     specified.
+        Returns:
+            a string. In the case of error, default
+            is returned. If default is not specified,
+            None is returned.
+        """
         try:
             self._conf.get(section, option)
         except (NoSectionError, NoOptionError):
@@ -187,7 +200,21 @@ class BaseConduit(object):
                 return None
             return str(default)
 
-    def confBool(self, section, option, default=None):
+    def conf_bool(self, section, option, default=None):
+        """get boolean value from plugin config
+
+        Args:
+            section: config section name
+            option: config option name
+            default: if section or option are not found,
+                     return default.
+        Raises:
+            ValueError: value requested is not a boolean
+        Returns:
+            a python boolean. In the case of error, default
+            is returned. If default is not specified and
+            there is an error, a ValueError is raised.
+        """
         try:
             self._conf.getboolean(section, option)
         except (NoSectionError, NoOptionError):
@@ -198,7 +225,21 @@ class BaseConduit(object):
             else:
                 raise ValueError("Boolean value expected")
 
-    def confInt(self, section, option, default=None):
+    def conf_int(self, section, option, default=None):
+        """get integer value from plugin config
+
+        Args:
+            section: config section name
+            option: config option name
+            default: if section or option are not found,
+                     return default.
+        Raises:
+            ValueError: value requested can not be made into an integer
+        Returns:
+            a python integer. In the case of error, default
+            is returned. If default is not specified, a
+            ValueError is raised.
+        """
         try:
             self._conf.getint(section, option)
         except (NoSectionError, NoOptionError):
@@ -208,7 +249,22 @@ class BaseConduit(object):
                 raise ValueError("Integer value expected")
             return val
 
-    def confFloat(self, section, option, default=None):
+    def conf_float(self, section, option, default=None):
+        """get float value from plugin config
+
+        Args:
+            section: config section name
+            option: config option name
+            default: if section or option are not found,
+                     return default.
+        Raises:
+            ValueError: value requested can not be made into
+                        a float
+        Returns:
+            a python float. In the case of error, default
+            is returned. If default is not specified, a
+            ValueError is raised.
+        """
         try:
             self._conf.getfloat(section, option)
         except (NoSectionError, NoOptionError):
