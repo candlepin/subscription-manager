@@ -208,6 +208,15 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['image'] = self._render_icon('yellow')
                         entry['status'] = _('Partially Subscribed')
                         entry['validity_note'] = _("Partially Subscribed")
+                    elif status == UNKNOWN:
+                        # TODO: get a real icon for unknown status:
+                        entry['image'] = self._render_icon('yellow')
+                        entry['status'] = _('Unknown')
+                        if self.cs.is_unregistered():
+                            entry['validity_note'] = _("System is not registered.")
+                        else:
+                            # System must be registered but unable to reach server:
+                            entry['validity_note'] = _("Entitlement server is unreachable.")
                     else:
                         entry['image'] = self._render_icon('green')
                         entry['status'] = _('Subscribed')

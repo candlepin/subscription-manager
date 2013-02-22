@@ -16,9 +16,10 @@ import unittest
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
     StubCertificateDirectory, StubEntitlementDirectory, StubFacts, StubProductDirectory
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter, \
-    CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
+    CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from datetime import timedelta, datetime
 from rhsm.certificate import GMT
+from mock import Mock
 
 
 def cert_list_has_product(cert_list, product_id):
@@ -68,6 +69,11 @@ class CertSorterTests(unittest.TestCase):
             # entitled, but not installed
             StubEntitlementCertificate(StubProduct('not_installed_product')),
             ])
+
+    def test_unregistered_status(self):
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
+        self.sorter.is_registered = Mock(return_value=False)
+        self.assertEquals(UNKNOWN, self.sorter.get_status(INST_PID_1))
 
     def test_unentitled_product_certs(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
