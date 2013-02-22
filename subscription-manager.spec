@@ -211,9 +211,7 @@ rm -rf %{buildroot}
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
 %dir %{_sysconfdir}/rhsm/pluginconf.d
-# we could probably just glob these dirs
-%{rhsm_plugins_dir}/product_install.py*
-%config(noreplace) %{_sysconfdir}/rhsm/pluginconf.d/product_install.ProductInstallPlugin.conf
+# add default plugins here when we have some
 
 # yum plugins
 # Using _prefix + lib here instead of libdir as that evaluates to /usr/lib64 on x86_64,
