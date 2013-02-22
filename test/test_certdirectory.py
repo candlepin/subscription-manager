@@ -117,11 +117,7 @@ class TestEntitlementDirectoryCheckKey(unittest.TestCase):
 
 
 class ProductDirectoryTest(unittest.TestCase):
-    def setUp(self):
-        ProductDirectory.PATH = "/some/path"
-
     def test_get_installed_products(self):
-        ProductDirectory.__init__ = lambda x: None
         pd = ProductDirectory()
         top_product = StubProduct("top")
         provided_products = [StubProduct("provided")]

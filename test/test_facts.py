@@ -204,7 +204,7 @@ class InstalledProductStatusTests(unittest.TestCase):
     @patch.object(Facts, "_load_custom_facts")
     def test_entitlement_for_installed_product_shows_valid(self, mockCustomFacts):
         product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
+        product_directory = StubProductDirectory([
             StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
             StubEntitlementCertificate(product)])
@@ -218,7 +218,7 @@ class InstalledProductStatusTests(unittest.TestCase):
 
     def test_expired_entitlement_for_installed_product_shows_invalid(self):
         product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
+        product_directory = StubProductDirectory([
             StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
             StubEntitlementCertificate(product,
@@ -232,7 +232,7 @@ class InstalledProductStatusTests(unittest.TestCase):
 
     def test_no_entitlement_for_installed_product_shows_invalid(self):
         product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
+        product_directory = StubProductDirectory([
             StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([])
 
@@ -244,7 +244,7 @@ class InstalledProductStatusTests(unittest.TestCase):
 
     def test_future_dated_entitlement_shows_invalid(self):
         product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
+        product_directory = StubProductDirectory([
                 StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
                 StubEntitlementCertificate(product,
