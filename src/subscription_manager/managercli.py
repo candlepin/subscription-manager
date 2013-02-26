@@ -47,7 +47,7 @@ from subscription_manager.quantity import valid_quantity
 from subscription_manager.release import ReleaseBackend
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
-        NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
+        NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
@@ -65,7 +65,8 @@ STATUS_MAP = {
         SUBSCRIBED: _("Subscribed"),
         NOT_SUBSCRIBED: _("Not Subscribed"),
         EXPIRED: _("Expired"),
-        PARTIALLY_SUBSCRIBED: _("Partially Subscribed")
+        PARTIALLY_SUBSCRIBED: _("Partially Subscribed"),
+        UNKNOWN: _("Unknown")
 }
 
 INSTALLED_PRODUCT_STATUS = [
