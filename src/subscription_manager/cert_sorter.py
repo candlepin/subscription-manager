@@ -17,6 +17,8 @@ import logging
 
 from rhsm.certificate import GMT
 from rhsm.connection import safe_int
+from subscription_manager.identity import ConsumerIdentity
+
 log = logging.getLogger('rhsm-app.' + __name__)
 
 import gettext
@@ -142,8 +144,7 @@ class CertSorter(object):
         return True
 
     def is_registered(self):
-        # TODO: implement
-        return True
+        return ConsumerIdentity.existsAndValid()
 
     def get_status(self, product_id):
         """Return the status of a given product"""

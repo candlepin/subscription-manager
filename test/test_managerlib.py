@@ -25,10 +25,13 @@ from stubs import StubCertificateDirectory, StubProductCertificate, \
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
         getInstalledProductStatus, LocalTz, parseDate, \
         MergedPoolsStackingGroupSorter, MergedPools, PoolStash
+from subscription_manager.identity import ConsumerIdentity
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
 from rhsm.certificate import create_from_pem, DateRange
+
+from mock import patch
 
 cfg = rhsm.config.initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
@@ -493,7 +496,9 @@ class InstalledProductStatusTests(unittest.TestCase):
         # no product certs installed...
         self.assertEquals(0, len(product_status))
 
-    def test_entitlement_for_installed_product_shows_subscribed(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_entitlement_for_installed_product_shows_subscribed(self, id_mock):
+        id_mock.return_value = True
         product = StubProduct("product1")
         product_directory = StubProductDirectory([
             StubProductCertificate(product)])
@@ -506,7 +511,9 @@ class InstalledProductStatusTests(unittest.TestCase):
         self.assertEquals(1, len(product_status))
         self.assertEquals("subscribed", product_status[0][4])
 
-    def test_expired_entitlement_for_installed_product_shows_expired(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_expired_entitlement_for_installed_product_shows_expired(self, id_mock):
+        id_mock.return_value = True
         product = StubProduct("product1")
         product_directory = StubProductDirectory([
             StubProductCertificate(product)])
@@ -520,7 +527,9 @@ class InstalledProductStatusTests(unittest.TestCase):
         self.assertEquals(1, len(product_status))
         self.assertEquals("expired", product_status[0][4])
 
-    def test_no_entitlement_for_installed_product_shows_no_subscribed(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_no_entitlement_for_installed_product_shows_no_subscribed(self, id_mock):
+        id_mock.return_value = True
         product = StubProduct("product1")
         product_directory = StubProductDirectory([
             StubProductCertificate(product)])
@@ -532,7 +541,9 @@ class InstalledProductStatusTests(unittest.TestCase):
         self.assertEquals(1, len(product_status))
         self.assertEquals("not_subscribed", product_status[0][4])
 
-    def test_future_dated_entitlement_shows_future_subscribed(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_future_dated_entitlement_shows_future_subscribed(self, id_mock):
+        id_mock.return_value = True
         product = StubProduct("product1")
         product_directory = StubProductDirectory([
                 StubProductCertificate(product)])
@@ -561,7 +572,9 @@ class InstalledProductStatusTests(unittest.TestCase):
         # only "product" is installed
         self.assertEquals(1, len(product_status))
 
-    def test_one_subscription_with_bundled_products_lists_once(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_one_subscription_with_bundled_products_lists_once(self, id_mock):
+        id_mock.return_value = True
         product1 = StubProduct("product1")
         product2 = StubProduct("product2")
         product3 = StubProduct("product3")
@@ -584,7 +597,9 @@ class InstalledProductStatusTests(unittest.TestCase):
         self.assertEquals("product1", product_status[0][0])
         self.assertEquals("subscribed", product_status[0][4])
 
-    def test_one_subscription_with_bundled_products_lists_once_part_two(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_one_subscription_with_bundled_products_lists_once_part_two(self, id_mock):
+        id_mock.return_value = True
         product1 = StubProduct("product1")
         product2 = StubProduct("product2")
         product3 = StubProduct("product3")

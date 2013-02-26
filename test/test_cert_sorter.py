@@ -18,9 +18,10 @@ from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificat
     StubUEP
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter, \
     CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
+from subscription_manager.identity import ConsumerIdentity
 from datetime import timedelta, datetime
 from rhsm.certificate import GMT
-from mock import Mock
+from mock import Mock, patch
 
 
 def cert_list_has_product(cert_list, product_id):
@@ -72,11 +73,13 @@ class CertSorterTests(unittest.TestCase):
             ])
 
     def test_unregistered_status(self):
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, StubUEP())
         self.sorter.is_registered = Mock(return_value=False)
         self.assertEquals(UNKNOWN, self.sorter.get_status(INST_PID_1))
 
-    def test_unentitled_product_certs(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_unentitled_product_certs(self, id_mock):
+        id_mock.return_value = True
         self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, StubUEP())
         self.assertEqual(1, len(self.sorter.unentitled_products.keys()))
         self.assertTrue(INST_PID_1 in self.sorter.unentitled_products)
@@ -98,7 +101,9 @@ class CertSorterTests(unittest.TestCase):
 
         self.assertEqual(0, len(self.sorter.partially_valid_products))
 
-    def test_expired(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_expired(self, id_mock):
+        id_mock.return_value = True
         self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, StubUEP())
         self.assertEqual(1, len(self.sorter.expired_entitlement_certs))
 
@@ -170,7 +175,9 @@ class CertSorterTests(unittest.TestCase):
         self.assertTrue(INST_PID_1 in self.sorter.unentitled_products)
         self.assertFalse(self.sorter.is_valid())
 
-    def test_future_entitled(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_future_entitled(self, id_mock):
+        id_mock.return_value = True
         provided = [StubProduct(INST_PID_2), StubProduct(INST_PID_3)]
         self.ent_dir = StubCertificateDirectory([
             StubEntitlementCertificate(StubProduct(INST_PID_5),
@@ -189,7 +196,9 @@ class CertSorterTests(unittest.TestCase):
         self.assertEquals(FUTURE_SUBSCRIBED, self.sorter.get_status(INST_PID_2))
         self.assertEquals(FUTURE_SUBSCRIBED, self.sorter.get_status(INST_PID_3))
 
-    def test_future_and_currently_entitled(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_future_and_currently_entitled(self, id_mock):
+        id_mock.return_value = True
         provided = [StubProduct(INST_PID_2), StubProduct(INST_PID_3)]
         self.ent_dir = StubCertificateDirectory([
             StubEntitlementCertificate(StubProduct(INST_PID_5),
@@ -464,18 +473,24 @@ class CertSorterStackingTests(unittest.TestCase):
 
 class TestCertSorterStatus(unittest.TestCase):
 
-    def test_subscribed(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_subscribed(self, id_mock):
+        id_mock.return_value = True
         product = create_prod_cert(INST_PID_1)
         entitlement = stub_ent_cert(INST_PID_1, sockets=None)
         sorter = create_cert_sorter([product], [entitlement])
         self.assertEqual(SUBSCRIBED, sorter.get_status(INST_PID_1))
 
-    def test_not_subscribed(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_not_subscribed(self, id_mock):
+        id_mock.return_value = True
         installed = create_prod_cert(INST_PID_1)
         sorter = create_cert_sorter([installed], [])
         self.assertEqual(NOT_SUBSCRIBED, sorter.get_status(INST_PID_1))
 
-    def test_expired(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_expired(self, id_mock):
+        id_mock.return_value = True
         installed = create_prod_cert(INST_PID_1)
         expired_ent = stub_ent_cert(INST_PID_1,
                                          start_date=datetime.now() - timedelta(days=365),
@@ -483,7 +498,9 @@ class TestCertSorterStatus(unittest.TestCase):
         sorter = create_cert_sorter([installed], [expired_ent])
         self.assertEqual(EXPIRED, sorter.get_status(INST_PID_1))
 
-    def test_future_subscribed(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_future_subscribed(self, id_mock):
+        id_mock.return_value = True
         installed = create_prod_cert(INST_PID_1)
         expired_ent = stub_ent_cert(INST_PID_1,
                                          start_date=datetime.now() + timedelta(days=10),
@@ -491,14 +508,18 @@ class TestCertSorterStatus(unittest.TestCase):
         sorter = create_cert_sorter([installed], [expired_ent])
         self.assertEqual(FUTURE_SUBSCRIBED, sorter.get_status(INST_PID_1))
 
-    def test_partially_subscribed(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_partially_subscribed(self, id_mock):
+        id_mock.return_value = True
         installed = create_prod_cert(INST_PID_1)
         partial_ent = stub_ent_cert(INST_PID_2, [INST_PID_1], quantity=1,
                                          stack_id=STACK_1, sockets=2)
         sorter = create_cert_sorter([installed], [partial_ent])
         self.assertEqual(PARTIALLY_SUBSCRIBED, sorter.get_status(INST_PID_1))
 
-    def test_partially_subscribed_and_future_subscription(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_partially_subscribed_and_future_subscription(self, id_mock):
+        id_mock.return_value = True
         installed = create_prod_cert(INST_PID_1)
         partial_ent = stub_ent_cert(INST_PID_2, [INST_PID_1], quantity=1,
                                          stack_id=STACK_1, sockets=2)
@@ -509,7 +530,9 @@ class TestCertSorterStatus(unittest.TestCase):
         sorter = create_cert_sorter([installed], [partial_ent, future_ent])
         self.assertEqual(PARTIALLY_SUBSCRIBED, sorter.get_status(INST_PID_1))
 
-    def test_expired_and_future_entitlements_report_future(self):
+    @patch.object(ConsumerIdentity, 'existsAndValid')
+    def test_expired_and_future_entitlements_report_future(self, id_mock):
+        id_mock.return_value = True
         installed = create_prod_cert(INST_PID_1)
         expired_ent = stub_ent_cert(INST_PID_1,
                                          start_date=datetime.now() - timedelta(days=365),
