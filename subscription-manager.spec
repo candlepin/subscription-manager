@@ -184,6 +184,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/async.py*
 %{_datadir}/rhsm/subscription_manager/logutil.py*
 %{_datadir}/rhsm/subscription_manager/repolib.py*
+%{_datadir}/rhsm/subscription_manager/identity.py*
 
 # Using _prefix + lib here instead of libdir as that evaluates to /usr/lib64 on x86_64,
 # but yum plugins seem to normally be sent to /usr/lib/:
