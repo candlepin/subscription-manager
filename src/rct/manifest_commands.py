@@ -132,54 +132,57 @@ class CatManifestCommand(RCTManifestCommand):
 
     def _print_products(self, location):
         ent_dir = os.path.join(location, "export", "entitlements")
-        for ent_file in os.listdir(ent_dir):
-            part = open(os.path.join(ent_dir, ent_file))
-            data = json.loads(part.read())
-            to_print = []
-            to_print.append((_("Name"), get_value(data, "pool.productName")))
-            to_print.append((_("Quantity"), get_value(data, "quantity")))
-            to_print.append((_("Created"), get_value(data, "created")))
-            to_print.append((_("Start Date"), get_value(data, "startDate")))
-            to_print.append((_("End Date"), get_value(data, "endDate")))
-            to_print.append((_("Service Level"), self._get_product_attribute("support_level", data)))
-            to_print.append((_("Service Type"), self._get_product_attribute("support_type", data)))
-            to_print.append((_("Architectures"), self._get_product_attribute("arch", data)))
-            to_print.append((_("SKU"), get_value(data, "pool.productId")))
-            to_print.append((_("Contract"), get_value(data, "pool.contractNumber")))
-            to_print.append((_("Order Number"), get_value(data, "pool.subscriptionId")))
+        if os.path.exists(ent_dir):
+            for ent_file in os.listdir(ent_dir):
+                part = open(os.path.join(ent_dir, ent_file))
+                data = json.loads(part.read())
+                to_print = []
+                to_print.append((_("Name"), get_value(data, "pool.productName")))
+                to_print.append((_("Quantity"), get_value(data, "quantity")))
+                to_print.append((_("Created"), get_value(data, "created")))
+                to_print.append((_("Start Date"), get_value(data, "startDate")))
+                to_print.append((_("End Date"), get_value(data, "endDate")))
+                to_print.append((_("Service Level"), self._get_product_attribute("support_level", data)))
+                to_print.append((_("Service Type"), self._get_product_attribute("support_type", data)))
+                to_print.append((_("Architectures"), self._get_product_attribute("arch", data)))
+                to_print.append((_("SKU"), get_value(data, "pool.productId")))
+                to_print.append((_("Contract"), get_value(data, "pool.contractNumber")))
+                to_print.append((_("Order Number"), get_value(data, "pool.subscriptionId")))
 
-            entitlement_file = os.path.join("export", "entitlements", "%s.json" % data["id"])
-            to_print.append((_("Entitlement File"), entitlement_file))
-            #Get the certificate to get the version
-            serial = data["certificates"][0]["serial"]["id"]
+                entitlement_file = os.path.join("export", "entitlements", "%s.json" % data["id"])
+                to_print.append((_("Entitlement File"), entitlement_file))
+                #Get the certificate to get the version
+                serial = data["certificates"][0]["serial"]["id"]
 
-            cert_file = os.path.join("export", "entitlement_certificates", "%s.pem" % serial)
-            to_print.append((_("Certificate File"), cert_file))
-            cert_file = os.path.join(location, cert_file)
+                cert_file = os.path.join("export", "entitlement_certificates", "%s.pem" % serial)
+                to_print.append((_("Certificate File"), cert_file))
+                cert_file = os.path.join(location, cert_file)
 
-            try:
-                cert = certificate.create_from_file(cert_file)
-            except certificate.CertificateException, ce:
-                raise certificate.CertificateException(
-                        _("Unable to read certificate file '%s': %s") % (cert_file,
-                        ce))
-            to_print.append((_("Certificate Version"), cert.version))
+                try:
+                    cert = certificate.create_from_file(cert_file)
+                except certificate.CertificateException, ce:
+                    raise certificate.CertificateException(
+                            _("Unable to read certificate file '%s': %s") % (cert_file,
+                            ce))
+                to_print.append((_("Certificate Version"), cert.version))
 
-            self._print_section(_("Subscription:"), to_print, 1, False)
+                self._print_section(_("Subscription:"), to_print, 1, False)
 
-            # Get the provided Products
-            to_print = []
-            for pp in data["pool"]["providedProducts"]:
-                to_print.append((int(pp["productId"]), pp["productName"]))
+                # Get the provided Products
+                to_print = []
+                for pp in data["pool"]["providedProducts"]:
+                    to_print.append((int(pp["productId"]), pp["productName"]))
 
-            self._print_section(_("Provided Products:"), sorted(to_print), 2, False)
+                self._print_section(_("Provided Products:"), sorted(to_print), 2, False)
 
-            # Get the Content Sets
-            to_print = []
-            for item in cert.content:
-                to_print.append([item.url])
-            self._print_section(_("Content Sets:"), sorted(to_print), 2, True)
-            part.close()
+                # Get the Content Sets
+                to_print = []
+                for item in cert.content:
+                    to_print.append([item.url])
+                self._print_section(_("Content Sets:"), sorted(to_print), 2, True)
+                part.close()
+        else:
+            self._print_section(_("Subscriptions:"), [["None"]], 1, True)
 
     def _do_command(self):
         """
