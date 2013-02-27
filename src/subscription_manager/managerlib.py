@@ -20,7 +20,6 @@ import stat
 import shutil
 import syslog
 import time
-import dateutil.parser
 import logging
 import datetime
 from os import linesep as NEW_LINE
@@ -38,9 +37,9 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.repolib import RepoLib
+from subscription_manager import isodate
 
 log = logging.getLogger('rhsm-app.' + __name__)
-
 
 import gettext
 _ = gettext.gettext
@@ -50,10 +49,6 @@ ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
 
 # Expected permissions for identity certificates:
 ID_CERT_PERMS = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP
-
-# 2038-01-01, used as the default when we hit an date overflow on
-# 32-bit systems:
-OVERFLOW_DATE = 2145916800.0
 
 
 def system_log(message, priority=syslog.LOG_NOTICE):
@@ -242,8 +237,8 @@ class PoolFilter(object):
         return entitled_products_to_certs
 
     def _dates_overlap(self, pool, certs):
-        pool_start = parseDate(pool['startDate'])
-        pool_end = parseDate(pool['endDate'])
+        pool_start = isodate.parse_date(pool['startDate'])
+        pool_end = isodate.parse_date(pool['endDate'])
 
         for cert in certs:
             cert_range = cert.valid_range
@@ -344,7 +339,7 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, get_all=False, acti
         else:
             d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
 
-        d['endDate'] = formatDate(parseDate(d['endDate']))
+        d['endDate'] = formatDate(isodate.parse_date(d['endDate']))
         del d['consumed']
 
     return data
@@ -738,35 +733,11 @@ def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])
 
 
-def parseDate(date):
-    try:
-        dt = dateutil.parser.parse(date)
-    except ValueError:
-        log.warning("Date overflow: %s, using 9999-09-06 instead." % date)
-        return dateutil.parser.parse("9999-09-06T00:00:00.000+0000")
-    return dt
-
-
 def formatDate(dt):
     if dt:
         return dt.astimezone(LocalTz()).strftime("%x")
     else:
         return ""
-
-
-class ServerTz(datetime.tzinfo):
-    """
-    tzinfo object for the tz offset of the entitlement server
-    """
-
-    def __init__(self, offset):
-        self.__offset = datetime.timedelta(seconds=offset)
-
-    def utcoffset(self, dt):
-        return self.__offset
-
-    def dst(self, dt):
-        return datetime.timedelta(seconds=0)
 
 
 class LocalTz(datetime.tzinfo):
