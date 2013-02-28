@@ -27,6 +27,7 @@ import gtk.glade
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import networkConfig
 from subscription_manager import managerlib
+from subscription_manager.identity import Identity
 from subscription_manager.gui import file_monitor
 from subscription_manager.gui import registergui
 import rhsm.connection as connection
@@ -157,39 +158,6 @@ class Backend(object):
 
     def monitor_identity(self, callback):
         self.identity_monitor.connect('changed', callback)
-
-
-class Consumer(object):
-    """
-    Wrapper for sharing consumer identity information throughout GUI
-    components.
-    """
-    def __init__(self):
-        self.reload()
-
-    def reload(self):
-        """
-        Check for consumer certificate on disk and update our info accordingly.
-        """
-        log.debug("Loading consumer info from identity certificates.")
-        try:
-            consumer = ConsumerIdentity.read()
-            self.name = consumer.getConsumerName()
-            self.uuid = consumer.getConsumerId()
-        # XXX shouldn't catch the global exception here, but that's what
-        # existsAndValid did, so this is better.
-        except Exception:
-            self.name = None
-            self.uuid = None
-
-    def is_valid(self):
-        return self.uuid is not None
-
-    def getConsumerName(self):
-        return self.name
-
-    def getConsumerId(self):
-        return self.uuid
 
 
 class MainWindow(widgets.GladeWidget):

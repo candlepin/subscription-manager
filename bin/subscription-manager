@@ -55,6 +55,9 @@ if os.getuid() != 0:
     sys.stderr.write('Error: this command requires root access to execute\n')
     sys.exit(8)
 
+from subscription_manager.injection_init import init_dep_injection
+init_dep_injection()
+
 try:
     # this has to be done first thing due to module level translated vars.
     from subscription_manager.i18n import configure_i18n

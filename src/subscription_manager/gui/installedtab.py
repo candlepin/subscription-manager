@@ -14,7 +14,7 @@
 #
 from subscription_manager import managerlib, cert_sorter
 from subscription_manager.cert_sorter import CertSorter, FUTURE_SUBSCRIBED, \
-    NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
+    NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.branding import get_branding
 from subscription_manager.gui import widgets
 from subscription_manager.hwprobe import ClassicCheck

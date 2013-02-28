@@ -278,7 +278,15 @@ class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
 
     path = "this/is/a/stub"
 
-    def __init__(self, certificates):
+    def __init__(self, certificates=None, pids=None):
+        """
+        Pass list of product ID strings instead of certificates to have
+        stub product certs created for you.
+        """
+        if pids is not None:
+            certificates = []
+            for pid in pids:
+                certificates.append(StubProductCertificate(StubProduct(pid)))
         StubCertificateDirectory.__init__(self, certificates)
 
 
@@ -423,9 +431,6 @@ class StubFacts(object):
 
     def get_facts(self, refresh=True):
         return self.facts
-
-    def refresh_validity_facts(self):
-        pass
 
     def has_changed(self):
         return self.delta_values

@@ -29,6 +29,8 @@ from subscription_manager import hwprobe
 from rhsm.profile import  RPMProfile
 from rhsm.connection import GoneException
 
+from fixture import SubManFixture
+
 
 CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},
                  'serviceLevel': "Pro Turbo HD Plus Ultra",
@@ -53,12 +55,13 @@ class ExceptionalException(Exception):
     pass
 
 
-class TestCertmgr(unittest.TestCase):
+class TestCertmgr(SubManFixture):
 
     # on python 2.6+ we could set class decorators, but that doesn't
     # work on python2.4, so this...
     # http://www.voidspace.org.uk/python/mock/patch.html#patch-methods-start-and-stop
     def setUp(self):
+        SubManFixture.setUp(self)
         # we have to have a reference to the patchers
         self.patcher2 = mock.patch.object(certlib.UpdateAction, '_getConsumerId')
         self.certlib_updateaction_getconsumerid = self.patcher2.start()
@@ -74,9 +77,6 @@ class TestCertmgr(unittest.TestCase):
 
         self.patcher6 = mock.patch('subscription_manager.managerlib.persist_consumer_cert')
         self.managerlib_persist_consumer_cert = self.patcher6.start()
-
-        self.patcher7 = mock.patch.object(facts.Facts, '_get_validity_facts')
-        self.facts_getvalidityfacts = self.patcher7.start()
 
         self.patcher8 = mock.patch.object(facts.Facts, 'get_last_update')
         self.facts_getlastupdate = self.patcher8.start()
@@ -138,7 +138,6 @@ class TestCertmgr(unittest.TestCase):
         self.certlib_updateaction_getconsumerid.return_value = "234234"
 
         self.repolib_updateaction_perform.return_value = 0
-        self.facts_getvalidityfacts.return_value = []
         self.facts_getlastupdate.return_value = None
 
         self.factlib_consumeridentity.read.return_value = stubs.StubConsumerIdentity("sdfsdf", "sdfsdf")

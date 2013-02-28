@@ -12,12 +12,12 @@
 # in this software or its documentation.
 #
 
+from injection import FEATURES, IDENTITY
 from datetime import datetime
 import logging
 
 from rhsm.certificate import GMT
 from rhsm.connection import safe_int
-from subscription_manager.identity import ConsumerIdentity
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -39,28 +39,32 @@ RAM_FACT = 'memory.memtotal'
 
 class CertSorter(object):
     """
-    Class used to sort all certificates in the given Entitlement and Product
-    directories into status for a particular date.
+    Queries the server for compliance information and breaks out the response
+    for use in the client code.
 
-    Certs will be sorted into: installed, entitled, installed + entitled,
-    installed + unentitled, expired.
-    When looking for the products we need, only installed products will be
-    considered. (i.e. we do not concern ourselves with products that are
-    entitled but not installed)
+    Originally this class actually sorted certificates and calculated status,
+    but this is handled by the server today.
 
-    The date can be used to examine the state this system will likely be in
-    at some point in the future.
+    If unregistered we report status as unknown.
+
+    On every successful server fetch (for *right now*), we cache the results.
+    In the event we are unable to reach the server periodically, we will
+    re-use this cached data for a period of time, before falling back to
+    reporting unknown.
     """
     def __init__(self, product_dir, entitlement_dir, facts_dict, uep, on_date=None):
+        self.identity = FEATURES.require(IDENTITY)
         self.product_dir = product_dir
         self.entitlement_dir = entitlement_dir
+
+        # Warning: could be None if we're not registered, we will check before
+        # we use it, but if connection is still none we will let this error out
+        # as it is programmer error.
         self.uep = uep
+
         if not on_date:
             on_date = datetime.now(GMT())
         self.on_date = on_date
-
-        self.expired_entitlement_certs = []
-        self.valid_entitlement_certs = []
 
         # All products installed on this machine, regardless of status. Maps
         # installed product ID to product certificate.
@@ -89,40 +93,70 @@ class CertSorter(object):
         # Maps product ID to a list of all valid entitlement certificates:
         self.valid_products = {}
 
-        # Products which are installed and entitled sometime in the future.
-        # Maps product ID to future entitlements.
-        self.future_products = {}
-
         # Maps stack ID to a list of the entitlement certs composing a
         # partially valid stack:
         self.partial_stacks = {}
 
-        # Maps stack ID to a list of the entitlement certs composing a
-        # valid stack:
-        self.valid_stacks = {}
+        # Products which are installed and entitled sometime in the future.
+        # Maps product ID to future entitlements.
+        # TODO: not in server call, calc locally?
+        self.future_products = {}
 
-        self.facts_dict = facts_dict
+        # TODO: Not in server status call but can be calculated locally
+        # or just let the one place it's used figure it out on it's own
+        self.valid_entitlement_certs = []
 
-        # Number of sockets on this system:
-        self.socket_count = 1
-        if SOCKET_FACT in self.facts_dict:
-            self.socket_count = safe_int(self.facts_dict[SOCKET_FACT], 1)
-        else:
-            log.warn("System has no socket fact, assuming 1.")
+        if not self.is_registered():
+            log.debug("Unregistered, skipping server compliance check.")
+            return
+        # TODO: handle temporarily disconnected use case / caching
 
-        # Amount of RAM on this system - default is 1GB
-        self.total_ram = 1
-        if RAM_FACT in self.facts_dict:
-            self.total_ram = self._convert_system_ram_to_gb(
-                                safe_int(self.facts_dict[RAM_FACT], self.total_ram))
-        else:
-            log.warn("System has no %s fact, assuming 1GB" % RAM_FACT)
+        status = uep.getCompliance(self.identity.uuid)
 
-        log.debug("Sorting product and entitlement cert status for: %s" %
-                on_date)
+        # TODO: check that all installed products appear somewhere and log if not:
 
-        self._scan_entitlement_certs()
-        self._scan_for_unentitled_products()
+        # TODO: we're now mapping product IDs to entitlement cert JSON,
+        # previously we mapped to actual entitlement cert objects. However,
+        # nothing seems to actually use these, so it may not matter for now.
+        self.valid_products = status['compliantProducts']
+
+        # Lookup product certs for each unentitled product returned by
+        # the server:
+        for unentitled_pid in status['nonCompliantProducts']:
+            prod_cert = self.product_dir.findByProduct(unentitled_pid)
+            if prod_cert is None:
+                raise InstalledProductMismatch(
+                        _("Server returned unentitled installed "
+                        "product we have no cert for: %s") % unentitled_pid)
+            self.unentitled_products[unentitled_pid] = prod_cert
+
+        self.partially_valid_products = status['partiallyCompliantProducts']
+
+        self.partial_stacks = status['partialStacks']
+
+
+        #self.facts_dict = facts_dict
+
+        ## Number of sockets on this system:
+        #self.socket_count = 1
+        #if SOCKET_FACT in self.facts_dict:
+        #    self.socket_count = safe_int(self.facts_dict[SOCKET_FACT], 1)
+        #else:
+        #    log.warn("System has no socket fact, assuming 1.")
+
+        ## Amount of RAM on this system - default is 1GB
+        #self.total_ram = 1
+        #if RAM_FACT in self.facts_dict:
+        #    self.total_ram = self._convert_system_ram_to_gb(
+        #                        safe_int(self.facts_dict[RAM_FACT], self.total_ram))
+        #else:
+        #    log.warn("System has no %s fact, assuming 1GB" % RAM_FACT)
+
+        #log.debug("Sorting product and entitlement cert status for: %s" %
+        #        on_date)
+
+        #self._scan_entitlement_certs()
+        #self._scan_for_unentitled_products()
 
         log.debug("valid entitled products: %s" % self.valid_products.keys())
         log.debug("expired entitled products: %s" % self.expired_products.keys())
@@ -130,7 +164,6 @@ class CertSorter(object):
         log.debug("unentitled products: %s" % self.unentitled_products.keys())
         log.debug("future products: %s" % self.future_products.keys())
         log.debug("partial stacks: %s" % self.partial_stacks.keys())
-        log.debug("valid stacks: %s" % self.valid_stacks.keys())
 
     def is_valid(self):
         """
@@ -144,7 +177,7 @@ class CertSorter(object):
         return True
 
     def is_registered(self):
-        return ConsumerIdentity.existsAndValid()
+        return self.identity.is_valid()
 
     def get_status(self, product_id):
         """Return the status of a given product"""
@@ -196,7 +229,6 @@ class CertSorter(object):
             # Check if entitlement has already expired:
             elif ent_cert.valid_range.end() < self.on_date:
                 log.debug("  expired: %s" % ent_cert.valid_range.end())
-                self.expired_entitlement_certs.append(ent_cert)
                 self._add_products_to_hash(ent_cert, self.expired_products)
 
             # Current entitlements:
@@ -215,17 +247,10 @@ class CertSorter(object):
                         log.debug("  stack already found to be invalid")
                         partially_stacked = True
                         self.partial_stacks[stack_id].append(ent_cert)
-                    elif stack_id in self.valid_stacks:
-                        log.debug("  stack already found to be valid")
-                        self.valid_stacks[stack_id].append(ent_cert)
-
                     elif not self.stack_id_valid(stack_id, ent_certs):
                         log.debug("  stack is invalid")
                         partially_stacked = True
                         self.partial_stacks[stack_id] = [ent_cert]
-                    else:
-                        log.debug("  stack is valid")
-                        self.valid_stacks[stack_id] = [ent_cert]
 
                 if partially_stacked:
                     self._add_products_to_hash(ent_cert, self.partially_valid_products)
@@ -399,3 +424,7 @@ class EntitlementCertStackingGroupSorter(StackingGroupSorter):
 
     def _get_identity_name(self, cert):
         return cert.order.name
+
+
+class InstalledProductMismatch(Exception):
+    pass

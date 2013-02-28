@@ -162,7 +162,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.top_view.expand_all()
         dbus_iface = get_dbus_iface()
         dbus_iface.check_status(ignore_reply=True)
-        self.facts.refresh_validity_facts()
         self.unsubscribe_button.set_property('sensitive', False)
         # 841396: Select first item in My Subscriptions table by default
         selection = self.top_view.get_selection()

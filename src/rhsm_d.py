@@ -25,6 +25,10 @@ import dbus.glib
 
 import sys
 sys.path.append("/usr/share/rhsm")
+
+from subscription_manager.injection_init import init_dep_injection
+init_dep_injection()
+
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager import certdirectory

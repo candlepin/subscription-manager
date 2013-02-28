@@ -16,7 +16,6 @@
 #
 
 
-import os
 import syslog
 import logging
 from datetime import timedelta, datetime
@@ -24,7 +23,7 @@ from subscription_manager.lock import Lock
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager import cert_sorter
 from subscription_manager.certdirectory import EntitlementDirectory, \
-    ProductDirectory, Path, Writer
+    ProductDirectory, Writer
 from rhsm.config import initConfig
 from rhsm.certificate import Key, create_from_pem, GMT
 

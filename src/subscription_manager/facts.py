@@ -102,12 +102,8 @@ class Facts(CacheManager):
             facts.update({"system.certificate_version": CERT_VERSION})
 
             facts.update(self._load_custom_facts())
-            facts.update(self._get_validity_facts(facts))
             self.facts = facts
         return self.facts
-
-    def refresh_validity_facts(self):
-        self.facts.update(self._get_validity_facts(self.facts))
 
     def to_dict(self):
         return self.get_facts()
@@ -129,21 +125,6 @@ class Facts(CacheManager):
                 file_facts.update(json.loads(json_buffer))
 
         return file_facts
-
-    def _get_validity_facts(self, facts_dict):
-        validity_facts = {'system.entitlements_valid': 'valid'}
-        if not ClassicCheck().is_registered_with_classic():
-            sorter = cert_sorter.CertSorter(self.product_dir,
-                    self.entitlement_dir, facts_dict, self.uep)
-            if (len(sorter.partially_valid_products) > 0) or \
-                (len(sorter.partial_stacks) > 0):
-                validity_facts['system.entitlements_valid'] = 'partial'
-
-            if ((len(sorter.expired_products) +
-                len(sorter.unentitled_products)) > 0):
-                validity_facts['system.entitlements_valid'] = 'invalid'
-
-        return validity_facts
 
     def _update_server(self, uep, consumer_uuid):
         log.debug("Updating facts on server")

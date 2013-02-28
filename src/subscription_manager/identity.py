@@ -22,6 +22,10 @@ from rhsm.config import initConfig
 
 CFG = initConfig()
 
+import logging
+log = logging.getLogger('rhsm-app.' + __name__)
+
+
 class ConsumerIdentity:
 
     PATH = CFG.get('rhsm', 'consumerCertDir')
@@ -112,5 +116,47 @@ class ConsumerIdentity:
             (self.getConsumerName(),
              self.getConsumerId())
 
+
+class Identity(object):
+    """
+    New-style identity to phase out the use of classmethod ConsumerIdentity class.
+    """
+    def __init__(self):
+        self.uuid = ConsumerIdentity.existsAndValid()
+
+    def exists_and_valid(self):
+        return ConsumerIdentity.existsAndValid()
+
+
+class Identity(object):
+    """
+    Wrapper for sharing consumer identity without constant reloading.
+    """
+    def __init__(self):
+        self.reload()
+
+    def reload(self):
+        """
+        Check for consumer certificate on disk and update our info accordingly.
+        """
+        log.debug("Loading consumer info from identity certificates.")
+        try:
+            consumer = ConsumerIdentity.read()
+            self.name = consumer.getConsumerName()
+            self.uuid = consumer.getConsumerId()
+        # XXX shouldn't catch the global exception here, but that's what
+        # existsAndValid did, so this is better.
+        except Exception:
+            self.name = None
+            self.uuid = None
+
+    def is_valid(self):
+        return self.uuid is not None
+
+    def getConsumerName(self):
+        return self.name
+
+    def getConsumerId(self):
+        return self.uuid
 
 
