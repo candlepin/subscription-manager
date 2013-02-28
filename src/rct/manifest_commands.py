@@ -132,6 +132,11 @@ class CatManifestCommand(RCTManifestCommand):
 
     def _print_products(self, location):
         ent_dir = os.path.join(location, "export", "entitlements")
+
+        if not os.path.exists(ent_dir):
+            self._print_section(_("Subscriptions:"), [["None"]], 1, True)
+            return
+
         for ent_file in os.listdir(ent_dir):
             part = open(os.path.join(ent_dir, ent_file))
             data = json.loads(part.read())
