@@ -197,7 +197,7 @@ class StubEntitlementCertificate(EntitlementCertificate):
 
     def __init__(self, product, provided_products=None, start_date=None, end_date=None,
             content=None, quantity=1, stacking_id=None, sockets=2, service_level=None,
-            ram=None):
+            ram=None, pool=None):
 
         products = []
         if product:
@@ -233,8 +233,8 @@ class StubEntitlementCertificate(EntitlementCertificate):
 
         path = "/tmp/fake_ent_cert-%s.pem" % self.serial
         EntitlementCertificate.__init__(self, path=path, products=products,
-                order=order, content=content, start=start_date, end=end_date,
-                serial=self.serial)
+                order=order, content=content, pool=pool, start=start_date,
+                end=end_date, serial=self.serial)
 
     def delete(self):
         self.is_deleted = True
