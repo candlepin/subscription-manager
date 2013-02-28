@@ -13,11 +13,13 @@
 #
 
 from injection import FEATURES, IDENTITY
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 
 from rhsm.certificate import GMT
 from rhsm.connection import safe_int
+
+from subscription_manager.utils import parseDate
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -134,6 +136,17 @@ class CertSorter(object):
 
         self.partial_stacks = status['partialStacks']
 
+        # For backward compatability with old find first invalid date,
+        # we drop one second from the compliant until from server (as
+        # it is returning the first second we are invalid), then add a full
+        # 24 hours giving us the first date where we know we're completely
+        # invalid from midnight to midnight.
+        self.compliant_until = None
+        self.first_invalid_date = None
+        if status['compliantUntil'] is not None:
+            self.compliant_until = parseDate(status['compliantUntil'])
+            self.first_invalid_date = self.compliant_until + \
+                    timedelta(seconds=60 * 60 * 24 - 1)
 
         #self.facts_dict = facts_dict
 

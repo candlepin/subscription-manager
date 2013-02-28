@@ -487,6 +487,28 @@ class CertSorterTests(SubManFixture):
         self.assertRaises(InstalledProductMismatch, CertSorter, prod_dir,
                 self.ent_dir, {}, self.mock_uep)
 
+    def test_no_compliant_until(self):
+        SAMPLE_COMPLIANCE_JSON['compliantUntil'] = None
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, self.mock_uep)
+        self.sorter.is_registered = Mock(return_value=True)
+        self.assertTrue(self.sorter.compliant_until is None)
+        self.assertTrue(self.sorter.first_invalid_date is None)
+
+    def test_compliant_until(self):
+        compliant_until = self.sorter.compliant_until
+        self.assertEquals(2013, compliant_until.year)
+        self.assertEquals(2, compliant_until.month)
+        self.assertEquals(27, compliant_until.day)
+        self.assertEquals(16, compliant_until.hour)
+        self.assertEquals(03, compliant_until.minute)
+        self.assertEquals(42, compliant_until.second)
+
+    def test_first_invalid_date(self):
+        first_invalid = self.sorter.first_invalid_date
+        self.assertEquals(2013, first_invalid.year)
+        self.assertEquals(2, first_invalid.month)
+        self.assertEquals(28, first_invalid.day)
+
 #    def test_requested_date(self):
 #        expected = "date" : "2013-02-27T16:03:42.509+0000"
 

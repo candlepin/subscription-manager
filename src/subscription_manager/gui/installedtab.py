@@ -18,8 +18,7 @@ from subscription_manager.cert_sorter import CertSorter, FUTURE_SUBSCRIBED, \
 from subscription_manager.branding import get_branding
 from subscription_manager.gui import widgets
 from subscription_manager.hwprobe import ClassicCheck
-from subscription_manager.validity import find_first_invalid_date, \
-    ValidProductDateRangeCalculator
+from subscription_manager.validity import ValidProductDateRangeCalculator
 
 import gettext
 import gobject
@@ -336,10 +335,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 _("This system does not match subscription limits."))
 
         else:
-            first_invalid = find_first_invalid_date(self.entitlement_dir,
-                    self.product_dir, self.facts.get_facts(), self.backend.uep)
             self._set_status_icons(VALID)
-            if first_invalid:
+            if sorter.first_invalid_date:
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
                         _("System is properly subscribed through %s.") % \

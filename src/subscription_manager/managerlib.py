@@ -20,7 +20,6 @@ import stat
 import shutil
 import syslog
 import time
-import dateutil.parser
 import logging
 import datetime
 from os import linesep as NEW_LINE
@@ -38,6 +37,7 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.repolib import RepoLib
+from subscription_manager.utils import parseDate
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -736,15 +736,6 @@ class ImportFileExtractor(object):
 
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])
-
-
-def parseDate(date):
-    try:
-        dt = dateutil.parser.parse(date)
-    except ValueError:
-        log.warning("Date overflow: %s, using 9999-09-06 instead." % date)
-        return dateutil.parser.parse("9999-09-06T00:00:00.000+0000")
-    return dt
 
 
 def formatDate(dt):
