@@ -263,7 +263,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         found = False
         if selected_pool_id:
             itr = self.store.get_iter_first()
-            while itr != None:
+            while itr is not None:
                 if self.store.get_value(itr,
                         self.store['pool_id']) == selected_pool_id:
                     self.top_view.set_cursor(self.store.get_path(itr))

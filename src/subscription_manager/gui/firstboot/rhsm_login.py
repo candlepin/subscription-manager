@@ -44,7 +44,7 @@ class SelectSLAScreen(registergui.SelectSLAScreen):
     override the default SelectSLAScreen to jump to the manual subscribe page.
     """
     def _on_get_service_levels_cb(self, result, error=None):
-        if error != None:
+        if error is not None:
             if isinstance(error, ServiceLevelNotSupportedException):
                 message = _("Unable to auto-attach, server does not support "
                             "service levels. Please run 'Subscription Manager' "
@@ -98,7 +98,7 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
 
     def _on_registration_finished_cb(self, new_account, error=None):
         try:
-            if error != None:
+            if error is not None:
                 raise error
 
             managerlib.persist_consumer_cert(new_account)

@@ -307,7 +307,7 @@ class PerformRegisterScreen(NoGuiScreen):
 
     def _on_registration_finished_cb(self, new_account, error=None):
         try:
-            if error != None:
+            if error is not None:
                 raise error
 
             managerlib.persist_consumer_cert(new_account)
@@ -345,7 +345,7 @@ class PerformSubscribeScreen(NoGuiScreen):
 
     def _on_subscribing_finished_cb(self, unused, error=None):
         try:
-            if error != None:
+            if error is not None:
                 raise error
             self._parent.pre_done(FINISH)
 
@@ -476,7 +476,7 @@ class SelectSLAScreen(Screen):
         # (which is MainWindow) because the parent window is closed
         # by finish_registration() after displaying the dialogs.  See
         # BZ #855762.
-        if error != None:
+        if error is not None:
             if isinstance(error, ServiceLevelNotSupportedException):
                 OkDialog(_("Unable to auto-attach, server does not support service levels."),
                         parent=self._parent.parent)
@@ -559,7 +559,7 @@ class EnvironmentScreen(Screen):
 
     def _on_get_environment_list_cb(self, result_tuple, error=None):
         environments = result_tuple
-        if error != None:
+        if error is not None:
             handle_gui_exception(error, REGISTER_ERROR, self._parent.parent)
             self._parent.finish_registration(failed=True)
             return
@@ -618,7 +618,7 @@ class OrganizationScreen(Screen):
         self._owner_key = None
 
     def _on_get_owner_list_cb(self, owners, error=None):
-        if error != None:
+        if error is not None:
             handle_gui_exception(error, REGISTER_ERROR,
                     self._parent.window)
             self._parent.pre_done(CREDENTIALS_PAGE)
@@ -823,7 +823,7 @@ class RefreshSubscriptionsScreen(NoGuiScreen):
 
     def _on_refresh_cb(self, error=None):
         try:
-            if error != None:
+            if error is not None:
                 raise error
             self._parent.pre_done(FINISH)
 
