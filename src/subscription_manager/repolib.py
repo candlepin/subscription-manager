@@ -340,8 +340,8 @@ class Repo(dict):
         #
         # all values will be in _order, since the key has to have been set
         # to get into our dict.
-        return tuple([(k, self[k]) for k in self._order if \
-                k in self and self[k]])
+        return tuple([(k, self[k]) for k in self._order if
+                     k in self and self[k]])
 
     def update(self, new_repo):
         """

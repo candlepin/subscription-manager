@@ -23,14 +23,14 @@ from subscription_manager.gui.utils import get_running_as_firstboot
 import gettext
 _ = gettext.gettext
 
-LICENSE = _("\nThis software is licensed to you under the GNU General Public License, " \
-            "version 2 (GPLv2). There is NO WARRANTY for this software, express or " \
-            "implied, including the implied warranties of MERCHANTABILITY or FITNESS " \
-            "FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 " \
-            "along with this software; if not, see:\n\n" \
-            "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n\n" \
-            "Red Hat trademarks are not licensed under GPLv2. No permission is " \
-            "granted to use or replicate Red Hat trademarks that are incorporated " \
+LICENSE = _("\nThis software is licensed to you under the GNU General Public License, "
+            "version 2 (GPLv2). There is NO WARRANTY for this software, express or "
+            "implied, including the implied warranties of MERCHANTABILITY or FITNESS "
+            "FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 "
+            "along with this software; if not, see:\n\n"
+            "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n\n"
+            "Red Hat trademarks are not licensed under GPLv2. No permission is "
+            "granted to use or replicate Red Hat trademarks that are incorporated "
             "in this software or its documentation.\n")
 
 UPDATE_FILE = '/var/run/rhsm/update'
@@ -68,10 +68,10 @@ class AboutDialog(object):
         client_versions = get_client_versions()
 
         self.dialog.set_version(client_versions['subscription-manager'])
-        rhsm_version_label.set_markup(_("<b>python-rhsm version:</b> %s" % \
-            client_versions['python-rhsm']))
-        backend_version_label.set_markup(_("<b>subscription management service version:</b> %s" % \
-            server_versions['candlepin']))
+        rhsm_version_label.set_markup(_("<b>python-rhsm version:</b> %s" %
+                                        client_versions['python-rhsm']))
+        backend_version_label.set_markup(_("<b>subscription management service version:</b> %s" %
+                                           server_versions['candlepin']))
 
         self.dialog.connect("response", self._handle_response)
         self.dialog.show_all()

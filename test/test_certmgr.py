@@ -26,7 +26,7 @@ from subscription_manager import facts
 from subscription_manager import hwprobe
 from subscription_manager import injection
 
-from rhsm.profile import  RPMProfile
+from rhsm.profile import RPMProfile
 from rhsm.connection import GoneException
 from rhsm.certificate import GMT
 

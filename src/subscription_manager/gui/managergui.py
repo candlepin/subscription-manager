@@ -348,13 +348,13 @@ class MainWindow(widgets.GladeWidget):
         except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e,
-                    _("<b>Errors were encountered during unregister.</b>") + \
-                    "\n%s\n" + \
-                    _("Please see /var/log/rhsm/rhsm.log for more information."),
-                    self.main_window,
-                    logMsg="Consumer may need to be manually cleaned up: %s" %
-                    self.identity.uuid)
-        self.identity.reload()
+                                 _("<b>Errors were encountered during unregister.</b>") +
+                                  "\n%s\n" +
+                                 _("Please see /var/log/rhsm/rhsm.log for more information."),
+                                 self.main_window,
+                                 logMsg="Consumer may need to be manually cleaned up: %s" %
+                                 self.consumer.uuid)
+        self.consumer.reload()
 
         # We have new credentials, restart virt-who
         restart_virt_who()

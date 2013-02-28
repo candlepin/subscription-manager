@@ -177,10 +177,10 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
                     contract_ids, sub_names = self._calc_subs_providing(
                             product_id, compliant_range)
-                    name = self.rreplace((", ").join(sub_names), \
-                        ',', _(' and'), 1)
-                    contract = self.rreplace((", ").join(contract_ids), \
-                        ',', _(' and'), 1)
+                    name = self.rreplace((", ").join(sub_names),
+                                         ',', _(' and'), 1)
+                    contract = self.rreplace((", ").join(contract_ids),
+                                             ',', _(' and'), 1)
                     num_of_contracts = len(contract_ids)
 
                     entry['subscription'] = name
@@ -341,7 +341,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
                         _("System is properly subscribed through %s.") % \
-                            managerlib.formatDate(sorter.first_invalid_date))
+			  managerlib.formatDate(sorter.first_invalid_date))
             else:
                 # No product certs installed, no first invalid date, and
                 # the subscription assistant can't do anything, so we'll disable

@@ -120,7 +120,7 @@ if __name__ == '__main__':
     bus_name = dbus.service.BusName(BUS_NAME, bus=dbus.SessionBus())
     request_name_res = bus.request_name(bus_name.get_name())
 
-    if bus and ((request_name_res != REQUEST_NAME_REPLY_PRIMARY_OWNER) and \
+    if bus and ((request_name_res != REQUEST_NAME_REPLY_PRIMARY_OWNER) and
        (request_name_res != REQUEST_NAME_REPLY_ALREADY_OWNER)):
         print _("subscription-manager-gui is already running")
         # Attempt to raise the running instance to the forefront

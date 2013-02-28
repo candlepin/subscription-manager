@@ -277,18 +277,30 @@ NOT_COLLECTED = "non-collected-package"
 # Note, this is duped from python-rhsm/test/unit/version_tests.py
 class VersionsStub(Versions):
     def _get_packages(self):
-        package_set = [{'name': Versions.SUBSCRIPTION_MANAGER, 'version':'1', 'release': "1"},
-                       {'name': Versions.PYTHON_RHSM, 'version':'2', 'release': "2"},
-                       {'name': NOT_COLLECTED, 'version':'3', 'release': "3"}]
+        package_set = [{'name': Versions.SUBSCRIPTION_MANAGER,
+                        'version': '1',
+                        'release': "1"},
+                       {'name': Versions.PYTHON_RHSM,
+                        'version': '2',
+                        'release': "2"},
+                       {'name': NOT_COLLECTED,
+                        'version': '3',
+                        'release': "3"}]
         return package_set
 
 
 # Versions with python-rhsm or subscription-manager
 class VersionsNoRhsmStub(Versions):
     def _get_packages(self):
-        package_set = [{'name': 'awesome-package', 'version':'1', 'release': "1"},
-                       {'name': 'totally-awesome-package', 'version':'2', 'release': "2"},
-                       {'name': 'something else', 'version':'3', 'release': "3"}]
+        package_set = [{'name': 'awesome-package',
+                        'version': '1',
+                        'release': "1"},
+                       {'name': 'totally-awesome-package',
+                        'version': '2',
+                        'release': "2"},
+                       {'name': 'something else',
+                        'version': '3',
+                        'release': "3"}]
         return package_set
 
 

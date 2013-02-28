@@ -324,8 +324,8 @@ class PerformRegisterScreen(NoGuiScreen):
             self._parent.finish_registration(failed=True)
 
     def pre(self):
-        log.info("Registering to owner: %s environment: %s" \
-                % (self._parent.owner_key, self._parent.environment))
+        log.info("Registering to owner: %s environment: %s" %
+                 (self._parent.owner_key, self._parent.environment))
 
         self._parent.async.register_consumer(self._parent.consumername,
                                              self._parent.facts,
@@ -400,8 +400,8 @@ class ConfirmSubscriptionsScreen(Screen):
         # the data is loaded into the screen.
         self.store.clear()
         log.info("Using service level: %s" % self._dry_run_result.service_level)
-        self.sla_label.set_markup("<b>" + self._dry_run_result.service_level + \
-                "</b>")
+        self.sla_label.set_markup("<b>" + self._dry_run_result.service_level +
+                                  "</b>")
 
         for pool_quantity in self._dry_run_result.json:
             self.store.append([pool_quantity['pool']['productName'],
@@ -628,8 +628,8 @@ class OrganizationScreen(Screen):
 
         if len(owners) == 0:
             handle_gui_exception(None,
-                    _("<b>User %s is not able to register with any orgs.</b>") \
-                            % (self._parent.username),
+                                 _("<b>User %s is not able to register with any orgs.</b>") %
+                                   (self._parent.username),
                     self._parent.parent)
             self._parent.finish_registration(failed=True)
             return
@@ -676,13 +676,13 @@ class CredentialsScreen(Screen):
         self._initialize_consumer_name()
 
         register_tip_label = self.glade.get_widget("registration_tip_label")
-        register_tip_label.set_label("<small>%s</small>" % \
-                get_branding().GUI_FORGOT_LOGIN_TIP)
+        register_tip_label.set_label("<small>%s</small>" %
+                                     get_branding().GUI_FORGOT_LOGIN_TIP)
 
         register_header_label = \
                 self.glade.get_widget("registration_header_label")
-        register_header_label.set_label("<b>%s</b>" % \
-                get_branding().GUI_REGISTRATION_HEADER)
+        register_header_label.set_label("<b>%s</b>" %
+                                        get_branding().GUI_REGISTRATION_HEADER)
 
     def _initialize_consumer_name(self):
         if not self.consumer_name.get_text():

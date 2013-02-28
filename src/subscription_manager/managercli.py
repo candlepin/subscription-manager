@@ -612,8 +612,8 @@ class RefreshCommand(CliCommand):
 
 class IdentityCommand(UserPassCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = \
-            _("Display the identity certificate for this system or request a new one")
+        shortdesc = _("Display the identity certificate for this system or "
+                      "request a new one")
 
         super(IdentityCommand, self).__init__("identity", shortdesc, False,
                                               ent_dir, prod_dir)
@@ -1010,7 +1010,7 @@ class RegisterCommand(UserPassCommand):
 
         # Set consumer's name to hostname by default:
         consumername = self.options.consumername
-        if consumername == None:
+        if consumername is None:
             consumername = socket.gethostname()
 
         if ConsumerIdentity.exists() and self.options.force:
@@ -1244,7 +1244,7 @@ class RedeemCommand(CliCommand):
             #candlepin throws an exception during activateMachine, even for
             #200's. We need to look at the code in the RestlibException and proceed
             #accordingly
-            if  200 <= e.code <= 210:
+            if 200 <= e.code <= 210:
                 systemExit(0, e)
             else:
                 handle_exception(u"Unable to redeem: %s" % e, e)
@@ -1315,8 +1315,9 @@ class ReleaseCommand(CliCommand):
                 self.cp.updateConsumer(self.consumer['uuid'],
                         release=self.options.release)
             else:
-                systemExit(-1, _("No releases match '%s'.  Consult 'release --list' for a full listing.") \
-                        % self.options.release)
+                systemExit(-1, _("No releases match '%s'.  "
+                                 "Consult 'release --list' for a full listing.")
+                                 % self.options.release)
             print _("Release set to: %s") % self.options.release
         elif self.options.list:
             self._get_consumer_release()
@@ -2156,11 +2157,12 @@ class VersionCommand(CliCommand):
 class ManagerCLI(CLI):
 
     def __init__(self, command_classes=[]):
-        commands = [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand, SubscribeCommand,\
-                       UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
-                       RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, ReleaseCommand, \
-                       EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand, \
-                       VersionCommand, RemoveCommand, AttachCommand, PluginsCommand]
+        commands = [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand,
+                    SubscribeCommand, UnSubscribeCommand, FactsCommand,
+                    IdentityCommand, OwnersCommand, RefreshCommand, CleanCommand,
+                    RedeemCommand, ReposCommand, ReleaseCommand,
+                    EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
+                    VersionCommand, RemoveCommand, AttachCommand, PluginsCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):
