@@ -14,6 +14,7 @@
 
 # Supported Features:
 IDENTITY = "IDENTITY"
+CERT_SORTER = "CERT_SORTER"
 
 class FeatureBroker:
     """
@@ -27,6 +28,8 @@ class FeatureBroker:
     def __init__(self):
         self.providers = {}
 
+    # TODO: remove args, we either get a method to call with args later, or an
+    # actual object here
     def provide(self, feature, provider, *args, **kwargs):
         """
         Provide an implementation for a feature.
@@ -36,22 +39,18 @@ class FeatureBroker:
         Can also pass an actual instance which will be returned on every
         invocation. (i.e. pass an actual instance if you want a "singleton".
         """
+        self.providers[feature] = provider
 
-        if callable(provider):
-            def call(): return provider(*args, **kwargs)
-        else:
-            def call(): return provider
-        self.providers[feature] = call
-
-    def __getitem__(self, feature):
+    def require(self, feature, *args, **kwargs):
         try:
             provider = self.providers[feature]
+            if callable(provider):
+                return provider(*args, **kwargs)
+            else:
+                return provider
         except KeyError:
             raise KeyError, "Unknown feature: %r" % feature
-        return provider()
-
-    def require(self, feature):
-        return FEATURES[feature]
+        return provider(*args, **kwargs)
 
 # Create a global instance we can use in all components. Tests can override
 # features as desired and that change should trickle out to all components.

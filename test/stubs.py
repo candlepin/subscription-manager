@@ -394,6 +394,9 @@ class StubUEP:
     def getCertificateSerials(self, consumer):
         return []
 
+    def getCompliance(self, uuid):
+        return {}
+
 
 class StubBackend:
     def __init__(self, uep=StubUEP()):

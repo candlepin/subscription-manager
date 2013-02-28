@@ -21,6 +21,7 @@ import logging
 from datetime import timedelta, datetime
 from subscription_manager.lock import Lock
 from subscription_manager.identity import ConsumerIdentity
+from subscription_manager.injection import FEATURES, CERT_SORTER
 from subscription_manager import cert_sorter
 from subscription_manager.certdirectory import EntitlementDirectory, \
     ProductDirectory, Writer
@@ -116,8 +117,11 @@ class HealingLib(DataLib):
                 # Check if we're not valid today and heal if so. If not
                 # we'll do the same check for tomorrow to hopefully always keep
                 # us valid:
+
+                # TODO: not great for testing:
                 ent_dir = EntitlementDirectory()
-                cs = cert_sorter.CertSorter(self._product_dir, ent_dir,
+
+                cs = FEATURES.require(CERT_SORTER, self._product_dir, ent_dir,
                         self.facts_dict, self.uep, on_date=today)
                 cert_updater = CertLib(lock=self.lock, uep=self.uep)
                 if not cs.is_valid():
@@ -129,7 +133,7 @@ class HealingLib(DataLib):
                     log.info("Entitlements are valid for today: %s" %
                             today)
 
-                    cs = cert_sorter.CertSorter(self._product_dir, ent_dir,
+                    cs = FEATURES.require(CERT_SORTER, self._product_dir, ent_dir,
                             self.facts_dict, self.uep, on_date=tomorrow)
                     if not cs.is_valid():
                         log.warn("Found invalid entitlements for tomorrow: %s" %
