@@ -6,7 +6,6 @@
 # main complete function
 _rct()
 {
-  local opts="cat-cert stat-cert cat-man dump-man"
   local cur="${COMP_WORDS[COMP_CWORD]}"
   local first="${COMP_WORDS[1]}"
 
@@ -14,21 +13,25 @@ _rct()
 
   case "${first}" in
     cat-cert)
-        opts="--no-products --no-content"
+        COMPREPLY=( $( compgen -f -o filenames -W "--no-products --no-content" -- "$cur" ) )
+        return 0
         ;;
     stat-cert)
-        opts=""
+        COMPREPLY=( $( compgen -f -o filenames -- "$cur" ) )
+        return 0
         ;;
     cat-manifest)
-        opts=""
+        COMPREPLY=( $( compgen -f -o filenames -- "$cur" ) )
+        return 0
         ;;
     dump-manifest)
-        opts=""
+        COMPREPLY=( $( compgen -f -o filenames -- "$cur" ) )
+        return 0
         ;;
   esac
 
-  COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+  COMPREPLY=($(compgen -W "cat-cert stat-cert cat-manifest dump-manifest" -- ${cur}))
   return 0
 }
 
-complete -F _rct rct
+complete -F _rct -o filenames rct
