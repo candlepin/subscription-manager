@@ -120,6 +120,7 @@ This package contains the firstboot screens for subscription manager.
 Summary: Migration scripts for moving to certificate based subscriptions
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
+Requires: rhnlib
 
 %description -n subscription-manager-migration
 This package contains scripts that aid in moving to certificate based
