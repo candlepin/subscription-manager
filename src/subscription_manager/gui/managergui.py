@@ -125,7 +125,7 @@ class Backend(object):
     def _create_uep(self, username=None, password=None, cert_file=None, key_file=None):
         return connection.UEPConnection(
             host=cfg.get('server', 'hostname'),
-            ssl_port=int(cfg.get('server', 'port')),
+            ssl_port=cfg.get_int('server', 'port'),
             handler=cfg.get('server', 'prefix'),
             proxy_hostname=cfg.get('server', 'proxy_hostname'),
             proxy_port=cfg.get_int('server', 'proxy_port'),

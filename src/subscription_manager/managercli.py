@@ -319,9 +319,7 @@ class CliCommand(AbstractCLICommand):
 
         # populate with config setttings if not specified
         server_hostname = host or cfg.get('server', 'hostname')
-        server_port = ssl_port or cfg.get('server', 'port')
-        if server_port:
-            server_port = connection.safe_int(server_port)
+        server_port = ssl_port or cfg.get_int('server', 'port')
         server_prefix = handler or cfg.get('server', 'prefix')
 
         # Note: username/password have no defaults, other than
@@ -369,7 +367,7 @@ class CliCommand(AbstractCLICommand):
 
         # set proxy before we try to connect to server
         self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
-        self.proxy_port = cfg.get('server', 'proxy_port')
+        self.proxy_port = cfg.get_int('server', 'proxy_port')
         self.proxy_user = cfg.get('server', 'proxy_user')
         self.proxy_password = cfg.get('server', 'proxy_password')
 

@@ -180,7 +180,7 @@ class NetworkConfigDialog:
         proxy_password = self.cfg.get("server", "proxy_password")
 
         server_host = self.cfg.get("server", "hostname")
-        server_port = self.cfg.get("server", "port")
+        server_port = self.cfg.get_int("server", "port")
         server_prefix = self.cfg.get("server", "prefix")
 
         cp = connection.UEPConnection(host=server_host,
