@@ -238,6 +238,8 @@ class MigrationEngine(object):
         except ServerUrlParseError, e:
             systemExit(-1, _("Error parsing server URL: %s") % e.msg)
 
+        proxy_port = self.proxy_port and int(self.proxy_port)
+
         if basic_auth:
             self.cp = UEPConnection(host=hostname,
                     ssl_port=int(port),
@@ -245,7 +247,7 @@ class MigrationEngine(object):
                     username=username,
                     password=password,
                     proxy_hostname=self.proxy_host,
-                    proxy_port=self.proxy_port,
+                    proxy_port=proxy_port,
                     proxy_user=self.proxy_user,
                     proxy_password=self.proxy_password)
         else:
@@ -255,7 +257,7 @@ class MigrationEngine(object):
                     cert_file=ConsumerIdentity.certpath(),
                     key_file=ConsumerIdentity.keypath(),
                     proxy_hostname=self.proxy_host,
-                    proxy_port=self.proxy_port,
+                    proxy_port=proxy_port,
                     proxy_user=self.proxy_user,
                     proxy_password=self.proxy_password)
 
