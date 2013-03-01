@@ -16,6 +16,9 @@
 IDENTITY = "IDENTITY"
 CERT_SORTER = "CERT_SORTER"
 
+import logging
+log = logging.getLogger('rhsm-app.' + __name__)
+
 class FeatureBroker:
     """
     Tracks all configured features.
@@ -39,14 +42,18 @@ class FeatureBroker:
         Can also pass an actual instance which will be returned on every
         invocation. (i.e. pass an actual instance if you want a "singleton".
         """
+        log.debug("Registering provider for feature %s: %s" % (feature, provider))
         self.providers[feature] = provider
 
     def require(self, feature, *args, **kwargs):
         try:
             provider = self.providers[feature]
             if callable(provider):
+                log.debug("Returning callable provider for feature %s: %s" %
+                        (feature, provider))
                 return provider(*args, **kwargs)
             else:
+                log.debug("Returning instance for feature %s" % feature)
                 return provider
         except KeyError:
             raise KeyError, "Unknown feature: %r" % feature

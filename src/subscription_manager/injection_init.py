@@ -22,6 +22,7 @@ def init_dep_injection():
     This needs to be called from any entry-point into subscription manager.
     """
     # Set up consumer identity as a singleton so we don't constantly re-load
-    # it from disk.
+    # it from disk. Call reload when anything changes and all references will be
+    # updated.
     FEATURES.provide(IDENTITY, Identity())
 

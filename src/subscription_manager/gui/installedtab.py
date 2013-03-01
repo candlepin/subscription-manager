@@ -166,7 +166,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 #        This is also used in mysubstab...
                 if status != NOT_SUBSCRIBED:
 
-                    range_calculator = ValidProductDateRangeCalculator(self.cs)
+                    range_calculator = ValidProductDateRangeCalculator(
+                            self.backend.uep)
                     compliant_range = range_calculator.calculate(product.id)
                     start = ''
                     end = ''

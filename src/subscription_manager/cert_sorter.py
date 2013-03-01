@@ -113,6 +113,11 @@ class CertSorter(object):
             return
         # TODO: handle temporarily disconnected use case / caching
 
+        self._parse_server_status()
+        self._parse_installed_product_status()
+
+    def _parse_server_status(self):
+        """ Fetch entitlement status info from server and parse. """
         status = uep.getCompliance(self.identity.uuid)
 
         # TODO: check that all installed products appear somewhere and log if not:
