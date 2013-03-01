@@ -231,7 +231,7 @@ class MigrationEngine(object):
         try:
             if self.options.serverurl is None:
                 hostname = self.rhsmcfg.get('server', 'hostname')
-                port = self.rhsmcfg.get('server', 'port')
+                port = self.rhsmcfg.get_int('server', 'port')
                 prefix = self.rhsmcfg.get('server', 'prefix')
             else:
                 (hostname, port, prefix) = parse_server_info(self.options.serverurl)
