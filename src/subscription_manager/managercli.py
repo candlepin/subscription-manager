@@ -429,7 +429,7 @@ class CliCommand(AbstractCLICommand):
             self.proxy_hostname = parts[0]
             # no ':'
             if len(parts) > 1:
-                self.proxy_port = parts[1]
+                self.proxy_port = int(parts[1])
             else:
                 # if no port specified, use the one from the config, or fallback to the default
                 self.proxy_port = cfg.get_int('server', 'proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
