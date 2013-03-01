@@ -1521,13 +1521,9 @@ class RemoveCommand(CliCommand):
                         print _("All subscriptions have been removed at the server.")
                     else:
                         count = total['deletedRecords']
-                        if count == 0:
-                            print _("No subscriptions existed at the server.")
-                        elif count == 1:
-                            print _("1 subscription removed at the server.")
-                        else:
-                            print (_("%s subscriptions removed at the server.") \
-                                % total['deletedRecords'])
+                        print gettext.ngettext("%s subscription removed at the server.",
+                                               "%s subscriptions removed at the server.",
+                                                count) % count
                 else:
                     success = []
                     failure = []
