@@ -240,6 +240,19 @@ class EntitlementDirectory(CertificateDirectory):
 
         return valid
 
+    def list_for_product(self, product_id):
+        """
+        Returns all entitlement certificates providing access to the given
+        product ID.
+        """
+        entitlements = []
+        for cert in self.list():
+            for cert_product in cert.products:
+                if product_id == cert_product.id:
+                    entitlements.append(cert)
+        return entitlements
+
+
 
 class Path:
 

@@ -23,7 +23,6 @@ import rhsm.config
 import logging
 
 from subscription_manager.facts import Facts
-from subscription_manager.cert_sorter import CertSorter
 from subscription_manager import listing
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -49,16 +48,11 @@ class ReleaseBackend(object):
             self.facts = Facts(ent_dir=self.entitlement_dir,
                                prod_dir=self.product_dir)
 
-        # find entitlements for rhel product? (or vice versa)
-        sorter = CertSorter(self.product_dir,
-                            self.entitlement_dir,
-                            self.facts.get_facts(),
-                            self.uep)
-
         # find the rhel product
         rhel_product = None
-        for product_hash in sorter.installed_products:
-            product_cert = sorter.installed_products[product_hash]
+        installed_products = self.product_dir.get_installed_products()
+        for product_hash in installed_products:
+            product_cert = installed_products[product_hash]
             products = product_cert.products
             for product in products:
                 product_tags = product.provided_tags
@@ -69,7 +63,7 @@ class ReleaseBackend(object):
         if rhel_product is None:
             return []
 
-        entitlements = sorter.get_entitlements_for_product(rhel_product.id)
+        entitlements = self.entitlement_dir.list_for_product(rhel_product.id)
         listings = []
         for entitlement in entitlements:
             contents = entitlement.content

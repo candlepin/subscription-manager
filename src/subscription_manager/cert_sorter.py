@@ -118,7 +118,7 @@ class CertSorter(object):
 
     def _parse_server_status(self):
         """ Fetch entitlement status info from server and parse. """
-        status = uep.getCompliance(self.identity.uuid)
+        status = self.uep.getCompliance(self.identity.uuid)
 
         # TODO: check that all installed products appear somewhere and log if not:
 
@@ -212,6 +212,7 @@ class CertSorter(object):
         if product_id in self.unentitled_products:
             return NOT_SUBSCRIBED
 
+    # TODO: moved to entitlement directory, see if we can remove this
     def get_entitlements_for_product(self, product_hash):
         entitlements = []
         for cert in self.entitlement_dir.list():
