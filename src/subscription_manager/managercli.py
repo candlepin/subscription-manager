@@ -331,7 +331,7 @@ class CliCommand(AbstractCLICommand):
         # also let's us override cfg values from the cli
         proxy_hostname = proxy_hostname_arg or self.proxy_hostname or remove_scheme(cfg.get('server', 'proxy_hostname'))
 
-        proxy_port = proxy_port_arg or self.proxy_port or cfg.get('server', 'proxy_port')
+        proxy_port = proxy_port_arg or self.proxy_port or cfg.get_int('server', 'proxy_port')
 
         proxy_user = proxy_user_arg or self.proxy_user or cfg.get('server', 'proxy_user')
 
@@ -434,7 +434,7 @@ class CliCommand(AbstractCLICommand):
                 self.proxy_port = parts[1]
             else:
                 # if no port specified, use the one from the config, or fallback to the default
-                self.proxy_port = cfg.get('server', 'proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
+                self.proxy_port = cfg.get_int('server', 'proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
 
         if hasattr(self.options, "proxy_user") and self.options.proxy_user:
             self.proxy_user = self.options.proxy_user

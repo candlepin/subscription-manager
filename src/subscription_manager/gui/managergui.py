@@ -128,7 +128,7 @@ class Backend(object):
             ssl_port=int(cfg.get('server', 'port')),
             handler=cfg.get('server', 'prefix'),
             proxy_hostname=cfg.get('server', 'proxy_hostname'),
-            proxy_port=cfg.get('server', 'proxy_port'),
+            proxy_port=cfg.get_int('server', 'proxy_port'),
             proxy_user=cfg.get('server', 'proxy_user'),
             proxy_password=cfg.get('server', 'proxy_password'),
             username=username,
@@ -144,7 +144,7 @@ class Backend(object):
         return connection.ContentConnection(host=cdn_hostname,
                                             ssl_port=cdn_port,
                                             proxy_hostname=cfg.get('server', 'proxy_hostname'),
-                                            proxy_port=cfg.get('server', 'proxy_port'),
+                                            proxy_port=cfg.get_int('server', 'proxy_port'),
                                             proxy_user=cfg.get('server', 'proxy_user'),
                                             proxy_password=cfg.get('server', 'proxy_password'))
 

@@ -248,6 +248,7 @@ class UpdateAction:
         proxy = ""
 
         proxy_host = CFG.get('server', 'proxy_hostname')
+        # proxy_port as string is fine here
         proxy_port = CFG.get('server', 'proxy_port')
         if proxy_host != "":
             proxy = "https://%s" % proxy_host
