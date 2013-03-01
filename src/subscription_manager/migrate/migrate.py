@@ -128,7 +128,17 @@ class ProxiedTransport(xmlrpclib.Transport):
 
     def make_connection(self, host):
         self.realhost = host
-        return httplib.HTTP(self.proxy)
+
+        # xmlrpclib.Transport changed in Python 2.7 from calling getreply()
+        # to calling getresponse() on the connection class.  httplib.HTTP
+        # does not have a getresponse() method, so for 2.7 we need to check if
+        # a new method included in 2.7, single_request(), is present and if
+        # so return an object that will have a getresponse() method.  See
+        # BZ 619276 and BZ 912882.
+        if hasattr(xmlrpclib.Transport, 'single_request'):
+            return httplib.HTTPConnection(self.proxy)
+        else:
+            return httplib.HTTP(self.proxy)
 
     def send_request(self, connection, handler, request_body):
         connection.putrequest("POST", 'http://%s%s' % (self.realhost, handler))

@@ -15,6 +15,7 @@
 
 from mock import patch, MagicMock, call
 from M2Crypto import SSL
+import httplib
 import re
 import sys
 import StringIO
@@ -74,8 +75,13 @@ class TestProxiedTransport(unittest.TestCase):
     def test_make_connection(self):
         self.transport.proxy = "proxy"
         http = self.transport.make_connection("host")
+        # On Python 2.7, we will return an HTTPConnection object which doesn't
+        # have a _conn attribute.  See BZ 912882 and BZ 619276.
+        if isinstance(http, httplib.HTTPConnection):
+            self.assertEquals(http.host, "proxy")
+        else:
+            self.assertEquals(http._conn.host, "proxy")
         self.assertEquals(self.transport.realhost, "host")
-        self.assertEquals(http._conn.host, "proxy")
 
 
 class TestMigration(unittest.TestCase):
