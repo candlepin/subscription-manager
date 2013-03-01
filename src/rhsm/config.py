@@ -58,19 +58,54 @@ DEFAULTS = {
 
 
 class RhsmConfigParser(SafeConfigParser):
+    """Config file parser for rhsm configuration"""
     def __init__(self, config_file=None, defaults=None):
         self.config_file = config_file
         SafeConfigParser.__init__(self, defaults=defaults)
         self.read(self.config_file)
 
     def save(self, config_file=None):
+        """writes config file to storage"""
         fo = open(self.config_file, "wb")
         self.write(fo)
 
     def get(self, section, prop):
+        """get a value from rhsm config
+
+        Args:
+            section: config file section
+            prop: what config propery to find, he
+                config item name
+        Returns:
+            The string value of the config item.
+            If config item exists, but is not set,
+            an empty string is return.
+        """
         if not self.has_section(section):
             self.add_section(section)
         return SafeConfigParser.get(self, section, prop)
+
+    def get_int(self, section, prop):
+        """get a int value from config
+
+        Returns:
+            an int cast from the string read from
+            the config. If config item is unset,
+            return None
+        Raises:
+            ValueError: if the config value found
+                        can not be coerced into an int
+        """
+        value_string = self.get(section, prop)
+        if value_string == "":
+            return None
+        try:
+            value_int = int(value_string)
+            # we could also try to handle port name
+            # strings (ie, 'http') here with getservbyname
+        except (ValueError, TypeError):
+            raise ValueError("Integer value excepted")
+        return value_int
 
     # Overriding this method to address
     # http://code.google.com/p/iniparse/issues/detail?id=9
@@ -82,7 +117,7 @@ class RhsmConfigParser(SafeConfigParser):
 
 
 def initConfig(config_file=None):
-
+    """get an rhsm config instance"""
     global CFG
     # If a config file was specified, assume we should overwrite the global config
     # to use it. This should only be used in testing. Could be switch to env var?

@@ -13,14 +13,19 @@
 # in this software or its documentation.
 #
 
-import unittest
+from iniparse.compat import NoOptionError
 from tempfile import NamedTemporaryFile
+import types
+import unittest
+
 
 from rhsm.config import RhsmConfigParser
 
 TEST_CONFIG = """
 [foo]
 bar =
+bigger_than_32_bit = 21474836470
+bigger_than_64_bit = 123456789009876543211234567890
 [server]
 hostname = server.example.conf
 prefix = /candlepin
@@ -60,6 +65,47 @@ class ConfigTests(unittest.TestCase):
     def testRead(self):
         self.assertEquals(self.cfgParser.get('server', 'hostname'), 'server.example.conf')
 
-    def testSetd(self):
+    def testSet(self):
         self.cfgParser.set('rhsm', 'baseurl', 'cod')
         self.assertEquals(self.cfgParser.get('rhsm', 'baseurl'), 'cod')
+
+    def test_get(self):
+        value = self.cfgParser.get("rhsm", "baseurl")
+        self.assertEquals("https://content.example.com", value)
+
+    def test_get_empty(self):
+        value = self.cfgParser.get("foo", "bar")
+        self.assertEquals("", value)
+
+    def test_get_int(self):
+        value = self.cfgParser.get_int("server", "port")
+        self.assertTrue(isinstance(value, types.IntType))
+        self.assertEquals(8443, value)
+
+    def test_get_item_does_not_exist(self):
+        self.assertRaises(NoOptionError,
+                          self.cfgParser.get,
+                          "rhsm",
+                          "this_isnt_a_thing")
+
+    def test_get_int_un_set(self):
+        value = self.cfgParser.get_int("server", "proxy_port")
+        self.assertEquals(None, value)
+
+    def test_get_int_does_not_exist(self):
+        self.assertRaises(NoOptionError,
+                          self.cfgParser.get_int,
+                          "rhsm",
+                          "this_isnt_a_thing")
+
+    def test_get_int_not_an_int(self):
+        self.assertRaises(ValueError,
+                          self.cfgParser.get_int,
+                          "rhsm",
+                          "baseurl")
+
+    def test_get_int_big_int(self):
+        value = self.cfgParser.get_int("foo", "bigger_than_32_bit")
+        self.assertEquals(21474836470, value)
+        value = self.cfgParser.get_int("foo", "bigger_than_64_bit")
+        self.assertEquals(123456789009876543211234567890, value)
