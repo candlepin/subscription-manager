@@ -769,7 +769,8 @@ class ServiceLevelCommand(OrgCommand):
         self.consumerIdentity = ConsumerIdentity
 
         shortdesc = _("Manage service levels for this system")
-        self._org_help_text = _("specify org for service level list")
+        self._org_help_text = \
+            _("specify an organization when listing available service levels using the organization key")
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
                                                   False, ent_dir, prod_dir)
 
