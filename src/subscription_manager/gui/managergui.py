@@ -28,7 +28,7 @@ import gtk.glade
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import networkConfig
 from subscription_manager import managerlib
-from subscription_manager.identity import Identity
+from subscription_manager.identity import Identity, ConsumerIdentity
 from subscription_manager.gui import file_monitor
 from subscription_manager.gui import registergui
 import rhsm.connection as connection
@@ -82,8 +82,8 @@ class Backend(object):
 
     def __init__(self):
         self.identity = FEATURES.require(IDENTITY)
-        self.create_uep(cert_file=self.identity.consumer.certpath(),
-                        key_file=self.identity.consumer.keypath())
+        self.create_uep(cert_file=ConsumerIdentity.certpath(),
+                        key_file=ConsumerIdentity.keypath())
 
         self.create_content_connection()
         # we don't know the user/pass yet, so no point in
@@ -97,7 +97,7 @@ class Backend(object):
         self.product_monitor = file_monitor.Monitor(self.product_dir.path)
         self.entitlement_monitor = file_monitor.Monitor(
                 self.entitlement_dir.path)
-        self.identity_monitor = file_monitor.Monitor(self.identity.consumer.PATH)
+        self.identity_monitor = file_monitor.Monitor(ConsumerIdentity.PATH)
 
         # connect handlers to refresh the cached data when we notice a change.
         # do this before any other handlers might connect
@@ -110,8 +110,8 @@ class Backend(object):
     # and a update() for a name
 
     def update(self):
-        self.create_uep(cert_file=self.identity.consumer.certpath(),
-                        key_file=self.identity.consumer.keypath())
+        self.create_uep(cert_file=ConsumerIdentity.certpath(),
+                        key_file=ConsumerIdentity.keypath())
         self.content_connection = self._create_content_connection()
 
     def create_uep(self, cert_file=None, key_file=None):
