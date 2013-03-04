@@ -65,8 +65,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         self.facts = facts
         self.backend = backend
-        self.cs = FEATURES.require(CERT_SORTER, prod_dir, ent_dir,
-                self.facts.get_facts(), self.backend.uep)
+        self.cs = FEATURES.require(CERT_SORTER, prod_dir, self.backend.uep)
 
         # Product column
         text_renderer = gtk.CellRendererText()
@@ -149,7 +148,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
     def update_products(self):
         self.store.clear()
         self.cs = FEATURES.require(CERT_SORTER, self.product_dir,
-                self.entitlement_dir, self.facts.get_facts(), self.backend.uep)
+                self.backend.uep)
         for product_cert in self.product_dir.list():
             for product in product_cert.products:
                 product_id = product.id
@@ -197,7 +196,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['image'] = self._render_icon('red')
                         entry['status'] = _('Expired')
                         sub_numbers = set([])
-                        for ent_cert in self.cs.get_entitlements_for_product(product_id):
+                        for ent_cert in self.entitlement_dir.list_for_product(product_id):
                             order = ent_cert.order
                             # FIXME:  getSubscription() seems to always be None...?
                             if order.subscription:
@@ -309,8 +308,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.set_registered(is_registered)
 
         # Look for products which have invalid entitlements
-        sorter = FEATURES.require(CERT_SORTER, self.product_dir, self.entitlement_dir,
-                self.facts.get_facts(), self.backend.uep)
+        sorter = FEATURES.require(CERT_SORTER, self.product_dir, self.backend.uep)
 
         warn_count = len(sorter.expired_products) + \
                 len(sorter.unentitled_products)

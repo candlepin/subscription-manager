@@ -55,10 +55,9 @@ class CertSorter(object):
     reporting unknown.
     """
     # TODO: drop the unused arguments
-    def __init__(self, product_dir, entitlement_dir, facts_dict, uep, on_date=None):
+    def __init__(self, product_dir, uep, on_date=None):
         self.identity = FEATURES.require(IDENTITY)
         self.product_dir = product_dir
-        self.entitlement_dir = entitlement_dir
 
         # Warning: could be None if we're not registered, we will check before
         # we use it, but if connection is still none we will let this error out
@@ -123,6 +122,7 @@ class CertSorter(object):
             return
         # TODO: handle temporarily disconnected use case / caching
 
+        # TODO: use on_date
         status = self.uep.getCompliance(self.identity.uuid)
 
         # TODO: check that all installed products appear somewhere and log if not:
@@ -215,15 +215,6 @@ class CertSorter(object):
             return EXPIRED
         if product_id in self.unentitled_products:
             return NOT_SUBSCRIBED
-
-    # TODO: moved to entitlement directory, see if we can remove this
-    def get_entitlements_for_product(self, product_hash):
-        entitlements = []
-        for cert in self.entitlement_dir.list():
-            for cert_product in cert.products:
-                if product_hash == cert_product.id:
-                    entitlements.append(cert)
-        return entitlements
 
     # pass in list to update, like installed_products
     # keep duplicate lists for future dates, to find first_invalid
