@@ -4,6 +4,7 @@ from mock import Mock, NonCallableMock
 from subscription_manager.injection import FEATURES, IDENTITY, \
         PRODUCT_DATE_RANGE_CALCULATOR
 
+
 class SubManFixture(unittest.TestCase):
     """
     Can be extended by any subscription manager test case to make
@@ -22,5 +23,3 @@ class SubManFixture(unittest.TestCase):
 
         FEATURES.provide(IDENTITY, id_mock)
         FEATURES.provide(PRODUCT_DATE_RANGE_CALCULATOR, self.mock_calc)
-
-

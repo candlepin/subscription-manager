@@ -117,7 +117,7 @@ class ConsumerIdentity:
              self.getConsumerId())
 
 
-class Identity(object):
+class IdentityOther(object):
     """
     New-style identity to phase out the use of classmethod ConsumerIdentity class.
     """

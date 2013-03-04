@@ -17,6 +17,7 @@
 # in this software or its documentation.
 #
 
+from subscription_manager.injection import FEATURES, IDENTITY
 import locale
 import logging
 import subprocess
@@ -174,7 +175,10 @@ class MainWindow(widgets.GladeWidget):
         super(MainWindow, self).__init__('mainwindow.glade')
 
         self.backend = backend or Backend()
-        self.consumer = consumer or Consumer()
+#        self.consumer = consumer or Consumer()
+        self.identity = FEATURES.require(IDENTITY)
+
+        # FIXME: remove use of consumer to other gui dialogs
         self.facts = facts or Facts(self.backend.entitlement_dir,
                 self.backend.product_dir)
 
