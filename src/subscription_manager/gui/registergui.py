@@ -310,7 +310,7 @@ class PerformRegisterScreen(NoGuiScreen):
                 raise error
 
             managerlib.persist_consumer_cert(new_account)
-            self._parent.consumer.reload()
+            self._parent.identity.reload()
             if self._parent.activation_keys:
                 self._parent.pre_done(REFRESH_SUBSCRIPTIONS_PAGE)
             elif self._parent.skip_auto_bind:
@@ -354,7 +354,7 @@ class PerformSubscribeScreen(NoGuiScreen):
             self._parent.finish_registration(failed=True)
 
     def pre(self):
-        self._parent.async.subscribe(self._parent.consumer.getConsumerId(),
+        self._parent.async.subscribe(self._parent.identity.uuid,
                                      self._parent.current_sla,
                                      self._parent.dry_run_result,
                                      self._on_subscribing_finished_cb)
@@ -527,7 +527,7 @@ class SelectSLAScreen(Screen):
             self._parent.finish_registration(failed=True)
 
     def pre(self):
-        self._parent.async.find_service_levels(self._parent.consumer,
+        self._parent.async.find_service_levels(self._parent.identity,
                                                self._parent.facts,
                                                self._on_get_service_levels_cb)
         return True
