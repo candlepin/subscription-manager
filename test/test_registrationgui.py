@@ -2,6 +2,7 @@ import unittest
 
 from mock import Mock
 
+from fixture import SubManFixture
 import rhsm_display
 rhsm_display.set_display()
 
@@ -11,17 +12,18 @@ from subscription_manager.gui.registergui import RegisterScreen, \
         CREDENTIALS_PAGE, CHOOSE_SERVER_PAGE
 
 
-class RegisterScreenTests(unittest.TestCase):
+class RegisterScreenTests(SubManFixture):
     def setUp(self):
+        super(RegisterScreenTests, self).setUp()
         self.backend = StubBackend()
-        self.consumer = Mock()
+#        self.consumer = Mock()
         expected_facts = {'fact1': 'one',
                           'fact2': 'two',
                           'system': '',
                           'system.uuid': 'MOCKUUID'}
         self.facts = StubFacts(fact_dict=expected_facts)
 
-        self.rs = RegisterScreen(self.backend, self.consumer, self.facts)
+        self.rs = RegisterScreen(self.backend, self.facts)
 
         self.rs._screens[CHOOSE_SERVER_PAGE] = Mock()
         self.rs._screens[CHOOSE_SERVER_PAGE].index = 0
@@ -43,7 +45,7 @@ class RegisterScreenTests(unittest.TestCase):
                           self.rs.register_notebook.get_current_page())
 
 
-class CredentialsScreenTests(unittest.TestCase):
+class CredentialsScreenTests(SubManFixture):
 
     def setUp(self):
         self.backend = StubBackend()
@@ -66,7 +68,7 @@ class CredentialsScreenTests(unittest.TestCase):
                           self.screen.consumer_name.get_text())
 
 
-class ActivationKeyScreenTests(unittest.TestCase):
+class ActivationKeyScreenTests(SubManFixture):
     def setUp(self):
         self.backend = StubBackend()
         self.parent = Mock()
@@ -79,7 +81,7 @@ class ActivationKeyScreenTests(unittest.TestCase):
         self.assertEquals(expected, result)
 
 
-class ChooseServerScreenTests(unittest.TestCase):
+class ChooseServerScreenTests(SubManFixture):
     def setUp(self):
         self.backend = StubBackend()
         self.parent = Mock()

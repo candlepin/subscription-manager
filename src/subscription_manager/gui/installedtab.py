@@ -12,7 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from subscription_manager.injection import FEATURES, CERT_SORTER
+from subscription_manager.injection import FEATURES, IDENTITY, CERT_SORTER
 from subscription_manager import managerlib
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
     NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
@@ -52,14 +52,16 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                  'subscription_text', 'subscription_status_label',
                  'update_certificates_button', 'register_button']
 
-    def __init__(self, backend, consumer, facts, tab_icon,
+    def __init__(self, backend, facts, tab_icon,
                  parent, ent_dir, prod_dir):
 
         super(InstalledProductsTab, self).__init__('installed.glade')
 
         self.tab_icon = tab_icon
 
-        self.consumer = consumer
+        self.identity = FEATURES.require(IDENTITY)
+        #FIXME: remove this
+        #self.consumer = identity
         self.product_dir = prod_dir
         self.entitlement_dir = ent_dir
 
@@ -305,7 +307,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 get_branding().RHSMD_REGISTERED_TO_OTHER)
             return
 
-        is_registered = self.consumer.is_valid()
+        is_registered = self.identity.is_valid()
         self.set_registered(is_registered)
 
         # Look for products which have invalid entitlements

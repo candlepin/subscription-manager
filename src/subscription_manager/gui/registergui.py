@@ -25,6 +25,7 @@ import gobject
 import gtk
 import gtk.glade
 
+from subscription_manager.injection import FEATURES, IDENTITY
 from subscription_manager import managerlib
 import rhsm.config as config
 from subscription_manager.branding import get_branding
@@ -81,7 +82,7 @@ class RegisterScreen(widgets.GladeWidget):
                     'register_progressbar', 'register_details_label',
                     'cancel_button', 'register_button']
 
-    def __init__(self, backend, consumer, facts=None, parent=None, callbacks=[]):
+    def __init__(self, backend, facts=None, parent=None, callbacks=[]):
         """
         Callbacks will be executed when registration status changes.
         """
@@ -89,7 +90,8 @@ class RegisterScreen(widgets.GladeWidget):
         widgets.GladeWidget.__init__(self, "registration.glade")
 
         self.backend = backend
-        self.consumer = consumer
+        self.identity = FEATURES.require(IDENTITY)
+        self.consumer = self.identity
         self.facts = facts
         self.parent = parent
         self.callbacks = callbacks

@@ -19,6 +19,7 @@ import gtk
 import gtk.glade
 import logging
 
+from subscription_manager.injection import FEATURES, IDENTITY
 from subscription_manager import release
 
 _ = gettext.gettext
@@ -38,10 +39,10 @@ class PreferencesDialog(object):
     changed, the new setting will be saved.
     """
 
-    def __init__(self, backend, consumer, parent):
+    def __init__(self, backend, parent):
 
         self.backend = backend
-        self.consumer = consumer
+        self.identity = FEATURES.require(IDENTITY)
         self.release_backend = release.ReleaseBackend(ent_dir=self.backend.entitlement_dir,
                                                       prod_dir=self.backend.product_dir,
                                                       content_connection=self.backend.content_connection,
@@ -75,7 +76,7 @@ class PreferencesDialog(object):
         self.sla_combobox.get_model().clear()
         self.release_combobox.get_model().clear()
 
-        if self.consumer.uuid is None:
+        if self.identity.uuid is None:
             self.sla_combobox.set_sensitive(False)
             self.release_combobox.set_sensitive(False)
             return
@@ -83,7 +84,7 @@ class PreferencesDialog(object):
         self.sla_combobox.set_sensitive(True)
         self.release_combobox.set_sensitive(True)
 
-        consumer_json = self.backend.uep.getConsumer(self.consumer.uuid)
+        consumer_json = self.backend.uep.getConsumer(self.identity.uuid)
 
         self.load_releases(consumer_json)
         self.load_servicelevel(consumer_json)
@@ -156,7 +157,7 @@ class PreferencesDialog(object):
 
         new_sla = model[active][1]
         log.info("SLA changed to: %s" % new_sla)
-        self.backend.uep.updateConsumer(self.consumer.uuid,
+        self.backend.uep.updateConsumer(self.identity.uuid,
                                         service_level=new_sla)
 
     def _release_changed(self, combobox):
@@ -167,7 +168,7 @@ class PreferencesDialog(object):
             return
         new_release = model[active][1]
         log.info("release changed to: %s" % new_release)
-        self.backend.uep.updateConsumer(self.consumer.uuid,
+        self.backend.uep.updateConsumer(self.identity.uuid,
                                         release=new_release)
 
     def show(self):

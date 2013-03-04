@@ -192,9 +192,9 @@ class MainWindow(widgets.GladeWidget):
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.backend,
                                                               self.facts)
 
-        self.registration_dialog = registergui.RegisterScreen(self.backend,
-                self.consumer, self.facts, self._get_window(),
-                callbacks=[self.registration_changed])
+        self.registration_dialog = registergui.RegisterScreen(self.backend, self.facts,
+                                                              self._get_window(),
+                                                              callbacks=[self.registration_changed])
 
         self.preferences_dialog = PreferencesDialog(self.backend, self.consumer,
                                                     self._get_window())
