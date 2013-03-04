@@ -89,7 +89,7 @@ def getInstalledProductStatus(product_directory, entitlement_directory, uep):
     product_status = []
 
     sorter = FEATURES.require(CERT_SORTER, product_directory,
-            uep)
+            entitlement_directory, uep)
 
     calculator = FEATURES.require(PRODUCT_DATE_RANGE_CALCULATOR, uep)
     for installed_product in sorter.installed_products:

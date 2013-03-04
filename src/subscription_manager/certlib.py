@@ -118,7 +118,7 @@ class HealingLib(DataLib):
                 # TODO: not great for testing:
                 ent_dir = EntitlementDirectory()
 
-                cs = FEATURES.require(CERT_SORTER, self._product_dir,
+                cs = FEATURES.require(CERT_SORTER, self._product_dir, ent_dir,
                         self.uep)
                 cert_updater = CertLib(lock=self.lock, uep=self.uep)
                 if not cs.is_valid():

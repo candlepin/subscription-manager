@@ -1413,8 +1413,7 @@ class AttachCommand(CliCommand):
             # must be auto
             else:
                 # if we are green, we don't need to go to the server
-                self.facts = Facts(ent_dir=self.entitlement_dir, prod_dir=self.product_dir)
-                self.sorter = CertSorter(self.product_dir, self.cp)
+                self.sorter = CertSorter(self.product_dir, self.entitlement_dir, self.cp)
 
                 if self.sorter.is_valid():
                     print _("All installed products are covered by valid entitlements. "
