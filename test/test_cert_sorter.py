@@ -19,7 +19,7 @@ from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificat
     StubCertificateDirectory, StubEntitlementDirectory, StubFacts, StubProductDirectory, \
     StubUEP
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter, \
-    CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN, InstalledProductMismatch
+    CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.identity import ConsumerIdentity
 from datetime import timedelta, datetime
 from rhsm.certificate import GMT
@@ -484,8 +484,9 @@ class CertSorterTests(SubManFixture):
         # in the response from the server as an unentitled product:
         prod_dir = StubProductDirectory(
                 pids=[INST_PID_1, INST_PID_2])
-        self.assertRaises(InstalledProductMismatch, CertSorter, prod_dir,
-                self.mock_uep)
+        sorter = CertSorter(prod_dir, self.mock_uep)
+        self.assertFalse(INST_PID_3 in sorter.installed_products)
+        self.assertFalse(INST_PID_3 in sorter.unentitled_products)
 
     def test_no_compliant_until(self):
         SAMPLE_COMPLIANCE_JSON['compliantUntil'] = None

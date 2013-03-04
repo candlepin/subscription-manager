@@ -116,7 +116,6 @@ class CertSorter(object):
             return
         # TODO: handle temporarily disconnected use case / caching
 
-        # TODO: use on_date
         status = self.uep.getCompliance(self.identity.uuid)
 
         # TODO: check that all installed products appear somewhere and log if not:
@@ -130,10 +129,11 @@ class CertSorter(object):
         # the server:
         for unentitled_pid in status['nonCompliantProducts']:
             prod_cert = self.product_dir.findByProduct(unentitled_pid)
+            # Ignore anything server thinks we have but we don't.
             if prod_cert is None:
-                raise InstalledProductMismatch(
-                        _("Server returned unentitled installed "
-                        "product we have no cert for: %s") % unentitled_pid)
+                log.warn("Server reported installed product not on system: %s" %
+                        unentitled_pid)
+                continue
             self.unentitled_products[unentitled_pid] = prod_cert
 
         self.partially_valid_products = status['partiallyCompliantProducts']
@@ -433,7 +433,3 @@ class EntitlementCertStackingGroupSorter(StackingGroupSorter):
 
     def _get_identity_name(self, cert):
         return cert.order.name
-
-
-class InstalledProductMismatch(Exception):
-    pass
