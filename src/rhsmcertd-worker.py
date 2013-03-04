@@ -20,6 +20,10 @@ sys.path.append("/usr/share/rhsm")
 import logging
 
 from rhsm import connection
+
+from subscription_manager.injection_init import init_dep_injection
+init_dep_injection()
+
 from subscription_manager import certmgr
 from subscription_manager import logutil
 from subscription_manager import managerlib
