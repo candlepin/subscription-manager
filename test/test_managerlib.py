@@ -496,8 +496,8 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter = StubCertSorter(prod_dir=product_directory)
         FEATURES.provide(CERT_SORTER, stub_sorter)
 
-        product_status = getInstalledProductStatus(
-                product_directory, StubUEP())
+        product_status = getInstalledProductStatus(product_directory,
+                None, StubUEP())
 
         # no product certs installed...
         self.assertEquals(0, len(product_status))
@@ -511,7 +511,7 @@ class InstalledProductStatusTests(SubManFixture):
         FEATURES.provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,
-                StubUEP())
+                None, StubUEP())
 
         self.assertEquals(1, len(product_status))
         self.assertEquals("subscribed", product_status[0][4])
@@ -527,7 +527,7 @@ class InstalledProductStatusTests(SubManFixture):
         FEATURES.provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,
-                StubUEP())
+                None, StubUEP())
 
         self.assertEquals(1, len(product_status))
         self.assertEquals("expired", product_status[0][4])
@@ -540,7 +540,7 @@ class InstalledProductStatusTests(SubManFixture):
         FEATURES.provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,
-                StubUEP())
+                None, StubUEP())
 
         self.assertEquals(1, len(product_status))
         self.assertEquals("not_subscribed", product_status[0][4])
@@ -554,7 +554,7 @@ class InstalledProductStatusTests(SubManFixture):
         FEATURES.provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,
-                StubUEP())
+                None, StubUEP())
         self.assertEquals(1, len(product_status))
         self.assertEquals("future_subscribed", product_status[0][4])
 
@@ -567,7 +567,7 @@ class InstalledProductStatusTests(SubManFixture):
         FEATURES.provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,
-                StubUEP())
+                None, StubUEP())
 
         # only "product" is installed
         self.assertEquals(1, len(product_status))
@@ -583,7 +583,7 @@ class InstalledProductStatusTests(SubManFixture):
         FEATURES.provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,
-                StubUEP())
+                None, StubUEP())
 
         # neither product3 or product 2 are installed
         self.assertEquals(1, len(product_status))
@@ -602,7 +602,7 @@ class InstalledProductStatusTests(SubManFixture):
         FEATURES.provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(prod_dir,
-                StubUEP())
+                None, StubUEP())
 
         # product3 isn't installed
         self.assertEquals(2, len(product_status))

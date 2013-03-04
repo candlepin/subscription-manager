@@ -82,7 +82,7 @@ def map_status(status):
     return smap[status]
 
 
-def getInstalledProductStatus(product_directory, uep):
+def getInstalledProductStatus(product_directory, entitlement_directory, uep):
     """
      Returns the Installed products and their subscription states
     """
