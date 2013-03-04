@@ -22,7 +22,6 @@ from datetime import timedelta, datetime
 from subscription_manager.lock import Lock
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.injection import FEATURES, CERT_SORTER
-from subscription_manager import cert_sorter
 from subscription_manager.certdirectory import EntitlementDirectory, \
     ProductDirectory, Writer
 from rhsm.config import initConfig

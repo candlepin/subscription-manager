@@ -15,6 +15,7 @@
 # Supported Features:
 IDENTITY = "IDENTITY"
 CERT_SORTER = "CERT_SORTER"
+PRODUCT_DATE_RANGE_CALCULATOR = "PRODUCT_DATE_RANGE_CALCULATOR"
 
 import logging
 log = logging.getLogger('rhsm-app.' + __name__)

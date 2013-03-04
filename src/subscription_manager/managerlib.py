@@ -33,8 +33,9 @@ from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.facts import Facts
 from subscription_manager.quantity import allows_multi_entitlement
 from subscription_manager.cert_sorter import StackingGroupSorter
+from subscription_manager.injection import FEATURES, CERT_SORTER, \
+        PRODUCT_DATE_RANGE_CALCULATOR
 from subscription_manager.jsonwrapper import PoolWrapper
-from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.repolib import RepoLib
 from subscription_manager.utils import parseDate
@@ -82,6 +83,7 @@ def map_status(status):
     return smap[status]
 
 
+# TODO: entitlement_directory can be removed
 def getInstalledProductStatus(product_directory, entitlement_directory, uep,
         facts=None):
     """
@@ -93,14 +95,15 @@ def getInstalledProductStatus(product_directory, entitlement_directory, uep,
 
     product_status = []
 
-    sorter = CertSorter(product_directory, entitlement_directory, facts, uep)
+    sorter = FEATURES.require(CERT_SORTER, product_directory,
+            entitlement_directory, facts, uep)
 
     for installed_product in sorter.installed_products:
         product_cert = sorter.installed_products[installed_product]
         for product in product_cert.products:
             begin = ""
             end = ""
-            calculator = ValidProductDateRangeCalculator(sorter)
+            calculator = FEATURES.require(PRODUCT_DATE_RANGE_CALCULATOR, uep)
             prod_status_range = calculator.calculate(product.id)
             if prod_status_range:
                 # Format the date in user's local time as the date

@@ -18,6 +18,8 @@ from rhsm import config
 import random
 import tempfile
 
+from subscription_manager.cert_sorter import CertSorter
+
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """
 [foo]
@@ -198,6 +200,15 @@ class StubEntitlementCertificate(EntitlementCertificate):
     def __init__(self, product, provided_products=None, start_date=None, end_date=None,
             content=None, quantity=1, stacking_id=None, sockets=2, service_level=None,
             ram=None):
+
+        # If we're given strings, create stub products for them:
+        if isinstance(product, str):
+            product = StubProduct(product)
+        if provided_products:
+            temp = []
+            for p in provided_products:
+                temp.append(StubProduct(p))
+            provided_products = temp
 
         products = []
         if product:
@@ -465,3 +476,15 @@ class StubCertLib:
 
     def update(self):
         pass
+
+
+class StubCertSorter(CertSorter):
+
+    def __init__(self, prod_dir):
+        CertSorter.__init__(self, prod_dir, None, None, None)
+
+    def _parse_server_status(self):
+        # Override this method to just leave all fields uninitialized so
+        # tests can do whatever they wish with them.
+        pass
+

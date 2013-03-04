@@ -54,6 +54,7 @@ class CertSorter(object):
     re-use this cached data for a period of time, before falling back to
     reporting unknown.
     """
+    # TODO: drop the unused arguments
     def __init__(self, product_dir, entitlement_dir, facts_dict, uep, on_date=None):
         self.identity = FEATURES.require(IDENTITY)
         self.product_dir = product_dir
@@ -108,16 +109,16 @@ class CertSorter(object):
         # or just let the one place it's used figure it out on it's own
         self.valid_entitlement_certs = []
 
+        self._parse_server_status()
+
+    def _parse_server_status(self):
+        """ Fetch entitlement status info from server and parse. """
+
         if not self.is_registered():
             log.debug("Unregistered, skipping server compliance check.")
             return
         # TODO: handle temporarily disconnected use case / caching
 
-        self._parse_server_status()
-        self._parse_installed_product_status()
-
-    def _parse_server_status(self):
-        """ Fetch entitlement status info from server and parse. """
         status = self.uep.getCompliance(self.identity.uuid)
 
         # TODO: check that all installed products appear somewhere and log if not:
