@@ -175,7 +175,6 @@ class MainWindow(widgets.GladeWidget):
         super(MainWindow, self).__init__('mainwindow.glade')
 
         self.backend = backend or Backend()
-#        self.consumer = consumer or Consumer()
         self.identity = FEATURES.require(IDENTITY)
         self.consumer = consumer or self.identity
 
@@ -196,7 +195,7 @@ class MainWindow(widgets.GladeWidget):
                                                               self._get_window(),
                                                               callbacks=[self.registration_changed])
 
-        self.preferences_dialog = PreferencesDialog(self.backend, self.consumer,
+        self.preferences_dialog = PreferencesDialog(self.backend,
                                                     self._get_window())
 
         self.import_sub_dialog = ImportSubDialog()
@@ -210,7 +209,7 @@ class MainWindow(widgets.GladeWidget):
         self.installed_tab_icon.set_from_stock(gtk.STOCK_YES,
                 gtk.ICON_SIZE_MENU)
 
-        self.installed_tab = InstalledProductsTab(self.backend, self.consumer,
+        self.installed_tab = InstalledProductsTab(self.backend,
                                                   self.facts,
                                                   self.installed_tab_icon,
                                                   self,
