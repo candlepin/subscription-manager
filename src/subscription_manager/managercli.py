@@ -351,6 +351,8 @@ class CliCommand(AbstractCLICommand):
 
     def main(self, args=None):
 
+        config_changed = False
+
         # In testing we sometimes specify args, otherwise use the default:
         if not args:
             args = sys.argv[1:]
@@ -373,8 +375,7 @@ class CliCommand(AbstractCLICommand):
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             cfg.set("server", "insecure", "1")
-            if self.persist_server_options():
-                cfg.save()
+            config_changed = True
 
         if hasattr(self.options, "server_url") and self.options.server_url:
             try:
@@ -403,10 +404,7 @@ class CliCommand(AbstractCLICommand):
             cfg.set("server", "port", self.server_port)
             cfg.set("server", "prefix", self.server_prefix)
 
-            # seems like cfg.save() could raise any wide variety of
-            # exceptions
-            if self.persist_server_options():
-                cfg.save()
+            config_changed = True
 
         if hasattr(self.options, "base_url") and self.options.base_url:
             try:
@@ -420,8 +418,7 @@ class CliCommand(AbstractCLICommand):
             cfg.set("rhsm", "baseurl", format_baseurl(baseurl_server_hostname,
                                                       baseurl_server_port,
                                                       baseurl_server_prefix))
-            if self.persist_server_options():
-                cfg.save()
+            config_changed = True
 
         # support foo.example.com:3128 format
         if hasattr(self.options, "proxy_url") and self.options.proxy_url:
@@ -466,6 +463,11 @@ class CliCommand(AbstractCLICommand):
         # do the work, catch most common errors here:
         try:
             return_code = self._do_command()
+
+            # Only persist the config changes if there was no exception
+            if config_changed and self.persist_server_options():
+                cfg.save()
+
             if return_code is not None:
                 return return_code
         except X509.X509Error, e:
