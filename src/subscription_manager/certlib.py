@@ -95,9 +95,7 @@ class HealingLib(DataLib):
     never have invalid certificats if subscriptions are available.
     """
 
-    def __init__(self, lock=ActionLock(), uep=None, facts_dict=None,
-                 product_dir=None):
-        self.facts_dict = facts_dict
+    def __init__(self, lock=ActionLock(), uep=None, product_dir=None):
         DataLib.__init__(self, lock, uep)
 
         self._product_dir = product_dir or ProductDirectory()

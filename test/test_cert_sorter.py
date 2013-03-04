@@ -486,6 +486,8 @@ class CertSorterTests(SubManFixture):
                 pids=[INST_PID_1, INST_PID_2])
         sorter = CertSorter(prod_dir, self.mock_uep)
         self.assertFalse(INST_PID_3 in sorter.installed_products)
+        # Should get filtered out of unentitled products even though
+        # server reported it here:
         self.assertFalse(INST_PID_3 in sorter.unentitled_products)
 
     def test_no_compliant_until(self):
