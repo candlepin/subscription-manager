@@ -15,6 +15,7 @@
 
 import logging
 
+from subscription_manager.injection import FEATURES, IDENTITY
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception
 
@@ -30,7 +31,7 @@ class RedeemDialog(widgets.GladeWidget):
     """
     widget_names = ['redeem_dialog', 'email_entry']
 
-    def __init__(self, backend, consumer):
+    def __init__(self, backend):
         super(RedeemDialog, self).__init__('redeem.glade')
 
         self.glade.signal_autoconnect({
@@ -40,14 +41,14 @@ class RedeemDialog(widgets.GladeWidget):
         })
 
         self.backend = backend
-        self.consumer = consumer
+        self.identity = FEATURES.require(IDENTITY)
 
     def _redeem(self, button):
         email = self.email_entry.get_text()
 
         # TODO:  Validate email address?
         try:
-            self.backend.uep.activateMachine(self.consumer.uuid, email)
+            self.backend.uep.activateMachine(self.identity.uuid, email)
             self.hide()
         except Exception, e:
             handle_gui_exception(e,
