@@ -91,7 +91,6 @@ class RegisterScreen(widgets.GladeWidget):
 
         self.backend = backend
         self.identity = FEATURES.require(IDENTITY)
-        self.consumer = self.identity
         self.facts = facts
         self.parent = parent
         self.callbacks = callbacks
@@ -244,8 +243,8 @@ class RegisterScreen(widgets.GladeWidget):
 
 class AutobindWizard(RegisterScreen):
 
-    def __init__(self, backend, consumer, facts, parent):
-        super(AutobindWizard, self).__init__(backend, consumer, facts, parent)
+    def __init__(self, backend, facts, parent):
+        super(AutobindWizard, self).__init__(backend, facts, parent)
 
     def show(self):
         super(AutobindWizard, self).show()
