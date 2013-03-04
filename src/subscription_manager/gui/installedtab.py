@@ -215,7 +215,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         # TODO: get a real icon for unknown status:
                         entry['image'] = self._render_icon('yellow')
                         entry['status'] = _('Unknown')
-                        if self.cs.is_unregistered():
+                        if not self.cs.is_registered():
                             entry['validity_note'] = _("System is not registered.")
                         else:
                             # System must be registered but unable to reach server:
@@ -342,7 +342,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
                         _("System is properly subscribed through %s.") % \
-                            managerlib.formatDate(first_invalid))
+                            managerlib.formatDate(sorter.first_invalid_date))
             else:
                 # No product certs installed, no first invalid date, and
                 # the subscription assistant can't do anything, so we'll disable
