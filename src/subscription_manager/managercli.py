@@ -611,8 +611,8 @@ class RefreshCommand(CliCommand):
 
 class IdentityCommand(UserPassCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Display the identity certificate for this system or " \
-                      "request a new one")
+        shortdesc = \
+            _("Display the identity certificate for this system or request a new one")
 
         super(IdentityCommand, self).__init__("identity", shortdesc, False,
                                               ent_dir, prod_dir)
@@ -776,7 +776,8 @@ class ServiceLevelCommand(OrgCommand):
         self.consumerIdentity = ConsumerIdentity
 
         shortdesc = _("Manage service levels for this system")
-        self._org_help_text = _("specify org for service level list")
+        self._org_help_text = \
+            _("specify an organization when listing available service levels using the organization key")
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
                                                   False, ent_dir, prod_dir)
 
@@ -1348,8 +1349,7 @@ class AttachCommand(CliCommand):
         self.parser.add_option("--quantity", dest="quantity",
                                help=_("number of subscriptions to attach"))
         self.parser.add_option("--auto", action='store_true',
-                               help=_("automatically attach compatible \
-                               subscriptions to this system"))
+            help=_("automatically attach compatible subscriptions to this system"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("service level to apply to this system"))
         # re bz #864207
@@ -1533,14 +1533,12 @@ class RemoveCommand(CliCommand):
                     # total will be None on older Candlepins that don't
                     # support returning the number of subscriptions unsubscribed from
                     if total is None:
-                        print _("All subscriptions have been removed from this system.")
+                        print _("All subscriptions have been removed at the server.")
                     else:
                         count = total['deletedRecords']
-                        if count == 1:
-                            print _("1 subscription removed from this system.")
-                        else:
-                            print (_("%s subscriptions removed from this system.") \
-                                % total['deletedRecords'])
+                        print gettext.ngettext("%s subscription removed at the server.",
+                                               "%s subscriptions removed at the server.",
+                                                count) % count
                 else:
                     success = []
                     failure = []
@@ -1554,11 +1552,11 @@ class RemoveCommand(CliCommand):
                                 systemExit(-1)
                             failure.append(re.msg)
                     if success:
-                        print _("Successfully removed serial numbers:")
+                        print _("Serial numbers successfully removed at the server:")
                         for ser in success:
                             print "   %s" % ser
                     if failure:
-                        print _("Unsuccessfully removed serial numbers:")
+                        print _("Serial numbers unsuccessfully removed at the server:")
                         for fail in failure:
                             print "   %s" % fail
                     if not success:
