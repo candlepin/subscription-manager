@@ -34,7 +34,7 @@ from subscription_manager.facts import Facts
 from subscription_manager.quantity import allows_multi_entitlement
 from subscription_manager.cert_sorter import StackingGroupSorter
 from subscription_manager.injection import FEATURES, CERT_SORTER, \
-        PRODUCT_DATE_RANGE_CALCULATOR
+        PRODUCT_DATE_RANGE_CALCULATOR, IDENTITY
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoLib
 from subscription_manager.utils import parseDate
@@ -450,9 +450,9 @@ class PoolStash(object):
     Object used to fetch pools from the server, sort them into compatible,
     incompatible, and installed lists. Also does filtering based on name.
     """
-    def __init__(self, backend, consumer, facts):
+    def __init__(self, backend, facts):
         self.backend = backend
-        self.consumer = consumer
+        self.identity = FEATURES.require(IDENTITY)
         self.facts = facts
 
         # Pools which passed rules server side for this consumer:
@@ -479,7 +479,7 @@ class PoolStash(object):
         self.compatible_pools = {}
         log.debug("Refreshing pools from server...")
         for pool in list_pools(self.backend.uep,
-                self.consumer.uuid, self.facts, active_on=active_on):
+                self.identity.uuid, self.facts, active_on=active_on):
             self.compatible_pools[pool['id']] = pool
             self.all_pools[pool['id']] = pool
 
@@ -487,13 +487,13 @@ class PoolStash(object):
         # Sadly this currently requires a second query to the server.
         self.incompatible_pools = {}
         for pool in list_pools(self.backend.uep,
-                self.consumer.uuid, self.facts, list_all=True, active_on=active_on):
+                self.identity.uuid, self.facts, list_all=True, active_on=active_on):
             if not pool['id'] in self.compatible_pools:
                 self.incompatible_pools[pool['id']] = pool
                 self.all_pools[pool['id']] = pool
 
         self.subscribed_pool_ids = []
-        for entitlement in self.backend.uep.getEntitlementList(self.consumer.uuid):
+        for entitlement in self.backend.uep.getEntitlementList(self.identity.uuid):
             self.subscribed_pool_ids.append(entitlement['pool']['id'])
 
         log.debug("found %s pools:" % len(self.all_pools))

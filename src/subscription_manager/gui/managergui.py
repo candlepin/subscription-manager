@@ -220,8 +220,9 @@ class MainWindow(widgets.GladeWidget):
                                               ent_dir=self.entitlement_dir,
                                               prod_dir=self.product_dir)
 
-        self.all_subs_tab = AllSubscriptionsTab(self.backend, self.consumer,
-                self.facts, self.main_window)
+        self.all_subs_tab = AllSubscriptionsTab(self.backend,
+                                                self.facts,
+                                                self.main_window)
 
         hbox = gtk.HBox(spacing=6)
         hbox.pack_start(self.installed_tab_icon, False, False)

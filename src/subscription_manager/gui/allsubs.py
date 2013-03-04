@@ -18,6 +18,7 @@ import logging
 import gobject
 
 import gettext
+from subscription_manager.injection import FEATURES, IDENTITY
 from subscription_manager.gui.widgets import MachineTypeColumn, QuantitySelectionColumn
 from subscription_manager.jsonwrapper import PoolWrapper
 import gtk
@@ -47,17 +48,17 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                         'edit_quantity_label', 'no_subs_label',
                         'filter_options_button', 'applied_filters_label']
 
-    def __init__(self, backend, consumer, facts, parent_win):
+    def __init__(self, backend, facts, parent_win):
 
         super(AllSubscriptionsTab, self).__init__('allsubs.glade')
 
         self.parent_win = parent_win
         self.backend = backend
-        self.consumer = consumer
+        self.identity = FEATURES.require(IDENTITY)
         self.facts = facts
 
-        self.pool_stash = managerlib.PoolStash(self.backend, self.consumer,
-                self.facts)
+        self.pool_stash = managerlib.PoolStash(self.backend,
+                                               self.facts)
 
         today = datetime.date.today()
         self.date_picker = widgets.DatePicker(today)
@@ -362,7 +363,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self._contract_selection_cancelled()
         try:
-            self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'], quantity)
+            self.backend.uep.bindByEntitlementPool(self.identity.uuid, pool['id'], quantity)
             managerlib.fetch_certificates(self.backend)
 
         except Exception, e:

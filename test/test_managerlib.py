@@ -1079,5 +1079,5 @@ class MergedPoolsTests(unittest.TestCase):
 class PoolStashTest(unittest.TestCase):
 
     def test_empty_stash_zero_length(self):
-        my_stash = PoolStash(None, None, None)
+        my_stash = PoolStash(None, None)
         self.assertTrue(my_stash.all_pools_size() == 0)
