@@ -12,8 +12,10 @@
 # in this software or its documentation.
 #
 
+import subscription_manager.injection as inj
 from subscription_manager.identity import Identity
-from subscription_manager.injection import FEATURES, IDENTITY
+from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.validity import ValidProductDateRangeCalculator
 
 def init_dep_injection():
     """
@@ -24,5 +26,8 @@ def init_dep_injection():
     # Set up consumer identity as a singleton so we don't constantly re-load
     # it from disk. Call reload when anything changes and all references will be
     # updated.
-    FEATURES.provide(IDENTITY, Identity())
+    inj.FEATURES.provide(inj.IDENTITY, Identity())
+    inj.FEATURES.provide(inj.CERT_SORTER, CertSorter)
+    inj.FEATURES.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR,
+            ValidProductDateRangeCalculator)
 
