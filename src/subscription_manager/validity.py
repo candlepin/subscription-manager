@@ -15,7 +15,6 @@
 
 import logging
 from subscription_manager.injection import FEATURES, IDENTITY
-from subscription_manager import cert_sorter
 from subscription_manager.utils import parseDate
 from datetime import timedelta, datetime
 from rhsm.certificate import GMT, DateRange
@@ -28,6 +27,8 @@ class ValidProductDateRangeCalculator(object):
     def __init__(self, uep):
         self.uep = uep
         self.identity = FEATURES.require(IDENTITY)
+        if self.identity.is_valid():
+            self.consumer_data = self.uep.getConsumer(self.identity.uuid)
 
     def calculate(self, product_hash):
         """
@@ -46,13 +47,11 @@ class ValidProductDateRangeCalculator(object):
         if not self.identity.is_valid():
             return None
 
-        consumer_data = self.uep.getConsumer(self.identity.uuid)
-
-        if 'installedProducts' not in consumer_data:
+        if 'installedProducts' not in self.consumer_data:
             log.warn("Server does not support product date ranges.")
             return None
 
-        installed_products = consumer_data['installedProducts']
+        installed_products = self.consumer_data['installedProducts']
         for prod in installed_products:
             if product_hash != prod['productId']:
                 continue
