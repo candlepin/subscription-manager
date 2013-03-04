@@ -13,9 +13,10 @@
 #
 
 from injection import FEATURES, IDENTITY
-from datetime import timedelta
+from datetime import datetime, timedelta
 import logging
 
+from rhsm.certificate import GMT
 from rhsm.connection import safe_int
 
 from subscription_manager.utils import parseDate
@@ -184,6 +185,8 @@ class CertSorter(object):
 
         #self._scan_entitlement_certs()
         #self._scan_for_unentitled_products()
+
+        self._scan_for_expired_or_future_products()
 
         log.debug("valid entitled products: %s" % self.valid_products.keys())
         log.debug("expired entitled products: %s" % self.expired_products.keys())
@@ -385,6 +388,32 @@ class CertSorter(object):
                 if product_id not in product_dict:
                     product_dict[product_id] = []
                 product_dict[product_id].append(ent_cert)
+
+    def _scan_for_expired_or_future_products(self):
+        # Subtract out the valid and partially valid items from the
+        # list of installed products
+        unknown_products = dict((k, v) for (k, v) in self.installed_products.items() \
+            if k not in self.valid_products.keys() \
+            and k not in self.partially_valid_products.keys())
+        ent_certs = self.entitlement_dir.list()
+
+        on_date = datetime.now(GMT())
+        for ent_cert in ent_certs:
+            for product in ent_cert.products:
+                if product.id in unknown_products.keys():
+                    # If the entitlement starts after the date we're checking, we
+                    # consider this a future entitlement. Technically it could be
+                    # partially stacked on that date, but we cannot determine that
+                    # without recursively cert sorting again on that date.
+                    if ent_cert.valid_range.begin() > on_date:
+                        product_dict = self.future_products
+                    # Check if entitlement has already expired:
+                    elif ent_cert.valid_range.end() < on_date:
+                        product_dict = self.expired_products
+                    else:
+                        continue
+
+                    product_dict.setdefault(product.id, []).append(ent_cert)
 
     def _scan_for_unentitled_products(self):
         # For all installed products, if not in valid or partially valid hash, it

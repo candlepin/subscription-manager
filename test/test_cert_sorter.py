@@ -519,6 +519,41 @@ class CertSorterTests(SubManFixture):
         self.assertEquals(2, first_invalid.month)
         self.assertEquals(28, first_invalid.day)
 
+    def test_scan_for_expired_or_future_products(self):
+        prod_dir = StubProductDirectory(pids=["a", "b", "c", "d", "e"])
+        ent_dir = StubEntitlementDirectory([
+            StubEntitlementCertificate(StubProduct("a")),
+            StubEntitlementCertificate(StubProduct("b")),
+            StubEntitlementCertificate(StubProduct("c")),
+            StubEntitlementCertificate(StubProduct("d"),
+                start_date=datetime.now() - timedelta(days=365),
+                end_date=datetime.now() - timedelta(days=2)),
+            StubEntitlementCertificate(StubProduct("e"),
+                start_date=datetime.now() + timedelta(days=365),
+                end_date=datetime.now() + timedelta(days=730)),
+            ])
+
+        mock_uep = StubUEP()
+        mock_uep.getCompliance = Mock(return_value=json.loads("""{
+            "date" : "2013-03-04T22:09:29.506+0000",
+            "compliantUntil" : "2013-03-04T22:09:29.506+0000",
+            "nonCompliantProducts" : [],
+            "compliantProducts" : {},
+            "partiallyCompliantProducts" : {},
+            "partialStacks" : {},
+            "status" : "invalid",
+            "compliant" : false
+            }"""))
+
+        sorter = CertSorter(prod_dir, ent_dir, mock_uep)
+        sorter.valid_products = {"a": StubProduct("a")}
+        sorter.partially_valid_products = {"b": StubProduct("b")}
+
+        sorter._scan_for_expired_or_future_products()
+
+        self.assertEquals(["d"], sorter.expired_products.keys())
+        self.assertEquals(["e"], sorter.future_products.keys())
+
 #    def test_requested_date(self):
 #        expected = "date" : "2013-02-27T16:03:42.509+0000"
 
