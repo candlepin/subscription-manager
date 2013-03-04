@@ -490,6 +490,14 @@ class CertSorterTests(SubManFixture):
         # server reported it here:
         self.assertFalse(INST_PID_3 in sorter.unentitled_products)
 
+    def test_missing_installed_product(self):
+        # Add a new installed product server doesn't know about:
+        prod_dir = StubProductDirectory(pids=[INST_PID_1, INST_PID_2,
+            INST_PID_3, "product4"])
+        sorter = CertSorter(prod_dir, self.mock_uep)
+        self.assertTrue('product4' in sorter.unentitled_products)
+
+
     def test_no_compliant_until(self):
         SAMPLE_COMPLIANCE_JSON['compliantUntil'] = None
         self.sorter = CertSorter(self.prod_dir, self.mock_uep)

@@ -118,23 +118,10 @@ class CertSorter(object):
 
         status = self.uep.getCompliance(self.identity.uuid)
 
-        # TODO: check that all installed products appear somewhere and log if not:
-
         # TODO: we're now mapping product IDs to entitlement cert JSON,
         # previously we mapped to actual entitlement cert objects. However,
         # nothing seems to actually use these, so it may not matter for now.
         self.valid_products = status['compliantProducts']
-
-        # Lookup product certs for each unentitled product returned by
-        # the server:
-        for unentitled_pid in status['nonCompliantProducts']:
-            prod_cert = self.product_dir.findByProduct(unentitled_pid)
-            # Ignore anything server thinks we have but we don't.
-            if prod_cert is None:
-                log.warn("Server reported installed product not on system: %s" %
-                        unentitled_pid)
-                continue
-            self.unentitled_products[unentitled_pid] = prod_cert
 
         self.partially_valid_products = status['partiallyCompliantProducts']
 
@@ -150,6 +137,29 @@ class CertSorter(object):
             self.compliant_until = parseDate(status['compliantUntil'])
             self.first_invalid_date = self.compliant_until + \
                     timedelta(seconds=60 * 60 * 24 - 1)
+
+        # Lookup product certs for each unentitled product returned by
+        # the server:
+        unentitled_pids = status['nonCompliantProducts']
+        # Add in any installed products not in the server response. This
+        # could happen if something changes before the certd runs. Log
+        # a warning if it does, and treat it like an unentitled product.
+        for pid in self.installed_products.keys():
+            if pid not in self.valid_products and pid not in \
+                    self.partially_valid_products and pid not in \
+                    self.unentitled_products:
+                log.warn("Installed product %s not present in response from "
+                        "server." % pid)
+                unentitled_pids.append(pid)
+
+        for unentitled_pid in unentitled_pids:
+            prod_cert = self.product_dir.findByProduct(unentitled_pid)
+            # Ignore anything server thinks we have but we don't.
+            if prod_cert is None:
+                log.warn("Server reported installed product not on system: %s" %
+                        unentitled_pid)
+                continue
+            self.unentitled_products[unentitled_pid] = prod_cert
 
         #self.facts_dict = facts_dict
 
