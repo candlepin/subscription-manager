@@ -255,17 +255,18 @@ class TestMigration(unittest.TestCase):
         self.engine.rhsmcfg = MagicMock()
         self.engine.rhsmcfg.get = MagicMock(side_effect=[
             "candlepin.example.com",
-            "443",
             "/candlepin",
             ])
+        self.engine.rhsmcfg.get_int = MagicMock(side_effect=[443])
 
         expected = [call("server", "hostname"),
-            call("server", "port"),
             call("server", "prefix"),
             ]
 
+        get_int_expected = [call("server", "port")]
         self.engine.get_candlepin_connection("some_username", "some_password")
         self.assertTrue(self.engine.rhsmcfg.get.call_args_list == expected)
+        self.assertTrue(self.engine.rhsmcfg.get_int.call_args_list == get_int_expected)
 
     def test_bad_server_url(self):
         try:

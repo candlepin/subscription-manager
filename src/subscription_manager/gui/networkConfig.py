@@ -175,12 +175,12 @@ class NetworkConfigDialog:
 
     def testConnection(self):
         proxy_host = remove_scheme(self.cfg.get("server", "proxy_hostname"))
-        proxy_port = self.cfg.get("server", "proxy_port")
+        proxy_port = self.cfg.get_int("server", "proxy_port")
         proxy_user = self.cfg.get("server", "proxy_user")
         proxy_password = self.cfg.get("server", "proxy_password")
 
         server_host = self.cfg.get("server", "hostname")
-        server_port = self.cfg.get("server", "port")
+        server_port = self.cfg.get_int("server", "port")
         server_prefix = self.cfg.get("server", "prefix")
 
         cp = connection.UEPConnection(host=server_host,
