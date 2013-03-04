@@ -82,20 +82,14 @@ def map_status(status):
     return smap[status]
 
 
-# TODO: entitlement_directory can be removed
-def getInstalledProductStatus(product_directory, entitlement_directory, uep,
-        facts=None):
+def getInstalledProductStatus(product_directory, uep):
     """
      Returns the Installed products and their subscription states
     """
-    # allow us to stub this out for testing
-    if facts is None:
-        facts = Facts().get_facts()
-
     product_status = []
 
     sorter = FEATURES.require(CERT_SORTER, product_directory,
-            entitlement_directory, facts, uep)
+            uep)
 
     calculator = FEATURES.require(PRODUCT_DATE_RANGE_CALCULATOR, uep)
     for installed_product in sorter.installed_products:

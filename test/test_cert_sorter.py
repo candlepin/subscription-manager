@@ -448,11 +448,11 @@ class CertSorterTests(SubManFixture):
 
         self.mock_uep = StubUEP()
         self.mock_uep.getCompliance = Mock(return_value=SAMPLE_COMPLIANCE_JSON)
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, self.mock_uep)
+        self.sorter = CertSorter(self.prod_dir, self.mock_uep)
         self.sorter.is_registered = Mock(return_value=True)
 
     def test_unregistered_status(self):
-        sorter = CertSorter(self.prod_dir, self.ent_dir, {}, self.mock_uep)
+        sorter = CertSorter(self.prod_dir, self.mock_uep)
         sorter.is_registered = Mock(return_value=False)
         self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
 
@@ -485,11 +485,11 @@ class CertSorterTests(SubManFixture):
         prod_dir = StubProductDirectory(
                 pids=[INST_PID_1, INST_PID_2])
         self.assertRaises(InstalledProductMismatch, CertSorter, prod_dir,
-                self.ent_dir, {}, self.mock_uep)
+                self.mock_uep)
 
     def test_no_compliant_until(self):
         SAMPLE_COMPLIANCE_JSON['compliantUntil'] = None
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {}, self.mock_uep)
+        self.sorter = CertSorter(self.prod_dir, self.mock_uep)
         self.sorter.is_registered = Mock(return_value=True)
         self.assertTrue(self.sorter.compliant_until is None)
         self.assertTrue(self.sorter.first_invalid_date is None)
@@ -1070,6 +1070,4 @@ def stub_ent_cert(parent_pid, provided_pids=None, quantity=1,
 def create_cert_sorter(product_certs, entitlement_certs, machine_sockets=8):
     stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": machine_sockets})
     return CertSorter(StubProductDirectory(product_certs),
-                      StubEntitlementDirectory(entitlement_certs),
-                      stub_facts.get_facts(),
                       StubUEP())

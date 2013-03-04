@@ -83,8 +83,7 @@ def check_status(force_signal):
         return RHSM_REGISTRATION_REQUIRED
 
     facts = Facts()
-    sorter = CertSorter(certdirectory.ProductDirectory(),
-            certdirectory.EntitlementDirectory(), facts.get_facts())
+    sorter = CertSorter(certdirectory.ProductDirectory())
 
     if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
         debug("System has one or more certificates that are not valid")

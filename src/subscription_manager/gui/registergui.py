@@ -1060,8 +1060,7 @@ class AsyncBackend(object):
         # Using the current date time, we may need to expand this to work
         # with arbitrary dates for future entitling someday:
         sorter = CertSorter(self.backend.product_dir,
-                self.backend.entitlement_dir,
-                facts.get_facts(), self.backend.uep)
+                self.backend.uep)
 
         if len(sorter.installed_products) == 0:
             raise NoProductsException()
