@@ -188,8 +188,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
 
 
 def show_autosubscribe_output(uep):
-    installed_status = managerlib.getInstalledProductStatus(ProductDirectory(),
-            EntitlementDirectory(), uep)
+    installed_status = managerlib.getInstalledProductStatus(ProductDirectory(), uep)
 
     log.info("Attempted to auto-attach/heal the system.")
     print _("Installed Product Current Status:")
@@ -1951,8 +1950,8 @@ class ListCommand(CliCommand):
 
         self._validate_options()
         if self.options.installed:
-            iproducts = managerlib.getInstalledProductStatus(self.product_dir,
-                    self.entitlement_dir, self.cp, self.facts.get_facts())
+            iproducts = managerlib.getInstalledProductStatus(
+                    self.product_dir, self.cp)
             if not len(iproducts):
                 print(_("No installed products to list"))
                 sys.exit(0)
