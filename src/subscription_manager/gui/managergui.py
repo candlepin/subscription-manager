@@ -215,8 +215,8 @@ class MainWindow(widgets.GladeWidget):
                                                   self,
                                                   ent_dir=self.entitlement_dir,
                                                   prod_dir=self.product_dir)
-        self.my_subs_tab = MySubscriptionsTab(self.backend, self.consumer,
-                                              self.facts, self.main_window,
+        self.my_subs_tab = MySubscriptionsTab(self.backend, self.facts,
+                                              self.main_window,
                                               ent_dir=self.entitlement_dir,
                                               prod_dir=self.product_dir)
 
