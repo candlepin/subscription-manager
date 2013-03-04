@@ -1711,20 +1711,16 @@ class ReposCommand(CliCommand):
         super(ReposCommand, self).__init__("repos", shortdesc, False, ent_dir,
                                            prod_dir)
 
-    def _validate_options(self):
-        if not (self.options.list or self.options.enable or self.options.disable):
-            self.options.list = True
-
-#    def require_connection(self):
-#        return True
-
-    def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
                                help=_("list known repos for this system"))
         self.parser.add_option("--enable", dest="enable", metavar="REPOID",
                                action='append', help=_("repo to enable (can be specified more than once)"))
         self.parser.add_option("--disable", dest="disable", metavar="REPOID",
                                action='append', help=_("repo to disable (can be specified more than once)"))
+
+    def _validate_options(self):
+        if not (self.options.list or self.options.enable or self.options.disable):
+            self.options.list = True
 
     def _do_command(self):
         self._validate_options()
@@ -1802,7 +1798,6 @@ class ConfigCommand(CliCommand):
         super(ConfigCommand, self).__init__("config", shortdesc, False, ent_dir,
                                             prod_dir)
 
-    def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
                                help=_("list the configuration for this system"))
         self.parser.add_option("--remove", dest="remove", action="append",
