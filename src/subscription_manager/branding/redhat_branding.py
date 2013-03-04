@@ -12,7 +12,7 @@ class Branding(object):
             "\n\n" + \
             _("This system has already been registered with Red Hat using RHN Classic.") + \
             "\n\n" + \
-            _("The tool you are using is attempting to re-register using Red Hat Subscription Management technology. Red Hat recommends that customers only register once.") + \
+            _("Your system is being registered again using Red Hat Subscription Management. Red Hat recommends that customers only register once.") + \
             "\n\n" + \
             _("To learn how to unregister from either service please consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563")
         self.REGISTERED_TO_OTHER_SUMMARY = _("RHN Classic")

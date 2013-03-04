@@ -37,19 +37,15 @@ import dbus
 import dbus.service
 import dbus.glib
 import dbus.exceptions
-import dbus.dbus_bindings
 import gtk
 import logging
 import gettext
 _ = gettext.gettext
 
-# these def's moved
-try:
-    from dbus.bus import REQUEST_NAME_REPLY_PRIMARY_OWNER
-    from dbus.bus import REQUEST_NAME_REPLY_ALREADY_OWNER
-except ImportError:
-    from dbus.dbus_bindings import REQUEST_NAME_REPLY_PRIMARY_OWNER
-    from dbus.dbus_bindings import REQUEST_NAME_REPLY_ALREADY_OWNER
+# Since the location of these def's keeps moving, hardcoded them here as per the spec
+# see http://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-names
+REQUEST_NAME_REPLY_PRIMARY_OWNER = 1
+REQUEST_NAME_REPLY_ALREADY_OWNER = 4
 
 gtk.gdk.threads_init()
 
@@ -119,7 +115,7 @@ if __name__ == '__main__':
         bus = None
 
     bus_name = dbus.service.BusName(BUS_NAME, bus=dbus.SessionBus())
-    request_name_res = dbus.dbus_bindings.bus_request_name(bus.get_connection(), bus_name.get_name())
+    request_name_res = bus.request_name(bus_name.get_name())
 
     if bus and ((request_name_res != REQUEST_NAME_REPLY_PRIMARY_OWNER) and \
        (request_name_res != REQUEST_NAME_REPLY_ALREADY_OWNER)):

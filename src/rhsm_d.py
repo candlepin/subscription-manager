@@ -62,7 +62,7 @@ def in_warning_period(sorter):
         valid_range = entitlement.valid_range
         warning_range = certificate.DateRange(
                 valid_range.end() - warning_period, valid_range.end())
-        if warning_range.hasNow():
+        if warning_range.has_now():
             return True
 
     return False

@@ -120,6 +120,7 @@ CONSUMED_LIST = [
     _("Contract:"),
     _("Account:"),
     _("Serial Number:"),
+    _("Pool ID:"),
     _("Active:"),
     _("Quantity Used:"),
     _("Service Level:"),
@@ -319,9 +320,7 @@ class CliCommand(AbstractCLICommand):
 
         # populate with config setttings if not specified
         server_hostname = host or cfg.get('server', 'hostname')
-        server_port = ssl_port or cfg.get('server', 'port')
-        if server_port:
-            server_port = connection.safe_int(server_port)
+        server_port = ssl_port or cfg.get_int('server', 'port')
         server_prefix = handler or cfg.get('server', 'prefix')
 
         # Note: username/password have no defaults, other than
@@ -331,7 +330,7 @@ class CliCommand(AbstractCLICommand):
         # also let's us override cfg values from the cli
         proxy_hostname = proxy_hostname_arg or self.proxy_hostname or remove_scheme(cfg.get('server', 'proxy_hostname'))
 
-        proxy_port = proxy_port_arg or self.proxy_port or cfg.get('server', 'proxy_port')
+        proxy_port = proxy_port_arg or self.proxy_port or cfg.get_int('server', 'proxy_port')
 
         proxy_user = proxy_user_arg or self.proxy_user or cfg.get('server', 'proxy_user')
 
@@ -369,7 +368,7 @@ class CliCommand(AbstractCLICommand):
 
         # set proxy before we try to connect to server
         self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
-        self.proxy_port = cfg.get('server', 'proxy_port')
+        self.proxy_port = cfg.get_int('server', 'proxy_port')
         self.proxy_user = cfg.get('server', 'proxy_user')
         self.proxy_password = cfg.get('server', 'proxy_password')
 
@@ -431,10 +430,10 @@ class CliCommand(AbstractCLICommand):
             self.proxy_hostname = parts[0]
             # no ':'
             if len(parts) > 1:
-                self.proxy_port = parts[1]
+                self.proxy_port = int(parts[1])
             else:
                 # if no port specified, use the one from the config, or fallback to the default
-                self.proxy_port = cfg.get('server', 'proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
+                self.proxy_port = cfg.get_int('server', 'proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
 
         if hasattr(self.options, "proxy_user") and self.options.proxy_user:
             self.proxy_user = self.options.proxy_user
@@ -604,8 +603,8 @@ class RefreshCommand(CliCommand):
 
 class IdentityCommand(UserPassCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Display the identity certificate for this system or " \
-                      "request a new one")
+        shortdesc = \
+            _("Display the identity certificate for this system or request a new one")
 
         super(IdentityCommand, self).__init__("identity", shortdesc, False,
                                               ent_dir, prod_dir)
@@ -769,7 +768,8 @@ class ServiceLevelCommand(OrgCommand):
         self.consumerIdentity = ConsumerIdentity
 
         shortdesc = _("Manage service levels for this system")
-        self._org_help_text = _("specify org for service level list")
+        self._org_help_text = \
+            _("specify an organization when listing available service levels using the organization key")
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
                                                   False, ent_dir, prod_dir)
 
@@ -1337,8 +1337,7 @@ class AttachCommand(CliCommand):
         self.parser.add_option("--quantity", dest="quantity",
                                help=_("number of subscriptions to attach"))
         self.parser.add_option("--auto", action='store_true',
-                               help=_("automatically attach compatible \
-                               subscriptions to this system"))
+            help=_("automatically attach compatible subscriptions to this system"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("service level to apply to this system"))
         # re bz #864207
@@ -1520,14 +1519,12 @@ class RemoveCommand(CliCommand):
                     # total will be None on older Candlepins that don't
                     # support returning the number of subscriptions unsubscribed from
                     if total is None:
-                        print _("All subscriptions have been removed from this system.")
+                        print _("All subscriptions have been removed at the server.")
                     else:
                         count = total['deletedRecords']
-                        if count == 1:
-                            print _("1 subscription removed from this system.")
-                        else:
-                            print (_("%s subscriptions removed from this system.") \
-                                % total['deletedRecords'])
+                        print gettext.ngettext("%s subscription removed at the server.",
+                                               "%s subscriptions removed at the server.",
+                                                count) % count
                 else:
                     success = []
                     failure = []
@@ -1541,11 +1538,11 @@ class RemoveCommand(CliCommand):
                                 systemExit(-1)
                             failure.append(re.msg)
                     if success:
-                        print _("Successfully removed serial numbers:")
+                        print _("Serial numbers successfully removed at the server:")
                         for ser in success:
                             print "   %s" % ser
                     if failure:
-                        print _("Unsuccessfully removed serial numbers:")
+                        print _("Serial numbers unsuccessfully removed at the server:")
                         for fail in failure:
                             print "   %s" % fail
                     if not success:
@@ -2054,6 +2051,9 @@ class ListCommand(CliCommand):
 
         for cert in certs:
             order = cert.order
+            pool_id = _("Not Available")
+            if hasattr(cert.pool, "id"):
+                pool_id = cert.pool.id
             service_level = order.service_level or ""
             service_type = order.service_type or ""
             product_names = [p.name for p in cert.products]
@@ -2064,6 +2064,7 @@ class ListCommand(CliCommand):
                     order.contract,
                     order.account,
                     cert.serial,
+                    pool_id,
                     cert.is_valid(),
                     order.quantity_used,
                     service_level,

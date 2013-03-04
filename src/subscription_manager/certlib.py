@@ -311,8 +311,11 @@ class UpdateAction(Action):
             report.rogue.append(cert)
         # If we just deleted certs, we need to refresh the now stale
         # entitlement directory before we go to delete expired certs.
-        if len(report.rogue) > 0:
-            print _("Any local-only certificates have been deleted.")
+        rogue_count = len(report.rogue)
+        if rogue_count > 0:
+            print gettext.ngettext("%s local certificate has been deleted.",
+                                   "%s local certificates have been deleted.",
+                                   rogue_count) % rogue_count
             self.entdir.refresh()
 
     def getCertificatesBySerialList(self, snList):
