@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.8.5
+Version: 1.8.6
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,9 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Mon Mar 04 2013 William Poteat <wpoteat@redhat.com> 1.8.6-1
+- Add a get_int method to RhsmConfigParser (alikins@redhat.com)
+
 * Tue Feb 19 2013 Alex Wood <awood@redhat.com> 1.8.5-1
 - 908671: Adding pool id to entitlement certificate. (awood@redhat.com)
 
