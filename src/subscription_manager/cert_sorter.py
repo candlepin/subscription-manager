@@ -105,6 +105,10 @@ class CertSorter(object):
         # TODO: not in server call, calc locally?
         self.future_products = {}
 
+        # The first date we're completely invalid from midnight to midnight:
+        # Will be None if we're not currently valid for the date requested.
+        self.first_invalid_date = None
+
         # TODO: Not in server status call but can be calculated locally
         # or just let the one place it's used figure it out on it's own
         self.valid_entitlement_certs = []
@@ -148,7 +152,6 @@ class CertSorter(object):
         # 24 hours giving us the first date where we know we're completely
         # invalid from midnight to midnight.
         self.compliant_until = None
-        self.first_invalid_date = None
         if status['compliantUntil'] is not None:
             self.compliant_until = parseDate(status['compliantUntil'])
             self.first_invalid_date = self.compliant_until + \

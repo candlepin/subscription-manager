@@ -12,8 +12,9 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from subscription_manager import managerlib, cert_sorter
-from subscription_manager.cert_sorter import CertSorter, FUTURE_SUBSCRIBED, \
+from subscription_manager.injection import FEATURES, CERT_SORTER
+from subscription_manager import managerlib
+from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
     NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.branding import get_branding
 from subscription_manager.gui import widgets
@@ -64,7 +65,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         self.facts = facts
         self.backend = backend
-        self.cs = cert_sorter.CertSorter(prod_dir, ent_dir,
+        self.cs = FEATURES.require(CERT_SORTER, prod_dir, ent_dir,
                 self.facts.get_facts(), self.backend.uep)
 
         # Product column
@@ -147,7 +148,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def update_products(self):
         self.store.clear()
-        self.cs = cert_sorter.CertSorter(self.product_dir,
+        self.cs = FEATURES.require(CERT_SORTER, self.product_dir,
                 self.entitlement_dir, self.facts.get_facts(), self.backend.uep)
         for product_cert in self.product_dir.list():
             for product in product_cert.products:
@@ -308,7 +309,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.set_registered(is_registered)
 
         # Look for products which have invalid entitlements
-        sorter = CertSorter(self.product_dir, self.entitlement_dir,
+        sorter = FEATURES.require(CERT_SORTER, self.product_dir, self.entitlement_dir,
                 self.facts.get_facts(), self.backend.uep)
 
         warn_count = len(sorter.expired_products) + \
