@@ -17,6 +17,7 @@ from subscription_manager.identity import Identity
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.validity import ValidProductDateRangeCalculator
 
+
 def init_dep_injection():
     """
     Initializes the default behaviour for all supported features.
@@ -30,4 +31,3 @@ def init_dep_injection():
     inj.FEATURES.provide(inj.CERT_SORTER, CertSorter)
     inj.FEATURES.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR,
             ValidProductDateRangeCalculator)
-

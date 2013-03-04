@@ -133,6 +133,7 @@ class Identity(object):
     Wrapper for sharing consumer identity without constant reloading.
     """
     def __init__(self):
+
         self.reload()
 
     def reload(self):
@@ -158,5 +159,3 @@ class Identity(object):
 
     def getConsumerId(self):
         return self.uuid
-
-
