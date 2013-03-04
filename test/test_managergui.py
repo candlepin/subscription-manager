@@ -29,7 +29,6 @@ class TestManagerGuiMainWindow(SubManFixture):
         stub_sorter = stubs.StubCertSorter(stubs.StubProductDirectory([]))
         FEATURES.provide(CERT_SORTER, stub_sorter)
 
-
         managergui.MainWindow(backend=stubs.StubBackend(), facts=stubs.StubFacts(),
                               ent_dir=stubs.StubCertificateDirectory([]),
                               prod_dir=stubs.StubProductDirectory([]))
