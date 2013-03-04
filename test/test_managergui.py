@@ -3,6 +3,8 @@ import unittest
 import rhsm_display
 rhsm_display.set_display()
 
+from fixture import SubManFixture
+
 import stubs
 from subscription_manager.gui import managergui, registergui, installedtab
 from subscription_manager.injection import FEATURES, CERT_SORTER
@@ -10,7 +12,6 @@ from fixture import SubManFixture
 
 
 class TestManagerGuiMainWindow(SubManFixture):
-
     def test_main_window(self):
         managergui.ConsumerIdentity = stubs.StubConsumerIdentity
         installedtab.ConsumerIdentity = stubs.StubConsumerIdentity

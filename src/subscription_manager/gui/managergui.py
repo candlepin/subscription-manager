@@ -177,6 +177,7 @@ class MainWindow(widgets.GladeWidget):
         self.backend = backend or Backend()
 #        self.consumer = consumer or Consumer()
         self.identity = FEATURES.require(IDENTITY)
+        self.consumer = consumer or self.identity
 
         # FIXME: remove use of consumer to other gui dialogs
         self.facts = facts or Facts(self.backend.entitlement_dir,
@@ -188,8 +189,8 @@ class MainWindow(widgets.GladeWidget):
         self.product_dir = prod_dir or self.backend.product_dir
         self.entitlement_dir = ent_dir or self.backend.entitlement_dir
 
-        self.system_facts_dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
-                self.facts)
+        self.system_facts_dialog = factsgui.SystemFactsDialog(self.backend,
+                                                              self.facts)
 
         self.registration_dialog = registergui.RegisterScreen(self.backend,
                 self.consumer, self.facts, self._get_window(),
