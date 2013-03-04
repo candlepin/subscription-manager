@@ -29,6 +29,7 @@ from subscription_manager import injection
 
 from rhsm.profile import  RPMProfile
 from rhsm.connection import GoneException
+from rhsm.certificate import GMT
 
 from fixture import SubManFixture
 
@@ -169,6 +170,8 @@ class TestCertmgr(SubManFixture):
 
     def test_healing_no_heal(self):
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
+        self.mock_cert_sorter.compliant_until = datetime.now() + \
+                timedelta(days=15)
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
                                   product_dir=self.stub_entitled_proddir)
         mgr.update(autoheal=True)
@@ -185,10 +188,13 @@ class TestCertmgr(SubManFixture):
 
     @mock.patch.object(certlib.Action, 'build')
     def test_healing_needs_heal_tomorrow(self, cert_build_mock):
-        # Mock is valid to return True for today, False for tomorrow:
-        self.mock_cert_sorter.is_valid = mock.Mock(side_effect=[True, False])
+        # Valid today, but not valid 24h from now:
+        self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
+        self.mock_cert_sorter.compliant_until = datetime.now(GMT()) + \
+                timedelta(hours=6)
         cert_build_mock.return_value = (mock.Mock(),
                 self.stub_ent_expires_tomorrow)
+
 
         self._stub_certificate_calls([self.stub_ent_expires_tomorrow])
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,

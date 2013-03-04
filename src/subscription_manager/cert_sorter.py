@@ -13,10 +13,9 @@
 #
 
 from injection import FEATURES, IDENTITY
-from datetime import datetime, timedelta
+from datetime import timedelta
 import logging
 
-from rhsm.certificate import GMT
 from rhsm.connection import safe_int
 
 from subscription_manager.utils import parseDate
@@ -54,8 +53,7 @@ class CertSorter(object):
     re-use this cached data for a period of time, before falling back to
     reporting unknown.
     """
-    # TODO: drop the unused arguments
-    def __init__(self, product_dir, uep, on_date=None):
+    def __init__(self, product_dir, uep):
         self.identity = FEATURES.require(IDENTITY)
         self.product_dir = product_dir
 
@@ -63,10 +61,6 @@ class CertSorter(object):
         # we use it, but if connection is still none we will let this error out
         # as it is programmer error.
         self.uep = uep
-
-        if not on_date:
-            on_date = datetime.now(GMT())
-        self.on_date = on_date
 
         # All products installed on this machine, regardless of status. Maps
         # installed product ID to product certificate.
@@ -186,6 +180,7 @@ class CertSorter(object):
         log.debug("unentitled products: %s" % self.unentitled_products.keys())
         log.debug("future products: %s" % self.future_products.keys())
         log.debug("partial stacks: %s" % self.partial_stacks.keys())
+        log.debug("entitlements valid until: %s" % self.compliant_until)
 
     def is_valid(self):
         """

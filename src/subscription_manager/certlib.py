@@ -113,15 +113,15 @@ class HealingLib(DataLib):
                 today = datetime.now(GMT())
                 tomorrow = today + timedelta(days=1)
 
-                # Check if we're not valid today and heal if so. If not
-                # we'll do the same check for tomorrow to hopefully always keep
-                # us valid:
+                # Check if we're invalid today and heal if so. If we are
+                # valid, see if 24h from now is greater than our "valid until"
+                # date, and heal for tomorrow if so.
 
                 # TODO: not great for testing:
                 ent_dir = EntitlementDirectory()
 
                 cs = FEATURES.require(CERT_SORTER, self._product_dir,
-                        self.uep, on_date=today)
+                        self.uep)
                 cert_updater = CertLib(lock=self.lock, uep=self.uep)
                 if not cs.is_valid():
                     log.warn("Found invalid entitlements for today: %s" %
@@ -132,10 +132,13 @@ class HealingLib(DataLib):
                     log.info("Entitlements are valid for today: %s" %
                             today)
 
-                    cs = FEATURES.require(CERT_SORTER, self._product_dir,
-                            self.uep, on_date=tomorrow)
-                    if not cs.is_valid():
-                        log.warn("Found invalid entitlements for tomorrow: %s" %
+                    if cs.compliant_until is None:
+                        # Edge case here, not even sure this can happen as we
+                        # should have a compliant until date if we're valid
+                        # today, but just in case:
+                        log.warn("Got valid status from server but no valid until date.")
+                    elif tomorrow > cs.compliant_until:
+                        log.warn("Entitlements will be invalid by tomorrow: %s" %
                                 tomorrow)
                         self.uep.bind(uuid, tomorrow)
                         cert_updater.update()
