@@ -152,7 +152,7 @@ class TestCliProxyCommand(TestCliCommand):
         self.assertEquals(proxy_url, self.cc.options.proxy_url)
         self.assertEquals(type(proxy_url), type(self.cc.options.proxy_url))
         self.assertEquals(proxy_host, self.cc.proxy_hostname)
-        self.assertEquals(proxy_port, self.cc.proxy_port)
+        self.assertEquals(int(proxy_port), self.cc.proxy_port)
 
     def test_main_proxy_user(self):
         proxy_user = "buster"
@@ -635,7 +635,7 @@ class TestReleaseCommand(TestCliProxyCommand):
         self.assertEquals(proxy_url, self.cc.options.proxy_url)
         self.assertEquals(type(proxy_url), type(self.cc.options.proxy_url))
         self.assertEquals(proxy_host, self.cc.proxy_hostname)
-        self.assertEquals(proxy_port, self.cc.proxy_port)
+        self.assertEquals(int(proxy_port), self.cc.proxy_port)
 
 
 class TestVersionCommand(TestCliCommand):

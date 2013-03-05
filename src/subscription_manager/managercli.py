@@ -326,9 +326,7 @@ class CliCommand(AbstractCLICommand):
 
         # populate with config setttings if not specified
         server_hostname = host or cfg.get('server', 'hostname')
-        server_port = ssl_port or cfg.get('server', 'port')
-        if server_port:
-            server_port = connection.safe_int(server_port)
+        server_port = ssl_port or cfg.get_int('server', 'port')
         server_prefix = handler or cfg.get('server', 'prefix')
 
         # Note: username/password have no defaults, other than
@@ -338,7 +336,7 @@ class CliCommand(AbstractCLICommand):
         # also let's us override cfg values from the cli
         proxy_hostname = proxy_hostname_arg or self.proxy_hostname or remove_scheme(cfg.get('server', 'proxy_hostname'))
 
-        proxy_port = proxy_port_arg or self.proxy_port or cfg.get('server', 'proxy_port')
+        proxy_port = proxy_port_arg or self.proxy_port or cfg.get_int('server', 'proxy_port')
 
         proxy_user = proxy_user_arg or self.proxy_user or cfg.get('server', 'proxy_user')
 
@@ -376,7 +374,7 @@ class CliCommand(AbstractCLICommand):
 
         # set proxy before we try to connect to server
         self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
-        self.proxy_port = cfg.get('server', 'proxy_port')
+        self.proxy_port = cfg.get_int('server', 'proxy_port')
         self.proxy_user = cfg.get('server', 'proxy_user')
         self.proxy_password = cfg.get('server', 'proxy_password')
 
@@ -438,10 +436,10 @@ class CliCommand(AbstractCLICommand):
             self.proxy_hostname = parts[0]
             # no ':'
             if len(parts) > 1:
-                self.proxy_port = parts[1]
+                self.proxy_port = int(parts[1])
             else:
                 # if no port specified, use the one from the config, or fallback to the default
-                self.proxy_port = cfg.get('server', 'proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
+                self.proxy_port = cfg.get_int('server', 'proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
 
         if hasattr(self.options, "proxy_user") and self.options.proxy_user:
             self.proxy_user = self.options.proxy_user
@@ -1777,20 +1775,16 @@ class ReposCommand(CliCommand):
         super(ReposCommand, self).__init__("repos", shortdesc, False, ent_dir,
                                            prod_dir)
 
-    def _validate_options(self):
-        if not (self.options.list or self.options.enable or self.options.disable):
-            self.options.list = True
-
-#    def require_connection(self):
-#        return True
-
-    def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
                                help=_("list known repos for this system"))
         self.parser.add_option("--enable", dest="enable", metavar="REPOID",
                                action='append', help=_("repo to enable (can be specified more than once)"))
         self.parser.add_option("--disable", dest="disable", metavar="REPOID",
                                action='append', help=_("repo to disable (can be specified more than once)"))
+
+    def _validate_options(self):
+        if not (self.options.list or self.options.enable or self.options.disable):
+            self.options.list = True
 
     def _do_command(self):
         self._validate_options()
@@ -1868,7 +1862,6 @@ class ConfigCommand(CliCommand):
         super(ConfigCommand, self).__init__("config", shortdesc, False, ent_dir,
                                             prod_dir)
 
-    def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
                                help=_("list the configuration for this system"))
         self.parser.add_option("--remove", dest="remove", action="append",

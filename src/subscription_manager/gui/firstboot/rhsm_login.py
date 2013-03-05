@@ -238,10 +238,10 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         cfg.save()
         self.backend.uep = rhsm.connection.UEPConnection(
             host=cfg.get('server', 'hostname'),
-            ssl_port=int(cfg.get('server', 'port')),
+            ssl_port=cfg.get_int('server', 'port'),
             handler=cfg.get('server', 'prefix'),
             proxy_hostname=cfg.get('server', 'proxy_hostname'),
-            proxy_port=cfg.get('server', 'proxy_port'),
+            proxy_port=cfg.get_int('server', 'proxy_port'),
             proxy_user=cfg.get('server', 'proxy_user'),
             proxy_password=cfg.get('server', 'proxy_password'),
             username=None, password=None,
