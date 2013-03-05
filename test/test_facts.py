@@ -2,13 +2,10 @@ import unittest
 import tempfile
 import simplejson as json
 import shutil
-from datetime import datetime, timedelta
-from mock import patch, Mock
+from mock import Mock
 
-from stubs import StubEntitlementDirectory, StubProductDirectory, StubProduct,\
-                  StubCertificateDirectory, StubProductCertificate, StubEntitlementCertificate
+from stubs import StubEntitlementDirectory, StubProductDirectory
 from subscription_manager import facts
-from subscription_manager.facts import Facts
 
 facts_buf = """
 {

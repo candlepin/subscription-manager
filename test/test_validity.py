@@ -13,20 +13,16 @@
 # in this software or its documentation.
 #
 
-import unittest
-import json
+import simplejson as json
 from mock import Mock, NonCallableMock
-from datetime import timedelta, datetime
+from datetime import datetime
 
-from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
-    StubCertificateDirectory, StubFacts, StubEntitlementDirectory, StubProductDirectory, \
-    StubUEP
+from stubs import StubUEP
 from fixture import SubManFixture
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.injection import FEATURES, IDENTITY
 
 from rhsm.certificate import GMT
-from subscription_manager.cert_sorter import CertSorter, SUBSCRIBED, PARTIALLY_SUBSCRIBED
 
 # Sample installed product status from the server. Ignoring the
 # rest of the consumer details for now, this is all we will use

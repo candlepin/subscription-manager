@@ -13,7 +13,6 @@
 # in this software or its documentation.
 #
 
-import unittest
 import mock
 
 import stubs
@@ -25,13 +24,6 @@ from subscription_manager.injection import FEATURES, IDENTITY
 
 from subscription_manager.gui import preferences
 
-
-#class StubConsumer:
-#    def __init__(self):
-#        self.uuid = "not_actually_a_uuid"
-#
-#    def reload(self):
-#        pass
 
 CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},
                  'serviceLevel': "Pro Turbo HD Plus Ultra",

@@ -12,18 +12,13 @@
 # in this software or its documentation.
 #
 
-import unittest
 from fixture import SubManFixture
-from subscription_manager.injection import FEATURES, IDENTITY
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
-    StubCertificateDirectory, StubEntitlementDirectory, StubFacts, StubProductDirectory, \
+    StubEntitlementDirectory, StubProductDirectory, \
     StubUEP
-from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter, \
-    CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
-from subscription_manager.identity import ConsumerIdentity
+from subscription_manager.cert_sorter import CertSorter, UNKNOWN
 from datetime import timedelta, datetime
-from rhsm.certificate import GMT
-from mock import Mock, patch
+from mock import Mock
 import simplejson as json
 
 SAMPLE_COMPLIANCE_JSON = json.loads("""

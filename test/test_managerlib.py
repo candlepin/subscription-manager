@@ -26,15 +26,11 @@ from fixture import SubManFixture
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
         getInstalledProductStatus, LocalTz, parseDate, \
         MergedPoolsStackingGroupSorter, MergedPools, PoolStash
-from subscription_manager.identity import ConsumerIdentity
-from subscription_manager.injection import FEATURES, CERT_SORTER, \
-        PRODUCT_DATE_RANGE_CALCULATOR
+from subscription_manager.injection import FEATURES, CERT_SORTER
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
 from rhsm.certificate import create_from_pem, DateRange
-
-from mock import patch, Mock
 
 cfg = rhsm.config.initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
@@ -490,8 +486,6 @@ class InstalledProductStatusTests(SubManFixture):
 
     def test_entitlement_for_not_installed_product_shows_nothing(self):
         product_directory = StubProductDirectory([])
-        entitlement_directory = StubCertificateDirectory([
-            StubEntitlementCertificate(StubProduct("product1"))])
 
         stub_sorter = StubCertSorter(prod_dir=product_directory)
         FEATURES.provide(CERT_SORTER, stub_sorter)

@@ -20,6 +20,7 @@ PRODUCT_DATE_RANGE_CALCULATOR = "PRODUCT_DATE_RANGE_CALCULATOR"
 import logging
 log = logging.getLogger('rhsm-app.' + __name__)
 
+
 class FeatureBroker:
     """
     Tracks all configured features.
@@ -57,31 +58,9 @@ class FeatureBroker:
                 log.debug("Returning instance for feature %s" % feature)
                 return provider
         except KeyError:
-            raise KeyError, "Unknown feature: %r" % feature
+            raise KeyError("Unknown feature: %r" % feature)
         return provider(*args, **kwargs)
 
 # Create a global instance we can use in all components. Tests can override
 # features as desired and that change should trickle out to all components.
 FEATURES = FeatureBroker()
-
-
-#class RequireFeature(object):
-
-#    def __init__(self, feature):
-#        self.feature = feature
-
-#    def __get__(self, obj, T):
-#        # Requests the
-#        return self.result # <-- will request the feature upon first call
-
-#    def __getattr__(self, name):
-#        if name != 'result':
-#            raise Exception("Unexpected feature attribute "
-#                    "requested: %s" % name)
-#        self.result = self.Request()
-#        return self.result
-
-#    def Request(self):
-#        obj = FEATURES[self.feature]
-#        return obj
-

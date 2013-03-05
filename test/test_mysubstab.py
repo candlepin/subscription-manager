@@ -12,9 +12,7 @@
 # in this software or its documentation.
 #
 
-import unittest
 import datetime
-from mock import Mock
 
 import rhsm_display
 rhsm_display.set_display()

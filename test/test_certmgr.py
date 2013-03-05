@@ -13,7 +13,6 @@
 # in this software or its documentation.
 #
 
-import unittest
 import simplejson as json
 from datetime import datetime, timedelta
 

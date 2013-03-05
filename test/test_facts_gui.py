@@ -1,5 +1,4 @@
 import sys
-import unittest
 from fixture import SubManFixture
 
 import rhsm_display
@@ -7,7 +6,7 @@ rhsm_display.set_display()
 
 from subscription_manager.injection import FEATURES, IDENTITY
 from stubs import MockStderr, MockStdout, StubUEP, StubBackend, StubFacts
-from subscription_manager.gui import factsgui, managergui
+from subscription_manager.gui import factsgui
 from mock import Mock, patch
 
 

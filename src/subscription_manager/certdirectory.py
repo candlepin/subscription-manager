@@ -253,7 +253,6 @@ class EntitlementDirectory(CertificateDirectory):
         return entitlements
 
 
-
 class Path:
 
     # Used during Anaconda install by the yum pidplugin to ensure we operate

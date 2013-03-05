@@ -7,7 +7,7 @@ from fixture import SubManFixture
 import mock
 
 import stubs
-from subscription_manager.gui import managergui, registergui, installedtab
+from subscription_manager.gui import managergui, registergui
 from subscription_manager.injection import FEATURES, IDENTITY, CERT_SORTER
 from fixture import SubManFixture
 

@@ -28,7 +28,7 @@ import gtk.glade
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import networkConfig
 from subscription_manager import managerlib
-from subscription_manager.identity import Identity, ConsumerIdentity
+from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.gui import file_monitor
 from subscription_manager.gui import registergui
 import rhsm.connection as connection

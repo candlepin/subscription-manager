@@ -20,9 +20,7 @@ _ = gettext.gettext
 
 import rhsm.config
 from subscription_manager import certdirectory
-from subscription_manager import cert_sorter
 from subscription_manager.cache import CacheManager
-from subscription_manager.hwprobe import ClassicCheck
 from datetime import datetime
 
 log = logging.getLogger('rhsm-app.' + __name__)

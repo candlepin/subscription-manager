@@ -16,8 +16,7 @@
 import logging
 from subscription_manager.injection import FEATURES, IDENTITY
 from subscription_manager.utils import parseDate
-from datetime import timedelta, datetime
-from rhsm.certificate import GMT, DateRange
+from rhsm.certificate import DateRange
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -77,4 +76,3 @@ class ValidProductDateRangeCalculator(object):
         log.error("Requested status for installed product server does not "
                 "know about: %s" % product_hash)
         return None
-
