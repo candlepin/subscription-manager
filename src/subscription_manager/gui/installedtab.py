@@ -12,7 +12,8 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from subscription_manager.injection import FEATURES, IDENTITY, CERT_SORTER
+from subscription_manager.injection import FEATURES, IDENTITY, CERT_SORTER, \
+        PRODUCT_DATE_RANGE_CALCULATOR
 from subscription_manager import managerlib
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
     NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
@@ -152,6 +153,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.store.clear()
         self.cs = FEATURES.require(CERT_SORTER, self.product_dir,
                 self.entitlement_dir, self.backend.uep)
+        range_calculator = FEATURES.require(PRODUCT_DATE_RANGE_CALCULATOR,
+                self.backend.uep)
         for product_cert in self.product_dir.list():
             for product in product_cert.products:
                 product_id = product.id
@@ -169,8 +172,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 #        This is also used in mysubstab...
                 if status != NOT_SUBSCRIBED:
 
-                    range_calculator = ValidProductDateRangeCalculator(
-                            self.backend.uep)
                     compliant_range = range_calculator.calculate(product.id)
                     start = ''
                     end = ''
