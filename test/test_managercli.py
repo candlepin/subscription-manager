@@ -642,6 +642,10 @@ class TestVersionCommand(TestCliCommand):
     command_class = managercli.VersionCommand
 
 
+class TestPluginsCommand(TestCliCommand):
+    command_class = managercli.PluginsCommand
+
+
 class TestSystemExit(unittest.TestCase):
     def setUp(self):
         sys.stderr = MockStderr()
