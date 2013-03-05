@@ -34,10 +34,13 @@ from subscription_manager.branding import get_branding
 from subscription_manager import certdirectory
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.hwprobe import ClassicCheck
-from subscription_manager.facts import Facts
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
 import rhsm.certificate as certificate
+from rhsm.connection import UEPConnection
+
+import rhsm.config
+CFG = rhsm.config.initConfig()
 
 enable_debug = False
 
@@ -82,9 +85,18 @@ def check_status(force_signal):
         debug("The system is not currently registered.")
         return RHSM_REGISTRATION_REQUIRED
 
-    facts = Facts()
+    connection = UEPConnection(
+        host=CFG.get('server', 'hostname'),
+        ssl_port=CFG.get_int('server', 'port'),
+        handler=CFG.get('server', 'prefix'),
+        proxy_hostname=CFG.get('server', 'proxy_hostname'),
+        proxy_port=CFG.get_int('server', 'proxy_port'),
+        proxy_user=CFG.get('server', 'proxy_user'),
+        proxy_password=CFG.get('server', 'proxy_password'),
+        cert_file=ConsumerIdentity.certpath(),
+        key_file=ConsumerIdentity.keypath())
     sorter = CertSorter(certdirectory.ProductDirectory(),
-            certdirectory.EntitlementDirectory())
+            certdirectory.EntitlementDirectory(), connection)
 
     if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
         debug("System has one or more certificates that are not valid")
