@@ -17,6 +17,7 @@ from datetime import datetime, timedelta
 import logging
 
 from rhsm.certificate import GMT
+from rhsm.connection import RestlibException
 
 from subscription_manager.utils import parseDate
 
@@ -115,7 +116,14 @@ class CertSorter(object):
             return
         # TODO: handle temporarily disconnected use case / caching
 
-        status = self.uep.getCompliance(self.identity.uuid)
+        try:
+            status = self.uep.getCompliance(self.identity.uuid)
+        except RestlibException, e:
+            # Indicates we may be talking to a very old candlepin server
+            # which does not have the compliance API call. Report everything
+            # as unknown in this case.
+            # TODO: try to tell user they need to upgrade their server?
+            return
 
         # TODO: we're now mapping product IDs to entitlement cert JSON,
         # previously we mapped to actual entitlement cert objects. However,
@@ -190,7 +198,6 @@ class CertSorter(object):
 
             # Builds the list of valid entitlement certs today:
             if ent_cert.is_valid():
-                print(ent_cert.products[0].name)
                 self.valid_entitlement_certs.append(ent_cert)
 
             for product in ent_cert.products:
@@ -237,6 +244,10 @@ class CertSorter(object):
             return EXPIRED
         if product_id in self.unentitled_products:
             return NOT_SUBSCRIBED
+        else:
+            # Can only really happen if server doesn't support compliance
+            # API call:
+            return UNKNOWN
 
 
 class StackingGroupSorter(object):

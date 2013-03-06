@@ -17,6 +17,7 @@ from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificat
     StubEntitlementDirectory, StubProductDirectory, \
     StubUEP, StubCertSorter
 from subscription_manager.cert_sorter import CertSorter, UNKNOWN
+from rhsm.connection import RestlibException
 from datetime import timedelta, datetime
 from mock import Mock
 import simplejson as json
@@ -449,6 +450,14 @@ class CertSorterTests(SubManFixture):
     def test_unregistered_status(self):
         sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
         sorter.is_registered = Mock(return_value=False)
+        self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
+
+    def test_server_has_no_compliance_api(self):
+        self.mock_uep = StubUEP()
+        self.mock_uep.getCompliance = Mock(
+                side_effect=RestlibException('boom'))
+        sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
+        sorter.is_registered = Mock(return_value=True)
         self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
 
     def test_unentitled_products(self):
