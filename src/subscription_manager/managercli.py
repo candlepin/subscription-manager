@@ -352,6 +352,8 @@ class CliCommand(AbstractCLICommand):
 
     def main(self, args=None):
 
+        config_changed = False
+
         # In testing we sometimes specify args, otherwise use the default:
         if not args:
             args = sys.argv[1:]
@@ -374,8 +376,7 @@ class CliCommand(AbstractCLICommand):
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             cfg.set("server", "insecure", "1")
-            if self.persist_server_options():
-                cfg.save()
+            config_changed = True
 
         if hasattr(self.options, "server_url") and self.options.server_url:
             try:
@@ -404,10 +405,7 @@ class CliCommand(AbstractCLICommand):
             cfg.set("server", "port", self.server_port)
             cfg.set("server", "prefix", self.server_prefix)
 
-            # seems like cfg.save() could raise any wide variety of
-            # exceptions
-            if self.persist_server_options():
-                cfg.save()
+            config_changed = True
 
         if hasattr(self.options, "base_url") and self.options.base_url:
             try:
@@ -421,8 +419,7 @@ class CliCommand(AbstractCLICommand):
             cfg.set("rhsm", "baseurl", format_baseurl(baseurl_server_hostname,
                                                       baseurl_server_port,
                                                       baseurl_server_prefix))
-            if self.persist_server_options():
-                cfg.save()
+            config_changed = True
 
         # support foo.example.com:3128 format
         if hasattr(self.options, "proxy_url") and self.options.proxy_url:
@@ -467,6 +464,11 @@ class CliCommand(AbstractCLICommand):
         # do the work, catch most common errors here:
         try:
             return_code = self._do_command()
+
+            # Only persist the config changes if there was no exception
+            if config_changed and self.persist_server_options():
+                cfg.save()
+
             if return_code is not None:
                 return return_code
         except X509.X509Error, e:
@@ -1712,20 +1714,16 @@ class ReposCommand(CliCommand):
         super(ReposCommand, self).__init__("repos", shortdesc, False, ent_dir,
                                            prod_dir)
 
-    def _validate_options(self):
-        if not (self.options.list or self.options.enable or self.options.disable):
-            self.options.list = True
-
-#    def require_connection(self):
-#        return True
-
-    def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
                                help=_("list known repos for this system"))
         self.parser.add_option("--enable", dest="enable", metavar="REPOID",
                                action='append', help=_("repo to enable (can be specified more than once)"))
         self.parser.add_option("--disable", dest="disable", metavar="REPOID",
                                action='append', help=_("repo to disable (can be specified more than once)"))
+
+    def _validate_options(self):
+        if not (self.options.list or self.options.enable or self.options.disable):
+            self.options.list = True
 
     def _do_command(self):
         self._validate_options()
@@ -1803,7 +1801,6 @@ class ConfigCommand(CliCommand):
         super(ConfigCommand, self).__init__("config", shortdesc, False, ent_dir,
                                             prod_dir)
 
-    def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
                                help=_("list the configuration for this system"))
         self.parser.add_option("--remove", dest="remove", action="append",
