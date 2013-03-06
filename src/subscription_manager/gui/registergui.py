@@ -31,7 +31,7 @@ import rhsm.config as config
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.certmgr import CertManager
-from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.injection import FEATURES, CERT_SORTER
 from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
         is_valid_server_info, MissingCaCertException, restart_virt_who
 from subscription_manager.gui import networkConfig
@@ -1058,7 +1058,8 @@ class AsyncBackend(object):
 
         # Using the current date time, we may need to expand this to work
         # with arbitrary dates for future entitling someday:
-        sorter = CertSorter(self.backend.product_dir,
+        sorter = FEATURES.require(CERT_SORTER,
+                self.backend.product_dir,
                 self.backend.entitlement_dir,
                 self.backend.uep)
 

@@ -38,7 +38,7 @@ from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.repolib import RepoLib, RepoFile
 from subscription_manager.certmgr import CertManager
-from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.injection import FEATURES, CERT_SORTER
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager import managerlib
@@ -1415,7 +1415,7 @@ class AttachCommand(CliCommand):
             # must be auto
             else:
                 # if we are green, we don't need to go to the server
-                self.sorter = CertSorter(self.product_dir, self.entitlement_dir, self.cp)
+                self.sorter = FEATURES.require(CERT_SORTER, self.product_dir, self.entitlement_dir, self.cp)
 
                 if self.sorter.is_valid():
                     print _("All installed products are covered by valid entitlements. "
