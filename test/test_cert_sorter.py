@@ -420,6 +420,7 @@ PARTIAL_STACK_ID = "1"
 def stub_prod_cert(pid):
     return StubProductCertificate(StubProduct(pid))
 
+
 class CertSorterTests(SubManFixture):
 
     def setUp(self):
@@ -547,4 +548,3 @@ class CertSorterTests(SubManFixture):
         self.assertEquals(["e"], sorter.future_products.keys())
 
         self.assertEquals(3, len(sorter.valid_entitlement_certs))
-

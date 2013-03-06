@@ -118,7 +118,7 @@ class CertSorter(object):
 
         try:
             status = self.uep.getCompliance(self.identity.uuid)
-        except RestlibException, e:
+        except RestlibException:
             # Indicates we may be talking to a very old candlepin server
             # which does not have the compliance API call. Report everything
             # as unknown in this case.

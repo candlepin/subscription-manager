@@ -20,7 +20,6 @@ from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
 from subscription_manager.branding import get_branding
 from subscription_manager.gui import widgets
 from subscription_manager.hwprobe import ClassicCheck
-from subscription_manager.validity import ValidProductDateRangeCalculator
 
 import gettext
 import gobject

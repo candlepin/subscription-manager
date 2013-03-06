@@ -182,4 +182,3 @@ class TestFacts(unittest.TestCase):
         self.assertTrue("system.certificate_version" in self.f.get_facts())
         self.assertEquals(facts.CERT_VERSION,
                 self.f.get_facts()['system.certificate_version'])
-

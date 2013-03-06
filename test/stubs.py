@@ -487,4 +487,3 @@ class StubCertSorter(CertSorter):
         # Override this method to just leave all fields uninitialized so
         # tests can do whatever they wish with them.
         pass
-

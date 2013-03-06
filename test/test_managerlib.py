@@ -530,7 +530,7 @@ class InstalledProductStatusTests(SubManFixture):
         product_directory = StubProductDirectory(pids=['product1'])
 
         stub_sorter = StubCertSorter(prod_dir=product_directory)
-        stub_sorter.unentitled_products['product1'] = None # prod cert unused here
+        stub_sorter.unentitled_products['product1'] = None  # prod cert unused here
         FEATURES.provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,

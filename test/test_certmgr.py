@@ -194,7 +194,6 @@ class TestCertmgr(SubManFixture):
         cert_build_mock.return_value = (mock.Mock(),
                 self.stub_ent_expires_tomorrow)
 
-
         self._stub_certificate_calls([self.stub_ent_expires_tomorrow])
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
                                   product_dir=self.stub_entitled_proddir)
