@@ -104,7 +104,9 @@ class RhsmConfigParser(SafeConfigParser):
             # we could also try to handle port name
             # strings (ie, 'http') here with getservbyname
         except (ValueError, TypeError):
-            raise ValueError("Integer value excepted")
+            raise ValueError(
+                "Section: %s, Property: %s - Integer value expected" \
+                % (section, prop))
         return value_int
 
     # Overriding this method to address
