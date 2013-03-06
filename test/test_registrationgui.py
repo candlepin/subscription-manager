@@ -15,7 +15,6 @@ class RegisterScreenTests(SubManFixture):
     def setUp(self):
         super(RegisterScreenTests, self).setUp()
         self.backend = StubBackend()
-#        self.consumer = Mock()
         expected_facts = {'fact1': 'one',
                           'fact2': 'two',
                           'system': '',

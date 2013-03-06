@@ -22,6 +22,159 @@ from datetime import timedelta, datetime
 from mock import Mock
 import simplejson as json
 
+def cert_list_has_product(cert_list, product_id):
+    for cert in cert_list:
+        for product in cert.products:
+            if product.id == product_id:
+                return True
+    return False
+
+
+INST_PID_1 = "37060"
+INST_PID_2 = "100000000000002"
+INST_PID_3 = "69"
+INST_PID_4 = 1004
+INST_PID_5 = 1005
+INST_PID_6 = 1006
+STACK_1 = 'stack1'
+STACK_2 = 'stack2'
+
+PARTIAL_STACK_ID = "1"
+
+
+def stub_prod_cert(pid):
+    return StubProductCertificate(StubProduct(pid))
+
+
+class CertSorterTests(SubManFixture):
+
+    def setUp(self):
+        SubManFixture.setUp(self)
+
+        # Setup mock product and entitlement certs:
+        self.prod_dir = StubProductDirectory(
+                pids=[INST_PID_1, INST_PID_2, INST_PID_3])
+
+        self.ent_dir = StubEntitlementDirectory([
+            StubEntitlementCertificate(StubProduct(INST_PID_2)),
+            StubEntitlementCertificate(StubProduct(INST_PID_3),
+                start_date=datetime.now() - timedelta(days=365),
+                end_date=datetime.now() - timedelta(days=2)),
+            StubEntitlementCertificate(StubProduct(INST_PID_4),
+                start_date=datetime.now() - timedelta(days=365),
+                end_date=datetime.now() + timedelta(days=365)),
+            StubEntitlementCertificate(StubProduct(INST_PID_5)),
+            # entitled, but not installed
+            StubEntitlementCertificate(StubProduct('not_installed_product')),
+            ])
+
+        self.mock_uep = StubUEP()
+        self.mock_uep.getCompliance = Mock(return_value=SAMPLE_COMPLIANCE_JSON)
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
+        self.sorter.is_registered = Mock(return_value=True)
+
+    def test_unregistered_status(self):
+        sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
+        sorter.is_registered = Mock(return_value=False)
+        self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
+
+    def test_server_has_no_compliance_api(self):
+        self.mock_uep = StubUEP()
+        self.mock_uep.getCompliance = Mock(
+                side_effect=RestlibException('boom'))
+        sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
+        sorter.is_registered = Mock(return_value=True)
+        self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
+
+    def test_unentitled_products(self):
+        self.assertEquals(1, len(self.sorter.unentitled_products))
+        self.assertTrue("69" in self.sorter.unentitled_products)
+
+    def test_valid_products(self):
+        self.assertEquals(1, len(self.sorter.valid_products))
+        self.assertTrue("37060" in self.sorter.valid_products)
+
+    def test_partially_valid_products(self):
+        self.assertEquals(1, len(self.sorter.partially_valid_products))
+        self.assertTrue("100000000000002" in
+                self.sorter.partially_valid_products)
+
+    def test_installed_products(self):
+        self.assertEquals(3, len(self.sorter.installed_products))
+        self.assertTrue(INST_PID_1 in self.sorter.installed_products)
+        self.assertTrue(INST_PID_2 in self.sorter.installed_products)
+        self.assertTrue(INST_PID_3 in self.sorter.installed_products)
+
+    def test_partial_stack(self):
+        self.assertEquals(1, len(self.sorter.partial_stacks))
+        self.assertTrue(PARTIAL_STACK_ID in self.sorter.partial_stacks)
+
+    def test_installed_mismatch_unentitled(self):
+        # Use a different product directory with something not present
+        # in the response from the server as an unentitled product:
+        prod_dir = StubProductDirectory(
+                pids=[INST_PID_1, INST_PID_2])
+        sorter = CertSorter(prod_dir, self.ent_dir, self.mock_uep)
+        self.assertFalse(INST_PID_3 in sorter.installed_products)
+        # Should get filtered out of unentitled products even though
+        # server reported it here:
+        self.assertFalse(INST_PID_3 in sorter.unentitled_products)
+
+    def test_missing_installed_product(self):
+        # Add a new installed product server doesn't know about:
+        prod_dir = StubProductDirectory(pids=[INST_PID_1, INST_PID_2,
+            INST_PID_3, "product4"])
+        sorter = CertSorter(prod_dir, self.ent_dir, self.mock_uep)
+        self.assertTrue('product4' in sorter.unentitled_products)
+
+    def test_no_compliant_until(self):
+        SAMPLE_COMPLIANCE_JSON['compliantUntil'] = None
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
+        self.sorter.is_registered = Mock(return_value=True)
+        self.assertTrue(self.sorter.compliant_until is None)
+        self.assertTrue(self.sorter.first_invalid_date is None)
+
+    def test_compliant_until(self):
+        compliant_until = self.sorter.compliant_until
+        self.assertEquals(2013, compliant_until.year)
+        self.assertEquals(2, compliant_until.month)
+        self.assertEquals(27, compliant_until.day)
+        self.assertEquals(16, compliant_until.hour)
+        self.assertEquals(03, compliant_until.minute)
+        self.assertEquals(42, compliant_until.second)
+
+    def test_first_invalid_date(self):
+        first_invalid = self.sorter.first_invalid_date
+        self.assertEquals(2013, first_invalid.year)
+        self.assertEquals(2, first_invalid.month)
+        self.assertEquals(28, first_invalid.day)
+
+    def test_scan_for_expired_or_future_products(self):
+        prod_dir = StubProductDirectory(pids=["a", "b", "c", "d", "e"])
+        ent_dir = StubEntitlementDirectory([
+            StubEntitlementCertificate(StubProduct("a")),
+            StubEntitlementCertificate(StubProduct("b")),
+            StubEntitlementCertificate(StubProduct("c")),
+            StubEntitlementCertificate(StubProduct("d"),
+                start_date=datetime.now() - timedelta(days=365),
+                end_date=datetime.now() - timedelta(days=2)),
+            StubEntitlementCertificate(StubProduct("e"),
+                start_date=datetime.now() + timedelta(days=365),
+                end_date=datetime.now() + timedelta(days=730)),
+            ])
+
+        sorter = StubCertSorter(prod_dir, ent_dir)
+        sorter.valid_products = {"a": StubProduct("a")}
+        sorter.partially_valid_products = {"b": StubProduct("b")}
+
+        sorter._scan_entitlement_certs()
+
+        self.assertEquals(["d"], sorter.expired_products.keys())
+        self.assertEquals(["e"], sorter.future_products.keys())
+
+        self.assertEquals(3, len(sorter.valid_entitlement_certs))
+
+
 SAMPLE_COMPLIANCE_JSON = json.loads("""
 {
   "date" : "2013-02-27T16:03:42.509+0000",
@@ -397,154 +550,3 @@ SAMPLE_COMPLIANCE_JSON = json.loads("""
 """)
 
 
-def cert_list_has_product(cert_list, product_id):
-    for cert in cert_list:
-        for product in cert.products:
-            if product.id == product_id:
-                return True
-    return False
-
-
-INST_PID_1 = "37060"
-INST_PID_2 = "100000000000002"
-INST_PID_3 = "69"
-INST_PID_4 = 1004
-INST_PID_5 = 1005
-INST_PID_6 = 1006
-STACK_1 = 'stack1'
-STACK_2 = 'stack2'
-
-PARTIAL_STACK_ID = "1"
-
-
-def stub_prod_cert(pid):
-    return StubProductCertificate(StubProduct(pid))
-
-
-class CertSorterTests(SubManFixture):
-
-    def setUp(self):
-        SubManFixture.setUp(self)
-
-        # Setup mock product and entitlement certs:
-        self.prod_dir = StubProductDirectory(
-                pids=[INST_PID_1, INST_PID_2, INST_PID_3])
-
-        self.ent_dir = StubEntitlementDirectory([
-            StubEntitlementCertificate(StubProduct(INST_PID_2)),
-            StubEntitlementCertificate(StubProduct(INST_PID_3),
-                start_date=datetime.now() - timedelta(days=365),
-                end_date=datetime.now() - timedelta(days=2)),
-            StubEntitlementCertificate(StubProduct(INST_PID_4),
-                start_date=datetime.now() - timedelta(days=365),
-                end_date=datetime.now() + timedelta(days=365)),
-            StubEntitlementCertificate(StubProduct(INST_PID_5)),
-            # entitled, but not installed
-            StubEntitlementCertificate(StubProduct('not_installed_product')),
-            ])
-
-        self.mock_uep = StubUEP()
-        self.mock_uep.getCompliance = Mock(return_value=SAMPLE_COMPLIANCE_JSON)
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
-        self.sorter.is_registered = Mock(return_value=True)
-
-    def test_unregistered_status(self):
-        sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
-        sorter.is_registered = Mock(return_value=False)
-        self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
-
-    def test_server_has_no_compliance_api(self):
-        self.mock_uep = StubUEP()
-        self.mock_uep.getCompliance = Mock(
-                side_effect=RestlibException('boom'))
-        sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
-        sorter.is_registered = Mock(return_value=True)
-        self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
-
-    def test_unentitled_products(self):
-        self.assertEquals(1, len(self.sorter.unentitled_products))
-        self.assertTrue("69" in self.sorter.unentitled_products)
-
-    def test_valid_products(self):
-        self.assertEquals(1, len(self.sorter.valid_products))
-        self.assertTrue("37060" in self.sorter.valid_products)
-
-    def test_partially_valid_products(self):
-        self.assertEquals(1, len(self.sorter.partially_valid_products))
-        self.assertTrue("100000000000002" in
-                self.sorter.partially_valid_products)
-
-    def test_installed_products(self):
-        self.assertEquals(3, len(self.sorter.installed_products))
-        self.assertTrue(INST_PID_1 in self.sorter.installed_products)
-        self.assertTrue(INST_PID_2 in self.sorter.installed_products)
-        self.assertTrue(INST_PID_3 in self.sorter.installed_products)
-
-    def test_partial_stack(self):
-        self.assertEquals(1, len(self.sorter.partial_stacks))
-        self.assertTrue(PARTIAL_STACK_ID in self.sorter.partial_stacks)
-
-    def test_installed_mismatch_unentitled(self):
-        # Use a different product directory with something not present
-        # in the response from the server as an unentitled product:
-        prod_dir = StubProductDirectory(
-                pids=[INST_PID_1, INST_PID_2])
-        sorter = CertSorter(prod_dir, self.ent_dir, self.mock_uep)
-        self.assertFalse(INST_PID_3 in sorter.installed_products)
-        # Should get filtered out of unentitled products even though
-        # server reported it here:
-        self.assertFalse(INST_PID_3 in sorter.unentitled_products)
-
-    def test_missing_installed_product(self):
-        # Add a new installed product server doesn't know about:
-        prod_dir = StubProductDirectory(pids=[INST_PID_1, INST_PID_2,
-            INST_PID_3, "product4"])
-        sorter = CertSorter(prod_dir, self.ent_dir, self.mock_uep)
-        self.assertTrue('product4' in sorter.unentitled_products)
-
-    def test_no_compliant_until(self):
-        SAMPLE_COMPLIANCE_JSON['compliantUntil'] = None
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
-        self.sorter.is_registered = Mock(return_value=True)
-        self.assertTrue(self.sorter.compliant_until is None)
-        self.assertTrue(self.sorter.first_invalid_date is None)
-
-    def test_compliant_until(self):
-        compliant_until = self.sorter.compliant_until
-        self.assertEquals(2013, compliant_until.year)
-        self.assertEquals(2, compliant_until.month)
-        self.assertEquals(27, compliant_until.day)
-        self.assertEquals(16, compliant_until.hour)
-        self.assertEquals(03, compliant_until.minute)
-        self.assertEquals(42, compliant_until.second)
-
-    def test_first_invalid_date(self):
-        first_invalid = self.sorter.first_invalid_date
-        self.assertEquals(2013, first_invalid.year)
-        self.assertEquals(2, first_invalid.month)
-        self.assertEquals(28, first_invalid.day)
-
-    def test_scan_for_expired_or_future_products(self):
-        prod_dir = StubProductDirectory(pids=["a", "b", "c", "d", "e"])
-        ent_dir = StubEntitlementDirectory([
-            StubEntitlementCertificate(StubProduct("a")),
-            StubEntitlementCertificate(StubProduct("b")),
-            StubEntitlementCertificate(StubProduct("c")),
-            StubEntitlementCertificate(StubProduct("d"),
-                start_date=datetime.now() - timedelta(days=365),
-                end_date=datetime.now() - timedelta(days=2)),
-            StubEntitlementCertificate(StubProduct("e"),
-                start_date=datetime.now() + timedelta(days=365),
-                end_date=datetime.now() + timedelta(days=730)),
-            ])
-
-        sorter = StubCertSorter(prod_dir, ent_dir)
-        sorter.valid_products = {"a": StubProduct("a")}
-        sorter.partially_valid_products = {"b": StubProduct("b")}
-
-        sorter._scan_entitlement_certs()
-
-        self.assertEquals(["d"], sorter.expired_products.keys())
-        self.assertEquals(["e"], sorter.future_products.keys())
-
-        self.assertEquals(3, len(sorter.valid_entitlement_certs))

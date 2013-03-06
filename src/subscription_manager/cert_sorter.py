@@ -97,7 +97,6 @@ class CertSorter(object):
 
         # Products which are installed and entitled sometime in the future.
         # Maps product ID to future entitlements.
-        # TODO: not in server call, calc locally?
         self.future_products = {}
 
         # The first date we're completely invalid from midnight to midnight:
@@ -122,7 +121,6 @@ class CertSorter(object):
             # Indicates we may be talking to a very old candlepin server
             # which does not have the compliance API call. Report everything
             # as unknown in this case.
-            # TODO: try to tell user they need to upgrade their server?
             return
 
         # TODO: we're now mapping product IDs to entitlement cert JSON,
