@@ -33,9 +33,7 @@ class FeatureBroker:
     def __init__(self):
         self.providers = {}
 
-    # TODO: remove args, we either get a method to call with args later, or an
-    # actual object here
-    def provide(self, feature, provider, *args, **kwargs):
+    def provide(self, feature, provider):
         """
         Provide an implementation for a feature.
 
