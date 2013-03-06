@@ -480,8 +480,8 @@ class StubCertLib:
 
 class StubCertSorter(CertSorter):
 
-    def __init__(self, prod_dir):
-        CertSorter.__init__(self, prod_dir, None, None)
+    def __init__(self, prod_dir, ent_dir=None):
+        CertSorter.__init__(self, prod_dir, ent_dir, None)
 
     def _parse_server_status(self):
         # Override this method to just leave all fields uninitialized so

@@ -103,8 +103,6 @@ class CertSorter(object):
         # Will be None if we're not currently valid for the date requested.
         self.first_invalid_date = None
 
-        # TODO: Not in server status call but can be calculated locally
-        # or just let the one place it's used figure it out on it's own
         self.valid_entitlement_certs = []
 
         self._parse_server_status()
@@ -162,7 +160,7 @@ class CertSorter(object):
                 continue
             self.unentitled_products[unentitled_pid] = prod_cert
 
-        self._scan_for_expired_or_future_products()
+        self._scan_entitlement_certs()
 
         log.debug("valid entitled products: %s" % self.valid_products.keys())
         log.debug("expired entitled products: %s" % self.expired_products.keys())
@@ -171,6 +169,45 @@ class CertSorter(object):
         log.debug("future products: %s" % self.future_products.keys())
         log.debug("partial stacks: %s" % self.partial_stacks.keys())
         log.debug("entitlements valid until: %s" % self.compliant_until)
+
+    def _scan_entitlement_certs(self):
+        """
+        Scan entitlement certs looking for unentitled products which may
+        have expired, or be entitled in future.
+
+        Also builds up a list of valid certs today. (used when determining
+        if anything is in it's warning period)
+        """
+        # Subtract out the valid and partially valid items from the
+        # list of installed products
+        unknown_products = dict((k, v) for (k, v) in self.installed_products.items()
+            if k not in self.valid_products.keys()
+            and k not in self.partially_valid_products.keys())
+        ent_certs = self.entitlement_dir.list()
+
+        on_date = datetime.now(GMT())
+        for ent_cert in ent_certs:
+
+            # Builds the list of valid entitlement certs today:
+            if ent_cert.is_valid():
+                print(ent_cert.products[0].name)
+                self.valid_entitlement_certs.append(ent_cert)
+
+            for product in ent_cert.products:
+                if product.id in unknown_products.keys():
+                    # If the entitlement starts after the date we're checking, we
+                    # consider this a future entitlement. Technically it could be
+                    # partially stacked on that date, but we cannot determine that
+                    # without recursively cert sorting again on that date.
+                    if ent_cert.valid_range.begin() > on_date:
+                        product_dict = self.future_products
+                    # Check if entitlement has already expired:
+                    elif ent_cert.valid_range.end() < on_date:
+                        product_dict = self.expired_products
+                    else:
+                        continue
+
+                    product_dict.setdefault(product.id, []).append(ent_cert)
 
     def is_valid(self):
         """
@@ -200,32 +237,6 @@ class CertSorter(object):
             return EXPIRED
         if product_id in self.unentitled_products:
             return NOT_SUBSCRIBED
-
-    def _scan_for_expired_or_future_products(self):
-        # Subtract out the valid and partially valid items from the
-        # list of installed products
-        unknown_products = dict((k, v) for (k, v) in self.installed_products.items()
-            if k not in self.valid_products.keys()
-            and k not in self.partially_valid_products.keys())
-        ent_certs = self.entitlement_dir.list()
-
-        on_date = datetime.now(GMT())
-        for ent_cert in ent_certs:
-            for product in ent_cert.products:
-                if product.id in unknown_products.keys():
-                    # If the entitlement starts after the date we're checking, we
-                    # consider this a future entitlement. Technically it could be
-                    # partially stacked on that date, but we cannot determine that
-                    # without recursively cert sorting again on that date.
-                    if ent_cert.valid_range.begin() > on_date:
-                        product_dict = self.future_products
-                    # Check if entitlement has already expired:
-                    elif ent_cert.valid_range.end() < on_date:
-                        product_dict = self.expired_products
-                    else:
-                        continue
-
-                    product_dict.setdefault(product.id, []).append(ent_cert)
 
 
 class StackingGroupSorter(object):

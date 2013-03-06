@@ -15,7 +15,7 @@
 from fixture import SubManFixture
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
     StubEntitlementDirectory, StubProductDirectory, \
-    StubUEP
+    StubUEP, StubCertSorter
 from subscription_manager.cert_sorter import CertSorter, UNKNOWN
 from datetime import timedelta, datetime
 from mock import Mock
@@ -528,24 +528,14 @@ class CertSorterTests(SubManFixture):
                 end_date=datetime.now() + timedelta(days=730)),
             ])
 
-        mock_uep = StubUEP()
-        mock_uep.getCompliance = Mock(return_value=json.loads("""{
-            "date" : "2013-03-04T22:09:29.506+0000",
-            "compliantUntil" : "2013-03-04T22:09:29.506+0000",
-            "nonCompliantProducts" : [],
-            "compliantProducts" : {},
-            "partiallyCompliantProducts" : {},
-            "partialStacks" : {},
-            "status" : "invalid",
-            "compliant" : false
-            }"""))
-
-        sorter = CertSorter(prod_dir, ent_dir, mock_uep)
+        sorter = StubCertSorter(prod_dir, ent_dir)
         sorter.valid_products = {"a": StubProduct("a")}
         sorter.partially_valid_products = {"b": StubProduct("b")}
 
-        sorter._scan_for_expired_or_future_products()
+        sorter._scan_entitlement_certs()
 
         self.assertEquals(["d"], sorter.expired_products.keys())
         self.assertEquals(["e"], sorter.future_products.keys())
+
+        self.assertEquals(3, len(sorter.valid_entitlement_certs))
 
