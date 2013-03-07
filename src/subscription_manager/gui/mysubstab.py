@@ -43,8 +43,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
     widget_names = widgets.SubscriptionManagerTab.widget_names + \
                     ['details_box', 'unsubscribe_button']
 
-    # Are facts required here? [mstead]
-    def __init__(self, backend, facts, parent_win,
+    def __init__(self, backend, parent_win,
                  ent_dir, prod_dir):
         """
         Create a new 'My Subscriptions' tab.
@@ -52,7 +51,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         super(MySubscriptionsTab, self).__init__('mysubs.glade')
         self.backend = backend
         self.identity = FEATURES.require(IDENTITY)
-        self.facts = facts
         self.parent_win = parent_win
         self.entitlement_dir = ent_dir
         self.product_dir = prod_dir

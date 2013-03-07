@@ -174,7 +174,6 @@ class MainWindow(widgets.GladeWidget):
         self.backend = backend or Backend()
         self.identity = FEATURES.require(IDENTITY)
 
-        # FIXME: remove use of consumer to other gui dialogs
         self.facts = facts or Facts(self.backend.entitlement_dir,
                 self.backend.product_dir)
 
@@ -211,7 +210,7 @@ class MainWindow(widgets.GladeWidget):
                                                   self,
                                                   ent_dir=self.entitlement_dir,
                                                   prod_dir=self.product_dir)
-        self.my_subs_tab = MySubscriptionsTab(self.backend, self.facts,
+        self.my_subs_tab = MySubscriptionsTab(self.backend,
                                               self.main_window,
                                               ent_dir=self.entitlement_dir,
                                               prod_dir=self.product_dir)
