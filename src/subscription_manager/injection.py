@@ -46,6 +46,14 @@ class FeatureBroker:
         self.providers[feature] = provider
 
     def require(self, feature, *args, **kwargs):
+        """
+        Require an implementation for a feature. Can be used to create objects
+        without requiring an exact implementation to use.
+
+        Depending on how the feature was configured during initialization, this
+        may return a class, or potentially a singleton object. (in which case
+        the args passed would be ignored)
+        """
         try:
             provider = self.providers[feature]
             if callable(provider):
