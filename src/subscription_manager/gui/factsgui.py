@@ -19,6 +19,7 @@ import gtk
 from subscription_manager.injection import FEATURES, IDENTITY
 from subscription_manager.gui.utils import linkify, handle_gui_exception
 from subscription_manager.gui import widgets
+from subscription_manager.managerlib import enhance_facts
 
 import gettext
 _ = gettext.gettext
@@ -91,8 +92,8 @@ class SystemFactsDialog(widgets.GladeWidget):
 
         # make sure we get fresh facts, since entitlement validity status could         # change
         system_facts_dict = self.facts.get_facts()
+        enhance_facts(system_facts_dict, self.identity)
 
-        # we dont do client side entitlement status now
         system_facts = system_facts_dict.items()
 
         system_facts.sort()
