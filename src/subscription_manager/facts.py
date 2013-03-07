@@ -21,10 +21,10 @@ _ = gettext.gettext
 import rhsm.config
 from subscription_manager import certdirectory
 from subscription_manager.cache import CacheManager
+from subscription_manager import plugins
 from datetime import datetime
 
 log = logging.getLogger('rhsm-app.' + __name__)
-
 
 # Hardcoded value for the version of certificates this version of the client
 # prefers:
@@ -52,6 +52,9 @@ class Facts(CacheManager):
         # fact churn, so we report it, but ignore it as an indicator
         # that we need to update
         self.graylist = ['cpu.cpu_mhz']
+
+        # plugin manager so we can add custom facst via plugin
+        self.plugin_manager = plugins.getPluginManager()
 
     def get_last_update(self):
         try:
@@ -99,6 +102,7 @@ class Facts(CacheManager):
             facts.update({"system.certificate_version": CERT_VERSION})
 
             facts.update(self._load_custom_facts())
+            self.plugin_manager.run('post_facts_collection', facts=facts)
             self.facts = facts
         return self.facts
 

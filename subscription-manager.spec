@@ -1,5 +1,9 @@
 # Prefer systemd over sysv on Fedora 17+ and RHEL 7+
 %define use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
+%define use_dateutil (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 6)
+
+
+%define rhsm_plugins_dir   /usr/share/rhsm-plugins
 
 # A couple files are for RHEL 5 only:
 %if 0%{?rhel} == 5
@@ -26,13 +30,24 @@ Requires:  python-ethtool
 Requires:  python-simplejson
 Requires:  python-iniparse
 Requires:  pygobject2
-Requires:  python-dateutil
 Requires:  virt-what
 Requires:  python-rhsm >= 1.8.7
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 Requires:  usermode
+# dateutil is better than our version
+# built using PyXML utils, but PyXML is
+# deprecated for f17+, and dateutil doesn't
+# exist on rhel5
+%if %use_dateutil
+# we are building for fedora >= 12 or rhel >= 6
+Requires: python-dateutil
+%else
+Requires: PyXML
+%endif
 
+
+%{?el5:Requires: rhn-setup-gnome >= 0.4.20-49}
 # There's no dmi to read on these arches, so don't pull in this dep.
 %ifnarch ppc ppc64 s390 s390x
 Requires:  python-dmidecode
@@ -175,41 +190,50 @@ rm -rf %{buildroot}
 
 %dir %{_datadir}/rhsm
 %dir %{_datadir}/rhsm/subscription_manager
-%{_datadir}/rhsm/subscription_manager/__init__.py*
-%{_datadir}/rhsm/subscription_manager/i18n.py*
-%{_datadir}/rhsm/subscription_manager/i18n_optparse.py*
-%{_datadir}/rhsm/subscription_manager/cli.py*
-%{_datadir}/rhsm/subscription_manager/managercli.py*
-%{_datadir}/rhsm/subscription_manager/managerlib.py*
+
 %{_datadir}/rhsm/subscription_manager/async.py*
-%{_datadir}/rhsm/subscription_manager/logutil.py*
-%{_datadir}/rhsm/subscription_manager/repolib.py*
+%{_datadir}/rhsm/subscription_manager/base_plugin.py*
+%{_datadir}/rhsm/subscription_manager/branding
+%{_datadir}/rhsm/subscription_manager/cache.py*
+%{_datadir}/rhsm/subscription_manager/certdirectory.py*
+%{_datadir}/rhsm/subscription_manager/certlib.py*
+%{_datadir}/rhsm/subscription_manager/certmgr.py*
+%{_datadir}/rhsm/subscription_manager/cert_sorter.py*
+%{_datadir}/rhsm/subscription_manager/cli.py*
+%{_datadir}/rhsm/subscription_manager/factlib.py*
+%{_datadir}/rhsm/subscription_manager/facts.py*
+%{_datadir}/rhsm/subscription_manager/hwprobe.py*
+%{_datadir}/rhsm/subscription_manager/isodate.py*
+%{_datadir}/rhsm/subscription_manager/i18n_optparse.py*
+%{_datadir}/rhsm/subscription_manager/i18n.py*
 %{_datadir}/rhsm/subscription_manager/identity.py*
 %{_datadir}/rhsm/subscription_manager/injection.py*
 %{_datadir}/rhsm/subscription_manager/injectioninit.py*
+%{_datadir}/rhsm/subscription_manager/__init__.py*
+%{_datadir}/rhsm/subscription_manager/jsonwrapper.py*
+%{_datadir}/rhsm/subscription_manager/listing.py*
+%{_datadir}/rhsm/subscription_manager/lock.py*
+%{_datadir}/rhsm/subscription_manager/logutil.py*
+%{_datadir}/rhsm/subscription_manager/managercli.py*
+%{_datadir}/rhsm/subscription_manager/managerlib.py*
+%{_datadir}/rhsm/subscription_manager/plugins.py*
+%{_datadir}/rhsm/subscription_manager/productid.py*
+%{_datadir}/rhsm/subscription_manager/quantity.py*
+%{_datadir}/rhsm/subscription_manager/release.py*
+%{_datadir}/rhsm/subscription_manager/repolib.py*
+%{_datadir}/rhsm/subscription_manager/utils.py*
+%{_datadir}/rhsm/subscription_manager/validity.py*
 
+# subscription-manager plugins
+%dir %{rhsm_plugins_dir}
+%dir %{_sysconfdir}/rhsm/pluginconf.d
+# add default plugins here when we have some
+
+# yum plugins
 # Using _prefix + lib here instead of libdir as that evaluates to /usr/lib64 on x86_64,
 # but yum plugins seem to normally be sent to /usr/lib/:
 %{_prefix}/lib/yum-plugins/subscription-manager.py*
 %{_prefix}/lib/yum-plugins/product-id.py*
-
-%{_datadir}/rhsm/subscription_manager/certlib.py*
-%{_datadir}/rhsm/subscription_manager/certdirectory.py*
-%{_datadir}/rhsm/subscription_manager/cert_sorter.py*
-%{_datadir}/rhsm/subscription_manager/validity.py*
-%{_datadir}/rhsm/subscription_manager/hwprobe.py*
-%{_datadir}/rhsm/subscription_manager/lock.py*
-%{_datadir}/rhsm/subscription_manager/facts.py*
-%{_datadir}/rhsm/subscription_manager/factlib.py*
-%{_datadir}/rhsm/subscription_manager/productid.py*
-%{_datadir}/rhsm/subscription_manager/cache.py*
-%{_datadir}/rhsm/subscription_manager/branding
-%{_datadir}/rhsm/subscription_manager/quantity.py*
-%{_datadir}/rhsm/subscription_manager/jsonwrapper.py*
-%{_datadir}/rhsm/subscription_manager/certmgr.py*
-%{_datadir}/rhsm/subscription_manager/listing.py*
-%{_datadir}/rhsm/subscription_manager/release.py*
-%{_datadir}/rhsm/subscription_manager/utils.py*
 
 
 %attr(755,root,root) %{_sbindir}/subscription-manager

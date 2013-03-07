@@ -5,7 +5,7 @@ import rhsm_display
 rhsm_display.set_display()
 
 from subscription_manager.gui import contract_selection
-from subscription_manager import managerlib
+from subscription_manager import isodate
 
 
 def stubSelectedCallback(self, pool):
@@ -20,8 +20,8 @@ class ContractSelection(unittest.TestCase):
     pool = {'productName': 'SomeProduct',
             'consumed': '3',
             'quantity': '10',
-            'startDate': datetime.datetime.now(tz=managerlib.ServerTz(0)).isoformat(),
-            'endDate': datetime.datetime.now(tz=managerlib.ServerTz(0)).isoformat(),
+            'startDate': datetime.datetime.now(tz=isodate.ServerTz(0)).isoformat(),
+            'endDate': datetime.datetime.now(tz=isodate.ServerTz(0)).isoformat(),
             'contractNumber': 'contractNumber',
             'attributes': [],
             'productAttributes': []}
