@@ -117,17 +117,6 @@ class ConsumerIdentity:
              self.getConsumerId())
 
 
-class IdentityOther(object):
-    """
-    New-style identity to phase out the use of classmethod ConsumerIdentity class.
-    """
-    def __init__(self):
-        self.uuid = ConsumerIdentity.existsAndValid()
-
-    def exists_and_valid(self):
-        return ConsumerIdentity.existsAndValid()
-
-
 class Identity(object):
     """
     Wrapper for sharing consumer identity without constant reloading.

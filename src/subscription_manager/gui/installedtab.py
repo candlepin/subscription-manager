@@ -60,8 +60,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.tab_icon = tab_icon
 
         self.identity = FEATURES.require(IDENTITY)
-        #FIXME: remove this
-        #self.consumer = identity
         self.product_dir = prod_dir
         self.entitlement_dir = ent_dir
 
