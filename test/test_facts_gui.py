@@ -105,11 +105,8 @@ class FactDialogTests(SubManFixture):
             return id_mock
         FEATURES.provide(IDENTITY, new_identity)
 
-#        sys.stdout = sys.__stdout__
         dialog = factsgui.SystemFactsDialog(self.backend,
                                             self.stub_facts)
-#        dialog = factsgui.SystemFactsDialog(self.backend, unregistered_consumer,
-#                self.stub_facts)
         dialog.show()
 
         enabled = dialog.update_button.get_property('sensitive')
