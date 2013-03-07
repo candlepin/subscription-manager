@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.23
+Version: 1.1.23.0
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -105,6 +105,7 @@ This package contains the firstboot screens for subscription manager.
 Summary: Migration scripts for moving to certificate based subscriptions
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
+Requires: rhnlib
 
 %description -n subscription-manager-migration
 This package contains scripts that aid in moving to certificate based
