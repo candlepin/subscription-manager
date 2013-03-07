@@ -12,7 +12,6 @@
 # in this software or its documentation.
 #
 
-from injection import FEATURES, IDENTITY
 from datetime import datetime, timedelta
 import logging
 
@@ -20,6 +19,7 @@ from rhsm.certificate import GMT
 from rhsm.connection import RestlibException
 
 from subscription_manager.utils import parseDate
+from subscription_manager.injection import FEATURES, IDENTITY
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -187,8 +187,8 @@ class CertSorter(object):
         # Subtract out the valid and partially valid items from the
         # list of installed products
         unknown_products = dict((k, v) for (k, v) in self.installed_products.items()
-            if k not in self.valid_products.keys()
-            and k not in self.partially_valid_products.keys())
+                                if k not in self.valid_products.keys()
+                                and k not in self.partially_valid_products.keys())
         ent_certs = self.entitlement_dir.list()
 
         on_date = datetime.now(GMT())
