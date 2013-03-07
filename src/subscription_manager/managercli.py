@@ -43,6 +43,7 @@ from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
+from subscription_manager import plugins
 from subscription_manager.quantity import valid_quantity
 from subscription_manager.release import ReleaseBackend
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
@@ -55,6 +56,7 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
+
 
 NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
 LIBRARY_ENV_NAME = "library"
@@ -178,8 +180,11 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
         cp.updateConsumer(consumer_uuid, service_level=service_level)
         print(_("Service level set to: %s") % service_level)
 
+    plugin_manager = plugins.getPluginManager()
     try:
-        cp.bind(consumer_uuid)  # new style
+        plugin_manager.run("pre_subscribe", consumer_uuid=consumer_uuid)
+        ents = cp.bind(consumer_uuid)  # new style
+        plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid, entitlement_data=ents)
 
     except Exception, e:
         log.warning("Error during auto-attach.")
@@ -220,6 +225,8 @@ class CliCommand(AbstractCLICommand):
 
         self.client_versions = self._default_client_version()
         self.server_versions = self._default_server_version()
+
+        self.plugin_manager = plugins.getPluginManager()
 
     def _request_validity_check(self):
         try:
@@ -1027,6 +1034,10 @@ class RegisterCommand(UserPassCommand):
             else:
                 admin_cp = self._get_UEP()
 
+            facts_dic = self.facts.get_facts()
+
+            self.plugin_manager.run("pre_register_consumer", name=consumername,
+                                    facts=facts_dic)
             if self.options.consumerid:
                 #TODO remove the username/password
                 log.info("Registering as existing consumer: %s" %
@@ -1040,11 +1051,12 @@ class RegisterCommand(UserPassCommand):
                         self.options.environment)
 
                 consumer = admin_cp.registerConsumer(name=consumername,
-                     type=self.options.consumertype, facts=self.facts.get_facts(),
+                     type=self.options.consumertype, facts=facts_dic,
                      owner=owner_key, environment=environment_id,
                      keys=self.options.activation_keys,
                      installed_products=self.installed_mgr.format_for_server())
-
+            self.plugin_manager.run("post_register_consumer", consumer=consumer,
+                                    facts=facts_dic)
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)
@@ -1392,7 +1404,9 @@ class AttachCommand(CliCommand):
                         # odd html strings will cause issues, reject them here.
                         if (pool.find("#") >= 0):
                             systemExit(-1, _("Please enter a valid numeric pool ID."))
+                        self.plugin_manager.run("pre_subscribe", consumer_uuid=consumer_uuid)
                         ents = self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
+                        self.plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid, entitlement_data=ents)
                         # Usually just one, but may as well be safe:
                         for ent in ents:
                             pool_json = ent['pool']
@@ -1704,6 +1718,56 @@ class ImportCertCommand(CliCommand):
 
     def require_connection(self):
         return False
+
+
+class PluginsCommand(CliCommand):
+    def __init__(self, ent_dir=None, prod_dir=None):
+        shortdesc = _("View and configure subscription-manager plugins")
+        super(PluginsCommand, self).__init__("plugins", shortdesc, False, ent_dir,
+                                           prod_dir)
+
+        self.parser.add_option("--list", action="store_true",
+                                help=_("list subscription-manager plugins"))
+        self.parser.add_option("--listslots", action="store_true",
+                                help=_("list subscription-manager plugin slots"))
+        self.parser.add_option("--listhooks", action="store_true",
+                                help=_("list subscription-manager plugin hooks"))
+        self.parser.add_option("--verbose", action="store_true",
+                               default=False,
+                               help=_("show verbose plugin info"))
+
+    def _validate_options(self):
+        # default to list
+        if not (self.options.list or
+                self.options.listslots or
+                 self.options.listhooks):
+            self.options.list = True
+
+    def _list_plugins(self):
+        for plugin_class in self.plugin_manager.get_plugins().values():
+            enabled = _("disabled")
+            if plugin_class.conf.is_plugin_enabled():
+                enabled = _("enabled")
+            print "%s: %s" % (plugin_class.get_plugin_key(), enabled)
+            if self.options.verbose:
+                print plugin_class.conf
+
+    def _do_command(self):
+        self._validate_options()
+
+        if self.options.list:
+            self._list_plugins()
+
+        if self.options.listslots:
+            for slot in self.plugin_manager.get_slots():
+                print slot
+
+        if self.options.listhooks:
+            # get_slots is nicely sorted for presentation
+            for slot in self.plugin_manager.get_slots():
+                print slot
+                for hook in sorted(self.plugin_manager._slot_to_funcs[slot]):
+                    print "\t%s.%s" % (hook.im_class.get_plugin_key(), hook.__name__)
 
 
 class ReposCommand(CliCommand):
@@ -2095,7 +2159,7 @@ class ManagerCLI(CLI):
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
                        RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, ReleaseCommand, \
                        EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand, \
-                       VersionCommand, RemoveCommand, AttachCommand]
+                       VersionCommand, RemoveCommand, AttachCommand, PluginsCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):

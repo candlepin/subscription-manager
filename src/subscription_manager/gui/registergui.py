@@ -33,6 +33,7 @@ from subscription_manager.certmgr import CertManager
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
         is_valid_server_info, MissingCaCertException, restart_virt_who
+from subscription_manager import plugins
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
 
@@ -939,6 +940,7 @@ class AsyncBackend(object):
 
     def __init__(self, backend):
         self.backend = backend
+        self.plugin_manager = plugins.getPluginManager()
         self.queue = Queue.Queue()
 
     def _get_owner_list(self, username, callback):
@@ -983,10 +985,15 @@ class AsyncBackend(object):
         """
         try:
             installed_mgr = InstalledProductsManager()
+
+            self.plugin_manager.run("pre_register_consumer", name=name,
+                facts=facts.get_facts())
             retval = self.backend.admin_uep.registerConsumer(name=name,
                     facts=facts.get_facts(), owner=owner, environment=env,
                     keys=activation_keys,
                     installed_products=installed_mgr.format_for_server())
+            self.plugin_manager.run("post_register_consumer", consumer=retval,
+                facts=facts.get_facts())
 
             # Facts and installed products went out with the registration
             # request, manually write caches to disk:
@@ -1029,7 +1036,9 @@ class AsyncBackend(object):
                 pool_id = pool_quantity['pool']['id']
                 quantity = pool_quantity['quantity']
                 log.info("  pool %s quantity %s" % (pool_id, quantity))
-                self.backend.uep.bindByEntitlementPool(uuid, pool_id, quantity)
+                self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid)
+                ents = self.backend.uep.bindByEntitlementPool(uuid, pool_id, quantity)
+                self.plugin_manager.run("post_subscribe", consumer_uuid=uuid, entitlement_data=ents)
             managerlib.fetch_certificates(self.backend)
         except Exception, e:
             # Going to try to update certificates just in case we errored out
