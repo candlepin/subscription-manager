@@ -12,8 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from subscription_manager.injection import FEATURES, IDENTITY, CERT_SORTER, \
-        PRODUCT_DATE_RANGE_CALCULATOR
+import subscription_manager.injection as inj
 from subscription_manager import managerlib
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
     NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
@@ -59,13 +58,13 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         self.tab_icon = tab_icon
 
-        self.identity = FEATURES.require(IDENTITY)
+        self.identity = inj.FEATURES.require(inj.IDENTITY)
         self.product_dir = prod_dir
         self.entitlement_dir = ent_dir
 
         self.facts = facts
         self.backend = backend
-        self.cs = FEATURES.require(CERT_SORTER, prod_dir, ent_dir,
+        self.cs = inj.FEATURES.require(inj.CERT_SORTER, prod_dir, ent_dir,
                 self.backend.uep)
 
         # Product column
@@ -148,9 +147,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def update_products(self):
         self.store.clear()
-        self.cs = FEATURES.require(CERT_SORTER, self.product_dir,
+        self.cs = inj.FEATURES.require(inj.CERT_SORTER, self.product_dir,
                 self.entitlement_dir, self.backend.uep)
-        range_calculator = FEATURES.require(PRODUCT_DATE_RANGE_CALCULATOR,
+        range_calculator = inj.FEATURES.require(inj.PRODUCT_DATE_RANGE_CALCULATOR,
                 self.backend.uep)
         for product_cert in self.product_dir.list():
             for product in product_cert.products:
@@ -309,7 +308,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.set_registered(is_registered)
 
         # Look for products which have invalid entitlements
-        sorter = FEATURES.require(CERT_SORTER, self.product_dir, self.entitlement_dir,
+        sorter = inj.FEATURES.require(inj.CERT_SORTER, self.product_dir, self.entitlement_dir,
                 self.backend.uep)
 
         warn_count = len(sorter.expired_products) + \
