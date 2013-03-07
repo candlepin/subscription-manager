@@ -21,7 +21,7 @@ from yum.plugins import TYPE_CORE
 
 sys.path.append('/usr/share/rhsm')
 
-from subscription_manager.injection_init import init_dep_injection
+from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
 from subscription_manager import logutil

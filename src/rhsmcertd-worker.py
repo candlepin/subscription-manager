@@ -21,7 +21,7 @@ import logging
 
 from rhsm import connection
 
-from subscription_manager.injection_init import init_dep_injection
+from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
 from subscription_manager import certmgr
