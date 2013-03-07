@@ -27,6 +27,7 @@ _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
 from subscription_manager import managerlib
+from subscription_manager import plugins
 
 from subscription_manager.gui import widgets
 from subscription_manager import async
@@ -58,7 +59,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.facts = facts
 
         self.pool_stash = managerlib.PoolStash(self.backend,
-                                               self.facts)
+
+        self.plugin_manager = plugins.getPluginManager()
 
         today = datetime.date.today()
         self.date_picker = widgets.DatePicker(today)
@@ -363,7 +365,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self._contract_selection_cancelled()
         try:
+            self.plugin_manager.run("pre_subscribe", consumer_uuid=self.identity.uuid)
             self.backend.uep.bindByEntitlementPool(self.identity.uuid, pool['id'], quantity)
+            self.plugin_manager.run("post_subscribe", consumer_uuid=self.identity.uuid, entitlement_data=ents)
             managerlib.fetch_certificates(self.backend)
 
         except Exception, e:

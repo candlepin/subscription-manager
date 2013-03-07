@@ -25,6 +25,7 @@ from subscription_manager.facts import Facts
 from subscription_manager.gui.firstboot_base import RhsmFirstbootModule
 
 from subscription_manager.gui.utils import handle_gui_exception
+from subscription_manager import plugins
 from subscription_manager.utils import remove_scheme
 from subscription_manager.gui.autobind import \
         ServiceLevelNotSupportedException, NoProductsException, \
@@ -178,9 +179,9 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
                 200.1, 109.10)
 
         backend = managergui.Backend()
-
-        registergui.RegisterScreen.__init__(self, backend,
-                managergui.Consumer(), Facts())
+        self.plugin_manager = plugins.getPluginManager()
+        registergui.RegisterScreen.__init__(self, backend, managergui.Consumer(),
+                self.plugin_manager, Facts())
 
         #insert our new screens
         screen = SelectSLAScreen(self, backend)

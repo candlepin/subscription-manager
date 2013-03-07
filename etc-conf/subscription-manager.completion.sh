@@ -121,6 +121,13 @@ _subscription_manager_orgs()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
+_subscription_manager_plugins()
+{
+  local opts="--list --listslots --listhooks
+              ${_subscription_manager_common_opts}"
+  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
 _subscription_manager_redeem()
 {
   local opts="--email --locale
@@ -163,7 +170,7 @@ _subscription_manager()
 
   # top-level commands and options
   opts="list refresh register subscribe unregister unsubscribe clean config environments
-  facts identity import orgs release redeem repos service-level attach remove"
+  facts identity import orgs plugins release redeem repos service-level attach remove"
 
   case "${first}" in
       list|\
@@ -177,6 +184,7 @@ _subscription_manager()
       identity|\
       import|\
       orgs|\
+      plugins|\
       redeem|\
       release|\
       repos|\

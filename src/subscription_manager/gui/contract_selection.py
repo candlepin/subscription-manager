@@ -26,7 +26,7 @@ _ = gettext.gettext
 
 from subscription_manager.gui import widgets
 from subscription_manager.quantity import allows_multi_entitlement
-from subscription_manager import managerlib
+from subscription_manager import isodate
 
 prefix = os.path.dirname(__file__)
 CONTRACT_SELECTION_GLADE = os.path.join(prefix, "data/contract_selection.glade")
@@ -137,8 +137,8 @@ class ContractSelectionWindow(object):
 
         row = [pool['contractNumber'],
                 "%s / %s" % (pool['consumed'], quantity),
-               managerlib.parseDate(pool['startDate']),
-               managerlib.parseDate(pool['endDate']),
+               isodate.parse_date(pool['startDate']),
+               isodate.parse_date(pool['endDate']),
                default_quantity_value,
                pool['productName'], pool,
                PoolWrapper(pool).is_virt_only(),
