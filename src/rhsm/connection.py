@@ -730,6 +730,13 @@ class UEPConnection:
         method = '/consumers/%s' % self.sanitize(uuid)
         return self.conn.request_get(method)
 
+    def getCompliance(self, uuid):
+        """
+        Returns a compliance object with compliance status information
+        """
+        method = '/consumers/%s/compliance' % self.sanitize(uuid)
+        return self.conn.request_get(method)
+
     def getOwner(self, uuid):
         """
         Returns an owner object with pem/key for existing consumers
