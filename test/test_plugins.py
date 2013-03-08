@@ -152,6 +152,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
 
     def test_empty_mock_module(self):
         mock_module = mock.Mock()
+        mock_module.__name__ = 'mock_module'
         self.base_manager.add_plugins_from_module(mock_module)
         # that was not a module, nor a plugin module, nor had any plugin classes
         # so we better not have any plugins found
