@@ -133,7 +133,7 @@ class TestReleaseBackend(unittest.TestCase):
                                        ["rhel-5-server"])
         self.assertTrue(icr)
 
-    def  test_is_correct_rhel_content_sub_variant_of_product(self):
+    def test_is_correct_rhel_content_sub_variant_of_product(self):
         icr = self.rb._is_correct_rhel(["rhel-5-server"],
                                        ["rhel-5"])
         self.assertTrue(icr)

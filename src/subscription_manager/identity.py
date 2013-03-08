@@ -52,8 +52,8 @@ class ConsumerIdentity:
 
     @classmethod
     def exists(cls):
-        return (os.path.exists(cls.keypath()) and \
-                 os.path.exists(cls.certpath()))
+        return (os.path.exists(cls.keypath()) and
+                os.path.exists(cls.certpath()))
 
     @classmethod
     def existsAndValid(cls):

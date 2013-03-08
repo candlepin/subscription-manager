@@ -299,10 +299,10 @@ class TestListCommand(TestCliProxyCommand):
         listCommand = managercli.ListCommand()
 
         def create_pool_list(self, one, two, three, four):
-            return [{'productName':'dummy-name', 'productId':'dummy-id', 'id':'888888888888',\
-                      'attributes':[{'name':'is_virt_only', 'value':'false'}], 'quantity':'4',\
-                      'service_level':'', 'service_type':'', 'multi-entitlement':'false',\
-                      'endDate':''}]
+            return [{'productName': 'dummy-name', 'productId': 'dummy-id',
+                     'id': '888888888888', 'attributes': [{'name': 'is_virt_only', 'value': 'false'}],
+                     'quantity': '4', 'service_level': '', 'service_type': '',
+                     'multi-entitlement': 'false', 'endDate': ''}]
         managerlib.getAvailableEntitlements = create_pool_list
 
         mc_exists_and_valid.return_value = True
@@ -335,7 +335,7 @@ class TestListCommand(TestCliProxyCommand):
         ent_dir = StubEntitlementDirectory([self.cert_with_service_level])
         try:
             self.cc.print_consumed(ent_dir, service_level="NotFound")
-            self.fail("Should have exited since an entitlement with the " + \
+            self.fail("Should have exited since an entitlement with the " +
                       "specified service level does not exist.")
         except SystemExit:
             pass
@@ -345,15 +345,15 @@ class TestListCommand(TestCliProxyCommand):
         self.cc.print_consumed(ent_dir, service_level="Premium")
 
     def test_filter_only_specified_service_level(self):
-        pools = [{'service_level':'Level1'},
-                 {'service_level':'Level2'},
-                 {'service_level':'Level3'}]
+        pools = [{'service_level': 'Level1'},
+                 {'service_level': 'Level2'},
+                 {'service_level': 'Level3'}]
         filtered = self.cc._filter_pool_json_by_service_level(pools, "Level2")
         self.assertEqual(1, len(filtered))
         self.assertEqual("Level2", filtered[0]['service_level'])
 
     def test_no_pool_with_specified_filter(self):
-        pools = [{'service_level':'Level1'}]
+        pools = [{'service_level': 'Level1'}]
         filtered = self.cc._filter_pool_json_by_service_level(pools, "NotFound")
         self.assertEqual(0, len(filtered))
 

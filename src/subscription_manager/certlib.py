@@ -259,23 +259,23 @@ class UpdateAction(Action):
 
     def syslogResults(self, report):
         for cert in report.added:
-            system_log("Added subscription for '%s' contract '%s'" % \
-                (cert.order.name, cert.order.contract))
+            system_log("Added subscription for '%s' contract '%s'" %
+                       (cert.order.name, cert.order.contract))
             for product in cert.products:
-                system_log("Added subscription for product '%s'" % \
-                    (product.name))
+                system_log("Added subscription for product '%s'" %
+                           (product.name))
         for cert in report.rogue:
-            system_log("Removed subscription for '%s' contract '%s'" % \
-                (cert.order.name, cert.order.contract))
+            system_log("Removed subscription for '%s' contract '%s'" %
+                       (cert.order.name, cert.order.contract))
             for product in cert.products:
-                system_log("Removed subscription for product '%s'" % \
-                    (product.name))
+                system_log("Removed subscription for product '%s'" %
+                           (product.name))
         for cert in report.expired:
-            system_log("Expired subscription for '%s' contract '%s'" % \
-                (cert.order.name, cert.order.contract))
+            system_log("Expired subscription for '%s' contract '%s'" %
+                       (cert.order.name, cert.order.contract))
             for product in cert.products:
-                system_log("Expired subscription for product '%s'" % \
-                    (product.name))
+                system_log("Expired subscription for product '%s'" %
+                           (product.name))
 
     def _get_local_serials(self, report):
         local = {}
@@ -392,17 +392,17 @@ class UpdateReport:
             for c in certificates:
                 products = c.products
                 if not products:
-                    s.append('%s[sn:%d (%s) @ %s]' % \
-                        (indent,
-                         c.serial,
-                         c.order.name,
-                         c.path))
+                    s.append('%s[sn:%d (%s) @ %s]' %
+                             (indent,
+                              c.serial,
+                              c.order.name,
+                              c.path))
                 for product in products:
-                    s.append('%s[sn:%d (%s,) @ %s]' % \
-                        (indent,
-                         c.serial,
-                         product.name,
-                         c.path))
+                    s.append('%s[sn:%d (%s,) @ %s]' %
+                             (indent,
+                              c.serial,
+                              product.name,
+                              c.path))
         else:
             s.append('%s<NONE>' % indent)
 

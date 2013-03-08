@@ -732,7 +732,7 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
             quantity = tree_model.get_value(iter, self.quantity_store_idx)
             cell_renderer.set_property("text", "%s *" % quantity)
 
-        if self.available_store_idx != None:
+        if self.available_store_idx is not None:
             available = tree_model.get_value(iter, self.available_store_idx)
             if available and available != -1:
                 cell_renderer.set_property("adjustment",

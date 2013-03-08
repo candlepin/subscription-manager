@@ -705,7 +705,6 @@ class TestMigration(unittest.TestCase):
         self.engine.enable_extra_channels(subscribed_channels)
         expected = [call("supplementary", "enabled", "1"),
             call("optional-rpms", "enabled", "1"),
-            call("productivity-rpms", "enabled", "1"),
-            ]
+            call("productivity-rpms", "enabled", "1")]
         self.assertTrue(mrf.set.call_args_list == expected)
         mrf.write.assert_called_with()

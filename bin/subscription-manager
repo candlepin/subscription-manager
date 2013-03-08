@@ -29,9 +29,9 @@ import codecs
 # $PYTHONIOENCODING or setting in lib/python{version}/site-packages
 if sys.getdefaultencoding() == 'ascii':
     writer_class = codecs.getwriter('utf-8')
-if sys.stdout.encoding == None:
+if sys.stdout.encoding is None:
     sys.stdout = writer_class(sys.stdout)
-if sys.stderr.encoding == None:
+if sys.stderr.encoding is None:
     sys.stderr = writer_class(sys.stderr)
 
 

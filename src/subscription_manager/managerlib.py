@@ -62,8 +62,8 @@ def persist_consumer_cert(consumerinfo):
     cert_dir = cfg.get('rhsm', 'consumerCertDir')
     if not os.path.isdir(cert_dir):
         os.mkdir(cert_dir)
-    consumer = certlib.ConsumerIdentity(consumerinfo['idCert']['key'], \
-                                  consumerinfo['idCert']['cert'])
+    consumer = certlib.ConsumerIdentity(consumerinfo['idCert']['key'],
+                                        consumerinfo['idCert']['cert'])
     consumer.write()
     consumer_info = {"consumer_name": consumer.getConsumerName(),
                      "uuid": consumer.getConsumerId()}
@@ -268,8 +268,8 @@ class PoolFilter(object):
         already has a subscription, unless the pool can be subscribed to again
         (ie has multi-entitle).
         """
-        resubscribeable_pool_ids = [pool['id'] for pool in \
-                compatible_pools.values()]
+        resubscribeable_pool_ids = [pool['id'] for pool in
+                                    compatible_pools.values()]
 
         filtered_pools = []
         for pool in pools:
@@ -504,8 +504,8 @@ class PoolStash(object):
             pools = self.all_pools.values()
         else:
             pools = self.compatible_pools.values()
-            log.debug("\tRemoved %d incompatible pools" % \
-                    len(self.incompatible_pools))
+            log.debug("\tRemoved %d incompatible pools" %
+                       len(self.incompatible_pools))
 
         pool_filter = PoolFilter(self.backend.product_dir,
                 self.backend.entitlement_dir)
@@ -514,28 +514,28 @@ class PoolStash(object):
         if uninstalled:
             prev_length = len(pools)
             pools = pool_filter.filter_out_uninstalled(pools)
-            log.debug("\tRemoved %d pools for not installed products" % \
-                    (prev_length - len(pools)))
+            log.debug("\tRemoved %d pools for not installed products" %
+                       (prev_length - len(pools)))
 
         if overlapping:
             prev_length = len(pools)
             pools = pool_filter.filter_out_overlapping(pools)
-            log.debug("\tRemoved %d pools overlapping existing entitlements" % \
-                    (prev_length - len(pools)))
+            log.debug("\tRemoved %d pools overlapping existing entitlements" %
+                      (prev_length - len(pools)))
 
         # Filter by product name if necessary:
         if text:
             prev_length = len(pools)
             pools = pool_filter.filter_product_name(pools, text)
-            log.debug("\tRemoved %d pools not matching the search string" % \
-                    (prev_length - len(pools)))
+            log.debug("\tRemoved %d pools not matching the search string" %
+                      (prev_length - len(pools)))
 
         if subscribed:
             prev_length = len(pools)
             pools = pool_filter.filter_subscribed_pools(pools,
                     self.subscribed_pool_ids, self.compatible_pools)
-            log.debug("\tRemoved %d pools that we're already subscribed to" % \
-                    (prev_length - len(pools)))
+            log.debug("\tRemoved %d pools that we're already subscribed to" %
+                      (prev_length - len(pools)))
 
         log.debug("\t%d pools to display, %d filtered out" % (len(pools),
             len(self.all_pools) - len(pools)))

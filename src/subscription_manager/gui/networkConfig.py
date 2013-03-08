@@ -79,8 +79,8 @@ class NetworkConfigDialog:
         self.proxyPasswordEntry.connect("changed", self.clearConnectionLabel)
 
         self.xml.get_widget("closeButton").connect("clicked", self.close)
-        self.xml.get_widget("testConnectionButton").connect("clicked", \
-                self.displayConnectionStatus)
+        self.xml.get_widget("testConnectionButton").connect("clicked",
+                                                            self.displayConnectionStatus)
         self.dlg.connect("delete-event", self.deleted)
 
     def setInitialValues(self):
@@ -198,20 +198,20 @@ class NetworkConfigDialog:
         try:
             cp.getStatus()
         except connection.RemoteServerException, e:
-            log.debug("Reporting proxy connection as good despite %s" % \
-                        e.code)
+            log.debug("Reporting proxy connection as good despite %s" %
+                      e.code)
             return True
         except connection.RestlibException, e:
-            log.debug("Reporting proxy connection as good despite %s" % \
-                        e.code)
+            log.debug("Reporting proxy connection as good despite %s" %
+                      e.code)
             return True
         except connection.NetworkException, e:
-            log.debug("%s when attempting to connect through %s:%s" % \
-                    (e.code, proxy_host, proxy_port))
+            log.debug("%s when attempting to connect through %s:%s" %
+                      (e.code, proxy_host, proxy_port))
             return False
         except Exception, e:
-            log.debug("'%s' when attempting to connect through %s:%s" % \
-                    (e, proxy_host, proxy_port))
+            log.debug("'%s' when attempting to connect through %s:%s" %
+                      (e, proxy_host, proxy_port))
             return False
         else:
             return True

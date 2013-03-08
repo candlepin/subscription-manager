@@ -49,7 +49,7 @@ def find_custom_branding():
 
 def get_branding():
     global _branding
-    if _branding == None:
+    if _branding is None:
         custom_branding = find_custom_branding()
         _branding = Branding(custom_branding)
     return _branding
@@ -59,7 +59,7 @@ class Branding(object):
 
     def __init__(self, custom_branding=None):
         self._default = DefaultBranding()
-        if custom_branding == None:
+        if custom_branding is None:
             custom_branding = EmptyBranding()
         self._custom = custom_branding
 

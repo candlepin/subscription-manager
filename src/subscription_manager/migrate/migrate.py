@@ -67,8 +67,8 @@ except ImportError:
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-CONNECTION_FAILURE = _(u"Unable to connect to certificate server: %s.  " \
-        "See /var/log/rhsm/rhsm.log for more details.")
+CONNECTION_FAILURE = _(u"Unable to connect to certificate server: %s.  "
+                        "See /var/log/rhsm/rhsm.log for more details.")
 
 DOUBLE_MAPPED = "rhel-.*?-(client|server)-dts-(5|6)-beta(-debuginfo)?"
 #The (?!-beta) bit is a negative lookahead assertion.  So we won't match
@@ -211,8 +211,8 @@ class MigrationEngine(object):
                 log.exception(e)
                 systemExit(1, _("Unable to read RHN proxy settings."))
 
-            log.info("Using proxy %s:%s - transferring settings to rhsm.conf" \
-                 % (self.proxy_host, self.proxy_port))
+            log.info("Using proxy %s:%s - transferring settings to rhsm.conf"
+                     % (self.proxy_host, self.proxy_port))
             self.rhsmcfg.set('server', 'proxy_hostname', self.proxy_host)
             self.rhsmcfg.set('server', 'proxy_port', self.proxy_port)
 
@@ -650,8 +650,8 @@ class MigrationEngine(object):
         try:
             for rhsmChannel in repofile.sections():
                 if ((extraChannels['supplementary'] and re.search('supplementary$', rhsmChannel)) or
-                (extraChannels['optional']  and re.search('optional-rpms$', rhsmChannel)) or
-                (extraChannels['productivity']  and re.search('productivity-rpms$', rhsmChannel))):
+                (extraChannels['optional'] and re.search('optional-rpms$', rhsmChannel)) or
+                (extraChannels['productivity'] and re.search('productivity-rpms$', rhsmChannel))):
                     log.info("Enabling extra channel '%s'" % rhsmChannel)
                     repofile.set(rhsmChannel, 'enabled', '1')
             repofile.write()
