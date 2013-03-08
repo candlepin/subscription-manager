@@ -1744,6 +1744,9 @@ class PluginsCommand(CliCommand):
                  self.options.listhooks):
             self.options.list = True
 
+    def _add_common_options(self):
+        pass
+
     def _list_plugins(self):
         for plugin_class in self.plugin_manager.get_plugins().values():
             enabled = _("disabled")
