@@ -22,6 +22,7 @@ import logging
 from rhsm.certificate import Key, create_from_file
 
 from rhsm.config import initConfig
+from subscription_manager.injection import FEATURES, ENT_DIR
 
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -279,8 +280,8 @@ class Path:
 
 class Writer:
 
-    def __init__(self, entitlement_dir=None):
-        self.entdir = entitlement_dir or EntitlementDirectory()
+    def __init__(self):
+        self.entdir = FEATURES.require(ENT_DIR)
 
     def write(self, key, cert):
         serial = cert.serial

@@ -1,8 +1,8 @@
 import unittest
 
 from mock import Mock, NonCallableMock
-from subscription_manager.injection import FEATURES, IDENTITY, \
-        PRODUCT_DATE_RANGE_CALCULATOR
+import subscription_manager.injection as inj
+import stubs
 
 
 class SubManFixture(unittest.TestCase):
@@ -21,5 +21,11 @@ class SubManFixture(unittest.TestCase):
         self.mock_calc = NonCallableMock()
         self.mock_calc.calculate.return_value = None
 
-        FEATURES.provide(IDENTITY, id_mock)
-        FEATURES.provide(PRODUCT_DATE_RANGE_CALCULATOR, self.mock_calc)
+        inj.FEATURES.provide(inj.IDENTITY, id_mock)
+        inj.FEATURES.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR, self.mock_calc)
+
+        # By default set up an empty stub entitlement and product dir.
+        # Tests need to modify or create their own but nothing should hit
+        # the system.
+        inj.FEATURES.provide(inj.ENT_DIR, stubs.StubEntitlementDirectory())
+        inj.FEATURES.provide(inj.PROD_DIR, stubs.StubProductDirectory())

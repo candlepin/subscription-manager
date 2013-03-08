@@ -22,6 +22,7 @@ from stubs import StubEntitlementCertificate, StubProduct, StubEntitlementDirect
 
 from subscription_manager.certlib import UpdateAction, UpdateReport
 from subscription_manager.certdirectory import Writer
+from fixture import SubManFixture
 
 
 class TestingUpdateAction(UpdateAction):
@@ -39,10 +40,7 @@ class TestingUpdateAction(UpdateAction):
         return StubConsumerIdentity("ConsumerKey", "ConsumerCert")
 
 
-class UpdateActionTests(unittest.TestCase):
-
-    def setUp(self):
-        pass
+class UpdateActionTests(SubManFixture):
 
     @patch.object(Writer, "write")
     def test_expired_are_ignored_when_installing_certs(self, write_mock):

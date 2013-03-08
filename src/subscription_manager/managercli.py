@@ -38,7 +38,7 @@ from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.repolib import RepoLib, RepoFile
 from subscription_manager.certmgr import CertManager
-from subscription_manager.injection import FEATURES, CERT_SORTER
+import subscription_manager.injection as inj
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager import managerlib
@@ -209,6 +209,7 @@ def show_autosubscribe_output(uep):
 class CliCommand(AbstractCLICommand):
     """ Base class for all sub-commands. """
 
+    # TODO: remove ent_dir and prod_dir, use dep injection now
     def __init__(self, name="cli", shortdesc=None, primary=False, ent_dir=None,
                  prod_dir=None):
         AbstractCLICommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
@@ -221,8 +222,8 @@ class CliCommand(AbstractCLICommand):
         self.proxy_hostname = None
         self.proxy_port = None
 
-        self.entitlement_dir = ent_dir or EntitlementDirectory()
-        self.product_dir = prod_dir or ProductDirectory()
+        self.entitlement_dir = ent_dir or inj.FEATURES.require(inj.ENT_DIR)
+        self.product_dir = prod_dir or inj.FEATURES.require(inj.PROD_DIR)
 
         self.client_versions = self._default_client_version()
         self.server_versions = self._default_server_version()
@@ -1430,7 +1431,8 @@ class AttachCommand(CliCommand):
             # must be auto
             else:
                 # if we are green, we don't need to go to the server
-                self.sorter = FEATURES.require(CERT_SORTER, self.product_dir, self.entitlement_dir, self.cp)
+                self.sorter = inj.FEATURES.require(inj.CERT_SORTER,
+                        self.product_dir, self.entitlement_dir, self.cp)
 
                 if self.sorter.is_valid():
                     print _("All installed products are covered by valid entitlements. "

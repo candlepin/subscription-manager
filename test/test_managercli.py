@@ -13,6 +13,7 @@ from stubs import MockStderr, MockStdout, StubProductDirectory, \
         StubEntitlementDirectory, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
 from test_handle_gui_exception import FakeException, FakeLogger
+from fixture import SubManFixture
 
 import mock
 from mock import patch
@@ -28,9 +29,10 @@ is_valid_server_mock = is_valid_server_patcher.start()
 is_valid_server_mock.return_value = True
 
 
-class TestCli(unittest.TestCase):
+class TestCli(SubManFixture):
     # shut up stdout spew
     def setUp(self):
+        SubManFixture.setUp(self)
         sys.stdout = stubs.MockStdout()
         sys.stderr = stubs.MockStderr()
 
