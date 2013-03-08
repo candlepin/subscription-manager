@@ -22,6 +22,8 @@ from datetime import timedelta, datetime
 from subscription_manager.lock import Lock
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.injection import FEATURES, CERT_SORTER
+from subscription_manager import plugins
+
 from subscription_manager.certdirectory import EntitlementDirectory, \
     ProductDirectory, Writer
 from rhsm.config import initConfig
@@ -99,6 +101,7 @@ class HealingLib(DataLib):
         DataLib.__init__(self, lock, uep)
 
         self._product_dir = product_dir or ProductDirectory()
+        self.plugin_manager = plugins.getPluginManager()
 
     def _do_update(self):
         uuid = ConsumerIdentity.read().getConsumerId()
@@ -124,7 +127,9 @@ class HealingLib(DataLib):
                 if not cs.is_valid():
                     log.warn("Found invalid entitlements for today: %s" %
                             today)
-                    self.uep.bind(uuid, today)
+                    self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid)
+                    ents = self.uep.bind(uuid, today)
+                    self.plugin_manager.run("post_subscribe", consumer_uuid=uuid, entitlement_data=ents)
                     cert_updater.update()
                 else:
                     log.info("Entitlements are valid for today: %s" %
@@ -138,7 +143,9 @@ class HealingLib(DataLib):
                     elif tomorrow > cs.compliant_until:
                         log.warn("Entitlements will be invalid by tomorrow: %s" %
                                 tomorrow)
-                        self.uep.bind(uuid, tomorrow)
+                        self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid)
+                        ents = self.uep.bind(uuid, tomorrow)
+                        self.plugin_manager.run("post_subscribe", consumer_uuid=uuid, entitlement_data=ents)
                         cert_updater.update()
                     else:
                         log.info("Entitlements are valid for tomorrow: %s" %

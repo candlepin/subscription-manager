@@ -24,7 +24,7 @@ from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubUEP, StubCertSorter
 from fixture import SubManFixture
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
-        getInstalledProductStatus, LocalTz, parseDate, \
+        getInstalledProductStatus, LocalTz, \
         MergedPoolsStackingGroupSorter, MergedPools, PoolStash
 from subscription_manager.injection import FEATURES, CERT_SORTER
 from modelhelpers import create_pool
@@ -604,81 +604,6 @@ class InstalledProductStatusTests(SubManFixture):
         self.assertEquals("subscribed", product_status[0][4])
         self.assertEquals("product1", product_status[1][0])
         self.assertEquals("subscribed", product_status[1][4])
-
-
-class TestParseDate(unittest.TestCase):
-    def _test_local_tz(self):
-        tz = LocalTz()
-        dt_no_tz = datetime(year=2000, month=1, day=1, hour=12, minute=34)
-        now_dt = datetime(year=2000, month=1, day=1, hour=12, minute=34, tzinfo=tz)
-        parseDate(now_dt.isoformat())
-        # last member is is_dst, which is -1, if there is no tzinfo, which
-        # we expect for dt_no_tz
-        #
-        # see if we get the same times
-        now_dt_tt = now_dt.timetuple()
-        dt_no_tz_tt = dt_no_tz.timetuple()
-
-        # tm_isdst (timpletuple()[8]) is 0 if a tz is set,
-        # but the dst offset is 0
-        # if it is -1, no timezone is set
-        if now_dt_tt[8] == 1 and dt_no_tz_tt == -1:
-            # we are applying DST to now time, but not no_tz time, so
-            # they will be off by an hour. This is kind of weird
-            self.assertEquals(now_dt_tt[:2], dt_no_tz_tt[:2])
-            self.assertEquals(now_dt_tt[4:7], dt_no_tz_tt[4:7])
-
-            # add an hour for comparisons
-            dt_no_tz_dst = dt_no_tz
-            dt_no_tz_dst = dt_no_tz + timedelta(hours=1)
-            self.assertEquals(now_dt_tt[3], dt_no_tz_dst.timetuple()[3])
-        else:
-            self.assertEquals(now_dt_tt[:7], dt_no_tz_tt[:7])
-
-    def test_local_tz_now(self):
-        self._test_local_tz()
-
-    def test_local_tz_not_dst(self):
-        time.daylight = 0
-        self._test_local_tz()
-
-    def test_local_tz_dst(self):
-        time.daylight = 1
-        self._test_local_tz()
-
-    def test_server_date_utc_timezone(self):
-        # sample date from json response from server
-        server_date = "2012-04-10T00:00:00.000+0000"
-        dt = parseDate(server_date)
-        # no dst
-        self.assertEquals(timedelta(seconds=0), dt.tzinfo.dst(dt))
-        # it's a utc date, no offset
-        self.assertEquals(timedelta(seconds=0), dt.tzinfo.utcoffset(dt))
-
-    def test_server_date_est_timezone(self):
-        est_date = "2012-04-10T00:00:00.000-04:00"
-        dt = parseDate(est_date)
-        self.assertEquals(timedelta(hours=-4), dt.tzinfo.utcoffset(dt))
-
-    # verify that we can handle dates past 2038
-    # datetime and dateutil modules seem okay with this
-    # even on 32bit platforms
-    def test_2038_bug(self):
-        parsed = parseDate("9999-09-06T00:00:00.000+0000")
-
-        # Simulated a 32-bit date overflow, date should have been
-        # replaced by one that does not overflow:
-        self.assertEquals(9999, parsed.year)
-        self.assertEquals(9, parsed.month)
-        self.assertEquals(6, parsed.day)
-
-    def test_10000_bug(self):
-        # dateutil is okay up to 9999, so we just return
-        # 9999-9-6 after that since that's what datetime/dateutil do
-        parsed = parseDate("10000-09-06T00:00:00.000+0000")
-        self.assertEquals(9999, parsed.year)
-        self.assertEquals(9, parsed.month)
-        self.assertEquals(6, parsed.day)
 
 
 # http://docs.python.org/library/datetime.html

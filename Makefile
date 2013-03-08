@@ -16,6 +16,8 @@ BIN_FILES = $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui 
 			$(BIN_DIR)/install-num-migrate-to-rhsm \
 			$(BIN_DIR)/rct
 SYSTEMD_INST_DIR=${PREFIX}/usr/lib/systemd/system
+RHSM_PLUGIN_DIR=${PREFIX}/usr/share/rhsm-plugins/
+RHSM_PLUGIN_CONF_DIR=${PREFIX}/etc/rhsm/pluginconf.d/
 
 SRC_DIR = src/subscription_manager
 
@@ -89,9 +91,27 @@ install-help-files:
 	install docs/subscription-manager-C.omf \
 		${PREFIX}/${INSTALL_DIR}/omf/subscription-manager
 
-install: install-files install-conf install-help-files
+install-plugins:
+	install -d ${RHSM_PLUGIN_DIR}
+#	install -m 644 -p src/rhsm-plugins/*.py ${RHSM_PLUGIN_DIR}
 
-install-files: dbus-service-install compile-po desktop-files
+install-plugins-conf:
+	install -d ${RHSM_PLUGIN_CONF_DIR}
+#	install -m 644 -p src/rhsm-plugins/*.conf ${RHSM_PLUGIN_CONF_DIR}
+
+install-example-plugins: install-example-plugins-files install-example-plugins-conf
+
+install-example-plugins-files:
+	install -d ${RHSM_PLUGIN_DIR}
+	install -m 644 -p example-plugins/*.py ${RHSM_PLUGIN_DIR}
+
+install-example-plugins-conf:
+	install -d ${RHSM_PLUGIN_CONF_DIR}
+	install -m 644 -p example-plugins/*.conf ${RHSM_PLUGIN_CONF_DIR}
+
+install: install-files install-conf install-help-files install-plugins-conf
+
+install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d ${CODE_DIR}/gui/data/icons
 	install -d ${CODE_DIR}/branding
 	install -d ${CODE_DIR}/migrate

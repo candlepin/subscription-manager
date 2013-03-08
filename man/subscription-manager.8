@@ -98,6 +98,9 @@ has specific options available for each command, depending on what operation is 
 13. orgs
 
 .IP
+13. plugins
+
+.IP
 14. identity
 
 .IP
@@ -468,6 +471,27 @@ If there is an on-premise subscription service such as Subscription Asset Manage
 .B --serverurl
 parameter is for the on-premise Subscription Asset Manager server.
 
+
+.SS PLUGIN OPTIONS
+The
+.B plugins
+command list the available subscription-manager plugins.
+
+.TP
+.B --list
+List the available subscription-manager plugins.
+
+.TP
+.B --listslots
+List the available plugin slots
+
+.TP
+.B --listhooks
+List the available plugin slots and the hooks that handle them.
+
+.TP
+.B --verbose
+Show additional info about the plugins, such as the plugin configuration values.
 
 .SS IDENTITY OPTIONS
 The 
