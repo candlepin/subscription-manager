@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.24.0
+Version: 1.0.24.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -352,6 +352,10 @@ fi
 %endif
 
 %changelog
+* Fri Mar 08 2013 Alex Wood <awood@redhat.com> 1.0.24.1-1
+- Adding rhel-5.9.z releaser. (awood@redhat.com)
+- 918967: Switch from using xmlrpclib to rhnlib's rpclib. (awood@redhat.com)
+
 * Wed Oct 24 2012 Alex Wood <awood@redhat.com> 1.0.24-1
 - updates for failed-qa issues in bz857195 (dlackey@redhat.com.com)
 - 850870: Update on-line documentation link. (awood@redhat.com)
