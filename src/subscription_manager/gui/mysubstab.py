@@ -20,6 +20,7 @@ from datetime import datetime, timedelta
 
 from rhsm.certificate import GMT
 
+from subscription_manager.injection import FEATURES, IDENTITY
 from subscription_manager.certlib import Disconnected
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import widgets
@@ -42,16 +43,14 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
     widget_names = widgets.SubscriptionManagerTab.widget_names + \
                     ['details_box', 'unsubscribe_button']
 
-    # Are facts required here? [mstead]
-    def __init__(self, backend, consumer, facts, parent_win,
+    def __init__(self, backend, parent_win,
                  ent_dir, prod_dir):
         """
         Create a new 'My Subscriptions' tab.
         """
         super(MySubscriptionsTab, self).__init__('mysubs.glade')
         self.backend = backend
-        self.consumer = consumer
-        self.facts = facts
+        self.identity = FEATURES.require(IDENTITY)
         self.parent_win = parent_win
         self.entitlement_dir = ent_dir
         self.product_dir = prod_dir
@@ -124,9 +123,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         serial = long(selection['serial'])
 
-        if self.consumer.is_valid():
+        if self.identity.is_valid():
             try:
-                self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
+                self.backend.uep.unbindBySerial(self.identity.uuid, serial)
             except Exception, e:
                 handle_gui_exception(e, _("There was an error removing %s with serial number %s") % (selection['subscription'], serial), self.parent_win, formatMsg=False)
 
@@ -162,7 +161,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.top_view.expand_all()
         dbus_iface = get_dbus_iface()
         dbus_iface.check_status(ignore_reply=True)
-        self.facts.refresh_validity_facts()
         self.unsubscribe_button.set_property('sensitive', False)
         # 841396: Select first item in My Subscriptions table by default
         selection = self.top_view.get_selection()

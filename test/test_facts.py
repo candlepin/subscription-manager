@@ -2,13 +2,10 @@ import unittest
 import tempfile
 import simplejson as json
 import shutil
-from datetime import datetime, timedelta
-from mock import patch, Mock
+from mock import Mock
 
-from stubs import StubEntitlementDirectory, StubProductDirectory, StubProduct,\
-                  StubCertificateDirectory, StubProductCertificate, StubEntitlementCertificate
+from stubs import StubEntitlementDirectory, StubProductDirectory
 from subscription_manager import facts
-from subscription_manager.facts import Facts
 
 facts_buf = """
 {
@@ -110,7 +107,6 @@ facts_buf = """
     "memory.memtotal": "10326220",
     "memory.swaptotal": "12419068",
     "nxxxw.tddng3": "10d0",
-    "system.entitlements_valid": "invalid",
     "test.attr": "blippy2",
     "uname.machine": "x86_64",
     "uname.release": "2.6.35.11-83.fc14.x86_64",
@@ -186,126 +182,3 @@ class TestFacts(unittest.TestCase):
         self.assertTrue("system.certificate_version" in self.f.get_facts())
         self.assertEquals(facts.CERT_VERSION,
                 self.f.get_facts()['system.certificate_version'])
-
-
-class InstalledProductStatusTests(unittest.TestCase):
-
-    # facts for system entitlement valid check for an rhn "classic"
-    # susbcription, so mock it out
-    def setUp(self):
-        self.rhn_check_patcher = patch('subscription_manager.facts.ClassicCheck')
-        self.rhn_check_mock = self.rhn_check_patcher.start()
-        self.rhn_check_mock_instance = self.rhn_check_mock.return_value
-        self.rhn_check_mock_instance.is_registered_with_classic.return_value = False
-
-    def tearDown(self):
-        self.rhn_check_patcher.stop()
-
-    @patch.object(Facts, "_load_custom_facts")
-    def test_entitlement_for_installed_product_shows_valid(self, mockCustomFacts):
-        product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
-            StubProductCertificate(product)])
-        entitlement_directory = StubCertificateDirectory([
-            StubEntitlementCertificate(product)])
-
-        facts = Facts(None)
-        facts.product_dir = product_directory
-        facts.entitlement_dir = entitlement_directory
-        mockCustomFacts.return_value = {}
-        facts_dict = facts.get_facts()
-        self.assertEquals("valid", facts_dict['system.entitlements_valid'])
-
-    def test_expired_entitlement_for_installed_product_shows_invalid(self):
-        product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
-            StubProductCertificate(product)])
-        entitlement_directory = StubCertificateDirectory([
-            StubEntitlementCertificate(product,
-                end_date=(datetime.now() - timedelta(days=2)))])
-
-        facts = Facts(None)
-        facts.product_dir = product_directory
-        facts.entitlement_dir = entitlement_directory
-        facts_dict = facts.get_facts()
-        self.assertEquals("invalid", facts_dict['system.entitlements_valid'])
-
-    def test_no_entitlement_for_installed_product_shows_invalid(self):
-        product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
-            StubProductCertificate(product)])
-        entitlement_directory = StubCertificateDirectory([])
-
-        facts = Facts(None)
-        facts.product_dir = product_directory
-        facts.entitlement_dir = entitlement_directory
-        facts_dict = facts.get_facts()
-        self.assertEquals("invalid", facts_dict['system.entitlements_valid'])
-
-    def test_future_dated_entitlement_shows_invalid(self):
-        product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
-                StubProductCertificate(product)])
-        entitlement_directory = StubCertificateDirectory([
-                StubEntitlementCertificate(product,
-                                           start_date=(datetime.now() + timedelta(days=1365)))])
-
-        facts = Facts(None)
-        facts.product_dir = product_directory
-        facts.entitlement_dir = entitlement_directory
-        facts_dict = facts.get_facts()
-        self.assertEquals("invalid", facts_dict['system.entitlements_valid'])
-
-    @patch('subscription_manager.cert_sorter.CertSorter')
-    def test_partial_fact(self, mock_sorter):
-
-        ents = []
-        stub_product = StubProduct('1005')
-
-        stub_ent_cert = StubEntitlementCertificate(stub_product, quantity=2, stacking_id='stack1', sockets=2)
-
-        ents.append(stub_ent_cert)
-        entitlement_directory = StubCertificateDirectory(ents)
-
-        product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
-                StubProductCertificate(product)])
-
-        mock_sorter_instance = mock_sorter.return_value
-        mock_sorter_instance.partially_valid_products = {'foo': 'blah'}
-        mock_sorter_instance.unentitled_products = {}
-        mock_sorter_instance.expired_products = {}
-        mock_sorter_instance.partial_stacks = {}
-
-        facts = Facts(None)
-        facts.product_dir = product_directory
-        facts.entitlement_dir = entitlement_directory
-        facts_dict = facts.get_facts()
-        self.assertEquals("partial", facts_dict['system.entitlements_valid'])
-
-    @patch('subscription_manager.cert_sorter.CertSorter')
-    def test_partial_and_invalid_fact(self, mock_sorter):
-
-        ents = []
-        stub_product = StubProduct('1005')
-
-        stub_ent_cert = StubEntitlementCertificate(stub_product, quantity=2, stacking_id='stack1', sockets=2)
-
-        ents.append(stub_ent_cert)
-        entitlement_directory = StubCertificateDirectory(ents)
-
-        product = StubProduct("product1")
-        product_directory = StubCertificateDirectory([
-                StubProductCertificate(product)])
-
-        mock_sorter_instance = mock_sorter.return_value
-        mock_sorter_instance.partially_valid_products = {'foo': 'blah'}
-        mock_sorter_instance.unentitled_products = {'bar': 'apple'}
-        mock_sorter_instance.expired_products = {}
-        mock_sorter_instance.partial_stacks = {}
-
-        facts = Facts(None)
-        facts.product_dir = product_directory
-        facts.entitlement_dir = entitlement_directory
-        facts_dict = facts.get_facts()
-        self.assertEquals("invalid", facts_dict['system.entitlements_valid'])

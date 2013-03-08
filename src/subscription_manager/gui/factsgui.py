@@ -16,6 +16,7 @@
 import logging
 import gtk
 
+from subscription_manager.injection import FEATURES, IDENTITY
 from subscription_manager.gui.utils import linkify, handle_gui_exception
 from subscription_manager.gui import widgets
 from subscription_manager.managerlib import enhance_facts
@@ -35,11 +36,12 @@ class SystemFactsDialog(widgets.GladeWidget):
                     'last_update_label', 'owner_label', 'environment_label',
                     'environment_hbox', 'owner_id_label', 'owner_id_hbox']
 
-    def __init__(self, backend, consumer, facts):
+    def __init__(self, backend, facts):
 
         super(SystemFactsDialog, self).__init__('factsdialog.glade')
 
-        self.consumer = consumer
+        #self.consumer = consumer
+        self.identity = FEATURES.require(IDENTITY)
         self.facts = facts
         self.backend = backend
         self.glade.signal_autoconnect({
@@ -71,7 +73,7 @@ class SystemFactsDialog(widgets.GladeWidget):
         # Set sorting by fact name
         self.facts_store.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
-        self.update_button.set_sensitive(bool(self.consumer.uuid))
+        self.update_button.set_sensitive(bool(self.identity.uuid))
         self.system_facts_dialog.present()
 
     def hide(self):
@@ -90,8 +92,8 @@ class SystemFactsDialog(widgets.GladeWidget):
 
         # make sure we get fresh facts, since entitlement validity status could         # change
         system_facts_dict = self.facts.get_facts()
+        enhance_facts(system_facts_dict, self.identity)
 
-        enhance_facts(system_facts_dict, self.consumer)
         system_facts = system_facts_dict.items()
 
         system_facts.sort()
@@ -108,7 +110,7 @@ class SystemFactsDialog(widgets.GladeWidget):
         # TODO: could stand to check if registered before trying to do this:
         displayName = _('Unknown')
         try:
-            owner = self.backend.uep.getOwner(self.consumer.uuid)
+            owner = self.backend.uep.getOwner(self.identity.uuid)
             displayName = owner['displayName']
             key = owner['key']
             self.owner_id_label.set_text(key)
@@ -120,7 +122,7 @@ class SystemFactsDialog(widgets.GladeWidget):
 
         try:
             if self.backend.uep.supports_resource('environments'):
-                consumer = self.backend.uep.getConsumer(self.consumer.uuid)
+                consumer = self.backend.uep.getConsumer(self.identity.uuid)
                 environment = consumer['environment']
                 if environment:
                     environment_name = environment['name']
@@ -138,7 +140,7 @@ class SystemFactsDialog(widgets.GladeWidget):
 
     def update_facts(self):
         """Sends the current system facts to the UEP server."""
-        consumer_uuid = self.consumer.uuid
+        consumer_uuid = self.identity.uuid
 
         try:
             self.facts.update_check(self.backend.uep, consumer_uuid, force=True)

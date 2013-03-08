@@ -178,6 +178,15 @@ class ProductDirectory(CertificateDirectory):
                     tags.add(tag)
         return tags
 
+    def get_installed_products(self):
+        prod_certs = self.list()
+        installed_products = {}
+        for product_cert in prod_certs:
+            product = product_cert.products[0]
+            installed_products[product.id] = product_cert
+        log.debug("Installed product IDs: %s" % installed_products.keys())
+        return installed_products
+
 
 class EntitlementDirectory(CertificateDirectory):
 
@@ -230,6 +239,18 @@ class EntitlementDirectory(CertificateDirectory):
                 valid.append(c)
 
         return valid
+
+    def list_for_product(self, product_id):
+        """
+        Returns all entitlement certificates providing access to the given
+        product ID.
+        """
+        entitlements = []
+        for cert in self.list():
+            for cert_product in cert.products:
+                if product_id == cert_product.id:
+                    entitlements.append(cert)
+        return entitlements
 
 
 class Path:

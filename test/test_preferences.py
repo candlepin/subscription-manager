@@ -13,22 +13,17 @@
 # in this software or its documentation.
 #
 
-import unittest
 import mock
 
 import stubs
 import rhsm_display
 rhsm_display.set_display()
 
+from fixture import SubManFixture
+from subscription_manager.injection import FEATURES, IDENTITY
+
 from subscription_manager.gui import preferences
 
-
-class StubConsumer:
-    def __init__(self):
-        self.uuid = "not_actually_a_uuid"
-
-    def reload(self):
-        pass
 
 CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},
                  'serviceLevel': "Pro Turbo HD Plus Ultra",
@@ -39,18 +34,22 @@ def getConsumerData(self):
     return CONSUMER_DATA
 
 
-class StubConsumerNone:
-    def __init__(self):
-        self.uuid = None
-
-
 def get_releases():
     return ["123123", "1", "2", "4", "blippy"]
 
 
-class TestPreferencesDialog(unittest.TestCase):
+class TestPreferencesDialog(SubManFixture):
     _getConsumerData = None
-    _getConsumer = None
+
+    def setUp(self):
+        super(TestPreferencesDialog, self).setUp()
+        # FIXME: this is c&p and could be in a fixture sub class
+        #        that  does the same things StubConsumer does now
+        self.id_mock = mock.Mock()
+        self.id_mock.name = "John Q Consumer"
+        self.id_mock.uuid = "not_actually_a_uuid"
+        self.id_mock.exists_and_valid = mock.Mock(return_value=True)
+        FEATURES.provide(IDENTITY, self.id_mock)
 
     def _getPrefDialog(self):
         stub_backend = stubs.StubBackend()
@@ -58,15 +57,10 @@ class TestPreferencesDialog(unittest.TestCase):
         if self._getConsumerData:
             stub_backend.uep.getConsumer = self._getConsumerData
 
-        self.consumer = StubConsumer()
-        if self._getConsumer:
-            self.consumer = self._getConsumer()
-
         stub_backend.product_dir = stubs.StubCertificateDirectory([stubs.StubProductCertificate(stubs.StubProduct("rhel-6"))])
         stub_backend.entitlement_dir = stubs.StubEntitlementDirectory([stubs.StubEntitlementCertificate(stubs.StubProduct("rhel-6"))])
 
         self.preferences_dialog = preferences.PreferencesDialog(backend=stub_backend,
-                                                                consumer=self.consumer,
                                                                 parent=None)
         self.preferences_dialog.release_backend.facts = stubs.StubFacts()
         self.preferences_dialog.release_backend.get_releases = get_releases
@@ -92,9 +86,12 @@ class TestPreferencesDialog(unittest.TestCase):
         self.preferences_dialog.show()
 
     def testShowPreferencesDialogNoConsumer(self):
-        def getConsumerNoConsumer():
-            return StubConsumerNone()
-        self._getConsumer = getConsumerNoConsumer
+        id_mock = mock.Mock()
+        id_mock.name = "John Q Consumer"
+        id_mock.uuid = None
+        id_mock.exists_and_valid = mock.Mock(return_value=True)
+        FEATURES.provide(IDENTITY, id_mock)
+
         self._getPrefDialog()
         self.preferences_dialog.show()
 
@@ -104,7 +101,12 @@ class TestPreferencesDialog(unittest.TestCase):
 
         self.preferences_dialog.show()
         self.preferences_dialog.sla_combobox.set_active(1)
-        MockUep.assert_called_with("not_actually_a_uuid", service_level="Pro")
+        # FIXME:
+        # slightly odd, we inject self.id_mock as the identity, but
+        # something in mock doesn't like to equate that to the injected
+        # one, so we just get a ref to the injected one and verify
+        identity = FEATURES.require(IDENTITY)
+        MockUep.assert_called_with(identity.uuid, service_level="Pro")
 
     def testSlaUnset(self):
         self._getPrefDialog()
@@ -121,7 +123,8 @@ class TestPreferencesDialog(unittest.TestCase):
         self.preferences_dialog.release_backend.get_releases = get_releases
         self.preferences_dialog.show()
         self.preferences_dialog.release_combobox.set_active(1)
-        MockUep.assert_called_with("not_actually_a_uuid", release="123123")
+        identity = FEATURES.require(IDENTITY)
+        MockUep.assert_called_with(identity.uuid, release="123123")
 
     def testReleaseUnset(self):
         self._getPrefDialog()

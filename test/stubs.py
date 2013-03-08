@@ -18,6 +18,8 @@ from rhsm import config
 import random
 import tempfile
 
+from subscription_manager.cert_sorter import CertSorter
+
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """
 [foo]
@@ -199,6 +201,15 @@ class StubEntitlementCertificate(EntitlementCertificate):
             content=None, quantity=1, stacking_id=None, sockets=2, service_level=None,
             ram=None, pool=None):
 
+        # If we're given strings, create stub products for them:
+        if isinstance(product, str):
+            product = StubProduct(product)
+        if provided_products:
+            temp = []
+            for p in provided_products:
+                temp.append(StubProduct(p))
+            provided_products = temp
+
         products = []
         if product:
             products.append(product)
@@ -278,7 +289,15 @@ class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
 
     path = "this/is/a/stub"
 
-    def __init__(self, certificates):
+    def __init__(self, certificates=None, pids=None):
+        """
+        Pass list of product ID strings instead of certificates to have
+        stub product certs created for you.
+        """
+        if pids is not None:
+            certificates = []
+            for pid in pids:
+                certificates.append(StubProductCertificate(StubProduct(pid)))
         StubCertificateDirectory.__init__(self, certificates)
 
 
@@ -386,6 +405,9 @@ class StubUEP:
     def getCertificateSerials(self, consumer):
         return []
 
+    def getCompliance(self, uuid):
+        return {}
+
 
 class StubBackend:
     def __init__(self, uep=StubUEP()):
@@ -424,9 +446,6 @@ class StubFacts(object):
     def get_facts(self, refresh=True):
         return self.facts
 
-    def refresh_validity_facts(self):
-        pass
-
     def has_changed(self):
         return self.delta_values
 
@@ -456,4 +475,15 @@ class StubCertLib:
         self.uep = uep
 
     def update(self):
+        pass
+
+
+class StubCertSorter(CertSorter):
+
+    def __init__(self, prod_dir, ent_dir=None):
+        CertSorter.__init__(self, prod_dir, ent_dir, None)
+
+    def _parse_server_status(self):
+        # Override this method to just leave all fields uninitialized so
+        # tests can do whatever they wish with them.
         pass

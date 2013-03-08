@@ -17,6 +17,7 @@
 # in this software or its documentation.
 #
 
+from subscription_manager.injection import FEATURES, IDENTITY
 import locale
 import logging
 import subprocess
@@ -27,6 +28,7 @@ import gtk.glade
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import networkConfig
 from subscription_manager import managerlib
+from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.gui import file_monitor
 from subscription_manager.gui import registergui
 import rhsm.connection as connection
@@ -34,7 +36,7 @@ import rhsm.config as config
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.facts import Facts
 from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
-from subscription_manager.certlib import ConsumerIdentity, CertLib
+from subscription_manager.certlib import CertLib
 from subscription_manager.branding import get_branding
 from subscription_manager.utils import get_client_versions, get_server_versions, \
 restart_virt_who, parse_baseurl_info
@@ -60,10 +62,6 @@ gtk.glade.bindtextdomain("rhsm")
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-
-cert_file = ConsumerIdentity.certpath()
-key_file = ConsumerIdentity.keypath()
-
 cfg = config.initConfig()
 
 ONLINE_DOC_URL_TEMPLATE = "https://access.redhat.com/knowledge/docs/Red_Hat_Subscription_Management/?locale=%s"
@@ -83,6 +81,7 @@ class Backend(object):
     """
 
     def __init__(self):
+        self.identity = FEATURES.require(IDENTITY)
         self.create_uep(cert_file=ConsumerIdentity.certpath(),
                         key_file=ConsumerIdentity.keypath())
 
@@ -159,39 +158,6 @@ class Backend(object):
         self.identity_monitor.connect('changed', callback)
 
 
-class Consumer(object):
-    """
-    Wrapper for sharing consumer identity information throughout GUI
-    components.
-    """
-    def __init__(self):
-        self.reload()
-
-    def reload(self):
-        """
-        Check for consumer certificate on disk and update our info accordingly.
-        """
-        log.debug("Loading consumer info from identity certificates.")
-        try:
-            consumer = ConsumerIdentity.read()
-            self.name = consumer.getConsumerName()
-            self.uuid = consumer.getConsumerId()
-        # XXX shouldn't catch the global exception here, but that's what
-        # existsAndValid did, so this is better.
-        except Exception:
-            self.name = None
-            self.uuid = None
-
-    def is_valid(self):
-        return self.uuid is not None
-
-    def getConsumerName(self):
-        return self.name
-
-    def getConsumerId(self):
-        return self.uuid
-
-
 class MainWindow(widgets.GladeWidget):
     """
     The new RHSM main window.
@@ -200,13 +166,14 @@ class MainWindow(widgets.GladeWidget):
                     'register_menu_item', 'unregister_menu_item',
                     'redeem_menu_item']
 
-    def __init__(self, backend=None, consumer=None,
-                 facts=None, ent_dir=None, prod_dir=None,
+    def __init__(self, backend=None, facts=None,
+                 ent_dir=None, prod_dir=None,
                  auto_launch_registration=False):
         super(MainWindow, self).__init__('mainwindow.glade')
 
         self.backend = backend or Backend()
-        self.consumer = consumer or Consumer()
+        self.identity = FEATURES.require(IDENTITY)
+
         self.facts = facts or Facts(self.backend.entitlement_dir,
                 self.backend.product_dir)
 
@@ -216,14 +183,14 @@ class MainWindow(widgets.GladeWidget):
         self.product_dir = prod_dir or self.backend.product_dir
         self.entitlement_dir = ent_dir or self.backend.entitlement_dir
 
-        self.system_facts_dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
-                self.facts)
+        self.system_facts_dialog = factsgui.SystemFactsDialog(self.backend,
+                                                              self.facts)
 
-        self.registration_dialog = registergui.RegisterScreen(self.backend,
-                self.consumer, self.facts, self._get_window(),
-                callbacks=[self.registration_changed])
+        self.registration_dialog = registergui.RegisterScreen(self.backend, self.facts,
+                                                              self._get_window(),
+                                                              callbacks=[self.registration_changed])
 
-        self.preferences_dialog = PreferencesDialog(self.backend, self.consumer,
+        self.preferences_dialog = PreferencesDialog(self.backend,
                                                     self._get_window())
 
         self.import_sub_dialog = ImportSubDialog()
@@ -231,25 +198,26 @@ class MainWindow(widgets.GladeWidget):
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
         self.network_config_dialog.xml.get_widget("closeButton").connect("clicked", self._config_changed)
 
-        self.redeem_dialog = redeem.RedeemDialog(self.backend, self.consumer)
+        self.redeem_dialog = redeem.RedeemDialog(self.backend)
 
         self.installed_tab_icon = gtk.Image()
         self.installed_tab_icon.set_from_stock(gtk.STOCK_YES,
                 gtk.ICON_SIZE_MENU)
 
-        self.installed_tab = InstalledProductsTab(self.backend, self.consumer,
+        self.installed_tab = InstalledProductsTab(self.backend,
                                                   self.facts,
                                                   self.installed_tab_icon,
                                                   self,
                                                   ent_dir=self.entitlement_dir,
                                                   prod_dir=self.product_dir)
-        self.my_subs_tab = MySubscriptionsTab(self.backend, self.consumer,
-                                              self.facts, self.main_window,
+        self.my_subs_tab = MySubscriptionsTab(self.backend,
+                                              self.main_window,
                                               ent_dir=self.entitlement_dir,
                                               prod_dir=self.product_dir)
 
-        self.all_subs_tab = AllSubscriptionsTab(self.backend, self.consumer,
-                self.facts, self.main_window)
+        self.all_subs_tab = AllSubscriptionsTab(self.backend,
+                                                self.facts,
+                                                self.main_window)
 
         hbox = gtk.HBox(spacing=6)
         hbox.pack_start(self.installed_tab_icon, False, False)
@@ -275,7 +243,7 @@ class MainWindow(widgets.GladeWidget):
         })
 
         def on_identity_change(filemonitor):
-            self.consumer.reload()
+            self.identity.reload()
             self.refresh()
 
         self.backend.monitor_identity(on_identity_change)
@@ -291,7 +259,7 @@ class MainWindow(widgets.GladeWidget):
             self._register_item_clicked(None)
 
     def registered(self):
-        return self.consumer.is_valid()
+        return self.identity.is_valid()
 
     def _on_sla_back_button_press(self):
         self._perform_unregister()
@@ -302,7 +270,7 @@ class MainWindow(widgets.GladeWidget):
 
     def registration_changed(self):
         log.debug("Registration changed, updating main window.")
-        self.consumer.reload()
+        self.identity.reload()
         self.refresh()
 
     def refresh(self):
@@ -346,9 +314,9 @@ class MainWindow(widgets.GladeWidget):
         # Check if consumer can redeem a subscription - if an identity cert exists
         can_redeem = False
 
-        if self.consumer.uuid:
+        if self.identity.uuid:
             try:
-                consumer = self.backend.uep.getConsumer(self.consumer.uuid, None, None)
+                consumer = self.backend.uep.getConsumer(self.identity.uuid, None, None)
                 can_redeem = consumer['canActivate']
             except:
                 can_redeem = False
@@ -371,12 +339,12 @@ class MainWindow(widgets.GladeWidget):
         if not response:
             log.info("unregistrater not confirmed. cancelling")
             return
-        log.info("Proceeding with un-registration: %s", self.consumer.uuid)
+        log.info("Proceeding with un-registration: %s", self.identity.uuid)
         self._perform_unregister()
 
     def _perform_unregister(self):
         try:
-            managerlib.unregister(self.backend.uep, self.consumer.uuid)
+            managerlib.unregister(self.backend.uep, self.identity.uuid)
         except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e,
@@ -385,8 +353,8 @@ class MainWindow(widgets.GladeWidget):
                     _("Please see /var/log/rhsm/rhsm.log for more information."),
                     self.main_window,
                     logMsg="Consumer may need to be manually cleaned up: %s" %
-                    self.consumer.uuid)
-        self.consumer.reload()
+                    self.identity.uuid)
+        self.identity.reload()
 
         # We have new credentials, restart virt-who
         restart_virt_who()
@@ -416,8 +384,9 @@ class MainWindow(widgets.GladeWidget):
         self.import_sub_dialog.show()
 
     def _update_certificates_button_clicked(self, widget):
-        autobind_wizard = registergui.AutobindWizard(self.backend, self.consumer,
-                 self.facts, self._get_window())
+        autobind_wizard = registergui.AutobindWizard(self.backend,
+                                                     self.facts,
+                                                     self._get_window())
         autobind_wizard.show()
 
     def _redeem_item_clicked(self, widget):

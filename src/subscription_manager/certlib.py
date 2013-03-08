@@ -16,15 +16,16 @@
 #
 
 
-import os
 import syslog
 import logging
 from datetime import timedelta, datetime
 from subscription_manager.lock import Lock
-from subscription_manager import cert_sorter
+from subscription_manager.identity import ConsumerIdentity
+from subscription_manager.injection import FEATURES, CERT_SORTER
 from subscription_manager import plugins
+
 from subscription_manager.certdirectory import EntitlementDirectory, \
-    ProductDirectory, Path, Writer
+    ProductDirectory, Writer
 from rhsm.config import initConfig
 from rhsm.certificate import Key, create_from_pem, GMT
 
@@ -96,9 +97,7 @@ class HealingLib(DataLib):
     never have invalid certificats if subscriptions are available.
     """
 
-    def __init__(self, lock=ActionLock(), uep=None, facts_dict=None,
-                 product_dir=None):
-        self.facts_dict = facts_dict
+    def __init__(self, lock=ActionLock(), uep=None, product_dir=None):
         DataLib.__init__(self, lock, uep)
 
         self._product_dir = product_dir or ProductDirectory()
@@ -115,12 +114,15 @@ class HealingLib(DataLib):
                 today = datetime.now(GMT())
                 tomorrow = today + timedelta(days=1)
 
-                # Check if we're not valid today and heal if so. If not
-                # we'll do the same check for tomorrow to hopefully always keep
-                # us valid:
+                # Check if we're invalid today and heal if so. If we are
+                # valid, see if 24h from now is greater than our "valid until"
+                # date, and heal for tomorrow if so.
+
+                # TODO: not great for testing:
                 ent_dir = EntitlementDirectory()
-                cs = cert_sorter.CertSorter(self._product_dir, ent_dir,
-                        self.facts_dict, on_date=today)
+
+                cs = FEATURES.require(CERT_SORTER, self._product_dir, ent_dir,
+                        self.uep)
                 cert_updater = CertLib(lock=self.lock, uep=self.uep)
                 if not cs.is_valid():
                     log.warn("Found invalid entitlements for today: %s" %
@@ -133,10 +135,13 @@ class HealingLib(DataLib):
                     log.info("Entitlements are valid for today: %s" %
                             today)
 
-                    cs = cert_sorter.CertSorter(self._product_dir, ent_dir,
-                            self.facts_dict, on_date=tomorrow)
-                    if not cs.is_valid():
-                        log.warn("Found invalid entitlements for tomorrow: %s" %
+                    if cs.compliant_until is None:
+                        # Edge case here, not even sure this can happen as we
+                        # should have a compliant until date if we're valid
+                        # today, but just in case:
+                        log.warn("Got valid status from server but no valid until date.")
+                    elif tomorrow > cs.compliant_until:
+                        log.warn("Entitlements will be invalid by tomorrow: %s" %
                                 tomorrow)
                         self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid)
                         ents = self.uep.bind(uuid, tomorrow)
@@ -366,97 +371,6 @@ class UpdateAction(Action):
 
 class Disconnected(Exception):
     pass
-
-
-class ConsumerIdentity:
-
-    PATH = cfg.get('rhsm', 'consumerCertDir')
-    KEY = 'key.pem'
-    CERT = 'cert.pem'
-
-    @classmethod
-    def keypath(cls):
-        return Path.join(cls.PATH, cls.KEY)
-
-    @classmethod
-    def certpath(cls):
-        return Path.join(cls.PATH, cls.CERT)
-
-    @classmethod
-    def read(cls):
-        f = open(cls.keypath())
-        key = f.read()
-        f.close()
-        f = open(cls.certpath())
-        cert = f.read()
-        f.close()
-        return ConsumerIdentity(key, cert)
-
-    @classmethod
-    def exists(cls):
-        return (os.path.exists(cls.keypath()) and \
-                 os.path.exists(cls.certpath()))
-
-    @classmethod
-    def existsAndValid(cls):
-        if cls.exists():
-            try:
-                cls.read()
-                return True
-            except Exception, e:
-                log.warn('possible certificate corruption')
-                log.error(e)
-        return False
-
-    def __init__(self, keystring, certstring):
-        self.key = keystring
-        # TODO: bad variables, cert should be the certificate object, x509 is
-        # used elsewhere for the m2crypto object of the same name.
-        self.cert = certstring
-        self.x509 = create_from_pem(certstring)
-
-    def getConsumerId(self):
-        subject = self.x509.subject
-        return subject.get('CN')
-
-    def getConsumerName(self):
-        altName = self.x509.alt_name
-        return altName.replace("DirName:/CN=", "")
-
-    def getSerialNumber(self):
-        return self.x509.serial
-
-    # TODO: we're using a Certificate which has it's own write/delete, no idea
-    # why this landed in a parallel disjoint class wrapping the actual cert.
-    def write(self):
-        from subscription_manager import managerlib
-        self.__mkdir()
-        f = open(self.keypath(), 'w')
-        f.write(self.key)
-        f.close()
-        os.chmod(self.keypath(), managerlib.ID_CERT_PERMS)
-        f = open(self.certpath(), 'w')
-        f.write(self.cert)
-        f.close()
-        os.chmod(self.certpath(), managerlib.ID_CERT_PERMS)
-
-    def delete(self):
-        path = self.keypath()
-        if os.path.exists(path):
-            os.unlink(path)
-        path = self.certpath()
-        if os.path.exists(path):
-            os.unlink(path)
-
-    def __mkdir(self):
-        path = Path.abs(self.PATH)
-        if not os.path.exists(path):
-            os.mkdir(path)
-
-    def __str__(self):
-        return 'consumer: name="%s", uuid=%s' % \
-            (self.getConsumerName(),
-             self.getConsumerId())
 
 
 class UpdateReport:

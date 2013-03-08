@@ -20,6 +20,7 @@ import unittest
 
 import mock
 
+from subscription_manager.injection import FEATURES, IDENTITY
 from subscription_manager import async
 from subscription_manager import managerlib
 
@@ -54,14 +55,14 @@ class TestAsyncPool(unittest.TestCase):
         return True
 
     def _create_async_pool(self):
-        consumer_mock = mock.Mock()
-        consumer_mock.uuid.return_value = 'some-consumer-uuid'
+        id_mock = mock.Mock()
+        id_mock.uuid = 'some-consumer-uuid'
+        FEATURES.provide(IDENTITY, id_mock)
         facts_mock = mock.Mock()
         facts_mock.update_check.return_value = None
 
         self.pool_stash = \
             managerlib.PoolStash(backend=stubs.StubBackend(uep=ListPoolsStubUEP()),
-                                                           consumer=consumer_mock,
                                                            facts=facts_mock)
 
         self.ap = async.AsyncPool(self.pool_stash)

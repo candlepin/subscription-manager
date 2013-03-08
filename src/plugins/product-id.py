@@ -20,6 +20,10 @@ import sys
 from yum.plugins import TYPE_CORE
 
 sys.path.append('/usr/share/rhsm')
+
+from subscription_manager.injectioninit import init_dep_injection
+init_dep_injection()
+
 from subscription_manager import logutil
 from subscription_manager.productid import ProductManager
 from subscription_manager.certdirectory import Path
