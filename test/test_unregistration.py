@@ -12,23 +12,22 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import unittest
 
-from stubs import StubUEP, StubEntitlementDirectory, StubProductDirectory
+from stubs import StubUEP
 import rhsm.connection as connection
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.cache import CacheManager
 from subscription_manager import managercli
+from fixture import SubManFixture
 
 
-class CliUnRegistrationTests(unittest.TestCase):
+class CliUnRegistrationTests(SubManFixture):
 
     def test_unregister_removes_consumer_cert(self):
         connection.UEPConnection = StubUEP
 
         # When
-        cmd = managercli.UnRegisterCommand(ent_dir=StubEntitlementDirectory([]),
-                              prod_dir=StubProductDirectory([]))
+        cmd = managercli.UnRegisterCommand()
 
         ConsumerIdentity.existsAndValid = classmethod(lambda cls: True)
         ConsumerIdentity.exists = classmethod(lambda cls: True)

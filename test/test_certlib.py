@@ -13,7 +13,6 @@
 # in this software or its documentation.
 #
 
-import unittest
 from mock import Mock, patch
 from datetime import timedelta, datetime
 

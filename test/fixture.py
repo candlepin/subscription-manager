@@ -27,5 +27,7 @@ class SubManFixture(unittest.TestCase):
         # By default set up an empty stub entitlement and product dir.
         # Tests need to modify or create their own but nothing should hit
         # the system.
-        inj.FEATURES.provide(inj.ENT_DIR, stubs.StubEntitlementDirectory())
-        inj.FEATURES.provide(inj.PROD_DIR, stubs.StubProductDirectory())
+        self.ent_dir = stubs.StubEntitlementDirectory()
+        inj.FEATURES.provide(inj.ENT_DIR, self.ent_dir)
+        self.prod_dir = stubs.StubProductDirectory()
+        inj.FEATURES.provide(inj.PROD_DIR, self.prod_dir)
