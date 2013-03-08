@@ -10,10 +10,10 @@ msgstr ""
 "PO-Revision-Date: 2013-01-23 01:06-0500\n"
 "Last-Translator: gcintra <gcintra@fedoraproject.org>\n"
 "Language-Team: Portuguese (Brazil)\n"
-"Language: pt-BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pt-BR\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Generator: Zanata 2.0.3\n"
 
@@ -22,7 +22,6 @@ msgstr ""
 msgid "%s local certificate has been deleted."
 msgid_plural "%s local certificates have been deleted."
 msgstr[0] ""
-msgstr[1] ""
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
@@ -86,8 +85,8 @@ msgstr "finalizado"
 # document keys
 #: ../src/subscription_manager/managercli.py:61
 msgid ""
-"This system is not yet registered. Try 'subscription-manager register --"
-"help' for more information."
+"This system is not yet registered. Try 'subscription-manager register "
+"--help' for more information."
 msgstr ""
 "Este sistema ainda não foi registrado. Tente 'subscription-manager register "
 "--help' para mais informações"
@@ -132,13 +131,13 @@ msgstr "Vencido"
 msgid "Partially Subscribed"
 msgstr "Parcialmente Subscrito"
 
-# translation auto-copied from project Subscription Manager, version 0.96.X,
-# document keys, author rgyorfy
 #. It's possible (though unlikely, and kind of broken) to have more
 #. than one version of python-rhsm/subscription-manager installed.
 #. Versions() will only return one (and I suspect it's not predictable
 #. which it will return).
 #. TODO: could stand to check if registered before trying to do this:
+# translation auto-copied from project Subscription Manager, version 0.96.X,
+# document keys, author rgyorfy
 #: ../src/subscription_manager/managercli.py:71
 #: ../src/subscription_manager/managercli.py:291
 #: ../src/subscription_manager/managercli.py:292
@@ -293,27 +292,28 @@ msgstr "Erro de rede, incapaz de conectar com o servidor"
 msgid "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr "Por favor veja /var/log/rhsm/rhsm.log para obter mais informações"
 
-# translation auto-copied from project Subscription Manager, version 0.96.X,
-# document keys
 #. NOTE: yes this looks a lot like the socket error, but I think these
 #. were actually intended to display slightly different messages:
+# translation auto-copied from project Subscription Manager, version 0.96.X,
+# document keys
 #: ../src/subscription_manager/managercli.py:153
 #: ../src/subscription_manager/gui/utils.py:82
 msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
+"Network error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"Erro na rede. Por favor verifique os detalhes de conexão ou consulte /var/"
-"log/rhsm/rhsm.log para maiores informações."
+"Erro na rede. Por favor verifique os detalhes de conexão ou consulte "
+"/var/log/rhsm/rhsm.log para maiores informações."
 
+#. This is what happens when there's an issue with the server on the other
+#. side of the wire
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#. This is what happens when there's an issue with the server on the other side of the wire
 #: ../src/subscription_manager/managercli.py:157
 #: ../src/subscription_manager/gui/utils.py:85
 msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
+"Remote server error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr ""
 "Erro no servidor remoto. Por favor verifique os detalhes da conexão ou "
 "consulte /var/log/rhsm/rhsm.log para maiores informações."
@@ -507,11 +507,11 @@ msgstr "--force pode apenas ser usado com --regenerate"
 msgid "--username and --password can only be used with --force"
 msgstr "--username e --password podem apenas ser usados com --force"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
 #. no need to continue if user is only registered to Classic
 #. FIXME: slightly odd in that we log that we can't get the version,
 #. but then show "unknown" here.
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
 #: ../src/subscription_manager/managercli.py:640
 #: ../src/subscription_manager/managercli.py:643
 #: ../src/subscription_manager/managercli.py:2150
@@ -691,8 +691,8 @@ msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
 msgstr ""
-"Erro: Você deve registrar ou especificar --username e --password para listar "
-"os níveis de serviços"
+"Erro: Você deve registrar ou especificar --username e --password para listar"
+" os níveis de serviços"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
@@ -837,7 +837,8 @@ msgstr ""
 # document keys
 #: ../src/subscription_manager/managercli.py:978
 msgid "Error: Activation keys cannot be used with --auto-attach."
-msgstr "Erro: Chaves de ativação não podem ser utilizadas sem o --auto-attach."
+msgstr ""
+"Erro: Chaves de ativação não podem ser utilizadas sem o --auto-attach."
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
@@ -926,8 +927,8 @@ msgstr ""
 # document keys
 #: ../src/subscription_manager/managercli.py:1216
 msgid ""
-"optional language to use for email notification when subscription redemption "
-"is complete (Examples: en-us, de-de)"
+"optional language to use for email notification when subscription redemption"
+" is complete (Examples: en-us, de-de)"
 msgstr ""
 "Idioma opcional para usar no e-mail de notificação quando o resgate de uma "
 "subscrição estiver completo. Exemplos: en-us, pt-br"
@@ -938,8 +939,8 @@ msgstr ""
 msgid ""
 "Error: This command requires that you specify an email address with --email."
 msgstr ""
-"Erro: Este comando requer que você especifique um endereço de email com o  --"
-"email."
+"Erro: Este comando requer que você especifique um endereço de email com o  "
+"--email."
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
@@ -1039,9 +1040,9 @@ msgstr "número de subscrições a conectar"
 msgid "automatically attach compatible subscriptions to this system"
 msgstr ""
 
+#. re bz #864207
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
-#. re bz #864207
 #: ../src/subscription_manager/managercli.py:1358
 msgid "All installed products are covered by valid entitlements."
 msgstr ""
@@ -1064,11 +1065,11 @@ msgstr "Conectar uma subscrição específica ao sistema registrado."
 # document keys
 #: ../src/subscription_manager/managercli.py:1372
 msgid ""
-"Error: This command requires that you specify a pool with --pool or use --"
-"auto."
-msgstr ""
-"Erro: Este comando requer que você especifique um conjunto com --pool ou use "
+"Error: This command requires that you specify a pool with --pool or use "
 "--auto."
+msgstr ""
+"Erro: Este comando requer que você especifique um conjunto com --pool ou use"
+" --auto."
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
@@ -1145,7 +1146,8 @@ msgstr "Erro: O '%s' não é um número serial válido"
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:1520
-msgid "Error: This command requires that you specify one of --serial or --all."
+msgid ""
+"Error: This command requires that you specify one of --serial or --all."
 msgstr ""
 "Erro: Este comando requer que você especifique um dos --serial ou --all."
 
@@ -1158,7 +1160,6 @@ msgstr ""
 msgid "%s subscription removed at the server."
 msgid_plural "%s subscriptions removed at the server."
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/subscription_manager/managercli.py:1556
 msgid "Serial numbers successfully removed at the server:"
@@ -1237,11 +1238,11 @@ msgstr ""
 # document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:1674
 msgid ""
-"Error: This command requires that you specify a certificate with --"
-"certificate."
+"Error: This command requires that you specify a certificate with "
+"--certificate."
 msgstr ""
-"Erro: Este comando requer que você especifique um certificado com  --"
-"certificate."
+"Erro: Este comando requer que você especifique um certificado com  "
+"--certificate."
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author rgyorfy
@@ -1264,11 +1265,11 @@ msgstr ""
 # document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:1705
 msgid ""
-"An error occurred while importing the certificate. Please check log file for "
-"more information."
+"An error occurred while importing the certificate. Please check log file for"
+" more information."
 msgstr ""
-"Ocorreu um erro ao importar o certificado. Por favor, verifique o arquivo de "
-"log para mais informações."
+"Ocorreu um erro ao importar o certificado. Por favor, verifique o arquivo de"
+" log para mais informações."
 
 #: ../src/subscription_manager/managercli.py:1726
 msgid "View and configure subscription-manager plugins"
@@ -1340,7 +1341,8 @@ msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1845
 #, python-format
-msgid "Error: %s is not a valid repo ID. Use --list option to see valid repos."
+msgid ""
+"Error: %s is not a valid repo ID. Use --list option to see valid repos."
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
@@ -1360,7 +1362,8 @@ msgstr "O Repo %s foi desabilitado neste sistema."
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
 #: ../src/subscription_manager/managercli.py:1864
-msgid "List, set, or remove the configuration parameters in use by this system"
+msgid ""
+"List, set, or remove the configuration parameters in use by this system"
 msgstr ""
 "Listar, definir ou remover os parâmetros de configuração em uso por este "
 "sistema."
@@ -1506,7 +1509,8 @@ msgstr "Error: --ondate é apenas aplicável com --available"
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
 #: ../src/subscription_manager/managercli.py:2002
-msgid "Error: --servicelevel is only applicable with --available or --consumed"
+msgid ""
+"Error: --servicelevel is only applicable with --available or --consumed"
 msgstr ""
 "Erro: --servicelevel é aplicável somente com o --available ou --consumed."
 
@@ -1525,7 +1529,8 @@ msgstr "    Status de Produtos Instalados"
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
 #: ../src/subscription_manager/managercli.py:2037
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr ""
 "A data inserida está inválida. A data deve aparecer no formato AAAA-MM-DD "
 "(exemplo:"
@@ -1639,10 +1644,10 @@ msgstr ""
 msgid "Server URL port should be numeric"
 msgstr ""
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
 #. usage format strips any leading 'usage' so
 #. do not iclude it
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
 #: ../src/subscription_manager/cli.py:60
 #, python-format
 msgid "%%prog %s [OPTIONS]"
@@ -1703,25 +1708,26 @@ msgstr "AVISO"
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:13
-msgid "This system has already been registered with Red Hat using RHN Classic."
+msgid ""
+"This system has already been registered with Red Hat using RHN Classic."
 msgstr "Este sistema já foi registrado com a Red Hat usando RHN Classic."
 
 #: ../src/subscription_manager/branding/redhat_branding.py:15
 msgid ""
-"Your system is being registered again using Red Hat Subscription Management. "
-"Red Hat recommends that customers only register once."
+"Your system is being registered again using Red Hat Subscription Management."
+" Red Hat recommends that customers only register once."
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
-"To learn how to unregister from either service please consult this Knowledge "
-"Base Article: https://access.redhat.com/kb/docs/DOC-45563"
+"To learn how to unregister from either service please consult this Knowledge"
+" Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"Para aprender mais sobre como cancelar o registro de algum dos serviços, por "
-"favor consulte este Artigo de Base de Conhecimento: https://access.redhat."
-"com/kb/docs/DOC-45563"
+"Para aprender mais sobre como cancelar o registro de algum dos serviços, por"
+" favor consulte este Artigo de Base de Conhecimento: "
+"https://access.redhat.com/kb/docs/DOC-45563"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author gcintra
@@ -1763,8 +1769,8 @@ msgid ""
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
 "Para aprender mais sobre como se registrar no RHN e sobre as tecnologias, "
-"por favor consulte este Artigo de Base de Conhecimento: //access.redhat.com/"
-"kb/docs/DOC-45563"
+"por favor consulte este Artigo de Base de Conhecimento: "
+"//access.redhat.com/kb/docs/DOC-45563"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
@@ -1774,8 +1780,8 @@ msgstr "RHN classic e Red Hat Subscription Management"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:30
 msgid ""
-"Tip: Forgot your login or password? Look it up at http://redhat.com/"
-"forgot_password"
+"Tip: Forgot your login or password? Look it up at "
+"http://redhat.com/forgot_password"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
@@ -1831,11 +1837,11 @@ msgstr ""
 #: ../src/subscription_manager/migrate/migrate.py:70
 #, python-format
 msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
-"more details."
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for"
+" more details."
 msgstr ""
-"Incapaz de se conectar ao servidor de certificado: %s. Veja o /var/log/rhsm/"
-"rhsm.log para obter mais detalhes"
+"Incapaz de se conectar ao servidor de certificado: %s. Veja o "
+"/var/log/rhsm/rhsm.log para obter mais detalhes"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author gcintra
@@ -1920,12 +1926,10 @@ msgstr ""
 #: ../src/subscription_manager/migrate/migrate.py:267
 msgid ""
 "\n"
-"This system appears to be already registered to Red Hat Subscription "
-"Management.  Exiting."
+"This system appears to be already registered to Red Hat Subscription Management.  Exiting."
 msgstr ""
 "\n"
-"Este sistema parece já estar registrado no Gerenciamento de Subscrição da "
-"Red Hat. Saindo."
+"Este sistema parece já estar registrado no Gerenciamento de Subscrição da Red Hat. Saindo."
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
@@ -1933,12 +1937,10 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"profile details."
+"Please visit https://access.redhat.com/management/consumers/%s to view the profile details."
 msgstr ""
 "\n"
-"Por favor visite https://access.redhat.com/management/consumers/%s para "
-"visualizar os detalhes do perfil."
+"Por favor visite https://access.redhat.com/management/consumers/%s para visualizar os detalhes do perfil."
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys, author rgyorfy
@@ -1971,8 +1973,8 @@ msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
 msgstr ""
-"Incapaz de autenticar no RHN Classic. Veja /var/log/rhsm/rhsm.log para obter "
-"mais detalhes."
+"Incapaz de autenticar no RHN Classic. Veja /var/log/rhsm/rhsm.log para obter"
+" mais detalhes."
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
@@ -1999,8 +2001,8 @@ msgstr "Prolema encontrado ao obter a lista de canais subscritos. Saindo."
 # document keys
 #: ../src/subscription_manager/migrate/migrate.py:378
 msgid ""
-"You are subscribed to more than one jbappplatform channel.  This script does "
-"not support that configuration.  Exiting."
+"You are subscribed to more than one jbappplatform channel.  This script does"
+" not support that configuration.  Exiting."
 msgstr ""
 "Você está registrado em mais de um canal jbapplatform. Este script não "
 "suporta esta configuração. Saindo."
@@ -2052,12 +2054,10 @@ msgstr ""
 #: ../src/subscription_manager/migrate/migrate.py:541
 #, python-format
 msgid ""
-"Did not receive a completed unregistration message from RHN Classic for "
-"system %s.\n"
+"Did not receive a completed unregistration message from RHN Classic for system %s.\n"
 "Please investigate on the Customer Portal at https://access.redhat.com."
 msgstr ""
-"Não recebemos uma mensagem de cancelamento de registro concluída do RHN "
-"Classic para o sistema %s. \n"
+"Não recebemos uma mensagem de cancelamento de registro concluída do RHN Classic para o sistema %s. \n"
 "Por favor veja o Portal do Consumidor em https://access.redhat.com."
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
@@ -2073,7 +2073,8 @@ msgid "Unable to unregister system from RHN Classic.  Exiting."
 msgstr ""
 "Incapaz de cancelar registro de sistema a partir do RHN Clássico. Saindo."
 
-#. For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
+#. For registering the machine, use the CLI tool to reuse the
+#. username/password (because the GUI will prompt for them again)
 #: ../src/subscription_manager/migrate/migrate.py:555
 msgid ""
 "\n"
@@ -2090,8 +2091,7 @@ msgid ""
 msgstr ""
 "\n"
 "Incapaz de se registrar. \n"
-"Para assistência futura, por favor entre em contato com os Serviços de "
-"Suporte da Red Hat Global."
+"Para assistência futura, por favor entre em contato com os Serviços de Suporte da Red Hat Global."
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -2100,11 +2100,12 @@ msgstr ""
 msgid ""
 "System '%s' successfully registered to Red Hat Subscription Management.\n"
 msgstr ""
-"Sistema '%s' registrado com sucesso para o Red Hat Subscription Management.\n"
+"Sistema '%s' registrado com sucesso para o Red Hat Subscription "
+"Management.\n"
 
+#. Display an actual message for the empty string level.
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author gcintra
-#. Display an actual message for the empty string level.
 #: ../src/subscription_manager/migrate/migrate.py:594
 msgid "No service level preference"
 msgstr "Nenhuma preferência de nível de serviço."
@@ -2132,8 +2133,8 @@ msgstr "Por favor, selecione um acordo de nível de serviço para este sistema."
 msgid ""
 "Launching the GUI tool to manually attach subscriptions to this system ..."
 msgstr ""
-"Lançando a ferramenta do GUI para conectar manualmente as subscrições a este "
-"sistema..."
+"Lançando a ferramenta do GUI para conectar manualmente as subscrições a este"
+" sistema..."
 
 #: ../src/subscription_manager/migrate/migrate.py:612
 msgid "Attempting to auto-attach to appropriate subscriptions..."
@@ -2144,12 +2145,10 @@ msgstr ""
 #: ../src/subscription_manager/migrate/migrate.py:621
 msgid ""
 "\n"
-"Unable to auto-attach.  Do your existing subscriptions match the products "
-"installed on this system?"
+"Unable to auto-attach.  Do your existing subscriptions match the products installed on this system?"
 msgstr ""
 "\n"
-"Incapaz de se auto-conectar. Suas subscrições existentes coincidem com os "
-"produtos instalados neste sistema?"
+"Incapaz de se auto-conectar. Suas subscrições existentes coincidem com os produtos instalados neste sistema?"
 
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
@@ -2157,12 +2156,10 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"details, and to make changes if necessary."
+"Please visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary."
 msgstr ""
 "\n"
-"Por favor visite https://access.redhat.com/management/consumers/%s para "
-"visualizar e fazer mudanças se necessário."
+"Por favor visite https://access.redhat.com/management/consumers/%s para visualizar e fazer mudanças se necessário."
 
 # translation auto-copied from project Subscription Manager, version 0.98.X,
 # document keys
@@ -2181,8 +2178,9 @@ msgid ""
 "Please ensure system has subscriptions attached, and see 'subscription-"
 "manager repos --help' to enable additional repositories"
 msgstr ""
-"Por favor certifique-se de que o sistema possui subscrições em anexo, e veja "
-"o 'subscription-manager repos --help' para habilitar repositórios adicionais"
+"Por favor certifique-se de que o sistema possui subscrições em anexo, e veja"
+" o 'subscription-manager repos --help' para habilitar repositórios "
+"adicionais"
 
 #. get a list of RHN classic channels this machine is subscribed to
 #: ../src/subscription_manager/migrate/migrate.py:682
@@ -2263,29 +2261,29 @@ msgstr "A plataforma de Virtualização não suporta UUIDs"
 msgid "Error finding UUID: %s"
 msgstr "Erro em encontrar UUID: %s"
 
+#. note default is lower caps
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#. note default is lower caps
 #: ../src/subscription_manager/i18n_optparse.py:36
 msgid "%prog [OPTIONS]"
 msgstr "%prog [OPTIONS]"
 
+#. For older versions of optparse
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:126
 #: ../src/subscription_manager/i18n_optparse.py:138
 #, python-format
 msgid "Usage: %s\n"
 msgstr "Uso: %s\n"
 
-# translation auto-copied from project Subscription Manager, version 0.96.X,
-# document keys, author mospina
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
 #. so we get it picked up. for local translation, and then optparse will
 #. use them.
 #. translators: this should have the same translation as "Usage: %s\n"
+# translation auto-copied from project Subscription Manager, version 0.96.X,
+# document keys, author mospina
 #: ../src/subscription_manager/i18n_optparse.py:137
 #, python-format
 msgid "usage: %s\n"
@@ -2321,9 +2319,9 @@ msgstr "Opções"
 msgid "options:"
 msgstr "opções:"
 
+#. stuff for option value sanity checking
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#. stuff for option value sanity checking
 #: ../src/subscription_manager/i18n_optparse.py:146
 #, python-format
 msgid "no such option: %s"
@@ -2395,9 +2393,9 @@ msgstr "opção %s: inválida %s valor: %r"
 msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr "opção %s: escolha errada: %r (escolha a partir do %s)"
 
+#. default options
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#. default options
 #: ../src/subscription_manager/i18n_optparse.py:159
 msgid "show this help message and exit"
 msgstr "apresenta esta mensagem de ajuda e encerramento"
@@ -2408,9 +2406,9 @@ msgstr "apresenta esta mensagem de ajuda e encerramento"
 msgid "show program's version number and exit"
 msgstr "o número de versão do programa apresentado e encerramento"
 
+#. translators: arg 1 is the program name, arg 2 is the error message
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys
-#. translators: arg 1 is the program name, arg 2 is the error message
 #: ../src/subscription_manager/i18n_optparse.py:173
 #, python-format
 msgid "%s: error: %s"
@@ -2432,9 +2430,9 @@ msgstr "Ilimitado"
 msgid "Subscription"
 msgstr "Subscrição"
 
+#. Set up the quantity column.
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#. Set up the quantity column.
 #: ../src/subscription_manager/gui/allsubs.py:88
 #: ../src/subscription_manager/gui/registergui.py:382
 #: ../src/subscription_manager/gui/contract_selection.py:114
@@ -2468,9 +2466,9 @@ msgstr "Nenhuma subscrição coincide com os filtros atuais."
 msgid "All Available Subscriptions"
 msgstr "Todas as Subscrições Disponíveis"
 
+#. show pulsating progress bar while we wait for results
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author gcintra
-#. show pulsating progress bar while we wait for results
 #: ../src/subscription_manager/gui/allsubs.py:339
 msgid "Searching"
 msgstr "Buscando"
@@ -2515,9 +2513,9 @@ msgstr "Erro ao obter subscrições: %s"
 msgid "%s applied"
 msgstr "%s applicado"
 
+#. Set up columns on the view
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:58
 msgid "Fact"
 msgstr "Dado"
@@ -2615,46 +2613,46 @@ msgstr[1] "Coberto pelos contratos %s através do %s"
 msgid "My Installed Products"
 msgstr "Meus Produtos Instalados"
 
+#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:325
 #, python-format
 msgid "%s installed products do not have valid subscriptions."
 msgstr "%s produtos instalados não possuem subscrições válidas"
 
+#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:330
 msgid "1 installed product does not have a valid subscription."
 msgstr "1 produto instaldo não possui uma subscrição válida"
 
+#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:336
 msgid "This system does not match subscription limits."
 msgstr "Este sistema não coincide limites de subscrição"
 
+#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:343
 #, python-format
 msgid "System is properly subscribed through %s."
 msgstr "O sistema está registrado adequadamente através do %s."
 
+#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:351
 msgid "No installed products detected."
 msgstr "Nenhum produto instalado detectado."
 
+#. I18N: Please add newlines if translation is longer:
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#. I18N: Please add newlines if translation is longer:
 #: ../src/subscription_manager/gui/installedtab.py:356
 msgid "Keep your system up to date by registering."
 msgstr "Mantenha seu sistema atualizado registrando-se."
@@ -2663,11 +2661,11 @@ msgstr "Mantenha seu sistema atualizado registrando-se."
 # document keys
 #: ../src/subscription_manager/gui/utils.py:72
 msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
+"Network error, unable to connect to server. Please see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"Erro na rede, não foi possível conectar ao servidor. Por favor consulte /var/"
-"log/rhsm/rhsm.log para maiores informações."
+"Erro na rede, não foi possível conectar ao servidor. Por favor consulte "
+"/var/log/rhsm/rhsm.log para maiores informações."
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
@@ -2676,10 +2674,10 @@ msgstr ""
 msgid "Unable to verify server's identity: %s"
 msgstr "Não foi possível verificar a identidade do servidor: %s"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
 #. An empty string entry is used for "un-setting" the system's SLA:
 #. for unsetting
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
 #: ../src/subscription_manager/gui/preferences.py:108
 #: ../src/subscription_manager/gui/preferences.py:136
 #: ../src/subscription_manager/gui/widgets.py:294
@@ -2745,9 +2743,9 @@ msgstr ""
 msgid "The following certificates were successfully imported:"
 msgstr "Os seguintes certificados foram importados com sucesso:"
 
+#. if we get to this point, the import was successful
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
-#. if we get to this point, the import was successful
 #: ../src/subscription_manager/gui/importsub.py:132
 msgid "Certificate import was successful."
 msgstr "O certificado foi importado com sucesso."
@@ -2793,8 +2791,8 @@ msgstr "Erro de subscrição"
 msgid ""
 "Unable to attach any additional subscriptions at current service level: %s"
 msgstr ""
-"Incapaz de conectar qualquer subscrição adicional no nível de serviço atual: "
-"%s"
+"Incapaz de conectar qualquer subscrição adicional no nível de serviço atual:"
+" %s"
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
@@ -2819,11 +2817,11 @@ msgstr "Você optou por pular o auto-attach (conectar automaticamente)."
 msgid "Finish"
 msgstr "Concluir"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys, author gcintra
 #. Firstboot module title
 #. Note: translated title needs to be unique across all
 #. firstboot modules, not just the rhsm ones. See bz #828042
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys, author gcintra
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:177
 msgid "Subscription Management Registration"
 msgstr "Registro de Gerenciamento de Subscrição"
@@ -2867,30 +2865,18 @@ msgstr "Sistema Já Registrado"
 #: ../src/subscription_manager/gui/about.py:26
 msgid ""
 "\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
+"This software is licensed to you under the GNU General Public License, version 2 (GPLv2). There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with this software; if not, see:\n"
 "\n"
 "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
 "\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to use or replicate Red Hat trademarks that are incorporated in this software or its documentation.\n"
 msgstr ""
 "\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
+"This software is licensed to you under the GNU General Public License, version 2 (GPLv2). There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with this software; if not, see:\n"
 "\n"
 "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
 "\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to use or replicate Red Hat trademarks that are incorporated in this software or its documentation.\n"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
@@ -3008,8 +2994,8 @@ msgid ""
 "All installed products are covered by valid entitlements. No need to attach "
 "subscriptions at this time."
 msgstr ""
-"Todos os produtos instalados são cobertos pelos direitos à serviços válidos. "
-"Não há a necessidade de conectar subscrições agora."
+"Todos os produtos instalados são cobertos pelos direitos à serviços válidos."
+" Não há a necessidade de conectar subscrições agora."
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
@@ -3019,8 +3005,8 @@ msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
 "\"All Available Subscriptions\" tab to manually attach subscriptions."
 msgstr ""
-"Não existem subscrições disponíveis no nível de serviço atual: %s. Por favor "
-"utse o \"Todas as Subscrições Disponíveis\" para conectar as subscrições "
+"Não existem subscrições disponíveis no nível de serviço atual: %s. Por favor"
+" utse o \"Todas as Subscrições Disponíveis\" para conectar as subscrições "
 "manualmente"
 
 #: ../src/subscription_manager/gui/registergui.py:522
@@ -3103,11 +3089,11 @@ msgstr "Certificado CA para o serviço de subscrição não foi instalado."
 # document keys, author gcintra
 #: ../src/subscription_manager/gui/registergui.py:914
 msgid ""
-"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
-"prefix]"
+"Please provide a hostname with optional port and/or prefix: "
+"hostname[:port][/prefix]"
 msgstr ""
-"Por favor, forneça um hostname com a porta opcional e/ou prefixo: hostname[:"
-"port][/prefix]"
+"Por favor, forneça um hostname com a porta opcional e/ou prefixo: "
+"hostname[:port][/prefix]"
 
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
@@ -3183,9 +3169,9 @@ msgstr "Hoje"
 msgid "Both"
 msgstr "Ambos"
 
+#. content-type is required, no need to xstr
 # translation auto-copied from project Subscription Manager, version 0.97.X,
 # document keys, author gcintra
-#. content-type is required, no need to xstr
 #: ../src/subscription_manager/gui/widgets.py:637
 #: ../src/rct/manifest_commands.py:120 ../src/rct/printing.py:76
 msgid "Type"
@@ -3400,8 +3386,8 @@ msgstr "organization_entry"
 # document keys
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:7
 msgid ""
-"Multiple Activation Keys can be entered by separating them with a comma or a "
-"space."
+"Multiple Activation Keys can be entered by separating them with a comma or a"
+" space."
 msgstr ""
 "Chaves de Ativação podem ser inseridas separando-as com uma vírgula ou um "
 "espaço."
@@ -4142,8 +4128,8 @@ msgid ""
 "system administrators to automatically register your system and attach all "
 "necessary subscriptions."
 msgstr ""
-"As chaves de ativação são faixas alfanuméricas que são pré-configuradas pelo "
-"seu administrador de sistemas para registrar seu sistema automaticamente e "
+"As chaves de ativação são faixas alfanuméricas que são pré-configuradas pelo"
+" seu administrador de sistemas para registrar seu sistema automaticamente e "
 "conectar todas as subscrições necessárias."
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
@@ -4354,8 +4340,8 @@ msgid ""
 "Could not read installation number from /etc/sysconfig/rhn/install-num.  "
 "Aborting."
 msgstr ""
-"Não foi possível ler o número de instalação a partir do /etc/sysconfig/rhn/"
-"install-num. Abortando."
+"Não foi possível ler o número de instalação a partir do /etc/sysconfig/rhn"
+"/install-num. Abortando."
 
 # translation auto-copied from project Subscription Manager, version 0.98.X,
 # document keys
@@ -4434,11 +4420,11 @@ msgstr "Para mais informações execute: rhsmcertd --help\n"
 msgid "Wrong number of arguments specified.\n"
 msgstr "Número errado de argumentos especificados\n"
 
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
 #. New style args were used, assume error.
 #. We do not support both at once, other than
 #. debug and wait.
+# translation auto-copied from project Subscription Manager, version 1.0.X,
+# document keys
 #: ../src/rhsmcertd.c:367
 msgid "Invalid argument specified.\n"
 msgstr "Argumentos especificados inválidos.\n"
@@ -4496,8 +4482,8 @@ msgid ""
 "Hat login to ensure your system is up-to-date."
 msgstr ""
 "Para que o Gerenciador de Subscrições forneça atualizações ao seu sistema, "
-"seu sistema deve ser registrado com o Customer Portal. Por favor, ensira seu "
-"login da Red Hat para certificar-se que seu sistema está atualizado."
+"seu sistema deve ser registrado com o Customer Portal. Por favor, ensira seu"
+" login da Red Hat para certificar-se que seu sistema está atualizado."
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys
@@ -4521,7 +4507,8 @@ msgstr "Produtos Parcialmente com Direitos"
 # document keys
 #: ../src/rhsm_icon.c:221
 msgid ""
-"This system is missing one or more subscriptions to fully cover its products."
+"This system is missing one or more subscriptions to fully cover its "
+"products."
 msgstr ""
 "Este sistema não possui um ou mais subscrições para cobrir totalmente seus "
 "produtos"
@@ -5001,48 +4988,3 @@ msgstr "Certificado de Identidade"
 #: ../src/rct/printing.py:198
 msgid "Unknown Certificate Type"
 msgstr "Tipo de Certificado Desconhecido"
-
-# translation auto-copied from project Subscription Manager, version 1.0.X,
-# document keys
-#~ msgid ""
-#~ "The tool you are using is attempting to re-register using Red Hat "
-#~ "Subscription Management technology. Red Hat recommends that customers "
-#~ "only register once."
-#~ msgstr ""
-#~ "A ferramenta que você está usando está tentado se registrar novamente "
-#~ "usando a tecnologia do Gerenciamento de Subscrição da Red hat. A Red Hat "
-#~ "recomenda que o consumidor se registre somente uma vez."
-
-# translation auto-copied from project Subscription Manager, version 0.99.X,
-# document keys
-#~ msgid "specify org for service level list"
-#~ msgstr "especifica o org para a lista do nível de serviço"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#~ msgid ""
-#~ "automatically attach compatible                                "
-#~ "subscriptions to this system"
-#~ msgstr ""
-#~ "conecta automaticam subscrições                                    "
-#~ "compatíveis.à este sistema."
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#~ msgid "All subscriptions have been removed from this system."
-#~ msgstr "Todas as subscrições foram removidas deste sistema"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#~ msgid "1 subscription removed from this system."
-#~ msgstr "subscrição removida deste sistema"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#~ msgid "Successfully removed serial numbers:"
-#~ msgstr "números em série removidos com sucesso:"
-
-# translation auto-copied from project Subscription Manager, version 1.1.X,
-# document keys
-#~ msgid "Unsuccessfully removed serial numbers:"
-#~ msgstr "números em série não foram removidos:"
