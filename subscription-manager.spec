@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.23.0
+Version: 1.1.23.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -347,6 +347,10 @@ fi
 %endif
 
 %changelog
+* Fri Mar 08 2013 Alex Wood <awood@redhat.com> 1.1.23.1-1
+- Adding rhel-6.4.z releaser. (awood@redhat.com)
+- 918969: Switch from using xmlrpclib to rhnlib's rpclib. (awood@redhat.com)
+
 * Mon Jan 21 2013 Adrian Likins <alikins@redhat.com> 1.1.23-1
 - 885964: Do not make a getOwner call when not necessary. (awood@redhat.com)
 
