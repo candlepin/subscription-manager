@@ -22,6 +22,7 @@ from subscription_manager.certlib import ConsumerIdentity
 from urlparse import urlparse
 import os
 import signal
+import dateutil.parser
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -398,3 +399,12 @@ def restart_virt_who():
     except ValueError:
         # The file has non numeric data in it
         log.error("The virt-who pid file contains non numeric data")
+
+
+def parseDate(date):
+    try:
+        dt = dateutil.parser.parse(date)
+    except ValueError:
+        log.warning("Date overflow: %s, using 9999-09-06 instead." % date)
+        return dateutil.parser.parse("9999-09-06T00:00:00.000+0000")
+    return dt

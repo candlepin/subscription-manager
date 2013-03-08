@@ -19,7 +19,6 @@
 from subscription_manager.certlib import CertLib, ActionLock, HealingLib, IdentityCertLib
 from subscription_manager.repolib import RepoLib
 from subscription_manager.factlib import FactLib
-from subscription_manager.facts import Facts
 from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
 
 from rhsm.connection import GoneException, ExpiredIdentityCertException
@@ -51,9 +50,7 @@ class CertManager:
         self.profilelib = PackageProfileLib(self.lock, uep=self.uep)
         self.installedprodlib = InstalledProductsLib(self.lock, uep=self.uep)
         #healinglib requires a fact set in order to get socket count
-        facts = Facts()
-        self.healinglib = HealingLib(self.lock, self.uep, facts.to_dict(),
-                                     product_dir)
+        self.healinglib = HealingLib(self.lock, self.uep, product_dir)
         self.idcertlib = IdentityCertLib(self.lock, uep=self.uep)
 
     def update(self, autoheal=False):
@@ -72,7 +69,7 @@ class CertManager:
             # of things before attempting to autoheal, and we need to autoheal
             # before attempting to fetch our certificates:
             if autoheal:
-                libset = [self.healinglib]
+                libset = [self.installedprodlib, self.healinglib]
             else:
                 libset = [self.idcertlib, self.repolib, self.factlib, self.profilelib, self.installedprodlib]
 

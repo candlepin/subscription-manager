@@ -18,6 +18,7 @@ import logging
 import gobject
 
 import gettext
+from subscription_manager.injection import FEATURES, IDENTITY
 from subscription_manager.gui.widgets import MachineTypeColumn, QuantitySelectionColumn
 from subscription_manager.jsonwrapper import PoolWrapper
 import gtk
@@ -48,18 +49,18 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                         'edit_quantity_label', 'no_subs_label',
                         'filter_options_button', 'applied_filters_label']
 
-    def __init__(self, backend, consumer, facts, parent_win):
+    def __init__(self, backend, facts, parent_win):
 
         super(AllSubscriptionsTab, self).__init__('allsubs.glade')
 
         self.parent_win = parent_win
         self.backend = backend
-        self.consumer = consumer
+        self.identity = FEATURES.require(IDENTITY)
         self.facts = facts
 
+        self.pool_stash = managerlib.PoolStash(self.backend,
+                                               self.facts)
         self.plugin_manager = plugins.getPluginManager()
-        self.pool_stash = managerlib.PoolStash(self.backend, self.consumer,
-                self.facts)
 
         today = datetime.date.today()
         self.date_picker = widgets.DatePicker(today)
@@ -364,11 +365,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self._contract_selection_cancelled()
         try:
-            self.plugin_manager.run("pre_subscribe", consumer_uuid=self.consumer.uuid)
-            ents = self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'], quantity)
-            self.plugin_manager.run("post_subscribe", consumer_uuid=self.consumer.uuid, entitlement_data=ents)
+            self.plugin_manager.run("pre_subscribe", consumer_uuid=self.identity.uuid)
+            ents = self.backend.uep.bindByEntitlementPool(self.identity.uuid, pool['id'], quantity)
+            self.plugin_manager.run("post_subscribe", consumer_uuid=self.identity.uuid, entitlement_data=ents)
             managerlib.fetch_certificates(self.backend)
-            self.facts.refresh_validity_facts()
 
         except Exception, e:
             handle_gui_exception(e, _("Error getting subscription: %s"),

@@ -25,12 +25,13 @@ import gobject
 import gtk
 import gtk.glade
 
+from subscription_manager.injection import FEATURES, IDENTITY
 from subscription_manager import managerlib
 import rhsm.config as config
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.certmgr import CertManager
-from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.injection import FEATURES, CERT_SORTER
 from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
         is_valid_server_info, MissingCaCertException, restart_virt_who
 from subscription_manager import plugins
@@ -82,7 +83,7 @@ class RegisterScreen(widgets.GladeWidget):
                     'register_progressbar', 'register_details_label',
                     'cancel_button', 'register_button']
 
-    def __init__(self, backend, consumer, facts=None, parent=None, callbacks=[]):
+    def __init__(self, backend, facts=None, parent=None, callbacks=[]):
         """
         Callbacks will be executed when registration status changes.
         """
@@ -90,7 +91,7 @@ class RegisterScreen(widgets.GladeWidget):
         widgets.GladeWidget.__init__(self, "registration.glade")
 
         self.backend = backend
-        self.consumer = consumer
+        self.identity = FEATURES.require(IDENTITY)
         self.facts = facts
         self.parent = parent
         self.callbacks = callbacks
@@ -243,8 +244,8 @@ class RegisterScreen(widgets.GladeWidget):
 
 class AutobindWizard(RegisterScreen):
 
-    def __init__(self, backend, consumer, facts, parent):
-        super(AutobindWizard, self).__init__(backend, consumer, facts, parent)
+    def __init__(self, backend, facts, parent):
+        super(AutobindWizard, self).__init__(backend, facts, parent)
 
     def show(self):
         super(AutobindWizard, self).show()
@@ -310,7 +311,7 @@ class PerformRegisterScreen(NoGuiScreen):
                 raise error
 
             managerlib.persist_consumer_cert(new_account)
-            self._parent.consumer.reload()
+            self._parent.identity.reload()
             if self._parent.activation_keys:
                 self._parent.pre_done(REFRESH_SUBSCRIPTIONS_PAGE)
             elif self._parent.skip_auto_bind:
@@ -354,7 +355,7 @@ class PerformSubscribeScreen(NoGuiScreen):
             self._parent.finish_registration(failed=True)
 
     def pre(self):
-        self._parent.async.subscribe(self._parent.consumer.getConsumerId(),
+        self._parent.async.subscribe(self._parent.identity.uuid,
                                      self._parent.current_sla,
                                      self._parent.dry_run_result,
                                      self._on_subscribing_finished_cb)
@@ -527,7 +528,7 @@ class SelectSLAScreen(Screen):
             self._parent.finish_registration(failed=True)
 
     def pre(self):
-        self._parent.async.find_service_levels(self._parent.consumer,
+        self._parent.async.find_service_levels(self._parent.identity,
                                                self._parent.facts,
                                                self._on_get_service_levels_cb)
         return True
@@ -1066,9 +1067,10 @@ class AsyncBackend(object):
 
         # Using the current date time, we may need to expand this to work
         # with arbitrary dates for future entitling someday:
-        sorter = CertSorter(self.backend.product_dir,
+        sorter = FEATURES.require(CERT_SORTER,
+                self.backend.product_dir,
                 self.backend.entitlement_dir,
-                facts.get_facts())
+                self.backend.uep)
 
         if len(sorter.installed_products) == 0:
             raise NoProductsException()

@@ -31,7 +31,7 @@ Requires:  python-simplejson
 Requires:  python-iniparse
 Requires:  pygobject2
 Requires:  virt-what
-Requires:  python-rhsm >= 1.8.6
+Requires:  python-rhsm >= 1.8.7
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 Requires:  usermode
@@ -206,6 +206,9 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/isodate.py*
 %{_datadir}/rhsm/subscription_manager/i18n_optparse.py*
 %{_datadir}/rhsm/subscription_manager/i18n.py*
+%{_datadir}/rhsm/subscription_manager/identity.py*
+%{_datadir}/rhsm/subscription_manager/injection.py*
+%{_datadir}/rhsm/subscription_manager/injectioninit.py*
 %{_datadir}/rhsm/subscription_manager/__init__.py*
 %{_datadir}/rhsm/subscription_manager/jsonwrapper.py*
 %{_datadir}/rhsm/subscription_manager/listing.py*

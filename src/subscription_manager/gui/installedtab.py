@@ -12,14 +12,13 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from subscription_manager import managerlib, cert_sorter
-from subscription_manager.cert_sorter import CertSorter, FUTURE_SUBSCRIBED, \
-    NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
+import subscription_manager.injection as inj
+from subscription_manager import managerlib
+from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
+    NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.branding import get_branding
 from subscription_manager.gui import widgets
 from subscription_manager.hwprobe import ClassicCheck
-from subscription_manager.validity import find_first_invalid_date, \
-    ValidProductDateRangeCalculator
 
 import gettext
 import gobject
@@ -52,20 +51,21 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                  'subscription_text', 'subscription_status_label',
                  'update_certificates_button', 'register_button']
 
-    def __init__(self, backend, consumer, facts, tab_icon,
+    def __init__(self, backend, facts, tab_icon,
                  parent, ent_dir, prod_dir):
 
         super(InstalledProductsTab, self).__init__('installed.glade')
 
         self.tab_icon = tab_icon
 
-        self.consumer = consumer
+        self.identity = inj.FEATURES.require(inj.IDENTITY)
         self.product_dir = prod_dir
         self.entitlement_dir = ent_dir
 
         self.facts = facts
-        self.cs = cert_sorter.CertSorter(prod_dir, ent_dir,
-                self.facts.get_facts())
+        self.backend = backend
+        self.cs = inj.FEATURES.require(inj.CERT_SORTER, prod_dir, ent_dir,
+                self.backend.uep)
 
         # Product column
         text_renderer = gtk.CellRendererText()
@@ -147,8 +147,10 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def update_products(self):
         self.store.clear()
-        self.cs = cert_sorter.CertSorter(self.product_dir,
-                self.entitlement_dir, self.facts.get_facts())
+        self.cs = inj.FEATURES.require(inj.CERT_SORTER, self.product_dir,
+                self.entitlement_dir, self.backend.uep)
+        range_calculator = inj.FEATURES.require(inj.PRODUCT_DATE_RANGE_CALCULATOR,
+                self.backend.uep)
         for product_cert in self.product_dir.list():
             for product in product_cert.products:
                 product_id = product.id
@@ -166,7 +168,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 #        This is also used in mysubstab...
                 if status != NOT_SUBSCRIBED:
 
-                    range_calculator = ValidProductDateRangeCalculator(self.cs)
                     compliant_range = range_calculator.calculate(product.id)
                     start = ''
                     end = ''
@@ -208,6 +209,15 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['image'] = self._render_icon('yellow')
                         entry['status'] = _('Partially Subscribed')
                         entry['validity_note'] = _("Partially Subscribed")
+                    elif status == UNKNOWN:
+                        # TODO: get a real icon for unknown status:
+                        entry['image'] = self._render_icon('yellow')
+                        entry['status'] = _('Unknown')
+                        if not self.cs.is_registered():
+                            entry['validity_note'] = _("System is not registered.")
+                        else:
+                            # System must be registered but unable to reach server:
+                            entry['validity_note'] = _("Entitlement server is unreachable.")
                     else:
                         entry['image'] = self._render_icon('green')
                         entry['status'] = _('Subscribed')
@@ -294,12 +304,12 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 get_branding().RHSMD_REGISTERED_TO_OTHER)
             return
 
-        is_registered = self.consumer.is_valid()
+        is_registered = self.identity.is_valid()
         self.set_registered(is_registered)
 
         # Look for products which have invalid entitlements
-        sorter = CertSorter(self.product_dir, self.entitlement_dir,
-                self.facts.get_facts())
+        sorter = inj.FEATURES.require(inj.CERT_SORTER, self.product_dir, self.entitlement_dir,
+                self.backend.uep)
 
         warn_count = len(sorter.expired_products) + \
                 len(sorter.unentitled_products)
@@ -326,14 +336,12 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 _("This system does not match subscription limits."))
 
         else:
-            first_invalid = find_first_invalid_date(self.entitlement_dir,
-                    self.product_dir, self.facts.get_facts())
             self._set_status_icons(VALID)
-            if first_invalid:
+            if sorter.first_invalid_date:
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
                         _("System is properly subscribed through %s.") % \
-                            managerlib.formatDate(first_invalid))
+                            managerlib.formatDate(sorter.first_invalid_date))
             else:
                 # No product certs installed, no first invalid date, and
                 # the subscription assistant can't do anything, so we'll disable

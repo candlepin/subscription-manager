@@ -12,26 +12,24 @@
 # in this software or its documentation.
 #
 
-import unittest
 import datetime
-from mock import Mock
 
 import rhsm_display
 rhsm_display.set_display()
 
+from fixture import SubManFixture
 from stubs import StubUEP, StubEntitlementCertificate, \
-        StubCertificateDirectory, StubProduct, StubBackend, StubFacts, \
+        StubCertificateDirectory, StubProduct, StubBackend, \
         StubProductDirectory
 from subscription_manager.gui.mysubstab import MySubscriptionsTab, WARNING_IMG, EXPIRED_IMG
 
 
-class MySubscriptionsTabTest(unittest.TestCase):
+class MySubscriptionsTabTest(SubManFixture):
 
     def setUp(self):
+        super(MySubscriptionsTabTest, self).setUp()
         self.uep = StubUEP
         self.backend = StubBackend()
-        self.consumer = Mock()
-        self.facts = StubFacts({})
 
         self.cert1 = StubEntitlementCertificate(
             StubProduct('product2'),
@@ -45,8 +43,10 @@ class MySubscriptionsTabTest(unittest.TestCase):
             quantity="10", stacking_id=None)
 
         self.cert_dir = StubCertificateDirectory([self.cert1, self.cert2])
-        self.my_subs_tab = MySubscriptionsTab(self.backend, self.consumer,
-                self.facts, None, self.cert_dir, StubProductDirectory([]))
+        self.my_subs_tab = MySubscriptionsTab(self.backend,
+                                              None,
+                                              self.cert_dir,
+                                              StubProductDirectory([]))
 
     def tearDown(self):
         pass
@@ -120,8 +120,10 @@ class MySubscriptionsTabTest(unittest.TestCase):
 
     def test_no_subscriptions_unregister_button_is_blank(self):
         cert_dir = StubCertificateDirectory([])
-        my_subs_tab = MySubscriptionsTab(self.backend, self.consumer,
-                self.facts, None, cert_dir, StubProductDirectory([]))
+        my_subs_tab = MySubscriptionsTab(self.backend,
+                                         None,
+                                         cert_dir,
+                                         StubProductDirectory([]))
         self.assertFalse(my_subs_tab.unsubscribe_button.get_property('sensitive'))
 
     def test_unselect_unregister_button_is_blank(self):

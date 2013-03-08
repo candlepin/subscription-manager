@@ -53,7 +53,7 @@ class TestReleaseBackend(unittest.TestCase):
                                                                    content=stub_contents)]
         stub_entitlement_dir = stubs.StubEntitlementDirectory(stub_entitlement_certs)
 
-        stub_product_dir = stubs.StubCertificateDirectory(
+        stub_product_dir = stubs.StubProductDirectory(
             [stubs.StubProductCertificate(
                     stubs.StubProduct("rhel-6",
                                       provided_tags="rhel-6-stub"),)])
