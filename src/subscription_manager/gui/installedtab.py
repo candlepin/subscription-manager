@@ -340,8 +340,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             if sorter.first_invalid_date:
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
-                        _("System is properly subscribed through %s.") % \
-			  managerlib.formatDate(sorter.first_invalid_date))
+                        _("System is properly subscribed through %s.") %
+                          managerlib.formatDate(sorter.first_invalid_date))
             else:
                 # No product certs installed, no first invalid date, and
                 # the subscription assistant can't do anything, so we'll disable

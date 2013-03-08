@@ -631,8 +631,9 @@ class BasePluginManager(object):
             self._plugins[plugin_key] = instance
         else:
             # This shouldn't ever happen
-            raise PluginException("Two or more plugins with the name \"%s\" exist " \
-                "in the plugin search path" % plugin_clazz.__name__)
+            raise PluginException("Two or more plugins with the name \"%s\" exist "
+                                  "in the plugin search path" %
+                                  plugin_clazz.__name__)
 
         # this is a valid plugin, with config, that instantiates, and is not a  dupe
         self._plugin_classes[plugin_key] = plugin_clazz

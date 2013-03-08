@@ -333,7 +333,9 @@ class MainWindow(widgets.GladeWidget):
         try:
             self.preferences_dialog.show()
         except Exception, e:
-            handle_gui_exception(e, _("Error in preferences dialog. Please see /var/log/rhsm/rhsm.log for more information."), self._get_window())
+            handle_gui_exception(e, _("Error in preferences dialog."
+                                      "Please see /var/log/rhsm/rhsm.log for more information."),
+                                 self._get_window())
 
     def _on_unregister_prompt_response(self, dialog, response):
         if not response:
@@ -347,14 +349,13 @@ class MainWindow(widgets.GladeWidget):
             managerlib.unregister(self.backend.uep, self.identity.uuid)
         except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
-            handle_gui_exception(e,
-                                 _("<b>Errors were encountered during unregister.</b>") +
-                                  "\n%s\n" +
-                                 _("Please see /var/log/rhsm/rhsm.log for more information."),
-                                 self.main_window,
-                                 logMsg="Consumer may need to be manually cleaned up: %s" %
-                                 self.consumer.uuid)
-        self.consumer.reload()
+            handle_gui_exception(e, _("<b>Errors were encountered during unregister.</b>") +
+                                      "\n%s\n" +
+                                      _("Please see /var/log/rhsm/rhsm.log for more information."),
+                                self.main_window,
+                                logMsg="Consumer may need to be manually cleaned up: %s" %
+                                self.identity.uuid)
+        self.identity.reload()
 
         # We have new credentials, restart virt-who
         restart_virt_who()
