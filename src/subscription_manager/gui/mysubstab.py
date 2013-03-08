@@ -206,7 +206,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         if old_image == new_image:
             return False
 
-        if old_image == None and new_image:
+        if old_image is None and new_image:
             return True
 
         if old_image == WARNING_IMG and new_image == EXPIRED_IMG:

@@ -60,8 +60,8 @@ class DryRunResult(object):
             log.debug("Found valid service level: %s" % self.service_level)
             return True
         else:
-            log.debug("Service level does not cover required products: %s" % \
-                    self.service_level)
+            log.debug("Service level does not cover required products: %s" %
+                      self.service_level)
             return False
 
     def get_pool_quantities(self):

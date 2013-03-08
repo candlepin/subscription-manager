@@ -198,8 +198,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         if self.pool_stash.all_pools_size() == 0:
             self.sub_details.clear()
-            self.display_message(_("No subscriptions are available on %s.") % \
-                self.date_picker.date.strftime("%Y-%m-%d"))
+            self.display_message(_("No subscriptions are available on %s.") %
+                                   self.date_picker.date.strftime("%Y-%m-%d"))
             return
 
         if len(merged_pools) == 0:
@@ -241,11 +241,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 self.store.add_map(iter, {
                     'virt_only': self._machine_type(entry.pools),
                     'product_name': entry.product_name,
-                    'product_name_formatted': \
-                            apply_highlight(entry.product_name,
-                                self.get_filter_text()),
-                    'quantity_to_consume': \
-                        quantity_defaults_calculator.calculate(pool),
+                    'product_name_formatted': apply_highlight(entry.product_name,
+                                                              self.get_filter_text()),
+                    'quantity_to_consume': quantity_defaults_calculator.calculate(pool),
                     'available': available,
                     'product_id': entry.product_id,
                     'pool_id': entry.pools[0]['id'],  # not displayed, just for lookup later
@@ -265,7 +263,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         found = False
         if selected_pool_id:
             itr = self.store.get_iter_first()
-            while itr != None:
+            while itr is not None:
                 if self.store.get_value(itr,
                         self.store['pool_id']) == selected_pool_id:
                     self.top_view.set_cursor(self.store.get_path(itr))
@@ -306,9 +304,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         return {
                     'virt_only': False,
                     'product_name': title,
-                    'product_name_formatted': \
-                            apply_highlight(title,
-                                self.get_filter_text()),
+                    'product_name_formatted': apply_highlight(title, self.get_filter_text()),
                     'quantity_to_consume': 0,
                     'available': "",
                     'product_id': "",
@@ -383,8 +379,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.contract_selection = None
 
     def update_applied_filters_label(self):
-        self.applied_filters_label.set_text(_("%s applied") % \
-             self.filters.get_applied_count())
+        self.applied_filters_label.set_text(_("%s applied") %
+                                              self.filters.get_applied_count())
 
     def filter_options_button_clicked(self, button):
         self.filter_dialog.show()

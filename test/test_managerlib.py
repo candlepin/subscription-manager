@@ -251,8 +251,9 @@ ndmrxQKBgGJiXMZnKjK9AUUDvsFBSp8Otrf20BoeCiq+tZF95S5jR9/I8nv4NBYp
 X2mYlgErL9vzxIQrwfL5JdEo9f+PQ0eVs/lh9MPY2TliwEyXDrVp
 -----END RSA PRIVATE KEY-----"""
 
-EXPECTED_CERT_V3 = create_from_pem(EXPECTED_CERT_CONTENT_V3 + NEW_LINE + EXPECTED_CERT_ENTITLEMENT_V3 + \
-                   NEW_LINE + EXPECTED_CERT_SIGNATURE_V3)
+EXPECTED_CERT_V3 = create_from_pem(EXPECTED_CERT_CONTENT_V3 + NEW_LINE +
+                                   EXPECTED_CERT_ENTITLEMENT_V3 +
+                                   NEW_LINE + EXPECTED_CERT_SIGNATURE_V3)
 
 
 class MergePoolsTests(SubManFixture):
