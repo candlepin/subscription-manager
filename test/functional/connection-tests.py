@@ -16,7 +16,7 @@
 import unittest
 
 from rhsm.connection import ContentConnection, UEPConnection, drift_check, Restlib
-import json
+import simplejson as json
 import mock
 
 class ConnectionTests(unittest.TestCase):
