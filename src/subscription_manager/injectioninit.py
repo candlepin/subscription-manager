@@ -16,6 +16,8 @@ import subscription_manager.injection as inj
 from subscription_manager.identity import Identity
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.validity import ValidProductDateRangeCalculator
+from subscription_manager.certdirectory import EntitlementDirectory
+from subscription_manager.certdirectory import ProductDirectory
 
 
 def init_dep_injection():
@@ -31,3 +33,7 @@ def init_dep_injection():
     inj.FEATURES.provide(inj.CERT_SORTER, CertSorter)
     inj.FEATURES.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR,
             ValidProductDateRangeCalculator)
+
+    # TODO: singletons possible?
+    inj.FEATURES.provide(inj.ENT_DIR, EntitlementDirectory)
+    inj.FEATURES.provide(inj.PROD_DIR, ProductDirectory)

@@ -9,10 +9,11 @@ import stubs
 from subscription_manager import managercli, managerlib
 from subscription_manager.managercli import format_name, columnize, \
         _echo, _none_wrap
-from stubs import MockStderr, MockStdout, StubProductDirectory, \
-        StubEntitlementDirectory, StubEntitlementCertificate, \
+from stubs import MockStderr, MockStdout, \
+        StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
 from test_handle_gui_exception import FakeException, FakeLogger
+from fixture import SubManFixture
 
 import mock
 from mock import patch
@@ -28,9 +29,10 @@ is_valid_server_mock = is_valid_server_patcher.start()
 is_valid_server_mock.return_value = True
 
 
-class TestCli(unittest.TestCase):
+class TestCli(SubManFixture):
     # shut up stdout spew
     def setUp(self):
+        SubManFixture.setUp(self)
         sys.stdout = stubs.MockStdout()
         sys.stderr = stubs.MockStderr()
 
@@ -68,12 +70,12 @@ class TestCli(unittest.TestCase):
         self.assertEquals(best_match, None)
 
 
-class TestCliCommand(unittest.TestCase):
+class TestCliCommand(SubManFixture):
     command_class = managercli.CliCommand
 
     def setUp(self):
-        self.cc = self.command_class(ent_dir=StubEntitlementDirectory([]),
-                                     prod_dir=StubProductDirectory([]))
+        SubManFixture.setUp(self)
+        self.cc = self.command_class()
         # neuter the _do_command, since this is mostly
         # for testing arg parsing
         self._orig_do_command = self.cc._do_command
@@ -313,36 +315,34 @@ class TestListCommand(TestCliProxyCommand):
         self.assertTrue('888888888888' in sys.stdout.buffer)
 
     def test_print_consumed_no_ents(self):
-        ent_dir = StubEntitlementDirectory([])
         try:
-            self.cc.print_consumed(ent_dir)
+            self.cc.print_consumed()
             self.fail("Should have exited.")
         except SystemExit:
             pass
 
     def test_print_consumed_one_ent_one_product(self):
         product = StubProduct("product1")
-        ent_dir = StubEntitlementDirectory([
-            StubEntitlementCertificate(product)])
-        self.cc.print_consumed(ent_dir)
+        self.ent_dir.certs.append(StubEntitlementCertificate(product))
+        self.cc.print_consumed()
 
     def test_print_consumed_one_ent_no_product(self):
-        ent_dir = StubEntitlementDirectory([
-            StubEntitlementCertificate(product=None)])
-        self.cc.print_consumed(ent_dir)
+        self.ent_dir.certs.append(StubEntitlementCertificate(
+            product=None))
+        self.cc.print_consumed()
 
     def test_print_consumed_prints_nothing_with_no_service_level_match(self):
-        ent_dir = StubEntitlementDirectory([self.cert_with_service_level])
+        self.ent_dir.certs.append(self.cert_with_service_level)
         try:
-            self.cc.print_consumed(ent_dir, service_level="NotFound")
+            self.cc.print_consumed(service_level="NotFound")
             self.fail("Should have exited since an entitlement with the " +
                       "specified service level does not exist.")
         except SystemExit:
             pass
 
     def test_print_consumed_prints_enitlement_with_service_level_match(self):
-        ent_dir = StubEntitlementDirectory([self.cert_with_service_level])
-        self.cc.print_consumed(ent_dir, service_level="Premium")
+        self.ent_dir.certs.append(self.cert_with_service_level)
+        self.cc.print_consumed(service_level="Premium")
 
     def test_filter_only_specified_service_level(self):
         pools = [{'service_level': 'Level1'},

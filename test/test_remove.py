@@ -12,26 +12,27 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import unittest
 
 from stubs import StubUEP, StubEntitlementDirectory, StubProductDirectory
 from stubs import StubConsumerIdentity, StubCertLib, StubEntitlementCertificate
 from stubs import StubProduct
 import rhsm.connection as connection
 from subscription_manager import managercli
+import subscription_manager.injection as inj
+from fixture import SubManFixture
 
 
 # This is a copy of CliUnSubscribeTests for the new name.
-class CliRemoveTests(unittest.TestCase):
+class CliRemoveTests(SubManFixture):
 
     def setUp(self):
+        SubManFixture.setUp(self)
         self.oldCI = managercli.ConsumerIdentity
 
     def test_unsubscribe_registered(self):
         connection.UEPConnection = StubUEP
 
-        cmd = managercli.RemoveCommand(ent_dir=StubEntitlementDirectory([]),
-                              prod_dir=StubProductDirectory([]))
+        cmd = managercli.RemoveCommand()
 
         managercli.ConsumerIdentity = StubConsumerIdentity
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: True)
@@ -56,8 +57,11 @@ class CliRemoveTests(unittest.TestCase):
         prod = StubProduct('stub_product')
         ent = StubEntitlementCertificate(prod)
 
-        cmd = managercli.RemoveCommand(ent_dir=StubEntitlementDirectory([ent]),
-                              prod_dir=StubProductDirectory([]))
+        inj.FEATURES.provide(inj.ENT_DIR,
+                StubEntitlementDirectory([ent]))
+        inj.FEATURES.provide(inj.PROD_DIR,
+                StubProductDirectory([]))
+        cmd = managercli.RemoveCommand()
 
         managercli.ConsumerIdentity = StubConsumerIdentity
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
@@ -72,8 +76,11 @@ class CliRemoveTests(unittest.TestCase):
         ent2 = StubEntitlementCertificate(prod)
         ent3 = StubEntitlementCertificate(prod)
 
-        cmd = managercli.RemoveCommand(ent_dir=StubEntitlementDirectory([ent1, ent2, ent3]),
-                              prod_dir=StubProductDirectory([]))
+        inj.FEATURES.provide(inj.ENT_DIR,
+                StubEntitlementDirectory([ent1, ent2, ent3]))
+        inj.FEATURES.provide(inj.PROD_DIR,
+                StubProductDirectory([]))
+        cmd = managercli.RemoveCommand()
         managercli.ConsumerIdentity = StubConsumerIdentity
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
         StubConsumerIdentity.exists = classmethod(lambda cls: False)

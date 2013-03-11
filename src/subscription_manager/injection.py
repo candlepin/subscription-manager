@@ -16,6 +16,8 @@
 IDENTITY = "IDENTITY"
 CERT_SORTER = "CERT_SORTER"
 PRODUCT_DATE_RANGE_CALCULATOR = "PRODUCT_DATE_RANGE_CALCULATOR"
+ENT_DIR = "ENT_DIR"
+PROD_DIR = "PROD_DIR"
 
 import logging
 log = logging.getLogger('rhsm-app.' + __name__)

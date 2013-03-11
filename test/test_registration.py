@@ -12,16 +12,16 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import unittest
 from mock import Mock
 
-from stubs import StubUEP, StubEntitlementDirectory, StubProductDirectory
+from stubs import StubUEP
 import rhsm.connection as connection
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.managercli import RegisterCommand
+from fixture import SubManFixture
 
 
-class CliRegistrationTests(unittest.TestCase):
+class CliRegistrationTests(SubManFixture):
 
     def stub_persist(self, consumer):
         self.persisted_consumer = consumer
@@ -31,8 +31,7 @@ class CliRegistrationTests(unittest.TestCase):
         connection.UEPConnection = StubUEP
 
         # When
-        cmd = RegisterCommand(ent_dir=StubEntitlementDirectory([]),
-                              prod_dir=StubProductDirectory([]))
+        cmd = RegisterCommand()
 
         ConsumerIdentity.exists = classmethod(lambda cls: False)
         cmd._persist_identity_cert = self.stub_persist
@@ -48,8 +47,7 @@ class CliRegistrationTests(unittest.TestCase):
     def test_installed_products_cache_written(self):
         connection.UEPConnection = StubUEP
 
-        cmd = RegisterCommand(ent_dir=StubEntitlementDirectory([]),
-                              prod_dir=StubProductDirectory([]))
+        cmd = RegisterCommand()
         cmd._persist_identity_cert = self.stub_persist
         ConsumerIdentity.exists = classmethod(lambda cls: False)
 
