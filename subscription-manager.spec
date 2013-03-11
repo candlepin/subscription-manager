@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.3
+Version: 1.8.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -377,6 +377,54 @@ fi
 %endif
 
 %changelog
+* Fri Mar 08 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.4-1
+- Pull latest strings from zanata. (dgoodwin@redhat.com)
+- Use PyXML for iso8601 date on RHEL5 and dateutil after (alikins@redhat.com)
+- Major switchover to server for compliance checking logic. (dgoodwin@redhat.com)
+- Introduce dependency injection framework. (dgoodwin@redhat.com)
+- 916369: Do not persist config changes until the action completes
+  (bkearney@redhat.com)
+- Fix a bug with changing installed products during healing.
+  (dgoodwin@redhat.com)
+- 912776: fix migration test scripts to expect get_int usage
+  (alikins@redhat.com)
+- 912776: cast port numbers from cli to int immediately (alikins@redhat.com)
+- 912776: use config.get_int for server port as well (alikins@redhat.com)
+- 905649: subscription-manager does not work with dbus-python-1.1.1-1
+  (wpoteat@redhat.com)
+- use ngettext for plural messages in certlib/managercli (alikins@redhat.com)
+- 912776: use cfg.get_int for proxy port (alikins@redhat.com)
+- 878097: update service-level org key help text (alikins@redhat.com)
+- Handle manifests with no subscriptions in the archive (alikins@redhat.com)
+- 878664: Add filename support to the bash completion for the rct tool.
+  (bkearney@redhat.com)
+- 877590: Changes to the branding messages when the user attempts to register
+  twice (bkearney@redhat.com)
+- New plugin framework. (alikins@redhat.com / awood@redhat.com)
+- 886115: Remove line continuations within strings. (bkearney@redhat.com)
+- 913302: Support Level and Support Type should be shown as Service Level and
+  Service Type (bkearney@redhat.com)
+- Add unknown product status state. (dgoodwin@redhat.com)
+- 913703: Prefer the use of SKU over Product ID (bkearney@redhat.com)
+- 913720: Use the term order number instead of subscription id
+  (bkearney@redhat.com)
+- 878634: Use correct capitalization for ID in the rct tool
+  (bkearney@redhat.com)
+- 878097: Help text for service-level command should be consistent with other
+  help texts (bkearney@redhat.com)
+- 906554: Add ui_repoid_vars line to yum based on the variables which are in
+  the baseurl (bkearney@redhat.com)
+- 912707: Remove a use of the deprecated hasNow() function.
+  (bkearney@redhat.com)
+- 913187: Allow older manifests to print out correctly. (bkearney@redhat.com)
+- 912776: Cast proxy port to an integer. (awood@redhat.com)
+- 882459: Deprecated message in help for cert-interval (wpoteat@redhat.com)
+- 895447: Changed messages to distinguish between local and server-side
+  removal. (wpoteat@redhat.com)
+- 908671: Display the pool ID when available. (awood@redhat.com)
+- 911386: Displaying combined Service Level and Type should handle empty values
+  for both items (jmolet@redhat.com)
+
 * Thu Feb 14 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.3-1
 - string and string catalog update from zanata (alikins@redhat.com)
 - 908954: Ensure that 'Not Set' is shown in the preferences dialog if it is not
