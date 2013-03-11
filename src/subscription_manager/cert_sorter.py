@@ -18,7 +18,7 @@ import logging
 from rhsm.certificate import GMT
 from rhsm.connection import RestlibException
 
-from subscription_manager.utils import parseDate
+from subscription_manager.isodate import parse_date
 from subscription_manager.injection import FEATURES, IDENTITY
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -139,7 +139,7 @@ class CertSorter(object):
         # invalid from midnight to midnight.
         self.compliant_until = None
         if status['compliantUntil'] is not None:
-            self.compliant_until = parseDate(status['compliantUntil'])
+            self.compliant_until = parse_date(status['compliantUntil'])
             self.first_invalid_date = self.compliant_until + \
                     timedelta(seconds=60 * 60 * 24 - 1)
 
