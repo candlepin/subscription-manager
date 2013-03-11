@@ -260,8 +260,10 @@ class StubCertificateDirectory(EntitlementDirectory):
     path = "this/is/a/stub/cert/dir"
     expired = False
 
-    def __init__(self, certificates):
+    def __init__(self, certificates=None):
         self.certs = certificates
+        if certificates is None:
+            self.certs = []
         self.list_called = False
 
     def list(self):

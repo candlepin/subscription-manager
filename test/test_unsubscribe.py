@@ -12,18 +12,19 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import unittest
 import mock
 
 from stubs import StubUEP, StubEntitlementDirectory, StubProductDirectory
 from stubs import StubConsumerIdentity, StubCertLib, StubEntitlementCertificate
 from stubs import StubProduct
+from fixture import SubManFixture
 import rhsm.connection as connection
 from subscription_manager import managercli
+import subscription_manager.injection as inj
 
 
 # This is a dupe of test_remove
-class CliUnSubscribeTests(unittest.TestCase):
+class CliUnSubscribeTests(SubManFixture):
 
     def setUp(self):
         self.oldCI = managercli.ConsumerIdentity
@@ -36,8 +37,11 @@ class CliUnSubscribeTests(unittest.TestCase):
         ent2 = StubEntitlementCertificate(prod)
         ent3 = StubEntitlementCertificate(prod)
 
-        cmd = managercli.UnSubscribeCommand(ent_dir=StubEntitlementDirectory([ent1, ent2, ent3]),
-                              prod_dir=StubProductDirectory([]))
+        inj.FEATURES.provide(inj.ENT_DIR,
+                StubEntitlementDirectory([ent1, ent2, ent3]))
+        inj.FEATURES.provide(inj.PROD_DIR,
+                StubProductDirectory([]))
+        cmd = managercli.UnSubscribeCommand()
 
         managercli.ConsumerIdentity = StubConsumerIdentity
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: True)
@@ -66,8 +70,11 @@ class CliUnSubscribeTests(unittest.TestCase):
         prod = StubProduct('stub_product')
         ent = StubEntitlementCertificate(prod)
 
-        cmd = managercli.UnSubscribeCommand(ent_dir=StubEntitlementDirectory([ent]),
-                              prod_dir=StubProductDirectory([]))
+        inj.FEATURES.provide(inj.ENT_DIR,
+                StubEntitlementDirectory([ent]))
+        inj.FEATURES.provide(inj.PROD_DIR,
+                StubProductDirectory([]))
+        cmd = managercli.UnSubscribeCommand()
 
         managercli.ConsumerIdentity = StubConsumerIdentity
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
@@ -82,8 +89,11 @@ class CliUnSubscribeTests(unittest.TestCase):
         ent2 = StubEntitlementCertificate(prod)
         ent3 = StubEntitlementCertificate(prod)
 
-        cmd = managercli.UnSubscribeCommand(ent_dir=StubEntitlementDirectory([ent1, ent2, ent3]),
-                              prod_dir=StubProductDirectory([]))
+        inj.FEATURES.provide(inj.ENT_DIR,
+                StubEntitlementDirectory([ent1, ent2, ent3]))
+        inj.FEATURES.provide(inj.PROD_DIR,
+                StubProductDirectory([]))
+        cmd = managercli.UnSubscribeCommand()
         managercli.ConsumerIdentity = StubConsumerIdentity
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
         StubConsumerIdentity.exists = classmethod(lambda cls: False)
