@@ -398,5 +398,3 @@ def restart_virt_who():
     except ValueError:
         # The file has non numeric data in it
         log.error("The virt-who pid file contains non numeric data")
-
-
