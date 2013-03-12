@@ -15,7 +15,7 @@
 
 import logging
 from subscription_manager.injection import FEATURES, IDENTITY
-from subscription_manager.utils import parseDate
+from subscription_manager.isodate import parse_date
 from rhsm.certificate import DateRange
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -62,8 +62,8 @@ class ValidProductDateRangeCalculator(object):
                 if prod['startDate'] is None or prod['endDate'] is None:
                     return None
 
-                return DateRange(parseDate(prod['startDate']),
-                    parseDate(prod['endDate']))
+                return DateRange(parse_date(prod['startDate']),
+                    parse_date(prod['endDate']))
             else:
                 # If startDate / endDate not supported
                 log.warn("Server does not support product date ranges.")
