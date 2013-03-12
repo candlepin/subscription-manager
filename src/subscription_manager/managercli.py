@@ -1067,6 +1067,10 @@ class RegisterCommand(UserPassCommand):
         # get a new UEP as the consumer
         self.cp = self._get_UEP(cert_file=cert_file, key_file=key_file)
 
+        # Reload the consumer identity:
+        self.identity = inj.FEATURES.require(inj.IDENTITY)
+        self.identity.reload()
+
         # log the version of the server we registered to
         self.log_server_version()
 
