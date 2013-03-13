@@ -56,7 +56,7 @@ class ProductDatabase:
         except:
             pass
 
-    def findRepo(self, product):
+    def find_repo(self, product):
         return self.content.get(product)
 
     def create(self):
@@ -107,8 +107,8 @@ class ProductManager:
     def update(self, yb):
         if yb is None:
             yb = yum.YumBase()
-        enabled = self.getEnabled(yb)
-        active = self.getActive(yb)
+        enabled = self.get_enabled(yb)
+        active = self.get_active(yb)
 
         # only execute this on versions of yum that track
         # which repo a package came from, aka, 3.2.28 and newer
@@ -118,8 +118,10 @@ class ProductManager:
             # that we have packages from repo's that are
             # not active. See #806457
             if enabled and active:
-                self.updateRemoved(active)
-        self.updateInstalled(enabled, active)
+                self.update_removed(active)
+        # FIXME: it would probably be useful to keep track of
+        # the state a bit, so we can report what we did
+        self.update_installed(enabled, active)
 
     def _check_yum_version_tracks_repos(self):
         major, minor, micro = yum.__version_info__
@@ -127,21 +129,21 @@ class ProductManager:
             return True
         return False
 
-    def _isWorkstation(self, product_cert):
+    def _is_workstation(self, product_cert):
         if product_cert.name == "Red Hat Enterprise Linux Workstation" and \
                 "rhel-5-client-workstation" in product_cert.provided_tags and \
                 product_cert.version[0] == '5':
             return True
         return False
 
-    def _isDesktop(self, product_cert):
+    def _is_desktop(self, product_cert):
         if product_cert.name == "Red Hat Enterprise Linux Desktop" and \
                 "rhel-5-client" in product_cert.provided_tags and \
                 product_cert.version[0] == '5':
             return True
         return False
 
-    def updateInstalled(self, enabled, active):
+    def update_installed(self, enabled, active):
         log.debug("Updating installed certificates")
         products_installed = []
         for cert, repo in enabled:
@@ -156,10 +158,10 @@ class ProductManager:
             prod_hash = p.id
 
             # Are we installing Workstation cert?
-            if self._isWorkstation(p):
+            if self._is_workstation(p):
                 # is the Desktop product cert installed?
                 for pc in self.pdir.list():
-                    if self._isDesktop(pc.products[0]):
+                    if self._is_desktop(pc.products[0]):
                         log.info("Removing obsolete Desktop cert: %s" % pc.path)
                         # Desktop product cert is installed,
                         # delete the Desktop product cert
@@ -170,7 +172,7 @@ class ProductManager:
 
             # If installing Desktop cert, see if Workstation exists on disk and skip
             # the write if so:
-            if self._isDesktop(p):
+            if self._is_desktop(p):
                 if self._workstation_cert_exists():
                     log.info("Skipping obsolete Desktop cert")
                     continue
@@ -196,18 +198,18 @@ class ProductManager:
 
     def _workstation_cert_exists(self):
         for pc in self.pdir.list():
-            if self._isWorkstation(pc.products[0]):
+            if self._is_workstation(pc.products[0]):
                 return True
         return False
 
     # We should only delete productcerts if there are no
     # packages from that repo installed (not "active")
     # and we have the product cert installed.
-    def updateRemoved(self, active):
+    def update_removed(self, active):
         for cert in self.pdir.list():
             p = cert.products[0]
             prod_hash = p.id
-            repo = self.db.findRepo(prod_hash)
+            repo = self.db.find_repo(prod_hash)
 
             # if we had errors with the repo or productid metadata
             # we could be very confused here, so do not
@@ -224,6 +226,7 @@ class ProductManager:
             if repo in active:
                 continue
 
+            # TODO/FIXME: plugin call on cert delete specifically?
             log.info("product cert %s for %s is being deleted" % (prod_hash, p.name))
             cert.delete()
             self.pdir.refresh()
@@ -233,7 +236,7 @@ class ProductManager:
 
     # find the list of repo's that provide packages that
     # are actually installed.
-    def getActive(self, yb):
+    def get_active(self, yb):
         active = set()
 
         packages = yb.pkgSack.returnPackages()
@@ -255,14 +258,14 @@ class ProductManager:
             active.add(repo)
         return active
 
-    def getEnabled(self, yb):
+    def get_enabled(self, yb):
         lst = []
         enabled = yb.repos.listEnabled()
 
         for repo in enabled:
             try:
                 fn = repo.retrieveMD(self.PRODUCTID)
-                cert = self.__getCert(fn)
+                cert = self.__get_cert(fn)
                 if cert is None:
                     continue
                 lst.append((cert, repo.id))
@@ -272,7 +275,7 @@ class ProductManager:
                 self.meta_data_errors.append(repo.id)
         return lst
 
-    def __getCert(self, fn):
+    def __get_cert(self, fn):
         if fn.endswith('.gz'):
             f = GzipFile(fn)
         else:

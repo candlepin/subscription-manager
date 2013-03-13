@@ -1,4 +1,5 @@
 import unittest
+import yum
 
 import stubs
 from subscription_manager import productid
@@ -17,33 +18,45 @@ class TestProductManager(unittest.TestCase):
         self.prod_db_mock.findRepo.return_value = "repo1"
         cert = self._create_desktop_cert()
         self.prod_dir.certs.append(cert)
-        self.prod_mgr.updateRemoved([])
+        self.prod_mgr.update_removed([])
         self.assertTrue(cert.delete.called)
 
-    def _create_desktop_cert(self):
+    def test_get_active_no_packages(self):
+        cert = self._create_server_cert()
+        self.prod_dir.certs.append(cert)
+        mock_yb = Mock(spec=yum.YumBase)
+        mock_yb.pkgSack.returnPackages.return_value = []
+        active = self.prod_mgr.get_active(mock_yb)
+        self.assertEquals(set([]), active)
+
+    def _create_cert(self, id, label, version, provided_tags):
         cert = stubs.StubProductCertificate(
-            stubs.StubProduct("68", "Red Hat Enterprise Linux Desktop",
-                version="5", provided_tags="rhel-5-client"))
+                stubs.StubProduct(id, label, version=version,
+                                   provided_tags=provided_tags))
         cert.delete = Mock()
         cert.write = Mock()
         return cert
 
+    def _create_desktop_cert(self):
+        return self._create_cert("68", "Red Hat Enterprise Linux Desktop",
+                                 "5", "rhel-5-client")
+
     def _create_workstation_cert(self):
-        cert = stubs.StubProductCertificate(
-            stubs.StubProduct("71", "Red Hat Enterprise Linux Workstation",
-                version="5", provided_tags="rhel-5-client-workstation"))
-        cert.delete = Mock()
-        cert.write = Mock()
-        return cert
+        return self._create_cert("71", "Red Hat Enterprise Linux Workstation",
+                                 "5", "rhel-5-client-workstation")
+
+    def _create_server_cert(self):
+        return self._create_cert("69", "Red Hat Enterprise Linux Server",
+                                 "6", "rhel-6-client")
 
     def test_is_workstation(self):
         workstation_cert = self._create_workstation_cert()
-        self.assertTrue(self.prod_mgr._isWorkstation(
+        self.assertTrue(self.prod_mgr._is_workstation(
             workstation_cert.products[0]))
 
     def test_is_desktop(self):
         desktop_cert = self._create_desktop_cert()
-        self.assertTrue(self.prod_mgr._isDesktop(
+        self.assertTrue(self.prod_mgr._is_desktop(
             desktop_cert.products[0]))
 
     # If Desktop cert exists, delete it and then write Workstation:
@@ -64,7 +77,7 @@ class TestProductManager(unittest.TestCase):
                 (workstation_cert, 'repo2'),
         ]
 
-        self.prod_mgr.updateInstalled(enabled, ['repo1', 'repo2'])
+        self.prod_mgr.update_installed(enabled, ['repo1', 'repo2'])
 
         self.assertTrue(desktop_cert.write.called)
         self.assertTrue(desktop_cert.delete.called)
@@ -95,7 +108,7 @@ class TestProductManager(unittest.TestCase):
                 (some_other_cert, 'repo3'),
         ]
 
-        self.prod_mgr.updateInstalled(enabled, ['repo1', 'repo2', 'repo3'])
+        self.prod_mgr.update_installed(enabled, ['repo1', 'repo2', 'repo3'])
 
         self.assertTrue(workstation_cert.write.called)
         self.assertFalse(workstation_cert.delete.called)
