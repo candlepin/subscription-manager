@@ -15,11 +15,34 @@ class TestProductManager(unittest.TestCase):
                 product_db=self.prod_db_mock)
 
     def test_removed(self):
-        self.prod_db_mock.findRepo.return_value = "repo1"
+        self.prod_db_mock.find_repo.return_value = "repo1"
         cert = self._create_desktop_cert()
         self.prod_dir.certs.append(cert)
         self.prod_mgr.update_removed([])
         self.assertTrue(cert.delete.called)
+
+    def test_update_no_packages_no_repos(self):
+        cert = self._create_server_cert()
+        self.prod_dir.certs.append(cert)
+
+        mock_yb = Mock(spec=yum.YumBase)
+        mock_yb.pkgSack.returnPackages.return_value = []
+        mock_yb.repos.listEnabled.return_value = []
+
+        self.prod_mgr.update(mock_yb)
+        # not a lot to test with no repos and no dbs
+        # should be no product id db writing in this case
+        self.assertFalse(self.prod_db_mock.delete.called)
+        self.assertFalse(self.prod_db_mock.add.called)
+        self.assertFalse(self.prod_db_mock.write.called)
+        self.assertFalse(self.prod_db_mock.find_repo.called)
+
+    def test_get_enabled_no_packages(self):
+        cert = self._create_server_cert()
+        self.prod_dir.certs.append(cert)
+        mock_yb = Mock(spec=yum.YumBase)
+        mock_yb.repos.listEnabled.return_value = []
+        self.prod_mgr.get_enabled(mock_yb)
 
     def test_get_active_no_packages(self):
         cert = self._create_server_cert()
@@ -28,6 +51,56 @@ class TestProductManager(unittest.TestCase):
         mock_yb.pkgSack.returnPackages.return_value = []
         active = self.prod_mgr.get_active(mock_yb)
         self.assertEquals(set([]), active)
+
+    def test_update_installed_no_packages_no_repos_no_active_no_certs(self):
+        self.prod_mgr.update_installed(set([]), set([]))
+        # we should do nothing here
+        self.assertFalse(self.prod_db_mock.delete.called)
+        self.assertFalse(self.prod_db_mock.add.called)
+        self.assertFalse(self.prod_db_mock.write.called)
+        self.assertFalse(self.prod_db_mock.find_repo.called)
+
+        self.prod_mgr.plugin_manager.run.assert_called_with('post_product_id_install', product_list=[])
+
+    def test_update_installed_no_packages_no_repos_no_active_no_enabled(self):
+        cert = self._create_server_cert()
+        self.prod_dir.certs.append(cert)
+
+        self.prod_mgr.update_installed(set([]), set([]))
+        # we should do nothing here
+        self.assertFalse(self.prod_db_mock.delete.called)
+        self.assertFalse(self.prod_db_mock.add.called)
+        self.assertFalse(self.prod_db_mock.write.called)
+        self.assertFalse(self.prod_db_mock.find_repo.called)
+
+        self.prod_mgr.plugin_manager.run.assert_called_with('post_product_id_install', product_list=[])
+
+    def test_update_removed_no_packages_no_repos_no_active_no_certs(self):
+        self.prod_mgr.update_removed(set([]))
+        self.assertFalse(self.prod_db_mock.delete.called)
+        self.assertFalse(self.prod_db_mock.write.called)
+
+    def test_update_removed_no_packages_no_repos_no_active(self):
+        """we have a product cert, but it is not in active, so it
+        should be deleted"""
+        cert = self._create_server_cert()
+        self.prod_dir.certs.append(cert)
+
+        self.prod_mgr.pdir.refresh = Mock()
+
+        self.prod_mgr.update_removed(set([]))
+        self.assertTrue(self.prod_db_mock.delete.called)
+        self.assertTrue(self.prod_db_mock.write.called)
+        # we have 69.pem installed, but it is not active, we
+        # should delete it from prod db
+        self.prod_db_mock.delete.assert_called_with('69')
+        self.assertTrue(cert.delete.called)
+
+        self.assertTrue(self.prod_mgr.pdir.refresh.called)
+        # TODO self.prod_mgr.pdir.refresh is called
+
+# TODO: test if pdir handles things added to it while iterating over it
+# TODO: test if product_id plugins are called on just product deletion
 
     def _create_cert(self, id, label, version, provided_tags):
         cert = stubs.StubProductCertificate(
