@@ -21,22 +21,6 @@ class TestProductManager(unittest.TestCase):
         self.prod_mgr.update_removed([])
         self.assertTrue(cert.delete.called)
 
-    def test_update_no_packages_no_repos(self):
-        cert = self._create_server_cert()
-        self.prod_dir.certs.append(cert)
-
-        mock_yb = Mock(spec=yum.YumBase)
-        mock_yb.pkgSack.returnPackages.return_value = []
-        mock_yb.repos.listEnabled.return_value = []
-
-        self.prod_mgr.update(mock_yb)
-        # not a lot to test with no repos and no dbs
-        # should be no product id db writing in this case
-        self.assertFalse(self.prod_db_mock.delete.called)
-        self.assertFalse(self.prod_db_mock.add.called)
-        self.assertFalse(self.prod_db_mock.write.called)
-        self.assertFalse(self.prod_db_mock.find_repo.called)
-
     def test_get_enabled_no_packages(self):
         cert = self._create_server_cert()
         self.prod_dir.certs.append(cert)
@@ -44,11 +28,58 @@ class TestProductManager(unittest.TestCase):
         mock_yb.repos.listEnabled.return_value = []
         self.prod_mgr.get_enabled(mock_yb)
 
+    def test_get_enabled_with_repos(self):
+        cert = self._create_server_cert()
+        self.prod_dir.certs.append(cert)
+
+        # mock the repo metadata read of the product cert
+        mock_repo = Mock(spec=yum.repos.Repository)
+        mock_repo.retrieveMD = Mock(return_value='somefilename')
+        mock_repo.id = Mock(return_value='rhel-6-server')
+        self.prod_mgr._get_cert = Mock(return_value=cert)
+
+        mock_yb = Mock(spec=yum.YumBase)
+        mock_yb.repos.listEnabled.return_value = [mock_repo]
+        self.prod_mgr.get_enabled(mock_yb)
+
+    def test_get_enabled_exception(self):
+        mock_repo = Mock(spec=yum.repos.Repository)
+        mock_repo.retrieveMD = Mock(return_value='somefilename')
+        mock_repo.id = Mock(return_value='rhel-6-server')
+        self.prod_mgr._get_cert = Mock(side_effect=IOError)
+
+        mock_yb = Mock(spec=yum.YumBase)
+        mock_yb.repos.listEnabled.return_value = [mock_repo]
+        enabled = self.prod_mgr.get_enabled(mock_yb)
+
+        self.assertEquals([], enabled)
+
     def test_get_active_no_packages(self):
         cert = self._create_server_cert()
         self.prod_dir.certs.append(cert)
         mock_yb = Mock(spec=yum.YumBase)
         mock_yb.pkgSack.returnPackages.return_value = []
+        active = self.prod_mgr.get_active(mock_yb)
+        self.assertEquals(set([]), active)
+
+    def test_get_active_with_active_packages(self):
+        mock_yb = Mock(spec=yum.YumBase)
+        mock_package = Mock(spec=yum.rpmsack.RPMInstalledPackage)
+        mock_package.repoid = 'this-is-not-a-rh-repo'
+        mock_package.name = 'some-cool-package'
+        mock_package.arch = 'noarch'
+        mock_yb.pkgSack.returnPackages.return_value = [mock_package]
+        active = self.prod_mgr.get_active(mock_yb)
+        self.assertEquals(set([mock_package.repoid]), active)
+
+    def test_get_active_with_active_packages_rhel57_installed_repo(self):
+        """rhel5.7 says every package is in 'installed' repo"""
+        mock_yb = Mock(spec=yum.YumBase)
+        mock_package = Mock(spec=yum.rpmsack.RPMInstalledPackage)
+        mock_package.repoid = 'installed'
+        mock_package.name = 'some-cool-package'
+        mock_package.arch = 'noarch'
+        mock_yb.pkgSack.returnPackages.return_value = [mock_package]
         active = self.prod_mgr.get_active(mock_yb)
         self.assertEquals(set([]), active)
 
@@ -114,6 +145,116 @@ class TestProductManager(unittest.TestCase):
         self.assertTrue(self.prod_mgr._is_workstation.called)
 
         self.prod_dir.findByProduct.assert_called_with('69')
+        self.prod_mgr.plugin_manager.run.assert_called_with('post_product_id_install', product_list=[])
+
+    def test_update_installed_no_product_certs_with_active_with_enabled(self):
+        """no product cert, repo enabled and active, cert should be installed.
+        This is the new product cert scenario"""
+
+        # simulate the cert from the repo metadata, not the cert isnt added to
+        # the product dir
+        cert = self._create_server_cert()
+
+        enabled = [(cert, 'rhel-6-server')]
+        active = set(['rhel-6-server'])
+
+        cert.write = Mock()
+        self.prod_dir.findByProduct = Mock(return_value=None)
+        self.prod_mgr._is_desktop = Mock(return_value=False)
+        self.prod_mgr._is_workstation = Mock(return_value=False)
+
+        # we dont actually use the return value anywhere...
+        products_installed = self.prod_mgr.update_installed(enabled, active)
+
+        self.prod_dir.findByProduct.assert_called_with('69')
+        self.assertTrue(cert.write.called)
+        self.assertTrue(self.prod_mgr._is_desktop.called)
+        self.assertTrue(self.prod_mgr._is_workstation.called)
+        self.assertTrue(self.prod_db_mock.add.called)
+        self.assertTrue(self.prod_db_mock.write.called)
+
+        self.prod_db_mock.add.assert_called_with('69', 'rhel-6-server')
+        self.prod_mgr.plugin_manager.run.assert_called_with('post_product_id_install', product_list=[cert])
+
+    def test_update_installed_no_active_with_product_certs_installed_anaconda(self):
+        """simulate no active packages (since they are installed via anaconda) repos
+        but product cert installed.  variations of rh#859197"""
+        cert = self._create_server_cert()
+        self.prod_dir.certs.append(cert)
+
+        enabled = [(cert, 'rhel-6-server')]
+        active = set([])
+
+        cert.write = Mock()
+        self.prod_dir.findByProduct = Mock(return_value=None)
+        self.prod_mgr._is_desktop = Mock(return_value=False)
+        self.prod_mgr._is_workstation = Mock(return_value=False)
+
+        # we dont actually use the return value anywhere...
+        products_installed = self.prod_mgr.update_installed(enabled, active)
+
+    def test_update_no_packages_no_repos(self):
+        cert = self._create_server_cert()
+        self.prod_dir.certs.append(cert)
+
+        mock_yb = Mock(spec=yum.YumBase)
+        mock_yb.pkgSack.returnPackages.return_value = []
+        mock_yb.repos.listEnabled.return_value = []
+
+        self.prod_mgr.update(mock_yb)
+        # not a lot to test with no repos and no dbs
+        # should be no product id db writing in this case
+        self.assertFalse(self.prod_db_mock.delete.called)
+        self.assertFalse(self.prod_db_mock.add.called)
+        self.assertFalse(self.prod_db_mock.write.called)
+        self.assertFalse(self.prod_db_mock.find_repo.called)
+
+    @patch('yum.YumBase', spec=yum.YumBase)
+    def test_update_with_enabled_but_not_in_active(self, mock_yb):
+        cert = self._create_server_cert()
+        self.prod_dir.certs.append(cert)
+        self.prod_mgr._get_cert = Mock(return_value=cert)
+
+        mock_package = Mock(spec=yum.rpmsack.RPMInstalledPackage)
+        mock_package.repoid = 'anaconda'
+        mock_package.name = 'some-cool-package'
+        mock_package.arch = 'noarch'
+        mock_yb.pkgSack.returnPackages.return_value = [mock_package]
+
+        mock_repo = Mock(spec=yum.repos.Repository)
+        mock_repo.retrieveMD = Mock(return_value='somefilename')
+        mock_repo.id = Mock(return_value='rhel-6-server')
+
+        mock_yb.repos.listEnabled.return_value = [mock_repo]
+
+        cert.delete = Mock()
+        self.prod_mgr.update(mock_yb)
+
+        self.assertFalse(cert.delete.called)
+        self.assertFalse(self.prod_db_mock.delete.called)
+        self.assertFalse(self.prod_db_mock.delete.called)
+
+    def test_update_removed_no_active_with_product_cert_anaconda(self):
+        """simulate packages are installed with anaconda repo, and none
+        installed from the enabled repo. This currently causes a product
+        cert deletion"""
+        cert = self._create_server_cert()
+        self.prod_dir.certs.append(cert)
+
+        self.prod_db_mock.find_repo.return_value = "rhel-6-server"
+        # we have rhel6 product id installed, and the repo is enabled, but
+        # we have no packages installed from that repo (they are from the anconda
+        # repo)
+
+        active = set(['anaconda'])
+
+        cert.delete = Mock()
+        self.prod_mgr.update_removed(set([]))
+
+        self.assertFalse(cert.delete.called)
+        self.assertFalse(self.prod_db_mock.delete.called)
+#TODO: test update_installed with a installed product cert, enabled, but not active
+#       because the packages were installed from anaconda
 
     def test_update_removed_no_packages_no_repos_no_active_no_certs(self):
         self.prod_mgr.update_removed(set([]))
@@ -139,10 +280,10 @@ class TestProductManager(unittest.TestCase):
         self.assertTrue(self.prod_mgr.pdir.refresh.called)
         # TODO self.prod_mgr.pdir.refresh is called
 
-# TODO: test if pdir handles things added to it while iterating over it
-# TODO: test if product_id plugins are called on just product deletion
-# TODO: test if we support duplicates in enabled repo list
-# TODO: is there a reason available is a set and enabled is a list? if so, test those cases
+        # TODO: test if pdir handles things added to it while iterating over it
+        # TODO: test if product_id plugins are called on just product deletion
+        # TODO: test if we support duplicates in enabled repo list
+        # TODO: is there a reason available is a set and enabled is a list? if so, test those cases
 
     def _create_cert(self, id, label, version, provided_tags):
         cert = stubs.StubProductCertificate(
