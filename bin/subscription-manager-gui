@@ -47,6 +47,33 @@ _ = gettext.gettext
 REQUEST_NAME_REPLY_PRIMARY_OWNER = 1
 REQUEST_NAME_REPLY_ALREADY_OWNER = 4
 
+# To figure out if we got the bus name we wanted, and if not,
+# why not, we need the results from request_name, and to
+# see if it's return codes are REQUEST_NAME_REPLY_PRIMARY_OWNER
+# or REQUEST_NAME_REPLY_ALREADY_OWNER.
+#
+# We have to support dbus-python ~ 0.7, from ~2005 for rhel5
+# which require the use of "dbus.dbus_bindings".
+# 'dbus_bindings' has been deprecated since ~2006  (~0.8.x)
+# and were finally removed from the dbus-python bindings
+# in rhel7. So for rhel5, we conditionally import dbus_bindings
+# use bus_request_name, otherwise we use the newer bus.request_name
+
+
+def _request_name_rhel5(bus, bus_name):
+    return dbus.dbus_bindings.bus_request_name(bus.get_connection(), bus_name.get_name())
+
+
+def _request_name(bus, bus_name):
+    return bus.request_name(bus_name.get_name())
+
+
+try:
+    import dbus.dbus_bindings
+    request_name = _request_name_rhel5
+except ImportError, e:
+    request_name = _request_name
+
 gtk.gdk.threads_init()
 
 
@@ -92,7 +119,6 @@ except ImportError, e:
 
 
 class SubscriptionManagerService(dbus.service.Object):
-
     def __init__(self, window):
         self.window = window
         bus_name = dbus.service.BusName(BUS_NAME, bus=dbus.SessionBus())
@@ -101,6 +127,20 @@ class SubscriptionManagerService(dbus.service.Object):
     @dbus.service.method(dbus_interface=BUS_NAME)
     def show_window(self):
         self.window.present()
+
+
+def already_running(bus):
+    if bus is None:
+        return False
+
+    bus_name = dbus.service.BusName(BUS_NAME, bus=dbus.SessionBus())
+    request_name_res = request_name(bus, bus_name)
+
+    if bus and ((request_name_res != REQUEST_NAME_REPLY_PRIMARY_OWNER) and
+       (request_name_res != REQUEST_NAME_REPLY_ALREADY_OWNER)):
+        print _("subscription-manager-gui is already running")
+        return True
+    return False
 
 if __name__ == '__main__':
     parser = OptionParser(usage=USAGE,
@@ -117,12 +157,7 @@ if __name__ == '__main__':
         # Just ignore it if for some reason we can't find the session bus
         bus = None
 
-    bus_name = dbus.service.BusName(BUS_NAME, bus=dbus.SessionBus())
-    request_name_res = bus.request_name(bus_name.get_name())
-
-    if bus and ((request_name_res != REQUEST_NAME_REPLY_PRIMARY_OWNER) and
-       (request_name_res != REQUEST_NAME_REPLY_ALREADY_OWNER)):
-        print _("subscription-manager-gui is already running")
+    if already_running(bus):
         # Attempt to raise the running instance to the forefront
         remote_object = bus.get_object(BUS_NAME, BUS_PATH)
         remote_object.show_window(dbus_interface=BUS_NAME)
