@@ -237,6 +237,7 @@ class ProductManager:
     # find the list of repo's that provide packages that
     # are actually installed.
     def get_active(self, yb):
+        """find yum repos that have packages installed"""
         active = set()
 
         packages = yb.pkgSack.returnPackages()
@@ -259,6 +260,7 @@ class ProductManager:
         return active
 
     def get_enabled(self, yb):
+        """find yum repos that are enabled"""
         lst = []
         enabled = yb.repos.listEnabled()
 
