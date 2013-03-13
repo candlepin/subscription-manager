@@ -267,7 +267,7 @@ class ProductManager:
         for repo in enabled:
             try:
                 fn = repo.retrieveMD(self.PRODUCTID)
-                cert = self.__get_cert(fn)
+                cert = self._get_cert(fn)
                 if cert is None:
                     continue
                 lst.append((cert, repo.id))
@@ -277,7 +277,7 @@ class ProductManager:
                 self.meta_data_errors.append(repo.id)
         return lst
 
-    def __get_cert(self, fn):
+    def _get_cert(self, fn):
         if fn.endswith('.gz'):
             f = GzipFile(fn)
         else:
