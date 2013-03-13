@@ -52,7 +52,7 @@ class TestProductManager(unittest.TestCase):
         active = self.prod_mgr.get_active(mock_yb)
         self.assertEquals(set([]), active)
 
-    def test_update_installed_no_packages_no_repos_no_active_no_certs(self):
+    def test_update_installed_no_packages_no_repos_no_active_no_enabled_no_certs(self):
         self.prod_mgr.update_installed(set([]), set([]))
         # we should do nothing here
         self.assertFalse(self.prod_db_mock.delete.called)
@@ -60,6 +60,7 @@ class TestProductManager(unittest.TestCase):
         self.assertFalse(self.prod_db_mock.write.called)
         self.assertFalse(self.prod_db_mock.find_repo.called)
 
+        # plugin should get called with empty list
         self.prod_mgr.plugin_manager.run.assert_called_with('post_product_id_install', product_list=[])
 
     def test_update_installed_no_packages_no_repos_no_active_no_enabled(self):
@@ -74,6 +75,45 @@ class TestProductManager(unittest.TestCase):
         self.assertFalse(self.prod_db_mock.find_repo.called)
 
         self.prod_mgr.plugin_manager.run.assert_called_with('post_product_id_install', product_list=[])
+
+    def test_update_installed_no_packages_no_repos_no_active_with_enabled(self):
+        """if repos are enabled but not active, basically nothing should happen"""
+        cert = self._create_server_cert()
+        self.prod_dir.certs.append(cert)
+        enabled = [(cert, 'rhel-6-server')]
+
+        self.prod_mgr.update_installed(enabled, set([]))
+
+        self.assertFalse(self.prod_db_mock.delete.called)
+        self.assertFalse(self.prod_db_mock.add.called)
+        self.assertFalse(self.prod_db_mock.write.called)
+        self.assertFalse(self.prod_db_mock.find_repo.called)
+
+        self.prod_mgr.plugin_manager.run.assert_called_with('post_product_id_install', product_list=[])
+
+    def test_update_installed_no_packages_no_repos_with_active_with_enabled(self):
+        """rhel-6-server enabled and active, with product cert already installed should do nothing"""
+        cert = self._create_server_cert()
+        self.prod_dir.certs.append(cert)
+        enabled = [(cert, 'rhel-6-server')]
+        active = set(['rhel-6-server'])
+
+        # mock this so we can verify it's called correctly
+        self.prod_dir.findByProduct = Mock(return_value=cert)
+        self.prod_mgr._is_desktop = Mock(return_value=False)
+        self.prod_mgr._is_workstation = Mock(return_value=False)
+
+        # this is the normal case, with a product cert already installed,
+        #  the repo enabled, and packages installed from it (active)
+        self.prod_mgr.update_installed(enabled, active)
+        self.assertFalse(self.prod_db_mock.delete.called)
+        self.assertFalse(self.prod_db_mock.add.called)
+        self.assertFalse(self.prod_db_mock.write.called)
+        self.assertFalse(self.prod_db_mock.find_repo.called)
+        self.assertTrue(self.prod_mgr._is_desktop.called)
+        self.assertTrue(self.prod_mgr._is_workstation.called)
+
+        self.prod_dir.findByProduct.assert_called_with('69')
 
     def test_update_removed_no_packages_no_repos_no_active_no_certs(self):
         self.prod_mgr.update_removed(set([]))
@@ -101,6 +141,8 @@ class TestProductManager(unittest.TestCase):
 
 # TODO: test if pdir handles things added to it while iterating over it
 # TODO: test if product_id plugins are called on just product deletion
+# TODO: test if we support duplicates in enabled repo list
+# TODO: is there a reason available is a set and enabled is a list? if so, test those cases
 
     def _create_cert(self, id, label, version, provided_tags):
         cert = stubs.StubProductCertificate(
@@ -120,7 +162,7 @@ class TestProductManager(unittest.TestCase):
 
     def _create_server_cert(self):
         return self._create_cert("69", "Red Hat Enterprise Linux Server",
-                                 "6", "rhel-6-client")
+                                 "6", "rhel-6-server")
 
     def test_is_workstation(self):
         workstation_cert = self._create_workstation_cert()
