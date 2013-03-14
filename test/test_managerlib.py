@@ -26,7 +26,7 @@ from fixture import SubManFixture
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
         getInstalledProductStatus, LocalTz, \
         MergedPoolsStackingGroupSorter, MergedPools, PoolStash
-from subscription_manager.injection import FEATURES, CERT_SORTER
+from subscription_manager.injection import provide, CERT_SORTER
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
@@ -489,7 +489,7 @@ class InstalledProductStatusTests(SubManFixture):
         product_directory = StubProductDirectory([])
 
         stub_sorter = StubCertSorter(prod_dir=product_directory)
-        FEATURES.provide(CERT_SORTER, stub_sorter)
+        provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,
                 None, StubUEP())
@@ -503,7 +503,7 @@ class InstalledProductStatusTests(SubManFixture):
 
         stub_sorter = StubCertSorter(prod_dir=product_directory)
         stub_sorter.valid_products['product1'] = [ent_cert]
-        FEATURES.provide(CERT_SORTER, stub_sorter)
+        provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,
                 None, StubUEP())
@@ -519,7 +519,7 @@ class InstalledProductStatusTests(SubManFixture):
 
         stub_sorter = StubCertSorter(prod_dir=product_directory)
         stub_sorter.expired_products['product1'] = [ent_cert]
-        FEATURES.provide(CERT_SORTER, stub_sorter)
+        provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,
                 None, StubUEP())
@@ -532,7 +532,7 @@ class InstalledProductStatusTests(SubManFixture):
 
         stub_sorter = StubCertSorter(prod_dir=product_directory)
         stub_sorter.unentitled_products['product1'] = None  # prod cert unused here
-        FEATURES.provide(CERT_SORTER, stub_sorter)
+        provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,
                 None, StubUEP())
@@ -546,7 +546,7 @@ class InstalledProductStatusTests(SubManFixture):
                     start_date=(datetime.now() + timedelta(days=1365)))
         stub_sorter = StubCertSorter(prod_dir=product_directory)
         stub_sorter.future_products['product1'] = [ent_cert]
-        FEATURES.provide(CERT_SORTER, stub_sorter)
+        provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,
                 None, StubUEP())
@@ -559,7 +559,7 @@ class InstalledProductStatusTests(SubManFixture):
         product_directory = StubProductDirectory(pids=['product1'])
         stub_sorter = StubCertSorter(prod_dir=product_directory)
         stub_sorter.valid_products['product1'] = [ent_cert, ent_cert]
-        FEATURES.provide(CERT_SORTER, stub_sorter)
+        provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,
                 None, StubUEP())
@@ -575,7 +575,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.valid_products['product1'] = [ent_cert]
         stub_sorter.valid_products['product2'] = [ent_cert]
         stub_sorter.valid_products['product3'] = [ent_cert]
-        FEATURES.provide(CERT_SORTER, stub_sorter)
+        provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(product_directory,
                 None, StubUEP())
@@ -594,7 +594,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.valid_products['product1'] = [ent_cert]
         stub_sorter.valid_products['product2'] = [ent_cert]
 
-        FEATURES.provide(CERT_SORTER, stub_sorter)
+        provide(CERT_SORTER, stub_sorter)
 
         product_status = getInstalledProductStatus(prod_dir,
                 None, StubUEP())

@@ -37,9 +37,9 @@ class CliUnSubscribeTests(SubManFixture):
         ent2 = StubEntitlementCertificate(prod)
         ent3 = StubEntitlementCertificate(prod)
 
-        inj.FEATURES.provide(inj.ENT_DIR,
+        inj.provide(inj.ENT_DIR,
                 StubEntitlementDirectory([ent1, ent2, ent3]))
-        inj.FEATURES.provide(inj.PROD_DIR,
+        inj.provide(inj.PROD_DIR,
                 StubProductDirectory([]))
         cmd = managercli.UnSubscribeCommand()
 
@@ -70,9 +70,9 @@ class CliUnSubscribeTests(SubManFixture):
         prod = StubProduct('stub_product')
         ent = StubEntitlementCertificate(prod)
 
-        inj.FEATURES.provide(inj.ENT_DIR,
+        inj.provide(inj.ENT_DIR,
                 StubEntitlementDirectory([ent]))
-        inj.FEATURES.provide(inj.PROD_DIR,
+        inj.provide(inj.PROD_DIR,
                 StubProductDirectory([]))
         cmd = managercli.UnSubscribeCommand()
 
@@ -89,9 +89,9 @@ class CliUnSubscribeTests(SubManFixture):
         ent2 = StubEntitlementCertificate(prod)
         ent3 = StubEntitlementCertificate(prod)
 
-        inj.FEATURES.provide(inj.ENT_DIR,
+        inj.provide(inj.ENT_DIR,
                 StubEntitlementDirectory([ent1, ent2, ent3]))
-        inj.FEATURES.provide(inj.PROD_DIR,
+        inj.provide(inj.PROD_DIR,
                 StubProductDirectory([]))
         cmd = managercli.UnSubscribeCommand()
         managercli.ConsumerIdentity = StubConsumerIdentity

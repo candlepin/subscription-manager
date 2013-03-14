@@ -29,11 +29,11 @@ def init_dep_injection():
     # Set up consumer identity as a singleton so we don't constantly re-load
     # it from disk. Call reload when anything changes and all references will be
     # updated.
-    inj.FEATURES.provide(inj.IDENTITY, Identity())
-    inj.FEATURES.provide(inj.CERT_SORTER, CertSorter)
-    inj.FEATURES.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR,
+    inj.provide(inj.IDENTITY, Identity())
+    inj.provide(inj.CERT_SORTER, CertSorter)
+    inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR,
             ValidProductDateRangeCalculator)
 
     # TODO: singletons possible?
-    inj.FEATURES.provide(inj.ENT_DIR, EntitlementDirectory)
-    inj.FEATURES.provide(inj.PROD_DIR, ProductDirectory)
+    inj.provide(inj.ENT_DIR, EntitlementDirectory)
+    inj.provide(inj.PROD_DIR, ProductDirectory)

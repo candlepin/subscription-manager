@@ -17,7 +17,7 @@
 # in this software or its documentation.
 #
 
-from subscription_manager.injection import FEATURES, IDENTITY
+from subscription_manager.injection import require, IDENTITY
 import locale
 import logging
 import subprocess
@@ -81,7 +81,7 @@ class Backend(object):
     """
 
     def __init__(self):
-        self.identity = FEATURES.require(IDENTITY)
+        self.identity = require(IDENTITY)
         self.create_uep(cert_file=ConsumerIdentity.certpath(),
                         key_file=ConsumerIdentity.keypath())
 
@@ -172,7 +172,7 @@ class MainWindow(widgets.GladeWidget):
         super(MainWindow, self).__init__('mainwindow.glade')
 
         self.backend = backend or Backend()
-        self.identity = FEATURES.require(IDENTITY)
+        self.identity = require(IDENTITY)
 
         self.facts = facts or Facts(self.backend.entitlement_dir,
                 self.backend.product_dir)

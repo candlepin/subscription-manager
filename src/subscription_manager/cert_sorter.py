@@ -19,7 +19,7 @@ from rhsm.certificate import GMT
 from rhsm.connection import RestlibException
 
 from subscription_manager.isodate import parse_date
-from subscription_manager.injection import FEATURES, IDENTITY
+from subscription_manager.injection import require, IDENTITY
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -55,7 +55,7 @@ class CertSorter(object):
     reporting unknown.
     """
     def __init__(self, product_dir, entitlement_dir, uep):
-        self.identity = FEATURES.require(IDENTITY)
+        self.identity = require(IDENTITY)
         self.product_dir = product_dir
         self.entitlement_dir = entitlement_dir
 

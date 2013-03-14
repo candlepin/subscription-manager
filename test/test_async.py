@@ -20,7 +20,7 @@ import unittest
 
 import mock
 
-from subscription_manager.injection import FEATURES, IDENTITY
+from subscription_manager.injection import provide, IDENTITY
 from subscription_manager import async
 from subscription_manager import managerlib
 
@@ -57,7 +57,7 @@ class TestAsyncPool(unittest.TestCase):
     def _create_async_pool(self):
         id_mock = mock.Mock()
         id_mock.uuid = 'some-consumer-uuid'
-        FEATURES.provide(IDENTITY, id_mock)
+        provide(IDENTITY, id_mock)
         facts_mock = mock.Mock()
         facts_mock.update_check.return_value = None
 

@@ -21,7 +21,7 @@ import logging
 from datetime import timedelta, datetime
 from subscription_manager.lock import Lock
 from subscription_manager.identity import ConsumerIdentity
-from subscription_manager.injection import FEATURES, CERT_SORTER
+from subscription_manager.injection import require, CERT_SORTER
 from subscription_manager import plugins
 
 from subscription_manager.certdirectory import EntitlementDirectory, \
@@ -121,7 +121,7 @@ class HealingLib(DataLib):
                 # TODO: not great for testing:
                 ent_dir = EntitlementDirectory()
 
-                cs = FEATURES.require(CERT_SORTER, self._product_dir, ent_dir,
+                cs = require(CERT_SORTER, self._product_dir, ent_dir,
                         self.uep)
                 cert_updater = CertLib(lock=self.lock, uep=self.uep)
                 if not cs.is_valid():
