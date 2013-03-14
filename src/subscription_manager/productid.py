@@ -36,7 +36,7 @@ class DatabaseDirectory(Directory):
     PATH = 'var/lib/rhsm'
 
     def __init__(self):
-        Directory.__init__(self, self.PATH)
+        super(DatabaseDirectory, self).__init__(self.PATH)
         self.create()
 
 
