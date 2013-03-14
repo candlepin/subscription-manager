@@ -145,7 +145,7 @@ class TestCertmgr(SubManFixture):
         # framework.
         self.mock_cert_sorter = mock.NonCallableMock()
 
-        injection.FEATURES.provide(injection.CERT_SORTER, self.mock_cert_sorter)
+        injection.provide(injection.CERT_SORTER, self.mock_cert_sorter)
 
     def tearDown(self):
         self.patcher2.stop()

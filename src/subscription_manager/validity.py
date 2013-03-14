@@ -14,7 +14,7 @@
 #
 
 import logging
-from subscription_manager.injection import FEATURES, IDENTITY
+from subscription_manager.injection import require, IDENTITY
 from subscription_manager.isodate import parse_date
 from rhsm.certificate import DateRange
 
@@ -25,7 +25,7 @@ class ValidProductDateRangeCalculator(object):
 
     def __init__(self, uep):
         self.uep = uep
-        self.identity = FEATURES.require(IDENTITY)
+        self.identity = require(IDENTITY)
         if self.identity.is_valid():
             self.consumer_data = self.uep.getConsumer(self.identity.uuid)
 

@@ -33,7 +33,7 @@ from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.facts import Facts
 from subscription_manager.quantity import allows_multi_entitlement
 from subscription_manager.cert_sorter import StackingGroupSorter
-from subscription_manager.injection import FEATURES, CERT_SORTER, \
+from subscription_manager.injection import require, CERT_SORTER, \
         PRODUCT_DATE_RANGE_CALCULATOR, IDENTITY
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoLib
@@ -83,10 +83,10 @@ def getInstalledProductStatus(product_directory, entitlement_directory, uep):
     """
     product_status = []
 
-    sorter = FEATURES.require(CERT_SORTER, product_directory,
+    sorter = require(CERT_SORTER, product_directory,
             entitlement_directory, uep)
 
-    calculator = FEATURES.require(PRODUCT_DATE_RANGE_CALCULATOR, uep)
+    calculator = require(PRODUCT_DATE_RANGE_CALCULATOR, uep)
     for installed_product in sorter.installed_products:
         product_cert = sorter.installed_products[installed_product]
         for product in product_cert.products:
@@ -441,7 +441,7 @@ class PoolStash(object):
     """
     def __init__(self, backend, facts):
         self.backend = backend
-        self.identity = FEATURES.require(IDENTITY)
+        self.identity = require(IDENTITY)
         self.facts = facts
 
         # Pools which passed rules server side for this consumer:

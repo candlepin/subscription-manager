@@ -15,7 +15,7 @@
 
 import logging
 
-from subscription_manager.injection import FEATURES, IDENTITY
+from subscription_manager.injection import require, IDENTITY
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception
 
@@ -41,7 +41,7 @@ class RedeemDialog(widgets.GladeWidget):
         })
 
         self.backend = backend
-        self.identity = FEATURES.require(IDENTITY)
+        self.identity = require(IDENTITY)
 
     def _redeem(self, button):
         email = self.email_entry.get_text()

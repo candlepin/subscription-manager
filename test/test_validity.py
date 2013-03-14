@@ -20,7 +20,7 @@ from datetime import datetime
 from stubs import StubUEP
 from fixture import SubManFixture
 from subscription_manager.validity import ValidProductDateRangeCalculator
-from subscription_manager.injection import FEATURES, IDENTITY
+from subscription_manager.injection import provide, IDENTITY
 
 from rhsm.certificate import GMT
 
@@ -113,7 +113,7 @@ class ValidProductDateRangeCalculatorTests(SubManFixture):
     def test_unregistered(self):
         id_mock = NonCallableMock()
         id_mock.is_valid.return_value = False
-        FEATURES.provide(IDENTITY, id_mock)
+        provide(IDENTITY, id_mock)
         self.calculator = ValidProductDateRangeCalculator(self.mock_uep)
         for pid in (INST_PID_1, INST_PID_2, INST_PID_3):
             self.assertTrue(self.calculator.calculate(pid) is None)

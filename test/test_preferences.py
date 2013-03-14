@@ -20,7 +20,7 @@ import rhsm_display
 rhsm_display.set_display()
 
 from fixture import SubManFixture
-from subscription_manager.injection import FEATURES, IDENTITY
+from subscription_manager.injection import require, provide, IDENTITY
 
 from subscription_manager.gui import preferences
 
@@ -49,7 +49,7 @@ class TestPreferencesDialog(SubManFixture):
         self.id_mock.name = "John Q Consumer"
         self.id_mock.uuid = "not_actually_a_uuid"
         self.id_mock.exists_and_valid = mock.Mock(return_value=True)
-        FEATURES.provide(IDENTITY, self.id_mock)
+        provide(IDENTITY, self.id_mock)
 
     def _getPrefDialog(self):
         stub_backend = stubs.StubBackend()
@@ -90,7 +90,7 @@ class TestPreferencesDialog(SubManFixture):
         id_mock.name = "John Q Consumer"
         id_mock.uuid = None
         id_mock.exists_and_valid = mock.Mock(return_value=True)
-        FEATURES.provide(IDENTITY, id_mock)
+        provide(IDENTITY, id_mock)
 
         self._getPrefDialog()
         self.preferences_dialog.show()
@@ -105,7 +105,7 @@ class TestPreferencesDialog(SubManFixture):
         # slightly odd, we inject self.id_mock as the identity, but
         # something in mock doesn't like to equate that to the injected
         # one, so we just get a ref to the injected one and verify
-        identity = FEATURES.require(IDENTITY)
+        identity = require(IDENTITY)
         MockUep.assert_called_with(identity.uuid, service_level="Pro")
 
     def testSlaUnset(self):
@@ -123,7 +123,7 @@ class TestPreferencesDialog(SubManFixture):
         self.preferences_dialog.release_backend.get_releases = get_releases
         self.preferences_dialog.show()
         self.preferences_dialog.release_combobox.set_active(1)
-        identity = FEATURES.require(IDENTITY)
+        identity = require(IDENTITY)
         MockUep.assert_called_with(identity.uuid, release="123123")
 
     def testReleaseUnset(self):

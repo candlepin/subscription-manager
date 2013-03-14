@@ -58,13 +58,13 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         self.tab_icon = tab_icon
 
-        self.identity = inj.FEATURES.require(inj.IDENTITY)
+        self.identity = inj.require(inj.IDENTITY)
         self.product_dir = prod_dir
         self.entitlement_dir = ent_dir
 
         self.facts = facts
         self.backend = backend
-        self.cs = inj.FEATURES.require(inj.CERT_SORTER, prod_dir, ent_dir,
+        self.cs = inj.require(inj.CERT_SORTER, prod_dir, ent_dir,
                 self.backend.uep)
 
         # Product column
@@ -147,9 +147,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def update_products(self):
         self.store.clear()
-        self.cs = inj.FEATURES.require(inj.CERT_SORTER, self.product_dir,
+        self.cs = inj.require(inj.CERT_SORTER, self.product_dir,
                 self.entitlement_dir, self.backend.uep)
-        range_calculator = inj.FEATURES.require(inj.PRODUCT_DATE_RANGE_CALCULATOR,
+        range_calculator = inj.require(inj.PRODUCT_DATE_RANGE_CALCULATOR,
                 self.backend.uep)
         for product_cert in self.product_dir.list():
             for product in product_cert.products:
@@ -308,7 +308,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.set_registered(is_registered)
 
         # Look for products which have invalid entitlements
-        sorter = inj.FEATURES.require(inj.CERT_SORTER, self.product_dir, self.entitlement_dir,
+        sorter = inj.require(inj.CERT_SORTER, self.product_dir, self.entitlement_dir,
                 self.backend.uep)
 
         warn_count = len(sorter.expired_products) + \

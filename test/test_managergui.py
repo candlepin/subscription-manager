@@ -8,7 +8,7 @@ import mock
 
 import stubs
 from subscription_manager.gui import managergui, registergui
-from subscription_manager.injection import FEATURES, IDENTITY, CERT_SORTER, \
+from subscription_manager.injection import provide, IDENTITY, CERT_SORTER, \
         PRODUCT_DATE_RANGE_CALCULATOR
 from fixture import SubManFixture
 
@@ -20,7 +20,7 @@ class TestManagerGuiMainWindow(SubManFixture):
         id_mock.name = "John Q Consumer"
         id_mock.uuid = "211211381984"
         id_mock.exists_and_valid = mock.Mock(return_value=True)
-        FEATURES.provide(IDENTITY, id_mock)
+        provide(IDENTITY, id_mock)
 
     def test_main_window(self):
 
@@ -28,8 +28,8 @@ class TestManagerGuiMainWindow(SubManFixture):
         managergui.Facts = stubs.StubFacts()
 
         stub_sorter = stubs.StubCertSorter(stubs.StubProductDirectory([]))
-        FEATURES.provide(CERT_SORTER, stub_sorter)
-        FEATURES.provide(PRODUCT_DATE_RANGE_CALCULATOR, mock.Mock())
+        provide(CERT_SORTER, stub_sorter)
+        provide(PRODUCT_DATE_RANGE_CALCULATOR, mock.Mock())
 
         managergui.MainWindow(backend=stubs.StubBackend(), facts=stubs.StubFacts(),
                               ent_dir=stubs.StubCertificateDirectory([]),

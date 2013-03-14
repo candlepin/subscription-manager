@@ -16,7 +16,7 @@
 import logging
 import gtk
 
-from subscription_manager.injection import FEATURES, IDENTITY
+from subscription_manager.injection import require, IDENTITY
 from subscription_manager.gui.utils import linkify, handle_gui_exception
 from subscription_manager.gui import widgets
 from subscription_manager.managerlib import enhance_facts
@@ -41,7 +41,7 @@ class SystemFactsDialog(widgets.GladeWidget):
         super(SystemFactsDialog, self).__init__('factsdialog.glade')
 
         #self.consumer = consumer
-        self.identity = FEATURES.require(IDENTITY)
+        self.identity = require(IDENTITY)
         self.facts = facts
         self.backend = backend
         self.glade.signal_autoconnect({

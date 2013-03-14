@@ -32,7 +32,7 @@ init_dep_injection()
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager import certdirectory
-from subscription_manager.injection import FEATURES, CERT_SORTER
+from subscription_manager.injection import require, CERT_SORTER
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
@@ -95,7 +95,7 @@ def check_status(force_signal):
         proxy_password=CFG.get('server', 'proxy_password'),
         cert_file=ConsumerIdentity.certpath(),
         key_file=ConsumerIdentity.keypath())
-    sorter = FEATURES.require(CERT_SORTER, certdirectory.ProductDirectory(),
+    sorter = require(CERT_SORTER, certdirectory.ProductDirectory(),
             certdirectory.EntitlementDirectory(), connection)
 
     if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:

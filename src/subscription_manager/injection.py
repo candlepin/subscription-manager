@@ -72,3 +72,15 @@ class FeatureBroker:
 # Create a global instance we can use in all components. Tests can override
 # features as desired and that change should trickle out to all components.
 FEATURES = FeatureBroker()
+
+
+# Small wrapper functions to make usage look a little cleaner, can use these
+# instead of the global:
+def require(feature, *args, **kwargs):
+    global FEATURES
+    return FEATURES.require(feature, *args, **kwargs)
+
+
+def provide(feature, provider):
+    global FEATURES
+    return FEATURES.provide(feature, provider)
