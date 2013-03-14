@@ -4,7 +4,7 @@ from fixture import SubManFixture
 import rhsm_display
 rhsm_display.set_display()
 
-from subscription_manager.injection import FEATURES, IDENTITY
+from subscription_manager.injection import provide, IDENTITY
 from stubs import MockStderr, MockStdout, StubUEP, StubBackend, StubFacts
 from subscription_manager.gui import factsgui
 from mock import Mock, patch
@@ -28,7 +28,7 @@ class FactDialogTests(SubManFixture):
         id_mock.name = 'system'
         id_mock.uuid = 'Random UUID'
         id_mock.exists_and_valid = Mock(return_value=True)
-        FEATURES.provide(IDENTITY, id_mock)
+        provide(IDENTITY, id_mock)
 
         sys.stderr = MockStderr
         sys.stdout = MockStdout
@@ -103,7 +103,7 @@ class FactDialogTests(SubManFixture):
 
         def new_identity():
             return id_mock
-        FEATURES.provide(IDENTITY, new_identity)
+        provide(IDENTITY, new_identity)
 
         dialog = factsgui.SystemFactsDialog(self.backend,
                                             self.stub_facts)
@@ -118,7 +118,7 @@ class FactDialogTests(SubManFixture):
         id_mock = Mock()
         id_mock.getConsumerName.return_value = 'system'
         id_mock.getConsumerId.return_value = 'Random UUID'
-        FEATURES.provide(IDENTITY, id_mock)
+        provide(IDENTITY, id_mock)
 
         dialog = factsgui.SystemFactsDialog(self.backend,
                                             self.stub_facts)

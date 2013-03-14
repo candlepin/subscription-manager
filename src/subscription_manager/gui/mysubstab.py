@@ -20,7 +20,7 @@ from datetime import datetime, timedelta
 
 from rhsm.certificate import GMT
 
-from subscription_manager.injection import FEATURES, IDENTITY
+from subscription_manager.injection import require, IDENTITY
 from subscription_manager.certlib import Disconnected
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import widgets
@@ -50,7 +50,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         super(MySubscriptionsTab, self).__init__('mysubs.glade')
         self.backend = backend
-        self.identity = FEATURES.require(IDENTITY)
+        self.identity = require(IDENTITY)
         self.parent_win = parent_win
         self.entitlement_dir = ent_dir
         self.product_dir = prod_dir

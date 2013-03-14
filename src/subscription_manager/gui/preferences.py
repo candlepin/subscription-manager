@@ -19,7 +19,7 @@ import gtk
 import gtk.glade
 import logging
 
-from subscription_manager.injection import FEATURES, IDENTITY
+from subscription_manager.injection import require, IDENTITY
 from subscription_manager import release
 
 _ = gettext.gettext
@@ -42,7 +42,7 @@ class PreferencesDialog(object):
     def __init__(self, backend, parent):
 
         self.backend = backend
-        self.identity = FEATURES.require(IDENTITY)
+        self.identity = require(IDENTITY)
         self.release_backend = release.ReleaseBackend(ent_dir=self.backend.entitlement_dir,
                                                       prod_dir=self.backend.product_dir,
                                                       content_connection=self.backend.content_connection,

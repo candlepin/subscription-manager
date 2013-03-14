@@ -18,7 +18,7 @@ import logging
 import gobject
 
 import gettext
-from subscription_manager.injection import FEATURES, IDENTITY
+from subscription_manager.injection import require, IDENTITY
 from subscription_manager.gui.widgets import MachineTypeColumn, QuantitySelectionColumn
 from subscription_manager.jsonwrapper import PoolWrapper
 import gtk
@@ -55,7 +55,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.parent_win = parent_win
         self.backend = backend
-        self.identity = FEATURES.require(IDENTITY)
+        self.identity = require(IDENTITY)
         self.facts = facts
 
         self.pool_stash = managerlib.PoolStash(self.backend,

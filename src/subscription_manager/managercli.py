@@ -220,8 +220,8 @@ class CliCommand(AbstractCLICommand):
         self.proxy_hostname = None
         self.proxy_port = None
 
-        self.entitlement_dir = inj.FEATURES.require(inj.ENT_DIR)
-        self.product_dir = inj.FEATURES.require(inj.PROD_DIR)
+        self.entitlement_dir = inj.require(inj.ENT_DIR)
+        self.product_dir = inj.require(inj.PROD_DIR)
 
         self.client_versions = self._default_client_version()
         self.server_versions = self._default_server_version()
@@ -1416,7 +1416,7 @@ class AttachCommand(CliCommand):
             # must be auto
             else:
                 # if we are green, we don't need to go to the server
-                self.sorter = inj.FEATURES.require(inj.CERT_SORTER,
+                self.sorter = inj.require(inj.CERT_SORTER,
                         self.product_dir, self.entitlement_dir, self.cp)
 
                 if self.sorter.is_valid():
