@@ -109,6 +109,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         # Monitor entitlements/products for additions/deletions
         def on_cert_change(filemonitor):
+            self.identity.reload()
             self.update_products()
             self._set_validity_status()
 
