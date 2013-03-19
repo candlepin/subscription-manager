@@ -150,8 +150,9 @@ class CatManifestCommand(RCTManifestCommand):
             to_print.append((_("Service Type"), self._get_product_attribute("support_type", data)))
             to_print.append((_("Architectures"), self._get_product_attribute("arch", data)))
             to_print.append((_("SKU"), get_value(data, "pool.productId")))
-            to_print.append((_("Contract"), get_value(data, "pool.contractNumber")))
-            to_print.append((_("Order Number"), get_value(data, "pool.subscriptionId")))
+            to_print.append((_("Contract"), get_value(data, "contractNumber")))
+            to_print.append((_("Order"), get_value(data, "orderNumber")))
+            to_print.append((_("Account"), get_value(data, "accountNumber")))
 
             entitlement_file = os.path.join("export", "entitlements", "%s.json" % data["id"])
             to_print.append((_("Entitlement File"), entitlement_file))
