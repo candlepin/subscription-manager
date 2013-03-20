@@ -47,7 +47,12 @@ class TestProductDatabase(unittest.TestCase):
 
     def test_add(self):
         self.pdb.add("product", "repo")
-        self.assertEquals(self.pdb.content['product'], "repo")
+        self.assertEquals(self.pdb.content['product'], ["repo"])
+
+    def test_add_multiple(self):
+        self.pdb.add("product", "repo1")
+        self.pdb.add("product", "repo2")
+        self.assertEquals(set(self.pdb.content['product']), set(['repo1', 'repo2']))
 
     def test_write(self):
         self.pdb.add("product", "repo")
@@ -88,13 +93,13 @@ class TestProductDatabase(unittest.TestCase):
 
     def test_find_repo(self):
         self.pdb.add("product", "repo")
-        repo = self.pdb.find_repo("product")
-        self.assertEquals("repo", repo)
+        repo = self.pdb.find_repos("product")
+        self.assertTrue("repo" in repo)
 
     def test_delete(self):
         self.pdb.add("product", "repo")
         self.pdb.delete("product")
-        no_repo = self.pdb.find_repo("product")
+        no_repo = self.pdb.find_repos("product")
         self.assertEquals(None, no_repo)
 
     def test_delete_non_existing(self):
@@ -438,6 +443,51 @@ class TestProductManager(unittest.TestCase):
         self.assertFalse(cert.delete.called)
         self.assertFalse(self.prod_db_mock.delete.called)
         self.assertFalse(self.prod_db_mock.delete.called)
+
+    @patch('yum.YumBase', spec=yum.YumBase)
+    def test_update_multiple_repos_per_productid(self, mock_yb):
+        """simulate cases where multiple repo's have the same product id cert"""
+        # create a rhel6 product cert
+        # for this scenario, the product cert is exactly the same for each repo
+        cert = self._create_server_cert()
+        self.prod_dir.certs.append(cert)
+        self.prod_mgr._get_cert = Mock(return_value=cert)
+
+        # at least one package installed from rhel6 repo
+        mock_packages = self._create_mock_packages([('some-cool-package',
+                                                     'noarch',
+                                                     'anaconda-RedHatEnterpriseLinux-201301150237.x86_64'),
+                                                    ('some-awesome-package',
+                                                     'noarch',
+                                                     'rhel-6-server-rpms')])
+        mock_yb.pkgSack.returnPackages.return_value = mock_packages
+        mock_repo_1 = Mock(spec=yum.repos.Repository)
+        mock_repo_1.retrieveMD = Mock(return_value='somefilename')
+        mock_repo_1.id = 'rhel-6-server-rpms'
+
+        mock_repo_2 = Mock(spec=yum.repos.Repository)
+        mock_repo_2.retrieveMD = Mock(return_value='somefilename')
+        mock_repo_2.id = 'rhel-6-mock-repo-2'
+
+        mock_repo_3 = Mock(spec=yum.repos.Repository)
+        mock_repo_3.retrieveMD = Mock(return_value='somefilename')
+        mock_repo_3.id = 'rhel-6-mock-repo-3'
+
+        # note that since _get_cert is patched, these all return the same
+        # product cert
+        mock_yb.repos.listEnabled.return_value = [mock_repo_3, mock_repo_2, mock_repo_1]
+        # atm, find_repo is going to return whatever got written last, so
+        # for this, we will mock that it returns mock_repo_2
+        self.prod_db_mock.find_repo.return_value = "rhel-6-mock-repo-2"
+
+        cert.delete = Mock()
+        self.prod_mgr.update(mock_yb)
+
+        # we should not delete, because we have a package from 'rhel-6-server-rpms' installed
+        self.assertFalse(cert.delete.called)
+        self.assertFalse(self.prod_db_mock.delete.called)
+        self.assertFalse(self.prod_db_mock.delete.called)
+
 
     def test_update_removed_no_active_with_product_cert_anaconda(self):
         """simulate packages are installed with anaconda repo, and none

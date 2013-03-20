@@ -51,7 +51,9 @@ class ProductDatabase:
         self.create()
 
     def add(self, product, repo):
-        self.content[product] = repo
+        if product not in self.content:
+            self.content[product] = []
+        self.content[product].append(repo)
 
     def delete(self, product):
         try:
@@ -59,7 +61,7 @@ class ProductDatabase:
         except:
             pass
 
-    def find_repo(self, product):
+    def find_repos(self, product):
         return self.content.get(product)
 
     def create(self):
