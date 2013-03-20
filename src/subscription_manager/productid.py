@@ -61,6 +61,8 @@ class ProductDatabase:
         except:
             pass
 
+    # need way to delete one prod->repo map
+
     def find_repos(self, product):
         return self.content.get(product)
 
@@ -217,26 +219,26 @@ class ProductManager:
             # so we can end up with a product cert installed, that the product
             # database thinks points at an old repo, and then update_removed
             # can't find the old repo name in active, and deletes it
-            if self.pdir.findByProduct(prod_hash):
-                print "while looking for a product cert for" \
-                      " repo %s, we found product cert %s," \
-                      " which the db is for repo %s" % (repo, prod_hash, self.db.find_repo(prod_hash))
 
-                continue
+            # if we dont find this product cert, install it
+            if not self.pdir.findByProduct(prod_hash):
+                fn = '%s.pem' % prod_hash
+                path = self.pdir.abspath(fn)
+                cert.write(path)
+                # FIXME: should only need once
+                self.pdir.refresh()  # must refresh product dir to see changes
+                log.info("Installed product cert: %s %s" % (p.name, cert.path))
+                # return associated repo's as well?
+                products_installed.append(cert)
 
-            # FIXME: seperate writing a new file from updateing the db
-            fn = '%s.pem' % prod_hash
-            path = self.pdir.abspath(fn)
-            cert.write(path)
-            self.pdir.refresh()  # must refresh product dir to see changes
-            log.info("Installed product cert: %s %s" % (p.name, cert.path))
-
-            # FIXME: handle multiple repo's per product id
-            self.db.add(prod_hash, repo)
-            self.db.write()
-
-            # return associated repo's as well?
-            products_installed.append(cert)
+            # we dont have a db entry for this prod->repo map, so add one
+            known_repos = self.db.find_repos(prod_hash)
+            # known_repos is None means we have no repo info at all
+            if known_repos is None or repo not in known_repos:
+                self.db.add(prod_hash, repo)
+                #FIXME: can do after
+                self.db.write()
+                # FIXME: do we need to track productid.js updates? for plugin?
 
         log.debug("about to run post_product_id_install")
         self.plugin_manager.run('post_product_id_install', product_list=products_installed)
@@ -262,43 +264,49 @@ class ProductManager:
             # FIXME: or if the productid.hs wasn't updated to reflect a new repo
             # FIXME: productid.js 'db' needs to be 1->N, with list of repos for
             # each product id. iff none of the repos are active, do we delete the product cert
-            repo = self.db.find_repo(prod_hash)
+            repos = self.db.find_repos(prod_hash)
 
-            # FIXME: next couple blocks should iter over all repos for a product id
-            #
-            # if we had errors with the repo or productid metadata
-            # we could be very confused here, so do not
-            # delete anything. see bz #736424
-            if repo in self.meta_data_errors:
-                log.info("%s has meta-data errors.  Not deleting product cert %s." % (repo, prod_hash))
-                continue
-
+            delete_product_cert = True
             # If productid database does not know about the the product,
             # ie, repo is None (basically, return from a db.content.get(),
             # dont delete the cert because we dont know anything about it
-            if repo is None:
+            if repos is None or repos is []:
                 # FIXME: this can also mean we need to update the product cert
                 #        for prod_hash, since it is installed, but no longer maps to a repo
+                delete_product_cert = False
+                # no repos to check, go to next cert
                 continue
 
-            print "ur: active", active, "repo", repo, repo in active
+            print "REPOS", repos
+            for repo in repos:
+                # if we had errors with the repo or productid metadata
+                # we could be very confused here, so do not
+                # delete anything. see bz #736424
+                if repo in self.meta_data_errors:
+                    log.info("%s has meta-data errors.  Not deleting product cert %s." % (repo, prod_hash))
+                    delete_product_cert = False
 
-            # do not delete a product cert if the repo[a] associated with it's prod_hash
-            # has packages installed
-            if repo in active:
-                continue
+                print "ur: active", active, "repo", repo, repo in active
+
+                # do not delete a product cert if the repo[a] associated with it's prod_hash
+                # has packages installed
+                if repo in active:
+                    delete_product_cert = False
 
             # for this prod cert/hash, we know what repo[a] it's for, but nothing
             # appears to be installed from the repo[s]
             #
-            # TODO/FIXME: plugin call on cert delete specifically?
-            log.info("product cert %s for %s is being deleted" % (prod_hash, p.name))
-            cert.delete()
-            self.pdir.refresh()
+            if delete_product_cert:
+                # TODO/FIXME: plugin call on cert delete specifically?
+                log.info("product cert %s for %s is being deleted" % (prod_hash, p.name))
+                cert.delete()
+                self.pdir.refresh()
 
-            # it should be safe to delete it's entry now
-            self.db.delete(prod_hash)
-            self.db.write()
+                # it should be safe to delete it's entry now, we either dont
+                # know anything about it's repos, it doesnt have any, or none
+                # of the repos are active
+                self.db.delete(prod_hash)
+                self.db.write()
 
     # find the list of repo's that provide packages that
     # are actually installed.
