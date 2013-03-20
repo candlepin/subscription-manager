@@ -29,7 +29,7 @@ from rhsm.certificate import Key, CertificateException, create_from_pem
 
 from subscription_manager import certlib
 from subscription_manager.certlib import system_log as inner_system_log
-from subscription_manager.cache import ProfileManager, InstalledProductsManager
+import subscription_manager.cache as cache
 from subscription_manager.facts import Facts
 from subscription_manager.quantity import allows_multi_entitlement
 from subscription_manager.cert_sorter import StackingGroupSorter
@@ -288,7 +288,7 @@ def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
     """
     facts.update_check(uep, consumer_uuid)
 
-    profile_mgr = ProfileManager()
+    profile_mgr = cache.ProfileManager()
     profile_mgr.update_check(uep, consumer_uuid)
 
     owner = uep.getOwner(consumer_uuid)
@@ -770,9 +770,11 @@ def unregister(uep, consumer_uuid):
     # Clean up certificates, these are no longer valid:
     shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
     shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
-    ProfileManager.delete_cache()
+    cache.ProfileManager.delete_cache()
     Facts.delete_cache()
-    InstalledProductsManager.delete_cache()
+    cache.InstalledProductsManager.delete_cache()
+    cache.StatusCache.delete_cache()
+    cache.ProductStatusCache.delete_cache()
 
 
 def check_identity_cert_perms():
@@ -818,8 +820,10 @@ def clean_all_data(backup=True):
 
     shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
 
-    ProfileManager.delete_cache()
-    InstalledProductsManager.delete_cache()
+    cache.ProfileManager.delete_cache()
+    cache.InstalledProductsManager.delete_cache()
     Facts.delete_cache()
+    cache.StatusCache.delete_cache()
+    cache.ProductStatusCache.delete_cache()
     RepoLib.delete_repo_file()
     log.info("Cleaned local data")

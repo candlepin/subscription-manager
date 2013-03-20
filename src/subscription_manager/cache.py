@@ -22,6 +22,8 @@ necessary.
 import logging
 import os
 import simplejson as json
+import socket
+import rhsm.connection as connection
 import gettext
 _ = gettext.gettext
 import rhsm.connection as connection
@@ -93,12 +95,9 @@ class CacheManager(object):
         """
         raise NotImplementedError
 
-    def _update_server(self, uep, consumer_uuid):
+    def _sync_with_server(self, uep, consumer_uuid):
         """
-        Update the server with latest data.
-
-        This generally completely replaced everything the server had
-        stored previously.
+        Sync the latest data to/from the server.
         """
         raise NotImplementedError
 
@@ -122,7 +121,7 @@ class CacheManager(object):
     def write_cache(self):
         """
         Write the current cache to disk. Should only be done after
-        successfully pushing to the server.
+        successful communication with the server.
 
         The update_check method will call this for you if an update was
         required, but the method is exposed as some system data can be
@@ -135,6 +134,7 @@ class CacheManager(object):
             f = open(self.CACHE_FILE, "w+")
             json.dump(self.to_dict(), f)
             f.close()
+            log.debug("Wrote cache: %s" % self.CACHE_FILE)
         except IOError, e:
             log.error("Unable to write cache: %s" %
                     self.CACHE_FILE)
@@ -165,7 +165,7 @@ class CacheManager(object):
         if self.has_changed() or force:
             log.info("System data has changed, updating server.")
             try:
-                self._update_server(uep, consumer_uuid)
+                self._sync_with_server(uep, consumer_uuid)
                 self.write_cache()
                 # Return the number of 'updates' we did, assuming updating all
                 # packages at once is one update.
@@ -180,6 +180,79 @@ class CacheManager(object):
         else:
             log.info("No changes.")
             return 0  # No updates performed.
+
+
+class StatusCache(CacheManager):
+    """
+    Manages the system cache of entitlement status from the server.
+    Unlike other cache managers, this one gets info from the server rather
+    than sending it.
+    """
+    CACHE_FILE = "/var/lib/rhsm/cache/entitlement_status.json"
+
+    def __init__(self):
+        self.server_status = None
+
+    def _sync_with_server(self, uep, uuid):
+        self.server_status = uep.getCompliance(uuid)
+
+    def load_status(self, uep, uuid):
+        """
+        Load status from wherever is appropriate.
+
+        If server is reachable, return it's response
+        and cache the results to disk.
+
+        If the server is not reachable, return the latest cache if
+        it is still reasonable to use it.
+
+        Returns None if we cannot reach the server, or use the cache.
+        """
+        try:
+            self._sync_with_server(uep, uuid)
+            self.write_cache()
+            return self.server_status
+        except connection.RestlibException:
+            # Indicates we may be talking to a very old candlepin server
+            # which does not have the compliance API call. Report everything
+            # as unknown in this case.
+            return None
+        except socket.error, ex:
+            log.exception(ex)
+            return self._load_cached_status()
+        except connection.NetworkException, ex:
+            log.exception(ex)
+            return self._load_cached_status()
+
+    def to_dict(self):
+        return self.server_status
+
+    def _load_cached_status(self):
+        if not self._cache_exists():
+            # NOTE: this is extremely unlikely to be possible but just in case:
+            log.error("Server unreachable, registered, but no cache exists.")
+            return None
+        log.warn("Unable to reach server, using cached status.")
+        return self._read_cache()
+
+    def _load_data(self, open_file):
+        json_str = open_file.read()
+        return json.loads(json_str)
+
+
+class ProductStatusCache(StatusCache):
+    """
+    Manages the system cache of installed product valid date ranges.
+    """
+    CACHE_FILE = "/var/lib/rhsm/cache/product_status.json"
+
+    def _sync_with_server(self, uep, uuid):
+        consumer_data = uep.getConsumer(uuid)
+
+        if 'installedProducts' not in consumer_data:
+            log.warn("Server does not support product date ranges.")
+        else:
+            self.server_status = consumer_data['installedProducts']
 
 
 class ProfileManager(CacheManager):
@@ -239,7 +312,7 @@ class ProfileManager(CacheManager):
         cached_profile = self._read_cache()
         return not cached_profile == self.current_profile
 
-    def _update_server(self, uep, consumer_uuid):
+    def _sync_with_server(self, uep, consumer_uuid):
         uep.updatePackageProfile(consumer_uuid,
                 self.current_profile.collect())
 
@@ -300,6 +373,6 @@ class InstalledProductsManager(CacheManager):
             })
         return final
 
-    def _update_server(self, uep, consumer_uuid):
+    def _sync_with_server(self, uep, consumer_uuid):
         uep.updateConsumer(consumer_uuid,
                 installed_products=self.format_for_server())
