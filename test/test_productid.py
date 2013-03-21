@@ -7,7 +7,7 @@ import yum
 import stubs
 from subscription_manager import productid
 from subscription_manager import certdirectory
-from mock import Mock, patch, DEFAULT
+from mock import Mock, patch
 
 
 class StubDirectory(certdirectory.Directory):
@@ -399,8 +399,6 @@ class TestProductManager(unittest.TestCase):
         self.prod_repo_map = {'69': [anaconda_repo, "rhel-6-server-rpms"]}
         self.prod_db_mock.find_repos = Mock(side_effect=self.find_repos_side_effect)
 
-        print mock_repo, mock_repo.id
-        print mock_repo_2, mock_repo_2.id
         mock_yb.repos.listEnabled.return_value = [mock_repo, mock_repo_2]
 
         cert.delete = Mock()

@@ -30,9 +30,6 @@ from subscription_manager import plugins
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-import pprint
-pp = pprint.pprint
-
 
 class DatabaseDirectory(Directory):
 
@@ -147,7 +144,7 @@ class ProductManager:
             if enabled and active:
                 self.update_removed(active)
 
-        # FIXME: it would probably be useful to keep track of
+        # TODO: it would probably be useful to keep track of
         # the state a bit, so we can report what we did
         self.update_installed(enabled, active)
 
@@ -260,7 +257,7 @@ class ProductManager:
 
             # known_repos is None means we have no repo info at all
             if known_repos is None or repo not in known_repos:
-                products_to_update_db.append((p, repo, known_repos))
+                products_to_update_db.append((p, repo))
 
         # collect info, then do the needful later, so we can hook
         # up a plugin in between and let it munge these lists, so a plugin
@@ -276,13 +273,12 @@ class ProductManager:
             products_installed.append(cert)
 
         db_updated = False
-        for (product, repo, known_repos) in products_to_update_db:
+        for (product, repo) in products_to_update_db:
             # known_repos is None means we have no repo info at all
-            if known_repos is None or repo not in known_repos:
-                log.info("Updating product db with %s -> %s" % (product.id, repo))
-                # if we don't have a db entry for that prod->repo mapping, add one
-                self.db.add(product.id, repo)
-                db_updated = True
+            log.info("Updating product db with %s -> %s" % (product.id, repo))
+            # if we don't have a db entry for that prod->repo mapping, add one
+            self.db.add(product.id, repo)
+            db_updated = True
 
         if db_updated:
             self.db.write()
@@ -324,6 +320,7 @@ class ProductManager:
         Side effects:
             deletes certs that need to be deleted
         """
+        certs_to_delete = []
         for cert in self.pdir.list():
             p = cert.products[0]
             prod_hash = p.id
@@ -383,16 +380,20 @@ class ProductManager:
             # appears to be installed from the repo[s]
             #
             if delete_product_cert:
-                # TODO: plugin call on cert delete specifically?
-                log.info("product cert %s for %s is being deleted" % (prod_hash, p.name))
-                cert.delete()
-                self.pdir.refresh()
+                certs_to_delete.append((p, cert))
 
-                # it should be safe to delete it's entry now, we either dont
-                # know anything about it's repos, it doesnt have any, or none
-                # of the repos are active
-                self.db.delete(prod_hash)
-                self.db.write()
+        # TODO: plugin hook for pre_product_id_delete
+        for (product, cert) in certs_to_delete:
+            log.info("product cert %s for %s is being deleted" % (product.id, product.id))
+            cert.delete()
+            self.pdir.refresh()
+            #TODO: plugin hook for post_product_id_delete
+
+            # it should be safe to delete it's entry now, we either dont
+            # know anything about it's repos, it doesnt have any, or none
+            # of the repos are active
+            self.db.delete(product.id)
+            self.db.write()
 
     # find the list of repo's that provide packages that
     # are actually installed.

@@ -36,9 +36,3 @@ class SubscribePlugin(SubManPlugin):
             conduit: A PostSubscriptionConduit()
         """
         conduit.log.info("post subscribe called")
-        print dir(conduit)
-        #print dir(conduit.entitlement_data)
-        #print help(conduit.entitlement_data)
-        import pprint
-        pprint.pprint(conduit.entitlement_data)
-
