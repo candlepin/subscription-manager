@@ -288,6 +288,22 @@ class ProductManager:
             repos = self.db.find_repos(prod_hash)
 
             delete_product_cert = True
+
+            # this is the core of a fix for rhbz #859197
+            #
+            # which is a scenario where we have rhel installed, a rhel cert installed,
+            # a rhel entitlement, a rhel enabled repo, yet no packages installed from
+            # that rhel repo. Aka, a system anaconda installed from a cloned repo
+            # perhaps. In that case, all the installed package think they came from
+            # that other repo (say, 'anaconda-repo'), so it looks like the rhel repo
+            # is not 'active'. So it ends up deleting the product cert for rhel since
+            # it appears it is not being used. It is kind of a strange case for the
+            # base os product cert, so we hardcode a special case here.
+            if [tag for tag in p.provided_tags if tag[:4] == 'rhel']:
+                # dont delete rhel product certs unless we have a better reason
+                # FIXME: will need to handle how to update product certs seperately
+                delete_product_cert = False
+
             # If productid database does not know about the the product,
             # ie, repo is None (basically, return from a db.content.get(),
             # dont delete the cert because we dont know anything about it

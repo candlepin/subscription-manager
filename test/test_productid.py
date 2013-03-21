@@ -119,8 +119,9 @@ class TestProductManager(unittest.TestCase):
                 product_db=self.prod_db_mock)
 
     def test_removed(self):
+        # non rhel cert, not in active, with enabled repo
         self.prod_db_mock.find_repos.return_value = ["repo1"]
-        cert = self._create_desktop_cert()
+        cert = self._create_non_rhel_cert()
         self.prod_dir.certs.append(cert)
         self.prod_mgr.update_removed([])
         self.assertTrue(cert.delete.called)
@@ -631,9 +632,8 @@ class TestProductManager(unittest.TestCase):
         self.prod_mgr.update_removed(set(['rhel-6-server-rpms']))
         self.assertFalse(cert.delete.called)
 
-    def test_update_removed_no_packages_no_repos_no_active(self):
-        """we have a product cert, but it is not in active, so it
-        should be deleted"""
+    def test_update_removed_no_packages_no_repos_no_active_rhel(self):
+        """we have a product cert, but it is not in active, but it is rhel, so do not delete"""
         cert = self._create_server_cert()
         self.prod_dir.certs.append(cert)
 
@@ -643,11 +643,32 @@ class TestProductManager(unittest.TestCase):
         self.prod_db_mock.find_repos = Mock(side_effect=self.find_repos_side_effect)
 
         self.prod_mgr.update_removed(set([]))
-        self.assertTrue(self.prod_db_mock.delete.called)
-        self.assertTrue(self.prod_db_mock.write.called)
+        self.assertFalse(self.prod_db_mock.delete.called)
+        self.assertFalse(self.prod_db_mock.write.called)
         # we have 69.pem installed, but it is not active, we
         # should delete it from prod db
-        self.prod_db_mock.delete.assert_called_with('69')
+        #self.prod_db_mock.delete.assert_called_with('69')
+        self.assertFalse(cert.delete.called)
+
+        self.assertFalse(self.prod_mgr.pdir.refresh.called)
+
+    def test_update_removed_no_packages_no_repos_no_active(self):
+        """we have a product cert, but it is not in active, so it
+        should be deleted"""
+        cert = self._create_non_rhel_cert()
+        self.prod_dir.certs.append(cert)
+
+        self.prod_mgr.pdir.refresh = Mock()
+
+        self.prod_repo_map = {'1234568': 'medios-6-server-rpms'}
+        self.prod_db_mock.find_repos = Mock(side_effect=self.find_repos_side_effect)
+
+        self.prod_mgr.update_removed(set([]))
+        self.assertTrue(self.prod_db_mock.delete.called)
+        self.assertTrue(self.prod_db_mock.write.called)
+        # we have 1234568.pem installed, but it is not active, we
+        # should delete it from prod db
+        self.prod_db_mock.delete.assert_called_with('1234568')
         self.assertTrue(cert.delete.called)
 
         self.assertTrue(self.prod_mgr.pdir.refresh.called)
@@ -676,7 +697,11 @@ class TestProductManager(unittest.TestCase):
 
     def _create_server_cert(self):
         return self._create_cert("69", "Red Hat Enterprise Linux Server",
-                                 "6", "rhel-6-server")
+                                 "6", "rhel-6,rhel-6-server")
+
+    def _create_non_rhel_cert(self):
+        return self._create_cert("1234568", "Mediocre OS",
+                                 "6", "medios-6,medios-6-server")
 
     def test_is_workstation(self):
         workstation_cert = self._create_workstation_cert()
