@@ -1793,7 +1793,7 @@ class ReposCommand(CliCommand):
         if self.options.enable:
             rc = rc or self._set_repo_status(repos, self.options.enable, True)
         if self.options.disable:
-            rc = rc or self._set_repo_status(repos, self.options.disable, False)
+            rc = self._set_repo_status(repos, self.options.disable, False) or rc
 
         if self.options.list:
             if len(repos) > 0:
