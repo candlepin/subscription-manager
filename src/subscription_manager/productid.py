@@ -137,10 +137,7 @@ class ProductManager:
         enabled = self.get_enabled(yb)
         active = self.get_active(yb)
 
-        print "active", active
-        print "enabled", enabled
-
-       # only execute this on versions of yum that track
+        # only execute this on versions of yum that track
         # which repo a package came from, aka, 3.2.28 and newer
         if self._check_yum_version_tracks_repos():
             # check that we have any repo's enabled
@@ -174,9 +171,39 @@ class ProductManager:
             return True
         return False
 
-    # FIXME: any reason we couldn't do this in repolib? populate the
     def update_installed(self, enabled, active):
+        """Install product certs for products with enabled and active repos
+
+        If we find a new product cert, we install it to /etc/pki/product
+        and update the productid database to show what repo it came from.
+
+        If we already have the product cert, but it now maps to a new or
+        different repo, then update productid database with that info.
+
+        It is possible for a single product cert to map to multiple repos.
+        If multiple repo's all have the same product cert id metadata, we
+        can get into this scenario. The anaconda install is an example of
+        this, since the 'anaconda' repo the installer uses has the product
+        cert metadata, but so does the corresponding rhel repo we get
+        from autosubscribing. In those cases, we track both.
+
+        Args:
+            enabled: list of tuples of (product_cert, repo_id)
+                     The repo's that are enabled=1 and have product
+                     id metadata
+            active: a set of names of repos that installed packages were
+                    installed from.
+
+        Returns:
+             list of product certs that were installed
+
+        Side Effects:
+            can delete certs for some odd rhel5 scenarios, where we
+            have to obsolete some deprecated certs
+        """
         log.debug("Updating installed certificates")
+        products_to_install = []
+        products_to_update_db = []
         products_installed = []
 
         # enabled means we have a repo, it's enabled=1, it has a productid metadata
@@ -187,18 +214,6 @@ class ProductManager:
             log.debug("product cert: %s repo: %s" % (cert.products[0].id, repo))
 
             # nothing from this repo is installed
-            #
-            # NOTE/FIXME: if the product cert needs to be updated (or
-            #             installed) we do not do it if there are no packages installed
-            #             from the repo for that product, so we can't update a cert
-            #             if we dont have anytong from it installed. I can see cases where
-            #             that might not be the right case (a GA rhel with an old product
-            #             id for example, where it may be useful to update the cert before
-            #             doing any of this.
-            #
-            #             tl;dr If we enable a repo, but havent installed anything from it,
-            #               we dont install the cert OR update productid.js. If we don't
-            #               update productid.js, update_remove thinks the repo
             #
             # check to see packages from this repo are installed and the repo
             # is considered active
@@ -236,35 +251,43 @@ class ProductManager:
             # FIXME: this is where we would check to see if a product cert
             # needs to be updated
             #
-            # FIXME: if we already have a product cert on disk, we don't
-            # update the productid.js db, even if the repo has changed
-            #
-            # so we can end up with a product cert installed, that the product
-            # database thinks points at an old repo, and then update_removed
-            # can't find the old repo name in active, and deletes it
-
             # if we dont find this product cert, install it
             if not self.pdir.findByProduct(prod_hash):
-                fn = '%s.pem' % prod_hash
-                path = self.pdir.abspath(fn)
-                cert.write(path)
-                # FIXME: should only need once
-                self.pdir.refresh()  # must refresh product dir to see changes
-                log.info("Installed product cert: %s %s" % (p.name, cert.path))
-                # return associated repo's as well?
-                products_installed.append(cert)
+                products_to_install.append((p, cert))
 
             # look up what repo's we know about for that prod has
             known_repos = self.db.find_repos(prod_hash)
 
             # known_repos is None means we have no repo info at all
             if known_repos is None or repo not in known_repos:
-                # if we don't have a db entry for that prod->repo mapping, add one
-                self.db.add(prod_hash, repo)
-                #FIXME: can do after
-                self.db.write()
-                # FIXME: do we need to track productid.js updates? for plugin?
+                products_to_update_db.append((p, repo, known_repos))
 
+        # collect info, then do the needful later, so we can hook
+        # up a plugin in between and let it munge these lists, so a plugin
+        # could blacklist a product cert for example.
+        # TODO: insert "pre_product_id_install" hook
+
+        for (product, cert) in products_to_install:
+            fn = '%s.pem' % product.id
+            path = self.pdir.abspath(fn)
+            cert.write(path)
+            self.pdir.refresh()
+            log.info("Installed product cert %s: %s %s" % (product.id, product.name, cert.path))
+            products_installed.append(cert)
+
+        db_updated = False
+        for (product, repo, known_repos) in products_to_update_db:
+            # known_repos is None means we have no repo info at all
+            if known_repos is None or repo not in known_repos:
+                log.info("Updating product db with %s -> %s" % (product.id, repo))
+                # if we don't have a db entry for that prod->repo mapping, add one
+                self.db.add(product.id, repo)
+                db_updated = True
+
+        if db_updated:
+            self.db.write()
+
+        # FIXME: we should include productid db with the conduit here
         log.debug("about to run post_product_id_install")
         self.plugin_manager.run('post_product_id_install', product_list=products_installed)
         #FIXME: nothing uses the return value here
@@ -280,6 +303,27 @@ class ProductManager:
     # packages from that repo installed (not "active")
     # and we have the product cert installed.
     def update_removed(self, active):
+        """remove product certs for inactive products
+
+        For each installed product cert, check to see if we still have
+        packages installed from the repo the product cert was installed
+        from. If not, delete the product cert.
+
+        With a few exceptions:
+            1) if the productid db does not know about the product cert,
+                do not delete it
+            2) if the productid db doesn't know what repo that cert came
+                from, do not delete it.
+            3) If there were errors reading the repo metadata for any of
+                the repos that provide that cert, do not delete it.
+            4) If the product cert has providedtags for 'rhel*'
+
+        Args:
+            active: a set of repo name strings of the repos that installed
+                    packages were installed from
+        Side effects:
+            deletes certs that need to be deleted
+        """
         for cert in self.pdir.list():
             p = cert.products[0]
             prod_hash = p.id
@@ -299,6 +343,9 @@ class ProductManager:
             # is not 'active'. So it ends up deleting the product cert for rhel since
             # it appears it is not being used. It is kind of a strange case for the
             # base os product cert, so we hardcode a special case here.
+            #
+            # FIXME: if there is a smarter way to detect this is the base os,
+            # this would be a good place for it.
             if [tag for tag in p.provided_tags if tag[:4] == 'rhel']:
                 # dont delete rhel product certs unless we have a better reason
                 # FIXME: will need to handle how to update product certs seperately
@@ -314,7 +361,6 @@ class ProductManager:
                 # no repos to check, go to next cert
                 continue
 
-            print "REPOS", repos
             for repo in repos:
                 # if we had errors with the repo or productid metadata
                 # we could be very confused here, so do not
@@ -323,10 +369,8 @@ class ProductManager:
                     log.info("%s has meta-data errors.  Not deleting product cert %s." % (repo, prod_hash))
                     delete_product_cert = False
 
-                print "ur: active", active, "repo", repo, repo in active
-
                 # do not delete a product cert if the repo[a] associated with it's prod_hash
-                # has packages installed
+                # has packages installed.
                 if repo in active:
                     delete_product_cert = False
 
@@ -339,7 +383,7 @@ class ProductManager:
             # appears to be installed from the repo[s]
             #
             if delete_product_cert:
-                # TODO/FIXME: plugin call on cert delete specifically?
+                # TODO: plugin call on cert delete specifically?
                 log.info("product cert %s for %s is being deleted" % (prod_hash, p.name))
                 cert.delete()
                 self.pdir.refresh()
@@ -355,22 +399,7 @@ class ProductManager:
     def get_active(self, yb):
         """find yum repos that have packages installed"""
 
-        # possibilities... detect rhel via -release pkg and always include
-        # it in active.
-        #
-        # - just dont ever delete rhel unless we are replacing it
-        #
-        # hardcode whitelist for update_remove to check product cert
-        # info against
-        #
-        # we could not remove product certs in no active scenario
-        #
-        # we could update productid db before we do this, based on
-        # current yum repos, aka, update_installed first, then update_removed
-        #
-        # support multiple repos per product id, and make sure we update that
-        # info
-        active = set()
+        active = set([])
 
         packages = yb.pkgSack.returnPackages()
         for p in packages:
@@ -379,28 +408,6 @@ class ProductManager:
             # if a pkg is in multiple repo's, this will consider
             # all the repo's with the pkg "active".
             db_pkg = yb.rpmdb.searchNevra(name=p.name, arch=p.arch)
-
-            # package was installed from a repo that is not currently
-            # enabled (ala, 'anaconda' post install), if so, check
-            # to see if the package is also available from an enabled
-            # repo ('foo'). If it is, consider 'foo' active as well,
-            # even if no package was directly installed from 'foo'.
-            # (in this case, the package also lives in 'foo', so consider
-            # it active as well)
-            #if p.repoid not in enabled:
-            #other_repos = self.find_enabled_repos_for_package(p)
-            #pp(other_repos)
-
-            # here, for anaconda repo installed packages, we ask yum
-            # and it claims the package came from only anaconda, even if
-            # it is potentially from other repos.
-            #
-            # should we be checking to see if the package is also in any
-            # enabled repo's?
-
-            # ugh, for added weirdness, at least one system it seems
-            # like repoid=anaconda may just be a 'until some other package
-            # is installed thing'
 
             # that pkg is not actually installed
             if not db_pkg:

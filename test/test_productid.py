@@ -715,21 +715,19 @@ class TestProductManager(unittest.TestCase):
 
     def find_repos_side_effect(self, product_hash):
         return self.prod_repo_map.get(product_hash)
-#        if product_hash in self.prod_repo_map:
-#            return self.prod_repo_map[product_hash]
-#        return DEFAULT
 
     # If Desktop cert exists, delete it and then write Workstation:
     def test_workstation_overrides_desktop(self):
 
         desktop_cert = self._create_desktop_cert()
+        self.prod_dir.certs.append(desktop_cert)
         workstation_cert = self._create_workstation_cert()
 
-        def write_cert_side_effect(path):
-            self.prod_dir.certs.append(desktop_cert)
+#        def write_cert_side_effect(path):
+#            self.prod_dir.certs.append(desktop_cert)
 
-        desktop_cert.write.side_effect = write_cert_side_effect
-        workstation_cert.write.side_effect = write_cert_side_effect
+#        desktop_cert.write.side_effect = write_cert_side_effect
+#        workstation_cert.write.side_effect = write_cert_side_effect
 
         self.prod_repo_map = {'71': ["repo2"],
                               '68': ["repo1"]}
@@ -743,7 +741,7 @@ class TestProductManager(unittest.TestCase):
 
         self.prod_mgr.update_installed(enabled, ['repo1', 'repo2'])
 
-        self.assertTrue(desktop_cert.write.called)
+ #       self.assertTrue(desktop_cert.write.called)
         self.assertTrue(desktop_cert.delete.called)
 
         self.assertTrue(workstation_cert.write.called)
@@ -754,21 +752,22 @@ class TestProductManager(unittest.TestCase):
 
         desktop_cert = self._create_desktop_cert()
         workstation_cert = self._create_workstation_cert()
+        self.prod_dir.certs.append(workstation_cert)
         some_other_cert = stubs.StubProductCertificate(
             stubs.StubProduct("8127", "Some Other Product"))
         some_other_cert.delete = Mock()
         some_other_cert.write = Mock()
 
-        def write_cert_side_effect(path):
-            self.prod_dir.certs.append(workstation_cert)
+#        def write_cert_side_effect(path):
+#            self.prod_dir.certs.append(workstation_cert)
 
         self.prod_repo_map = {'71': ["repo2"],
                               '68': ["repo1"],
                               '8127': ["repo3"]}
         self.prod_db_mock.find_repos = Mock(side_effect=self.find_repos_side_effect)
 
-        desktop_cert.write.side_effect = write_cert_side_effect
-        workstation_cert.write.side_effect = write_cert_side_effect
+#        desktop_cert.write.side_effect = write_cert_side_effect
+#        workstation_cert.write.side_effect = write_cert_side_effect
 
         # Workstation comes first in this scenario:
         enabled = [
@@ -779,7 +778,7 @@ class TestProductManager(unittest.TestCase):
 
         self.prod_mgr.update_installed(enabled, ['repo1', 'repo2', 'repo3'])
 
-        self.assertTrue(workstation_cert.write.called)
+#        self.assertTrue(workstation_cert.write.called)
         self.assertFalse(workstation_cert.delete.called)
 
         self.assertFalse(desktop_cert.write.called)
