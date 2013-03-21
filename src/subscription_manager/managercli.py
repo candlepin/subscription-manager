@@ -1424,8 +1424,14 @@ class AttachCommand(CliCommand):
                         self.product_dir, self.entitlement_dir, self.cp)
 
                 if self.sorter.is_valid():
-                    print _("All installed products are covered by valid entitlements. "
-                            "No need to update subscriptions at this time.")
+                    iproducts = managerlib.getInstalledProductStatus(self.product_dir,
+                        self.entitlement_dir, self.cp)
+                    if not len(iproducts):
+                        print _("No Installed products on system. "
+                                "No need to attach subscriptions.")
+                    else:
+                        print _("All installed products are covered by valid entitlements. "
+                                "No need to update subscriptions at this time.")
                     cert_update = False
                 else:
                     # If service level specified, make an additional request to
@@ -1447,10 +1453,14 @@ class AttachCommand(CliCommand):
                 for e in result[1]:
                     print '\t-', str(e)
             elif self.options.auto:
-                # run this after certlib update, so we have the new entitlements
-                subscribed = show_autosubscribe_output(self.cp)
-                if not subscribed:
+                if not len(managerlib.getInstalledProductStatus(
+                                 self.product_dir, self.entitlement_dir, self.cp)):
                     return_code = 1
+                else:
+                    # run this after certlib update, so we have the new entitlements
+                    subscribed = show_autosubscribe_output(self.cp)
+                    if not subscribed:
+                        return_code = 1
 
         except Exception, e:
             handle_exception("Unable to attach: %s" % e, e)
