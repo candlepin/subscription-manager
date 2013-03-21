@@ -92,6 +92,26 @@ class ProductDatabase:
 
 
 class ProductManager:
+    """Manager product certs, detecting when they need to be installed, or deleted.
+
+    Note that this class has no knowledge of when it runs, and no nothing of the
+    rpm transaction that may have causes it to run. So it only looks at the state
+    of installed packages, yum repo states, installed product certs, and the
+    product id->repo id mapping db productid.js.
+
+    It finds yum repo's which are enabled.
+    It finds repo's which are active. "active" in this case means one or more
+      installed packages were installed from that repo. It does this my checking
+      the 'repoid' field yum reports for each installed package.
+
+    It removes certs that are no longer needed. If no packages are installed from
+      a product (and more specifically, the repo's created from that product), it
+      is considered unneeded and removed.
+
+    Args:
+        product_dir: a ProductDirectory class (optional)
+        product_db: A ProductDatabase class (optional)
+    """
 
     REPO = 'from_repo'
     PRODUCTID = 'productid'
@@ -129,6 +149,7 @@ class ProductManager:
             # not active. See #806457
             if enabled and active:
                 self.update_removed(active)
+
         # FIXME: it would probably be useful to keep track of
         # the state a bit, so we can report what we did
         self.update_installed(enabled, active)
@@ -153,6 +174,7 @@ class ProductManager:
             return True
         return False
 
+    # FIXME: any reason we couldn't do this in repolib? populate the
     def update_installed(self, enabled, active):
         log.debug("Updating installed certificates")
         products_installed = []
@@ -165,6 +187,7 @@ class ProductManager:
             log.debug("product cert: %s repo: %s" % (cert.products[0].id, repo))
 
             # nothing from this repo is installed
+            #
             # NOTE/FIXME: if the product cert needs to be updated (or
             #             installed) we do not do it if there are no packages installed
             #             from the repo for that product, so we can't update a cert
@@ -231,10 +254,12 @@ class ProductManager:
                 # return associated repo's as well?
                 products_installed.append(cert)
 
-            # we dont have a db entry for this prod->repo map, so add one
+            # look up what repo's we know about for that prod has
             known_repos = self.db.find_repos(prod_hash)
+
             # known_repos is None means we have no repo info at all
             if known_repos is None or repo not in known_repos:
+                # if we don't have a db entry for that prod->repo mapping, add one
                 self.db.add(prod_hash, repo)
                 #FIXME: can do after
                 self.db.write()
@@ -259,11 +284,7 @@ class ProductManager:
             p = cert.products[0]
             prod_hash = p.id
 
-            # FIXME: this is wrong if multiple repos provide the same
-            # product cert id
             # FIXME: or if the productid.hs wasn't updated to reflect a new repo
-            # FIXME: productid.js 'db' needs to be 1->N, with list of repos for
-            # each product id. iff none of the repos are active, do we delete the product cert
             repos = self.db.find_repos(prod_hash)
 
             delete_product_cert = True
@@ -292,6 +313,11 @@ class ProductManager:
                 # has packages installed
                 if repo in active:
                     delete_product_cert = False
+
+                # other reasons not to delete.
+                #  is this a rhel product cert?
+
+                # is the repo we find here actually active? try harder to find active?
 
             # for this prod cert/hash, we know what repo[a] it's for, but nothing
             # appears to be installed from the repo[s]
