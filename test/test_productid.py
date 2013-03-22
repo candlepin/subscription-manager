@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 import unittest
 
@@ -19,12 +20,13 @@ class TestProductDatabase(unittest.TestCase):
     def setUp(self):
         self.patcher = patch('subscription_manager.productid.DatabaseDirectory')
         self.mock_dir = self.patcher.start()
-        self.temp_dir = tempfile.mkdtemp()
+        self.temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
         self.mock_dir.return_value = StubDirectory(path=self.temp_dir)
         self.pdb = productid.ProductDatabase()
 
     def tearDown(self):
         self.patcher.stop()
+        shutil.rmtree(self.temp_dir)
 
     def test_create(self):
         """verify we create a db file on init (done in setUp)"""
