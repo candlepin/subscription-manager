@@ -58,19 +58,28 @@ class RCTManifestCommand(RCTCliCommand):
         if not os.path.isfile(manifest_file):
             raise InvalidCLIOptionError(_("The specified manifest file does not exist."))
 
+    def _extractall(self, zfile, location):
+        archive = ZipFile(zfile, 'r')
+        for each in archive.namelist():
+            (directory, filename) = os.path.split(each)
+            directory = location + '/' + directory
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            outfile = open(directory + '/' + filename, 'w')
+            outfile.write(archive.read(each))
+            outfile.close()
+        archive.close()
+
     def _extract_manifest(self, location):
         # Extract the outer file
-        archive = ZipFile(self._get_file_from_args(), 'r')
-        archive.extractall(location)
-
+        self._extractall(self._get_file_from_args(), location)
         # now extract the inner file
         if location:
             inner_file = os.path.join(location, self.INNER_FILE)
         else:
             inner_file = self.INNER_FILE
 
-        archive = ZipFile(inner_file, 'r')
-        archive.extractall(location)
+        self._extractall(inner_file, location)
 
         # Delete the intermediate file
         os.remove(inner_file)
