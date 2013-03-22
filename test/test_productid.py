@@ -1,6 +1,7 @@
 import os
 import shutil
 import tempfile
+import types
 import unittest
 
 import yum
@@ -97,6 +98,22 @@ class TestProductDatabase(unittest.TestCase):
         self.pdb.add("product", "repo")
         repo = self.pdb.find_repos("product")
         self.assertTrue("repo" in repo)
+
+    def test_find_repos_old_format(self):
+        self.pdb.content = {'product': 'repo'}
+        repo = self.pdb.find_repos("product")
+        self.assertTrue(isinstance(repo, types.ListType))
+        self.assertTrue("repo" in repo)
+
+    def test_find_repos_mixed_old_and_new_format(self):
+        self.pdb.content = {'product1': 'repo1',
+                            'product2': ['repo2']}
+        repo1 = self.pdb.find_repos("product1")
+        self.assertTrue(isinstance(repo1, types.ListType))
+        self.assertTrue("repo1" in repo1)
+        repo2 = self.pdb.find_repos("product2")
+        self.assertTrue(isinstance(repo2, types.ListType))
+        self.assertTrue("repo2" in repo2)
 
     def test_delete(self):
         self.pdb.add("product", "repo")

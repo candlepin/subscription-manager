@@ -16,6 +16,7 @@
 #
 
 import os
+import types
 import logging
 import simplejson as json
 import gettext
@@ -61,7 +62,14 @@ class ProductDatabase:
     # need way to delete one prod->repo map
 
     def find_repos(self, product):
-        return self.content.get(product)
+        repo_value = self.content.get(product)
+        # support the old format as well by
+        # listafying if it's just a string value
+        if isinstance(repo_value, types.ListType):
+            return repo_value
+        if repo_value is None:
+            return None
+        return [repo_value]
 
     def create(self):
         if not os.path.exists(self.__fn()):
