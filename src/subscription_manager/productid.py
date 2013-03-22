@@ -295,9 +295,6 @@ class ProductManager:
                 return True
         return False
 
-    # We should only delete productcerts if there are no
-    # packages from that repo installed (not "active")
-    # and we have the product cert installed.
     def update_removed(self, active):
         """remove product certs for inactive products
 
