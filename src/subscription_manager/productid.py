@@ -295,6 +295,23 @@ class ProductManager:
                 return True
         return False
 
+    def _is_rhel_product_cert(self, product):
+        """return true if this is a rhel product cert"""
+
+        # FIXME: if there is a smarter way to detect this is the base os,
+        # this would be a good place for it.
+        if [tag for tag in product.provided_tags if tag[:4] == 'rhel']:
+            # dont delete rhel product certs unless we have a better reason
+            # FIXME: will need to handle how to update product certs seperately
+
+            # if any of the tags are "rhel", that's enough
+            return True
+
+        return False
+
+    # We should only delete productcerts if there are no
+    # packages from that repo installed (not "active")
+    # and we have the product cert installed.
     def update_removed(self, active):
         """remove product certs for inactive products
 
@@ -337,12 +354,7 @@ class ProductManager:
             # is not 'active'. So it ends up deleting the product cert for rhel since
             # it appears it is not being used. It is kind of a strange case for the
             # base os product cert, so we hardcode a special case here.
-            #
-            # FIXME: if there is a smarter way to detect this is the base os,
-            # this would be a good place for it.
-            if [tag for tag in p.provided_tags if tag[:4] == 'rhel']:
-                # dont delete rhel product certs unless we have a better reason
-                # FIXME: will need to handle how to update product certs seperately
+            if self._is_rhel_product_cert(p):
                 delete_product_cert = False
 
             # If productid database does not know about the the product,
