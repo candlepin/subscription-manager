@@ -244,6 +244,7 @@ class MainWindow(widgets.GladeWidget):
 
         def on_identity_change(filemonitor):
             self.identity.reload()
+            self.installed_tab.update_products()
             self.refresh()
 
         self.backend.monitor_identity(on_identity_change)
@@ -271,6 +272,7 @@ class MainWindow(widgets.GladeWidget):
     def registration_changed(self):
         log.debug("Registration changed, updating main window.")
         self.identity.reload()
+        self.installed_tab.update_products()
         self.refresh()
 
     def refresh(self):
