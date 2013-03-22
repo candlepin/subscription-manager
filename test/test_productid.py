@@ -29,11 +29,6 @@ class TestProductDatabase(unittest.TestCase):
         self.patcher.stop()
         shutil.rmtree(self.temp_dir)
 
-    def test_create(self):
-        """verify we create a db file on init (done in setUp)"""
-        self.assertTrue(os.path.exists(self.temp_dir))
-        self.assertTrue(os.access(self.temp_dir, os.R_OK | os.W_OK))
-
     # mock this so we can verify we call write to create a new one
     @patch("subscription_manager.productid.ProductDatabase.write")
     def test_create_no_dir(self, mock_write):
