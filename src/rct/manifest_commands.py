@@ -60,13 +60,13 @@ class RCTManifestCommand(RCTCliCommand):
 
     def _extractall(self, zfile, location):
         archive = ZipFile(zfile, 'r')
-        for each in archive.namelist():
-            (directory, filename) = os.path.split(each)
+        for path_name in archive.namelist():
+            (directory, filename) = os.path.split(path_name)
             directory = location + '/' + directory
             if not os.path.exists(directory):
                 os.makedirs(directory)
             outfile = open(directory + '/' + filename, 'w')
-            outfile.write(archive.read(each))
+            outfile.write(archive.read(path_name))
             outfile.close()
         archive.close()
 
