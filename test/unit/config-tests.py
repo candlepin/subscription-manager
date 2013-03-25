@@ -45,6 +45,7 @@ productCertDir = /etc/pki/product
 entitlementCertDir = /etc/pki/entitlement
 consumerCertDir = /etc/pki/consumer
 report_package_profile = 1
+pluginDir = /usr/lib/rhsm-plugins
 
 [rhsmcertd]
 certCheckInterval = 240
