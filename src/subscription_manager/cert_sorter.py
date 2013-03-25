@@ -16,10 +16,9 @@ from datetime import datetime, timedelta
 import logging
 
 from rhsm.certificate import GMT
-from rhsm.connection import RestlibException
+import subscription_manager.injection as inj
 
 from subscription_manager.isodate import parse_date
-from subscription_manager.injection import require, IDENTITY
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -55,7 +54,7 @@ class CertSorter(object):
     reporting unknown.
     """
     def __init__(self, product_dir, entitlement_dir, uep):
-        self.identity = require(IDENTITY)
+        self.identity = inj.require(inj.IDENTITY)
         self.product_dir = product_dir
         self.entitlement_dir = entitlement_dir
 
@@ -115,12 +114,9 @@ class CertSorter(object):
             return
         # TODO: handle temporarily disconnected use case / caching
 
-        try:
-            status = self.uep.getCompliance(self.identity.uuid)
-        except RestlibException:
-            # Indicates we may be talking to a very old candlepin server
-            # which does not have the compliance API call. Report everything
-            # as unknown in this case.
+        status_cache = inj.require(inj.STATUS_CACHE)
+        status = status_cache.load_status(self.uep, self.identity.uuid)
+        if status is None:
             return
 
         # TODO: we're now mapping product IDs to entitlement cert JSON,
@@ -152,7 +148,7 @@ class CertSorter(object):
         for pid in self.installed_products.keys():
             if pid not in self.valid_products and pid not in \
                     self.partially_valid_products and pid not in \
-                    self.unentitled_products:
+                    unentitled_pids:
                 log.warn("Installed product %s not present in response from "
                         "server." % pid)
                 unentitled_pids.append(pid)

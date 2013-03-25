@@ -17,10 +17,9 @@ import simplejson as json
 from mock import Mock, NonCallableMock
 from datetime import datetime
 
-from stubs import StubUEP
 from fixture import SubManFixture
 from subscription_manager.validity import ValidProductDateRangeCalculator
-from subscription_manager.injection import provide, IDENTITY
+import subscription_manager.injection as inj
 
 from rhsm.certificate import GMT
 
@@ -75,16 +74,11 @@ class ValidProductDateRangeCalculatorTests(SubManFixture):
 
     def setUp(self):
         SubManFixture.setUp(self)
-        self.status = json.loads(INST_PROD_STATUS)
-        self.mock_uep = StubUEP()
-        self.mock_uep.getConsumer = Mock(return_value=self.status)
-        self.calculator = ValidProductDateRangeCalculator(self.mock_uep)
-
-    # Very old servers may not have expose installed products:
-    def test_missing_installed_products(self):
-        self.status.pop('installedProducts')
-        for pid in (INST_PID_1, INST_PID_2, INST_PID_3):
-            self.assertTrue(self.calculator.calculate(pid) is None)
+        self.status = json.loads(INST_PROD_STATUS)['installedProducts']
+        self.prod_status_cache = NonCallableMock()
+        self.prod_status_cache.load_status = Mock(return_value=self.status)
+        inj.provide(inj.PROD_STATUS_CACHE, self.prod_status_cache)
+        self.calculator = ValidProductDateRangeCalculator(None)
 
     # If client asks for product status for something server doesn't
     # know is installed, this is very weird, but we will log and handle
@@ -94,7 +88,7 @@ class ValidProductDateRangeCalculatorTests(SubManFixture):
 
     # Very old servers may not expose product date ranges:
     def test_missing_installed_status(self):
-        for prod in self.status['installedProducts']:
+        for prod in self.status:
             prod.pop('startDate')
             prod.pop('endDate')
         for pid in (INST_PID_1, INST_PID_2, INST_PID_3):
@@ -113,7 +107,7 @@ class ValidProductDateRangeCalculatorTests(SubManFixture):
     def test_unregistered(self):
         id_mock = NonCallableMock()
         id_mock.is_valid.return_value = False
-        provide(IDENTITY, id_mock)
-        self.calculator = ValidProductDateRangeCalculator(self.mock_uep)
+        inj.provide(inj.IDENTITY, id_mock)
+        self.calculator = ValidProductDateRangeCalculator(None)
         for pid in (INST_PID_1, INST_PID_2, INST_PID_3):
             self.assertTrue(self.calculator.calculate(pid) is None)

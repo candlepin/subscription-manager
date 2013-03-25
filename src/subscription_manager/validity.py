@@ -14,7 +14,7 @@
 #
 
 import logging
-from subscription_manager.injection import require, IDENTITY
+import subscription_manager.injection as inj
 from subscription_manager.isodate import parse_date
 from rhsm.certificate import DateRange
 
@@ -25,9 +25,11 @@ class ValidProductDateRangeCalculator(object):
 
     def __init__(self, uep):
         self.uep = uep
-        self.identity = require(IDENTITY)
+        self.identity = inj.require(inj.IDENTITY)
         if self.identity.is_valid():
-            self.consumer_data = self.uep.getConsumer(self.identity.uuid)
+            self.prod_status_cache = inj.require(inj.PROD_STATUS_CACHE)
+            self.prod_status = self.prod_status_cache.load_status(
+                    self.uep, self.identity.uuid)
 
     def calculate(self, product_hash):
         """
@@ -41,17 +43,14 @@ class ValidProductDateRangeCalculator(object):
         The returned date range will be in GMT, so keep this in mind when
         presenting these dates to the user.
         """
-
         # If we're not registered, don't return a valid range:
         if not self.identity.is_valid():
             return None
 
-        if 'installedProducts' not in self.consumer_data:
-            log.warn("Server does not support product date ranges.")
+        if self.prod_status is None:
             return None
 
-        installed_products = self.consumer_data['installedProducts']
-        for prod in installed_products:
+        for prod in self.prod_status:
             if product_hash != prod['productId']:
                 continue
 

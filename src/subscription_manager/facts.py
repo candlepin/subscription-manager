@@ -127,7 +127,7 @@ class Facts(CacheManager):
 
         return file_facts
 
-    def _update_server(self, uep, consumer_uuid):
+    def _sync_with_server(self, uep, consumer_uuid):
         log.debug("Updating facts on server")
         uep.updateConsumer(consumer_uuid, facts=self.get_facts())
 

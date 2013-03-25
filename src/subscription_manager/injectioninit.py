@@ -18,6 +18,7 @@ from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
+from subscription_manager.cache import StatusCache, ProductStatusCache
 
 
 def init_dep_injection():
@@ -37,3 +38,6 @@ def init_dep_injection():
     # TODO: singletons possible?
     inj.provide(inj.ENT_DIR, EntitlementDirectory)
     inj.provide(inj.PROD_DIR, ProductDirectory)
+
+    inj.provide(inj.STATUS_CACHE, StatusCache)
+    inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache)
