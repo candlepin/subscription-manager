@@ -12,12 +12,14 @@
 # in this software or its documentation.
 #
 
+import subscription_manager.injection as inj
+
 from fixture import SubManFixture
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
     StubEntitlementDirectory, StubProductDirectory, \
     StubUEP, StubCertSorter
 from subscription_manager.cert_sorter import CertSorter, UNKNOWN
-from rhsm.connection import RestlibException
+from subscription_manager.cache import StatusCache
 from datetime import timedelta, datetime
 from mock import Mock
 import simplejson as json
@@ -70,7 +72,13 @@ class CertSorterTests(SubManFixture):
             ])
 
         self.mock_uep = StubUEP()
-        self.mock_uep.getCompliance = Mock(return_value=SAMPLE_COMPLIANCE_JSON)
+
+        self.status_mgr = StatusCache()
+        self.status_mgr.load_status = Mock(
+                return_value=SAMPLE_COMPLIANCE_JSON)
+        self.status_mgr.write_cache = Mock()
+        inj.provide(inj.STATUS_CACHE, self.status_mgr)
+
         self.sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
         self.sorter.is_registered = Mock(return_value=True)
 
@@ -79,10 +87,11 @@ class CertSorterTests(SubManFixture):
         sorter.is_registered = Mock(return_value=False)
         self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
 
-    def test_server_has_no_compliance_api(self):
-        self.mock_uep = StubUEP()
-        self.mock_uep.getCompliance = Mock(
-                side_effect=RestlibException('boom'))
+    # Server doesn't support compliance API, or server is unreachable and
+    # we cannot use the cache for some reason.
+    def test_no_usable_status(self):
+        self.status_mgr.load_status = Mock(
+                return_value=None)
         sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
         sorter.is_registered = Mock(return_value=True)
         self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))

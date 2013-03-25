@@ -12,14 +12,18 @@
 #
 
 import unittest
+import socket
 from mock import Mock
 import simplejson as json
 
 # used to get a user readable cfg class for test cases
 from stubs import StubProduct, StubProductCertificate, StubCertificateDirectory
+from fixture import SubManFixture
 
-from subscription_manager.cache import ProfileManager, InstalledProductsManager
+from subscription_manager.cache import ProfileManager, \
+        InstalledProductsManager, StatusCache
 from rhsm.profile import Package, RPMProfile
+from rhsm.connection import RestlibException
 
 
 class _FACT_MATCHER(object):
@@ -241,3 +245,43 @@ class TestInstalledProductsCache(unittest.TestCase):
         uep.updateConsumer.assert_called_with(uuid,
                 installed_products=self.mgr.format_for_server())
         self.assertEquals(0, self.mgr.write_cache.call_count)
+
+
+class TestStatusCache(SubManFixture):
+
+    def setUp(self):
+        self.status_cache = StatusCache()
+        self.status_cache.write_cache = Mock()
+
+    def test_load_from_server(self):
+        uep = Mock()
+        dummy_status = {"a": "1"}
+        uep.getCompliance = Mock(return_value=dummy_status)
+
+        self.status_cache.load_status(uep, "SOMEUUID")
+
+        self.assertEquals(dummy_status, self.status_cache.server_status)
+        self.assertEquals(1, self.status_cache.write_cache.call_count)
+
+    def test_server_no_compliance_call(self):
+        uep = Mock()
+        uep.getCompliance = Mock(side_effect=RestlibException("boom"))
+        status = self.status_cache.load_status(uep, "SOMEUUID")
+        self.assertEquals(None, status)
+
+    def test_server_network_error(self):
+        dummy_status = {"a": "1"}
+        uep = Mock()
+        uep.getCompliance = Mock(side_effect=socket.error("boom"))
+        self.status_cache._cache_exists = Mock(return_value=True)
+        self.status_cache._read_cache = Mock(return_value=dummy_status)
+        status = self.status_cache.load_status(uep, "SOMEUUID")
+        self.assertEquals(dummy_status, status)
+        self.assertEquals(1, self.status_cache._read_cache.call_count)
+
+    # Extremely unlikely but just in case:
+    def test_server_network_error_no_cache(self):
+        uep = Mock()
+        uep.getCompliance = Mock(side_effect=socket.error("boom"))
+        self.status_cache._cache_exists = Mock(return_value=False)
+        self.assertRaises(socket.error, self.status_cache.load_status, uep, "SOMEUUID")
