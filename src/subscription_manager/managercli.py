@@ -1862,6 +1862,9 @@ class ConfigCommand(CliCommand):
                 self.parser.add_option("--" + section + "." + name, dest=(section + "." + name),
                     help=_("Section: %s, Name: %s") % (section, name))
 
+    def _add_common_options(self):
+        pass
+
     def _validate_options(self):
         if self.options.list:
             too_many = False
