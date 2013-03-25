@@ -39,6 +39,19 @@ def get_value(json_dict, path):
     return current
 
 
+class ZipExtractAll(ZipFile):
+
+    def extractall(self, location):
+        for path_name in self.namelist():
+            (directory, filename) = os.path.split(path_name)
+            directory = location + '/' + directory
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            outfile = open(directory + '/' + filename, 'w')
+            outfile.write(self.read(path_name))
+            outfile.close()
+
+
 class RCTManifestCommand(RCTCliCommand):
 
     INNER_FILE = "consumer_export.zip"
@@ -58,28 +71,19 @@ class RCTManifestCommand(RCTCliCommand):
         if not os.path.isfile(manifest_file):
             raise InvalidCLIOptionError(_("The specified manifest file does not exist."))
 
-    def _extractall(self, zfile, location):
-        archive = ZipFile(zfile, 'r')
-        for path_name in archive.namelist():
-            (directory, filename) = os.path.split(path_name)
-            directory = location + '/' + directory
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-            outfile = open(directory + '/' + filename, 'w')
-            outfile.write(archive.read(path_name))
-            outfile.close()
-        archive.close()
-
     def _extract_manifest(self, location):
         # Extract the outer file
-        self._extractall(self._get_file_from_args(), location)
+        archive = ZipExtractAll(self._get_file_from_args(), 'r')
+        archive.extractall(location)
+
         # now extract the inner file
         if location:
             inner_file = os.path.join(location, self.INNER_FILE)
         else:
             inner_file = self.INNER_FILE
 
-        self._extractall(inner_file, location)
+        archive = ZipExtractAll(inner_file, 'r')
+        archive.extractall(location)
 
         # Delete the intermediate file
         os.remove(inner_file)
