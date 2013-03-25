@@ -217,23 +217,29 @@ class StatusCache(CacheManager):
             # which does not have the compliance API call. Report everything
             # as unknown in this case.
             return None
+
+        # If we hit a network error, but no cache exists (extremely unlikely)
+        # then we just re-throw the exception.
         except socket.error, ex:
             log.exception(ex)
-            return self._load_cached_status()
+            if not self._cache_exists():
+                log.error("Server unreachable, registered, but no cache exists.")
+                raise ex
+
+            log.warn("Unable to reach server, using cached status.")
+            return self._read_cache()
+
         except connection.NetworkException, ex:
             log.exception(ex)
-            return self._load_cached_status()
+            if not self._cache_exists():
+                log.error("Server unreachable, registered, but no cache exists.")
+                raise ex
+
+            log.warn("Unable to reach server, using cached status.")
+            return self._read_cache()
 
     def to_dict(self):
         return self.server_status
-
-    def _load_cached_status(self):
-        if not self._cache_exists():
-            # NOTE: this is extremely unlikely to be possible but just in case:
-            log.error("Server unreachable, registered, but no cache exists.")
-            return None
-        log.warn("Unable to reach server, using cached status.")
-        return self._read_cache()
 
     def _load_data(self, open_file):
         json_str = open_file.read()

@@ -278,3 +278,10 @@ class TestStatusCache(SubManFixture):
         status = self.status_cache.load_status(uep, "SOMEUUID")
         self.assertEquals(dummy_status, status)
         self.assertEquals(1, self.status_cache._read_cache.call_count)
+
+    # Extremely unlikely but just in case:
+    def test_server_network_error_no_cache(self):
+        uep = Mock()
+        uep.getCompliance = Mock(side_effect=socket.error("boom"))
+        self.status_cache._cache_exists = Mock(return_value=False)
+        self.assertRaises(socket.error, self.status_cache.load_status, uep, "SOMEUUID")

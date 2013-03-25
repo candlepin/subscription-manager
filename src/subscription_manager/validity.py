@@ -28,7 +28,7 @@ class ValidProductDateRangeCalculator(object):
         self.identity = inj.require(inj.IDENTITY)
         if self.identity.is_valid():
             self.prod_status_cache = inj.require(inj.PROD_STATUS_CACHE)
-            self.consumer_data = self.prod_status_cache.load_status(
+            self.prod_status = self.prod_status_cache.load_status(
                     self.uep, self.identity.uuid)
 
     def calculate(self, product_hash):
@@ -47,10 +47,10 @@ class ValidProductDateRangeCalculator(object):
         if not self.identity.is_valid():
             return None
 
-        if self.consumer_data is None:
+        if self.prod_status is None:
             return None
 
-        for prod in self.consumer_data:
+        for prod in self.prod_status:
             if product_hash != prod['productId']:
                 continue
 
