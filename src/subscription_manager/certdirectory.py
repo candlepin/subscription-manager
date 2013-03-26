@@ -33,7 +33,7 @@ _ = gettext.gettext
 cfg = initConfig()
 
 
-class Directory:
+class Directory(object):
 
     def __init__(self, path):
         self.path = Path.abs(path)
@@ -103,7 +103,7 @@ class CertificateDirectory(Directory):
     KEY = 'key.pem'
 
     def __init__(self, path):
-        Directory.__init__(self, path)
+        super(CertificateDirectory, self).__init__(path)
         self.create()
         self._listing = None
 
@@ -165,7 +165,7 @@ class ProductDirectory(CertificateDirectory):
     PATH = cfg.get('rhsm', 'productCertDir')
 
     def __init__(self):
-        CertificateDirectory.__init__(self, self.PATH)
+        super(ProductDirectory, self).__init__(self.PATH)
 
     def get_provided_tags(self):
         """
@@ -199,7 +199,7 @@ class EntitlementDirectory(CertificateDirectory):
         return cls.PATH
 
     def __init__(self):
-        CertificateDirectory.__init__(self, self.productpath())
+        super(EntitlementDirectory, self).__init__(self.productpath())
 
     def _check_key(self, cert):
         """

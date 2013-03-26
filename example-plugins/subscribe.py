@@ -36,5 +36,3 @@ class SubscribePlugin(SubManPlugin):
             conduit: A PostSubscriptionConduit()
         """
         conduit.log.info("post subscribe called")
-
-
