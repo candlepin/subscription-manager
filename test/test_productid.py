@@ -100,6 +100,13 @@ class TestProductDatabase(unittest.TestCase):
         self.assertTrue(isinstance(repo, types.ListType))
         self.assertTrue("repo" in repo)
 
+    def test_add_old_format(self):
+        self.pdb.content = {'product': 'repo'}
+        self.pdb.add('product', 'repo2')
+        repo = self.pdb.find_repos("product")
+        self.assertTrue("repo" in repo)
+        self.assertTrue("repo2" in repo)
+
     def test_find_repos_mixed_old_and_new_format(self):
         self.pdb.content = {'product1': 'repo1',
                             'product2': ['repo2']}
@@ -109,6 +116,25 @@ class TestProductDatabase(unittest.TestCase):
         repo2 = self.pdb.find_repos("product2")
         self.assertTrue(isinstance(repo2, types.ListType))
         self.assertTrue("repo2" in repo2)
+
+    def test_add_mixed_old_and_new_format(self):
+        self.pdb.content = {'product1': 'product1-repo1',
+                            'product2': ['product2-repo1'],
+                            'product3': 'product3-repo1'}
+        self.pdb.add('product2', 'product2-repo2')
+        self.pdb.add('product1', 'product1-repo2')
+        product1_repos = self.pdb.find_repos('product1')
+        product2_repos = self.pdb.find_repos('product2')
+        product3_repos = self.pdb.find_repos('product3')
+        self.assertTrue(isinstance(product1_repos, types.ListType))
+        self.assertTrue(isinstance(product2_repos, types.ListType))
+        self.assertTrue(isinstance(product3_repos, types.ListType))
+        self.assertEquals(["product1-repo1", "product1-repo2"],
+                          product1_repos)
+        self.assertEquals(["product2-repo1", "product2-repo2"],
+                          product2_repos)
+        self.assertEquals(['product3-repo1'],
+                          product3_repos)
 
     def test_delete(self):
         self.pdb.add("product", "repo")
