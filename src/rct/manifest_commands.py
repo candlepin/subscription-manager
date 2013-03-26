@@ -41,13 +41,28 @@ def get_value(json_dict, path):
 
 class ZipExtractAll(ZipFile):
 
+    def _isSecure(self, base, newfile):
+        basePath = os.path.abspath(base)
+        newPath = os.path.abspath(newfile)
+        if not newPath.startswith(basePath):
+            raise Exception(_('Manifest zip attempted to extract outside of the base directory.'))
+        #traces symlink to source, and checks that it is valid
+        realNewPath = os.path.realpath(newPath)
+        if realNewPath != newPath:
+            self._isSecure(base, realNewPath)
+        elif os.path.islink(newPath):
+            raise Exception(_('Unable to trace symbolic link.  Possibly circular linkage.'))
+
     def extractall(self, location):
+        self._isSecure(location, location)
         for path_name in self.namelist():
             (directory, filename) = os.path.split(path_name)
-            directory = location + '/' + directory
+            directory = os.path.join(location, directory)
+            self._isSecure(location, directory)
             if not os.path.exists(directory):
                 os.makedirs(directory)
-            outfile = open(directory + '/' + filename, 'w')
+            self._isSecure(location, os.path.join(directory, filename))
+            outfile = os.fdopen(os.open(os.path.join(directory, filename), os.O_RDWR | os.O_CREAT | os.O_EXCL), 'w')
             outfile.write(self.read(path_name))
             outfile.close()
 
