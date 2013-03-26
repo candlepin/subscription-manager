@@ -197,7 +197,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['image'] = self._render_icon('red')
                         entry['status'] = _('Expired')
                         sub_numbers = set([])
-                        for ent_cert in self.cs.get_entitlements_for_product(product_id):
+                        for ent_cert in self.entitlement_dir.list_for_product(product_id):
                             order = ent_cert.order
                             # FIXME:  getSubscription() seems to always be None...?
                             if order.subscription:
