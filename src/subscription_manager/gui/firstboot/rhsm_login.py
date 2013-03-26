@@ -17,6 +17,9 @@ logutil.init_logger()
 from subscription_manager.gui.utils import running_as_firstboot
 running_as_firstboot()
 
+from subscription_manager.injectioninit import init_dep_injection
+init_dep_injection()
+
 from subscription_manager.gui import managergui
 from subscription_manager import managerlib
 from subscription_manager.gui import registergui
@@ -102,7 +105,7 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
                 raise error
 
             managerlib.persist_consumer_cert(new_account)
-            self._parent.consumer.reload()
+            self._parent.identity.reload()
             if self._parent.activation_keys:
                 self._parent.pre_done(registergui.REFRESH_SUBSCRIPTIONS_PAGE)
             elif self._parent.skip_auto_bind:
@@ -137,10 +140,10 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
         if ConsumerIdentity.exists():
             try:
                 managerlib.unregister(self._parent.backend.uep,
-                        self._parent.consumer.uuid)
+                        self._parent.identity.uuid)
             except socket.error, e:
                 handle_gui_exception(e, e, self._parent.window)
-            self._parent.consumer.reload()
+            self._parent.identity.reload()
             self._parent._registration_finished = False
 
         return registergui.PerformRegisterScreen.pre(self)
@@ -180,8 +183,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         backend = managergui.Backend()
         self.plugin_manager = plugins.getPluginManager()
-        registergui.RegisterScreen.__init__(self, backend, managergui.Consumer(),
-                self.plugin_manager, Facts())
+        registergui.RegisterScreen.__init__(self, backend, Facts())
 
         #insert our new screens
         screen = SelectSLAScreen(self, backend)
