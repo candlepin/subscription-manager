@@ -90,7 +90,6 @@ class CertManager:
             except Exception, e:
                 log.warning("Exception caught while running certlib update")
                 log.exception(e)
-                print e
 
             # run the certlib update first as it will talk to candlepin,
             # and we can find out if we got deleted or not.
