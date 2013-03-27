@@ -51,6 +51,9 @@ class ProductDatabase:
     def add(self, product, repo):
         if product not in self.content:
             self.content[product] = []
+        # handle existing old format values
+        if isinstance(self.content[product], types.StringType):
+            self.content[product] = [self.content[product]]
         self.content[product].append(repo)
 
     def delete(self, product):
