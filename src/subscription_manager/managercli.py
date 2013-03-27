@@ -195,12 +195,15 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
 def show_autosubscribe_output(uep):
     installed_status = managerlib.getInstalledProductStatus(ProductDirectory(),
             EntitlementDirectory(), uep)
-
+    if not installed_status:
+        print _("No products installed.")
+        return 1
     log.info("Attempted to auto-attach/heal the system.")
     print _("Installed Product Current Status:")
-    subscribed = False
+    subscribed = 1
     for prod_status in installed_status:
-        subscribed = subscribed or prod_status[4] == SUBSCRIBED
+        if prod_status[4] == SUBSCRIBED:
+            subscribed = 0
         status = STATUS_MAP[prod_status[4]]
         print columnize(PRODUCT_STATUS, _echo, prod_status[0], status) + "\n"
     return subscribed
@@ -1103,14 +1106,11 @@ class RegisterCommand(UserPassCommand):
             self.certlib.update()
 
         # run this after certlib update, so we have the new entitlements
-        return_code = 0
+        subscribed = 0
         if self.autoattach:
             subscribed = show_autosubscribe_output(self.cp)
-            if not subscribed:
-                return_code = 1
-
         self._request_validity_check()
-        return return_code
+        return subscribed
 
     def _persist_identity_cert(self, consumer):
         """
@@ -1419,13 +1419,19 @@ class AttachCommand(CliCommand):
                     return_code = 1
             # must be auto
             else:
+                productsInstalled = len(managerlib.getInstalledProductStatus(self.product_dir,
+                                 self.entitlement_dir, self.cp))
                 # if we are green, we don't need to go to the server
                 self.sorter = inj.require(inj.CERT_SORTER,
                         self.product_dir, self.entitlement_dir, self.cp)
 
                 if self.sorter.is_valid():
-                    print _("All installed products are covered by valid entitlements. "
-                            "No need to update subscriptions at this time.")
+                    if not productsInstalled:
+                        print _("No Installed products on system. "
+                                "No need to attach subscriptions.")
+                    else:
+                        print _("All installed products are covered by valid entitlements. "
+                                "No need to update subscriptions at this time.")
                     cert_update = False
                 else:
                     # If service level specified, make an additional request to
@@ -1447,10 +1453,11 @@ class AttachCommand(CliCommand):
                 for e in result[1]:
                     print '\t-', str(e)
             elif self.options.auto:
-                # run this after certlib update, so we have the new entitlements
-                subscribed = show_autosubscribe_output(self.cp)
-                if not subscribed:
+                if not productsInstalled:
                     return_code = 1
+                else:
+                    # run this after certlib update, so we have the new entitlements
+                    return_code = show_autosubscribe_output(self.cp)
 
         except Exception, e:
             handle_exception("Unable to attach: %s" % e, e)
