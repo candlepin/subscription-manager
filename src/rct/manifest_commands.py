@@ -41,30 +41,36 @@ def get_value(json_dict, path):
 
 class ZipExtractAll(ZipFile):
 
-    def _isSecure(self, base, newfile):
-        basePath = os.path.abspath(base)
-        newPath = os.path.abspath(newfile)
-        if not newPath.startswith(basePath):
+    def _open_excl(self, path):
+        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL), 'w')
+
+    def _write_file(self, output_path, archive_path):
+        outfile = self._open_excl(output_path)
+        outfile.write(self.read(archive_path))
+        outfile.close()
+
+    def _is_secure(self, base, new_file):
+        base_path = os.path.abspath(base)
+        new_path = os.path.abspath(new_file)
+        if not new_path.startswith(base_path):
             raise Exception(_('Manifest zip attempted to extract outside of the base directory.'))
         #traces symlink to source, and checks that it is valid
-        realNewPath = os.path.realpath(newPath)
-        if realNewPath != newPath:
-            self._isSecure(base, realNewPath)
-        elif os.path.islink(newPath):
+        real_new_path = os.path.realpath(new_path)
+        if real_new_path != new_path:
+            self._is_secure(base, real_new_path)
+        elif os.path.islink(new_path):
             raise Exception(_('Unable to trace symbolic link.  Possibly circular linkage.'))
 
     def extractall(self, location):
-        self._isSecure(location, location)
+        self._is_secure(location, location)
         for path_name in self.namelist():
             (directory, filename) = os.path.split(path_name)
             directory = os.path.join(location, directory)
-            self._isSecure(location, directory)
+            self._is_secure(location, directory)
             if not os.path.exists(directory):
                 os.makedirs(directory)
-            self._isSecure(location, os.path.join(directory, filename))
-            outfile = os.fdopen(os.open(os.path.join(directory, filename), os.O_RDWR | os.O_CREAT | os.O_EXCL), 'w')
-            outfile.write(self.read(path_name))
-            outfile.close()
+            self._is_secure(location, os.path.join(directory, filename))
+            self._write_file(os.path.join(directory, filename), path_name)
 
 
 class RCTManifestCommand(RCTCliCommand):
