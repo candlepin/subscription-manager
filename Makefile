@@ -450,9 +450,16 @@ rpmlint:
 	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
+# see https://github.com/ghewgill/pyqver
 versionlint:
 	@TMPFILE=`mktemp` || exit 1; \
 	pyqver2.py -m 2.5 -v  $(STYLEFILES) | grep -v hashlib | tee $$TMPFILE; \
+	! test -s $$TMPFILE
+
+# see https://bitbucket.org/jendrikseipp/vulture
+vulture:
+	@TMPFILE=`mktemp` || exit 1; \
+	vulture $(BINFILES) $(PYFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 
