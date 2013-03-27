@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.4
+Version: 1.8.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -377,6 +377,37 @@ fi
 %endif
 
 %changelog
+* Wed Mar 27 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.5-1
+- 927875: Fix GUI bug if there is an expired certificate. (dgoodwin@redhat.com)
+- 922806: Use dependency injection with firstboot module. (awood@redhat.com)
+- 919512: Remove proxy options from config command. (awood@redhat.com)
+- 921126: latest string updates from zanata (alikins@redhat.com)
+- 919255: Remove extraneous print statement. (awood@redhat.com)
+- 919584: Fix unicode error in RHEL 5. (awood@redhat.com)
+- Implement entitlement/product status caching. (dgoodwin@redhat.com)
+- 921245: Update installed products tab after registration. (awood@redhat.com)
+- 893993: some refactoring, show_autosubscribe_output returns 0 or 1
+  (ckozak@redhat.com)
+- 859197: add special case for products that provide 'rhel-' tags
+  (alikins@redhat.com)
+- productid db now supports multiple repos per product id (alikins@redhat.com)
+- let ProductData support multiple repos per product (alikins@redhat.com)
+- 893993: attach --auto now prints the proper text when no products are
+  installed (ckozak@redhat.com)
+- 918746: Switched or ordering for disabling repos.  Will now print all
+  repository validation errors (ckozak@redhat.com)
+- 914717: rct cat-manifest fails to report Contract from the embedded
+  entitlement cert (wpoteat@redhat.com)
+- More convenient dep injection. (dgoodwin@redhat.com)
+- Try to handle the really old dbus-python on rhel5 (alikins@redhat.com)
+- add missing conf file for all_slots plugin (alikins@redhat.com)
+- 919700: Reload consumer identity after force subscribing.
+  (dgoodwin@redhat.com)
+- utils.parseDate is now isodate.parse_date (alikins@redhat.com)
+- Remove  ent/prod dir arguments to CLI commands. (dgoodwin@redhat.com)
+- PluginsCommand does not need network cli options (alikins@redhat.com)
+- Fix pluginDir config value in default config file (alikins@redhat.com)
+
 * Fri Mar 08 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.4-1
 - Pull latest strings from zanata. (dgoodwin@redhat.com)
 - Use PyXML for iso8601 date on RHEL5 and dateutil after (alikins@redhat.com)
