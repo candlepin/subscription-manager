@@ -633,7 +633,7 @@ class UEPConnection:
 
     def registerConsumer(self, name="unknown", type="system", facts={},
             owner=None, environment=None, keys=None,
-            installed_products=None):
+            installed_products=None, uuid=None):
         """
         Creates a consumer on candlepin server
         """
@@ -642,6 +642,9 @@ class UEPConnection:
                   "facts": facts}
         if installed_products:
             params['installedProducts'] = installed_products
+
+        if uuid:
+            params['uuid'] = uuid
 
         url = "/consumers"
         if environment:
@@ -728,6 +731,16 @@ class UEPConnection:
         Returns a consumer object with pem/key for existing consumers
         """
         method = '/consumers/%s' % self.sanitize(uuid)
+        return self.conn.request_get(method)
+
+    def getConsumers(self, owner=None):
+        """
+        Returns a list of consumers
+        """
+        method = '/consumers/'
+        if owner:
+            method = "%s?owner=%s" % (method, owner)
+
         return self.conn.request_get(method)
 
     def getCompliance(self, uuid):
@@ -853,6 +866,15 @@ class UEPConnection:
     def unbindAll(self, consumerId):
         method = "/consumers/%s/entitlements" % self.sanitize(consumerId)
         return self.conn.request_delete(method)
+
+    def checkin(self, consumerId, checkin_date=None):
+        method = "/consumers/%s/checkin" % self.sanitize(consumerId)
+        # add the optional date to the url
+        if checkin_date:
+            method = "%s?checkin_date=%s" % (method,
+                    self.sanitize(checkin_date.isoformat(), plus=True))
+
+        return self.conn.request_put(method)
 
     def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None):
         """
