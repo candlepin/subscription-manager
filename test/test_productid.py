@@ -161,7 +161,8 @@ class TestProductManager(unittest.TestCase):
         mock_yb.repos.listEnabled.return_value = [mock_repo]
         self.prod_mgr.get_enabled(mock_yb)
 
-    def test_get_enabled_exception(self):
+    @patch('subscription_manager.productid.log')
+    def test_get_enabled_exception(self, mock_log):
         mock_repo = Mock(spec=yum.repos.Repository)
         mock_repo.retrieveMD = Mock(return_value='somefilename')
         mock_repo.id = Mock(return_value='rhel-6-server')
@@ -171,7 +172,20 @@ class TestProductManager(unittest.TestCase):
         mock_yb.repos.listEnabled.return_value = [mock_repo]
         enabled = self.prod_mgr.get_enabled(mock_yb)
 
+        self.assertTrue(mock_log.exception.called)
         self.assertEquals([], enabled)
+
+    @patch('subscription_manager.productid.log')
+    def test_get_enabled_metadata_error(self, mock_log):
+        mock_repo = Mock(spec=yum.repos.Repository)
+        mock_repo.retrieveMD = Mock(side_effect=yum.Errors.RepoMDError)
+        mock_repo.id = Mock(return_value='rhel-6-server')
+
+        mock_yb = Mock(spec=yum.YumBase)
+        mock_yb.repos.listEnabled.return_value = [mock_repo]
+        self.prod_mgr.get_enabled(mock_yb)
+        self.assertTrue(mock_repo.id in self.prod_mgr.meta_data_errors)
+        self.assertFalse(mock_log.exception.called)
 
     def test_get_active_no_packages(self):
         cert = self._create_server_cert()
