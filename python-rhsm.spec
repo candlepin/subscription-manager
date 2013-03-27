@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.8.7
+Version: 1.8.8
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,10 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Mar 27 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.8-1
+- no 'json' module in rhel5, use simplejson instead (alikins@redhat.com)
+- Adding plugin directory config option. (awood@redhat.com)
+
 * Thu Mar 07 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.7-1
 - 912776: Improve error message (wpoteat@redhat.com)
 - Add a method to get compliance status for a consumer. (awood@redhat.com)
