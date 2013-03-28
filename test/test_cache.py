@@ -250,6 +250,7 @@ class TestInstalledProductsCache(unittest.TestCase):
 class TestStatusCache(SubManFixture):
 
     def setUp(self):
+        super(TestStatusCache, self).setUp()
         self.status_cache = StatusCache()
         self.status_cache.write_cache = Mock()
 
