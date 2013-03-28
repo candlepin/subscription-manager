@@ -46,6 +46,7 @@ class RegisterScreenTests(SubManFixture):
 class CredentialsScreenTests(SubManFixture):
 
     def setUp(self):
+        super(CredentialsScreenTests, self).setUp()
         self.backend = StubBackend()
         self.parent = Mock()
 
@@ -68,6 +69,7 @@ class CredentialsScreenTests(SubManFixture):
 
 class ActivationKeyScreenTests(SubManFixture):
     def setUp(self):
+        super(ActivationKeyScreenTests, self).setUp()
         self.backend = StubBackend()
         self.parent = Mock()
         self.screen = ActivationKeyScreen(self.backend, self.parent)
@@ -81,6 +83,7 @@ class ActivationKeyScreenTests(SubManFixture):
 
 class ChooseServerScreenTests(SubManFixture):
     def setUp(self):
+        super(ChooseServerScreenTests, self).setUp()
         self.backend = StubBackend()
         self.parent = Mock()
         self.screen = ChooseServerScreen(self.backend, self.parent)
