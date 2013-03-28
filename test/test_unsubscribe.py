@@ -28,6 +28,7 @@ class CliUnSubscribeTests(SubManFixture):
 
     def setUp(self):
         self.oldCI = managercli.ConsumerIdentity
+        super(CliUnSubscribeTests, self).setUp()
 
     def test_unsubscribe_registered(self):
         connection.UEPConnection = StubUEP

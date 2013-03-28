@@ -1,6 +1,6 @@
 import unittest
 
-from mock import Mock, NonCallableMock
+from mock import Mock, NonCallableMock, patch
 import subscription_manager.injection as inj
 import stubs
 
@@ -31,3 +31,9 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.ENT_DIR, self.ent_dir)
         self.prod_dir = stubs.StubProductDirectory()
         inj.provide(inj.PROD_DIR, self.prod_dir)
+
+        self.dbus_patcher = patch('subscription_manager.managercli.CliCommand._request_validity_check')
+        self.dbus_patcher.start()
+
+    def tearDown(self):
+        self.dbus_patcher.stop()
