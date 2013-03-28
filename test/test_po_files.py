@@ -3,9 +3,6 @@ import glob
 import unittest
 import sys
 
-# easy_install polib http://polib.readthedocs.org/
-import polib
-
 import locale
 import gettext
 _ = gettext.gettext
@@ -27,19 +24,6 @@ po_files = glob.glob("po/*.po")
 langs = []
 for po_file in po_files:
     langs.append(po_file[:-3])
-
-
-class PotFile:
-    def __init__(self):
-
-        self.msgids = []
-        PO_PATH = "po/"
-        pot_file = "%s/keys.pot" % PO_PATH
-        po = polib.pofile(pot_file)
-        for entry in po:
-            self.msgids.append(entry.msgid)
-
-        self.msgids.sort()
 
 
 class TestLocale(unittest.TestCase):
@@ -103,16 +87,3 @@ class TestUnicodeGettext(TestLocale):
         except SystemExit:
             # tis okay, we are looking for unicode errors on the string encode
             pass
-
-    def test_all_strings_all_langs(self):
-        pot = PotFile()
-        msgids = pot.msgids
-
-        for lang in self.test_locales:
-            self._setupLang(lang)
-            for msgid in msgids:
-                "%s" % gettext.gettext(msgid)
-
-
-if __name__ == "__main__":
-    po = PotFile()
