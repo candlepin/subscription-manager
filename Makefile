@@ -6,8 +6,7 @@ PYTHON ?= python
 INSTALL_DIR= usr/share
 INSTALL_MODULE = rhsm
 PKGNAME = subscription_manager
-CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/${PKGNAME}
-VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
+CODE_DIR = $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
 BIN_DIR = bin/
@@ -278,20 +277,6 @@ clean:
 
 checkcommits:
 	scripts/checkcommits.sh
-
-archive: clean
-	@rm -rf ${PKGNAME}-%{VERSION}.tar.gz
-	@rm -rf /tmp/${PKGNAME}-$(VERSION) /tmp/${PKGNAME}
-	@rm -rf po/build
-	@dir=$$PWD; cd /tmp; cp -a $$dir ${PKGNAME}
-	@rm -f /tmp/${PKGNAME}/${PKGNAME}-daily.spec
-	@mv /tmp/${PKGNAME} /tmp/${PKGNAME}-$(VERSION)
-	@dir=$$PWD; cd /tmp; tar cvzf $$dir/${PKGNAME}-$(VERSION).tar.gz --exclude \.svn ${PKGNAME}-$(VERSION)
-	@rm -rf /tmp/${PKGNAME}-$(VERSION)
-	@echo "The archive is in ${PKGNAME}-$(VERSION).tar.gz"
-
-rpm: archive
-	rpmbuild -ta ${PKGNAME}-$(VERSION).tar.gz
 
 desktop-files: etc-conf/rhsm-icon.desktop \
 				etc-conf/subscription-manager-gui.desktop
