@@ -12,7 +12,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import types
 
 import dbus
 import dbus.service
@@ -54,7 +53,6 @@ class SubManEventDbus(dbus.service.Object):
         print "sending dbus signal with message: %s" % message
 
 
-
 class DbusEventPlugin(SubManPlugin):
     """Plugin to emit dbus signals for each hook"""
     name = "all_dbus"
@@ -92,4 +90,3 @@ class DbusEventPlugin(SubManPlugin):
 
     def post_subscribe_hook(self, conduit):
         self._dbus_event("post_subscribe", conduit)
-
