@@ -30,6 +30,10 @@ CFLAGS = -Wall -g
 
 build:	rhsmcertd rhsm-icon
 
+# we never "remake" this makefile, so add a target so
+# we stop searching for implicit rules on how to remake it
+Makefile: ;
+
 bin:
 	mkdir bin
 
@@ -95,9 +99,10 @@ install-plugins:
 #	install -m 644 -p src/rhsm-plugins/*.py ${RHSM_PLUGIN_DIR}
 
 install-plugins-conf:
-	install -d ${RHSM_PLUGIN_CONF_DIR}
-#	install -m 644 -p src/rhsm-plugins/*.conf ${RHSM_PLUGIN_CONF_DIR}
+	install -d $(RHSM_PLUGIN_CONF_DIR)
+#	install -m 644 -p src/rhsm-plugins/*.conf $(RHSM_PLUGIN_CONF_DIR)
 
+.PHONY: install-example-plugins
 install-example-plugins: install-example-plugins-files install-example-plugins-conf
 
 install-example-plugins-files:
@@ -105,9 +110,10 @@ install-example-plugins-files:
 	install -m 644 -p example-plugins/*.py ${RHSM_PLUGIN_DIR}
 
 install-example-plugins-conf:
-	install -d ${RHSM_PLUGIN_CONF_DIR}
-	install -m 644 -p example-plugins/*.conf ${RHSM_PLUGIN_CONF_DIR}
+	install -d $(RHSM_PLUGIN_CONF_DIR)
+	install -m 644 -p $(EXAMPLE_PLUGINS_SRC_DIR)/*.conf $(RHSM_PLUGIN_CONF_DIR)
 
+.PHONY: install
 install: install-files install-conf install-help-files install-plugins-conf
 
 install-files: dbus-service-install compile-po desktop-files install-plugins
@@ -367,6 +373,7 @@ tablint:
 trailinglint:
 	@! GREP_COLOR='7;31'  grep --color -nP "[ \t]$$" $(STYLEFILES)
 
+.PHONY: whitespacelint
 whitespacelint: tablint trailinglint
 
 # look for things that are likely debugging code left in by accident
@@ -440,7 +447,7 @@ versionlint:
 	pyqver2.py -m 2.5 -v  $(STYLEFILES) | grep -v hashlib | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-
+.PHONY: stylish
 stylish: versionlint gladelint find-missing-widgets find-missing-signals pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins
