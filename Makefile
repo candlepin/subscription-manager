@@ -259,17 +259,17 @@ coverage-xunit:
 	nosetests --with-xunit --with-cover --cover-package subscription_manager --cover-erase
 
 coverage-html: coverage
-	coverage html --include "${SRC_DIR}/*"
+	coverage html
 
 coverage-html-old:
 	nosetests --with-cover --cover-package subscription_manager --cover-html --cover-html-dir test/html --cover-erase
 
 coverage-xml: coverage
-	coverage xml --include "${SRC_DIR}/*"
+	coverage xml
 
 coverage-jenkins: coverage-xunit
-	coverage html --include "${SRC_DIR}/*"
-	coverage xml --include "${SRC_DIR}/*"
+	coverage html
+	coverage xml
 
 clean:
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
