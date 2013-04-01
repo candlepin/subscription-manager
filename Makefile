@@ -3,25 +3,31 @@ PREFIX ?=
 SYSCONF ?= etc
 PYTHON ?= python
 
-INSTALL_DIR= usr/share
+INSTALL_DIR = usr/share
 INSTALL_MODULE = rhsm
 PKGNAME = subscription_manager
 CODE_DIR = $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
-BIN_DIR = bin/
-BIN_FILES = $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui \
-			$(BIN_DIR)/rhn-migrate-classic-to-rhsm \
-			$(BIN_DIR)/install-num-migrate-to-rhsm \
-			$(BIN_DIR)/rct
-SYSTEMD_INST_DIR=${PREFIX}/usr/lib/systemd/system
-RHSM_PLUGIN_DIR=${PREFIX}/usr/share/rhsm-plugins/
-RHSM_PLUGIN_CONF_DIR=${PREFIX}/etc/rhsm/pluginconf.d/
+BIN_DIR := bin/
+BIN_FILES := $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui \
+			 $(BIN_DIR)/rhn-migrate-classic-to-rhsm \
+			 $(BIN_DIR)/install-num-migrate-to-rhsm \
+			 $(BIN_DIR)/rct
+SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
 
-SRC_DIR = src/subscription_manager
+RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
+RHSM_PLUGIN_CONF_DIR := $(PREFIX)/etc/rhsm/pluginconf.d/
 
-RCT_CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/rct
-RCT_SRC_DIR = src/rct
+BASE_SRC_DIR := src
+SRC_DIR := $(BASE_SRC_DIR)/subscription_manager
+RCT_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
+RCT_SRC_DIR := $(BASE_SRC_DIR)/rct
+RHSM_ICON_SRC_DIR := $(BASE_SRC_DIR)/rhsm_icon
+DAEMONS_SRC_DIR := $(BASE_SRC_DIR)/daemons
+EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
+YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
+ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(DAEMONS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
 
 CFLAGS = -Wall -g
 
@@ -37,66 +43,67 @@ Makefile: ;
 bin:
 	mkdir bin
 
-RHSMCERTD_FLAGS=`pkg-config --cflags --libs glib-2.0`
+RHSMCERTD_FLAGS = `pkg-config --cflags --libs glib-2.0`
 
-PYFILES=`find  src/ -name "*.py"`
+PYFILES := `find $(ALL_SRC_DIRS) -name "*.py"`
+EXAMPLE_PLUGINS_PYFILES := `find "$(EXAMPLE_PLUGINS_SRC_DIR)/*.py"`
 # Ignore certdata.py from style checks as tabs and trailing
 # whitespace are required for testing.
 TESTFILES=`find  test/ \( ! -name certdata.py ! -name manifestdata.py \) -name "*.py"`
 STYLEFILES=$(PYFILES) $(BIN_FILES) $(TESTFILES)
 GLADEFILES=`find src/subscription_manager/gui/data -name "*.glade"`
 
-rhsmcertd: src/rhsmcertd.c bin
-	${CC} ${CFLAGS} ${RHSMCERTD_FLAGS} src/rhsmcertd.c -o bin/rhsmcertd
+rhsmcertd: $(DAEMONS_SRC_DIR)/rhsmcertd.c bin
+	$(CC) $(CFLAGS) $(RHSMCERTD_FLAGS) $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd
 
 check-syntax:
-	${CC} ${CFLAGS} ${ICON_FLAGS} -o nul -S $(CHK_SOURCES)
+	$(CC) $(CFLAGS) $(ICON_FLAGS) -o nul -S $(CHK_SOURCES)
 
 
-ICON_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify gconf-2.0 dbus-glib-1`
+ICON_FLAGS = `pkg-config --cflags --libs gtk+-2.0 libnotify gconf-2.0 dbus-glib-1`
 
-rhsm-icon: src/rhsm_icon.c bin
-	${CC} ${CFLAGS} ${ICON_FLAGS} -o bin/rhsm-icon src/rhsm_icon.c;\
+rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c bin
+	$(CC) $(CFLAGS) $(ICON_FLAGS) -o bin/rhsm-icon $(RHSM_ICON_SRC_DIR)/rhsm_icon.c;\
 
 dbus-service-install:
-	install -d ${PREFIX}/etc/dbus-1/system.d
-	install -d ${PREFIX}/${INSTALL_DIR}/dbus-1/system-services
-	install -d ${PREFIX}/usr/libexec
-	install -d ${PREFIX}/etc/bash_completion.d
+	install -d $(PREFIX)/etc/dbus-1/system.d
+	install -d $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
+	install -d $(PREFIX)/usr/libexec
+	install -d $(PREFIX)/etc/bash_completion.d
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.conf \
-		${PREFIX}/etc/dbus-1/system.d
+		$(PREFIX)/etc/dbus-1/system.d
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.service \
-		${PREFIX}/${INSTALL_DIR}/dbus-1/system-services
-	install -m 744 src/rhsm_d.py \
-		${PREFIX}/usr/libexec/rhsmd
+		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
+	install -m 744 $(DAEMONS_SRC_DIR)/rhsm_d.py \
+		$(PREFIX)/usr/libexec/rhsmd
 
 install-conf:
-	install etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
-	install -T etc-conf/logrotate.conf ${PREFIX}/etc/logrotate.d/subscription-manager
-	install etc-conf/plugin/*.conf ${PREFIX}/etc/yum/pluginconf.d/
-	install -m 644 etc-conf/subscription-manager.completion.sh ${PREFIX}/etc/bash_completion.d/subscription-manager
-	install -m 644 etc-conf/rct.completion.sh ${PREFIX}/etc/bash_completion.d/rct
+	install etc-conf/rhsm.conf $(PREFIX)/etc/rhsm/
+	install -T etc-conf/logrotate.conf $(PREFIX)/etc/logrotate.d/subscription-manager
+	install etc-conf/plugin/*.conf $(PREFIX)/etc/yum/pluginconf.d/
+	install -m 644 etc-conf/subscription-manager.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager
+	install -m 644 etc-conf/rct.completion.sh $(PREFIX)/etc/bash_completion.d/rct
 
 install-help-files:
-	install -d ${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager
-	install -d ${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C
+	install -d $(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager
+	install -d $(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C
 	install -d \
-		${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C/figures
-	install -d ${PREFIX}/${INSTALL_DIR}/omf/subscription-manager
+		$(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C/figures
+	install -d $(PREFIX)/$(INSTALL_DIR)/omf/subscription-manager
 	install docs/subscription-manager.xml \
-		${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C
+		$(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C
 	install docs/legal.xml \
-		${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C
+		$(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C
 	install docs/figures/rhsm-subscribe-prod.png \
-		${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C/figures
+		$(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C/figures
 	install docs/figures/rhsm-status.png \
-		${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C/figures
+		$(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C/figures
 	install docs/subscription-manager-C.omf \
-		${PREFIX}/${INSTALL_DIR}/omf/subscription-manager
+		$(PREFIX)/$(INSTALL_DIR)/omf/subscription-manager
 
 install-plugins:
-	install -d ${RHSM_PLUGIN_DIR}
-#	install -m 644 -p src/rhsm-plugins/*.py ${RHSM_PLUGIN_DIR}
+	install -d $(RHSM_PLUGIN_DIR)
+#	install -m 644 -p src/rhsm-plugins/*.py $(RHSM_PLUGIN_DIR)
 
 install-plugins-conf:
 	install -d $(RHSM_PLUGIN_CONF_DIR)
@@ -106,8 +113,8 @@ install-plugins-conf:
 install-example-plugins: install-example-plugins-files install-example-plugins-conf
 
 install-example-plugins-files:
-	install -d ${RHSM_PLUGIN_DIR}
-	install -m 644 -p example-plugins/*.py ${RHSM_PLUGIN_DIR}
+	install -d $(RHSM_PLUGIN_DIR)
+	install -m 644 -p $(EXAMPLE_PLUGINS_SRC_DIR)/*.py $(RHSM_PLUGIN_DIR)
 
 install-example-plugins-conf:
 	install -d $(RHSM_PLUGIN_CONF_DIR)
@@ -117,141 +124,142 @@ install-example-plugins-conf:
 install: install-files install-conf install-help-files install-plugins-conf
 
 install-files: dbus-service-install compile-po desktop-files install-plugins
-	install -d ${CODE_DIR}/gui/data/icons
-	install -d ${CODE_DIR}/branding
-	install -d ${CODE_DIR}/migrate
-	install -d ${PREFIX}/${INSTALL_DIR}/locale/
-	install -d ${PREFIX}/usr/lib/yum-plugins/
-	install -d ${PREFIX}/usr/sbin
-	install -d ${PREFIX}/etc/rhsm
-	install -d ${PREFIX}/etc/rhsm/facts
-	install -d ${PREFIX}/etc/xdg/autostart
-	install -d ${PREFIX}/etc/cron.daily
-	install -d ${PREFIX}/etc/pam.d
-	install -d ${PREFIX}/etc/logrotate.d
-	install -d ${PREFIX}/etc/security/console.apps
-	install -d ${PREFIX}/etc/yum/pluginconf.d/
-	install -d ${PREFIX}/${INSTALL_DIR}/man/man8/
-	install -d ${PREFIX}/${INSTALL_DIR}/applications
-	install -d ${PREFIX}/var/log/rhsm
-	install -d ${PREFIX}/var/run/rhsm
-	install -d ${PREFIX}/var/lib/rhsm/facts
-	install -d ${PREFIX}/var/lib/rhsm/packages
-	install -d ${PREFIX}/var/lib/rhsm/cache
-	install -d ${PREFIX}/usr/bin
-	install -d ${PREFIX}/etc/rc.d/init.d
-	install -d ${PREFIX}/usr/share/icons/hicolor/16x16/apps
-	install -d ${PREFIX}/usr/share/icons/hicolor/22x22/apps
-	install -d ${PREFIX}/usr/share/icons/hicolor/24x24/apps
-	install -d ${PREFIX}/usr/share/icons/hicolor/32x32/apps
-	install -d ${PREFIX}/usr/share/icons/hicolor/48x48/apps
-	install -d ${PREFIX}/usr/share/icons/hicolor/scalable/apps
-	install -d ${PREFIX}/usr/share/rhn/up2date_client/firstboot/
-	if [ ${OS_VERSION} = 5 ]; then install -d ${PREFIX}/usr/share/firstboot/modules; fi
+	install -d $(CODE_DIR)/gui/data/icons
+	install -d $(CODE_DIR)/branding
+	install -d $(CODE_DIR)/migrate
+	install -d $(PREFIX)/$(INSTALL_DIR)/locale/
+	install -d $(PREFIX)/usr/lib/yum-plugins/
+	install -d $(PREFIX)/usr/sbin
+	install -d $(PREFIX)/etc/rhsm
+	install -d $(PREFIX)/etc/rhsm/facts
+	install -d $(PREFIX)/etc/xdg/autostart
+	install -d $(PREFIX)/etc/cron.daily
+	install -d $(PREFIX)/etc/pam.d
+	install -d $(PREFIX)/etc/logrotate.d
+	install -d $(PREFIX)/etc/security/console.apps
+	install -d $(PREFIX)/etc/yum/pluginconf.d/
+	install -d $(PREFIX)/$(INSTALL_DIR)/man/man8/
+	install -d $(PREFIX)/$(INSTALL_DIR)/applications
+	install -d $(PREFIX)/var/log/rhsm
+	install -d $(PREFIX)/var/run/rhsm
+	install -d $(PREFIX)/var/lib/rhsm/facts
+	install -d $(PREFIX)/var/lib/rhsm/packages
+	install -d $(PREFIX)/var/lib/rhsm/cache
+	install -d $(PREFIX)/usr/bin
+	install -d $(PREFIX)/etc/rc.d/init.d
+	install -d $(PREFIX)/usr/share/icons/hicolor/16x16/apps
+	install -d $(PREFIX)/usr/share/icons/hicolor/22x22/apps
+	install -d $(PREFIX)/usr/share/icons/hicolor/24x24/apps
+	install -d $(PREFIX)/usr/share/icons/hicolor/32x32/apps
+	install -d $(PREFIX)/usr/share/icons/hicolor/48x48/apps
+	install -d $(PREFIX)/usr/share/icons/hicolor/scalable/apps
+	install -d $(PREFIX)/usr/share/rhn/up2date_client/firstboot/
+	if [ $(OS_VERSION) = 5 ]; then install -d $(PREFIX)/usr/share/firstboot/modules; fi
 
-	install -d ${PREFIX}/usr/libexec
-	install -m 755 src/rhsmcertd-worker.py \
-		${PREFIX}/usr/libexec/rhsmcertd-worker
+	install -d $(PREFIX)/usr/libexec
+	install -m 755 $(DAEMONS_SRC_DIR)/rhsmcertd-worker.py \
+		$(PREFIX)/usr/libexec/rhsmcertd-worker
 
-	cp -R po/build/* ${PREFIX}/${INSTALL_DIR}/locale/
+	cp -R po/build/* $(PREFIX)/$(INSTALL_DIR)/locale/
 
-	install -m 644 -p ${SRC_DIR}/*.py ${CODE_DIR}
-	install -m 644 -p ${SRC_DIR}/gui/*.py ${CODE_DIR}/gui
-	install -m 644 -p ${SRC_DIR}/migrate/*.py ${CODE_DIR}/migrate
-	install -m 644 -p ${SRC_DIR}/branding/*.py ${CODE_DIR}/branding
-	install -m 644 -p src/plugins/*.py ${PREFIX}/usr/lib/yum-plugins/
+	install -m 644 -p $(SRC_DIR)/*.py $(CODE_DIR)
+	install -m 644 -p $(SRC_DIR)/gui/*.py $(CODE_DIR)/gui
+	install -m 644 -p $(SRC_DIR)/migrate/*.py $(CODE_DIR)/migrate
+	install -m 644 -p $(SRC_DIR)/branding/*.py $(CODE_DIR)/branding
+	install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/
 
-	install -m 644 ${SRC_DIR}/gui/data/*.glade ${CODE_DIR}/gui/data/
+	install -m 644 $(SRC_DIR)/gui/data/*.glade $(CODE_DIR)/gui/data/
 
 	#icons
-	install -m 644 ${SRC_DIR}/gui/data/icons/hicolor/16x16/apps/*.png \
-		${PREFIX}/usr/share/icons/hicolor/16x16/apps
-	install -m 644 ${SRC_DIR}/gui/data/icons/hicolor/22x22/apps/*.png \
-		${PREFIX}/usr/share/icons/hicolor/22x22/apps
-	install -m 644 ${SRC_DIR}/gui/data/icons/hicolor/24x24/apps/*.png \
-		${PREFIX}/usr/share/icons/hicolor/24x24/apps
-	install -m 644 ${SRC_DIR}/gui/data/icons/hicolor/32x32/apps/*.png \
-		${PREFIX}/usr/share/icons/hicolor/32x32/apps
-	install -m 644 ${SRC_DIR}/gui/data/icons/hicolor/48x48/apps/*.png \
-		${PREFIX}/usr/share/icons/hicolor/48x48/apps
-	install -m 644 ${SRC_DIR}/gui/data/icons/hicolor/scalable/apps/*.svg \
-		${PREFIX}/usr/share/icons/hicolor/scalable/apps
-	install -m 644 ${SRC_DIR}/gui/data/icons/*.svg \
-		${CODE_DIR}/gui/data/icons
+	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/16x16/apps/*.png \
+		$(PREFIX)/usr/share/icons/hicolor/16x16/apps
+	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/22x22/apps/*.png \
+		$(PREFIX)/usr/share/icons/hicolor/22x22/apps
+	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/24x24/apps/*.png \
+		$(PREFIX)/usr/share/icons/hicolor/24x24/apps
+	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/32x32/apps/*.png \
+		$(PREFIX)/usr/share/icons/hicolor/32x32/apps
+	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/48x48/apps/*.png \
+		$(PREFIX)/usr/share/icons/hicolor/48x48/apps
+	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/scalable/apps/*.svg \
+		$(PREFIX)/usr/share/icons/hicolor/scalable/apps
+	install -m 644 $(SRC_DIR)/gui/data/icons/*.svg \
+		$(CODE_DIR)/gui/data/icons
 
-	install bin/subscription-manager ${PREFIX}/usr/sbin
-	install bin/rhn-migrate-classic-to-rhsm  ${PREFIX}/usr/sbin
-	if [ ${OS_VERSION} = 5 ]; then install bin/install-num-migrate-to-rhsm ${PREFIX}/usr/sbin; fi
-	install bin/subscription-manager-gui ${PREFIX}/usr/sbin
-	install bin/rhsmcertd ${PREFIX}/usr/bin
+	install bin/subscription-manager $(PREFIX)/usr/sbin
+	install bin/rhn-migrate-classic-to-rhsm  $(PREFIX)/usr/sbin
+	if [ $(OS_VERSION) = 5 ]; then install bin/install-num-migrate-to-rhsm $(PREFIX)/usr/sbin; fi
+	install bin/subscription-manager-gui $(PREFIX)/usr/sbin
+	install bin/rhsmcertd $(PREFIX)/usr/bin
 
 	# Set up rhsmcertd daemon. If installing on Fedora 17+ or RHEL 7+
 	# we prefer systemd over sysv as this is the new trend.
-	if [ ${OS} = Fedora ] ; then \
-		if [ ${OS_VERSION} -lt 17 ]; then \
+	if [ $(OS) = Fedora ] ; then \
+		if [ $(OS_VERSION) -lt 17 ]; then \
 			install etc-conf/rhsmcertd.init.d \
-				${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
+				$(PREFIX)/etc/rc.d/init.d/rhsmcertd; \
 		else \
-			install -d ${SYSTEMD_INST_DIR}; \
-			install -d ${PREFIX}/usr/lib/tmpfiles.d; \
-			install etc-conf/rhsmcertd.service ${SYSTEMD_INST_DIR}; \
+			install -d $(SYSTEMD_INST_DIR); \
+			install -d $(PREFIX)/usr/lib/tmpfiles.d; \
+			install etc-conf/rhsmcertd.service $(SYSTEMD_INST_DIR); \
 			install etc-conf/subscription-manager.conf.tmpfiles \
-				${PREFIX}/usr/lib/tmpfiles.d/subscription-manager.conf; \
+				$(PREFIX)/usr/lib/tmpfiles.d/subscription-manager.conf; \
 		fi; \
 	else \
-		if [ ${OS_VERSION} -lt 7 ]; then \
+		if [ $(OS_VERSION) -lt 7 ]; then \
 			install etc-conf/rhsmcertd.init.d \
-				${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
+				$(PREFIX)/etc/rc.d/init.d/rhsmcertd; \
 		else \
-			install -d ${SYSTEMD_INST_DIR}; \
-			install -d ${PREFIX}/usr/lib/tmpfiles.d; \
-			install etc-conf/rhsmcertd.service ${SYSTEMD_INST_DIR}; \
+			install -d $(SYSTEMD_INST_DIR); \
+			install -d $(PREFIX)/usr/lib/tmpfiles.d; \
+			install etc-conf/rhsmcertd.service $(SYSTEMD_INST_DIR); \
 			install etc-conf/subscription-manager.conf.tmpfiles \
-				${PREFIX}/usr/lib/tmpfiles.d/subscription-manager.conf; \
+				$(PREFIX)/usr/lib/tmpfiles.d/subscription-manager.conf; \
 		fi; \
 	fi; \
 
 	# RHEL 5 Customizations:
-	if [ ${OS_VERSION} = 5 ]; then \
-		install -m644 ${SRC_DIR}/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot;\
-		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_login.py ${PREFIX}/usr/share/firstboot/modules/;\
+	if [ $(OS_VERSION) = 5 ]; then \
+		install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/rhn/up2date_client/firstboot;\
+		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_login.py $(PREFIX)/usr/share/firstboot/modules/;\
 	else \
-		install -m644 ${SRC_DIR}/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot;\
+		install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/rhn/up2date_client/firstboot;\
 	fi;\
 
-	install -m 644 man/rhn-migrate-classic-to-rhsm.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
-	install -m 644 man/rhsmcertd.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
-	install -m 644 man/rhsm-icon.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
-	install -m 644 man/subscription-manager.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
-	install -m 644 man/subscription-manager-gui.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
-	install -m 644 man/rct.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
-	if [ ${OS_VERSION} = 5 ]; then install -m 644 man/install-num-migrate-to-rhsm.8 ${PREFIX}/${INSTALL_DIR}/man/man8/; fi
+	install -m 644 man/rhn-migrate-classic-to-rhsm.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
+	install -m 644 man/rhsmcertd.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
+	install -m 644 man/rhsm-icon.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
+	install -m 644 man/subscription-manager.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
+	install -m 644 man/subscription-manager-gui.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
+	install -m 644 man/rct.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
+	if [ $(OS_VERSION) = 5 ]; then install -m 644 man/install-num-migrate-to-rhsm.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/; fi
 
 	install -m 644 etc-conf/rhsm-icon.desktop \
-		${PREFIX}/etc/xdg/autostart;\
-	install bin/rhsm-icon ${PREFIX}/usr/bin;\
+		$(PREFIX)/etc/xdg/autostart;\
+	install bin/rhsm-icon $(PREFIX)/usr/bin;\
 
 	install -m 755 etc-conf/rhsmd.cron \
-		${PREFIX}/etc/cron.daily/rhsmd
+		$(PREFIX)/etc/cron.daily/rhsmd
 	install -m 644 etc-conf/subscription-manager-gui.desktop \
-		${PREFIX}/${INSTALL_DIR}/applications
+		$(PREFIX)/$(INSTALL_DIR)/applications
 
-	ln -sf /usr/bin/consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
-	ln -sf /usr/bin/consolehelper ${PREFIX}/usr/bin/subscription-manager
+	ln -sf /usr/bin/consolehelper $(PREFIX)/usr/bin/subscription-manager-gui
+	ln -sf /usr/bin/consolehelper $(PREFIX)/usr/bin/subscription-manager
 
 	install -m 644 etc-conf/subscription-manager-gui.pam \
-		${PREFIX}/etc/pam.d/subscription-manager-gui
+		$(PREFIX)/etc/pam.d/subscription-manager-gui
 	install -m 644 etc-conf/subscription-manager-gui.console \
-		${PREFIX}/etc/security/console.apps/subscription-manager-gui
+		$(PREFIX)/etc/security/console.apps/subscription-manager-gui
 
 	install -m 644 etc-conf/subscription-manager.pam \
-		${PREFIX}/etc/pam.d/subscription-manager
+		$(PREFIX)/etc/pam.d/subscription-manager
 	install -m 644 etc-conf/subscription-manager.console \
-		${PREFIX}/etc/security/console.apps/subscription-manager
+		$(PREFIX)/etc/security/console.apps/subscription-manager
 
-	install -d ${RCT_CODE_DIR}
-	install -m 644 -p ${RCT_SRC_DIR}/*.py ${RCT_CODE_DIR}
-	install bin/rct ${PREFIX}/usr/bin
+	install -d $(RCT_CODE_DIR)
+	install -m 644 -p $(RCT_SRC_DIR)/*.py $(RCT_CODE_DIR)
+	install bin/rct $(PREFIX)/usr/bin
+
 
 
 check:
@@ -293,14 +301,14 @@ desktop-files: etc-conf/rhsm-icon.desktop \
 po/POTFILES.in:
 	# generate the POTFILES.in file expected by intltool. it wants one
 	# file per line, but we're lazy.
-	find ${SRC_DIR}/ -name "*.py" > po/POTFILES.in
-	find ${SRC_DIR}/gui/data/ -name "*.glade" >> po/POTFILES.in
-	find ${BIN_DIR} -name "*-to-rhsm" >> po/POTFILES.in
-	find ${BIN_DIR} -name "subscription-manager*" >> po/POTFILES.in
-	find ${BIN_DIR} -name "rct" >> po/POTFILES.in
+	find $(SRC_DIR)/ $(RCT_SRC_DIR) $(DAEMONS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) -name "*.py" > po/POTFILES.in
+	find $(SRC_DIR)/gui/data/ -name "*.glade" >> po/POTFILES.in
+	find $(BIN_DIR) -name "*-to-rhsm" >> po/POTFILES.in
+	find $(BIN_DIR) -name "subscription-manager*" >> po/POTFILES.in
+	find $(BIN_DIR) -name "rct" >> po/POTFILES.in
 	find src/ -name "*.c" >> po/POTFILES.in
 	find etc-conf/ -name "*.desktop.in" >> po/POTFILES.in
-	find ${RCT_SRC_DIR}/ -name "*.py" >> po/POTFILES.in
+	find $(RCT_SRC_DIR)/ -name "*.py" >> po/POTFILES.in
 
 .PHONY: po/POTFILES.in %.desktop
 
@@ -431,7 +439,7 @@ gladelint:
     grep -nP "property name=\"orientation\"" $(GLADEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-INDENT_IGNORE="E121,E122,E123,E124,E125,E126,E127,E128"
+INDENT_IGNORE = "E121,E122,E123,E124,E125,E126,E127,E128"
 pep8:
 	@TMPFILE=`mktemp` || exit 1; \
 	pep8 --ignore E501,$(INDENT_IGNORE) --exclude ".#*" --repeat src $(STYLEFILES) | tee $$TMPFILE; \
