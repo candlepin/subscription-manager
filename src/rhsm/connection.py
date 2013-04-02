@@ -737,11 +737,32 @@ class UEPConnection:
         method = '/consumers/%s/compliance' % self.sanitize(uuid)
         return self.conn.request_get(method)
 
+    def createOwner(self, ownerKey, ownerDisplayName=None):
+        params = {"key": ownerKey}
+        if ownerDisplayName:
+            params['displayName'] = ownerDisplayName
+        method = '/owners/'
+        return self.conn.request_post(method, params)
+
     def getOwner(self, uuid):
         """
         Returns an owner object with pem/key for existing consumers
         """
         method = '/consumers/%s/owner' % self.sanitize(uuid)
+        return self.conn.request_get(method)
+
+    def deleteOwner(self, key):
+        """
+        deletes an owner
+        """
+        method = '/owners/%s' % self.sanitize(key)
+        return self.conn.request_delete(method)
+
+    def getOwners(self):
+        """
+        Returns a list of all owners
+        """
+        method = '/owners'
         return self.conn.request_get(method)
 
     def getOwnerList(self, username):
