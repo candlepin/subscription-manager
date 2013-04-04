@@ -18,9 +18,10 @@ import logging
 from rhsm.certificate import GMT
 import subscription_manager.injection as inj
 
+log = logging.getLogger('rhsm-app.' + __name__)
+
 from subscription_manager.isodate import parse_date
 
-log = logging.getLogger('rhsm-app.' + __name__)
 
 import gettext
 _ = gettext.gettext
