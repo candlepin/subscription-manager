@@ -15,9 +15,8 @@
 
 import os
 import simplejson as json
-import shutil
-import tempfile
 from zipfile import ZipFile
+from cStringIO import StringIO
 from rhsm import certificate
 from rct.commands import RCTCliCommand
 from rct.printing import xstr
@@ -40,6 +39,37 @@ def get_value(json_dict, path):
 
 
 class ZipExtractAll(ZipFile):
+
+    inner_zip = None
+
+    def _get_inner_zip(self):
+        if self.inner_zip is None:
+            output = StringIO(self.read(RCTManifestCommand.INNER_FILE))
+            self.inner_zip = ZipExtractAll(output)
+        return self.inner_zip
+
+    def _read_file(self, file_path, is_inner=False):
+        try:
+            output = StringIO(self.read(file_path))
+            result = output.getvalue()
+            output.close()
+        except KeyError:
+            try:
+                if is_inner:
+                    raise KeyError
+                result = self._get_inner_zip()._read_file(file_path, True)
+            except KeyError:
+                raise Exception(_('Unable to find file "%s" in manifest.') % file_path)
+        return result
+
+    def _get_entitlements(self):
+        results = []
+        in_zip = self._get_inner_zip()
+        for filename in in_zip.namelist():
+            (read_path, read_file) = os.path.split(filename)
+            if (read_path == os.path.join("export", "entitlements")) and (len(read_file) > 0):
+                results.append(filename)
+        return results
 
     def _open_excl(self, path):
         return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL), 'w')
@@ -92,6 +122,9 @@ class RCTManifestCommand(RCTCliCommand):
         if not os.path.isfile(manifest_file):
             raise InvalidCLIOptionError(_("The specified manifest file does not exist."))
 
+    def _get_zipfile(self):
+        return ZipExtractAll(self._get_file_from_args(), 'r')
+
     def _extract_manifest(self, location):
         # Extract the outer file
         archive = ZipExtractAll(self._get_file_from_args(), 'r')
@@ -132,28 +165,26 @@ class CatManifestCommand(RCTManifestCommand):
         if whitespace:
             print ""
 
-    def _print_general(self, location):
+    def _print_general(self, zip_archive):
         # Print out general data
-        part = open(os.path.join(location, "export", "meta.json"))
-        data = json.loads(part.read())
+        part = zip_archive._read_file(os.path.join("export", "meta.json"))
+        data = json.loads(part)
         to_print = []
         to_print.append((_("Server"), get_value(data, "webAppPrefix")))
         to_print.append((_("Server Version"), get_value(data, "version")))
         to_print.append((_("Date Created"), get_value(data, "created")))
         to_print.append((_("Creator"), get_value(data, "principalName")))
         self._print_section(_("General:"), to_print)
-        part.close()
 
-    def _print_consumer(self, location):
+    def _print_consumer(self, zip_archive):
         # Print out the consumer data
-        part = open(os.path.join(location, "export", "consumer.json"))
-        data = json.loads(part.read())
+        part = zip_archive._read_file(os.path.join("export", "consumer.json"))
+        data = json.loads(part)
         to_print = []
         to_print.append((_("Name"), get_value(data, "name")))
         to_print.append((_("UUID"), get_value(data, "uuid")))
         to_print.append((_("Type"), get_value(data, "type.label")))
         self._print_section(_("Consumer:"), to_print)
-        part.close()
 
     def _get_product_attribute(self, name, data):
         return_value = None
@@ -164,16 +195,15 @@ class CatManifestCommand(RCTManifestCommand):
 
         return return_value
 
-    def _print_products(self, location):
-        ent_dir = os.path.join(location, "export", "entitlements")
-
-        if not os.path.exists(ent_dir):
+    def _print_products(self, zip_archive):
+        entitlements = zip_archive._get_entitlements()
+        if len(entitlements) == 0:
             self._print_section(_("Subscriptions:"), [["None"]], 1, True)
             return
 
-        for ent_file in os.listdir(ent_dir):
-            part = open(os.path.join(ent_dir, ent_file))
-            data = json.loads(part.read())
+        for ent_file in entitlements:
+            part = zip_archive._read_file(ent_file)
+            data = json.loads(part)
             to_print = []
             to_print.append((_("Name"), get_value(data, "pool.productName")))
             to_print.append((_("Quantity"), get_value(data, "quantity")))
@@ -195,10 +225,9 @@ class CatManifestCommand(RCTManifestCommand):
 
             cert_file = os.path.join("export", "entitlement_certificates", "%s.pem" % serial)
             to_print.append((_("Certificate File"), cert_file))
-            cert_file = os.path.join(location, cert_file)
 
             try:
-                cert = certificate.create_from_file(cert_file)
+                cert = certificate.create_from_pem(zip_archive._read_file(cert_file))
             except certificate.CertificateException, ce:
                 raise certificate.CertificateException(
                         _("Unable to read certificate file '%s': %s") % (cert_file,
@@ -219,14 +248,12 @@ class CatManifestCommand(RCTManifestCommand):
             for item in cert.content:
                 to_print.append([item.url])
             self._print_section(_("Content Sets:"), sorted(to_print), 2, True)
-            part.close()
 
     def _do_command(self):
         """
         Does the work that this command intends.
         """
-        temp = tempfile.mkdtemp()
-        self._extract_manifest(temp)
+        temp = self._get_zipfile()
         # Print out the header
         print("\n+-------------------------------------------+")
         print(_("\tManifest"))
@@ -235,8 +262,6 @@ class CatManifestCommand(RCTManifestCommand):
         self._print_general(temp)
         self._print_consumer(temp)
         self._print_products(temp)
-
-        shutil.rmtree(temp)
 
 
 class DumpManifestCommand(RCTManifestCommand):
