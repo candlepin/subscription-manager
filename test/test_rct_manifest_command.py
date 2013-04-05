@@ -104,6 +104,9 @@ class RCTManifestExtractTests(unittest.TestCase):
         archive = ZipExtractAll(zip_file_object, "w", compression=zipfile.ZIP_STORED)
         archive.writestr(r"\\nethost\share\whatever", "this is weird")
 
+        archive.close()
+        archive = ZipExtractAll(zip_file_object, "r", compression=zipfile.ZIP_STORED)
+
         tmp_dir = tempfile.mkdtemp()
         archive.extractall(tmp_dir)
         archive.close()
@@ -116,6 +119,9 @@ class RCTManifestExtractTests(unittest.TestCase):
         zip_file_object = StringIO()
         archive = ZipExtractAll(zip_file_object, "w", compression=zipfile.ZIP_STORED)
         archive.writestr("./some/path", "this is okay I think, though odd")
+
+        archive.close()
+        archive = ZipExtractAll(zip_file_object, "r", compression=zipfile.ZIP_STORED)
 
         tmp_dir = tempfile.mkdtemp()
         archive.extractall(tmp_dir)
