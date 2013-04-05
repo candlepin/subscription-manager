@@ -54,7 +54,7 @@ class ZipExtractAll(ZipFile):
     def _get_inner_zip(self):
         if self.inner_zip is None:
             output = StringIO(self.read(RCTManifestCommand.INNER_FILE))
-            self.inner_zip = ZipExtractAll(output)
+            self.inner_zip = ZipExtractAll(output, 'r')
         return self.inner_zip
 
     def _read_file(self, file_path, is_inner=False):
@@ -85,7 +85,7 @@ class ZipExtractAll(ZipFile):
 
     def _write_file(self, output_path, archive_path):
         outfile = self._open_excl(output_path)
-        outfile.write(self.read(archive_path, 'r'))
+        outfile.write(self.read(archive_path))
         outfile.close()
 
     def _is_secure(self, base, new_file):
@@ -284,8 +284,8 @@ class DumpManifestCommand(RCTManifestCommand):
         """
         Does the work that this command intends.
         """
-        self._extract_manifest(self.options.destination)
         if self.options.destination:
+            self._extract_manifest(self.options.destination)
             print _("The manifest has been dumped to the %s directory" % self.options.destination)
         else:
             print _("The manifest has been dumped to the current directory")
