@@ -39,6 +39,15 @@ def get_value(json_dict, path):
 
 
 class ZipExtractAll(ZipFile):
+    """extend ZipFile with a safer extractall
+
+    Zipfile() does not support extractall on python2.4, and the 2.6 versions
+    are known to be unsafe in how they extract files. 2.6 version does not
+    validate that files are within the archive root, or check that files are
+    created safely.
+
+    Contains helper methods for manipulating and reading
+    the zipfile more easily in memory"""
 
     inner_zip = None
 
@@ -121,9 +130,6 @@ class RCTManifestCommand(RCTCliCommand):
 
         if not os.path.isfile(manifest_file):
             raise InvalidCLIOptionError(_("The specified manifest file does not exist."))
-
-    def _get_zipfile(self):
-        return ZipExtractAll(self._get_file_from_args(), 'r')
 
     def _extract_manifest(self, location):
         # Extract the outer file
@@ -253,7 +259,7 @@ class CatManifestCommand(RCTManifestCommand):
         """
         Does the work that this command intends.
         """
-        temp = self._get_zipfile()
+        temp = ZipExtractAll(self._get_file_from_args(), 'r')
         # Print out the header
         print("\n+-------------------------------------------+")
         print(_("\tManifest"))
