@@ -39,7 +39,7 @@ RHSMCERTD_FLAGS=`pkg-config --cflags --libs glib-2.0`
 PYFILES=`find  src/ -name "*.py"`
 # Ignore certdata.py from style checks as tabs and trailing
 # whitespace are required for testing.
-TESTFILES=`find  test/ \( ! -name certdata.py \) -name "*.py"`
+TESTFILES=`find  test/ \( ! -name certdata.py ! -name manifestdata.py \) -name "*.py"`
 STYLEFILES=$(PYFILES) $(BIN_FILES) $(TESTFILES)
 GLADEFILES=`find src/subscription_manager/gui/data -name "*.glade"`
 
