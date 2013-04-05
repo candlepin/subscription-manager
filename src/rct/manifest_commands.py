@@ -85,7 +85,7 @@ class ZipExtractAll(ZipFile):
 
     def _write_file(self, output_path, archive_path):
         outfile = self._open_excl(output_path)
-        outfile.write(self.read(archive_path))
+        outfile.write(self.read(archive_path, 'r'))
         outfile.close()
 
     def _is_secure(self, base, new_file):
