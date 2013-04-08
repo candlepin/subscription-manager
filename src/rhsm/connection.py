@@ -416,8 +416,8 @@ class Restlib(object):
 
         headers = self.headers
         if body is None:
-            headers = dict(self.headers.items() + \
-                    {"Content-Length": "0"}.items())
+            headers = dict(self.headers.items() +
+                           {"Content-Length": "0"}.items())
         try:
             conn.request(request_type, handler, body=body, headers=headers)
         except SSLError, e:
@@ -791,8 +791,8 @@ class UEPConnection:
         This will cause the UEP to look for one or more pools which provide
         access to the given product.
         """
-        args = "&".join(["product=" + product.replace(" ", "%20") \
-                for product in products])
+        args = "&".join(["product=" + product.replace(" ", "%20")
+                        for product in products])
         method = "/consumers/%s/entitlements?%s" % (str(consumerId), args)
         return self.conn.request_post(method)
 
