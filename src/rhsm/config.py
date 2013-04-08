@@ -135,6 +135,6 @@ def initConfig(config_file=None):
         CFG = CFG
     except NameError:
         CFG = None
-    if CFG == None:
+    if CFG is None:
         CFG = RhsmConfigParser(config_file=DEFAULT_CONFIG_PATH, defaults=DEFAULTS)
     return CFG
