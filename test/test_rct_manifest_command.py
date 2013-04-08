@@ -26,6 +26,7 @@ from rct.manifest_commands import get_value
 from rct.manifest_commands import ZipExtractAll
 from rct.manifest_commands import RCTManifestCommand
 from rct.manifest_commands import CatManifestCommand
+from rct.manifest_commands import DumpManifestCommand
 from stubs import MockStdout, MockStderr
 
 
@@ -85,6 +86,35 @@ class RCTManifestCommandTests(unittest.TestCase):
         self.assertTrue(os.path.exists(os.path.join(tmp_dir, "export")))
 
         shutil.rmtree(tmp_dir)
+
+    def test_dump_manifest_current(self):
+        original_directory = os.getcwd()
+        new_directory = tempfile.mkdtemp()
+        os.chdir(new_directory)
+        mancommand = DumpManifestCommand()
+        mancommand.args = [_build_valid_manifest()]
+
+        #This makes sure there is a 'None' at 'self.options.destination'
+        mancommand.options = mancommand
+        mancommand.destination = None
+
+        mancommand._do_command()
+        self.assertTrue(os.path.exists(os.path.join(new_directory, "export")))
+        os.chdir(original_directory)
+        shutil.rmtree(new_directory)
+
+    def test_dump_manifest_directory(self):
+        new_directory = tempfile.mkdtemp()
+        mancommand = DumpManifestCommand()
+        mancommand.args = [_build_valid_manifest()]
+
+        #This makes sure the temp directory is referenced at 'self.options.destination'
+        mancommand.options = mancommand
+        mancommand.destination = new_directory
+
+        mancommand._do_command()
+        self.assertTrue(os.path.exists(os.path.join(new_directory, "export")))
+        shutil.rmtree(new_directory)
 
 
 class RCTManifestExtractTests(unittest.TestCase):
