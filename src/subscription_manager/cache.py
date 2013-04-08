@@ -109,11 +109,11 @@ class CacheManager(object):
         raise NotImplementedError
 
     @classmethod
-    def delete_cache(self):
+    def delete_cache(cls):
         """ Delete the cache for this collection from disk. """
-        if os.path.exists(self.CACHE_FILE):
-            log.info("Deleting cache: %s" % self.CACHE_FILE)
-            os.remove(self.CACHE_FILE)
+        if os.path.exists(cls.CACHE_FILE):
+            log.info("Deleting cache: %s" % cls.CACHE_FILE)
+            os.remove(cls.CACHE_FILE)
 
     def _cache_exists(self):
         return os.path.exists(self.CACHE_FILE)
