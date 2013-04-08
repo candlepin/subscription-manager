@@ -26,7 +26,6 @@ import socket
 import rhsm.connection as connection
 import gettext
 _ = gettext.gettext
-import rhsm.connection as connection
 
 from rhsm.config import initConfig
 from rhsm.profile import get_profile, RPMProfile
