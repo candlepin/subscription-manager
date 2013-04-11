@@ -44,6 +44,10 @@ class ProductPrinter(object):
 class OrderPrinter(object):
 
     def as_str(self, order):
+
+        if order is None:
+            return ''
+
         s = []
         s.append("%s:" % _("Order"))
         s.append("\t%s: %s" % (_("Name"), xstr(order.name)))
@@ -158,7 +162,7 @@ class EntitlementCertificatePrinter(ProductCertificatePrinter):
         content_printer = ContentPrinter()
 
         s = []
-        if not self.skip_content:
+        if not self.skip_content and cert.content:
             # sort content by label - makes content easier to read/locate
             sorted_content = sorted(cert.content, key=lambda content: content.label)
             for c in sorted_content:
