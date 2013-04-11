@@ -390,7 +390,7 @@ class Restlib(object):
             context.post_connection_check = NoOpChecker()
         else:
             context.set_verify(SSL.verify_fail_if_no_peer_cert, self.ssl_verify_depth)
-            if self.ca_dir != None:
+            if self.ca_dir is not None:
                 log.debug('Loading CA PEM certificates from: %s', self.ca_dir)
                 self._load_ca_certificates(context)
         if self.cert_file and os.path.exists(self.cert_file):
@@ -692,13 +692,13 @@ class UEPConnection:
         example parsing is in subscription-manager's format_for_server() method.
         """
         params = {}
-        if installed_products != None:
+        if installed_products is not None:
             params['installedProducts'] = installed_products
-        if guest_uuids != None:
+        if guest_uuids is not None:
             params['guestIds'] = guest_uuids
-        if facts != None:
+        if facts is not None:
             params['facts'] = facts
-        if release != None:
+        if release is not None:
             params['releaseVer'] = release
 
         # The server will reject a service level that is not available

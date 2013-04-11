@@ -689,7 +689,7 @@ class Content(object):
         # Convert possible incoming None or string (0/1) to a boolean:
         # If enabled isn't specified in cert we assume True.
         self.enabled = False
-        if enabled is None or enabled == "1" or enabled == True:
+        if enabled is None or enabled == "1" or enabled is True:
             self.enabled = True
 
         self.metadata_expire = metadata_expire
