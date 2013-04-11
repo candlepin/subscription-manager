@@ -334,11 +334,11 @@ class StubConsumerIdentity:
         return StubConsumerIdentity("", "")
 
     @classmethod
-    def certpath(self):
+    def certpath(cls):
         return ""
 
     @classmethod
-    def keypath(self):
+    def keypath(cls):
         return ""
 
 

@@ -65,7 +65,7 @@ class RepoLib(DataLib):
         return repo_file.path
 
     @classmethod
-    def delete_repo_file(self):
+    def delete_repo_file(cls):
         repo_file = RepoFile()
         if os.path.exists(repo_file.path):
             os.unlink(repo_file.path)
