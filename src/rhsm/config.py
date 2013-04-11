@@ -107,7 +107,7 @@ class RhsmConfigParser(SafeConfigParser):
             # strings (ie, 'http') here with getservbyname
         except (ValueError, TypeError):
             raise ValueError(
-                "Section: %s, Property: %s - Integer value expected" \
+                "Section: %s, Property: %s - Integer value expected"
                 % (section, prop))
         return value_int
 
