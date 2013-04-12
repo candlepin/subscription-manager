@@ -393,7 +393,7 @@ class CliCommand(AbstractCLICommand):
                  self.server_port,
                  self.server_prefix) = parse_server_info(self.options.server_url)
             except ServerUrlParseError, e:
-                print _("Error parsing serverurl: %s" % e.msg)
+                print _("Error parsing serverurl: %s") % e.msg
                 sys.exit(-1)
 
             # this trys to actually connect to the server and ping it
@@ -401,10 +401,10 @@ class CliCommand(AbstractCLICommand):
                 if not is_valid_server_info(self.server_hostname,
                                             self.server_port,
                                             self.server_prefix):
-                    print _("Unable to reach the server at %s:%s%s" %
+                    print _("Unable to reach the server at %s:%s%s") % \
                             (self.server_hostname,
                              self.server_port,
-                             self.server_prefix))
+                             self.server_prefix)
                     sys.exit(-1)
             except MissingCaCertException:
                 print _("Error: CA certificate for subscription service has not been installed.")
@@ -422,7 +422,7 @@ class CliCommand(AbstractCLICommand):
                  baseurl_server_port,
                  baseurl_server_prefix) = parse_baseurl_info(self.options.base_url)
             except ServerUrlParseError, e:
-                print _("Error parsing baseurl: %s" % e.msg)
+                print _("Error parsing baseurl: %s") % e.msg
                 sys.exit(-1)
 
             cfg.set("rhsm", "baseurl", format_baseurl(baseurl_server_hostname,
@@ -1579,8 +1579,8 @@ class RemoveCommand(CliCommand):
                     for ent in self.entitlement_dir.list():
                         if str(ent.serial) in self.options.serials:
                             ent.delete()
-                            print _("Subscription with serial number %s removed from this system"
-                                % str(ent.serial))
+                            print _("Subscription with serial number %s removed from this system") \
+                                    % str(ent.serial)
                             count = count + 1
                     if count == 0:
                         return_code = 1
@@ -1839,7 +1839,7 @@ class ReposCommand(CliCommand):
             if not found:
                 rc = 1
                 print _("Error: %s is not a valid repo ID. "
-                        "Use --list option to see valid repos." % item)
+                        "Use --list option to see valid repos.") % item
         if change_repos:
             repo_file = RepoFile()
             repo_file.read()
