@@ -86,7 +86,7 @@ class AboutDialog(object):
     def _set_next_update(self, next_update_label):
         try:
             next_update = long(file(UPDATE_FILE).read())
-        except:
+        except Exception:
             next_update = None
 
         if next_update:

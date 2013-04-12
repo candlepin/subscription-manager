@@ -320,7 +320,7 @@ class MainWindow(widgets.GladeWidget):
             try:
                 consumer = self.backend.uep.getConsumer(self.identity.uuid, None, None)
                 can_redeem = consumer['canActivate']
-            except:
+            except Exception:
                 can_redeem = False
 
         if can_redeem:

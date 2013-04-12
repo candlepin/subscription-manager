@@ -97,7 +97,7 @@ def handle_gui_exception(e, msg, parent, formatMsg=True, logMsg=None):
                     message = msg % linkify(e.msg)
                 else:
                     message = linkify(e.msg)
-            except:
+            except Exception:
                 message = msg
 
             errorWindow(message, parent=parent)
@@ -109,7 +109,7 @@ def handle_gui_exception(e, msg, parent, formatMsg=True, logMsg=None):
         try:
             interpolatedStr = msg % e
             errorWindow(interpolatedStr, parent=parent)
-        except:
+        except Exception:
             errorWindow(msg, parent=parent)
 
 

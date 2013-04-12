@@ -177,8 +177,8 @@ class Hardware:
                 if key in useful:
                     nkey = '.'.join(["memory", key.lower()])
                     self.meminfo[nkey] = "%s" % int(value)
-        except:
-            print _("Error reading system memory information:"), sys.exc_type
+        except Exception, e:
+            print _("Error reading system memory information:"), e
         self.allhw.update(self.meminfo)
         return self.meminfo
 
@@ -251,8 +251,8 @@ class Hardware:
                 key, value = info.split(":")
                 nkey = '.'.join(["lscpu", key.lower().strip().replace(" ", "_")])
                 self.lscpuinfo[nkey] = "%s" % value.strip()
-        except:
-            print _("Error reading system CPU information:"), sys.exc_type
+        except Exception, e:
+            print _("Error reading system CPU information:"), e
         self.allhw.update(self.lscpuinfo)
         return self.lscpuinfo
 
@@ -266,18 +266,18 @@ class Hardware:
                 info = socket.getaddrinfo(host, None, socket.AF_INET, socket.SOCK_STREAM)
                 ip_list = set([x[4][0] for x in info])
                 self.netinfo['network.ipv4_address'] = ', '.join(ip_list)
-            except:
+            except Exception:
                 self.netinfo['network.ipv4_address'] = "127.0.0.1"
 
             try:
                 info = socket.getaddrinfo(host, None, socket.AF_INET6, socket.SOCK_STREAM)
                 ip_list = set([x[4][0] for x in info])
                 self.netinfo['network.ipv6_address'] = ', '.join(ip_list)
-            except:
+            except Exception:
                 self.netinfo['network.ipv6_address'] = "::1"
 
-        except:
-            print _("Error reading networking information:"), sys.exc_type
+        except Exception, e:
+            print _("Error reading networking information:"), e
         self.allhw.update(self.netinfo)
         return self.netinfo
 
@@ -366,7 +366,7 @@ class Hardware:
                 try:
                     master = os.readlink('/sys/class/net/%s/master' % info.device)
                 #FIXME
-                except:
+                except Exception:
                     master = None
 
                 if master:
