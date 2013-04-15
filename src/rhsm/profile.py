@@ -10,9 +10,10 @@
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
-import rpm
 import logging
 import simplejson as json
+
+import rpm
 
 log = logging.getLogger(__name__)
 

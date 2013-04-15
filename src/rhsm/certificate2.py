@@ -13,13 +13,13 @@
 # in this software or its documentation.
 #
 
-import zlib
+import base64
 import logging
 import os
-import base64
 import posixpath
 import re
 import simplejson as json
+import zlib
 
 log = logging.getLogger(__name__)
 

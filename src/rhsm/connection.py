@@ -14,17 +14,17 @@
 # in this software or its documentation.
 #
 
-import sys
-import socket
-import locale
-import urllib
-import simplejson as json
 import base64
-import os
-import logging
-import datetime
-import time
 import certificate
+import datetime
+import locale
+import logging
+import os
+import simplejson as json
+import socket
+import sys
+import time
+import urllib
 
 from M2Crypto import SSL, httpslib
 from M2Crypto.SSL import SSLError
