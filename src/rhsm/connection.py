@@ -55,7 +55,7 @@ class NullHandler(logging.Handler):
 def safe_int(value, safe_value=None):
     try:
         return int(value)
-    except:
+    except Exception:
         return safe_value
 
 
