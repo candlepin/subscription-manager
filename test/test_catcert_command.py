@@ -14,10 +14,13 @@
 #
 import sys
 import unittest
+
 import certdata
-from rhsm.certificate import create_from_pem
+import fixture
+
 from rct.cert_commands import CatCertCommand
 from rct.printing import xstr
+from rhsm.certificate import create_from_pem
 
 from stubs import MockStdout, MockStderr
 
@@ -47,9 +50,10 @@ class CatCertCommandStub(CatCertCommand):
         return self.cert
 
 
-class CatCertCommandTests(unittest.TestCase):
+class CatCertCommandTests(fixture.SubManFixture):
 
     def setUp(self):
+        super(CatCertCommandTests, self).setUp()
         self.mock_stdout = MockStdout()
         self.mock_stderr = MockStderr()
         sys.stdout = self.mock_stdout
@@ -60,6 +64,7 @@ class CatCertCommandTests(unittest.TestCase):
         sys.stderr = sys.__stderr__
 
     def tearDown(self):
+        super(CatCertCommandTests, self).tearDown()
         self._restore_stdout()
 
     def test_omit_content_list(self):
@@ -81,25 +86,25 @@ class CatCertCommandTests(unittest.TestCase):
         command.main(['will_use_stub'])
 
         cert_output = self.mock_stdout.buffer
-        self.assertEqual(certdata.ENTITLEMENT_CERT_V1_0_OUTPUT, cert_output)
+        self.assert_string_equals(certdata.ENTITLEMENT_CERT_V1_0_OUTPUT, cert_output)
 
     def test_cert_v3_cat(self):
         command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
         command.main(['will_use_stub'])
 
         cert_output = self.mock_stdout.buffer
-        self.assertEqual(certdata.ENTITLEMENT_CERT_V3_0_OUTPUT, cert_output)
+        self.assert_string_equals(certdata.ENTITLEMENT_CERT_V3_0_OUTPUT, cert_output)
 
     def test_product_cert_output(self):
         command = CatCertCommandStub(certdata.PRODUCT_CERT_V1_0)
         command.main(['will_use_stub'])
 
         cert_output = self.mock_stdout.buffer
-        self.assertEqual(certdata.PRODUCT_CERT_V1_0_OUTPUT, cert_output)
+        self.assert_string_equals(certdata.PRODUCT_CERT_V1_0_OUTPUT, cert_output)
 
     def test_identity_cert_output(self):
         command = CatCertCommandStub(certdata.IDENTITY_CERT)
         command.main(['will_use_stub'])
 
         cert_output = self.mock_stdout.buffer
-        self.assertEqual(certdata.IDENTITY_CERT_OUTPUT, cert_output)
+        self.assert_string_equals(certdata.IDENTITY_CERT_OUTPUT, cert_output)
