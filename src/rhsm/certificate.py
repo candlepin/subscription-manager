@@ -158,9 +158,9 @@ class Certificate(object):
 
         self.altName = None
         try:
-            nameExt = self.x509.get_ext('subjectAltName')
-            if nameExt:
-                self.altName = nameExt.get_value()
+            name_ext = self.x509.get_ext('subjectAltName')
+            if name_ext:
+                self.altName = name_ext.get_value()
         except LookupError:
             # This may not be defined, seems to only be used for identity
             # certificates:
