@@ -930,7 +930,7 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--consumerid", dest="consumerid", metavar="SYSTEMID",
                                help=_("the existing system data is pulled from the server"))
         self.parser.add_option("--org", dest="org", metavar="ORG_KEY",
-                               help=_("register to one of multiple organizations for the user, using organization key"))
+                               help=_("register with one of multiple organizations for the user, using organization key"))
         self.parser.add_option("--environment", dest="environment",
                                help=_("register with a specific environment in the destination org"))
         self.parser.add_option("--release", dest="release",
