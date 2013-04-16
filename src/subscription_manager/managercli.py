@@ -651,7 +651,7 @@ class IdentityCommand(UserPassCommand):
                 print _('Current identity is: %s') % consumerid
                 print _('name: %s') % consumer_name
                 print _('org name: %s') % ownername
-                print _('org id: %s') % ownerid
+                print _('org ID: %s') % ownerid
 
                 if self.cp.supports_resource('environments'):
                     consumer = self.cp.getConsumer(consumerid)
@@ -962,7 +962,7 @@ class RegisterCommand(UserPassCommand):
             print(_("Error: Activation keys do not require user credentials."))
             sys.exit(-1)
         elif (self.options.consumerid and self.options.activation_keys):
-            print(_("Error: Activation keys can not be used with previously registered ids."))
+            print(_("Error: Activation keys can not be used with previously registered IDs."))
             sys.exit(-1)
         elif (self.options.environment and self.options.activation_keys):
             print(_("Error: Activation keys do not allow environments to be specified."))
@@ -1062,7 +1062,7 @@ class RegisterCommand(UserPassCommand):
         # We have new credentials, restart virt-who
         restart_virt_who()
 
-        print (_("The system has been registered with id: %s ")) % (consumer_info["uuid"])
+        print (_("The system has been registered with ID: %s ")) % (consumer_info["uuid"])
 
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
