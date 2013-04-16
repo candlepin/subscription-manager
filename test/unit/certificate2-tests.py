@@ -87,6 +87,7 @@ class V1CertTests(unittest.TestCase):
         self.assertTrue(self.ent_cert.check_path('/foo/path/never'))
         self.assertTrue(self.ent_cert.check_path('/foo/path/never/'))
         self.assertTrue(self.ent_cert.check_path('/foo/path/never/bar/a/b/c'))
+        self.assertTrue(self.ent_cert.check_path('/foo/path/never/bar//a/b/c'))
 
     def test_check_path_with_var(self):
         # matches /path/to/$basearch/$releasever/awesomeos
@@ -194,6 +195,7 @@ class V3CertTests(unittest.TestCase):
 
     def test_match_path(self):
         self.assertTrue(self.ent_cert.check_path('/path/to/awesomeos/x86_64'))
+        self.assertTrue(self.ent_cert.check_path('/path/to/awesomeos//x86_64'))
 
     def test_match_deep_path(self):
         self.assertTrue(self.ent_cert.check_path('/path/to/awesomeos/x86_64/foo/bar'))

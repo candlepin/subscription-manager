@@ -17,6 +17,7 @@ import zlib
 import logging
 import os
 import base64
+import posixpath
 import re
 import simplejson as json
 
@@ -521,6 +522,7 @@ class EntitlementCertificate(ProductCertificate):
 
         :raise:    ValueError when self.version.major < 3
         """
+        path = posixpath.normpath(path)
         if self.version.major < 3:
             return self._check_v1_path(path)
         else:
