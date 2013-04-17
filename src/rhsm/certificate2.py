@@ -522,6 +522,10 @@ class EntitlementCertificate(ProductCertificate):
 
         :raise:    ValueError when self.version.major < 3
         """
+
+        # squash double '//' if we get it in a content path
+        # NOTE: according to http://tools.ietf.org/html/rfc3986#section-3.3
+        # I think this technically changes the semantics of the url
         path = posixpath.normpath(path)
         if self.version.major < 3:
             return self._check_v1_path(path)
