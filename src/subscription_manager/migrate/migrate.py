@@ -287,7 +287,7 @@ class MigrationEngine(object):
             systemExit(1, CONNECTION_FAILURE % e)
 
         if len(owner_list) == 0:
-            systemExit(1, _("%s cannot register to any organizations.") % username)
+            systemExit(1, _("%s cannot register with any organizations.") % username)
         elif len(owner_list) > 1:
             org_input = raw_input(_("Org: ")).strip()
             org = None
