@@ -454,6 +454,9 @@ class ProductManager:
                 if cert is None:
                     continue
                 lst.append((cert, repo.id))
+            except yum.Errors.RepoMDError, e:
+                log.warn("Error loading productid metadata for %s." % repo)
+                self.meta_data_errors.append(repo.id)
             except Exception, e:
                 log.warn("Error loading productid metadata for %s." % repo)
                 log.exception(e)
