@@ -901,8 +901,9 @@ class ChooseServerScreen(Screen):
 
             try:
                 if not is_valid_server_info(hostname, port, prefix):
-                    errorWindow(_("Unable to reach the server at %s:%s%s" %
-                        (hostname, port, prefix)), self._parent.window)
+                    errorWindow(_("Unable to reach the server at %s:%s%s") %
+                                  (hostname, port, prefix),
+                                  self._parent.window)
                     return DONT_CHANGE
             except MissingCaCertException:
                 errorWindow(_("CA certificate for subscription service has not been installed."),

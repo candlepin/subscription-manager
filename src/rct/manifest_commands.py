@@ -286,7 +286,7 @@ class DumpManifestCommand(RCTManifestCommand):
         """
         if self.options.destination:
             self._extract_manifest(self.options.destination)
-            print _("The manifest has been dumped to the %s directory" % self.options.destination)
+            print _("The manifest has been dumped to the %s directory") % self.options.destination
         else:
             self._extract_manifest(os.getcwd())
             print _("The manifest has been dumped to the current directory")

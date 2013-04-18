@@ -598,7 +598,7 @@ class MigrationEngine(object):
         if servicelevel is None or \
             servicelevel.upper() not in (level.upper() for level in levels):
             if servicelevel is not None:
-                print _("\nService level \"%s\" is not available." % servicelevel)
+                print _("\nService level \"%s\" is not available.") % servicelevel
             menu = Menu(slas, _("Please select a service level agreement for this system."))
             servicelevel = menu.choose()
         return servicelevel
