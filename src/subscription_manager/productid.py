@@ -59,7 +59,7 @@ class ProductDatabase:
     def delete(self, product):
         try:
             del self.content[product]
-        except:
+        except Exception:
             pass
 
     # need way to delete one prod->repo map
@@ -83,7 +83,7 @@ class ProductDatabase:
         try:
             d = json.load(f)
             self.content = d
-        except:
+        except Exception:
             pass
         f.close()
 
@@ -91,7 +91,7 @@ class ProductDatabase:
         f = open(self.__fn(), 'w')
         try:
             json.dump(self.content, f, indent=2)
-        except:
+        except Exception:
             pass
         f.close()
 

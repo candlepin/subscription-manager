@@ -865,7 +865,8 @@ class PluginManager(BasePluginManager):
                 loaded_module = imp.load_module(module_name, fp, pathname, description)
             finally:
                 fp.close()
-        except:
+        # we could catch BaseException too for system exit
+        except Exception:
             raise PluginModuleImportException(module_file, module_name)
 
         # FIXME: look up module conf, so we can enable entire plugin modules

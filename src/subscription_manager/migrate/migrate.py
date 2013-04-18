@@ -344,14 +344,14 @@ class MigrationEngine(object):
 
             sk = sc.auth.login(credentials.username, credentials.password)
             return (sc, sk)
-        except:
+        except Exception:
             log.error(traceback.format_exc())
             systemExit(1, _("Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more details."))
 
     def check_is_org_admin(self, sc, sk, username):
         try:
             roles = sc.user.listRoles(sk, username)
-        except:
+        except Exception:
             log.error(traceback.format_exc())
             systemExit(1, _("Problem encountered determining user roles in RHN Classic.  Exiting."))
         if "org_admin" not in roles:
@@ -360,7 +360,7 @@ class MigrationEngine(object):
     def get_subscribed_channels_list(self):
         try:
             subscribedChannels = map(lambda x: x['label'], getChannels().channels())
-        except:
+        except Exception:
             log.error(traceback.format_exc())
             systemExit(1, _("Problem encountered getting the list of subscribed channels.  Exiting."))
         return subscribedChannels
@@ -426,7 +426,7 @@ class MigrationEngine(object):
                 else:
                     invalidRhsmChannels.append(channel)
                     log.info("%s is not mapped to any certificates", channel)
-            except:
+            except Exception:
                 unrecognizedChannels.append(channel)
 
         if invalidRhsmChannels:
@@ -533,7 +533,7 @@ class MigrationEngine(object):
         log.info("Deleting system %s from RHN Classic...", systemId)
         try:
             result = sc.system.deleteSystems(sk, systemId)
-        except:
+        except Exception:
             log.error("Could not delete system %s from RHN Classic" % systemId)
             log.error(traceback.format_exc())
             shutil.move(systemIdPath, systemIdPath + ".save")
@@ -655,7 +655,7 @@ class MigrationEngine(object):
                     log.info("Enabling extra channel '%s'" % rhsmChannel)
                     repofile.set(rhsmChannel, 'enabled', '1')
             repofile.write()
-        except:
+        except Exception:
             print _("\nUnable to enable extra repositories.")
             print _("Please ensure system has subscriptions attached, and see 'subscription-manager repos --help' to enable additional repositories")
 

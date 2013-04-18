@@ -99,7 +99,7 @@ class UpdateAction:
         # data from the server
         try:
             self.consumer = ConsumerIdentity.read()
-        except:
+        except Exception:
             self.consumer = None
 
         if self.consumer:

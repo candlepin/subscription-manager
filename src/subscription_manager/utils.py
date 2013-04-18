@@ -304,7 +304,7 @@ def get_terminal_width():
                                 fcntl.ioctl(fd,
                                     termios.TIOCGWINSZ,
                                     '1234'))
-            except:
+            except Exception:
                 return
             return cr
 
@@ -314,9 +314,9 @@ def get_terminal_width():
                 fd = os.open(os.ctermid(), os.O_RDONLY)
                 dim = ioctl_GWINSZ(fd)
                 os.close(fd)
-            except:
+            except Exception:
                 pass
-    except:
+    except Exception:
         pass
 
     if dim:
