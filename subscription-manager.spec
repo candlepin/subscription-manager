@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.5
+Version: 1.8.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -377,6 +377,28 @@ fi
 %endif
 
 %changelog
+* Thu Apr 18 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.6-1
+- Latest translations. (dgoodwin@redhat.com)
+- 903298: Fix a few more examples of Register to (bkearney@redhat.com)
+- 878634: Fix the final three uses of id instead of ID (bkearney@redhat.com)
+- Fix string formatting done outside of gettext _() (alikins@redhat.com)
+- 950892: entity typo (dlackey@redhat.com.com)
+- when no parameters are given, dump manifest uses current directory
+  (ckozak@redhat.com)
+- fixed zipfile creation in python 2.4 (ckozak@redhat.com)
+- 919561: moving cat manifest into memory (ckozak@redhat.com)
+- 914717: Fields taken from pool data. (wpoteat@redhat.com)
+- 924919: stop log to stderr in isodata module (alikins@redhat.com)
+- 919561: refactored some code into additional methods, fixed naming
+  conventions, and added test cases (ckozak@redhat.com)
+- Dont log exception if a repo doesn't have productid (alikins@redhat.com)
+- 919561: checking manifest zip for files outside of scope (ckozak@redhat.com)
+- 919561: moved new extractall into a class that extends ZipFile
+  (ckozak@redhat.com)
+- 919561: fixed variable naming in new extractall method (ckozak@redhat.com)
+- 919561: replaced reference to zipfile.extractall (aded in python2.6)
+  (ckozak@redhat.com)
+
 * Wed Mar 27 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.5-1
 - 927875: Fix GUI bug if there is an expired certificate. (dgoodwin@redhat.com)
 - 922806: Use dependency injection with firstboot module. (awood@redhat.com)
