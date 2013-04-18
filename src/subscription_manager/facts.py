@@ -59,7 +59,7 @@ class Facts(CacheManager):
     def get_last_update(self):
         try:
             return datetime.fromtimestamp(os.stat(self.CACHE_FILE).st_mtime)
-        except:
+        except Exception:
             return None
 
     def has_changed(self):

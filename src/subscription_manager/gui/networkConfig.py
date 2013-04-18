@@ -146,7 +146,7 @@ class NetworkConfigDialog:
 
         try:
             self.cfg.save()
-        except:
+        except Exception:
             errorWindow(_("There was an error saving your configuration.") +
                     _("Make sure that you own %s.") % self.cfg.fileName,
                     parent=self.dlg)

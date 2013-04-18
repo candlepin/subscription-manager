@@ -72,7 +72,7 @@ class LockFile:
             fd = self.fp.fileno()
             fcntl.flock(fd, fcntl.LOCK_UN)
             self.fp.close()
-        except:
+        except Exception:
             pass
         self.pid = None
         self.fp = None
@@ -97,7 +97,7 @@ class Lock:
             if not os.path.exists(lock_dir):
                 os.makedirs(lock_dir)
             self.lockdir = lock_dir
-        except:
+        except Exception:
             self.lockdir = None
 
     def acquire(self):
@@ -170,5 +170,5 @@ class Lock:
     def __del__(self):
         try:
             self.release()
-        except:
+        except Exception:
             pass

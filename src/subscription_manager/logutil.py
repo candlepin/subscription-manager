@@ -23,7 +23,7 @@ def _get_handler():
     try:
         if not os.path.isdir("/var/log/rhsm"):
             os.mkdir("/var/log/rhsm")
-    except:
+    except Exception:
         pass
     fmt = u'%(asctime)s [%(levelname)s]  @%(filename)s:%(lineno)d - %(message)s'
 
@@ -32,7 +32,7 @@ def _get_handler():
         handler = RotatingFileHandler(path, maxBytes=0x100000, backupCount=5, encoding='utf-8')
     except IOError:
         handler = logging.StreamHandler()
-    except:
+    except Exception:
         handler = logging.StreamHandler()
 
     handler.setFormatter(Formatter(fmt))
