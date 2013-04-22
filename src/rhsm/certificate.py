@@ -158,9 +158,9 @@ class Certificate(object):
 
         self.altName = None
         try:
-            nameExt = self.x509.get_ext('subjectAltName')
-            if nameExt:
-                self.altName = nameExt.get_value()
+            name_ext = self.x509.get_ext('subjectAltName')
+            if name_ext:
+                self.altName = name_ext.get_value()
         except LookupError:
             # This may not be defined, seems to only be used for identity
             # certificates:
@@ -347,7 +347,7 @@ class RedhatCertificate(Certificate):
         """
         try:
             return self.__redhat
-        except:
+        except Exception:
             return self.extensions()
 
     def bogus(self):
@@ -557,7 +557,7 @@ class Key(object):
         if self.content:
             try:
                 RSA.load_key_string(self.content)
-            except:
+            except Exception:
                 bogus.append("Invalid key data")
         else:
             bogus.append("No key data provided")

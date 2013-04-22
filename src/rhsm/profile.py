@@ -10,9 +10,10 @@
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
-import rpm
 import logging
 import simplejson as json
+
+import rpm
 
 log = logging.getLogger(__name__)
 
@@ -96,9 +97,9 @@ class RPMProfile(object):
             ts = rpm.TransactionSet()
             ts.setVSFlags(-1)
             installed = ts.dbMatch()
-            self.packages = self.__accumulateProfile(installed)
+            self.packages = self._accumulate_profile(installed)
 
-    def __accumulateProfile(self, rpm_header_list):
+    def _accumulate_profile(self, rpm_header_list):
         """
         Accumulates list of installed rpm info
         @param rpm_header_list: list of rpm headers

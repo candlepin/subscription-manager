@@ -14,17 +14,17 @@
 # in this software or its documentation.
 #
 
-import sys
-import socket
-import locale
-import urllib
-import simplejson as json
 import base64
-import os
-import logging
-import datetime
-import time
 import certificate
+import datetime
+import locale
+import logging
+import os
+import simplejson as json
+import socket
+import sys
+import time
+import urllib
 
 from M2Crypto import SSL, httpslib
 from M2Crypto.SSL import SSLError
@@ -55,7 +55,7 @@ class NullHandler(logging.Handler):
 def safe_int(value, safe_value=None):
     try:
         return int(value)
-    except:
+    except Exception:
         return safe_value
 
 
@@ -311,15 +311,15 @@ class Restlib(object):
         lc = _get_locale()
         #collect some version data
         v = Versions()
-        smVersion = ("%s-%s") % \
+        subman_version = ("%s-%s") % \
             (v.get_version("subscription-manager"), v.get_release("subscription-manager"))
-        prVersion = ("%s-%s") % \
+        python_rhsm_version = ("%s-%s") % \
             (v.get_version("python-rhsm"), v.get_release("python-rhsm"))
 
         self.headers = {"Content-type": "application/json",
                         "Accept": "application/json",
-                        "x-python-rhsm-version": prVersion,
-                        "x-subscription-manager-version": smVersion}
+                        "x-python-rhsm-version": python_rhsm_version,
+                        "x-subscription-manager-version": subman_version}
 
         if lc:
             self.headers["Accept-Language"] = lc.lower().replace('_', '-')
@@ -990,11 +990,11 @@ class UEPConnection:
                 method += "&email_locale=%s" % lang
         return self.conn.request_post(method)
 
-    def sanitize(self, urlParam, plus=False):
+    def sanitize(self, url_param, plus=False):
         #This is a wrapper around urllib.quote to avoid issues like the one
         #discussed in http://bugs.python.org/issue9301
         if plus:
-            retStr = urllib.quote_plus(str(urlParam))
+            sane_string = urllib.quote_plus(str(url_param))
         else:
-            retStr = urllib.quote(str(urlParam))
-        return retStr
+            sane_string = urllib.quote(str(url_param))
+        return sane_string
