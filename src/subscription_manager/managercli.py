@@ -77,6 +77,7 @@ INSTALLED_PRODUCT_STATUS = [
     _("Version:"),
     _("Arch:"),
     _("Status:"),
+    _("Status Info:"),
     _("Starts:"),
     _("Ends:")
 ]
@@ -127,6 +128,7 @@ CONSUMED_LIST = [
     _("Quantity Used:"),
     _("Service Level:"),
     _("Service Type:"),
+    _("Status Info:"),
     _("Starts:"),
     _("Ends:")
 ]
@@ -1981,6 +1983,8 @@ class ListCommand(CliCommand):
                                       % strftime("%Y-%m-%d", localtime())))
         self.parser.add_option("--consumed", action='store_true',
                                help=_("show the subscriptions being consumed by this system"))
+        self.parser.add_option("--status", action='store_true',
+                               help=_("show the current status of the system and reasons it not fully compliant."))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("shows only subscriptions matching the specified service level; only used with --available and --consumed"))
 
@@ -1998,7 +2002,7 @@ class ListCommand(CliCommand):
                                               self.options.available):
             print _("Error: --servicelevel is only applicable with --available or --consumed")
             sys.exit(-1)
-        if not (self.options.available or self.options.consumed):
+        if not (self.options.available or self.options.consumed or self.options.status):
             self.options.installed = True
 
     def _do_command(self):
@@ -2020,7 +2024,7 @@ class ListCommand(CliCommand):
                 status = STATUS_MAP[product[4]]
                 print columnize(INSTALLED_PRODUCT_STATUS, _none_wrap,
                                 product[0], product[1], product[2], product[3],
-                                status, product[5], product[6]) + "\n"
+                                status, product[5], product[6], product[7]) + "\n"
 
         if self.options.available:
             consumer = check_registration()['uuid']
@@ -2069,6 +2073,9 @@ class ListCommand(CliCommand):
         if self.options.consumed:
             self.print_consumed(service_level=self.options.service_level)
 
+        if self.options.status:
+            self.print_status()
+
     def _filter_pool_json_by_service_level(self, pools, service_level):
 
         def filter_pool_data_by_service_level(pool_data):
@@ -2079,6 +2086,22 @@ class ListCommand(CliCommand):
             return service_level.lower() == pool_level.lower()
 
         return filter(filter_pool_data_by_service_level, pools)
+
+    def print_status(self):
+        # list status and all reasons it is not valid
+        sorter = inj.require(inj.CERT_SORTER,
+                self.product_dir, self.entitlement_dir, self.cp)
+        overall_status = sorter.get_system_status()
+        reasons = sorter.get_reasons_messages()
+
+        print("+-------------------------------------------+")
+        print("   " + _("System Status Information"))
+        print("+-------------------------------------------+")
+
+        print(_("Overall Status: %s" % overall_status))
+        if len(reasons):
+            rows = [_('Reason %s:' % str(count+1)) for count in range(len(reasons))]
+            print columnize(rows, _none_wrap, *reasons)
 
     def print_consumed(self, service_level=None):
         # list all certificates that have not yet expired, even those
@@ -2099,6 +2122,10 @@ class ListCommand(CliCommand):
         if len(certs) == 0:
             print(_("No consumed subscription pools to list"))
             sys.exit(0)
+
+        sorter = inj.require(inj.CERT_SORTER,
+                self.product_dir, self.entitlement_dir, self.cp)
+        cert_reasons_map = sorter.get_subscription_reasons_map()
 
         print("+-------------------------------------------+")
         print("   " + _("Consumed Subscriptions"))
@@ -2124,6 +2151,7 @@ class ListCommand(CliCommand):
                     order.quantity_used,
                     service_level,
                     service_type,
+                    cert_reasons_map[cert.subject['CN']],
                     managerlib.formatDate(cert.valid_range.begin()),
                     managerlib.formatDate(cert.valid_range.end())) + "\n"
 

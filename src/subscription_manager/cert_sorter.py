@@ -103,6 +103,9 @@ class CertSorter(object):
         # Will be None if we're not currently valid for the date requested.
         self.first_invalid_date = None
 
+        # Reasons that products aren't fully compliant
+        self.reasons = []
+
         self.valid_entitlement_certs = []
 
         self._parse_server_status()
@@ -129,6 +132,8 @@ class CertSorter(object):
 
         self.partial_stacks = status['partialStacks']
 
+        self.reasons = status['reasons']
+        self.system_status = status['status']
         # For backward compatability with old find first invalid date,
         # we drop one second from the compliant until from server (as
         # it is returning the first second we are invalid), then add a full
@@ -210,6 +215,104 @@ class CertSorter(object):
                         continue
 
                     product_dict.setdefault(product.id, []).append(ent_cert)
+
+    def get_product_subscriptions(self, prod):
+        """
+        Returns a list of subscriptions that provide
+        the product.
+        """
+        results = []
+        for valid_ent in self.valid_entitlement_certs:
+            if prod in valid_ent.products:
+                results.append(valid_ent)
+        return results
+
+    def get_product_reasons(self, prod):
+        """
+        Returns a list of reasons that
+        apply to the installed product
+        """
+        result = set([])
+        subscriptions = self.get_product_subscriptions(prod)
+
+        sub_ids = set([])
+        stack_ids = set([])
+
+        for s in subscriptions:
+            if 'CN' in s.subject:
+                sub_ids.add(s.subject['CN'])
+            if s.order.stacking_id:
+                stack_ids.add(s.order.stacking_id)
+        for reason in self.reasons:
+            if 'product_id' in reason['attributes']:
+                if reason['attributes']['product_id'] == prod.id:
+                    result.add(reason['message'])
+            elif 'entitlement_id' in reason['attributes']:
+                if reason['attributes']['entitlement_id'] in sub_ids:
+                    result.add(reason['message'])
+            elif 'stack_id' in reason['attributes']:
+                if reason['attributes']['stack_id'] in stack_ids:
+                    result.add(reason['message'])
+        return list(result)
+
+    def get_system_status(self):
+        #this isn't translated. Should probably do that
+        status = self.system_status
+        if status == 'valid':
+            return _('Current')
+        elif status == 'partial':
+            return _('Insufficient')
+        elif status == 'invalid':
+            return _('Invalid')
+        else:
+            return _('Unknown')
+
+    def get_reasons_messages(self):
+        # we want non-covered (red) reasons first,
+        # then arch-mismatch, then others (sockets/ram/cores/etc...)
+        order = ['NOTCOVERED', 'ARCH']
+        result_map = {}
+        result = []
+        for reason in self.reasons:
+            if reason['key'] not in result_map:
+                result_map[reason['key']] = []
+            result_map[reason['key']].append(reason['message'])
+        
+        for item in order:
+            if item in result_map:
+                result.extend(result_map[item])
+                del result_map[item]
+
+        for key, messages in result_map.items():
+            result.extend(messages)
+        return result
+        #return [r['message'] for r in self.reasons]
+
+    #could build a dict, and only calc once at cost of memory
+    def get_stack_subscriptions(self, stack_id):
+        result = set([])
+        for s in self.valid_entitlement_certs:
+            if s.order.stacking_id:
+                if s.order.stacking_id == stack_id:
+                    result.add(s.subject['CN'])
+        return result
+
+    def get_subscription_reasons_map(self):
+        """
+        returns a dictionary that maps
+        subscriptions to lists of reasons
+        """
+        result = {}
+        for s in self.valid_entitlement_certs:
+            result[s.subject['CN']] = []
+
+        for reason in self.reasons:
+            if 'entitlement_id' in reason['attributes']:
+                result[reason['attributes']['entitlement_id']].append(reason['message'])
+            elif 'stack_id' in reason['attributes']:
+                for s in self.get_stack_subscriptions(reason['attributes']['stack_id']):
+                    result[s].append(reason['message'])
+        return result
 
     def is_valid(self):
         """
