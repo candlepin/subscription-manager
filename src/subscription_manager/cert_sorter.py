@@ -256,7 +256,6 @@ class CertSorter(object):
         return list(result)
 
     def get_system_status(self):
-        #this isn't translated. Should probably do that
         status = self.system_status
         if status == 'valid':
             return _('Current')

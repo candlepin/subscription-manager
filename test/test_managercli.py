@@ -14,6 +14,8 @@ from stubs import MockStderr, MockStdout, \
         StubConsumerIdentity, StubProduct, StubUEP
 from test_handle_gui_exception import FakeException, FakeLogger
 from fixture import SubManFixture
+# for mock cp json
+import test_cert_sorter
 
 import mock
 from mock import patch
@@ -342,6 +344,7 @@ class TestListCommand(TestCliProxyCommand):
 
     def test_print_consumed_prints_enitlement_with_service_level_match(self):
         self.ent_dir.certs.append(self.cert_with_service_level)
+        self.cc.cp = test_cert_sorter.SAMPLE_COMPLIANCE_JSON
         self.cc.print_consumed(service_level="Premium")
 
     def test_filter_only_specified_service_level(self):

@@ -554,6 +554,7 @@ SAMPLE_COMPLIANCE_JSON = json.loads("""
       "href" : "/entitlements/402881983d17fabf013d1c642a420b78"
     } ]
   },
+  "reasons":[],
   "status" : "invalid",
   "compliant" : false
 }

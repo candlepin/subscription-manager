@@ -77,7 +77,7 @@ INSTALLED_PRODUCT_STATUS = [
     _("Version:"),
     _("Arch:"),
     _("Status:"),
-    _("Status Info:"),
+    _("Status Details:"),
     _("Starts:"),
     _("Ends:")
 ]
@@ -128,7 +128,7 @@ CONSUMED_LIST = [
     _("Quantity Used:"),
     _("Service Level:"),
     _("Service Type:"),
-    _("Status Info:"),
+    _("Status Details:"),
     _("Starts:"),
     _("Ends:")
 ]
@@ -2095,13 +2095,14 @@ class ListCommand(CliCommand):
         reasons = sorter.get_reasons_messages()
 
         print("+-------------------------------------------+")
-        print("   " + _("System Status Information"))
+        print("   " + _("System Status Details"))
         print("+-------------------------------------------+")
 
         print(_("Overall Status: %s" % overall_status))
         if len(reasons):
             rows = [_('Reason %s:' % str(count+1)) for count in range(len(reasons))]
             print columnize(rows, _none_wrap, *reasons)
+        print('')
 
     def print_consumed(self, service_level=None):
         # list all certificates that have not yet expired, even those
@@ -2129,7 +2130,7 @@ class ListCommand(CliCommand):
 
         print("+-------------------------------------------+")
         print("   " + _("Consumed Subscriptions"))
-        print("+-------------------------------------------+\n")
+        print("+-------------------------------------------+")
 
         for cert in certs:
             order = cert.order
