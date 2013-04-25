@@ -2011,6 +2011,10 @@ class ListCommand(CliCommand):
         """
 
         self._validate_options()
+
+        self.sorter = inj.require(inj.CERT_SORTER,
+                self.product_dir, self.entitlement_dir, self.cp)
+
         if self.options.installed:
             iproducts = managerlib.getInstalledProductStatus(self.product_dir,
                     self.entitlement_dir, self.cp)
@@ -2089,10 +2093,8 @@ class ListCommand(CliCommand):
 
     def print_status(self):
         # list status and all reasons it is not valid
-        sorter = inj.require(inj.CERT_SORTER,
-                self.product_dir, self.entitlement_dir, self.cp)
-        overall_status = sorter.get_system_status()
-        reasons = sorter.get_reasons_messages()
+        overall_status = self.sorter.get_system_status()
+        reasons = self.sorter.get_reasons_messages()
 
         print("+-------------------------------------------+")
         print("   " + _("System Status Details"))
@@ -2124,9 +2126,7 @@ class ListCommand(CliCommand):
             print(_("No consumed subscription pools to list"))
             sys.exit(0)
 
-        sorter = inj.require(inj.CERT_SORTER,
-                self.product_dir, self.entitlement_dir, self.cp)
-        cert_reasons_map = sorter.get_subscription_reasons_map()
+        cert_reasons_map = self.sorter.get_subscription_reasons_map()
 
         print("+-------------------------------------------+")
         print("   " + _("Consumed Subscriptions"))
