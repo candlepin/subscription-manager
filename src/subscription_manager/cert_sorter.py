@@ -131,8 +131,10 @@ class CertSorter(object):
         self.partially_valid_products = status['partiallyCompliantProducts']
 
         self.partial_stacks = status['partialStacks']
+        
+        if 'reasons' in status:
+            self.reasons = status['reasons']
 
-        self.reasons = status['reasons']
         self.system_status = status['status']
         # For backward compatability with old find first invalid date,
         # we drop one second from the compliant until from server (as
@@ -318,7 +320,7 @@ class CertSorter(object):
         Return true if the results of this cert sort indicate our
         entitlements are completely valid.
         """
-        if len(self.reasons):
+        if self.system_status != 'valid':
             return False
         return True
 
