@@ -14,11 +14,10 @@ from stubs import MockStderr, MockStdout, \
         StubConsumerIdentity, StubProduct, StubUEP
 from test_handle_gui_exception import FakeException, FakeLogger
 from fixture import SubManFixture
-# for mock cp json
-import test_cert_sorter
 
 import mock
 from mock import patch
+from mock import Mock
 # for some exceptions
 from rhsm import connection
 from M2Crypto import SSL
@@ -326,11 +325,17 @@ class TestListCommand(TestCliProxyCommand):
     def test_print_consumed_one_ent_one_product(self):
         product = StubProduct("product1")
         self.ent_dir.certs.append(StubEntitlementCertificate(product))
+        self.cc.sorter = Mock()
+        self.cc.sorter.get_subscription_reasons_map = Mock()
+        self.cc.sorter.get_subscription_reasons_map.return_value = {}
         self.cc.print_consumed()
 
     def test_print_consumed_one_ent_no_product(self):
         self.ent_dir.certs.append(StubEntitlementCertificate(
             product=None))
+        self.cc.sorter = Mock()
+        self.cc.sorter.get_subscription_reasons_map = Mock()
+        self.cc.sorter.get_subscription_reasons_map.return_value = {}
         self.cc.print_consumed()
 
     def test_print_consumed_prints_nothing_with_no_service_level_match(self):
@@ -344,7 +349,9 @@ class TestListCommand(TestCliProxyCommand):
 
     def test_print_consumed_prints_enitlement_with_service_level_match(self):
         self.ent_dir.certs.append(self.cert_with_service_level)
-        self.cc.cp = test_cert_sorter.SAMPLE_COMPLIANCE_JSON
+        self.cc.sorter = Mock()
+        self.cc.sorter.get_subscription_reasons_map = Mock()
+        self.cc.sorter.get_subscription_reasons_map.return_value = {}
         self.cc.print_consumed(service_level="Premium")
 
     def test_filter_only_specified_service_level(self):

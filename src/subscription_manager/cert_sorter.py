@@ -229,7 +229,7 @@ class CertSorter(object):
 
     def get_product_reasons(self, prod):
         """
-        Returns a list of reasons that
+        Returns a list of reason messages that
         apply to the installed product
         """
         result = set([])
@@ -276,7 +276,7 @@ class CertSorter(object):
             if reason['key'] not in result_map:
                 result_map[reason['key']] = []
             result_map[reason['key']].append(reason['message'])
-        
+
         for item in order:
             if item in result_map:
                 result.extend(result_map[item])
@@ -318,10 +318,8 @@ class CertSorter(object):
         Return true if the results of this cert sort indicate our
         entitlements are completely valid.
         """
-        if self.partially_valid_products or self.expired_products or \
-                self.partial_stacks or self.unentitled_products:
+        if len(self.reasons):
             return False
-
         return True
 
     def is_registered(self):

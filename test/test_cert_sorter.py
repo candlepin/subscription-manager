@@ -119,6 +119,12 @@ class CertSorterTests(SubManFixture):
         self.assertEquals(1, len(self.sorter.partial_stacks))
         self.assertTrue(PARTIAL_STACK_ID in self.sorter.partial_stacks)
 
+    def test_reasons(self):
+        self.assertEquals(5, len(self.sorter.reasons))
+        expected_keys = ['SOCKETS', 'ARCH', 'RAM', 'NOTCOVERED', 'CORES']
+        result_keys = [reason['key'] for reason in self.sorter.reasons]
+        self.assertEquals(expected_keys, result_keys)
+
     def test_installed_mismatch_unentitled(self):
         # Use a different product directory with something not present
         # in the response from the server as an unentitled product:
@@ -184,6 +190,28 @@ class CertSorterTests(SubManFixture):
 
         self.assertEquals(3, len(sorter.valid_entitlement_certs))
 
+    def test_get_system_status(self):
+        self.assertEquals('Invalid', self.sorter.get_system_status())
+        self.sorter.system_status = 'valid'
+        self.assertEquals('Current', self.sorter.get_system_status())
+        self.sorter.system_status = 'partial'
+        self.assertEquals('Insufficient', self.sorter.get_system_status())
+
+    def get_reasons_messages(self):
+        #must have notcovered first
+        #pref arch mismatch next
+        messages = self.sorter.get_reasons_messages()
+        self.assertEquals(5, len(messages))
+        expected = "The system does not have subscriptions \
+                that cover Awesome OS for x86_64 Bits."
+        self.assertEquals(expected, messages[0])
+        expected = "Awesome OS for ppc64 covers architecture \
+                ppc64 but the system is x86_64."
+        self.assertEquals(expected, messages[1])
+
+    def get_stack_subscriptions(self):
+        messages = self.sorter.get_stack_subscriptions("multiattr-stack-test")
+        self.assertEquals(3, len(messages))
 
 SAMPLE_COMPLIANCE_JSON = json.loads("""
 {
@@ -554,7 +582,45 @@ SAMPLE_COMPLIANCE_JSON = json.loads("""
       "href" : "/entitlements/402881983d17fabf013d1c642a420b78"
     } ]
   },
-  "reasons":[],
+  "reasons" : [ {
+    "key" : "SOCKETS",
+    "message" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM) only covers 4 of 8 sockets.",
+    "attributes" : {
+      "has" : "8",
+      "covered" : "4",
+      "stack_id" : "multiattr-stack-test"
+    }
+  }, {
+    "key" : "ARCH",
+    "message" : "Awesome OS for ppc64 covers architecture ppc64 but the system is x86_64.",
+    "attributes" : {
+      "has" : "x86_64",
+      "covered" : "ppc64",
+      "entitlement_id" : "ff8080813e41a66e013e41a941a8000d"
+    }
+  }, {
+    "key" : "RAM",
+    "message" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM) only covers 8GB of 31GB of RAM.",
+    "attributes" : {
+      "has" : "31",
+      "covered" : "8",
+      "stack_id" : "multiattr-stack-test"
+    }
+  }, {
+    "key" : "NOTCOVERED",
+    "message" : "The system does not have subscriptions that cover Awesome OS for x86_64 Bits.",
+    "attributes" : {
+      "product_id" : "100000000000002"
+    }
+  }, {
+    "key" : "CORES",
+    "message" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM) only covers 16 of 32 cores.",
+    "attributes" : {
+      "has" : "32",
+      "covered" : "16",
+      "stack_id" : "multiattr-stack-test"
+    }
+  } ],
   "status" : "invalid",
   "compliant" : false
 }

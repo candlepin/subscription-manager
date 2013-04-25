@@ -2102,7 +2102,7 @@ class ListCommand(CliCommand):
 
         print(_("Overall Status: %s" % overall_status))
         if len(reasons):
-            rows = [_('Reason %s:' % str(count+1)) for count in range(len(reasons))]
+            rows = [_('Reason %s:' % str(count + 1)) for count in range(len(reasons))]
             print columnize(rows, _none_wrap, *reasons)
         print('')
 
@@ -2140,6 +2140,9 @@ class ListCommand(CliCommand):
             service_level = order.service_level or ""
             service_type = order.service_type or ""
             product_names = [p.name for p in cert.products]
+            reasons = []
+            if cert.subject and 'CN' in cert.subject:
+                reasons = cert_reasons_map[cert.subject['CN']]
             print columnize(CONSUMED_LIST, _none_wrap,
                     order.name,
                     product_names,
@@ -2152,7 +2155,7 @@ class ListCommand(CliCommand):
                     order.quantity_used,
                     service_level,
                     service_type,
-                    cert_reasons_map[cert.subject['CN']],
+                    reasons,
                     managerlib.formatDate(cert.valid_range.begin()),
                     managerlib.formatDate(cert.valid_range.end())) + "\n"
 
