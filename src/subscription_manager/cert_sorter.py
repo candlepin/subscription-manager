@@ -131,7 +131,7 @@ class CertSorter(object):
         self.partially_valid_products = status['partiallyCompliantProducts']
 
         self.partial_stacks = status['partialStacks']
-        
+
         if 'reasons' in status:
             self.reasons = status['reasons']
 
@@ -287,16 +287,21 @@ class CertSorter(object):
         for key, messages in result_map.items():
             result.extend(messages)
         return result
-        #return [r['message'] for r in self.reasons]
 
     #could build a dict, and only calc once at cost of memory
     def get_stack_subscriptions(self, stack_id):
-        result = set([])
+        result = []
         for s in self.valid_entitlement_certs:
             if s.order.stacking_id:
                 if s.order.stacking_id == stack_id:
-                    result.add(s.subject['CN'])
+                    result.append(s.subject['CN'])
         return result
+
+    def get_subscription_name(self, ent_id):
+        for s in self.valid_entitlement_certs:
+            if s.subject['CN'] == ent_id:
+                return s.order.name
+        return None
 
     def get_subscription_reasons_map(self):
         """
