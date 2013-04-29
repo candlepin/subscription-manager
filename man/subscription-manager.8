@@ -1,4 +1,4 @@
-.TH subscription-manager 8 "December 12, 2012" "version 2.4" "Subscription Management"  Deon Lackey 
+.TH subscription-manager 8 "April 30, 2013" "version 2.5" "Subscription Management"  Deon Lackey 
 .SH NAME
 subscription-manager \- Registers systems to a subscription management service and then attaches and manages subscriptions for software products.
 
@@ -178,7 +178,7 @@ References an existing system inventory ID to reregister a system. The ID is use
 
 .TP
 .B --activationkey=KEYS
-Gives a comma-separated list of product keys to use to redeem or apply specific subscriptions to the system. This is used generally for preconfigured systems, which may already have products installed and subscriptions attached to that system.
+Gives a comma-separated list of product keys to use to redeem or apply specific subscriptions to the system. This is used for preconfigured systems, which may already have products installed and subscriptions attached to that system. Activation keys are issued by an on-premise subscription management service, such as Subscription Asset Manager.
 .IP
 When the 
 .B --activationkey
@@ -188,7 +188,7 @@ and
 .B --password
 options, because the authentication information is implicit in the activation key.
 .IP
-When there is a single organization or when using the Customer Portal Subscription Management service, it is not necessary to specify an organization with the 
+When there is a single organization, it is not necessary to specify an organization with the 
 .B --org
 option, but in multi-organization environments, this is required.
 .IP
@@ -198,10 +198,6 @@ For example:
 subscription-manager register --org="IT Dept" --activationkey=1234abcd
 .fi
 .RE
-
-.IP
-Giving the org name is not necessary when there is a single organization or when using the Customer Portal Subscription Management service.
-
 
 .TP
 .B --auto-attach

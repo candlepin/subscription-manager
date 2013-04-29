@@ -1,9 +1,9 @@
-.TH rhsmcertd 8 "December 12, 2012" "version 1.4" "Subscription Management Certificate Daemon"  Deon Lackey 
+.TH rhsmcertd 8 "April 30, 2013" "version 1.5" "Subscription Management Certificate Daemon"  Deon Lackey 
 .SH NAME
 rhsmcertd \- Periodically scans and updates the entitlement certificates on a registered system.
 
 .SH SYNOPSIS
-rhsmcertd [--cert-interval=MINUTES] [--auto-attach-interval=MINUTES] [--now] [--debug] [--help]
+rhsmcertd [--cert-check-interval=MINUTES] [--auto-attach-interval=MINUTES] [--now] [--debug] [--help]
 
 .PP
 .I Deprecated usage
@@ -50,7 +50,7 @@ Records more verbose output to the \fB/var/log/rhsm/rhsmcertd.log\fP log file.
 Runs the \fBrhsmcertd\fP scan immediately, rather than waiting for the next scheduled interval.
 
 .TP
-.B -c, --cert-interval=MINUTES
+.B -c, --cert-check-interval=MINUTES
 Resets the interval for checking for new subscription certificates. This value is in minutes. The default is 240, or four hours. This interval is in effect until the daemon restarts, and then the values in the 
 .B /etc/rhsm/rhsm.conf
 file are used (unless the argument is passed again).
@@ -69,7 +69,7 @@ Be sure to stop the running \fBrhsmcertd\fP daemon before making any configurati
 .SS RESETTING THE CERTIFICATE SCAN INTERVAL
 .nf
 service rhsmcertd stop
-rhsmcertd --cert-interval=240
+rhsmcertd --cert-cert-interval=240
 .fi
 
 .SS RUNNING CERTIFICATE AND HEALING SCANS IMMEDIATELY
