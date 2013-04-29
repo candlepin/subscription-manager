@@ -234,28 +234,28 @@ class CertSorter(object):
         Returns a list of reason messages that
         apply to the installed product
         """
-        result = set([])
+        result = []
         subscriptions = self.get_product_subscriptions(prod)
 
-        sub_ids = set([])
-        stack_ids = set([])
+        sub_ids = []
+        stack_ids = []
 
         for s in subscriptions:
             if 'CN' in s.subject:
-                sub_ids.add(s.subject['CN'])
+                sub_ids.append(s.subject['CN'])
             if s.order.stacking_id:
-                stack_ids.add(s.order.stacking_id)
+                stack_ids.append(s.order.stacking_id)
         for reason in self.reasons:
             if 'product_id' in reason['attributes']:
                 if reason['attributes']['product_id'] == prod.id:
-                    result.add(reason['message'])
+                    result.append(reason['message'])
             elif 'entitlement_id' in reason['attributes']:
                 if reason['attributes']['entitlement_id'] in sub_ids:
-                    result.add(reason['message'])
+                    result.append(reason['message'])
             elif 'stack_id' in reason['attributes']:
                 if reason['attributes']['stack_id'] in stack_ids:
-                    result.add(reason['message'])
-        return list(result)
+                    result.append(reason['message'])
+        return result
 
     def get_system_status(self):
         status = self.system_status
@@ -278,17 +278,14 @@ class CertSorter(object):
             if reason['key'] not in result_map:
                 result_map[reason['key']] = []
             result_map[reason['key']].append(reason['message'])
-
         for item in order:
             if item in result_map:
                 result.extend(result_map[item])
                 del result_map[item]
-
         for key, messages in result_map.items():
             result.extend(messages)
         return result
 
-    #could build a dict, and only calc once at cost of memory
     def get_stack_subscriptions(self, stack_id):
         result = []
         for s in self.valid_entitlement_certs:
