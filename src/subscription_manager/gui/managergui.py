@@ -293,6 +293,7 @@ class MainWindow(widgets.GladeWidget):
 
         self._show_buttons()
         self._show_redemption_buttons()
+        self.facts.get_facts(True)
 
     def _get_window(self):
         """
