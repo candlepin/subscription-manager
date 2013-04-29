@@ -297,7 +297,8 @@ class _CertFactory(object):
                 service_type=service_type,
                 stacking_id=sub.get('stacking_id', None),
                 virt_only=sub.get('virt_only', False),
-                ram_limit=sub.get('ram', None)
+                ram_limit=sub.get('ram', None),
+                core_limit=sub.get('cores', None)
             )
 
     def _parse_v3_products(self, payload):
@@ -632,7 +633,7 @@ class Order(object):
             contract=None, quantity_used=None, warning_period=None,
             account=None, provides_management=None, service_level=None,
             service_type=None, stacking_id=None, virt_only=None,
-            ram_limit=None):
+            ram_limit=None, core_limit=None):
 
         self.name = name
         self.number = number  # order number
@@ -664,6 +665,7 @@ class Order(object):
         self.virt_only = virt_only or False
 
         self.ram_limit = safe_int(ram_limit, None)
+        self.core_limit = safe_int(core_limit, None)
 
     def __str__(self):
         return "<Order: name=%s number=%s sku=%s>" % \
