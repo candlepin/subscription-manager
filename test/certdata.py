@@ -257,6 +257,7 @@ Order:
 	Quantity Used: 1
 	Socket Limit: 2
 	RAM Limit: 
+	Core Limit: 
 	Virt Limit: 
 	Virt Only: False
 	Subscription: 
@@ -366,6 +367,7 @@ Order:
 	Quantity Used: 2
 	Socket Limit: 1
 	RAM Limit: 
+	Core Limit: 
 	Virt Limit: 
 	Virt Only: False
 	Subscription: 
