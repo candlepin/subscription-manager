@@ -92,8 +92,6 @@ try:
     parse_date = _parse_date_dateutil
     parse_date_impl_name = 'dateutil'
 except ImportError:
-    log.warning("dateutil module not found, trying pyxml")
-
     # now try pyxml
     try:
         import xml.utils.iso8601
@@ -102,7 +100,6 @@ except ImportError:
     # if we can't import either,
     # we have broken package deps...
     except ImportError:
-        log.warning("pyxml xml.utils.iso8601 not imported")
         # if we found neither raise an ImportError communicating that
         # we needed one ot the other and found neither
         raise ImportError("No suitable date parsing module found ('dateutil', nor 'xml.utils.iso8601')")
