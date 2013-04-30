@@ -323,7 +323,7 @@ class CertSorter(object):
         Return true if the results of this cert sort indicate our
         entitlements are completely valid.
         """
-        return self.system_status == 'valid':
+        return self.system_status == 'valid'
 
     def is_registered(self):
         return self.identity.is_valid()
