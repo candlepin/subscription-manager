@@ -2100,9 +2100,9 @@ class ListCommand(CliCommand):
         print("   " + _("System Status Details"))
         print("+-------------------------------------------+")
 
-        print(_("Overall Status: %s" % overall_status))
+        print(_("Overall Status: %s") % overall_status)
         if len(reasons):
-            rows = [_('Reason %s:' % str(count + 1)) for count in range(len(reasons))]
+            rows = [_('Reason %d:') % (count + 1) for count in range(len(reasons))]
             print columnize(rows, _none_wrap, *reasons)
         print('')
 
