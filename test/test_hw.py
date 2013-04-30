@@ -269,7 +269,13 @@ class HardwareProbeTests(unittest.TestCase):
         mock_info.get_ipv6_addresses.return_value = []
 
         # mock etherinfo not having a get_ipv4_addresses method
-        del mock_info.get_ipv4_addresses
+        # if this fails, you need a mock that supports deleting
+        # attributes from mocks, ala mock 1.0+
+        try:
+            del mock_info.get_ipv4_addresses
+        except AttributeError:
+            self.fail("You probably need a newer version of 'mock' installed, 1.0 or newer")
+
         MockGetInterfacesInfo.return_value = [mock_info]
 
         net_int = hw.getNetworkInterfaces()
