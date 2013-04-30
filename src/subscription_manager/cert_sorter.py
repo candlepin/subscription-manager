@@ -277,7 +277,7 @@ class CertSorter(object):
         for reason in self.reasons:
             if reason['key'] not in result_map:
                 result_map[reason['key']] = []
-            result_map[reason['key']].append(reason['message'])
+            result_map[reason['key']].append((reason['attributes']['name'], reason['message']))
         for item in order:
             if item in result_map:
                 result.extend(result_map[item])
@@ -293,12 +293,6 @@ class CertSorter(object):
                 if s.order.stacking_id == stack_id:
                     result.append(s.subject['CN'])
         return result
-
-    def get_subscription_name(self, ent_id):
-        for s in self.valid_entitlement_certs:
-            if s.subject['CN'] == ent_id:
-                return s.order.name
-        return None
 
     def get_subscription_reasons_map(self):
         """

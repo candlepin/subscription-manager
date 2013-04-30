@@ -213,15 +213,12 @@ class CertSorterTests(SubManFixture):
         self.assertEquals(5, len(messages))
         expected = "The system does not have subscriptions " + \
                 "that cover RAM Limiting Product."
-        self.assertEquals(expected, messages[0])
+        self.assertEquals(expected, messages[0][1])
+        self.assertEquals("RAM Limiting Product", messages[0][0])
         expected = "Awesome OS for ppc64 covers architecture " + \
                 "ppc64 but the system is x86_64."
-        self.assertEquals(expected, messages[1])
-
-    def test_get_sub_name(self):
-        name = self.sorter.get_subscription_name(
-                "ff8080813e468fd8013e4694a4921179")
-        self.assertEquals(name, "Awesome OS for ppc64")
+        self.assertEquals(expected, messages[1][1])
+        self.assertEquals("Awesome OS for ppc64", messages[1][0])
 
     def test_get_stack_subscriptions(self):
         subs = self.sorter.get_stack_subscriptions(PARTIAL_STACK_ID)
@@ -721,7 +718,8 @@ SAMPLE_COMPLIANCE_JSON = json.loads("""
     "key" : "NOTCOVERED",
     "message" : "The system does not have subscriptions that cover RAM Limiting Product.",
     "attributes" : {
-      "product_id" : "801"
+      "product_id" : "801",
+      "name" : "RAM Limiting Product"
     }
   }, {
     "key" : "CORES",
@@ -729,7 +727,8 @@ SAMPLE_COMPLIANCE_JSON = json.loads("""
     "attributes" : {
       "has" : "32",
       "covered" : "16",
-      "stack_id" : "multiattr-stack-test"
+      "stack_id" : "multiattr-stack-test",
+      "name" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)"
     }
   }, {
     "key" : "SOCKETS",
@@ -737,7 +736,8 @@ SAMPLE_COMPLIANCE_JSON = json.loads("""
     "attributes" : {
       "has" : "8",
       "covered" : "4",
-      "stack_id" : "multiattr-stack-test"
+      "stack_id" : "multiattr-stack-test",
+      "name" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)"
     }
   }, {
     "key" : "RAM",
@@ -745,7 +745,8 @@ SAMPLE_COMPLIANCE_JSON = json.loads("""
     "attributes" : {
       "has" : "31",
       "covered" : "8",
-      "stack_id" : "multiattr-stack-test"
+      "stack_id" : "multiattr-stack-test",
+      "name" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)"
     }
   }, {
     "key" : "ARCH",
@@ -753,7 +754,8 @@ SAMPLE_COMPLIANCE_JSON = json.loads("""
     "attributes" : {
       "has" : "x86_64",
       "covered" : "ppc64",
-      "entitlement_id" : "ff8080813e468fd8013e4694a4921179"
+      "entitlement_id" : "ff8080813e468fd8013e4694a4921179",
+      "name" : "Awesome OS for ppc64"
     }
   } ],
   "status" : "invalid",

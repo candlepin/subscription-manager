@@ -2093,17 +2093,21 @@ class ListCommand(CliCommand):
 
     def print_status(self):
         # list status and all reasons it is not valid
-        overall_status = self.sorter.get_system_status()
-        reasons = self.sorter.get_reasons_messages()
-
         print("+-------------------------------------------+")
         print("   " + _("System Status Details"))
         print("+-------------------------------------------+")
 
-        print(_("Overall Status: %s") % overall_status)
+        if not self.is_registered():
+            print(_("Overall Status: Unknown\n"))
+            return
+
+        overall_status = self.sorter.get_system_status()
+        reasons = self.sorter.get_reasons_messages()
+        print(_("Overall Status: %s\n") % overall_status)
         if reasons:
-            rows = [_('Reason %d:') % (count + 1) for count in range(len(reasons))]
-            print columnize(rows, _none_wrap, *reasons)
+            rows = [reason[0] + ':' for reason in reasons]
+            #rows = [_('Reason %d:') % (count + 1) for count in range(len(reasons))]
+            print columnize(rows, _none_wrap, *[r[1] for r in reasons])
         print('')
 
     def print_consumed(self, service_level=None):
