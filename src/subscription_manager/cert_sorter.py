@@ -135,7 +135,10 @@ class CertSorter(object):
         if 'reasons' in status:
             self.reasons = status['reasons']
 
-        self.system_status = status['status']
+        if 'status' in status and len(status['status']):
+            self.system_status = status['status']
+        else:
+            self.system_status = None
 
         # For backward compatability with old find first invalid date,
         # we drop one second from the compliant until from server (as
@@ -323,7 +326,14 @@ class CertSorter(object):
         Return true if the results of this cert sort indicate our
         entitlements are completely valid.
         """
-        return self.system_status == 'valid'
+        if self.system_status:
+            return self.system_status == 'valid'
+
+        #Some old candlepin versions do not return 'status' with information
+        if self.partially_valid_products or self.expired_products or \
+                self.partial_stacks or self.unentitled_products:
+            return False
+        return True
 
     def is_registered(self):
         return self.identity.is_valid()
