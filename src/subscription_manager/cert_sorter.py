@@ -38,6 +38,10 @@ UNKNOWN = "unknown"
 SOCKET_FACT = 'cpu.cpu_socket(s)'
 RAM_FACT = 'memory.memtotal'
 
+STATUS_MAP = {'valid': _('Current'),
+        'partial': _('Insufficient'),
+        'invalid': _('Invalid')}
+
 
 class CertSorter(object):
     """
@@ -262,15 +266,7 @@ class CertSorter(object):
         return result
 
     def get_system_status(self):
-        status = self.system_status
-        if status == 'valid':
-            return _('Current')
-        elif status == 'partial':
-            return _('Insufficient')
-        elif status == 'invalid':
-            return _('Invalid')
-        else:
-            return _('Unknown')
+        return STATUS_MAP.get(self.system_status, _('Unknown'))
 
     def get_reasons_messages(self):
         # we want non-covered (red) reasons first,

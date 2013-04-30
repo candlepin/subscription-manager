@@ -1984,7 +1984,7 @@ class ListCommand(CliCommand):
         self.parser.add_option("--consumed", action='store_true',
                                help=_("show the subscriptions being consumed by this system"))
         self.parser.add_option("--status", action='store_true',
-                               help=_("show the current status of the system and reasons it not fully compliant."))
+                               help=_("show the current status of the system and reasons it is not fully compliant."))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("shows only subscriptions matching the specified service level; only used with --available and --consumed"))
 

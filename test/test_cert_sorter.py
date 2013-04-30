@@ -46,6 +46,8 @@ STACK_2 = '1'  # awesomeos 64
 PARTIAL_STACK_ID = STACK_1
 PROD_4 = StubProduct(INST_PID_4,
         name="Multi-Attribute Stackable")
+PROD_2 = StubProduct(INST_PID_2,
+        name="Awesome OS for ppc64")
 
 
 def stub_prod_cert(pid):
@@ -61,8 +63,7 @@ class CertSorterTests(SubManFixture):
         self.prod_dir = StubProductDirectory(
                 pids=[INST_PID_1, INST_PID_2, INST_PID_3, INST_PID_4])
         self.ent_dir = StubEntitlementDirectory([
-            StubEntitlementCertificate(StubProduct(INST_PID_2,
-                name="Awesome OS for ppc64"),
+            StubEntitlementCertificate(PROD_2,
                 ent_id=ENT_ID_2),
             StubEntitlementCertificate(StubProduct(INST_PID_1,
                 name="Awesome OS for x86_64"),
@@ -236,14 +237,19 @@ class CertSorterTests(SubManFixture):
         messages = self.sorter.get_product_reasons(PROD_4)
         self.assertEquals(3, len(messages))
         expectations = []
-        expectations.append("Multi-Attribute Stackable (16 " +
+        expectations.append("Multi-Attribute Stackable (16 "
                 "cores, 4 sockets, 8GB RAM) only covers 16 of 32 cores.")
-        expectations.append("Multi-Attribute Stackable (16 " +
+        expectations.append("Multi-Attribute Stackable (16 "
                 "cores, 4 sockets, 8GB RAM) only covers 8GB of 31GB of RAM.")
-        expectations.append("Multi-Attribute Stackable " +
+        expectations.append("Multi-Attribute Stackable "
                 "(16 cores, 4 sockets, 8GB RAM) only covers 4 of 8 sockets.")
         for expected in expectations:
             self.assertTrue(expected in messages)
+        messages = self.sorter.get_product_reasons(PROD_2)
+        self.assertEquals(1, len(messages))
+        expected = "Awesome OS for ppc64 covers architecture " + \
+            "ppc64 but the system is x86_64."
+        self.assertEquals(expected, messages[0])
 
     def test_get_subscription_reasons_map(self):
         sub_reason_map = self.sorter.get_subscription_reasons_map()
