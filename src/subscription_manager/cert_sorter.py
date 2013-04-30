@@ -136,6 +136,7 @@ class CertSorter(object):
             self.reasons = status['reasons']
 
         self.system_status = status['status']
+
         # For backward compatability with old find first invalid date,
         # we drop one second from the compliant until from server (as
         # it is returning the first second we are invalid), then add a full
@@ -322,9 +323,7 @@ class CertSorter(object):
         Return true if the results of this cert sort indicate our
         entitlements are completely valid.
         """
-        if self.system_status != 'valid':
-            return False
-        return True
+        return self.system_status == 'valid':
 
     def is_registered(self):
         return self.identity.is_valid()
