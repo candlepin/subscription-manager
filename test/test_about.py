@@ -25,8 +25,10 @@ from subscription_manager.gui import about
 class TestAboutDialog(unittest.TestCase):
     @mock.patch('subscription_manager.gui.about.get_server_versions')
     @mock.patch('subscription_manager.gui.about.get_client_versions')
-    def test(self, client_versions_mock, server_versions_mock):
+    @mock.patch('__builtin__.file')
+    def test(self, file_mock, client_versions_mock, server_versions_mock):
         backend_mock = mock.Mock()
+        file_mock.return_value = '1367419386'
 
         server_versions_mock.return_value = {"candlepin": '100-1.0',
                                              "server-type": 'candlepin'}
