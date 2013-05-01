@@ -843,6 +843,13 @@ class TestNoneWrap(unittest.TestCase):
 
 
 class TestColumnize(unittest.TestCase):
+    def setUp(self):
+        self.old_method = managercli.get_terminal_width
+        managercli.get_terminal_width = Mock(return_value=500)
+
+    def tearDown(self):
+        managercli.get_terminal_width = self.old_method
+
     def test_columnize(self):
         result = columnize(["Hello:", "Foo:"], _echo, "world", "bar")
         self.assertEquals(result, "Hello: world\nFoo:   bar")
@@ -854,3 +861,15 @@ class TestColumnize(unittest.TestCase):
     def test_columnize_with_empty_list(self):
         result = columnize(["Hello:", "Foo:"], _echo, [], "bar")
         self.assertEquals(result, "Hello: \nFoo:   bar")
+
+    def test_columnize_with_small_term(self):
+        result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
+                _echo, "This is a testing string", "This_is_another_testing_string")
+        expected = 'Hello\n Hello\n Hello\n Hello\n :    This\n      is a\n      ' \
+                'testin\n      g\n      string\nFoo\n Foo\n Foo\n Foo: \n      ' \
+                'This_i\n      s_anot\n      her_te\n      sting_\n      string'
+        self.assertNotEquals(result, expected)
+        managercli.get_terminal_width = Mock(return_value=12)
+        result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
+                _echo, "This is a testing string", "This_is_another_testing_string")
+        self.assertEquals(result, expected)

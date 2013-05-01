@@ -2106,7 +2106,6 @@ class ListCommand(CliCommand):
         print(_("Overall Status: %s\n") % overall_status)
         if reasons:
             rows = [reason[0] + ':' for reason in reasons]
-            #rows = [_('Reason %d:') % (count + 1) for count in range(len(reasons))]
             print columnize(rows, _none_wrap, *[r[1] for r in reasons])
         print('')
 
@@ -2211,15 +2210,21 @@ def columnize(caption_list, callback, *args):
     The callback gives us the ability to do things like replacing None values
     with the string "None" (see _none_wrap()).
     """
-    #Add one so that the longest string has a space after it
-    padding = sorted(map(len, caption_list))[-1] + 1
-    padded_list = [caption.ljust(padding) + "%s" for caption in caption_list]
+    # Add one so that the longest string has a space after it
+    # Unless that is longer than half the console width
+    padding = min(sorted(map(len, caption_list))[-1] + 1,
+            int(get_terminal_width() / 2))
+    padded_list = []
+    for caption in caption_list:
+        lines = format_name(caption, 1, padding).split('\n')
+        lines[-1] = lines[-1].ljust(padding) + '%s'
+        fixed_caption = '\n'.join(lines)
+        padded_list.append(fixed_caption)
 
     lines = zip(padded_list, args)
     columns = get_terminal_width()
     output = []
-    for line in lines:
-        (caption, value) = line
+    for (caption, value) in lines:
         if isinstance(value, list):
             if value:
                 # Put the first value on the same line as the caption
@@ -2254,21 +2259,24 @@ def format_name(name, indent, max_length):
     if not words:
         return name
 
-    first_word = words.pop(0)
-    line = [first_word]
-    current += len(first_word) + 1
-
     def add_line():
         lines.append(' '.join(line))
 
+    line = []
     # Split here and build it back up by word, this way we get word wrapping
-    for word in words:
-        if current + len(word) < max_length:
+    while words:
+        word = words.pop(0)
+        if current + len(word) <= max_length:
             current += len(word) + 1  # Have to account for the extra space
             line.append(word)
         else:
             add_line()
-            line = [' ' * (indent - 1), word]
+            if indent + len(word) > max_length:
+                words.insert(0, word[max_length - indent:])
+                word = word[:max_length - indent]
+            line = [word]
+            if indent:
+                line.insert(0, ' ' * (indent - 1))
             current = indent + len(word) + 1
 
     add_line()
