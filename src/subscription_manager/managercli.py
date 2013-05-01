@@ -77,6 +77,7 @@ INSTALLED_PRODUCT_STATUS = [
     _("Version:"),
     _("Arch:"),
     _("Status:"),
+    _("Status Details:"),
     _("Starts:"),
     _("Ends:")
 ]
@@ -127,6 +128,7 @@ CONSUMED_LIST = [
     _("Quantity Used:"),
     _("Service Level:"),
     _("Service Type:"),
+    _("Status Details:"),
     _("Starts:"),
     _("Ends:")
 ]
@@ -1981,6 +1983,8 @@ class ListCommand(CliCommand):
                                       % strftime("%Y-%m-%d", localtime())))
         self.parser.add_option("--consumed", action='store_true',
                                help=_("show the subscriptions being consumed by this system"))
+        self.parser.add_option("--status", action='store_true',
+                               help=_("show the current status of the system and reasons it is not fully compliant."))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("shows only subscriptions matching the specified service level; only used with --available and --consumed"))
 
@@ -1998,7 +2002,7 @@ class ListCommand(CliCommand):
                                               self.options.available):
             print _("Error: --servicelevel is only applicable with --available or --consumed")
             sys.exit(-1)
-        if not (self.options.available or self.options.consumed):
+        if not (self.options.available or self.options.consumed or self.options.status):
             self.options.installed = True
 
     def _do_command(self):
@@ -2007,6 +2011,10 @@ class ListCommand(CliCommand):
         """
 
         self._validate_options()
+
+        self.sorter = inj.require(inj.CERT_SORTER,
+                self.product_dir, self.entitlement_dir, self.cp)
+
         if self.options.installed:
             iproducts = managerlib.getInstalledProductStatus(self.product_dir,
                     self.entitlement_dir, self.cp)
@@ -2020,7 +2028,7 @@ class ListCommand(CliCommand):
                 status = STATUS_MAP[product[4]]
                 print columnize(INSTALLED_PRODUCT_STATUS, _none_wrap,
                                 product[0], product[1], product[2], product[3],
-                                status, product[5], product[6]) + "\n"
+                                status, product[5], product[6], product[7]) + "\n"
 
         if self.options.available:
             consumer = check_registration()['uuid']
@@ -2069,6 +2077,9 @@ class ListCommand(CliCommand):
         if self.options.consumed:
             self.print_consumed(service_level=self.options.service_level)
 
+        if self.options.status:
+            self.print_status()
+
     def _filter_pool_json_by_service_level(self, pools, service_level):
 
         def filter_pool_data_by_service_level(pool_data):
@@ -2079,6 +2090,25 @@ class ListCommand(CliCommand):
             return service_level.lower() == pool_level.lower()
 
         return filter(filter_pool_data_by_service_level, pools)
+
+    def print_status(self):
+        # list status and all reasons it is not valid
+        print("+-------------------------------------------+")
+        print("   " + _("System Status Details"))
+        print("+-------------------------------------------+")
+
+        if not self.is_registered():
+            print(_("Overall Status: Unknown\n"))
+            return
+
+        overall_status = self.sorter.get_system_status()
+        reasons = self.sorter.get_reasons_messages()
+        print(_("Overall Status: %s\n") % overall_status)
+        if reasons:
+            rows = [reason[0] + ':' for reason in reasons]
+            #rows = [_('Reason %d:') % (count + 1) for count in range(len(reasons))]
+            print columnize(rows, _none_wrap, *[r[1] for r in reasons])
+        print('')
 
     def print_consumed(self, service_level=None):
         # list all certificates that have not yet expired, even those
@@ -2100,9 +2130,11 @@ class ListCommand(CliCommand):
             print(_("No consumed subscription pools to list"))
             sys.exit(0)
 
+        cert_reasons_map = self.sorter.get_subscription_reasons_map()
+
         print("+-------------------------------------------+")
         print("   " + _("Consumed Subscriptions"))
-        print("+-------------------------------------------+\n")
+        print("+-------------------------------------------+")
 
         for cert in certs:
             order = cert.order
@@ -2112,6 +2144,9 @@ class ListCommand(CliCommand):
             service_level = order.service_level or ""
             service_type = order.service_type or ""
             product_names = [p.name for p in cert.products]
+            reasons = []
+            if cert.subject and 'CN' in cert.subject:
+                reasons = cert_reasons_map[cert.subject['CN']]
             print columnize(CONSUMED_LIST, _none_wrap,
                     order.name,
                     product_names,
@@ -2124,6 +2159,7 @@ class ListCommand(CliCommand):
                     order.quantity_used,
                     service_level,
                     service_type,
+                    reasons,
                     managerlib.formatDate(cert.valid_range.begin()),
                     managerlib.formatDate(cert.valid_range.end())) + "\n"
 

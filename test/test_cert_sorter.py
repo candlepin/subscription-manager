@@ -33,16 +33,21 @@ def cert_list_has_product(cert_list, product_id):
     return False
 
 
-INST_PID_1 = "37060"
-INST_PID_2 = "100000000000002"
-INST_PID_3 = "69"
-INST_PID_4 = 1004
-INST_PID_5 = 1005
-INST_PID_6 = 1006
-STACK_1 = 'stack1'
-STACK_2 = 'stack2'
+INST_PID_1 = "100000000000002"  # awesomeos 64
+ENT_ID_1 = "ff8080813e468fd8013e4690966601d7"
+INST_PID_2 = "100000000000003"  # ppc64 awesomeos
+ENT_ID_2 = "ff8080813e468fd8013e4694a4921179"
+INST_PID_3 = "801"  # non-entitled ram limiting product
+INST_PID_4 = "900"  # multiattr stack
+ENT_ID_4 = "ff8080813e468fd8013e4690f041031b"
+STACK_1 = 'multiattr-stack-test'  # multiattr
+STACK_2 = '1'  # awesomeos 64
 
-PARTIAL_STACK_ID = "1"
+PARTIAL_STACK_ID = STACK_1
+PROD_4 = StubProduct(INST_PID_4,
+        name="Multi-Attribute Stackable")
+PROD_2 = StubProduct(INST_PID_2,
+        name="Awesome OS for ppc64")
 
 
 def stub_prod_cert(pid):
@@ -56,19 +61,20 @@ class CertSorterTests(SubManFixture):
 
         # Setup mock product and entitlement certs:
         self.prod_dir = StubProductDirectory(
-                pids=[INST_PID_1, INST_PID_2, INST_PID_3])
-
+                pids=[INST_PID_1, INST_PID_2, INST_PID_3, INST_PID_4])
         self.ent_dir = StubEntitlementDirectory([
-            StubEntitlementCertificate(StubProduct(INST_PID_2)),
-            StubEntitlementCertificate(StubProduct(INST_PID_3),
-                start_date=datetime.now() - timedelta(days=365),
-                end_date=datetime.now() - timedelta(days=2)),
-            StubEntitlementCertificate(StubProduct(INST_PID_4),
-                start_date=datetime.now() - timedelta(days=365),
-                end_date=datetime.now() + timedelta(days=365)),
-            StubEntitlementCertificate(StubProduct(INST_PID_5)),
+            StubEntitlementCertificate(PROD_2,
+                ent_id=ENT_ID_2),
+            StubEntitlementCertificate(StubProduct(INST_PID_1,
+                name="Awesome OS for x86_64"),
+                ent_id=ENT_ID_1),
+            StubEntitlementCertificate(product=PROD_4,
+                stacking_id=STACK_1,
+                ent_id=ENT_ID_4),
             # entitled, but not installed
-            StubEntitlementCertificate(StubProduct('not_installed_product')),
+            StubEntitlementCertificate(StubProduct('not_installed_product',
+                name="Some Product"),
+                ent_id="SomeSubId"),
             ])
 
         self.mock_uep = StubUEP()
@@ -98,26 +104,35 @@ class CertSorterTests(SubManFixture):
 
     def test_unentitled_products(self):
         self.assertEquals(1, len(self.sorter.unentitled_products))
-        self.assertTrue("69" in self.sorter.unentitled_products)
+        self.assertTrue(INST_PID_3 in self.sorter.unentitled_products)
 
     def test_valid_products(self):
         self.assertEquals(1, len(self.sorter.valid_products))
-        self.assertTrue("37060" in self.sorter.valid_products)
+        self.assertTrue(INST_PID_1 in self.sorter.valid_products)
 
     def test_partially_valid_products(self):
-        self.assertEquals(1, len(self.sorter.partially_valid_products))
-        self.assertTrue("100000000000002" in
+        self.assertEquals(2, len(self.sorter.partially_valid_products))
+        self.assertTrue(INST_PID_2 in
+                self.sorter.partially_valid_products)
+        self.assertTrue(INST_PID_4 in
                 self.sorter.partially_valid_products)
 
     def test_installed_products(self):
-        self.assertEquals(3, len(self.sorter.installed_products))
+        self.assertEquals(4, len(self.sorter.installed_products))
         self.assertTrue(INST_PID_1 in self.sorter.installed_products)
         self.assertTrue(INST_PID_2 in self.sorter.installed_products)
+        self.assertTrue(INST_PID_3 in self.sorter.installed_products)
         self.assertTrue(INST_PID_3 in self.sorter.installed_products)
 
     def test_partial_stack(self):
         self.assertEquals(1, len(self.sorter.partial_stacks))
         self.assertTrue(PARTIAL_STACK_ID in self.sorter.partial_stacks)
+
+    def test_reasons(self):
+        self.assertEquals(5, len(self.sorter.reasons))
+        expected_keys = ['NOTCOVERED', 'CORES', 'SOCKETS', 'RAM', 'ARCH']
+        result_keys = [reason['key'] for reason in self.sorter.reasons]
+        self.assertEquals(sorted(expected_keys), sorted(result_keys))
 
     def test_installed_mismatch_unentitled(self):
         # Use a different product directory with something not present
@@ -147,17 +162,17 @@ class CertSorterTests(SubManFixture):
     def test_compliant_until(self):
         compliant_until = self.sorter.compliant_until
         self.assertEquals(2013, compliant_until.year)
-        self.assertEquals(2, compliant_until.month)
-        self.assertEquals(27, compliant_until.day)
-        self.assertEquals(16, compliant_until.hour)
-        self.assertEquals(03, compliant_until.minute)
-        self.assertEquals(42, compliant_until.second)
+        self.assertEquals(4, compliant_until.month)
+        self.assertEquals(26, compliant_until.day)
+        self.assertEquals(13, compliant_until.hour)
+        self.assertEquals(43, compliant_until.minute)
+        self.assertEquals(12, compliant_until.second)
 
     def test_first_invalid_date(self):
         first_invalid = self.sorter.first_invalid_date
         self.assertEquals(2013, first_invalid.year)
-        self.assertEquals(2, first_invalid.month)
-        self.assertEquals(28, first_invalid.day)
+        self.assertEquals(4, first_invalid.month)
+        self.assertEquals(27, first_invalid.day)
 
     def test_scan_for_expired_or_future_products(self):
         prod_dir = StubProductDirectory(pids=["a", "b", "c", "d", "e"])
@@ -184,376 +199,603 @@ class CertSorterTests(SubManFixture):
 
         self.assertEquals(3, len(sorter.valid_entitlement_certs))
 
+    def test_get_system_status(self):
+        self.assertEquals('Invalid', self.sorter.get_system_status())
+        self.sorter.system_status = 'valid'
+        self.assertEquals('Current', self.sorter.get_system_status())
+        self.sorter.system_status = 'partial'
+        self.assertEquals('Insufficient', self.sorter.get_system_status())
+
+    def test_get_reasons_messages(self):
+        #must have notcovered first
+        #pref arch mismatch next
+        messages = self.sorter.get_reasons_messages()
+        self.assertEquals(5, len(messages))
+        expected = "The system does not have subscriptions " + \
+                "that cover RAM Limiting Product."
+        self.assertEquals(expected, messages[0][1])
+        self.assertEquals("RAM Limiting Product", messages[0][0])
+        expected = "Awesome OS for ppc64 covers architecture " + \
+                "ppc64 but the system is x86_64."
+        self.assertEquals(expected, messages[1][1])
+        self.assertEquals("Awesome OS for ppc64", messages[1][0])
+        #make sure name fallback works
+        for reason in self.sorter.reasons:
+            del reason['attributes']['name']
+        messages = self.sorter.get_reasons_messages()
+        self.assertEquals(5, len(messages))
+        expected = "The system does not have subscriptions " + \
+                "that cover RAM Limiting Product."
+        self.assertEquals(expected, messages[0][1])
+        self.assertEquals("Product 801", messages[0][0])
+
+    def test_get_stack_subscriptions(self):
+        subs = self.sorter.get_stack_subscriptions(PARTIAL_STACK_ID)
+        self.assertEquals(1, len(subs))
+        self.assertEquals(ENT_ID_4, subs[0])
+
+    def test_get_product_subscriptions(self):
+        subs = self.sorter.get_product_subscriptions(PROD_4)
+        self.assertEquals(1, len(subs))
+        self.assertEquals(ENT_ID_4, subs[0].subject['CN'])
+
+    def test_get_product_reasons(self):
+        messages = self.sorter.get_product_reasons(PROD_4)
+        self.assertEquals(3, len(messages))
+        expectations = []
+        expectations.append("Multi-Attribute Stackable (16 "
+                "cores, 4 sockets, 8GB RAM) only covers 16 of 32 cores.")
+        expectations.append("Multi-Attribute Stackable (16 "
+                "cores, 4 sockets, 8GB RAM) only covers 8GB of 31GB of RAM.")
+        expectations.append("Multi-Attribute Stackable "
+                "(16 cores, 4 sockets, 8GB RAM) only covers 4 of 8 sockets.")
+        for expected in expectations:
+            self.assertTrue(expected in messages)
+        messages = self.sorter.get_product_reasons(PROD_2)
+        self.assertEquals(1, len(messages))
+        expected = "Awesome OS for ppc64 covers architecture " + \
+            "ppc64 but the system is x86_64."
+        self.assertEquals(expected, messages[0])
+
+    def test_get_subscription_reasons_map(self):
+        sub_reason_map = self.sorter.get_subscription_reasons_map()
+        self.assertEquals(3, len(sub_reason_map[ENT_ID_4]))
+        self.assertEquals(0, len(sub_reason_map[ENT_ID_1]))
+        self.assertEquals(1, len(sub_reason_map[ENT_ID_2]))
+        expected = "Awesome OS for ppc64 covers architecture " + \
+                "ppc64 but the system is x86_64."
+        actual = sub_reason_map[ENT_ID_2][0]
+        self.assertEquals(expected, actual)
+
+    def test_get_reason_id(self):
+        reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6', ent='1234')
+        reason_id = self.sorter.get_reason_id(reason)
+        self.assertEquals("Subscription 1234", reason_id)
+        reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6', stack='1234')
+        reason_id = self.sorter.get_reason_id(reason)
+        self.assertEquals("Stack 1234", reason_id)
+        reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6', prod='1234')
+        reason_id = self.sorter.get_reason_id(reason)
+        self.assertEquals("Product 1234", reason_id)
+
+    def build_ent_reason_with_attrs(self, key, message, has,
+            covered, name=None, ent=None, stack=None, prod=None):
+        attrs = {'has': has,
+                'covered': covered}
+        if name:
+            attrs['name'] = name
+        if ent:
+            attrs['entitlement_id'] = ent
+        elif stack:
+            attrs['stack_id'] = stack
+        elif prod:
+            attrs['product_id'] = prod
+        return self.build_reason(key, message, attrs)
+
+    def build_reason(self, key, message, attrs):
+        return {'KEY': key,
+                'message': message,
+                'attributes': attrs}
 
 SAMPLE_COMPLIANCE_JSON = json.loads("""
 {
-  "date" : "2013-02-27T16:03:42.509+0000",
-  "compliantUntil" : "2013-02-27T16:03:42.509+0000",
-  "nonCompliantProducts" : [ "69" ],
+  "date" : "2013-04-26T13:43:12.436+0000",
+  "compliantUntil" : "2013-04-26T13:43:12.436+0000",
+  "nonCompliantProducts" : [ "801" ],
   "compliantProducts" : {
-    "37060" : [ {
-      "created" : "2013-02-27T16:03:18.111+0000",
-      "updated" : "2013-02-27T16:03:18.111+0000",
-      "id" : "402881983d17fabf013d1c64c1df0b7a",
-      "consumer" : {
-        "id" : "402881983d17fabf013d1c5c98810b70",
-        "uuid" : "4bb47522-df95-46c2-ac23-c4532faf6d8d",
-        "name" : "lenovo.local.rm-rf.ca",
-        "href" : "/consumers/4bb47522-df95-46c2-ac23-c4532faf6d8d"
-      },
+    "100000000000002" : [ {
+      "created" : "2013-04-26T13:41:56.688+0000",
+      "updated" : "2013-04-26T13:41:56.688+0000",
+      "id" : "ff8080813e468fd8013e46942f501173",
+      "consumer" : null,
       "pool" : {
-        "created" : "2013-02-26T19:30:06.708+0000",
-        "updated" : "2013-02-27T16:03:18.119+0000",
-        "id" : "402881983d17fabf013d17fbbcf40363",
+        "created" : "2013-04-26T13:38:29.296+0000",
+        "updated" : "2013-04-26T13:41:56.688+0000",
+        "id" : "ff8080813e468fd8013e469105300613",
         "owner" : {
-          "id" : "402881983d17fabf013d17fae23d005d",
+          "id" : "ff8080813e468fd8013e468ff4c70002",
           "key" : "admin",
           "displayName" : "Admin Owner",
           "href" : "/owners/admin"
         },
         "activeSubscription" : true,
-        "subscriptionId" : "402881983d17fabf013d17fb94510241",
+        "subscriptionId" : "ff8080813e468fd8013e4690809e018f",
+        "subscriptionSubKey" : "master",
+        "sourceEntitlement" : null,
+        "quantity" : 10,
+        "startDate" : "2013-04-26T00:00:00.000+0000",
+        "endDate" : "2014-04-26T00:00:00.000+0000",
+        "productId" : "awesomeos-x86_64",
+        "providedProducts" : [ {
+          "id" : "ff8080813e468fd8013e46910531061c",
+          "productId" : "100000000000002",
+          "productName" : "Awesome OS for x86_64 Bits"
+        } ],
+        "attributes" : [ ],
+        "productAttributes" : [ {
+          "id" : null,
+          "name" : "arch",
+          "value" : "x86_64",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "multi-entitlement",
+          "value" : "yes",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "type",
+          "value" : "MKT",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "stacking_id",
+          "value" : "1",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "sockets",
+          "value" : "1",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "version",
+          "value" : "3.11",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "variant",
+          "value" : "ALL",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "warning_period",
+          "value" : "30",
+          "productId" : null
+        } ],
+        "restrictedToUsername" : null,
+        "contractNumber" : "79",
+        "accountNumber" : "12331131231",
+        "orderNumber" : "order-8675309",
+        "consumed" : 3,
+        "exported" : 0,
+        "productName" : "Awesome OS for x86_64",
+        "href" : "/pools/ff8080813e468fd8013e469105300613"
+      },
+      "startDate" : "2013-04-26T00:00:00.000+0000",
+      "endDate" : "2014-04-26T00:00:00.000+0000",
+      "certificates" : [ ],
+      "quantity" : 3,
+      "href" : "/entitlements/ff8080813e468fd8013e46942f501173"
+    }, {
+      "created" : "2013-04-26T13:41:28.554+0000",
+      "updated" : "2013-04-26T13:41:28.554+0000",
+      "id" : "ff8080813e468fd8013e4693c16a1170",
+      "consumer" : null,
+      "pool" : {
+        "created" : "2013-04-26T13:38:29.320+0000",
+        "updated" : "2013-04-26T13:41:28.554+0000",
+        "id" : "ff8080813e468fd8013e46910548061d",
+        "owner" : {
+          "id" : "ff8080813e468fd8013e468ff4c70002",
+          "key" : "admin",
+          "displayName" : "Admin Owner",
+          "href" : "/owners/admin"
+        },
+        "activeSubscription" : true,
+        "subscriptionId" : "ff8080813e468fd8013e4690801e018e",
         "subscriptionSubKey" : "master",
         "sourceEntitlement" : null,
         "quantity" : 5,
-        "startDate" : "2013-02-26T00:00:00.000+0000",
-        "endDate" : "2014-02-26T00:00:00.000+0000",
-        "productId" : "awesomeos-virt-4",
+        "startDate" : "2013-04-26T00:00:00.000+0000",
+        "endDate" : "2014-04-26T00:00:00.000+0000",
+        "productId" : "awesomeos-x86_64",
         "providedProducts" : [ {
-          "created" : "2013-02-26T19:30:06.709+0000",
-          "updated" : "2013-02-26T19:30:06.709+0000",
-          "id" : "402881983d17fabf013d17fbbcf5036a",
-          "productId" : "37060",
-          "productName" : "Awesome OS Server Bits"
+          "id" : "ff8080813e468fd8013e469105490627",
+          "productId" : "100000000000002",
+          "productName" : "Awesome OS for x86_64 Bits"
         } ],
         "attributes" : [ ],
         "productAttributes" : [ {
-          "created" : "2013-02-26T19:30:06.708+0000",
-          "updated" : "2013-02-26T19:30:06.708+0000",
-          "id" : "402881983d17fabf013d17fbbcf40364",
+          "id" : null,
+          "name" : "arch",
+          "value" : "x86_64",
+          "productId" : null
+        }, {
+          "id" : null,
           "name" : "multi-entitlement",
           "value" : "yes",
-          "productId" : "awesomeos-virt-4"
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:06.708+0000",
-          "updated" : "2013-02-26T19:30:06.708+0000",
-          "id" : "402881983d17fabf013d17fbbcf40365",
-          "name" : "virt_limit",
-          "value" : "4",
-          "productId" : "awesomeos-virt-4"
-        }, {
-          "created" : "2013-02-26T19:30:06.709+0000",
-          "updated" : "2013-02-26T19:30:06.709+0000",
-          "id" : "402881983d17fabf013d17fbbcf50366",
+          "id" : null,
           "name" : "type",
           "value" : "MKT",
-          "productId" : "awesomeos-virt-4"
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:06.709+0000",
-          "updated" : "2013-02-26T19:30:06.709+0000",
-          "id" : "402881983d17fabf013d17fbbcf50367",
-          "name" : "arch",
-          "value" : "ALL",
-          "productId" : "awesomeos-virt-4"
+          "id" : null,
+          "name" : "stacking_id",
+          "value" : "1",
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:06.709+0000",
-          "updated" : "2013-02-26T19:30:06.709+0000",
-          "id" : "402881983d17fabf013d17fbbcf50368",
+          "id" : null,
+          "name" : "sockets",
+          "value" : "1",
+          "productId" : null
+        }, {
+          "id" : null,
           "name" : "version",
-          "value" : "6.1",
-          "productId" : "awesomeos-virt-4"
+          "value" : "3.11",
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:06.709+0000",
-          "updated" : "2013-02-26T19:30:06.709+0000",
-          "id" : "402881983d17fabf013d17fbbcf50369",
+          "id" : null,
           "name" : "variant",
           "value" : "ALL",
-          "productId" : "awesomeos-virt-4"
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "warning_period",
+          "value" : "30",
+          "productId" : null
         } ],
         "restrictedToUsername" : null,
-        "contractNumber" : "102",
+        "contractNumber" : "78",
         "accountNumber" : "12331131231",
-        "consumed" : 1,
+        "orderNumber" : "order-8675309",
+        "consumed" : 5,
         "exported" : 0,
-        "productName" : "Awesome OS with up to 4 virtual guests",
-        "href" : "/pools/402881983d17fabf013d17fbbcf40363"
+        "productName" : "Awesome OS for x86_64",
+        "href" : "/pools/ff8080813e468fd8013e46910548061d"
       },
-      "startDate" : "2013-02-26T00:00:00.000+0000",
-      "endDate" : "2014-02-26T00:00:00.000+0000",
-      "certificates" : [ {
-        "created" : "2013-02-27T16:03:18.219+0000",
-        "updated" : "2013-02-27T16:03:18.219+0000",
-        "key" : "",
-        "cert" : "",
-        "id" : "402881983d17fabf013d1c64c24b0b88",
-        "serial" : {
-          "created" : "2013-02-27T16:03:18.187+0000",
-          "updated" : "2013-02-27T16:03:18.187+0000",
-          "id" : 3772349624435077441,
-          "revoked" : false,
-          "collected" : false,
-          "expiration" : "2014-02-26T00:00:00.000+0000",
-          "serial" : 3772349624435077441
-        }
-      } ],
-      "quantity" : 1,
-      "accountNumber" : "12331131231",
-      "contractNumber" : "102",
-      "href" : "/entitlements/402881983d17fabf013d1c64c1df0b7a"
+      "startDate" : "2013-04-26T00:00:00.000+0000",
+      "endDate" : "2014-04-26T00:00:00.000+0000",
+      "certificates" : [ ],
+      "quantity" : 5,
+      "href" : "/entitlements/ff8080813e468fd8013e4693c16a1170"
     } ]
   },
   "partiallyCompliantProducts" : {
-    "100000000000002" : [ {
-      "created" : "2013-02-27T16:02:39.298+0000",
-      "updated" : "2013-02-27T16:02:39.298+0000",
-      "id" : "402881983d17fabf013d1c642a420b78",
-      "consumer" : {
-        "id" : "402881983d17fabf013d1c5c98810b70",
-        "uuid" : "4bb47522-df95-46c2-ac23-c4532faf6d8d",
-        "name" : "lenovo.local.rm-rf.ca",
-        "href" : "/consumers/4bb47522-df95-46c2-ac23-c4532faf6d8d"
-      },
+    "100000000000003" : [ {
+      "created" : "2013-04-26T13:42:26.706+0000",
+      "updated" : "2013-04-26T13:42:26.706+0000",
+      "id" : "ff8080813e468fd8013e4694a4921179",
+      "consumer" : null,
       "pool" : {
-        "created" : "2013-02-26T19:30:07.553+0000",
-        "updated" : "2013-02-27T16:02:39.299+0000",
-        "id" : "402881983d17fabf013d17fbc0410407",
+        "created" : "2013-04-26T13:38:28.981+0000",
+        "updated" : "2013-04-26T13:42:26.707+0000",
+        "id" : "ff8080813e468fd8013e469103f505b6",
         "owner" : {
-          "id" : "402881983d17fabf013d17fae23d005d",
+          "id" : "ff8080813e468fd8013e468ff4c70002",
           "key" : "admin",
           "displayName" : "Admin Owner",
           "href" : "/owners/admin"
         },
         "activeSubscription" : true,
-        "subscriptionId" : "402881983d17fabf013d17fb6bab01bf",
+        "subscriptionId" : "ff8080813e468fd8013e4690966601d7",
         "subscriptionSubKey" : "master",
         "sourceEntitlement" : null,
         "quantity" : 10,
-        "startDate" : "2013-02-26T00:00:00.000+0000",
-        "endDate" : "2014-02-26T00:00:00.000+0000",
-        "productId" : "awesomeos-x86_64",
+        "startDate" : "2013-04-26T00:00:00.000+0000",
+        "endDate" : "2014-04-26T00:00:00.000+0000",
+        "productId" : "awesomeos-ppc64",
         "providedProducts" : [ {
-          "created" : "2013-02-26T19:30:07.555+0000",
-          "updated" : "2013-02-26T19:30:07.555+0000",
-          "id" : "402881983d17fabf013d17fbc0430410",
-          "productId" : "100000000000002",
-          "productName" : "Awesome OS for x86_64 Bits"
+          "id" : "ff8080813e468fd8013e469103f505be",
+          "productId" : "100000000000003",
+          "productName" : "Awesome OS for ppc64 Bits"
         } ],
         "attributes" : [ ],
         "productAttributes" : [ {
-          "created" : "2013-02-26T19:30:07.554+0000",
-          "updated" : "2013-02-26T19:30:07.554+0000",
-          "id" : "402881983d17fabf013d17fbc0420408",
+          "id" : null,
+          "name" : "sockets",
+          "value" : "16",
+          "productId" : null
+        }, {
+          "id" : null,
           "name" : "arch",
-          "value" : "x86_64",
-          "productId" : "awesomeos-x86_64"
+          "value" : "ppc64",
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:07.554+0000",
-          "updated" : "2013-02-26T19:30:07.554+0000",
-          "id" : "402881983d17fabf013d17fbc0420409",
-          "name" : "multi-entitlement",
-          "value" : "yes",
-          "productId" : "awesomeos-x86_64"
-        }, {
-          "created" : "2013-02-26T19:30:07.554+0000",
-          "updated" : "2013-02-26T19:30:07.554+0000",
-          "id" : "402881983d17fabf013d17fbc042040a",
-          "name" : "stacking_id",
-          "value" : "1",
-          "productId" : "awesomeos-x86_64"
-        }, {
-          "created" : "2013-02-26T19:30:07.554+0000",
-          "updated" : "2013-02-26T19:30:07.554+0000",
-          "id" : "402881983d17fabf013d17fbc042040b",
+          "id" : null,
           "name" : "type",
           "value" : "MKT",
-          "productId" : "awesomeos-x86_64"
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:07.554+0000",
-          "updated" : "2013-02-26T19:30:07.554+0000",
-          "id" : "402881983d17fabf013d17fbc042040c",
-          "name" : "sockets",
-          "value" : "1",
-          "productId" : "awesomeos-x86_64"
-        }, {
-          "created" : "2013-02-26T19:30:07.554+0000",
-          "updated" : "2013-02-26T19:30:07.554+0000",
-          "id" : "402881983d17fabf013d17fbc043040d",
+          "id" : null,
           "name" : "version",
           "value" : "3.11",
-          "productId" : "awesomeos-x86_64"
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:07.555+0000",
-          "updated" : "2013-02-26T19:30:07.555+0000",
-          "id" : "402881983d17fabf013d17fbc043040e",
-          "name" : "warning_period",
-          "value" : "30",
-          "productId" : "awesomeos-x86_64"
-        }, {
-          "created" : "2013-02-26T19:30:07.555+0000",
-          "updated" : "2013-02-26T19:30:07.555+0000",
-          "id" : "402881983d17fabf013d17fbc043040f",
+          "id" : null,
           "name" : "variant",
           "value" : "ALL",
-          "productId" : "awesomeos-x86_64"
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "warning_period",
+          "value" : "30",
+          "productId" : null
         } ],
         "restrictedToUsername" : null,
-        "contractNumber" : "67",
+        "contractNumber" : "97",
         "accountNumber" : "12331131231",
+        "orderNumber" : "order-8675309",
         "consumed" : 1,
         "exported" : 0,
-        "productName" : "Awesome OS for x86_64",
-        "href" : "/pools/402881983d17fabf013d17fbc0410407"
+        "productName" : "Awesome OS for ppc64",
+        "href" : "/pools/ff8080813e468fd8013e469103f505b6"
       },
-      "startDate" : "2013-02-26T00:00:00.000+0000",
-      "endDate" : "2014-02-26T00:00:00.000+0000",
-      "certificates" : [ {
-        "created" : "2013-02-27T16:02:39.385+0000",
-        "updated" : "2013-02-27T16:02:39.385+0000",
-        "key" : "",
-        "cert" : "",
-        "id" : "402881983d17fabf013d1c642a990b79",
-        "serial" : {
-          "created" : "2013-02-27T16:02:39.337+0000",
-          "updated" : "2013-02-27T16:02:39.337+0000",
-          "id" : 7014120607119972290,
-          "revoked" : false,
-          "collected" : false,
-          "expiration" : "2014-02-26T00:00:00.000+0000",
-          "serial" : 7014120607119972290
-        }
-      } ],
+      "startDate" : "2013-04-26T00:00:00.000+0000",
+      "endDate" : "2014-04-26T00:00:00.000+0000",
+      "certificates" : [ ],
       "quantity" : 1,
-      "accountNumber" : "12331131231",
-      "contractNumber" : "67",
-      "href" : "/entitlements/402881983d17fabf013d1c642a420b78"
+      "href" : "/entitlements/ff8080813e468fd8013e4694a4921179"
+    } ],
+    "900" : [ {
+      "created" : "2013-04-26T13:42:16.220+0000",
+      "updated" : "2013-04-26T13:42:16.220+0000",
+      "id" : "ff8080813e468fd8013e46947b9c1176",
+      "consumer" : null,
+      "pool" : {
+        "created" : "2013-04-26T13:38:27.320+0000",
+        "updated" : "2013-04-26T13:42:16.220+0000",
+        "id" : "ff8080813e468fd8013e4690fd7803a4",
+        "owner" : {
+          "id" : "ff8080813e468fd8013e468ff4c70002",
+          "key" : "admin",
+          "displayName" : "Admin Owner",
+          "href" : "/owners/admin"
+        },
+        "activeSubscription" : true,
+        "subscriptionId" : "ff8080813e468fd8013e4690f041031b",
+        "subscriptionSubKey" : "master",
+        "sourceEntitlement" : null,
+        "quantity" : 5,
+        "startDate" : "2013-04-26T00:00:00.000+0000",
+        "endDate" : "2014-04-26T00:00:00.000+0000",
+        "productId" : "sock-core-ram-multiattr",
+        "providedProducts" : [ {
+          "id" : "ff8080813e468fd8013e4690fd7903b0",
+          "productId" : "900",
+          "productName" : "Multi-Attribute Limited Product"
+        } ],
+        "attributes" : [ ],
+        "productAttributes" : [ {
+          "id" : null,
+          "name" : "cores",
+          "value" : "16",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "multi-entitlement",
+          "value" : "yes",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "ram",
+          "value" : "8",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "support_type",
+          "value" : "Level 3",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "type",
+          "value" : "MKT",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "arch",
+          "value" : "ALL",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "stacking_id",
+          "value" : "multiattr-stack-test",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "version",
+          "value" : "1.0",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "support_level",
+          "value" : "Super",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "sockets",
+          "value" : "4",
+          "productId" : null
+        }, {
+          "id" : null,
+          "name" : "variant",
+          "value" : "ALL",
+          "productId" : null
+        } ],
+        "restrictedToUsername" : null,
+        "contractNumber" : "204",
+        "accountNumber" : "12331131231",
+        "orderNumber" : "order-8675309",
+        "consumed" : 1,
+        "exported" : 0,
+        "productName" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)",
+        "href" : "/pools/ff8080813e468fd8013e4690fd7803a4"
+      },
+      "startDate" : "2013-04-26T00:00:00.000+0000",
+      "endDate" : "2014-04-26T00:00:00.000+0000",
+      "certificates" : [ ],
+      "quantity" : 1,
+      "href" : "/entitlements/ff8080813e468fd8013e46947b9c1176"
     } ]
   },
   "partialStacks" : {
-    "1" : [ {
-      "created" : "2013-02-27T16:02:39.298+0000",
-      "updated" : "2013-02-27T16:02:39.298+0000",
-      "id" : "402881983d17fabf013d1c642a420b78",
-      "consumer" : {
-        "id" : "402881983d17fabf013d1c5c98810b70",
-        "uuid" : "4bb47522-df95-46c2-ac23-c4532faf6d8d",
-        "name" : "lenovo.local.rm-rf.ca",
-        "href" : "/consumers/4bb47522-df95-46c2-ac23-c4532faf6d8d"
-      },
+    "multiattr-stack-test" : [ {
+      "created" : "2013-04-26T13:42:16.220+0000",
+      "updated" : "2013-04-26T13:42:16.220+0000",
+      "id" : "ff8080813e468fd8013e46947b9c1176",
+      "consumer" : null,
       "pool" : {
-        "created" : "2013-02-26T19:30:07.553+0000",
-        "updated" : "2013-02-27T16:02:39.299+0000",
-        "id" : "402881983d17fabf013d17fbc0410407",
+        "created" : "2013-04-26T13:38:27.320+0000",
+        "updated" : "2013-04-26T13:42:16.220+0000",
+        "id" : "ff8080813e468fd8013e4690fd7803a4",
         "owner" : {
-          "id" : "402881983d17fabf013d17fae23d005d",
+          "id" : "ff8080813e468fd8013e468ff4c70002",
           "key" : "admin",
           "displayName" : "Admin Owner",
           "href" : "/owners/admin"
         },
         "activeSubscription" : true,
-        "subscriptionId" : "402881983d17fabf013d17fb6bab01bf",
+        "subscriptionId" : "ff8080813e468fd8013e4690f041031b",
         "subscriptionSubKey" : "master",
         "sourceEntitlement" : null,
-        "quantity" : 10,
-        "startDate" : "2013-02-26T00:00:00.000+0000",
-        "endDate" : "2014-02-26T00:00:00.000+0000",
-        "productId" : "awesomeos-x86_64",
+        "quantity" : 5,
+        "startDate" : "2013-04-26T00:00:00.000+0000",
+        "endDate" : "2014-04-26T00:00:00.000+0000",
+        "productId" : "sock-core-ram-multiattr",
         "providedProducts" : [ {
-          "created" : "2013-02-26T19:30:07.555+0000",
-          "updated" : "2013-02-26T19:30:07.555+0000",
-          "id" : "402881983d17fabf013d17fbc0430410",
-          "productId" : "100000000000002",
-          "productName" : "Awesome OS for x86_64 Bits"
+          "id" : "ff8080813e468fd8013e4690fd7903b0",
+          "productId" : "900",
+          "productName" : "Multi-Attribute Limited Product"
         } ],
         "attributes" : [ ],
         "productAttributes" : [ {
-          "created" : "2013-02-26T19:30:07.554+0000",
-          "updated" : "2013-02-26T19:30:07.554+0000",
-          "id" : "402881983d17fabf013d17fbc0420408",
-          "name" : "arch",
-          "value" : "x86_64",
-          "productId" : "awesomeos-x86_64"
+          "id" : null,
+          "name" : "cores",
+          "value" : "16",
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:07.554+0000",
-          "updated" : "2013-02-26T19:30:07.554+0000",
-          "id" : "402881983d17fabf013d17fbc0420409",
+          "id" : null,
           "name" : "multi-entitlement",
           "value" : "yes",
-          "productId" : "awesomeos-x86_64"
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:07.554+0000",
-          "updated" : "2013-02-26T19:30:07.554+0000",
-          "id" : "402881983d17fabf013d17fbc042040a",
-          "name" : "stacking_id",
-          "value" : "1",
-          "productId" : "awesomeos-x86_64"
+          "id" : null,
+          "name" : "ram",
+          "value" : "8",
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:07.554+0000",
-          "updated" : "2013-02-26T19:30:07.554+0000",
-          "id" : "402881983d17fabf013d17fbc042040b",
+          "id" : null,
+          "name" : "support_type",
+          "value" : "Level 3",
+          "productId" : null
+        }, {
+          "id" : null,
           "name" : "type",
           "value" : "MKT",
-          "productId" : "awesomeos-x86_64"
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:07.554+0000",
-          "updated" : "2013-02-26T19:30:07.554+0000",
-          "id" : "402881983d17fabf013d17fbc042040c",
-          "name" : "sockets",
-          "value" : "1",
-          "productId" : "awesomeos-x86_64"
+          "id" : null,
+          "name" : "arch",
+          "value" : "ALL",
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:07.554+0000",
-          "updated" : "2013-02-26T19:30:07.554+0000",
-          "id" : "402881983d17fabf013d17fbc043040d",
+          "id" : null,
+          "name" : "stacking_id",
+          "value" : "multiattr-stack-test",
+          "productId" : null
+        }, {
+          "id" : null,
           "name" : "version",
-          "value" : "3.11",
-          "productId" : "awesomeos-x86_64"
+          "value" : "1.0",
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:07.555+0000",
-          "updated" : "2013-02-26T19:30:07.555+0000",
-          "id" : "402881983d17fabf013d17fbc043040e",
-          "name" : "warning_period",
-          "value" : "30",
-          "productId" : "awesomeos-x86_64"
+          "id" : null,
+          "name" : "support_level",
+          "value" : "Super",
+          "productId" : null
         }, {
-          "created" : "2013-02-26T19:30:07.555+0000",
-          "updated" : "2013-02-26T19:30:07.555+0000",
-          "id" : "402881983d17fabf013d17fbc043040f",
+          "id" : null,
+          "name" : "sockets",
+          "value" : "4",
+          "productId" : null
+        }, {
+          "id" : null,
           "name" : "variant",
           "value" : "ALL",
-          "productId" : "awesomeos-x86_64"
+          "productId" : null
         } ],
         "restrictedToUsername" : null,
-        "contractNumber" : "67",
+        "contractNumber" : "204",
         "accountNumber" : "12331131231",
+        "orderNumber" : "order-8675309",
         "consumed" : 1,
         "exported" : 0,
-        "productName" : "Awesome OS for x86_64",
-        "href" : "/pools/402881983d17fabf013d17fbc0410407"
+        "productName" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)",
+        "href" : "/pools/ff8080813e468fd8013e4690fd7803a4"
       },
-      "startDate" : "2013-02-26T00:00:00.000+0000",
-      "endDate" : "2014-02-26T00:00:00.000+0000",
-      "certificates" : [ {
-        "created" : "2013-02-27T16:02:39.385+0000",
-        "updated" : "2013-02-27T16:02:39.385+0000",
-        "key" : "",
-        "cert" : "",
-        "id" : "402881983d17fabf013d1c642a990b79",
-        "serial" : {
-          "created" : "2013-02-27T16:02:39.337+0000",
-          "updated" : "2013-02-27T16:02:39.337+0000",
-          "id" : 7014120607119972290,
-          "revoked" : false,
-          "collected" : false,
-          "expiration" : "2014-02-26T00:00:00.000+0000",
-          "serial" : 7014120607119972290
-        }
-      } ],
+      "startDate" : "2013-04-26T00:00:00.000+0000",
+      "endDate" : "2014-04-26T00:00:00.000+0000",
+      "certificates" : [ ],
       "quantity" : 1,
-      "accountNumber" : "12331131231",
-      "contractNumber" : "67",
-      "href" : "/entitlements/402881983d17fabf013d1c642a420b78"
+      "href" : "/entitlements/ff8080813e468fd8013e46947b9c1176"
     } ]
   },
+  "reasons" : [ {
+    "key" : "NOTCOVERED",
+    "message" : "The system does not have subscriptions that cover RAM Limiting Product.",
+    "attributes" : {
+      "product_id" : "801",
+      "name" : "RAM Limiting Product"
+    }
+  }, {
+    "key" : "CORES",
+    "message" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM) only covers 16 of 32 cores.",
+    "attributes" : {
+      "has" : "32",
+      "covered" : "16",
+      "stack_id" : "multiattr-stack-test",
+      "name" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)"
+    }
+  }, {
+    "key" : "SOCKETS",
+    "message" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM) only covers 4 of 8 sockets.",
+    "attributes" : {
+      "has" : "8",
+      "covered" : "4",
+      "stack_id" : "multiattr-stack-test",
+      "name" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)"
+    }
+  }, {
+    "key" : "RAM",
+    "message" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM) only covers 8GB of 31GB of RAM.",
+    "attributes" : {
+      "has" : "31",
+      "covered" : "8",
+      "stack_id" : "multiattr-stack-test",
+      "name" : "Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)"
+    }
+  }, {
+    "key" : "ARCH",
+    "message" : "Awesome OS for ppc64 covers architecture ppc64 but the system is x86_64.",
+    "attributes" : {
+      "has" : "x86_64",
+      "covered" : "ppc64",
+      "entitlement_id" : "ff8080813e468fd8013e4694a4921179",
+      "name" : "Awesome OS for ppc64"
+    }
+  } ],
   "status" : "invalid",
   "compliant" : false
 }

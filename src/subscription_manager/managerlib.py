@@ -103,6 +103,7 @@ def getInstalledProductStatus(product_directory, entitlement_directory, uep):
                     product.version,
                     ",".join(product.architectures),
                     sorter.get_status(product.id),
+                    sorter.get_product_reasons(product),
                     begin,
                     end)
             product_status.append(data)
