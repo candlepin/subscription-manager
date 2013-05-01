@@ -219,6 +219,15 @@ class CertSorterTests(SubManFixture):
                 "ppc64 but the system is x86_64."
         self.assertEquals(expected, messages[1][1])
         self.assertEquals("Awesome OS for ppc64", messages[1][0])
+        #make sure name fallback works
+        for reason in self.sorter.reasons:
+            del reason['attributes']['name']
+        messages = self.sorter.get_reasons_messages()
+        self.assertEquals(5, len(messages))
+        expected = "The system does not have subscriptions " + \
+                "that cover RAM Limiting Product."
+        self.assertEquals(expected, messages[0][1])
+        self.assertEquals("Product 801", messages[0][0])
 
     def test_get_stack_subscriptions(self):
         subs = self.sorter.get_stack_subscriptions(PARTIAL_STACK_ID)
@@ -258,6 +267,35 @@ class CertSorterTests(SubManFixture):
         actual = sub_reason_map[ENT_ID_2][0]
         self.assertEquals(expected, actual)
 
+    def test_get_reason_id(self):
+        reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6', ent='1234')
+        reason_id = self.sorter.get_reason_id(reason)
+        self.assertEquals("Subscription 1234", reason_id)
+        reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6', stack='1234')
+        reason_id = self.sorter.get_reason_id(reason)
+        self.assertEquals("Stack 1234", reason_id)
+        reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6', prod='1234')
+        reason_id = self.sorter.get_reason_id(reason)
+        self.assertEquals("Product 1234", reason_id)
+
+    def build_ent_reason_with_attrs(self, key, message, has,
+            covered, name=None, ent=None, stack=None, prod=None):
+        attrs = {'has': has,
+                'covered': covered}
+        if name:
+            attrs['name'] = name
+        if ent:
+            attrs['entitlement_id'] = ent
+        elif stack:
+            attrs['stack_id'] = stack
+        elif prod:
+            attrs['product_id'] = prod
+        return self.build_reason(key, message, attrs)
+
+    def build_reason(self, key, message, attrs):
+        return {'KEY': key,
+                'message': message,
+                'attributes': attrs}
 
 SAMPLE_COMPLIANCE_JSON = json.loads("""
 {

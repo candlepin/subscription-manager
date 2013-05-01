@@ -268,7 +268,22 @@ class CertSorter(object):
     def get_system_status(self):
         return STATUS_MAP.get(self.system_status, _('Unknown'))
 
+    def get_reason_id(self, reason):
+        # returns ent/prod/stack id
+        # ex: Subscription 123456
+        if 'product_id' in reason['attributes']:
+            return _('Product ') + reason['attributes']['product_id']
+        elif 'entitlement_id' in reason['attributes']:
+            return _('Subscription ') + reason['attributes']['entitlement_id']
+        elif 'stack_id' in reason['attributes']:
+            return _('Stack ') + reason['attributes']['stack_id']
+        else:
+            # Shouldn't be reachable.
+            # Reason has no id attr
+            return _('Unknown')
+
     def get_reasons_messages(self):
+        # Returns a list of tuples (offending name, message)
         # we want non-covered (red) reasons first,
         # then arch-mismatch, then others (sockets/ram/cores/etc...)
         order = ['NOTCOVERED', 'ARCH']
@@ -277,7 +292,11 @@ class CertSorter(object):
         for reason in self.reasons:
             if reason['key'] not in result_map:
                 result_map[reason['key']] = []
-            result_map[reason['key']].append((reason['attributes']['name'], reason['message']))
+            if 'name' in reason['attributes']:
+                name = reason['attributes']['name']
+            else:
+                name = self.get_reason_id(reason)
+            result_map[reason['key']].append((name, reason['message']))
         for item in order:
             if item in result_map:
                 result.extend(result_map[item])
