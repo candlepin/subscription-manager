@@ -231,11 +231,11 @@ class CertSorter(object):
         Returns a list of subscriptions that provide
         the product.
         """
-        results = set([])
+        results = []
         for valid_ent in self.valid_entitlement_certs:
             if prod in valid_ent.products:
-                results.add(valid_ent)
-        return list(results)
+                results.append(valid_ent)
+        return results
 
     def get_product_reasons(self, prod):
         """
