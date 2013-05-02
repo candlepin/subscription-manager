@@ -2098,7 +2098,7 @@ class ListCommand(CliCommand):
         print("+-------------------------------------------+")
 
         if not self.is_registered():
-            print(_("Overall Status: Unknown\n"))
+            print(_("Overall Status: %s\n") % _("Unknown"))
             return
 
         overall_status = self.sorter.get_system_status()
