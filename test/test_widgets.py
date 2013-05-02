@@ -255,3 +255,15 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
         iter = tree_model.add_map(None, self._create_store_map(initial_quantity,
                                                                inital_multi_entitlement))
         return (column, tree_model, iter)
+
+    def test_increment_based_on_provided_data(self):
+        tree_model = MappedTreeStore({"quantity": int, "multi-entitlement": bool, "available_store": int,
+            "quantity_increment": str})
+        column = QuantitySelectionColumn("test-col", tree_model, tree_model['quantity'],
+                tree_model['multi-entitlement'], tree_model['available_store'],
+                tree_model['quantity_increment'])
+        iter = tree_model.add_map(None, {"quantity": 15, "multi-entitlement": True,
+            "available_store": 15, "quantity_increment": 2})
+        column._update_cell_based_on_data(column, column.quantity_renderer, tree_model, iter)
+        adj = column.quantity_renderer.get_property("adjustment")
+        self.assertEquals(2, int(adj.get_property("step_increment")))

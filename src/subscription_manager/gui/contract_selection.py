@@ -69,6 +69,7 @@ class ContractSelectionWindow(object):
                                    gobject.TYPE_PYOBJECT,
                                    bool,
                                    bool,
+                                   int,
                                    int)
         self.contract_selection_treeview.set_model(self.model)
 
@@ -111,7 +112,7 @@ class ContractSelectionWindow(object):
         self.model.set_sort_func(3, self._sort_date, None)
         self.contract_selection_treeview.append_column(column)
 
-        column = widgets.QuantitySelectionColumn(_("Quantity"), self.model, 4, 8, 9)
+        column = widgets.QuantitySelectionColumn(_("Quantity"), self.model, 4, 8, 9, 10)
         self.contract_selection_treeview.append_column(column)
 
         self.edit_quantity_label.set_label(column.get_column_legend_text())
@@ -135,6 +136,13 @@ class ContractSelectionWindow(object):
         if default_quantity_value > quantity_available and quantity_available >= 0:
             default_quantity_value = quantity_available
 
+        quantity_increment = 1
+        if 'calculatedAttributes' in pool:
+            calculated_attrs = pool['calculatedAttributes']
+
+            if 'quantity_increment' in calculated_attrs:
+                quantity_increment = int(calculated_attrs['quantity_increment'])
+
         row = [pool['contractNumber'],
                 "%s / %s" % (pool['consumed'], quantity),
                isodate.parse_date(pool['startDate']),
@@ -143,7 +151,8 @@ class ContractSelectionWindow(object):
                pool['productName'], pool,
                PoolWrapper(pool).is_virt_only(),
                allows_multi_entitlement(pool),
-               quantity_available]
+               quantity_available,
+               quantity_increment]
         self.model.append(row)
 
     def set_parent_window(self, window):
