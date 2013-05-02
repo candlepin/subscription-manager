@@ -322,7 +322,8 @@ def get_terminal_width():
     if dim:
         return int(dim[1])
     else:
-        return None
+        # This allows tests to run
+        return 1000
 
 
 def get_client_versions():
