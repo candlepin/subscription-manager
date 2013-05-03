@@ -866,7 +866,7 @@ class TestColumnize(unittest.TestCase):
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
                 _echo, "This is a testing string", "This_is_another_testing_string")
         expected = 'Hello\n Hello\n Hello\n Hello\n :    This\n      is a\n      ' \
-                'testin\n      g\n      string\nFoo\n Foo\n Foo\n Foo: \n      ' \
+                'testin\n      g\n      string\nFoo\n Foo\n Foo\n Foo: ' \
                 'This_i\n      s_anot\n      her_te\n      sting_\n      string'
         self.assertNotEquals(result, expected)
         managercli.get_terminal_width = Mock(return_value=12)

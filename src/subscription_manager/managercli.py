@@ -2270,12 +2270,13 @@ def format_name(name, indent, max_length):
             current += len(word) + 1  # Have to account for the extra space
             line.append(word)
         else:
-            add_line()
+            if line:
+                add_line()
             if indent + len(word) > max_length:
                 words.insert(0, word[max_length - indent:])
                 word = word[:max_length - indent]
             line = [word]
-            if indent:
+            if indent and lines:
                 line.insert(0, ' ' * (indent - 1))
             current = indent + len(word) + 1
 
