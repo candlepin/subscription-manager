@@ -2145,7 +2145,7 @@ class ListCommand(CliCommand):
             service_type = order.service_type or ""
             product_names = [p.name for p in cert.products]
             reasons = []
-            if cert.subject and 'CN' in cert.subject:
+            if cert.subject and 'CN' in cert.subject and cert.subject['CN'] in cert_reasons_map:
                 reasons = cert_reasons_map[cert.subject['CN']]
             print columnize(CONSUMED_LIST, _none_wrap,
                     order.name,
