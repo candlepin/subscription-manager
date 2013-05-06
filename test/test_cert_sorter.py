@@ -48,6 +48,8 @@ PROD_4 = StubProduct(INST_PID_4,
         name="Multi-Attribute Stackable")
 PROD_2 = StubProduct(INST_PID_2,
         name="Awesome OS for ppc64")
+PROD_1 = StubProduct(INST_PID_1,
+        name="Awesome OS for x86_64")
 
 
 def stub_prod_cert(pid):
@@ -65,8 +67,7 @@ class CertSorterTests(SubManFixture):
         self.ent_dir = StubEntitlementDirectory([
             StubEntitlementCertificate(PROD_2,
                 ent_id=ENT_ID_2),
-            StubEntitlementCertificate(StubProduct(INST_PID_1,
-                name="Awesome OS for x86_64"),
+            StubEntitlementCertificate(PROD_1,
                 ent_id=ENT_ID_1),
             StubEntitlementCertificate(product=PROD_4,
                 stacking_id=STACK_1,
@@ -256,6 +257,12 @@ class CertSorterTests(SubManFixture):
         expected = "Awesome OS for ppc64 covers architecture " + \
             "ppc64 but the system is x86_64."
         self.assertEquals(expected, messages[0])
+        reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6',
+                prod=INST_PID_1, name="Awesome OS for x86_64")
+        self.sorter.reasons.append(reason)
+        messages = self.sorter.get_product_reasons(PROD_1)
+        self.assertEquals(0, len(messages))
+        self.sorter.reasons.remove(reason)
 
     def test_get_subscription_reasons_map(self):
         sub_reason_map = self.sorter.get_subscription_reasons_map()
@@ -293,7 +300,7 @@ class CertSorterTests(SubManFixture):
         return self.build_reason(key, message, attrs)
 
     def build_reason(self, key, message, attrs):
-        return {'KEY': key,
+        return {'key': key,
                 'message': message,
                 'attributes': attrs}
 
