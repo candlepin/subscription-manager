@@ -171,6 +171,22 @@ class V3CertTests(unittest.TestCase):
         self.assertEquals("never-enabled-content", content.name)
         self.assertEquals(False, content.enabled)
 
+    def test_content_no_arches(self):
+        """Handle entitlement certs with no arch info on content"""
+        content = self._find_content_by_label(self.ent_cert.content,
+                                              "always-enabled-content")
+        # we should get the default empty list if there are no arches
+        # specified, ala the test entitlement cert
+        self.assertEquals([], content.arches)
+
+# test: - we can create a Content objectfrom an entitlement cert that
+#           has no arch info for the content section
+#       - that we can create a Content object from an entitlement cert
+#           that does have arches info in the cert
+#       - that arches is a list
+#       - cert with empty list of arches is okay
+#       - cert with list of empty string is okay?
+
     @patch('os.unlink')
     def test_delete(self, unlink_mock):
         """ Entitlement cert deletion should cleanup key as well. """
