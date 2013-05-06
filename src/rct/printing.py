@@ -61,6 +61,7 @@ class OrderPrinter(object):
         s.append("\t%s: %s" % (_("Quantity Used"), xstr(order.quantity_used)))
         s.append("\t%s: %s" % (_("Socket Limit"), xstr(order.socket_limit)))
         s.append("\t%s: %s" % (_("RAM Limit"), xstr(order.ram_limit)))
+        s.append("\t%s: %s" % (_("Core Limit"), xstr(order.core_limit)))
         s.append("\t%s: %s" % (_("Virt Limit"), xstr(order.virt_limit)))
         s.append("\t%s: %s" % (_("Virt Only"), xstr(order.virt_only)))
         s.append("\t%s: %s" % (_("Subscription"), xstr(order.subscription)))
