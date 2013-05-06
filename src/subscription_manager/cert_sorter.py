@@ -242,6 +242,12 @@ class CertSorter(object):
         Returns a list of reason messages that
         apply to the installed product
         """
+        # If the prod is in valid_prod, we don't want
+        # reasons here.  If they exist, they're from
+        # overconsumption.
+        if prod.id in self.valid_products:
+            return []
+
         result = []
         subscriptions = self.get_product_subscriptions(prod)
 
