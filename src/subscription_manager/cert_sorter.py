@@ -242,7 +242,7 @@ class CertSorter(object):
         Returns a list of reason messages that
         apply to the installed product
         """
-        result = []
+        result = set([])
         subscriptions = self.get_product_subscriptions(prod)
 
         sub_ids = []
@@ -256,14 +256,14 @@ class CertSorter(object):
         for reason in self.reasons:
             if 'product_id' in reason['attributes']:
                 if reason['attributes']['product_id'] == prod.id:
-                    result.append(reason['message'])
+                    result.add(reason['message'])
             elif 'entitlement_id' in reason['attributes']:
                 if reason['attributes']['entitlement_id'] in sub_ids:
-                    result.append(reason['message'])
+                    result.add(reason['message'])
             elif 'stack_id' in reason['attributes']:
                 if reason['attributes']['stack_id'] in stack_ids:
-                    result.append(reason['message'])
-        return result
+                    result.add(reason['message'])
+        return list(result)
 
     def get_system_status(self):
         return STATUS_MAP.get(self.system_status, _('Unknown'))
@@ -299,19 +299,23 @@ class CertSorter(object):
             result_map[reason['key']].append((name, reason['message']))
         for item in order:
             if item in result_map:
-                result.extend(result_map[item])
+                for message in result_map[item]:
+                    if message not in result:
+                        result.append(message)
                 del result_map[item]
         for key, messages in result_map.items():
-            result.extend(messages)
+            for message in messages:
+                if message not in result:
+                    result.append(message)
         return result
 
     def get_stack_subscriptions(self, stack_id):
-        result = []
+        result = set([])
         for s in self.valid_entitlement_certs:
             if s.order.stacking_id:
                 if s.order.stacking_id == stack_id:
-                    result.append(s.subject['CN'])
-        return result
+                    result.add(s.subject['CN'])
+        return list(result)
 
     def get_subscription_reasons_map(self):
         """
@@ -324,10 +328,12 @@ class CertSorter(object):
 
         for reason in self.reasons:
             if 'entitlement_id' in reason['attributes']:
-                result[reason['attributes']['entitlement_id']].append(reason['message'])
+                if reason['message'] not in result[reason['attributes']['entitlement_id']]:
+                    result[reason['attributes']['entitlement_id']].append(reason['message'])
             elif 'stack_id' in reason['attributes']:
                 for s in self.get_stack_subscriptions(reason['attributes']['stack_id']):
-                    result[s].append(reason['message'])
+                    if reason['message'] not in result[s]:
+                        result[s].append(reason['message'])
         return result
 
     def is_valid(self):

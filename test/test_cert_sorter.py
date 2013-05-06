@@ -268,15 +268,34 @@ class CertSorterTests(SubManFixture):
         self.assertEquals(expected, actual)
 
     def test_get_reason_id(self):
-        reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6', ent='1234')
+        reason = self.build_ent_reason_with_attrs(
+                'SOCKETS', 'some message', '8', '6', ent='1234')
         reason_id = self.sorter.get_reason_id(reason)
         self.assertEquals("Subscription 1234", reason_id)
-        reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6', stack='1234')
+        reason = self.build_ent_reason_with_attrs(
+                'SOCKETS', 'some message', '8', '6', stack='1234')
         reason_id = self.sorter.get_reason_id(reason)
         self.assertEquals("Stack 1234", reason_id)
-        reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6', prod='1234')
+        reason = self.build_ent_reason_with_attrs(
+                'SOCKETS', 'some message', '8', '6', prod='1234')
         reason_id = self.sorter.get_reason_id(reason)
         self.assertEquals("Product 1234", reason_id)
+
+    def test_duplicate_get_reasons_messages(self):
+        self.set_up_duplicates()
+        result = self.sorter.get_reasons_messages()
+        self.assertEquals(1, len(result))
+        expected = ('testing', 'some message')
+        self.assertEquals(expected, result[0])
+
+    def set_up_duplicates(self):
+        self.sorter.reasons = []
+        self.sorter.reasons.append(self.build_ent_reason_with_attrs(
+            'SOCKETS', 'some message', '8', '6', ent='1234', name='testing'))
+        self.sorter.reasons.append(self.build_ent_reason_with_attrs(
+            'SOCKETS', 'some message', '8', '6', ent='2345', name='testing'))
+        self.sorter.reasons.append(self.build_ent_reason_with_attrs(
+            'SOCKETS', 'some message', '8', '6', ent='3345', name='testing'))
 
     def build_ent_reason_with_attrs(self, key, message, has,
             covered, name=None, ent=None, stack=None, prod=None):
@@ -293,7 +312,7 @@ class CertSorterTests(SubManFixture):
         return self.build_reason(key, message, attrs)
 
     def build_reason(self, key, message, attrs):
-        return {'KEY': key,
+        return {'key': key,
                 'message': message,
                 'attributes': attrs}
 
