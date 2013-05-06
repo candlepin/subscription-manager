@@ -21,7 +21,7 @@ import subscription_manager.injection as inj
 log = logging.getLogger('rhsm-app.' + __name__)
 
 from subscription_manager.isodate import parse_date
-
+from subscription_manager.reasons import Reasons
 
 import gettext
 _ = gettext.gettext
@@ -108,7 +108,7 @@ class CertSorter(object):
         self.first_invalid_date = None
 
         # Reasons that products aren't fully compliant
-        self.reasons = []
+        self.reasons = None
 
         self.valid_entitlement_certs = []
 
@@ -137,7 +137,7 @@ class CertSorter(object):
         self.partial_stacks = status['partialStacks']
 
         if 'reasons' in status:
-            self.reasons = status['reasons']
+            self.reasons = Reasons(status['reasons'], self)
 
         if 'status' in status and len(status['status']):
             self.system_status = status['status']
@@ -226,115 +226,8 @@ class CertSorter(object):
 
                     product_dict.setdefault(product.id, []).append(ent_cert)
 
-    def get_product_subscriptions(self, prod):
-        """
-        Returns a list of subscriptions that provide
-        the product.
-        """
-        results = []
-        for valid_ent in self.valid_entitlement_certs:
-            if prod in valid_ent.products:
-                results.append(valid_ent)
-        return results
-
-    def get_product_reasons(self, prod):
-        """
-        Returns a list of reason messages that
-        apply to the installed product
-        """
-        # If the prod is in valid_prod, we don't want
-        # reasons here.  If they exist, they're from
-        # overconsumption.
-        if prod.id in self.valid_products:
-            return []
-
-        result = []
-        subscriptions = self.get_product_subscriptions(prod)
-
-        sub_ids = []
-        stack_ids = []
-
-        for s in subscriptions:
-            if 'CN' in s.subject:
-                sub_ids.append(s.subject['CN'])
-            if s.order.stacking_id:
-                stack_ids.append(s.order.stacking_id)
-        for reason in self.reasons:
-            if 'product_id' in reason['attributes']:
-                if reason['attributes']['product_id'] == prod.id:
-                    result.append(reason['message'])
-            elif 'entitlement_id' in reason['attributes']:
-                if reason['attributes']['entitlement_id'] in sub_ids:
-                    result.append(reason['message'])
-            elif 'stack_id' in reason['attributes']:
-                if reason['attributes']['stack_id'] in stack_ids:
-                    result.append(reason['message'])
-        return result
-
     def get_system_status(self):
         return STATUS_MAP.get(self.system_status, _('Unknown'))
-
-    def get_reason_id(self, reason):
-        # returns ent/prod/stack id
-        # ex: Subscription 123456
-        if 'product_id' in reason['attributes']:
-            return _('Product ') + reason['attributes']['product_id']
-        elif 'entitlement_id' in reason['attributes']:
-            return _('Subscription ') + reason['attributes']['entitlement_id']
-        elif 'stack_id' in reason['attributes']:
-            return _('Stack ') + reason['attributes']['stack_id']
-        else:
-            # Shouldn't be reachable.
-            # Reason has no id attr
-            return _('Unknown')
-
-    def get_reasons_messages(self):
-        # Returns a list of tuples (offending name, message)
-        # we want non-covered (red) reasons first,
-        # then arch-mismatch, then others (sockets/ram/cores/etc...)
-        order = ['NOTCOVERED', 'ARCH']
-        result_map = {}
-        result = []
-        for reason in self.reasons:
-            if reason['key'] not in result_map:
-                result_map[reason['key']] = []
-            if 'name' in reason['attributes']:
-                name = reason['attributes']['name']
-            else:
-                name = self.get_reason_id(reason)
-            result_map[reason['key']].append((name, reason['message']))
-        for item in order:
-            if item in result_map:
-                result.extend(result_map[item])
-                del result_map[item]
-        for key, messages in result_map.items():
-            result.extend(messages)
-        return result
-
-    def get_stack_subscriptions(self, stack_id):
-        result = []
-        for s in self.valid_entitlement_certs:
-            if s.order.stacking_id:
-                if s.order.stacking_id == stack_id:
-                    result.append(s.subject['CN'])
-        return result
-
-    def get_subscription_reasons_map(self):
-        """
-        returns a dictionary that maps
-        subscriptions to lists of reasons
-        """
-        result = {}
-        for s in self.valid_entitlement_certs:
-            result[s.subject['CN']] = []
-
-        for reason in self.reasons:
-            if 'entitlement_id' in reason['attributes']:
-                result[reason['attributes']['entitlement_id']].append(reason['message'])
-            elif 'stack_id' in reason['attributes']:
-                for s in self.get_stack_subscriptions(reason['attributes']['stack_id']):
-                    result[s].append(reason['message'])
-        return result
 
     def is_valid(self):
         """

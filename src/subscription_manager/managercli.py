@@ -2098,11 +2098,11 @@ class ListCommand(CliCommand):
         print("+-------------------------------------------+")
 
         if not self.is_registered():
-            print(_("Overall Status: Unknown\n"))
+            print(_("Overall Status: %s\n") % _("Unknown"))
             return
 
         overall_status = self.sorter.get_system_status()
-        reasons = self.sorter.get_reasons_messages()
+        reasons = self.sorter.reasons.get_reasons_messages()
         print(_("Overall Status: %s\n") % overall_status)
         if reasons:
             rows = [reason[0] + ':' for reason in reasons]
@@ -2130,7 +2130,7 @@ class ListCommand(CliCommand):
             print(_("No consumed subscription pools to list"))
             sys.exit(0)
 
-        cert_reasons_map = self.sorter.get_subscription_reasons_map()
+        cert_reasons_map = self.sorter.reasons.get_subscription_reasons_map()
 
         print("+-------------------------------------------+")
         print("   " + _("Consumed Subscriptions"))
