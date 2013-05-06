@@ -2246,7 +2246,8 @@ def columnize(caption_list, callback, *args):
 def format_name(name, indent, max_length):
     """
     Formats a potentially long name for multi-line display, giving
-    it a columned effect.
+    it a columned effect.  Assumes the first line is already
+    properly indented.
     """
 
     if not name or not max_length or not isinstance(name, basestring):
@@ -2272,6 +2273,7 @@ def format_name(name, indent, max_length):
         else:
             if line:
                 add_line()
+            # If the word will not fit, break it
             if indent + len(word) > max_length:
                 words.insert(0, word[max_length - indent:])
                 word = word[:max_length - indent]

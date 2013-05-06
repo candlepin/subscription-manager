@@ -873,3 +873,32 @@ class TestColumnize(unittest.TestCase):
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
                 _echo, "This is a testing string", "This_is_another_testing_string")
         self.assertEquals(result, expected)
+
+    def test_format_name_no_break_no_indent(self):
+        result = format_name('testing string testing st', 0, 10)
+        expected = 'testing\nstring\ntesting st'
+        self.assertEquals(result, expected)
+
+    def test_format_name_no_break(self):
+        result = format_name('testing string testing st', 1, 11)
+        expected = 'testing\n string\n testing st'
+        self.assertEquals(result, expected)
+        result = format_name('testing string testing st', 2, 12)
+        expected = 'testing\n  string\n  testing st'
+        self.assertEquals(result, expected)
+
+    def test_format_name_break(self):
+        result = format_name('a' * 10, 0, 10)
+        expected = 'a' * 10
+        self.assertEquals(result, expected)
+        result = format_name('a' * 11, 0, 10)
+        expected = 'a' * 10 + '\na'
+        self.assertEquals(result, expected)
+        result = format_name('a' * 11 + ' ' + 'a' * 9, 0, 10)
+        expected = 'a' * 10 + '\na\n' + 'a' * 9
+        self.assertEquals(result, expected)
+
+    def test_format_name_break_indent(self):
+        result = format_name('a' * 20, 1, 10)
+        expected = 'a' * 9 + '\n ' + 'a' * 9 + '\n ' + 'aa'
+        self.assertEquals(result, expected)
