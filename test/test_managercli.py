@@ -902,3 +902,14 @@ class TestColumnize(unittest.TestCase):
         result = format_name('a' * 20, 1, 10)
         expected = 'a' * 9 + '\n ' + 'a' * 9 + '\n ' + 'aa'
         self.assertEquals(result, expected)
+
+    def test_columnize_multibyte(self):
+        multibyte_str = u"このシステム用に"
+        managercli.get_terminal_width = Mock(return_value=20)
+        result = columnize([multibyte_str], _echo, multibyte_str)
+        expected = u"このシステム用に このシステム用に"
+        self.assertEquals(result, expected)
+        managercli.get_terminal_width = Mock(return_value=14)
+        result = columnize([multibyte_str], _echo, multibyte_str)
+        expected = u"このシステム\n 用に    このシステム用\n       に"
+        self.assertEquals(result, expected)
