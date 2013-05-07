@@ -19,6 +19,7 @@ from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
 from subscription_manager.branding import get_branding
 from subscription_manager.gui import widgets
 from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager.utils import friendly_join
 
 import gettext
 import gobject
@@ -178,10 +179,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
                     contract_ids, sub_names = self._calc_subs_providing(
                             product_id, compliant_range)
-                    name = self.rreplace((", ").join(sub_names),
-                                         ',', _(' and'), 1)
-                    contract = self.rreplace((", ").join(contract_ids),
-                                             ',', _(' and'), 1)
+                    name = friendly_join(sub_names)
+                    contract = friendly_join(contract_ids)
                     num_of_contracts = len(contract_ids)
 
                     entry['subscription'] = name
