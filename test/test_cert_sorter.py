@@ -48,6 +48,8 @@ PROD_4 = StubProduct(INST_PID_4,
         name="Multi-Attribute Stackable")
 PROD_2 = StubProduct(INST_PID_2,
         name="Awesome OS for ppc64")
+PROD_1 = StubProduct(INST_PID_1,
+        name="Awesome OS for x86_64")
 
 
 def stub_prod_cert(pid):
@@ -65,8 +67,7 @@ class CertSorterTests(SubManFixture):
         self.ent_dir = StubEntitlementDirectory([
             StubEntitlementCertificate(PROD_2,
                 ent_id=ENT_ID_2),
-            StubEntitlementCertificate(StubProduct(INST_PID_1,
-                name="Awesome OS for x86_64"),
+            StubEntitlementCertificate(PROD_1,
                 ent_id=ENT_ID_1),
             StubEntitlementCertificate(product=PROD_4,
                 stacking_id=STACK_1,
@@ -129,9 +130,9 @@ class CertSorterTests(SubManFixture):
         self.assertTrue(PARTIAL_STACK_ID in self.sorter.partial_stacks)
 
     def test_reasons(self):
-        self.assertEquals(5, len(self.sorter.reasons))
+        self.assertEquals(5, len(self.sorter.reasons.reasons))
         expected_keys = ['NOTCOVERED', 'CORES', 'SOCKETS', 'RAM', 'ARCH']
-        result_keys = [reason['key'] for reason in self.sorter.reasons]
+        result_keys = [reason['key'] for reason in self.sorter.reasons.reasons]
         self.assertEquals(sorted(expected_keys), sorted(result_keys))
 
     def test_installed_mismatch_unentitled(self):
@@ -205,97 +206,6 @@ class CertSorterTests(SubManFixture):
         self.assertEquals('Current', self.sorter.get_system_status())
         self.sorter.system_status = 'partial'
         self.assertEquals('Insufficient', self.sorter.get_system_status())
-
-    def test_get_reasons_messages(self):
-        #must have notcovered first
-        #pref arch mismatch next
-        messages = self.sorter.get_reasons_messages()
-        self.assertEquals(5, len(messages))
-        expected = "The system does not have subscriptions " + \
-                "that cover RAM Limiting Product."
-        self.assertEquals(expected, messages[0][1])
-        self.assertEquals("RAM Limiting Product", messages[0][0])
-        expected = "Awesome OS for ppc64 covers architecture " + \
-                "ppc64 but the system is x86_64."
-        self.assertEquals(expected, messages[1][1])
-        self.assertEquals("Awesome OS for ppc64", messages[1][0])
-        #make sure name fallback works
-        for reason in self.sorter.reasons:
-            del reason['attributes']['name']
-        messages = self.sorter.get_reasons_messages()
-        self.assertEquals(5, len(messages))
-        expected = "The system does not have subscriptions " + \
-                "that cover RAM Limiting Product."
-        self.assertEquals(expected, messages[0][1])
-        self.assertEquals("Product 801", messages[0][0])
-
-    def test_get_stack_subscriptions(self):
-        subs = self.sorter.get_stack_subscriptions(PARTIAL_STACK_ID)
-        self.assertEquals(1, len(subs))
-        self.assertEquals(ENT_ID_4, subs[0])
-
-    def test_get_product_subscriptions(self):
-        subs = self.sorter.get_product_subscriptions(PROD_4)
-        self.assertEquals(1, len(subs))
-        self.assertEquals(ENT_ID_4, subs[0].subject['CN'])
-
-    def test_get_product_reasons(self):
-        messages = self.sorter.get_product_reasons(PROD_4)
-        self.assertEquals(3, len(messages))
-        expectations = []
-        expectations.append("Multi-Attribute Stackable (16 "
-                "cores, 4 sockets, 8GB RAM) only covers 16 of 32 cores.")
-        expectations.append("Multi-Attribute Stackable (16 "
-                "cores, 4 sockets, 8GB RAM) only covers 8GB of 31GB of RAM.")
-        expectations.append("Multi-Attribute Stackable "
-                "(16 cores, 4 sockets, 8GB RAM) only covers 4 of 8 sockets.")
-        for expected in expectations:
-            self.assertTrue(expected in messages)
-        messages = self.sorter.get_product_reasons(PROD_2)
-        self.assertEquals(1, len(messages))
-        expected = "Awesome OS for ppc64 covers architecture " + \
-            "ppc64 but the system is x86_64."
-        self.assertEquals(expected, messages[0])
-
-    def test_get_subscription_reasons_map(self):
-        sub_reason_map = self.sorter.get_subscription_reasons_map()
-        self.assertEquals(3, len(sub_reason_map[ENT_ID_4]))
-        self.assertEquals(0, len(sub_reason_map[ENT_ID_1]))
-        self.assertEquals(1, len(sub_reason_map[ENT_ID_2]))
-        expected = "Awesome OS for ppc64 covers architecture " + \
-                "ppc64 but the system is x86_64."
-        actual = sub_reason_map[ENT_ID_2][0]
-        self.assertEquals(expected, actual)
-
-    def test_get_reason_id(self):
-        reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6', ent='1234')
-        reason_id = self.sorter.get_reason_id(reason)
-        self.assertEquals("Subscription 1234", reason_id)
-        reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6', stack='1234')
-        reason_id = self.sorter.get_reason_id(reason)
-        self.assertEquals("Stack 1234", reason_id)
-        reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6', prod='1234')
-        reason_id = self.sorter.get_reason_id(reason)
-        self.assertEquals("Product 1234", reason_id)
-
-    def build_ent_reason_with_attrs(self, key, message, has,
-            covered, name=None, ent=None, stack=None, prod=None):
-        attrs = {'has': has,
-                'covered': covered}
-        if name:
-            attrs['name'] = name
-        if ent:
-            attrs['entitlement_id'] = ent
-        elif stack:
-            attrs['stack_id'] = stack
-        elif prod:
-            attrs['product_id'] = prod
-        return self.build_reason(key, message, attrs)
-
-    def build_reason(self, key, message, attrs):
-        return {'KEY': key,
-                'message': message,
-                'attributes': attrs}
 
 SAMPLE_COMPLIANCE_JSON = json.loads("""
 {

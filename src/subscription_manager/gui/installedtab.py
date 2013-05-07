@@ -315,7 +315,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         warn_count = len(sorter.expired_products) + \
                 len(sorter.unentitled_products)
 
-        partial_count = len(sorter.partially_valid_products)
+        # Check partially valid products to retain compatibility with older candlepin
+        # TODO rewrite this method to use status from the server
+        partial_count = len(sorter.reasons.reasons) or len(sorter.partially_valid_products)
 
         if warn_count > 0:
             self._set_status_icons(INVALID)
