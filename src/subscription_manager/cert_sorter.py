@@ -138,6 +138,8 @@ class CertSorter(object):
 
         if 'reasons' in status:
             self.reasons = Reasons(status['reasons'], self)
+        else:
+            self.reasons = Reasons([], self)
 
         if 'status' in status and len(status['status']):
             self.system_status = status['status']
