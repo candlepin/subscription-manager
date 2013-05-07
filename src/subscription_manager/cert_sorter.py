@@ -108,7 +108,7 @@ class CertSorter(object):
         self.first_invalid_date = None
 
         # Reasons that products aren't fully compliant
-        self.reasons = None
+        self.reasons = Reasons([], self)
 
         self.valid_entitlement_certs = []
 
@@ -138,8 +138,6 @@ class CertSorter(object):
 
         if 'reasons' in status:
             self.reasons = Reasons(status['reasons'], self)
-        else:
-            self.reasons = Reasons([], self)
 
         if 'status' in status and len(status['status']):
             self.system_status = status['status']
