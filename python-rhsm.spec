@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.8.9
+Version: 1.8.10
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,10 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Tue May 07 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.10-1
+- Added core limit to entitlement object. (mstead@redhat.com)
+- Codestyle cleanup. (alikins@redhat.com)
+
 * Thu Apr 18 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.9-1
 - add note about check_path squashing '//' in paths (alikins@redhat.com)
 - normalizing path before checking (jsherril@redhat.com)
