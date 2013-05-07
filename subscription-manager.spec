@@ -223,6 +223,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/repolib.py*
 %{_datadir}/rhsm/subscription_manager/utils.py*
 %{_datadir}/rhsm/subscription_manager/validity.py*
+%{_datadir}/rhsm/subscription_manager/reasons.py*
 
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}

@@ -19,6 +19,7 @@ import random
 import tempfile
 
 from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.reasons import Reasons
 
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """
@@ -486,6 +487,7 @@ class StubCertSorter(CertSorter):
 
     def __init__(self, prod_dir, ent_dir=None):
         CertSorter.__init__(self, prod_dir, ent_dir, None)
+        self.reasons = Reasons([], self)
 
     def _parse_server_status(self):
         # Override this method to just leave all fields uninitialized so
