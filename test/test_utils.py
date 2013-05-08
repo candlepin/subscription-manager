@@ -5,7 +5,7 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
     parse_baseurl_info, format_baseurl, ServerUrlParseErrorEmpty, \
     ServerUrlParseErrorNone, ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
     ServerUrlParseErrorJustScheme, get_version, get_client_versions, \
-    get_server_versions, Versions
+    get_server_versions, Versions, friendly_join
 from subscription_manager import certlib
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
@@ -442,3 +442,14 @@ class TestGetVersion(unittest.TestCase):
         versions.get_release.return_value = ""
         result = get_version(versions, "foobar")
         self.assertEquals("1.0", result)
+
+
+class TestFriendlyJoin(unittest.TestCase):
+
+    def test_join(self):
+        self.assertEquals("One", friendly_join(["One"]))
+        self.assertEquals("One and Two", friendly_join(["One", "Two"]))
+        self.assertEquals("One, Two and Three", friendly_join(["One", "Two", "Three"]))
+        self.assertEquals("Three, Two and One", friendly_join(set(["One", "Two", "Three"])))
+        self.assertEquals("", friendly_join([]))
+        self.assertEquals("", friendly_join(None))
