@@ -6,31 +6,8 @@
 
 # options common to all subcommands (+ 3rd level opts for simplicity)
 _subscription_manager_common_opts="-h --help --proxy --proxyuser --proxypassword"
-
+_subscription_manager_common_url_opts="--serverurl"
 # complete functions for subcommands ($1 - current opt, $2 - previous opt)
-
-_subscription_manager_list()
-{
-  local opts="--installed --available --ondate --consumed --all
-              ${_subscription_manager_common_opts}"
-  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
-}
-
-
-_subscription_manager_refresh()
-{
-  local opts="${_subscription_manager_common_opts}"
-  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
-}
-
-_subscription_manager_register()
-{
-  local opts="--username --password --type --name --consumerid
-              --org --environment --autosubscribe --force --activationkey
-              --release --servicelevel
-              ${_subscription_manager_common_opts}"
-  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
-}
 
 _subscription_manager_attach()
 {
@@ -44,7 +21,7 @@ _subscription_manager_attach()
           COMPREPLY=($(compgen -W "${POOLS}" -- ${1}))
           return 0
   esac
-  local opts="--pool --quantity --auto --servicelevel
+  local opts="i--auto --pool --quantity --servicelevel
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -87,7 +64,8 @@ _subscription_manager_config()
 
 _subscription_manager_environments()
 {
-  local opts="--username --password --org
+  local opts="--org --password --password
+              ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -101,7 +79,7 @@ _subscription_manager_facts()
 
 _subscription_manager_identity()
 {
-  local opts="--username --password --regenerate --force
+  local opts="--force --password --regenerate --username
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -114,16 +92,24 @@ _subscription_manager_import()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
+_subscription_manager_list()
+{
+  local opts="--all --available --consumed --installed
+              --ondate --servicelevel --status
+              ${_subscription_manager_common_opts}"
+  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
 _subscription_manager_orgs()
 {
-  local opts="--username --password
+  local opts="--password --username
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
 _subscription_manager_plugins()
 {
-  local opts="--list --listslots --listhooks
+  local opts="--list --listhooks --listslots --verbose
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -135,29 +121,52 @@ _subscription_manager_redeem()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
+_subscription_manager_refresh()
+{
+  local opts="${_subscription_manager_common_opts}"
+  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
+
+_subscription_manager_register()
+{
+  local opts="--activationkey --auto-attach --autosubscribe --consumerid
+              --environment --force --name --org --password --release
+              --servicelevel --type --username
+              ${_subscription_manager_common_url_opts}
+              ${_subscription_manager_common_opts}"
+  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
 _subscription_manager_release()
 {
     # we could autocomplete the release version for
     # --set
-    local opts="--list --set --show
+    local opts="--list --set --show --unset
                   ${_subscription_manager_common_opts}"
     COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
 _subscription_manager_repos()
 {
-  local opts="--list
+  local opts="--disable --enable --list
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
 _subscription_manager_service_level()
 {
-    local opts="--show --org --list
-                  ${_subscription_manager_common_opts}"
+    local opts="--list --org --set --show --unset
+                ${_subscription_manager_common_url_opts}
+                ${_subscription_manager_common_opts}"
     COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
+_subscription_manager_version()
+{
+  local opts="${_subscription_manager_common_opts}"
+  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
 
 # main complete function
 _subscription_manager()
@@ -169,27 +178,32 @@ _subscription_manager()
   prev="${COMP_WORDS[COMP_CWORD-1]}"
 
   # top-level commands and options
-  opts="list refresh register subscribe unregister unsubscribe clean config environments
-  facts identity import orgs plugins release redeem repos service-level attach remove"
+  opts="attach clean config environments facts identity import list orgs
+        plugins redeem refresh register release remove repos service-level subscribe
+        unregister unsubscribe version"
 
   case "${first}" in
-      list|\
-      refresh|\
-      register|\
-      unregister|\
       clean|\
       config|\
       environments|\
       facts|\
       identity|\
       import|\
+      list|\
       orgs|\
       plugins|\
       redeem|\
+      refresh|\
+      register|\
       release|\
       repos|\
-      service-level)
+      unregister|\
+      version)
       "_subscription_manager_$first" "${cur}" "${prev}"
+      return 0
+      ;;
+      service-level)
+      "_subscription_manager_service_level" "${cur}" "${prev}"
       return 0
       ;;
       attach|subscribe)
