@@ -905,11 +905,11 @@ class TestColumnize(unittest.TestCase):
 
     def test_columnize_multibyte(self):
         multibyte_str = u"このシステム用に"
-        managercli.get_terminal_width = Mock(return_value=20)
+        managercli.get_terminal_width = Mock(return_value=40)
         result = columnize([multibyte_str], _echo, multibyte_str)
         expected = u"このシステム用に このシステム用に"
         self.assertEquals(result, expected)
         managercli.get_terminal_width = Mock(return_value=14)
         result = columnize([multibyte_str], _echo, multibyte_str)
-        expected = u"このシステム\n用に     このシステム用\n       に"
+        expected = u"このシ\nステム\n用に   このシ\n       ステム\n       用に"
         self.assertEquals(result, expected)

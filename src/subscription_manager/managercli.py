@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # Subscription manager command line utility.
 #
@@ -22,6 +23,7 @@ import socket
 import getpass
 import dbus
 import datetime
+import unicodedata
 from time import strftime, strptime, localtime
 from M2Crypto import X509
 from M2Crypto import SSL
@@ -2198,6 +2200,17 @@ class ManagerCLI(CLI):
         return CLI.main(self)
 
 
+def width(in_str):
+    if not isinstance(in_str, unicode):
+        in_str = in_str.decode("utf-8")
+    # From http://stackoverflow.com/questions/2476953/ user Josh Lee
+    return sum(1 + (unicodedata.east_asian_width(c) in "WF") for c in in_str)
+
+
+def ljust_wide(in_str, padding):
+    return in_str + ' ' * (padding - width(in_str))
+
+
 def columnize(caption_list, callback, *args):
     """
     Take a list of captions and values and columnize the output so that
@@ -2210,14 +2223,12 @@ def columnize(caption_list, callback, *args):
     The callback gives us the ability to do things like replacing None values
     with the string "None" (see _none_wrap()).
     """
-    # Add one so that the longest string has a space after it
-    # Unless that is longer than half the console width
-    padding = min(sorted(map(len, caption_list))[-1] + 1,
+    padding = min(sorted(map(width, caption_list))[-1] + 1,
             int(get_terminal_width() / 2))
     padded_list = []
     for caption in caption_list:
         lines = format_name(caption, 0, padding - 1).split('\n')
-        lines[-1] = lines[-1].ljust(padding) + '%s'
+        lines[-1] = ljust_wide(lines[-1], padding) + '%s'
         fixed_caption = '\n'.join(lines)
         padded_list.append(fixed_caption)
 
@@ -2249,10 +2260,10 @@ def format_name(name, indent, max_length):
     it a columned effect.  Assumes the first line is already
     properly indented.
     """
-
-    if not name or not max_length or (max_length - indent) < 2 or not isinstance(name, basestring):
+    if not name or not max_length or (max_length - indent) <= 2 or not isinstance(name, basestring):
         return name
-
+    if not isinstance(name, unicode):
+        name = name.decode("utf-8")
     words = name.split()
     current = indent
     lines = []
@@ -2267,20 +2278,23 @@ def format_name(name, indent, max_length):
     # Split here and build it back up by word, this way we get word wrapping
     while words:
         word = words.pop(0)
-        if current + len(word) <= max_length:
-            current += len(word) + 1  # Have to account for the extra space
+        if current + width(word) <= max_length:
+            current += width(word) + 1  # Have to account for the extra space
             line.append(word)
         else:
             if line:
                 add_line()
             # If the word will not fit, break it
-            if indent + len(word) > max_length:
-                words.insert(0, word[max_length - indent:])
-                word = word[:max_length - indent]
+            if indent + width(word) > max_length:
+                split_index = 0
+                while(width(word[:split_index + 1]) + indent <= max_length):
+                    split_index += 1
+                words.insert(0, word[split_index:])
+                word = word[:split_index]
             line = [word]
             if indent and lines:
                 line.insert(0, ' ' * (indent - 1))
-            current = indent + len(word) + 1
+            current = indent + width(word) + 1
 
     add_line()
     return '\n'.join(lines)
