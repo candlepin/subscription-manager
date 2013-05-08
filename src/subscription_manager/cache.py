@@ -271,7 +271,7 @@ class ProfileManager(CacheManager):
         # Could be None, we'll read the system's current profile later once
         # we're sure we actually need the data.
         self._current_profile = current_profile
-        self._report_package_profile = cfg.get('rhsm', 'report_package_profile')
+        self._report_package_profile = cfg.get_int('rhsm', 'report_package_profile')
 
     def _get_current_profile(self):
         # If we weren't given a profile, load the current systems packages:
