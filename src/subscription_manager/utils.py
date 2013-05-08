@@ -398,3 +398,17 @@ def restart_virt_who():
     except ValueError:
         # The file has non numeric data in it
         log.error("The virt-who pid file contains non numeric data")
+
+
+def friendly_join(items):
+    if (not items or len(items) == 0):
+        return ""
+
+    items = list(items)
+    if len(items) == 1:
+        return items[0]
+
+    first = items[0:-1]
+    last = items[-1]
+    first_string = ", ".join(first)
+    return first_string + _(" and ") + last
