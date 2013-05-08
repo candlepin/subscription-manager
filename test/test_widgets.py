@@ -226,10 +226,16 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
         self._run_filter_value_test("1", True, upper=10, lower=1)
         self._run_filter_value_test("10", True, upper=10, lower=1)
 
-    def _run_filter_value_test(self, test_input_value, is_allowed, upper=15, lower=1):
+    def test_filter_spinner_value_does_not_allow_non_multiples_of_increment(self):
+        self._run_filter_value_test("4", False, step_incr=3)
+
+    def test_filter_spinner_value_allows_multiples_of_increment(self):
+        self._run_filter_value_test("9", True, step_incr=3)
+
+    def _run_filter_value_test(self, test_input_value, is_allowed, upper=15, lower=1, step_incr=1):
         column, tree_model, iter = self._setup_column(1, True)
 
-        adjustment = gtk.Adjustment(upper=upper, lower=lower, value=7.0)
+        adjustment = gtk.Adjustment(upper=upper, lower=lower, value=7.0, step_incr=step_incr)
         # Simulate the editable created by the CellRendererSpin object.
         editable = gtk.SpinButton()
         editable.set_property("adjustment", adjustment)
@@ -266,4 +272,5 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
             "available_store": 15, "quantity_increment": 2})
         column._update_cell_based_on_data(column, column.quantity_renderer, tree_model, iter)
         adj = column.quantity_renderer.get_property("adjustment")
-        self.assertEquals(2, int(adj.get_property("step_increment")))
+        self.assertEquals(2, int(adj.get_property("step-increment")))
+        self.assertEquals(2, int(adj.get_property("lower")))

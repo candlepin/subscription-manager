@@ -685,6 +685,7 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
         adj = editable.get_property("adjustment")
         upper = int(adj.get_property("upper"))
         lower = int(adj.get_property("lower"))
+        increment = int(adj.get_property("step-increment"))
 
         # Ensure that a digit was entered.
         if len(new_value) >= 1 and not new_value.isdigit():
@@ -701,6 +702,11 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
         # exception of 0.
         int_value = int(new_value)
         if int_value > upper or (int_value != 0 and int_value < lower):
+            editable.emit_stop_by_name(triggering_event)
+            return
+
+        # Don't let users enter values that aren't multiples of the increment
+        if int_value % increment != 0:
             editable.emit_stop_by_name(triggering_event)
             return
 
@@ -742,7 +748,7 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
                     increment = 1
 
                 cell_renderer.set_property("adjustment",
-                    gtk.Adjustment(lower=1, upper=int(available), step_incr=int(increment)))
+                    gtk.Adjustment(lower=int(increment), upper=int(available), step_incr=int(increment)))
 
 
 def expand_collapse_on_row_activated_callback(treeview, path, view_column):
