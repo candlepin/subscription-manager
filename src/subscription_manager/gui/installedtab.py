@@ -33,17 +33,20 @@ prefix = os.path.dirname(__file__)
 VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
 PARTIAL_IMG = os.path.join(prefix, "data/icons/partial.svg")
 INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
+UNKNOWN_IMG = os.path.join(prefix, "data/icons/unknown.svg")
 
 ICONSET = {
     'green': gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 13, 13),
     'red': gtk.gdk.pixbuf_new_from_file_at_size(INVALID_IMG, 13, 13),
-    'yellow': gtk.gdk.pixbuf_new_from_file_at_size(PARTIAL_IMG, 13, 13)
+    'yellow': gtk.gdk.pixbuf_new_from_file_at_size(PARTIAL_IMG, 13, 13),
+    'unknown': gtk.gdk.pixbuf_new_from_file_at_size(UNKNOWN_IMG, 13, 13),
 }
 
 
-PARTIAL = 0
-INVALID = 1
-VALID = 2
+PARTIAL_STATUS = 0
+INVALID_STATUS = 1
+VALID_STATUS = 2
+UNKNOWN_STATUS = 3
 
 
 class InstalledProductsTab(widgets.SubscriptionManagerTab):
@@ -210,8 +213,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['status'] = _('Partially Subscribed')
                         entry['validity_note'] = _("Partially Subscribed")
                     elif status == UNKNOWN:
-                        # TODO: get a real icon for unknown status:
-                        entry['image'] = self._render_icon('yellow')
+                        entry['image'] = self._render_icon('unknown')
                         entry['status'] = _('Unknown')
                         if not self.cs.is_registered():
                             entry['validity_note'] = _("System is not registered.")
@@ -287,10 +289,12 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def _set_status_icons(self, status_type):
         img = INVALID_IMG
-        if status_type == PARTIAL:
+        if status_type == PARTIAL_STATUS:
             img = PARTIAL_IMG
-        elif status_type == VALID:
+        elif status_type == VALID_STATUS:
             img = VALID_IMG
+        elif status_type == UNKNOWN_STATUS:
+            img = UNKNOWN_IMG
 
         pix_buf = gtk.gdk.pixbuf_new_from_file_at_size(img, 13, 13)
         self.tab_icon.set_from_pixbuf(pix_buf)
@@ -299,7 +303,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         """ Updates the entitlement validity status portion of the UI. """
 
         if ClassicCheck().is_registered_with_classic():
-            self._set_status_icons(VALID)
+            self._set_status_icons(VALID_STATUS)
             self.subscription_status_label.set_text(
                 get_branding().RHSMD_REGISTERED_TO_OTHER)
             return
@@ -319,7 +323,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         partial_count = len(sorter.reasons.reasons) or len(sorter.partially_valid_products)
 
         if warn_count > 0:
-            self._set_status_icons(INVALID)
+            self._set_status_icons(INVALID_STATUS)
             # Change wording slightly for just one product
             if warn_count > 1:
                 self.subscription_status_label.set_markup(
@@ -332,13 +336,13 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         _("1 installed product does not have a valid subscription."))
 
         elif partial_count > 0:
-            self._set_status_icons(PARTIAL)
+            self._set_status_icons(PARTIAL_STATUS)
             self.subscription_status_label.set_markup(
                 # I18N: Please add newlines if translation is longer:
                 _("This system does not match subscription limits."))
 
         else:
-            self._set_status_icons(VALID)
+            self._set_status_icons(VALID_STATUS)
             if sorter.first_invalid_date:
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
@@ -353,6 +357,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         _("No installed products detected."))
 
         if not is_registered:
+            self._set_status_icons(UNKNOWN_STATUS)
             self.subscription_status_label.set_text(
                 # I18N: Please add newlines if translation is longer:
                 _("Keep your system up to date by registering."))
