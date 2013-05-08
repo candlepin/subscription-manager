@@ -2216,7 +2216,7 @@ def columnize(caption_list, callback, *args):
             int(get_terminal_width() / 2))
     padded_list = []
     for caption in caption_list:
-        lines = format_name(caption, 1, padding).split('\n')
+        lines = format_name(caption, 0, padding - 1).split('\n')
         lines[-1] = lines[-1].ljust(padding) + '%s'
         fixed_caption = '\n'.join(lines)
         padded_list.append(fixed_caption)

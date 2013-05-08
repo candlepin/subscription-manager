@@ -865,8 +865,8 @@ class TestColumnize(unittest.TestCase):
     def test_columnize_with_small_term(self):
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
                 _echo, "This is a testing string", "This_is_another_testing_string")
-        expected = 'Hello\n Hello\n Hello\n Hello\n :    This\n      is a\n      ' \
-                'testin\n      g\n      string\nFoo\n Foo\n Foo\n Foo: ' \
+        expected = 'Hello\nHello\nHello\nHello\n:     This\n      is a\n      ' \
+                'testin\n      g\n      string\nFoo\nFoo\nFoo\nFoo:  ' \
                 'This_i\n      s_anot\n      her_te\n      sting_\n      string'
         self.assertNotEquals(result, expected)
         managercli.get_terminal_width = Mock(return_value=12)
@@ -911,5 +911,5 @@ class TestColumnize(unittest.TestCase):
         self.assertEquals(result, expected)
         managercli.get_terminal_width = Mock(return_value=14)
         result = columnize([multibyte_str], _echo, multibyte_str)
-        expected = u"このシステム\n 用に    このシステム用\n       に"
+        expected = u"このシステム\n用に     このシステム用\n       に"
         self.assertEquals(result, expected)
