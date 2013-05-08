@@ -48,6 +48,7 @@ INVALID_STATUS = 1
 VALID_STATUS = 2
 UNKNOWN_STATUS = 3
 
+
 class InstalledProductsTab(widgets.SubscriptionManagerTab):
     widget_names = widgets.SubscriptionManagerTab.widget_names + \
                 ['product_text', 'product_arch_text', 'validity_text',
