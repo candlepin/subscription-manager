@@ -14,9 +14,7 @@
 # in this software or its documentation.
 #
 
-import base64
 import getpass
-import httplib
 import libxml2
 import logging
 import os
@@ -26,9 +24,9 @@ import simplejson as json
 import subprocess
 import sys
 import traceback
-import xmlrpclib
 from datetime import datetime
 from M2Crypto.SSL import SSLError
+from rhn import rpclib
 
 import rhsm.config
 from rhsm.connection import UEPConnection, RemoteServerException, RestlibException
@@ -119,24 +117,6 @@ class Menu(object):
             return self.choices[index][1]
         except IndexError:
             raise InvalidChoiceError
-
-
-class ProxiedTransport(xmlrpclib.Transport):
-    def set_proxy(self, proxy, credentials):
-        self.proxy = proxy
-        self.credentials = credentials
-
-    def make_connection(self, host):
-        self.realhost = host
-        return httplib.HTTP(self.proxy)
-
-    def send_request(self, connection, handler, request_body):
-        connection.putrequest("POST", 'http://%s%s' % (self.realhost, handler))
-
-    def send_host(self, connection, host):
-        connection.putheader('Host', self.realhost)
-        if self.credentials:
-            connection.putheader('Proxy-Authorization', 'Basic ' + self.credentials)
 
 
 class UserCredentials(object):
@@ -330,17 +310,17 @@ class MigrationEngine(object):
         server_url = 'https://%s/rpc/api' % (hostname)
         try:
             if self.rhncfg['enableProxy']:
-                pt = ProxiedTransport()
+                proxy = "%s:%s" % (self.proxy_host, self.proxy_port)
+                log.info("Using proxy %s for RHN API methods" % (proxy))
                 if self.rhncfg['enableProxyAuth']:
-                    proxy_credentials = base64.encodestring('%s:%s' % (self.proxy_user, self.proxy_pass)).strip()
-                else:
-                    proxy_credentials = ""
-
-                pt.set_proxy("%s:%s" % (self.proxy_host, self.proxy_port), proxy_credentials)
-                log.info("Using proxy %s:%s for RHN API methods" % (self.proxy_host, self.proxy_port))
-                sc = xmlrpclib.Server(server_url, transport=pt)
+                    proxy = "@".join(["%s:%s" % (self.proxy_user, self.proxy_pass), proxy])
             else:
-                sc = xmlrpclib.Server(server_url)
+                proxy = None
+
+            sc = rpclib.Server(server_url, proxy=proxy)
+
+            ca = self.rhncfg["sslCACert"]
+            sc.add_trusted_cert(ca)
 
             sk = sc.auth.login(credentials.username, credentials.password)
             return (sc, sk)
