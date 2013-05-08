@@ -62,22 +62,6 @@ class TestMenu(unittest.TestCase):
         self.assertEqual(choice, "Hello")
 
 
-class TestProxiedTransport(unittest.TestCase):
-    def setUp(self):
-        self.transport = migrate.ProxiedTransport()
-
-    def test_set_proxy(self):
-        self.transport.set_proxy("proxy", "credentials")
-        self.assertEquals(self.transport.proxy, "proxy")
-        self.assertEquals(self.transport.credentials, "credentials")
-
-    def test_make_connection(self):
-        self.transport.proxy = "proxy"
-        http = self.transport.make_connection("host")
-        self.assertEquals(self.transport.realhost, "host")
-        self.assertEquals(http._conn.host, "proxy")
-
-
 class TestMigration(unittest.TestCase):
     def setUp(self):
         migrate.initUp2dateConfig = lambda: {}
@@ -412,13 +396,13 @@ class TestMigration(unittest.TestCase):
         else:
             self.fail("No exception raised")
 
-    @patch("xmlrpclib.Server")
+    @patch("rhn.rpclib.Server")
     def test_connect_to_rhn(self, mock_server):
-        pass
         rhn_config = {
             "serverURL": "https://some.host.example.com/XMLRPC",
             "enableProxy": True,
             "enableProxyAuth": True,
+            "sslCACert": "/some/path/here",
             }
         self.engine.rhncfg = rhn_config
         self.engine.proxy_user = "proxy_user"
@@ -432,6 +416,7 @@ class TestMigration(unittest.TestCase):
 
         ms = mock_server.return_value
         self.engine.connect_to_rhn(credentials)
+        mock_server.assert_called_with("https://some.host.example.com/rpc/api", proxy="proxy_user:proxy_pass@proxy.example.com:3128")
         ms.auth.login.assert_called_with("username", "password")
 
     def test_check_is_org_admin(self):
