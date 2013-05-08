@@ -14,10 +14,12 @@
 #
 
 import sys
-import unittest
+
 import certdata
-from rhsm.certificate import create_from_pem
+import fixture
+
 from rct.cert_commands import StatCertCommand
+from rhsm.certificate import create_from_pem
 
 from stubs import MockStdout, MockStderr
 
@@ -40,9 +42,10 @@ class StatCertCommandStub(StatCertCommand):
         return self._pem
 
 
-class StatCertCommandTests(unittest.TestCase):
+class StatCertCommandTests(fixture.SubManFixture):
 
     def setUp(self):
+        super(StatCertCommandTests, self).setUp()
         self.mock_stdout = MockStdout()
         self.mock_stderr = MockStderr()
         sys.stdout = self.mock_stdout
@@ -53,6 +56,7 @@ class StatCertCommandTests(unittest.TestCase):
         sys.stderr = sys.__stderr__
 
     def tearDown(self):
+        super(StatCertCommandTests, self).tearDown()
         self._restore_stdout()
 
     def test_basic_cert_output(self):
@@ -60,12 +64,12 @@ class StatCertCommandTests(unittest.TestCase):
         command.main(['will_use_stub'])
 
         cert_output = self.mock_stdout.buffer
-        self.assertEqual(certdata.PRODUCT_CERT_V1_0_STAT_OUTPUT, cert_output)
+        self.assert_string_equals(certdata.PRODUCT_CERT_V1_0_STAT_OUTPUT, cert_output)
 
     def test_entitlement_cert_output_includes_content_sets(self):
         command = StatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
         command.main(['will_use_stub'])
 
         cert_output = self.mock_stdout.buffer
-        self.assertEqual(certdata.ENTITLEMENT_CERT_V3_0_STAT_OUTPUT,
+        self.assert_string_equals(certdata.ENTITLEMENT_CERT_V3_0_STAT_OUTPUT,
                 cert_output)
