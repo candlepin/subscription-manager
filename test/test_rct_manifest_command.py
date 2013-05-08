@@ -13,20 +13,23 @@
 # in this software or its documentation.
 #
 
-import unittest
-import tempfile
+from cStringIO import StringIO
+import os
 import shutil
+import sys
+import tempfile
+import unittest
 import zipfile
 from zipfile import ZipFile
-import os
-import sys
-from cStringIO import StringIO
+
+import fixture
 import manifestdata
-from rct.manifest_commands import get_value
-from rct.manifest_commands import ZipExtractAll
-from rct.manifest_commands import RCTManifestCommand
 from rct.manifest_commands import CatManifestCommand
 from rct.manifest_commands import DumpManifestCommand
+from rct.manifest_commands import get_value
+from rct.manifest_commands import RCTManifestCommand
+from rct.manifest_commands import ZipExtractAll
+
 from stubs import MockStdout, MockStderr
 
 
@@ -48,7 +51,7 @@ def _build_valid_manifest():
     return manifest_zip
 
 
-class RCTManifestCommandTests(unittest.TestCase):
+class RCTManifestCommandTests(fixture.SubManFixture):
 
     def test_get_value(self):
         data = {"test": "value", "test2": {"key2": "value2", "key3": []}}
@@ -72,7 +75,7 @@ class RCTManifestCommandTests(unittest.TestCase):
         catman._do_command()
 
         self.assertEquals("", mock_err.buffer)
-        self.assertEquals(manifestdata.correct_manifest_output, mock_out.buffer)
+        self.assert_string_equals(manifestdata.correct_manifest_output, mock_out.buffer)
 
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
