@@ -2250,7 +2250,7 @@ def format_name(name, indent, max_length):
     properly indented.
     """
 
-    if not name or not max_length or not isinstance(name, basestring):
+    if not name or not max_length or (max_length - indent) < 2 or not isinstance(name, basestring):
         return name
 
     words = name.split()
