@@ -13,9 +13,9 @@
 # in this software or its documentation.
 #
 
-import unittest
-import os
 from datetime import datetime
+import types
+import unittest
 
 import certdata
 from rhsm.certificate import create_from_pem, CertificateException
@@ -171,6 +171,14 @@ class V3CertTests(unittest.TestCase):
         self.assertEquals("never-enabled-content", content.name)
         self.assertEquals(False, content.enabled)
 
+    def test_content_no_arches(self):
+        """Handle entitlement certs with no arch info on content"""
+        content = self._find_content_by_label(self.ent_cert.content,
+                                              "always-enabled-content")
+        # we should get the default empty list if there are no arches
+        # specified, ala the test entitlement cert
+        self.assertEquals([], content.arches)
+
     @patch('os.unlink')
     def test_delete(self, unlink_mock):
         """ Entitlement cert deletion should cleanup key as well. """
@@ -216,6 +224,22 @@ class V3_2CertTests(unittest.TestCase):
                 self.ent_cert.pool.id)
 
 
+class V3_2ContentArchCertTests(unittest.TestCase):
+
+    def setUp(self):
+        self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V3_2_WITH_CONTENT_ARCH)
+
+    def test_read_content_arches(self):
+        for content in self.ent_cert.content:
+            self.assertTrue(isinstance(content.arches, types.ListType))
+            if content.label == 'always-enabled-content':
+                self.assertEquals(['ALL'], content.arches)
+            if content.label == 'awesomeos-x86_64-i386-content':
+                self.assertTrue('i386' in content.arches)
+                self.assertTrue('x86_64' in content.arches)
+                self.assertFalse('ALL' in content.arches)
+
+
 class IdentityCertTests(unittest.TestCase):
 
     def test_creation(self):
@@ -252,6 +276,27 @@ class ContentTests(unittest.TestCase):
                           name="testcontent", label="testcontent", enabled=True)
         self.assertRaises(CertificateException, Content, content_type="",
                           name="testcontent", label="testcontent", enabled=True)
+
+    def test_arches_not_set(self):
+        c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=1)
+        self.assertTrue(isinstance(c.arches, types.ListType))
+        self.assertEquals([], c.arches)
+
+    def test_arches_empty(self):
+        c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=1, arches=[])
+        self.assertTrue(isinstance(c.arches, types.ListType))
+        self.assertEquals([], c.arches)
+
+    def test_arches(self):
+        c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=1, arches=['i386', 's390'])
+        self.assertTrue(isinstance(c.arches, types.ListType))
+        self.assertTrue('i386' in c.arches)
+        self.assertTrue('s390' in c.arches)
+
+    def test_arches_all(self):
+        c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=1, arches=['ALL'])
+        self.assertTrue(isinstance(c.arches, types.ListType))
+        self.assertTrue('ALL' in c.arches)
 
 
 class ProductTests(unittest.TestCase):

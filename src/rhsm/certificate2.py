@@ -335,6 +335,7 @@ class _CertFactory(object):
                     enabled=c.get('enabled', True),
                     metadata_expire=c.get('metadata_expire', None),
                     required_tags=c.get('required_tags', []),
+                    arches=c.get('arches', []),
                 ))
         return content
 
@@ -675,7 +676,7 @@ class Order(object):
 class Content(object):
 
     def __init__(self, content_type=None, name=None, label=None, vendor=None, url=None,
-            gpg=None, enabled=None, metadata_expire=None, required_tags=None):
+            gpg=None, enabled=None, metadata_expire=None, required_tags=None, arches=None):
 
         if (name is None) or (label is None):
             raise CertificateException("Content missing name/label")
@@ -702,6 +703,8 @@ class Content(object):
 
         self.metadata_expire = metadata_expire
         self.required_tags = required_tags or []
+
+        self.arches = arches or []
 
     def __eq__(self, other):
         return (self.label == other.label)
