@@ -167,7 +167,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         selection.select_path(0)
 
     def _add_group(self, group_idx, group):
-        iter = None
+        tree_iter = None
         bg_color = get_cell_background_color(group_idx)
         if group.name and len(group.entitlements) > 1:
             unique = self.find_unique_name_count(group.entitlements)
@@ -178,12 +178,12 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                 name_string = _("Stack of %s and 1 other") % (group.name)
             else:
                 name_string = _("Stack of %s") % (group.name)
-            iter = self.store.add_map(iter, self._create_stacking_header_entry(name_string,
+            tree_iter = self.store.add_map(tree_iter, self._create_stacking_header_entry(name_string,
                                                                                bg_color))
         new_parent_image = None
         for i, cert in enumerate(group.entitlements):
             image = self._get_entry_image(cert)
-            self.store.add_map(iter, self._create_entry_map(cert, bg_color, image))
+            self.store.add_map(tree_iter, self._create_entry_map(cert, bg_color, image))
 
             # Determine if we need to change the parent's image. We
             # will match the parent's image with the children if any of
@@ -192,8 +192,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                 new_parent_image = image
 
         # Update the parent image if required.
-        if new_parent_image and iter:
-            self.store.set_value(iter, self.store['image'],
+        if new_parent_image and tree_iter:
+            self.store.set_value(tree_iter, self.store['image'],
                     gtk.gdk.pixbuf_new_from_file_at_size(new_parent_image, 13, 13))
 
     def find_unique_name_count(self, entitlements):
@@ -343,9 +343,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         return installed_products
 
-    def _update_progress_renderer(self, column, cell_renderer, tree_model, iter):
-        hide_progress = tree_model.get_value(iter, self.store['is_group_row'])
-        background_color = tree_model.get_value(iter, self.store['background'])
+    def _update_progress_renderer(self, column, cell_renderer, tree_model, tree_iter):
+        hide_progress = tree_model.get_value(tree_iter, self.store['is_group_row'])
+        background_color = tree_model.get_value(tree_iter, self.store['background'])
 
         cell_renderer.set_property('visible', not hide_progress)
 
