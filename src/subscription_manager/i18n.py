@@ -23,8 +23,8 @@ def configure_i18n(with_glade=False):
     Configure internationalization for the application. Should only be
     called once per invocation. (once for CLI, once for GUI)
     """
-    import locale
     import gettext
+    import locale
     try:
         locale.setlocale(locale.LC_ALL, '')
     except locale.Error:

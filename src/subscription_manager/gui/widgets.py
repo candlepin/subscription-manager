@@ -13,22 +13,24 @@
 # in this software or its documentation.
 #
 
-import os
 import datetime
+import gettext
+import os
 import time
+
 import gobject
 import gtk
 import pango
 
-import gettext
-_ = gettext.gettext
 
 from rhsm.certificate import GMT
 
-from subscription_manager import managerlib
-from subscription_manager.gui import storage
 from subscription_manager.gui import messageWindow
+from subscription_manager.gui import storage
 from subscription_manager.gui import utils
+from subscription_manager import managerlib
+
+_ = gettext.gettext
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
 

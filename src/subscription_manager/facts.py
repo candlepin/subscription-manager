@@ -11,18 +11,20 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
+from datetime import datetime
+import gettext
 import glob
+import logging
 import os
 import simplejson as json
-import logging
-import gettext
-_ = gettext.gettext
 
 import rhsm.config
-from subscription_manager import certdirectory
+
 from subscription_manager.cache import CacheManager
+from subscription_manager import certdirectory
 from subscription_manager import plugins
-from datetime import datetime
+
+_ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
 

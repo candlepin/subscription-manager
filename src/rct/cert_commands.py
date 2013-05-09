@@ -14,14 +14,17 @@
 #
 
 import base64
+import gettext
 import os
+
 from rhsm import certificate, _certificate
 from rhsm.certificate2 import EntitlementCertificate
+
 from rct.commands import RCTCliCommand
 from rct.printing import printc, type_to_string
 
-import gettext
 from subscription_manager.cli import InvalidCLIOptionError
+
 _ = gettext.gettext
 
 

@@ -23,11 +23,11 @@ attributes matching the names of those on DefaultBranding for any values you
 want to override.
 """
 
+import gettext
+import glob
 import os
 import sys
-import glob
 
-import gettext
 _ = gettext.gettext
 
 __all__ = ["get_branding"]

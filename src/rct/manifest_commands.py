@@ -13,17 +13,18 @@
 # in this software or its documentation.
 #
 
+from cStringIO import StringIO
+import gettext
 import os
 import simplejson as json
 from zipfile import ZipFile
-from cStringIO import StringIO
+
 from rhsm import certificate
+
 from rct.commands import RCTCliCommand
 from rct.printing import xstr
-
-
-import gettext
 from subscription_manager.cli import InvalidCLIOptionError
+
 _ = gettext.gettext
 
 

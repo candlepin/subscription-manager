@@ -13,10 +13,10 @@
 # in this software or its documentation.
 #
 
-import sys
-import os
-
 import gettext
+import os
+import sys
+
 _ = gettext.gettext
 
 from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter

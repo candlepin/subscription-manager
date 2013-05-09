@@ -15,27 +15,28 @@
 # in this software or its documentation.
 #
 
+import gettext
+import logging
+import Queue
 import re
 import socket
-import logging
 import threading
-import Queue
 
 import gobject
 import gtk
 import gtk.glade
 
-from subscription_manager import managerlib
 import rhsm.config as config
+
 from subscription_manager.branding import get_branding
-from subscription_manager.cache import ProfileManager, InstalledProductsManager
+from subscription_manager.cache import InstalledProductsManager, ProfileManager
 from subscription_manager.certmgr import CertManager
-from subscription_manager.injection import require, IDENTITY, CERT_SORTER
-from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
-        is_valid_server_info, MissingCaCertException, restart_virt_who
-from subscription_manager import plugins
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
+from subscription_manager.injection import CERT_SORTER, IDENTITY, require
+from subscription_manager import managerlib
+from subscription_manager import plugins
+from subscription_manager.utils import is_valid_server_info, MissingCaCertException, parse_server_info, restart_virt_who, ServerUrlParseError
 
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow
 from subscription_manager.gui.autobind import DryRunResult, \
@@ -43,13 +44,16 @@ from subscription_manager.gui.autobind import DryRunResult, \
         NoProductsException
 from subscription_manager.gui.messageWindow import InfoDialog, OkDialog
 
-import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
+
 gettext.textdomain("rhsm")
+
 gtk.glade.bindtextdomain("rhsm")
+
 gtk.glade.textdomain("rhsm")
 
 log = logging.getLogger('rhsm-app.' + __name__)
+
 CFG = config.initConfig()
 
 # An implied Katello environment which we can't actual register to.

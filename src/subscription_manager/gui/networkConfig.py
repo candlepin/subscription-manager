@@ -14,11 +14,12 @@
 # in this software or its documentation.
 #
 
-import os
 import gettext
+import logging
+import os
+
 import gtk
 import gtk.glade
-import logging
 
 import rhsm.config
 import rhsm.connection as connection

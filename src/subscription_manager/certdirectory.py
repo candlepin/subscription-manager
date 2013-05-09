@@ -15,19 +15,16 @@
 # in this software or its documentation.
 #
 
-
-import os
+import gettext
 import logging
+import os
 
 from rhsm.certificate import Key, create_from_file
-
 from rhsm.config import initConfig
 from subscription_manager.injection import require, ENT_DIR
 
-
 log = logging.getLogger('rhsm-app.' + __name__)
 
-import gettext
 _ = gettext.gettext
 
 cfg = initConfig()

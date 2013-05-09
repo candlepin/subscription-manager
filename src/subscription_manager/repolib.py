@@ -15,11 +15,11 @@
 # in this software or its documentation.
 #
 
+from iniparse import ConfigParser
+import logging
 import os
 import string
-import logging
 from urllib import basejoin
-from iniparse import ConfigParser
 
 from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException

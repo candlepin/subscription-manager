@@ -13,23 +13,25 @@
 # in this software or its documentation.
 #
 
-import gtk
-import gobject
+import gettext
 import os
 from datetime import datetime, timedelta
 
+import gobject
+import gtk
+
 from rhsm.certificate import GMT
 
-from subscription_manager.injection import require, IDENTITY
-from subscription_manager.certlib import Disconnected
-from subscription_manager.gui import messageWindow
-from subscription_manager.gui import widgets
-from subscription_manager.gui.utils import handle_gui_exception, get_dbus_iface,\
-    get_cell_background_color
-
-import gettext
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
+from subscription_manager.certlib import Disconnected
+from subscription_manager.injection import IDENTITY, require
+
+from subscription_manager.gui import messageWindow
 from subscription_manager.gui.storage import MappedTreeStore
+from subscription_manager.gui import widgets
+from subscription_manager.gui.utils import get_cell_background_color, get_dbus_iface, handle_gui_exception
+
+
 _ = gettext.gettext
 
 WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
