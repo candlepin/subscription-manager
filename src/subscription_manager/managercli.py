@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # Subscription manager command line utility.
 #
@@ -22,6 +23,7 @@ import socket
 import getpass
 import dbus
 import datetime
+import unicodedata
 from time import strftime, strptime, localtime
 from M2Crypto import X509
 from M2Crypto import SSL
@@ -2106,7 +2108,6 @@ class ListCommand(CliCommand):
         print(_("Overall Status: %s\n") % overall_status)
         if reasons:
             rows = [reason[0] + ':' for reason in reasons]
-            #rows = [_('Reason %d:') % (count + 1) for count in range(len(reasons))]
             print columnize(rows, _none_wrap, *[r[1] for r in reasons])
         print('')
 
@@ -2199,6 +2200,17 @@ class ManagerCLI(CLI):
         return CLI.main(self)
 
 
+def width(in_str):
+    if not isinstance(in_str, unicode):
+        in_str = in_str.decode("utf-8")
+    # From http://stackoverflow.com/questions/2476953/ user Josh Lee
+    return sum(1 + (unicodedata.east_asian_width(c) in "WF") for c in in_str)
+
+
+def ljust_wide(in_str, padding):
+    return in_str + ' ' * (padding - width(in_str))
+
+
 def columnize(caption_list, callback, *args):
     """
     Take a list of captions and values and columnize the output so that
@@ -2211,15 +2223,19 @@ def columnize(caption_list, callback, *args):
     The callback gives us the ability to do things like replacing None values
     with the string "None" (see _none_wrap()).
     """
-    #Add one so that the longest string has a space after it
-    padding = sorted(map(len, caption_list))[-1] + 1
-    padded_list = [caption.ljust(padding) + "%s" for caption in caption_list]
+    padding = min(sorted(map(width, caption_list))[-1] + 1,
+            int(get_terminal_width() / 2))
+    padded_list = []
+    for caption in caption_list:
+        lines = format_name(caption, 0, padding - 1).split('\n')
+        lines[-1] = ljust_wide(lines[-1], padding) + '%s'
+        fixed_caption = '\n'.join(lines)
+        padded_list.append(fixed_caption)
 
     lines = zip(padded_list, args)
     columns = get_terminal_width()
     output = []
-    for line in lines:
-        (caption, value) = line
+    for (caption, value) in lines:
         if isinstance(value, list):
             if value:
                 # Put the first value on the same line as the caption
@@ -2241,12 +2257,13 @@ def columnize(caption_list, callback, *args):
 def format_name(name, indent, max_length):
     """
     Formats a potentially long name for multi-line display, giving
-    it a columned effect.
+    it a columned effect.  Assumes the first line is already
+    properly indented.
     """
-
-    if not name or not max_length or not isinstance(name, basestring):
+    if not name or not max_length or (max_length - indent) <= 2 or not isinstance(name, basestring):
         return name
-
+    if not isinstance(name, unicode):
+        name = name.decode("utf-8")
     words = name.split()
     current = indent
     lines = []
@@ -2254,22 +2271,30 @@ def format_name(name, indent, max_length):
     if not words:
         return name
 
-    first_word = words.pop(0)
-    line = [first_word]
-    current += len(first_word) + 1
-
     def add_line():
         lines.append(' '.join(line))
 
+    line = []
     # Split here and build it back up by word, this way we get word wrapping
-    for word in words:
-        if current + len(word) < max_length:
-            current += len(word) + 1  # Have to account for the extra space
+    while words:
+        word = words.pop(0)
+        if current + width(word) <= max_length:
+            current += width(word) + 1  # Have to account for the extra space
             line.append(word)
         else:
-            add_line()
-            line = [' ' * (indent - 1), word]
-            current = indent + len(word) + 1
+            if line:
+                add_line()
+            # If the word will not fit, break it
+            if indent + width(word) > max_length:
+                split_index = 0
+                while(width(word[:split_index + 1]) + indent <= max_length):
+                    split_index += 1
+                words.insert(0, word[split_index:])
+                word = word[:split_index]
+            line = [word]
+            if indent and lines:
+                line.insert(0, ' ' * (indent - 1))
+            current = indent + width(word) + 1
 
     add_line()
     return '\n'.join(lines)
