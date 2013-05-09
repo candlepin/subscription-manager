@@ -75,7 +75,7 @@ class SubscriptionManagerTab(GladeWidget):
     MIN_GTK_MINOR_GRID = 18
     MIN_GTK_MICRO_GRID = 0
 
-    def __init__(self, glade_file, initial_widget_names=[]):
+    def __init__(self, glade_file):
         """
         Creates a new tab widget, given the specified glade file and a list of
         widget names to extract to instance variables.
