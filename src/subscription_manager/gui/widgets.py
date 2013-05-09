@@ -720,30 +720,30 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
         """
         try:
             new_quantity = int(new_text)
-            iter = model.get_iter(path)
-            model.set_value(iter, self.quantity_store_idx, new_quantity)
+            tree_iter = model.get_iter(path)
+            model.set_value(tree_iter, self.quantity_store_idx, new_quantity)
         except ValueError:
             # Do nothing... The value entered in the grid will be reset.
             pass
 
-    def _update_cell_based_on_data(self, column, cell_renderer, tree_model, iter):
+    def _update_cell_based_on_data(self, column, cell_renderer, tree_model, tree_iter):
         # Clear the cell if we are a parent row.
-        if tree_model.iter_n_children(iter) > 0:
+        if tree_model.iter_n_children(tree_iter) > 0:
             cell_renderer.set_property("text", "")
 
         # Disable editor if not multi-entitled.
-        is_multi_entitled = tree_model.get_value(iter, self.is_multi_entitled_store_idx)
+        is_multi_entitled = tree_model.get_value(tree_iter, self.is_multi_entitled_store_idx)
         cell_renderer.set_property("editable", is_multi_entitled)
 
         if is_multi_entitled:
-            quantity = tree_model.get_value(iter, self.quantity_store_idx)
+            quantity = tree_model.get_value(tree_iter, self.quantity_store_idx)
             cell_renderer.set_property("text", "%s *" % quantity)
 
         if self.available_store_idx is not None:
-            available = tree_model.get_value(iter, self.available_store_idx)
+            available = tree_model.get_value(tree_iter, self.available_store_idx)
             if available and available != -1:
                 if self.quantity_increment_idx is not None:
-                    increment = tree_model.get_value(iter, self.quantity_increment_idx)
+                    increment = tree_model.get_value(tree_iter, self.quantity_increment_idx)
                 else:
                     increment = 1
 
