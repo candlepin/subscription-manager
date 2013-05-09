@@ -351,12 +351,12 @@ class StubUEP:
                  proxy_hostname=None, proxy_port=None,
                  proxy_user=None, proxy_password=None,
                  cert_file=None, key_file=None):
-            self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid'}
-            self.environment_list = []
-            self.called_unregister_uuid = None
-            self.called_unbind_uuid = None
-            self.called_unbind_serial = []
-            pass
+        self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid'}
+        self.environment_list = []
+        self.called_unregister_uuid = None
+        self.called_unbind_uuid = None
+        self.called_unbind_serial = []
+        pass
 
     def supports_resource(self, resource):
         return False
