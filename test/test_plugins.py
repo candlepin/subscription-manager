@@ -797,9 +797,9 @@ class TestBaseConduit(unittest.TestCase):
 
 class TestVersionChecks(unittest.TestCase):
     def test_parse_version(self):
-        maj, min = plugins.parse_version("1.0")
-        self.assertEquals(1, maj)
-        self.assertEquals(0, min)
+        maj_ver, min_ver = plugins.parse_version("1.0")
+        self.assertEquals(1, maj_ver)
+        self.assertEquals(0, min_ver)
 
     def test_api_versions_equal(self):
         self.assertTrue(plugins.api_version_ok("1.0", "1.0"))
