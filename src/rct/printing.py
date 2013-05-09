@@ -87,6 +87,7 @@ class ContentPrinter(object):
         s.append("\t%s: %s" % (_("Enabled"), xstr(content.enabled)))
         s.append("\t%s: %s" % (_("Expires"), xstr(content.metadata_expire)))
         s.append("\t%s: %s" % (_("Required Tags"), ", ".join(content.required_tags)))
+        s.append("\t%s: %s" % (_("Arches"), ", ".join(content.arches)))
 
         return '\n'.join(s)
 
