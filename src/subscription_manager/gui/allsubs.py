@@ -216,9 +216,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         sorter = MergedPoolsStackingGroupSorter(merged_pools.values())
         for group_idx, group in enumerate(sorter.groups):
             bg_color = get_cell_background_color(group_idx)
-            iter = None
+            tree_iter = None
             if group.name and len(group.entitlements) > 1:
-                iter = self.store.add_map(iter, self._create_parent_map(group.name, bg_color))
+                tree_iter = self.store.add_map(tree_iter, self._create_parent_map(group.name, bg_color))
 
             for entry in group.entitlements:
                 quantity_available = 0
@@ -247,7 +247,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     if 'quantity_increment' in calculated_attrs:
                         quantity_increment = int(calculated_attrs['quantity_increment'])
 
-                self.store.add_map(iter, {
+                self.store.add_map(tree_iter, {
                     'virt_only': self._machine_type(entry.pools),
                     'product_name': entry.product_name,
                     'product_name_formatted': apply_highlight(entry.product_name,
