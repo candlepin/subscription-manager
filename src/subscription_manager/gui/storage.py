@@ -76,5 +76,5 @@ class MappedTreeStore(MappedStore, gtk.TreeStore):
     def __getitem__(self, key):
         return self.type_index[key]
 
-    def add_map(self, iter, item_map):
-        return self.append(iter, self._create_initial_entry(item_map))
+    def add_map(self, tree_iter, item_map):
+        return self.append(tree_iter, self._create_initial_entry(item_map))
