@@ -12,7 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from mock import Mock
+from mock import Mock, patch
 
 from stubs import StubUEP
 import rhsm.connection as connection
@@ -27,13 +27,14 @@ class CliRegistrationTests(SubManFixture):
         self.persisted_consumer = consumer
         return self.persisted_consumer
 
-    def test_register_persists_consumer_cert(self):
+    @patch('subscription_manager.certlib.ConsumerIdentity.exists')
+    def test_register_persists_consumer_cert(self, mock_exists):
         connection.UEPConnection = StubUEP
 
         # When
         cmd = RegisterCommand()
 
-        ConsumerIdentity.exists = classmethod(lambda cls: False)
+        mock_exists.return_value = False
         cmd._persist_identity_cert = self.stub_persist
         cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
         cmd.facts.write_cache = Mock()
@@ -44,12 +45,13 @@ class CliRegistrationTests(SubManFixture):
         # Then
         self.assertEqual('dummy-consumer-uuid', self.persisted_consumer["uuid"])
 
-    def test_installed_products_cache_written(self):
+    @patch('subscription_manager.certlib.ConsumerIdentity.exists')
+    def test_installed_products_cache_written(self, mock_exists):
         connection.UEPConnection = StubUEP
 
         cmd = RegisterCommand()
         cmd._persist_identity_cert = self.stub_persist
-        ConsumerIdentity.exists = classmethod(lambda cls: False)
+        mock_exists.return_value = False
 
         # Mock out facts and installed products:
         cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
