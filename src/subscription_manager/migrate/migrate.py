@@ -559,13 +559,13 @@ class MigrationEngine(object):
         except RemoteServerException, e:
             systemExit(-1, not_supported)
         except RestlibException, e:
-                if e.code == 404:
-                    # no need to die, just skip it
-                    print not_supported
-                    return None
-                else:
-                    # server supports it but something went wrong, die.
-                    raise e
+            if e.code == 404:
+                # no need to die, just skip it
+                print not_supported
+                return None
+            else:
+                # server supports it but something went wrong, die.
+                raise e
 
         # Create the sla tuple before appending the empty string to the list of
         # valid slas.
