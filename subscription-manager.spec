@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.6
+Version: 1.8.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -379,6 +379,45 @@ fi
 %endif
 
 %changelog
+* Thu May 09 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.7-1
+- 959563, 956298: for rhel 5.10 (dlackey@redhat.com.com)
+- 905922: use get_int instead of get in order to consume the value as a
+  booolean (bkearney@redhat.com)
+- enhancements to tests (alikins@redhat.com)
+- Update expected rct output for content arch info (alikins@redhat.com)
+- let 'rct cat-cert' show arches info on content sets (alikins@redhat.com)
+- Use the unknown icon when it is appropriate. (bkearney@redhat.com)
+- Do not allow manual entry of numbers that aren't multiples of spinner
+  increment. (awood@redhat.com)
+- 959570: Subscription names were being mangled in the installed products page.
+  (bkearney@redhat.com)
+- 959124: Consistant system status between CLI and GUI (ckozak@redhat.com)
+- re-added compatibility for old candlepin servers. (ckozak@redhat.com)
+- 885130: Switch from using xmlrpclib to rhnlib's rpclib. (awood@redhat.com)
+- 958827: fixed duplicate reasons from bundled subs, removed messages for valid
+  products, refactoreed client-side reasons code (ckozak@redhat.com)
+- 958775: correct info for future subscriptions (ckozak@redhat.com)
+- Removing messages from compliant installed products caused by bad overconsumption (ckozak@redhat.com)
+- Use server provided value to determine quantity increment. (awood@redhat.com)
+- 957218: Bump system.certificate_version for cores support (mstead@redhat.com)
+- 956285, 913635, 913628. still need to finalize output for 913628.  (dlackey@redhat.com.com)
+- 955142: Display core limit in rct cat-cert tool (mstead@redhat.com)
+- Warn when we detect we need a newer version of 'mock' (alikins@redhat.com)
+- 924919: remove loging about isodate implementation (alikins@redhat.com)
+- 957195: Pull in the latest or fix from zanata. (bkearney@redhat.com)
+- Add the unkown icon (bkearney@redhat.com)
+- Add reasons to list --installed and list --consumed.  Added list --status
+  (ckozak@redhat.com)
+- 908037: remove all ¶ characters from the ml.po file. Zanata was also updated
+  (bkearney@redhat.com)
+- 906552: Fixed mis translation of subscription-manager in pa.po and zh_CN.po.
+  Zanata was also updated (bkearney@redhat.com)
+- 908059: Fix a pt_BR translation which did not include the http portion of a
+  url. Zanata is fixed as well (bkearney@redhat.com)
+- Add F19, 5.10, 6.4 releasers. (dgoodwin@redhat.com)
+- use "assert_string_equal" for multiline str asserts (alikins@redhat.com)
+- add "assert_string_equals" that diffs multiline strings (alikins@redhat.com)
+
 * Thu Apr 18 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.6-1
 - Latest translations. (dgoodwin@redhat.com)
 - 903298: Fix a few more examples of Register to (bkearney@redhat.com)
