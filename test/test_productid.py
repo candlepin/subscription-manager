@@ -706,9 +706,9 @@ class TestProductManager(unittest.TestCase):
         # TODO: test if we support duplicates in enabled repo list
         # TODO: is there a reason available is a set and enabled is a list? if so, test those cases
 
-    def _create_cert(self, id, label, version, provided_tags):
+    def _create_cert(self, product_id, label, version, provided_tags):
         cert = stubs.StubProductCertificate(
-                stubs.StubProduct(id, label, version=version,
+                stubs.StubProduct(product_id, label, version=version,
                                    provided_tags=provided_tags))
         cert.delete = Mock()
         cert.write = Mock()
