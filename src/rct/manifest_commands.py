@@ -116,7 +116,7 @@ class RCTManifestCommand(RCTCliCommand):
 
     INNER_FILE = "consumer_export.zip"
 
-    def __init__(self, name="cli", aliases=[], shortdesc=None, primary=False):
+    def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
         RCTCliCommand.__init__(self, name=name, aliases=aliases,
                 shortdesc=shortdesc, primary=primary)
 

@@ -52,7 +52,8 @@ test_config = StringIO.StringIO(cfg_buf)
 
 
 class StubConfig(config.RhsmConfigParser):
-    def __init__(self, config_file=None, defaults=config.DEFAULTS):
+    def __init__(self, config_file=None, defaults=None):
+        defaults = defaults or config.DEFAULTS
         config.RhsmConfigParser.__init__(self, config_file=config_file, defaults=defaults)
         self.raise_io = None
         self.fileName = config_file
@@ -437,7 +438,8 @@ class StubContentConnection:
 
 
 class StubFacts(object):
-    def __init__(self, fact_dict={}, facts_changed=True):
+    def __init__(self, fact_dict=None, facts_changed=True):
+        fact_dict = fact_dict or {}
         self.facts = fact_dict
 
         self.delta_values = {}

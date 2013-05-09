@@ -41,13 +41,16 @@ def md5sum(buf):
     return m.hexdigest()
 
 
-def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=[],
-                attributes=[], productAttributes=[], calculatedAttributes=None,
+def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=None,
+                attributes=None, productAttributes=None, calculatedAttributes=None,
                 start_end_range=None):
     """
     Returns a hash representing a pool. Used to simulate the JSON returned
     from Candlepin.
     """
+    provided_products = provided_products or []
+    attributes = attributes or []
+    productAttributes= productAttributes or []
     start_date = datetime.now(GMT()) - timedelta(days=365)
     end_date = datetime.now(GMT()) + timedelta(days=365)
     if start_end_range:

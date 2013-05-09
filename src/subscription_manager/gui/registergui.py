@@ -82,18 +82,17 @@ class RegisterScreen(widgets.GladeWidget):
                     'register_progressbar', 'register_details_label',
                     'cancel_button', 'register_button']
 
-    def __init__(self, backend, facts=None, parent=None, callbacks=[]):
+    def __init__(self, backend, facts=None, parent=None, callbacks=None):
         """
         Callbacks will be executed when registration status changes.
         """
-
         widgets.GladeWidget.__init__(self, "registration.glade")
 
         self.backend = backend
         self.identity = require(IDENTITY)
         self.facts = facts
         self.parent = parent
-        self.callbacks = callbacks
+        self.callbacks = callbacks or []
 
         self.async = AsyncBackend(self.backend)
 

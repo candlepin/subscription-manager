@@ -270,13 +270,14 @@ class SubDetailsWidget(GladeWidget):
 
     def show(self, name, contract=None, start=None, end=None, account=None,
             management=None, support_level="", support_type="",
-            virt_only=None, products=[], highlight=None, sku=None):
+            virt_only=None, products=None, highlight=None, sku=None):
         """
         Show subscription details.
 
         Start and end should be datetime objects.
         Products is a list of tuples in the format (name, id)
         """
+        products = products or []
         # set a new buffer to clear out all the old tag information
         self.subscription_text.set_buffer(gtk.TextBuffer())
         self._set(self.subscription_text, name)
@@ -310,7 +311,7 @@ class SubDetailsWidget(GladeWidget):
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
-                           virt_only=None, products=[], highlight=None, sku=None):
+                           virt_only=None, products=None, highlight=None, sku=None):
         pass
 
     def _set(self, text_view, text):
@@ -377,7 +378,8 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
-                           virt_only=None, products=[], highlight=None, sku=None):
+                           virt_only=None, products=None, highlight=None, sku=None):
+        products = products or []
         self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
                 self._get_date_bg(end))
 

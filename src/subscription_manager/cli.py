@@ -32,11 +32,11 @@ class AbstractCLICommand(object):
     Base class for rt commands. This class provides a templated run
     strategy.
     """
-    def __init__(self, name="cli", aliases=[], shortdesc=None, primary=False):
+    def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
         self.name = name
         self.shortdesc = shortdesc
         self.primary = primary
-        self.aliases = aliases
+        self.aliases = aliases or []
 
         # include our own HelpFormatter that doesn't try to break
         # long words, since that fails on multibyte words
@@ -69,8 +69,8 @@ class AbstractCLICommand(object):
 # taken wholseale from rho...
 class CLI:
 
-    def __init__(self, command_classes=[]):
-
+    def __init__(self, command_classes=None):
+        command_classes = command_classes or []
         self.cli_commands = {}
         self.cli_aliases = {}
         for clazz in command_classes:
