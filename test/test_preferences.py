@@ -112,8 +112,8 @@ class TestPreferencesDialog(SubManFixture):
         self._getPrefDialog()
         self.preferences_dialog.show()
         self.preferences_dialog.sla_combobox.set_active(0)
-        iter = self.preferences_dialog.sla_combobox.get_active_iter()
-        display_text = self.preferences_dialog.sla_model.get_value(iter, 0)
+        tree_iter = self.preferences_dialog.sla_combobox.get_active_iter()
+        display_text = self.preferences_dialog.sla_model.get_value(tree_iter, 0)
         self.assertEquals("Not Set", display_text)
 
     @mock.patch.object(stubs.StubUEP, 'updateConsumer')
@@ -132,6 +132,6 @@ class TestPreferencesDialog(SubManFixture):
         self.preferences_dialog.release_backend.get_releases = get_releases
         self.preferences_dialog.show()
         self.preferences_dialog.release_combobox.set_active(0)
-        iter = self.preferences_dialog.release_combobox.get_active_iter()
-        display_text = self.preferences_dialog.release_model.get_value(iter, 0)
+        tree_iter = self.preferences_dialog.release_combobox.get_active_iter()
+        display_text = self.preferences_dialog.release_model.get_value(tree_iter, 0)
         self.assertEquals("Not Set", display_text)
