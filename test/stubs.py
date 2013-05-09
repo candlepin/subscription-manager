@@ -304,7 +304,7 @@ class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
         super(StubProductDirectory, self).__init__(certificates)
 
 
-class StubConsumerIdentity:
+class StubConsumerIdentity(object):
     CONSUMER_NAME = "John Q Consumer"
     CONSUMER_ID = "211211381984"
     SERIAL = "23234523452345234523453453434534534"
