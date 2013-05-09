@@ -36,10 +36,10 @@ class StorageTests(unittest.TestCase):
         data = self.create_data_map(expected_c1, expected_c2, expected_c3)
         add_data_to_map_funct(data, store)
 
-        iter = store.get_iter_first()
-        self.assertEquals(expected_c1, store.get_value(iter, store['c1']))
-        self.assertEquals(expected_c2, store.get_value(iter, store['c2']))
-        self.assertEquals(expected_c3, store.get_value(iter, store['c3']))
+        tree_iter = store.get_iter_first()
+        self.assertEquals(expected_c1, store.get_value(tree_iter, store['c1']))
+        self.assertEquals(expected_c2, store.get_value(tree_iter, store['c2']))
+        self.assertEquals(expected_c3, store.get_value(tree_iter, store['c3']))
 
     def create_store(self, store_class):
         type_map = {
