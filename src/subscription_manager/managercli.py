@@ -2189,7 +2189,7 @@ class VersionCommand(CliCommand):
 
 class ManagerCLI(CLI):
 
-    def __init__(self, command_classes=[]):
+    def __init__(self):
         commands = [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand,
                     SubscribeCommand, UnSubscribeCommand, FactsCommand,
                     IdentityCommand, OwnersCommand, RefreshCommand, CleanCommand,
