@@ -1,4 +1,4 @@
-.TH subscription-manager 8 "April 30, 2013" "version 2.5" "Subscription Management"  Deon Lackey 
+.TH subscription-manager 8 "May 9, 2013" "version 2.6" "Subscription Management"  Deon Lackey 
 .SH NAME
 subscription-manager \- Registers systems to a subscription management service and then attaches and manages subscriptions for software products.
 
@@ -188,10 +188,6 @@ and
 .B --password
 options, because the authentication information is implicit in the activation key.
 .IP
-When there is a single organization, it is not necessary to specify an organization with the 
-.B --org
-option, but in multi-organization environments, this is required.
-.IP
 For example:
 .RS
 .nf
@@ -220,7 +216,7 @@ the existing system entry is unregistered first, all of its subscriptions are re
 .B --org=ORG
 Assigns the system to an organization. Infrastructures which are managed on-site may be 
 .I multi-tenant,
-meaning that there are multiple organizations within one customer unit. A system may be assigned manually to one of these suborganizations. If there is only one organization configured (which is the case with infrastructures using Customer Portal Subscription Management), then this is not used. With multi-tenant environments, this is required.
+meaning that there are multiple organizations within one customer unit. A system may be assigned manually to one of these suborganizations. When a system is registered with the Customer Portal, this is not required. When a system is registered with an on-premise application such as Subscription Asset Manager, this argument \fIis\fP required, even if there is only a single organization configured.
 
 .TP
 .B --environment=ENV
@@ -370,6 +366,12 @@ The
 command lists all of the subscriptions that are compatible with a system. The options allow the list to be filtered by subscriptions that are used by the system or unused subscriptions that are available to the system.
 
 .TP
+.B --all
+Lists all possible subscriptions that have been purchased, even if they don't match the architecture of the system. This is used with the
+.B --available 
+option. 
+
+.TP
 .B --available
 Lists available subscriptions which are not yet attached to the system.
 
@@ -378,25 +380,22 @@ Lists available subscriptions which are not yet attached to the system.
 Lists all of the subscriptions currently attached to the system.
 
 .TP
+.B --installed
+Lists products which are currently installed on the system which may (or may not) have subscriptions associated with them, as well as products with attached subscriptions which may (or may not) be installed.
+
+.TP
 .B --ondate=YYYY-MM-DD
 Sets the date to use to search for active and available subscriptions. The default (if not explicitly passed) is today's date; using a later date looks for subscriptions which will be active then. This is only used with the 
 .B --available
 option.
 
 .TP
-.B --installed
-Lists products which are currently installed on the system which may (or may not) have subscriptions associated with them, as well as products with attached subscriptions which may (or may not) be installed.
-
-.TP
-.B --all
-Lists all possible subscriptions that have been purchased, even if they don't match the architecture of the system. This is used with the
-.B --available 
-option. 
-
-
-.TP
 .B --servicelevel
 Displays the current preferred service level for the system. Service levels commonly are none, standard, or premium. If a service level is not set, then there is a message saying it is not set.
+
+.TP
+.B --status
+Shows the current status of the products and attached subscriptions for the system. If some products are not fully covered or subscriptions have expired, then the \fB--status\fP argument shows why subscriptions are not current.
 
 
 .SS REFRESH OPTIONS
