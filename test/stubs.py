@@ -354,7 +354,6 @@ class StubUEP:
         self.called_unregister_uuid = None
         self.called_unbind_uuid = None
         self.called_unbind_serial = []
-        pass
 
     def supports_resource(self, resource):
         return False
