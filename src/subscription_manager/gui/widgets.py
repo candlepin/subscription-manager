@@ -602,13 +602,13 @@ class ToggleTextColumn(gtk.TreeViewColumn):
         self.pack_start(self.renderer, False)
         self.set_cell_data_func(self.renderer, self._render_cell)
 
-    def _render_cell(self, column, cell_renderer, tree_model, iter):
+    def _render_cell(self, column, cell_renderer, tree_model, tree_iter):
         # Clear the cell if we are a parent row.
-        if tree_model.iter_n_children(iter) > 0:
+        if tree_model.iter_n_children(tree_iter) > 0:
             cell_renderer.set_property("text", "")
             return
 
-        bool_val = tree_model.get_value(iter, self.model_idx)
+        bool_val = tree_model.get_value(tree_iter, self.model_idx)
         if bool_val is None:
             text = self._get_none_text()
         elif bool(bool_val):
