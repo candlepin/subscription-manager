@@ -2104,12 +2104,15 @@ class ListCommand(CliCommand):
             return
 
         overall_status = self.sorter.get_system_status()
-        reasons = self.sorter.reasons.get_reasons_messages()
+        reasons = self.sorter.reasons.get_name_message_map()
         print(_("Overall Status: %s\n") % overall_status)
-        if reasons:
-            rows = [reason[0] + ':' for reason in reasons]
-            print columnize(rows, _none_wrap, *[r[1] for r in reasons])
-        print('')
+
+        columns = get_terminal_width()
+        for name in reasons:
+            print format_name(name + ':', 0, columns)
+            for message in reasons[name]:
+                print '- %s' % format_name(message, 2, columns)
+            print ''
 
     def print_consumed(self, service_level=None):
         # list all certificates that have not yet expired, even those
