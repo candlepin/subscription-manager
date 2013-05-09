@@ -905,8 +905,10 @@ class UEPConnection:
         results = self.conn.request_get(method)
         return results
 
-    def getPool(self, poolId):
+    def getPool(self, poolId, consumerId=None):
         method = "/pools/%s" % self.sanitize(poolId)
+        if consumerId:
+            method = "%s?consumer=%s" % (method, self.sanitize(consumerId))
         return self.conn.request_get(method)
 
     def getProduct(self, product_id):
