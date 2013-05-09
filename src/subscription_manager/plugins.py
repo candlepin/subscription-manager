@@ -881,8 +881,8 @@ class PluginManager(BasePluginManager):
 
 def parse_version(api_version):
     """parse an API version string into major and minor version strings."""
-    maj, min = api_version.split('.')
-    return int(maj), int(min)
+    maj_ver, min_ver = api_version.split('.')
+    return int(maj_ver), int(min_ver)
 
 
 def api_version_ok(a, b):
