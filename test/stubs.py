@@ -97,9 +97,6 @@ from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
 class MockActionLock(ActionLock):
     PATH = tempfile.mkstemp()[1]
 
-    def __init__(self):
-        ActionLock.__init__(self)
-
 
 class MockStdout:
     def __init__(self):
@@ -135,8 +132,9 @@ class StubProduct(Product):
         if provided_tags:
             provided_tags = parse_tags(provided_tags)
 
-        Product.__init__(self, id=product_id, name=name, version=version,
-                architectures=architectures, provided_tags=provided_tags)
+        super(StubProduct, self).__init__(id=product_id, name=name, version=version,
+                                          architectures=architectures,
+                                          provided_tags=provided_tags)
 
 
 class StubContent(Content):
@@ -149,9 +147,10 @@ class StubContent(Content):
             name = name
         if required_tags:
             required_tags = parse_tags(required_tags)
-        Content.__init__(self, content_type=content_type, name=name, label=label,
-                vendor=vendor, url=url, gpg=gpg, enabled=enabled,
-                metadata_expire=metadata_expire, required_tags=required_tags)
+        super(StubContent, self).__init__(content_type=content_type, name=name, label=label,
+                                          vendor=vendor, url=url, gpg=gpg, enabled=enabled,
+                                          metadata_expire=metadata_expire,
+                                          required_tags=required_tags)
 
 
 class StubProductCertificate(ProductCertificate):
@@ -181,11 +180,10 @@ class StubProductCertificate(ProductCertificate):
         if not end_date:
             end_date = datetime.now() + timedelta(days=365)
 
-        ProductCertificate.__init__(self, products=products,
-                serial=random.randint(1, 10000000),
-                start=start_date,
-                end=end_date,
-                version=version)
+        super(StubProductCertificate, self).__init__(products=products,
+                                                     serial=random.randint(1, 10000000),
+                                                     start=start_date, end=end_date,
+                                                     version=version)
 
     def __str__(self):
         s = []
@@ -244,9 +242,9 @@ class StubEntitlementCertificate(EntitlementCertificate):
         # write these to tmp, could we abuse PATH thing in certs for tests?
 
         path = "/tmp/fake_ent_cert-%s.pem" % self.serial
-        EntitlementCertificate.__init__(self, path=path, products=products,
-                order=order, content=content, pool=pool, start=start_date,
-                end=end_date, serial=self.serial)
+        super(StubEntitlementCertificate, self).__init__(path=path, products=products, order=order,
+                                                         content=content, pool=pool, start=start_date,
+                                                         end=end_date, serial=self.serial)
         if ent_id:
             self.subject = {'CN': ent_id}
 
@@ -303,7 +301,7 @@ class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
             certificates = []
             for pid in pids:
                 certificates.append(StubProductCertificate(StubProduct(pid)))
-        StubCertificateDirectory.__init__(self, certificates)
+        super(StubProductDirectory, self).__init__(certificates)
 
 
 class StubConsumerIdentity:
@@ -486,7 +484,7 @@ class StubCertLib:
 class StubCertSorter(CertSorter):
 
     def __init__(self, prod_dir, ent_dir=None):
-        CertSorter.__init__(self, prod_dir, ent_dir, None)
+        super(StubCertSorter, self).__init__(prod_dir, ent_dir, None)
         self.reasons = Reasons([], self)
 
     def _parse_server_status(self):
