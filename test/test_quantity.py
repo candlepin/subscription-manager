@@ -34,6 +34,27 @@ entitlements = [
 
 
 class TestQuantityDefaultValueCalculator(unittest.TestCase):
+    def test_uses_calculated_attributes(self):
+        fact_dict = {QuantityDefaultValueCalculator._VIRT_IS_GUEST_FACT_NAME: False,
+                     QuantityDefaultValueCalculator._SOCKET_FACT_NAME: '1'}
+        facts = StubFacts(fact_dict, facts_changed=False)
+        calculator = QuantityDefaultValueCalculator(facts, [])
+
+        pool = create_pool("my-test-product", "My Test Product",
+                           calculatedAttributes={'suggested_quantity': 100})
+        qty = calculator.calculate(pool)
+        self.assertEquals(100, qty)
+
+    def test_uses_default_for_empty_calculated_attributes(self):
+        fact_dict = {QuantityDefaultValueCalculator._VIRT_IS_GUEST_FACT_NAME: False,
+                     QuantityDefaultValueCalculator._SOCKET_FACT_NAME: '1'}
+        facts = StubFacts(fact_dict, facts_changed=False)
+        calculator = QuantityDefaultValueCalculator(facts, [])
+
+        pool = create_pool("my-test-product", "My Test Product",
+                           calculatedAttributes={})
+        qty = calculator.calculate(pool)
+        self.assertEquals(1, qty)
 
     def test_if_not_multi_entitled_defualt_to_1(self):
         fact_dict = {QuantityDefaultValueCalculator._VIRT_IS_GUEST_FACT_NAME: False,
