@@ -16,7 +16,6 @@ from mock import Mock, patch
 
 from stubs import StubUEP
 import rhsm.connection as connection
-from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.managercli import RegisterCommand
 from fixture import SubManFixture
 
