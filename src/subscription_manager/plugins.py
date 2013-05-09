@@ -76,10 +76,10 @@ def getPluginManager():
 
 class PluginException(Exception):
     """Base exception for rhsm plugins."""
-    def _add_message(self, repr):
+    def _add_message(self, repr_msg):
         if hasattr(self, "msg") and self.msg:
-            repr = "\n".join([repr, "Message: %s" % self.msg])
-        return repr
+            repr_msg = "\n".join([repr_msg, "Message: %s" % self.msg])
+        return repr_msg
 
 
 class PluginImportException(PluginException):
@@ -90,9 +90,9 @@ class PluginImportException(PluginException):
         self.msg = msg
 
     def __str__(self):
-        repr = "Plugin \"%s\" can't be imported from file %s" % \
-            (self.module_name, self.module_file)
-        return self._add_message(repr)
+        repr_msg = "Plugin \"%s\" can't be imported from file %s" % \
+                    (self.module_name, self.module_file)
+        return self._add_message(repr_msg)
 
 
 class PluginModuleImportException(PluginImportException):
@@ -102,10 +102,10 @@ class PluginModuleImportException(PluginImportException):
 class PluginModuleImportApiVersionMissingException(PluginImportException):
     """Raised when a plugin module does not include a 'requires_api_version'."""
     def __str__(self):
-        repr = """Plugin module "%s" in %s has no API version.
-                'requires_api_version' should be set.""" % \
-                (self.module_name, self.module_file)
-        return self._add_message(repr)
+        repr_msg = """Plugin module "%s" in %s has no API version.
+                   'requires_api_version' should be set.""" % \
+                    (self.module_name, self.module_file)
+        return self._add_message(repr_msg)
 
 
 class PluginModuleImportApiVersionException(PluginImportException):
@@ -118,9 +118,9 @@ class PluginModuleImportApiVersionException(PluginImportException):
         self.msg = msg
 
     def __str__(self):
-        repr = "Plugin \"%s\" requires API version %s. Supported API is %s" % \
+        repr_msg = "Plugin \"%s\" requires API version %s. Supported API is %s" % \
             (self.module_name, self.module_ver, self.api_ver)
-        return self._add_message(repr)
+        return self._add_message(repr_msg)
 
 
 class PluginConfigException(PluginException):
@@ -130,8 +130,8 @@ class PluginConfigException(PluginException):
         self.msg = msg
 
     def __str__(self):
-        repr = "Cannot load configuration for plugin \"%s\"" % (self.plugin_name)
-        return self._add_message(repr)
+        repr_msg = "Cannot load configuration for plugin \"%s\"" % (self.plugin_name)
+        return self._add_message(repr_msg)
 
 
 # if code try's to run a hook for a slot_name that doesn't exist
