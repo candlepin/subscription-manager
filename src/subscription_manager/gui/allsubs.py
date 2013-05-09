@@ -89,7 +89,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                                                   self.store,
                                                   self.store['quantity_to_consume'],
                                                   self.store['multi-entitlement'],
-                                                  self.store['quantity_available'])
+                                                  self.store['quantity_available'],
+                                                  self.store['quantity_increment'])
         self.top_view.append_column(quantity_column)
 
         self.set_sorts(cols)
@@ -143,6 +144,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             'align': float,
             'multi-entitlement': bool,
             'quantity_available': int,
+            'quantity_increment': int,
         }
 
     def get_filter_text(self):
@@ -238,6 +240,13 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 if 'support_type' in attrs:
                     support_type = attrs['support_type']
 
+                quantity_increment = 1
+                if 'calculatedAttributes' in pool:
+                    calculated_attrs = pool['calculatedAttributes']
+
+                    if 'quantity_increment' in calculated_attrs:
+                        quantity_increment = int(calculated_attrs['quantity_increment'])
+
                 self.store.add_map(iter, {
                     'virt_only': self._machine_type(entry.pools),
                     'product_name': entry.product_name,
@@ -254,6 +263,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'quantity_available': quantity_available,
                     'support_level': support_level,
                     'support_type': support_type,
+                    'quantity_increment': quantity_increment,
                 })
 
         # Ensure that all nodes are expanded in the tree view.
@@ -316,6 +326,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'quantity_available': 0,
                     'support_level': "",
                     'support_type': "",
+                    'quantity_increment': 1,
                 }
 
     def get_label(self):

@@ -42,7 +42,8 @@ def md5sum(buf):
 
 
 def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=[],
-                attributes=[], productAttributes=[], start_end_range=None):
+                attributes=[], productAttributes=[], calculatedAttributes=None,
+                start_end_range=None):
     """
     Returns a hash representing a pool. Used to simulate the JSON returned
     from Candlepin.
@@ -62,7 +63,7 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
 
     pool_id = md5sum(product_id)
 
-    return {
+    to_return = {
             'productName': product_name,
             'productId': product_id,
             'quantity': quantity,
@@ -84,6 +85,11 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
             'attributes': attributes,
             'productAttributes': productAttributes,
         }
+
+    if calculatedAttributes is not None:
+        to_return['calculatedAttributes'] = calculatedAttributes
+
+    return to_return
 
 
 def create_attribute_list(attribute_map):
