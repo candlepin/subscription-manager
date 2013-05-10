@@ -47,7 +47,7 @@ Requires: PyXML
 %endif
 
 
-%{?el5:Requires: rhn-setup-gnome >= 0.4.20-49}
+%{?el5:Requires: rhn-setup-gnome}
 # There's no dmi to read on these arches, so don't pull in this dep.
 %ifnarch ppc ppc64 s390 s390x
 Requires:  python-dmidecode
@@ -106,8 +106,7 @@ subscriptions.
 Summary: Firstboot screens for subscription manager
 Group: System Environment/Base
 Requires: %{name}-gui = %{version}-%{release}
-%{?el5:Requires: rhn-setup-gnome >= 0.4.20-49}
-%{?el6:Requires: rhn-setup-gnome >= 1.0.0-82}
+Requires: rhn-setup-gnome
 
 # Fedora can figure this out automatically, but RHEL cannot:
 Requires: librsvg2
