@@ -35,7 +35,7 @@ class Directory(object):
     def __init__(self, path):
         self.path = Path.abs(path)
 
-    def listAll(self):
+    def list_all(self):
         all_items = []
         if not os.path.exists(self.path):
             return all_items
@@ -47,7 +47,7 @@ class Directory(object):
 
     def list(self):
         files = []
-        for p, fn in self.listAll():
+        for p, fn in self.list_all():
             path = self.abspath(fn)
             if Path.isdir(path):
                 continue
@@ -57,7 +57,7 @@ class Directory(object):
 
     def listdirs(self):
         dirs = []
-        for p, fn in self.listAll():
+        for p, fn in self.list_all():
             path = self.abspath(fn)
             if Path.isdir(path):
                 dirs.append(Directory(path))
