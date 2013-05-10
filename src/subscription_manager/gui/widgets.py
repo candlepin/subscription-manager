@@ -277,7 +277,7 @@ class ProductsTable(object):
 
 class SubDetailsWidget(GladeWidget):
     widget_names = ["sub_details_vbox", "subscription_text", "products_view",
-                    "support_level_and_type_text", "sku_text", "details_view"]
+                    "support_level_and_type_text", "sku_text"]
     glade_file = "subdetails.glade"
 
     def __init__(self, product_dir):
@@ -286,7 +286,6 @@ class SubDetailsWidget(GladeWidget):
         self.sub_details_vbox.unparent()
 
         self.bundled_products = ProductsTable(self.products_view, product_dir)
-        self.reasons = ReasonsTable(self.details_view)
 
         self.expired_color = gtk.gdk.color_parse(EXPIRED_COLOR)
         self.warning_color = gtk.gdk.color_parse(WARNING_COLOR)
@@ -334,10 +333,6 @@ class SubDetailsWidget(GladeWidget):
             self.bundled_products.add_product(utils.apply_highlight(product[0],
                 highlight), product[1])
 
-        self.reasons.clear()
-        for reason in reasons:
-            self.reasons.add_message(reason)
-
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
 <<<<<<< HEAD
@@ -356,7 +351,6 @@ class SubDetailsWidget(GladeWidget):
     def clear(self):
         """ No subscription to display. """
         self.bundled_products.clear()
-        self.reasons.clear()
         self.subscription_text.get_buffer().set_text("")
 
         self._set(self.sku_text, "")
@@ -390,8 +384,6 @@ class SubDetailsWidget(GladeWidget):
                 "All Available Support Level And Type Text")
         self.bundled_products.set_accessibility_name(
                 "All Available Bundled Product Table")
-        self.reasons.set_accessibility_name(
-                "All Available Status Details Table")
 
 
 # also show contract info on this details widget
@@ -401,7 +393,8 @@ class ContractSubDetailsWidget(SubDetailsWidget):
                      "start_end_date_text",
                      "account_text",
                      "provides_management_text",
-                     "virt_only_text"]
+                     "virt_only_text",
+                     "details_view"]
 
     glade_file = "subdetailscontract.glade"
 
@@ -411,6 +404,9 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         # start_end_date_text widget so we can restore it in the
         # clear() function.
         self.original_bg = self.start_end_date_text.rc_get_style().base[gtk.STATE_NORMAL]
+        self.reasons = ReasonsTable(self.details_view)
+        self.reasons.set_accessibility_name(
+                "All Available Status Details Table")
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
@@ -429,6 +425,9 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         self._set(self.account_text, account)
         self._set(self.provides_management_text, management)
         self._set(self.virt_only_text, virt_only)
+        self.reasons.clear()
+        for reason in reasons:
+            self.reasons.add_message(reason)
 
     def _clear_other_details(self):
         #Clear row highlighting
@@ -438,8 +437,9 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         self._set(self.account_text, "")
         self._set(self.provides_management_text, "")
         self._set(self.virt_only_text, "")
+        self.reasons.clear()
 
-    def _set_accessibility_names(self):
+    def _set_sub_accessibility_names(self):
         # already set in glade
         pass
 
