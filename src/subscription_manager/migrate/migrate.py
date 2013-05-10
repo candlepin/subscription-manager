@@ -42,7 +42,7 @@ if _LIBPATH not in sys.path:
 
 from subscription_manager.certdirectory import ProductDirectory
 from subscription_manager.certlib import ConsumerIdentity
-from subscription_manager.cli import systemExit
+from subscription_manager.cli import system_exit
 from subscription_manager.i18n_optparse import OptionParser, \
         USAGE, WrappedIndentedHelpFormatter
 from subscription_manager import repolib
@@ -157,7 +157,7 @@ class MigrationEngine(object):
 
     def validate_options(self):
         if self.options.servicelevel and self.options.noauto:
-            systemExit(1, _("The --servicelevel and --no-auto options cannot be used together."))
+            system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))
 
     def authenticate(self, prompt):
         username = raw_input(prompt).strip()
@@ -191,7 +191,7 @@ class MigrationEngine(object):
                 self.proxy_host, self.proxy_port = http_proxy.split(':')
             except ValueError, e:
                 log.exception(e)
-                systemExit(1, _("Unable to read RHN proxy settings."))
+                system_exit(1, _("Unable to read RHN proxy settings."))
 
             log.info("Using proxy %s:%s - transferring settings to rhsm.conf"
                      % (self.proxy_host, self.proxy_port))
@@ -218,7 +218,7 @@ class MigrationEngine(object):
             else:
                 (hostname, port, prefix) = parse_server_info(self.options.serverurl)
         except ServerUrlParseError, e:
-            systemExit(-1, _("Error parsing server URL: %s") % e.msg)
+            system_exit(-1, _("Error parsing server URL: %s") % e.msg)
 
         proxy_port = self.proxy_port and int(self.proxy_port)
 
@@ -248,17 +248,17 @@ class MigrationEngine(object):
         if ConsumerIdentity.existsAndValid():
             print _("\nThis system appears to be already registered to Red Hat Subscription Management.  Exiting.")
             consumer = ConsumerIdentity.read()
-            systemExit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % consumer.getConsumerId())
+            system_exit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % consumer.getConsumerId())
 
         try:
             self.cp.getOwnerList(username)
         except SSLError, e:
             print _("Error: CA certificate for subscription service has not been installed.")
-            systemExit(1, CONNECTION_FAILURE % e)
+            system_exit(1, CONNECTION_FAILURE % e)
         except Exception, e:
             log.error(e)
             log.error(traceback.format_exc())
-            systemExit(1, CONNECTION_FAILURE % e)
+            system_exit(1, CONNECTION_FAILURE % e)
 
     def get_org(self, username):
         try:
@@ -266,10 +266,10 @@ class MigrationEngine(object):
         except Exception, e:
             log.error(e)
             log.error(traceback.format_exc())
-            systemExit(1, CONNECTION_FAILURE % e)
+            system_exit(1, CONNECTION_FAILURE % e)
 
         if len(owner_list) == 0:
-            systemExit(1, _("%s cannot register with any organizations.") % username)
+            system_exit(1, _("%s cannot register with any organizations.") % username)
         elif len(owner_list) > 1:
             org_input = raw_input(_("Org: ")).strip()
             org = None
@@ -278,7 +278,7 @@ class MigrationEngine(object):
                     org = owner_data['key']
                     break
             if not org:
-                systemExit(1, _("No such org: %s") % org_input)
+                system_exit(1, _("No such org: %s") % org_input)
         else:
             org = owner_list[0]['key']
 
@@ -292,7 +292,7 @@ class MigrationEngine(object):
         except Exception, e:
             log.error(e)
             log.error(traceback.format_exc())
-            systemExit(1, CONNECTION_FAILURE % e)
+            system_exit(1, CONNECTION_FAILURE % e)
 
         environment = None
         # If we just have one environment, Candlepin will do the right thing
@@ -303,7 +303,7 @@ class MigrationEngine(object):
                     environment = env_data['name']
                     break
             if not environment:
-                systemExit(1, _("No such environment: %s") % env_input)
+                system_exit(1, _("No such environment: %s") % env_input)
 
         return environment
 
@@ -328,23 +328,23 @@ class MigrationEngine(object):
             return (sc, sk)
         except Exception:
             log.error(traceback.format_exc())
-            systemExit(1, _("Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more details."))
+            system_exit(1, _("Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more details."))
 
     def check_is_org_admin(self, sc, sk, username):
         try:
             roles = sc.user.listRoles(sk, username)
         except Exception:
             log.error(traceback.format_exc())
-            systemExit(1, _("Problem encountered determining user roles in RHN Classic.  Exiting."))
+            system_exit(1, _("Problem encountered determining user roles in RHN Classic.  Exiting."))
         if "org_admin" not in roles:
-            systemExit(1, _("You must be an org admin to successfully run this script."))
+            system_exit(1, _("You must be an org admin to successfully run this script."))
 
     def get_subscribed_channels_list(self):
         try:
             subscribed_channels = map(lambda x: x['label'], getChannels().channels())
         except Exception:
             log.error(traceback.format_exc())
-            systemExit(1, _("Problem encountered getting the list of subscribed channels.  Exiting."))
+            system_exit(1, _("Problem encountered getting the list of subscribed channels.  Exiting."))
         return subscribed_channels
 
     def print_banner(self, msg):
@@ -357,7 +357,7 @@ class MigrationEngine(object):
         for channel in subscribed_channels:
             if channel.startswith("jbappplatform"):
                 if jboss_channel:
-                    systemExit(1, _("You are subscribed to more than one jbappplatform channel."
+                    system_exit(1, _("You are subscribed to more than one jbappplatform channel."
                                     "  This script does not support that configuration.  Exiting."))
                 jboss_channel = True
 
@@ -391,7 +391,7 @@ class MigrationEngine(object):
             dic_data = self.read_channel_cert_mapping(mappingfile)
         except IOError, e:
             log.exception(e)
-            systemExit(1, _("Unable to read mapping file: %s") % mappingfile)
+            system_exit(1, _("Unable to read mapping file: %s") % mappingfile)
 
         applicable_certs = []
         valid_rhsm_channels = []
@@ -530,7 +530,7 @@ class MigrationEngine(object):
             self.disable_yum_rhn_plugin()
             print _("System successfully unregistered from RHN Classic.")
         else:
-            systemExit(1, _("Unable to unregister system from RHN Classic.  Exiting."))
+            system_exit(1, _("Unable to unregister system from RHN Classic.  Exiting."))
 
     def register(self, credentials, org, environment):
         # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
@@ -547,7 +547,7 @@ class MigrationEngine(object):
         result = subprocess.call(cmd)
 
         if result != 0:
-            systemExit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
+            system_exit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
         else:
             consumer = ConsumerIdentity.read()
             print _("System '%s' successfully registered to Red Hat Subscription Management.\n") % consumer.getConsumerName()
@@ -559,7 +559,7 @@ class MigrationEngine(object):
         try:
             levels = self.cp.getServiceLevelList(org)
         except RemoteServerException, e:
-            systemExit(-1, not_supported)
+            system_exit(-1, not_supported)
         except RestlibException, e:
             if e.code == 404:
                 # no need to die, just skip it

@@ -40,7 +40,7 @@ from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.certmgr import CertManager
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
-from subscription_manager.cli import AbstractCLICommand, CLI, systemExit
+from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
 from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import ClassicCheck
 import subscription_manager.injection as inj
@@ -175,7 +175,7 @@ def handle_exception(msg, ex):
         print _("Your identity certificate has expired")
         sys.exit(-1)
     else:
-        systemExit(-1, ex)
+        system_exit(-1, ex)
 
 
 def autosubscribe(cp, consumer_uuid, service_level=None):
@@ -605,7 +605,7 @@ class RefreshCommand(CliCommand):
             print (_("All local data refreshed"))
         except connection.RestlibException, re:
             log.error(re)
-            systemExit(-1, re.msg)
+            system_exit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Unable to perform refresh due to the following exception: %s") % e, e)
 
@@ -680,7 +680,7 @@ class IdentityCommand(UserPassCommand):
         except connection.RestlibException, re:
             log.exception(re)
             log.error(u"Error: Unable to generate a new identity for the system: %s" % re)
-            systemExit(-1, re.msg)
+            system_exit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to generate a new identity for the system"), e)
 
@@ -716,7 +716,7 @@ class OwnersCommand(UserPassCommand):
         except connection.RestlibException, re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve org list from server: %s" % re)
-            systemExit(-1, re.msg)
+            system_exit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve org list from server"), e)
 
@@ -766,7 +766,7 @@ class EnvironmentsCommand(OrgCommand):
         except connection.RestlibException, re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve environment list from server: %s" % re)
-            systemExit(-1, re.msg)
+            system_exit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
@@ -797,7 +797,7 @@ class ServiceLevelCommand(OrgCommand):
         consumer_uuid = self.consumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
         if 'serviceLevel' not in consumer:
-            systemExit(-1, _("Error: The service-level command is not supported "
+            system_exit(-1, _("Error: The service-level command is not supported "
                              "by the server."))
         self.cp.updateConsumer(consumer_uuid, service_level=service_level)
 
@@ -860,7 +860,7 @@ class ServiceLevelCommand(OrgCommand):
         except connection.RestlibException, re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve service levels: %s" % re)
-            systemExit(-1, re.msg)
+            system_exit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
 
@@ -879,7 +879,7 @@ class ServiceLevelCommand(OrgCommand):
         consumer_uuid = self.consumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
         if 'serviceLevel' not in consumer:
-            systemExit(-1, _("Error: The service-level command is not supported by "
+            system_exit(-1, _("Error: The service-level command is not supported by "
                              "the server."))
         service_level = consumer['serviceLevel'] or ""
         if service_level:
@@ -910,11 +910,11 @@ class ServiceLevelCommand(OrgCommand):
             else:
                 print _("This org does not have any subscriptions with service levels.")
         except connection.RemoteServerException, e:
-            systemExit(-1, not_supported)
+            system_exit(-1, not_supported)
         except connection.RestlibException, e:
             if e.code == 404 and\
                 e.msg.find('/servicelevels') > 0:
-                systemExit(-1, not_supported)
+                system_exit(-1, not_supported)
             else:
                 raise e
 
@@ -1059,7 +1059,7 @@ class RegisterCommand(UserPassCommand):
                                     facts=facts_dic)
         except connection.RestlibException, re:
             log.exception(re)
-            systemExit(-1, re.msg)
+            system_exit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Error during registration: %s") % e, e)
 
@@ -1103,7 +1103,7 @@ class RegisterCommand(UserPassCommand):
 
         if self.autoattach:
             if 'serviceLevel' not in consumer and self.options.service_level:
-                systemExit(-1, _("Error: The --servicelevel option is not supported "
+                system_exit(-1, _("Error: The --servicelevel option is not supported "
                                  "by the server. Did not complete your request."))
             autosubscribe(self.cp, consumer['uuid'],
                     service_level=self.options.service_level)
@@ -1132,11 +1132,11 @@ class RegisterCommand(UserPassCommand):
             return environment_name
 
         if not cp.supports_resource('environments'):
-            systemExit(-1, _("Error: Server does not support environments."))
+            system_exit(-1, _("Error: Server does not support environments."))
 
         env = cp.getEnvironment(owner_key=owner_key, name=environment_name)
         if not env:
-            systemExit(-1, _("No such environment: %s") % environment_name)
+            system_exit(-1, _("No such environment: %s") % environment_name)
         return env['id']
 
     def _determine_owner_key(self, cp):
@@ -1151,7 +1151,7 @@ class RegisterCommand(UserPassCommand):
         owners = cp.getOwnerList(self.username)
 
         if len(owners) == 0:
-            systemExit(-1, _("%s cannot register with any organizations.") % self.username)
+            system_exit(-1, _("%s cannot register with any organizations.") % self.username)
         if len(owners) == 1:
             return owners[0]['key']
 
@@ -1244,7 +1244,7 @@ class RedeemCommand(CliCommand):
             #200's. We need to look at the code in the RestlibException and proceed
             #accordingly
             if 200 <= e.code <= 210:
-                systemExit(0, e)
+                system_exit(0, e)
             else:
                 handle_exception(u"Unable to redeem: %s" % e, e)
         except Exception, e:
@@ -1273,7 +1273,7 @@ class ReleaseCommand(CliCommand):
         err_msg = _("Error: The 'release' command is not supported by the server.")
         consumer = self.cp.getConsumer(self.consumer['uuid'])
         if 'releaseVer' not in consumer:
-            systemExit(-1, err_msg)
+            system_exit(-1, err_msg)
         return consumer['releaseVer']['releaseVer']
 
     def show_current_release(self):
@@ -1313,7 +1313,7 @@ class ReleaseCommand(CliCommand):
                 self.cp.updateConsumer(self.consumer['uuid'],
                         release=self.options.release)
             else:
-                systemExit(-1, _("No releases match '%s'.  "
+                system_exit(-1, _("No releases match '%s'.  "
                                  "Consult 'release --list' for a full listing.")
                                  % self.options.release)
             print _("Release set to: %s") % self.options.release
@@ -1321,7 +1321,7 @@ class ReleaseCommand(CliCommand):
             self._get_consumer_release()
             releases = self.release_backend.get_releases()
             if not releases:
-                systemExit(-1, _("No release versions available, please check subscriptions."))
+                system_exit(-1, _("No release versions available, please check subscriptions."))
 
             print("+-------------------------------------------+")
             print("          %s" % (_("Available Releases")))
@@ -1402,7 +1402,7 @@ class AttachCommand(CliCommand):
                     try:
                         # odd html strings will cause issues, reject them here.
                         if (pool.find("#") >= 0):
-                            systemExit(-1, _("Please enter a valid numeric pool ID."))
+                            system_exit(-1, _("Please enter a valid numeric pool ID."))
                         self.plugin_manager.run("pre_subscribe", consumer_uuid=consumer_uuid)
                         ents = self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
                         self.plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid, entitlement_data=ents)
@@ -1420,7 +1420,7 @@ class AttachCommand(CliCommand):
                         elif re.code == 400:
                             print re.msg  # no such pool.
                         else:
-                            systemExit(-1, re.msg)  # some other error.. don't try again
+                            system_exit(-1, re.msg)  # some other error.. don't try again
                 if not subscribed:
                     return_code = 1
             # must be auto
@@ -1445,7 +1445,7 @@ class AttachCommand(CliCommand):
                     if self.options.service_level:
                         consumer = self.cp.getConsumer(consumer_uuid)
                         if 'serviceLevel' not in consumer:
-                            systemExit(-1, _("Error: The --servicelevel option is not "
+                            system_exit(-1, _("Error: The --servicelevel option is not "
                                              "supported by the server. Did not "
                                              "complete your request."))
                     autosubscribe(self.cp, consumer_uuid,
@@ -1518,10 +1518,10 @@ class RemoveCommand(CliCommand):
                     print _("Error: '%s' is not a valid serial number") % serial
                     bad = True
             if bad:
-                systemExit(-1)
+                system_exit(-1)
         elif not self.options.all:
             print _("Error: This command requires that you specify one of --serial or --all.")
-            systemExit(-1)
+            system_exit(-1)
 
     def _do_command(self):
         """
@@ -1553,7 +1553,7 @@ class RemoveCommand(CliCommand):
                         except connection.RestlibException, re:
                             if re.code == 410:
                                 print re.msg
-                                systemExit(-1)
+                                system_exit(-1)
                             failure.append(re.msg)
                     if success:
                         print _("Serial numbers successfully removed at the server:")
@@ -1568,7 +1568,7 @@ class RemoveCommand(CliCommand):
                 self.certlib.update()
             except connection.RestlibException, re:
                 log.error(re)
-                systemExit(-1, re.msg)
+                system_exit(-1, re.msg)
             except Exception, e:
                 handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
         else:
@@ -1657,7 +1657,7 @@ class FactsCommand(CliCommand):
                 facts.update_check(self.cp, consumer, force=True)
             except connection.RestlibException, re:
                 log.exception(re)
-                systemExit(-1, re.msg)
+                system_exit(-1, re.msg)
             print _("Successfully updated the system facts.")
 
 

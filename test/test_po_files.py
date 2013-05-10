@@ -81,9 +81,9 @@ class TestUnicodeGettext(TestLocale):
         msg = _("'%s' is not a valid serial number") % "123123"
         unicode(managercli.to_unicode_or_bust(msg)).encode("UTF-8") + '\n'
 
-    def test_systemExit(self):
+    def test_system_exit(self):
         try:
-            managercli.systemExit(1, _("'%s' is not a valid serial number") % "123123")
+            managercli.system_exit(1, _("'%s' is not a valid serial number") % "123123")
         except SystemExit:
             # tis okay, we are looking for unicode errors on the string encode
             pass

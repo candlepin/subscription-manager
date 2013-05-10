@@ -663,7 +663,7 @@ class TestSystemExit(unittest.TestCase):
     def test_a_msg(self):
         msg = "some message"
         try:
-            managercli.systemExit(1, msg)
+            managercli.system_exit(1, msg)
         except SystemExit:
             pass
         self.assertEquals("%s\n" % msg, sys.stderr.buffer)
@@ -671,7 +671,7 @@ class TestSystemExit(unittest.TestCase):
     def test_msgs(self):
         msgs = ["a", "b", "c"]
         try:
-            managercli.systemExit(1, msgs)
+            managercli.system_exit(1, msgs)
         except SystemExit:
             pass
         self.assertEquals("%s\n" % ("\n".join(msgs)), sys.stderr.buffer)
@@ -679,7 +679,7 @@ class TestSystemExit(unittest.TestCase):
     def test_msg_and_exception(self):
         msgs = ["a", ValueError()]
         try:
-            managercli.systemExit(1, msgs)
+            managercli.system_exit(1, msgs)
         except SystemExit:
             pass
         self.assertEquals("%s\n\n" % msgs[0], sys.stderr.buffer)
@@ -690,7 +690,7 @@ class TestSystemExit(unittest.TestCase):
 
         msgs = ["a", NoStrException()]
         try:
-            managercli.systemExit(1, msgs)
+            managercli.system_exit(1, msgs)
         except SystemExit:
             pass
         self.assertEquals("%s\n\n" % msgs[0], sys.stderr.buffer)
@@ -698,7 +698,7 @@ class TestSystemExit(unittest.TestCase):
     def test_msg_unicode(self):
         msgs = [u"\u2620 \u2603 \u203D"]
         try:
-            managercli.systemExit(1, msgs)
+            managercli.system_exit(1, msgs)
         except SystemExit:
             pass
         self.assertEquals("%s\n" % msgs[0].encode("utf8"), sys.stderr.buffer)
@@ -714,7 +714,7 @@ class TestSystemExit(unittest.TestCase):
         msg = "bar"
         msgs = ["a", StrException(msg)]
         try:
-            managercli.systemExit(1, msgs)
+            managercli.system_exit(1, msgs)
         except SystemExit:
             pass
         self.assertEquals("%s\n%s\n" % ("a", msg), sys.stderr.buffer)
