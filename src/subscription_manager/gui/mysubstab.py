@@ -23,6 +23,8 @@ import gtk
 from rhsm.certificate import GMT
 
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
+import subscription_manager.injection as inj
+from subscription_manager.injection import require, IDENTITY
 from subscription_manager.certlib import Disconnected
 from subscription_manager.injection import IDENTITY, require
 
@@ -56,6 +58,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.parent_win = parent_win
         self.entitlement_dir = ent_dir
         self.product_dir = prod_dir
+
+        self.cs = inj.require(inj.CERT_SORTER,
+                prod_dir, ent_dir, backend.uep)
 
         self.sub_details = widgets.ContractSubDetailsWidget(prod_dir)
 
@@ -252,6 +257,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         order = cert.order
         products = [(product.name, product.id)
                         for product in cert.products]
+        reasons = self.cs.reasons.get_subscription_reasons(cert.subject['CN'])
 
         if str(order.virt_only) == "1":
             virt_only = _("Virtual")
@@ -273,7 +279,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                               support_level=order.service_level or "",
                               support_type=order.service_type or "",
                               products=products,
-                              sku=order.sku)
+                              sku=order.sku,
+                              reasons=reasons)
 
     def on_no_selection(self):
         """
