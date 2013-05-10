@@ -113,7 +113,7 @@ class Facts(CacheManager):
 
     def _load_hw_facts(self):
         import hwprobe
-        return hwprobe.Hardware().getAll()
+        return hwprobe.Hardware().get_all()
 
     def _load_custom_facts(self):
         """

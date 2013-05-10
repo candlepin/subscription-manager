@@ -87,7 +87,7 @@ class TestCertmgr(SubManFixture):
         self.certlib_entdir = self.patcher9.start()
 
         # mock out all hardware fetching... we may need to fake socket counts
-        self.hwprobe_getall_patcher = mock.patch.object(hwprobe.Hardware, 'getAll')
+        self.hwprobe_getall_patcher = mock.patch.object(hwprobe.Hardware, 'get_all')
         self.hwprobe_getall_mock = self.hwprobe_getall_patcher.start()
         self.hwprobe_getall_mock.return_value = {}
 
