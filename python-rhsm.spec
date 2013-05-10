@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.8.10
+Version: 1.8.11
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,14 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri May 10 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.11-1
+- Don't attach a question mark to the request if not necessary.
+  (awood@redhat.com)
+- Sanitize consumerId input. (awood@redhat.com)
+- Add more test cases for Content.arches (alikins@redhat.com)
+- add 'arches' list of arches to Content object (alikins@redhat.com)
+- Add optional consumer to getPool. (awood@redhat.com)
+
 * Tue May 07 2013 Devan Goodwin <dgoodwin@rm-rf.ca> 1.8.10-1
 - Added core limit to entitlement object. (mstead@redhat.com)
 - Codestyle cleanup. (alikins@redhat.com)
