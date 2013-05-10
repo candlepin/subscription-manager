@@ -341,11 +341,11 @@ class MigrationEngine(object):
 
     def get_subscribed_channels_list(self):
         try:
-            subscribedChannels = map(lambda x: x['label'], getChannels().channels())
+            subscribed_channels = map(lambda x: x['label'], getChannels().channels())
         except Exception:
             log.error(traceback.format_exc())
             systemExit(1, _("Problem encountered getting the list of subscribed channels.  Exiting."))
-        return subscribedChannels
+        return subscribed_channels
 
     def print_banner(self, msg):
         print "\n+-----------------------------------------------------+"
@@ -393,64 +393,64 @@ class MigrationEngine(object):
             log.exception(e)
             systemExit(1, _("Unable to read mapping file: %s") % mappingfile)
 
-        applicableCerts = []
-        validRhsmChannels = []
-        invalidRhsmChannels = []
-        unrecognizedChannels = []
+        applicable_certs = []
+        valid_rhsm_channels = []
+        invalid_rhsm_channels = []
+        unrecognized_channels = []
 
         for channel in subscribed_channels:
             try:
                 if dic_data[channel] != 'none':
-                    validRhsmChannels.append(channel)
+                    valid_rhsm_channels.append(channel)
                     log.info("mapping found for: %s = %s", channel, dic_data[channel])
-                    if dic_data[channel] not in applicableCerts:
-                        applicableCerts.append(dic_data[channel])
+                    if dic_data[channel] not in applicable_certs:
+                        applicable_certs.append(dic_data[channel])
                 else:
-                    invalidRhsmChannels.append(channel)
+                    invalid_rhsm_channels.append(channel)
                     log.info("%s is not mapped to any certificates", channel)
             except Exception:
-                unrecognizedChannels.append(channel)
+                unrecognized_channels.append(channel)
 
-        if invalidRhsmChannels:
+        if invalid_rhsm_channels:
             self.print_banner(_("Channels not available on RHSM:"))
-            for i in invalidRhsmChannels:
+            for i in invalid_rhsm_channels:
                 print i
 
-        if unrecognizedChannels:
+        if unrecognized_channels:
             self.print_banner(_("No product certificates are mapped to these RHN Classic channels:"))
-            for i in unrecognizedChannels:
+            for i in unrecognized_channels:
                 print i
 
-        if unrecognizedChannels or invalidRhsmChannels:
+        if unrecognized_channels or invalid_rhsm_channels:
             if not self.options.force:
                 print(_("\nUse --force to ignore these channels and continue the migration.\n"))
                 sys.exit(1)
 
-        log.info("certs to be installed: %s", applicableCerts)
+        log.info("certs to be installed: %s", applicable_certs)
 
         self.print_banner(_("Installing product certificates for these RHN Classic channels:"))
-        for i in validRhsmChannels:
+        for i in valid_rhsm_channels:
             print i
 
         release = self.get_release()
 
         # creates the product directory if it doesn't already exist
-        productDir = ProductDirectory()
-        for cert in applicableCerts:
+        product_dir = ProductDirectory()
+        for cert in applicable_certs:
             source_path = os.path.join("/usr/share/rhsm/product", release, cert)
             truncated_cert_name = cert.split('-')[-1]
-            destination_path = os.path.join(str(productDir), truncated_cert_name)
+            destination_path = os.path.join(str(product_dir), truncated_cert_name)
             log.info("copying %s to %s ", source_path, destination_path)
             shutil.copy2(source_path, destination_path)
-        print _("\nProduct certificates installed successfully to %s.") % str(productDir)
+        print _("\nProduct certificates installed successfully to %s.") % str(product_dir)
 
     def clean_up(self, subscribed_channels):
         #Hack to address BZ 853233
-        productDir = ProductDirectory()
-        if os.path.isfile(os.path.join(str(productDir), "68.pem")) and \
-            os.path.isfile(os.path.join(str(productDir), "71.pem")):
+        product_dir = ProductDirectory()
+        if os.path.isfile(os.path.join(str(product_dir), "68.pem")) and \
+            os.path.isfile(os.path.join(str(product_dir), "71.pem")):
             try:
-                os.remove(os.path.join(str(productDir), "68.pem"))
+                os.remove(os.path.join(str(product_dir), "68.pem"))
                 log.info("Removed 68.pem due to existence of 71.pem")
             except OSError, e:
                 log.info(e)
@@ -461,7 +461,7 @@ class MigrationEngine(object):
 
         if is_double_mapped and is_single_mapped:
             try:
-                os.remove(os.path.join(str(productDir), "180.pem"))
+                os.remove(os.path.join(str(product_dir), "180.pem"))
                 log.info("Removed 180.pem")
             except OSError, e:
                 log.info(e)
@@ -609,16 +609,16 @@ class MigrationEngine(object):
     def enable_extra_channels(self, subscribed_channels):
         # Check if system was subscribed to extra channels like supplementary, optional, fastrack etc.
         # If so, enable them in the redhat.repo file
-        extraChannels = {'supplementary': False, 'productivity': False, 'optional': False}
+        extra_channels = {'supplementary': False, 'productivity': False, 'optional': False}
         for subscribedChannel in subscribed_channels:
             if 'supplementary' in subscribedChannel:
-                extraChannels['supplementary'] = True
+                extra_channels['supplementary'] = True
             elif 'optional' in subscribedChannel:
-                extraChannels['optional'] = True
+                extra_channels['optional'] = True
             elif 'productivity' in subscribedChannel:
-                extraChannels['productivity'] = True
+                extra_channels['productivity'] = True
 
-        if True not in extraChannels.values():
+        if True not in extra_channels.values():
             return
 
         # create and populate the redhat.repo file
@@ -631,9 +631,9 @@ class MigrationEngine(object):
         # enable any extra channels we are using and write out redhat.repo
         try:
             for rhsmChannel in repofile.sections():
-                if ((extraChannels['supplementary'] and re.search('supplementary$', rhsmChannel)) or
-                (extraChannels['optional'] and re.search('optional-rpms$', rhsmChannel)) or
-                (extraChannels['productivity'] and re.search('productivity-rpms$', rhsmChannel))):
+                if ((extra_channels['supplementary'] and re.search('supplementary$', rhsmChannel)) or
+                (extra_channels['optional'] and re.search('optional-rpms$', rhsmChannel)) or
+                (extra_channels['productivity'] and re.search('productivity-rpms$', rhsmChannel))):
                     log.info("Enabling extra channel '%s'" % rhsmChannel)
                     repofile.set(rhsmChannel, 'enabled', '1')
             repofile.write()
