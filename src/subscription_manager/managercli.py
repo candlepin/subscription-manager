@@ -16,47 +16,49 @@
 # in this software or its documentation.
 #
 
-import os
-import sys
-import logging
-import socket
-import getpass
-import dbus
 import datetime
-import unicodedata
-from time import strftime, strptime, localtime
-from M2Crypto import X509
-from M2Crypto import SSL
-
+import dbus
+import getpass
 import gettext
-from subscription_manager.cli import systemExit, CLI, AbstractCLICommand
-from subscription_manager.jsonwrapper import PoolWrapper
-_ = gettext.gettext
+import unicodedata
+import logging
+import os
+import socket
+import sys
+from time import localtime, strftime, strptime
+
+from M2Crypto import SSL
+from M2Crypto import X509
 
 import rhsm.config
 import rhsm.connection as connection
 
 from subscription_manager.branding import get_branding
+from subscription_manager.cache import InstalledProductsManager, ProfileManager
+from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.certlib import CertLib, ConsumerIdentity
-from subscription_manager.repolib import RepoLib, RepoFile
 from subscription_manager.certmgr import CertManager
-import subscription_manager.injection as inj
-from subscription_manager.hwprobe import ClassicCheck
-from subscription_manager.cache import ProfileManager, InstalledProductsManager
-from subscription_manager import managerlib
+from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
+        NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
+from subscription_manager.cli import AbstractCLICommand, CLI, systemExit
 from subscription_manager.facts import Facts
+from subscription_manager.hwprobe import ClassicCheck
+import subscription_manager.injection as inj
+from subscription_manager.jsonwrapper import PoolWrapper
+from subscription_manager import managerlib
 from subscription_manager import plugins
 from subscription_manager.quantity import valid_quantity
 from subscription_manager.release import ReleaseBackend
-from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
-from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
-        NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
+from subscription_manager.repolib import RepoFile, RepoLib
 from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width
 
+_ = gettext.gettext
+
 log = logging.getLogger('rhsm-app.' + __name__)
+
 cfg = rhsm.config.initConfig()
 
 
@@ -2189,7 +2191,7 @@ class VersionCommand(CliCommand):
 
 class ManagerCLI(CLI):
 
-    def __init__(self, command_classes=[]):
+    def __init__(self):
         commands = [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand,
                     SubscribeCommand, UnSubscribeCommand, FactsCommand,
                     IdentityCommand, OwnersCommand, RefreshCommand, CleanCommand,

@@ -13,22 +13,24 @@
 # in this software or its documentation.
 #
 
-import os
 import datetime
+import gettext
+import os
 import time
+
 import gobject
 import gtk
 import gtk.glade
-import gettext
-from subscription_manager.jsonwrapper import PoolWrapper
-from subscription_manager.gui.widgets import MachineTypeColumn
-_ = gettext.gettext
 
 from subscription_manager.gui import widgets
-from subscription_manager.quantity import allows_multi_entitlement
 from subscription_manager import isodate
+from subscription_manager.jsonwrapper import PoolWrapper
+from subscription_manager.quantity import allows_multi_entitlement
+
+_ = gettext.gettext
 
 prefix = os.path.dirname(__file__)
+
 CONTRACT_SELECTION_GLADE = os.path.join(prefix, "data/contract_selection.glade")
 
 
@@ -89,7 +91,7 @@ class ContractSelectionWindow(object):
         self.model.set_sort_func(0, self._sort_text, None)
         self.contract_selection_treeview.append_column(column)
 
-        column = MachineTypeColumn(7)
+        column = widgets.MachineTypeColumn(7)
         column.set_sort_column_id(7)
         self.model.set_sort_func(7, self._sort_machine_type, column)
         self.contract_selection_treeview.append_column(column)

@@ -17,15 +17,17 @@
 #
 
 import gettext
-_ = gettext.gettext
+import logging
 
 import rhsm.config
-import logging
 
 from subscription_manager.facts import Facts
 from subscription_manager import listing
 
+_ = gettext.gettext
+
 log = logging.getLogger('rhsm-app.' + __name__)
+
 cfg = rhsm.config.initConfig()
 
 

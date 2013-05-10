@@ -14,9 +14,10 @@
 #
 
 import logging
+
+from rhsm.certificate import DateRange
 import subscription_manager.injection as inj
 from subscription_manager.isodate import parse_date
-from rhsm.certificate import DateRange
 
 log = logging.getLogger('rhsm-app.' + __name__)
 

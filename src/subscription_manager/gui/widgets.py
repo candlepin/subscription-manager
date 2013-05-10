@@ -13,22 +13,24 @@
 # in this software or its documentation.
 #
 
-import os
 import datetime
+import gettext
+import os
 import time
+
 import gobject
 import gtk
 import pango
 
-import gettext
-_ = gettext.gettext
 
 from rhsm.certificate import GMT
 
-from subscription_manager import managerlib
-from subscription_manager.gui import storage
 from subscription_manager.gui import messageWindow
+from subscription_manager.gui import storage
 from subscription_manager.gui import utils
+from subscription_manager import managerlib
+
+_ = gettext.gettext
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
 
@@ -75,7 +77,7 @@ class SubscriptionManagerTab(GladeWidget):
     MIN_GTK_MINOR_GRID = 18
     MIN_GTK_MICRO_GRID = 0
 
-    def __init__(self, glade_file, initial_widget_names=[]):
+    def __init__(self, glade_file):
         """
         Creates a new tab widget, given the specified glade file and a list of
         widget names to extract to instance variables.
@@ -270,13 +272,14 @@ class SubDetailsWidget(GladeWidget):
 
     def show(self, name, contract=None, start=None, end=None, account=None,
             management=None, support_level="", support_type="",
-            virt_only=None, products=[], highlight=None, sku=None):
+            virt_only=None, products=None, highlight=None, sku=None):
         """
         Show subscription details.
 
         Start and end should be datetime objects.
         Products is a list of tuples in the format (name, id)
         """
+        products = products or []
         # set a new buffer to clear out all the old tag information
         self.subscription_text.set_buffer(gtk.TextBuffer())
         self._set(self.subscription_text, name)
@@ -310,7 +313,7 @@ class SubDetailsWidget(GladeWidget):
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
-                           virt_only=None, products=[], highlight=None, sku=None):
+                           virt_only=None, products=None, highlight=None, sku=None):
         pass
 
     def _set(self, text_view, text):
@@ -377,7 +380,8 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
-                           virt_only=None, products=[], highlight=None, sku=None):
+                           virt_only=None, products=None, highlight=None, sku=None):
+        products = products or []
         self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
                 self._get_date_bg(end))
 
@@ -602,13 +606,13 @@ class ToggleTextColumn(gtk.TreeViewColumn):
         self.pack_start(self.renderer, False)
         self.set_cell_data_func(self.renderer, self._render_cell)
 
-    def _render_cell(self, column, cell_renderer, tree_model, iter):
+    def _render_cell(self, column, cell_renderer, tree_model, tree_iter):
         # Clear the cell if we are a parent row.
-        if tree_model.iter_n_children(iter) > 0:
+        if tree_model.iter_n_children(tree_iter) > 0:
             cell_renderer.set_property("text", "")
             return
 
-        bool_val = tree_model.get_value(iter, self.model_idx)
+        bool_val = tree_model.get_value(tree_iter, self.model_idx)
         if bool_val is None:
             text = self._get_none_text()
         elif bool(bool_val):
@@ -720,30 +724,30 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
         """
         try:
             new_quantity = int(new_text)
-            iter = model.get_iter(path)
-            model.set_value(iter, self.quantity_store_idx, new_quantity)
+            tree_iter = model.get_iter(path)
+            model.set_value(tree_iter, self.quantity_store_idx, new_quantity)
         except ValueError:
             # Do nothing... The value entered in the grid will be reset.
             pass
 
-    def _update_cell_based_on_data(self, column, cell_renderer, tree_model, iter):
+    def _update_cell_based_on_data(self, column, cell_renderer, tree_model, tree_iter):
         # Clear the cell if we are a parent row.
-        if tree_model.iter_n_children(iter) > 0:
+        if tree_model.iter_n_children(tree_iter) > 0:
             cell_renderer.set_property("text", "")
 
         # Disable editor if not multi-entitled.
-        is_multi_entitled = tree_model.get_value(iter, self.is_multi_entitled_store_idx)
+        is_multi_entitled = tree_model.get_value(tree_iter, self.is_multi_entitled_store_idx)
         cell_renderer.set_property("editable", is_multi_entitled)
 
         if is_multi_entitled:
-            quantity = tree_model.get_value(iter, self.quantity_store_idx)
+            quantity = tree_model.get_value(tree_iter, self.quantity_store_idx)
             cell_renderer.set_property("text", "%s *" % quantity)
 
         if self.available_store_idx is not None:
-            available = tree_model.get_value(iter, self.available_store_idx)
+            available = tree_model.get_value(tree_iter, self.available_store_idx)
             if available and available != -1:
                 if self.quantity_increment_idx is not None:
-                    increment = tree_model.get_value(iter, self.quantity_increment_idx)
+                    increment = tree_model.get_value(tree_iter, self.quantity_increment_idx)
                 else:
                     increment = 1
 

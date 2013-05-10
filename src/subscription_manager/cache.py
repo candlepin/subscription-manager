@@ -19,19 +19,19 @@ this with the current state, and perform an update on the server if
 necessary.
 """
 
+import gettext
 import logging
 import os
 import simplejson as json
 import socket
-import rhsm.connection as connection
-import gettext
-_ = gettext.gettext
 
 from rhsm.config import initConfig
+import rhsm.connection as connection
 from rhsm.profile import get_profile, RPMProfile
-from subscription_manager.certlib import DataLib, ConsumerIdentity
 from subscription_manager.certdirectory import ProductDirectory
+from subscription_manager.certlib import ConsumerIdentity, DataLib
 
+_ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 
 PACKAGES_RESOURCE = "packages"

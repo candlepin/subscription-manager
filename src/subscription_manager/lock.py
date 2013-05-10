@@ -15,10 +15,10 @@
 # in this software or its documentation.
 #
 
-import os
-import time
 import fcntl
+import os
 from threading import RLock as Mutex
+import time
 
 
 class LockFile:

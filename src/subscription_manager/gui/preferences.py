@@ -13,11 +13,12 @@
 # in this software or its documentation.
 #
 
-import os
 import gettext
+import logging
+import os
+
 import gtk
 import gtk.glade
-import logging
 
 from subscription_manager.injection import require, IDENTITY
 from subscription_manager import release

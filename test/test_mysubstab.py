@@ -133,7 +133,7 @@ class MySubscriptionsTabTest(SubManFixture):
     def _get_entries_for_test(self):
         column_entries = []
 
-        def collect_entries(iter, entry):
+        def collect_entries(tree_iter, entry):
             column_entries.append(entry)
 
         # Test that the data from a subscription is loaded into the store.

@@ -258,7 +258,8 @@ class TestCertmgr(SubManFixture):
                 return
         self.fail("Did not ExceptionException in the logged exceptions")
 
-    def _stub_certificate_calls(self, stub_ents=[]):
+    def _stub_certificate_calls(self, stub_ents=None):
+        stub_ents = stub_ents or []
         stub_entdir = stubs.StubEntitlementDirectory(stub_ents)
 
         self.certdir_entdir.return_value = stub_entdir

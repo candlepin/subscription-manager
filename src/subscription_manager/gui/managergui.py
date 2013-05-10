@@ -18,46 +18,50 @@
 #
 
 from subscription_manager.injection import require, IDENTITY
+
+import gettext
 import locale
 import logging
 import subprocess
+import urllib2
+import webbrowser
 
 import gtk
 import gtk.glade
 
+import rhsm.config as config
+import rhsm.connection as connection
+
+from subscription_manager.branding import get_branding
+from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
+from subscription_manager.certlib import CertLib
+from subscription_manager.facts import Facts
+from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager.identity import ConsumerIdentity
+from subscription_manager import managerlib
+from subscription_manager.utils import get_client_versions, get_server_versions, parse_baseurl_info, restart_virt_who
+
+from subscription_manager.gui import factsgui
+from subscription_manager.gui import file_monitor
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import networkConfig
-from subscription_manager import managerlib
-from subscription_manager.identity import ConsumerIdentity
-from subscription_manager.gui import file_monitor
-from subscription_manager.gui import registergui
-import rhsm.connection as connection
-import rhsm.config as config
-from subscription_manager.hwprobe import ClassicCheck
-from subscription_manager.facts import Facts
-from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
-from subscription_manager.certlib import CertLib
-from subscription_manager.branding import get_branding
-from subscription_manager.utils import get_client_versions, get_server_versions, \
-restart_virt_who, parse_baseurl_info
-
 from subscription_manager.gui import redeem
-from subscription_manager.gui import factsgui
+from subscription_manager.gui import registergui
 from subscription_manager.gui import widgets
-from subscription_manager.gui.installedtab import InstalledProductsTab
-from subscription_manager.gui.mysubstab import MySubscriptionsTab
+
+from subscription_manager.gui.about import AboutDialog
 from subscription_manager.gui.allsubs import AllSubscriptionsTab
 from subscription_manager.gui.importsub import ImportSubDialog
-from subscription_manager.gui.utils import handle_gui_exception, linkify
+from subscription_manager.gui.installedtab import InstalledProductsTab
+from subscription_manager.gui.mysubstab import MySubscriptionsTab
 from subscription_manager.gui.preferences import PreferencesDialog
-from subscription_manager.gui.about import AboutDialog
+from subscription_manager.gui.utils import handle_gui_exception, linkify
 
-import webbrowser
-import urllib2
 
-import gettext
 _ = gettext.gettext
+
 gettext.textdomain("rhsm")
+
 gtk.glade.bindtextdomain("rhsm")
 
 log = logging.getLogger('rhsm-app.' + __name__)

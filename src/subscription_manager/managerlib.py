@@ -14,34 +14,34 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import datetime
+import gettext
+import logging
 import os
+from os import linesep as NEW_LINE
 import re
-import stat
 import shutil
+import stat
 import syslog
 import time
-import logging
-import datetime
-from os import linesep as NEW_LINE
 
 from rhsm.config import initConfig
 from rhsm.certificate import Key, CertificateException, create_from_pem
 
+import subscription_manager.cache as cache
+from subscription_manager.cert_sorter import StackingGroupSorter
 from subscription_manager import certlib
 from subscription_manager.certlib import system_log as inner_system_log
-import subscription_manager.cache as cache
 from subscription_manager.facts import Facts
 from subscription_manager.quantity import allows_multi_entitlement
-from subscription_manager.cert_sorter import StackingGroupSorter
 from subscription_manager.injection import require, CERT_SORTER, \
         PRODUCT_DATE_RANGE_CALCULATOR, IDENTITY
+from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoLib
-from subscription_manager import isodate
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-import gettext
 _ = gettext.gettext
 
 cfg = initConfig()

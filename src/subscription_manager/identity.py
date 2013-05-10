@@ -13,16 +13,15 @@
 # in this software or its documentation.
 #
 
-
+import logging
 import os
 
-from subscription_manager.certdirectory import Path
 from rhsm.certificate import create_from_pem
 from rhsm.config import initConfig
+from subscription_manager.certdirectory import Path
 
 CFG = initConfig()
 
-import logging
 log = logging.getLogger('rhsm-app.' + __name__)
 
 

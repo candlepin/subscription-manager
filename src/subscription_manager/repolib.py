@@ -15,11 +15,11 @@
 # in this software or its documentation.
 #
 
+from iniparse import ConfigParser
+import logging
 import os
 import string
-import logging
 from urllib import basejoin
-from iniparse import ConfigParser
 
 from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
@@ -294,7 +294,8 @@ class Repo(dict):
         ('ui_repoid_vars', 0, None),
     )
 
-    def __init__(self, repo_id, existing_values={}):
+    def __init__(self, repo_id, existing_values=None):
+        existing_values = existing_values or {}
         self.id = self._clean_id(repo_id)
 
         # used to store key order, so we can write things out in the order

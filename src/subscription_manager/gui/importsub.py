@@ -13,16 +13,17 @@
 # in this software or its documentation.
 #
 
-import os
 import gettext
 import logging
+import os
+
 import gtk
 
 _ = gettext.gettext
 
-from subscription_manager.managerlib import ImportFileExtractor
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui.utils import errorWindow
+from subscription_manager.managerlib import ImportFileExtractor
 
 log = logging.getLogger('rhsm-app.' + __name__)
 

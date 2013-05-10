@@ -82,7 +82,6 @@ if __name__ == '__main__':
         # exit with failure to the caller. Otherwise, we will exit with 0
         if se.code:
             sys.exit(-1)
-        pass
     except Exception, e:
         log.error("Error while updating certificates using daemon")
         print _('Unable to update entitlement certificates and repositories')
