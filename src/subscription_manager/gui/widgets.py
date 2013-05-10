@@ -199,6 +199,25 @@ class SelectionWrapper(object):
         return self.model.get_value(self.tree_iter, self.store[key])
 
 
+class ReasonsTable(object):
+    def __init__(self, table_widget):
+        self.table_widget = table_widget
+        self.message_store = gtk.ListStore(str)
+        table_widget.set_model(self.message_store)
+
+        message_column = gtk.TreeViewColumn(_("Status Details"),
+                gtk.CellRendererText(),
+                markup=0)
+        message_column.set_expand(True)
+        table_widget.append_column(message_column)
+
+    def clear(self):
+        self.message_store.clear()
+
+    def add_message(self, message):
+        self.message_store.append([message])
+
+
 class ProductsTable(object):
     def __init__(self, table_widget, product_dir, yes_id=gtk.STOCK_APPLY,
                  no_id=gtk.STOCK_REMOVE):
@@ -272,7 +291,7 @@ class SubDetailsWidget(GladeWidget):
 
     def show(self, name, contract=None, start=None, end=None, account=None,
             management=None, support_level="", support_type="",
-            virt_only=None, products=None, highlight=None, sku=None):
+            virt_only=None, products=None, highlight=None, sku=None, reasons=[]):
         """
         Show subscription details.
 
@@ -304,7 +323,7 @@ class SubDetailsWidget(GladeWidget):
 
         self._show_other_details(name, contract, start, end, account,
                                  management, support_level, support_type,
-                                 virt_only, products, highlight, sku)
+                                 virt_only, products, highlight, sku, reasons)
 
         self.bundled_products.clear()
         for product in products:
@@ -313,7 +332,7 @@ class SubDetailsWidget(GladeWidget):
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
-                           virt_only=None, products=None, highlight=None, sku=None):
+                           virt_only=None, products=None, highlight=None, sku=None, reasons=[]):
         pass
 
     def _set(self, text_view, text):
@@ -367,7 +386,8 @@ class ContractSubDetailsWidget(SubDetailsWidget):
                      "start_end_date_text",
                      "account_text",
                      "provides_management_text",
-                     "virt_only_text"]
+                     "virt_only_text",
+                     "details_view"]
 
     glade_file = "subdetailscontract.glade"
 
@@ -377,11 +397,16 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         # start_end_date_text widget so we can restore it in the
         # clear() function.
         self.original_bg = self.start_end_date_text.rc_get_style().base[gtk.STATE_NORMAL]
+        self.reasons = ReasonsTable(self.details_view)
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
-                           virt_only=None, products=None, highlight=None, sku=None):
+                           virt_only=None, products=None, highlight=None, sku=None,
+                           reasons=[]):
         products = products or []
+        self.reasons.clear()
+        for reason in reasons:
+            self.reasons.add_message(reason)
         self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
                 self._get_date_bg(end))
 
@@ -400,6 +425,7 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         self._set(self.account_text, "")
         self._set(self.provides_management_text, "")
         self._set(self.virt_only_text, "")
+        self.reasons.clear()
 
     def _set_accessibility_names(self):
         # already set in glade
