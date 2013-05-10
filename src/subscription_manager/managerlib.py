@@ -77,7 +77,7 @@ def map_status(status):
     return smap[status]
 
 
-def getInstalledProductStatus(product_directory, entitlement_directory, uep):
+def get_installed_product_status(product_directory, entitlement_directory, uep):
     """
      Returns the Installed products and their subscription states
     """
@@ -301,7 +301,7 @@ def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
 # TODO: This method is morphing the actual pool json and returning a new
 # dict which does not contain all the pool info. Not sure if this is really
 # necessary. Also some "view" specific things going on in here.
-def getAvailableEntitlements(cpserver, consumer_uuid, facts, get_all=False, active_on=None):
+def get_available_entitlements(cpserver, consumer_uuid, facts, get_all=False, active_on=None):
     """
     Returns a list of entitlement pools from the server.
 

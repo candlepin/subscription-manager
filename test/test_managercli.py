@@ -306,7 +306,7 @@ class TestListCommand(TestCliProxyCommand):
                      'id': '888888888888', 'attributes': [{'name': 'is_virt_only', 'value': 'false'}],
                      'quantity': '4', 'service_level': '', 'service_type': '',
                      'multi-entitlement': 'false', 'endDate': ''}]
-        managerlib.getAvailableEntitlements = create_pool_list
+        managerlib.get_available_entitlements = create_pool_list
 
         mc_exists_and_valid.return_value = True
         mc_exists.return_value = True

@@ -24,7 +24,7 @@ from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubUEP, StubCertSorter
 from fixture import SubManFixture
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
-        getInstalledProductStatus, LocalTz, \
+        get_installed_product_status, LocalTz, \
         MergedPoolsStackingGroupSorter, MergedPools, PoolStash
 from subscription_manager.injection import provide, CERT_SORTER
 from modelhelpers import create_pool
@@ -491,7 +491,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter = StubCertSorter(prod_dir=product_directory)
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = getInstalledProductStatus(product_directory,
+        product_status = get_installed_product_status(product_directory,
                 None, StubUEP())
 
         # no product certs installed...
@@ -505,7 +505,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.valid_products['product1'] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = getInstalledProductStatus(product_directory,
+        product_status = get_installed_product_status(product_directory,
                 None, StubUEP())
 
         self.assertEquals(1, len(product_status))
@@ -521,7 +521,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.expired_products['product1'] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = getInstalledProductStatus(product_directory,
+        product_status = get_installed_product_status(product_directory,
                 None, StubUEP())
 
         self.assertEquals(1, len(product_status))
@@ -534,7 +534,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.unentitled_products['product1'] = None  # prod cert unused here
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = getInstalledProductStatus(product_directory,
+        product_status = get_installed_product_status(product_directory,
                 None, StubUEP())
 
         self.assertEquals(1, len(product_status))
@@ -548,7 +548,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.future_products['product1'] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = getInstalledProductStatus(product_directory,
+        product_status = get_installed_product_status(product_directory,
                 None, StubUEP())
         self.assertEquals(1, len(product_status))
         self.assertEquals("future_subscribed", product_status[0][4])
@@ -561,7 +561,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.valid_products['product1'] = [ent_cert, ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = getInstalledProductStatus(product_directory,
+        product_status = get_installed_product_status(product_directory,
                 None, StubUEP())
 
         # only "product" is installed
@@ -577,7 +577,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.valid_products['product3'] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = getInstalledProductStatus(product_directory,
+        product_status = get_installed_product_status(product_directory,
                 None, StubUEP())
 
         # neither product3 or product 2 are installed
@@ -596,7 +596,7 @@ class InstalledProductStatusTests(SubManFixture):
 
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = getInstalledProductStatus(prod_dir,
+        product_status = get_installed_product_status(prod_dir,
                 None, StubUEP())
 
         # product3 isn't installed

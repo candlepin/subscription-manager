@@ -199,7 +199,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
 
 
 def show_autosubscribe_output(uep):
-    installed_status = managerlib.getInstalledProductStatus(ProductDirectory(),
+    installed_status = managerlib.get_installed_product_status(ProductDirectory(),
             EntitlementDirectory(), uep)
     if not installed_status:
         print _("No products installed.")
@@ -1425,7 +1425,7 @@ class AttachCommand(CliCommand):
                     return_code = 1
             # must be auto
             else:
-                productsInstalled = len(managerlib.getInstalledProductStatus(self.product_dir,
+                productsInstalled = len(managerlib.get_installed_product_status(self.product_dir,
                                  self.entitlement_dir, self.cp))
                 # if we are green, we don't need to go to the server
                 self.sorter = inj.require(inj.CERT_SORTER,
@@ -2020,7 +2020,7 @@ class ListCommand(CliCommand):
                 self.product_dir, self.entitlement_dir, self.cp)
 
         if self.options.installed:
-            iproducts = managerlib.getInstalledProductStatus(self.product_dir,
+            iproducts = managerlib.get_installed_product_status(self.product_dir,
                     self.entitlement_dir, self.cp)
             if not len(iproducts):
                 print(_("No installed products to list"))
@@ -2046,7 +2046,7 @@ class ListCommand(CliCommand):
                     print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
                     sys.exit(1)
 
-            epools = managerlib.getAvailableEntitlements(self.cp, consumer,
+            epools = managerlib.get_available_entitlements(self.cp, consumer,
                     self.facts, self.options.all, on_date)
 
             # Filter certs by service level, if specified.
