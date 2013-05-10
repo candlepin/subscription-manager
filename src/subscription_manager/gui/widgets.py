@@ -199,6 +199,28 @@ class SelectionWrapper(object):
         return self.model.get_value(self.tree_iter, self.store[key])
 
 
+class ReasonsTable(object):
+    def __init__(self, table_widget):
+        self.table_widget = table_widget
+        self.message_store = gtk.ListStore(str)
+        table_widget.set_model(self.message_store)
+
+        message_column = gtk.TreeViewColumn(_("Status Details"),
+                gtk.CellRendererText(),
+                markup=0)
+        message_column.set_expand(True)
+        table_widget.append_column(message_column)
+
+    def clear(self):
+        self.message_store.clear()
+
+    def add_message(self, message):
+        self.message_store.append([message])
+
+    def set_accessibility_name(self, accessibility_name):
+        self.table_widget.get_accessible().set_name(accessibility_name)
+
+
 class ProductsTable(object):
     def __init__(self, table_widget, product_dir, yes_id=gtk.STOCK_APPLY,
                  no_id=gtk.STOCK_REMOVE):
@@ -255,7 +277,7 @@ class ProductsTable(object):
 
 class SubDetailsWidget(GladeWidget):
     widget_names = ["sub_details_vbox", "subscription_text", "products_view",
-                    "support_level_and_type_text", "sku_text"]
+                    "support_level_and_type_text", "sku_text", "details_view"]
     glade_file = "subdetails.glade"
 
     def __init__(self, product_dir):
@@ -264,6 +286,7 @@ class SubDetailsWidget(GladeWidget):
         self.sub_details_vbox.unparent()
 
         self.bundled_products = ProductsTable(self.products_view, product_dir)
+        self.reasons = ReasonsTable(self.details_view)
 
         self.expired_color = gtk.gdk.color_parse(EXPIRED_COLOR)
         self.warning_color = gtk.gdk.color_parse(WARNING_COLOR)
@@ -272,7 +295,7 @@ class SubDetailsWidget(GladeWidget):
 
     def show(self, name, contract=None, start=None, end=None, account=None,
             management=None, support_level="", support_type="",
-            virt_only=None, products=None, highlight=None, sku=None):
+            virt_only=None, products=None, highlight=None, sku=None, reasons=[]):
         """
         Show subscription details.
 
@@ -304,16 +327,24 @@ class SubDetailsWidget(GladeWidget):
 
         self._show_other_details(name, contract, start, end, account,
                                  management, support_level, support_type,
-                                 virt_only, products, highlight, sku)
+                                 virt_only, products, highlight, sku, reasons)
 
         self.bundled_products.clear()
         for product in products:
             self.bundled_products.add_product(utils.apply_highlight(product[0],
                 highlight), product[1])
 
+        self.reasons.clear()
+        for reason in reasons:
+            self.reasons.add_message(reason)
+
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
+<<<<<<< HEAD
                            virt_only=None, products=None, highlight=None, sku=None):
+=======
+                           virt_only=None, products=[], highlight=None, sku=None, reasons=[]):
+>>>>>>> Added reasons to Subscription Details
         pass
 
     def _set(self, text_view, text):
@@ -325,6 +356,7 @@ class SubDetailsWidget(GladeWidget):
     def clear(self):
         """ No subscription to display. """
         self.bundled_products.clear()
+        self.reasons.clear()
         self.subscription_text.get_buffer().set_text("")
 
         self._set(self.sku_text, "")
@@ -358,6 +390,8 @@ class SubDetailsWidget(GladeWidget):
                 "All Available Support Level And Type Text")
         self.bundled_products.set_accessibility_name(
                 "All Available Bundled Product Table")
+        self.reasons.set_accessibility_name(
+                "All Available Status Details Table")
 
 
 # also show contract info on this details widget
@@ -380,8 +414,12 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
+<<<<<<< HEAD
                            virt_only=None, products=None, highlight=None, sku=None):
         products = products or []
+=======
+                           virt_only=None, products=[], highlight=None, sku=None, reasons=[]):
+>>>>>>> Added reasons to Subscription Details
         self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
                 self._get_date_bg(end))
 
