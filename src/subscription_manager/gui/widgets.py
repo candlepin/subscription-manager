@@ -217,9 +217,6 @@ class ReasonsTable(object):
     def add_message(self, message):
         self.message_store.append([message])
 
-    def set_accessibility_name(self, accessibility_name):
-        self.table_widget.get_accessible().set_name(accessibility_name)
-
 
 class ProductsTable(object):
     def __init__(self, table_widget, product_dir, yes_id=gtk.STOCK_APPLY,
@@ -335,11 +332,7 @@ class SubDetailsWidget(GladeWidget):
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
-<<<<<<< HEAD
-                           virt_only=None, products=None, highlight=None, sku=None):
-=======
-                           virt_only=None, products=[], highlight=None, sku=None, reasons=[]):
->>>>>>> Added reasons to Subscription Details
+                           virt_only=None, products=None, highlight=None, sku=None, reasons=[]):
         pass
 
     def _set(self, text_view, text):
@@ -405,17 +398,15 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         # clear() function.
         self.original_bg = self.start_end_date_text.rc_get_style().base[gtk.STATE_NORMAL]
         self.reasons = ReasonsTable(self.details_view)
-        self.reasons.set_accessibility_name(
-                "All Available Status Details Table")
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
-<<<<<<< HEAD
-                           virt_only=None, products=None, highlight=None, sku=None):
+                           virt_only=None, products=None, highlight=None, sku=None,
+                           reasons=[]):
         products = products or []
-=======
-                           virt_only=None, products=[], highlight=None, sku=None, reasons=[]):
->>>>>>> Added reasons to Subscription Details
+        self.reasons.clear()
+        for reason in reasons:
+            self.reasons.add_message(reason)
         self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
                 self._get_date_bg(end))
 
@@ -425,9 +416,6 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         self._set(self.account_text, account)
         self._set(self.provides_management_text, management)
         self._set(self.virt_only_text, virt_only)
-        self.reasons.clear()
-        for reason in reasons:
-            self.reasons.add_message(reason)
 
     def _clear_other_details(self):
         #Clear row highlighting
@@ -439,7 +427,7 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         self._set(self.virt_only_text, "")
         self.reasons.clear()
 
-    def _set_sub_accessibility_names(self):
+    def _set_accessibility_names(self):
         # already set in glade
         pass
 
