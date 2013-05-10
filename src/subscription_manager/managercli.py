@@ -20,12 +20,12 @@ import datetime
 import dbus
 import getpass
 import gettext
-import unicodedata
 import logging
 import os
 import socket
 import sys
 from time import localtime, strftime, strptime
+import unicodedata
 
 from M2Crypto import SSL
 from M2Crypto import X509
@@ -320,7 +320,7 @@ class CliCommand(AbstractCLICommand):
 
     # note, depending on that args, we could get a full
     # fledged uep, a basic auth uep, or an unauthenticate uep
-    def _get_UEP(self,
+    def _get_uep(self,
                 host=None,
                 ssl_port=None,
                 handler=None,
@@ -463,12 +463,12 @@ class CliCommand(AbstractCLICommand):
             # we use the defaults from connection module init
             # we've set self.proxy* here, so we'll use them if they
             # are set
-            self.cp = self._get_UEP(cert_file=cert_file,
+            self.cp = self._get_uep(cert_file=cert_file,
                                     key_file=key_file)
 
             # no auth cp for get / (resources) and
             # get /status (status and versions)
-            self.no_auth_cp = self._get_UEP()
+            self.no_auth_cp = self._get_uep()
             self.log_server_version()
 
             self.certlib = CertLib(uep=self.cp)
@@ -670,7 +670,7 @@ class IdentityCommand(UserPassCommand):
             else:
                 if self.options.force:
                     # get an UEP with basic auth
-                    self.cp = self._get_UEP(username=self.username,
+                    self.cp = self._get_uep(username=self.username,
                                             password=self.password)
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
@@ -698,7 +698,7 @@ class OwnersCommand(UserPassCommand):
 
         try:
             # get a UEP
-            self.cp = self._get_UEP(username=self.username,
+            self.cp = self._get_uep(username=self.username,
                                     password=self.password)
             owners = self.cp.getOwnerList(self.username)
             log.info("Successfully retrieved org list from server.")
@@ -745,7 +745,7 @@ class EnvironmentsCommand(OrgCommand):
         self._validate_options()
         try:
 
-            self.cp = self._get_UEP(username=self.username,
+            self.cp = self._get_uep(username=self.username,
                                     password=self.password)
             if self.cp.supports_resource('environments'):
                 environments = self._get_enviornments(self.org)
@@ -835,14 +835,14 @@ class ServiceLevelCommand(OrgCommand):
             # we'll use the identity certificate. We already know one or the other
             # exists:
             if self.options.username and self.options.password:
-                self.cp = self._get_UEP(username=self.username,
+                self.cp = self._get_uep(username=self.username,
                                         password=self.password)
             else:
                 cert_file = self.consumerIdentity.certpath()
                 key_file = self.consumerIdentity.keypath()
 
                 # get an UEP as consumer
-                self.cp = self._get_UEP(cert_file=cert_file,
+                self.cp = self._get_uep(cert_file=cert_file,
                                         key_file=key_file)
 
             if self.options.unset:
@@ -1029,10 +1029,10 @@ class RegisterCommand(UserPassCommand):
         # Proceed with new registration:
         try:
             if not self.options.activation_keys:
-                admin_cp = self._get_UEP(username=self.username,
+                admin_cp = self._get_uep(username=self.username,
                                          password=self.password)
             else:
-                admin_cp = self._get_UEP()
+                admin_cp = self._get_uep()
 
             facts_dic = self.facts.get_facts()
 
@@ -1074,7 +1074,7 @@ class RegisterCommand(UserPassCommand):
         key_file = ConsumerIdentity.keypath()
 
         # get a new UEP as the consumer
-        self.cp = self._get_UEP(cert_file=cert_file, key_file=key_file)
+        self.cp = self._get_uep(cert_file=cert_file, key_file=key_file)
 
         # Reload the consumer identity:
         self.identity = inj.FEATURES.require(inj.IDENTITY)
@@ -1425,14 +1425,14 @@ class AttachCommand(CliCommand):
                     return_code = 1
             # must be auto
             else:
-                productsInstalled = len(managerlib.get_installed_product_status(self.product_dir,
+                products_installed = len(managerlib.get_installed_product_status(self.product_dir,
                                  self.entitlement_dir, self.cp))
                 # if we are green, we don't need to go to the server
                 self.sorter = inj.require(inj.CERT_SORTER,
                         self.product_dir, self.entitlement_dir, self.cp)
 
                 if self.sorter.is_valid():
-                    if not productsInstalled:
+                    if not products_installed:
                         print _("No Installed products on system. "
                                 "No need to attach subscriptions.")
                     else:
@@ -1459,7 +1459,7 @@ class AttachCommand(CliCommand):
                 for e in result[1]:
                     print '\t-', str(e)
             elif self.options.auto:
-                if not productsInstalled:
+                if not products_installed:
                     return_code = 1
                 else:
                     # run this after certlib update, so we have the new entitlements
@@ -1931,9 +1931,9 @@ class ConfigCommand(CliCommand):
         if self.options.list:
             for section in cfg.sections():
                 print '[%s]' % (section)
-                sourceList = cfg.items(section)
-                sourceList.sort()
-                for (name, value) in sourceList:
+                source_list = cfg.items(section)
+                source_list.sort()
+                for (name, value) in source_list:
                     indicator1 = ''
                     indicator2 = ''
                     if (value == cfg.defaults().get(name)):
