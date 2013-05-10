@@ -101,7 +101,7 @@ class HealingLib(DataLib):
         DataLib.__init__(self, lock, uep)
 
         self._product_dir = product_dir or ProductDirectory()
-        self.plugin_manager = plugins.getPluginManager()
+        self.plugin_manager = plugins.get_plugin_manager()
 
     def _do_update(self):
         uuid = ConsumerIdentity.read().getConsumerId()

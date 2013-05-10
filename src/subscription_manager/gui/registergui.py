@@ -944,7 +944,7 @@ class AsyncBackend(object):
 
     def __init__(self, backend):
         self.backend = backend
-        self.plugin_manager = plugins.getPluginManager()
+        self.plugin_manager = plugins.get_plugin_manager()
         self.queue = Queue.Queue()
 
     def _get_owner_list(self, username, callback):

@@ -137,7 +137,7 @@ class ProductManager:
         self.db.read()
         self.meta_data_errors = []
 
-        self.plugin_manager = plugins.getPluginManager()
+        self.plugin_manager = plugins.get_plugin_manager()
 
     def update(self, yb):
         if yb is None:

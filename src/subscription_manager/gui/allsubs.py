@@ -57,7 +57,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.pool_stash = managerlib.PoolStash(self.backend,
                                                self.facts)
-        self.plugin_manager = plugins.getPluginManager()
+        self.plugin_manager = plugins.get_plugin_manager()
 
         today = datetime.date.today()
         self.date_picker = widgets.DatePicker(today)
