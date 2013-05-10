@@ -58,10 +58,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.parent_win = parent_win
         self.entitlement_dir = ent_dir
         self.product_dir = prod_dir
-
-        self.cs = inj.require(inj.CERT_SORTER,
-                prod_dir, ent_dir, backend.uep)
-
         self.sub_details = widgets.ContractSubDetailsWidget(prod_dir)
 
         # Put the details widget in the middle
