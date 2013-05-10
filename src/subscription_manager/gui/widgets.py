@@ -387,7 +387,7 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
         self._set(self.contract_number_text, contract)
         self._set(self.start_end_date_text, "%s - %s" % (
-                    managerlib.formatDate(start), managerlib.formatDate(end)))
+                    managerlib.format_date(start), managerlib.format_date(end)))
         self._set(self.account_text, account)
         self._set(self.provides_management_text, management)
         self._set(self.virt_only_text, virt_only)
@@ -439,7 +439,7 @@ class CellRendererDate(gtk.CellRendererText):
         """
 
         if value:
-            date = managerlib.formatDate(value)
+            date = managerlib.format_date(value)
         else:
             date = value
 

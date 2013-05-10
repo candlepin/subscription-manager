@@ -2166,8 +2166,8 @@ class ListCommand(CliCommand):
                     service_level,
                     service_type,
                     reasons,
-                    managerlib.formatDate(cert.valid_range.begin()),
-                    managerlib.formatDate(cert.valid_range.end())) + "\n"
+                    managerlib.format_date(cert.valid_range.begin()),
+                    managerlib.format_date(cert.valid_range.end())) + "\n"
 
 
 class VersionCommand(CliCommand):

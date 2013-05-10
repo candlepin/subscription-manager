@@ -228,7 +228,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                                              'Covered by contracts %s through %s',
                                              num_of_contracts) % \
                             (contract,
-                             managerlib.formatDate(entry['expiration_date']))
+                             managerlib.format_date(entry['expiration_date']))
                 else:
                     entry['image'] = self._render_icon('red')
                     entry['status'] = _('Not Subscribed')
@@ -347,7 +347,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
                         _("System is properly subscribed through %s.") %
-                          managerlib.formatDate(sorter.first_invalid_date))
+                          managerlib.format_date(sorter.first_invalid_date))
             else:
                 # No product certs installed, no first invalid date, and
                 # the subscription assistant can't do anything, so we'll disable

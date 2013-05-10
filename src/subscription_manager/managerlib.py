@@ -96,8 +96,8 @@ def get_installed_product_status(product_directory, entitlement_directory, uep):
             if prod_status_range:
                 # Format the date in user's local time as the date
                 # range is returned in GMT.
-                begin = formatDate(prod_status_range.begin())
-                end = formatDate(prod_status_range.end())
+                begin = format_date(prod_status_range.begin())
+                end = format_date(prod_status_range.end())
             data = (product.name,
                     installed_product,
                     product.version,
@@ -336,7 +336,7 @@ def get_available_entitlements(cpserver, consumer_uuid, facts, get_all=False, ac
         else:
             d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
 
-        d['endDate'] = formatDate(isodate.parse_date(d['endDate']))
+        d['endDate'] = format_date(isodate.parse_date(d['endDate']))
         del d['consumed']
 
     return data
@@ -730,7 +730,7 @@ def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])
 
 
-def formatDate(dt):
+def format_date(dt):
     if dt:
         return dt.astimezone(LocalTz()).strftime("%x")
     else:
