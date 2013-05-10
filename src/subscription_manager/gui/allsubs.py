@@ -14,31 +14,28 @@
 #
 
 import datetime
-import logging
-import gobject
-
 import gettext
-from subscription_manager.injection import require, IDENTITY
-from subscription_manager.gui.widgets import MachineTypeColumn, QuantitySelectionColumn
-from subscription_manager.jsonwrapper import PoolWrapper
+import gobject
+import logging
+
 import gtk
-from subscription_manager.managerlib import MergedPoolsStackingGroupSorter
+
+from subscription_manager import async
+from subscription_manager.gui.contract_selection import ContractSelectionWindow
+from subscription_manager.gui.filter import FilterOptionsWindow, Filters
+from subscription_manager.gui import progress
+from subscription_manager.gui.storage import MappedTreeStore
+from subscription_manager.gui.utils import apply_highlight, errorWindow, get_cell_background_color, handle_gui_exception, set_background_model_index
+from subscription_manager.gui import widgets
+from subscription_manager.injection import IDENTITY, require
+from subscription_manager.jsonwrapper import PoolWrapper
+from subscription_manager import managerlib
+from subscription_manager import plugins
+from subscription_manager.quantity import allows_multi_entitlement, QuantityDefaultValueCalculator, valid_quantity
+
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
-from subscription_manager import managerlib
-from subscription_manager import plugins
-
-from subscription_manager.gui import widgets
-from subscription_manager import async
-from subscription_manager.gui import progress
-from subscription_manager.gui.utils import handle_gui_exception, apply_highlight, errorWindow,\
-    get_cell_background_color, set_background_model_index
-from subscription_manager.gui.contract_selection import ContractSelectionWindow
-from subscription_manager.gui.filter import FilterOptionsWindow, Filters
-from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_quantity, \
-                                          allows_multi_entitlement
-from subscription_manager.gui.storage import MappedTreeStore
 
 
 class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
@@ -77,7 +74,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         cols = []
         cols.append((subscription_column, 'text', 'product_name_formatted'))
 
-        machine_type_col = MachineTypeColumn(self.store['virt_only'])
+        machine_type_col = widgets.MachineTypeColumn(self.store['virt_only'])
         self.top_view.append_column(machine_type_col)
         cols.append((machine_type_col, 'text', 'virt_only'))
 
@@ -85,12 +82,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         cols.append((column, 'text', 'available'))
 
         # Set up the quantity column.
-        quantity_column = QuantitySelectionColumn(_("Quantity"),
-                                                  self.store,
-                                                  self.store['quantity_to_consume'],
-                                                  self.store['multi-entitlement'],
-                                                  self.store['quantity_available'],
-                                                  self.store['quantity_increment'])
+        quantity_column = widgets.QuantitySelectionColumn(_("Quantity"),
+                                                          self.store,
+                                                          self.store['quantity_to_consume'],
+                                                          self.store['multi-entitlement'],
+                                                          self.store['quantity_available'],
+                                                          self.store['quantity_increment'])
         self.top_view.append_column(quantity_column)
 
         self.set_sorts(cols)
@@ -213,12 +210,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.top_view.show()
         self.no_subs_label.hide()
 
-        sorter = MergedPoolsStackingGroupSorter(merged_pools.values())
+        sorter = managerlib.MergedPoolsStackingGroupSorter(merged_pools.values())
         for group_idx, group in enumerate(sorter.groups):
             bg_color = get_cell_background_color(group_idx)
-            iter = None
+            tree_iter = None
             if group.name and len(group.entitlements) > 1:
-                iter = self.store.add_map(iter, self._create_parent_map(group.name, bg_color))
+                tree_iter = self.store.add_map(tree_iter, self._create_parent_map(group.name, bg_color))
 
             for entry in group.entitlements:
                 quantity_available = 0
@@ -247,7 +244,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     if 'quantity_increment' in calculated_attrs:
                         quantity_increment = int(calculated_attrs['quantity_increment'])
 
-                self.store.add_map(iter, {
+                self.store.add_map(tree_iter, {
                     'virt_only': self._machine_type(entry.pools),
                     'product_name': entry.product_name,
                     'product_name_formatted': apply_highlight(entry.product_name,

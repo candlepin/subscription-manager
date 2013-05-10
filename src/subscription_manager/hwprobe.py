@@ -17,19 +17,19 @@
 # in this software or its documentation.
 #
 
-import os
-import sys
-import signal
-import re
-import logging
-import gettext
-_ = gettext.gettext
-import ethtool
-import socket
 import commands
+import ethtool
+import gettext
+import logging
+import os
 import platform
+import re
+import signal
+import socket
+from subprocess import PIPE, Popen
+import sys
 
-from subprocess import Popen, PIPE
+_ = gettext.gettext
 
 
 # Exception classes used by this module.

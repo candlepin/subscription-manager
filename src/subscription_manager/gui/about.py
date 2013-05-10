@@ -13,14 +13,16 @@
 # in this software or its documentation.
 #
 
-import os
 import datetime
+import gettext
+import os
+
 from gtk import RESPONSE_DELETE_EVENT, RESPONSE_CANCEL, \
                 AboutDialog as GtkAboutDialog, Label
-from subscription_manager.utils import get_client_versions, get_server_versions
-from subscription_manager.gui.utils import get_running_as_firstboot
 
-import gettext
+from subscription_manager.gui.utils import get_running_as_firstboot
+from subscription_manager.utils import get_client_versions, get_server_versions
+
 _ = gettext.gettext
 
 LICENSE = _("\nThis software is licensed to you under the GNU General Public License, "

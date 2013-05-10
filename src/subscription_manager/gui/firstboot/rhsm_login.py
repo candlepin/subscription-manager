@@ -1,9 +1,11 @@
-import sys
-import gtk
-import socket
 
 import gettext
+import socket
+import sys
+
 _ = lambda x: gettext.ldgettext("rhsm", x)
+
+import gtk
 
 import rhsm
 
@@ -20,19 +22,18 @@ running_as_firstboot()
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
-from subscription_manager.gui import managergui
-from subscription_manager import managerlib
-from subscription_manager.gui import registergui
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
 from subscription_manager.gui.firstboot_base import RhsmFirstbootModule
-
+from subscription_manager.gui import managergui
+from subscription_manager.gui import registergui
 from subscription_manager.gui.utils import handle_gui_exception
-from subscription_manager import plugins
-from subscription_manager.utils import remove_scheme
 from subscription_manager.gui.autobind import \
         ServiceLevelNotSupportedException, NoProductsException, \
         AllProductsCoveredException
+from subscription_manager import managerlib
+from subscription_manager import plugins
+from subscription_manager.utils import remove_scheme
 
 from rhsm.connection import RestlibException
 

@@ -13,15 +13,16 @@
 # in this software or its documentation.
 #
 
+import gettext
 import logging
+
 import gtk
 
-from subscription_manager.injection import require, IDENTITY
-from subscription_manager.gui.utils import linkify, handle_gui_exception
 from subscription_manager.gui import widgets
+from subscription_manager.gui.utils import handle_gui_exception, linkify
+from subscription_manager.injection import IDENTITY, require
 from subscription_manager.managerlib import enhance_facts
 
-import gettext
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)

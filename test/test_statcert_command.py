@@ -27,7 +27,7 @@ from stubs import MockStdout, MockStderr
 class StatCertCommandStub(StatCertCommand):
 
     def __init__(self, cert_pem):
-        super(StatCertCommand, self).__init__()
+        super(StatCertCommandStub, self).__init__()
         self._pem = cert_pem
         self._cert = create_from_pem(self._pem)
 

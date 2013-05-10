@@ -15,23 +15,23 @@
 # in this software or its documentation.
 #
 
-
-import syslog
+from datetime import datetime, timedelta
+import gettext
 import logging
-from datetime import timedelta, datetime
-from subscription_manager.lock import Lock
-from subscription_manager.identity import ConsumerIdentity
-from subscription_manager.injection import require, CERT_SORTER
-from subscription_manager import plugins
+import syslog
 
-from subscription_manager.certdirectory import EntitlementDirectory, \
-    ProductDirectory, Writer
 from rhsm.config import initConfig
 from rhsm.certificate import Key, create_from_pem, GMT
 
+from subscription_manager import plugins
+from subscription_manager.certdirectory import EntitlementDirectory, \
+    ProductDirectory, Writer
+from subscription_manager.identity import ConsumerIdentity
+from subscription_manager.injection import CERT_SORTER, require
+from subscription_manager.lock import Lock
+
 log = logging.getLogger('rhsm-app.' + __name__)
 
-import gettext
 _ = gettext.gettext
 
 cfg = initConfig()

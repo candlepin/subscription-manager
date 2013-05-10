@@ -24,13 +24,14 @@ For some backgorund, see:
 http://bugs.python.org/issue4319
 """
 
-import sys
 import gettext
-_ = gettext.gettext
-
-from optparse import OptionParser as _OptionParser
 from optparse import IndentedHelpFormatter as _IndentedHelpFormatter
+from optparse import OptionParser as _OptionParser
+import sys
 import textwrap
+
+
+_ = gettext.gettext
 
 # note default is lower caps
 USAGE = _("%prog [OPTIONS]")
