@@ -359,7 +359,7 @@ class MainWindow(widgets.GladeWidget):
                                       "\n%s\n" +
                                       _("Please see /var/log/rhsm/rhsm.log for more information."),
                                 self.main_window,
-                                logMsg="Consumer may need to be manually cleaned up: %s" %
+                                log_msg="Consumer may need to be manually cleaned up: %s" %
                                 self.identity.uuid)
         self.identity.reload()
 

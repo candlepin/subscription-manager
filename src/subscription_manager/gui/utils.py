@@ -55,19 +55,19 @@ def get_running_as_firstboot():
     return FIRSTBOOT
 
 
-def handle_gui_exception(e, msg, parent, formatMsg=True, logMsg=None):
+def handle_gui_exception(e, msg, parent, format_msg=True, log_msg=None):
     """
     Handles an exception for the gui by logging the stack trace and
     displaying a user-friendly internationalized message.
 
     msg = User friendly message to display in GUI.
     parent = Parent window where the error originates.
-    logMsg = Optional message to be logged in addition to stack trace.
-    formatMsg = if true, string sub the exception error in the msg
+    log_msg = Optional message to be logged in addition to stack trace.
+    format_msg = if true, string sub the exception error in the msg
     """
 
-    if logMsg:
-        log.error(logMsg)
+    if log_msg:
+        log.error(log_msg)
     log.exception(e)
 
     # If exception is of these types we ignore the given display msg:
@@ -96,7 +96,7 @@ def handle_gui_exception(e, msg, parent, formatMsg=True, logMsg=None):
 
         else:
             try:
-                if formatMsg:
+                if format_msg:
                     message = msg % linkify(e.msg)
                 else:
                     message = linkify(e.msg)
