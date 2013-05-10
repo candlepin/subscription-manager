@@ -59,32 +59,32 @@ class NetworkConfigDialog:
         # Need to load values before connecting signals because when the dialog
         # starts up it seems to trigger the signals which overwrites the config
         # with the blank values.
-        self.setInitialValues()
-        self.enableProxyButton.connect("toggled", self.enableAction)
-        self.enableProxyAuthButton.connect("toggled", self.enableAction)
+        self.set_initial_values()
+        self.enableProxyButton.connect("toggled", self.enable_action)
+        self.enableProxyAuthButton.connect("toggled", self.enable_action)
 
-        self.enableProxyButton.connect("toggled", self.writeValues)
-        self.enableProxyAuthButton.connect("toggled", self.writeValues)
+        self.enableProxyButton.connect("toggled", self.write_values)
+        self.enableProxyAuthButton.connect("toggled", self.write_values)
 
-        self.enableProxyButton.connect("toggled", self.clearConnectionLabel)
-        self.enableProxyAuthButton.connect("toggled", self.clearConnectionLabel)
+        self.enableProxyButton.connect("toggled", self.clear_connection_label)
+        self.enableProxyAuthButton.connect("toggled", self.clear_connection_label)
 
-        self.enableProxyButton.connect("toggled", self.enableTestButton)
+        self.enableProxyButton.connect("toggled", self.enable_test_button)
 
-        self.proxyEntry.connect("focus-out-event", self.writeValues)
-        self.proxyUserEntry.connect("focus-out-event", self.writeValues)
-        self.proxyPasswordEntry.connect("focus-out-event", self.writeValues)
+        self.proxyEntry.connect("focus-out-event", self.write_values)
+        self.proxyUserEntry.connect("focus-out-event", self.write_values)
+        self.proxyPasswordEntry.connect("focus-out-event", self.write_values)
 
-        self.proxyEntry.connect("changed", self.clearConnectionLabel)
-        self.proxyUserEntry.connect("changed", self.clearConnectionLabel)
-        self.proxyPasswordEntry.connect("changed", self.clearConnectionLabel)
+        self.proxyEntry.connect("changed", self.clear_connection_label)
+        self.proxyUserEntry.connect("changed", self.clear_connection_label)
+        self.proxyPasswordEntry.connect("changed", self.clear_connection_label)
 
         self.xml.get_widget("closeButton").connect("clicked", self.close)
         self.xml.get_widget("testConnectionButton").connect("clicked",
-                                                            self.displayConnectionStatus)
+                                                            self.display_connection_status)
         self.dlg.connect("delete-event", self.deleted)
 
-    def setInitialValues(self):
+    def set_initial_values(self):
         proxy_url = self.cfg.get("server", "proxy_hostname") or ""
         # append port unless not specified, then append the default of 3128
         if proxy_url:
@@ -99,8 +99,8 @@ class NetworkConfigDialog:
         if self.cfg.get("server", "proxy_user"):
             self.xml.get_widget("enableProxyAuthButton").set_active(True)
 
-        self.enableAction(self.xml.get_widget("enableProxyAuthButton"))
-        self.enableAction(self.xml.get_widget("enableProxyButton"))
+        self.enable_action(self.xml.get_widget("enableProxyAuthButton"))
+        self.enable_action(self.xml.get_widget("enableProxyButton"))
 
         # the extra or "" are to make sure we don't str None
         self.xml.get_widget("proxyUserEntry").set_text(str(self.cfg.get("server", "proxy_user") or ""))
@@ -111,7 +111,7 @@ class NetworkConfigDialog:
         if not self.xml.get_widget("enableProxyButton").get_active():
             self.xml.get_widget("testConnectionButton").set_sensitive(False)
 
-    def writeValues(self, widget=None, dummy=None):
+    def write_values(self, widget=None, dummy=None):
         proxy = self.xml.get_widget("proxyEntry").get_text() or ""
 
         # don't save these values if they are disabled in the gui
@@ -153,28 +153,28 @@ class NetworkConfigDialog:
                     parent=self.dlg)
 
     def show(self):
-        self.setInitialValues()
+        self.set_initial_values()
         self.dlg.present()
 
     def close(self, button):
-        self.writeValues()
+        self.write_values()
         self.dlg.hide()
 
-    def enableTestButton(self, button):
+    def enable_test_button(self, button):
         test_connection_button = self.xml.get_widget("testConnectionButton")
         test_connection_button.set_sensitive(button.get_active())
 
-    def clearConnectionLabel(self, entry):
+    def clear_connection_label(self, entry):
         self.xml.get_widget("connectionStatusLabel").set_label("")
 
-    def displayConnectionStatus(self, button):
+    def display_connection_status(self, button):
         connection_label = self.xml.get_widget("connectionStatusLabel")
-        if self.testConnection():
+        if self.test_connection():
             connection_label.set_label(_("Proxy connection succeeded"))
         else:
             connection_label.set_label(_("Proxy connection failed"))
 
-    def testConnection(self):
+    def test_connection(self):
         proxy_host = remove_scheme(self.cfg.get("server", "proxy_hostname"))
         proxy_port = self.cfg.get_int("server", "proxy_port")
         proxy_user = self.cfg.get("server", "proxy_user")
@@ -218,11 +218,11 @@ class NetworkConfigDialog:
             return True
 
     def deleted(self, event, data):
-        self.writeValues()
+        self.write_values()
         self.dlg.hide()
         return True
 
-    def enableAction(self, button):
+    def enable_action(self, button):
         if button.get_name() == "enableProxyButton":
             self.xml.get_widget("proxyEntry").set_sensitive(button.get_active())
             self.xml.get_widget("proxyEntry").grab_focus()
