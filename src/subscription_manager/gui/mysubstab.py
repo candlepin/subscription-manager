@@ -255,7 +255,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         order = cert.order
         products = [(product.name, product.id)
                         for product in cert.products]
-        reasons = self.cs.reasons.get_subscription_reasons(cert.subject['CN'])
+
+        reasons = []
+        if cert.subject and 'CN' in cert.subject:
+            reasons = self.cs.reasons.get_subscription_reasons(cert.subject['CN'])
 
         if str(order.virt_only) == "1":
             virt_only = _("Virtual")
