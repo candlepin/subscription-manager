@@ -164,6 +164,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         Pulls the entitlement certificates and updates the subscription model.
         """
         self.store.clear()
+        self.cs = inj.require(inj.CERT_SORTER,
+                self.product_dir, self.entitlement_dir, self.backend.uep)
         sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
         for idx, group in enumerate(sorter.groups):
             self._add_group(idx, group)
