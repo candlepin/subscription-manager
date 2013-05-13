@@ -110,8 +110,8 @@ def handle_gui_exception(e, msg, parent, format_msg=True, log_msg=None):
     else:
         #catch-all, try to interpolate and if it doesn't work out, just display the message
         try:
-            interpolatedStr = msg % e
-            errorWindow(interpolatedStr, parent=parent)
+            interpolated_str = msg % e
+            errorWindow(interpolated_str, parent=parent)
         except Exception:
             errorWindow(msg, parent=parent)
 
