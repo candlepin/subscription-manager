@@ -17,7 +17,6 @@ from datetime import datetime, timedelta
 import time
 import unittest
 import os
-from os import linesep as NEW_LINE
 
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubProductDirectory, \
@@ -251,9 +250,9 @@ ndmrxQKBgGJiXMZnKjK9AUUDvsFBSp8Otrf20BoeCiq+tZF95S5jR9/I8nv4NBYp
 X2mYlgErL9vzxIQrwfL5JdEo9f+PQ0eVs/lh9MPY2TliwEyXDrVp
 -----END RSA PRIVATE KEY-----"""
 
-EXPECTED_CERT_V3 = create_from_pem(EXPECTED_CERT_CONTENT_V3 + NEW_LINE +
+EXPECTED_CERT_V3 = create_from_pem(EXPECTED_CERT_CONTENT_V3 + os.linesep +
                                    EXPECTED_CERT_ENTITLEMENT_V3 +
-                                   NEW_LINE + EXPECTED_CERT_SIGNATURE_V3)
+                                   os.linesep + EXPECTED_CERT_SIGNATURE_V3)
 
 
 class MergePoolsTests(SubManFixture):
@@ -643,11 +642,11 @@ class MockLog:
 def MockSystemLog(self, message, priority):
     pass
 
-EXPECTED_CONTENT = EXPECTED_CERT_CONTENT + NEW_LINE + EXPECTED_KEY_CONTENT
-EXPECTED_CERT_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
-                      EXPECTED_CERT_ENTITLEMENT_V3 + NEW_LINE + \
+EXPECTED_CONTENT = EXPECTED_CERT_CONTENT + os.linesep + EXPECTED_KEY_CONTENT
+EXPECTED_CERT_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + os.linesep + \
+                      EXPECTED_CERT_ENTITLEMENT_V3 + os.linesep + \
                       EXPECTED_CERT_SIGNATURE_V3
-EXPECTED_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
+EXPECTED_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + os.linesep + \
                       EXPECTED_KEY_CONTENT_V3
 
 

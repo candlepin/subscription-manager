@@ -18,7 +18,6 @@ import datetime
 import gettext
 import logging
 import os
-from os import linesep as NEW_LINE
 import re
 import shutil
 import stat
@@ -661,9 +660,9 @@ class ImportFileExtractor(object):
         if self._CERT_DICT_TAG in self.parts:
             cert_content = self.parts[self._CERT_DICT_TAG]
         if self._ENT_DICT_TAG in self.parts:
-            cert_content = cert_content + NEW_LINE + self.parts[self._ENT_DICT_TAG]
+            cert_content = cert_content + os.linesep + self.parts[self._ENT_DICT_TAG]
         if self._SIG_DICT_TAG in self.parts:
-            cert_content = cert_content + NEW_LINE + self.parts[self._SIG_DICT_TAG]
+            cert_content = cert_content + os.linesep + self.parts[self._SIG_DICT_TAG]
         return cert_content
 
     def verify_valid_entitlement(self):
