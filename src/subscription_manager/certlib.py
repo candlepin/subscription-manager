@@ -364,7 +364,7 @@ class UpdateAction(Action):
         return exceptions
 
     def purge_expired(self, report):
-        for cert in self.entdir.listExpired():
+        for cert in self.entdir.list_expired():
             report.expired.append(cert)
             cert.delete()
 

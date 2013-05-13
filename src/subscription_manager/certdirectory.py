@@ -120,14 +120,14 @@ class CertificateDirectory(Directory):
         self._listing = listing
         return listing
 
-    def listValid(self):
+    def list_valid(self):
         valid = []
         for c in self.list():
             if c.is_valid():
                 valid.append(c)
         return valid
 
-    def listExpired(self):
+    def list_expired(self):
         expired = []
         for c in self.list():
             if c.is_expired():
@@ -141,7 +141,7 @@ class CertificateDirectory(Directory):
                 return c
         return None
 
-    def findAllByProduct(self, p_hash):
+    def find_all_by_product(self, p_hash):
         certs = []
         for c in self.list():
             for p in c.products:
@@ -149,7 +149,7 @@ class CertificateDirectory(Directory):
                     certs.append(c)
         return certs
 
-    def findByProduct(self, p_hash):
+    def find_by_product(self, p_hash):
         for c in self.list():
             for p in c.products:
                 if p.id == p_hash:
@@ -170,7 +170,7 @@ class ProductDirectory(CertificateDirectory):
         set of all tags they provide.
         """
         tags = set()
-        for prod_cert in self.listValid():
+        for prod_cert in self.list_valid():
             for product in prod_cert.products:
                 for tag in product.provided_tags:
                     tags.add(tag)
@@ -224,7 +224,7 @@ class EntitlementDirectory(CertificateDirectory):
             cert_writer.write(key, cert)
         return True
 
-    def listValid(self):
+    def list_valid(self):
         valid = []
         for c in self.list():
 

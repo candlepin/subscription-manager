@@ -247,7 +247,7 @@ class ProductsTable(object):
         return self.table_widget.render_icon(icon_id, gtk.ICON_SIZE_MENU)
 
     def _get_icon(self, product_id):
-        if self.product_dir.findByProduct(product_id):
+        if self.product_dir.find_by_product(product_id):
             return self.yes_icon
         else:
             return self.no_icon

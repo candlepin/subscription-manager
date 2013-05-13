@@ -162,7 +162,7 @@ class UpdateAction:
         unique = set()
         if not self.manage_repos:
             return unique
-        ent_certs = self.ent_dir.listValid()
+        ent_certs = self.ent_dir.list_valid()
         baseurl = CFG.get('rhsm', 'baseurl')
         ca_cert = CFG.get('rhsm', 'repo_ca_cert')
         for ent_cert in ent_certs:

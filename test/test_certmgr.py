@@ -308,7 +308,7 @@ class TestCertmgr(SubManFixture):
 
         # this makes the stub_entdir report all ents as being expired
         # so we fetch new ones
-        self.stub_entdir.listExpired = mock.Mock(
+        self.stub_entdir.list_expired = mock.Mock(
                 return_value=self.stub_entdir.list())
 
         # we don't want to find replacements, so this forces a delete

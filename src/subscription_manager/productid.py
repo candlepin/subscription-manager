@@ -260,7 +260,7 @@ class ProductManager:
             # needs to be updated
             #
             # if we dont find this product cert, install it
-            if not self.pdir.findByProduct(prod_hash):
+            if not self.pdir.find_by_product(prod_hash):
                 products_to_install.append((p, cert))
 
             # look up what repo's we know about for that prod has

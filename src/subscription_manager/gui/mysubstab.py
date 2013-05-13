@@ -340,7 +340,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         installed_products = []
 
         for product in products:
-            installed = installed_dir.findByProduct(product.id)
+            installed = installed_dir.find_by_product(product.id)
 
             if installed:
                 installed_products.append(installed)

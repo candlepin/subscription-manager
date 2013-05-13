@@ -138,7 +138,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         if compliant_range is None:
             return contract_ids, sub_names
 
-        for cert in self.entitlement_dir.findAllByProduct(product_id):
+        for cert in self.entitlement_dir.find_all_by_product(product_id):
 
             # Only include if this cert overlaps with the overall date range
             # we are currently covered for:
