@@ -205,7 +205,7 @@ class ReasonsTable(object):
         self.message_store = gtk.ListStore(str)
         table_widget.set_model(self.message_store)
 
-        message_column = gtk.TreeViewColumn(_("Status Details"),
+        message_column = gtk.TreeViewColumn(_("Message"),
                 gtk.CellRendererText(),
                 markup=0)
         message_column.set_expand(True)
@@ -404,9 +404,11 @@ class ContractSubDetailsWidget(SubDetailsWidget):
                            virt_only=None, products=None, highlight=None, sku=None,
                            reasons=[]):
         products = products or []
+
         self.reasons.clear()
         for reason in reasons:
             self.reasons.add_message(reason)
+
         self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
                 self._get_date_bg(end))
 
