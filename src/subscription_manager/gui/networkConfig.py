@@ -24,7 +24,7 @@ import gtk.glade
 import rhsm.config
 import rhsm.connection as connection
 
-from subscription_manager.gui.utils import errorWindow
+from subscription_manager.gui.utils import show_error_window
 from subscription_manager.utils import remove_scheme
 
 _ = gettext.gettext
@@ -148,9 +148,9 @@ class NetworkConfigDialog:
         try:
             self.cfg.save()
         except Exception:
-            errorWindow(_("There was an error saving your configuration.") +
-                    _("Make sure that you own %s.") % self.cfg.fileName,
-                    parent=self.dlg)
+            show_error_window(_("There was an error saving your configuration.") +
+                              _("Make sure that you own %s.") % self.cfg.fileName,
+                                parent=self.dlg)
 
     def show(self):
         self.set_initial_values()

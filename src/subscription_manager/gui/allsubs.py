@@ -25,7 +25,7 @@ from subscription_manager.gui.contract_selection import ContractSelectionWindow
 from subscription_manager.gui.filter import FilterOptionsWindow, Filters
 from subscription_manager.gui import progress
 from subscription_manager.gui.storage import MappedTreeStore
-from subscription_manager.gui.utils import apply_highlight, errorWindow, get_cell_background_color, handle_gui_exception, set_background_model_index
+from subscription_manager.gui.utils import apply_highlight, show_error_window, get_cell_background_color, handle_gui_exception, set_background_model_index
 from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, require
 from subscription_manager.jsonwrapper import PoolWrapper
@@ -363,8 +363,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def _contract_selected(self, pool, quantity=1):
         if not valid_quantity(quantity):
-            errorWindow(_("Quantity must be a positive number."),
-                    parent=self.parent_win)
+            show_error_window(_("Quantity must be a positive number."),
+                              parent=self.parent_win)
             return
 
         self._contract_selection_cancelled()

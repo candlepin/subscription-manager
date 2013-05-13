@@ -55,7 +55,7 @@ class HandleGuiExceptionTests(unittest.TestCase):
         self.msg_with_url_and_formatting = "https://www.example.com %s"
         self.msg_with_markup = """<span foreground="blue" size="100">Blue text</span> is <i>cool</i>!"""
         utils.log = FakeLogger()
-        utils.errorWindow = FakeErrorWindow
+        utils.show_error_window = FakeErrorWindow
         # set a mock logger
 
     def test_hge(self):
