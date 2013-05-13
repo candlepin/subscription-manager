@@ -70,6 +70,11 @@ log = logging.getLogger('rhsm-app.' + __name__)
 CONNECTION_FAILURE = _(u"Unable to connect to certificate server: %s.  "
                         "See /var/log/rhsm/rhsm.log for more details.")
 
+
+FACT_FILE = "/etc/rhsm/facts/migration.facts"
+
+YUM_PLUGIN_CONF = '/etc/yum/pluginconf.d/rhnplugin.conf'
+
 DOUBLE_MAPPED = "rhel-.*?-(client|server)-dts-(5|6)-beta(-debuginfo)?"
 #The (?!-beta) bit is a negative lookahead assertion.  So we won't match
 #if the 5 or 6 is followed by the word "-beta"
@@ -467,7 +472,7 @@ class MigrationEngine(object):
                 log.info(e)
 
     def get_system_id(self):
-        system_id_path = self.rhncfg["systemIdPath"]
+        system_id_path = self.rhncfg["system_id_path"]
         p = libxml2.parseDoc(file(system_id_path).read())
         system_id = int(p.xpathEval('string(//member[* = "system_id"]/value/string)').split('-')[1])
         return system_id
@@ -475,7 +480,6 @@ class MigrationEngine(object):
     def write_migration_facts(self):
         migration_date = datetime.now().isoformat()
 
-        FACT_FILE = "/etc/rhsm/facts/migration.facts"
         if not os.path.exists(FACT_FILE):
             f = open(FACT_FILE, 'w')
             json.dump({"migration.classic_system_id": self.get_system_id(),
@@ -491,7 +495,6 @@ class MigrationEngine(object):
         Can thrown IOError exception.
         """
         log.info("Disabling rhnplugin.conf")
-        YUM_PLUGIN_CONF = '/etc/yum/pluginconf.d/rhnplugin.conf'
         f = open(YUM_PLUGIN_CONF, 'r')
         lines = f.readlines()
         f.close()
@@ -509,24 +512,24 @@ class MigrationEngine(object):
         f.close()
 
     def unregister_system_from_rhn_classic(self, sc, sk):
-        systemIdPath = self.rhncfg["systemIdPath"]
-        systemId = self.get_system_id()
+        system_id_path = self.rhncfg["systemIdPath"]
+        system_id = self.get_system_id()
 
-        log.info("Deleting system %s from RHN Classic...", systemId)
+        log.info("Deleting system %s from RHN Classic...", system_id)
         try:
-            result = sc.system.deleteSystems(sk, systemId)
+            result = sc.system.deleteSystems(sk, system_id)
         except Exception:
-            log.error("Could not delete system %s from RHN Classic" % systemId)
+            log.error("Could not delete system %s from RHN Classic" % system_id)
             log.error(traceback.format_exc())
-            shutil.move(systemIdPath, systemIdPath + ".save")
+            shutil.move(system_id_path, system_id_path + ".save")
             self.disable_yum_rhn_plugin()
             print _("Did not receive a completed unregistration message from RHN Classic for system %s.\n"
-                    "Please investigate on the Customer Portal at https://access.redhat.com.") % systemId
+                    "Please investigate on the Customer Portal at https://access.redhat.com.") % system_id
             return
 
         if result:
-            log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", systemId)
-            os.remove(systemIdPath)
+            log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", system_id)
+            os.remove(system_id_path)
             self.disable_yum_rhn_plugin()
             print _("System successfully unregistered from RHN Classic.")
         else:
