@@ -149,7 +149,8 @@ class Lock:
         finally:
             mutex.release()
 
-    def P(self):
+    # P
+    def wait(self):
         mutex = self.mutex
         mutex.acquire()
         try:
@@ -157,8 +158,10 @@ class Lock:
         finally:
             mutex.release()
         return self
+    P = wait
 
-    def V(self):
+    # V
+    def signal(self):
         mutex = self.mutex
         mutex.acquire()
         try:
@@ -166,6 +169,7 @@ class Lock:
                 self.depth -= 1
         finally:
             mutex.release()
+    V = signal
 
     def __del__(self):
         try:
