@@ -1987,8 +1987,6 @@ class ListCommand(CliCommand):
                                       % strftime("%Y-%m-%d", localtime())))
         self.parser.add_option("--consumed", action='store_true',
                                help=_("show the subscriptions being consumed by this system"))
-        self.parser.add_option("--status", action='store_true',
-                               help=_("show the current status of the system and reasons it is not fully compliant."))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("shows only subscriptions matching the specified service level; only used with --available and --consumed"))
 
@@ -2006,7 +2004,7 @@ class ListCommand(CliCommand):
                                               self.options.available):
             print _("Error: --servicelevel is only applicable with --available or --consumed")
             sys.exit(-1)
-        if not (self.options.available or self.options.consumed or self.options.status):
+        if not (self.options.available or self.options.consumed):
             self.options.installed = True
 
     def _do_command(self):
@@ -2081,9 +2079,6 @@ class ListCommand(CliCommand):
         if self.options.consumed:
             self.print_consumed(service_level=self.options.service_level)
 
-        if self.options.status:
-            self.print_status()
-
     def _filter_pool_json_by_service_level(self, pools, service_level):
 
         def filter_pool_data_by_service_level(pool_data):
@@ -2094,27 +2089,6 @@ class ListCommand(CliCommand):
             return service_level.lower() == pool_level.lower()
 
         return filter(filter_pool_data_by_service_level, pools)
-
-    def print_status(self):
-        # list status and all reasons it is not valid
-        print("+-------------------------------------------+")
-        print("   " + _("System Status Details"))
-        print("+-------------------------------------------+")
-
-        if not self.is_registered():
-            print(_("Overall Status: %s\n") % _("Unknown"))
-            return
-
-        overall_status = self.sorter.get_system_status()
-        reasons = self.sorter.reasons.get_name_message_map()
-        print(_("Overall Status: %s\n") % overall_status)
-
-        columns = get_terminal_width()
-        for name in reasons:
-            print format_name(name + ':', 0, columns)
-            for message in reasons[name]:
-                print '- %s' % format_name(message, 2, columns)
-            print ''
 
     def print_consumed(self, service_level=None):
         # list all certificates that have not yet expired, even those
@@ -2189,13 +2163,48 @@ class VersionCommand(CliCommand):
         print (_("python-rhsm: %s") % self.client_versions["python-rhsm"])
 
 
+class StatusCommand(CliCommand):
+
+    def __init__(self):
+        shortdesc = _("Show status information for this system's subscriptions and products")
+        super(StatusCommand, self).__init__("status", shortdesc, True)
+
+    def _add_common_options(self):
+        pass
+
+    def _do_command(self):
+        # list status and all reasons it is not valid
+
+        self.sorter = inj.require(inj.CERT_SORTER,
+                self.product_dir, self.entitlement_dir, self.cp)
+
+        print("+-------------------------------------------+")
+        print("   " + _("System Status Details"))
+        print("+-------------------------------------------+")
+
+        if not self.is_registered():
+            print(_("Overall Status: %s\n") % _("Unknown"))
+            return
+
+        overall_status = self.sorter.get_system_status()
+        reasons = self.sorter.reasons.get_name_message_map()
+        print(_("Overall Status: %s\n") % overall_status)
+
+        columns = get_terminal_width()
+        for name in reasons:
+            print format_name(name + ':', 0, columns)
+            for message in reasons[name]:
+                print '- %s' % format_name(message, 2, columns)
+            print ''
+
+
 class ManagerCLI(CLI):
 
     def __init__(self):
         commands = [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand,
                     SubscribeCommand, UnSubscribeCommand, FactsCommand,
                     IdentityCommand, OwnersCommand, RefreshCommand, CleanCommand,
-                    RedeemCommand, ReposCommand, ReleaseCommand,
+                    RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
                     VersionCommand, RemoveCommand, AttachCommand, PluginsCommand]
         CLI.__init__(self, command_classes=commands)
