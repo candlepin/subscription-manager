@@ -15,12 +15,13 @@
 # in this software or its documentation.
 #
 
-import logging
 import gettext
-_ = gettext.gettext
+import logging
 
 from certlib import ConsumerIdentity, DataLib
 from subscription_manager.facts import Facts
+
+_ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
 

@@ -189,7 +189,6 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         # module as the module we pass
         class PluginClass(base_plugin.SubManPlugin):
             __module__ = "mock_module"
-            pass
 
         mock_module.PluginClass = PluginClass
 
@@ -215,7 +214,6 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         # module as the module we pass
         class PluginClass(base_plugin.SubManPlugin):
             __module__ = "mock_module"
-            pass
 
         mock_module.PluginClass = PluginClass
         # this config is empty, so we will fail to read its config
@@ -244,7 +242,6 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         # module as the module we pass
         class PluginClass(base_plugin.SubManPlugin):
             __module__ = "mock_module"
-            pass
 
         # unused in this case
         mock_conf_instance.plugin_key = PluginClass.get_plugin_key()
@@ -282,7 +279,6 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         # module as the module we pass
         class PluginClass(base_plugin.SubManPlugin):
             __module__ = "mock_module"
-            pass
 
         # we validate the plugins_conf plugin key matches...
         mock_conf_instance.plugin_key = PluginClass.get_plugin_key()
@@ -801,9 +797,9 @@ class TestBaseConduit(unittest.TestCase):
 
 class TestVersionChecks(unittest.TestCase):
     def test_parse_version(self):
-        maj, min = plugins.parse_version("1.0")
-        self.assertEquals(1, maj)
-        self.assertEquals(0, min)
+        maj_ver, min_ver = plugins.parse_version("1.0")
+        self.assertEquals(1, maj_ver)
+        self.assertEquals(0, min_ver)
 
     def test_api_versions_equal(self):
         self.assertTrue(plugins.api_version_ok("1.0", "1.0"))
@@ -912,7 +908,6 @@ class TestPluginImportException(BasePluginException):
 
 class TestPluginModuleImportException(TestPluginImportException):
     e = plugins.PluginModuleImportException
-    pass
 
 
 class TestPluginModuleImportApiVersionMissingException(TestPluginImportException):

@@ -158,48 +158,48 @@ class TestMachineTypeColumn(BaseColumnTest):
 class TestQuantitySelectionColumnTests(unittest.TestCase):
 
     def test__update_cell_based_on_data_clears_cell_when_row_has_children(self):
-        column, tree_model, iter = self._setup_column(1, False)
-        tree_model.add_map(iter, self._create_store_map(1, False))
+        column, tree_model, tree_iter = self._setup_column(1, False)
+        tree_model.add_map(tree_iter, self._create_store_map(1, False))
 
         column.quantity_renderer.set_property("text", "22")
-        column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, iter)
+        column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, tree_iter)
 
         self.assertEquals("", column.quantity_renderer.get_property("text"))
 
     def test_update_cell_based_on_data_does_not_clear_cell_when_row_has_no_children(self):
-        column, tree_model, iter = self._setup_column(1, False)
+        column, tree_model, tree_iter = self._setup_column(1, False)
 
         # Manually set the text value here to make sure that the value is not reset.
         column.quantity_renderer.set_property("text", "12")
-        column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, iter)
+        column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, tree_iter)
 
         self.assertNotEquals("", column.quantity_renderer.get_property("text"))
 
     def test_editor_is_disabled_when_not_multi_entitlement(self):
         is_multi_entitled = False
-        column, tree_model, iter = self._setup_column(1, is_multi_entitled)
-        column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, iter)
+        column, tree_model, tree_iter = self._setup_column(1, is_multi_entitled)
+        column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, tree_iter)
         self.assertEquals(is_multi_entitled, column.quantity_renderer.get_property("editable"))
 
     def test_editor_is_enabled_when_multi_entitlement(self):
         is_multi_entitled = True
-        column, tree_model, iter = self._setup_column(1, is_multi_entitled)
-        column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, iter)
+        column, tree_model, tree_iter = self._setup_column(1, is_multi_entitled)
+        column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, tree_iter)
         self.assertEquals(is_multi_entitled, column.quantity_renderer.get_property("editable"))
 
     def test_value_not_changed_when_editor_has_invalid_text(self):
         expected_initial_value = 12
-        column, tree_model, iter = self._setup_column(expected_initial_value, False)
-        column._on_edit(column.quantity_renderer, tree_model.get_path(iter), "aaa",
+        column, tree_model, tree_iter = self._setup_column(expected_initial_value, False)
+        column._on_edit(column.quantity_renderer, tree_model.get_path(tree_iter), "aaa",
                         tree_model)
         self.assertEquals(expected_initial_value,
-                          tree_model.get_value(iter, column.quantity_store_idx))
+                          tree_model.get_value(tree_iter, column.quantity_store_idx))
 
     def test_value_changed_when_editor_has_valid_text(self):
-        column, tree_model, iter = self._setup_column(1, False)
-        column._on_edit(column.quantity_renderer, tree_model.get_path(iter), "20",
+        column, tree_model, tree_iter = self._setup_column(1, False)
+        column._on_edit(column.quantity_renderer, tree_model.get_path(tree_iter), "20",
                         tree_model)
-        self.assertEquals(20, tree_model.get_value(iter, column.quantity_store_idx))
+        self.assertEquals(20, tree_model.get_value(tree_iter, column.quantity_store_idx))
 
     def test_filter_spinner_value_only_allows_digits(self):
         self._run_filter_value_test("4", True)
@@ -226,10 +226,16 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
         self._run_filter_value_test("1", True, upper=10, lower=1)
         self._run_filter_value_test("10", True, upper=10, lower=1)
 
-    def _run_filter_value_test(self, test_input_value, is_allowed, upper=15, lower=1):
-        column, tree_model, iter = self._setup_column(1, True)
+    def test_filter_spinner_value_does_not_allow_non_multiples_of_increment(self):
+        self._run_filter_value_test("4", False, step_incr=3)
 
-        adjustment = gtk.Adjustment(upper=upper, lower=lower, value=7.0)
+    def test_filter_spinner_value_allows_multiples_of_increment(self):
+        self._run_filter_value_test("9", True, step_incr=3)
+
+    def _run_filter_value_test(self, test_input_value, is_allowed, upper=15, lower=1, step_incr=1):
+        column, tree_model, tree_iter = self._setup_column(1, True)
+
+        adjustment = gtk.Adjustment(upper=upper, lower=lower, value=7.0, step_incr=step_incr)
         # Simulate the editable created by the CellRendererSpin object.
         editable = gtk.SpinButton()
         editable.set_property("adjustment", adjustment)
@@ -252,6 +258,19 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
         tree_model = MappedTreeStore(self._create_store_map(int, bool))
         column = QuantitySelectionColumn("test-col", tree_model, tree_model['quantity'],
                                          tree_model['multi-entitlement'])
-        iter = tree_model.add_map(None, self._create_store_map(initial_quantity,
+        tree_iter = tree_model.add_map(None, self._create_store_map(initial_quantity,
                                                                inital_multi_entitlement))
-        return (column, tree_model, iter)
+        return (column, tree_model, tree_iter)
+
+    def test_increment_based_on_provided_data(self):
+        tree_model = MappedTreeStore({"quantity": int, "multi-entitlement": bool, "available_store": int,
+            "quantity_increment": str})
+        column = QuantitySelectionColumn("test-col", tree_model, tree_model['quantity'],
+                tree_model['multi-entitlement'], tree_model['available_store'],
+                tree_model['quantity_increment'])
+        tree_iter = tree_model.add_map(None, {"quantity": 15, "multi-entitlement": True,
+            "available_store": 15, "quantity_increment": 2})
+        column._update_cell_based_on_data(column, column.quantity_renderer, tree_model, tree_iter)
+        adj = column.quantity_renderer.get_property("adjustment")
+        self.assertEquals(2, int(adj.get_property("step-increment")))
+        self.assertEquals(2, int(adj.get_property("lower")))

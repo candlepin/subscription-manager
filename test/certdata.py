@@ -275,6 +275,7 @@ Content:
 	Enabled: True
 	Expires: 200
 	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -286,6 +287,7 @@ Content:
 	Enabled: True
 	Expires: 0
 	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -297,6 +299,7 @@ Content:
 	Enabled: True
 	Expires: 0
 	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -308,6 +311,7 @@ Content:
 	Enabled: True
 	Expires: 0
 	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -319,6 +323,7 @@ Content:
 	Enabled: False
 	Expires: 600
 	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -330,6 +335,7 @@ Content:
 	Enabled: True
 	Expires: 
 	Required Tags: TAG1, TAG2
+	Arches: 
 """
 
 ENTITLEMENT_CERT_V3_0_OUTPUT = """
@@ -385,6 +391,7 @@ Content:
 	Enabled: True
 	Expires: 200
 	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -396,6 +403,7 @@ Content:
 	Enabled: True
 	Expires: 3600
 	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -407,6 +415,7 @@ Content:
 	Enabled: False
 	Expires: 3600
 	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -418,6 +427,7 @@ Content:
 	Enabled: False
 	Expires: 600
 	Required Tags: 
+	Arches: 
 """
 
 PRODUCT_CERT_V1_0_OUTPUT = """

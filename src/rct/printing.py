@@ -87,6 +87,7 @@ class ContentPrinter(object):
         s.append("\t%s: %s" % (_("Enabled"), xstr(content.enabled)))
         s.append("\t%s: %s" % (_("Expires"), xstr(content.metadata_expire)))
         s.append("\t%s: %s" % (_("Required Tags"), ", ".join(content.required_tags)))
+        s.append("\t%s: %s" % (_("Arches"), ", ".join(content.arches)))
 
         return '\n'.join(s)
 
@@ -193,14 +194,14 @@ class CertificatePrinterFactory(object):
 
 
 def type_to_string(cert):
-        if isinstance(cert, EntitlementCertificate):
-            return _("Entitlement Certificate")
-        elif isinstance(cert, ProductCertificate):
-            return _("Product Certificate")
-        elif isinstance(cert, IdentityCertificate):
-            return _("Identity Certificate")
-        else:
-            return _("Unknown Certificate Type")
+    if isinstance(cert, EntitlementCertificate):
+        return _("Entitlement Certificate")
+    elif isinstance(cert, ProductCertificate):
+        return _("Product Certificate")
+    elif isinstance(cert, IdentityCertificate):
+        return _("Identity Certificate")
+    else:
+        return _("Unknown Certificate Type")
 
 
 def printc(cert, **kwargs):

@@ -45,6 +45,15 @@ class Reasons(object):
                         result[s].append(reason['message'])
         return result
 
+    def get_name_message_map(self):
+        result = {}
+        for reason in self.reasons:
+            if reason['attributes']['name'] not in result:
+                result[reason['attributes']['name']] = []
+            if reason['message'] not in result[reason['attributes']['name']]:
+                result[reason['attributes']['name']].append(reason['message'])
+        return result
+
     def get_stack_subscriptions(self, stack_id):
         result = set([])
         for s in self.sorter.valid_entitlement_certs:

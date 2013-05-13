@@ -76,8 +76,8 @@ class ActivationKeyScreenTests(SubManFixture):
 
     def test_split_activation_keys(self):
         expected = ['hello', 'world', 'how', 'are', 'you']
-        input = "hello, world,how  are , you"
-        result = self.screen._split_activation_keys(input)
+        key_input = "hello, world,how  are , you"
+        result = self.screen._split_activation_keys(key_input)
         self.assertEquals(expected, result)
 
 

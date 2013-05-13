@@ -13,20 +13,23 @@
 # in this software or its documentation.
 #
 
-import re
-import logging
-from socket import error as socket_error
-from M2Crypto import SSL
-import gobject
 import datetime
+import gettext
+import logging
+import re
+from socket import error as socket_error
+
+from M2Crypto import SSL
+
 import dbus
+import gobject
 import gtk
 import gtk.glade
 
-import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
 import rhsm.connection as connection
+
 from subscription_manager.gui import messageWindow
 from subscription_manager import managerlib
 

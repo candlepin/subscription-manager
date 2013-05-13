@@ -12,9 +12,11 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import gettext
+
 import gobject
 import gtk
-import gettext
+
 _ = gettext.gettext
 
 

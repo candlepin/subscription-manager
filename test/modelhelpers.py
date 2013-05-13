@@ -41,12 +41,16 @@ def md5sum(buf):
     return m.hexdigest()
 
 
-def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=[],
-                attributes=[], productAttributes=[], start_end_range=None):
+def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=None,
+                attributes=None, productAttributes=None, calculatedAttributes=None,
+                start_end_range=None):
     """
     Returns a hash representing a pool. Used to simulate the JSON returned
     from Candlepin.
     """
+    provided_products = provided_products or []
+    attributes = attributes or []
+    productAttributes = productAttributes or []
     start_date = datetime.now(GMT()) - timedelta(days=365)
     end_date = datetime.now(GMT()) + timedelta(days=365)
     if start_end_range:
@@ -62,7 +66,7 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
 
     pool_id = md5sum(product_id)
 
-    return {
+    to_return = {
             'productName': product_name,
             'productId': product_id,
             'quantity': quantity,
@@ -84,6 +88,11 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
             'attributes': attributes,
             'productAttributes': productAttributes,
         }
+
+    if calculatedAttributes is not None:
+        to_return['calculatedAttributes'] = calculatedAttributes
+
+    return to_return
 
 
 def create_attribute_list(attribute_map):

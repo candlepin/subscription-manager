@@ -50,23 +50,23 @@ class ReasonsTests(unittest.TestCase):
                     ent_id="SomeSubId")]
         reason_list = []
         reason_list.append(self.build_reason('NOTCOVERED',
-            'The system does not have subscriptions that cover RAM Limiting Product.',
+            'Not covered by a valid subscription.',
             {'product_id': '801',
              'name': 'RAM Limiting Product'}))
         reason_list.append(self.build_ent_reason_with_attrs('CORES',
-            'Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM) only covers 16 of 32 cores.',
+            'Only covers 16 of 32 cores.',
             '32', '16', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
             stack='multiattr-stack-test'))
         reason_list.append(self.build_ent_reason_with_attrs('SOCKETS',
-            'Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM) only covers 4 of 8 sockets.',
+            'Only covers 4 of 8 sockets.',
             '8', '4', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
             stack='multiattr-stack-test'))
         reason_list.append(self.build_ent_reason_with_attrs('RAM',
-            'Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM) only covers 8GB of 31GB of RAM.',
+            'Only covers 8GB of 31GB of RAM.',
             '31', '8', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
             stack='multiattr-stack-test'))
         reason_list.append(self.build_ent_reason_with_attrs('ARCH',
-            'Awesome OS for ppc64 covers architecture ppc64 but the system is x86_64.',
+            'Covers architecture ppc64 but the system is x86_64.',
             'x86_64', 'ppc64', name='Awesome OS for ppc64',
             ent='ff8080813e468fd8013e4694a4921179'))
 
@@ -77,12 +77,10 @@ class ReasonsTests(unittest.TestCase):
         #pref arch mismatch next
         messages = self.sorter.reasons.get_reasons_messages()
         self.assertEquals(5, len(messages))
-        expected = "The system does not have subscriptions " + \
-                "that cover RAM Limiting Product."
+        expected = "Not covered by a valid subscription."
         self.assertEquals(expected, messages[0][1])
         self.assertEquals("RAM Limiting Product", messages[0][0])
-        expected = "Awesome OS for ppc64 covers architecture " + \
-                "ppc64 but the system is x86_64."
+        expected = "Covers architecture ppc64 but the system is x86_64."
         self.assertEquals(expected, messages[1][1])
         self.assertEquals("Awesome OS for ppc64", messages[1][0])
         #make sure name fallback works
@@ -90,8 +88,7 @@ class ReasonsTests(unittest.TestCase):
             del reason['attributes']['name']
         messages = self.sorter.reasons.get_reasons_messages()
         self.assertEquals(5, len(messages))
-        expected = "The system does not have subscriptions " + \
-                "that cover RAM Limiting Product."
+        expected = "Not covered by a valid subscription."
         self.assertEquals(expected, messages[0][1])
         self.assertEquals("Product 801", messages[0][0])
 
@@ -109,18 +106,14 @@ class ReasonsTests(unittest.TestCase):
         messages = self.sorter.reasons.get_product_reasons(PROD_4)
         self.assertEquals(3, len(messages))
         expectations = []
-        expectations.append("Multi-Attribute Stackable (16 "
-                "cores, 4 sockets, 8GB RAM) only covers 16 of 32 cores.")
-        expectations.append("Multi-Attribute Stackable (16 "
-                "cores, 4 sockets, 8GB RAM) only covers 8GB of 31GB of RAM.")
-        expectations.append("Multi-Attribute Stackable "
-                "(16 cores, 4 sockets, 8GB RAM) only covers 4 of 8 sockets.")
+        expectations.append("Only covers 16 of 32 cores.")
+        expectations.append("Only covers 8GB of 31GB of RAM.")
+        expectations.append("Only covers 4 of 8 sockets.")
         for expected in expectations:
             self.assertTrue(expected in messages)
         messages = self.sorter.reasons.get_product_reasons(PROD_2)
         self.assertEquals(1, len(messages))
-        expected = "Awesome OS for ppc64 covers architecture " + \
-            "ppc64 but the system is x86_64."
+        expected = "Covers architecture ppc64 but the system is x86_64."
         self.assertEquals(expected, messages[0])
         reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6',
                 prod=INST_PID_1, name="Awesome OS for x86_64")
@@ -134,8 +127,7 @@ class ReasonsTests(unittest.TestCase):
         self.assertEquals(3, len(sub_reason_map[ENT_ID_4]))
         self.assertEquals(0, len(sub_reason_map[ENT_ID_1]))
         self.assertEquals(1, len(sub_reason_map[ENT_ID_2]))
-        expected = "Awesome OS for ppc64 covers architecture " + \
-                "ppc64 but the system is x86_64."
+        expected = "Covers architecture ppc64 but the system is x86_64."
         actual = sub_reason_map[ENT_ID_2][0]
         self.assertEquals(expected, actual)
 
@@ -159,6 +151,15 @@ class ReasonsTests(unittest.TestCase):
         self.assertEquals(1, len(result))
         expected = ('testing', 'some message')
         self.assertEquals(expected, result[0])
+
+    def test_get_name_message_map(self):
+        name_message_map = self.sorter.reasons.get_name_message_map()
+        self.assertEquals(3, len(name_message_map))
+        expected = ['Only covers 16 of 32 cores.',
+            'Only covers 4 of 8 sockets.',
+            'Only covers 8GB of 31GB of RAM.']
+        self.assortEquals(expected, name_message_map[
+            'Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)'])
 
     def set_up_duplicates(self):
         self.sorter.reasons.reasons = []
@@ -187,3 +188,7 @@ class ReasonsTests(unittest.TestCase):
         return {'key': key,
                 'message': message,
                 'attributes': attrs}
+
+    def assortEquals(self, list_a, list_b):
+        self.assertTrue(isinstance(list_a, list) and isinstance(list_b, list))
+        self.assertEquals(sorted(list_a), sorted(list_b))

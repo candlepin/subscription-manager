@@ -10,7 +10,6 @@ import stubs
 from subscription_manager.gui import managergui, registergui
 from subscription_manager.injection import provide, IDENTITY, CERT_SORTER, \
         PRODUCT_DATE_RANGE_CALCULATOR
-from fixture import SubManFixture
 
 
 class TestManagerGuiMainWindow(SubManFixture):

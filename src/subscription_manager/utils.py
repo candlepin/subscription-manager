@@ -13,26 +13,28 @@
 # in this software or its documentation.
 #
 
-import re
+import gettext
 import logging
-from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
-    DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
+import os
+import re
+import signal
+from urlparse import urlparse
+
+from M2Crypto.SSL import SSLError
+
 from subscription_manager.branding import get_branding
 from subscription_manager.certlib import ConsumerIdentity
-from urlparse import urlparse
-import os
-import signal
+from subscription_manager.hwprobe import ClassicCheck
+from rhsm.connection import UEPConnection, RestlibException, GoneException
+from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
+    DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
+from rhsm.version import Versions
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
-gettext.textdomain("rhsm")
 
-from rhsm.connection import UEPConnection, RestlibException, GoneException
-from subscription_manager.hwprobe import ClassicCheck
-from rhsm.version import Versions
-from M2Crypto.SSL import SSLError
+gettext.textdomain("rhsm")
 
 
 def remove_scheme(uri):
@@ -298,8 +300,8 @@ def get_terminal_width():
         def ioctl_GWINSZ(fd):
             try:
                 import fcntl
-                import termios
                 import struct
+                import termios
                 cr = struct.unpack('hh',
                                 fcntl.ioctl(fd,
                                     termios.TIOCGWINSZ,
@@ -322,7 +324,8 @@ def get_terminal_width():
     if dim:
         return int(dim[1])
     else:
-        return None
+        # This allows tests to run
+        return 1000
 
 
 def get_client_versions():

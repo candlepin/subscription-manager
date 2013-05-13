@@ -13,12 +13,14 @@
 # in this software or its documentation.
 #
 
-import logging
 import gettext
+import logging
 import os
+
 from subscription_manager.gui import widgets
 
 _ = gettext.gettext
+
 log = logging.getLogger('rhsm-app.' + __name__)
 
 prefix = os.path.dirname(__file__)

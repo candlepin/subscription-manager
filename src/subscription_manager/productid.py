@@ -15,20 +15,20 @@
 # in this software or its documentation.
 #
 
-import os
-import types
-import logging
-import simplejson as json
 import gettext
-import yum
-_ = gettext.gettext
-
 from gzip import GzipFile
-from rhsm.certificate import create_from_pem
-from subscription_manager.certdirectory import Directory, ProductDirectory
+import logging
+import os
+import simplejson as json
+import types
+import yum
 
+from rhsm.certificate import create_from_pem
+
+from subscription_manager.certdirectory import Directory, ProductDirectory
 from subscription_manager import plugins
 
+_ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 
 

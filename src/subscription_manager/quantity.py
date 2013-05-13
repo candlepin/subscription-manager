@@ -33,6 +33,14 @@ class QuantityDefaultValueCalculator(object):
         self.current_entitlements = current_entitlements
 
     def calculate(self, pool):
+        if 'calculatedAttributes' in pool:
+            calculated_attrs = pool['calculatedAttributes']
+
+            if 'suggested_quantity' in calculated_attrs:
+                return int(calculated_attrs['suggested_quantity'])
+            else:
+                return 1
+
         product_attrs = self._flatten_attributes(pool, 'productAttributes')
 
         if not allows_multi_entitlement(pool):

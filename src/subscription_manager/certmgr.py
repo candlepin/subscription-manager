@@ -16,17 +16,18 @@
 # in this software or its documentation.
 #
 
-from subscription_manager.certlib import CertLib, ActionLock, HealingLib, IdentityCertLib
-from subscription_manager.repolib import RepoLib
-from subscription_manager.factlib import FactLib
-from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
+import gettext
+import logging
 
 from rhsm.connection import GoneException, ExpiredIdentityCertException
 
-import logging
+from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
+from subscription_manager.certlib import CertLib, ActionLock, HealingLib, IdentityCertLib
+from subscription_manager.factlib import FactLib
+from subscription_manager.repolib import RepoLib
+
 log = logging.getLogger('rhsm-app.' + __name__)
 
-import gettext
 _ = gettext.gettext
 
 

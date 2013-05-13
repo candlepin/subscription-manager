@@ -9,11 +9,10 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
-import os
 import logging
-
 from logging import Formatter
 from logging.handlers import RotatingFileHandler
+import os
 
 CERT_LOG = '/var/log/rhsm/rhsmcertd.log'
 

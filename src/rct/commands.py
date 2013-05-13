@@ -23,7 +23,7 @@ _ = gettext.gettext
 class RCTCliCommand(AbstractCLICommand):
     FILE_ARG_IDX = 0
 
-    def __init__(self, name="cli", aliases=[], shortdesc=None, primary=False):
+    def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
         AbstractCLICommand.__init__(self, name=name, aliases=aliases,
                 shortdesc=shortdesc, primary=primary)
 

@@ -14,8 +14,9 @@
 # in this software or its documentation.
 #
 
+from datetime import datetime
 import getpass
-import libxml2
+import gettext
 import logging
 import os
 import re
@@ -24,26 +25,27 @@ import simplejson as json
 import subprocess
 import sys
 import traceback
-from datetime import datetime
+
+import libxml2
 from M2Crypto.SSL import SSLError
+
 from rhn import rpclib
 
 import rhsm.config
 from rhsm.connection import UEPConnection, RemoteServerException, RestlibException
 
-import gettext
 _ = gettext.gettext
 
 _LIBPATH = "/usr/share/rhsm"
 if _LIBPATH not in sys.path:
     sys.path.append(_LIBPATH)
 
-from subscription_manager import repolib
-from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.certdirectory import ProductDirectory
+from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.cli import systemExit
 from subscription_manager.i18n_optparse import OptionParser, \
-     WrappedIndentedHelpFormatter, USAGE
+        USAGE, WrappedIndentedHelpFormatter
+from subscription_manager import repolib
 from subscription_manager.utils import parse_server_info, ServerUrlParseError
 
 _RHNLIBPATH = "/usr/share/rhn"
@@ -559,13 +561,13 @@ class MigrationEngine(object):
         except RemoteServerException, e:
             systemExit(-1, not_supported)
         except RestlibException, e:
-                if e.code == 404:
-                    # no need to die, just skip it
-                    print not_supported
-                    return None
-                else:
-                    # server supports it but something went wrong, die.
-                    raise e
+            if e.code == 404:
+                # no need to die, just skip it
+                print not_supported
+                return None
+            else:
+                # server supports it but something went wrong, die.
+                raise e
 
         # Create the sla tuple before appending the empty string to the list of
         # valid slas.

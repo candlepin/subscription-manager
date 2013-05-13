@@ -13,12 +13,13 @@
 #
 
 import subscription_manager.injection as inj
-from subscription_manager.identity import Identity
+
+from subscription_manager.cache import ProductStatusCache, StatusCache
 from subscription_manager.cert_sorter import CertSorter
-from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
-from subscription_manager.cache import StatusCache, ProductStatusCache
+from subscription_manager.identity import Identity
+from subscription_manager.validity import ValidProductDateRangeCalculator
 
 
 def init_dep_injection():

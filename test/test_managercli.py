@@ -843,6 +843,13 @@ class TestNoneWrap(unittest.TestCase):
 
 
 class TestColumnize(unittest.TestCase):
+    def setUp(self):
+        self.old_method = managercli.get_terminal_width
+        managercli.get_terminal_width = Mock(return_value=500)
+
+    def tearDown(self):
+        managercli.get_terminal_width = self.old_method
+
     def test_columnize(self):
         result = columnize(["Hello:", "Foo:"], _echo, "world", "bar")
         self.assertEquals(result, "Hello: world\nFoo:   bar")
@@ -854,3 +861,55 @@ class TestColumnize(unittest.TestCase):
     def test_columnize_with_empty_list(self):
         result = columnize(["Hello:", "Foo:"], _echo, [], "bar")
         self.assertEquals(result, "Hello: \nFoo:   bar")
+
+    def test_columnize_with_small_term(self):
+        result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
+                _echo, "This is a testing string", "This_is_another_testing_string")
+        expected = 'Hello\nHello\nHello\nHello\n:     This\n      is a\n      ' \
+                'testin\n      g\n      string\nFoo\nFoo\nFoo\nFoo:  ' \
+                'This_i\n      s_anot\n      her_te\n      sting_\n      string'
+        self.assertNotEquals(result, expected)
+        managercli.get_terminal_width = Mock(return_value=12)
+        result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
+                _echo, "This is a testing string", "This_is_another_testing_string")
+        self.assertEquals(result, expected)
+
+    def test_format_name_no_break_no_indent(self):
+        result = format_name('testing string testing st', 0, 10)
+        expected = 'testing\nstring\ntesting st'
+        self.assertEquals(result, expected)
+
+    def test_format_name_no_break(self):
+        result = format_name('testing string testing st', 1, 11)
+        expected = 'testing\n string\n testing st'
+        self.assertEquals(result, expected)
+        result = format_name('testing string testing st', 2, 12)
+        expected = 'testing\n  string\n  testing st'
+        self.assertEquals(result, expected)
+
+    def test_format_name_break(self):
+        result = format_name('a' * 10, 0, 10)
+        expected = 'a' * 10
+        self.assertEquals(result, expected)
+        result = format_name('a' * 11, 0, 10)
+        expected = 'a' * 10 + '\na'
+        self.assertEquals(result, expected)
+        result = format_name('a' * 11 + ' ' + 'a' * 9, 0, 10)
+        expected = 'a' * 10 + '\na\n' + 'a' * 9
+        self.assertEquals(result, expected)
+
+    def test_format_name_break_indent(self):
+        result = format_name('a' * 20, 1, 10)
+        expected = 'a' * 9 + '\n ' + 'a' * 9 + '\n ' + 'aa'
+        self.assertEquals(result, expected)
+
+    def test_columnize_multibyte(self):
+        multibyte_str = u"このシステム用に"
+        managercli.get_terminal_width = Mock(return_value=40)
+        result = columnize([multibyte_str], _echo, multibyte_str)
+        expected = u"このシステム用に このシステム用に"
+        self.assertEquals(result, expected)
+        managercli.get_terminal_width = Mock(return_value=14)
+        result = columnize([multibyte_str], _echo, multibyte_str)
+        expected = u"このシ\nステム\n用に   このシ\n       ステム\n       用に"
+        self.assertEquals(result, expected)

@@ -14,6 +14,7 @@
 #
 
 import os
+
 import gtk
 import gtk.glade
 

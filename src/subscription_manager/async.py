@@ -15,8 +15,8 @@
 # in this software or its documentation.
 #
 
-import threading
 import Queue
+import threading
 
 import gobject
 
