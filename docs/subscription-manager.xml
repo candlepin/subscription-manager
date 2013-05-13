@@ -302,9 +302,9 @@
 		<orderedlist>
 			<listitem>
 				<para>
-					Launch the Subscription Manager UI.
+					Launch the Subscription Manager UI. This must be run as root.
 				</para>
-				<screen>subscription-manager-gui</screen>
+				<screen>[root@server ~]# subscription-manager-gui</screen>
 			</listitem>
 				<listitem>
 					<para>
@@ -335,11 +335,17 @@
 				<para>
 					For example:
 				</para>
-				<screen>[root@server ~]# rpm -ivh http://sam.example.com/pub/candlepin-cert-consumer-sam.example.com-1.0-1.noarch.rpm</screen>
+				
+				<!--
+				code is 14 chars too long
+				adding break
+				-->
+<screen>[root@server ~]# rpm -ivh \
+     http://sam.example.com/pub/candlepin-cert-consumer-sam.example.com-1.0-1.noarch.rpm</screen>
 			</listitem>
 			<listitem>
 				<para>
-					Launch the Subscription Manager UI.
+					Launch the Subscription Manager UI. This must be run as root.
 				</para>
 			</listitem>
 			<listitem>
@@ -377,7 +383,12 @@
 			Install the configuration RPM to point Subscription Manager to the subscription application. 
 					For example:
 				</para>
-				<screen>[root@server ~]# rpm -ivh http://sam.example.com/pub/candlepin-cert-consumer-sam.example.com-1.0-1.noarch.rpm</screen>
+				<!--
+				code is 14 chars too long
+				adding break
+				-->
+<screen>[root@server ~]# rpm -ivh \
+     http://sam.example.com/pub/candlepin-cert-consumer-sam.example.com-1.0-1.noarch.rpm</screen>
 			</listitem>
 			<listitem>
 				<para>
