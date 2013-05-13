@@ -39,7 +39,8 @@ _ = gettext.gettext
 WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
 
 prefix = os.path.dirname(__file__)
-WARNING_IMG = os.path.join(prefix, "data/icons/expiring.svg")
+WARNING_IMG = os.path.join(prefix, "data/icons/partial.svg")
+EXPIRING_IMG = os.path.join(prefix, "data/icons/expiring.svg")
 EXPIRED_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 
 
@@ -210,16 +211,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         return len(result)
 
     def image_ranks_higher(self, old_image, new_image):
-        if old_image == new_image:
-            return False
-
-        if old_image is None and new_image:
-            return True
-
-        if old_image == WARNING_IMG and new_image == EXPIRED_IMG:
-            return True
-
-        return False
+        images = [None, WARNING_IMG, EXPIRING_IMG, EXPIRED_IMG]
+        return images.index(new_image) > images.index(old_image)
 
     def get_label(self):
         return _("My Subscriptions")
@@ -343,6 +336,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             return EXPIRED_IMG
 
         if date_range.end() - timedelta(days=WARNING_DAYS) < now:
+            return EXPIRING_IMG
+
+        if cert.subject and 'CN' in cert.subject and \
+                self.cs.reasons.get_subscription_reasons(cert.subject['CN']):
             return WARNING_IMG
 
         return None
