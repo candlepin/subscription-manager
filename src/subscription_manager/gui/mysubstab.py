@@ -259,8 +259,18 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                         for product in cert.products]
 
         reasons = []
-        if cert.subject and 'CN' in cert.subject:
+        if self.cs.are_reasons_supported():
             reasons = self.cs.reasons.get_subscription_reasons(cert.subject['CN'])
+            if not reasons:
+                if cert in self.cs.valid_entitlement_certs:
+                    reasons.append(_('Subscription is current.'))
+                else:
+                    if cert.valid_range.end() < datetime.now(GMT()):
+                        reasons.append(_('Subscription is expired.'))
+                    else:
+                        reasons.append(_('Subscription has not begun.'))
+        else:
+            reasons.append(_('Subscription management service doesn\'t support Status Details.'))
 
         if str(order.virt_only) == "1":
             virt_only = _("Virtual")
