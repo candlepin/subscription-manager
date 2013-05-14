@@ -82,7 +82,7 @@ class ZipExtractAll(ZipFile):
         return results
 
     def _open_excl(self, path):
-        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL), 'w')
+        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT), 'w')
 
     def _write_file(self, output_path, archive_path):
         outfile = self._open_excl(output_path)
