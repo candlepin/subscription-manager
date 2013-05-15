@@ -23,6 +23,8 @@ import gtk
 from rhsm.certificate import GMT
 
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
+import subscription_manager.injection as inj
+from subscription_manager.injection import require, IDENTITY
 from subscription_manager.certlib import Disconnected
 from subscription_manager.injection import IDENTITY, require
 
@@ -56,7 +58,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.parent_win = parent_win
         self.entitlement_dir = ent_dir
         self.product_dir = prod_dir
-
         self.sub_details = widgets.ContractSubDetailsWidget(prod_dir)
 
         # Put the details widget in the middle
@@ -157,6 +158,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         Pulls the entitlement certificates and updates the subscription model.
         """
         self.store.clear()
+        self.cs = inj.require(inj.CERT_SORTER,
+                self.product_dir, self.entitlement_dir, self.backend.uep)
         sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
         for idx, group in enumerate(sorter.groups):
             self._add_group(idx, group)
@@ -253,6 +256,14 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         products = [(product.name, product.id)
                         for product in cert.products]
 
+        reasons = []
+        if self.cs.are_reasons_supported():
+            reasons = self.cs.reasons.get_subscription_reasons(cert.subject['CN'])
+            if not reasons:
+                reasons.append(_('Subscription is current.'))
+        else:
+            reasons.append(_('Subscription management service doesn\'t support Status Details.'))
+
         if str(order.virt_only) == "1":
             virt_only = _("Virtual")
         else:
@@ -273,7 +284,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                               support_level=order.service_level or "",
                               support_type=order.service_type or "",
                               products=products,
-                              sku=order.sku)
+                              sku=order.sku,
+                              reasons=reasons)
 
     def on_no_selection(self):
         """
