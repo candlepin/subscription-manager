@@ -339,7 +339,8 @@ class InstalledProductsManager(CacheManager):
             prod = prod_cert.products[0]
             self.installed[prod.id] = {'productId': prod.id,
                     'productName': prod.name,
-                    'version': prod.version
+                    'version': prod.version,
+                    'arch': ','.join(prod.architectures)
                     }
 
     def to_dict(self):
@@ -359,12 +360,8 @@ class InstalledProductsManager(CacheManager):
         if len(cached.keys()) != len(self.installed.keys()):
             return True
 
-        for key in self.installed.keys():
-            if key not in cached:
-                return True
-            if self.installed[key] != cached[key]:
-                return True
-
+        if cached != self.installed:
+            return True
         return False
 
     def format_for_server(self):

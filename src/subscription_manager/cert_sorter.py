@@ -22,6 +22,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
+from subscription_manager.cache import InstalledProductsManager
 
 import gettext
 _ = gettext.gettext
@@ -120,8 +121,19 @@ class CertSorter(object):
         if not self.is_registered():
             log.debug("Unregistered, skipping server compliance check.")
             return
-        # TODO: handle temporarily disconnected use case / caching
 
+        # These may help with virt bugs
+        # Refreshes most/all data between cli/server
+        #certmgr = CertManager(uep=self.uep)
+        #certmgr.update()
+
+        # Update installed product information so everything is
+        # accounted for.  Time expensive, maybe we only need to
+        # sync once?
+        installed_mgr = InstalledProductsManager()
+        installed_mgr.update_check(self.uep, self.identity.uuid)
+
+        # TODO: handle temporarily disconnected use case / caching
         status_cache = inj.require(inj.STATUS_CACHE)
         status = status_cache.load_status(self.uep, self.identity.uuid)
         if status is None:

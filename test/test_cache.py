@@ -197,9 +197,9 @@ class TestInstalledProductsCache(unittest.TestCase):
 
     def test_has_not_changed(self):
         cached = {
-                'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0'},
-                'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0'},
-                'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0'}
+                'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
+                'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
+                'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
         }
 
         self.mgr._read_cache = Mock(return_value=cached)

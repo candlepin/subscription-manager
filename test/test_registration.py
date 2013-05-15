@@ -59,4 +59,4 @@ class CliRegistrationTests(SubManFixture):
 
         cmd.main(['register', '--username=testuser1', '--password=password'])
 
-        self.assertEquals(1, cmd.installed_mgr.write_cache.call_count)
+        self.assertTrue(cmd.installed_mgr.write_cache.call_count > 0)
