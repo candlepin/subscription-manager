@@ -52,8 +52,14 @@ class ActionLock(Lock):
 
 class DataLib(object):
 
-    def __init__(self, lock=ActionLock(), uep=None):
+    def __init__(self, lock=None, uep=None):
         self.lock = lock
+
+        # Need to do this here rather than with a default argument to prevent
+        # circular dependency problems:
+        if not self.lock:
+            self.lock = ActionLock()
+
         self.uep = uep
 
     def update(self):
