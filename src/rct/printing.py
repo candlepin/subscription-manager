@@ -49,7 +49,6 @@ class OrderPrinter(object):
             return ''
 
         s = []
-        print order
         s.append("%s:" % _("Order"))
         s.append("\t%s: %s" % (_("Name"), xstr(order.name)))
         s.append("\t%s: %s" % (_("Number"), xstr(order.number)))
