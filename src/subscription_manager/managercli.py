@@ -1835,13 +1835,14 @@ class ReposCommand(CliCommand):
         for item in items:
             found = False
             for repo in repos:
-                if repo.id == item:
+                if repo.id == item or item == "*":
                     if repo['enabled'] != status:
                         repo['enabled'] = status
                         change_repos.append(repo)
                     repos_modified.append(repo.id)
                     found = True
-                    break
+                    if item != "*":
+                        break
             if not found:
                 rc = 1
                 print _("Error: %s is not a valid repo ID. "
