@@ -25,7 +25,7 @@ _rct()
         return 0
         ;;
     dump-manifest)
-        COMPREPLY=( $( compgen -f -o filenames -- "$cur" ) )
+        COMPREPLY=( $( compgen -f -o filenames -W "--force" -- "$cur" ) )
         return 0
         ;;
   esac

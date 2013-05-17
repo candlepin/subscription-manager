@@ -160,6 +160,8 @@ class CLI:
             return cmd.main()
         except InvalidCLIOptionError, error:
             print error
+        except Exception, e:
+            systemExit(-1, e)
 
 
 def systemExit(code, msgs=None):

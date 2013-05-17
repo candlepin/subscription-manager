@@ -82,7 +82,10 @@ class ZipExtractAll(ZipFile):
         return results
 
     def _open_excl(self, path):
-        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL), 'w')
+        try:
+            return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL), 'w')
+        except OSError:
+            raise Exception(_('File "%s" exists. Use -f to force overwriting the file.') % path)
 
     def _write_file(self, output_path, archive_path):
         outfile = self._open_excl(output_path)
@@ -101,7 +104,7 @@ class ZipExtractAll(ZipFile):
         elif os.path.islink(new_path):
             raise Exception(_('Unable to trace symbolic link.  Possibly circular linkage.'))
 
-    def extractall(self, location):
+    def extractall(self, location, overwrite=False):
         self._is_secure(location, location)
         for path_name in self.namelist():
             (directory, filename) = os.path.split(path_name)
@@ -109,8 +112,11 @@ class ZipExtractAll(ZipFile):
             self._is_secure(location, directory)
             if not os.path.exists(directory):
                 os.makedirs(directory)
-            self._is_secure(location, os.path.join(directory, filename))
-            self._write_file(os.path.join(directory, filename), path_name)
+            new_location = os.path.join(directory, filename)
+            self._is_secure(location, new_location)
+            if (os.path.exists(new_location) and overwrite):
+                os.remove(new_location)
+            self._write_file(new_location, path_name)
 
 
 class RCTManifestCommand(RCTCliCommand):
@@ -132,10 +138,10 @@ class RCTManifestCommand(RCTCliCommand):
         if not os.path.isfile(manifest_file):
             raise InvalidCLIOptionError(_("The specified manifest file does not exist."))
 
-    def _extract_manifest(self, location):
+    def _extract_manifest(self, location, overwrite=False):
         # Extract the outer file
         archive = ZipExtractAll(self._get_file_from_args(), 'r')
-        archive.extractall(location)
+        archive.extractall(location, overwrite)
 
         # now extract the inner file
         if location:
@@ -144,7 +150,7 @@ class RCTManifestCommand(RCTCliCommand):
             inner_file = self.INNER_FILE
 
         archive = ZipExtractAll(inner_file, 'r')
-        archive.extractall(location)
+        archive.extractall(location, overwrite)
 
         # Delete the intermediate file
         os.remove(inner_file)
@@ -280,14 +286,17 @@ class DumpManifestCommand(RCTManifestCommand):
 
         self.parser.add_option("--destination", dest="destination",
                                help=_("directory to extract the manifest to"))
+        self.parser.add_option("-f", "--force", action="store_true",
+                               dest="overwrite_files", default=False,
+                               help=_("overwrite files which may exist"))
 
     def _do_command(self):
         """
         Does the work that this command intends.
         """
         if self.options.destination:
-            self._extract_manifest(self.options.destination)
+            self._extract_manifest(self.options.destination, self.options.overwrite_files)
             print _("The manifest has been dumped to the %s directory") % self.options.destination
         else:
-            self._extract_manifest(os.getcwd())
+            self._extract_manifest(os.getcwd(), self.options.overwrite_files)
             print _("The manifest has been dumped to the current directory")

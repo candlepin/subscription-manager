@@ -100,6 +100,7 @@ class RCTManifestCommandTests(fixture.SubManFixture):
         #This makes sure there is a 'None' at 'self.options.destination'
         mancommand.options = mancommand
         mancommand.destination = None
+        mancommand.overwrite_files = False
 
         mancommand._do_command()
         self.assertTrue(os.path.exists(os.path.join(new_directory, "export")))
@@ -114,7 +115,23 @@ class RCTManifestCommandTests(fixture.SubManFixture):
         #This makes sure the temp directory is referenced at 'self.options.destination'
         mancommand.options = mancommand
         mancommand.destination = new_directory
+        mancommand.overwrite_files = False
 
+        mancommand._do_command()
+        self.assertTrue(os.path.exists(os.path.join(new_directory, "export")))
+        shutil.rmtree(new_directory)
+
+    def test_dump_manifest_directory_twice(self):
+        new_directory = tempfile.mkdtemp()
+        mancommand = DumpManifestCommand()
+        mancommand.args = [_build_valid_manifest()]
+
+        #This makes sure the temp directory is referenced at 'self.options.destination'
+        mancommand.options = mancommand
+        mancommand.destination = new_directory
+        mancommand.overwrite_files = True
+
+        mancommand._do_command()
         mancommand._do_command()
         self.assertTrue(os.path.exists(os.path.join(new_directory, "export")))
         shutil.rmtree(new_directory)
