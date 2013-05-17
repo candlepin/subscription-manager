@@ -30,10 +30,17 @@ import os
 _ = gettext.gettext
 
 prefix = os.path.dirname(__file__)
-VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
-PARTIAL_IMG = os.path.join(prefix, "data/icons/partial.svg")
-INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
-UNKNOWN_IMG = os.path.join(prefix, "data/icons/unknown.svg")
+alikins_mode = False
+if alikins_mode == True:
+    VALID_IMG = os.path.join(prefix, "data/icons/alt/pepperG.svg")
+    PARTIAL_IMG = os.path.join(prefix, "data/icons/alt/pepperY.svg")
+    INVALID_IMG = os.path.join(prefix, "data/icons/alt/pepperR.svg")
+    UNKNOWN_IMG = os.path.join(prefix, "data/icons/alt/pepperD.svg")
+else:
+    VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
+    PARTIAL_IMG = os.path.join(prefix, "data/icons/partial.svg")
+    INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
+    UNKNOWN_IMG = os.path.join(prefix, "data/icons/unknown.svg")
 
 ICONSET = {
     'green': gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 13, 13),
