@@ -55,7 +55,7 @@ class HandleGuiExceptionTests(unittest.TestCase):
         self.msg_with_url_and_formatting = "https://www.example.com %s"
         self.msg_with_markup = """<span foreground="blue" size="100">Blue text</span> is <i>cool</i>!"""
         utils.log = FakeLogger()
-        utils.errorWindow = FakeErrorWindow
+        utils.show_error_window = FakeErrorWindow
         # set a mock logger
 
     def test_hge(self):
@@ -67,7 +67,7 @@ class HandleGuiExceptionTests(unittest.TestCase):
     def test_hge_log_msg_none(self):
         e = FakeException()
         utils.log.set_expected_msg(self.msg)
-        utils.handle_gui_exception(e, self.msg, None, logMsg=None)
+        utils.handle_gui_exception(e, self.msg, None, log_msg=None)
         self.assertEqual(utils.log.expected_msg, self.msg)
 
     def test_hge_socket_error(self):
@@ -98,11 +98,11 @@ class HandleGuiExceptionTests(unittest.TestCase):
                                    self.msg, None)
         self.assertEqual(utils.log.expected_msg, self.msg)
 
-    def test_hge_restlib_exception_unformatted_msg_formatMsg_false(self):
+    def test_hge_restlib_exception_unformatted_msg_format_msg_false(self):
         utils.log.set_expected_msg(self.msg)
         utils.handle_gui_exception(connection.RestlibException(421, "whatever"),
                                    self.msg, None,
-                                   formatMsg=False)
+                                   format_msg=False)
 
     def test_hge_restlib_exception_formated_msg(self):
         utils.log.set_expected_msg(self.msg)
@@ -116,15 +116,15 @@ class HandleGuiExceptionTests(unittest.TestCase):
                                    self.msg_with_url, None)
         self.assertEqual(utils.log.expected_msg, self.msg)
 
-    # if we handle this okay, we can probably remove the formatMsg tests
-    def test_hge_restlib_exception_url_msg_with_formatting_formatMsg_false(self):
+    # if we handle this okay, we can probably remove the format_msg tests
+    def test_hge_restlib_exception_url_msg_with_formatting_format_msg_false(self):
         utils.handle_gui_exception(connection.RestlibException(404, "page not found"),
                                    self.msg_with_url_and_formatting, None,
-                                   formatMsg=False)
+                                   format_msg=False)
 
     def test_hge_restlib_exception_url_msg_500(self):
         utils.handle_gui_exception(connection.RestlibException(500, "internal server error"),
-                                   self.msg_with_url, None, formatMsg=True)
+                                   self.msg_with_url, None, format_msg=True)
 
     def test_hge_bad_certificate(self):
         utils.handle_gui_exception(connection.BadCertificateException("/road/to/nowhere"),
@@ -142,12 +142,12 @@ class HandleGuiExceptionTests(unittest.TestCase):
         utils.handle_gui_exception(FakeException(msg="something"),
                                    self.formatted_msg, None)
 
-    def test_hge_fake_exception_formatted_msg_formatMsg_false(self):
+    def test_hge_fake_exception_formatted_msg_format_msg_false(self):
         utils.handle_gui_exception(FakeException(msg="whatever"),
                                    self.formatted_msg, None,
-                                   formatMsg=False)
+                                   format_msg=False)
 
     def test_hge_fake_exception_fomatted_log_msg(self):
         utils.handle_gui_exception(FakeException(msg="bieber"),
                                    self.formatted_msg, None,
-                                   logMsg=self.formatted_msg)
+                                   log_msg=self.formatted_msg)

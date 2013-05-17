@@ -15,11 +15,11 @@ class NetworkConfigDialog(unittest.TestCase):
         nc.cfg = stubConfig
         nc.xml.get_widget("enableProxyButton").set_active(True)
         nc.xml.get_widget("proxyEntry").set_text("example.com:10000")
-        nc.writeValues()
+        nc.write_values()
 
     def test_network_config_write_fail(self):
         nc = networkConfig.NetworkConfigDialog()
         stubConfig = stubs.StubConfig()
         stubConfig.raise_io = True
         nc.cfg = stubConfig
-        nc.writeValues()
+        nc.write_values()

@@ -297,7 +297,7 @@ def get_terminal_width():
     """
     dim = None
     try:
-        def ioctl_GWINSZ(fd):
+        def ioctl_gwinsz(fd):
             try:
                 import fcntl
                 import struct
@@ -310,11 +310,11 @@ def get_terminal_width():
                 return
             return cr
 
-        dim = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
+        dim = ioctl_gwinsz(0) or ioctl_gwinsz(1) or ioctl_gwinsz(2)
         if not dim:
             try:
                 fd = os.open(os.ctermid(), os.O_RDONLY)
-                dim = ioctl_GWINSZ(fd)
+                dim = ioctl_gwinsz(fd)
                 os.close(fd)
             except Exception:
                 pass

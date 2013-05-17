@@ -67,9 +67,9 @@ class ClassicCheck:
 class DmiInfo(object):
 
     def __init__(self):
-        self.info = self.getDmiInfo()
+        self.info = self.get_gmi_info()
 
-    def getDmiInfo(self):
+    def get_gmi_info(self):
         import dmidecode
         dmiinfo = {}
         dmi_data = {
@@ -113,7 +113,7 @@ class Hardware:
     def __init__(self):
         self.allhw = {}
 
-    def getUnameInfo(self):
+    def get_uname_info(self):
 
         uname_data = os.uname()
         uname_keys = ('uname.sysname', 'uname.nodename', 'uname.release',
@@ -122,10 +122,10 @@ class Hardware:
         self.allhw.update(self.unameinfo)
         return self.unameinfo
 
-    def getReleaseInfo(self):
+    def get_release_info(self):
         distro_keys = ('distribution.name', 'distribution.version',
                        'distribution.id')
-        self.releaseinfo = dict(zip(distro_keys, self.getDistribution()))
+        self.releaseinfo = dict(zip(distro_keys, self.get_distribution()))
         self.allhw.update(self.releaseinfo)
         return self.releaseinfo
 
@@ -133,7 +133,7 @@ class Hardware:
         return open(filename, 'r')
 
     # this version os very RHEL/Fedora specific...
-    def getDistribution(self):
+    def get_distribution(self):
 
         if hasattr(platform, 'linux_distribution'):
             return platform.linux_distribution()
@@ -158,7 +158,7 @@ class Hardware:
 
         return distname, version, dist_id
 
-    def getMemInfo(self):
+    def get_mem_info(self):
         self.meminfo = {}
 
         # most of this mem info changes constantly, which makes decding
@@ -182,7 +182,7 @@ class Hardware:
         self.allhw.update(self.meminfo)
         return self.meminfo
 
-    def _getSocketIdForCpu(self, cpu):
+    def _get_socket_id_for_cpu(self, cpu):
         physical_package_id = "%s/topology/physical_package_id" % cpu
 
         # this can happen for a couple of cases. xen hosts/guests don't
@@ -196,7 +196,7 @@ class Hardware:
         socket_id = f.readline()
         return socket_id
 
-    def getCpuInfo(self):
+    def get_cpu_info(self):
         # TODO:(prad) Revisit this and see if theres a better way to parse /proc/cpuinfo
         # perhaps across all arches
         self.cpuinfo = {}
@@ -215,7 +215,7 @@ class Hardware:
 
         for cpu in cpu_files:
             cpu_count = cpu_count + 1
-            socket_id = self._getSocketIdForCpu(cpu)
+            socket_id = self._get_socket_id_for_cpu(cpu)
 
             if socket_id is None:
                 continue
@@ -237,7 +237,7 @@ class Hardware:
         self.allhw.update(self.cpuinfo)
         return self.cpuinfo
 
-    def getLsCpuInfo(self):
+    def get_lscpu_info(self):
         # if we have `lscpu`, let's use it for facts as well, under
         # the `lscpu` name space
 
@@ -256,7 +256,7 @@ class Hardware:
         self.allhw.update(self.lscpuinfo)
         return self.lscpuinfo
 
-    def getNetworkInfo(self):
+    def get_network_info(self):
         self.netinfo = {}
         try:
             host = socket.gethostname()
@@ -286,7 +286,7 @@ class Hardware:
             return False
         return True
 
-    def getNetworkInterfaces(self):
+    def get_network_interfaces(self):
         netinfdict = {}
         old_ipv4_metakeys = ['ipv4_address', 'ipv4_netmask', 'ipv4_broadcast']
         ipv4_metakeys = ['address', 'netmask', 'broadcast']
@@ -403,7 +403,7 @@ class Hardware:
         bonding.close()
         return hwaddr
 
-    def getVirtInfo(self):
+    def get_virt_info(self):
         virt_dict = {}
 
         try:
@@ -449,7 +449,7 @@ class Hardware:
 
         return output
 
-    def getPlatformSpecificInfo(self):
+    def get_platform_specific_info(self):
         """
         Read and parse data that comes from platform specific interfaces.
         This is only dmi/smbios data for now (which isn't on ppc/s390).
@@ -464,7 +464,7 @@ class Hardware:
             platform_specific_info = DmiInfo().info
         self.allhw.update(platform_specific_info)
 
-    def _getVirtUUID(self):
+    def get_virt_uuid(self):
         """
         Given a populated fact list, add on a virt.uuid fact if appropriate.
         Partially adapted from Spacewalk's rhnreg.py, example hardware reporting
@@ -496,16 +496,16 @@ class Hardware:
         except IOError:
             pass
 
-    def getAll(self):
-        hardware_methods = [self.getUnameInfo,
-                            self.getReleaseInfo,
-                            self.getMemInfo,
-                            self.getCpuInfo,
-                            self.getLsCpuInfo,
-                            self.getNetworkInfo,
-                            self.getNetworkInterfaces,
-                            self.getVirtInfo,
-                            self.getPlatformSpecificInfo]
+    def get_all(self):
+        hardware_methods = [self.get_uname_info,
+                            self.get_release_info,
+                            self.get_mem_info,
+                            self.get_cpu_info,
+                            self.get_lscpu_info,
+                            self.get_network_info,
+                            self.get_network_interfaces,
+                            self.get_virt_info,
+                            self.get_platform_specific_info]
         # try each hardware method, and try/except around, since
         # these tend to be fragile
         for hardware_method in hardware_methods:
@@ -518,7 +518,7 @@ class Hardware:
         #we need to know the DMI info and VirtInfo before determining UUID.
         #Thus, we can't figure it out within the main data collection loop.
         if self.allhw.get('virt.is_guest'):
-            self._getVirtUUID()
+            self.get_virt_uuid()
 
         import dmidecode
         dmiwarnings = dmidecode.get_warnings()
@@ -529,5 +529,5 @@ class Hardware:
 
 
 if __name__ == '__main__':
-    for hkey, hvalue in Hardware().getAll().items():
+    for hkey, hvalue in Hardware().get_all().items():
         print "'%s' : '%s'" % (hkey, hvalue)

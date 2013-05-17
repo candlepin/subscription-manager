@@ -162,7 +162,7 @@ class CLI:
             print error
 
 
-def systemExit(code, msgs=None):
+def system_exit(code, msgs=None):
     "Exit with a code and optional message(s). Saved a few lines of code."
 
     if msgs:

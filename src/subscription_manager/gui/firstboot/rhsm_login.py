@@ -183,7 +183,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
                 200.1, 109.10)
 
         backend = managergui.Backend()
-        self.plugin_manager = plugins.getPluginManager()
+        self.plugin_manager = plugins.get_plugin_manager()
         registergui.RegisterScreen.__init__(self, backend, Facts())
 
         #insert our new screens

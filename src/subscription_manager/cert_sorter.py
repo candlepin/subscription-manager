@@ -170,7 +170,7 @@ class CertSorter(object):
                 unentitled_pids.append(pid)
 
         for unentitled_pid in unentitled_pids:
-            prod_cert = self.product_dir.findByProduct(unentitled_pid)
+            prod_cert = self.product_dir.find_by_product(unentitled_pid)
             # Ignore anything server thinks we have but we don't.
             if prod_cert is None:
                 log.warn("Server reported installed product not on system: %s" %

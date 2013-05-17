@@ -64,7 +64,7 @@ class TestCertmgr(SubManFixture):
     def setUp(self):
         SubManFixture.setUp(self)
         # we have to have a reference to the patchers
-        self.patcher2 = mock.patch.object(certlib.UpdateAction, '_getConsumerId')
+        self.patcher2 = mock.patch.object(certlib.UpdateAction, '_get_consumer_id')
         self.certlib_updateaction_getconsumerid = self.patcher2.start()
 
         self.patcher3 = mock.patch.object(repolib.UpdateAction, 'perform')
@@ -87,7 +87,7 @@ class TestCertmgr(SubManFixture):
         self.certlib_entdir = self.patcher9.start()
 
         # mock out all hardware fetching... we may need to fake socket counts
-        self.hwprobe_getall_patcher = mock.patch.object(hwprobe.Hardware, 'getAll')
+        self.hwprobe_getall_patcher = mock.patch.object(hwprobe.Hardware, 'get_all')
         self.hwprobe_getall_mock = self.hwprobe_getall_patcher.start()
         self.hwprobe_getall_mock.return_value = {}
 
@@ -102,7 +102,7 @@ class TestCertmgr(SubManFixture):
         self.patcher_certlib_writer = mock.patch("subscription_manager.certlib.Writer")
         self.certlib_writer = self.patcher_certlib_writer.start()
 
-        self.patcher_certlib_action_syslogreport = mock.patch.object(certlib.UpdateAction, 'syslogResults')
+        self.patcher_certlib_action_syslogreport = mock.patch.object(certlib.UpdateAction, 'syslog_results')
         self.update_action_syslog_mock = self.patcher_certlib_action_syslogreport.start()
 
         # some stub certs
@@ -128,7 +128,7 @@ class TestCertmgr(SubManFixture):
 
         self.mock_uep = mock.Mock()
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[{'serial': self.stub_ent1.serial},
-                                                                      {'serial': self.stub_ent2.serial}])
+                                                                        {'serial': self.stub_ent2.serial}])
         self.mock_uep.getConsumer = mock.Mock(return_value=CONSUMER_DATA)
 
         self.certdir_entdir = self.patchcer_certdir_entdir.start()
@@ -308,7 +308,7 @@ class TestCertmgr(SubManFixture):
 
         # this makes the stub_entdir report all ents as being expired
         # so we fetch new ones
-        self.stub_entdir.listExpired = mock.Mock(
+        self.stub_entdir.list_expired = mock.Mock(
                 return_value=self.stub_entdir.list())
 
         # we don't want to find replacements, so this forces a delete

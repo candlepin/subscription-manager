@@ -104,7 +104,7 @@ class HardwareProbeTests(unittest.TestCase):
         reload(hwprobe)
         hw = hwprobe.Hardware()
         expected = {'virt.is_guest': True, 'virt.host_type': 'kvm'}
-        self.assertEquals(expected, hw.getVirtInfo())
+        self.assertEquals(expected, hw.get_virt_info())
 
     @patch('subprocess.Popen')
     def test_virt_bare_metal(self, MockPopen):
@@ -114,7 +114,7 @@ class HardwareProbeTests(unittest.TestCase):
         reload(hwprobe)
         hw = hwprobe.Hardware()
         expected = {'virt.is_guest': False, 'virt.host_type': 'Not Applicable'}
-        self.assertEquals(expected, hw.getVirtInfo())
+        self.assertEquals(expected, hw.get_virt_info())
 
     @patch('subprocess.Popen')
     def test_virt_error(self, MockPopen):
@@ -124,14 +124,14 @@ class HardwareProbeTests(unittest.TestCase):
         reload(hwprobe)
         hw = hwprobe.Hardware()
         expected = {'virt.is_guest': 'Unknown'}
-        self.assertEquals(expected, hw.getVirtInfo())
+        self.assertEquals(expected, hw.get_virt_info())
 
     @patch("__builtin__.open")
     def test_distro_no_release(self, MockOpen):
         reload(hwprobe)
         hw = hwprobe.Hardware()
         MockOpen.side_effect = IOError()
-        self.assertRaises(IOError, hw.getReleaseInfo)
+        self.assertRaises(IOError, hw.get_release_info)
 
     @patch("__builtin__.open")
     def test_distro_bogus_content_no_platform_module(self, MockOpen):
@@ -139,26 +139,26 @@ class HardwareProbeTests(unittest.TestCase):
         hw = hwprobe.Hardware()
         hwprobe.platform = None
         MockOpen.return_value.readline.return_value = "this is not really a release file of any sort"
-        self.assertEquals(hw.getReleaseInfo(), {'distribution.version': 'Unknown', 'distribution.name': 'Unknown', 'distribution.id': 'Unknown'})
+        self.assertEquals(hw.get_release_info(), {'distribution.version': 'Unknown', 'distribution.name': 'Unknown', 'distribution.id': 'Unknown'})
 
     @patch("__builtin__.open")
     def test_distro(self, MockOpen):
         reload(hwprobe)
         hw = hwprobe.Hardware()
         MockOpen.return_value.readline.return_value = "Awesome OS release 42 (Go4It)"
-        self.assertEquals(hw.getReleaseInfo(), {'distribution.version': '42', 'distribution.name': 'Awesome OS', 'distribution.id': 'Go4It'})
+        self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS', 'distribution.id': 'Go4It'})
 
     @patch("__builtin__.open")
     def test_distro_newline_in_release(self, MockOpen):
         reload(hwprobe)
         hw = hwprobe.Hardware()
         MockOpen.return_value.readline.return_value = "Awesome OS release 42 (Go4It)\n\n"
-        self.assertEquals(hw.getReleaseInfo(), {'distribution.version': '42', 'distribution.name': 'Awesome OS', 'distribution.id': 'Go4It'})
+        self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS', 'distribution.id': 'Go4It'})
 
     def test_meminfo(self):
         reload(hwprobe)
         hw = hwprobe.Hardware()
-        mem = hw.getMemInfo()
+        mem = hw.get_mem_info()
         # not great tests, but alas
         self.assertEquals(len(mem), 2)
         for key in mem:
@@ -169,7 +169,7 @@ class HardwareProbeTests(unittest.TestCase):
     def test_networkinfo(self):
         reload(hwprobe)
         hw = hwprobe.Hardware()
-        net = hw.getNetworkInfo()
+        net = hw.get_network_info()
         self.assertEquals(len(net), 3)
         for key in net:
             assert key in ['network.hostname', 'network.ipv4_address', 'network.ipv6_address']
@@ -177,7 +177,7 @@ class HardwareProbeTests(unittest.TestCase):
     def test_network_interfaces(self):
         reload(hwprobe)
         hw = hwprobe.Hardware()
-        net_int = hw.getNetworkInterfaces()
+        net_int = hw.get_network_interfaces()
         self.assertEquals(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
         self.assertFalse('net.interface.lo.mac_address' in net_int)
         self.assertFalse('net.interface.sit0.mac_address' in net_int)
@@ -188,7 +188,7 @@ class HardwareProbeTests(unittest.TestCase):
     def test_network_interfaces_none(self, MockGetInterfacesInfo, MockGetDevices):
         reload(hwprobe)
         hw = hwprobe.Hardware()
-        net_int = hw.getNetworkInterfaces()
+        net_int = hw.get_network_interfaces()
         self.assertEquals(net_int, {})
 
     @patch("ethtool.get_devices")
@@ -206,7 +206,7 @@ class HardwareProbeTests(unittest.TestCase):
         mock_info.get_ipv4_addresses = Mock(return_value=mock_ipv4s)
         MockGetInterfacesInfo.return_value = [mock_info]
 
-        net_int = hw.getNetworkInterfaces()
+        net_int = hw.get_network_interfaces()
 
         # FIXME/TODO/NOTE: We currently expect to get just the last interface
         # listed in this scenario. But... that is wrong. We should really
@@ -229,7 +229,7 @@ class HardwareProbeTests(unittest.TestCase):
                          broadcase="Unknown")
         mock_info.get_ipv4_addresses = Mock(return_value=[mock_ipv4])
         MockGetInterfacesInfo.return_value = [mock_info]
-        net_int = hw.getNetworkInterfaces()
+        net_int = hw.get_network_interfaces()
         self.assertEquals(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
         self.assertFalse('net.interface.lo.mac_address' in net_int)
 
@@ -249,7 +249,7 @@ class HardwareProbeTests(unittest.TestCase):
         mock_info.get_ipv4_addresses.return_value = []
         MockGetInterfacesInfo.return_value = [mock_info]
 
-        net_int = hw.getNetworkInterfaces()
+        net_int = hw.get_network_interfaces()
         # ignore mac address for sit* interfaces (bz #838123)
         self.assertFalse('net.interface.sit0.mac_address' in net_int)
 
@@ -278,7 +278,7 @@ class HardwareProbeTests(unittest.TestCase):
 
         MockGetInterfacesInfo.return_value = [mock_info]
 
-        net_int = hw.getNetworkInterfaces()
+        net_int = hw.get_network_interfaces()
         self.assertEquals(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
         self.assertFalse('net.interface.lo.mac_address' in net_int)
 
@@ -299,7 +299,7 @@ class HardwareProbeTests(unittest.TestCase):
         mock_info.get_ipv4_addresses.return_value = []
         MockGetInterfacesInfo.return_value = [mock_info]
 
-        net_int = hw.getNetworkInterfaces()
+        net_int = hw.get_network_interfaces()
         self.assertEquals(net_int['net.interface.lo.ipv6_address.global'], '::1')
         self.assertFalse('net.interface.lo.mac_address' in net_int)
 
@@ -325,7 +325,7 @@ class HardwareProbeTests(unittest.TestCase):
 #    def test_platform_specific_info(self):
 #        reload(hwprobe)
 #        hw = hwprobe.Hardware()
-#        platform_info = hw.getPlatformSpecificInfo()
+#        platform_info = hw.get_platform_specific_info()
 #        # this is going to be empty as non root
 #        print platform_info
 
@@ -337,8 +337,8 @@ class HardwareProbeTests(unittest.TestCase):
         MockSocketId = Mock()
         MockListdir.return_value = ["cpu0", "cpu1"]
         MockSocketId.return_value = "0"
-        hw._getSocketIdForCpu = MockSocketId
-        self.assertEquals(hw.getCpuInfo(), {'cpu.cpu(s)': 2, 'cpu.core(s)_per_socket': 2, 'cpu.cpu_socket(s)': 1})
+        hw._get_socket_id_for_cpu = MockSocketId
+        self.assertEquals(hw.get_cpu_info(), {'cpu.cpu(s)': 2, 'cpu.core(s)_per_socket': 2, 'cpu.cpu_socket(s)': 1})
 
     @patch("os.listdir")
     def test_cpu_info_lots_cpu(self, MockListdir):
@@ -348,8 +348,8 @@ class HardwareProbeTests(unittest.TestCase):
         MockSocketId = Mock()
         MockListdir.return_value = ["cpu%s" % i for i in range(0, 2000)]
         MockSocketId.return_value = "0"
-        hw._getSocketIdForCpu = MockSocketId
-        self.assertEquals(hw.getCpuInfo(), {'cpu.cpu(s)': 2000, 'cpu.core(s)_per_socket': 2000, 'cpu.cpu_socket(s)': 1})
+        hw._get_socket_id_for_cpu = MockSocketId
+        self.assertEquals(hw.get_cpu_info(), {'cpu.cpu(s)': 2000, 'cpu.core(s)_per_socket': 2000, 'cpu.cpu_socket(s)': 1})
 
     @patch("os.listdir")
     def test_cpu_info_other_files(self, MockListdir):
@@ -366,5 +366,5 @@ class HardwareProbeTests(unittest.TestCase):
                                     "cpu11111111 ",  # trailing space, not valie
                                     "cpu00"]          # odd name, but valid I guess
         MockSocketId.return_value = "0"
-        hw._getSocketIdForCpu = MockSocketId
-        self.assertEquals(hw.getCpuInfo(), {'cpu.cpu(s)': 4, 'cpu.core(s)_per_socket': 4, 'cpu.cpu_socket(s)': 1})
+        hw._get_socket_id_for_cpu = MockSocketId
+        self.assertEquals(hw.get_cpu_info(), {'cpu.cpu(s)': 4, 'cpu.core(s)_per_socket': 4, 'cpu.cpu_socket(s)': 1})

@@ -33,18 +33,18 @@ class Progress:
 
         self.lastProgress = 0.0
 
-        self.setTitle(title)
-        self.setLabel(label)
+        self.set_title(title)
+        self.set_label(label)
 
     def hide(self):
         self.progressWindow.hide()
 
         del self
 
-    def setTitle(self, text):
+    def set_title(self, text):
         self.progressWindow.set_title(text)
 
-    def setLabel(self, text):
+    def set_label(self, text):
         label = self.xml.get_widget("progressLabel")
         label.set_text(text)
 
@@ -55,7 +55,7 @@ class Progress:
         self.xml.get_widget("progressBar").pulse()
         return True
 
-    def setProgress(self, amount, total):
+    def set_progress(self, amount, total):
         if total:
             i = float(amount) / total
         else:
@@ -70,7 +70,7 @@ class Progress:
                 i = 0
             self.lastProgress = i
 
-    def setStatusLabel(self, text):
+    def set_status_label(self, text):
         self.xml.get_widget("statusLabel").set_text(text)
 
     def destroy(self):

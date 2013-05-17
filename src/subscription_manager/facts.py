@@ -56,7 +56,7 @@ class Facts(CacheManager):
         self.graylist = ['cpu.cpu_mhz']
 
         # plugin manager so we can add custom facst via plugin
-        self.plugin_manager = plugins.getPluginManager()
+        self.plugin_manager = plugins.get_plugin_manager()
 
     def get_last_update(self):
         try:
@@ -113,7 +113,7 @@ class Facts(CacheManager):
 
     def _load_hw_facts(self):
         import hwprobe
-        return hwprobe.Hardware().getAll()
+        return hwprobe.Hardware().get_all()
 
     def _load_custom_facts(self):
         """

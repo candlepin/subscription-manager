@@ -135,9 +135,9 @@ from subscription_manager import base_plugin
 #   verify _get_conduits only returns class objects, not instances
 #   verify _get_conduits is not empty
 #
-# getPluginManager
-#   multiple invocations of getPluginManager returnt he same PluginManager object
-#   can we test that getPluginManager is not imported into a local namespace?
+# get_plugin_manager
+#   multiple invocations of get_plugin_manager returnt he same PluginManager object
+#   can we test that get_plugin_manager is not imported into a local namespace?
 
 
 # this test class heavily uses mock to simulate the "default" case
@@ -961,7 +961,7 @@ class TestGetPluginManager(unittest.TestCase):
     # we do want to verify we get the same object
     @mock.patch("subscription_manager.plugins.PluginManager")
     def test(self, mock_plugin_manager):
-        pm = plugins.getPluginManager()
-        pm2 = plugins.getPluginManager()
+        pm = plugins.get_plugin_manager()
+        pm2 = plugins.get_plugin_manager()
         self.assertEquals(pm, pm2)
         self.assertTrue(pm is pm2)
