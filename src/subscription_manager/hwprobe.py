@@ -24,12 +24,16 @@ import logging
 import os
 import platform
 import re
+import sets
 import signal
 import socket
 from subprocess import PIPE, Popen
 import sys
 
 _ = gettext.gettext
+
+
+log = logging.getLogger('rhsm-app.' + __name__)
 
 
 # Exception classes used by this module.
@@ -49,9 +53,6 @@ class CalledProcessError(Exception):
         return "Command '%s' returned non-zero exit status %d" % (self.cmd, self.returncode)
 
 
-log = logging.getLogger('rhsm-app.' + __name__)
-
-
 class ClassicCheck:
 
     def is_registered_with_classic(self):
@@ -62,6 +63,43 @@ class ClassicCheck:
             return False
 
         return up2dateAuth.getSystemId() is not None
+
+
+# take a string like '1-4' and returns a list of
+# ints like [1,2,3,4]
+# 31-37 return [31,32,33,34,35,36,37]
+def parse_range(range_str):
+    # not a range, just a string ala, 7
+    # return a list of [7]
+    if '-' not in range_str:
+        return [int(range_str)]
+
+    range_ends = range_str.split('-')
+    start = int(range_ends[0])
+    end = int(range_ends[1])
+
+    range_list = []
+    for i in range(start, end + 1):
+        range_list.append(i)
+    return range_list
+
+
+# util to total up the values represented by a cpu siblings list
+# ala /sys/devices/cpu/cpu0/topology/core_siblings_list
+#
+# which can be a comma seperated list of ranges
+#  1,2,3,4
+#  1-2, 4-6, 8-10, 12-14
+#
+def gather_entries(entries_string):
+    entries = []
+    entry_parts = entries_string.split(',')
+    for entry_part in entry_parts:
+        # return a list of enumerated items
+        entry_range = parse_range(entry_part)
+        for entry in entry_range:
+            entries.append(entry)
+    return entries
 
 
 class DmiInfo(object):
@@ -112,6 +150,9 @@ class Hardware:
 
     def __init__(self):
         self.allhw = {}
+        # prefix to look for /sys, for testing
+        self.prefix = ''
+        self.testing = False
 
     def get_uname_info(self):
 
@@ -205,7 +246,7 @@ class Hardware:
         cpu_re = r'cpu([0-9]+$)'
 
         cpu_files = []
-        sys_cpu_path = "/sys/devices/system/cpu/"
+        sys_cpu_path = self.prefix + "/sys/devices/system/cpu/"
         for cpu in os.listdir(sys_cpu_path):
             if re.match(cpu_re, cpu):
                 cpu_files.append("%s/%s" % (sys_cpu_path, cpu))
@@ -237,16 +278,68 @@ class Hardware:
         self.allhw.update(self.cpuinfo)
         return self.cpuinfo
 
-    def get_lscpu_info(self):
+
+    def count_cpumask_entries(self, cpu, field):
+        f = open("%s/topology/%s" % (cpu, field), 'r')
+        entries = f.read()
+        cpumask_entries = gather_entries(entries)
+        return len(cpumask_entries)
+
+    def getCpuInfo2(self):
+        cpuinfo = {}
+        # we also have cpufreq, etc in this dir, so match just the numbs
+        cpu_re = r'cpu([0-9]+$)'
+
+        cpu_files = []
+        sys_cpu_path = self.prefix + "/sys/devices/system/cpu/"
+        for cpu in os.listdir(sys_cpu_path):
+            if re.match(cpu_re, cpu):
+                cpu_files.append("%s/%s" % (sys_cpu_path, cpu))
+
+        cpu_count = len(cpu_files)
+        socket_dict = {}
+
+        # assume each socket has the same number of cores, and
+        # each core has the same number of threads.
+        #
+        # This is not actually true sometimes... *cough*s390x*cough*
+        # but lscpu makes the same assumption
+        threads_per_cpu = self.count_cpumask_entries(cpu_files[0], 'thread_siblings_list')
+        cores_per_cpu = self.count_cpumask_entries(cpu_files[0], 'core_siblings_list') / threads_per_cpu
+
+        # cpu_count = 64
+        # threads_per_cpu = 2
+        # cores_per_cpu = 8
+        # socket_count = 4
+        core_count = cpu_count / threads_per_cpu
+        # cpu_count = socket_count * cores_per_cpu * threads_per_cpu (4 * 8 *
+        # 2)
+        socket_count = cpu_count / cores_per_cpu / threads_per_cpu
+        self.cpuinfo['cpu.cpu_socket(s)'] = socket_count
+        self.cpuinfo['cpu.core(s)_per_socket'] = cores_per_cpu
+        self.cpuinfo["cpu.cpu(s)"] = cpu_count
+        self.cpuinfo["cpu.thread(s)_per_cpu"] = threads_per_cpu
+        self.allhw.update(self.cpuinfo)
+
+#    def getSockets(self):
+#        socket_info = {}
+#        self.prefix = "/"
+
+     def get_ls_cpu_info(self): 
         # if we have `lscpu`, let's use it for facts as well, under
         # the `lscpu` name space
-
         if not os.access('/usr/bin/lscpu', os.R_OK):
             return
 
         self.lscpuinfo = {}
+        # let us specify a test dir of /sys info for testing
+        ls_cpu_path = 'LANG=en_US.UTF-8 /usr/bin/lscpu'
+        ls_cpu_cmd = ls_cpu_path
+        if self.testing:
+            ls_cpu_cmd = "%s -s %s" % (ls_cpu_cmd, self.prefix)
+
         try:
-            cpudata = commands.getstatusoutput('LANG=en_US.UTF-8 /usr/bin/lscpu')[-1].split('\n')
+            cpudata = commands.getstatusoutput(ls_cpu_cmd)[-1].split('\n')
             for info in cpudata:
                 key, value = info.split(":")
                 nkey = '.'.join(["lscpu", key.lower().strip().replace(" ", "_")])
@@ -497,15 +590,16 @@ class Hardware:
             pass
 
     def get_all(self):
-        hardware_methods = [self.get_uname_info,
-                            self.get_release_info,
-                            self.get_mem_info,
-                            self.get_cpu_info,
-                            self.get_lscpu_info,
-                            self.get_network_info,
-                            self.get_network_interfaces,
-                            self.get_virt_info,
-                            self.get_platform_specific_info]
+        hardware_methods = [self.getUnameInfo,
+                            self.getReleaseInfo,
+                            self.getMemInfo,
+                            self.getCpuInfo,
+                            self.getCpuInfo2,
+                            self.getLsCpuInfo,
+                            self.getNetworkInfo,
+                            self.getNetworkInterfaces,
+                            self.getVirtInfo,
+                            self.getPlatformSpecificInfo]
         # try each hardware method, and try/except around, since
         # these tend to be fragile
         for hardware_method in hardware_methods:
@@ -529,5 +623,42 @@ class Hardware:
 
 
 if __name__ == '__main__':
-    for hkey, hvalue in Hardware().get_all().items():
-        print "'%s' : '%s'" % (hkey, hvalue)
+    _LIBPATH = "/usr/share/rhsm"
+      # add to the path if need be
+    if _LIBPATH not in sys.path:
+        sys.path.append(_LIBPATH)
+
+    from subscription_manager import logutil
+    logutil.init_logger()
+
+    hw = Hardware()
+
+    if len(sys.argv) > 1:
+        hw.prefix = sys.argv[1]
+        hw.testing = True
+    print "hw.prefix", hw.prefix, sys.argv
+    print "hw.testing", hw.testing
+    hw_dict = hw.getAll()
+    print "foo"
+    if True or not hw.testing:
+        for hkey, hvalue in sorted(hw_dict.items()):
+            print "'%s' : '%s'" % (hkey, hvalue)
+
+    # verify the cpu socket info collection we use for rhel5 matches lscpu
+    cpu_items = [('cpu.core(s)_per_socket', 'lscpu.core(s)_per_socket'),
+                 ('cpu.cpu(s)', 'lscpu.cpu(s)'),
+                 # NOTE: the substring is different for these two folks...
+                 # FIXME: follow up to see if this has changed
+                 ('cpu.cpu_socket(s)', 'lscpu.socket(s)')]
+    failed = False
+    for cpu_item in cpu_items:
+        print "blip", hw_dict.get(cpu_item[0])
+        value_0 = int(hw_dict.get(cpu_item[0]))
+        value_1 = int(hw_dict.get(cpu_item[1], -1))
+        if value_0 != value_1:
+            print "cpu detection error", value_0 == value_1,
+            print "The values %s %s do not match (|%s| != |%s|)" % (cpu_item[0], cpu_item[1],
+                                                                value_0, value_1)
+            failed = True
+    if failed:
+        sys.exit(1)

@@ -74,6 +74,50 @@ Slave queue ID: 0
 """
 
 
+class TestParseRange(unittest.TestCase):
+    def test_single(self):
+        r = '1'
+        r_list = hwprobe.parse_range(r)
+        self.assertEquals([1], r_list)
+
+    def test_range_1_4(self):
+        r = '1-4'
+        r_list = hwprobe.parse_range(r)
+        self.assertEquals([1, 2, 3, 4], r_list)
+
+
+class TestGatherEntries(unittest.TestCase):
+    def test_single(self):
+        ent = "1"
+        ent_list = hwprobe.gather_entries(ent)
+        self.assertEquals(1, len(ent_list))
+
+    def test_multiple(self):
+        ent = "1,2,3,4"
+        ent_list = hwprobe.gather_entries(ent)
+        self.assertEquals(4, len(ent_list))
+
+    def test_range_1_2(self):
+        ent = "1-2"
+        ent_list = hwprobe.gather_entries(ent)
+        self.assertEquals(2, len(ent_list))
+
+    def test_range_2_ranges(self):
+        ent = "1-4,9-12"
+        ent_list = hwprobe.gather_entries(ent)
+        self.assertEquals(8, len(ent_list))
+
+    def test_range_64cpu_example(self):
+        ent = "0,4,8,12,16,20,24,28,32,36,40,44,48,52,56,60"
+        ent_list = hwprobe.gather_entries(ent)
+        self.assertEquals(16, len(ent_list))
+
+    def test_range_0_2(self):
+        ent = "0,2"
+        ent_list = hwprobe.gather_entries(ent)
+        self.assertEquals(2, len(ent_list))
+
+
 class HardwareProbeTests(unittest.TestCase):
 
     @patch('subprocess.Popen')
