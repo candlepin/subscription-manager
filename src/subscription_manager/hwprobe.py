@@ -228,7 +228,10 @@ class Hardware:
         except IOError:
             return None
 
-        entries = f.read()
+        # ia64 entries seem to be null padded, or perhaps
+        # that's a collection error
+        # FIXME
+        entries = f.read().rstrip('\n\x00')
         cpumask_entries = gather_entries(entries)
         return len(cpumask_entries)
 
@@ -250,10 +253,12 @@ class Hardware:
         #
         # This is not actually true sometimes... *cough*s390x*cough*
         # but lscpu makes the same assumption
+
         threads_per_cpu = self.count_cpumask_entries(cpu_files[0], 'thread_siblings_list')
         cores_per_cpu = self.count_cpumask_entries(cpu_files[0], 'core_siblings_list') / threads_per_cpu
         book_siblings_per_cpu = self.count_cpumask_entries(cpu_files[0], 'book_siblings_list')
 
+        #print cpu_count, cores_per_cpu, threads_per_cpu
         socket_count = cpu_count / cores_per_cpu / threads_per_cpu
 
         # for s390, socket calculates are per book, and we can have multiple
