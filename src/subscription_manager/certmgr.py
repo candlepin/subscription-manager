@@ -42,12 +42,13 @@ class CertManager:
     @type repolib: L{RepoLib}
     """
 
-    def __init__(self, lock=ActionLock(), uep=None, product_dir=None):
+    def __init__(self, lock=ActionLock(), uep=None, product_dir=None,
+            facts=None):
         self.lock = lock
         self.uep = uep
         self.certlib = CertLib(self.lock, uep=self.uep)
         self.repolib = RepoLib(self.lock, uep=self.uep)
-        self.factlib = FactLib(self.lock, uep=self.uep)
+        self.factlib = FactLib(self.lock, uep=self.uep, facts=facts)
         self.profilelib = PackageProfileLib(self.lock, uep=self.uep)
         self.installedprodlib = InstalledProductsLib(self.lock, uep=self.uep)
         #healinglib requires a fact set in order to get socket count

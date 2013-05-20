@@ -22,13 +22,9 @@ class TestFactlib(unittest.TestCase):
 
     def setUp(self):
         self.stub_uep = stubs.StubUEP()
-        self.fl = factlib.FactLib(lock=stubs.MockActionLock(), uep=self.stub_uep)
-
         self.expected_facts = {'fact1': 'F1', 'fact2': 'F2'}
-
-        def init_facts():
-            return stubs.StubFacts(self.expected_facts)
-        self.fl._get_facts = init_facts
+        self.fl = factlib.FactLib(lock=stubs.MockActionLock(),
+                uep=self.stub_uep, facts=stubs.StubFacts(self.expected_facts))
 
     def test_factlib_updates_when_identity_does_not_exist(self):
         factlib.ConsumerIdentity = stubs.StubConsumerIdentity
