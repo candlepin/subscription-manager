@@ -14,11 +14,13 @@
 
 import unittest
 
+
 import cStringIO
 
 from mock import patch
 from mock import Mock
 
+import fixture
 from subscription_manager import hwprobe
 
 PROC_BONDING_RR = """Ethernet Channel Bonding Driver: v3.6.0 (September 26, 2009)
@@ -118,7 +120,7 @@ class TestGatherEntries(unittest.TestCase):
         self.assertEquals(2, len(ent_list))
 
 
-class HardwareProbeTests(unittest.TestCase):
+class HardwareProbeTests(fixture.SubManFixture):
 
     @patch('subprocess.Popen')
     def test_command_error(self, MockPopen):
@@ -373,34 +375,62 @@ class HardwareProbeTests(unittest.TestCase):
 #        # this is going to be empty as non root
 #        print platform_info
 
+    @patch('subscription_manager.hwprobe.Hardware.count_cpumask_entries')
     @patch("os.listdir")
-    def test_cpu_info(self, MockListdir):
+    def test_cpu_info(self, mock_list_dir, mock_count):
         reload(hwprobe)
         hw = hwprobe.Hardware()
 
-        MockSocketId = Mock()
-        MockListdir.return_value = ["cpu0", "cpu1"]
-        MockSocketId.return_value = "0"
-        hw._get_socket_id_for_cpu = MockSocketId
-        self.assertEquals(hw.get_cpu_info(), {'cpu.cpu(s)': 2, 'cpu.core(s)_per_socket': 2, 'cpu.cpu_socket(s)': 1})
+        def count_cpumask(cpu, field):
+            vals = {'thread_siblings_list': 1,
+                    #'core_siblings_list': 2,
+                    'core_siblings_list': 2,
+                    'book_siblings_list': None}
+            return vals[field]
+
+        mock_list_dir.return_value = ["cpu0", "cpu1"]
+        hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
+        #print hw.get_cpu_info()
+        self.assert_equal_dict(hw.get_cpu_info(), {'cpu.cpu(s)': 2,
+                                              'cpu.core(s)_per_socket': 2,
+                                              'cpu.cpu_socket(s)': 1,
+                                              'cpu.thread(s)_per_core': 1})
+
+        #self.assertEquals(hw.get_cpu_info(), {'cpu.cpu(s)': 2,
+                                              #'cpu.core(s)_per_socket': 2,
+                                              #'cpu.cpu_socket(s)': 1,
+                                              #'cpu.thread(s)_per_core': 1})
 
     @patch("os.listdir")
     def test_cpu_info_lots_cpu(self, MockListdir):
         reload(hwprobe)
         hw = hwprobe.Hardware()
 
-        MockSocketId = Mock()
         MockListdir.return_value = ["cpu%s" % i for i in range(0, 2000)]
-        MockSocketId.return_value = "0"
-        hw._get_socket_id_for_cpu = MockSocketId
-        self.assertEquals(hw.get_cpu_info(), {'cpu.cpu(s)': 2000, 'cpu.core(s)_per_socket': 2000, 'cpu.cpu_socket(s)': 1})
+
+        def count_cpumask(cpu, field):
+            vals = {'thread_siblings_list': 1,
+                    #'core_siblings_list': 2,
+                    'core_siblings_list': 2000,
+                    'book_siblings_list': None}
+            return vals[field]
+
+        hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
+        self.assert_equal_dict(hw.get_cpu_info(),
+                              {'cpu.cpu(s)': 2000,
+                               'cpu.core(s)_per_socket': 2000,
+                               'cpu.thread(s)_per_core': 1,
+                               'cpu.cpu_socket(s)': 1})
+
+
+
+        #self.assertEquals(hw.get_cpu_info(), {'cpu.cpu(s)': 2000, 'cpu.core(s)_per_socket': 2000, 'cpu.cpu_socket(s)': 1})
 
     @patch("os.listdir")
     def test_cpu_info_other_files(self, MockListdir):
         reload(hwprobe)
         hw = hwprobe.Hardware()
 
-        MockSocketId = Mock()
         MockListdir.return_value = ["cpu0", "cpu1",  # normal cpu ids (valid)
                                     "cpu123123",     # big cpu   (valid)
                                     "cpu_",          # not valid
@@ -409,6 +439,17 @@ class HardwareProbeTests(unittest.TestCase):
                                     "cpu0foo",       # only cpuN are valid
                                     "cpu11111111 ",  # trailing space, not valie
                                     "cpu00"]          # odd name, but valid I guess
-        MockSocketId.return_value = "0"
-        hw._get_socket_id_for_cpu = MockSocketId
-        self.assertEquals(hw.get_cpu_info(), {'cpu.cpu(s)': 4, 'cpu.core(s)_per_socket': 4, 'cpu.cpu_socket(s)': 1})
+
+        def count_cpumask(cpu, field):
+            vals = {'thread_siblings_list': 1,
+                    #'core_siblings_list': 2,
+                    'core_siblings_list': 4,
+                    'book_siblings_list': None}
+            return vals[field]
+
+        hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
+        self.assert_equal_dict(hw.get_cpu_info(),
+                               {'cpu.cpu(s)': 4,
+                                'cpu.core(s)_per_socket': 4,
+                                'cpu.thread(s)_per_core': 1,
+                                'cpu.cpu_socket(s)': 1})
