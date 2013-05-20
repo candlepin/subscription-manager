@@ -277,18 +277,17 @@ class Hardware:
         self.allhw.update(self.cpuinfo)
         return self.cpuinfo
 
-
     def count_cpumask_entries(self, cpu, field):
         try:
             f = open("%s/topology/%s" % (cpu, field), 'r')
-        except IOError,e:
+        except IOError:
             return None
 
         entries = f.read()
         cpumask_entries = gather_entries(entries)
         return len(cpumask_entries)
 
-    def getCpuInfo2(self):
+    def get_cpu_info2(self):
         self.cpuinfo = {}
         # we also have cpufreq, etc in this dir, so match just the numbs
         cpu_re = r'cpu([0-9]+$)'
@@ -300,7 +299,6 @@ class Hardware:
                 cpu_files.append("%s/%s" % (sys_cpu_path, cpu))
 
         cpu_count = len(cpu_files)
-        socket_dict = {}
 
         # assume each socket has the same number of cores, and
         # each core has the same number of threads.
@@ -312,7 +310,6 @@ class Hardware:
         book_siblings_per_cpu = self.count_cpumask_entries(cpu_files[0], 'book_siblings_list')
 
         # socket_count = 4
-        core_count = cpu_count / threads_per_cpu
         socket_count = cpu_count / cores_per_cpu / threads_per_cpu
 
         # for s390, socket calculates are per book, and we can have multiple
@@ -334,11 +331,7 @@ class Hardware:
 
         self.allhw.update(self.cpuinfo)
 
-#    def getSockets(self):
-#        socket_info = {}
-#        self.prefix = "/"
-
-     def get_ls_cpu_info(self): 
+    def get_ls_cpu_info(self):
         # if we have `lscpu`, let's use it for facts as well, under
         # the `lscpu` name space
         if not os.access('/usr/bin/lscpu', os.R_OK):
@@ -603,16 +596,15 @@ class Hardware:
             pass
 
     def get_all(self):
-        hardware_methods = [self.getUnameInfo,
-                            self.getReleaseInfo,
-                            self.getMemInfo,
-                            #self.getCpuInfo,
-                            self.getCpuInfo2,
-                            self.getLsCpuInfo,
-                            self.getNetworkInfo,
-                            self.getNetworkInterfaces,
-                            self.getVirtInfo,
-                            self.getPlatformSpecificInfo]
+        hardware_methods = [self.get_uname_info,
+                            self.get_release_info,
+                            self.get_mem_info,
+                            self.get_cpu_info2,
+                            self.get_ls_cpu_info,
+                            self.get_network_info,
+                            self.get_network_interfaces,
+                            self.get_virt_info,
+                            self.get_platform_specific_info]
         # try each hardware method, and try/except around, since
         # these tend to be fragile
         for hardware_method in hardware_methods:
@@ -651,7 +643,7 @@ if __name__ == '__main__':
         hw.testing = True
     #print "hw.prefix", hw.prefix, sys.argv
     #print "hw.testing", hw.testing
-    hw_dict = hw.getAll()
+    hw_dict = hw.get_all()
     #print "foo"
     if True or not hw.testing:
         for hkey, hvalue in sorted(hw_dict.items()):
