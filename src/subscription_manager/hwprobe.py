@@ -222,61 +222,6 @@ class Hardware:
         self.allhw.update(self.meminfo)
         return self.meminfo
 
-    def _get_socket_id_for_cpu(self, cpu):
-        physical_package_id = "%s/topology/physical_package_id" % cpu
-
-        # this can happen for a couple of cases. xen hosts/guests don't
-        # seem to populate this at all. cross arch kvm guests only seem
-        # to populate it for cpu0.
-        try:
-            f = open(physical_package_id)
-        except IOError:
-            log.warn("no physical_package_id found for cpu: %s" % cpu)
-            return None
-        socket_id = f.readline()
-        return socket_id
-
-    def get_cpu_info(self):
-        # TODO:(prad) Revisit this and see if theres a better way to parse /proc/cpuinfo
-        # perhaps across all arches
-        self.cpuinfo = {}
-
-        # we also have cpufreq, etc in this dir, so match just the numbs
-        cpu_re = r'cpu([0-9]+$)'
-
-        cpu_files = []
-        sys_cpu_path = self.prefix + "/sys/devices/system/cpu/"
-        for cpu in os.listdir(sys_cpu_path):
-            if re.match(cpu_re, cpu):
-                cpu_files.append("%s/%s" % (sys_cpu_path, cpu))
-
-        cpu_count = 0
-        socket_dict = {}
-
-        for cpu in cpu_files:
-            cpu_count = cpu_count + 1
-            socket_id = self._get_socket_id_for_cpu(cpu)
-
-            if socket_id is None:
-                continue
-
-            if socket_id not in socket_dict:
-                socket_dict[socket_id] = 1
-            else:
-                socket_dict[socket_id] = socket_dict[socket_id] + 1
-
-        # we didn't detect any cpu socket info, for example
-        # xen hosts that do not export any cpu  topology info
-        # assume one socket
-        num_sockets = len(socket_dict)
-        if num_sockets == 0:
-            num_sockets = 1
-        self.cpuinfo['cpu.cpu_socket(s)'] = num_sockets
-        self.cpuinfo['cpu.core(s)_per_socket'] = cpu_count / num_sockets
-        self.cpuinfo["cpu.cpu(s)"] = cpu_count
-        self.allhw.update(self.cpuinfo)
-        return self.cpuinfo
-
     def count_cpumask_entries(self, cpu, field):
         try:
             f = open("%s/topology/%s" % (cpu, field), 'r')
@@ -287,7 +232,7 @@ class Hardware:
         cpumask_entries = gather_entries(entries)
         return len(cpumask_entries)
 
-    def get_cpu_info2(self):
+    def get_cpu_info(self):
         self.cpuinfo = {}
         # we also have cpufreq, etc in this dir, so match just the numbs
         cpu_re = r'cpu([0-9]+$)'
@@ -309,7 +254,6 @@ class Hardware:
         cores_per_cpu = self.count_cpumask_entries(cpu_files[0], 'core_siblings_list') / threads_per_cpu
         book_siblings_per_cpu = self.count_cpumask_entries(cpu_files[0], 'book_siblings_list')
 
-        # socket_count = 4
         socket_count = cpu_count / cores_per_cpu / threads_per_cpu
 
         # for s390, socket calculates are per book, and we can have multiple
@@ -330,6 +274,7 @@ class Hardware:
             self.cpuinfo["cpu.book(s)"] = book_count
 
         self.allhw.update(self.cpuinfo)
+        return self.cpuinfo
 
     def get_ls_cpu_info(self):
         # if we have `lscpu`, let's use it for facts as well, under
@@ -599,7 +544,7 @@ class Hardware:
         hardware_methods = [self.get_uname_info,
                             self.get_release_info,
                             self.get_mem_info,
-                            self.get_cpu_info2,
+                            self.get_cpu_info,
                             self.get_ls_cpu_info,
                             self.get_network_info,
                             self.get_network_interfaces,
