@@ -33,6 +33,11 @@ class FactLib(DataLib):
 
     Makes use of the facts module as well.
     """
+    def __init__(self, lock=None, uep=None, facts=None):
+        DataLib.__init__(self, lock, uep)
+        self.facts = facts
+        if not self.facts:
+            self.facts = Facts()
 
     def _do_update(self):
         updates = 0
@@ -40,18 +45,14 @@ class FactLib(DataLib):
         # figure out the diff between latest facts and
         # report that as updates
 
-        facts = self._get_facts()
-        if facts.has_changed():
-            updates = len(facts.get_facts())
+        if self.facts.has_changed():
+            updates = len(self.facts.get_facts())
             if not ConsumerIdentity.exists():
                 return updates
             consumer = ConsumerIdentity.read()
             consumer_uuid = consumer.getConsumerId()
 
-            facts.update_check(self.uep, consumer_uuid)
+            self.facts.update_check(self.uep, consumer_uuid)
         else:
             log.info("Facts have not changed, skipping upload.")
         return updates
-
-    def _get_facts(self):
-        return Facts()

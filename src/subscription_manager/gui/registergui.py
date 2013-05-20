@@ -1092,7 +1092,7 @@ class AsyncBackend(object):
         # Will map service level (string) to the results of the dry-run
         # autobind results for each SLA that covers all installed products:
         suitable_slas = {}
-        certmgr = CertManager(uep=self.backend.uep)
+        certmgr = CertManager(uep=self.backend.uep, facts=facts)
         certmgr.update()
         for sla in available_slas:
             dry_run_json = self.backend.uep.dryRunBind(consumer.uuid, sla)

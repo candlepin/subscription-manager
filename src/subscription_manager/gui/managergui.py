@@ -180,6 +180,11 @@ class MainWindow(widgets.GladeWidget):
 
         self.facts = facts or Facts(self.backend.entitlement_dir,
                 self.backend.product_dir)
+        # We need to make sure facts are loaded immediately, some GUI operations
+        # are done in separate threads, and if facts try to load in another
+        # thread the virt guest detection code breaks due to hwprobe's use of
+        # signals.
+        self.facts.get_facts()
 
         log.debug("Client Versions: %s " % get_client_versions())
         log.debug("Server Versions: %s " % get_server_versions(self.backend.uep))
