@@ -55,3 +55,36 @@ class SubManFixture(unittest.TestCase):
                 message += " : " + msg
 
             self.fail("Multi-line strings are unequal:\n" + message)
+
+    def assert_equal_dict(self, first_dict, second_dict):
+        mismatches = []
+        missing_keys = []
+        extra = []
+
+        for key in first_dict:
+            if key not in second_dict:
+                missing_keys.append(key)
+                continue
+            if first_dict[key] != second_dict[key]:
+                mismatches.append((key, first_dict[key], second_dict[key]))
+
+        for key in second_dict:
+            if key not in first_dict:
+                extra.append(key)
+
+        message = ""
+        if missing_keys or extra:
+            message += "Keys in only one dict: \n"
+            if missing_keys:
+                for key in missing_keys:
+                    message += "second_dict:  %s\n" % key
+            if extra:
+                for key in extra:
+                    message += "first_dict: %s\n" % key
+        if mismatches:
+            message += "Unequal values: \n"
+            for info in mismatches:
+                message += "%s: %s != %s\n" % info
+
+        if mismatches or missing_keys or extra:
+            self.fail(message)
