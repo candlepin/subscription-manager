@@ -171,7 +171,7 @@ class TestInstalledProductsCache(unittest.TestCase):
         self.assertTrue('a-product' in self.mgr.installed)
         self.assertTrue('b-product' in self.mgr.installed)
         self.assertTrue('c-product' in self.mgr.installed)
-        self.assertEquals("Product A", self.mgr.installed['a-product'])
+        self.assertEquals("Product A", self.mgr.installed['a-product']['productName'])
 
     def test_load_data(self):
         cached = {
@@ -197,9 +197,9 @@ class TestInstalledProductsCache(unittest.TestCase):
 
     def test_has_not_changed(self):
         cached = {
-                'a-product': 'Product A',
-                'b-product': 'Product B',
-                'c-product': 'Product C',
+                'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
+                'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
+                'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
         }
 
         self.mgr._read_cache = Mock(return_value=cached)
