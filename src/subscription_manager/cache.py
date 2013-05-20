@@ -337,7 +337,11 @@ class InstalledProductsManager(CacheManager):
         self.installed = {}
         for prod_cert in product_dir.list():
             prod = prod_cert.products[0]
-            self.installed[prod.id] = prod.name
+            self.installed[prod.id] = {'productId': prod.id,
+                    'productName': prod.name,
+                    'version': prod.version,
+                    'arch': ','.join(prod.architectures)
+                    }
 
     def to_dict(self):
         return self.installed
@@ -356,12 +360,8 @@ class InstalledProductsManager(CacheManager):
         if len(cached.keys()) != len(self.installed.keys()):
             return True
 
-        for key in self.installed.keys():
-            if key not in cached:
-                return True
-            if self.installed[key] != cached[key]:
-                return True
-
+        if cached != self.installed:
+            return True
         return False
 
     def format_for_server(self):
@@ -370,12 +370,7 @@ class InstalledProductsManager(CacheManager):
         easier to work with) into the format the server expects for the
         consumer.
         """
-        final = []
-        for key in self.installed.keys():
-            final.append({
-                    'productId': key,
-                    'productName': self.installed[key]
-            })
+        final = [val for (key, val) in self.installed.items()]
         return final
 
     def _sync_with_server(self, uep, consumer_uuid):

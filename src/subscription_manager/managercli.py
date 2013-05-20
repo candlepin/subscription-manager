@@ -1038,6 +1038,7 @@ class RegisterCommand(UserPassCommand):
 
             self.plugin_manager.run("pre_register_consumer", name=consumername,
                                     facts=facts_dic)
+
             if self.options.consumerid:
                 #TODO remove the username/password
                 log.info("Registering as existing consumer: %s" %
@@ -1055,6 +1056,7 @@ class RegisterCommand(UserPassCommand):
                      owner=owner_key, environment=environment_id,
                      keys=self.options.activation_keys,
                      installed_products=self.installed_mgr.format_for_server())
+                self.installed_mgr.write_cache()
             self.plugin_manager.run("post_register_consumer", consumer=consumer,
                                     facts=facts_dic)
         except connection.RestlibException, re:
@@ -1095,7 +1097,7 @@ class RegisterCommand(UserPassCommand):
         # Facts and installed products went out with the registration request,
         # manually write caches to disk:
         self.facts.write_cache()
-        self.installed_mgr.write_cache()
+        self.installed_mgr.update_check(self.cp, consumer['uuid'])
 
         if self.options.release:
             # TODO: grab the list of valid options, and check
