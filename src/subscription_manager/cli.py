@@ -84,6 +84,9 @@ class CLI:
     def _add_command(self, cmd):
         self.cli_commands[cmd.name] = cmd
 
+    def _default_command(self):
+        self._usage()
+
     def _usage(self):
         print _("Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0])
         print "\r"
@@ -148,7 +151,10 @@ class CLI:
 
     def main(self):
         cmd = self._find_best_match(sys.argv)
-        if len(sys.argv) < 2 or not cmd:
+        if len(sys.argv) < 2:
+            self._default_command()
+            sys.exit(0)
+        if not cmd:
             self._usage()
             # Allow for a 0 return code if just calling --help
             return_code = 1
