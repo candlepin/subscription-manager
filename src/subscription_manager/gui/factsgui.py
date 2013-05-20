@@ -109,17 +109,17 @@ class SystemFactsDialog(widgets.GladeWidget):
             self.facts_store.append(parent, [fact, value])
 
         # TODO: could stand to check if registered before trying to do this:
-        displayName = _('Unknown')
+        display_name = _('Unknown')
         try:
             owner = self.backend.uep.getOwner(self.identity.uuid)
-            displayName = owner['displayName']
+            display_name = owner['displayName']
             key = owner['key']
             self.owner_id_label.set_text(key)
             self.owner_id_hbox.show()
         except Exception, e:
             log.error("Could not get owner name \nError: %s" % e)
             self.owner_id_hbox.hide()
-        self.owner_label.set_text(displayName)
+        self.owner_label.set_text(display_name)
 
         try:
             if self.backend.uep.supports_resource('environments'):

@@ -129,7 +129,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             try:
                 self.backend.uep.unbindBySerial(self.identity.uuid, serial)
             except Exception, e:
-                handle_gui_exception(e, _("There was an error removing %s with serial number %s") % (selection['subscription'], serial), self.parent_win, formatMsg=False)
+                handle_gui_exception(e, _("There was an error removing %s with serial number %s") %
+                                         (selection['subscription'], serial),
+                                     self.parent_win, format_msg=False)
 
             try:
                 self.backend.certlib.update()
@@ -338,7 +340,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         installed_products = []
 
         for product in products:
-            installed = installed_dir.findByProduct(product.id)
+            installed = installed_dir.find_by_product(product.id)
 
             if installed:
                 installed_products.append(installed)

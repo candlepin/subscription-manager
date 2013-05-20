@@ -85,7 +85,7 @@ def warnExpired(conduit):
     """ display warning for expired entitlements """
     entdir = EntitlementDirectory()
     products = set()
-    for cert in entdir.listExpired():
+    for cert in entdir.list_expired():
         for p in cert.products:
             m = '  - %s' % p.name
             products.add(m)
@@ -108,7 +108,7 @@ def warnOrGiveUsageMessage(conduit):
         try:
             ConsumerIdentity.read().getConsumerId()
             entdir = EntitlementDirectory()
-            if len(entdir.listValid()) == 0:
+            if len(entdir.list_valid()) == 0:
                 msg = no_subs_warning
             else:
                 msg = registered_message

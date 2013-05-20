@@ -35,7 +35,7 @@ class TestingUpdateAction(UpdateAction):
         '''
         return (Mock(), cert)
 
-    def _getConsumerId(self):
+    def _get_consumer_id(self):
         return StubConsumerIdentity("ConsumerKey", "ConsumerCert")
 
 

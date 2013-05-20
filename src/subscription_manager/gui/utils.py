@@ -55,37 +55,37 @@ def get_running_as_firstboot():
     return FIRSTBOOT
 
 
-def handle_gui_exception(e, msg, parent, formatMsg=True, logMsg=None):
+def handle_gui_exception(e, msg, parent, format_msg=True, log_msg=None):
     """
     Handles an exception for the gui by logging the stack trace and
     displaying a user-friendly internationalized message.
 
     msg = User friendly message to display in GUI.
     parent = Parent window where the error originates.
-    logMsg = Optional message to be logged in addition to stack trace.
-    formatMsg = if true, string sub the exception error in the msg
+    log_msg = Optional message to be logged in addition to stack trace.
+    format_msg = if true, string sub the exception error in the msg
     """
 
-    if logMsg:
-        log.error(logMsg)
+    if log_msg:
+        log.error(log_msg)
     log.exception(e)
 
     # If exception is of these types we ignore the given display msg:
     if isinstance(e, socket_error):
-        errorWindow(_('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.'),
+        show_error_window(_('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.'),
                 parent=parent)
     elif isinstance(e, SSL.SSLError):
-        errorWindow(_('Unable to verify server\'s identity: %s') % str(e),
+        show_error_window(_('Unable to verify server\'s identity: %s') % str(e),
                 parent=parent)
     elif isinstance(e, connection.ExpiredIdentityCertException):
-        errorWindow(_('Your identity certificate has expired'), parent=parent)
+        show_error_window(_('Your identity certificate has expired'), parent=parent)
     elif isinstance(e, connection.NetworkException):
         # NOTE: yes this looks a lot like the socket error, but I think these
         # were actually intended to display slightly different messages:
-        errorWindow(_("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."), parent=parent)
+        show_error_window(_("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."), parent=parent)
     elif isinstance(e, connection.RemoteServerException):
         # This is what happens when there's an issue with the server on the other side of the wire
-        errorWindow(_("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."), parent=parent)
+        show_error_window(_("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."), parent=parent)
     elif isinstance(e, connection.RestlibException):
         # If this exception's code is in the 200 range (such as 202 ACCEPTED)
         # we're going to ignore the message we were given and just display
@@ -96,27 +96,27 @@ def handle_gui_exception(e, msg, parent, formatMsg=True, logMsg=None):
 
         else:
             try:
-                if formatMsg:
+                if format_msg:
                     message = msg % linkify(e.msg)
                 else:
                     message = linkify(e.msg)
             except Exception:
                 message = msg
 
-            errorWindow(message, parent=parent)
+            show_error_window(message, parent=parent)
 
     elif isinstance(e, connection.BadCertificateException):
-        errorWindow(_("Bad CA certificate: %s") % e.cert_path, parent=parent)
+        show_error_window(_("Bad CA certificate: %s") % e.cert_path, parent=parent)
     else:
         #catch-all, try to interpolate and if it doesn't work out, just display the message
         try:
-            interpolatedStr = msg % e
-            errorWindow(interpolatedStr, parent=parent)
+            interpolated_str = msg % e
+            show_error_window(interpolated_str, parent=parent)
         except Exception:
-            errorWindow(msg, parent=parent)
+            show_error_window(msg, parent=parent)
 
 
-def errorWindow(message, parent=None):
+def show_error_window(message, parent=None):
     messageWindow.ErrorDialog(messageWindow.wrap_text(message),
             parent)
 

@@ -38,7 +38,7 @@ from subscription_manager import managerlib
 from subscription_manager import plugins
 from subscription_manager.utils import is_valid_server_info, MissingCaCertException, parse_server_info, restart_virt_who, ServerUrlParseError
 
-from subscription_manager.gui.utils import handle_gui_exception, errorWindow
+from subscription_manager.gui.utils import handle_gui_exception, show_error_window
 from subscription_manager.gui.autobind import DryRunResult, \
         ServiceLevelNotSupportedException, AllProductsCoveredException, \
         NoProductsException
@@ -692,7 +692,7 @@ class CredentialsScreen(Screen):
 
     def _validate_consumername(self, consumername):
         if not consumername:
-            errorWindow(_("You must enter a system name."), self._parent.window)
+            show_error_window(_("You must enter a system name."), self._parent.window)
             self.consumer_name.grab_focus()
             return False
         return True
@@ -700,12 +700,12 @@ class CredentialsScreen(Screen):
     def _validate_account(self):
         # validate / check user name
         if self.account_login.get_text().strip() == "":
-            errorWindow(_("You must enter a login."), self._parent.window)
+            show_error_window(_("You must enter a login."), self._parent.window)
             self.account_login.grab_focus()
             return False
 
         if self.account_password.get_text().strip() == "":
-            errorWindow(_("You must enter a password."), self._parent.window)
+            show_error_window(_("You must enter a password."), self._parent.window)
             self.account_password.grab_focus()
             return False
         return True
@@ -784,21 +784,21 @@ class ActivationKeyScreen(Screen):
 
     def _validate_owner_key(self, owner_key):
         if not owner_key:
-            errorWindow(_("You must enter an organization."), self._parent.window)
+            show_error_window(_("You must enter an organization."), self._parent.window)
             self.organization_entry.grab_focus()
             return False
         return True
 
     def _validate_activation_keys(self, activation_keys):
         if not activation_keys:
-            errorWindow(_("You must enter an activation key."), self._parent.window)
+            show_error_window(_("You must enter an activation key."), self._parent.window)
             self.activation_key_entry.grab_focus()
             return False
         return True
 
     def _validate_consumername(self, consumername):
         if not consumername:
-            errorWindow(_("You must enter a system name."), self._parent.window)
+            show_error_window(_("You must enter a system name."), self._parent.window)
             self.consumer_entry.grab_focus()
             return False
         return True
@@ -904,18 +904,18 @@ class ChooseServerScreen(Screen):
 
             try:
                 if not is_valid_server_info(hostname, port, prefix):
-                    errorWindow(_("Unable to reach the server at %s:%s%s") %
-                                  (hostname, port, prefix),
-                                  self._parent.window)
+                    show_error_window(_("Unable to reach the server at %s:%s%s") %
+                                      (hostname, port, prefix),
+                                      self._parent.window)
                     return DONT_CHANGE
             except MissingCaCertException:
-                errorWindow(_("CA certificate for subscription service has not been installed."),
-                            self._parent.window)
+                show_error_window(_("CA certificate for subscription service has not been installed."),
+                                  self._parent.window)
                 return DONT_CHANGE
 
         except ServerUrlParseError:
-            errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"),
-                        self._parent.window)
+            show_error_window(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"),
+                              self._parent.window)
             return DONT_CHANGE
 
         log.info("Writing server data to rhsm.conf")
@@ -944,7 +944,7 @@ class AsyncBackend(object):
 
     def __init__(self, backend):
         self.backend = backend
-        self.plugin_manager = plugins.getPluginManager()
+        self.plugin_manager = plugins.get_plugin_manager()
         self.queue = Queue.Queue()
 
     def _get_owner_list(self, username, callback):

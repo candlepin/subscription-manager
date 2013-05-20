@@ -42,7 +42,7 @@ if _LIBPATH not in sys.path:
 
 from subscription_manager.certdirectory import ProductDirectory
 from subscription_manager.certlib import ConsumerIdentity
-from subscription_manager.cli import systemExit
+from subscription_manager.cli import system_exit
 from subscription_manager.i18n_optparse import OptionParser, \
         USAGE, WrappedIndentedHelpFormatter
 from subscription_manager import repolib
@@ -69,6 +69,11 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 CONNECTION_FAILURE = _(u"Unable to connect to certificate server: %s.  "
                         "See /var/log/rhsm/rhsm.log for more details.")
+
+
+FACT_FILE = "/etc/rhsm/facts/migration.facts"
+
+YUM_PLUGIN_CONF = '/etc/yum/pluginconf.d/rhnplugin.conf'
 
 DOUBLE_MAPPED = "rhel-.*?-(client|server)-dts-(5|6)-beta(-debuginfo)?"
 #The (?!-beta) bit is a negative lookahead assertion.  So we won't match
@@ -157,7 +162,7 @@ class MigrationEngine(object):
 
     def validate_options(self):
         if self.options.servicelevel and self.options.noauto:
-            systemExit(1, _("The --servicelevel and --no-auto options cannot be used together."))
+            system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))
 
     def authenticate(self, prompt):
         username = raw_input(prompt).strip()
@@ -191,7 +196,7 @@ class MigrationEngine(object):
                 self.proxy_host, self.proxy_port = http_proxy.split(':')
             except ValueError, e:
                 log.exception(e)
-                systemExit(1, _("Unable to read RHN proxy settings."))
+                system_exit(1, _("Unable to read RHN proxy settings."))
 
             log.info("Using proxy %s:%s - transferring settings to rhsm.conf"
                      % (self.proxy_host, self.proxy_port))
@@ -218,7 +223,7 @@ class MigrationEngine(object):
             else:
                 (hostname, port, prefix) = parse_server_info(self.options.serverurl)
         except ServerUrlParseError, e:
-            systemExit(-1, _("Error parsing server URL: %s") % e.msg)
+            system_exit(-1, _("Error parsing server URL: %s") % e.msg)
 
         proxy_port = self.proxy_port and int(self.proxy_port)
 
@@ -248,17 +253,17 @@ class MigrationEngine(object):
         if ConsumerIdentity.existsAndValid():
             print _("\nThis system appears to be already registered to Red Hat Subscription Management.  Exiting.")
             consumer = ConsumerIdentity.read()
-            systemExit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % consumer.getConsumerId())
+            system_exit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % consumer.getConsumerId())
 
         try:
             self.cp.getOwnerList(username)
         except SSLError, e:
             print _("Error: CA certificate for subscription service has not been installed.")
-            systemExit(1, CONNECTION_FAILURE % e)
+            system_exit(1, CONNECTION_FAILURE % e)
         except Exception, e:
             log.error(e)
             log.error(traceback.format_exc())
-            systemExit(1, CONNECTION_FAILURE % e)
+            system_exit(1, CONNECTION_FAILURE % e)
 
     def get_org(self, username):
         try:
@@ -266,10 +271,10 @@ class MigrationEngine(object):
         except Exception, e:
             log.error(e)
             log.error(traceback.format_exc())
-            systemExit(1, CONNECTION_FAILURE % e)
+            system_exit(1, CONNECTION_FAILURE % e)
 
         if len(owner_list) == 0:
-            systemExit(1, _("%s cannot register with any organizations.") % username)
+            system_exit(1, _("%s cannot register with any organizations.") % username)
         elif len(owner_list) > 1:
             org_input = raw_input(_("Org: ")).strip()
             org = None
@@ -278,7 +283,7 @@ class MigrationEngine(object):
                     org = owner_data['key']
                     break
             if not org:
-                systemExit(1, _("No such org: %s") % org_input)
+                system_exit(1, _("No such org: %s") % org_input)
         else:
             org = owner_list[0]['key']
 
@@ -292,7 +297,7 @@ class MigrationEngine(object):
         except Exception, e:
             log.error(e)
             log.error(traceback.format_exc())
-            systemExit(1, CONNECTION_FAILURE % e)
+            system_exit(1, CONNECTION_FAILURE % e)
 
         environment = None
         # If we just have one environment, Candlepin will do the right thing
@@ -303,7 +308,7 @@ class MigrationEngine(object):
                     environment = env_data['name']
                     break
             if not environment:
-                systemExit(1, _("No such environment: %s") % env_input)
+                system_exit(1, _("No such environment: %s") % env_input)
 
         return environment
 
@@ -328,24 +333,24 @@ class MigrationEngine(object):
             return (sc, sk)
         except Exception:
             log.error(traceback.format_exc())
-            systemExit(1, _("Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more details."))
+            system_exit(1, _("Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more details."))
 
     def check_is_org_admin(self, sc, sk, username):
         try:
             roles = sc.user.listRoles(sk, username)
         except Exception:
             log.error(traceback.format_exc())
-            systemExit(1, _("Problem encountered determining user roles in RHN Classic.  Exiting."))
+            system_exit(1, _("Problem encountered determining user roles in RHN Classic.  Exiting."))
         if "org_admin" not in roles:
-            systemExit(1, _("You must be an org admin to successfully run this script."))
+            system_exit(1, _("You must be an org admin to successfully run this script."))
 
     def get_subscribed_channels_list(self):
         try:
-            subscribedChannels = map(lambda x: x['label'], getChannels().channels())
+            subscribed_channels = map(lambda x: x['label'], getChannels().channels())
         except Exception:
             log.error(traceback.format_exc())
-            systemExit(1, _("Problem encountered getting the list of subscribed channels.  Exiting."))
-        return subscribedChannels
+            system_exit(1, _("Problem encountered getting the list of subscribed channels.  Exiting."))
+        return subscribed_channels
 
     def print_banner(self, msg):
         print "\n+-----------------------------------------------------+"
@@ -357,7 +362,7 @@ class MigrationEngine(object):
         for channel in subscribed_channels:
             if channel.startswith("jbappplatform"):
                 if jboss_channel:
-                    systemExit(1, _("You are subscribed to more than one jbappplatform channel."
+                    system_exit(1, _("You are subscribed to more than one jbappplatform channel."
                                     "  This script does not support that configuration.  Exiting."))
                 jboss_channel = True
 
@@ -391,66 +396,66 @@ class MigrationEngine(object):
             dic_data = self.read_channel_cert_mapping(mappingfile)
         except IOError, e:
             log.exception(e)
-            systemExit(1, _("Unable to read mapping file: %s") % mappingfile)
+            system_exit(1, _("Unable to read mapping file: %s") % mappingfile)
 
-        applicableCerts = []
-        validRhsmChannels = []
-        invalidRhsmChannels = []
-        unrecognizedChannels = []
+        applicable_certs = []
+        valid_rhsm_channels = []
+        invalid_rhsm_channels = []
+        unrecognized_channels = []
 
         for channel in subscribed_channels:
             try:
                 if dic_data[channel] != 'none':
-                    validRhsmChannels.append(channel)
+                    valid_rhsm_channels.append(channel)
                     log.info("mapping found for: %s = %s", channel, dic_data[channel])
-                    if dic_data[channel] not in applicableCerts:
-                        applicableCerts.append(dic_data[channel])
+                    if dic_data[channel] not in applicable_certs:
+                        applicable_certs.append(dic_data[channel])
                 else:
-                    invalidRhsmChannels.append(channel)
+                    invalid_rhsm_channels.append(channel)
                     log.info("%s is not mapped to any certificates", channel)
             except Exception:
-                unrecognizedChannels.append(channel)
+                unrecognized_channels.append(channel)
 
-        if invalidRhsmChannels:
+        if invalid_rhsm_channels:
             self.print_banner(_("Channels not available on RHSM:"))
-            for i in invalidRhsmChannels:
+            for i in invalid_rhsm_channels:
                 print i
 
-        if unrecognizedChannels:
+        if unrecognized_channels:
             self.print_banner(_("No product certificates are mapped to these RHN Classic channels:"))
-            for i in unrecognizedChannels:
+            for i in unrecognized_channels:
                 print i
 
-        if unrecognizedChannels or invalidRhsmChannels:
+        if unrecognized_channels or invalid_rhsm_channels:
             if not self.options.force:
                 print(_("\nUse --force to ignore these channels and continue the migration.\n"))
                 sys.exit(1)
 
-        log.info("certs to be installed: %s", applicableCerts)
+        log.info("certs to be installed: %s", applicable_certs)
 
         self.print_banner(_("Installing product certificates for these RHN Classic channels:"))
-        for i in validRhsmChannels:
+        for i in valid_rhsm_channels:
             print i
 
         release = self.get_release()
 
         # creates the product directory if it doesn't already exist
-        productDir = ProductDirectory()
-        for cert in applicableCerts:
+        product_dir = ProductDirectory()
+        for cert in applicable_certs:
             source_path = os.path.join("/usr/share/rhsm/product", release, cert)
             truncated_cert_name = cert.split('-')[-1]
-            destination_path = os.path.join(str(productDir), truncated_cert_name)
+            destination_path = os.path.join(str(product_dir), truncated_cert_name)
             log.info("copying %s to %s ", source_path, destination_path)
             shutil.copy2(source_path, destination_path)
-        print _("\nProduct certificates installed successfully to %s.") % str(productDir)
+        print _("\nProduct certificates installed successfully to %s.") % str(product_dir)
 
     def clean_up(self, subscribed_channels):
         #Hack to address BZ 853233
-        productDir = ProductDirectory()
-        if os.path.isfile(os.path.join(str(productDir), "68.pem")) and \
-            os.path.isfile(os.path.join(str(productDir), "71.pem")):
+        product_dir = ProductDirectory()
+        if os.path.isfile(os.path.join(str(product_dir), "68.pem")) and \
+            os.path.isfile(os.path.join(str(product_dir), "71.pem")):
             try:
-                os.remove(os.path.join(str(productDir), "68.pem"))
+                os.remove(os.path.join(str(product_dir), "68.pem"))
                 log.info("Removed 68.pem due to existence of 71.pem")
             except OSError, e:
                 log.info(e)
@@ -461,13 +466,13 @@ class MigrationEngine(object):
 
         if is_double_mapped and is_single_mapped:
             try:
-                os.remove(os.path.join(str(productDir), "180.pem"))
+                os.remove(os.path.join(str(product_dir), "180.pem"))
                 log.info("Removed 180.pem")
             except OSError, e:
                 log.info(e)
 
     def get_system_id(self):
-        system_id_path = self.rhncfg["systemIdPath"]
+        system_id_path = self.rhncfg["system_id_path"]
         p = libxml2.parseDoc(file(system_id_path).read())
         system_id = int(p.xpathEval('string(//member[* = "system_id"]/value/string)').split('-')[1])
         return system_id
@@ -475,7 +480,6 @@ class MigrationEngine(object):
     def write_migration_facts(self):
         migration_date = datetime.now().isoformat()
 
-        FACT_FILE = "/etc/rhsm/facts/migration.facts"
         if not os.path.exists(FACT_FILE):
             f = open(FACT_FILE, 'w')
             json.dump({"migration.classic_system_id": self.get_system_id(),
@@ -491,7 +495,6 @@ class MigrationEngine(object):
         Can thrown IOError exception.
         """
         log.info("Disabling rhnplugin.conf")
-        YUM_PLUGIN_CONF = '/etc/yum/pluginconf.d/rhnplugin.conf'
         f = open(YUM_PLUGIN_CONF, 'r')
         lines = f.readlines()
         f.close()
@@ -509,28 +512,28 @@ class MigrationEngine(object):
         f.close()
 
     def unregister_system_from_rhn_classic(self, sc, sk):
-        systemIdPath = self.rhncfg["systemIdPath"]
-        systemId = self.get_system_id()
+        system_id_path = self.rhncfg["systemIdPath"]
+        system_id = self.get_system_id()
 
-        log.info("Deleting system %s from RHN Classic...", systemId)
+        log.info("Deleting system %s from RHN Classic...", system_id)
         try:
-            result = sc.system.deleteSystems(sk, systemId)
+            result = sc.system.deleteSystems(sk, system_id)
         except Exception:
-            log.error("Could not delete system %s from RHN Classic" % systemId)
+            log.error("Could not delete system %s from RHN Classic" % system_id)
             log.error(traceback.format_exc())
-            shutil.move(systemIdPath, systemIdPath + ".save")
+            shutil.move(system_id_path, system_id_path + ".save")
             self.disable_yum_rhn_plugin()
             print _("Did not receive a completed unregistration message from RHN Classic for system %s.\n"
-                    "Please investigate on the Customer Portal at https://access.redhat.com.") % systemId
+                    "Please investigate on the Customer Portal at https://access.redhat.com.") % system_id
             return
 
         if result:
-            log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", systemId)
-            os.remove(systemIdPath)
+            log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", system_id)
+            os.remove(system_id_path)
             self.disable_yum_rhn_plugin()
             print _("System successfully unregistered from RHN Classic.")
         else:
-            systemExit(1, _("Unable to unregister system from RHN Classic.  Exiting."))
+            system_exit(1, _("Unable to unregister system from RHN Classic.  Exiting."))
 
     def register(self, credentials, org, environment):
         # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
@@ -547,7 +550,7 @@ class MigrationEngine(object):
         result = subprocess.call(cmd)
 
         if result != 0:
-            systemExit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
+            system_exit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
         else:
             consumer = ConsumerIdentity.read()
             print _("System '%s' successfully registered to Red Hat Subscription Management.\n") % consumer.getConsumerName()
@@ -559,7 +562,7 @@ class MigrationEngine(object):
         try:
             levels = self.cp.getServiceLevelList(org)
         except RemoteServerException, e:
-            systemExit(-1, not_supported)
+            system_exit(-1, not_supported)
         except RestlibException, e:
             if e.code == 404:
                 # no need to die, just skip it
@@ -609,16 +612,16 @@ class MigrationEngine(object):
     def enable_extra_channels(self, subscribed_channels):
         # Check if system was subscribed to extra channels like supplementary, optional, fastrack etc.
         # If so, enable them in the redhat.repo file
-        extraChannels = {'supplementary': False, 'productivity': False, 'optional': False}
+        extra_channels = {'supplementary': False, 'productivity': False, 'optional': False}
         for subscribedChannel in subscribed_channels:
             if 'supplementary' in subscribedChannel:
-                extraChannels['supplementary'] = True
+                extra_channels['supplementary'] = True
             elif 'optional' in subscribedChannel:
-                extraChannels['optional'] = True
+                extra_channels['optional'] = True
             elif 'productivity' in subscribedChannel:
-                extraChannels['productivity'] = True
+                extra_channels['productivity'] = True
 
-        if True not in extraChannels.values():
+        if True not in extra_channels.values():
             return
 
         # create and populate the redhat.repo file
@@ -631,9 +634,9 @@ class MigrationEngine(object):
         # enable any extra channels we are using and write out redhat.repo
         try:
             for rhsmChannel in repofile.sections():
-                if ((extraChannels['supplementary'] and re.search('supplementary$', rhsmChannel)) or
-                (extraChannels['optional'] and re.search('optional-rpms$', rhsmChannel)) or
-                (extraChannels['productivity'] and re.search('productivity-rpms$', rhsmChannel))):
+                if ((extra_channels['supplementary'] and re.search('supplementary$', rhsmChannel)) or
+                (extra_channels['optional'] and re.search('optional-rpms$', rhsmChannel)) or
+                (extra_channels['productivity'] and re.search('productivity-rpms$', rhsmChannel))):
                     log.info("Enabling extra channel '%s'" % rhsmChannel)
                     repofile.set(rhsmChannel, 'enabled', '1')
             repofile.write()

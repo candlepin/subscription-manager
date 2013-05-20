@@ -55,7 +55,7 @@ DEFAULT_CONF_PATH = "/etc/rhsm/pluginconf.d/"
 plugin_manager = None
 
 
-def getPluginManager():
+def get_plugin_manager():
     """Create or retrieve a PluginManager().
 
     Use this instead of creating PluginManager() directly

@@ -25,7 +25,7 @@ from subscription_manager.gui.contract_selection import ContractSelectionWindow
 from subscription_manager.gui.filter import FilterOptionsWindow, Filters
 from subscription_manager.gui import progress
 from subscription_manager.gui.storage import MappedTreeStore
-from subscription_manager.gui.utils import apply_highlight, errorWindow, get_cell_background_color, handle_gui_exception, set_background_model_index
+from subscription_manager.gui.utils import apply_highlight, show_error_window, get_cell_background_color, handle_gui_exception, set_background_model_index
 from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, require
 from subscription_manager.jsonwrapper import PoolWrapper
@@ -57,7 +57,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.pool_stash = managerlib.PoolStash(self.backend,
                                                self.facts)
-        self.plugin_manager = plugins.getPluginManager()
+        self.plugin_manager = plugins.get_plugin_manager()
 
         today = datetime.date.today()
         self.date_picker = widgets.DatePicker(today)
@@ -281,13 +281,13 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         if not found:
             self.sub_details.clear()
 
-    def _product_attrs_to_dict(self, productAttributesList):
+    def _product_attrs_to_dict(self, product_attributes_list):
         """
         Convert the JSON list of product attributes into a dict we can
         work with more easily.
         """
         final_attrs = {}
-        for pa in productAttributesList:
+        for pa in product_attributes_list:
             final_attrs[pa['name']] = pa['value']
         return final_attrs
 
@@ -363,8 +363,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def _contract_selected(self, pool, quantity=1):
         if not valid_quantity(quantity):
-            errorWindow(_("Quantity must be a positive number."),
-                    parent=self.parent_win)
+            show_error_window(_("Quantity must be a positive number."),
+                              parent=self.parent_win)
             return
 
         self._contract_selection_cancelled()

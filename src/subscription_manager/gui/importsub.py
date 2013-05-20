@@ -22,7 +22,7 @@ import gtk
 _ = gettext.gettext
 
 from subscription_manager.gui import messageWindow
-from subscription_manager.gui.utils import errorWindow
+from subscription_manager.gui.utils import show_error_window
 from subscription_manager.managerlib import ImportFileExtractor
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -127,7 +127,7 @@ class ImportSubDialog(object):
                 msg += "\n\n"
                 msg += _("The following certificates were successfully imported:")
                 msg += "\n" + "\n".join(good_certs)
-            errorWindow(msg, parent=self._parent)
+            show_error_window(msg, parent=self._parent)
         else:
             #if we get to this point, the import was successful
             messageWindow.InfoDialog(_("Certificate import was successful."),

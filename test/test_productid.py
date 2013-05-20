@@ -286,7 +286,7 @@ class TestProductManager(unittest.TestCase):
         active = set(['rhel-6-server'])
 
         # mock this so we can verify it's called correctly
-        self.prod_dir.findByProduct = Mock(return_value=cert)
+        self.prod_dir.find_by_product = Mock(return_value=cert)
         self.prod_mgr._is_desktop = Mock(return_value=False)
         self.prod_mgr._is_workstation = Mock(return_value=False)
 
@@ -302,7 +302,7 @@ class TestProductManager(unittest.TestCase):
         self.assertTrue(self.prod_mgr._is_desktop.called)
         self.assertTrue(self.prod_mgr._is_workstation.called)
 
-        self.prod_dir.findByProduct.assert_called_with('69')
+        self.prod_dir.find_by_product.assert_called_with('69')
         self.prod_mgr.plugin_manager.run.assert_called_with('post_product_id_install', product_list=[])
 
     def test_update_installed_no_product_certs_with_active_with_enabled(self):
@@ -321,14 +321,14 @@ class TestProductManager(unittest.TestCase):
         self.prod_db_mock.find_repos = Mock(side_effect=self.find_repos_side_effect)
 
         cert.write = Mock()
-        self.prod_dir.findByProduct = Mock(return_value=None)
+        self.prod_dir.find_by_product = Mock(return_value=None)
         self.prod_mgr._is_desktop = Mock(return_value=False)
         self.prod_mgr._is_workstation = Mock(return_value=False)
 
         # we dont actually use the return value anywhere...
         self.prod_mgr.update_installed(enabled, active)
 
-        self.prod_dir.findByProduct.assert_called_with('69')
+        self.prod_dir.find_by_product.assert_called_with('69')
         self.assertTrue(cert.write.called)
         self.assertTrue(self.prod_mgr._is_desktop.called)
         self.assertTrue(self.prod_mgr._is_workstation.called)
@@ -348,7 +348,7 @@ class TestProductManager(unittest.TestCase):
         active = set([])
 
         cert.write = Mock()
-        self.prod_dir.findByProduct = Mock(return_value=None)
+        self.prod_dir.find_by_product = Mock(return_value=None)
         self.prod_mgr._is_desktop = Mock(return_value=False)
         self.prod_mgr._is_workstation = Mock(return_value=False)
 

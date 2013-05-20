@@ -18,7 +18,6 @@ import datetime
 import gettext
 import logging
 import os
-from os import linesep as NEW_LINE
 import re
 import shutil
 import stat
@@ -77,7 +76,7 @@ def map_status(status):
     return smap[status]
 
 
-def getInstalledProductStatus(product_directory, entitlement_directory, uep):
+def get_installed_product_status(product_directory, entitlement_directory, uep):
     """
      Returns the Installed products and their subscription states
     """
@@ -96,8 +95,8 @@ def getInstalledProductStatus(product_directory, entitlement_directory, uep):
             if prod_status_range:
                 # Format the date in user's local time as the date
                 # range is returned in GMT.
-                begin = formatDate(prod_status_range.begin())
-                end = formatDate(prod_status_range.end())
+                begin = format_date(prod_status_range.begin())
+                end = format_date(prod_status_range.end())
             data = (product.name,
                     installed_product,
                     product.version,
@@ -301,7 +300,7 @@ def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
 # TODO: This method is morphing the actual pool json and returning a new
 # dict which does not contain all the pool info. Not sure if this is really
 # necessary. Also some "view" specific things going on in here.
-def getAvailableEntitlements(cpserver, consumer_uuid, facts, get_all=False, active_on=None):
+def get_available_entitlements(cpserver, consumer_uuid, facts, get_all=False, active_on=None):
     """
     Returns a list of entitlement pools from the server.
 
@@ -336,7 +335,7 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, get_all=False, acti
         else:
             d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
 
-        d['endDate'] = formatDate(isodate.parse_date(d['endDate']))
+        d['endDate'] = format_date(isodate.parse_date(d['endDate']))
         del d['consumed']
 
     return data
@@ -661,9 +660,9 @@ class ImportFileExtractor(object):
         if self._CERT_DICT_TAG in self.parts:
             cert_content = self.parts[self._CERT_DICT_TAG]
         if self._ENT_DICT_TAG in self.parts:
-            cert_content = cert_content + NEW_LINE + self.parts[self._ENT_DICT_TAG]
+            cert_content = cert_content + os.linesep + self.parts[self._ENT_DICT_TAG]
         if self._SIG_DICT_TAG in self.parts:
-            cert_content = cert_content + NEW_LINE + self.parts[self._SIG_DICT_TAG]
+            cert_content = cert_content + os.linesep + self.parts[self._SIG_DICT_TAG]
         return cert_content
 
     def verify_valid_entitlement(self):
@@ -730,7 +729,7 @@ def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])
 
 
-def formatDate(dt):
+def format_date(dt):
     if dt:
         return dt.astimezone(LocalTz()).strftime("%x")
     else:

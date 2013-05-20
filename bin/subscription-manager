@@ -25,7 +25,7 @@ import sys
 import os
 
 
-def systemExit(code, msgs=None):
+def system_exit(code, msgs=None):
     "Exit with a code and optional message(s). Saved a few lines of code."
 
     if msgs:
@@ -59,9 +59,9 @@ try:
     from subscription_manager import managercli
     from subscription_manager.managercli import handle_exception
 except KeyboardInterrupt:
-    systemExit(0, "\nUser interrupted process.")
+    system_exit(0, "\nUser interrupted process.")
 except ImportError, e:
-    systemExit(2, "Unable to find Subscription Manager module.\n"
+    system_exit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
 
 
@@ -70,7 +70,7 @@ def main():
     try:
         return managercli.ManagerCLI().main()
     except KeyboardInterrupt:
-        systemExit(0, "\nUser interrupted process.")
+        system_exit(0, "\nUser interrupted process.")
 
     return 0
 
@@ -83,6 +83,6 @@ if __name__ == '__main__':
         #re-raise, bypassing handle_exception
         raise e
     except KeyboardInterrupt:
-        systemExit(0, "\nUser interrupted process.")
+        system_exit(0, "\nUser interrupted process.")
     except Exception, e:
         handle_exception("exception caught in subscription-manager", e)

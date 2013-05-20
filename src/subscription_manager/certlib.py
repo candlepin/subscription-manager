@@ -73,11 +73,11 @@ class CertLib(DataLib):
     def __init__(self, lock=ActionLock(), uep=None):
         DataLib.__init__(self, lock, uep)
 
-    def delete(self, serialNumbers):
+    def delete(self, serial_numbers):
         lock = self.lock
         lock.acquire()
         try:
-            return self._do_delete(serialNumbers)
+            return self._do_delete(serial_numbers)
         finally:
             lock.release()
 
@@ -85,9 +85,9 @@ class CertLib(DataLib):
         action = UpdateAction(uep=self.uep)
         return action.perform()
 
-    def _do_delete(self, serialNumbers):
+    def _do_delete(self, serial_numbers):
         action = DeleteAction()
-        return action.perform(serialNumbers)
+        return action.perform(serial_numbers)
 
 
 class HealingLib(DataLib):
@@ -101,7 +101,7 @@ class HealingLib(DataLib):
         DataLib.__init__(self, lock, uep)
 
         self._product_dir = product_dir or ProductDirectory()
-        self.plugin_manager = plugins.getPluginManager()
+        self.plugin_manager = plugins.get_plugin_manager()
 
     def _do_update(self):
         uuid = ConsumerIdentity.read().getConsumerId()
@@ -210,8 +210,8 @@ class Action:
 
 class DeleteAction(Action):
 
-    def perform(self, serialNumbers):
-        for sn in serialNumbers:
+    def perform(self, serial_numbers):
+        for sn in serial_numbers:
             cert = self.entdir.find(sn)
             if cert is None:
                 continue
@@ -232,9 +232,9 @@ class UpdateAction(Action):
         rogue_serials = self._find_rogue_serials(local, expected)
         self.delete(rogue_serials, report)
         exceptions = self.install(missing_serials, report)
-        self.purgeExpired(report)
+        self.purge_expired(report)
         log.info('certs updated:\n%s', report)
-        self.syslogResults(report)
+        self.syslog_results(report)
         # WARNING: TODO: XXX: this is returning a tuple, the parent class and
         # all other sub-classes return an int, which somewhat defeats
         # the purpose...
@@ -257,7 +257,7 @@ class UpdateAction(Action):
                 rogue.append(cert)
         return rogue
 
-    def syslogResults(self, report):
+    def syslog_results(self, report):
         for cert in report.added:
             system_log("Added subscription for '%s' contract '%s'" %
                        (cert.order.name, cert.order.contract))
@@ -289,7 +289,7 @@ class UpdateAction(Action):
             local[sn] = valid
         return local
 
-    def _getConsumerId(self):
+    def _get_consumer_id(self):
         try:
             cid = ConsumerIdentity.read()
             return cid.getConsumerId()
@@ -297,19 +297,19 @@ class UpdateAction(Action):
             log.error(e)
             raise Disconnected()
 
-    def getCertificateSerialsList(self):
+    def get_certificate_serials_list(self):
         results = []
         # if there is no UEP object, short circuit
         if self.uep is None:
             return results
-        reply = self.uep.getCertificateSerials(self._getConsumerId())
+        reply = self.uep.getCertificateSerials(self._get_consumer_id())
         for d in reply:
             sn = d['serial']
             results.append(sn)
         return results
 
     def _get_expected_serials(self, report):
-        exp = self.getCertificateSerialsList()
+        exp = self.get_certificate_serials_list()
         report.expected = exp
         return exp
 
@@ -326,12 +326,12 @@ class UpdateAction(Action):
                                    rogue_count) % rogue_count
             self.entdir.refresh()
 
-    def getCertificatesBySerialList(self, snList):
+    def get_certificates_by_serial_list(self, sn_list):
         result = []
-        if snList:
-            snList = [str(sn) for sn in snList]
-            reply = self.uep.getCertificates(self._getConsumerId(),
-                                              serials=snList)
+        if sn_list:
+            sn_list = [str(sn) for sn in sn_list]
+            reply = self.uep.getCertificates(self._get_consumer_id(),
+                                              serials=sn_list)
             for cert in reply:
                 result.append(cert)
         return result
@@ -339,7 +339,7 @@ class UpdateAction(Action):
     def install(self, serials, report):
         br = Writer()
         exceptions = []
-        for bundle in self.getCertificatesBySerialList(serials):
+        for bundle in self.get_certificates_by_serial_list(serials):
             try:
                 key, cert = self.build(bundle)
                 # Skip any expired certs coming from the server
@@ -363,8 +363,8 @@ class UpdateAction(Action):
                 exceptions.append(e)
         return exceptions
 
-    def purgeExpired(self, report):
-        for cert in self.entdir.listExpired():
+    def purge_expired(self, report):
+        for cert in self.entdir.list_expired():
             report.expired.append(cert)
             cert.delete()
 
