@@ -167,7 +167,7 @@ class CLI:
         except InvalidCLIOptionError, error:
             print error
         except Exception, e:
-            systemExit(-1, e)
+            system_exit(-1, e)
 
 
 def system_exit(code, msgs=None):
