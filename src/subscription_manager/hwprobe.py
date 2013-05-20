@@ -24,7 +24,6 @@ import logging
 import os
 import platform
 import re
-import sets
 import signal
 import socket
 from subprocess import PIPE, Popen
@@ -280,13 +279,17 @@ class Hardware:
 
 
     def count_cpumask_entries(self, cpu, field):
-        f = open("%s/topology/%s" % (cpu, field), 'r')
+        try:
+            f = open("%s/topology/%s" % (cpu, field), 'r')
+        except IOError,e:
+            return None
+
         entries = f.read()
         cpumask_entries = gather_entries(entries)
         return len(cpumask_entries)
 
     def getCpuInfo2(self):
-        cpuinfo = {}
+        self.cpuinfo = {}
         # we also have cpufreq, etc in this dir, so match just the numbs
         cpu_re = r'cpu([0-9]+$)'
 
@@ -306,19 +309,29 @@ class Hardware:
         # but lscpu makes the same assumption
         threads_per_cpu = self.count_cpumask_entries(cpu_files[0], 'thread_siblings_list')
         cores_per_cpu = self.count_cpumask_entries(cpu_files[0], 'core_siblings_list') / threads_per_cpu
+        book_siblings_per_cpu = self.count_cpumask_entries(cpu_files[0], 'book_siblings_list')
 
-        # cpu_count = 64
-        # threads_per_cpu = 2
-        # cores_per_cpu = 8
         # socket_count = 4
         core_count = cpu_count / threads_per_cpu
-        # cpu_count = socket_count * cores_per_cpu * threads_per_cpu (4 * 8 *
-        # 2)
         socket_count = cpu_count / cores_per_cpu / threads_per_cpu
+
+        # for s390, socket calculates are per book, and we can have multiple
+        # books, so multiply socket count by book count
+
+        if book_siblings_per_cpu:
+            book_count = cpu_count / book_siblings_per_cpu
+
         self.cpuinfo['cpu.cpu_socket(s)'] = socket_count
         self.cpuinfo['cpu.core(s)_per_socket'] = cores_per_cpu
         self.cpuinfo["cpu.cpu(s)"] = cpu_count
-        self.cpuinfo["cpu.thread(s)_per_cpu"] = threads_per_cpu
+        self.cpuinfo["cpu.thread(s)_per_core"] = threads_per_cpu
+
+        # s390 etc
+        if book_siblings_per_cpu:
+            self.cpuinfo["cpu.book(s)_per_cpu"] = book_siblings_per_cpu
+            self.cpuinfo["cpu.socket(s)_per_book"] = book_count / socket_count
+            self.cpuinfo["cpu.book(s)"] = book_count
+
         self.allhw.update(self.cpuinfo)
 
 #    def getSockets(self):
@@ -593,7 +606,7 @@ class Hardware:
         hardware_methods = [self.getUnameInfo,
                             self.getReleaseInfo,
                             self.getMemInfo,
-                            self.getCpuInfo,
+                            #self.getCpuInfo,
                             self.getCpuInfo2,
                             self.getLsCpuInfo,
                             self.getNetworkInfo,
@@ -636,29 +649,40 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         hw.prefix = sys.argv[1]
         hw.testing = True
-    print "hw.prefix", hw.prefix, sys.argv
-    print "hw.testing", hw.testing
+    #print "hw.prefix", hw.prefix, sys.argv
+    #print "hw.testing", hw.testing
     hw_dict = hw.getAll()
-    print "foo"
+    #print "foo"
     if True or not hw.testing:
         for hkey, hvalue in sorted(hw_dict.items()):
             print "'%s' : '%s'" % (hkey, hvalue)
+    #print "bar"
 
     # verify the cpu socket info collection we use for rhel5 matches lscpu
     cpu_items = [('cpu.core(s)_per_socket', 'lscpu.core(s)_per_socket'),
                  ('cpu.cpu(s)', 'lscpu.cpu(s)'),
                  # NOTE: the substring is different for these two folks...
                  # FIXME: follow up to see if this has changed
-                 ('cpu.cpu_socket(s)', 'lscpu.socket(s)')]
+                 ('cpu.cpu_socket(s)', 'lscpu.socket(s)'),
+                 ('cpu.book(s)', 'lscpu.book(s)'),
+                 ('cpu.thread(s)_per_core', 'lscpu.thread(s)_per_core'),
+                 ('cpu.socket(s)_per_book', 'lscpu.socket(s)_per_book')]
     failed = False
+    failed_list = []
     for cpu_item in cpu_items:
-        print "blip", hw_dict.get(cpu_item[0])
-        value_0 = int(hw_dict.get(cpu_item[0]))
+        #print "blip", hw_dict.get(cpu_item[0])
+        value_0 = int(hw_dict.get(cpu_item[0], -1))
         value_1 = int(hw_dict.get(cpu_item[1], -1))
-        if value_0 != value_1:
-            print "cpu detection error", value_0 == value_1,
-            print "The values %s %s do not match (|%s| != |%s|)" % (cpu_item[0], cpu_item[1],
-                                                                value_0, value_1)
-            failed = True
+        print "| %s | %s |" % (cpu_item[0], cpu_item[1])
+        print "%s  %s" % (value_0, value_1)
+        if value_0 != value_1 and ((value_0 != -1) and (value_1 != -1)):
+            failed_list.append((cpu_item[0], cpu_item[1], value_0, value_1))
+
+    if failed:
+        print "cpu detection error"
+    for failed in failed_list:
+            print "The values %s %s do not match (|%s| != |%s|)" % (failed[0], failed[1],
+                                                                    failed[2], failed[3])
+
     if failed:
         sys.exit(1)
