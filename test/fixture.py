@@ -1,4 +1,5 @@
 import difflib
+import pprint
 import unittest
 
 from mock import Mock, NonCallableMock, patch
@@ -56,20 +57,20 @@ class SubManFixture(unittest.TestCase):
 
             self.fail("Multi-line strings are unequal:\n" + message)
 
-    def assert_equal_dict(self, first_dict, second_dict):
+    def assert_equal_dict(self, expected_dict, actual_dict):
         mismatches = []
         missing_keys = []
         extra = []
 
-        for key in first_dict:
-            if key not in second_dict:
+        for key in expected_dict:
+            if key not in actual_dict:
                 missing_keys.append(key)
                 continue
-            if first_dict[key] != second_dict[key]:
-                mismatches.append((key, first_dict[key], second_dict[key]))
+            if expected_dict[key] != actual_dict[key]:
+                mismatches.append((key, expected_dict[key], actual_dict[key]))
 
-        for key in second_dict:
-            if key not in first_dict:
+        for key in actual_dict:
+            if key not in expected_dict:
                 extra.append(key)
 
         message = ""
@@ -77,14 +78,22 @@ class SubManFixture(unittest.TestCase):
             message += "Keys in only one dict: \n"
             if missing_keys:
                 for key in missing_keys:
-                    message += "second_dict:  %s\n" % key
+                    message += "actual_dict:  %s\n" % key
             if extra:
                 for key in extra:
-                    message += "first_dict: %s\n" % key
+                    message += "expected_dict: %s\n" % key
         if mismatches:
             message += "Unequal values: \n"
             for info in mismatches:
                 message += "%s: %s != %s\n" % info
+
+        # pprint the dicts
+        message += "\n"
+        message += "expected_dict:\n"
+        message += pprint.pformat(expected_dict)
+        message += "\n"
+        message += "actual_dict:\n"
+        message += pprint.pformat(actual_dict)
 
         if mismatches or missing_keys or extra:
             self.fail(message)
