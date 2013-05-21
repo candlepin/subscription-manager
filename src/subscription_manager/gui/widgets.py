@@ -688,8 +688,6 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
     def _filter_spinner_value(self, triggering_event, editable, new_value):
         adj = editable.get_property("adjustment")
         upper = int(adj.get_property("upper"))
-        lower = int(adj.get_property("lower"))
-        increment = int(adj.get_property("step-increment"))
 
         # Ensure that a digit was entered.
         if len(new_value) >= 1 and not new_value.isdigit():
@@ -702,15 +700,12 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
             editable.emit_stop_by_name(triggering_event)
             return
 
-        # Ensure the value is within upper/lower bounds with
-        # exception of 0.
-        int_value = int(new_value)
-        if int_value > upper or (int_value != 0 and int_value < lower):
-            editable.emit_stop_by_name(triggering_event)
-            return
-
-        # Don't let users enter values that aren't multiples of the increment
-        if int_value % increment != 0:
+        # Check to make sure they aren't over the upper bound here.
+        # We will check that they aren't under the lower bound once they have
+        # finished entering text in _on_edit so that we don't prevent people
+        # from temporarily entering values that are too low.  E.g. a person
+        # entering '12' must type '1' first which might be below the lower bound.
+        if int(new_value) > upper:
             editable.emit_stop_by_name(triggering_event)
             return
 
@@ -725,6 +720,21 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
         try:
             new_quantity = int(new_text)
             tree_iter = model.get_iter(path)
+
+            if self.quantity_increment_idx is not None:
+                increment = model.get_value(tree_iter, self.quantity_increment_idx)
+            else:
+                increment = 1
+
+            # Don't allow quantities that aren't divisible by the increment.  This
+            # also serves to prevent values that are lower than the lower bound.
+            # Since the lower bound is the increment itself, any number smaller
+            # than the lower bound modulo the lower bound will be the smaller number.
+            # E.g. If the increment is 4 and the person enters 3, 3 % 4 is 3 and we
+            # will reset to the previous value.
+            if new_quantity % increment != 0:
+                return
+
             model.set_value(tree_iter, self.quantity_store_idx, new_quantity)
         except ValueError:
             # Do nothing... The value entered in the grid will be reset.
