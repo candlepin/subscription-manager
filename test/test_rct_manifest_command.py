@@ -14,6 +14,8 @@
 #
 
 from cStringIO import StringIO
+import errno
+import mock
 import os
 import shutil
 import sys
@@ -135,6 +137,39 @@ class RCTManifestCommandTests(fixture.SubManFixture):
         mancommand._do_command()
         self.assertTrue(os.path.exists(os.path.join(new_directory, "export")))
         shutil.rmtree(new_directory)
+
+    @mock.patch("rct.manifest_commands.ZipExtractAll._write_file")
+    def test_dump_manifest_directory_no_perms(self, mock_write_file):
+        new_directory = tempfile.mkdtemp()
+        mancommand = DumpManifestCommand()
+        mancommand.args = [_build_valid_manifest()]
+
+        #This makes sure the temp directory is referenced at 'self.options.destination'
+        mancommand.options = mancommand
+        mancommand.destination = new_directory
+        mancommand.overwrite_files = True
+
+        mock_write_file.side_effect = IOError(errno.EACCES, "permission denied", new_directory)
+        mancommand._do_command()
+        # we fail to extract manifest in this case
+        self.assertFalse(os.path.exists(os.path.join(new_directory, "export")))
+
+    @mock.patch("rct.manifest_commands.ZipExtractAll._write_file")
+    def test_dump_manifest_directory_exists(self, mock_write_file):
+        new_directory = tempfile.mkdtemp()
+
+        mancommand = DumpManifestCommand()
+        mancommand.args = [_build_valid_manifest()]
+
+        #This makes sure the temp directory is referenced at 'self.options.destination'
+        mancommand.options = mancommand
+        mancommand.destination = new_directory
+        mancommand.overwrite_files = True
+
+        mock_write_file.side_effect = OSError(errno.EEXIST, "file exists", new_directory)
+        mancommand._do_command()
+        # we fail to extract manifest in this case
+        self.assertFalse(os.path.exists(os.path.join(new_directory, "export")))
 
 
 class RCTManifestExtractTests(unittest.TestCase):

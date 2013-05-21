@@ -14,6 +14,7 @@
 #
 
 from cStringIO import StringIO
+import errno
 import gettext
 import os
 import simplejson as json
@@ -82,10 +83,7 @@ class ZipExtractAll(ZipFile):
         return results
 
     def _open_excl(self, path):
-        try:
-            return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL), 'w')
-        except OSError:
-            raise Exception(_('File "%s" exists. Use -f to force overwriting the file.') % path)
+        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL), 'w')
 
     def _write_file(self, output_path, archive_path):
         outfile = self._open_excl(output_path)
@@ -290,13 +288,30 @@ class DumpManifestCommand(RCTManifestCommand):
                                dest="overwrite_files", default=False,
                                help=_("overwrite files which may exist"))
 
+    def _extract(self, destination, overwrite):
+        try:
+            self._extract_manifest(destination, overwrite)
+        except EnvironmentError, e:
+            # IOError/OSError base class
+            if e.errno == errno.EEXIST:
+                # useful error for file already exists
+                print _('File "%s" exists. Use -f to force overwriting the file.') % e.filename
+            else:
+                # generic error for everything else
+                print _("Manifest could not be written:")
+                print e.strerror
+                if e.filename:
+                    print e.filename
+            return False
+        return True
+
     def _do_command(self):
         """
         Does the work that this command intends.
         """
         if self.options.destination:
-            self._extract_manifest(self.options.destination, self.options.overwrite_files)
-            print _("The manifest has been dumped to the %s directory") % self.options.destination
+            if self._extract(self.options.destination, self.options.overwrite_files):
+                print _("The manifest has been dumped to the %s directory") % self.options.destination
         else:
-            self._extract_manifest(os.getcwd(), self.options.overwrite_files)
-            print _("The manifest has been dumped to the current directory")
+            if self._extract(os.getcwd(), self.options.overwrite_files):
+                print _("The manifest has been dumped to the current directory")
