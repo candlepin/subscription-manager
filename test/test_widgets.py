@@ -159,7 +159,7 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
 
     def test__update_cell_based_on_data_clears_cell_when_row_has_children(self):
         column, tree_model, tree_iter = self._setup_column(1, False)
-        tree_model.add_map(tree_iter, self._create_store_map(1, False))
+        tree_model.add_map(tree_iter, self._create_store_map(1, False, 15, 2))
 
         column.quantity_renderer.set_property("text", "22")
         column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, tree_iter)
@@ -219,18 +219,9 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
     def test_filter_spinner_value_does_not_accept_value_over_upper_limit(self):
         self._run_filter_value_test("13", False, upper=12.0)
 
-    def test_filter_spinner_value_does_not_accept_value_under_lower_limit(self):
-        self._run_filter_value_test("2", False, lower=3.0)
-
     def test_filter_spinner_value_allows_value_on_bounds(self):
         self._run_filter_value_test("1", True, upper=10, lower=1)
         self._run_filter_value_test("10", True, upper=10, lower=1)
-
-    def test_filter_spinner_value_does_not_allow_non_multiples_of_increment(self):
-        self._run_filter_value_test("4", False, step_incr=3)
-
-    def test_filter_spinner_value_allows_multiples_of_increment(self):
-        self._run_filter_value_test("9", True, step_incr=3)
 
     def _run_filter_value_test(self, test_input_value, is_allowed, upper=15, lower=1, step_incr=1):
         column, tree_model, tree_iter = self._setup_column(1, True)
@@ -251,26 +242,39 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
 
         self.assertEquals(not is_allowed, self.stopped)
 
-    def _create_store_map(self, quantity, multi_entitlement):
-        return {"quantity": quantity, "multi-entitlement": multi_entitlement}
+    def _create_store_map(self, quantity, multi_entitlement, available, increment):
+        return {"quantity": quantity, "multi-entitlement": multi_entitlement, "available_store": available,
+                "quantity_increment": increment}
 
-    def _setup_column(self, initial_quantity, inital_multi_entitlement):
-        tree_model = MappedTreeStore(self._create_store_map(int, bool))
+    def _setup_column(self, initial_quantity, inital_multi_entitlement, initial_available=15,
+            initial_increment=2):
+        tree_model = MappedTreeStore(self._create_store_map(int, bool, int, int))
         column = QuantitySelectionColumn("test-col", tree_model, tree_model['quantity'],
-                                         tree_model['multi-entitlement'])
+                                         tree_model['multi-entitlement'], tree_model['available_store'],
+                                         tree_model['quantity_increment'])
         tree_iter = tree_model.add_map(None, self._create_store_map(initial_quantity,
-                                                               inital_multi_entitlement))
+                                                               inital_multi_entitlement, initial_available,
+                                                               initial_increment))
         return (column, tree_model, tree_iter)
 
     def test_increment_based_on_provided_data(self):
-        tree_model = MappedTreeStore({"quantity": int, "multi-entitlement": bool, "available_store": int,
-            "quantity_increment": str})
-        column = QuantitySelectionColumn("test-col", tree_model, tree_model['quantity'],
-                tree_model['multi-entitlement'], tree_model['available_store'],
-                tree_model['quantity_increment'])
-        tree_iter = tree_model.add_map(None, {"quantity": 15, "multi-entitlement": True,
-            "available_store": 15, "quantity_increment": 2})
+        (column, tree_model, tree_iter) = self._setup_column(15, True, 15, 2)
         column._update_cell_based_on_data(column, column.quantity_renderer, tree_model, tree_iter)
         adj = column.quantity_renderer.get_property("adjustment")
         self.assertEquals(2, int(adj.get_property("step-increment")))
         self.assertEquals(2, int(adj.get_property("lower")))
+
+    def test_on_edit_refuses_non_multiples_of_increment(self):
+        (column, tree_model, tree_iter) = self._setup_column(10, True, 15, 2)
+        column._on_edit(None, 0, 7, tree_model)
+        self.assertEquals(10, int(tree_model.get_value(tree_iter, tree_model['quantity'])))
+
+    def test_on_edit_allows_multiples_of_increment(self):
+        (column, tree_model, tree_iter) = self._setup_column(10, True, 15, 2)
+        column._on_edit(None, 0, 8, tree_model)
+        self.assertEquals(8, tree_model.get_value(tree_iter, tree_model['quantity']))
+
+    def test_on_edit_refuses_value_lower_than_increment(self):
+        (column, tree_model, tree_iter) = self._setup_column(10, True, 15, 4)
+        column._on_edit(None, 0, 2, tree_model)
+        self.assertEquals(10, tree_model.get_value(tree_iter, tree_model['quantity']))
