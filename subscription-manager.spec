@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.7
+Version: 1.8.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -378,6 +378,27 @@ fi
 %endif
 
 %changelog
+* Tue May 21 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.8-1
+- Fix echo'ing of exit status or exception on exit (alikins@redhat.com)
+- 962905: Fixing errors with quantity spinner. (awood@redhat.com)
+- 961124: Allow rct dump-manifest to be called more than once (bkearney@redhat.com)
+- 921249: Fix Unknown virt status being reported to server.  (dgoodwin@redhat.com)
+- 905136: Make the accessability value unique (bkearney@redhat.com)
+- 913635: typo (dlackey@redhat.com.com)
+- 889582 (dlackey@redhat.com.com)
+- 962520: require python-rhsm 1.8.11 for arches (alikins@redhat.com)
+- 919706: Relax rhn-setup-gnome dependency. (dgoodwin@redhat.com)
+- Add new expiring icon (bkearney@redhat.com)
+- use os.linesep as imported (alikins@redhat.com)
+- cleanup camelCase usage in various files (alikins@redhat.com)
+- adding architecture data (ckozak@redhat.com)
+- Default option is status (ckozak@redhat.com)
+- changed list --status to status (ckozak@redhat.com)
+- adding data to installed prods (ckozak@redhat.com)
+- SORT ALL THE IMPORTS! (alikins@redhat.com)
+- stylish cleanup (alikins@redhat.com)
+- mock.patch ConsumerIdentity instead of monkey patch (alikins@redhat.com)
+
 * Thu May 09 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.7-1
 - 959563, 956298: for rhel 5.10 (dlackey@redhat.com.com)
 - 905922: use get_int instead of get in order to consume the value as a
