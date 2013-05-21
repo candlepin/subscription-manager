@@ -37,7 +37,7 @@ _ = gettext.gettext
 WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
 
 prefix = os.path.dirname(__file__)
-WARNING_IMG = os.path.join(prefix, "data/icons/partial.svg")
+WARNING_IMG = os.path.join(prefix, "data/icons/expiring.svg")
 EXPIRED_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 
 
