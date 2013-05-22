@@ -591,14 +591,15 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         hw.prefix = sys.argv[1]
         hw.testing = True
-    #print "hw.prefix", hw.prefix, sys.argv
-    #print "hw.testing", hw.testing
     hw_dict = hw.get_all()
-    #print "foo"
-    if True or not hw.testing:
+
+    # just show the facts collected
+    if not hw.testing:
         for hkey, hvalue in sorted(hw_dict.items()):
             print "'%s' : '%s'" % (hkey, hvalue)
-    #print "bar"
+
+    if not hw.testing:
+        sys.exit(0)
 
     # verify the cpu socket info collection we use for rhel5 matches lscpu
     cpu_items = [('cpu.core(s)_per_socket', 'lscpu.core(s)_per_socket'),
@@ -612,19 +613,19 @@ if __name__ == '__main__':
     failed = False
     failed_list = []
     for cpu_item in cpu_items:
-        #print "blip", hw_dict.get(cpu_item[0])
         value_0 = int(hw_dict.get(cpu_item[0], -1))
         value_1 = int(hw_dict.get(cpu_item[1], -1))
-        print "| %s | %s |" % (cpu_item[0], cpu_item[1])
-        print "%s  %s" % (value_0, value_1)
+
+        #print "%s/%s: %s %s" % (cpu_item[0], cpu_item[1], value_0, value_1)
+
         if value_0 != value_1 and ((value_0 != -1) and (value_1 != -1)):
             failed_list.append((cpu_item[0], cpu_item[1], value_0, value_1))
 
     if failed:
         print "cpu detection error"
     for failed in failed_list:
-            print "The values %s %s do not match (|%s| != |%s|)" % (failed[0], failed[1],
-                                                                    failed[2], failed[3])
+        print "The values %s %s do not match (|%s| != |%s|)" % (failed[0], failed[1],
+                                                                failed[2], failed[3])
 
     if failed:
         sys.exit(1)
