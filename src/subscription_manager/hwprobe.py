@@ -235,7 +235,7 @@ class Hardware:
         cpumask_entries = gather_entries(entries)
         return len(cpumask_entries)
 
-    def _get_s390_sysinfo(self, cpu_count, sysinfo):
+    def _parse_s390_sysinfo(self, cpu_count, sysinfo):
         # to quote lscpu.c:
         #CPU Topology SW:      0 0 0 4 6 4
         #/* s390 detects its cpu topology via /proc/sysinfo, if present.
@@ -264,6 +264,20 @@ class Hardware:
                 return (socket_count, cores_count, books, sockets_per_book, cores_per_socket)
 
         return None
+
+    def has_s390_sysinfo(self, proc_sysinfo):
+        if not os.access(proc_sysinfo, os.R_OK):
+            return False
+        return True
+
+    def read_s390_sysinfo(self, cpu_count, proc_sysinfo):
+        try:
+            f = open(proc_sysinfo, 'r')
+        finally:
+            f.close()
+
+        sysinfo = f.readlines()
+        return self._parse_s390_sysinfo(cpu_count, sysinfo)
 
     def get_cpu_info(self):
         self.cpuinfo = {}
@@ -309,14 +323,12 @@ class Hardware:
         # see if we have a /proc/sysinfo ala s390, if so
         # prefer that info
         proc_sysinfo = self.prefix + "/proc/sysinfo"
-        if os.access(proc_sysinfo, os.R_OK):
-            f = open(proc_sysinfo, 'r')
-            sysinfo = f.readlines()
-            s390_topo = self._get_s390_sysinfo(cpu_count, sysinfo)
-            f.close()
+        has_sysinfo = self.has_s390_sysinfo(proc_sysinfo)
+        if has_sysinfo:
+            s390_topo = self.read_s390_sysinfo(cpu_count, proc_sysinfo)
             if s390_topo:
                 socket_count, cores_count, book_count, \
-                        sockets_per_book, cores_per_socket = s390_topo
+                    sockets_per_book, cores_per_socket = s390_topo
                 books = True
 
         self.cpuinfo['cpu.cpu_socket(s)'] = socket_count
