@@ -458,11 +458,11 @@ class HardwareProbeTests(fixture.SubManFixture):
                                               #'cpu.thread(s)_per_core': 1})
 
     @patch("os.listdir")
-    def test_cpu_info_lots_cpu(self, MockListdir):
+    def test_cpu_info_lots_cpu(self, mock_list_dir):
         reload(hwprobe)
         hw = hwprobe.Hardware()
 
-        MockListdir.return_value = ["cpu%s" % i for i in range(0, 2000)]
+        mock_list_dir.return_value = ["cpu%s" % i for i in range(0, 2000)]
 
         def count_cpumask(cpu, field):
             vals = {'thread_siblings_list': 1,
