@@ -275,9 +275,7 @@ class Hardware:
             f = open(proc_sysinfo, 'r')
         finally:
             f.close()
-
-        sysinfo = f.readlines()
-        return self._parse_s390_sysinfo(cpu_count, sysinfo)
+        return f.readlines()
 
     def get_cpu_info(self):
         self.cpuinfo = {}
@@ -324,11 +322,13 @@ class Hardware:
         # prefer that info
         proc_sysinfo = self.prefix + "/proc/sysinfo"
         has_sysinfo = self.has_s390_sysinfo(proc_sysinfo)
+
         if has_sysinfo:
-            s390_topo = self.read_s390_sysinfo(cpu_count, proc_sysinfo)
-            if s390_topo:
+            sysinfo_lines = self.read_s390_sysinfo(cpu_count, proc_sysinfo)
+            if sysinfo_lines:
                 socket_count, cores_count, book_count, \
-                    sockets_per_book, cores_per_socket = s390_topo
+                    sockets_per_book, \
+                        cores_per_socket = self._parse_s390_sysinfo(cpu_count, sysinfo_lines)
                 books = True
 
         self.cpuinfo['cpu.cpu_socket(s)'] = socket_count

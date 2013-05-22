@@ -431,6 +431,42 @@ class HardwareProbeTests(fixture.SubManFixture):
                                 'cpu.cpu_socket(s)': 3},
                                hw.get_cpu_info())
 
+    @patch("subscription_manager.hwprobe.Hardware.has_s390_sysinfo")
+    @patch("subscription_manager.hwprobe.Hardware.read_s390_sysinfo")
+    @patch("os.listdir")
+    def test_cpu_info_s390_sysinfo(self, mock_list_dir,
+                                   mock_read_sysinfo, mock_has_sysinfo):
+        #reload(hwprobe)
+
+        mock_list_dir.return_value = ["cpu%s" % i for i in range(0, 20)]
+        mock_has_sysinfo.return_value = True
+        mock_read_sysinfo.return_value = ["CPU Topology SW:      0 0 0 4 6 4"]
+
+        hw = hwprobe.Hardware()
+
+        def count_cpumask(cpu, field):
+            return self.cpumask_vals[field]
+
+        # 20 cpus
+        # 24 cores, 1 threads per core = each cpu has two thread siblings
+        # 1 core per socket 1 sockets per book via /sys, but
+        # /proc/sysinfo says 4 books of 6 sockets of 4 cores
+        # and we prefer /proc/sysinfo
+        # how does 24 sockets have 20 cpu? 4 are offline
+        self.cpumask_vals = {'thread_siblings_list': 1,
+                             'core_siblings_list': 1,
+                             'book_siblings_list': 1}
+
+        hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
+        self.assert_equal_dict({'cpu.cpu(s)': 20,
+                                'cpu.socket(s)_per_book': 6,
+                                'cpu.core(s)_per_socket': 4,
+                                'cpu.thread(s)_per_core': 1,
+                                'cpu.book(s)': 4,
+                                'cpu.book(s)_per_cpu': 1,
+                                'cpu.cpu_socket(s)': 24},
+                               hw.get_cpu_info())
+
     @patch('subscription_manager.hwprobe.Hardware.count_cpumask_entries')
     @patch("os.listdir")
     def test_cpu_info(self, mock_list_dir, mock_count):
