@@ -79,6 +79,13 @@ class TestContractSubDetailsWidget(TestSubDetailsWidget):
         bg_color = details._get_date_bg(tomorrow)
         self.assertEqual(details.warning_color, bg_color)
 
+    def test_get_details(self):
+        details = self.widget(None)
+        reasons = ['reason 1', 'reason 2']
+        details.show("Some Product", reasons=reasons, start=datetime.now(GMT()), end=datetime.now(GMT()) + timedelta(days=365))
+        result_list = [row[0] for row in details.reasons.message_store]
+        self.assertEquals(reasons, result_list)
+
     def testVirtOnly(self):
         details = self.widget(None)
         self.show(details)

@@ -26,6 +26,13 @@ class Reasons(object):
         self.reasons = reasons
         self.sorter = sorter
 
+    def get_subscription_reasons(self, sub_id):
+        """
+        returns reasons for sub_id, or empty list
+        if there are none.
+        """
+        return self.get_subscription_reasons_map().get(sub_id, [])
+
     def get_subscription_reasons_map(self):
         """
         returns a dictionary that maps

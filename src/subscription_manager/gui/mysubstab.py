@@ -23,6 +23,8 @@ import gtk
 from rhsm.certificate import GMT
 
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
+import subscription_manager.injection as inj
+from subscription_manager.injection import require, IDENTITY
 from subscription_manager.certlib import Disconnected
 from subscription_manager.injection import IDENTITY, require
 
@@ -37,7 +39,8 @@ _ = gettext.gettext
 WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
 
 prefix = os.path.dirname(__file__)
-WARNING_IMG = os.path.join(prefix, "data/icons/expiring.svg")
+WARNING_IMG = os.path.join(prefix, "data/icons/partial.svg")
+EXPIRING_IMG = os.path.join(prefix, "data/icons/expiring.svg")
 EXPIRED_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 
 
@@ -56,7 +59,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.parent_win = parent_win
         self.entitlement_dir = ent_dir
         self.product_dir = prod_dir
-
         self.sub_details = widgets.ContractSubDetailsWidget(prod_dir)
 
         # Put the details widget in the middle
@@ -159,6 +161,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         Pulls the entitlement certificates and updates the subscription model.
         """
         self.store.clear()
+        self.cs = inj.require(inj.CERT_SORTER,
+                self.product_dir, self.entitlement_dir, self.backend.uep)
         sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
         for idx, group in enumerate(sorter.groups):
             self._add_group(idx, group)
@@ -207,16 +211,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         return len(result)
 
     def image_ranks_higher(self, old_image, new_image):
-        if old_image == new_image:
-            return False
-
-        if old_image is None and new_image:
-            return True
-
-        if old_image == WARNING_IMG and new_image == EXPIRED_IMG:
-            return True
-
-        return False
+        images = [None, WARNING_IMG, EXPIRING_IMG, EXPIRED_IMG]
+        return images.index(new_image) > images.index(old_image)
 
     def get_label(self):
         return _("My Subscriptions")
@@ -255,6 +251,20 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         products = [(product.name, product.id)
                         for product in cert.products]
 
+        reasons = []
+        if self.cs.are_reasons_supported():
+            reasons = self.cs.reasons.get_subscription_reasons(cert.subject['CN'])
+            if not reasons:
+                if cert in self.cs.valid_entitlement_certs:
+                    reasons.append(_('Subscription is current.'))
+                else:
+                    if cert.valid_range.end() < datetime.now(GMT()):
+                        reasons.append(_('Subscription is expired.'))
+                    else:
+                        reasons.append(_('Subscription has not begun.'))
+        else:
+            reasons.append(_("Subscription management service doesn't support Status Details."))
+
         if str(order.virt_only) == "1":
             virt_only = _("Virtual")
         else:
@@ -275,7 +285,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                               support_level=order.service_level or "",
                               support_type=order.service_type or "",
                               products=products,
-                              sku=order.sku)
+                              sku=order.sku,
+                              reasons=reasons)
 
     def on_no_selection(self):
         """
@@ -325,6 +336,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             return EXPIRED_IMG
 
         if date_range.end() - timedelta(days=WARNING_DAYS) < now:
+            return EXPIRING_IMG
+
+        if cert.subject and 'CN' in cert.subject and \
+                self.cs.reasons.get_subscription_reasons(cert.subject['CN']):
             return WARNING_IMG
 
         return None

@@ -110,6 +110,7 @@ class CertSorter(object):
 
         # Reasons that products aren't fully compliant
         self.reasons = Reasons([], self)
+        self.supports_reasons = False
 
         self.valid_entitlement_certs = []
 
@@ -149,6 +150,7 @@ class CertSorter(object):
         self.partial_stacks = status['partialStacks']
 
         if 'reasons' in status:
+            self.supports_reasons = True
             self.reasons = Reasons(status['reasons'], self)
 
         if 'status' in status and len(status['status']):
@@ -240,6 +242,11 @@ class CertSorter(object):
 
     def get_system_status(self):
         return STATUS_MAP.get(self.system_status, _('Unknown'))
+
+    def are_reasons_supported(self):
+        # Check if the candlepin in use supports status
+        # detail messages. Older versions don't.
+        return self.supports_reasons
 
     def is_valid(self):
         """
