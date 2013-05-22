@@ -375,7 +375,6 @@ class HardwareProbeTests(fixture.SubManFixture):
 #        # this is going to be empty as non root
 #        print platform_info
 
-
     @patch('subscription_manager.hwprobe.Hardware.count_cpumask_entries')
     @patch("os.listdir")
     def test_cpu_info(self, mock_list_dir, mock_count):
@@ -451,8 +450,7 @@ class HardwareProbeTests(fixture.SubManFixture):
                                 'cpu.book(s)': 3,
                                 'cpu.book(s)_per_cpu': 1,
                                 'cpu.cpu_socket(s)': 3},
-                               hw.get_cpu_info(),
-)
+                               hw.get_cpu_info())
 
     @patch("os.listdir")
     def test_cpu_info_other_files(self, mock_list_dir):
