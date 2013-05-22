@@ -263,7 +263,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                     else:
                         reasons.append(_('Subscription has not begun.'))
         else:
-            reasons.append(_('Subscription management service doesn\'t support Status Details.'))
+            reasons.append(_("Subscription management service doesn't support Status Details."))
 
         if str(order.virt_only) == "1":
             virt_only = _("Virtual")
