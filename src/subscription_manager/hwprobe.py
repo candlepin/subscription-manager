@@ -235,6 +235,36 @@ class Hardware:
         cpumask_entries = gather_entries(entries)
         return len(cpumask_entries)
 
+    def _get_s390_sysinfo(self, cpu_count, sysinfo):
+        # to quote lscpu.c:
+        #CPU Topology SW:      0 0 0 4 6 4
+        #/* s390 detects its cpu topology via /proc/sysinfo, if present.
+        #* Using simply the cpu topology masks in sysfs will not give
+        #* usable results since everything is virtualized. E.g.
+        #* virtual core 0 may have only 1 cpu, but virtual core 2 may
+        #* five cpus.
+        #* If the cpu topology is not exported (e.g. 2nd level guest)
+        #* fall back to old calculation scheme.
+        #*/
+        for line in sysinfo:
+            if line.startswith("CPU Topology SW:"):
+                parts = line.split(':', 1)
+                s390_topo_str = parts[1]
+                topo_parts = s390_topo_str.split()
+
+                # indexes 3/4/5 being books/sockets_per_book,
+                # and cores_per_socket based on lscpu.c
+                books = int(topo_parts[3])
+                sockets_per_book = int(topo_parts[4])
+                cores_per_socket = int(topo_parts[5])
+
+                socket_count = books * sockets_per_book
+                cores_count = socket_count * cores_per_socket
+
+                return (socket_count, cores_count, books, sockets_per_book, cores_per_socket)
+
+        return None
+
     def get_cpu_info(self):
         self.cpuinfo = {}
         # we also have cpufreq, etc in this dir, so match just the numbs
@@ -254,28 +284,51 @@ class Hardware:
         # This is not actually true sometimes... *cough*s390x*cough*
         # but lscpu makes the same assumption
 
-        threads_per_cpu = self.count_cpumask_entries(cpu_files[0], 'thread_siblings_list')
-        cores_per_cpu = self.count_cpumask_entries(cpu_files[0], 'core_siblings_list') / threads_per_cpu
-        book_siblings_per_cpu = self.count_cpumask_entries(cpu_files[0], 'book_siblings_list')
+        threads_per_core = self.count_cpumask_entries(cpu_files[0],
+                                                      'thread_siblings_list')
+        cores_per_socket = self.count_cpumask_entries(cpu_files[0],
+                                                      'core_siblings_list') / threads_per_core
 
         #print cpu_count, cores_per_cpu, threads_per_cpu
-        socket_count = cpu_count / cores_per_cpu / threads_per_cpu
-
-        # for s390, socket calculates are per book, and we can have multiple
-        # books, so multiply socket count by book count
-
-        if book_siblings_per_cpu:
-            book_count = cpu_count / book_siblings_per_cpu
-
-        self.cpuinfo['cpu.cpu_socket(s)'] = socket_count
-        self.cpuinfo['cpu.core(s)_per_socket'] = cores_per_cpu
-        self.cpuinfo["cpu.cpu(s)"] = cpu_count
-        self.cpuinfo["cpu.thread(s)_per_core"] = threads_per_cpu
+        socket_count = cpu_count / cores_per_socket / threads_per_core
 
         # s390 etc
+        # for s390, socket calculates are per book, and we can have multiple
+        # books, so multiply socket count by book count
+        # see if we are on a s390 with book info
+        # all s390 platforms show book siblings, even the ones that also
+        # show sysinfo (lpar)
+        books = False
+        book_siblings_per_cpu = self.count_cpumask_entries(cpu_files[0],
+                                                           'book_siblings_list')
+        if book_siblings_per_cpu:
+            book_count = cpu_count / book_siblings_per_cpu
+            sockets_per_book = book_count / socket_count
+            books = True
+
+        # see if we have a /proc/sysinfo ala s390, if so
+        # prefer that info
+        proc_sysinfo = self.prefix + "/proc/sysinfo"
+        if os.access(proc_sysinfo, os.R_OK):
+            f = open(proc_sysinfo, 'r')
+            sysinfo = f.readlines()
+            s390_topo = self._get_s390_sysinfo(cpu_count, sysinfo)
+            f.close()
+            if s390_topo:
+                socket_count, cores_count, book_count, \
+                        sockets_per_book, cores_per_socket = s390_topo
+                books = True
+
+        self.cpuinfo['cpu.cpu_socket(s)'] = socket_count
+        self.cpuinfo['cpu.core(s)_per_socket'] = cores_per_socket
+        self.cpuinfo["cpu.cpu(s)"] = cpu_count
+        self.cpuinfo["cpu.thread(s)_per_core"] = threads_per_core
+
         if book_siblings_per_cpu:
             self.cpuinfo["cpu.book(s)_per_cpu"] = book_siblings_per_cpu
-            self.cpuinfo["cpu.socket(s)_per_book"] = book_count / socket_count
+
+        if books:
+            self.cpuinfo["cpu.socket(s)_per_book"] = sockets_per_book
             self.cpuinfo["cpu.book(s)"] = book_count
 
         self.allhw.update(self.cpuinfo)
@@ -293,7 +346,6 @@ class Hardware:
         ls_cpu_cmd = ls_cpu_path
         if self.testing:
             ls_cpu_cmd = "%s -s %s" % (ls_cpu_cmd, self.prefix)
-
         try:
             cpudata = commands.getstatusoutput(ls_cpu_cmd)[-1].split('\n')
             for info in cpudata:
