@@ -21,7 +21,7 @@ from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificat
 from subscription_manager.cert_sorter import CertSorter, UNKNOWN
 from subscription_manager.cache import StatusCache
 from datetime import timedelta, datetime
-from mock import Mock
+from mock import Mock, patch
 import simplejson as json
 
 
@@ -58,7 +58,8 @@ def stub_prod_cert(pid):
 
 class CertSorterTests(SubManFixture):
 
-    def setUp(self):
+    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    def setUp(self, mock_update):
         SubManFixture.setUp(self)
 
         # Setup mock product and entitlement certs:
@@ -89,14 +90,16 @@ class CertSorterTests(SubManFixture):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
         self.sorter.is_registered = Mock(return_value=True)
 
-    def test_unregistered_status(self):
+    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    def test_unregistered_status(self, mock_update):
         sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
         sorter.is_registered = Mock(return_value=False)
         self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
 
     # Server doesn't support compliance API, or server is unreachable and
     # we cannot use the cache for some reason.
-    def test_no_usable_status(self):
+    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    def test_no_usable_status(self, mock_update):
         self.status_mgr.load_status = Mock(
                 return_value=None)
         sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
@@ -135,7 +138,8 @@ class CertSorterTests(SubManFixture):
         result_keys = [reason['key'] for reason in self.sorter.reasons.reasons]
         self.assertEquals(sorted(expected_keys), sorted(result_keys))
 
-    def test_installed_mismatch_unentitled(self):
+    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    def test_installed_mismatch_unentitled(self, mock_update):
         # Use a different product directory with something not present
         # in the response from the server as an unentitled product:
         prod_dir = StubProductDirectory(
@@ -146,14 +150,16 @@ class CertSorterTests(SubManFixture):
         # server reported it here:
         self.assertFalse(INST_PID_3 in sorter.unentitled_products)
 
-    def test_missing_installed_product(self):
+    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    def test_missing_installed_product(self, mock_update):
         # Add a new installed product server doesn't know about:
         prod_dir = StubProductDirectory(pids=[INST_PID_1, INST_PID_2,
             INST_PID_3, "product4"])
         sorter = CertSorter(prod_dir, self.ent_dir, self.mock_uep)
         self.assertTrue('product4' in sorter.unentitled_products)
 
-    def test_no_compliant_until(self):
+    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    def test_no_compliant_until(self, mock_update):
         SAMPLE_COMPLIANCE_JSON['compliantUntil'] = None
         self.sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
         self.sorter.is_registered = Mock(return_value=True)
