@@ -21,7 +21,9 @@ from fixture import SubManFixture
 from stubs import StubUEP, StubEntitlementCertificate, \
         StubCertificateDirectory, StubProduct, StubBackend, \
         StubProductDirectory
-from subscription_manager.gui.mysubstab import MySubscriptionsTab, WARNING_IMG, EXPIRED_IMG
+from subscription_manager.gui.mysubstab import MySubscriptionsTab, \
+        EXPIRING_IMG, WARNING_IMG, EXPIRED_IMG
+from mock import Mock
 
 
 class MySubscriptionsTabTest(SubManFixture):
@@ -35,12 +37,12 @@ class MySubscriptionsTabTest(SubManFixture):
             StubProduct('product2'),
             start_date=datetime.datetime(2010, 1, 1),
             end_date=datetime.datetime(2060, 1, 1),
-            quantity="10", stacking_id=None)
+            quantity="10", ent_id='prod2')
         self.cert2 = StubEntitlementCertificate(
             StubProduct('product3'),
             start_date=datetime.datetime(2010, 1, 1),
             end_date=datetime.datetime(2060, 1, 1),
-            quantity="10", stacking_id=None)
+            quantity="10", ent_id='prod3')
 
         self.cert_dir = StubCertificateDirectory([self.cert1, self.cert2])
         self.my_subs_tab = MySubscriptionsTab(self.backend,
@@ -60,7 +62,7 @@ class MySubscriptionsTabTest(SubManFixture):
         image = self.my_subs_tab._get_entry_image(cert)
         self.assertEqual(EXPIRED_IMG, image)
 
-    def test_get_entry_image_warning(self):
+    def test_get_entry_image_expiring(self):
         tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
         cert = StubEntitlementCertificate(
                     StubProduct('product2'),
@@ -68,22 +70,42 @@ class MySubscriptionsTabTest(SubManFixture):
                     end_date=tomorrow,
                     quantity="10", stacking_id=None)
         image = self.my_subs_tab._get_entry_image(cert)
+        self.assertEqual(EXPIRING_IMG, image)
+
+    def test_get_entry_image_warning(self):
+        ending = datetime.datetime.now() + datetime.timedelta(days=300)
+        cert = StubEntitlementCertificate(
+                StubProduct('product2'),
+                start_date=datetime.datetime(2010, 1, 1),
+                end_date=ending,
+                quantity="10", ent_id='ent')
+        self.my_subs_tab.cs.reasons.get_subscription_reasons = Mock(return_value=['Some detail'])
+        image = self.my_subs_tab._get_entry_image(cert)
         self.assertEqual(WARNING_IMG, image)
 
     def test_image_rank_both_none(self):
         self.assertFalse(self.my_subs_tab.image_ranks_higher(None, None))
 
     def test_image_rank_new_image_none(self):
-        self.assertFalse(self.my_subs_tab.image_ranks_higher(WARNING_IMG, None))
+        self.assertFalse(self.my_subs_tab.image_ranks_higher(EXPIRING_IMG, None))
 
     def test_image_rank_new_image_lower(self):
-        self.assertFalse(self.my_subs_tab.image_ranks_higher(EXPIRED_IMG, WARNING_IMG))
+        self.assertFalse(self.my_subs_tab.image_ranks_higher(EXPIRED_IMG, EXPIRING_IMG))
 
     def test_image_rank_new_image_higher(self):
-        self.assertTrue(self.my_subs_tab.image_ranks_higher(WARNING_IMG, EXPIRED_IMG))
+        self.assertTrue(self.my_subs_tab.image_ranks_higher(EXPIRING_IMG, EXPIRED_IMG))
 
     def test_image_rank_old_image_none(self):
         self.assertTrue(self.my_subs_tab.image_ranks_higher(None, EXPIRED_IMG))
+
+    def test_image_rank_warn_none(self):
+        self.assertTrue(self.my_subs_tab.image_ranks_higher(None, WARNING_IMG))
+
+    def test_image_rank_warn_expiring(self):
+        self.assertTrue(self.my_subs_tab.image_ranks_higher(WARNING_IMG, EXPIRING_IMG))
+
+    def test_image_rank_warn_expired(self):
+        self.assertTrue(self.my_subs_tab.image_ranks_higher(WARNING_IMG, EXPIRED_IMG))
 
     def test_correct_cert_data_inserted_into_store(self):
         self.cert1.order.stacking_id = None
