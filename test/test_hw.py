@@ -375,6 +375,32 @@ class HardwareProbeTests(fixture.SubManFixture):
 #        # this is going to be empty as non root
 #        print platform_info
 
+    def test_get_s390_sysinfo_empty(self):
+        cpu_count = 0
+        sysinfo_lines = []
+
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+
+        ret = hw._get_s390_sysinfo(cpu_count, sysinfo_lines)
+        self.assertTrue(ret is None)
+
+    def test_get_s390_sysinfo_empty(self):
+        cpu_count = 24
+        sysinfo_lines = ["CPU Topology SW:      0 0 0 4 6 4"]
+
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+
+        ret = hw._get_s390_sysinfo(cpu_count, sysinfo_lines)
+        socket_count, cores_count, book_count, \
+            sockets_per_book, cores_per_socket = ret
+        self.assertEquals(24, socket_count)
+        self.assertEquals(96, cores_count)
+        self.assertEquals(4, book_count)
+        self.assertEquals(6, sockets_per_book)
+        self.assertEquals(4, cores_per_socket)
+
     @patch('subscription_manager.hwprobe.Hardware.count_cpumask_entries')
     @patch("os.listdir")
     def test_cpu_info(self, mock_list_dir, mock_count):
