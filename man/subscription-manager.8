@@ -1,4 +1,4 @@
-.TH subscription-manager 8 "May 9, 2013" "version 2.6" "Subscription Management"  Deon Lackey 
+.TH subscription-manager 8 "May 23, 2013" "version 2.7" "Subscription Management"  Deon Lackey 
 .SH NAME
 subscription-manager \- Registers systems to a subscription management service and then attaches and manages subscriptions for software products.
 
@@ -114,6 +114,9 @@ has specific options available for each command, depending on what operation is 
 
 .IP
 18. version
+
+.IP
+19. status
 
 
 .SS COMMON OPTIONS
@@ -393,11 +396,6 @@ option.
 .B --servicelevel
 Displays the current preferred service level for the system. Service levels commonly are none, standard, or premium. If a service level is not set, then there is a message saying it is not set.
 
-.TP
-.B --status
-Shows the current status of the products and attached subscriptions for the system. If some products are not fully covered or subscriptions have expired, then the \fB--status\fP argument shows why subscriptions are not current.
-
-
 .SS REFRESH OPTIONS
 The 
 .B refresh
@@ -628,6 +626,34 @@ python-rhsm: 1.1.3-1.el6
 .PP
 This command has no options.
 
+
+.SS STATUS OPTIONS
+The 
+.B status
+command shows the current status of the products and attached subscriptions for the system. If some products are not fully covered or subscriptions have expired, then the \fBstatus\fP command shows why subscriptions are not current.
+
+.nf
+[root@server ~]# subscription-manager status
++-------------------------------------------+
+    Installed Product Status
++-------------------------------------------+
+Product Name: Red Hat Enterprise Linux
+Product ID: 69
+Version: 7
+Arch: x86_64
+Status: Subscribed
+Status Details:
+Starts: 01/01/2012
+Ends: 01/01/2022
+
++-------------------------------------------+
+     System Status Details
++-------------------------------------------+
+Overall Status: Subscribed
+.fi
+
+.PP
+This command has no options.
 
 .SH USAGE
 .B subscription-manager 

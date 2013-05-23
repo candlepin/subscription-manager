@@ -1,4 +1,4 @@
-.TH rct 8 "April 30, 2013" "version 1.2" "Certificate Information Tool"  Deon Lackey 
+.TH rct 8 "May 23, 2013" "version 1.3" "Certificate Information Tool"  Deon Lackey 
 .SH NAME
 rct \- Displays information (headers) about or size and statistics of a entitlement, product, or identity certificate used by Red Hat Subscription Manager.
 
@@ -6,7 +6,7 @@ rct \- Displays information (headers) about or size and statistics of a entitlem
 rct cat-cert [--no-content] [--no-products] /path/to/certificate.pem
 rct stat-cert /path/to/certificate.pem
 rct cat-manifest /path/to/consumer_export.zip
-rct dump-manifest  [--destination /path] /path/to/consumer_export.zip
+rct dump-manifest  [--destination /path] [--force] /path/to/consumer_export.zip
 
 .SH DESCRIPTION
 Red Hat Subscription Manager uses X.509 certificates to identify a registered system (identity certificate), the products installed on that system (product certificates), and the subscriptions attached to the system (entitlement certificates), including available content repositories, products, and support levels. All of the information that Subscription Manager requires is contained in the body of the certificate.
@@ -120,7 +120,7 @@ Subject Key ID size: 20b
 .fi
 .RE
 
-.SH CAT-CERT COMMAND
+.SH THE CAT-CERT COMMAND
 Each certificate contains a complete set of information with all of the details for whatever element is being identified. That information can be displayed, in pretty-print form, using the \fBcat-cert\fP command.
 
 .SS OPTIONS
@@ -325,9 +325,13 @@ A subscription management service is allocated a specific bloc of subscriptions 
 .I /path/to/consumer_export.zip
 Gives the path and filename (by default, \fBconsumer_export.zip\fP) for the manifest file on the local system. This is required.
 
-.TP.
-.B --destination
+.TP
+.B --destination=PATH
 Specifies an export directory to which to extract and save the contents of the manifest archive. If no destination is given, then the archive is extracted to the local directory.
+
+.TP
+.B --force, -f
+Overwrites any existing archive files. If a manifest archive already exists in the specified location (for example, if the manifest has already been dumped once), then attempting to dump the manifest to the same location will fail. Using the \fB--force\fP option forces the dump operation to complete and overwrites the previous file.
 
 .SS EXAMPLES
 This command simply extracts the manifest files to a given location (the working directory by default). The manifest itself contains multiple JSON files, with separate JSON files providing details on the manifest itself, each individual product, each individual subscription, and details for the specific, on-premise subscription management service.
