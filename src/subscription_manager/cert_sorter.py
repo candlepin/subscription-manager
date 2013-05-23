@@ -112,6 +112,8 @@ class CertSorter(object):
         self.reasons = Reasons([], self)
         self.supports_reasons = False
 
+        self.system_status = None
+
         self.valid_entitlement_certs = []
 
         self._parse_server_status()
@@ -155,8 +157,6 @@ class CertSorter(object):
 
         if 'status' in status and len(status['status']):
             self.system_status = status['status']
-        else:
-            self.system_status = None
 
         # For backward compatability with old find first invalid date,
         # we drop one second from the compliant until from server (as
