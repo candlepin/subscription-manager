@@ -318,13 +318,27 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         warn_count = len(sorter.expired_products) + \
                 len(sorter.unentitled_products)
 
-        # Check partially valid products to retain compatibility with older candlepin
-        # TODO rewrite this method to use status from the server
-        partial_count = len(sorter.reasons.reasons) or len(sorter.partially_valid_products)
-
-        if warn_count > 0:
+        if sorter.system_status == 'valid':
+            self._set_status_icons(VALID_STATUS)
+            if sorter.first_invalid_date:
+                self.subscription_status_label.set_markup(
+                        # I18N: Please add newlines if translation is longer:
+                        _("System is properly subscribed through %s.") %
+                        managerlib.format_date(sorter.first_invalid_date))
+            else:
+                # No product certs installed, no first invalid date, and
+                # the subscription assistant can't do anything, so we'll disable
+                # the button to launch it:
+                self.subscription_status_label.set_text(
+                        # I18N: Please add newlines if translation is longer:
+                        _("No installed products detected."))
+        elif sorter.system_status == 'partial':
+            self._set_status_icons(PARTIAL_STATUS)
+            self.subscription_status_label.set_markup(
+                    # I18N: Please add newlines if translation is longer:
+                    _("This system does not match subscription limits."))
+        elif sorter.system_status == 'invalid':
             self._set_status_icons(INVALID_STATUS)
-            # Change wording slightly for just one product
             if warn_count > 1:
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
@@ -334,29 +348,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
                         _("1 installed product does not have a valid subscription."))
-
-        elif partial_count > 0:
-            self._set_status_icons(PARTIAL_STATUS)
-            self.subscription_status_label.set_markup(
-                # I18N: Please add newlines if translation is longer:
-                _("This system does not match subscription limits."))
-
-        else:
-            self._set_status_icons(VALID_STATUS)
-            if sorter.first_invalid_date:
-                self.subscription_status_label.set_markup(
-                        # I18N: Please add newlines if translation is longer:
-                        _("System is properly subscribed through %s.") %
-                          managerlib.format_date(sorter.first_invalid_date))
-            else:
-                # No product certs installed, no first invalid date, and
-                # the subscription assistant can't do anything, so we'll disable
-                # the button to launch it:
-                self.subscription_status_label.set_text(
-                        # I18N: Please add newlines if translation is longer:
-                        _("No installed products detected."))
-
-        if not is_registered:
+        elif sorter.system_status == 'unknown':
             self._set_status_icons(UNKNOWN_STATUS)
             self.subscription_status_label.set_text(
                 # I18N: Please add newlines if translation is longer:
