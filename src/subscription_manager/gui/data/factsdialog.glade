@@ -90,6 +90,9 @@
                 <child>
                   <widget class="GtkLabel" id="owner_label">
                     <property name="visible">True</property>
+                      <accessibility>
+                        <atkproperty name="AtkObject::accessible-name" translatable="yes">Organization Value</atkproperty>
+                      </accessibility>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
