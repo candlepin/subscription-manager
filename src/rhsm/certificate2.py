@@ -112,6 +112,9 @@ class _CertFactory(object):
     def _read_alt_name(self, x509):
         return x509.get_extension(name='subjectAltName')
 
+    def _read_issuer(self, x509):
+        return x509.get_issuer()
+
     def _read_subject(self, x509):
         return x509.get_subject()
 
@@ -125,6 +128,7 @@ class _CertFactory(object):
                 end=get_datetime_from_x509(x509.get_not_after()),
                 alt_name=self._read_alt_name(x509),
                 subject=self._read_subject(x509),
+                issuer=self._read_issuer(x509),
             )
         return cert
 
@@ -139,6 +143,7 @@ class _CertFactory(object):
                 end=get_datetime_from_x509(x509.get_not_after()),
                 products=products,
                 subject=self._read_subject(x509),
+                issuer=self._read_issuer(x509),
             )
         return cert
 
@@ -159,6 +164,7 @@ class _CertFactory(object):
                 content=content,
                 products=products,
                 extensions=extensions,
+                issuer=self._read_issuer(x509),
             )
         return cert
 
@@ -268,7 +274,8 @@ class _CertFactory(object):
                 content=content,
                 products=products,
                 pool=pool,
-                pem=pem
+                pem=pem,
+                issuer=self._read_issuer(x509),
             )
         return cert
 
@@ -394,7 +401,7 @@ class _Extensions2(Extensions):
 class Certificate(object):
     """ Parent class of all x509 certificate types. """
     def __init__(self, x509=None, path=None, version=None, serial=None, start=None,
-            end=None, subject=None, pem=None):
+            end=None, subject=None, pem=None, issuer=None):
 
         # The X509 M2crypto object for this certificate.
         # WARNING: May be None in tests
@@ -420,6 +427,7 @@ class Certificate(object):
         self.pem = pem
 
         self.subject = subject
+        self.issuer = issuer
 
     def is_valid(self, on_date=None):
         gmt = datetime.utcnow()

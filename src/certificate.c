@@ -31,7 +31,7 @@
  * Our specific need is to read non-standard extension values, as either
  * UTF8 strings,  or binary octets. M2Crypto and openssl itself default to
  * assuming that the extension payload is a printable string value, and
- * giving you that. This is why you see ".." in front of most extension values. 
+ * giving you that. This is why you see ".." in front of most extension values.
  * Those are non printable characters that make up the DER encoded header of
  * the value. You can instruct the openssl cli command to print out the
  * structural information of a value, and use that to glean the type and do
@@ -68,6 +68,7 @@ static PyObject *get_not_before (certificate_x509 *self, PyObject *varargs);
 static PyObject *get_not_after (certificate_x509 *self, PyObject *varargs);
 static PyObject *get_serial_number (certificate_x509 *self, PyObject *varargs);
 static PyObject *get_subject (certificate_x509 *self, PyObject *varargs);
+static PyObject *get_issuer(certificate_x509 *self, PyObject *varargs);
 static PyObject *get_extension (certificate_x509 *self, PyObject *varargs,
 				PyObject *keywords);
 static PyObject *get_all_extensions (certificate_x509 *self, PyObject *varargs);
@@ -82,6 +83,8 @@ static PyMethodDef x509_methods[] = {
 	 "get the certificate's serial number"},
 	{"get_subject", (PyCFunction) get_subject, METH_VARARGS,
 	 "get the certificate's subject"},
+	{"get_issuer", (PyCFunction) get_issuer, METH_VARARGS,
+	 "get the certificate's issuer"},
 	{"get_extension", (PyCFunction) get_extension,
 	 METH_VARARGS | METH_KEYWORDS,
 	 "get the string representation of an extension by oid"},
@@ -362,6 +365,36 @@ get_subject (certificate_x509 *self, PyObject *args)
 	}
 
 	X509_NAME *name = X509_get_subject_name (self->x509);
+	int entries = X509_NAME_entry_count (name);
+	int i;
+
+	PyObject *dict = PyDict_New ();
+	for (i = 0; i < entries; i++) {
+		X509_NAME_ENTRY *entry = X509_NAME_get_entry (name, i);
+		ASN1_OBJECT *obj = X509_NAME_ENTRY_get_object (entry);
+		ASN1_STRING *data = X509_NAME_ENTRY_get_data (entry);
+
+		PyObject *key =
+			PyString_FromString (OBJ_nid2sn (OBJ_obj2nid (obj)));
+		PyObject *value = PyString_FromString ((const char *)
+						       ASN1_STRING_data (data));
+		PyDict_SetItem (dict, key, value);
+
+		Py_DECREF (key);
+		Py_DECREF (value);
+	}
+
+	return dict;
+}
+
+static PyObject *
+get_issuer (certificate_x509 *self, PyObject *args)
+{
+	if (!PyArg_ParseTuple (args, "")) {
+		return NULL;
+	}
+
+	X509_NAME *name = X509_get_issuer_name (self->x509);
 	int entries = X509_NAME_entry_count (name);
 	int i;
 
