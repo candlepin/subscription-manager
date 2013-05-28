@@ -105,18 +105,26 @@ class CertificatePrinter(object):
         s.append("\t%s: %s" % (_("Serial"), xstr(cert.serial)))
         s.append("\t%s: %s" % (_("Start Date"), xstr(cert.start)))
         s.append("\t%s: %s" % (_("End Date"), xstr(cert.end)))
-        self._append_to_cert_section(cert, s)
         s.append("\n%s" % xstr(self._get_subject(cert)))
+        s.append("\n%s" % xstr(self._get_issuer(cert)))
         return "%s" % '\n'.join(s)
 
     def printc(self, cert):
         print self.cert_to_str(cert)
+
 
     def _get_subject(self, cert):
         s = []
         s.append(_("Subject:"))
         for key in sorted(cert.subject):
             s.append("\t%s: %s" % (key, cert.subject[key]))
+        return "%s\n" % '\n'.join(s)
+
+    def _get_issuer(self, cert):
+        s = []
+        s.append(_("Issuer:"))
+        for key in sorted(cert.issuer):
+            s.append("\t%s: %s" % (key, cert.issuer[key]))
         return "%s\n" % '\n'.join(s)
 
     def _append_to_cert_section(self, cert, str_parts_list):
