@@ -111,14 +111,12 @@ class CertificatePrinter(object):
     def printc(self, cert):
         print self.cert_to_str(cert)
 
-
     def _get_subject(self, cert):
         s = []
         s.append(_("Subject:"))
         for key in sorted(cert.subject):
             s.append("\t%s: %s" % (key, cert.subject[key]))
         return "%s\n" % '\n'.join(s)
-
 
     def _append_to_cert_section(self, cert, str_parts_list):
         """
