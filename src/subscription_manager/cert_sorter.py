@@ -41,7 +41,8 @@ RAM_FACT = 'memory.memtotal'
 
 STATUS_MAP = {'valid': _('Current'),
         'partial': _('Insufficient'),
-        'invalid': _('Invalid')}
+        'invalid': _('Invalid'),
+        'unknown': _('Unknown')}
 
 
 class CertSorter(object):
@@ -112,6 +113,8 @@ class CertSorter(object):
         self.reasons = Reasons([], self)
         self.supports_reasons = False
 
+        self.system_status = 'unknown'
+
         self.valid_entitlement_certs = []
 
         self._parse_server_status()
@@ -155,8 +158,14 @@ class CertSorter(object):
 
         if 'status' in status and len(status['status']):
             self.system_status = status['status']
+        #Some old candlepin versions do not return 'status' with information
+        elif status['nonCompliantProducts']:
+            self.system_status = 'invalid'
+        elif self.partially_valid_products or self.partial_stacks or \
+                self.reasons.reasons:
+            self.system_status = 'partial'
         else:
-            self.system_status = None
+            self.system_status = 'unknown'
 
         # For backward compatability with old find first invalid date,
         # we drop one second from the compliant until from server (as
@@ -164,6 +173,7 @@ class CertSorter(object):
         # 24 hours giving us the first date where we know we're completely
         # invalid from midnight to midnight.
         self.compliant_until = None
+
         if status['compliantUntil'] is not None:
             self.compliant_until = parse_date(status['compliantUntil'])
             self.first_invalid_date = self.compliant_until + \
@@ -241,7 +251,7 @@ class CertSorter(object):
                     product_dict.setdefault(product.id, []).append(ent_cert)
 
     def get_system_status(self):
-        return STATUS_MAP.get(self.system_status, _('Unknown'))
+        return STATUS_MAP.get(self.system_status, STATUS_MAP['unknown'])
 
     def are_reasons_supported(self):
         # Check if the candlepin in use supports status
@@ -253,14 +263,7 @@ class CertSorter(object):
         Return true if the results of this cert sort indicate our
         entitlements are completely valid.
         """
-        if self.system_status:
-            return self.system_status == 'valid'
-
-        #Some old candlepin versions do not return 'status' with information
-        if self.partially_valid_products or self.expired_products or \
-                self.partial_stacks or self.unentitled_products:
-            return False
-        return True
+        return self.system_status == 'valid'
 
     def is_registered(self):
         return self.identity.is_valid()
