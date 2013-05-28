@@ -18,6 +18,7 @@ from fixture import SubManFixture
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
     StubEntitlementDirectory, StubProductDirectory, \
     StubUEP, StubCertSorter
+import subscription_manager.cert_sorter
 from subscription_manager.cert_sorter import CertSorter, UNKNOWN
 from subscription_manager.cache import StatusCache
 from datetime import timedelta, datetime
@@ -105,6 +106,25 @@ class CertSorterTests(SubManFixture):
         sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
         sorter.is_registered = Mock(return_value=True)
         self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
+
+    # Consumer has been deleted, overall status should be unknown
+    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    def test_deleted_consumer_status(self, mock_update):
+        self.status_mgr.load_status = Mock(
+                return_value=None)
+        sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
+        sorter.is_registered = Mock(return_value=True)
+        expected = subscription_manager.cert_sorter.STATUS_MAP['unknown']
+        self.assertEquals(expected, sorter.get_system_status())
+
+    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    def test_unregistered_system_status(self, mock_update):
+        self.status_mgr.load_status = Mock(
+                return_value=None)
+        sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
+        sorter.is_registered = Mock(return_value=False)
+        expected = subscription_manager.cert_sorter.STATUS_MAP['unknown']
+        self.assertEquals(expected, sorter.get_system_status())
 
     def test_unentitled_products(self):
         self.assertEquals(1, len(self.sorter.unentitled_products))
