@@ -72,6 +72,10 @@ def _parse_date_pyxml(date):
         # can still list such subscription now.
         log.warning("Date overflow: %s, using Jan 1 2038 instead." % date)
         posix_time = OVERFLOW_DATE
+    except ValueError, e:
+        # RHEL5 versions of pyxml's date parsing doesnt support year > 10k
+        log.warning("iso8601 date parsing error parsing date %s: %s" % (date, e))
+        posix_time = OVERFLOW_DATE
 
     dt = datetime.datetime.fromtimestamp(posix_time, tz=server_tz)
     return dt
