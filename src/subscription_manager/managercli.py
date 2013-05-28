@@ -944,7 +944,7 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--autosubscribe", action='store_true',
                                help=_("Deprecated, see --auto-attach"))
         self.parser.add_option("--auto-attach", action='store_true', dest="autoattach",
-                               help=_("automatically attach this system to compatible subscriptions."))
+                               help=_("automatically attach compatible subscriptions to this system"))
         self.parser.add_option("--force", action='store_true',
                                help=_("register the system even if it is already registered"))
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
