@@ -472,7 +472,7 @@ class MigrationEngine(object):
                 log.info(e)
 
     def get_system_id(self):
-        system_id_path = self.rhncfg["system_id_path"]
+        system_id_path = self.rhncfg["systemIdPath"]
         p = libxml2.parseDoc(file(system_id_path).read())
         system_id = int(p.xpathEval('string(//member[* = "system_id"]/value/string)').split('-')[1])
         return system_id

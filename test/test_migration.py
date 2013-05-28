@@ -693,3 +693,28 @@ class TestMigration(unittest.TestCase):
             call("productivity-rpms", "enabled", "1")]
         self.assertTrue(mrf.set.call_args_list == expected)
         mrf.write.assert_called_with()
+
+    @patch("__builtin__.file")
+    def test_get_system_id(self, mock_file):
+        rhn_config = {
+            "systemIdPath": "/tmp/foo",
+            }
+        mock_file.return_value.read.return_value = """
+        <params>
+          <param>
+            <value>
+              <struct>
+                <member>
+                  <name>system_id</name>
+                  <value>
+                    <string>ID-123</string>
+                  </value>
+                </member>
+              </struct>
+            </value>
+          </param>
+        </params>
+        """
+        self.engine.rhncfg = rhn_config
+        system_id = self.engine.get_system_id()
+        self.assertEquals(123, system_id)
