@@ -105,6 +105,7 @@ class CertificatePrinter(object):
         s.append("\t%s: %s" % (_("Serial"), xstr(cert.serial)))
         s.append("\t%s: %s" % (_("Start Date"), xstr(cert.start)))
         s.append("\t%s: %s" % (_("End Date"), xstr(cert.end)))
+        self._append_to_cert_section(cert, s)
         s.append("\n%s" % xstr(self._get_subject(cert)))
         return "%s" % '\n'.join(s)
 
