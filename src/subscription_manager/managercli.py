@@ -1862,7 +1862,7 @@ class ReposCommand(CliCommand):
         return rc
 
     def _contains_wildcard(self, item):
-        return '*' in item or '?' in item
+        return any(c in "*?[]!" for c in item)
 
 
 class ConfigCommand(CliCommand):
