@@ -1835,6 +1835,7 @@ class ReposCommand(CliCommand):
 
         for item in items:
             found = False
+            contains_wildcard = self._contains_wildcard(item)
             for repo in repos:
                 if fnmatch.fnmatch(repo.id, item):
                     if repo['enabled'] != status:
@@ -1842,7 +1843,7 @@ class ReposCommand(CliCommand):
                         change_repos.append(repo)
                     repos_modified.append(repo.id)
                     found = True
-                    if not self._contains_wildcard(item):
+                    if not contains_wildcard:
                         break
             if not found:
                 rc = 1
@@ -1862,7 +1863,11 @@ class ReposCommand(CliCommand):
         return rc
 
     def _contains_wildcard(self, item):
-        return any(c in "*?[]!" for c in item)
+        return "*" in item or \
+            "?" in item or \
+            "[" in item or \
+            "!" in item or \
+            "]" in item
 
 
 class ConfigCommand(CliCommand):
