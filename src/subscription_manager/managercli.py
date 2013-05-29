@@ -190,9 +190,9 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
 
     plugin_manager = plugins.get_plugin_manager()
     try:
-        plugin_manager.run("pre_subscribe", consumer_uuid=consumer_uuid)
+        plugin_manager.run("pre_auto_attach", consumer_uuid=consumer_uuid)
         ents = cp.bind(consumer_uuid)  # new style
-        plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid, entitlement_data=ents)
+        plugin_manager.run("post_auto_attach", consumer_uuid=consumer_uuid, entitlement_data=ents)
 
     except Exception, e:
         log.warning("Error during auto-attach.")
@@ -1406,7 +1406,12 @@ class AttachCommand(CliCommand):
                         # odd html strings will cause issues, reject them here.
                         if (pool.find("#") >= 0):
                             system_exit(-1, _("Please enter a valid numeric pool ID."))
-                        self.plugin_manager.run("pre_subscribe", consumer_uuid=consumer_uuid)
+                        # If quantity is None, server will assume 1. pre_subscribe will
+                        # report the same.
+                        self.plugin_manager.run("pre_subscribe",
+                                                consumer_uuid=consumer_uuid,
+                                                pool_id=pool,
+                                                quantity=self.options.quantity or 1)
                         ents = self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
                         self.plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid, entitlement_data=ents)
                         # Usually just one, but may as well be safe:

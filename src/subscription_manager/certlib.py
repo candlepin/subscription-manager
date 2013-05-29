@@ -133,9 +133,10 @@ class HealingLib(DataLib):
                 if not cs.is_valid():
                     log.warn("Found invalid entitlements for today: %s" %
                             today)
-                    self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid)
+                    self.plugin_manager.run("pre_auto_attach", consumer_uuid=uuid)
                     ents = self.uep.bind(uuid, today)
-                    self.plugin_manager.run("post_subscribe", consumer_uuid=uuid, entitlement_data=ents)
+                    self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,
+                                            entitlement_data=ents)
                     cert_updater.update()
                 else:
                     log.info("Entitlements are valid for today: %s" %
@@ -149,9 +150,10 @@ class HealingLib(DataLib):
                     elif tomorrow > cs.compliant_until:
                         log.warn("Entitlements will be invalid by tomorrow: %s" %
                                 tomorrow)
-                        self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid)
+                        self.plugin_manager.run("pre_auto_attach", consumer_uuid=uuid)
                         ents = self.uep.bind(uuid, tomorrow)
-                        self.plugin_manager.run("post_subscribe", consumer_uuid=uuid, entitlement_data=ents)
+                        self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,
+                                                entitlement_data=ents)
                         cert_updater.update()
                     else:
                         log.info("Entitlements are valid for tomorrow: %s" %

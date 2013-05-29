@@ -340,17 +340,22 @@ class SubscriptionConduit(BaseConduit):
     """Conduit for subscription info"""
     slots = ['pre_subscribe']
 
-    def __init__(self, clazz, consumer_uuid):
+    def __init__(self, clazz, consumer_uuid, pool_id, quantity):
         """init for SubscriptionConduit
 
         Args:
             consumer_uuid: the UUID of the consumer being subscribed
+            pool_id: the id of the pool the subscription will come from (None if 'auto' is False)
+            quantity: the quantity to consume from the pool (None if 'auto' is False).
+            auto: is this an auto-attach/healing event.
         """
         super(SubscriptionConduit, self).__init__(clazz)
         self.consumer_uuid = consumer_uuid
+        self.pool_id = pool_id
+        self.quantity = quantity
 
 
-class PostSubscriptionConduit(SubscriptionConduit):
+class PostSubscriptionConduit(BaseConduit):
     slots = ['post_subscribe']
 
     def __init__(self, clazz, consumer_uuid, entitlement_data):
@@ -360,8 +365,36 @@ class PostSubscriptionConduit(SubscriptionConduit):
             consumer_uuid: the UUID of the consumer subscribed
             entitlement_data: the data returned by the server
         """
-        super(PostSubscriptionConduit, self).__init__(clazz, consumer_uuid)
+        super(PostSubscriptionConduit, self).__init__(clazz)
+        self.consumer_uuid = consumer_uuid
         self.entitlement_data = entitlement_data
+
+
+class AutoAttachConduit(BaseConduit):
+    slots = ['pre_auto_attach']
+
+    def __init__(self, clazz, consumer_uuid):
+        """
+        init for AutoAttachConduit
+
+        Args:
+            consumer_uuid: the UUID of the consumer being auto-subscribed
+        """
+        super(AutoAttachConduit, self).__init__(clazz)
+        self.consumer_uuid = consumer_uuid
+
+
+class PostAutoAttachConduit(PostSubscriptionConduit):
+    slots = ['post_auto_attach']
+
+    def __init__(self, clazz, consumer_uuid, entitlement_data):
+        """init for PostAutoAttachConduit
+
+        Args:
+            consumer_uuid: the UUID of the consumer subscribed
+            entitlement_data: the data returned by the server
+        """
+        super(PostAutoAttachConduit, self).__init__(clazz, consumer_uuid, entitlement_data)
 
 
 class PluginConfig(object):
@@ -808,7 +841,8 @@ class PluginManager(BasePluginManager):
         return [BaseConduit, ProductConduit,
                 RegistrationConduit, PostRegistrationConduit,
                 FactsConduit, SubscriptionConduit,
-                PostSubscriptionConduit]
+                PostSubscriptionConduit,
+                AutoAttachConduit, PostAutoAttachConduit]
 
     def _get_modules(self):
         module_files = self._find_plugin_module_files(self.search_path)

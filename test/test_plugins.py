@@ -851,8 +851,12 @@ class TestPostRegistrationConduit(unittest.TestCase):
 class TestSubscriptionConduit(unittest.TestCase):
     def test_subscription_conduit(self):
         conduit = plugins.SubscriptionConduit(StubPluginClass,
-                                              consumer_uuid="123456789")
+                                              consumer_uuid="123456789",
+                                              pool_id="4444",
+                                              quantity=4)
         self.assertEquals("123456789", conduit.consumer_uuid)
+        self.assertEquals(4, conduit.quantity)
+        self.assertEquals("4444", conduit.pool_id)
 
 
 class TestPostSubscriptionConduit(unittest.TestCase):
@@ -861,6 +865,21 @@ class TestPostSubscriptionConduit(unittest.TestCase):
                                                   consumer_uuid="123456789",
                                                   entitlement_data={})
         self.assertEquals("123456789", conduit.consumer_uuid)
+        self.assertEquals({}, conduit.entitlement_data)
+
+
+class TestAutoAttachConduit(unittest.TestCase):
+    def test_auto_attach_conduit(self):
+        conduit = plugins.AutoAttachConduit(StubPluginClass, "a-consumer-uuid")
+        self.assertEquals("a-consumer-uuid", conduit.consumer_uuid)
+
+
+class TestPostAutoAttachConduit(unittest.TestCase):
+    def test_post_auto_attach_conduit(self):
+        conduit = plugins.PostAutoAttachConduit(StubPluginClass,
+                                                "a-consumer-uuid",
+                                                {})
+        self.assertEquals("a-consumer-uuid", conduit.consumer_uuid)
         self.assertEquals({}, conduit.entitlement_data)
 
 
