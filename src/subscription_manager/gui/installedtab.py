@@ -18,6 +18,7 @@ from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
     NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.branding import get_branding
 from subscription_manager.gui import widgets
+from widgets import SubscriptionsTable
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.utils import friendly_join
 
@@ -52,7 +53,7 @@ UNKNOWN_STATUS = 3
 class InstalledProductsTab(widgets.SubscriptionManagerTab):
     widget_names = widgets.SubscriptionManagerTab.widget_names + \
                 ['product_text', 'product_arch_text', 'validity_text',
-                 'subscription_text', 'subscription_status_label',
+                 'subscriptions_view', 'subscription_status_label',
                  'update_certificates_button', 'register_button']
 
     def __init__(self, backend, facts, tab_icon,
@@ -86,6 +87,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.top_view.append_column(column)
         cols = []
         cols.append((column, 'text', 'product'))
+
+        self.subscription = SubscriptionsTable(self.subscriptions_view)
 
         column = self.add_text_column(_('Version'), 'version')
         cols.append((column, 'text', 'version'))
@@ -133,18 +136,20 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         contract_ids = set()
         sub_names = set()
 
-        # No compliant range means we're not fully compliant right now, so
-        # not much point displaying the contracts that are covering us:
-        if compliant_range is None:
-            return contract_ids, sub_names
+        sorter = inj.require(inj.CERT_SORTER, self.product_dir, self.entitlement_dir,
+                self.backend.uep)
 
         for cert in self.entitlement_dir.find_all_by_product(product_id):
 
             # Only include if this cert overlaps with the overall date range
             # we are currently covered for:
-            if compliant_range.has_date(cert.valid_range.begin()) or \
-                    compliant_range.has_date(cert.valid_range.end()):
+            if compliant_range:
+                if compliant_range.has_date(cert.valid_range.begin()) or \
+                        compliant_range.has_date(cert.valid_range.end()):
 
+                    contract_ids.add(cert.order.contract)
+                    sub_names.add(cert.order.name)
+            elif cert in sorter.valid_entitlement_certs:
                 contract_ids.add(cert.order.contract)
                 sub_names.add(cert.order.name)
 
@@ -182,11 +187,10 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
                     contract_ids, sub_names = self._calc_subs_providing(
                             product_id, compliant_range)
-                    name = friendly_join(sub_names)
                     contract = friendly_join(contract_ids)
                     num_of_contracts = len(contract_ids)
 
-                    entry['subscription'] = name
+                    entry['subscription'] = list(sub_names)
 
                     entry['start_date'] = start
                     entry['expiration_date'] = end
@@ -258,14 +262,14 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         validity = selection['validity_note']
         self.validity_text.get_buffer().set_text(validity)
 
-        subscription = selection['subscription'] or ''
-        self.subscription_text.get_buffer().set_text(subscription)
+        self.subscription.clear()
+        self.subscription.add_subs(selection['subscription'])
 
     def on_no_selection(self):
         self.product_text.get_buffer().set_text("")
         self.product_arch_text.get_buffer().set_text("")
         self.validity_text.get_buffer().set_text("")
-        self.subscription_text.get_buffer().set_text("")
+        self.subscription.clear()
 
     def get_type_map(self):
         return {
@@ -276,7 +280,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             'arch': str,
             'status': str,
             'validity_note': str,
-            'subscription': str,
+            'subscription': gobject.TYPE_PYOBJECT,
             'start_date': gobject.TYPE_PYOBJECT,
             'expiration_date': gobject.TYPE_PYOBJECT,
             'serial': str,
