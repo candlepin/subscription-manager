@@ -107,7 +107,7 @@ class CertificatePrinter(object):
         s.append("\t%s: %s" % (_("End Date"), xstr(cert.end)))
         self._append_to_cert_section(cert, s)
         s.append("\n%s" % xstr(self._get_subject(cert)))
-        s.append("\n%s" % xstr(self._get_issuer(cert)))
+        s.append("%s" % xstr(self._get_issuer(cert)))
         return "%s" % '\n'.join(s)
 
     def printc(self, cert):
