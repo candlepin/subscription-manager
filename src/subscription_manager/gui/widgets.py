@@ -199,6 +199,28 @@ class SelectionWrapper(object):
         return self.model.get_value(self.tree_iter, self.store[key])
 
 
+class SubscriptionsTable(object):
+    def __init__(self, table_widget):
+        self.table_widget = table_widget
+        self.sub_store = gtk.ListStore(str)
+        table_widget.set_model(self.sub_store)
+        sub_column = gtk.TreeViewColumn(None,
+                gtk.CellRendererText(),
+                markup=0)
+        sub_column.set_expand(True)
+        table_widget.append_column(sub_column)
+
+    def clear(self):
+        self.sub_store.clear()
+
+    def add_sub(self, sub):
+        self.sub_store.append([sub])
+
+    def add_subs(self, subs):
+        for sub in subs or []:
+            self.add_sub(sub)
+
+
 class ReasonsTable(object):
     def __init__(self, table_widget):
         self.table_widget = table_widget
