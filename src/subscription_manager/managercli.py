@@ -18,6 +18,7 @@
 
 import datetime
 import dbus
+import fnmatch
 import getpass
 import gettext
 import logging
@@ -1785,9 +1786,9 @@ class ReposCommand(CliCommand):
         self.parser.add_option("--list", action="store_true",
                                help=_("list known repos for this system"))
         self.parser.add_option("--enable", dest="enable", metavar="REPOID",
-                               action='append', help=_("repo to enable (can be specified more than once)"))
+                               action='append', help=_("repo to enable (can be specified more than once). Wildcards (* and ?) are supported."))
         self.parser.add_option("--disable", dest="disable", metavar="REPOID",
-                               action='append', help=_("repo to disable (can be specified more than once)"))
+                               action='append', help=_("repo to disable (can be specified more than once). Wildcards (* and ?) are supported."))
 
     def _validate_options(self):
         if not (self.options.list or self.options.enable or self.options.disable):
@@ -1836,14 +1837,16 @@ class ReposCommand(CliCommand):
 
         for item in items:
             found = False
+            contains_wildcard = self._contains_wildcard(item)
             for repo in repos:
-                if repo.id == item:
+                if fnmatch.fnmatch(repo.id, item):
                     if repo['enabled'] != status:
                         repo['enabled'] = status
                         change_repos.append(repo)
                     repos_modified.append(repo.id)
                     found = True
-                    break
+                    if not contains_wildcard:
+                        break
             if not found:
                 rc = 1
                 print _("Error: %s is not a valid repo ID. "
@@ -1860,6 +1863,13 @@ class ReposCommand(CliCommand):
             else:
                 print _("Repo %s is disabled for this system.") % repo
         return rc
+
+    def _contains_wildcard(self, item):
+        return "*" in item or \
+            "?" in item or \
+            "[" in item or \
+            "!" in item or \
+            "]" in item
 
 
 class ConfigCommand(CliCommand):
