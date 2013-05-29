@@ -203,6 +203,11 @@ Certificate:
 Subject:
 	CN: ff80808139affbb50139b5841809706e
 
+Issuer:
+	C: US
+	CN: boogady
+	L: Raleigh
+
 Product:
 	ID: 37060
 	Name: Awesome OS Server Bits
@@ -354,6 +359,11 @@ Certificate:
 Subject:
 	CN: ff80808139d9e26c0139da23489a0066
 
+Issuer:
+	C: US
+	CN: pipboy
+	L: Raleigh
+
 Product:
 	ID: 100000000000002
 	Name: Awesome OS for x86_64 Bits
@@ -445,6 +455,11 @@ Certificate:
 Subject:
 	CN: 100000000000002
 
+Issuer:
+	C: US
+	CN: localhost
+	L: Raleigh
+
 Product:
 	ID: 100000000000002
 	Name: Awesome OS for x86_64 Bits
@@ -469,6 +484,11 @@ Certificate:
 
 Subject:
 	CN: eaadd6ea-852d-4430-94a7-73d5887d48e8
+
+Issuer:
+	C: US
+	CN: 192.168.1.25
+	L: Raleigh
 
 """
 
