@@ -126,7 +126,7 @@ CONSUMED_LIST = [
     _("SKU:"),
     _("Contract:"),
     _("Account:"),
-    _("Serial Number:"),
+    _("Serial:"),
     _("Pool ID:"),
     _("Active:"),
     _("Quantity Used:"),
