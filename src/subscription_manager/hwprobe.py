@@ -68,19 +68,11 @@ class ClassicCheck:
 # ints like [1,2,3,4]
 # 31-37 return [31,32,33,34,35,36,37]
 def parse_range(range_str):
-    # not a range, just a string ala, 7
-    # return a list of [7]
-    if '-' not in range_str:
-        return [int(range_str)]
+    range_list = range_str.split('-')
+    start = int(range_list[0])
+    end = int(range_list[-1])
 
-    range_ends = range_str.split('-')
-    start = int(range_ends[0])
-    end = int(range_ends[1])
-
-    range_list = []
-    for i in range(start, end + 1):
-        range_list.append(i)
-    return range_list
+    return range(start, end + 1)
 
 
 # util to total up the values represented by a cpu siblings list
