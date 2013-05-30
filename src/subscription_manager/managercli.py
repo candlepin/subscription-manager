@@ -126,7 +126,7 @@ CONSUMED_LIST = [
     _("SKU:"),
     _("Contract:"),
     _("Account:"),
-    _("Serial:"),
+    _("Serial Number:"),
     _("Pool ID:"),
     _("Active:"),
     _("Quantity Used:"),
@@ -2059,7 +2059,7 @@ class ListCommand(CliCommand):
                 print(_("No available subscription pools to list"))
                 sys.exit(0)
             print("+-------------------------------------------+")
-            print("    " + _("Available"))
+            print("    " + _("Available Subscriptions"))
             print("+-------------------------------------------+")
             for data in epools:
                 if PoolWrapper(data).is_virt_only():
