@@ -224,20 +224,21 @@ class Hardware:
         # that's a collection error
         # FIXME
         entries = f.read().rstrip('\n\x00')
+        f.close()
         cpumask_entries = gather_entries(entries)
         return len(cpumask_entries)
 
     def _parse_s390_sysinfo(self, cpu_count, sysinfo):
         # to quote lscpu.c:
-        #CPU Topology SW:      0 0 0 4 6 4
-        #/* s390 detects its cpu topology via /proc/sysinfo, if present.
-        #* Using simply the cpu topology masks in sysfs will not give
-        #* usable results since everything is virtualized. E.g.
-        #* virtual core 0 may have only 1 cpu, but virtual core 2 may
-        #* five cpus.
-        #* If the cpu topology is not exported (e.g. 2nd level guest)
-        #* fall back to old calculation scheme.
-        #*/
+        # CPU Topology SW:      0 0 0 4 6 4
+        # /* s390 detects its cpu topology via /proc/sysinfo, if present.
+        # * Using simply the cpu topology masks in sysfs will not give
+        # * usable results since everything is virtualized. E.g.
+        # * virtual core 0 may have only 1 cpu, but virtual core 2 may
+        # * five cpus.
+        # * If the cpu topology is not exported (e.g. 2nd level guest)
+        # * fall back to old calculation scheme.
+        # */
         for line in sysinfo:
             if line.startswith("CPU Topology SW:"):
                 parts = line.split(':', 1)
@@ -263,11 +264,15 @@ class Hardware:
         return True
 
     def read_s390_sysinfo(self, cpu_count, proc_sysinfo):
+        lines = []
         try:
             f = open(proc_sysinfo, 'r')
-        finally:
-            f.close()
-        return f.readlines()
+        except IOError:
+            return lines
+
+        lines = f.readlines()
+        f.close()
+        return lines
 
     def get_cpu_info(self):
         self.cpuinfo = {}
