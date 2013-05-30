@@ -78,7 +78,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.top_view.append_column(machine_type_col)
         cols.append((machine_type_col, 'text', 'virt_only'))
 
-        column = self.add_text_column(_('Available Subscriptions'), 'available')
+        column = self.add_text_column(_('Available'), 'available')
         cols.append((column, 'text', 'available'))
 
         # Set up the quantity column.
