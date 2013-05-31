@@ -396,7 +396,8 @@ class MigrationEngine(object):
             dic_data = self.read_channel_cert_mapping(mappingfile)
         except IOError, e:
             log.exception(e)
-            system_exit(1, _("Unable to read mapping file: %s") % mappingfile)
+            system_exit(1, _("Unable to read mapping file: %s.\n"
+            "Do you have the subscription-manager-migration-data package installed?") % mappingfile)
 
         applicable_certs = []
         valid_rhsm_channels = []
