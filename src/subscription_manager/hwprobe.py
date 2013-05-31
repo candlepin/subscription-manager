@@ -32,6 +32,9 @@ import sys
 _ = gettext.gettext
 
 
+log = logging.getLogger('rhsm-app.' + __name__)
+
+
 # Exception classes used by this module.
 # from later versions of subprocess, but not there on 2.4, so include our version
 class CalledProcessError(Exception):
@@ -49,9 +52,6 @@ class CalledProcessError(Exception):
         return "Command '%s' returned non-zero exit status %d" % (self.cmd, self.returncode)
 
 
-log = logging.getLogger('rhsm-app.' + __name__)
-
-
 class ClassicCheck:
 
     def is_registered_with_classic(self):
@@ -62,6 +62,35 @@ class ClassicCheck:
             return False
 
         return up2dateAuth.getSystemId() is not None
+
+
+# take a string like '1-4' and returns a list of
+# ints like [1,2,3,4]
+# 31-37 return [31,32,33,34,35,36,37]
+def parse_range(range_str):
+    range_list = range_str.split('-')
+    start = int(range_list[0])
+    end = int(range_list[-1])
+
+    return range(start, end + 1)
+
+
+# util to total up the values represented by a cpu siblings list
+# ala /sys/devices/cpu/cpu0/topology/core_siblings_list
+#
+# which can be a comma seperated list of ranges
+#  1,2,3,4
+#  1-2, 4-6, 8-10, 12-14
+#
+def gather_entries(entries_string):
+    entries = []
+    entry_parts = entries_string.split(',')
+    for entry_part in entry_parts:
+        # return a list of enumerated items
+        entry_range = parse_range(entry_part)
+        for entry in entry_range:
+            entries.append(entry)
+    return entries
 
 
 class DmiInfo(object):
@@ -112,6 +141,9 @@ class Hardware:
 
     def __init__(self):
         self.allhw = {}
+        # prefix to look for /sys, for testing
+        self.prefix = ''
+        self.testing = False
 
     def get_uname_info(self):
 
@@ -182,71 +214,149 @@ class Hardware:
         self.allhw.update(self.meminfo)
         return self.meminfo
 
-    def _get_socket_id_for_cpu(self, cpu):
-        physical_package_id = "%s/topology/physical_package_id" % cpu
-
-        # this can happen for a couple of cases. xen hosts/guests don't
-        # seem to populate this at all. cross arch kvm guests only seem
-        # to populate it for cpu0.
+    def count_cpumask_entries(self, cpu, field):
         try:
-            f = open(physical_package_id)
+            f = open("%s/topology/%s" % (cpu, field), 'r')
         except IOError:
-            log.warn("no physical_package_id found for cpu: %s" % cpu)
             return None
-        socket_id = f.readline()
-        return socket_id
+
+        # ia64 entries seem to be null padded, or perhaps
+        # that's a collection error
+        # FIXME
+        entries = f.read().rstrip('\n\x00')
+        f.close()
+        cpumask_entries = gather_entries(entries)
+        return len(cpumask_entries)
+
+    def _parse_s390_sysinfo(self, cpu_count, sysinfo):
+        # to quote lscpu.c:
+        # CPU Topology SW:      0 0 0 4 6 4
+        # /* s390 detects its cpu topology via /proc/sysinfo, if present.
+        # * Using simply the cpu topology masks in sysfs will not give
+        # * usable results since everything is virtualized. E.g.
+        # * virtual core 0 may have only 1 cpu, but virtual core 2 may
+        # * five cpus.
+        # * If the cpu topology is not exported (e.g. 2nd level guest)
+        # * fall back to old calculation scheme.
+        # */
+        for line in sysinfo:
+            if line.startswith("CPU Topology SW:"):
+                parts = line.split(':', 1)
+                s390_topo_str = parts[1]
+                topo_parts = s390_topo_str.split()
+
+                # indexes 3/4/5 being books/sockets_per_book,
+                # and cores_per_socket based on lscpu.c
+                books = int(topo_parts[3])
+                sockets_per_book = int(topo_parts[4])
+                cores_per_socket = int(topo_parts[5])
+
+                socket_count = books * sockets_per_book
+                cores_count = socket_count * cores_per_socket
+
+                return (socket_count, cores_count, books, sockets_per_book, cores_per_socket)
+
+        return None
+
+    def has_s390_sysinfo(self, proc_sysinfo):
+        if not os.access(proc_sysinfo, os.R_OK):
+            return False
+        return True
+
+    def read_s390_sysinfo(self, cpu_count, proc_sysinfo):
+        lines = []
+        try:
+            f = open(proc_sysinfo, 'r')
+        except IOError:
+            return lines
+
+        lines = f.readlines()
+        f.close()
+        return lines
 
     def get_cpu_info(self):
-        # TODO:(prad) Revisit this and see if theres a better way to parse /proc/cpuinfo
-        # perhaps across all arches
         self.cpuinfo = {}
-
         # we also have cpufreq, etc in this dir, so match just the numbs
         cpu_re = r'cpu([0-9]+$)'
 
         cpu_files = []
-        sys_cpu_path = "/sys/devices/system/cpu/"
+        sys_cpu_path = self.prefix + "/sys/devices/system/cpu/"
         for cpu in os.listdir(sys_cpu_path):
             if re.match(cpu_re, cpu):
                 cpu_files.append("%s/%s" % (sys_cpu_path, cpu))
 
-        cpu_count = 0
-        socket_dict = {}
+        cpu_count = len(cpu_files)
 
-        for cpu in cpu_files:
-            cpu_count = cpu_count + 1
-            socket_id = self._get_socket_id_for_cpu(cpu)
+        # assume each socket has the same number of cores, and
+        # each core has the same number of threads.
+        #
+        # This is not actually true sometimes... *cough*s390x*cough*
+        # but lscpu makes the same assumption
 
-            if socket_id is None:
-                continue
+        threads_per_core = self.count_cpumask_entries(cpu_files[0],
+                                                      'thread_siblings_list')
+        cores_per_socket = self.count_cpumask_entries(cpu_files[0],
+                                                      'core_siblings_list') / threads_per_core
 
-            if socket_id not in socket_dict:
-                socket_dict[socket_id] = 1
-            else:
-                socket_dict[socket_id] = socket_dict[socket_id] + 1
+        #print cpu_count, cores_per_cpu, threads_per_cpu
+        socket_count = cpu_count / cores_per_socket / threads_per_core
 
-        # we didn't detect any cpu socket info, for example
-        # xen hosts that do not export any cpu  topology info
-        # assume one socket
-        num_sockets = len(socket_dict)
-        if num_sockets == 0:
-            num_sockets = 1
-        self.cpuinfo['cpu.cpu_socket(s)'] = num_sockets
-        self.cpuinfo['cpu.core(s)_per_socket'] = cpu_count / num_sockets
+        # s390 etc
+        # for s390, socket calculates are per book, and we can have multiple
+        # books, so multiply socket count by book count
+        # see if we are on a s390 with book info
+        # all s390 platforms show book siblings, even the ones that also
+        # show sysinfo (lpar)
+        books = False
+        book_siblings_per_cpu = self.count_cpumask_entries(cpu_files[0],
+                                                           'book_siblings_list')
+        if book_siblings_per_cpu:
+            book_count = cpu_count / book_siblings_per_cpu
+            sockets_per_book = book_count / socket_count
+            books = True
+
+        # see if we have a /proc/sysinfo ala s390, if so
+        # prefer that info
+        proc_sysinfo = self.prefix + "/proc/sysinfo"
+        has_sysinfo = self.has_s390_sysinfo(proc_sysinfo)
+
+        if has_sysinfo:
+            sysinfo_lines = self.read_s390_sysinfo(cpu_count, proc_sysinfo)
+            if sysinfo_lines:
+                socket_count, cores_count, book_count, \
+                    sockets_per_book, \
+                        cores_per_socket = self._parse_s390_sysinfo(cpu_count, sysinfo_lines)
+                books = True
+
+        self.cpuinfo['cpu.cpu_socket(s)'] = socket_count
+        self.cpuinfo['cpu.core(s)_per_socket'] = cores_per_socket
         self.cpuinfo["cpu.cpu(s)"] = cpu_count
+        self.cpuinfo["cpu.thread(s)_per_core"] = threads_per_core
+
+        if book_siblings_per_cpu:
+            self.cpuinfo["cpu.book(s)_per_cpu"] = book_siblings_per_cpu
+
+        if books:
+            self.cpuinfo["cpu.socket(s)_per_book"] = sockets_per_book
+            self.cpuinfo["cpu.book(s)"] = book_count
+
         self.allhw.update(self.cpuinfo)
         return self.cpuinfo
 
-    def get_lscpu_info(self):
+    def get_ls_cpu_info(self):
         # if we have `lscpu`, let's use it for facts as well, under
         # the `lscpu` name space
-
         if not os.access('/usr/bin/lscpu', os.R_OK):
             return
 
         self.lscpuinfo = {}
+        # let us specify a test dir of /sys info for testing
+        ls_cpu_path = 'LANG=en_US.UTF-8 /usr/bin/lscpu'
+        ls_cpu_cmd = ls_cpu_path
+        if self.testing:
+            ls_cpu_cmd = "%s -s %s" % (ls_cpu_cmd, self.prefix)
         try:
-            cpudata = commands.getstatusoutput('LANG=en_US.UTF-8 /usr/bin/lscpu')[-1].split('\n')
+            cpudata = commands.getstatusoutput(ls_cpu_cmd)[-1].split('\n')
             for info in cpudata:
                 key, value = info.split(":")
                 nkey = '.'.join(["lscpu", key.lower().strip().replace(" ", "_")])
@@ -501,7 +611,7 @@ class Hardware:
                             self.get_release_info,
                             self.get_mem_info,
                             self.get_cpu_info,
-                            self.get_lscpu_info,
+                            self.get_ls_cpu_info,
                             self.get_network_info,
                             self.get_network_interfaces,
                             self.get_virt_info,
@@ -529,5 +639,54 @@ class Hardware:
 
 
 if __name__ == '__main__':
-    for hkey, hvalue in Hardware().get_all().items():
-        print "'%s' : '%s'" % (hkey, hvalue)
+    _LIBPATH = "/usr/share/rhsm"
+      # add to the path if need be
+    if _LIBPATH not in sys.path:
+        sys.path.append(_LIBPATH)
+
+    from subscription_manager import logutil
+    logutil.init_logger()
+
+    hw = Hardware()
+
+    if len(sys.argv) > 1:
+        hw.prefix = sys.argv[1]
+        hw.testing = True
+    hw_dict = hw.get_all()
+
+    # just show the facts collected
+    if not hw.testing:
+        for hkey, hvalue in sorted(hw_dict.items()):
+            print "'%s' : '%s'" % (hkey, hvalue)
+
+    if not hw.testing:
+        sys.exit(0)
+
+    # verify the cpu socket info collection we use for rhel5 matches lscpu
+    cpu_items = [('cpu.core(s)_per_socket', 'lscpu.core(s)_per_socket'),
+                 ('cpu.cpu(s)', 'lscpu.cpu(s)'),
+                 # NOTE: the substring is different for these two folks...
+                 # FIXME: follow up to see if this has changed
+                 ('cpu.cpu_socket(s)', 'lscpu.socket(s)'),
+                 ('cpu.book(s)', 'lscpu.book(s)'),
+                 ('cpu.thread(s)_per_core', 'lscpu.thread(s)_per_core'),
+                 ('cpu.socket(s)_per_book', 'lscpu.socket(s)_per_book')]
+    failed = False
+    failed_list = []
+    for cpu_item in cpu_items:
+        value_0 = int(hw_dict.get(cpu_item[0], -1))
+        value_1 = int(hw_dict.get(cpu_item[1], -1))
+
+        #print "%s/%s: %s %s" % (cpu_item[0], cpu_item[1], value_0, value_1)
+
+        if value_0 != value_1 and ((value_0 != -1) and (value_1 != -1)):
+            failed_list.append((cpu_item[0], cpu_item[1], value_0, value_1))
+
+    if failed:
+        print "cpu detection error"
+    for failed in failed_list:
+        print "The values %s %s do not match (|%s| != |%s|)" % (failed[0], failed[1],
+                                                                failed[2], failed[3])
+
+    if failed:
+        sys.exit(1)
