@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.8
+Version: 1.8.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -378,6 +378,27 @@ fi
 %endif
 
 %changelog
+* Fri May 31 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.9-1
+- 905136: added accessibily name for owner_label (jmolet@redhat.com)
+- 928175: fixed status command after user deletion (ckozak@redhat.com)
+- 950672: Added data for yellow. Added list view. (ckozak@redhat.com)
+- 963796: Unified descriptions (cschevia@redhat.com)
+- 966745: Correct typo in name of configuration value. (awood@redhat.com)
+- 967863: Suggest package to install when mapping file is missing. (awood@redhat.com)
+- 968364: show the issuer for certs in rct. (bkearney@redhat.com)
+- 966262 for rct.8; 959563 for subscription-manager.8 (dlackey@redhat.com.com)
+- Extract latest strings from code. (dgoodwin@redhat.com)
+- close file objects deliberately (alikins@redhat.com)
+- Use fnmatch to add wildcard support (bkearney@redhat.com)
+- One more miss from my issuer/errata debacle (bkearney@redhat.com)
+- Extend use of compliance status from cp (ckozak@redhat.com)
+- Add s390 lpar specific socket counting (alikins@redhat.com)
+- be extra paranoid and strip nul from /sys reads (alikins@redhat.com)
+- use new cpu info method by default (alikins@redhat.com)
+- Add a new method for calculating cpu sockets (alikins@redhat.com)
+- Added reasons to Subscription Details (ckozak@redhat.com)
+- Support enable and disable of all repos. (bkearney@redhat.com)
+
 * Tue May 21 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.8-1
 - Fix echo'ing of exit status or exception on exit (alikins@redhat.com)
 - 962905: Fixing errors with quantity spinner. (awood@redhat.com)
