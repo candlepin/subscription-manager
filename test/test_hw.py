@@ -14,11 +14,13 @@
 
 import unittest
 
+
 import cStringIO
 
 from mock import patch
 from mock import Mock
 
+import fixture
 from subscription_manager import hwprobe
 
 PROC_BONDING_RR = """Ethernet Channel Bonding Driver: v3.6.0 (September 26, 2009)
@@ -74,7 +76,51 @@ Slave queue ID: 0
 """
 
 
-class HardwareProbeTests(unittest.TestCase):
+class TestParseRange(unittest.TestCase):
+    def test_single(self):
+        r = '1'
+        r_list = hwprobe.parse_range(r)
+        self.assertEquals([1], r_list)
+
+    def test_range_1_4(self):
+        r = '1-4'
+        r_list = hwprobe.parse_range(r)
+        self.assertEquals([1, 2, 3, 4], r_list)
+
+
+class TestGatherEntries(unittest.TestCase):
+    def test_single(self):
+        ent = "1"
+        ent_list = hwprobe.gather_entries(ent)
+        self.assertEquals(1, len(ent_list))
+
+    def test_multiple(self):
+        ent = "1,2,3,4"
+        ent_list = hwprobe.gather_entries(ent)
+        self.assertEquals(4, len(ent_list))
+
+    def test_range_1_2(self):
+        ent = "1-2"
+        ent_list = hwprobe.gather_entries(ent)
+        self.assertEquals(2, len(ent_list))
+
+    def test_range_2_ranges(self):
+        ent = "1-4,9-12"
+        ent_list = hwprobe.gather_entries(ent)
+        self.assertEquals(8, len(ent_list))
+
+    def test_range_64cpu_example(self):
+        ent = "0,4,8,12,16,20,24,28,32,36,40,44,48,52,56,60"
+        ent_list = hwprobe.gather_entries(ent)
+        self.assertEquals(16, len(ent_list))
+
+    def test_range_0_2(self):
+        ent = "0,2"
+        ent_list = hwprobe.gather_entries(ent)
+        self.assertEquals(2, len(ent_list))
+
+
+class HardwareProbeTests(fixture.SubManFixture):
 
     @patch('subprocess.Popen')
     def test_command_error(self, MockPopen):
@@ -329,42 +375,169 @@ class HardwareProbeTests(unittest.TestCase):
 #        # this is going to be empty as non root
 #        print platform_info
 
-    @patch("os.listdir")
-    def test_cpu_info(self, MockListdir):
+    def test_parse_s390_sysinfo_empty(self):
+        cpu_count = 0
+        sysinfo_lines = []
+
         reload(hwprobe)
         hw = hwprobe.Hardware()
 
-        MockSocketId = Mock()
-        MockListdir.return_value = ["cpu0", "cpu1"]
-        MockSocketId.return_value = "0"
-        hw._get_socket_id_for_cpu = MockSocketId
-        self.assertEquals(hw.get_cpu_info(), {'cpu.cpu(s)': 2, 'cpu.core(s)_per_socket': 2, 'cpu.cpu_socket(s)': 1})
+        ret = hw._parse_s390_sysinfo(cpu_count, sysinfo_lines)
+        self.assertTrue(ret is None)
 
-    @patch("os.listdir")
-    def test_cpu_info_lots_cpu(self, MockListdir):
+    def test_parse_s390_sysinfo(self):
+        cpu_count = 24
+        sysinfo_lines = ["CPU Topology SW:      0 0 0 4 6 4"]
+
         reload(hwprobe)
         hw = hwprobe.Hardware()
 
-        MockSocketId = Mock()
-        MockListdir.return_value = ["cpu%s" % i for i in range(0, 2000)]
-        MockSocketId.return_value = "0"
-        hw._get_socket_id_for_cpu = MockSocketId
-        self.assertEquals(hw.get_cpu_info(), {'cpu.cpu(s)': 2000, 'cpu.core(s)_per_socket': 2000, 'cpu.cpu_socket(s)': 1})
+        ret = hw._parse_s390_sysinfo(cpu_count, sysinfo_lines)
+        socket_count, cores_count, book_count, \
+            sockets_per_book, cores_per_socket = ret
+        self.assertEquals(24, socket_count)
+        self.assertEquals(96, cores_count)
+        self.assertEquals(4, book_count)
+        self.assertEquals(6, sockets_per_book)
+        self.assertEquals(4, cores_per_socket)
 
     @patch("os.listdir")
-    def test_cpu_info_other_files(self, MockListdir):
+    def test_cpu_info_s390(self, mock_list_dir):
         reload(hwprobe)
         hw = hwprobe.Hardware()
 
-        MockSocketId = Mock()
-        MockListdir.return_value = ["cpu0", "cpu1",  # normal cpu ids (valid)
-                                    "cpu123123",     # big cpu   (valid)
-                                    "cpu_",          # not valid
-                                    "cpufreq",       # this exists but is not a cpu
-                                    "cpuidle",       # also exists
-                                    "cpu0foo",       # only cpuN are valid
-                                    "cpu11111111 ",  # trailing space, not valie
-                                    "cpu00"]          # odd name, but valid I guess
-        MockSocketId.return_value = "0"
-        hw._get_socket_id_for_cpu = MockSocketId
-        self.assertEquals(hw.get_cpu_info(), {'cpu.cpu(s)': 4, 'cpu.core(s)_per_socket': 4, 'cpu.cpu_socket(s)': 1})
+        mock_list_dir.return_value = ["cpu%s" % i for i in range(0, 3)]
+
+        def count_cpumask(cpu, field):
+            return self.cpumask_vals[field]
+
+        # 32 cpus
+        # 16 cores, 2 threads per core = each cpu has two thread siblings
+        # 1 core per socket
+        # 8 sockets per book, = each cpu has 8 core siblings
+        # 2 books, each check has 16 book siblings
+        self.cpumask_vals = {'thread_siblings_list': 1,
+                             'core_siblings_list': 1,
+                             'book_siblings_list': 1}
+
+        hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
+        self.assert_equal_dict({'cpu.cpu(s)': 3,
+                                'cpu.socket(s)_per_book': 1,
+                                'cpu.core(s)_per_socket': 1,
+                                'cpu.thread(s)_per_core': 1,
+                                'cpu.cpu_socket(s)': 3,
+                                'cpu.book(s)': 3,
+                                'cpu.book(s)_per_cpu': 1,
+                                'cpu.cpu_socket(s)': 3},
+                               hw.get_cpu_info())
+
+    @patch("subscription_manager.hwprobe.Hardware.has_s390_sysinfo")
+    @patch("subscription_manager.hwprobe.Hardware.read_s390_sysinfo")
+    @patch("os.listdir")
+    def test_cpu_info_s390_sysinfo(self, mock_list_dir,
+                                   mock_read_sysinfo, mock_has_sysinfo):
+        #reload(hwprobe)
+
+        mock_list_dir.return_value = ["cpu%s" % i for i in range(0, 20)]
+        mock_has_sysinfo.return_value = True
+        mock_read_sysinfo.return_value = ["CPU Topology SW:      0 0 0 4 6 4"]
+
+        hw = hwprobe.Hardware()
+
+        def count_cpumask(cpu, field):
+            return self.cpumask_vals[field]
+
+        # 20 cpus
+        # 24 cores, 1 threads per core = each cpu has two thread siblings
+        # 1 core per socket 1 sockets per book via /sys, but
+        # /proc/sysinfo says 4 books of 6 sockets of 4 cores
+        # and we prefer /proc/sysinfo
+        # how does 24 sockets have 20 cpu? 4 are offline
+        self.cpumask_vals = {'thread_siblings_list': 1,
+                             'core_siblings_list': 1,
+                             'book_siblings_list': 1}
+
+        hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
+        self.assert_equal_dict({'cpu.cpu(s)': 20,
+                                'cpu.socket(s)_per_book': 6,
+                                'cpu.core(s)_per_socket': 4,
+                                'cpu.thread(s)_per_core': 1,
+                                'cpu.book(s)': 4,
+                                'cpu.book(s)_per_cpu': 1,
+                                'cpu.cpu_socket(s)': 24},
+                               hw.get_cpu_info())
+
+    @patch('subscription_manager.hwprobe.Hardware.count_cpumask_entries')
+    @patch("os.listdir")
+    def test_cpu_info(self, mock_list_dir, mock_count):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+
+        def count_cpumask(cpu, field):
+            return self.cpumask_vals[field]
+
+        self.cpumask_vals = {'thread_siblings_list': 1,
+                             'core_siblings_list': 2,
+                             'book_siblings_list': None}
+
+        mock_list_dir.return_value = ["cpu0", "cpu1"]
+        hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
+        #print hw.get_cpu_info()
+        self.assert_equal_dict(hw.get_cpu_info(), {'cpu.cpu(s)': 2,
+                                              'cpu.core(s)_per_socket': 2,
+                                              'cpu.cpu_socket(s)': 1,
+                                              'cpu.thread(s)_per_core': 1})
+
+        #self.assertEquals(hw.get_cpu_info(), {'cpu.cpu(s)': 2,
+                                              #'cpu.core(s)_per_socket': 2,
+                                              #'cpu.cpu_socket(s)': 1,
+                                              #'cpu.thread(s)_per_core': 1})
+
+    @patch("os.listdir")
+    def test_cpu_info_lots_cpu(self, mock_list_dir):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+
+        mock_list_dir.return_value = ["cpu%s" % i for i in range(0, 2000)]
+
+        def count_cpumask(cpu, field):
+            vals = {'thread_siblings_list': 1,
+                    #'core_siblings_list': 2,
+                    'core_siblings_list': 2000,
+                    'book_siblings_list': None}
+            return vals[field]
+
+        hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
+        self.assert_equal_dict(hw.get_cpu_info(),
+                              {'cpu.cpu(s)': 2000,
+                               'cpu.core(s)_per_socket': 2000,
+                               'cpu.thread(s)_per_core': 1,
+                               'cpu.cpu_socket(s)': 1})
+
+    @patch("os.listdir")
+    def test_cpu_info_other_files(self, mock_list_dir):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+
+        mock_list_dir.return_value = ["cpu0", "cpu1",  # normal cpu ids (valid)
+                                      "cpu123123",     # big cpu   (valid)
+                                      "cpu_",          # not valid
+                                      "cpufreq",       # this exists but is not a cpu
+                                      "cpuidle",       # also exists
+                                      "cpu0foo",       # only cpuN are valid
+                                      "cpu11111111 ",  # trailing space, not valie
+                                      "cpu00"]          # odd name, but valid I guess
+
+        def count_cpumask(cpu, field):
+            vals = {'thread_siblings_list': 1,
+                    #'core_siblings_list': 2,
+                    'core_siblings_list': 4,
+                    'book_siblings_list': None}
+            return vals[field]
+
+        hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
+        self.assert_equal_dict(hw.get_cpu_info(),
+                               {'cpu.cpu(s)': 4,
+                                'cpu.core(s)_per_socket': 4,
+                                'cpu.thread(s)_per_core': 1,
+                                'cpu.cpu_socket(s)': 1})
