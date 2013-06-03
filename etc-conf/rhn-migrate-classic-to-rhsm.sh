@@ -3,12 +3,6 @@
 #	  based on subscription-manager bash completion script
 #
 
-_rhn_help()
-{
-	local opts="--list --org --set --show --unset"
-	COMPREPLY=($(compgen -W "${opts}" -- ${1}))
-}
-
 # main completion function
 _rhn-migrate-classic-to-rhsm()
 {
@@ -17,7 +11,7 @@ _rhn-migrate-classic-to-rhsm()
 	first="${COMP_WORDS[1]}"
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
-	opts="-h --help -f --force -g --gui -n --no-auto -s --servicelevel= --serverurl="
+	opts="-h --help -f --force -g --gui -n --no-auto -s --servicelevel --serverurl"
 
 	case "${cur}" in	
 		-*)
