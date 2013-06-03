@@ -24,6 +24,7 @@ import logging
 import os
 import simplejson as json
 import socket
+from M2Crypto import SSL
 
 from rhsm.config import initConfig
 import rhsm.connection as connection
@@ -211,6 +212,10 @@ class StatusCache(CacheManager):
             self._sync_with_server(uep, uuid)
             self.write_cache()
             return self.server_status
+        except SSL.SSLError, ex:
+            log.exception(ex)
+            log.error("Consumer certificate is invalid")
+            return None
         except connection.RestlibException:
             # Indicates we may be talking to a very old candlepin server
             # which does not have the compliance API call. Report everything
