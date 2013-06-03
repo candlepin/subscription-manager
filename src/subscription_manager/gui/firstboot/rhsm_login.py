@@ -358,9 +358,15 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # the standalone gui flow), which is before apply(). So
         # do nothing here if we haven't set a ref to self.interface
         # yet. See bz#863572
-        if self.interface is not None:
-            self.interface.backButton.set_sensitive(sensitive)
-            self.interface.nextButton.set_sensitive(sensitive)
+        # EL5:
+        if self._is_compat:
+            self.parent.backButton.set_sensitive(sensitive)
+            self.parent.nextButton.set_sensitive(sensitive)
+        # EL6:
+        else:
+            if self.interface is not None:
+                self.interface.backButton.set_sensitive(sensitive)
+                self.interface.nextButton.set_sensitive(sensitive)
 
     def _get_credentials_hash(self):
         """
