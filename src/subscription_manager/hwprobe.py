@@ -247,20 +247,25 @@ class Hardware:
 
                 # indexes 3/4/5 being books/sockets_per_book,
                 # and cores_per_socket based on lscpu.c
-                books = int(topo_parts[3])
+                book_count = int(topo_parts[3])
                 sockets_per_book = int(topo_parts[4])
                 cores_per_socket = int(topo_parts[5])
 
-                socket_count = books * sockets_per_book
+                socket_count = book_count * sockets_per_book
                 cores_count = socket_count * cores_per_socket
 
-                return (socket_count, cores_count, books, sockets_per_book, cores_per_socket)
+                return {'socket_count': socket_count,
+                        'cores_count': cores_count,
+                        'book_count': book_count,
+                        'sockets_per_book': sockets_per_book,
+                        'cores_per_socket': cores_per_socket}
 
         return None
 
     def has_s390_sysinfo(self, proc_sysinfo):
         if not os.access(proc_sysinfo, os.R_OK):
             return False
+
         return True
 
     def read_s390_sysinfo(self, cpu_count, proc_sysinfo):
@@ -323,10 +328,15 @@ class Hardware:
         if has_sysinfo:
             sysinfo_lines = self.read_s390_sysinfo(cpu_count, proc_sysinfo)
             if sysinfo_lines:
-                socket_count, cores_count, book_count, \
-                    sockets_per_book, \
-                        cores_per_socket = self._parse_s390_sysinfo(cpu_count, sysinfo_lines)
-                books = True
+                sysinfo = self._parse_s390_sysinfo(cpu_count, sysinfo_lines)
+                # verify the sysinfo has system level virt info
+                if sysinfo:
+                    socket_count = sysinfo['socket_count']
+                    cores_count = sysinfo['cores_count']
+                    book_count = sysinfo['book_count']
+                    sockets_per_book = sysinfo['sockets_per_book']
+                    cores_per_socket = sysinfo['cores_per_socket']
+                    books = True
 
         self.cpuinfo['cpu.cpu_socket(s)'] = socket_count
         self.cpuinfo['cpu.core(s)_per_socket'] = cores_per_socket
@@ -624,7 +634,6 @@ class Hardware:
             except Exception, e:
                 log.warn("%s" % hardware_method)
                 log.warn("Hardware detection failed: %s" % e)
-
         #we need to know the DMI info and VirtInfo before determining UUID.
         #Thus, we can't figure it out within the main data collection loop.
         if self.allhw.get('virt.is_guest'):
@@ -682,11 +691,20 @@ if __name__ == '__main__':
         if value_0 != value_1 and ((value_0 != -1) and (value_1 != -1)):
             failed_list.append((cpu_item[0], cpu_item[1], value_0, value_1))
 
+    missing_list = []
+    must_haves = ['cpu.cpu_socket(s)', 'cpu.cpu(s)', 'cpu.core(s)_per_socket', 'cpu.thread(s)_per_core']
+    for must_have in must_haves:
+        if must_have not in hw_dict:
+            missing_list.append(must_have)
+
     if failed:
         print "cpu detection error"
     for failed in failed_list:
         print "The values %s %s do not match (|%s| != |%s|)" % (failed[0], failed[1],
                                                                 failed[2], failed[3])
+    if missing_list:
+        for missing in missing_list:
+            print "cpu info fact: %s was missing" % missing
 
     if failed:
         sys.exit(1)
