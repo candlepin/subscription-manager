@@ -256,7 +256,9 @@ class TestProductManager(SubManFixture):
         self.assert_nothing_happened()
 
         # plugin should get called with empty list
-        self.prod_mgr.plugin_manager.run.assert_called_with('post_product_id_install', product_list=[])
+        self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[])
+        self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[])
+        self.assertEquals(2, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_packages_no_repos_no_active_no_enabled(self):
         cert = self._create_server_cert()
@@ -266,7 +268,9 @@ class TestProductManager(SubManFixture):
         # we should do nothing here
         self.assert_nothing_happened()
 
-        self.prod_mgr.plugin_manager.run.assert_called_with('post_product_id_install', product_list=[])
+        self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[])
+        self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[])
+        self.assertEquals(2, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_packages_no_repos_no_active_with_enabled(self):
         """if repos are enabled but not active, basically nothing should happen"""
@@ -278,7 +282,9 @@ class TestProductManager(SubManFixture):
 
         self.assert_nothing_happened()
 
-        self.prod_mgr.plugin_manager.run.assert_called_with('post_product_id_install', product_list=[])
+        self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[])
+        self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[])
+        self.assertEquals(2, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_packages_no_repos_with_active_with_enabled(self):
         """rhel-6-server enabled and active, with product cert already installed should do nothing"""
@@ -305,7 +311,9 @@ class TestProductManager(SubManFixture):
         self.assertTrue(self.prod_mgr._is_workstation.called)
 
         self.prod_dir.find_by_product.assert_called_with('69')
-        self.prod_mgr.plugin_manager.run.assert_called_with('post_product_id_install', product_list=[])
+        self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[])
+        self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[])
+        self.assertEquals(2, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_product_certs_with_active_with_enabled(self):
         """no product cert, repo enabled and active, cert should be installed.
@@ -338,7 +346,9 @@ class TestProductManager(SubManFixture):
         self.assertTrue(self.prod_db_mock.write.called)
 
         self.prod_db_mock.add.assert_called_with('69', 'rhel-6-server')
-        self.prod_mgr.plugin_manager.run.assert_called_with('post_product_id_install', product_list=[cert])
+        self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[(cert.product, cert)])
+        self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[cert])
+        self.assertEquals(2, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_active_with_product_certs_installed_anaconda(self):
         """simulate no active packages (since they are installed via anaconda) repos

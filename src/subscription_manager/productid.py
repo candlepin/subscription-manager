@@ -273,8 +273,7 @@ class ProductManager:
         # collect info, then do the needful later, so we can hook
         # up a plugin in between and let it munge these lists, so a plugin
         # could blacklist a product cert for example.
-        # TODO: insert "pre_product_id_install" hook
-
+        self.plugin_manager.run('pre_product_id_install', product_list=products_to_install)
         for (product, cert) in products_to_install:
             fn = '%s.pem' % product.id
             path = self.pdir.abspath(fn)

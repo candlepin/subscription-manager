@@ -287,7 +287,7 @@ class PostRegistrationConduit(BaseConduit):
 
 
 class ProductConduit(BaseConduit):
-    """Conduit for uses with plugins that handle product id functions."""
+    """Conduit for use with plugins that handle product id functions."""
     slots = ['pre_product_id_install', 'post_product_id_install']
 
     def __init__(self, clazz, product_list):
