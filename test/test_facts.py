@@ -1,9 +1,9 @@
-import unittest
 import tempfile
 import simplejson as json
 import shutil
-from mock import Mock
+from mock import patch
 
+import fixture
 from stubs import StubEntitlementDirectory, StubProductDirectory
 from subscription_manager import facts
 
@@ -107,6 +107,7 @@ facts_buf = """
     "memory.memtotal": "10326220",
     "memory.swaptotal": "12419068",
     "nxxxw.tddng3": "10d0",
+    "system.certificate_version": "3.2",
     "test.attr": "blippy2",
     "uname.machine": "x86_64",
     "uname.release": "2.6.35.11-83.fc14.x86_64",
@@ -123,7 +124,7 @@ def stub_get_facts():
     return {'newstuff': True}
 
 
-class TestFacts(unittest.TestCase):
+class TestFacts(fixture.SubManFixture):
     def setUp(self):
         self.fact_cache_dir = tempfile.mkdtemp()
         fact_cache = self.fact_cache_dir + "/facts.json"
@@ -145,23 +146,134 @@ class TestFacts(unittest.TestCase):
         #FIXME: verify the date is correct
         self.f.get_last_update()
 
-    def test_facts_delta(self):
-        self.f.get_facts = stub_get_facts
+    @patch('subscription_manager.facts.Facts._load_custom_facts',
+           return_value={})
+    @patch('subscription_manager.facts.Facts._load_hw_facts',
+           return_value={'newstuff': 'a new_hope'})
+    def test_facts_has_changed(self, mock_load_hw, mock_load_cf):
         self.assertTrue(self.f.has_changed())
 
-    def test_get_facts(self):
-        f = self.f.get_facts()
-        self.assertEquals(f['net.interface.lo.ipv4_address'], '127.0.0.1')
+    @patch('subscription_manager.facts.Facts._load_custom_facts',
+           return_value={})
+    @patch('subscription_manager.facts.Facts._load_hw_facts')
+    def test_facts_has_changed_no_change(self, mock_load_hw, mock_load_cf):
+        test_facts = json.loads(facts_buf)
+        mock_load_hw.return_value = test_facts
+        changed = self.f.has_changed()
+        self.assert_equal_dict(test_facts, self.f.facts)
+        self.assertFalse(changed)
 
-    def test_custom_facts_override_hardware_facts(self):
-        self.f._load_custom_facts = Mock()
-        self.f._load_custom_facts.return_value = \
+    @patch('subscription_manager.facts.Facts._load_custom_facts',
+           return_value={})
+    @patch('subscription_manager.facts.Facts._load_hw_facts')
+    def test_facts_has_changed_no_change(self, mock_load_hw, mock_load_cf):
+        test_facts = json.loads(facts_buf)
+        # change socket fact count from what is in the cache
+        test_facts['cpu.cpu_socket(s)'] = '16'
+        mock_load_hw.return_value = test_facts
+
+        changed = self.f.has_changed()
+        self.assertEquals(self.f.facts['cpu.cpu_socket(s)'], '16')
+        self.assertTrue(changed)
+
+    @patch('subscription_manager.facts.Facts._read_cache',
+           return_value=None)
+    @patch('subscription_manager.facts.Facts._load_custom_facts',
+           return_value={})
+    @patch('subscription_manager.facts.Facts._load_hw_facts')
+    def test_facts_has_changed_cache_is_none(self, mock_load_hw,
+                                             mock_load_cf,
+                                             mock_read_cache):
+        test_facts = json.loads(facts_buf)
+        mock_load_hw.return_value = test_facts
+
+        changed = self.f.has_changed()
+        self.assert_equal_dict(test_facts, self.f.facts)
+        self.assertTrue(changed)
+
+    @patch('subscription_manager.facts.Facts._cache_exists',
+           return_value=False)
+    @patch('subscription_manager.facts.Facts._load_custom_facts',
+           return_value={})
+    @patch('subscription_manager.facts.Facts._load_hw_facts')
+    def test_facts_has_changed_cache_exists_false(self, mock_load_hw,
+                                                  mock_load_cf,
+                                                  mock_read_cache):
+
+        test_facts = json.loads(facts_buf)
+        mock_load_hw.return_value = test_facts
+
+        changed = self.f.has_changed()
+        self.assertTrue(changed)
+
+    @patch('subscription_manager.facts.Facts._load_custom_facts')
+    @patch('subscription_manager.facts.Facts._load_hw_facts')
+    def test_get_facts(self, mock_load_hw, mock_load_cf):
+        mock_load_hw.return_value = \
+            {'net.interface.lo.ipv4_address': '127.0.0.1'}
+
+        mock_load_cf.return_value = \
+            {'some.custom_fact': 'foobar'}
+
+        f = self.f.get_facts()
+
+        self.assertTrue(isinstance(f, dict))
+        self.assertEquals(f['net.interface.lo.ipv4_address'], '127.0.0.1')
+        self.assertEquals(f['some.custom_fact'], 'foobar')
+
+    @patch('subscription_manager.facts.Facts._load_custom_facts')
+    @patch('subscription_manager.facts.Facts._load_hw_facts')
+    def test_custom_facts_override_hardware_facts(self, mock_load_hw, mock_load_cf):
+        mock_load_hw.return_value = \
+            {'net.interface.lo.ipv4_address': '127.0.0.1'}
+
+        mock_load_cf.return_value = \
             {'net.interface.lo.ipv4_address': 'foobar'}
 
         f = self.f.get_facts()
         self.assertEquals(f['net.interface.lo.ipv4_address'], 'foobar')
 
-    def test_write_facts(self):
+    # simulate an empty facts file
+    @patch('subscription_manager.facts.Facts._open_custom_facts',
+           return_value="")
+    @patch('subscription_manager.facts.Facts._load_hw_facts',
+           return_value={})
+    def test_empty_custom_facts(self, mock_load_hw, mock_open_cf):
+        # dont load hardware info
+        mock_load_hw.return_value = {}
+        f = self.f.get_facts()
+        # not much to check, just want to verify we dont
+        # throw an exception
+        # see rhbz #966747
+        self.assertTrue(isinstance(f, dict))
+
+    @patch('glob.glob', return_value="/path/to/custom/facts/foo.fact")
+    @patch('subscription_manager.facts.Facts._open_custom_facts')
+    @patch('subscription_manager.facts.Facts._load_hw_facts',
+           return_value={})
+    def test_custom_facts(self, mock_load_hw, mock_open_cf, mock_glob):
+        mock_open_cf.return_value = facts_buf
+        f = self.f.get_facts()
+        self.assertTrue(isinstance(f, dict))
+
+    @patch('__builtin__.open',
+           side_effect=IOError)
+    @patch('subscription_manager.facts.Facts._load_hw_facts',
+           return_value={'test_key': 'test_value'})
+    def test_io_error_on_custom_facts(self, mock_load_hw, mock_open):
+        # verify we handle ioerrors reading custom facts
+        f = self.f.get_facts()
+
+        self.assertTrue(isinstance(f, dict))
+        self.assertEquals(f['test_key'], 'test_value')
+
+    @patch('subscription_manager.facts.Facts._load_custom_facts')
+    @patch('subscription_manager.facts.Facts._load_hw_facts')
+    def test_write_facts(self, mock_load_hw, mock_load_cf):
+        mock_load_hw.return_value = \
+            {'net.interface.lo.ipv4_address': '127.0.0.1',
+             'cpu.cpu_socket(s)': '128',
+             'newstuff': 'newstuff_is_true'}
         fact_cache_dir = tempfile.mkdtemp()
         fact_cache = fact_cache_dir + "/facts.json"
 
@@ -169,16 +281,19 @@ class TestFacts(unittest.TestCase):
         self.f.fact_cache_dir = fact_cache_dir
         self.f.CACHE_FILE = fact_cache
 
-        # use a stub impl of get_facts since the normal impl always loads
-        # the real facts
-        self.f.get_facts = stub_get_facts
+        # mocking load_hw_facts and load_custom_facts neuters get_facts
+        #self.f.get_facts = 'asdfadfasdfadf'
         self.f.write_cache()
 
         new_facts_buf = open(fact_cache).read()
         new_facts = json.loads(new_facts_buf)
-        self.assertEquals(new_facts['newstuff'], True)
+        self.assertEquals(new_facts['newstuff'], 'newstuff_is_true')
 
-    def test_entitlement_version(self):
+    @patch('subscription_manager.facts.Facts._load_custom_facts',
+           return_value={})
+    @patch('subscription_manager.facts.Facts._load_hw_facts',
+           return_value={})
+    def test_entitlement_version(self, mock_load_hw, mock_load_cf):
         self.assertTrue("system.certificate_version" in self.f.get_facts())
         self.assertEquals(facts.CERT_VERSION,
                 self.f.get_facts()['system.certificate_version'])
