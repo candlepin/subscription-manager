@@ -166,7 +166,7 @@ class TestFacts(fixture.SubManFixture):
     @patch('subscription_manager.facts.Facts._load_custom_facts',
            return_value={})
     @patch('subscription_manager.facts.Facts._load_hw_facts')
-    def test_facts_has_changed_no_change(self, mock_load_hw, mock_load_cf):
+    def test_facts_has_changed_with_change(self, mock_load_hw, mock_load_cf):
         test_facts = json.loads(facts_buf)
         # change socket fact count from what is in the cache
         test_facts['cpu.cpu_socket(s)'] = '16'
