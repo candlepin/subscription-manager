@@ -248,16 +248,12 @@ class CatManifestCommand(RCTManifestCommand):
             self._print_section(_("Subscription:"), to_print, 1, False)
 
             # Get the provided Products
-            to_print = []
-            for pp in data["pool"]["providedProducts"]:
-                to_print.append((int(pp["productId"]), pp["productName"]))
+            to_print = [(int(pp["productId"]), pp["productName"]) for pp in data["pool"]["providedProducts"]]
 
             self._print_section(_("Provided Products:"), sorted(to_print), 2, False)
 
             # Get the Content Sets
-            to_print = []
-            for item in cert.content:
-                to_print.append([item.url])
+            to_print = [[item.url] for item in cert.content]
             self._print_section(_("Content Sets:"), sorted(to_print), 2, True)
 
     def _do_command(self):
