@@ -84,8 +84,8 @@ install-conf:
 	install -m 644 etc-conf/subscription-manager.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager
 	install -m 644 etc-conf/rct.completion.sh $(PREFIX)/etc/bash_completion.d/rct
 	install -m 644 etc-conf/rhn-migrate-classic-to-rhsm.completion.sh $(PREFIX)/etc/bash_completion.d/rhn-migrate-classic-to-rhsm
-	install -m 644 etc-conf/rhsm-icon.sh $(PREFIX)/etc/bash_completion.d/rhsm-icon
-	install -m 644 etc-conf/rhsmcertd.sh $(PREFIX)/etc/bash_completion.d/rhsmcertd
+	install -m 644 etc-conf/rhsm-icon.completion.sh $(PREFIX)/etc/bash_completion.d/rhsm-icon
+	install -m 644 etc-conf/rhsmcertd.completion.sh $(PREFIX)/etc/bash_completion.d/rhsmcertd
 
 install-help-files:
 	install -d $(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager
