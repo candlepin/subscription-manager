@@ -184,6 +184,9 @@ rm -rf %{buildroot}
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
 %{_sysconfdir}/bash_completion.d/subscription-manager
 %{_sysconfdir}/bash_completion.d/rct
+%{_sysconfdir}/bash_completion.d/rhn-migrate-classic-to-rhsm
+%{_sysconfdir}/bash_completion.d/rhsm-icon
+%{_sysconfdir}/bash_completion.d/rhsmcertd
 
 %{_sysconfdir}/cron.daily/rhsmd
 %{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
