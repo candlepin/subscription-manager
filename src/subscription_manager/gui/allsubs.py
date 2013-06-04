@@ -369,7 +369,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self._contract_selection_cancelled()
         try:
-            self.plugin_manager.run("pre_subscribe", consumer_uuid=self.identity.uuid)
+            self.plugin_manager.run("pre_subscribe", consumer_uuid=self.identity.uuid,
+                                    pool_id=pool['id'], quantity=quantity)
             ents = self.backend.uep.bindByEntitlementPool(self.identity.uuid, pool['id'], quantity)
             self.plugin_manager.run("post_subscribe", consumer_uuid=self.identity.uuid, entitlement_data=ents)
             managerlib.fetch_certificates(self.backend)
