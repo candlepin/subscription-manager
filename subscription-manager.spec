@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.9
+Version: 1.8.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -381,6 +381,15 @@ fi
 %endif
 
 %changelog
+* Tue Jun 04 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.10-1
+- 922825: pre_subscribe conduit now contains more data (mstead@redhat.com)
+- 921222: Fixed subman auto-complete scripts (cschevia@redhat.com)
+- 922806: Fix RHEL 5 firstboot issue with backButton. (dgoodwin@redhat.com)
+- 960465: Subman disconnected when consumer cert is invalid (ckozak@redhat.com)
+- 966747: handle a custom facts file being empty (alikins@redhat.com)
+- 969280: Fix traceback on disconnected sub detach (ckozak@redhat.com)
+- handle s390x's without vm info in sysinfo (alikins@redhat.com)
+
 * Fri May 31 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.9-1
 - 905136: added accessibily name for owner_label (jmolet@redhat.com)
 - 928175: fixed status command after user deletion (ckozak@redhat.com)
