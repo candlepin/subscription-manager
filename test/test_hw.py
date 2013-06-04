@@ -393,13 +393,12 @@ class HardwareProbeTests(fixture.SubManFixture):
         hw = hwprobe.Hardware()
 
         ret = hw._parse_s390_sysinfo(cpu_count, sysinfo_lines)
-        socket_count, cores_count, book_count, \
-            sockets_per_book, cores_per_socket = ret
-        self.assertEquals(24, socket_count)
-        self.assertEquals(96, cores_count)
-        self.assertEquals(4, book_count)
-        self.assertEquals(6, sockets_per_book)
-        self.assertEquals(4, cores_per_socket)
+
+        self.assertEquals(24, ret['socket_count'])
+        self.assertEquals(96, ret['cores_count'])
+        self.assertEquals(4, ret['book_count'])
+        self.assertEquals(6, ret['sockets_per_book'])
+        self.assertEquals(4, ret['cores_per_socket'])
 
     @patch("os.listdir")
     def test_cpu_info_s390(self, mock_list_dir):
