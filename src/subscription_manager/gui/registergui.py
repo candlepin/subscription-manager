@@ -1040,7 +1040,8 @@ class AsyncBackend(object):
                 pool_id = pool_quantity['pool']['id']
                 quantity = pool_quantity['quantity']
                 log.info("  pool %s quantity %s" % (pool_id, quantity))
-                self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid)
+                self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid,
+                                        pool_id=pool_id, quantity=quantity)
                 ents = self.backend.uep.bindByEntitlementPool(uuid, pool_id, quantity)
                 self.plugin_manager.run("post_subscribe", consumer_uuid=uuid, entitlement_data=ents)
             managerlib.fetch_certificates(self.backend)
