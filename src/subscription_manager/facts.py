@@ -69,7 +69,11 @@ class Facts(CacheManager):
         return a dict of any key/values that have changed
         including new keys or deleted keys
         """
-        cached_facts = self._read_cache()
+        if not self._cache_exists():
+            log.info("Cache %s does not exit" % self.CACHE_FILE)
+            return True
+
+        cached_facts = self._read_cache() or {}
         diff = {}
         self.facts = self.get_facts()
         # compare the dicts to see if there is a diff
@@ -77,8 +81,6 @@ class Facts(CacheManager):
         for key in self.facts:
             value = self.facts[key]
             # new fact found
-            if cached_facts is None:
-                continue
             if key not in cached_facts:
                 diff[key] = value
             if key in cached_facts:
@@ -87,11 +89,10 @@ class Facts(CacheManager):
                     diff[key] = value
 
         # look for keys that went away
-        if cached_facts:
-            for key in cached_facts:
-                if key not in self.facts:
-                    #update with new value, though it doesnt matter
-                    diff[key] = cached_facts[key]
+        for key in cached_facts:
+            if key not in self.facts:
+                #update with new value, though it doesnt matter
+                diff[key] = cached_facts[key]
 
         return len(diff) > 0
 
@@ -115,6 +116,32 @@ class Facts(CacheManager):
         import hwprobe
         return hwprobe.Hardware().get_all()
 
+    def _parse_facts_json(self, json_buffer, file_path):
+        custom_facts = None
+
+        try:
+            custom_facts = json.loads(json_buffer)
+        except ValueError:
+            log.warn("Unable to load custom facts file: %s" % file_path)
+
+        return custom_facts
+
+    def _open_custom_facts(self, file_path):
+        if not os.access(file_path, os.R_OK):
+            log.warn("Unable to access custom facts file: %s" % file_path)
+            return None
+
+        try:
+            f = open(file_path)
+        except IOError:
+            log.warn("Unabled to open custom facts file: %s" % file_path)
+            return None
+
+        json_buffer = f.read()
+        f.close()
+
+        return json_buffer
+
     def _load_custom_facts(self):
         """
         Load custom facts from .facts files in /etc/rhsm/facts.
@@ -122,10 +149,16 @@ class Facts(CacheManager):
         facts_file_glob = "%s/facts/*.facts" % rhsm.config.DEFAULT_CONFIG_DIR
         file_facts = {}
         for file_path in glob.glob(facts_file_glob):
-            if os.access(file_path, os.R_OK):
-                f = open(file_path)
-                json_buffer = f.read()
-                file_facts.update(json.loads(json_buffer))
+            log.info("Loading custom facts from: %s" % file_path)
+            json_buffer = self._open_custom_facts(file_path)
+
+            if json_buffer is None:
+                continue
+
+            custom_facts = self._parse_facts_json(json_buffer, file_path)
+
+            if custom_facts:
+                file_facts.update(custom_facts)
 
         return file_facts
 
