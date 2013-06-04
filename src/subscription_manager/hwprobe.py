@@ -252,10 +252,8 @@ class Hardware:
                 cores_per_socket = int(topo_parts[5])
 
                 socket_count = book_count * sockets_per_book
-                cores_count = socket_count * cores_per_socket
 
                 return {'socket_count': socket_count,
-                        'cores_count': cores_count,
                         'book_count': book_count,
                         'sockets_per_book': sockets_per_book,
                         'cores_per_socket': cores_per_socket}
@@ -332,7 +330,6 @@ class Hardware:
                 # verify the sysinfo has system level virt info
                 if sysinfo:
                     socket_count = sysinfo['socket_count']
-                    cores_count = sysinfo['cores_count']
                     book_count = sysinfo['book_count']
                     sockets_per_book = sysinfo['sockets_per_book']
                     cores_per_socket = sysinfo['cores_per_socket']
