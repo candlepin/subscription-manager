@@ -34,4 +34,4 @@ _rct()
   return 0
 }
 
-complete -F _rct rct
+complete -F _rct -o default rct
