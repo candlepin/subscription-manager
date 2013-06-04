@@ -691,19 +691,16 @@ if __name__ == '__main__':
         if value_0 != value_1 and ((value_0 != -1) and (value_1 != -1)):
             failed_list.append((cpu_item[0], cpu_item[1], value_0, value_1))
 
-    missing_list = []
     must_haves = ['cpu.cpu_socket(s)', 'cpu.cpu(s)', 'cpu.core(s)_per_socket', 'cpu.thread(s)_per_core']
-    for must_have in must_haves:
-        if must_have not in hw_dict:
-            missing_list.append(must_have)
+    missing_set = set(must_haves).difference(set(hw_dict))
 
     if failed:
         print "cpu detection error"
     for failed in failed_list:
         print "The values %s %s do not match (|%s| != |%s|)" % (failed[0], failed[1],
                                                                 failed[2], failed[3])
-    if missing_list:
-        for missing in missing_list:
+    if missing_set:
+        for missing in missing_set:
             print "cpu info fact: %s was missing" % missing
 
     if failed:
