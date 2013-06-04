@@ -395,7 +395,6 @@ class HardwareProbeTests(fixture.SubManFixture):
         ret = hw._parse_s390_sysinfo(cpu_count, sysinfo_lines)
 
         self.assertEquals(24, ret['socket_count'])
-        self.assertEquals(96, ret['cores_count'])
         self.assertEquals(4, ret['book_count'])
         self.assertEquals(6, ret['sockets_per_book'])
         self.assertEquals(4, ret['cores_per_socket'])
