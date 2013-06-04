@@ -19,6 +19,7 @@ from datetime import datetime, timedelta
 import gettext
 import logging
 import syslog
+import socket
 
 from rhsm.config import initConfig
 from rhsm.certificate import Key, create_from_pem, GMT
@@ -233,7 +234,12 @@ class UpdateAction(Action):
     def perform(self):
         report = UpdateReport()
         local = self._get_local_serials(report)
-        expected = self._get_expected_serials(report)
+        try:
+            expected = self._get_expected_serials(report)
+        except socket.error, ex:
+            log.exception(ex)
+            log.error('Cannot detach subscriptions while disconnected')
+            return (0, [ex])
         missing_serials = self._find_missing_serials(local, expected)
         rogue_serials = self._find_rogue_serials(local, expected)
         self.delete(rogue_serials, report)
