@@ -95,7 +95,10 @@ class StatCertCommand(RCTCertCommand):
             print _("Subject Key ID size: %db") % len(subject_key_id)
 
         if isinstance(cert, EntitlementCertificate):
-            print _("Content sets: %s") % len(cert.content)
+            content_len = 0
+            if cert.content:
+                content_len = len(cert.content)
+            print _("Content sets: %s") % content_len
 
     def _get_pem(self, filename):
         return open(filename, 'r',).read()
