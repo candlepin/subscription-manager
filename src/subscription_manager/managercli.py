@@ -47,8 +47,8 @@ from subscription_manager.hwprobe import ClassicCheck
 import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
+from subscription_manager.managerlib import valid_quantity
 from subscription_manager import plugins
-from subscription_manager.quantity import valid_quantity
 from subscription_manager.release import ReleaseBackend
 from subscription_manager.repolib import RepoFile, RepoLib
 from subscription_manager.utils import remove_scheme, parse_server_info, \

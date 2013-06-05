@@ -221,7 +221,6 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/managerlib.py*
 %{_datadir}/rhsm/subscription_manager/plugins.py*
 %{_datadir}/rhsm/subscription_manager/productid.py*
-%{_datadir}/rhsm/subscription_manager/quantity.py*
 %{_datadir}/rhsm/subscription_manager/release.py*
 %{_datadir}/rhsm/subscription_manager/repolib.py*
 %{_datadir}/rhsm/subscription_manager/utils.py*
