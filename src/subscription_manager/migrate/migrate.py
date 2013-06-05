@@ -538,7 +538,9 @@ class MigrationEngine(object):
 
     def register(self, credentials, org, environment):
         # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
-        print _("\nAttempting to register system to Red Hat Subscription Management...")
+        # Prepended a \n so translation can proceed without hitch
+        print ("")
+        print _("Attempting to register system to Red Hat Subscription Management...")
         cmd = ['subscription-manager', 'register', '--username=' + credentials.username, '--password=' + credentials.password]
         if self.options.serverurl:
             cmd.insert(2, '--serverurl=' + self.options.serverurl)
@@ -665,7 +667,9 @@ class MigrationEngine(object):
         self.check_is_org_admin(sc, sk, self.rhncreds.username)
 
         # get a list of RHN classic channels this machine is subscribed to
-        print _("\nRetrieving existing RHN Classic subscription information...")
+        # prepending a \n so translation can proceed without hitch
+        print ("")
+        print _("Retrieving existing RHN Classic subscription information...")
         subscribed_channels = self.get_subscribed_channels_list()
         self.print_banner(_("System is currently subscribed to these RHN Classic Channels:"))
         for channel in subscribed_channels:
