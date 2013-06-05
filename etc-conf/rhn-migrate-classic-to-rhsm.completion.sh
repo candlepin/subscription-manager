@@ -19,6 +19,9 @@ _rhn-migrate-classic-to-rhsm()
 			return 0
 			;;
 	esac
+
+	COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+	return 0
 }
 
 complete -F _rhn-migrate-classic-to-rhsm rhn-migrate-classic-to-rhsm

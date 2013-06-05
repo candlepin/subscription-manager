@@ -13,19 +13,19 @@ _rct()
 
   case "${first}" in
     cat-cert)
-        COMPREPLY=( $( compgen -W "-h --help --no-products --no-content" -- "$cur" ) )
+        COMPREPLY=( $( compgen -W -o filenames "-h --help --no-products --no-content" -- "$cur" ) )
         return 0
         ;;
     stat-cert)
-        COMPREPLY=( $( compgen -W "-h --help" -- "${cur}" ) )
+        COMPREPLY=( $( compgen -W -o filenames "-h --help" -- "${cur}" ) )
         return 0
         ;;
     cat-manifest)
-        COMPREPLY=( $( compgen -W "-h --help" -- "${cur}" ) )
+        COMPREPLY=( $( compgen -W -o filenames "-h --help" -- "${cur}" ) )
         return 0
         ;;
     dump-manifest)
-        COMPREPLY=( $( compgen -W "-h --help --force" -- "${cur}" ) )
+        COMPREPLY=( $( compgen -W -o filenames "-h --help --force" -- "${cur}" ) )
         return 0
         ;;
   esac
