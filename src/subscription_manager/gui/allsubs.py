@@ -182,8 +182,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.store.clear()
 
-        quantity_defaults_calculator = QuantityDefaultValueCalculator(
-                self.facts, self.backend.entitlement_dir.list())
+        quantity_defaults_calculator = QuantityDefaultValueCalculator()
 
         # It may seem backwards that incompatible = self.filters.show_compatible
         # etc., but think of it like "if show_compatible is true, then
