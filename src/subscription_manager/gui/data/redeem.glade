@@ -11,7 +11,7 @@
     <property name="destroy_with_parent">True</property>
     <property name="icon_name">subscription-manager</property>
     <property name="type_hint">dialog</property>
-    <signal name="delete_event" handler="on_redeem_dialog_delete_event" swapped="no"/>
+    <signal name="delete_event" handler="on_redeem_dialog_delete_event" />
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -28,7 +28,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_cancel_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_cancel_button_clicked" />
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -42,7 +42,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_redeem_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_redeem_button_clicked" />
               </widget>
               <packing>
                 <property name="expand">False</property>
