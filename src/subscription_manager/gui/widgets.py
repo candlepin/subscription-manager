@@ -199,50 +199,51 @@ class SelectionWrapper(object):
         return self.model.get_value(self.tree_iter, self.store[key])
 
 
-class SubscriptionsTable(object):
-    def __init__(self, table_widget):
+class ListTable(object):
+    def __init__(self, table_widget, store):
         table_widget.get_selection().set_mode(gtk.SELECTION_NONE)
         self.table_widget = table_widget
-        self.sub_store = gtk.ListStore(str)
-        table_widget.set_model(self.sub_store)
-        sub_column = gtk.TreeViewColumn(None,
-                gtk.CellRendererText(),
-                markup=0)
-        sub_column.set_expand(True)
-        table_widget.append_column(sub_column)
+        self.store = store
+        self.table_widget.set_model(self.store)
+
+    def add_column(self, column):
+        column.set_expand(True)
+        self.table_widget.append_column(column)
 
     def clear(self):
-        self.sub_store.clear()
+        """
+        Remove all products from the table.
+        """
+        self.store.clear()
+
+
+class SubscriptionsTable(ListTable):
+    def __init__(self, table_widget):
+        super(SubscriptionsTable, self).__init__(table_widget, gtk.ListStore(str))
+        self.add_column(gtk.TreeViewColumn(None,
+                gtk.CellRendererText(),
+                markup=0))
 
     def add_sub(self, sub):
-        self.sub_store.append([sub])
+        self.store.append([sub])
 
     def add_subs(self, subs):
         for sub in subs or []:
             self.add_sub(sub)
 
 
-class ReasonsTable(object):
+class ReasonsTable(ListTable):
     def __init__(self, table_widget):
-        table_widget.get_selection().set_mode(gtk.SELECTION_NONE)
-        self.table_widget = table_widget
-        self.message_store = gtk.ListStore(str)
-        table_widget.set_model(self.message_store)
-
-        message_column = gtk.TreeViewColumn(_("Message"),
+        super(ReasonsTable, self).__init__(table_widget, gtk.ListStore(str))
+        self.add_column(gtk.TreeViewColumn(_("Message"),
                 gtk.CellRendererText(),
-                markup=0)
-        message_column.set_expand(True)
-        table_widget.append_column(message_column)
-
-    def clear(self):
-        self.message_store.clear()
+                markup=0))
 
     def add_message(self, message):
-        self.message_store.append([message])
+        self.store.append([message])
 
 
-class ProductsTable(object):
+class ProductsTable(ListTable):
     def __init__(self, table_widget, product_dir, yes_id=gtk.STOCK_APPLY,
                  no_id=gtk.STOCK_REMOVE):
         """
@@ -251,38 +252,24 @@ class ProductsTable(object):
         yes_id and no_id are GTK constants that specify the icon to
         use for representing if a product is installed.
         """
-
-        table_widget.get_selection().set_mode(gtk.SELECTION_NONE)
-        self.table_widget = table_widget
-        self.product_store = gtk.ListStore(str, gtk.gdk.Pixbuf)
-        table_widget.set_model(self.product_store)
+        super(ProductsTable, self).__init__(table_widget, gtk.ListStore(str, gtk.gdk.Pixbuf))
 
         self.yes_icon = self._render_icon(yes_id)
         self.no_icon = self._render_icon(no_id)
         self.product_dir = product_dir
 
-        name_column = gtk.TreeViewColumn(_("Product"),
+        self.add_column(gtk.TreeViewColumn(_("Product"),
                                          gtk.CellRendererText(),
-                                         markup=0)
-        name_column.set_expand(True)
-        installed_column = gtk.TreeViewColumn(_("Installed"),
+                                         markup=0))
+        self.add_column(gtk.TreeViewColumn(_("Installed"),
                                               gtk.CellRendererPixbuf(),
-                                              pixbuf=1)
-
-        table_widget.append_column(name_column)
-        table_widget.append_column(installed_column)
-
-    def clear(self):
-        """
-        Remove all products from the table.
-        """
-        self.product_store.clear()
+                                              pixbuf=1))
 
     def add_product(self, product_name, product_id):
         """
         Add a product with the given name and id to the table.
         """
-        self.product_store.append([product_name, self._get_icon(product_id)])
+        self.store.append([product_name, self._get_icon(product_id)])
 
     def set_accessibility_name(self, accessibility_name):
         self.table_widget.get_accessible().set_name(accessibility_name)
