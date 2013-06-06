@@ -32,6 +32,7 @@ from subscription_manager.gui import messageWindow
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import get_cell_background_color, get_dbus_iface, handle_gui_exception
+from subscription_manager.utils import is_true_value
 
 
 _ = gettext.gettext
@@ -265,12 +266,12 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         else:
             reasons.append(_("Subscription management service doesn't support Status Details."))
 
-        if str(order.virt_only) == "1":
+        if is_true_value(str(order.virt_only)):
             virt_only = _("Virtual")
         else:
             virt_only = _("Physical")
 
-        if str(order.provides_management) == "1":
+        if is_true_value(str(order.provides_management)):
             management = _("Yes")
         else:
             management = _("No")

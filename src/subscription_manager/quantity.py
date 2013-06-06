@@ -14,6 +14,7 @@
 #
 
 from math import ceil
+from subscription_manager.utils import is_true_value
 
 
 class QuantityDefaultValueCalculator(object):
@@ -136,6 +137,6 @@ def allows_multi_entitlement(pool):
     """
     for attribute in pool['productAttributes']:
         if attribute['name'] == "multi-entitlement" and \
-            (attribute['value'].lower() == "yes" or attribute['value'] == "1"):
+            is_true_value(attribute['value']):
             return True
     return False

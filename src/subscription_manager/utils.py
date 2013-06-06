@@ -415,3 +415,10 @@ def friendly_join(items):
     last = items[-1]
     first_string = ", ".join(first)
     return first_string + _(" and ") + last
+
+
+def is_true_value(test_string):
+    if not test_string:
+        return False
+    val = test_string.lower()
+    return val == "1" or val == "true" or val == "yes"
