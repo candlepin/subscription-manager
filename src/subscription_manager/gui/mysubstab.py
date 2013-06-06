@@ -266,12 +266,12 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         else:
             reasons.append(_("Subscription management service doesn't support Status Details."))
 
-        if is_true_value(str(order.virt_only)):
+        if is_true_value(order.virt_only):
             virt_only = _("Virtual")
         else:
             virt_only = _("Physical")
 
-        if is_true_value(str(order.provides_management)):
+        if is_true_value(order.provides_management):
             management = _("Yes")
         else:
             management = _("No")

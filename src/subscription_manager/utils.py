@@ -418,7 +418,5 @@ def friendly_join(items):
 
 
 def is_true_value(test_string):
-    if not test_string:
-        return False
-    val = test_string.lower()
+    val = str(test_string).lower()
     return val == "1" or val == "true" or val == "yes"
