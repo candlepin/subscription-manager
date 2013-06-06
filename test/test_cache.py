@@ -285,4 +285,4 @@ class TestStatusCache(SubManFixture):
         uep = Mock()
         uep.getCompliance = Mock(side_effect=socket.error("boom"))
         self.status_cache._cache_exists = Mock(return_value=False)
-        self.assertRaises(socket.error, self.status_cache.load_status, uep, "SOMEUUID")
+        self.assertEquals(None, self.status_cache.load_status(uep, "SOMEUUID"))

@@ -223,12 +223,12 @@ class StatusCache(CacheManager):
             return None
 
         # If we hit a network error, but no cache exists (extremely unlikely)
-        # then we just re-throw the exception.
+        # then we are disconnected
         except socket.error, ex:
             log.exception(ex)
             if not self._cache_exists():
                 log.error("Server unreachable, registered, but no cache exists.")
-                raise ex
+                return None
 
             log.warn("Unable to reach server, using cached status.")
             return self._read_cache()
