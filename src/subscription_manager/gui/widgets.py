@@ -201,6 +201,7 @@ class SelectionWrapper(object):
 
 class SubscriptionsTable(object):
     def __init__(self, table_widget):
+        table_widget.get_selection().set_mode(gtk.SELECTION_NONE)
         self.table_widget = table_widget
         self.sub_store = gtk.ListStore(str)
         table_widget.set_model(self.sub_store)
@@ -223,6 +224,7 @@ class SubscriptionsTable(object):
 
 class ReasonsTable(object):
     def __init__(self, table_widget):
+        table_widget.get_selection().set_mode(gtk.SELECTION_NONE)
         self.table_widget = table_widget
         self.message_store = gtk.ListStore(str)
         table_widget.set_model(self.message_store)
@@ -250,6 +252,7 @@ class ProductsTable(object):
         use for representing if a product is installed.
         """
 
+        table_widget.get_selection().set_mode(gtk.SELECTION_NONE)
         self.table_widget = table_widget
         self.product_store = gtk.ListStore(str, gtk.gdk.Pixbuf)
         table_widget.set_model(self.product_store)
