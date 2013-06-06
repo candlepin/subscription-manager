@@ -14,6 +14,8 @@
 
 # This module contains wrappers for JSON returned from the CP server.
 
+from subscription_manager.utils import is_true_value
+
 
 class PoolWrapper(object):
 
@@ -27,8 +29,7 @@ class PoolWrapper(object):
             name = attribute['name']
             value = attribute['value']
             if name == "virt_only":
-                if value and value.upper() == "TRUE" or value == "1":
-                    virt_only = True
+                virt_only = is_true_value(value)
                 break
 
         return virt_only
