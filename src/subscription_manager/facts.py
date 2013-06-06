@@ -20,9 +20,10 @@ import simplejson as json
 
 import rhsm.config
 
+from subscription_manager.injection import PLUGIN_MANAGER, require
 from subscription_manager.cache import CacheManager
 from subscription_manager import certdirectory
-from subscription_manager import plugins
+
 
 _ = gettext.gettext
 
@@ -56,7 +57,7 @@ class Facts(CacheManager):
         self.graylist = ['cpu.cpu_mhz']
 
         # plugin manager so we can add custom facst via plugin
-        self.plugin_manager = plugins.get_plugin_manager()
+        self.plugin_manager = require(PLUGIN_MANAGER)
 
     def get_last_update(self):
         try:

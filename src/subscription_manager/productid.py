@@ -26,7 +26,7 @@ import yum
 from rhsm.certificate import create_from_pem
 
 from subscription_manager.certdirectory import Directory, ProductDirectory
-from subscription_manager import plugins
+from subscription_manager.injection import PLUGIN_MANAGER, require
 
 _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -137,7 +137,7 @@ class ProductManager:
         self.db.read()
         self.meta_data_errors = []
 
-        self.plugin_manager = plugins.get_plugin_manager()
+        self.plugin_manager = require(PLUGIN_MANAGER)
 
     def update(self, yb):
         if yb is None:

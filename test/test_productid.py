@@ -10,6 +10,7 @@ import stubs
 from subscription_manager import productid
 from subscription_manager import certdirectory
 from mock import Mock, patch
+from fixture import SubManFixture
 
 
 class StubDirectory(certdirectory.Directory):
@@ -150,9 +151,10 @@ class TestProductDatabase(unittest.TestCase):
         self.assertEquals(len_content, len_content2)
 
 
-class TestProductManager(unittest.TestCase):
+class TestProductManager(SubManFixture):
 
     def setUp(self):
+        SubManFixture.setUp(self)
         self.prod_dir = stubs.StubProductDirectory([])
         self.prod_db_mock = Mock()
         self.prod_mgr = productid.ProductManager(product_dir=self.prod_dir,

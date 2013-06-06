@@ -51,28 +51,6 @@ API_VERSION = "1.0"
 DEFAULT_SEARCH_PATH = "/usr/share/rhsm-plugins/"
 DEFAULT_CONF_PATH = "/etc/rhsm/pluginconf.d/"
 
-# we really only want one PluginManager instance, so share it
-plugin_manager = None
-
-
-def get_plugin_manager():
-    """Create or retrieve a PluginManager().
-
-    Use this instead of creating PluginManager() directly
-    so we don't re import plugins.
-
-    Returns:
-        A PluginManager object. If one has already been created, it
-        is returned, otherwise a new one is created.
-    """
-    global plugin_manager
-    if plugin_manager:
-        return plugin_manager
-    # FIXME: should we aggressively catch exceptions here? If we can't
-    # create a PluginManager we should probably raise an exception all the way up
-    plugin_manager = PluginManager()
-    return plugin_manager
-
 
 class PluginException(Exception):
     """Base exception for rhsm plugins."""

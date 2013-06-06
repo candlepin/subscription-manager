@@ -21,6 +21,7 @@ from subscription_manager.certdirectory import ProductDirectory
 from subscription_manager.identity import Identity
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.cp_provider import CPProvider
+from subscription_manager.plugins import PluginManager
 
 
 def init_dep_injection():
@@ -47,3 +48,8 @@ def init_dep_injection():
 
     # Must come after ent dir, prod dir, conn info, and identity
     inj.provide(inj.CERT_SORTER, CertSorter(lazy_load=True))
+
+    # Set up plugin manager as a singleton.
+    # FIXME: should we aggressively catch exceptions here? If we can't
+    # create a PluginManager we should probably raise an exception all the way up
+    inj.provide(inj.PLUGIN_MANAGER, PluginManager())
