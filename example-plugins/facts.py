@@ -39,9 +39,33 @@ class FactsPlugin(SubManPlugin):
         # for test, let's collect puppet/facter facts
         # that is sort of useful
 
-        process = subprocess.Popen(['/usr/bin/facter', '--json'], stdout=subprocess.PIPE)
-        facter = process.communicate()[0]
-        facter_dict = json.loads(facter)
+        facter_cmd = "/usr/bin/facter"
+        facter_args = ["--json"]
+        facter_cli = [facter_cmd] + facter_args
+
+        facter_out = None
+
+        return_code = None
+        try:
+            process = subprocess.Popen(facter_cli,
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
+            facter_out, facter_err = process.communicate()
+            return_code = process.returncode
+        except EnvironmentError, e:
+            conduit.log.error(e)
+            conduit.log.error("Could not run command:  \"%s\"" % " ".join(facter_cli))
+            return
+
+        if return_code != 0:
+            conduit.log.error("\"%s\" exit status indicated an error: %s" % (" ".join(facter_cli),
+                                                                           facter_err))
+            return
+
+        if facter_out is None:
+            return
+
+        facter_dict = json.loads(facter_out)
 
         # append 'facter' to the names
         # terrible list comprehension, dont do this in real code
