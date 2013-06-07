@@ -133,10 +133,13 @@ class PoolFilter(object):
     """
     Helper to filter a list of pools.
     """
-    def __init__(self, product_dir, entitlement_dir):
+    # Although sorter isn't necessarily required, when present it allows
+    # us to not filter out yellow packages when "has no overlap" is selected
+    def __init__(self, product_dir, entitlement_dir, sorter=None):
 
         self.product_directory = product_dir
         self.entitlement_directory = entitlement_dir
+        self.sorter = sorter
 
     def filter_product_ids(self, pools, product_ids):
         """
@@ -250,7 +253,9 @@ class PoolFilter(object):
             overlap = False
             for productid in entitled_product_ids_to_certs.keys():
                 if str(productid) in provided_ids or str(productid) == pool['productId']:
-                    if self._dates_overlap(pool, entitled_product_ids_to_certs[productid]):
+                    if self._dates_overlap(pool, entitled_product_ids_to_certs[productid]) \
+                            and ((self.sorter and productid in self.sorter.valid_products) or
+                            not self.sorter):
                         overlap = True
                         break
             if not overlap:
@@ -507,8 +512,10 @@ class PoolStash(object):
             log.debug("\tRemoved %d incompatible pools" %
                        len(self.incompatible_pools))
 
+        sorter = require(CERT_SORTER, self.backend.product_dir,
+                self.backend.entitlement_dir, self.backend.uep)
         pool_filter = PoolFilter(self.backend.product_dir,
-                self.backend.entitlement_dir)
+                self.backend.entitlement_dir, sorter)
 
         # Filter out products that are not installed if necessary:
         if uninstalled:

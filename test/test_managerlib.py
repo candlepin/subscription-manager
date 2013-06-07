@@ -30,6 +30,7 @@ from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
 from rhsm.certificate import create_from_pem, DateRange
+from mock import Mock
 
 cfg = rhsm.config.initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
@@ -454,6 +455,68 @@ class PoolFilterTests(unittest.TestCase):
 
         result = pool_filter.filter_out_non_overlapping(pools)
         self.assertEquals(1, len(result))
+
+    def test_filter_overlap_sorter_with_valid(self):
+        product1 = "Test Product 1"
+        provided1 = "Provided By Test Product 1"
+        product2 = "Test Product 2"
+        provided2 = "Provided By Test Product 2"
+
+        cert_start = datetime.now() - timedelta(days=10)
+        cert_end = datetime.now() + timedelta(days=365)
+        cert1 = StubProductCertificate(StubProduct(provided1),
+                                                   start_date=cert_start,
+                                                   end_date=cert_end)
+
+        ent_dir = StubCertificateDirectory([cert1])
+        mock_sorter = Mock()
+        mock_sorter.valid_products = {cert1.products[0].id: set([cert1])}
+        pool_filter = PoolFilter(product_dir=StubCertificateDirectory([]),
+                entitlement_dir=ent_dir,
+                sorter=mock_sorter)
+
+        pools = [
+                create_pool(product1, product1, provided_products=[provided1],
+                            start_end_range=DateRange(cert_start, cert_end)),
+                create_pool(product2, product2, provided_products=[provided2],
+                            start_end_range=DateRange(cert_start, cert_end))
+        ]
+        result = pool_filter.filter_out_overlapping(pools)
+        self.assertEquals([pools[1]], result)
+
+        result = pool_filter.filter_out_non_overlapping(pools)
+        self.assertEquals([pools[0]], result)
+
+    def test_filter_overlap_sorter_without_valid(self):
+        product1 = "Test Product 1"
+        provided1 = "Provided By Test Product 1"
+        product2 = "Test Product 2"
+        provided2 = "Provided By Test Product 2"
+
+        cert_start = datetime.now() - timedelta(days=10)
+        cert_end = datetime.now() + timedelta(days=365)
+        cert1 = StubProductCertificate(StubProduct(provided1),
+                                                   start_date=cert_start,
+                                                   end_date=cert_end)
+
+        ent_dir = StubCertificateDirectory([cert1])
+        mock_sorter = Mock()
+        mock_sorter.valid_products = {}
+        pool_filter = PoolFilter(product_dir=StubCertificateDirectory([]),
+                entitlement_dir=ent_dir,
+                sorter=mock_sorter)
+
+        pools = [
+                create_pool(product1, product1, provided_products=[provided1],
+                            start_end_range=DateRange(cert_start, cert_end)),
+                create_pool(product2, product2, provided_products=[provided2],
+                            start_end_range=DateRange(cert_start, cert_end))
+        ]
+        result = pool_filter.filter_out_overlapping(pools)
+        self.assertEquals([pools[0], pools[1]], result)
+
+        result = pool_filter.filter_out_non_overlapping(pools)
+        self.assertEquals([], result)
 
     def test_filter_no_overlap_with_future_entitlement(self):
         product1 = "Test Product 1"
