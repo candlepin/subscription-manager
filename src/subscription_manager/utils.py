@@ -108,50 +108,23 @@ def format_baseurl(hostname, port, prefix):
 
 
 def has_bad_scheme(url):
-    bad_fragments = ["http//", "http/",
-                     "https//", "https/"]
-    short_fragments = [("http:", "http://"),
-                       ("http:/", "http://"),
-                       ("https:", "https://"),
-                       ("https:/", "https://")]
-
-    # we could in theory, have a host named 'http',
-    # so that http/prefix is a valid url. However, do not
-    # do that. If you have to, use http://http/blah.
-    # Sorry.
-    for bad_fragment in bad_fragments:
-        if url.startswith(bad_fragment):
-            return True
-
-    # handle truncated schemes
-    for short_fragment in short_fragments:
-        if url.startswith(short_fragment[0]) and \
-                not url.startswith(short_fragment[1]):
-            return True
-
-    # this could in theory be a local path, but that
-    # doesn't really help us
-    if url.startswith(':/'):
+    # Don't allow urls to start with :/ http/ https/ non http/httpsm or http(s) with single /
+    match_bad = '(https?[:/])|(:/)|(\S+://)'
+    match_good = 'https?://'
+    # Testing good first allows us to exclude some regex for bad
+    if re.match(match_good, url):
+        return False
+    if re.match(match_bad, url):
         return True
-
-    # if we have a scheme, and we may not, make
-    # sure it's valid
-    url_split = url.split('://')
-    if len(url_split) > 1:
-        if url_split[0] not in ["http", "https"]:
-            return True
-
     return False
 
 
 def has_good_scheme(url):
-    good_schemes = ["http", "https"]
-    url_parts = url.split('://')
-    if url_parts[0] not in good_schemes:
+    match = re.match("https?://(\S+)?", url)
+    if not match:
         return False
-
     # a good scheme alone is not really a good scheme
-    if len(url_parts) > 1 and url_parts[1] == '':
+    if not match.group(1):
         raise ServerUrlParseErrorJustScheme(url,
                 msg=_("Server URL is just a schema. Should include hostname, and/or port and path"))
     return True
