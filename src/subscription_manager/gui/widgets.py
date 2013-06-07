@@ -199,51 +199,7 @@ class SelectionWrapper(object):
         return self.model.get_value(self.tree_iter, self.store[key])
 
 
-class ListTable(object):
-    def __init__(self, table_widget, store):
-        table_widget.get_selection().set_mode(gtk.SELECTION_NONE)
-        self.table_widget = table_widget
-        self.store = store
-        self.table_widget.set_model(self.store)
-
-    def add_column(self, column):
-        column.set_expand(True)
-        self.table_widget.append_column(column)
-
-    def clear(self):
-        """
-        Remove all products from the table.
-        """
-        self.store.clear()
-
-
-class SubscriptionsTable(ListTable):
-    def __init__(self, table_widget):
-        super(SubscriptionsTable, self).__init__(table_widget, gtk.ListStore(str))
-        self.add_column(gtk.TreeViewColumn(None,
-                gtk.CellRendererText(),
-                markup=0))
-
-    def add_sub(self, sub):
-        self.store.append([sub])
-
-    def add_subs(self, subs):
-        for sub in subs or []:
-            self.add_sub(sub)
-
-
-class ReasonsTable(ListTable):
-    def __init__(self, table_widget):
-        super(ReasonsTable, self).__init__(table_widget, gtk.ListStore(str))
-        self.add_column(gtk.TreeViewColumn(_("Message"),
-                gtk.CellRendererText(),
-                markup=0))
-
-    def add_message(self, message):
-        self.store.append([message])
-
-
-class ProductsTable(ListTable):
+class ProductsTable(object):
     def __init__(self, table_widget, product_dir, yes_id=gtk.STOCK_APPLY,
                  no_id=gtk.STOCK_REMOVE):
         """
@@ -252,24 +208,38 @@ class ProductsTable(ListTable):
         yes_id and no_id are GTK constants that specify the icon to
         use for representing if a product is installed.
         """
-        super(ProductsTable, self).__init__(table_widget, gtk.ListStore(str, gtk.gdk.Pixbuf))
+
+        table_widget.get_selection().set_mode(gtk.SELECTION_NONE)
+        self.table_widget = table_widget
+        self.product_store = gtk.ListStore(str, gtk.gdk.Pixbuf)
+        table_widget.set_model(self.product_store)
 
         self.yes_icon = self._render_icon(yes_id)
         self.no_icon = self._render_icon(no_id)
         self.product_dir = product_dir
 
-        self.add_column(gtk.TreeViewColumn(_("Product"),
+        name_column = gtk.TreeViewColumn(_("Product"),
                                          gtk.CellRendererText(),
-                                         markup=0))
-        self.add_column(gtk.TreeViewColumn(_("Installed"),
+                                         markup=0)
+        name_column.set_expand(True)
+        installed_column = gtk.TreeViewColumn(_("Installed"),
                                               gtk.CellRendererPixbuf(),
-                                              pixbuf=1))
+                                              pixbuf=1)
+
+        table_widget.append_column(name_column)
+        table_widget.append_column(installed_column)
+
+    def clear(self):
+        """
+        Remove all products from the table.
+        """
+        self.product_store.clear()
 
     def add_product(self, product_name, product_id):
         """
         Add a product with the given name and id to the table.
         """
-        self.store.append([product_name, self._get_icon(product_id)])
+        self.product_store.append([product_name, self._get_icon(product_id)])
 
     def set_accessibility_name(self, accessibility_name):
         self.table_widget.get_accessible().set_name(accessibility_name)
@@ -409,17 +379,15 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         # start_end_date_text widget so we can restore it in the
         # clear() function.
         self.original_bg = self.start_end_date_text.rc_get_style().base[gtk.STATE_NORMAL]
-        self.reasons = ReasonsTable(self.details_view)
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
                            virt_only=None, products=None, highlight=None, sku=None,
                            reasons=[]):
         products = products or []
+        reasons = reasons or []
 
-        self.reasons.clear()
-        for reason in reasons:
-            self.reasons.add_message(reason)
+        self._set(self.details_view, '\n'.join(reasons))
 
         self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
                 self._get_date_bg(end))
@@ -439,7 +407,7 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         self._set(self.account_text, "")
         self._set(self.provides_management_text, "")
         self._set(self.virt_only_text, "")
-        self.reasons.clear()
+        self._set(self.details_view, "")
 
     def _set_accessibility_names(self):
         # already set in glade
