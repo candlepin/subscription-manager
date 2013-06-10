@@ -30,8 +30,8 @@ from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, require
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
+from subscription_manager.managerlib import allows_multi_entitlement, valid_quantity
 from subscription_manager import plugins
-from subscription_manager.quantity import allows_multi_entitlement, QuantityDefaultValueCalculator, valid_quantity
 
 _ = gettext.gettext
 
@@ -182,9 +182,6 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.store.clear()
 
-        quantity_defaults_calculator = QuantityDefaultValueCalculator(
-                self.facts, self.backend.entitlement_dir.list())
-
         # It may seem backwards that incompatible = self.filters.show_compatible
         # etc., but think of it like "if show_compatible is true, then
         # filter out all the incompatible products."
@@ -249,7 +246,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'product_name': entry.product_name,
                     'product_name_formatted': apply_highlight(entry.product_name,
                                                               self.get_filter_text()),
-                    'quantity_to_consume': quantity_defaults_calculator.calculate(pool),
+                    'quantity_to_consume': self.calculate_default_quantity(pool),
                     'available': available,
                     'product_id': entry.product_id,
                     'pool_id': entry.pools[0]['id'],  # not displayed, just for lookup later
@@ -445,3 +442,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def on_no_selection(self):
         self.subscribe_button.set_sensitive(False)
+
+    def calculate_default_quantity(self, pool):
+        try:
+            return int(pool['calculatedAttributes']['suggested_quantity'])
+        except:
+            return 1
