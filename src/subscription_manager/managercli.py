@@ -306,7 +306,7 @@ class CliCommand(AbstractCLICommand):
 
     def log_client_version(self):
         self.client_versions = get_client_versions()
-        log.info("Client Versions: %s " % get_client_versions())
+        log.info("Client Versions: %s" % self.client_versions)
 
     def log_server_version(self):
         # can't check the server version without a connection
@@ -317,7 +317,7 @@ class CliCommand(AbstractCLICommand):
         # get_server_versions needs to handle any exceptions
         # and return the server dict
         self.server_versions = get_server_versions(self.no_auth_cp)
-        log.info("Server Versions: %s " % get_server_versions(self.no_auth_cp))
+        log.info("Server Versions: %s" % self.server_versions)
 
     # note, depending on that args, we could get a full
     # fledged uep, a basic auth uep, or an unauthenticate uep
