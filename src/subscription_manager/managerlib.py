@@ -71,11 +71,6 @@ def persist_consumer_cert(consumerinfo):
     return consumer_info
 
 
-def map_status(status):
-    smap = {True: _("Subscribed"), False: _("Expired"), None: _("Not Subscribed")}
-    return smap[status]
-
-
 def get_installed_product_status(product_directory, entitlement_directory, uep):
     """
      Returns the Installed products and their subscription states

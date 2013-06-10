@@ -64,12 +64,11 @@ class DataLib(object):
         self.uep = uep
 
     def update(self):
-        lock = self.lock
-        lock.acquire()
+        self.lock.acquire()
         try:
             return self._do_update()
         finally:
-            lock.release()
+            self.lock.release()
 
     def _do_update(self):
         return
@@ -256,19 +255,12 @@ class UpdateAction(Action):
 
     def _find_missing_serials(self, local, expected):
         """ Find serials from the server we do not have locally. """
-        missing = []
-        for sn in expected:
-            if not sn in local:
-                missing.append(sn)
+        missing = [sn for sn in expected if sn not in local]
         return missing
 
     def _find_rogue_serials(self, local, expected):
         """ Find serials we have locally but are not on the server. """
-        rogue = []
-        for sn in local:
-            if not sn in expected:
-                cert = local[sn]
-                rogue.append(cert)
+        rogue = [local[sn] for sn in local if not sn in expected]
         return rogue
 
     def syslog_results(self, report):

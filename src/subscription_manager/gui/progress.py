@@ -57,12 +57,10 @@ class Progress:
 
     def set_progress(self, amount, total):
         if total:
-            i = float(amount) / total
+            i = min(1, float(amount) / total)
         else:
             i = 1
 
-        if i > 1:
-            i = 1
         if i > self.lastProgress + .01 or i == 1:
             self.xml.get_widget("progressBar").set_fraction(i)
             if i == 1:

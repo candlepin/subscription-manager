@@ -72,26 +72,6 @@ class ReasonsTests(unittest.TestCase):
 
         self.sorter.reasons = Reasons(reason_list, self.sorter)
 
-    def test_get_reasons_messages(self):
-        #must have notcovered first
-        #pref arch mismatch next
-        messages = self.sorter.reasons.get_reasons_messages()
-        self.assertEquals(5, len(messages))
-        expected = "Not covered by a valid subscription."
-        self.assertEquals(expected, messages[0][1])
-        self.assertEquals("RAM Limiting Product", messages[0][0])
-        expected = "Covers architecture ppc64 but the system is x86_64."
-        self.assertEquals(expected, messages[1][1])
-        self.assertEquals("Awesome OS for ppc64", messages[1][0])
-        #make sure name fallback works
-        for reason in self.sorter.reasons.reasons:
-            del reason['attributes']['name']
-        messages = self.sorter.reasons.get_reasons_messages()
-        self.assertEquals(5, len(messages))
-        expected = "Not covered by a valid subscription."
-        self.assertEquals(expected, messages[0][1])
-        self.assertEquals("Product 801", messages[0][0])
-
     def test_get_stack_subscriptions(self):
         subs = self.sorter.reasons.get_stack_subscriptions(PARTIAL_STACK_ID)
         self.assertEquals(1, len(subs))
@@ -144,13 +124,6 @@ class ReasonsTests(unittest.TestCase):
                 'SOCKETS', 'some message', '8', '6', prod='1234')
         reason_id = self.sorter.reasons.get_reason_id(reason)
         self.assertEquals("Product 1234", reason_id)
-
-    def test_duplicate_get_reasons_messages(self):
-        self.set_up_duplicates()
-        result = self.sorter.reasons.get_reasons_messages()
-        self.assertEquals(1, len(result))
-        expected = ('testing', 'some message')
-        self.assertEquals(expected, result[0])
 
     def test_get_name_message_map(self):
         name_message_map = self.sorter.reasons.get_name_message_map()
