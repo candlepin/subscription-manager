@@ -32,12 +32,12 @@ from subscription_manager.cert_sorter import StackingGroupSorter
 from subscription_manager import certlib
 from subscription_manager.certlib import system_log as inner_system_log
 from subscription_manager.facts import Facts
-from subscription_manager.quantity import allows_multi_entitlement
 from subscription_manager.injection import require, CERT_SORTER, \
         PRODUCT_DATE_RANGE_CALCULATOR, IDENTITY
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoLib
+from subscription_manager.utils import is_true_value
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -834,3 +834,25 @@ def clean_all_data(backup=True):
     cache.ProductStatusCache.delete_cache()
     RepoLib.delete_repo_file()
     log.info("Cleaned local data")
+
+
+def valid_quantity(quantity):
+    if not quantity:
+        return False
+
+    try:
+        return int(quantity) > 0
+    except ValueError:
+        return False
+
+
+def allows_multi_entitlement(pool):
+    """
+    Determine if this pool allows multi-entitlement based on the pool's
+    top-level product's multi-entitlement attribute.
+    """
+    for attribute in pool['productAttributes']:
+        if attribute['name'] == "multi-entitlement" and \
+            is_true_value(attribute['value']):
+            return True
+    return False

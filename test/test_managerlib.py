@@ -24,7 +24,8 @@ from stubs import StubCertificateDirectory, StubProductCertificate, \
 from fixture import SubManFixture
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
         get_installed_product_status, LocalTz, \
-        MergedPoolsStackingGroupSorter, MergedPools, PoolStash
+        MergedPoolsStackingGroupSorter, MergedPools, \
+        PoolStash, allows_multi_entitlement, valid_quantity
 from subscription_manager.injection import provide, CERT_SORTER
 from modelhelpers import create_pool
 from subscription_manager import managerlib
@@ -1063,3 +1064,58 @@ class PoolStashTest(unittest.TestCase):
     def test_empty_stash_zero_length(self):
         my_stash = PoolStash(None, None)
         self.assertTrue(my_stash.all_pools_size() == 0)
+
+
+class TestAllowsMutliEntitlement(unittest.TestCase):
+
+    def test_allows_when_yes(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("yes")
+        self.assertTrue(allows_multi_entitlement(pool))
+
+    def test_allows_when_1(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("1")
+        self.assertTrue(allows_multi_entitlement(pool))
+
+    def test_does_not_allow_when_no(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("no")
+        self.assertFalse(allows_multi_entitlement(pool))
+
+    def test_does_not_allow_when_0(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("0")
+        self.assertFalse(allows_multi_entitlement(pool))
+
+    def test_does_not_allow_when_not_set(self):
+        pool = {"productAttributes": []}
+        self.assertFalse(allows_multi_entitlement(pool))
+
+    def test_does_not_allow_when_empty_string(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("")
+        self.assertFalse(allows_multi_entitlement(pool))
+
+    def test_does_not_allow_when_any_other_value(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("not_a_good_value")
+        self.assertFalse(allows_multi_entitlement(pool))
+
+    def test_is_case_insensitive(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("YeS")
+        self.assertTrue(allows_multi_entitlement(pool))
+
+        pool = self._create_pool_data_with_multi_entitlement_attribute("nO")
+        self.assertFalse(allows_multi_entitlement(pool))
+
+    def _create_pool_data_with_multi_entitlement_attribute(self, value):
+        return {"productAttributes": [{"name": "multi-entitlement", "value": value}]}
+
+
+class TestValidQuantity(unittest.TestCase):
+    def test_nonetype_not_valid(self):
+        self.assertFalse(valid_quantity(None))
+
+    def test_neg_quantity_value_is_invalid(self):
+        self.assertFalse(valid_quantity(-1))
+
+    def test_positive_quantity_value_is_valid(self):
+        self.assertTrue(valid_quantity(3))
+
+    def test_string_quantity_not_valid(self):
+        self.assertFalse(valid_quantity("12dfg2"))

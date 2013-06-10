@@ -25,7 +25,7 @@ import gtk.glade
 from subscription_manager.gui import widgets
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
-from subscription_manager.quantity import allows_multi_entitlement
+from subscription_manager.managerlib import allows_multi_entitlement
 
 _ = gettext.gettext
 
