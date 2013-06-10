@@ -20,6 +20,9 @@ _rhsm-icon()
 			return 0
 			;;
 	esac
+
+	COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+	return 0
 }
 
 complete -F _rhsm-icon rhsm-icon
