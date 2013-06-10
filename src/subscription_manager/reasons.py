@@ -64,37 +64,9 @@ class Reasons(object):
     def get_stack_subscriptions(self, stack_id):
         result = set([])
         for s in self.sorter.valid_entitlement_certs:
-            if s.order.stacking_id:
-                if s.order.stacking_id == stack_id:
-                    result.add(s.subject['CN'])
+            if s.order.stacking_id and s.order.stacking_id == stack_id:
+                result.add(s.subject['CN'])
         return list(result)
-
-    def get_reasons_messages(self):
-        # Returns a list of tuples (offending name, message)
-        # we want non-covered (red) reasons first,
-        # then arch-mismatch, then others (sockets/ram/cores/etc...)
-        order = ['NOTCOVERED', 'ARCH']
-        result_map = {}
-        result = []
-        for reason in self.reasons:
-            if reason['key'] not in result_map:
-                result_map[reason['key']] = []
-            if 'name' in reason['attributes']:
-                name = reason['attributes']['name']
-            else:
-                name = self.get_reason_id(reason)
-            result_map[reason['key']].append((name, reason['message']))
-        for item in order:
-            if item in result_map:
-                for message in result_map[item]:
-                    if message not in result:
-                        result.append(message)
-                del result_map[item]
-        for key, messages in result_map.items():
-            for message in messages:
-                if message not in result:
-                    result.append(message)
-        return result
 
     def get_reason_id(self, reason):
         # returns ent/prod/stack id
@@ -149,8 +121,6 @@ class Reasons(object):
         Returns a list of subscriptions that provide
         the product.
         """
-        results = []
-        for valid_ent in self.sorter.valid_entitlement_certs:
-            if prod in valid_ent.products:
-                results.append(valid_ent)
+        results = [valid_ent for valid_ent in self.sorter.valid_entitlement_certs
+                if prod in valid_ent.products]
         return results

@@ -36,11 +36,7 @@ class Filters(object):
         self.contains_text = contains_text
 
     def get_applied_count(self):
-        i = 0
-        for v in self.__dict__.values():
-            if v:
-                i += 1
-        return i
+        return len(filter(None, self.__dict__.values()))
 
 
 class FilterOptionsWindow(widgets.GladeWidget):

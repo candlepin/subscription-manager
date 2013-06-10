@@ -74,27 +74,12 @@ class Facts(CacheManager):
             return True
 
         cached_facts = self._read_cache() or {}
-        diff = {}
         self.facts = self.get_facts()
-        # compare the dicts to see if there is a diff
 
-        for key in self.facts:
-            value = self.facts[key]
-            # new fact found
-            if key not in cached_facts:
-                diff[key] = value
-            if key in cached_facts:
-                # key changed values, ignore changes in graylist facts
-                if value != cached_facts[key] and key not in self.graylist:
-                    diff[key] = value
-
-        # look for keys that went away
-        for key in cached_facts:
-            if key not in self.facts:
-                #update with new value, though it doesnt matter
-                diff[key] = cached_facts[key]
-
-        return len(diff) > 0
+        for key in (set(self.facts) | set(cached_facts)) - set(self.graylist):
+            if self.facts.get(key) != cached_facts.get(key):
+                return True
+        return False
 
     def get_facts(self, refresh=False):
         if ((len(self.facts) == 0) or refresh):
