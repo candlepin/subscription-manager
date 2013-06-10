@@ -58,7 +58,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def __init__(self, backend, facts, tab_icon,
                  parent, ent_dir, prod_dir):
-
         super(InstalledProductsTab, self).__init__('installed.glade')
 
         self.tab_icon = tab_icon
@@ -69,8 +68,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         self.facts = facts
         self.backend = backend
-        self.cs = inj.require(inj.CERT_SORTER, prod_dir, ent_dir,
-                self.backend.uep)
+        self.cs = inj.require(inj.CERT_SORTER)
 
         # Product column
         text_renderer = gtk.CellRendererText()
@@ -117,6 +115,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         # Monitor entitlements/products for additions/deletions
         def on_cert_change(filemonitor):
             self.identity.reload()
+            self.cs.refresh()
             self.update_products()
             self._set_validity_status()
 
@@ -136,9 +135,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         contract_ids = set()
         sub_names = set()
 
-        sorter = inj.require(inj.CERT_SORTER, self.product_dir, self.entitlement_dir,
-                self.backend.uep)
-
         for cert in self.entitlement_dir.find_all_by_product(product_id):
 
             # Only include if this cert overlaps with the overall date range
@@ -149,7 +145,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
                     contract_ids.add(cert.order.contract)
                     sub_names.add(cert.order.name)
-            elif cert in sorter.valid_entitlement_certs:
+            elif cert in self.cs.valid_entitlement_certs:
                 contract_ids.add(cert.order.contract)
                 sub_names.add(cert.order.name)
 
@@ -157,8 +153,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def update_products(self):
         self.store.clear()
-        self.cs = inj.require(inj.CERT_SORTER, self.product_dir,
-                self.entitlement_dir, self.backend.uep)
         range_calculator = inj.require(inj.PRODUCT_DATE_RANGE_CALCULATOR,
                 self.backend.uep)
         for product_cert in self.product_dir.list():
@@ -315,20 +309,16 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         is_registered = self.identity.is_valid()
         self.set_registered(is_registered)
 
-        # Look for products which have invalid entitlements
-        sorter = inj.require(inj.CERT_SORTER, self.product_dir, self.entitlement_dir,
-                self.backend.uep)
+        warn_count = len(self.cs.expired_products) + \
+                len(self.cs.unentitled_products)
 
-        warn_count = len(sorter.expired_products) + \
-                len(sorter.unentitled_products)
-
-        if sorter.system_status == 'valid':
+        if self.cs.system_status == 'valid':
             self._set_status_icons(VALID_STATUS)
-            if sorter.first_invalid_date:
+            if self.cs.first_invalid_date:
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
                         _("System is properly subscribed through %s.") %
-                        managerlib.format_date(sorter.first_invalid_date))
+                        managerlib.format_date(self.cs.first_invalid_date))
             else:
                 # No product certs installed, no first invalid date, and
                 # the subscription assistant can't do anything, so we'll disable
@@ -336,12 +326,12 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 self.subscription_status_label.set_text(
                         # I18N: Please add newlines if translation is longer:
                         _("No installed products detected."))
-        elif sorter.system_status == 'partial':
+        elif self.cs.system_status == 'partial':
             self._set_status_icons(PARTIAL_STATUS)
             self.subscription_status_label.set_markup(
                     # I18N: Please add newlines if translation is longer:
                     _("This system does not match subscription limits."))
-        elif sorter.system_status == 'invalid':
+        elif self.cs.system_status == 'invalid':
             self._set_status_icons(INVALID_STATUS)
             if warn_count > 1:
                 self.subscription_status_label.set_markup(
@@ -352,7 +342,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
                         _("1 installed product does not have a valid subscription."))
-        elif sorter.system_status == 'unknown':
+        elif self.cs.system_status == 'unknown':
             self._set_status_icons(UNKNOWN_STATUS)
             self.subscription_status_label.set_text(
                 # I18N: Please add newlines if translation is longer:

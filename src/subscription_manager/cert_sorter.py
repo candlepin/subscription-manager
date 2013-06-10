@@ -60,6 +60,8 @@ class CertSorter(object):
     re-use this cached data for a period of time, before falling back to
     reporting unknown.
     """
+    started = False
+
     def __init__(self, product_dir, entitlement_dir, uep):
         self.identity = inj.require(inj.IDENTITY)
         self.product_dir = product_dir
@@ -69,7 +71,12 @@ class CertSorter(object):
         # we use it, but if connection is still none we will let this error out
         # as it is programmer error.
         self.uep = uep
+        if not self.started:
+            self.started = True
+            self.refresh()
 
+    def refresh(self):
+        print 'refresh'
         # All products installed on this machine, regardless of status. Maps
         # installed product ID to product certificate.
         self.installed_products = self.product_dir.get_installed_products()

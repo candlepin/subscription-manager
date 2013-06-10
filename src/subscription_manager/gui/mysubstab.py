@@ -62,6 +62,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.product_dir = prod_dir
         self.sub_details = widgets.ContractSubDetailsWidget(prod_dir)
 
+        self.cs = inj.require(inj.CERT_SORTER)
+
         # Put the details widget in the middle
         details = self.sub_details.get_widget()
         self.details_box.pack_start(details)
@@ -109,9 +111,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.top_view.connect("row_activated",
                               widgets.expand_collapse_on_row_activated_callback)
 
-        self.update_subscriptions()
+        self.update_subscriptions(refresh=False)
 
         self.glade.signal_autoconnect({'on_unsubscribe_button_clicked': self.unsubscribe_button_clicked})
+
 
         # Monitor entitlements/products for additions/deletions
         def on_cert_change(filemonitor):
@@ -157,13 +160,13 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                 self.content.get_toplevel())
         prompt.connect('response', self._on_unsubscribe_prompt_response, selection)
 
-    def update_subscriptions(self):
+    def update_subscriptions(self, refresh=True):
         """
         Pulls the entitlement certificates and updates the subscription model.
         """
         self.store.clear()
-        self.cs = inj.require(inj.CERT_SORTER,
-                self.product_dir, self.entitlement_dir, self.backend.uep)
+        if refresh:
+            self.cs.refresh()
         sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
         for idx, group in enumerate(sorter.groups):
             self._add_group(idx, group)

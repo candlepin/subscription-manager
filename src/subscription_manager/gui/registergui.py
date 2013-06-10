@@ -1071,10 +1071,9 @@ class AsyncBackend(object):
 
         # Using the current date time, we may need to expand this to work
         # with arbitrary dates for future entitling someday:
-        sorter = require(CERT_SORTER,
-                self.backend.product_dir,
-                self.backend.entitlement_dir,
-                self.backend.uep)
+        sorter = require(CERT_SORTER)
+        sorter.uep = self.backend.uep
+        sorter.refresh()
 
         if len(sorter.installed_products) == 0:
             raise NoProductsException()
