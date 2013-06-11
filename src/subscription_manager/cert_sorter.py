@@ -17,12 +17,14 @@ import logging
 
 from rhsm.certificate import GMT
 import subscription_manager.injection as inj
+from rhsm import connection
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
 from subscription_manager.cache import InstalledProductsManager
+from subscription_manager.certlib import ConsumerIdentity
 
 import gettext
 _ = gettext.gettext
@@ -60,23 +62,24 @@ class CertSorter(object):
     re-use this cached data for a period of time, before falling back to
     reporting unknown.
     """
-    started = False
+    loaded = False
 
-    def __init__(self, product_dir, entitlement_dir, uep):
-        self.identity = inj.require(inj.IDENTITY)
-        self.product_dir = product_dir
-        self.entitlement_dir = entitlement_dir
-
+    def __init__(self, lazy_load=False):
         # Warning: could be None if we're not registered, we will check before
         # we use it, but if connection is still none we will let this error out
         # as it is programmer error.
-        self.uep = uep
-        if not self.started:
-            self.started = True
+        self.uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
+                key_file=ConsumerIdentity.keypath())
+
+        if not lazy_load:
             self.refresh()
 
     def refresh(self):
-        print 'refresh'
+        self.loaded = True
+        self.identity = inj.require(inj.IDENTITY)
+        self.product_dir = inj.require(inj.PROD_DIR)
+        self.entitlement_dir = inj.require(inj.ENT_DIR)
+
         # All products installed on this machine, regardless of status. Maps
         # installed product ID to product certificate.
         self.installed_products = self.product_dir.get_installed_products()

@@ -1438,8 +1438,7 @@ class AttachCommand(CliCommand):
                 products_installed = len(managerlib.get_installed_product_status(self.product_dir,
                                  self.entitlement_dir, self.cp))
                 # if we are green, we don't need to go to the server
-                self.sorter = inj.require(inj.CERT_SORTER,
-                        self.product_dir, self.entitlement_dir, self.cp)
+                self.sorter = inj.require(inj.CERT_SORTER)
 
                 if self.sorter.is_valid():
                     if not products_installed:
@@ -2033,8 +2032,7 @@ class ListCommand(CliCommand):
 
         self._validate_options()
 
-        self.sorter = inj.require(inj.CERT_SORTER,
-                self.product_dir, self.entitlement_dir, self.cp)
+        self.sorter = inj.require(inj.CERT_SORTER)
 
         if self.options.installed:
             iproducts = managerlib.get_installed_product_status(self.product_dir,
@@ -2194,8 +2192,7 @@ class StatusCommand(CliCommand):
     def _do_command(self):
         # list status and all reasons it is not valid
 
-        self.sorter = inj.require(inj.CERT_SORTER,
-                self.product_dir, self.entitlement_dir, self.cp)
+        self.sorter = inj.require(inj.CERT_SORTER)
 
         print("+-------------------------------------------+")
         print("   " + _("System Status Details"))

@@ -21,8 +21,6 @@ from subscription_manager.certdirectory import ProductDirectory
 from subscription_manager.identity import Identity
 from subscription_manager.validity import ValidProductDateRangeCalculator
 
-from rhsm import connection
-from subscription_manager.certlib import ConsumerIdentity
 
 def init_dep_injection():
     """
@@ -34,7 +32,6 @@ def init_dep_injection():
     # it from disk. Call reload when anything changes and all references will be
     # updated.
     inj.provide(inj.IDENTITY, Identity())
-    #inj.provide(inj.CERT_SORTER, CertSorter)
     inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR,
             ValidProductDateRangeCalculator)
 
@@ -45,6 +42,5 @@ def init_dep_injection():
     inj.provide(inj.STATUS_CACHE, StatusCache)
     inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache)
 
-    uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
-            key_file=ConsumerIdentity.keypath())
-    inj.provide(inj.CERT_SORTER, CertSorter(inj.require(inj.PROD_DIR), inj.require(inj.ENT_DIR), uep))
+    # Must come after ent dir, prod dir, and identity
+    inj.provide(inj.CERT_SORTER, CertSorter(lazy_load=True))

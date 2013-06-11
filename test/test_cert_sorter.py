@@ -59,10 +59,10 @@ def stub_prod_cert(pid):
 
 class CertSorterTests(SubManFixture):
 
+    @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
-    def setUp(self, mock_update):
+    def setUp(self, mock_update, mock_conn):
         SubManFixture.setUp(self)
-
         # Setup mock product and entitlement certs:
         self.prod_dir = StubProductDirectory(
                 pids=[INST_PID_1, INST_PID_2, INST_PID_3, INST_PID_4])
@@ -88,12 +88,15 @@ class CertSorterTests(SubManFixture):
         self.status_mgr.write_cache = Mock()
         inj.provide(inj.STATUS_CACHE, self.status_mgr)
 
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
+        inj.provide(inj.PROD_DIR, self.prod_dir)
+        inj.provide(inj.ENT_DIR, self.ent_dir)
+        mock_conn.return_value = self.mock_uep
+        self.sorter = CertSorter()
         self.sorter.is_registered = Mock(return_value=True)
 
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
     def test_unregistered_status(self, mock_update):
-        sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
+        sorter = CertSorter()
         sorter.is_registered = Mock(return_value=False)
         self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
 
@@ -103,7 +106,7 @@ class CertSorterTests(SubManFixture):
     def test_no_usable_status(self, mock_update):
         self.status_mgr.load_status = Mock(
                 return_value=None)
-        sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
+        sorter = CertSorter()
         sorter.is_registered = Mock(return_value=True)
         self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
 
@@ -112,7 +115,7 @@ class CertSorterTests(SubManFixture):
     def test_deleted_consumer_status(self, mock_update):
         self.status_mgr.load_status = Mock(
                 return_value=None)
-        sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
+        sorter = CertSorter()
         sorter.is_registered = Mock(return_value=True)
         expected = subscription_manager.cert_sorter.STATUS_MAP['unknown']
         self.assertEquals(expected, sorter.get_system_status())
@@ -121,7 +124,7 @@ class CertSorterTests(SubManFixture):
     def test_unregistered_system_status(self, mock_update):
         self.status_mgr.load_status = Mock(
                 return_value=None)
-        sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
+        sorter = CertSorter()
         sorter.is_registered = Mock(return_value=False)
         expected = subscription_manager.cert_sorter.STATUS_MAP['unknown']
         self.assertEquals(expected, sorter.get_system_status())
@@ -164,7 +167,8 @@ class CertSorterTests(SubManFixture):
         # in the response from the server as an unentitled product:
         prod_dir = StubProductDirectory(
                 pids=[INST_PID_1, INST_PID_2])
-        sorter = CertSorter(prod_dir, self.ent_dir, self.mock_uep)
+        inj.provide(inj.PROD_DIR, prod_dir)
+        sorter = CertSorter()
         self.assertFalse(INST_PID_3 in sorter.installed_products)
         # Should get filtered out of unentitled products even though
         # server reported it here:
@@ -175,13 +179,14 @@ class CertSorterTests(SubManFixture):
         # Add a new installed product server doesn't know about:
         prod_dir = StubProductDirectory(pids=[INST_PID_1, INST_PID_2,
             INST_PID_3, "product4"])
-        sorter = CertSorter(prod_dir, self.ent_dir, self.mock_uep)
+        inj.provide(inj.PROD_DIR, prod_dir)
+        sorter = CertSorter()
         self.assertTrue('product4' in sorter.unentitled_products)
 
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
     def test_no_compliant_until(self, mock_update):
         SAMPLE_COMPLIANCE_JSON['compliantUntil'] = None
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir, self.mock_uep)
+        self.sorter = CertSorter()
         self.sorter.is_registered = Mock(return_value=True)
         self.assertTrue(self.sorter.compliant_until is None)
         self.assertTrue(self.sorter.first_invalid_date is None)
@@ -215,7 +220,10 @@ class CertSorterTests(SubManFixture):
                 end_date=datetime.now() + timedelta(days=730)),
             ])
 
-        sorter = StubCertSorter(prod_dir, ent_dir)
+        inj.provide(inj.PROD_DIR, prod_dir)
+        inj.provide(inj.ENT_DIR, ent_dir)
+
+        sorter = StubCertSorter()
         sorter.valid_products = {"a": StubProduct("a")}
         sorter.partially_valid_products = {"b": StubProduct("b")}
 

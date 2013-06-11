@@ -66,6 +66,8 @@ class FeatureBroker:
                 return provider(*args, **kwargs)
             else:
                 log.debug("Returning instance for feature %s" % feature)
+                if feature == 'CERT_SORTER' and not provider.loaded:
+                    provider.refresh()
                 return provider
         except KeyError:
             raise KeyError("Unknown feature: %r" % feature)

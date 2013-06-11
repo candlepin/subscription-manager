@@ -484,9 +484,8 @@ class StubCertLib:
 
 class StubCertSorter(CertSorter):
 
-    def __init__(self, prod_dir, ent_dir=None):
-        super(StubCertSorter, self).__init__(prod_dir, ent_dir, None)
-        self.reasons = Reasons([], self)
+    def __init__(self):
+        super(StubCertSorter, self).__init__()
 
     def _parse_server_status(self):
         # Override this method to just leave all fields uninitialized so

@@ -77,8 +77,7 @@ def get_installed_product_status(product_directory, entitlement_directory, uep):
     """
     product_status = []
 
-    sorter = require(CERT_SORTER, product_directory,
-            entitlement_directory, uep)
+    sorter = require(CERT_SORTER)
 
     calculator = require(PRODUCT_DATE_RANGE_CALCULATOR, uep)
     for installed_product in sorter.installed_products:
@@ -507,8 +506,7 @@ class PoolStash(object):
             log.debug("\tRemoved %d incompatible pools" %
                        len(self.incompatible_pools))
 
-        sorter = require(CERT_SORTER, self.backend.product_dir,
-                self.backend.entitlement_dir, self.backend.uep)
+        sorter = require(CERT_SORTER)
         pool_filter = PoolFilter(self.backend.product_dir,
                 self.backend.entitlement_dir, sorter)
 
