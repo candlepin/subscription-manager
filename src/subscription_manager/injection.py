@@ -12,6 +12,8 @@
 # in this software or its documentation.
 #
 
+from subscription_manager.lazyloader import LazyLoader
+
 # Supported Features:
 IDENTITY = "IDENTITY"
 CERT_SORTER = "CERT_SORTER"
@@ -66,8 +68,8 @@ class FeatureBroker:
                 return provider(*args, **kwargs)
             else:
                 log.debug("Returning instance for feature %s" % feature)
-                if feature == 'CERT_SORTER' and not provider.loaded:
-                    provider.refresh()
+                if isinstance(provider, LazyLoader) and not provider.loaded:
+                    provider.load()
                 return provider
         except KeyError:
             raise KeyError("Unknown feature: %r" % feature)

@@ -19,7 +19,6 @@ import random
 import tempfile
 
 from subscription_manager.cert_sorter import CertSorter
-from subscription_manager.reasons import Reasons
 
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """

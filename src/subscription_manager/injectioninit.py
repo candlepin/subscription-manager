@@ -31,7 +31,7 @@ def init_dep_injection():
     # Set up consumer identity as a singleton so we don't constantly re-load
     # it from disk. Call reload when anything changes and all references will be
     # updated.
-    inj.provide(inj.IDENTITY, Identity())
+    inj.provide(inj.IDENTITY, Identity(lazy_load=True))
     inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR,
             ValidProductDateRangeCalculator)
 
