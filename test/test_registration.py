@@ -26,8 +26,9 @@ class CliRegistrationTests(SubManFixture):
         self.persisted_consumer = consumer
         return self.persisted_consumer
 
+    @patch('subscription_manager.managercli.InstalledProductsManager.write_cache')
     @patch('subscription_manager.certlib.ConsumerIdentity.exists')
-    def test_register_persists_consumer_cert(self, mock_exists):
+    def test_register_persists_consumer_cert(self, mock_exists, mock_ipm_wc):
         connection.UEPConnection = StubUEP
 
         # When
@@ -37,15 +38,15 @@ class CliRegistrationTests(SubManFixture):
         cmd._persist_identity_cert = self.stub_persist
         cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
         cmd.facts.write_cache = Mock()
-        cmd.installed_mgr.write_cache = Mock()
 
         cmd.main(['register', '--username=testuser1', '--password=password'])
 
         # Then
         self.assertEqual('dummy-consumer-uuid', self.persisted_consumer["uuid"])
 
+    @patch('subscription_manager.managercli.InstalledProductsManager.write_cache')
     @patch('subscription_manager.certlib.ConsumerIdentity.exists')
-    def test_installed_products_cache_written(self, mock_exists):
+    def test_installed_products_cache_written(self, mock_exists, mock_ipm_wc):
         connection.UEPConnection = StubUEP
 
         cmd = RegisterCommand()
@@ -55,8 +56,7 @@ class CliRegistrationTests(SubManFixture):
         # Mock out facts and installed products:
         cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
         cmd.facts.write_cache = Mock()
-        cmd.installed_mgr.write_cache = Mock()
 
         cmd.main(['register', '--username=testuser1', '--password=password'])
 
-        self.assertTrue(cmd.installed_mgr.write_cache.call_count > 0)
+        self.assertTrue(mock_ipm_wc.call_count > 0)
