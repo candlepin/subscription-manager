@@ -20,6 +20,7 @@ import unittest
 
 import mock
 
+import subscription_manager.injection as inj
 from subscription_manager.injection import provide, IDENTITY
 from subscription_manager import async
 from subscription_manager import managerlib
@@ -58,6 +59,9 @@ class TestAsyncPool(unittest.TestCase):
         id_mock = mock.Mock()
         id_mock.uuid = 'some-consumer-uuid'
         provide(IDENTITY, id_mock)
+        provide(inj.USER_AUTH_UEP, stubs.StubUEP())
+        inj.provide(inj.PROD_DIR, stubs.StubProductDirectory())
+        inj.provide(inj.ENT_DIR, stubs.StubEntitlementDirectory())
         facts_mock = mock.Mock()
         facts_mock.update_check.return_value = None
 

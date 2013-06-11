@@ -87,7 +87,7 @@ class CertSorterTests(SubManFixture):
                 return_value=SAMPLE_COMPLIANCE_JSON)
         self.status_mgr.write_cache = Mock()
         inj.provide(inj.STATUS_CACHE, self.status_mgr)
-
+        inj.provide(inj.USER_AUTH_UEP, self.mock_uep)
         inj.provide(inj.PROD_DIR, self.prod_dir)
         inj.provide(inj.ENT_DIR, self.ent_dir)
         mock_conn.return_value = self.mock_uep

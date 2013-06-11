@@ -417,6 +417,7 @@ class StubBackend:
         self.entitlement_dir = None
         self.product_dir = None
         self.content_connection = None
+        self.cs = StubCertSorter()
 
     def monitor_certs(self, callback):
         pass

@@ -31,11 +31,12 @@ init_dep_injection()
 
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
-from subscription_manager.injection import require, CERT_SORTER
+from subscription_manager.injection import require, provide, CERT_SORTER, USER_AUTH_UEP
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
 import rhsm.certificate as certificate
+from rhsm.connection import UEPConnection
 
 import rhsm.config
 CFG = rhsm.config.initConfig()
@@ -83,6 +84,9 @@ def check_status(force_signal):
         debug("The system is not currently registered.")
         return RHSM_REGISTRATION_REQUIRED
 
+    connection = UEPConnection(cert_file=ConsumerIdentity.certpath(),
+            key_file=ConsumerIdentity.keypath())
+    provide(USER_AUTH_UEP, connection)
     sorter = require(CERT_SORTER)
 
     if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:

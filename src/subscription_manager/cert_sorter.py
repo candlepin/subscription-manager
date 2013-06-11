@@ -17,14 +17,12 @@ import logging
 
 from rhsm.certificate import GMT
 import subscription_manager.injection as inj
-from rhsm import connection
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
 from subscription_manager.cache import InstalledProductsManager
-from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.lazyloader import LazyLoader
 
 import gettext
@@ -65,14 +63,7 @@ class CertSorter(LazyLoader):
     """
     def load(self):
         super(CertSorter, self).load()
-        # Warning: could be None if we're not registered, we will check before
-        # we use it, but if connection is still none we will let this error out
-        # as it is programmer error.
-        self.uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
-                key_file=ConsumerIdentity.keypath())
-        self.refresh()
-
-    def refresh(self):
+        self.uep = inj.require(inj.USER_AUTH_UEP)
         self.identity = inj.require(inj.IDENTITY)
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)

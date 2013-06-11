@@ -68,7 +68,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         self.facts = facts
         self.backend = backend
-        self.cs = inj.require(inj.CERT_SORTER)
 
         # Product column
         text_renderer = gtk.CellRendererText()
@@ -115,7 +114,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         # Monitor entitlements/products for additions/deletions
         def on_cert_change(filemonitor):
             self.identity.reload()
-            self.cs.refresh()
             self.update_products()
             self._set_validity_status()
 
@@ -145,7 +143,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
                     contract_ids.add(cert.order.contract)
                     sub_names.add(cert.order.name)
-            elif cert in self.cs.valid_entitlement_certs:
+            elif cert in self.backend.cs.valid_entitlement_certs:
                 contract_ids.add(cert.order.contract)
                 sub_names.add(cert.order.name)
 
@@ -158,7 +156,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         for product_cert in self.product_dir.list():
             for product in product_cert.products:
                 product_id = product.id
-                status = self.cs.get_status(product_id)
+                status = self.backend.cs.get_status(product_id)
 
                 entry = {}
                 entry['product'] = product.name
@@ -213,7 +211,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                     elif status == UNKNOWN:
                         entry['image'] = self._render_icon('unknown')
                         entry['status'] = _('Unknown')
-                        if not self.cs.is_registered():
+                        if not self.backend.cs.is_registered():
                             entry['validity_note'] = _("System is not registered.")
                         else:
                             # System must be registered but unable to reach server:
@@ -309,16 +307,16 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         is_registered = self.identity.is_valid()
         self.set_registered(is_registered)
 
-        warn_count = len(self.cs.expired_products) + \
-                len(self.cs.unentitled_products)
+        warn_count = len(self.backend.cs.expired_products) + \
+                len(self.backend.cs.unentitled_products)
 
-        if self.cs.system_status == 'valid':
+        if self.backend.cs.system_status == 'valid':
             self._set_status_icons(VALID_STATUS)
-            if self.cs.first_invalid_date:
+            if self.backend.cs.first_invalid_date:
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
                         _("System is properly subscribed through %s.") %
-                        managerlib.format_date(self.cs.first_invalid_date))
+                        managerlib.format_date(self.backend.cs.first_invalid_date))
             else:
                 # No product certs installed, no first invalid date, and
                 # the subscription assistant can't do anything, so we'll disable
@@ -326,12 +324,12 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 self.subscription_status_label.set_text(
                         # I18N: Please add newlines if translation is longer:
                         _("No installed products detected."))
-        elif self.cs.system_status == 'partial':
+        elif self.backend.cs.system_status == 'partial':
             self._set_status_icons(PARTIAL_STATUS)
             self.subscription_status_label.set_markup(
                     # I18N: Please add newlines if translation is longer:
                     _("This system does not match subscription limits."))
-        elif self.cs.system_status == 'invalid':
+        elif self.backend.cs.system_status == 'invalid':
             self._set_status_icons(INVALID_STATUS)
             if warn_count > 1:
                 self.subscription_status_label.set_markup(
@@ -342,7 +340,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
                         _("1 installed product does not have a valid subscription."))
-        elif self.cs.system_status == 'unknown':
+        elif self.backend.cs.system_status == 'unknown':
             self._set_status_icons(UNKNOWN_STATUS)
             self.subscription_status_label.set_text(
                 # I18N: Please add newlines if translation is longer:

@@ -79,7 +79,7 @@ class MySubscriptionsTabTest(SubManFixture):
                 start_date=datetime.datetime(2010, 1, 1),
                 end_date=ending,
                 quantity="10", ent_id='ent')
-        self.my_subs_tab.cs.reasons.get_subscription_reasons = Mock(return_value=['Some detail'])
+        self.my_subs_tab.backend.cs.reasons.get_subscription_reasons = Mock(return_value=['Some detail'])
         image = self.my_subs_tab._get_entry_image(cert)
         self.assertEqual(WARNING_IMG, image)
 

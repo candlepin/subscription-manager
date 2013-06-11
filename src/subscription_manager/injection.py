@@ -22,6 +22,7 @@ ENT_DIR = "ENT_DIR"
 PROD_DIR = "PROD_DIR"
 STATUS_CACHE = "STATUS_CACHE"
 PROD_STATUS_CACHE = "PROD_STATUS_CACHE"
+USER_AUTH_UEP = "USER_AUTH_UEP"
 
 import logging
 log = logging.getLogger('rhsm-app.' + __name__)

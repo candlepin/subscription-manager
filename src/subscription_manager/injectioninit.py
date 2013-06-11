@@ -42,5 +42,7 @@ def init_dep_injection():
     inj.provide(inj.STATUS_CACHE, StatusCache)
     inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache)
 
-    # Must come after ent dir, prod dir, and identity
+    inj.provide(inj.USER_AUTH_UEP, None)
+
+    # Must come after ent dir, prod dir, conn info, and identity
     inj.provide(inj.CERT_SORTER, CertSorter(lazy_load=True))

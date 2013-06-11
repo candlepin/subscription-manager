@@ -33,7 +33,7 @@ from subscription_manager.cache import InstalledProductsManager, ProfileManager
 from subscription_manager.certmgr import CertManager
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
-from subscription_manager.injection import CERT_SORTER, IDENTITY, require
+from subscription_manager.injection import IDENTITY, require
 from subscription_manager import managerlib
 from subscription_manager import plugins
 from subscription_manager.utils import is_valid_server_info, MissingCaCertException, parse_server_info, restart_virt_who, ServerUrlParseError
@@ -1071,14 +1071,12 @@ class AsyncBackend(object):
 
         # Using the current date time, we may need to expand this to work
         # with arbitrary dates for future entitling someday:
-        sorter = require(CERT_SORTER)
-        sorter.uep = self.backend.uep
-        sorter.refresh()
+        self.backend.cs.load()
 
-        if len(sorter.installed_products) == 0:
+        if len(self.backend.cs.installed_products) == 0:
             raise NoProductsException()
 
-        if len(sorter.unentitled_products) == 0:
+        if len(self.backend.cs.unentitled_products) == 0:
             raise AllProductsCoveredException()
 
         if current_sla:
@@ -1096,14 +1094,14 @@ class AsyncBackend(object):
         certmgr.update()
         for sla in available_slas:
             dry_run_json = self.backend.uep.dryRunBind(consumer.uuid, sla)
-            dry_run = DryRunResult(sla, dry_run_json, sorter)
+            dry_run = DryRunResult(sla, dry_run_json, self.backend.cs)
 
             # If we have a current SLA for this system, we do not need
             # all products to be covered by the SLA to proceed through
             # this wizard:
             if current_sla or dry_run.covers_required_products():
                 suitable_slas[sla] = dry_run
-        return (current_sla, sorter.unentitled_products.values(), suitable_slas)
+        return (current_sla, self.backend.cs.unentitled_products.values(), suitable_slas)
 
     def _find_service_levels(self, consumer, facts, callback):
         """

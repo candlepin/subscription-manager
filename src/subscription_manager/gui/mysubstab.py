@@ -23,7 +23,6 @@ import gtk
 from rhsm.certificate import GMT
 
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
-import subscription_manager.injection as inj
 from subscription_manager.injection import require, IDENTITY
 from subscription_manager.certlib import Disconnected
 from subscription_manager.injection import IDENTITY, require
@@ -61,8 +60,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.entitlement_dir = ent_dir
         self.product_dir = prod_dir
         self.sub_details = widgets.ContractSubDetailsWidget(prod_dir)
-
-        self.cs = inj.require(inj.CERT_SORTER)
 
         # Put the details widget in the middle
         details = self.sub_details.get_widget()
@@ -111,7 +108,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.top_view.connect("row_activated",
                               widgets.expand_collapse_on_row_activated_callback)
 
-        self.update_subscriptions(refresh=False)
+        self.update_subscriptions()
 
         self.glade.signal_autoconnect({'on_unsubscribe_button_clicked': self.unsubscribe_button_clicked})
 
@@ -159,13 +156,11 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                 self.content.get_toplevel())
         prompt.connect('response', self._on_unsubscribe_prompt_response, selection)
 
-    def update_subscriptions(self, refresh=True):
+    def update_subscriptions(self):
         """
         Pulls the entitlement certificates and updates the subscription model.
         """
         self.store.clear()
-        if refresh:
-            self.cs.refresh()
         sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
         for idx, group in enumerate(sorter.groups):
             self._add_group(idx, group)
@@ -255,10 +250,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                         for product in cert.products]
 
         reasons = []
-        if self.cs.are_reasons_supported():
-            reasons = self.cs.reasons.get_subscription_reasons(cert.subject['CN'])
+        if self.backend.cs.are_reasons_supported():
+            reasons = self.backend.cs.reasons.get_subscription_reasons(cert.subject['CN'])
             if not reasons:
-                if cert in self.cs.valid_entitlement_certs:
+                if cert in self.backend.cs.valid_entitlement_certs:
                     reasons.append(_('Subscription is current.'))
                 else:
                     if cert.valid_range.end() < datetime.now(GMT()):
@@ -342,7 +337,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             return EXPIRING_IMG
 
         if cert.subject and 'CN' in cert.subject and \
-                self.cs.reasons.get_subscription_reasons(cert.subject['CN']):
+                self.backend.cs.reasons.get_subscription_reasons(cert.subject['CN']):
             return WARNING_IMG
 
         return None

@@ -364,6 +364,7 @@ class CliCommand(AbstractCLICommand):
                                       proxy_password=proxy_password,
                                       username=username,
                                       password=password)
+
         return cp
 
     def main(self, args=None):
@@ -453,6 +454,19 @@ class CliCommand(AbstractCLICommand):
         if hasattr(self.options, "proxy_password") and self.options.proxy_password:
             self.proxy_password = self.options.proxy_password
 
+        # Proxy information isn't written to the config, so we have to make sure
+        # the sorter gets it
+        '''connection_info = {}
+        if self.proxy_hostname:
+            connection_info['proxy_hostname'] = self.proxy_hostname
+        if self.proxy_port:
+            connection_info['proxy_port'] = self.proxy_port
+        if self.proxy_user:
+            connection_info['proxy_user'] = self.proxy_user
+        if self.proxy_password:
+            connection_info['proxy_password'] = self.proxy_password
+        inj.provide(inj.CONN_INFO, connection_info)'''
+
         # Create a connection using the default configuration:
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
@@ -467,6 +481,7 @@ class CliCommand(AbstractCLICommand):
             self.cp = self._get_uep(cert_file=cert_file,
                                     key_file=key_file)
 
+            inj.provide(inj.USER_AUTH_UEP, self.cp)
             # no auth cp for get / (resources) and
             # get /status (status and versions)
             self.no_auth_cp = self._get_uep()

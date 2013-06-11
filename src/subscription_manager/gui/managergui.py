@@ -17,7 +17,7 @@
 # in this software or its documentation.
 #
 
-from subscription_manager.injection import require, IDENTITY
+from subscription_manager.injection import require, provide, IDENTITY, CERT_SORTER, USER_AUTH_UEP
 
 import gettext
 import locale
@@ -97,6 +97,7 @@ class Backend(object):
         self.product_dir = ProductDirectory()
         self.entitlement_dir = EntitlementDirectory()
         self.certlib = CertLib(uep=self.uep)
+        provide(USER_AUTH_UEP, self.uep)
 
         self.product_monitor = file_monitor.Monitor(self.product_dir.path)
         self.entitlement_monitor = file_monitor.Monitor(
@@ -109,6 +110,14 @@ class Backend(object):
                 lambda monitor: self.product_dir.refresh())
         self.entitlement_monitor.connect("changed",
                 lambda monitor: self.entitlement_dir.refresh())
+
+        self.cs = require(CERT_SORTER)
+
+        # Only need to refresh here, rather than in every file
+        def on_cert_change(filemonitor):
+            self.cs.load()
+
+        self.monitor_certs(on_cert_change)
 
     # make a create that does the init
     # and a update() for a name
