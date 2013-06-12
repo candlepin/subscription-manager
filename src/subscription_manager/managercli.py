@@ -955,7 +955,6 @@ class RegisterCommand(UserPassCommand):
 
         self.facts = Facts(ent_dir=self.entitlement_dir,
                            prod_dir=self.product_dir)
-        self.installed_mgr = InstalledProductsManager()
 
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
@@ -1007,6 +1006,9 @@ class RegisterCommand(UserPassCommand):
             print(get_branding().REGISTERED_TO_OTHER_WARNING)
 
         self._validate_options()
+
+        # gather installed products info
+        self.installed_mgr = InstalledProductsManager()
 
         # Set consumer's name to hostname by default:
         consumername = self.options.consumername
