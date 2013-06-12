@@ -26,6 +26,7 @@ import rhsm.connection as connection
 
 from subscription_manager.gui.utils import show_error_window
 from subscription_manager.utils import remove_scheme
+import subscription_manager.injection as inj
 
 _ = gettext.gettext
 
@@ -55,6 +56,7 @@ class NetworkConfigDialog:
         self.proxyPasswordEntry = self.xml.get_widget("proxyPasswordEntry")
 
         self.cfg = rhsm.config.initConfig()
+        self.uep_factory = inj.require(inj.UEP_FACTORY)
 
         # Need to load values before connecting signals because when the dialog
         # starts up it seems to trigger the signals which overwrites the config
@@ -147,6 +149,7 @@ class NetworkConfigDialog:
 
         try:
             self.cfg.save()
+            self.uep_factory.set_connection_info()
         except Exception:
             show_error_window(_("There was an error saving your configuration.") +
                               _("Make sure that you own %s.") % self.cfg.fileName,
@@ -177,25 +180,9 @@ class NetworkConfigDialog:
     def test_connection(self):
         proxy_host = remove_scheme(self.cfg.get("server", "proxy_hostname"))
         proxy_port = self.cfg.get_int("server", "proxy_port")
-        proxy_user = self.cfg.get("server", "proxy_user")
-        proxy_password = self.cfg.get("server", "proxy_password")
 
-        server_host = self.cfg.get("server", "hostname")
-        server_port = self.cfg.get_int("server", "port")
-        server_prefix = self.cfg.get("server", "prefix")
+        cp = self.uep_factory.get_no_auth_uep()
 
-        cp = connection.UEPConnection(host=server_host,
-                                    ssl_port=server_port,
-                                    handler=server_prefix,
-                                    proxy_hostname=proxy_host,
-                                    proxy_port=proxy_port,
-                                    proxy_user=proxy_user,
-                                    proxy_password=proxy_password,
-                                    username=None,
-                                    password=None,
-                                    cert_file=None,
-                                    key_file=None
-                                    )
         try:
             cp.getStatus()
         except connection.RemoteServerException, e:

@@ -59,7 +59,7 @@ class TestAsyncPool(unittest.TestCase):
         id_mock = mock.Mock()
         id_mock.uuid = 'some-consumer-uuid'
         provide(IDENTITY, id_mock)
-        provide(inj.USER_AUTH_UEP, stubs.StubUEP())
+        provide(inj.UEP_FACTORY, stubs.StubUEPFactory())
         inj.provide(inj.PROD_DIR, stubs.StubProductDirectory())
         inj.provide(inj.ENT_DIR, stubs.StubEntitlementDirectory())
         facts_mock = mock.Mock()

@@ -413,7 +413,7 @@ class StubUEP:
 
 class StubBackend:
     def __init__(self, uep=StubUEP()):
-        self.uep = uep
+        self.uep_factory = StubUEPFactory()
         self.entitlement_dir = None
         self.product_dir = None
         self.content_connection = None
@@ -491,3 +491,39 @@ class StubCertSorter(CertSorter):
         # Override this method to just leave all fields uninitialized so
         # tests can do whatever they wish with them.
         pass
+
+
+class StubUEPFactory(object):
+
+    user_auth_uep = StubUEP()
+    basic_auth_uep = StubUEP()
+    no_auth_uep = StubUEP()
+
+    def set_connection_info(self,
+                host=None,
+                ssl_port=None,
+                handler=None,
+                cert_file=None,
+                key_file=None,
+                proxy_hostname_arg=None,
+                proxy_port_arg=None,
+                proxy_user_arg=None,
+                proxy_password_arg=None):
+        self.user_auth_uep = StubUEP()
+        self.basic_auth_uep = StubUEP()
+        self.no_auth_uep = StubUEP()
+
+    def set_user_pass(self, username=None, password=None):
+        pass
+
+    def clean(self):
+        pass
+
+    def get_user_auth_uep(self):
+        return self.user_auth_uep
+
+    def get_basic_auth_uep(self):
+        return self.basic_auth_uep
+
+    def get_no_auth_uep(self):
+        return self.no_auth_uep

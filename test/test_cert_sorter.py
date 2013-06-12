@@ -17,7 +17,7 @@ import subscription_manager.injection as inj
 from fixture import SubManFixture
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
     StubEntitlementDirectory, StubProductDirectory, \
-    StubUEP, StubCertSorter
+    StubUEP, StubUEPFactory, StubCertSorter
 import subscription_manager.cert_sorter
 from subscription_manager.cert_sorter import CertSorter, UNKNOWN
 from subscription_manager.cache import StatusCache
@@ -59,9 +59,8 @@ def stub_prod_cert(pid):
 
 class CertSorterTests(SubManFixture):
 
-    @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
-    def setUp(self, mock_update, mock_conn):
+    def setUp(self, mock_update):
         SubManFixture.setUp(self)
         # Setup mock product and entitlement certs:
         self.prod_dir = StubProductDirectory(
@@ -87,10 +86,9 @@ class CertSorterTests(SubManFixture):
                 return_value=SAMPLE_COMPLIANCE_JSON)
         self.status_mgr.write_cache = Mock()
         inj.provide(inj.STATUS_CACHE, self.status_mgr)
-        inj.provide(inj.USER_AUTH_UEP, self.mock_uep)
+        inj.provide(inj.UEP_FACTORY, StubUEPFactory())
         inj.provide(inj.PROD_DIR, self.prod_dir)
         inj.provide(inj.ENT_DIR, self.ent_dir)
-        mock_conn.return_value = self.mock_uep
         self.sorter = CertSorter()
         self.sorter.is_registered = Mock(return_value=True)
 

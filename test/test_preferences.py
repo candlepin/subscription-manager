@@ -24,7 +24,6 @@ from subscription_manager.injection import require, provide, IDENTITY
 
 from subscription_manager.gui import preferences
 
-
 CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},
                  'serviceLevel': "Pro Turbo HD Plus Ultra",
                  'owner': {'key': 'admin'}}
@@ -53,9 +52,7 @@ class TestPreferencesDialog(SubManFixture):
 
     def _getPrefDialog(self):
         stub_backend = stubs.StubBackend()
-        stub_backend.uep.getConsumer = getConsumerData
-        if self._getConsumerData:
-            stub_backend.uep.getConsumer = self._getConsumerData
+        stub_backend.uep_factory.user_auth_uep.setConsumer(CONSUMER_DATA)
 
         stub_backend.product_dir = stubs.StubCertificateDirectory([stubs.StubProductCertificate(stubs.StubProduct("rhel-6"))])
         stub_backend.entitlement_dir = stubs.StubEntitlementDirectory([stubs.StubEntitlementCertificate(stubs.StubProduct("rhel-6"))])

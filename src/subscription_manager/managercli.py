@@ -319,54 +319,6 @@ class CliCommand(AbstractCLICommand):
         self.server_versions = get_server_versions(self.no_auth_cp)
         log.info("Server Versions: %s" % self.server_versions)
 
-    # note, depending on that args, we could get a full
-    # fledged uep, a basic auth uep, or an unauthenticate uep
-    def _get_uep(self,
-                host=None,
-                ssl_port=None,
-                handler=None,
-                cert_file=None,
-                key_file=None,
-                proxy_hostname_arg=None,
-                proxy_port_arg=None,
-                proxy_user_arg=None,
-                proxy_password_arg=None,
-                username=None,
-                password=None):
-
-        # populate with config setttings if not specified
-        server_hostname = host or cfg.get('server', 'hostname')
-        server_port = ssl_port or cfg.get_int('server', 'port')
-        server_prefix = handler or cfg.get('server', 'prefix')
-
-        # Note: username/password have no defaults, other than
-        # None
-
-        # touch ugly, but removes some duplicate args all over the place,
-        # also let's us override cfg values from the cli
-        proxy_hostname = proxy_hostname_arg or self.proxy_hostname or remove_scheme(cfg.get('server', 'proxy_hostname'))
-
-        proxy_port = proxy_port_arg or self.proxy_port or cfg.get_int('server', 'proxy_port')
-
-        proxy_user = proxy_user_arg or self.proxy_user or cfg.get('server', 'proxy_user')
-
-        proxy_password = proxy_password_arg or self.proxy_password or cfg.get('server', 'proxy_password')
-
-        # pass in all args, to make sure we don't rely on connections
-        # defautls pulled from config at class inst time
-        cp = connection.UEPConnection(host=server_hostname,
-                                      ssl_port=server_port,
-                                      handler=server_prefix,
-                                      cert_file=cert_file, key_file=key_file,
-                                      proxy_hostname=proxy_hostname,
-                                      proxy_port=proxy_port,
-                                      proxy_user=proxy_user,
-                                      proxy_password=proxy_password,
-                                      username=username,
-                                      password=password)
-
-        return cp
-
     def main(self, args=None):
 
         config_changed = False
@@ -390,6 +342,10 @@ class CliCommand(AbstractCLICommand):
         self.proxy_port = cfg.get_int('server', 'proxy_port')
         self.proxy_user = cfg.get('server', 'proxy_user')
         self.proxy_password = cfg.get('server', 'proxy_password')
+
+        self.server_hostname = cfg.get("server", "hostname")
+        self.server_port = cfg.get("server", "port")
+        self.server_prefix = cfg.get("server", "prefix")
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             cfg.set("server", "insecure", "1")
@@ -456,20 +412,24 @@ class CliCommand(AbstractCLICommand):
 
         # Proxy information isn't written to the config, so we have to make sure
         # the sorter gets it
-        '''connection_info = {}
+        connection_info = {}
         if self.proxy_hostname:
-            connection_info['proxy_hostname'] = self.proxy_hostname
+            connection_info['proxy_hostname_arg'] = self.proxy_hostname
         if self.proxy_port:
-            connection_info['proxy_port'] = self.proxy_port
+            connection_info['proxy_port_arg'] = self.proxy_port
         if self.proxy_user:
-            connection_info['proxy_user'] = self.proxy_user
+            connection_info['proxy_user_arg'] = self.proxy_user
         if self.proxy_password:
-            connection_info['proxy_password'] = self.proxy_password
-        inj.provide(inj.CONN_INFO, connection_info)'''
+            connection_info['proxy_password_arg'] = self.proxy_password
+        if self.server_hostname:
+            connection_info['host'] = self.server_hostname
+        if self.server_port:
+            connection_info['ssl_port'] = self.server_port
+        if self.server_prefix:
+            connection_info['handler'] = self.server_prefix
 
-        # Create a connection using the default configuration:
-        cert_file = ConsumerIdentity.certpath()
-        key_file = ConsumerIdentity.keypath()
+        self.uep_factory = inj.require(inj.UEP_FACTORY)
+        self.uep_factory.set_connection_info(**connection_info)
 
         self.log_client_version()
 
@@ -478,13 +438,11 @@ class CliCommand(AbstractCLICommand):
             # we use the defaults from connection module init
             # we've set self.proxy* here, so we'll use them if they
             # are set
-            self.cp = self._get_uep(cert_file=cert_file,
-                                    key_file=key_file)
+            self.cp = self.uep_factory.get_user_auth_uep()
 
-            inj.provide(inj.USER_AUTH_UEP, self.cp)
             # no auth cp for get / (resources) and
             # get /status (status and versions)
-            self.no_auth_cp = self._get_uep()
+            self.no_auth_cp = self.uep_factory.get_no_auth_uep()
             self.log_server_version()
 
             self.certlib = CertLib(uep=self.cp)
@@ -523,8 +481,8 @@ class UserPassCommand(CliCommand):
         self.parser.add_option("--password", dest="password",
                                help=_("password to use when authorizing against the server"))
 
-    @staticmethod
-    def _get_username_and_password(username, password):
+    #@staticmethod
+    def _get_username_and_password(self, username, password):
         """
         Safely get a username and password from the tty, without echoing.
         if either username or password are provided as arguments, they will
@@ -537,7 +495,7 @@ class UserPassCommand(CliCommand):
         if not password:
             while not password:
                 password = getpass.getpass(_("Password: "))
-
+        self.uep_factory.set_user_pass(username, password)
         return (username, password)
 
     # lazy load the username and password, prompting for them if they weren't
@@ -686,8 +644,8 @@ class IdentityCommand(UserPassCommand):
             else:
                 if self.options.force:
                     # get an UEP with basic auth
-                    self.cp = self._get_uep(username=self.username,
-                                            password=self.password)
+                    self.uep_factory.set_user_pass(self.username, self.password)
+                    self.cp = self.uep_factory.get_basic_auth_uep()
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
                 print _("Identity certificate has been regenerated.")
@@ -714,8 +672,8 @@ class OwnersCommand(UserPassCommand):
 
         try:
             # get a UEP
-            self.cp = self._get_uep(username=self.username,
-                                    password=self.password)
+            self.uep_factory.set_user_pass(self.username, self.password)
+            self.cp = self.uep_factory.get_basic_auth_uep()
             owners = self.cp.getOwnerList(self.username)
             log.info("Successfully retrieved org list from server.")
             if len(owners):
@@ -760,9 +718,8 @@ class EnvironmentsCommand(OrgCommand):
     def _do_command(self):
         self._validate_options()
         try:
-
-            self.cp = self._get_uep(username=self.username,
-                                    password=self.password)
+            self.uep_factory.set_user_pass(self.username, self.password)
+            self.cp = self.uep_factory.get_basic_auth_uep()
             if self.cp.supports_resource('environments'):
                 environments = self._get_enviornments(self.org)
 
@@ -851,15 +808,11 @@ class ServiceLevelCommand(OrgCommand):
             # we'll use the identity certificate. We already know one or the other
             # exists:
             if self.options.username and self.options.password:
-                self.cp = self._get_uep(username=self.username,
-                                        password=self.password)
+                self.uep_factory.set_user_pass(self.username, self.password)
+                self.cp = self.uep_factory.get_basic_auth_uep()
             else:
-                cert_file = self.consumerIdentity.certpath()
-                key_file = self.consumerIdentity.keypath()
-
                 # get an UEP as consumer
-                self.cp = self._get_uep(cert_file=cert_file,
-                                        key_file=key_file)
+                self.cp = self.uep_factory.get_user_auth_uep()
 
             if self.options.unset:
                 self.unset_service_level()
@@ -1047,10 +1000,10 @@ class RegisterCommand(UserPassCommand):
         # Proceed with new registration:
         try:
             if not self.options.activation_keys:
-                admin_cp = self._get_uep(username=self.username,
-                                         password=self.password)
+                self.uep_factory.set_user_pass(self.username, self.password)
+                admin_cp = self.uep_factory.get_basic_auth_uep()
             else:
-                admin_cp = self._get_uep()
+                admin_cp = self.uep_factory.get_no_auth_uep()
 
             facts_dic = self.facts.get_facts()
 
@@ -1090,11 +1043,8 @@ class RegisterCommand(UserPassCommand):
 
         print (_("The system has been registered with ID: %s ")) % (consumer_info["uuid"])
 
-        cert_file = ConsumerIdentity.certpath()
-        key_file = ConsumerIdentity.keypath()
-
         # get a new UEP as the consumer
-        self.cp = self._get_uep(cert_file=cert_file, key_file=key_file)
+        self.cp = self.uep_factory.get_user_auth_uep()
 
         # Reload the consumer identity:
         self.identity = inj.FEATURES.require(inj.IDENTITY)

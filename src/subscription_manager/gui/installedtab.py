@@ -152,7 +152,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
     def update_products(self):
         self.store.clear()
         range_calculator = inj.require(inj.PRODUCT_DATE_RANGE_CALCULATOR,
-                self.backend.uep)
+                self.backend.uep_factory.get_user_auth_uep())
         for product_cert in self.product_dir.list():
             for product in product_cert.products:
                 product_id = product.id

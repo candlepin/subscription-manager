@@ -63,7 +63,7 @@ class CertSorter(LazyLoader):
     """
     def load(self):
         super(CertSorter, self).load()
-        self.uep = inj.require(inj.USER_AUTH_UEP)
+        self.uep = inj.require(inj.UEP_FACTORY).get_user_auth_uep()
         self.identity = inj.require(inj.IDENTITY)
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)

@@ -129,7 +129,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         if self.identity.is_valid():
             try:
-                self.backend.uep.unbindBySerial(self.identity.uuid, serial)
+                self.backend.uep_factory.get_user_auth_uep().unbindBySerial(self.identity.uuid, serial)
             except Exception, e:
                 handle_gui_exception(e, _("There was an error removing %s with serial number %s") %
                                          (selection['subscription'], serial),

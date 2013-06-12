@@ -466,7 +466,7 @@ class PoolStash(object):
         self.all_pools = {}
         self.compatible_pools = {}
         log.debug("Refreshing pools from server...")
-        for pool in list_pools(self.backend.uep,
+        for pool in list_pools(self.backend.uep_factory.get_user_auth_uep(),
                 self.identity.uuid, self.facts, active_on=active_on):
             self.compatible_pools[pool['id']] = pool
             self.all_pools[pool['id']] = pool
@@ -474,14 +474,14 @@ class PoolStash(object):
         # Filter the list of all pools, removing those we know are compatible.
         # Sadly this currently requires a second query to the server.
         self.incompatible_pools = {}
-        for pool in list_pools(self.backend.uep,
+        for pool in list_pools(self.backend.uep_factory.get_user_auth_uep(),
                 self.identity.uuid, self.facts, list_all=True, active_on=active_on):
             if not pool['id'] in self.compatible_pools:
                 self.incompatible_pools[pool['id']] = pool
                 self.all_pools[pool['id']] = pool
 
         self.subscribed_pool_ids = []
-        for entitlement in self.backend.uep.getEntitlementList(self.identity.uuid):
+        for entitlement in self.backend.uep_factory.get_user_auth_uep().getEntitlementList(self.identity.uuid):
             self.subscribed_pool_ids.append(entitlement['pool']['id'])
 
         log.debug("found %s pools:" % len(self.all_pools))

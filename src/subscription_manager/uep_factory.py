@@ -1,0 +1,93 @@
+# Copyright (c) 2010 Red Hat, Inc.
+#
+# This software is licensed to you under the GNU General Public License,
+# version 2 (GPLv2). There is NO WARRANTY for this software, express or
+# implied, including the implied warranties of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2
+# along with this software; if not, see
+# http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+#
+# Red Hat trademarks are not licensed under GPLv2. No permission is
+# granted to use or replicate Red Hat trademarks that are incorporated
+# in this software or its documentation.
+#
+
+from subscription_manager.certlib import ConsumerIdentity
+from subscription_manager.utils import remove_scheme
+import rhsm.connection as connection
+import rhsm.config
+
+
+class UEPFactory(object):
+
+    user_auth_uep = None
+    basic_auth_uep = None
+    no_auth_uep = None
+
+    def __init__(self):
+        self.set_connection_info()
+
+    def set_connection_info(self,
+                host=None,
+                ssl_port=None,
+                handler=None,
+                cert_file=None,
+                key_file=None,
+                proxy_hostname_arg=None,
+                proxy_port_arg=None,
+                proxy_user_arg=None,
+                proxy_password_arg=None):
+
+        cfg = rhsm.config.initConfig()
+
+        self.cert_file = ConsumerIdentity.certpath()
+        self.key_file = ConsumerIdentity.keypath()
+
+        self.server_hostname = host or cfg.get('server', 'hostname')
+        self.server_port = ssl_port or cfg.get_int('server', 'port')
+        self.server_prefix = handler or cfg.get('server', 'prefix')
+        self.proxy_hostname = proxy_hostname_arg or remove_scheme(cfg.get('server', 'proxy_hostname'))
+        self.proxy_port = proxy_port_arg or cfg.get_int('server', 'proxy_port')
+        self.proxy_user = proxy_user_arg or cfg.get('server', 'proxy_user')
+        self.proxy_password = proxy_password_arg or cfg.get('server', 'proxy_password')
+        self.clean()
+
+    def set_user_pass(self, username=None, password=None):
+        self.username = username
+        self.password = password
+        self.basic_auth_uep = None
+
+    def clean(self):
+        self.user_auth_uep = None
+        self.basic_auth_uep = None
+        self.no_auth_uep = None
+
+    def get_user_auth_uep(self):
+        if not self.user_auth_uep:
+            self.user_auth_uep = connection.UEPConnection(
+                    proxy_hostname=self.proxy_hostname,
+                    proxy_port=self.proxy_port,
+                    proxy_user=self.proxy_user,
+                    proxy_password=self.proxy_password,
+                    cert_file=self.cert_file, key_file=self.key_file)
+        return self.user_auth_uep
+
+    def get_basic_auth_uep(self):
+        if not self.basic_auth_uep:
+            self.basic_auth_uep = connection.UEPConnection(
+                    proxy_hostname=self.proxy_hostname,
+                    proxy_port=self.proxy_port,
+                    proxy_user=self.proxy_user,
+                    proxy_password=self.proxy_password,
+                    username=self.username,
+                    password=self.password)
+        return self.basic_auth_uep
+
+    def get_no_auth_uep(self):
+        if not self.no_auth_uep:
+            self.no_auth_uep = connection.UEPConnection(
+                    proxy_hostname=self.proxy_hostname,
+                    proxy_port=self.proxy_port,
+                    proxy_user=self.proxy_user,
+                    proxy_password=self.proxy_password)
+        return self.no_auth_uep
