@@ -2232,9 +2232,6 @@ class ManagerCLI(CLI):
         managerlib.check_identity_cert_perms()
         return CLI.main(self)
 
-    def _default_command(self):
-        StatusCommand().main()
-
 
 def width(in_str):
     if not isinstance(in_str, unicode):
