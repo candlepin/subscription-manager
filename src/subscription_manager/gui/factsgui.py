@@ -111,7 +111,7 @@ class SystemFactsDialog(widgets.GladeWidget):
         # TODO: could stand to check if registered before trying to do this:
         display_name = _('Unknown')
         try:
-            owner = self.backend.uep_factory.get_user_auth_uep().getOwner(self.identity.uuid)
+            owner = self.backend.cp_provider.get_user_auth_cp().getOwner(self.identity.uuid)
             display_name = owner['displayName']
             key = owner['key']
             self.owner_id_label.set_text(key)
@@ -122,8 +122,8 @@ class SystemFactsDialog(widgets.GladeWidget):
         self.owner_label.set_text(display_name)
 
         try:
-            if self.backend.uep_factory.get_user_auth_uep().supports_resource('environments'):
-                consumer = self.backend.uep_factory.get_user_auth_uep().getConsumer(self.identity.uuid)
+            if self.backend.cp_provider.get_user_auth_cp().supports_resource('environments'):
+                consumer = self.backend.cp_provider.get_user_auth_cp().getConsumer(self.identity.uuid)
                 environment = consumer['environment']
                 if environment:
                     environment_name = environment['name']
@@ -144,7 +144,7 @@ class SystemFactsDialog(widgets.GladeWidget):
         consumer_uuid = self.identity.uuid
 
         try:
-            self.facts.update_check(self.backend.uep_factory.get_user_auth_uep(), consumer_uuid, force=True)
+            self.facts.update_check(self.backend.cp_provider.get_user_auth_cp(), consumer_uuid, force=True)
         except Exception, e:
             log.error("Could not update system facts \nError: %s" % e)
             handle_gui_exception(e, linkify(str(e)), self.system_facts_dialog)

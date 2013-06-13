@@ -726,7 +726,7 @@ class CredentialsScreen(Screen):
         if not self._validate_account():
             return DONT_CHANGE
 
-        self._backend.uep_factory.set_user_pass(self._username, self._password)
+        self._backend.cp_provider.set_user_pass(self._username, self._password)
 
         return OWNER_SELECT_PAGE
 
@@ -814,7 +814,7 @@ class ActivationKeyScreen(Screen):
         # Environments aren't used with activation keys so clear any
         # cached value.
         self._parent.environment = None
-        self._backend.uep_factory.set_user_pass()
+        self._backend.cp_provider.set_user_pass()
 
 
 class RefreshSubscriptionsScreen(NoGuiScreen):
@@ -952,7 +952,7 @@ class AsyncBackend(object):
         method run in the worker thread.
         """
         try:
-            retval = self.backend.uep_factory.get_basic_auth_uep().getOwnerList(username)
+            retval = self.backend.cp_provider.get_basic_auth_cp().getOwnerList(username)
             self.queue.put((callback, retval, None))
         except Exception, e:
             self.queue.put((callback, None, e))
@@ -964,11 +964,11 @@ class AsyncBackend(object):
         try:
             retval = None
             # If environments aren't supported, don't bother trying to list:
-            if self.backend.uep_factory.get_basic_auth_uep().supports_resource('environments'):
+            if self.backend.cp_provider.get_basic_auth_cp().supports_resource('environments'):
                 log.info("Server supports environments, checking for "
                          "environment to register with.")
                 retval = []
-                for env in self.backend.uep_factory.get_basic_auth_uep().getEnvironmentList(owner_key):
+                for env in self.backend.cp_provider.get_basic_auth_cp().getEnvironmentList(owner_key):
                     # We need to ignore the "locker" environment, you can't
                     # register to it:
                     if env['name'].lower() != LIBRARY_ENV_NAME.lower():
@@ -992,7 +992,7 @@ class AsyncBackend(object):
 
             self.plugin_manager.run("pre_register_consumer", name=name,
                 facts=facts.get_facts())
-            retval = self.backend.uep_factory.get_basic_auth_uep().registerConsumer(name=name,
+            retval = self.backend.cp_provider.get_basic_auth_cp().registerConsumer(name=name,
                     facts=facts.get_facts(), owner=owner, environment=env,
                     keys=activation_keys,
                     installed_products=installed_mgr.format_for_server())
@@ -1004,16 +1004,16 @@ class AsyncBackend(object):
             facts.write_cache()
             installed_mgr.write_cache()
 
-            cp = self.backend.uep_factory.get_basic_auth_uep()
+            cp = self.backend.cp_provider.get_basic_auth_cp()
 
             # In practice, the only time this condition should be true is
             # when we are working with activation keys.  See BZ #888790.
-            if not self.backend.uep_factory.get_basic_auth_uep().username and \
-                not self.backend.uep_factory.get_basic_auth_uep().password:
+            if not self.backend.cp_provider.get_basic_auth_cp().username and \
+                not self.backend.cp_provider.get_basic_auth_cp().password:
                 # Write the identity cert to disk
                 managerlib.persist_consumer_cert(retval)
                 self.backend.update()
-                cp = self.backend.uep_factory.get_user_auth_uep()
+                cp = self.backend.cp_provider.get_user_auth_cp()
 
             ProfileManager().update_check(cp, retval['uuid'])
 
@@ -1031,7 +1031,7 @@ class AsyncBackend(object):
         try:
             if not current_sla:
                 log.info("Saving selected service level for this system.")
-                self.backend.uep_factory.get_user_auth_uep().updateConsumer(uuid,
+                self.backend.cp_provider.get_user_auth_cp().updateConsumer(uuid,
                         service_level=dry_run_result.service_level)
 
             log.info("Binding to subscriptions at service level: %s" %
@@ -1042,7 +1042,7 @@ class AsyncBackend(object):
                 log.info("  pool %s quantity %s" % (pool_id, quantity))
                 self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid,
                                         pool_id=pool_id, quantity=quantity)
-                ents = self.backend.uep_factory.get_user_auth_uep().bindByEntitlementPool(uuid, pool_id, quantity)
+                ents = self.backend.cp_provider.get_user_auth_cp().bindByEntitlementPool(uuid, pool_id, quantity)
                 self.plugin_manager.run("post_subscribe", consumer_uuid=uuid, entitlement_data=ents)
             managerlib.fetch_certificates(self.backend)
         except Exception, e:
@@ -1058,7 +1058,7 @@ class AsyncBackend(object):
         self.queue.put((callback, None, None))
 
     def _find_suitable_service_levels(self, consumer, facts):
-        consumer_json = self.backend.uep_factory.get_user_auth_uep().getConsumer(
+        consumer_json = self.backend.cp_provider.get_user_auth_cp().getConsumer(
                 consumer.getConsumerId())
 
         if 'serviceLevel' not in consumer_json:
@@ -1084,16 +1084,16 @@ class AsyncBackend(object):
             log.debug("Using system's current service level: %s" %
                     current_sla)
         else:
-            available_slas = self.backend.uep_factory.get_user_auth_uep().getServiceLevelList(owner_key)
+            available_slas = self.backend.cp_provider.get_user_auth_cp().getServiceLevelList(owner_key)
             log.debug("Available service levels: %s" % available_slas)
 
         # Will map service level (string) to the results of the dry-run
         # autobind results for each SLA that covers all installed products:
         suitable_slas = {}
-        certmgr = CertManager(uep=self.backend.uep_factory.get_user_auth_uep(), facts=facts)
+        certmgr = CertManager(uep=self.backend.cp_provider.get_user_auth_cp(), facts=facts)
         certmgr.update()
         for sla in available_slas:
-            dry_run_json = self.backend.uep_factory.get_user_auth_uep().dryRunBind(consumer.uuid, sla)
+            dry_run_json = self.backend.cp_provider.get_user_auth_cp().dryRunBind(consumer.uuid, sla)
             dry_run = DryRunResult(sla, dry_run_json, self.backend.cs)
 
             # If we have a current SLA for this system, we do not need

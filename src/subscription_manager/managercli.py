@@ -428,8 +428,8 @@ class CliCommand(AbstractCLICommand):
         if self.server_prefix:
             connection_info['handler'] = self.server_prefix
 
-        self.uep_factory = inj.require(inj.UEP_FACTORY)
-        self.uep_factory.set_connection_info(**connection_info)
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.cp_provider.set_connection_info(**connection_info)
 
         self.log_client_version()
 
@@ -438,11 +438,11 @@ class CliCommand(AbstractCLICommand):
             # we use the defaults from connection module init
             # we've set self.proxy* here, so we'll use them if they
             # are set
-            self.cp = self.uep_factory.get_user_auth_uep()
+            self.cp = self.cp_provider.get_user_auth_cp()
 
             # no auth cp for get / (resources) and
             # get /status (status and versions)
-            self.no_auth_cp = self.uep_factory.get_no_auth_uep()
+            self.no_auth_cp = self.cp_provider.get_no_auth_cp()
             self.log_server_version()
 
             self.certlib = CertLib(uep=self.cp)
@@ -495,7 +495,7 @@ class UserPassCommand(CliCommand):
         if not password:
             while not password:
                 password = getpass.getpass(_("Password: "))
-        self.uep_factory.set_user_pass(username, password)
+        self.cp_provider.set_user_pass(username, password)
         return (username, password)
 
     # lazy load the username and password, prompting for them if they weren't
@@ -644,8 +644,8 @@ class IdentityCommand(UserPassCommand):
             else:
                 if self.options.force:
                     # get an UEP with basic auth
-                    self.uep_factory.set_user_pass(self.username, self.password)
-                    self.cp = self.uep_factory.get_basic_auth_uep()
+                    self.cp_provider.set_user_pass(self.username, self.password)
+                    self.cp = self.cp_provider.get_basic_auth_cp()
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
                 print _("Identity certificate has been regenerated.")
@@ -672,8 +672,8 @@ class OwnersCommand(UserPassCommand):
 
         try:
             # get a UEP
-            self.uep_factory.set_user_pass(self.username, self.password)
-            self.cp = self.uep_factory.get_basic_auth_uep()
+            self.cp_provider.set_user_pass(self.username, self.password)
+            self.cp = self.cp_provider.get_basic_auth_cp()
             owners = self.cp.getOwnerList(self.username)
             log.info("Successfully retrieved org list from server.")
             if len(owners):
@@ -718,8 +718,8 @@ class EnvironmentsCommand(OrgCommand):
     def _do_command(self):
         self._validate_options()
         try:
-            self.uep_factory.set_user_pass(self.username, self.password)
-            self.cp = self.uep_factory.get_basic_auth_uep()
+            self.cp_provider.set_user_pass(self.username, self.password)
+            self.cp = self.cp_provider.get_basic_auth_cp()
             if self.cp.supports_resource('environments'):
                 environments = self._get_enviornments(self.org)
 
@@ -808,11 +808,11 @@ class ServiceLevelCommand(OrgCommand):
             # we'll use the identity certificate. We already know one or the other
             # exists:
             if self.options.username and self.options.password:
-                self.uep_factory.set_user_pass(self.username, self.password)
-                self.cp = self.uep_factory.get_basic_auth_uep()
+                self.cp_provider.set_user_pass(self.username, self.password)
+                self.cp = self.cp_provider.get_basic_auth_cp()
             else:
                 # get an UEP as consumer
-                self.cp = self.uep_factory.get_user_auth_uep()
+                self.cp = self.cp_provider.get_user_auth_cp()
 
             if self.options.unset:
                 self.unset_service_level()
@@ -1000,10 +1000,10 @@ class RegisterCommand(UserPassCommand):
         # Proceed with new registration:
         try:
             if not self.options.activation_keys:
-                self.uep_factory.set_user_pass(self.username, self.password)
-                admin_cp = self.uep_factory.get_basic_auth_uep()
+                self.cp_provider.set_user_pass(self.username, self.password)
+                admin_cp = self.cp_provider.get_basic_auth_cp()
             else:
-                admin_cp = self.uep_factory.get_no_auth_uep()
+                admin_cp = self.cp_provider.get_no_auth_cp()
 
             facts_dic = self.facts.get_facts()
 
@@ -1044,7 +1044,7 @@ class RegisterCommand(UserPassCommand):
         print (_("The system has been registered with ID: %s ")) % (consumer_info["uuid"])
 
         # get a new UEP as the consumer
-        self.cp = self.uep_factory.get_user_auth_uep()
+        self.cp = self.cp_provider.get_user_auth_cp()
 
         # Reload the consumer identity:
         self.identity = inj.FEATURES.require(inj.IDENTITY)

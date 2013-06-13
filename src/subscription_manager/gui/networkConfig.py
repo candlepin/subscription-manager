@@ -56,7 +56,7 @@ class NetworkConfigDialog:
         self.proxyPasswordEntry = self.xml.get_widget("proxyPasswordEntry")
 
         self.cfg = rhsm.config.initConfig()
-        self.uep_factory = inj.require(inj.UEP_FACTORY)
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
 
         # Need to load values before connecting signals because when the dialog
         # starts up it seems to trigger the signals which overwrites the config
@@ -149,7 +149,7 @@ class NetworkConfigDialog:
 
         try:
             self.cfg.save()
-            self.uep_factory.set_connection_info()
+            self.cp_provider.set_connection_info()
         except Exception:
             show_error_window(_("There was an error saving your configuration.") +
                               _("Make sure that you own %s.") % self.cfg.fileName,
@@ -181,7 +181,7 @@ class NetworkConfigDialog:
         proxy_host = remove_scheme(self.cfg.get("server", "proxy_hostname"))
         proxy_port = self.cfg.get_int("server", "proxy_port")
 
-        cp = self.uep_factory.get_no_auth_uep()
+        cp = self.cp_provider.get_no_auth_cp()
 
         try:
             cp.getStatus()

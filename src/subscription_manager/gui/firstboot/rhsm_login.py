@@ -140,7 +140,7 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
         # since it does take some time
         if ConsumerIdentity.exists():
             try:
-                managerlib.unregister(self._parent.backend.uep_factory.get_user_auth_uep(),
+                managerlib.unregister(self._parent.backend.cp_provider.get_user_auth_cp(),
                         self._parent.identity.uuid)
             except socket.error, e:
                 handle_gui_exception(e, e, self._parent.window)
@@ -239,7 +239,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
             cfg.set('server', 'proxy_password', '')
 
         cfg.save()
-        self.backend.uep_factory.set_connection_info()
+        self.backend.cp_provider.set_connection_info()
 
     def apply(self, interface, testing=False):
         """

@@ -20,7 +20,7 @@ from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
 from subscription_manager.identity import Identity
 from subscription_manager.validity import ValidProductDateRangeCalculator
-from subscription_manager.uep_factory import UEPFactory
+from subscription_manager.cp_provider import CPProvider
 
 
 def init_dep_injection():
@@ -43,7 +43,7 @@ def init_dep_injection():
     inj.provide(inj.STATUS_CACHE, StatusCache)
     inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache)
 
-    inj.provide(inj.UEP_FACTORY, UEPFactory())
+    inj.provide(inj.CP_PROVIDER, CPProvider())
 
     # Must come after ent dir, prod dir, conn info, and identity
     inj.provide(inj.CERT_SORTER, CertSorter(lazy_load=True))

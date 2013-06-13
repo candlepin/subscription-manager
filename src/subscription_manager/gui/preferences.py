@@ -47,7 +47,7 @@ class PreferencesDialog(object):
         self.release_backend = release.ReleaseBackend(ent_dir=self.backend.entitlement_dir,
                                                       prod_dir=self.backend.product_dir,
                                                       content_connection=self.backend.content_connection,
-                                                      uep=self.backend.uep_factory.get_user_auth_uep())
+                                                      uep=self.backend.cp_provider.get_user_auth_cp())
 
         self.dialog = GLADE_XML.get_widget('preferences_dialog')
         self.dialog.set_transient_for(parent)
@@ -85,7 +85,7 @@ class PreferencesDialog(object):
         self.sla_combobox.set_sensitive(True)
         self.release_combobox.set_sensitive(True)
 
-        consumer_json = self.backend.uep_factory.get_user_auth_uep().getConsumer(self.identity.uuid)
+        consumer_json = self.backend.cp_provider.get_user_auth_cp().getConsumer(self.identity.uuid)
 
         self.load_releases(consumer_json)
         self.load_servicelevel(consumer_json)
@@ -103,7 +103,7 @@ class PreferencesDialog(object):
 
         current_sla = consumer_json['serviceLevel']
         owner_key = consumer_json['owner']['key']
-        available_slas = self.backend.uep_factory.get_user_auth_uep().getServiceLevelList(owner_key)
+        available_slas = self.backend.cp_provider.get_user_auth_cp().getServiceLevelList(owner_key)
 
         # An empty string entry is used for "un-setting" the system's SLA:
         self.sla_model.append((_("Not Set"), ""))
@@ -158,7 +158,7 @@ class PreferencesDialog(object):
 
         new_sla = model[active][1]
         log.info("SLA changed to: %s" % new_sla)
-        self.backend.uep_factory.get_user_auth_uep().updateConsumer(self.identity.uuid,
+        self.backend.cp_provider.get_user_auth_cp().updateConsumer(self.identity.uuid,
                                         service_level=new_sla)
 
     def _release_changed(self, combobox):
@@ -169,7 +169,7 @@ class PreferencesDialog(object):
             return
         new_release = model[active][1]
         log.info("release changed to: %s" % new_release)
-        self.backend.uep_factory.get_user_auth_uep().updateConsumer(self.identity.uuid,
+        self.backend.cp_provider.get_user_auth_cp().updateConsumer(self.identity.uuid,
                                         release=new_release)
 
     def show(self):

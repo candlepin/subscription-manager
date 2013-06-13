@@ -368,7 +368,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         try:
             self.plugin_manager.run("pre_subscribe", consumer_uuid=self.identity.uuid,
                                     pool_id=pool['id'], quantity=quantity)
-            ents = self.backend.uep_factory.get_user_auth_uep().bindByEntitlementPool(self.identity.uuid, pool['id'], quantity)
+            ents = self.backend.cp_provider.get_user_auth_cp().bindByEntitlementPool(self.identity.uuid, pool['id'], quantity)
             self.plugin_manager.run("post_subscribe", consumer_uuid=self.identity.uuid, entitlement_data=ents)
             managerlib.fetch_certificates(self.backend)
 

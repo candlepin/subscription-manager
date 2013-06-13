@@ -52,7 +52,7 @@ class TestPreferencesDialog(SubManFixture):
 
     def _getPrefDialog(self):
         stub_backend = stubs.StubBackend()
-        stub_backend.uep_factory.user_auth_uep.setConsumer(CONSUMER_DATA)
+        stub_backend.cp_provider.user_auth_cp.setConsumer(CONSUMER_DATA)
 
         stub_backend.product_dir = stubs.StubCertificateDirectory([stubs.StubProductCertificate(stubs.StubProduct("rhel-6"))])
         stub_backend.entitlement_dir = stubs.StubEntitlementDirectory([stubs.StubEntitlementCertificate(stubs.StubProduct("rhel-6"))])

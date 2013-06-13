@@ -18,11 +18,11 @@ import rhsm.connection as connection
 import rhsm.config
 
 
-class UEPFactory(object):
+class CPProvider(object):
 
-    user_auth_uep = None
-    basic_auth_uep = None
-    no_auth_uep = None
+    user_auth_cp = None
+    basic_auth_cp = None
+    no_auth_cp = None
 
     def __init__(self):
         self.set_connection_info()
@@ -55,39 +55,39 @@ class UEPFactory(object):
     def set_user_pass(self, username=None, password=None):
         self.username = username
         self.password = password
-        self.basic_auth_uep = None
+        self.basic_auth_cp = None
 
     def clean(self):
-        self.user_auth_uep = None
-        self.basic_auth_uep = None
-        self.no_auth_uep = None
+        self.user_auth_cp = None
+        self.basic_auth_cp = None
+        self.no_auth_cp = None
 
-    def get_user_auth_uep(self):
-        if not self.user_auth_uep:
-            self.user_auth_uep = connection.UEPConnection(
+    def get_user_auth_cp(self):
+        if not self.user_auth_cp:
+            self.user_auth_cp = connection.UEPConnection(
                     proxy_hostname=self.proxy_hostname,
                     proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user,
                     proxy_password=self.proxy_password,
                     cert_file=self.cert_file, key_file=self.key_file)
-        return self.user_auth_uep
+        return self.user_auth_cp
 
-    def get_basic_auth_uep(self):
-        if not self.basic_auth_uep:
-            self.basic_auth_uep = connection.UEPConnection(
+    def get_basic_auth_cp(self):
+        if not self.basic_auth_cp:
+            self.basic_auth_cp = connection.UEPConnection(
                     proxy_hostname=self.proxy_hostname,
                     proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user,
                     proxy_password=self.proxy_password,
                     username=self.username,
                     password=self.password)
-        return self.basic_auth_uep
+        return self.basic_auth_cp
 
-    def get_no_auth_uep(self):
-        if not self.no_auth_uep:
-            self.no_auth_uep = connection.UEPConnection(
+    def get_no_auth_cp(self):
+        if not self.no_auth_cp:
+            self.no_auth_cp = connection.UEPConnection(
                     proxy_hostname=self.proxy_hostname,
                     proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user,
                     proxy_password=self.proxy_password)
-        return self.no_auth_uep
+        return self.no_auth_cp
