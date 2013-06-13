@@ -177,6 +177,8 @@ class TestMigration(unittest.TestCase):
 
     def test_setting_unauthenticated_proxy(self):
         self.engine.rhsmcfg = MagicMock()
+        self.engine.options = MagicMock()
+        self.engine.options.noproxy = False
 
         rhn_config = {
             "enableProxy": True,
@@ -195,6 +197,8 @@ class TestMigration(unittest.TestCase):
 
     def test_setting_authenticated_proxy(self):
         self.engine.rhsmcfg = MagicMock()
+        self.engine.options = MagicMock()
+        self.engine.options.noproxy = False
 
         rhn_config = {
             "enableProxy": True,
@@ -215,6 +219,8 @@ class TestMigration(unittest.TestCase):
 
     def test_setting_prefixed_proxy(self):
         self.engine.rhsmcfg = MagicMock()
+        self.engine.options = MagicMock()
+        self.engine.options.noproxy = False
 
         rhn_config = {
             "enableProxy": True,
@@ -230,6 +236,23 @@ class TestMigration(unittest.TestCase):
             ]
         self.assertTrue(self.engine.rhsmcfg.set.call_args_list == expected)
         self.engine.rhsmcfg.save.assert_called_once_with()
+
+    def test_noproxy_option(self):
+        self.engine.rhsmcfg = MagicMock()
+        self.engine.options = MagicMock()
+        self.engine.options.noproxy = True
+
+        rhn_config = {
+            "enableProxy": True,
+            "httpProxy": "proxy.example.com:123",
+            "enableProxyAuth": False,
+            }
+        self.engine.rhncfg = rhn_config
+        self.engine.transfer_http_proxy_settings()
+        self.assertEquals("proxy.example.com", self.engine.proxy_host)
+        self.assertEquals("123", self.engine.proxy_port)
+        self.assertEquals(None, self.engine.proxy_user)
+        self.assertEquals(None, self.engine.proxy_pass)
 
     @patch("rhsm.connection.UEPConnection")
     def test_no_server_url_provided(self, mock_uep):

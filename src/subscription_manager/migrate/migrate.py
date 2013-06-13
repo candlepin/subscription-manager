@@ -140,7 +140,7 @@ class MigrationEngine(object):
         self.proxy_host = None
         self.proxy_port = None
         self.proxy_user = None
-        self.proxy_password = None
+        self.proxy_pass = None
 
         self.cp = None
 
@@ -159,6 +159,9 @@ class MigrationEngine(object):
                 "level use --servicelevel=\"\""))
         self.parser.add_option("--serverurl", dest='serverurl',
             help=_("specify the subscription management server to migrate to"))
+        # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
+        self.parser.add_option("--no-proxy", action="store_true", dest='noproxy',
+            help=_("don't use RHN proxy settings with subscription management server"))
 
     def validate_options(self):
         if self.options.servicelevel and self.options.noauto:
@@ -198,21 +201,17 @@ class MigrationEngine(object):
                 log.exception(e)
                 system_exit(1, _("Unable to read RHN proxy settings."))
 
-            log.info("Using proxy %s:%s - transferring settings to rhsm.conf"
-                     % (self.proxy_host, self.proxy_port))
-            self.rhsmcfg.set('server', 'proxy_hostname', self.proxy_host)
-            self.rhsmcfg.set('server', 'proxy_port', self.proxy_port)
-
             if self.rhncfg['enableProxyAuth']:
                 self.proxy_user = self.rhncfg['proxyUser']
                 self.proxy_pass = self.rhncfg['proxyPassword']
-                self.rhsmcfg.set('server', 'proxy_user', self.proxy_user)
-                self.rhsmcfg.set('server', 'proxy_password', self.proxy_pass)
-            else:
-                self.rhsmcfg.set('server', 'proxy_user', '')
-                self.rhsmcfg.set('server', 'proxy_password', '')
 
-            self.rhsmcfg.save()
+            log.info("Using proxy %s:%s" % (self.proxy_host, self.proxy_port))
+            if not self.options.noproxy:
+                self.rhsmcfg.set('server', 'proxy_hostname', self.proxy_host)
+                self.rhsmcfg.set('server', 'proxy_port', self.proxy_port)
+                self.rhsmcfg.set('server', 'proxy_user', self.proxy_user or '')
+                self.rhsmcfg.set('server', 'proxy_password', self.proxy_pass or '')
+                self.rhsmcfg.save()
 
     def get_candlepin_connection(self, username, password, basic_auth=True):
         try:
@@ -225,28 +224,22 @@ class MigrationEngine(object):
         except ServerUrlParseError, e:
             system_exit(-1, _("Error parsing server URL: %s") % e.msg)
 
-        proxy_port = self.proxy_port and int(self.proxy_port)
+        args = {'host': hostname, 'ssl_port': int(port), 'handler': prefix}
 
         if basic_auth:
-            self.cp = UEPConnection(host=hostname,
-                    ssl_port=int(port),
-                    handler=prefix,
-                    username=username,
-                    password=password,
-                    proxy_hostname=self.proxy_host,
-                    proxy_port=proxy_port,
-                    proxy_user=self.proxy_user,
-                    proxy_password=self.proxy_password)
+            args['username'] = username
+            args['password'] = password
         else:
-            self.cp = UEPConnection(host=hostname,
-                    ssl_port=int(port),
-                    handler=prefix,
-                    cert_file=ConsumerIdentity.certpath(),
-                    key_file=ConsumerIdentity.keypath(),
-                    proxy_hostname=self.proxy_host,
-                    proxy_port=proxy_port,
-                    proxy_user=self.proxy_user,
-                    proxy_password=self.proxy_password)
+            args['cert_file'] = ConsumerIdentity.certpath()
+            args['key_file'] = ConsumerIdentity.keypath()
+
+        if not self.options.noproxy:
+            args['proxy_hostname'] = self.proxy_host
+            args['proxy_port'] = self.proxy_port and int(self.proxy_port)
+            args['proxy_user'] = self.proxy_user
+            args['proxy_password'] = self.proxy_pass
+
+        self.cp = UEPConnection(**args)
 
     def check_ok_to_proceed(self, username):
         # check if this machine is already registered to Certicate-based RHN
