@@ -2136,26 +2136,48 @@ class ListCommand(CliCommand):
         print("+-------------------------------------------+")
 
         for cert in certs:
+            # for some certs, order can be empty
+            # so we default the values and populate them if
+            # they exist. BZ974587
+            name = ""
+            sku = ""
+            contract = ""
+            account = ""
+            quantity_used = ""
+            service_level = ""
+            service_type = ""
+
             order = cert.order
+
+            if order:
+                service_level = order.service_level or ""
+                service_type = order.service_type or ""
+                name = order.name
+                sku = order.sku
+                contract = order.contract
+                account = order.account
+                quantity_used = order.quantity_used
+                service_level = order.service_level
+                service_type = order.service_type
+
             pool_id = _("Not Available")
             if hasattr(cert.pool, "id"):
                 pool_id = cert.pool.id
-            service_level = order.service_level or ""
-            service_type = order.service_type or ""
+
             product_names = [p.name for p in cert.products]
             reasons = []
             if cert.subject and 'CN' in cert.subject and cert.subject['CN'] in cert_reasons_map:
                 reasons = cert_reasons_map[cert.subject['CN']]
             print columnize(CONSUMED_LIST, _none_wrap,
-                    order.name,
+                    name,
                     product_names,
-                    order.sku,
-                    order.contract,
-                    order.account,
+                    sku,
+                    contract,
+                    account,
                     cert.serial,
                     pool_id,
                     cert.is_valid(),
-                    order.quantity_used,
+                    quantity_used,
                     service_level,
                     service_type,
                     reasons,
