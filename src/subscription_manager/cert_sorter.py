@@ -63,7 +63,7 @@ class CertSorter(LazyLoader):
     """
     def load(self):
         super(CertSorter, self).load()
-        self.uep = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.identity = inj.require(inj.IDENTITY)
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
@@ -124,20 +124,15 @@ class CertSorter(LazyLoader):
             log.debug("Unregistered, skipping server compliance check.")
             return
 
-        # These may help with virt bugs
-        # Refreshes most/all data between cli/server
-        #certmgr = CertManager(uep=self.uep)
-        #certmgr.update()
-
         # Update installed product information so everything is
         # accounted for.  Time expensive, maybe we only need to
         # sync once?
         installed_mgr = InstalledProductsManager()
-        installed_mgr.update_check(self.uep, self.identity.uuid)
+        installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
 
         # TODO: handle temporarily disconnected use case / caching
         status_cache = inj.require(inj.STATUS_CACHE)
-        status = status_cache.load_status(self.uep, self.identity.uuid)
+        status = status_cache.load_status(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
         if status is None:
             return
 
