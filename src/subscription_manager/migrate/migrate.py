@@ -45,6 +45,7 @@ from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.cli import system_exit
 from subscription_manager.i18n_optparse import OptionParser, \
         USAGE, WrappedIndentedHelpFormatter
+from subscription_manager.productid import ProductDatabase
 from subscription_manager import repolib
 from subscription_manager.utils import parse_server_info, ServerUrlParseError
 
@@ -143,6 +144,7 @@ class MigrationEngine(object):
         self.proxy_pass = None
 
         self.cp = None
+        self.db = ProductDatabase()
 
         self.parser = OptionParser(usage=USAGE, formatter=WrappedIndentedHelpFormatter())
         self.add_parser_options()
@@ -402,8 +404,8 @@ class MigrationEngine(object):
                 if dic_data[channel] != 'none':
                     valid_rhsm_channels.append(channel)
                     log.info("mapping found for: %s = %s", channel, dic_data[channel])
-                    if dic_data[channel] not in applicable_certs:
-                        applicable_certs.append(dic_data[channel])
+                    if (channel, dic_data[channel]) not in applicable_certs:
+                        applicable_certs.append((channel, dic_data[channel]))
                 else:
                     invalid_rhsm_channels.append(channel)
                     log.info("%s is not mapped to any certificates", channel)
@@ -435,12 +437,23 @@ class MigrationEngine(object):
 
         # creates the product directory if it doesn't already exist
         product_dir = ProductDirectory()
-        for cert in applicable_certs:
+        db_modified = False
+        for channel, cert in applicable_certs:
             source_path = os.path.join("/usr/share/rhsm/product", release, cert)
             truncated_cert_name = cert.split('-')[-1]
             destination_path = os.path.join(str(product_dir), truncated_cert_name)
             log.info("copying %s to %s ", source_path, destination_path)
             shutil.copy2(source_path, destination_path)
+
+            # See BZ #972883. Add an entry to the repo db telling subscription-manager
+            # that packages for this product were installed by the RHN repo which
+            # conveniently uses the channel name for the repo name.
+            db_id = truncated_cert_name.split('.pem')[0]
+            self.db.add(db_id, channel)
+            db_modified = True
+
+        if db_modified:
+            self.db.write()
         print _("\nProduct certificates installed successfully to %s.") % str(product_dir)
 
     def clean_up(self, subscribed_channels):
@@ -450,6 +463,8 @@ class MigrationEngine(object):
             os.path.isfile(os.path.join(str(product_dir), "71.pem")):
             try:
                 os.remove(os.path.join(str(product_dir), "68.pem"))
+                self.db.delete("68")
+                self.db.write()
                 log.info("Removed 68.pem due to existence of 71.pem")
             except OSError, e:
                 log.info(e)
@@ -461,6 +476,8 @@ class MigrationEngine(object):
         if is_double_mapped and is_single_mapped:
             try:
                 os.remove(os.path.join(str(product_dir), "180.pem"))
+                self.db.delete("180")
+                self.db.write()
                 log.info("Removed 180.pem")
             except OSError, e:
                 log.info(e)
@@ -690,7 +707,6 @@ class MigrationEngine(object):
                 self.subscribe(consumer, None)
 
         self.enable_extra_channels(subscribed_channels)
-
 
 if __name__ == '__main__':
     engine = MigrationEngine().main()

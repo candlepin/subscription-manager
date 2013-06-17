@@ -514,6 +514,7 @@ class TestMigration(unittest.TestCase):
     def test_deploy_prod_certificates(self, mock_shutil, mock_product_directory):
         mock_product_directory.return_value = "/some/path"
         mock_shutil.return_value = True
+        self.engine.db = MagicMock()
 
         def stub_read_channel_cert_mapping(mappingfile):
             return {"a": "a-1.pem"}
@@ -527,27 +528,35 @@ class TestMigration(unittest.TestCase):
 
         self.engine.deploy_prod_certificates(subscribed_channels)
         mock_shutil.assert_called_with("/usr/share/rhsm/product/RHEL-6/a-1.pem", "/some/path/1.pem")
+        self.engine.db.add.assert_called_with("1", "a")
+        self.engine.db.write.assert_called_with()
 
     @patch("subscription_manager.migrate.migrate.ProductDirectory")
     @patch("os.path.isfile")
     @patch("os.remove")
     def test_clean_up_remove_68_pem(self, mock_remove, mock_isfile, mock_product_directory):
         mock_product_directory.return_value = "/some/path"
+        self.engine.db = MagicMock()
         mock_isfile.side_effect = [True, True]
         self.engine.clean_up([])
         mock_remove.assert_called_with("/some/path/68.pem")
+        self.engine.db.delete.assert_called_with("68")
+        self.engine.db.write.assert_called_with()
 
     @patch("subscription_manager.migrate.migrate.ProductDirectory")
     @patch("os.path.isfile")
     @patch("os.remove")
     def test_clean_up_remove_180_pem(self, mock_remove, mock_isfile, mock_product_directory):
         mock_product_directory.return_value = "/some/path"
+        self.engine.db = MagicMock()
         mock_isfile.side_effect = [False, False]
         self.engine.clean_up([
             "rhel-i386-client-dts-5-beta",
             "rhel-i386-client-dts-5",
             ])
         mock_remove.assert_called_with("/some/path/180.pem")
+        self.engine.db.delete.assert_called_with("180")
+        self.engine.db.write.assert_called_with()
 
     def test_double_mapping_regex(self):
         regex = migrate.DOUBLE_MAPPED
