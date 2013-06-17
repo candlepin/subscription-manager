@@ -183,8 +183,7 @@ class MainWindow(widgets.GladeWidget):
                                                               self.facts)
 
         self.registration_dialog = registergui.RegisterScreen(self.backend, self.facts,
-                                                              self._get_window(),
-                                                              callbacks=[self.registration_changed])
+                                                              self._get_window())
 
         self.preferences_dialog = PreferencesDialog(self.backend,
                                                     self._get_window())
@@ -264,12 +263,6 @@ class MainWindow(widgets.GladeWidget):
 
     def _on_sla_cancel_button_press(self):
         self._perform_unregister()
-
-    def registration_changed(self):
-        log.debug("Registration changed, updating main window.")
-        self.identity.reload()
-        self.installed_tab.update_products()
-        self.refresh()
 
     def refresh(self):
         """ Refresh the UI. """
