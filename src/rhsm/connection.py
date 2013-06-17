@@ -914,11 +914,6 @@ class UEPConnection:
             method = "%s?consumer=%s" % (method, self.sanitize(consumerId))
         return self.conn.request_get(method)
 
-    def getAutoheal(self, consumerId):
-        method = "/consumers/%s/autoheal" % self.sanitize(consumerId)
-        results = self.conn.request_get(method)
-        return results
-
     def getProduct(self, product_id):
         method = "/products/%s" % self.sanitize(product_id)
         return self.conn.request_get(method)
