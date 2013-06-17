@@ -684,7 +684,8 @@ class UEPConnection:
         return self.updateConsumer(consumer_uuid, facts=facts)
 
     def updateConsumer(self, uuid, facts=None, installed_products=None,
-            guest_uuids=None, service_level=None, release=None):
+            guest_uuids=None, service_level=None, release=None,
+            autoheal=None):
         """
         Update a consumer on the server.
 
@@ -703,6 +704,8 @@ class UEPConnection:
             params['facts'] = facts
         if release is not None:
             params['releaseVer'] = release
+        if autoheal is not None:
+            params['autoheal'] = autoheal
 
         # The server will reject a service level that is not available
         # in the consumer's organization, so no need to check if it's safe
