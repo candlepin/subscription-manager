@@ -771,13 +771,53 @@ class EnvironmentsCommand(OrgCommand):
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
+class AutohealCommand(OrgCommand):
+
+    def __init__(self):
+        self.consumerIdentity = ConsumerIdentity
+        shortdesc = _("Manage the autoheal setting for this system")
+        self._org_help_text = \
+            _("specify whether to enable or disable autohealing of subscriptions")
+        super(AutohealCommand, self).__init__("autoheal", shortdesc,
+                                                False)
+
+        self._add_url_options()
+        self.parser.add_option("--enable", dest="enable", action='store_true',
+                help=_("enable autohealing of subscriptions"))
+        self.parser.add_option("--disable", dest="disable", action='store_true',
+                help=_("disable autohealing of subscriptions"))
+
+    def _enable(self):
+        consumer_uuid = self.consumerIdentity.read().getConsumerId()
+        consumer = self.cp.getConsumer(consumer_uuid)
+        self.cp.updateConsumer(consumer_uuid, autoheal=True)
+        print "yo dawg i herd u liek true"
+
+    def _disable(self):
+        consumer_uuid = self.consumerIdentity.read().getConsumerId()
+        consumer = self.cp.getConsumer(consumer_uuid)
+        self.cp.updateConsumer(consumer_uuid, autoheal=False)
+        print "yo dawg i herd u liek false"
+
+    def _do_command(self):
+        """
+        Executes the command.
+        """
+
+        if self.options.autoheal is not None:
+            if self.options.autoheal == True:
+                self._enable()
+            else:
+                self._disable()
+
+
 
 class ServiceLevelCommand(OrgCommand):
 
     def __init__(self):
         self.consumerIdentity = ConsumerIdentity
 
-        shortdesc = _("Manage service levels for this system")
+        shortdesc = _("Manage service levels for this system uber style")
         self._org_help_text = \
             _("specify an organization when listing available service levels using the organization key")
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
@@ -2225,7 +2265,8 @@ class ManagerCLI(CLI):
                     IdentityCommand, OwnersCommand, RefreshCommand, CleanCommand,
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
-                    VersionCommand, RemoveCommand, AttachCommand, PluginsCommand]
+                    VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
+                    AutohealCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):

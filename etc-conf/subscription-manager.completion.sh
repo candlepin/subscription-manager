@@ -9,6 +9,12 @@ _subscription_manager_common_opts="-h --help --proxy --proxyuser --proxypassword
 _subscription_manager_common_url_opts="--serverurl"
 # complete functions for subcommands ($1 - current opt, $2 - previous opt)
 
+_subscription_manager_autoheal()
+{
+  local opts="--enable --disable"
+  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
 _subscription_manager_attach()
 {
   # try to autocomplete pool id's as well
@@ -178,11 +184,12 @@ _subscription_manager()
   prev="${COMP_WORDS[COMP_CWORD-1]}"
 
   # top-level commands and options
-  opts="attach clean config environments facts identity import list orgs
+  opts="attach autoheal clean config environments facts identity import list orgs
         plugins redeem refresh register release remove repos service-level subscribe
         unregister unsubscribe version"
 
   case "${first}" in
+      autoheal|\
       clean|\
       config|\
       environments|\
