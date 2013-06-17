@@ -18,7 +18,6 @@ from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
     NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.branding import get_branding
 from subscription_manager.gui import widgets
-from widgets import SubscriptionsTable
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.utils import friendly_join
 
@@ -87,8 +86,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.top_view.append_column(column)
         cols = []
         cols.append((column, 'text', 'product'))
-
-        self.subscription = SubscriptionsTable(self.subscriptions_view)
 
         column = self.add_text_column(_('Version'), 'version')
         cols.append((column, 'text', 'version'))
@@ -262,14 +259,13 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         validity = selection['validity_note']
         self.validity_text.get_buffer().set_text(validity)
 
-        self.subscription.clear()
-        self.subscription.add_subs(selection['subscription'])
+        self.subscriptions_view.get_buffer().set_text("\n".join(selection['subscription'] or []))
 
     def on_no_selection(self):
         self.product_text.get_buffer().set_text("")
         self.product_arch_text.get_buffer().set_text("")
         self.validity_text.get_buffer().set_text("")
-        self.subscription.clear()
+        self.subscriptions_view.get_buffer().set_text("")
 
     def get_type_map(self):
         return {

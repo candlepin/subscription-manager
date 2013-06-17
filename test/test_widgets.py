@@ -83,7 +83,8 @@ class TestContractSubDetailsWidget(TestSubDetailsWidget):
         details = self.widget(None)
         reasons = ['reason 1', 'reason 2']
         details.show("Some Product", reasons=reasons, start=datetime.now(GMT()), end=datetime.now(GMT()) + timedelta(days=365))
-        result_list = [row[0] for row in details.reasons.message_store]
+        buff = details.details_view.get_buffer()
+        result_list = buff.get_text(buff.get_bounds()[0], buff.get_bounds()[1]).split("\n")
         self.assertEquals(reasons, result_list)
 
     def testVirtOnly(self):
