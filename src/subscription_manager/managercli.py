@@ -37,7 +37,7 @@ import rhsm.connection as connection
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import InstalledProductsManager, ProfileManager
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
-from subscription_manager.certlib import CertLib, ConsumerIdentity
+from subscription_manager.certlib import CertLib, ConsumerIdentity, Disconnected
 from subscription_manager.certmgr import CertManager
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
@@ -150,7 +150,7 @@ def handle_exception(msg, ex):
 
     log.error(msg)
     log.exception(ex)
-    if isinstance(ex, socket.error):
+    if isinstance(ex, socket.error) or isinstance(ex, Disconnected):
         print _("Network error, unable to connect to server.")
         print _("Please see /var/log/rhsm/rhsm.log for more information.")
         sys.exit(-1)

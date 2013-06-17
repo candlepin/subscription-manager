@@ -239,8 +239,8 @@ class UpdateAction(Action):
             expected = self._get_expected_serials(report)
         except socket.error, ex:
             log.exception(ex)
-            log.error('Cannot detach subscriptions while disconnected')
-            return (0, [ex])
+            log.error('Cannot modify subscriptions while disconnected')
+            raise Disconnected()
         missing_serials = self._find_missing_serials(local, expected)
         rogue_serials = self._find_rogue_serials(local, expected)
         self.delete(rogue_serials, report)
