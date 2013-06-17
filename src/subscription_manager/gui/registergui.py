@@ -1013,7 +1013,7 @@ class AsyncBackend(object):
                 # Write the identity cert to disk
                 managerlib.persist_consumer_cert(retval)
                 self.backend.update()
-                cp = self.backend.cp_provider.get_user_auth_cp()
+                cp = self.backend.cp_provider.get_consumer_auth_cp()
 
             ProfileManager().update_check(cp, retval['uuid'])
 
@@ -1031,7 +1031,7 @@ class AsyncBackend(object):
         try:
             if not current_sla:
                 log.info("Saving selected service level for this system.")
-                self.backend.cp_provider.get_user_auth_cp().updateConsumer(uuid,
+                self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(uuid,
                         service_level=dry_run_result.service_level)
 
             log.info("Binding to subscriptions at service level: %s" %
@@ -1042,7 +1042,7 @@ class AsyncBackend(object):
                 log.info("  pool %s quantity %s" % (pool_id, quantity))
                 self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid,
                                         pool_id=pool_id, quantity=quantity)
-                ents = self.backend.cp_provider.get_user_auth_cp().bindByEntitlementPool(uuid, pool_id, quantity)
+                ents = self.backend.cp_provider.get_consumer_auth_cp().bindByEntitlementPool(uuid, pool_id, quantity)
                 self.plugin_manager.run("post_subscribe", consumer_uuid=uuid, entitlement_data=ents)
             managerlib.fetch_certificates(self.backend)
         except Exception, e:
@@ -1058,7 +1058,7 @@ class AsyncBackend(object):
         self.queue.put((callback, None, None))
 
     def _find_suitable_service_levels(self, consumer, facts):
-        consumer_json = self.backend.cp_provider.get_user_auth_cp().getConsumer(
+        consumer_json = self.backend.cp_provider.get_consumer_auth_cp().getConsumer(
                 consumer.getConsumerId())
 
         if 'serviceLevel' not in consumer_json:
@@ -1084,16 +1084,16 @@ class AsyncBackend(object):
             log.debug("Using system's current service level: %s" %
                     current_sla)
         else:
-            available_slas = self.backend.cp_provider.get_user_auth_cp().getServiceLevelList(owner_key)
+            available_slas = self.backend.cp_provider.get_consumer_auth_cp().getServiceLevelList(owner_key)
             log.debug("Available service levels: %s" % available_slas)
 
         # Will map service level (string) to the results of the dry-run
         # autobind results for each SLA that covers all installed products:
         suitable_slas = {}
-        certmgr = CertManager(uep=self.backend.cp_provider.get_user_auth_cp(), facts=facts)
+        certmgr = CertManager(uep=self.backend.cp_provider.get_consumer_auth_cp(), facts=facts)
         certmgr.update()
         for sla in available_slas:
-            dry_run_json = self.backend.cp_provider.get_user_auth_cp().dryRunBind(consumer.uuid, sla)
+            dry_run_json = self.backend.cp_provider.get_consumer_auth_cp().dryRunBind(consumer.uuid, sla)
             dry_run = DryRunResult(sla, dry_run_json, self.backend.cs)
 
             # If we have a current SLA for this system, we do not need

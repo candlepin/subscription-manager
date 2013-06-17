@@ -438,7 +438,7 @@ class CliCommand(AbstractCLICommand):
             # we use the defaults from connection module init
             # we've set self.proxy* here, so we'll use them if they
             # are set
-            self.cp = self.cp_provider.get_user_auth_cp()
+            self.cp = self.cp_provider.get_consumer_auth_cp()
 
             # no auth cp for get / (resources) and
             # get /status (status and versions)
@@ -812,7 +812,7 @@ class ServiceLevelCommand(OrgCommand):
                 self.cp = self.cp_provider.get_basic_auth_cp()
             else:
                 # get an UEP as consumer
-                self.cp = self.cp_provider.get_user_auth_cp()
+                self.cp = self.cp_provider.get_consumer_auth_cp()
 
             if self.options.unset:
                 self.unset_service_level()
@@ -1044,7 +1044,7 @@ class RegisterCommand(UserPassCommand):
         print (_("The system has been registered with ID: %s ")) % (consumer_info["uuid"])
 
         # get a new UEP as the consumer
-        self.cp = self.cp_provider.get_user_auth_cp()
+        self.cp = self.cp_provider.get_consumer_auth_cp()
 
         # Reload the consumer identity:
         self.identity = inj.FEATURES.require(inj.IDENTITY)

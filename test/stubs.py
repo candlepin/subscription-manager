@@ -495,7 +495,7 @@ class StubCertSorter(CertSorter):
 
 class StubCPProvider(object):
 
-    user_auth_cp = StubUEP()
+    consumer_auth_cp = StubUEP()
     basic_auth_cp = StubUEP()
     no_auth_cp = StubUEP()
 
@@ -509,7 +509,7 @@ class StubCPProvider(object):
                 proxy_port_arg=None,
                 proxy_user_arg=None,
                 proxy_password_arg=None):
-        self.user_auth_cp = StubUEP()
+        self.consumer_auth_cp = StubUEP()
         self.basic_auth_cp = StubUEP()
         self.no_auth_cp = StubUEP()
 
@@ -519,8 +519,8 @@ class StubCPProvider(object):
     def clean(self):
         pass
 
-    def get_user_auth_cp(self):
-        return self.user_auth_cp
+    def get_consumer_auth_cp(self):
+        return self.consumer_auth_cp
 
     def get_basic_auth_cp(self):
         return self.basic_auth_cp

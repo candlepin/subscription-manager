@@ -48,7 +48,7 @@ class RedeemDialog(widgets.GladeWidget):
 
         # TODO:  Validate email address?
         try:
-            self.backend.cp_provider.get_user_auth_cp().activateMachine(self.identity.uuid, email)
+            self.backend.cp_provider.get_consumer_auth_cp().activateMachine(self.identity.uuid, email)
             self.hide()
         except Exception, e:
             handle_gui_exception(e,

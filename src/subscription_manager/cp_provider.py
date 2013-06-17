@@ -20,7 +20,7 @@ import rhsm.config
 
 class CPProvider(object):
 
-    user_auth_cp = None
+    consumer_auth_cp = None
     basic_auth_cp = None
     no_auth_cp = None
 
@@ -58,19 +58,19 @@ class CPProvider(object):
         self.basic_auth_cp = None
 
     def clean(self):
-        self.user_auth_cp = None
+        self.consumer_auth_cp = None
         self.basic_auth_cp = None
         self.no_auth_cp = None
 
-    def get_user_auth_cp(self):
-        if not self.user_auth_cp:
-            self.user_auth_cp = connection.UEPConnection(
+    def get_consumer_auth_cp(self):
+        if not self.consumer_auth_cp:
+            self.consumer_auth_cp = connection.UEPConnection(
                     proxy_hostname=self.proxy_hostname,
                     proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user,
                     proxy_password=self.proxy_password,
                     cert_file=self.cert_file, key_file=self.key_file)
-        return self.user_auth_cp
+        return self.consumer_auth_cp
 
     def get_basic_auth_cp(self):
         if not self.basic_auth_cp:

@@ -93,7 +93,7 @@ class Backend(object):
 
         self.product_dir = ProductDirectory()
         self.entitlement_dir = EntitlementDirectory()
-        self.certlib = CertLib(uep=self.cp_provider.get_user_auth_cp())
+        self.certlib = CertLib(uep=self.cp_provider.get_consumer_auth_cp())
 
         self.product_monitor = file_monitor.Monitor(self.product_dir.path)
         self.entitlement_monitor = file_monitor.Monitor(
@@ -127,7 +127,7 @@ class Backend(object):
         self.cp_provider.set_connection_info()
 
         # Holds a reference to the old uep:
-        self.certlib = CertLib(uep=self.cp_provider.get_user_auth_cp())
+        self.certlib = CertLib(uep=self.cp_provider.get_consumer_auth_cp())
 
     def create_content_connection(self):
         self.content_connection = self._create_content_connection()
@@ -174,7 +174,7 @@ class MainWindow(widgets.GladeWidget):
         self.facts.get_facts()
 
         log.debug("Client Versions: %s " % get_client_versions())
-        log.debug("Server Versions: %s " % get_server_versions(self.backend.cp_provider.get_user_auth_cp()))
+        log.debug("Server Versions: %s " % get_server_versions(self.backend.cp_provider.get_consumer_auth_cp()))
 
         self.product_dir = prod_dir or self.backend.product_dir
         self.entitlement_dir = ent_dir or self.backend.entitlement_dir
@@ -314,7 +314,7 @@ class MainWindow(widgets.GladeWidget):
 
         if self.identity.uuid:
             try:
-                consumer = self.backend.cp_provider.get_user_auth_cp().getConsumer(self.identity.uuid, None, None)
+                consumer = self.backend.cp_provider.get_consumer_auth_cp().getConsumer(self.identity.uuid, None, None)
                 can_redeem = consumer['canActivate']
             except Exception:
                 can_redeem = False
@@ -344,7 +344,7 @@ class MainWindow(widgets.GladeWidget):
 
     def _perform_unregister(self):
         try:
-            managerlib.unregister(self.backend.cp_provider.get_user_auth_cp(), self.identity.uuid)
+            managerlib.unregister(self.backend.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
         except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, _("<b>Errors were encountered during unregister.</b>") +
