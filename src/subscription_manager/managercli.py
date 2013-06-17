@@ -775,6 +775,7 @@ class AutohealCommand(OrgCommand):
 
     def __init__(self):
         self.consumerIdentity = ConsumerIdentity
+
         shortdesc = _("Manage the autoheal setting for this system")
         self._org_help_text = \
             _("specify whether to enable or disable autohealing of subscriptions")
@@ -791,24 +792,31 @@ class AutohealCommand(OrgCommand):
         consumer_uuid = self.consumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
         self.cp.updateConsumer(consumer_uuid, autoheal=True)
-        print "yo dawg i herd u liek true"
 
     def _disable(self):
         consumer_uuid = self.consumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
         self.cp.updateConsumer(consumer_uuid, autoheal=False)
-        print "yo dawg i herd u liek false"
+
+    def _validate_options(self):
+        if not self.consumerIdentity.existsAndValid():
+            if not (self.options.username and self.options.password):
+                print(_("Error: you must register or specify --username and --password to list service levels"))
+                sys.exit(-1)
+            else:
+                print(NOT_REGISTERED)
+                sys.exit(-1)
 
     def _do_command(self):
-        """
-        Executes the command.
-        """
+        self._validate_options()
 
-        if self.options.autoheal is not None:
-            if self.options.autoheal == True:
+        if self.options.enable is not None:
+            if self.options.enable == True:
                 self._enable()
-            else:
-                self._disable()
+        else:
+            if self.options.disable is not None:
+                if self.options.disable == True:
+                    self._disable()
 
 
 
@@ -817,7 +825,7 @@ class ServiceLevelCommand(OrgCommand):
     def __init__(self):
         self.consumerIdentity = ConsumerIdentity
 
-        shortdesc = _("Manage service levels for this system uber style")
+        shortdesc = _("Manage service levels for this system kekek")
         self._org_help_text = \
             _("specify an organization when listing available service levels using the organization key")
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
