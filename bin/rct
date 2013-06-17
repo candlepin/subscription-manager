@@ -45,6 +45,10 @@ if __name__ == '__main__':
     except SystemExit, e:
         #this is a non-exceptional exception thrown by Python 2.4, just
         #re-raise, bypassing handle_exception
+        try:
+            sys.stdout.flush()
+        except IOError:
+            pass
         raise e
     except KeyboardInterrupt:
         sys.stderr.write("\n" + _("User interrupted process."))
