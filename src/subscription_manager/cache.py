@@ -210,7 +210,6 @@ class StatusCache(CacheManager):
         """
         try:
             self._sync_with_server(uep, uuid)
-            self.write_cache()
             return self.server_status
         except SSL.SSLError, ex:
             log.exception(ex)
@@ -226,21 +225,21 @@ class StatusCache(CacheManager):
         # then we are disconnected
         except socket.error, ex:
             log.exception(ex)
-            if not self._cache_exists():
+            if not self._cache_exists() and not self.server_status:
                 log.error("Server unreachable, registered, but no cache exists.")
                 return None
 
             log.warn("Unable to reach server, using cached status.")
-            return self._read_cache()
+            return self.server_status or self._read_cache()
 
         except connection.NetworkException, ex:
             log.exception(ex)
-            if not self._cache_exists():
+            if not self._cache_exists() and not self.server_status:
                 log.error("Server unreachable, registered, but no cache exists.")
                 raise ex
 
             log.warn("Unable to reach server, using cached status.")
-            return self._read_cache()
+            return self.server_status or self._read_cache()
 
     def to_dict(self):
         return self.server_status
@@ -248,6 +247,11 @@ class StatusCache(CacheManager):
     def _load_data(self, open_file):
         json_str = open_file.read()
         return json.loads(json_str)
+
+    # When the program ends, if there is a newer response, write it
+    def __del__(self):
+        if self.server_status:
+            self.write_cache()
 
 
 class ProductStatusCache(StatusCache):

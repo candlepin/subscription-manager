@@ -262,7 +262,13 @@ class TestStatusCache(SubManFixture):
         self.status_cache.load_status(uep, "SOMEUUID")
 
         self.assertEquals(dummy_status, self.status_cache.server_status)
-        self.assertEquals(1, self.status_cache.write_cache.call_count)
+
+        # Verify write doesn't occur until the cache is destroyed
+        self.assertEquals(0, self.status_cache.write_cache.call_count)
+        # Hold on to a reference
+        write_cache_holder = self.status_cache.write_cache
+        del self.status_cache
+        self.assertEquals(1, write_cache_holder.call_count)
 
     def test_server_no_compliance_call(self):
         uep = Mock()
