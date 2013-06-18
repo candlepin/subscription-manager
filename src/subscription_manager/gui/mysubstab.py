@@ -23,7 +23,6 @@ import gtk
 from rhsm.certificate import GMT
 
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
-import subscription_manager.injection as inj
 from subscription_manager.injection import require, IDENTITY
 from subscription_manager.certlib import Disconnected
 from subscription_manager.injection import IDENTITY, require
@@ -130,7 +129,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         if self.identity.is_valid():
             try:
-                self.backend.uep.unbindBySerial(self.identity.uuid, serial)
+                self.backend.cp_provider.get_consumer_auth_cp().unbindBySerial(self.identity.uuid, serial)
             except Exception, e:
                 handle_gui_exception(e, _("There was an error removing %s with serial number %s") %
                                          (selection['subscription'], serial),
@@ -162,8 +161,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         Pulls the entitlement certificates and updates the subscription model.
         """
         self.store.clear()
-        self.cs = inj.require(inj.CERT_SORTER,
-                self.product_dir, self.entitlement_dir, self.backend.uep)
         sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
         for idx, group in enumerate(sorter.groups):
             self._add_group(idx, group)
@@ -253,10 +250,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                         for product in cert.products]
 
         reasons = []
-        if self.cs.are_reasons_supported():
-            reasons = self.cs.reasons.get_subscription_reasons(cert.subject['CN'])
+        if self.backend.cs.are_reasons_supported():
+            reasons = self.backend.cs.reasons.get_subscription_reasons(cert.subject['CN'])
             if not reasons:
-                if cert in self.cs.valid_entitlement_certs:
+                if cert in self.backend.cs.valid_entitlement_certs:
                     reasons.append(_('Subscription is current.'))
                 else:
                     if cert.valid_range.end() < datetime.now(GMT()):
@@ -340,7 +337,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             return EXPIRING_IMG
 
         if cert.subject and 'CN' in cert.subject and \
-                self.cs.reasons.get_subscription_reasons(cert.subject['CN']):
+                self.backend.cs.reasons.get_subscription_reasons(cert.subject['CN']):
             return WARNING_IMG
 
         return None
