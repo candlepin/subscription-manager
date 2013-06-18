@@ -19,14 +19,28 @@ import rhsm.config
 
 
 class CPProvider(object):
+    """
+    CPProvider provides candlepin connections of varying authentication levels
+    in order to avoid creating more than we need, and reuse the ones we have.
+
+    Please try not to hold a self.cp or self.uep, instead the instance of CPProvider
+    and use get_X_auth_cp() when a connection is needed.
+
+    consumer_auth_cp: authenticates with consumer cert/key
+    basic_auth_cp: also called admin_auth uses a username/password
+    no_auth_cp: no authentication
+    """
 
     consumer_auth_cp = None
     basic_auth_cp = None
     no_auth_cp = None
 
+    # Initialize with default connection info from the config file
     def __init__(self):
         self.set_connection_info()
 
+    # Reread the config file and prefer arguments over config values
+    # then recreate connections
     def set_connection_info(self,
                 host=None,
                 ssl_port=None,
@@ -52,11 +66,14 @@ class CPProvider(object):
         self.proxy_password = proxy_password_arg or cfg.get('server', 'proxy_password')
         self.clean()
 
+    # Set username and password used for basic_auth without
+    # modifying previously set options
     def set_user_pass(self, username=None, password=None):
         self.username = username
         self.password = password
         self.basic_auth_cp = None
 
+    # Force connections to be re-initialized
     def clean(self):
         self.consumer_auth_cp = None
         self.basic_auth_cp = None

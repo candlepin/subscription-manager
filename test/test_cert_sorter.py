@@ -17,7 +17,7 @@ import subscription_manager.injection as inj
 from fixture import SubManFixture
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
     StubEntitlementDirectory, StubProductDirectory, \
-    StubUEP, StubCPProvider, StubCertSorter
+    StubUEP, StubCertSorter
 import subscription_manager.cert_sorter
 from subscription_manager.cert_sorter import CertSorter, UNKNOWN
 from subscription_manager.cache import StatusCache
@@ -86,7 +86,6 @@ class CertSorterTests(SubManFixture):
                 return_value=SAMPLE_COMPLIANCE_JSON)
         self.status_mgr.write_cache = Mock()
         inj.provide(inj.STATUS_CACHE, self.status_mgr)
-        inj.provide(inj.CP_PROVIDER, StubCPProvider())
         inj.provide(inj.PROD_DIR, self.prod_dir)
         inj.provide(inj.ENT_DIR, self.ent_dir)
         self.sorter = CertSorter()

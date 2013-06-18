@@ -481,8 +481,8 @@ class UserPassCommand(CliCommand):
         self.parser.add_option("--password", dest="password",
                                help=_("password to use when authorizing against the server"))
 
-    #@staticmethod
-    def _get_username_and_password(self, username, password):
+    @staticmethod
+    def _get_username_and_password(username, password):
         """
         Safely get a username and password from the tty, without echoing.
         if either username or password are provided as arguments, they will
@@ -495,7 +495,6 @@ class UserPassCommand(CliCommand):
         if not password:
             while not password:
                 password = getpass.getpass(_("Password: "))
-        self.cp_provider.set_user_pass(username, password)
         return (username, password)
 
     # lazy load the username and password, prompting for them if they weren't

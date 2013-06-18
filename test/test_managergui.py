@@ -8,7 +8,7 @@ import mock
 
 import stubs
 from subscription_manager.gui import managergui, registergui
-from subscription_manager.injection import provide, IDENTITY, CERT_SORTER, \
+from subscription_manager.injection import provide, IDENTITY, \
         PRODUCT_DATE_RANGE_CALCULATOR, PROD_DIR
 
 
@@ -27,8 +27,6 @@ class TestManagerGuiMainWindow(SubManFixture):
         managergui.Facts = stubs.StubFacts()
 
         provide(PROD_DIR, stubs.StubProductDirectory([]))
-        stub_sorter = stubs.StubCertSorter()
-        provide(CERT_SORTER, stub_sorter)
         provide(PRODUCT_DATE_RANGE_CALCULATOR, mock.Mock())
 
         managergui.MainWindow(backend=stubs.StubBackend(), facts=stubs.StubFacts(),

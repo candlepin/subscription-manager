@@ -551,8 +551,6 @@ class InstalledProductStatusTests(SubManFixture):
     def test_entitlement_for_not_installed_product_shows_nothing(self):
         product_directory = StubProductDirectory([])
         provide(PROD_DIR, product_directory)
-        stub_sorter = StubCertSorter()
-        provide(CERT_SORTER, stub_sorter)
 
         product_status = get_installed_product_status(product_directory,
                 None, StubUEP())
