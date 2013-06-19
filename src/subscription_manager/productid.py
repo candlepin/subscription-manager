@@ -26,7 +26,7 @@ import yum
 from rhsm.certificate import create_from_pem
 
 from subscription_manager.certdirectory import Directory, ProductDirectory
-from subscription_manager import plugins
+from subscription_manager.injection import PLUGIN_MANAGER, require
 
 _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -137,7 +137,7 @@ class ProductManager:
         self.db.read()
         self.meta_data_errors = []
 
-        self.plugin_manager = plugins.get_plugin_manager()
+        self.plugin_manager = require(PLUGIN_MANAGER)
 
     def update(self, yb):
         if yb is None:
@@ -273,8 +273,7 @@ class ProductManager:
         # collect info, then do the needful later, so we can hook
         # up a plugin in between and let it munge these lists, so a plugin
         # could blacklist a product cert for example.
-        # TODO: insert "pre_product_id_install" hook
-
+        self.plugin_manager.run('pre_product_id_install', product_list=products_to_install)
         for (product, cert) in products_to_install:
             fn = '%s.pem' % product.id
             path = self.pdir.abspath(fn)

@@ -33,10 +33,10 @@ from subscription_manager.cache import InstalledProductsManager, ProfileManager
 from subscription_manager.certmgr import CertManager
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
-from subscription_manager.injection import IDENTITY, require
+from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require
 from subscription_manager import managerlib
-from subscription_manager import plugins
-from subscription_manager.utils import is_valid_server_info, MissingCaCertException, parse_server_info, restart_virt_who, ServerUrlParseError
+from subscription_manager.utils import is_valid_server_info, MissingCaCertException, \
+        parse_server_info, restart_virt_who, ServerUrlParseError
 
 from subscription_manager.gui.utils import handle_gui_exception, show_error_window
 from subscription_manager.gui.autobind import DryRunResult, \
@@ -944,7 +944,7 @@ class AsyncBackend(object):
 
     def __init__(self, backend):
         self.backend = backend
-        self.plugin_manager = plugins.get_plugin_manager()
+        self.plugin_manager = require(PLUGIN_MANAGER)
         self.queue = Queue.Queue()
 
     def _get_owner_list(self, username, callback):
