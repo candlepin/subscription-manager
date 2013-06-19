@@ -31,7 +31,6 @@ import sys
 
 _ = gettext.gettext
 
-
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
@@ -95,11 +94,17 @@ def gather_entries(entries_string):
 
 class DmiInfo(object):
 
-    def __init__(self):
+    def __init__(self, hardware_info, dump_file=None):
+        self.hardware_info = hardware_info
+        self.dump_file = dump_file
+        self.socket_designation = []
         self.info = self.get_gmi_info()
 
     def get_gmi_info(self):
         import dmidecode
+        if self.dump_file:
+            dmidecode.set_dev(self.dump_file)
+
         dmiinfo = {}
         dmi_data = {
             "dmi.bios.": self._read_dmi(dmidecode.bios),
@@ -117,6 +122,20 @@ class DmiInfo(object):
                 dmiinfo = self._get_dmi_data(func, tag, dmiinfo)
         except Exception, e:
             log.warn(_("Error reading system DMI information: %s"), e)
+
+        # cpu topology reporting on xen dom0 machines is wrong. So
+        # if we are a xen dom0, and we found socket info in dmiinfo,
+        # replace our normal cpu socket calculation with the dmiinfo one
+        # we have to do it after the virt data and cpu data collection
+        if 'virt.host_type' in self.hardware_info:
+            if self.hardware_info['virt.host_type'].find('dom0') > -1:
+                if self.socket_designation:
+                    socket_count = len(self.socket_designation)
+                    self.hardware_info['cpu.cpu_socket(s)'] = socket_count
+                    if 'cpu.cpu(s)' in self.hardware_info:
+                        self.hardware_info['cpu.core(s)_per_socket'] = \
+                                int(self.hardware_info['cpu.cpu(s)']) / socket_count
+
         return dmiinfo
 
     def _read_dmi(self, func):
@@ -129,8 +148,17 @@ class DmiInfo(object):
     def _get_dmi_data(self, func, tag, ddict):
         for key, value in func.items():
             for key1, value1 in value['data'].items():
+                # FIXME: this loses useful data...
                 if not isinstance(value1, str):
+                    # we are skipping things like int and bool values, as
+                    # well as lists and dicts
                     continue
+
+                # keep track of any cpu socket info we find, we have to do
+                # it here, since we flatten it and lose the info creating nkey
+                if tag == 'dmi.processor.' and key1 == 'Socket Designation':
+                    self.socket_designation.append(value1)
+
                 nkey = ''.join([tag, key1.lower()]).replace(" ", "_")
                 ddict[nkey] = str(value1)
 
@@ -578,7 +606,12 @@ class Hardware:
             log.debug("not looking for dmi info due to system arch '%s'" % arch)
             platform_specific_info = {}
         else:
-            platform_specific_info = DmiInfo().info
+            if self.testing and self.prefix:
+                dump_file = "%s/dmi.dump" % self.prefix
+                platform_specific_info = DmiInfo(self.allhw, dump_file=dump_file).info
+            else:
+                platform_specific_info = DmiInfo(self.allhw).info
+
         self.allhw.update(platform_specific_info)
 
     def get_virt_uuid(self):
@@ -622,6 +655,8 @@ class Hardware:
                             self.get_network_info,
                             self.get_network_interfaces,
                             self.get_virt_info,
+                            # this has to happen after everything else, since
+                            # it expects to check virt and processor info
                             self.get_platform_specific_info]
         # try each hardware method, and try/except around, since
         # these tend to be fragile
@@ -631,6 +666,7 @@ class Hardware:
             except Exception, e:
                 log.warn("%s" % hardware_method)
                 log.warn("Hardware detection failed: %s" % e)
+
         #we need to know the DMI info and VirtInfo before determining UUID.
         #Thus, we can't figure it out within the main data collection loop.
         if self.allhw.get('virt.is_guest'):
