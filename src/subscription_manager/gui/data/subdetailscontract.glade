@@ -236,15 +236,15 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkTreeView" id="details_view">
+                              <widget class="GtkTextView" id="details_view">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="rules_hint">True</property>
-                                <property name="enable_search">False</property>
-                                <property name="search_column">0</property>
-                                <property name="show_expanders">False</property>
+                                <property name="pixels_above_lines">5</property>
+                                <property name="editable">False</property>
+                                <property name="left_margin">10</property>
+                                <property name="cursor_visible">False</property>
                                 <accessibility>
-                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Status Details Table</atkproperty>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Status Details</atkproperty>
                                 </accessibility>
                               </widget>
                               <packing>
@@ -252,7 +252,7 @@
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">8</property>
                                 <property name="bottom_attach">9</property>
-                                <property name="y_options">GTK_SHRINK</property>
+                                <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>

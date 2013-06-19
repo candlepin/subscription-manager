@@ -19,7 +19,6 @@ import random
 import tempfile
 
 from subscription_manager.cert_sorter import CertSorter
-from subscription_manager.reasons import Reasons
 
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """
@@ -414,10 +413,11 @@ class StubUEP:
 
 class StubBackend:
     def __init__(self, uep=StubUEP()):
-        self.uep = uep
+        self.cp_provider = StubCPProvider()
         self.entitlement_dir = None
         self.product_dir = None
         self.content_connection = None
+        self.cs = StubCertSorter()
 
     def monitor_certs(self, callback):
         pass
@@ -484,11 +484,46 @@ class StubCertLib:
 
 class StubCertSorter(CertSorter):
 
-    def __init__(self, prod_dir, ent_dir=None):
-        super(StubCertSorter, self).__init__(prod_dir, ent_dir, None)
-        self.reasons = Reasons([], self)
+    def __init__(self):
+        super(StubCertSorter, self).__init__()
 
     def _parse_server_status(self):
         # Override this method to just leave all fields uninitialized so
         # tests can do whatever they wish with them.
         pass
+
+
+class StubCPProvider(object):
+
+    consumer_auth_cp = StubUEP()
+    basic_auth_cp = StubUEP()
+    no_auth_cp = StubUEP()
+
+    def set_connection_info(self,
+                host=None,
+                ssl_port=None,
+                handler=None,
+                cert_file=None,
+                key_file=None,
+                proxy_hostname_arg=None,
+                proxy_port_arg=None,
+                proxy_user_arg=None,
+                proxy_password_arg=None):
+        self.consumer_auth_cp = StubUEP()
+        self.basic_auth_cp = StubUEP()
+        self.no_auth_cp = StubUEP()
+
+    def set_user_pass(self, username=None, password=None):
+        pass
+
+    def clean(self):
+        pass
+
+    def get_consumer_auth_cp(self):
+        return self.consumer_auth_cp
+
+    def get_basic_auth_cp(self):
+        return self.basic_auth_cp
+
+    def get_no_auth_cp(self):
+        return self.no_auth_cp

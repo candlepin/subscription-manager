@@ -17,7 +17,7 @@
 # in this software or its documentation.
 #
 
-from subscription_manager.injection import require, IDENTITY
+from subscription_manager.injection import require, IDENTITY, CERT_SORTER, CP_PROVIDER
 
 import gettext
 import locale
@@ -86,17 +86,14 @@ class Backend(object):
 
     def __init__(self):
         self.identity = require(IDENTITY)
-        self.create_uep(cert_file=ConsumerIdentity.certpath(),
-                        key_file=ConsumerIdentity.keypath())
+        self.cp_provider = require(CP_PROVIDER)
+        self.create_uep()
 
         self.create_content_connection()
-        # we don't know the user/pass yet, so no point in
-        # creating an admin uep till we need it
-        self.admin_uep = None
 
         self.product_dir = ProductDirectory()
         self.entitlement_dir = EntitlementDirectory()
-        self.certlib = CertLib(uep=self.uep)
+        self.certlib = CertLib(uep=self.cp_provider.get_consumer_auth_cp())
 
         self.product_monitor = file_monitor.Monitor(self.product_dir.path)
         self.entitlement_monitor = file_monitor.Monitor(
@@ -110,34 +107,27 @@ class Backend(object):
         self.entitlement_monitor.connect("changed",
                 lambda monitor: self.entitlement_dir.refresh())
 
+        self.cs = require(CERT_SORTER)
+
+        # Only need to refresh here, rather than in every file
+        def on_cert_change(filemonitor):
+            self.cs.load()
+
+        self.monitor_certs(on_cert_change)
+
     # make a create that does the init
     # and a update() for a name
 
     def update(self):
-        self.create_uep(cert_file=ConsumerIdentity.certpath(),
-                        key_file=ConsumerIdentity.keypath())
+        self.create_uep()
         self.content_connection = self._create_content_connection()
 
-    def create_uep(self, cert_file=None, key_file=None):
+    def create_uep(self):
         # Re-initialize our connection:
-        self.uep = self._create_uep(cert_file=cert_file,
-                                    key_file=key_file)
-        # Holds a reference to the old uep:
-        self.certlib = CertLib(uep=self.uep)
+        self.cp_provider.set_connection_info()
 
-    def _create_uep(self, username=None, password=None, cert_file=None, key_file=None):
-        return connection.UEPConnection(
-            host=cfg.get('server', 'hostname'),
-            ssl_port=cfg.get_int('server', 'port'),
-            handler=cfg.get('server', 'prefix'),
-            proxy_hostname=cfg.get('server', 'proxy_hostname'),
-            proxy_port=cfg.get_int('server', 'proxy_port'),
-            proxy_user=cfg.get('server', 'proxy_user'),
-            proxy_password=cfg.get('server', 'proxy_password'),
-            username=username,
-            password=password,
-            cert_file=cert_file,
-            key_file=key_file)
+        # Holds a reference to the old uep:
+        self.certlib = CertLib(uep=self.cp_provider.get_consumer_auth_cp())
 
     def create_content_connection(self):
         self.content_connection = self._create_content_connection()
@@ -150,9 +140,6 @@ class Backend(object):
                                             proxy_port=cfg.get_int('server', 'proxy_port'),
                                             proxy_user=cfg.get('server', 'proxy_user'),
                                             proxy_password=cfg.get('server', 'proxy_password'))
-
-    def create_admin_uep(self, username=None, password=None):
-        self.admin_uep = self._create_uep(username=username, password=password)
 
     def monitor_certs(self, callback):
         self.product_monitor.connect('changed', callback)
@@ -187,7 +174,7 @@ class MainWindow(widgets.GladeWidget):
         self.facts.get_facts()
 
         log.debug("Client Versions: %s " % get_client_versions())
-        log.debug("Server Versions: %s " % get_server_versions(self.backend.uep))
+        log.debug("Server Versions: %s " % get_server_versions(self.backend.cp_provider.get_consumer_auth_cp()))
 
         self.product_dir = prod_dir or self.backend.product_dir
         self.entitlement_dir = ent_dir or self.backend.entitlement_dir
@@ -196,8 +183,7 @@ class MainWindow(widgets.GladeWidget):
                                                               self.facts)
 
         self.registration_dialog = registergui.RegisterScreen(self.backend, self.facts,
-                                                              self._get_window(),
-                                                              callbacks=[self.registration_changed])
+                                                              self._get_window())
 
         self.preferences_dialog = PreferencesDialog(self.backend,
                                                     self._get_window())
@@ -278,12 +264,6 @@ class MainWindow(widgets.GladeWidget):
     def _on_sla_cancel_button_press(self):
         self._perform_unregister()
 
-    def registration_changed(self):
-        log.debug("Registration changed, updating main window.")
-        self.identity.reload()
-        self.installed_tab.update_products()
-        self.refresh()
-
     def refresh(self):
         """ Refresh the UI. """
         # Show the All Subscriptions tab if registered, hide it otherwise:
@@ -327,7 +307,7 @@ class MainWindow(widgets.GladeWidget):
 
         if self.identity.uuid:
             try:
-                consumer = self.backend.uep.getConsumer(self.identity.uuid, None, None)
+                consumer = self.backend.cp_provider.get_consumer_auth_cp().getConsumer(self.identity.uuid, None, None)
                 can_redeem = consumer['canActivate']
             except Exception:
                 can_redeem = False
@@ -357,7 +337,7 @@ class MainWindow(widgets.GladeWidget):
 
     def _perform_unregister(self):
         try:
-            managerlib.unregister(self.backend.uep, self.identity.uuid)
+            managerlib.unregister(self.backend.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
         except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, _("<b>Errors were encountered during unregister.</b>") +

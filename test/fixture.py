@@ -34,6 +34,8 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.ENT_DIR, self.ent_dir)
         self.prod_dir = stubs.StubProductDirectory()
         inj.provide(inj.PROD_DIR, self.prod_dir)
+        inj.provide(inj.CP_PROVIDER, stubs.StubCPProvider())
+        inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
 
         self.dbus_patcher = patch('subscription_manager.managercli.CliCommand._request_validity_check')
         self.dbus_patcher.start()

@@ -12,6 +12,8 @@
 # in this software or its documentation.
 #
 
+from subscription_manager.lazyloader import LazyLoader
+
 # Supported Features:
 IDENTITY = "IDENTITY"
 CERT_SORTER = "CERT_SORTER"
@@ -20,6 +22,7 @@ ENT_DIR = "ENT_DIR"
 PROD_DIR = "PROD_DIR"
 STATUS_CACHE = "STATUS_CACHE"
 PROD_STATUS_CACHE = "PROD_STATUS_CACHE"
+CP_PROVIDER = "CP_PROVIDER"
 
 import logging
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -66,6 +69,8 @@ class FeatureBroker:
                 return provider(*args, **kwargs)
             else:
                 log.debug("Returning instance for feature %s" % feature)
+                if isinstance(provider, LazyLoader) and not provider.loaded:
+                    provider.load(*provider.args, **provider.kwargs)
                 return provider
         except KeyError:
             raise KeyError("Unknown feature: %r" % feature)

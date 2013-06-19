@@ -37,7 +37,7 @@ import rhsm.connection as connection
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import InstalledProductsManager, ProfileManager
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
-from subscription_manager.certlib import CertLib, ConsumerIdentity
+from subscription_manager.certlib import CertLib, ConsumerIdentity, Disconnected
 from subscription_manager.certmgr import CertManager
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
@@ -150,7 +150,7 @@ def handle_exception(msg, ex):
 
     log.error(msg)
     log.exception(ex)
-    if isinstance(ex, socket.error):
+    if isinstance(ex, socket.error) or isinstance(ex, Disconnected):
         print _("Network error, unable to connect to server.")
         print _("Please see /var/log/rhsm/rhsm.log for more information.")
         sys.exit(-1)
@@ -319,53 +319,6 @@ class CliCommand(AbstractCLICommand):
         self.server_versions = get_server_versions(self.no_auth_cp)
         log.info("Server Versions: %s" % self.server_versions)
 
-    # note, depending on that args, we could get a full
-    # fledged uep, a basic auth uep, or an unauthenticate uep
-    def _get_uep(self,
-                host=None,
-                ssl_port=None,
-                handler=None,
-                cert_file=None,
-                key_file=None,
-                proxy_hostname_arg=None,
-                proxy_port_arg=None,
-                proxy_user_arg=None,
-                proxy_password_arg=None,
-                username=None,
-                password=None):
-
-        # populate with config setttings if not specified
-        server_hostname = host or cfg.get('server', 'hostname')
-        server_port = ssl_port or cfg.get_int('server', 'port')
-        server_prefix = handler or cfg.get('server', 'prefix')
-
-        # Note: username/password have no defaults, other than
-        # None
-
-        # touch ugly, but removes some duplicate args all over the place,
-        # also let's us override cfg values from the cli
-        proxy_hostname = proxy_hostname_arg or self.proxy_hostname or remove_scheme(cfg.get('server', 'proxy_hostname'))
-
-        proxy_port = proxy_port_arg or self.proxy_port or cfg.get_int('server', 'proxy_port')
-
-        proxy_user = proxy_user_arg or self.proxy_user or cfg.get('server', 'proxy_user')
-
-        proxy_password = proxy_password_arg or self.proxy_password or cfg.get('server', 'proxy_password')
-
-        # pass in all args, to make sure we don't rely on connections
-        # defautls pulled from config at class inst time
-        cp = connection.UEPConnection(host=server_hostname,
-                                      ssl_port=server_port,
-                                      handler=server_prefix,
-                                      cert_file=cert_file, key_file=key_file,
-                                      proxy_hostname=proxy_hostname,
-                                      proxy_port=proxy_port,
-                                      proxy_user=proxy_user,
-                                      proxy_password=proxy_password,
-                                      username=username,
-                                      password=password)
-        return cp
-
     def main(self, args=None):
 
         config_changed = False
@@ -389,6 +342,10 @@ class CliCommand(AbstractCLICommand):
         self.proxy_port = cfg.get_int('server', 'proxy_port')
         self.proxy_user = cfg.get('server', 'proxy_user')
         self.proxy_password = cfg.get('server', 'proxy_password')
+
+        self.server_hostname = cfg.get("server", "hostname")
+        self.server_port = cfg.get("server", "port")
+        self.server_prefix = cfg.get("server", "prefix")
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             cfg.set("server", "insecure", "1")
@@ -453,9 +410,26 @@ class CliCommand(AbstractCLICommand):
         if hasattr(self.options, "proxy_password") and self.options.proxy_password:
             self.proxy_password = self.options.proxy_password
 
-        # Create a connection using the default configuration:
-        cert_file = ConsumerIdentity.certpath()
-        key_file = ConsumerIdentity.keypath()
+        # Proxy information isn't written to the config, so we have to make sure
+        # the sorter gets it
+        connection_info = {}
+        if self.proxy_hostname:
+            connection_info['proxy_hostname_arg'] = self.proxy_hostname
+        if self.proxy_port:
+            connection_info['proxy_port_arg'] = self.proxy_port
+        if self.proxy_user:
+            connection_info['proxy_user_arg'] = self.proxy_user
+        if self.proxy_password:
+            connection_info['proxy_password_arg'] = self.proxy_password
+        if self.server_hostname:
+            connection_info['host'] = self.server_hostname
+        if self.server_port:
+            connection_info['ssl_port'] = self.server_port
+        if self.server_prefix:
+            connection_info['handler'] = self.server_prefix
+
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.cp_provider.set_connection_info(**connection_info)
 
         self.log_client_version()
 
@@ -464,12 +438,11 @@ class CliCommand(AbstractCLICommand):
             # we use the defaults from connection module init
             # we've set self.proxy* here, so we'll use them if they
             # are set
-            self.cp = self._get_uep(cert_file=cert_file,
-                                    key_file=key_file)
+            self.cp = self.cp_provider.get_consumer_auth_cp()
 
             # no auth cp for get / (resources) and
             # get /status (status and versions)
-            self.no_auth_cp = self._get_uep()
+            self.no_auth_cp = self.cp_provider.get_no_auth_cp()
             self.log_server_version()
 
             self.certlib = CertLib(uep=self.cp)
@@ -522,7 +495,6 @@ class UserPassCommand(CliCommand):
         if not password:
             while not password:
                 password = getpass.getpass(_("Password: "))
-
         return (username, password)
 
     # lazy load the username and password, prompting for them if they weren't
@@ -671,8 +643,8 @@ class IdentityCommand(UserPassCommand):
             else:
                 if self.options.force:
                     # get an UEP with basic auth
-                    self.cp = self._get_uep(username=self.username,
-                                            password=self.password)
+                    self.cp_provider.set_user_pass(self.username, self.password)
+                    self.cp = self.cp_provider.get_basic_auth_cp()
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
                 print _("Identity certificate has been regenerated.")
@@ -699,8 +671,8 @@ class OwnersCommand(UserPassCommand):
 
         try:
             # get a UEP
-            self.cp = self._get_uep(username=self.username,
-                                    password=self.password)
+            self.cp_provider.set_user_pass(self.username, self.password)
+            self.cp = self.cp_provider.get_basic_auth_cp()
             owners = self.cp.getOwnerList(self.username)
             log.info("Successfully retrieved org list from server.")
             if len(owners):
@@ -745,9 +717,8 @@ class EnvironmentsCommand(OrgCommand):
     def _do_command(self):
         self._validate_options()
         try:
-
-            self.cp = self._get_uep(username=self.username,
-                                    password=self.password)
+            self.cp_provider.set_user_pass(self.username, self.password)
+            self.cp = self.cp_provider.get_basic_auth_cp()
             if self.cp.supports_resource('environments'):
                 environments = self._get_enviornments(self.org)
 
@@ -884,15 +855,11 @@ class ServiceLevelCommand(OrgCommand):
             # we'll use the identity certificate. We already know one or the other
             # exists:
             if self.options.username and self.options.password:
-                self.cp = self._get_uep(username=self.username,
-                                        password=self.password)
+                self.cp_provider.set_user_pass(self.username, self.password)
+                self.cp = self.cp_provider.get_basic_auth_cp()
             else:
-                cert_file = self.consumerIdentity.certpath()
-                key_file = self.consumerIdentity.keypath()
-
                 # get an UEP as consumer
-                self.cp = self._get_uep(cert_file=cert_file,
-                                        key_file=key_file)
+                self.cp = self.cp_provider.get_consumer_auth_cp()
 
             if self.options.unset:
                 self.unset_service_level()
@@ -1080,10 +1047,10 @@ class RegisterCommand(UserPassCommand):
         # Proceed with new registration:
         try:
             if not self.options.activation_keys:
-                admin_cp = self._get_uep(username=self.username,
-                                         password=self.password)
+                self.cp_provider.set_user_pass(self.username, self.password)
+                admin_cp = self.cp_provider.get_basic_auth_cp()
             else:
-                admin_cp = self._get_uep()
+                admin_cp = self.cp_provider.get_no_auth_cp()
 
             facts_dic = self.facts.get_facts()
 
@@ -1123,11 +1090,8 @@ class RegisterCommand(UserPassCommand):
 
         print (_("The system has been registered with ID: %s ")) % (consumer_info["uuid"])
 
-        cert_file = ConsumerIdentity.certpath()
-        key_file = ConsumerIdentity.keypath()
-
         # get a new UEP as the consumer
-        self.cp = self._get_uep(cert_file=cert_file, key_file=key_file)
+        self.cp = self.cp_provider.get_consumer_auth_cp()
 
         # Reload the consumer identity:
         self.identity = inj.FEATURES.require(inj.IDENTITY)
@@ -1486,8 +1450,7 @@ class AttachCommand(CliCommand):
                 products_installed = len(managerlib.get_installed_product_status(self.product_dir,
                                  self.entitlement_dir, self.cp))
                 # if we are green, we don't need to go to the server
-                self.sorter = inj.require(inj.CERT_SORTER,
-                        self.product_dir, self.entitlement_dir, self.cp)
+                self.sorter = inj.require(inj.CERT_SORTER)
 
                 if self.sorter.is_valid():
                     if not products_installed:
@@ -2081,8 +2044,7 @@ class ListCommand(CliCommand):
 
         self._validate_options()
 
-        self.sorter = inj.require(inj.CERT_SORTER,
-                self.product_dir, self.entitlement_dir, self.cp)
+        self.sorter = inj.require(inj.CERT_SORTER)
 
         if self.options.installed:
             iproducts = managerlib.get_installed_product_status(self.product_dir,
@@ -2184,26 +2146,48 @@ class ListCommand(CliCommand):
         print("+-------------------------------------------+")
 
         for cert in certs:
+            # for some certs, order can be empty
+            # so we default the values and populate them if
+            # they exist. BZ974587
+            name = ""
+            sku = ""
+            contract = ""
+            account = ""
+            quantity_used = ""
+            service_level = ""
+            service_type = ""
+
             order = cert.order
+
+            if order:
+                service_level = order.service_level or ""
+                service_type = order.service_type or ""
+                name = order.name
+                sku = order.sku
+                contract = order.contract
+                account = order.account
+                quantity_used = order.quantity_used
+                service_level = order.service_level
+                service_type = order.service_type
+
             pool_id = _("Not Available")
             if hasattr(cert.pool, "id"):
                 pool_id = cert.pool.id
-            service_level = order.service_level or ""
-            service_type = order.service_type or ""
+
             product_names = [p.name for p in cert.products]
             reasons = []
             if cert.subject and 'CN' in cert.subject and cert.subject['CN'] in cert_reasons_map:
                 reasons = cert_reasons_map[cert.subject['CN']]
             print columnize(CONSUMED_LIST, _none_wrap,
-                    order.name,
+                    name,
                     product_names,
-                    order.sku,
-                    order.contract,
-                    order.account,
+                    sku,
+                    contract,
+                    account,
                     cert.serial,
                     pool_id,
                     cert.is_valid(),
-                    order.quantity_used,
+                    quantity_used,
                     service_level,
                     service_type,
                     reasons,
@@ -2242,8 +2226,7 @@ class StatusCommand(CliCommand):
     def _do_command(self):
         # list status and all reasons it is not valid
 
-        self.sorter = inj.require(inj.CERT_SORTER,
-                self.product_dir, self.entitlement_dir, self.cp)
+        self.sorter = inj.require(inj.CERT_SORTER)
 
         print("+-------------------------------------------+")
         print("   " + _("System Status Details"))

@@ -45,6 +45,7 @@ from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.cli import system_exit
 from subscription_manager.i18n_optparse import OptionParser, \
         USAGE, WrappedIndentedHelpFormatter
+from subscription_manager.productid import ProductDatabase
 from subscription_manager import repolib
 from subscription_manager.utils import parse_server_info, ServerUrlParseError
 
@@ -140,9 +141,10 @@ class MigrationEngine(object):
         self.proxy_host = None
         self.proxy_port = None
         self.proxy_user = None
-        self.proxy_password = None
+        self.proxy_pass = None
 
         self.cp = None
+        self.db = ProductDatabase()
 
         self.parser = OptionParser(usage=USAGE, formatter=WrappedIndentedHelpFormatter())
         self.add_parser_options()
@@ -159,6 +161,9 @@ class MigrationEngine(object):
                 "level use --servicelevel=\"\""))
         self.parser.add_option("--serverurl", dest='serverurl',
             help=_("specify the subscription management server to migrate to"))
+        # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
+        self.parser.add_option("--no-proxy", action="store_true", dest='noproxy',
+            help=_("don't use RHN proxy settings with subscription management server"))
 
     def validate_options(self):
         if self.options.servicelevel and self.options.noauto:
@@ -198,21 +203,17 @@ class MigrationEngine(object):
                 log.exception(e)
                 system_exit(1, _("Unable to read RHN proxy settings."))
 
-            log.info("Using proxy %s:%s - transferring settings to rhsm.conf"
-                     % (self.proxy_host, self.proxy_port))
-            self.rhsmcfg.set('server', 'proxy_hostname', self.proxy_host)
-            self.rhsmcfg.set('server', 'proxy_port', self.proxy_port)
-
             if self.rhncfg['enableProxyAuth']:
                 self.proxy_user = self.rhncfg['proxyUser']
                 self.proxy_pass = self.rhncfg['proxyPassword']
-                self.rhsmcfg.set('server', 'proxy_user', self.proxy_user)
-                self.rhsmcfg.set('server', 'proxy_password', self.proxy_pass)
-            else:
-                self.rhsmcfg.set('server', 'proxy_user', '')
-                self.rhsmcfg.set('server', 'proxy_password', '')
 
-            self.rhsmcfg.save()
+            log.info("Using proxy %s:%s" % (self.proxy_host, self.proxy_port))
+            if not self.options.noproxy:
+                self.rhsmcfg.set('server', 'proxy_hostname', self.proxy_host)
+                self.rhsmcfg.set('server', 'proxy_port', self.proxy_port)
+                self.rhsmcfg.set('server', 'proxy_user', self.proxy_user or '')
+                self.rhsmcfg.set('server', 'proxy_password', self.proxy_pass or '')
+                self.rhsmcfg.save()
 
     def get_candlepin_connection(self, username, password, basic_auth=True):
         try:
@@ -225,28 +226,22 @@ class MigrationEngine(object):
         except ServerUrlParseError, e:
             system_exit(-1, _("Error parsing server URL: %s") % e.msg)
 
-        proxy_port = self.proxy_port and int(self.proxy_port)
+        args = {'host': hostname, 'ssl_port': int(port), 'handler': prefix}
 
         if basic_auth:
-            self.cp = UEPConnection(host=hostname,
-                    ssl_port=int(port),
-                    handler=prefix,
-                    username=username,
-                    password=password,
-                    proxy_hostname=self.proxy_host,
-                    proxy_port=proxy_port,
-                    proxy_user=self.proxy_user,
-                    proxy_password=self.proxy_password)
+            args['username'] = username
+            args['password'] = password
         else:
-            self.cp = UEPConnection(host=hostname,
-                    ssl_port=int(port),
-                    handler=prefix,
-                    cert_file=ConsumerIdentity.certpath(),
-                    key_file=ConsumerIdentity.keypath(),
-                    proxy_hostname=self.proxy_host,
-                    proxy_port=proxy_port,
-                    proxy_user=self.proxy_user,
-                    proxy_password=self.proxy_password)
+            args['cert_file'] = ConsumerIdentity.certpath()
+            args['key_file'] = ConsumerIdentity.keypath()
+
+        if not self.options.noproxy:
+            args['proxy_hostname'] = self.proxy_host
+            args['proxy_port'] = self.proxy_port and int(self.proxy_port)
+            args['proxy_user'] = self.proxy_user
+            args['proxy_password'] = self.proxy_pass
+
+        self.cp = UEPConnection(**args)
 
     def check_ok_to_proceed(self, username):
         # check if this machine is already registered to Certicate-based RHN
@@ -409,8 +404,8 @@ class MigrationEngine(object):
                 if dic_data[channel] != 'none':
                     valid_rhsm_channels.append(channel)
                     log.info("mapping found for: %s = %s", channel, dic_data[channel])
-                    if dic_data[channel] not in applicable_certs:
-                        applicable_certs.append(dic_data[channel])
+                    if (channel, dic_data[channel]) not in applicable_certs:
+                        applicable_certs.append((channel, dic_data[channel]))
                 else:
                     invalid_rhsm_channels.append(channel)
                     log.info("%s is not mapped to any certificates", channel)
@@ -442,12 +437,23 @@ class MigrationEngine(object):
 
         # creates the product directory if it doesn't already exist
         product_dir = ProductDirectory()
-        for cert in applicable_certs:
+        db_modified = False
+        for channel, cert in applicable_certs:
             source_path = os.path.join("/usr/share/rhsm/product", release, cert)
             truncated_cert_name = cert.split('-')[-1]
             destination_path = os.path.join(str(product_dir), truncated_cert_name)
             log.info("copying %s to %s ", source_path, destination_path)
             shutil.copy2(source_path, destination_path)
+
+            # See BZ #972883. Add an entry to the repo db telling subscription-manager
+            # that packages for this product were installed by the RHN repo which
+            # conveniently uses the channel name for the repo name.
+            db_id = truncated_cert_name.split('.pem')[0]
+            self.db.add(db_id, channel)
+            db_modified = True
+
+        if db_modified:
+            self.db.write()
         print _("\nProduct certificates installed successfully to %s.") % str(product_dir)
 
     def clean_up(self, subscribed_channels):
@@ -457,6 +463,8 @@ class MigrationEngine(object):
             os.path.isfile(os.path.join(str(product_dir), "71.pem")):
             try:
                 os.remove(os.path.join(str(product_dir), "68.pem"))
+                self.db.delete("68")
+                self.db.write()
                 log.info("Removed 68.pem due to existence of 71.pem")
             except OSError, e:
                 log.info(e)
@@ -468,6 +476,8 @@ class MigrationEngine(object):
         if is_double_mapped and is_single_mapped:
             try:
                 os.remove(os.path.join(str(product_dir), "180.pem"))
+                self.db.delete("180")
+                self.db.write()
                 log.info("Removed 180.pem")
             except OSError, e:
                 log.info(e)
@@ -697,7 +707,6 @@ class MigrationEngine(object):
                 self.subscribe(consumer, None)
 
         self.enable_extra_channels(subscribed_channels)
-
 
 if __name__ == '__main__':
     engine = MigrationEngine().main()

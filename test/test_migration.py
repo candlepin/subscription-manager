@@ -177,6 +177,8 @@ class TestMigration(unittest.TestCase):
 
     def test_setting_unauthenticated_proxy(self):
         self.engine.rhsmcfg = MagicMock()
+        self.engine.options = MagicMock()
+        self.engine.options.noproxy = False
 
         rhn_config = {
             "enableProxy": True,
@@ -195,6 +197,8 @@ class TestMigration(unittest.TestCase):
 
     def test_setting_authenticated_proxy(self):
         self.engine.rhsmcfg = MagicMock()
+        self.engine.options = MagicMock()
+        self.engine.options.noproxy = False
 
         rhn_config = {
             "enableProxy": True,
@@ -215,6 +219,8 @@ class TestMigration(unittest.TestCase):
 
     def test_setting_prefixed_proxy(self):
         self.engine.rhsmcfg = MagicMock()
+        self.engine.options = MagicMock()
+        self.engine.options.noproxy = False
 
         rhn_config = {
             "enableProxy": True,
@@ -230,6 +236,23 @@ class TestMigration(unittest.TestCase):
             ]
         self.assertTrue(self.engine.rhsmcfg.set.call_args_list == expected)
         self.engine.rhsmcfg.save.assert_called_once_with()
+
+    def test_noproxy_option(self):
+        self.engine.rhsmcfg = MagicMock()
+        self.engine.options = MagicMock()
+        self.engine.options.noproxy = True
+
+        rhn_config = {
+            "enableProxy": True,
+            "httpProxy": "proxy.example.com:123",
+            "enableProxyAuth": False,
+            }
+        self.engine.rhncfg = rhn_config
+        self.engine.transfer_http_proxy_settings()
+        self.assertEquals("proxy.example.com", self.engine.proxy_host)
+        self.assertEquals("123", self.engine.proxy_port)
+        self.assertEquals(None, self.engine.proxy_user)
+        self.assertEquals(None, self.engine.proxy_pass)
 
     @patch("rhsm.connection.UEPConnection")
     def test_no_server_url_provided(self, mock_uep):
@@ -491,6 +514,7 @@ class TestMigration(unittest.TestCase):
     def test_deploy_prod_certificates(self, mock_shutil, mock_product_directory):
         mock_product_directory.return_value = "/some/path"
         mock_shutil.return_value = True
+        self.engine.db = MagicMock()
 
         def stub_read_channel_cert_mapping(mappingfile):
             return {"a": "a-1.pem"}
@@ -504,27 +528,35 @@ class TestMigration(unittest.TestCase):
 
         self.engine.deploy_prod_certificates(subscribed_channels)
         mock_shutil.assert_called_with("/usr/share/rhsm/product/RHEL-6/a-1.pem", "/some/path/1.pem")
+        self.engine.db.add.assert_called_with("1", "a")
+        self.engine.db.write.assert_called_with()
 
     @patch("subscription_manager.migrate.migrate.ProductDirectory")
     @patch("os.path.isfile")
     @patch("os.remove")
     def test_clean_up_remove_68_pem(self, mock_remove, mock_isfile, mock_product_directory):
         mock_product_directory.return_value = "/some/path"
+        self.engine.db = MagicMock()
         mock_isfile.side_effect = [True, True]
         self.engine.clean_up([])
         mock_remove.assert_called_with("/some/path/68.pem")
+        self.engine.db.delete.assert_called_with("68")
+        self.engine.db.write.assert_called_with()
 
     @patch("subscription_manager.migrate.migrate.ProductDirectory")
     @patch("os.path.isfile")
     @patch("os.remove")
     def test_clean_up_remove_180_pem(self, mock_remove, mock_isfile, mock_product_directory):
         mock_product_directory.return_value = "/some/path"
+        self.engine.db = MagicMock()
         mock_isfile.side_effect = [False, False]
         self.engine.clean_up([
             "rhel-i386-client-dts-5-beta",
             "rhel-i386-client-dts-5",
             ])
         mock_remove.assert_called_with("/some/path/180.pem")
+        self.engine.db.delete.assert_called_with("180")
+        self.engine.db.write.assert_called_with()
 
     def test_double_mapping_regex(self):
         regex = migrate.DOUBLE_MAPPED

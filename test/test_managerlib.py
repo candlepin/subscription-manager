@@ -26,7 +26,7 @@ from subscription_manager.managerlib import merge_pools, PoolFilter, \
         get_installed_product_status, LocalTz, \
         MergedPoolsStackingGroupSorter, MergedPools, \
         PoolStash, allows_multi_entitlement, valid_quantity
-from subscription_manager.injection import provide, CERT_SORTER
+from subscription_manager.injection import provide, CERT_SORTER, PROD_DIR
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
@@ -550,9 +550,7 @@ class InstalledProductStatusTests(SubManFixture):
 
     def test_entitlement_for_not_installed_product_shows_nothing(self):
         product_directory = StubProductDirectory([])
-
-        stub_sorter = StubCertSorter(prod_dir=product_directory)
-        provide(CERT_SORTER, stub_sorter)
+        provide(PROD_DIR, product_directory)
 
         product_status = get_installed_product_status(product_directory,
                 None, StubUEP())
@@ -562,9 +560,10 @@ class InstalledProductStatusTests(SubManFixture):
 
     def test_entitlement_for_installed_product_shows_subscribed(self):
         product_directory = StubProductDirectory(pids=['product1'])
+        provide(PROD_DIR, product_directory)
         ent_cert = StubEntitlementCertificate('product1')
 
-        stub_sorter = StubCertSorter(prod_dir=product_directory)
+        stub_sorter = StubCertSorter()
         stub_sorter.valid_products['product1'] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
@@ -579,8 +578,8 @@ class InstalledProductStatusTests(SubManFixture):
                 end_date=(datetime.now() - timedelta(days=2)))
 
         product_directory = StubProductDirectory(pids=['product1'])
-
-        stub_sorter = StubCertSorter(prod_dir=product_directory)
+        provide(PROD_DIR, product_directory)
+        stub_sorter = StubCertSorter()
         stub_sorter.expired_products['product1'] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
@@ -592,8 +591,8 @@ class InstalledProductStatusTests(SubManFixture):
 
     def test_no_entitlement_for_installed_product_shows_no_subscribed(self):
         product_directory = StubProductDirectory(pids=['product1'])
-
-        stub_sorter = StubCertSorter(prod_dir=product_directory)
+        provide(PROD_DIR, product_directory)
+        stub_sorter = StubCertSorter()
         stub_sorter.unentitled_products['product1'] = None  # prod cert unused here
         provide(CERT_SORTER, stub_sorter)
 
@@ -605,9 +604,10 @@ class InstalledProductStatusTests(SubManFixture):
 
     def test_future_dated_entitlement_shows_future_subscribed(self):
         product_directory = StubProductDirectory(pids=['product1'])
+        provide(PROD_DIR, product_directory)
         ent_cert = StubEntitlementCertificate('product1',
                     start_date=(datetime.now() + timedelta(days=1365)))
-        stub_sorter = StubCertSorter(prod_dir=product_directory)
+        stub_sorter = StubCertSorter()
         stub_sorter.future_products['product1'] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
@@ -620,7 +620,8 @@ class InstalledProductStatusTests(SubManFixture):
         ent_cert = StubEntitlementCertificate('product1',
             ['product2', 'product3'], sockets=10)
         product_directory = StubProductDirectory(pids=['product1'])
-        stub_sorter = StubCertSorter(prod_dir=product_directory)
+        provide(PROD_DIR, product_directory)
+        stub_sorter = StubCertSorter()
         stub_sorter.valid_products['product1'] = [ent_cert, ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
@@ -634,7 +635,8 @@ class InstalledProductStatusTests(SubManFixture):
         ent_cert = StubEntitlementCertificate('product1',
             ['product2', 'product3'], sockets=10)
         product_directory = StubProductDirectory(pids=['product1'])
-        stub_sorter = StubCertSorter(prod_dir=product_directory)
+        provide(PROD_DIR, product_directory)
+        stub_sorter = StubCertSorter()
         stub_sorter.valid_products['product1'] = [ent_cert]
         stub_sorter.valid_products['product2'] = [ent_cert]
         stub_sorter.valid_products['product3'] = [ent_cert]
@@ -653,7 +655,8 @@ class InstalledProductStatusTests(SubManFixture):
             ['product2', 'product3'], sockets=10)
 
         prod_dir = StubProductDirectory(pids=['product1', 'product2'])
-        stub_sorter = StubCertSorter(prod_dir=prod_dir)
+        provide(PROD_DIR, prod_dir)
+        stub_sorter = StubCertSorter()
         stub_sorter.valid_products['product1'] = [ent_cert]
         stub_sorter.valid_products['product2'] = [ent_cert]
 

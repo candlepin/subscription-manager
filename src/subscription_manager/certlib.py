@@ -124,11 +124,7 @@ class HealingLib(DataLib):
                 # valid, see if 24h from now is greater than our "valid until"
                 # date, and heal for tomorrow if so.
 
-                # TODO: not great for testing:
-                ent_dir = EntitlementDirectory()
-
-                cs = require(CERT_SORTER, self._product_dir, ent_dir,
-                        self.uep)
+                cs = require(CERT_SORTER)
                 cert_updater = CertLib(lock=self.lock, uep=self.uep)
                 if not cs.is_valid():
                     log.warn("Found invalid entitlements for today: %s" %
@@ -239,8 +235,8 @@ class UpdateAction(Action):
             expected = self._get_expected_serials(report)
         except socket.error, ex:
             log.exception(ex)
-            log.error('Cannot detach subscriptions while disconnected')
-            return (0, [ex])
+            log.error('Cannot modify subscriptions while disconnected')
+            raise Disconnected()
         missing_serials = self._find_missing_serials(local, expected)
         rogue_serials = self._find_rogue_serials(local, expected)
         self.delete(rogue_serials, report)
