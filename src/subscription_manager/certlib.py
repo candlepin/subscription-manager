@@ -124,11 +124,7 @@ class HealingLib(DataLib):
                 # valid, see if 24h from now is greater than our "valid until"
                 # date, and heal for tomorrow if so.
 
-                # TODO: not great for testing:
-                ent_dir = EntitlementDirectory()
-
-                cs = require(CERT_SORTER, self._product_dir, ent_dir,
-                        self.uep)
+                cs = require(CERT_SORTER)
                 cert_updater = CertLib(lock=self.lock, uep=self.uep)
                 if not cs.is_valid():
                     log.warn("Found invalid entitlements for today: %s" %

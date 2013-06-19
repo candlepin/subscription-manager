@@ -23,6 +23,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
 from subscription_manager.cache import InstalledProductsManager
+from subscription_manager.lazyloader import LazyLoader
 
 import gettext
 _ = gettext.gettext
@@ -45,7 +46,7 @@ STATUS_MAP = {'valid': _('Current'),
         'unknown': _('Unknown')}
 
 
-class CertSorter(object):
+class CertSorter(LazyLoader):
     """
     Queries the server for compliance information and breaks out the response
     for use in the client code.
@@ -60,15 +61,12 @@ class CertSorter(object):
     re-use this cached data for a period of time, before falling back to
     reporting unknown.
     """
-    def __init__(self, product_dir, entitlement_dir, uep):
+    def load(self):
+        super(CertSorter, self).load()
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.identity = inj.require(inj.IDENTITY)
-        self.product_dir = product_dir
-        self.entitlement_dir = entitlement_dir
-
-        # Warning: could be None if we're not registered, we will check before
-        # we use it, but if connection is still none we will let this error out
-        # as it is programmer error.
-        self.uep = uep
+        self.product_dir = inj.require(inj.PROD_DIR)
+        self.entitlement_dir = inj.require(inj.ENT_DIR)
 
         # All products installed on this machine, regardless of status. Maps
         # installed product ID to product certificate.
@@ -126,20 +124,15 @@ class CertSorter(object):
             log.debug("Unregistered, skipping server compliance check.")
             return
 
-        # These may help with virt bugs
-        # Refreshes most/all data between cli/server
-        #certmgr = CertManager(uep=self.uep)
-        #certmgr.update()
-
         # Update installed product information so everything is
         # accounted for.  Time expensive, maybe we only need to
         # sync once?
         installed_mgr = InstalledProductsManager()
-        installed_mgr.update_check(self.uep, self.identity.uuid)
+        installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
 
         # TODO: handle temporarily disconnected use case / caching
         status_cache = inj.require(inj.STATUS_CACHE)
-        status = status_cache.load_status(self.uep, self.identity.uuid)
+        status = status_cache.load_status(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
         if status is None:
             return
 

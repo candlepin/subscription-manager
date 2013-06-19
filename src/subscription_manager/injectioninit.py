@@ -20,6 +20,7 @@ from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
 from subscription_manager.identity import Identity
 from subscription_manager.validity import ValidProductDateRangeCalculator
+from subscription_manager.cp_provider import CPProvider
 
 
 def init_dep_injection():
@@ -31,8 +32,7 @@ def init_dep_injection():
     # Set up consumer identity as a singleton so we don't constantly re-load
     # it from disk. Call reload when anything changes and all references will be
     # updated.
-    inj.provide(inj.IDENTITY, Identity())
-    inj.provide(inj.CERT_SORTER, CertSorter)
+    inj.provide(inj.IDENTITY, Identity(lazy_load=True))
     inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR,
             ValidProductDateRangeCalculator)
 
@@ -42,3 +42,8 @@ def init_dep_injection():
 
     inj.provide(inj.STATUS_CACHE, StatusCache)
     inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache)
+
+    inj.provide(inj.CP_PROVIDER, CPProvider())
+
+    # Must come after ent dir, prod dir, conn info, and identity
+    inj.provide(inj.CERT_SORTER, CertSorter(lazy_load=True))

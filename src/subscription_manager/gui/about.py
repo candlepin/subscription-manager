@@ -66,7 +66,7 @@ class AboutDialog(object):
         self._set_next_update(next_update_label)
 
         # Set the component versions.
-        server_versions = get_server_versions(self.backend.uep)
+        server_versions = get_server_versions(self.backend.cp_provider.get_consumer_auth_cp())
         client_versions = get_client_versions()
 
         self.dialog.set_version(client_versions['subscription-manager'])
