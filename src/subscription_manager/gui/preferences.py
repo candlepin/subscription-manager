@@ -55,6 +55,7 @@ class PreferencesDialog(object):
 
         self.release_combobox = GLADE_XML.get_widget('release_combobox')
         self.sla_combobox = GLADE_XML.get_widget('sla_combobox')
+        self.autoheal_checkbox = GLADE_XML.get_widget('autoheal_checkbox')
 
         # The first string is the displayed service level; the second is
         # the value sent to Candlepin.
@@ -68,6 +69,7 @@ class PreferencesDialog(object):
             "on_close_button_clicked": self._close_button_clicked,
             "on_sla_combobox_changed": self._sla_changed,
             "on_release_combobox_changed": self._release_changed,
+            "on_checkbox_toggled": self._on_checkbox_toggled,
         })
 
         # Handle the dialog's delete event when ESC key is pressed.
@@ -89,6 +91,7 @@ class PreferencesDialog(object):
 
         self.load_releases(consumer_json)
         self.load_servicelevel(consumer_json)
+        self.load_autoheal(consumer_json)
 
     def load_servicelevel(self, consumer_json):
         # The combo box you get from the widget tree already has a
@@ -146,6 +149,19 @@ class PreferencesDialog(object):
                 self.release_combobox.set_active(i)
             i += 1
 
+    def load_autoheal(self, consumer_json):
+        if 'autoheal' not in consumer_json:
+            log.warn("Disabling autoheal checkbox, server does not support autoheal/autto-attach.")
+            self.autoheal_checkbox.set_sensitive(False)
+            return
+
+        self.autoheal_checkbox.set_sensitive(True)
+        self.autoheal_checkbox.set_active(False)
+        current_autoheal = consumer_json['autoheal']
+
+        if current_autoheal:
+            self.autoheal_checkbox.set_active(True)
+
     def _close_button_clicked(self, widget):
         self._close_dialog()
 
@@ -181,4 +197,12 @@ class PreferencesDialog(object):
 
     def _dialog_deleted(self, event, data):
         self._close_dialog()
+        return True
+
+    def _on_checkbox_toggled(self, checkbox):
+        log.info("Auto-attach (autoheal) changed to: %s" 
+                    % checkbox.get_active())
+        self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
+            autoheal=checkbox.get_active())
+
         return True
