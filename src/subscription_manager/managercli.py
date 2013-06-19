@@ -36,7 +36,6 @@ import rhsm.connection as connection
 
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import InstalledProductsManager, ProfileManager
-from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.certlib import CertLib, ConsumerIdentity, Disconnected
 from subscription_manager.certmgr import CertManager
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
@@ -200,8 +199,8 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
 
 
 def show_autosubscribe_output(uep):
-    installed_status = managerlib.get_installed_product_status(ProductDirectory(),
-            EntitlementDirectory(), uep)
+    installed_status = managerlib.get_installed_product_status(inj.require(inj.PROD_DIR),
+            inj.require(inj.ENT_DIR), uep)
     if not installed_status:
         print _("No products installed.")
         return 1

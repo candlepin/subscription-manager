@@ -19,6 +19,7 @@ import random
 import tempfile
 
 from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.lazyloader import LazyLoader
 
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """
@@ -280,11 +281,16 @@ class StubCertificateDirectory(EntitlementDirectory):
     def getCerts(self):
         return self.certs
 
+
 # so we can use a less confusing name when we use this stub
-StubEntitlementDirectory = StubCertificateDirectory
+class StubEntitlementDirectory(StubCertificateDirectory, LazyLoader):
+
+    def __init__(self, certificates=None):
+        super(StubEntitlementDirectory, self).__init__(certificates)
+        LazyLoader.__init__(self)
 
 
-class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
+class StubProductDirectory(StubCertificateDirectory, ProductDirectory, LazyLoader):
     """
     Stub for mimicing behavior of an on-disk certificate directory.
     Can be used for both entitlement and product directories as needed.
@@ -302,6 +308,7 @@ class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
             for pid in pids:
                 certificates.append(StubProductCertificate(StubProduct(pid)))
         super(StubProductDirectory, self).__init__(certificates)
+        LazyLoader.__init__(self)
 
 
 class StubConsumerIdentity(object):

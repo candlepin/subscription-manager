@@ -25,8 +25,9 @@ import yum
 
 from rhsm.certificate import create_from_pem
 
-from subscription_manager.certdirectory import Directory, ProductDirectory
+from subscription_manager.certdirectory import Directory
 from subscription_manager import plugins
+import subscription_manager.injection as inj
 
 _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -128,7 +129,7 @@ class ProductManager:
 
         self.pdir = product_dir
         if not product_dir:
-            self.pdir = ProductDirectory()
+            self.pdir = inj.require(inj.PROD_DIR)
 
         self.db = product_db
         if not product_db:

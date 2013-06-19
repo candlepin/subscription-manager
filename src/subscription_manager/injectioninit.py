@@ -37,8 +37,8 @@ def init_dep_injection():
             ValidProductDateRangeCalculator)
 
     # TODO: singletons possible?
-    inj.provide(inj.ENT_DIR, EntitlementDirectory)
-    inj.provide(inj.PROD_DIR, ProductDirectory)
+    inj.provide(inj.ENT_DIR, EntitlementDirectory(lazy_load=True))
+    inj.provide(inj.PROD_DIR, ProductDirectory(lazy_load=True))
 
     inj.provide(inj.STATUS_CACHE, StatusCache)
     inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache)

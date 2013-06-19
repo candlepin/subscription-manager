@@ -22,6 +22,7 @@ import os
 from rhsm.certificate import Key, create_from_file
 from rhsm.config import initConfig
 from subscription_manager.injection import require, ENT_DIR
+from subscription_manager.lazyloader import LazyLoader
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -157,12 +158,14 @@ class CertificateDirectory(Directory):
         return None
 
 
-class ProductDirectory(CertificateDirectory):
+class ProductDirectory(LazyLoader, CertificateDirectory):
 
     PATH = cfg.get('rhsm', 'productCertDir')
+    path = 'Product Directory'  # Place holder until path is set
 
-    def __init__(self):
-        super(ProductDirectory, self).__init__(self.PATH)
+    def load(self):
+        super(ProductDirectory, self).load()
+        CertificateDirectory.__init__(self, self.PATH)
 
     def get_provided_tags(self):
         """
@@ -186,17 +189,19 @@ class ProductDirectory(CertificateDirectory):
         return installed_products
 
 
-class EntitlementDirectory(CertificateDirectory):
+class EntitlementDirectory(LazyLoader, CertificateDirectory):
 
     PATH = cfg.get('rhsm', 'entitlementCertDir')
     PRODUCT = 'product'
+    path = 'Entitlement Directory'  # Place holder until path is set
 
     @classmethod
     def productpath(cls):
         return cls.PATH
 
-    def __init__(self):
-        super(EntitlementDirectory, self).__init__(self.productpath())
+    def load(self):
+        super(EntitlementDirectory, self).load()
+        CertificateDirectory.__init__(self, self.productpath())
 
     def _check_key(self, cert):
         """
