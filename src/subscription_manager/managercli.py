@@ -746,7 +746,7 @@ class EnvironmentsCommand(OrgCommand):
 class AutohealCommand(OrgCommand):
 
     def __init__(self):
-        self.consumerIdentity = ConsumerIdentity
+        self.uuid = inj.require(inj.IDENTITY).uuid
 
         shortdesc = _("Manage the autoheal setting for this system")
         self._org_help_text = \
@@ -760,16 +760,11 @@ class AutohealCommand(OrgCommand):
         self.parser.add_option("--disable", dest="disable", action='store_true',
                 help=_("disable autohealing of subscriptions"))
 
-    def _enable(self):
-        consumer_uuid = self.consumerIdentity.read().getConsumerId()
-        self.cp.updateConsumer(consumer_uuid, autoheal=True)
-
-    def _disable(self):
-        consumer_uuid = self.consumerIdentity.read().getConsumerId()
-        self.cp.updateConsumer(consumer_uuid, autoheal=False)
+    def _toggle(self, autoheal):
+        self.cp.updateConsumer(self.uuid, autoheal=autoheal)
 
     def _validate_options(self):
-        if not self.consumerIdentity.existsAndValid():
+        if not self.uuid:
             if not (self.options.username and self.options.password):
                 print(_("Error: you must register or specify --username and --password to list service levels"))
                 sys.exit(-1)
@@ -779,12 +774,7 @@ class AutohealCommand(OrgCommand):
 
     def _do_command(self):
         self._validate_options()
-
-        if self.options.enable:
-            self._enable()
-        else:
-            if self.options.disable:
-                self._disable()
+        self._toggle(self.options.enable or False)
 
 
 class ServiceLevelCommand(OrgCommand):

@@ -79,15 +79,16 @@ class PreferencesDialog(object):
         self.sla_combobox.get_model().clear()
         self.release_combobox.get_model().clear()
 
-        if self.identity.uuid is None:
-            self.sla_combobox.set_sensitive(False)
-            self.release_combobox.set_sensitive(False)
-            return
-
         self.sla_combobox.set_sensitive(True)
         self.release_combobox.set_sensitive(True)
 
         consumer_json = self.backend.cp_provider.get_consumer_auth_cp().getConsumer(self.identity.uuid)
+
+        if self.identity.uuid is None:
+            self.sla_combobox.set_sensitive(False)
+            self.release_combobox.set_sensitive(False)
+            self.autoheal_checkbox.set_sensitive(False)
+            return
 
         self.load_releases(consumer_json)
         self.load_servicelevel(consumer_json)
@@ -156,13 +157,13 @@ class PreferencesDialog(object):
             return
 
         self.autoheal_checkbox.set_sensitive(True)
-        self.autoheal_checkbox.set_active(False)
-        self.autoheal_checkbox.set_label("Disabled")
         current_autoheal = consumer_json['autoheal']
+        self.autoheal_checkbox.set_active(current_autoheal)
 
         if current_autoheal:
-            self.autoheal_checkbox.set_active(True)
             self.autoheal_checkbox.set_label("Enabled")
+        else:
+            self.autoheal_checkbox.set_label("Disabled")
 
     def _close_button_clicked(self, widget):
         self._close_dialog()
@@ -207,8 +208,8 @@ class PreferencesDialog(object):
             autoheal=checkbox.get_active())
 
         if (checkbox.get_active()):
-            checkbox.set_label("Enabled")
+            checkbox.set_label(_("Enabled"))
         else:
-            checkbox.set_label("Disabled")
+            checkbox.set_label(_("Disabled"))
 
         return True
