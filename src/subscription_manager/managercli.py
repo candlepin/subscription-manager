@@ -742,6 +742,7 @@ class EnvironmentsCommand(OrgCommand):
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
+
 class AutohealCommand(OrgCommand):
 
     def __init__(self):
@@ -761,12 +762,10 @@ class AutohealCommand(OrgCommand):
 
     def _enable(self):
         consumer_uuid = self.consumerIdentity.read().getConsumerId()
-        consumer = self.cp.getConsumer(consumer_uuid)
         self.cp.updateConsumer(consumer_uuid, autoheal=True)
 
     def _disable(self):
         consumer_uuid = self.consumerIdentity.read().getConsumerId()
-        consumer = self.cp.getConsumer(consumer_uuid)
         self.cp.updateConsumer(consumer_uuid, autoheal=False)
 
     def _validate_options(self):
@@ -781,14 +780,11 @@ class AutohealCommand(OrgCommand):
     def _do_command(self):
         self._validate_options()
 
-        if self.options.enable is not None:
-            if self.options.enable == True:
-                self._enable()
+        if self.options.enable:
+            self._enable()
         else:
-            if self.options.disable is not None:
-                if self.options.disable == True:
-                    self._disable()
-
+            if self.options.disable:
+                self._disable()
 
 
 class ServiceLevelCommand(OrgCommand):
@@ -796,7 +792,7 @@ class ServiceLevelCommand(OrgCommand):
     def __init__(self):
         self.consumerIdentity = ConsumerIdentity
 
-        shortdesc = _("Manage service levels for this system kekek")
+        shortdesc = _("Manage service levels for this system")
         self._org_help_text = \
             _("specify an organization when listing available service levels using the organization key")
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
