@@ -52,4 +52,4 @@ def init_dep_injection():
     # Set up plugin manager as a singleton.
     # FIXME: should we aggressively catch exceptions here? If we can't
     # create a PluginManager we should probably raise an exception all the way up
-    inj.provide(inj.PLUGIN_MANAGER, PluginManager())
+    inj.provide(inj.PLUGIN_MANAGER, PluginManager(lazy_load=True))

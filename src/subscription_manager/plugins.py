@@ -14,6 +14,7 @@
 # in this software or its documentation.
 #
 import gettext
+from subscription_manager.lazyloader import LazyLoader
 _ = gettext.gettext
 
 import glob
@@ -441,9 +442,10 @@ class PluginConfig(object):
 
 #NOTE: need to be super paranoid here about existing of cfg variables
 # BasePluginManager with our default config info
-class BasePluginManager(object):
+class BasePluginManager(LazyLoader):
+
     """Finds, load, and provides acccess to subscription-manager plugins"""
-    def __init__(self, search_path=None, plugin_conf_path=None):
+    def load(self, search_path=None, plugin_conf_path=None):
         """init for BasePluginManager().
 
         attributes:
@@ -489,7 +491,7 @@ class BasePluginManager(object):
 
         # populate self._plugins with plugins in modules in self.modules
         self._import_plugins()
-        log.debug("Calling PluginManager init")
+        super(BasePluginManager, self).load()
 
     def _get_conduits(self):
         """Needs to be implemented in subclass.
@@ -788,7 +790,7 @@ class PluginManager(BasePluginManager):
     default_search_path = DEFAULT_SEARCH_PATH
     default_conf_path = DEFAULT_CONF_PATH
 
-    def __init__(self, search_path=None, plugin_conf_path=None):
+    def load(self, search_path=None, plugin_conf_path=None):
         """init PluginManager
 
         Args:
@@ -810,8 +812,8 @@ class PluginManager(BasePluginManager):
         init_plugin_conf_path = plugin_conf_path or cfg_conf_path \
             or self.default_conf_path
 
-        super(PluginManager, self).__init__(search_path=init_search_path,
-                                            plugin_conf_path=init_plugin_conf_path)
+        super(PluginManager, self).load(search_path=init_search_path,
+                                        plugin_conf_path=init_plugin_conf_path)
 
     def _get_conduits(self):
         """get subscription-manager specific plugin conduits."""
