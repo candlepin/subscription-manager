@@ -189,12 +189,10 @@ class StatusCache(CacheManager):
     than sending it.
     """
     CACHE_FILE = "/var/lib/rhsm/cache/entitlement_status.json"
-
-    def __init__(self):
-        self.server_status = None
+    server_status = None
 
     def _sync_with_server(self, uep, uuid):
-        self.server_status = uep.getCompliance(uuid)
+        self.__class__.server_status = uep.getCompliance(uuid)
 
     def load_status(self, uep, uuid):
         """
@@ -210,7 +208,7 @@ class StatusCache(CacheManager):
         """
         try:
             self._sync_with_server(uep, uuid)
-            return self.server_status
+            return self.__class__.server_status
         except SSL.SSLError, ex:
             log.exception(ex)
             log.error("Consumer certificate is invalid")
@@ -225,33 +223,37 @@ class StatusCache(CacheManager):
         # then we are disconnected
         except socket.error, ex:
             log.exception(ex)
-            if not self._cache_exists() and not self.server_status:
+            if not self._cache_exists() and not self.__class__.server_status:
                 log.error("Server unreachable, registered, but no cache exists.")
                 return None
 
             log.warn("Unable to reach server, using cached status.")
-            return self.server_status or self._read_cache()
+            return self.__class__.server_status or self._read_cache()
 
         except connection.NetworkException, ex:
             log.exception(ex)
-            if not self._cache_exists() and not self.server_status:
+            if not self._cache_exists() and not self.__class__.server_status:
                 log.error("Server unreachable, registered, but no cache exists.")
                 raise ex
 
             log.warn("Unable to reach server, using cached status.")
-            return self.server_status or self._read_cache()
+            return self.__class__.server_status or self._read_cache()
 
     def to_dict(self):
-        return self.server_status
+        return self.__class__.server_status
 
     def _load_data(self, open_file):
         json_str = open_file.read()
         return json.loads(json_str)
 
-    # When the program ends, if there is a newer response, write it
-    def __del__(self):
-        if self.server_status:
-            self.write_cache()
+    @classmethod
+    def delete_cache(cls):
+        super(StatusCache, cls).delete_cache()
+        cls.server_status = None
+
+    def write_cache(self):
+        if self.__class__.server_status:
+            super(StatusCache, self).write_cache()
 
 
 class ProductStatusCache(StatusCache):
@@ -266,7 +268,7 @@ class ProductStatusCache(StatusCache):
         if 'installedProducts' not in consumer_data:
             log.warn("Server does not support product date ranges.")
         else:
-            self.server_status = consumer_data['installedProducts']
+            self.__class__.server_status = consumer_data['installedProducts']
 
 
 class ProfileManager(CacheManager):

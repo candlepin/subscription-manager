@@ -40,6 +40,7 @@ import dbus.exceptions
 import gtk
 import logging
 import gettext
+import subscription_manager.injection as inj
 _ = gettext.gettext
 
 # Since the location of these def's keeps moving, hardcoded them here as per the spec
@@ -142,6 +143,11 @@ def already_running(bus):
         return True
     return False
 
+
+def cleanup():
+    inj.require(inj.STATUS_CACHE).write_cache()
+    inj.require(inj.PROD_STATUS_CACHE).write_cache()
+
 if __name__ == '__main__':
     parser = OptionParser(usage=USAGE,
                           formatter=WrappedIndentedHelpFormatter())
@@ -176,9 +182,12 @@ if __name__ == '__main__':
         except SystemExit, e:
             #this is a non-exceptional exception thrown by Python 2.4, just
             #re-raise, bypassing handle_exception
+            cleanup()
             raise e
         except KeyboardInterrupt:
+            cleanup()
             system_exit(0, "\nUser interrupted process.")
         except Exception, e:
+            cleanup()
             log.exception(e)
             system_exit(1, e)

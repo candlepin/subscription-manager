@@ -31,7 +31,8 @@ init_dep_injection()
 
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
-from subscription_manager.injection import require, CERT_SORTER
+import subscription_manager.injection as inj
+from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
@@ -83,7 +84,9 @@ def check_status(force_signal):
         debug("The system is not currently registered.")
         return RHSM_REGISTRATION_REQUIRED
 
-    sorter = require(CERT_SORTER)
+    sorter = CertSorter()
+    inj.require(inj.STATUS_CACHE).write_cache()
+    inj.require(inj.PROD_STATUS_CACHE).write_cache()
 
     if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
         debug("System has one or more certificates that are not valid")

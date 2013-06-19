@@ -13,7 +13,7 @@
 
 import unittest
 import socket
-from mock import Mock
+from mock import Mock, patch
 import simplejson as json
 
 # used to get a user readable cfg class for test cases
@@ -252,6 +252,7 @@ class TestStatusCache(SubManFixture):
     def setUp(self):
         super(TestStatusCache, self).setUp()
         self.status_cache = StatusCache()
+        StatusCache.server_status = None
         self.status_cache.write_cache = Mock()
 
     def test_load_from_server(self):
@@ -261,14 +262,20 @@ class TestStatusCache(SubManFixture):
 
         self.status_cache.load_status(uep, "SOMEUUID")
 
-        self.assertEquals(dummy_status, self.status_cache.server_status)
+        self.assertEquals(dummy_status, StatusCache.server_status)
 
-        # Verify write doesn't occur until the cache is destroyed
+        # Verify write doesn't occur.  Handled at exit
         self.assertEquals(0, self.status_cache.write_cache.call_count)
-        # Hold on to a reference
-        write_cache_holder = self.status_cache.write_cache
-        del self.status_cache
-        self.assertEquals(1, write_cache_holder.call_count)
+
+    @patch('os.remove')
+    def test_delete_cache(self, mock_remove):
+        uep = Mock()
+        dummy_status = {"a": "1"}
+        uep.getCompliance = Mock(return_value=dummy_status)
+        self.status_cache.load_status(uep, "SOMEUUID")
+        self.assertEquals(dummy_status, self.status_cache.server_status)
+        self.status_cache.delete_cache()
+        self.assertEquals(None, self.status_cache.server_status)
 
     def test_server_no_compliance_call(self):
         uep = Mock()

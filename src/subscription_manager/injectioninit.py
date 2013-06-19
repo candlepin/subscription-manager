@@ -46,7 +46,6 @@ def init_dep_injection():
 
     inj.provide(inj.CP_PROVIDER, CPProvider())
 
-    # Must come after ent dir, prod dir, conn info, and identity
     inj.provide(inj.CERT_SORTER, CertSorter(lazy_load=True))
 
     # Set up plugin manager as a singleton.
