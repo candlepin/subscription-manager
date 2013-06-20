@@ -16,7 +16,6 @@
 import gettext
 import logging
 import os
-import threading
 
 import gtk
 import gtk.glade
@@ -70,7 +69,7 @@ class PreferencesDialog(object):
             "on_close_button_clicked": self._close_button_clicked,
             "on_sla_combobox_changed": self._sla_changed,
             "on_release_combobox_changed": self._release_changed,
-            "on_checkbox_toggled": self._on_checkbox_toggled,
+            "on_autoheal_checkbox_toggled": self._on_autoheal_checkbox_toggled,
         })
 
         # Handle the dialog's delete event when ESC key is pressed.
@@ -203,11 +202,8 @@ class PreferencesDialog(object):
         self._close_dialog()
         return True
 
-    def _on_checkbox_toggled(self, checkbox):
+    def _on_autoheal_checkbox_toggled(self, checkbox):
         log.info("Auto-attach (autoheal) changed to: %s" % checkbox.get_active())
-        update_func = self.backend.cp_provider.get_consumer_auth_cp().updateConsumer
-        update_thread = threading.Thread(target=update_func, args=[self.identity.uuid], kwargs={'autoheal':checkbox.get_active()})
-        update_thread.start()
 
         if (checkbox.get_active()):
             checkbox.set_label(_("Enabled"))
