@@ -23,6 +23,7 @@ PROD_DIR = "PROD_DIR"
 STATUS_CACHE = "STATUS_CACHE"
 PROD_STATUS_CACHE = "PROD_STATUS_CACHE"
 CP_PROVIDER = "CP_PROVIDER"
+PLUGIN_MANAGER = "PLUGIN_MANAGER"
 
 import logging
 log = logging.getLogger('rhsm-app.' + __name__)

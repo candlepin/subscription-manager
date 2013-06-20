@@ -48,7 +48,6 @@ import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import valid_quantity
-from subscription_manager import plugins
 from subscription_manager.release import ReleaseBackend
 from subscription_manager.repolib import RepoFile, RepoLib
 from subscription_manager.utils import remove_scheme, parse_server_info, \
@@ -188,7 +187,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
         cp.updateConsumer(consumer_uuid, service_level=service_level)
         print(_("Service level set to: %s") % service_level)
 
-    plugin_manager = plugins.get_plugin_manager()
+    plugin_manager = inj.require(inj.PLUGIN_MANAGER)
     try:
         plugin_manager.run("pre_auto_attach", consumer_uuid=consumer_uuid)
         ents = cp.bind(consumer_uuid)  # new style
@@ -236,7 +235,7 @@ class CliCommand(AbstractCLICommand):
         self.client_versions = self._default_client_version()
         self.server_versions = self._default_server_version()
 
-        self.plugin_manager = plugins.get_plugin_manager()
+        self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
 
     def _request_validity_check(self):
         try:

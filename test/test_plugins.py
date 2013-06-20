@@ -19,32 +19,6 @@ import mock
 import unittest
 
 
-# we globally mock PluginManager, since it tries to import modules
-# from outside of the relative scope. But, we need the real one
-# for this set of tests. Since we created the mock_plugin_manager
-# with a spec, it's __class__ is the original class, so we then
-# patch back to the original for this module via the module
-# setUp/tearDown.
-#
-# FIXME: we could probably avoid this with a shared unittest.TestCase subclass
-#        to create our test case classes
-#
-from test import mock_plugin_manager
-patcher = None
-
-
-def setUp():
-    global patcher
-    patcher = mock.patch("subscription_manager.plugins.PluginManager",
-                         new=mock_plugin_manager.__class__)
-    patcher.start()
-
-
-def tearDown():
-    global patcher
-    patcher.stop()
-
-
 from iniparse import SafeConfigParser
 from StringIO import StringIO
 
@@ -973,14 +947,3 @@ class TestSlotNameException(BasePluginException):
         except self.e, exp:
             self.assertEquals("slot_name", exp.slot_name)
             self.assertTrue("slot_name" in str(exp))
-
-
-class TestGetPluginManager(unittest.TestCase):
-    # we dont actually care if we get a real PluginManager, but
-    # we do want to verify we get the same object
-    @mock.patch("subscription_manager.plugins.PluginManager")
-    def test(self, mock_plugin_manager):
-        pm = plugins.get_plugin_manager()
-        pm2 = plugins.get_plugin_manager()
-        self.assertEquals(pm, pm2)
-        self.assertTrue(pm is pm2)

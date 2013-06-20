@@ -27,11 +27,10 @@ from subscription_manager.gui import progress
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui.utils import apply_highlight, show_error_window, get_cell_background_color, handle_gui_exception, set_background_model_index
 from subscription_manager.gui import widgets
-from subscription_manager.injection import IDENTITY, require
+from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import allows_multi_entitlement, valid_quantity
-from subscription_manager import plugins
 
 _ = gettext.gettext
 
@@ -57,7 +56,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.pool_stash = managerlib.PoolStash(self.backend,
                                                self.facts)
-        self.plugin_manager = plugins.get_plugin_manager()
+        self.plugin_manager = require(PLUGIN_MANAGER)
 
         today = datetime.date.today()
         self.date_picker = widgets.DatePicker(today)

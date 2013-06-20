@@ -21,6 +21,7 @@ running_as_firstboot()
 
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
+from subscription_manager.injection import PLUGIN_MANAGER, require
 
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
@@ -32,7 +33,6 @@ from subscription_manager.gui.autobind import \
         ServiceLevelNotSupportedException, NoProductsException, \
         AllProductsCoveredException
 from subscription_manager import managerlib
-from subscription_manager import plugins
 from subscription_manager.utils import remove_scheme
 
 from rhsm.connection import RestlibException
@@ -183,7 +183,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
                 200.1, 109.10)
 
         backend = managergui.Backend()
-        self.plugin_manager = plugins.get_plugin_manager()
+        self.plugin_manager = require(PLUGIN_MANAGER)
         registergui.RegisterScreen.__init__(self, backend, Facts())
 
         #insert our new screens

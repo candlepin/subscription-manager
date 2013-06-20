@@ -24,11 +24,10 @@ import socket
 from rhsm.config import initConfig
 from rhsm.certificate import Key, create_from_pem, GMT
 
-from subscription_manager import plugins
 from subscription_manager.certdirectory import EntitlementDirectory, \
     ProductDirectory, Writer
 from subscription_manager.identity import ConsumerIdentity
-from subscription_manager.injection import CERT_SORTER, require
+from subscription_manager.injection import CERT_SORTER, PLUGIN_MANAGER, require
 from subscription_manager.lock import Lock
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -107,7 +106,7 @@ class HealingLib(DataLib):
         DataLib.__init__(self, lock, uep)
 
         self._product_dir = product_dir or ProductDirectory()
-        self.plugin_manager = plugins.get_plugin_manager()
+        self.plugin_manager = require(PLUGIN_MANAGER)
 
     def _do_update(self):
         uuid = ConsumerIdentity.read().getConsumerId()
