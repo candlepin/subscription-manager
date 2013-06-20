@@ -742,6 +742,40 @@ class EnvironmentsCommand(OrgCommand):
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
 
+class AutohealCommand(OrgCommand):
+
+    def __init__(self):
+        self.uuid = inj.require(inj.IDENTITY).uuid
+
+        shortdesc = _("Manage the autoheal setting for this system")
+        self._org_help_text = \
+            _("specify whether to enable or disable autohealing of subscriptions")
+        super(AutohealCommand, self).__init__("autoheal", shortdesc,
+                                                False)
+
+        self._add_url_options()
+        self.parser.add_option("--enable", dest="enable", action='store_true',
+                help=_("enable autohealing of subscriptions"))
+        self.parser.add_option("--disable", dest="disable", action='store_true',
+                help=_("disable autohealing of subscriptions"))
+
+    def _toggle(self, autoheal):
+        self.cp.updateConsumer(self.uuid, autoheal=autoheal)
+
+    def _validate_options(self):
+        if not self.uuid:
+            if not (self.options.username and self.options.password):
+                print(_("Error: you must register or specify --username and --password to list service levels"))
+                sys.exit(-1)
+            else:
+                print(NOT_REGISTERED)
+                sys.exit(-1)
+
+    def _do_command(self):
+        self._validate_options()
+        self._toggle(self.options.enable or False)
+
+
 class ServiceLevelCommand(OrgCommand):
 
     def __init__(self):
@@ -2207,7 +2241,8 @@ class ManagerCLI(CLI):
                     IdentityCommand, OwnersCommand, RefreshCommand, CleanCommand,
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
-                    VersionCommand, RemoveCommand, AttachCommand, PluginsCommand]
+                    VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
+                    AutohealCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):
