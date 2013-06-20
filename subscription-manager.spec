@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.10
+Version: 1.8.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -382,6 +382,29 @@ fi
 %endif
 
 %changelog
+* Thu Jun 20 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.11-1
+- 844532: xen dom0 cpu topology lies, work around it (alikins@redhat.com)
+- 854380: fix overlap filter (ckozak@redhat.com)
+- 915847: Provide option to skip using proxy when connecting to RHSM.
+- 921222: Fixed tab completion (cschevia@redhat.com)
+- 922871: Call pre_product_id_install hook on product install (mstead@redhat.com)
+- 924766: Show machine type when attaching 'virt only' subscriptions (wpoteat@redhat.com)
+- 927340: added empty warning, block auth unless proxy enabled (ckozak@redhat.com)
+- 928401: Fixed translation issue in redeem dialog (cschevia@redhat.com)
+- 947485: System 'disconnected' if no cache and disconnected (ckozak@redhat.com)
+- 947788: facts plugin can handle no 'facter' (alikins@redhat.com)
+- 966137: stat-cert handles ent cert with no content (alikins@redhat.com)
+- 972883: Add entries to productid.js during migration. (awood@redhat.com)
+- 973938: Flush std out and catch errors to work around the broken pipe from the more command (bkearney@redhat.com)
+- 974123: default behavior is help, no longer status (ckozak@redhat.com)
+- 974587: Allow list --consumed to handle certificates with empty order sections (bkearney@redhat.com) (awood@redhat.com)
+- 975164: 975186: fix certlib exception handling (ckozak@redhat.com)
+- Pull PluginManager from dependency injection framework (mstead@redhat.com)
+- Performance enhancements (ckozak@redhat.com)
+- added cp_provider doc strings, modified test fixture (ckozak@redhat.com)
+- Fix expand options so there is no border txt view (alikins@redhat.com)
+- Make PluginManager lazy loading (mstead@redhat.com)
+
 * Tue Jun 04 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.10-1
 - 922825: pre_subscribe conduit now contains more data (mstead@redhat.com)
 - 921222: Fixed subman auto-complete scripts (cschevia@redhat.com)
