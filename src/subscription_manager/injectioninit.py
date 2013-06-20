@@ -41,12 +41,11 @@ def init_dep_injection():
     inj.provide(inj.ENT_DIR, EntitlementDirectory)
     inj.provide(inj.PROD_DIR, ProductDirectory)
 
-    inj.provide(inj.STATUS_CACHE, StatusCache)
-    inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache)
+    inj.provide(inj.STATUS_CACHE, StatusCache())
+    inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache())
 
     inj.provide(inj.CP_PROVIDER, CPProvider())
 
-    # Must come after ent dir, prod dir, conn info, and identity
     inj.provide(inj.CERT_SORTER, CertSorter(lazy_load=True))
 
     # Set up plugin manager as a singleton.

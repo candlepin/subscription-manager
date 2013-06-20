@@ -23,6 +23,7 @@ if __name__ != '__main__':
 
 import sys
 import os
+import subscription_manager.injection as inj
 
 
 def system_exit(code, msgs=None):
@@ -75,14 +76,21 @@ def main():
     return 0
 
 
+def cleanup():
+    inj.require(inj.STATUS_CACHE).write_cache()
+    inj.require(inj.PROD_STATUS_CACHE).write_cache()
+
 if __name__ == '__main__':
     try:
         sys.exit(abs(main() or 0))
     except SystemExit, e:
         #this is a non-exceptional exception thrown by Python 2.4, just
         #re-raise, bypassing handle_exception
+        cleanup()
         raise e
     except KeyboardInterrupt:
+        cleanup()
         system_exit(0, "\nUser interrupted process.")
     except Exception, e:
+        cleanup()
         handle_exception("exception caught in subscription-manager", e)
