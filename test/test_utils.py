@@ -331,12 +331,12 @@ NOT_COLLECTED = "non-collected-package"
 
 class TestGetServerVersions(fixture.SubManFixture):
 
-    @patch('subscription_manager.utils.Versions', spec=Versions)
     @patch('subscription_manager.utils.ClassicCheck')
-    def test_get_server_versions_classic(self, mock_classic, mock_versions):
-        self._inject_mock_invalid_consumer()
-        instance = mock_classic.return_value
+    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
+    def test_get_server_versions_classic(self, mci_exists_and_valid, MockClassicCheck):
+        instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = True
+        mci_exists_and_valid.return_value = False
 
         sv = get_server_versions(None)
         self.assertEquals(sv['server-type'], "RHN Classic")
@@ -516,6 +516,13 @@ class TestGetVersion(fixture.SubManFixture):
         versions.get_release.return_value = ""
         result = get_version(versions, "foobar")
         self.assertEquals("1.0", result)
+class TestClientVersion(unittest.TestCase):
+    def test_get_client_versions(self):
+        client_versions = get_client_versions()
+        self.assertTrue('python-rhsm' in client_versions)
+        self.assertTrue('subscription-manager' in client_versions)
+        self.assertTrue(isinstance(client_versions['python-rhsm'], str))
+        self.assertTrue(isinstance(client_versions['subscription-manager'], str))
 
 
 class TestFriendlyJoin(fixture.SubManFixture):

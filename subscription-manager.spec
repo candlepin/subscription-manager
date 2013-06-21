@@ -287,6 +287,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/dmiinfo.py*
 %{_datadir}/rhsm/subscription_manager/entcertlib.py*
 %{_datadir}/rhsm/subscription_manager/entbranding.py*
+%{_datadir}/rhsm/subscription_manager/cp_provider.py*
 %{_datadir}/rhsm/subscription_manager/factlib.py*
 %{_datadir}/rhsm/subscription_manager/facts.py*
 %{_datadir}/rhsm/subscription_manager/healinglib.py*
@@ -311,6 +312,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/packageprofilelib.py*
 %{_datadir}/rhsm/subscription_manager/plugins.py*
 %{_datadir}/rhsm/subscription_manager/productid.py*
+%{_datadir}/rhsm/subscription_manager/reasons.py*
 %{_datadir}/rhsm/subscription_manager/release.py*
 %{_datadir}/rhsm/subscription_manager/repolib.py*
 %{_datadir}/rhsm/subscription_manager/rhelentbranding.py*
@@ -325,6 +327,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/exceptions.py*
 %{_datadir}/rhsm/subscription_manager/plugin/*.py*
 
+%{_datadir}/rhsm/subscription_manager/version.py*
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
 %dir %{_sysconfdir}/rhsm/pluginconf.d
@@ -362,6 +365,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/rct/cli.py*
 %{_datadir}/rhsm/rct/*commands.py*
 %{_datadir}/rhsm/rct/printing.py*
+%{_datadir}/rhsm/rct/version.py*
 %attr(755,root,root) %{_bindir}/rct
 
 # Include consumer debug CLI tool
