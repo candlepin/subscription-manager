@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.8.12
+Version: 1.8.13
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,9 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Jun 21 2013 Adrian Likins <alikins@redhat.com> 1.8.13-1
+- Added autoheal option to updateConsumer (cschevia@redhat.com)
+
 * Fri May 31 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.12-1
 - Update the releasers with a 6.3 (bkearney@redhat.com)
 - 967566: Enhance the ssl bindings to expose the issuer. (bkearney@redhat.com)
