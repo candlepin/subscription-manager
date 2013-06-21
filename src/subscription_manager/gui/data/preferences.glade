@@ -132,7 +132,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="on_checkbox_toggled"/>
+                    <signal name="toggled" handler="on_autoheal_checkbox_toggled"/>
                   </widget>
                   <packing>
                     <property name="expand">True</property>
