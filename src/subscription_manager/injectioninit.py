@@ -36,18 +36,16 @@ def init_dep_injection():
     inj.provide(inj.IDENTITY, Identity, singleton=True)
 
     inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR,
-            ValidProductDateRangeCalculator, singleton=False)
+            ValidProductDateRangeCalculator)
 
-    # TODO: singletons possible?
     inj.provide(inj.ENT_DIR, EntitlementDirectory, singleton=True)
     inj.provide(inj.PROD_DIR, ProductDirectory, singleton=True)
 
-    inj.provide(inj.STATUS_CACHE, StatusCache, singleton=True)
-    inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache, singleton=True)
+    inj.provide(inj.STATUS_CACHE, StatusCache)
+    inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache)
 
     inj.provide(inj.CP_PROVIDER, CPProvider, singleton=True)
 
-    # Must come after ent dir, prod dir, conn info, and identity
     inj.provide(inj.CERT_SORTER, CertSorter, singleton=True)
 
     # Set up plugin manager as a singleton.

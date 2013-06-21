@@ -40,7 +40,6 @@ class FeatureBroker:
     """
     def __init__(self):
         self.providers = {}
-        self.non_singletons = set()
 
     def provide(self, feature, provider):
         """
@@ -65,25 +64,30 @@ class FeatureBroker:
         """
         try:
             provider = self.providers[feature]
-            if isinstance(provider, (type, types.ClassType)):
-                log.debug("Initializing singleton for feature %s: %s" %
-                        (feature, provider))
-                self.providers[feature] = provider(*args, **kwargs)
-            elif callable(provider):
-                log.debug("Returning callable provider for feature %s: %s" %
-                        (feature, provider))
-                return provider(*args, **kwargs)
-            log.debug("Returning instance for feature %s" % feature)
-            return self.providers[feature]
         except KeyError:
             raise KeyError("Unknown feature: %r" % feature)
 
+        if isinstance(provider, (type, types.ClassType)):
+            log.debug("Initializing singleton for feature %s" % feature)
+            # Args should never be used with singletons, they are ignored
+            self.providers[feature] = provider()
+        elif callable(provider):
+            log.debug("Returning callable provider for feature %s: %s" %
+                    (feature, provider))
+            return provider(*args, **kwargs)
 
-class NonSingleton(object):
-    def __new__(cls, other, *args, **kwargs):
-        def factory():
-            return other(*args, **kwargs)
-        return factory
+        log.debug("Returning instance for feature %s" % feature)
+        return self.providers[feature]
+
+
+def nonSingleton(other):
+    """
+    Creates a factory method for a class. Passes args to the constructor
+    in order to create a new object every time it is required.
+    """
+    def factory(*args, **kwargs):
+        return other(*args, **kwargs)
+    return factory
 
 
 # Create a global instance we can use in all components. Tests can override
@@ -101,5 +105,5 @@ def require(feature, *args, **kwargs):
 def provide(feature, provider, singleton=False):
     global FEATURES
     if not singleton and isinstance(provider, (type, types.ClassType)):
-        provider = NonSingleton(provider)
+        provider = nonSingleton(provider)
     return FEATURES.provide(feature, provider)

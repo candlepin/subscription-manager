@@ -25,6 +25,7 @@ from subscription_manager import repolib
 from subscription_manager import facts
 from subscription_manager import hwprobe
 from subscription_manager import injection
+import subscription_manager.injection as inj
 
 from rhsm.profile import RPMProfile
 from rhsm.connection import GoneException
@@ -82,22 +83,10 @@ class TestCertmgr(SubManFixture):
         self.patcher8 = mock.patch.object(facts.Facts, 'get_last_update')
         self.facts_getlastupdate = self.patcher8.start()
 
-        # we end up import EntitlementDirectory differently lots...
-        self.patcher9 = mock.patch('subscription_manager.certlib.EntitlementDirectory')
-        self.certlib_entdir = self.patcher9.start()
-
         # mock out all hardware fetching... we may need to fake socket counts
         self.hwprobe_getall_patcher = mock.patch.object(hwprobe.Hardware, 'get_all')
         self.hwprobe_getall_mock = self.hwprobe_getall_patcher.start()
         self.hwprobe_getall_mock.return_value = {}
-
-        self.patchcer_certdir_entdir = \
-            mock.patch('subscription_manager.certdirectory.EntitlementDirectory')
-        self.certdir_entdir = self.patchcer_certdir_entdir.start()
-
-        self.patcher_repolib_entdir = \
-            mock.patch("subscription_manager.repolib.EntitlementDirectory")
-        self.repolib_entdir = self.patcher_repolib_entdir.start()
 
         self.patcher_certlib_writer = mock.patch("subscription_manager.certlib.Writer")
         self.certlib_writer = self.patcher_certlib_writer.start()
@@ -122,16 +111,13 @@ class TestCertmgr(SubManFixture):
 
         # local entitlement dir
         self.stub_entdir = stubs.StubEntitlementDirectory(self.local_ent_certs)
-        self.certdir_entdir.return_value = self.stub_entdir
-        self.certlib_entdir.return_value = self.stub_entdir
-        self.repolib_entdir.return_value = self.stub_entdir
+        inj.provide(inj.ENT_DIR, self.stub_entdir)
 
         self.mock_uep = mock.Mock()
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[{'serial': self.stub_ent1.serial},
                                                                         {'serial': self.stub_ent2.serial}])
         self.mock_uep.getConsumer = mock.Mock(return_value=CONSUMER_DATA)
 
-        self.certdir_entdir = self.patchcer_certdir_entdir.start()
         self.certlib_updateaction_getconsumerid.return_value = "234234"
 
         self.repolib_updateaction_perform.return_value = 0
@@ -154,10 +140,7 @@ class TestCertmgr(SubManFixture):
         self.patcher5.stop()
         self.patcher6.stop()
         self.patcher8.stop()
-        self.patcher9.stop()
 
-        self.patchcer_certdir_entdir.stop()
-        self.patcher_repolib_entdir.stop()
         self.patcher_certlib_writer.stop()
 
         self.hwprobe_getall_patcher.stop()
@@ -262,9 +245,7 @@ class TestCertmgr(SubManFixture):
         stub_ents = stub_ents or []
         stub_entdir = stubs.StubEntitlementDirectory(stub_ents)
 
-        self.certdir_entdir.return_value = stub_entdir
-        self.certlib_entdir.return_value = stub_entdir
-        self.repolib_entdir.return_value = stub_entdir
+        inj.provide(inj.ENT_DIR, stub_entdir)
 
         # don't need to build real pem's, we mock out the writer anyway
         # so this just create a list of mock keys and stub ent certs
