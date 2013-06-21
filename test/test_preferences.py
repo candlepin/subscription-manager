@@ -123,6 +123,15 @@ class TestPreferencesDialog(SubManFixture):
         identity = require(IDENTITY)
         MockUep.assert_called_with(identity.uuid, release="123123")
 
+    @mock.patch.object(stubs.StubUEP, 'updateConsumer')
+    def testAutohealChanged(self, MockUep):
+        self._getPrefDialog()
+
+        self.preferences_dialog.show()
+        self.preferences_dialog.autoheal_checkbox.set_active(1)
+        # we currently dont actually do anything here, so
+        # not much to test
+
     def testReleaseUnset(self):
         self._getPrefDialog()
 
