@@ -33,9 +33,9 @@ def init_dep_injection():
     # Set up consumer identity as a singleton so we don't constantly re-load
     # it from disk. Call reload when anything changes and all references will be
     # updated.
-    inj.provide(inj.IDENTITY, Identity(lazy_load=True))
+    inj.provide(inj.IDENTITY, Identity)
     inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR,
-            ValidProductDateRangeCalculator)
+            ValidProductDateRangeCalculator, is_singleton=False)
 
     # TODO: singletons possible?
     inj.provide(inj.ENT_DIR, EntitlementDirectory)
@@ -44,12 +44,12 @@ def init_dep_injection():
     inj.provide(inj.STATUS_CACHE, StatusCache)
     inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache)
 
-    inj.provide(inj.CP_PROVIDER, CPProvider())
+    inj.provide(inj.CP_PROVIDER, CPProvider)
 
     # Must come after ent dir, prod dir, conn info, and identity
-    inj.provide(inj.CERT_SORTER, CertSorter(lazy_load=True))
+    inj.provide(inj.CERT_SORTER, CertSorter)
 
     # Set up plugin manager as a singleton.
     # FIXME: should we aggressively catch exceptions here? If we can't
     # create a PluginManager we should probably raise an exception all the way up
-    inj.provide(inj.PLUGIN_MANAGER, PluginManager(lazy_load=True))
+    inj.provide(inj.PLUGIN_MANAGER, PluginManager)

@@ -19,7 +19,6 @@ import os
 from rhsm.certificate import create_from_pem
 from rhsm.config import initConfig
 from subscription_manager.certdirectory import Path
-from subscription_manager.lazyloader import LazyLoader
 
 CFG = initConfig()
 
@@ -117,12 +116,11 @@ class ConsumerIdentity:
              self.getConsumerId())
 
 
-class Identity(LazyLoader):
+class Identity(object):
     """
     Wrapper for sharing consumer identity without constant reloading.
     """
-    def load(self):
-        super(Identity, self).load()
+    def __init__(self):
         self.reload()
 
     def reload(self):

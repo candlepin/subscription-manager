@@ -24,13 +24,13 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 class ValidProductDateRangeCalculator(object):
 
-    def __init__(self, uep):
-        self.uep = uep
+    def __init__(self, uep=None):
+        uep = uep or inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
         self.identity = inj.require(inj.IDENTITY)
         if self.identity.is_valid():
             self.prod_status_cache = inj.require(inj.PROD_STATUS_CACHE)
             self.prod_status = self.prod_status_cache.load_status(
-                    self.uep, self.identity.uuid)
+                    uep, self.identity.uuid)
 
     def calculate(self, product_hash):
         """

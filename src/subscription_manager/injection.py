@@ -12,7 +12,6 @@
 # in this software or its documentation.
 #
 
-from subscription_manager.lazyloader import LazyLoader
 
 # Supported Features:
 IDENTITY = "IDENTITY"
@@ -26,6 +25,7 @@ CP_PROVIDER = "CP_PROVIDER"
 PLUGIN_MANAGER = "PLUGIN_MANAGER"
 
 import logging
+import types
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
@@ -40,6 +40,7 @@ class FeatureBroker:
     """
     def __init__(self):
         self.providers = {}
+        self.non_singletons = set()
 
     def provide(self, feature, provider):
         """
@@ -64,18 +65,18 @@ class FeatureBroker:
         """
         try:
             provider = self.providers[feature]
-            if callable(provider):
+            if isinstance(provider, (type, types.ClassType)) and feature not in self.non_singletons:
+                log.debug("Initializing singleton for feature %s: %s" %
+                        (feature, provider))
+                self.providers[feature] = provider(*args, **kwargs)
+            elif callable(provider):
                 log.debug("Returning callable provider for feature %s: %s" %
                         (feature, provider))
                 return provider(*args, **kwargs)
-            else:
-                log.debug("Returning instance for feature %s" % feature)
-                if isinstance(provider, LazyLoader) and not provider.loaded:
-                    provider.load(*provider.args, **provider.kwargs)
-                return provider
+            log.debug("Returning instance for feature %s" % feature)
+            return self.providers[feature]
         except KeyError:
             raise KeyError("Unknown feature: %r" % feature)
-        return provider(*args, **kwargs)
 
 # Create a global instance we can use in all components. Tests can override
 # features as desired and that change should trickle out to all components.
@@ -89,6 +90,10 @@ def require(feature, *args, **kwargs):
     return FEATURES.require(feature, *args, **kwargs)
 
 
-def provide(feature, provider):
+def provide(feature, provider, is_singleton=True):
     global FEATURES
+    if not is_singleton:
+        FEATURES.non_singletons.add(feature)
+    elif feature in FEATURES.non_singletons:
+        FEATURES.non_singletons.remove(feature)
     return FEATURES.provide(feature, provider)
