@@ -1,16 +1,14 @@
 import unittest
 
-from mock import Mock, patch
+from mock import patch
 from subscription_manager.utils import remove_scheme, parse_server_info, \
     parse_baseurl_info, format_baseurl, ServerUrlParseErrorEmpty, \
     ServerUrlParseErrorNone, ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
-    ServerUrlParseErrorJustScheme, get_version, get_client_versions, \
-    get_server_versions, Versions, friendly_join
+    ServerUrlParseErrorJustScheme, get_client_versions, \
+    get_server_versions, friendly_join
 from subscription_manager import certlib
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
-
-from rhsm.version import Versions
 
 
 class TestParseServerInfo(unittest.TestCase):
@@ -274,46 +272,14 @@ class TestRemoveScheme(unittest.TestCase):
 NOT_COLLECTED = "non-collected-package"
 
 
-# Note, this is duped from python-rhsm/test/unit/version_tests.py
-class VersionsStub(Versions):
-    def _get_packages(self):
-        package_set = [{'name': Versions.SUBSCRIPTION_MANAGER,
-                        'version': '1',
-                        'release': "1"},
-                       {'name': Versions.PYTHON_RHSM,
-                        'version': '2',
-                        'release': "2"},
-                       {'name': NOT_COLLECTED,
-                        'version': '3',
-                        'release': "3"}]
-        return package_set
-
-
-# Versions with python-rhsm or subscription-manager
-class VersionsNoRhsmStub(Versions):
-    def _get_packages(self):
-        package_set = [{'name': 'awesome-package',
-                        'version': '1',
-                        'release': "1"},
-                       {'name': 'totally-awesome-package',
-                        'version': '2',
-                        'release': "2"},
-                       {'name': 'something else',
-                        'version': '3',
-                        'release': "3"}]
-        return package_set
-
-
 class TestGetServerVersions(unittest.TestCase):
 
     @patch('subscription_manager.utils.ClassicCheck')
     @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
     def test_get_server_versions_classic(self, mci_exists_and_valid, MockClassicCheck):
-        from subscription_manager import utils
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = True
         mci_exists_and_valid.return_value = False
-        utils.Versions = VersionsStub
 
         sv = get_server_versions(None)
         self.assertEquals(sv['server-type'], "RHN Classic")
@@ -388,60 +354,13 @@ class TestGetServerVersions(unittest.TestCase):
         self.assertEquals(sv['candlepin'], "Unknown")
 
 
-class TestGetClientVersions(unittest.TestCase):
-    @patch('subscription_manager.utils.Versions')
-    def test_get_client_versions(self, MockVersions):
-        # FIXME: the singleton-esqu nature of subscription_manager.utils.Versions
-        # make mocking/stubbing a little odd, more exhaustive testing
-        # will require figuing that out
-        instance = MockVersions.return_value
-
-        instance.get_version.return_value = '2'
-        instance.get_release.return_value = '3'
-        cv = get_client_versions()
-
-        self.assertEquals(cv['subscription-manager'], "2-3")
-        self.assertEquals(cv['python-rhsm'], '2-3')
-
-    @patch('subscription_manager.utils.Versions')
-    def test_get_client_versions_strings(self, MockVersions):
-        instance = MockVersions.return_value
-        instance.get_version.return_value = 'as'
-        instance.get_release.return_value = 'vc'
-        cv = get_client_versions()
-
-        self.assertEquals(cv['subscription-manager'], "as-vc")
-        self.assertEquals(cv['python-rhsm'], 'as-vc')
-
-    @patch('subscription_manager.utils.Versions')
-    def test_get_client_versions_exception(self, MockVersions):
-        def raise_exception(arg):
-            raise Exception("boom" + arg)
-
-        instance = MockVersions.return_value
-        instance.get_version.return_value = 'as'
-        instance.get_release.return_value = 'vc'
-        instance.get_version.side_effect = raise_exception
-
-        cv = get_client_versions()
-        self.assertEquals(cv['subscription-manager'], "Unknown")
-        self.assertEquals(cv['python-rhsm'], 'Unknown')
-
-
-class TestGetVersion(unittest.TestCase):
-    def test_version_and_release_present(self):
-        versions = Mock()
-        versions.get_version.return_value = "1.0"
-        versions.get_release.return_value = "1"
-        result = get_version(versions, "foobar")
-        self.assertEquals("1.0-1", result)
-
-    def test_version_no_release(self):
-        versions = Mock()
-        versions.get_version.return_value = "1.0"
-        versions.get_release.return_value = ""
-        result = get_version(versions, "foobar")
-        self.assertEquals("1.0", result)
+class TestClientVersion(unittest.TestCase):
+    def test_get_client_versions(self):
+        client_versions = get_client_versions()
+        self.assertTrue('python-rhsm' in client_versions)
+        self.assertTrue('subscription-manager' in client_versions)
+        self.assertTrue(isinstance(client_versions['python-rhsm'], str))
+        self.assertTrue(isinstance(client_versions['subscription-manager'], str))
 
 
 class TestFriendlyJoin(unittest.TestCase):
