@@ -129,8 +129,15 @@ class TestPreferencesDialog(SubManFixture):
 
         self.preferences_dialog.show()
         self.preferences_dialog.autoheal_checkbox.set_active(1)
-        # we currently dont actually do anything here, so
-        # not much to test
+        display_text = self.preferences_dialog.autoheal_checkbox.get_label()
+        self.assertEquals("Enabled", display_text)
+        identity = require(IDENTITY)
+        MockUep.assert_called_with(identity.uuid, autoheal=True)
+
+        self.preferences_dialog.autoheal_checkbox.set_active(0)
+        display_text = self.preferences_dialog.autoheal_checkbox.get_label()
+        self.assertEquals("Disabled", display_text)
+        MockUep.assert_called_with(identity.uuid, autoheal=False)
 
     def testReleaseUnset(self):
         self._getPrefDialog()

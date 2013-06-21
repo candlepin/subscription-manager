@@ -205,6 +205,9 @@ class PreferencesDialog(object):
     def _on_autoheal_checkbox_toggled(self, checkbox):
         log.info("Auto-attach (autoheal) changed to: %s" % checkbox.get_active())
 
+        self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
+                                autoheal=checkbox.get_active())
+
         if (checkbox.get_active()):
             checkbox.set_label(_("Enabled"))
         else:
