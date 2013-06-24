@@ -13,52 +13,19 @@
 # in this software or its documentation.
 #
 
-from rhsm.version import Versions
+import rhsm.version
 import unittest
 
 NOT_COLLECTED = "non-collected-package"
 
 
-# NOTE: Because the super class will only initialize version data
-# the first time an instance is created, calling the c'tor with
-# different package data will not reset the data in the new instance.
-# This was done on purpose so that we can test that the data is initialized
-# only once.
-class VersionsStub(Versions):
+class VersionTests(unittest.TestCase):
+    def test_rpm_version(self):
+        self.assertTrue(isinstance(rhsm.version.rpm_version, str))
 
-    def __init__(self):
-        super(VersionsStub, self).__init__()
-        self._collect_data()
+    def test_rpm_version_no_name(self):
+        self.assertFalse('python-rhsm' in rhsm.version.rpm_version)
 
-    def _get_packages(self):
-        package_set = [
-            {'name': Versions.SUBSCRIPTION_MANAGER, 'version':'1', 'release': "1"},
-            {'name': Versions.PYTHON_RHSM, 'version':'2', 'release': "2"},
-            {'name': NOT_COLLECTED, 'version':'3', 'release': "3"},
-        ]
-        return package_set
-
-
-class VersionsTests(unittest.TestCase):
-
-    def test_versions_get_version_returns_correct_value(self):
-        versions = VersionsStub()
-        self.assertEqual('1', versions.get_version(Versions.SUBSCRIPTION_MANAGER))
-        self.assertEqual('2', versions.get_version(Versions.PYTHON_RHSM))
-
-    def test_versions_get_version_returns_empty_when_unknown(self):
-        versions = VersionsStub()
-        self.assertEquals("", versions.get_version("not-found"))
-
-    def test_versions_get_release_returns_correct_value(self):
-        versions = VersionsStub()
-        self.assertEqual('1', versions.get_release(Versions.SUBSCRIPTION_MANAGER))
-        self.assertEqual('2', versions.get_release(Versions.PYTHON_RHSM))
-
-    def test_versions_get_release_returns_empty_when_unknown(self):
-        versions = VersionsStub()
-        self.assertEquals("", versions.get_release("not-found"))
-
-    def test_versions_collects_package_data_for_only_sub_man_and_python_rhsm(self):
-        versions = VersionsStub()
-        self.assertEquals("", versions.get_version(NOT_COLLECTED))
+    def test_rpm_version_at_least_dash(self):
+        # just looking for something version number like
+        self.assertTrue('-' in rhsm.version.rpm_version)

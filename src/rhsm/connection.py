@@ -32,7 +32,15 @@ from M2Crypto import m2
 from urllib import urlencode
 
 from config import initConfig
-from version import Versions
+
+import version
+python_rhsm_version = version.rpm_version
+
+try:
+    import subscription_manager.version
+    subman_version = subscription_manager.version.rpm_version
+except ImportError:
+    subman_version = "unknown"
 
 from rhsm import ourjson as json
 from rhsm.utils import get_env_proxy_info
@@ -344,12 +352,6 @@ class Restlib(object):
         self.ssl_port = ssl_port
         self.apihandler = apihandler
         lc = _get_locale()
-        #collect some version data
-        v = Versions()
-        subman_version = ("%s-%s") % \
-            (v.get_version("subscription-manager"), v.get_release("subscription-manager"))
-        python_rhsm_version = ("%s-%s") % \
-            (v.get_version("python-rhsm"), v.get_release("python-rhsm"))
 
         self.headers = {"Content-type": "application/json",
                         "Accept": "application/json",
