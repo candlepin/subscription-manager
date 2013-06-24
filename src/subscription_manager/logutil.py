@@ -10,14 +10,16 @@
 #
 
 import logging
-from logging import Formatter
 from logging.handlers import RotatingFileHandler
 import os
 
 CERT_LOG = '/var/log/rhsm/rhsmcertd.log'
 
-
 handler = None
+stdout_handler = None
+
+LOG_FORMAT = u'%(asctime)s [%(levelname)s]  @%(filename)s:%(lineno)d - %(message)s'
+LOG_LEVEL = logging.DEBUG
 
 
 def _get_handler():
@@ -33,8 +35,6 @@ def _get_handler():
     except Exception:
         pass
 
-    fmt = u'%(asctime)s [%(levelname)s]  @%(filename)s:%(lineno)d - %(message)s'
-
     # Try to write to /var/log, fallback on console logging:
     try:
         handler = RotatingFileHandler(path, maxBytes=0x100000, backupCount=5, encoding='utf-8')
@@ -43,15 +43,34 @@ def _get_handler():
     except Exception:
         handler = logging.StreamHandler()
 
-    handler.setFormatter(Formatter(fmt))
+    handler.setFormatter(logging.Formatter(LOG_FORMAT))
+    handler.setLevel(LOG_LEVEL)
+
+    return handler
+
+
+def _get_stdout_handler():
+    global stdout_handler
+    if stdout_handler is not None:
+        return stdout_handler
+
+    handler = logging.StreamHandler()
+
+    handler.setFormatter(logging.Formatter(LOG_FORMAT))
     handler.setLevel(logging.DEBUG)
 
     return handler
 
 
 def init_logger():
-    logging.getLogger().setLevel(logging.DEBUG)
+    logging.getLogger().setLevel(LOG_LEVEL)
     logging.getLogger().addHandler(_get_handler())
+
+    # dump logs to stdout, and (re)set log level
+    # to DEBUG
+    if 'SUBMAN_DEBUG' in os.environ:
+        logging.getLogger().setLevel(logging.DEBUG)
+        logging.getLogger().addHandler(_get_stdout_handler())
 
 
 def init_logger_for_yum():
