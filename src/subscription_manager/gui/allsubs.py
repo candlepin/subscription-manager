@@ -370,6 +370,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             ents = self.backend.cp_provider.get_consumer_auth_cp().bindByEntitlementPool(self.identity.uuid, pool['id'], quantity)
             self.plugin_manager.run("post_subscribe", consumer_uuid=self.identity.uuid, entitlement_data=ents)
             managerlib.fetch_certificates(self.backend)
+            self.backend.cs.force_cert_check()
 
         except Exception, e:
             handle_gui_exception(e, _("Error getting subscription: %s"),
