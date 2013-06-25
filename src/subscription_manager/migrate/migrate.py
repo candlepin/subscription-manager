@@ -313,7 +313,10 @@ class MigrationEngine(object):
                 env_input = raw_input(_("Environment: ")).strip()
 
             for env_data in environment_list:
-                if env_data['name'] == env_input or env_data['label'] == env_input:
+                # See BZ #978001
+                if (env_data['name'] == env_input or
+                    ('label' in env_data and env_data['label'] == env_input) or
+                    ('displayName' in env_data and env_data['displayName'] == env_input)):
                     environment = env_data['name']
                     break
             if not environment:

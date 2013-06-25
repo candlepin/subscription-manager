@@ -435,8 +435,8 @@ class TestMigration(unittest.TestCase):
 
         self.engine.cp.getEnvironmentList = MagicMock()
         self.engine.cp.getEnvironmentList.return_value = [
-            {"name": "My Environment", "label": "my_environment"},
-            {"name": "Another Environment", "label": "another_environment"},
+            {"name": "My Environment"},
+            {"name": "Another Environment"},
             ]
 
         mock_input.return_value = "My Environment"
@@ -454,6 +454,23 @@ class TestMigration(unittest.TestCase):
         self.engine.cp.getEnvironmentList.return_value = [
             {"name": "My Environment", "label": "my_environment"},
             {"name": "Another Environment", "label": "another_environment"},
+            ]
+
+        mock_input.return_value = "my_environment"
+        env = self.engine.get_environment("some_org")
+        self.assertEquals(env, "My Environment")
+
+    @patch("__builtin__.raw_input")
+    def test_enter_environment_displayName(self, mock_input):
+        self.engine.options = MagicMock()
+        self.engine.options.environment = None
+        self.engine.cp.supports_resource = MagicMock()
+        self.engine.cp.supports_resource.return_value = True
+
+        self.engine.cp.getEnvironmentList = MagicMock()
+        self.engine.cp.getEnvironmentList.return_value = [
+            {"name": "My Environment", "displayName": "my_environment"},
+            {"name": "Another Environment", "displayName": "another_environment"},
             ]
 
         mock_input.return_value = "my_environment"
