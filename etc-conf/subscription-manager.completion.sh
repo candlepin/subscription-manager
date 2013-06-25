@@ -11,7 +11,7 @@ _subscription_manager_common_url_opts="--serverurl"
 
 _subscription_manager_autoheal()
 {
-  local opts="--enable --disable"
+  local opts="--enable --disable --show ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
@@ -184,12 +184,12 @@ _subscription_manager()
   prev="${COMP_WORDS[COMP_CWORD-1]}"
 
   # top-level commands and options
-  opts="attach autoheal clean config environments facts identity import list orgs
+  opts="attach auto-attach clean config environments facts identity import list orgs
         plugins redeem refresh register release remove repos service-level subscribe
         unregister unsubscribe version"
 
   case "${first}" in
-      autoheal|\
+      auto-attach|\
       clean|\
       config|\
       environments|\

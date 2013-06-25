@@ -742,38 +742,46 @@ class EnvironmentsCommand(OrgCommand):
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
 
-class AutohealCommand(OrgCommand):
+class AutohealCommand(CliCommand):
 
     def __init__(self):
         self.uuid = inj.require(inj.IDENTITY).uuid
 
-        shortdesc = _("Manage the autoheal setting for this system")
+        shortdesc = _("Set if this system runs auto-attach each check-in")
         self._org_help_text = \
-            _("specify whether to enable or disable autohealing of subscriptions")
-        super(AutohealCommand, self).__init__("autoheal", shortdesc,
+            _("specify whether to enable or disable auto-attaching of subscriptions")
+        super(AutohealCommand, self).__init__("auto-attach", shortdesc,
                                                 False)
 
-        self._add_url_options()
         self.parser.add_option("--enable", dest="enable", action='store_true',
-                help=_("enable autohealing of subscriptions"))
+                help=_("try to attach subscriptions for uncovered products each check-in"))
         self.parser.add_option("--disable", dest="disable", action='store_true',
-                help=_("disable autohealing of subscriptions"))
+                help=_("do not try to automatically attach subscriptions each check-in"))
+        self.parser.add_option("--show", dest="show", action='store_true',
+                help=_("show the current auto-attach preference"))
 
     def _toggle(self, autoheal):
         self.cp.updateConsumer(self.uuid, autoheal=autoheal)
+        self._show(autoheal)
 
     def _validate_options(self):
-        if not self.uuid:
-            if not (self.options.username and self.options.password):
-                print(_("Error: you must register or specify --username and --password to list service levels"))
-                sys.exit(-1)
-            else:
-                print(NOT_REGISTERED)
-                sys.exit(-1)
+        if not self.uuid and not self.is_registered():
+            print(NOT_REGISTERED)
+            sys.exit(-1)
+
+    def _show(self, autoheal):
+        if autoheal:
+            print _("Auto-attach preference: enabled")
+        else:
+            print _("Auto-attach preference: disabled")
 
     def _do_command(self):
         self._validate_options()
-        self._toggle(self.options.enable or False)
+
+        if not self.options.enable and not self.options.disable:
+            self._show(self.cp.getConsumer(self.uuid)['autoheal'])
+        else:
+            self._toggle(self.options.enable or False)
 
 
 class ServiceLevelCommand(OrgCommand):
