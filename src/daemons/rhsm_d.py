@@ -26,6 +26,8 @@ import dbus.glib
 import sys
 sys.path.append("/usr/share/rhsm")
 
+from subscription_manager.logutil import init_logger
+
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
@@ -175,6 +177,8 @@ def parse_force_signal(cli_arg):
 
 
 def main():
+    init_logger()
+
     parser = OptionParser(usage=USAGE,
                           formatter=WrappedIndentedHelpFormatter())
     parser.add_option("-d", "--debug", dest="debug",
