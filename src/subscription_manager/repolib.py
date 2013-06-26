@@ -25,7 +25,8 @@ from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
 
 from certlib import ActionLock, DataLib, ConsumerIdentity
-from certdirectory import Path, EntitlementDirectory, ProductDirectory
+from certdirectory import Path
+import subscription_manager.injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -81,12 +82,12 @@ class UpdateAction:
         if ent_dir:
             self.ent_dir = ent_dir
         else:
-            self.ent_dir = EntitlementDirectory()
+            self.ent_dir = inj.require(inj.ENT_DIR)
 
         if prod_dir:
             self.prod_dir = prod_dir
         else:
-            self.prod_dir = ProductDirectory()
+            self.prod_dir = inj.require(inj.PROD_DIR)
 
         self.uep = uep
         self.manage_repos = 1

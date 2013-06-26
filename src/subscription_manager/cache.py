@@ -29,8 +29,8 @@ from M2Crypto import SSL
 from rhsm.config import initConfig
 import rhsm.connection as connection
 from rhsm.profile import get_profile, RPMProfile
-from subscription_manager.certdirectory import ProductDirectory
 from subscription_manager.certlib import ConsumerIdentity, DataLib
+import subscription_manager.injection as inj
 
 _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -337,7 +337,7 @@ class InstalledProductsManager(CacheManager):
     def __init__(self, product_dir=None):
 
         if not product_dir:
-            product_dir = ProductDirectory()
+            product_dir = inj.require(inj.PROD_DIR)
 
         self.installed = {}
         for prod_cert in product_dir.list():

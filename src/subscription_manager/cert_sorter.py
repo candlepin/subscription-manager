@@ -23,7 +23,6 @@ log = logging.getLogger('rhsm-app.' + __name__)
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
 from subscription_manager.cache import InstalledProductsManager
-from subscription_manager.lazyloader import LazyLoader
 
 import gettext
 _ = gettext.gettext
@@ -46,7 +45,7 @@ STATUS_MAP = {'valid': _('Current'),
         'unknown': _('Unknown')}
 
 
-class CertSorter(LazyLoader):
+class CertSorter(object):
     """
     Queries the server for compliance information and breaks out the response
     for use in the client code.
@@ -61,13 +60,14 @@ class CertSorter(LazyLoader):
     re-use this cached data for a period of time, before falling back to
     reporting unknown.
     """
-    def load(self):
-        super(CertSorter, self).load()
+    def __init__(self):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.identity = inj.require(inj.IDENTITY)
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
+        self.identity = inj.require(inj.IDENTITY)
+        self.load()
 
+    def load(self):
         # All products installed on this machine, regardless of status. Maps
         # installed product ID to product certificate.
         self.installed_products = self.product_dir.get_installed_products()

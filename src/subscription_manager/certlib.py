@@ -24,10 +24,10 @@ import socket
 from rhsm.config import initConfig
 from rhsm.certificate import Key, create_from_pem, GMT
 
-from subscription_manager.certdirectory import EntitlementDirectory, \
-    ProductDirectory, Writer
+from subscription_manager.certdirectory import Writer
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.injection import CERT_SORTER, PLUGIN_MANAGER, require
+import subscription_manager.injection as inj
 from subscription_manager.lock import Lock
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -105,7 +105,7 @@ class HealingLib(DataLib):
     def __init__(self, lock=ActionLock(), uep=None, product_dir=None):
         DataLib.__init__(self, lock, uep)
 
-        self._product_dir = product_dir or ProductDirectory()
+        self._product_dir = product_dir or inj.require(inj.PROD_DIR)
         self.plugin_manager = require(PLUGIN_MANAGER)
 
     def _do_update(self):
@@ -199,7 +199,7 @@ class IdentityCertLib(DataLib):
 class Action:
 
     def __init__(self, uep=None, entdir=None):
-        self.entdir = entdir or EntitlementDirectory()
+        self.entdir = entdir or inj.require(inj.ENT_DIR)
         self.uep = uep
 
     def build(self, bundle):
