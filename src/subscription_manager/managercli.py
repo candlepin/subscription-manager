@@ -2152,8 +2152,6 @@ class ListCommand(CliCommand):
                 contract = order.contract
                 account = order.account
                 quantity_used = order.quantity_used
-                service_level = order.service_level
-                service_type = order.service_type
 
             pool_id = _("Not Available")
             if hasattr(cert.pool, "id"):
