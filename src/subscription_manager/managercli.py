@@ -220,7 +220,8 @@ class CliCommand(AbstractCLICommand):
     def __init__(self, name="cli", shortdesc=None, primary=False):
         AbstractCLICommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
 
-        self._add_common_options()
+        if self.require_connection():
+            self._add_proxy_options()
 
         self.server_url = None
 
@@ -263,8 +264,8 @@ class CliCommand(AbstractCLICommand):
         self.parser.add_option("--insecure", action="store_true",
                                 default=False, help=_("do not check the server SSL certificate against available certificate authorities"))
 
-    def _add_common_options(self):
-        """ Add options that apply to all sub-commands. """
+    def _add_proxy_options(self):
+        """ Add proxy options that apply to sub-commands that require network connections. """
         self.parser.add_option("--proxy", dest="proxy_url",
                                default=None, help=_("proxy URL in the form of proxy_hostname:proxy_port"))
         self.parser.add_option("--proxyuser", dest="proxy_user",
@@ -544,10 +545,6 @@ class CleanCommand(CliCommand):
         shortdesc = _("Remove all local system and subscription data without affecting the server")
 
         super(CleanCommand, self).__init__("clean", shortdesc, False)
-
-    def _add_common_options(self):
-        # remove these options as per bz #664581
-        return
 
     def _do_command(self):
         managerlib.clean_all_data(False)
@@ -1693,10 +1690,6 @@ class ImportCertCommand(CliCommand):
             print _("Error: This command requires that you specify a certificate with --certificate.")
             sys.exit(-1)
 
-    def _add_common_options(self):
-        # remove these options as per bz #733873
-        return
-
     def _do_command(self):
         self._validate_options()
         # Return code
@@ -1762,8 +1755,8 @@ class PluginsCommand(CliCommand):
                  self.options.listhooks):
             self.options.list = True
 
-    def _add_common_options(self):
-        pass
+    def require_connection(self):
+        return False
 
     def _list_plugins(self):
         for plugin_class in self.plugin_manager.get_plugins().values():
@@ -1901,9 +1894,6 @@ class ConfigCommand(CliCommand):
             for name, value in cfg.items(section):
                 self.parser.add_option("--" + section + "." + name, dest=(section + "." + name),
                     help=_("Section: %s, Name: %s") % (section, name))
-
-    def _add_common_options(self):
-        pass
 
     def _validate_options(self):
         if self.options.list:
@@ -2196,9 +2186,6 @@ class VersionCommand(CliCommand):
         shortdesc = _("Print version information")
 
         super(VersionCommand, self).__init__("version", shortdesc, False)
-
-    def _add_common_options(self):
-        pass
 
     def _do_command(self):
         # FIXME: slightly odd in that we log that we can't get the version,
