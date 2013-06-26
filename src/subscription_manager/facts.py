@@ -22,8 +22,7 @@ import rhsm.config
 
 from subscription_manager.injection import PLUGIN_MANAGER, require
 from subscription_manager.cache import CacheManager
-from subscription_manager import certdirectory
-
+import subscription_manager.injection as inj
 
 _ = gettext.gettext
 
@@ -47,8 +46,8 @@ class Facts(CacheManager):
     def __init__(self, ent_dir=None, prod_dir=None):
         self.facts = {}
 
-        self.entitlement_dir = ent_dir or certdirectory.EntitlementDirectory()
-        self.product_dir = prod_dir or certdirectory.ProductDirectory()
+        self.entitlement_dir = ent_dir or inj.require(inj.ENT_DIR)
+        self.product_dir = prod_dir or inj.require(inj.PROD_DIR)
         # see bz #627962
         # we would like to have this info, but for now, since it
         # can change constantly on laptops, it makes for a lot of

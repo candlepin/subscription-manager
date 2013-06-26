@@ -23,9 +23,10 @@ sys.path.append('/usr/share/rhsm')
 
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
+import subscription_manager.injection as inj
 
 from subscription_manager import logutil
-from subscription_manager.repolib import RepoLib, EntitlementDirectory
+from subscription_manager.repolib import RepoLib
 from rhsm import connection
 
 requires_api_version = '2.5'
@@ -83,7 +84,7 @@ def update(conduit):
 
 def warnExpired(conduit):
     """ display warning for expired entitlements """
-    entdir = EntitlementDirectory()
+    entdir = inj.require(inj.ENT_DIR)
     products = set()
     for cert in entdir.list_expired():
         for p in cert.products:
@@ -107,7 +108,7 @@ def warnOrGiveUsageMessage(conduit):
     try:
         try:
             ConsumerIdentity.read().getConsumerId()
-            entdir = EntitlementDirectory()
+            entdir = inj.require(inj.ENT_DIR)
             if len(entdir.list_valid()) == 0:
                 msg = no_subs_warning
             else:

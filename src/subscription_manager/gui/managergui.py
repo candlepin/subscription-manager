@@ -18,6 +18,7 @@
 #
 
 from subscription_manager.injection import require, IDENTITY, CERT_SORTER, CP_PROVIDER
+import subscription_manager.injection as inj
 
 import gettext
 import locale
@@ -33,7 +34,6 @@ import rhsm.config as config
 import rhsm.connection as connection
 
 from subscription_manager.branding import get_branding
-from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.certlib import CertLib
 from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import ClassicCheck
@@ -91,8 +91,8 @@ class Backend(object):
 
         self.create_content_connection()
 
-        self.product_dir = ProductDirectory()
-        self.entitlement_dir = EntitlementDirectory()
+        self.product_dir = inj.require(inj.PROD_DIR)
+        self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.certlib = CertLib(uep=self.cp_provider.get_consumer_auth_cp())
 
         self.product_monitor = file_monitor.Monitor(self.product_dir.path)
@@ -346,6 +346,9 @@ class MainWindow(widgets.GladeWidget):
                                 self.main_window,
                                 log_msg="Consumer may need to be manually cleaned up: %s" %
                                 self.identity.uuid)
+        # managerlib.unregister removes product and entitlement directories
+        self.backend.product_dir.__init__()
+        self.backend.entitlement_dir.__init__()
         self.identity.reload()
 
         # We have new credentials, restart virt-who

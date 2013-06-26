@@ -12,7 +12,6 @@
 # in this software or its documentation.
 #
 
-from subscription_manager.lazyloader import LazyLoader
 
 # Supported Features:
 IDENTITY = "IDENTITY"
@@ -26,6 +25,7 @@ CP_PROVIDER = "CP_PROVIDER"
 PLUGIN_MANAGER = "PLUGIN_MANAGER"
 
 import logging
+import types
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
@@ -64,18 +64,31 @@ class FeatureBroker:
         """
         try:
             provider = self.providers[feature]
-            if callable(provider):
-                log.debug("Returning callable provider for feature %s: %s" %
-                        (feature, provider))
-                return provider(*args, **kwargs)
-            else:
-                log.debug("Returning instance for feature %s" % feature)
-                if isinstance(provider, LazyLoader) and not provider.loaded:
-                    provider.load(*provider.args, **provider.kwargs)
-                return provider
         except KeyError:
             raise KeyError("Unknown feature: %r" % feature)
-        return provider(*args, **kwargs)
+
+        if isinstance(provider, (type, types.ClassType)):
+            log.debug("Initializing singleton for feature %s" % feature)
+            # Args should never be used with singletons, they are ignored
+            self.providers[feature] = provider()
+        elif callable(provider):
+            log.debug("Returning callable provider for feature %s: %s" %
+                    (feature, provider))
+            return provider(*args, **kwargs)
+
+        log.debug("Returning instance for feature %s" % feature)
+        return self.providers[feature]
+
+
+def nonSingleton(other):
+    """
+    Creates a factory method for a class. Passes args to the constructor
+    in order to create a new object every time it is required.
+    """
+    def factory(*args, **kwargs):
+        return other(*args, **kwargs)
+    return factory
+
 
 # Create a global instance we can use in all components. Tests can override
 # features as desired and that change should trickle out to all components.
@@ -89,6 +102,8 @@ def require(feature, *args, **kwargs):
     return FEATURES.require(feature, *args, **kwargs)
 
 
-def provide(feature, provider):
+def provide(feature, provider, singleton=False):
     global FEATURES
+    if not singleton and isinstance(provider, (type, types.ClassType)):
+        provider = nonSingleton(provider)
     return FEATURES.provide(feature, provider)
