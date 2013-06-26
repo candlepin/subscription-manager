@@ -107,9 +107,9 @@ class BadCertificateException(ConnectionException):
 
 class RestlibException(ConnectionException):
 
-    def __init__(self, code, msg=""):
+    def __init__(self, code, msg=None):
         self.code = code
-        self.msg = msg
+        self.msg = msg or ""
 
     def __str__(self):
         return self.msg
@@ -137,10 +137,18 @@ class NetworkException(ConnectionException):
 
 class RemoteServerException(ConnectionException):
 
-    def __init__(self, code):
+    def __init__(self, code,
+                 request_type=None,
+                 handler=None):
         self.code = code
+        self.request_type = request_type
+        self.handler = handler
 
     def __str__(self):
+        if self.request_type and self.handler:
+            return "Server error attempting a %s to %s returned status %s" % (self.request_type,
+                                                                              self.handler,
+                                                                              self.code)
         return "Server returned %s" % self.code
 
 
@@ -420,12 +428,12 @@ class Restlib(object):
                            {"Content-Length": "0"}.items())
         try:
             conn.request(request_type, handler, body=body, headers=headers)
-        except SSLError, e:
+        except SSLError:
             if self.cert_file:
                 id_cert = certificate.create_from_file(self.cert_file)
                 if not id_cert.is_valid():
                     raise ExpiredIdentityCertException()
-            raise e
+            raise
         response = conn.getresponse()
         result = {
             "content": response.read(),
@@ -440,32 +448,57 @@ class Restlib(object):
         # FIXME: we should probably do this in a wrapper method
         # so we can use the request method for normal http
 
-        self.validateResponse(result)
+        self.validateResponse(result, request_type, handler)
+
+        # handle empty, but succesful responses, ala 204
         if not len(result['content']):
             return None
 
         return json.loads(result['content'], object_hook=self._decode_dict)
 
-    def validateResponse(self, response):
+    def validateResponse(self, response, request_type=None, handler=None):
+
+        # FIXME: what are we supposed to do with a 204?
         if str(response['status']) not in ["200", "204"]:
             parsed = {}
-            try:
-                parsed = json.loads(response['content'], object_hook=self._decode_dict)
-            except Exception, e:
-                log.exception(e)
-                log.error("Response: %s" % response)
-                if str(response['status']) in ["404", "500", "502", "503", "504"]:
-                    log.error('remote server status code: ' + str(response['status']))
-                    raise RemoteServerException(response['status'])
-                else:
-                    raise NetworkException(response['status'])
+            if not response['content']:
+                parsed = {}
+            else:
+                # try vaguely to see if it had a json parseable body
+                try:
+                    parsed = json.loads(response['content'], object_hook=self._decode_dict)
+                except ValueError, e:
+                    log.error("Response: %s" % response['status'])
+                    log.error("JSON parsing error: %s" % e.msg)
+                except Exception, e:
+                    log.error("Response: %s" % response['status'])
+                    log.exception(e)
 
-            if str(response['status']) == "410":
-                raise GoneException(response['status'],
+            if parsed:
+                # find and raise a GoneException on '410' with 'deleteId' in the
+                # content, implying that the resource has been deleted
+                # NOTE: a 410 with a unparseable content will raise
+                # RemoteServerException
+                if str(response['status']) == "410":
+                    raise GoneException(response['status'],
                         parsed['displayMessage'], parsed['deletedId'])
 
-            error_msg = self._parse_msg_from_error_response_body(parsed)
-            raise RestlibException(response['status'], error_msg)
+                # I guess this is where we would have an exception mapper if we
+                # had more meaningful exceptions. We've gotten a response from
+                # the server that means something.
+
+                # FIXME: we can get here with a valid json response that
+                # could be anything, we don't verify it anymore
+                error_msg = self._parse_msg_from_error_response_body(parsed)
+                raise RestlibException(response['status'], error_msg)
+            else:
+                if str(response['status']) in ["404", "410", "500", "502", "503", "504"]:
+                    raise RemoteServerException(response['status'],
+                                                request_type=request_type,
+                                                handler=handler)
+                else:
+                    # unexpected with no valid content
+                    raise NetworkException(response['status'])
 
     def _parse_msg_from_error_response_body(self, body):
 
