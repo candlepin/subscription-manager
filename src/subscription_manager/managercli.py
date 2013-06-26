@@ -2203,9 +2203,6 @@ class StatusCommand(CliCommand):
         shortdesc = _("Show status information for this system's subscriptions and products")
         super(StatusCommand, self).__init__("status", shortdesc, True)
 
-    def _add_common_options(self):
-        pass
-
     def _do_command(self):
         # list status and all reasons it is not valid
 
