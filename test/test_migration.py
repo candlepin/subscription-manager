@@ -249,6 +249,12 @@ class TestMigration(unittest.TestCase):
             }
         self.engine.rhncfg = rhn_config
         self.engine.transfer_http_proxy_settings()
+        expected = [call("server", "proxy_hostname", ""),
+            call("server", "proxy_port", ""),
+            call("server", "proxy_user", ""),
+            call("server", "proxy_password", ""),
+            ]
+        self.assertTrue(self.engine.rhsmcfg.set.call_args_list == expected)
         self.assertEquals("proxy.example.com", self.engine.proxy_host)
         self.assertEquals("123", self.engine.proxy_port)
         self.assertEquals(None, self.engine.proxy_user)

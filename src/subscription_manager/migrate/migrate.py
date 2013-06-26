@@ -212,12 +212,19 @@ class MigrationEngine(object):
                 self.proxy_pass = self.rhncfg['proxyPassword']
 
             log.info("Using proxy %s:%s" % (self.proxy_host, self.proxy_port))
-            if not self.options.noproxy:
+            if self.options.noproxy:
+                # If the user doesn't want to use a proxy to connect to their subscription
+                # management server, then remove any proxy information that may have crept in.
+                self.rhsmcfg.set('server', 'proxy_hostname', '')
+                self.rhsmcfg.set('server', 'proxy_port', '')
+                self.rhsmcfg.set('server', 'proxy_user', '')
+                self.rhsmcfg.set('server', 'proxy_password', '')
+            else:
                 self.rhsmcfg.set('server', 'proxy_hostname', self.proxy_host)
                 self.rhsmcfg.set('server', 'proxy_port', self.proxy_port)
                 self.rhsmcfg.set('server', 'proxy_user', self.proxy_user or '')
                 self.rhsmcfg.set('server', 'proxy_password', self.proxy_pass or '')
-                self.rhsmcfg.save()
+            self.rhsmcfg.save()
 
     def get_candlepin_connection(self, username, password, basic_auth=True):
         try:
