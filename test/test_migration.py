@@ -319,13 +319,17 @@ class TestMigration(unittest.TestCase):
             self.fail("No exception raised")
 
     def test_one_org(self):
+        self.engine.options = MagicMock()
+        self.engine.options.org = None
         self.engine.cp.getOwnerList = MagicMock()
-        self.engine.cp.getOwnerList.return_value = [{"key": "my_org"}]
+        self.engine.cp.getOwnerList.return_value = [{"key": "my_org", "displayName": "My Org"}]
         org = self.engine.get_org("some_username")
         self.assertEquals(org, "my_org")
 
     @patch("__builtin__.raw_input")
     def test_enter_org_key(self, mock_input):
+        self.engine.options = MagicMock()
+        self.engine.options.org = None
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
@@ -337,6 +341,8 @@ class TestMigration(unittest.TestCase):
 
     @patch("__builtin__.raw_input")
     def test_enter_org_name(self, mock_input):
+        self.engine.options = MagicMock()
+        self.engine.options.org = None
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
@@ -348,6 +354,8 @@ class TestMigration(unittest.TestCase):
 
     @patch("__builtin__.raw_input")
     def test_enter_bad_org(self, mock_input):
+        self.engine.options = MagicMock()
+        self.engine.options.org = None
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
@@ -361,7 +369,33 @@ class TestMigration(unittest.TestCase):
         else:
             self.fail("No exception raised")
 
-    def test_environment_not_supported(self):
+    def test_org_option(self):
+        self.engine.options = MagicMock()
+        self.engine.options.org = "my_org"
+        self.engine.cp.getOwnerList = MagicMock()
+        self.engine.cp.getOwnerList.return_value = [
+            {"key": "my_org", "displayName": "My Org"},
+            {"key": "second_org", "displayName": "Second Org"},
+            ]
+        org = self.engine.get_org("some_username")
+        self.assertEquals(org, "my_org")
+
+    def test_bad_org_option(self):
+        self.engine.options = MagicMock()
+        self.engine.options.org = "nonsense"
+        self.engine.cp.getOwnerList = MagicMock()
+        self.engine.cp.getOwnerList.return_value = [
+            {"key": "my_org", "displayName": "My Org"},
+            {"key": "second_org", "displayName": "Second Org"},
+            ]
+        try:
+            self.engine.get_org("some_username")
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
+    def test_environment_supported_exception(self):
         self.engine.cp.supports_resource = MagicMock(side_effect=Exception)
         try:
             self.engine.get_environment("some_org")
@@ -370,15 +404,39 @@ class TestMigration(unittest.TestCase):
         else:
             self.fail("No exception raised")
 
-    @patch("__builtin__.raw_input")
-    def test_enter_environment_name(self, mock_input):
+    def test_environment_with_no_resource(self):
+        self.engine.options = MagicMock()
+        self.engine.options.environment = None
+        self.engine.cp.supports_resource = MagicMock()
+        self.engine.cp.supports_resource.return_value = False
+        env = self.engine.get_environment("some_org")
+        self.assertEquals(env, None)
+
+    def test_single_environment_requires_no_input(self):
+        self.engine.options = MagicMock()
+        self.engine.options.environment = None
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
 
         self.engine.cp.getEnvironmentList = MagicMock()
         self.engine.cp.getEnvironmentList.return_value = [
-            {"name": "My Environment", "label": "my_environment"},
-            {"name": "Another Environment", "label": "another_environment"},
+            {"name": "My Environment", "label": "my_environment"}
+            ]
+
+        env = self.engine.get_environment("some_org")
+        self.assertEquals(env, "My Environment")
+
+    @patch("__builtin__.raw_input")
+    def test_enter_environment_name(self, mock_input):
+        self.engine.options = MagicMock()
+        self.engine.options.environment = None
+        self.engine.cp.supports_resource = MagicMock()
+        self.engine.cp.supports_resource.return_value = True
+
+        self.engine.cp.getEnvironmentList = MagicMock()
+        self.engine.cp.getEnvironmentList.return_value = [
+            {"name": "My Environment"},
+            {"name": "Another Environment"},
             ]
 
         mock_input.return_value = "My Environment"
@@ -387,6 +445,8 @@ class TestMigration(unittest.TestCase):
 
     @patch("__builtin__.raw_input")
     def test_enter_environment_label(self, mock_input):
+        self.engine.options = MagicMock()
+        self.engine.options.environment = None
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
 
@@ -401,10 +461,28 @@ class TestMigration(unittest.TestCase):
         self.assertEquals(env, "My Environment")
 
     @patch("__builtin__.raw_input")
-    def test_enter_bad_environment(self, mock_input):
+    def test_enter_environment_displayName(self, mock_input):
+        self.engine.options = MagicMock()
+        self.engine.options.environment = None
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
 
+        self.engine.cp.getEnvironmentList = MagicMock()
+        self.engine.cp.getEnvironmentList.return_value = [
+            {"name": "My Environment", "displayName": "my_environment"},
+            {"name": "Another Environment", "displayName": "another_environment"},
+            ]
+
+        mock_input.return_value = "my_environment"
+        env = self.engine.get_environment("some_org")
+        self.assertEquals(env, "My Environment")
+
+    @patch("__builtin__.raw_input")
+    def test_enter_bad_environment(self, mock_input):
+        self.engine.options = MagicMock()
+        self.engine.options.environment = None
+        self.engine.cp.supports_resource = MagicMock()
+        self.engine.cp.supports_resource.return_value = True
         self.engine.cp.getEnvironmentList = MagicMock()
         self.engine.cp.getEnvironmentList.return_value = [
             {"name": "My Environment", "label": "my_environment"},
@@ -412,6 +490,49 @@ class TestMigration(unittest.TestCase):
             ]
 
         mock_input.return_value = "something else"
+        try:
+            self.engine.get_environment("some_org")
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
+    def test_environment_option(self):
+        self.engine.options = MagicMock()
+        self.engine.options.environment = "My Environment"
+        self.engine.cp.supports_resource = MagicMock()
+        self.engine.cp.supports_resource.return_value = True
+        self.engine.cp.getEnvironmentList = MagicMock()
+        self.engine.cp.getEnvironmentList.return_value = [
+            {"name": "My Environment", "label": "my_environment"},
+            {"name": "Another Environment", "label": "another_environment"},
+            ]
+
+        env = self.engine.get_environment("some_org")
+        self.assertEquals(env, "My Environment")
+
+    def test_bad_environment_option(self):
+        self.engine.options = MagicMock()
+        self.engine.options.environment = "nonsense"
+        self.engine.cp.supports_resource = MagicMock()
+        self.engine.cp.supports_resource.return_value = True
+        self.engine.cp.getEnvironmentList = MagicMock()
+        self.engine.cp.getEnvironmentList.return_value = [
+            {"name": "My Environment", "label": "my_environment"},
+            {"name": "Another Environment", "label": "another_environment"},
+            ]
+        try:
+            self.engine.get_environment("some_org")
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
+    def test_environment_option_with_no_resource(self):
+        self.engine.options = MagicMock()
+        self.engine.options.environment = "My Environment"
+        self.engine.cp.supports_resource = MagicMock()
+        self.engine.cp.supports_resource.return_value = False
         try:
             self.engine.get_environment("some_org")
         except SystemExit, e:

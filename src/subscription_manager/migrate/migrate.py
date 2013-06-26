@@ -164,6 +164,10 @@ class MigrationEngine(object):
         # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
         self.parser.add_option("--no-proxy", action="store_true", dest='noproxy',
             help=_("don't use RHN proxy settings with subscription management server"))
+        self.parser.add_option("--org", dest='org',
+            help=_("organization to register to"))
+        self.parser.add_option("--environment", dest='environment',
+            help=_("environment to register to"))
 
     def validate_options(self):
         if self.options.servicelevel and self.options.noauto:
@@ -270,8 +274,14 @@ class MigrationEngine(object):
 
         if len(owner_list) == 0:
             system_exit(1, _("%s cannot register with any organizations.") % username)
-        elif len(owner_list) > 1:
-            org_input = raw_input(_("Org: ")).strip()
+        else:
+            if self.options.org:
+                org_input = self.options.org
+            elif len(owner_list) == 1:
+                org_input = owner_list[0]['key']
+            else:
+                org_input = raw_input(_("Org: ")).strip()
+
             org = None
             for owner_data in owner_list:
                 if owner_data['key'] == org_input or owner_data['displayName'] == org_input:
@@ -279,9 +289,6 @@ class MigrationEngine(object):
                     break
             if not org:
                 system_exit(1, _("No such org: %s") % org_input)
-        else:
-            org = owner_list[0]['key']
-
         return org
 
     def get_environment(self, owner_key):
@@ -289,17 +296,27 @@ class MigrationEngine(object):
         try:
             if self.cp.supports_resource('environments'):
                 environment_list = self.cp.getEnvironmentList(owner_key)
+            elif self.options.environment:
+                system_exit(1, _("Environments are not supported by this server."))
         except Exception, e:
             log.error(e)
             log.error(traceback.format_exc())
             system_exit(1, CONNECTION_FAILURE % e)
 
         environment = None
-        # If we just have one environment, Candlepin will do the right thing
-        if len(environment_list) > 1:
-            env_input = raw_input(_("Environment: ")).strip()
+        if len(environment_list) > 0:
+            if self.options.environment:
+                env_input = self.options.environment
+            elif len(environment_list) == 1:
+                env_input = environment_list[0]['name']
+            else:
+                env_input = raw_input(_("Environment: ")).strip()
+
             for env_data in environment_list:
-                if env_data['name'] == env_input or env_data['label'] == env_input:
+                # See BZ #978001
+                if (env_data['name'] == env_input or
+                    ('label' in env_data and env_data['label'] == env_input) or
+                    ('displayName' in env_data and env_data['displayName'] == env_input)):
                     environment = env_data['name']
                     break
             if not environment:
