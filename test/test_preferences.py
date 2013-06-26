@@ -24,7 +24,8 @@ from subscription_manager.injection import require, provide, IDENTITY
 
 from subscription_manager.gui import preferences
 
-CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},
+CONSUMER_DATA = {'autoheal':True,
+                 'releaseVer': {'id': 1, 'releaseVer': '123123'},
                  'serviceLevel': "Pro Turbo HD Plus Ultra",
                  'owner': {'key': 'admin'}}
 
@@ -49,6 +50,22 @@ class TestPreferencesDialog(SubManFixture):
         self.id_mock.uuid = "not_actually_a_uuid"
         self.id_mock.exists_and_valid = mock.Mock(return_value=True)
         provide(IDENTITY, self.id_mock)
+
+    @mock.patch.object(stubs.StubUEP, 'updateConsumer')
+    def testAutohealChanged(self, MockUep):
+        self._getPrefDialog()
+
+        self.preferences_dialog.show()
+        self.preferences_dialog.autoheal_checkbox.set_active(1)
+        display_text = self.preferences_dialog.autoheal_preference.get_label()
+        self.assertEquals("Enabled", display_text)
+        identity = require(IDENTITY)
+        MockUep.assert_called_with(identity.uuid, autoheal=True)
+
+   #     self.preferences_dialog.autoheal_checkbox.set_active(0)
+   #     display_text = self.preferences_dialog.autoheal_preference.get_label()
+   #     self.assertEquals("Disabled", display_text)
+   #     MockUep.assert_called_with(identity.uuid, autoheal=False)
 
     def _getPrefDialog(self):
         stub_backend = stubs.StubBackend()
@@ -122,22 +139,6 @@ class TestPreferencesDialog(SubManFixture):
         self.preferences_dialog.release_combobox.set_active(1)
         identity = require(IDENTITY)
         MockUep.assert_called_with(identity.uuid, release="123123")
-
-    @mock.patch.object(stubs.StubUEP, 'updateConsumer')
-    def testAutohealChanged(self, MockUep):
-        self._getPrefDialog()
-
-        self.preferences_dialog.show()
-        self.preferences_dialog.autoheal_checkbox.set_active(1)
-        display_text = self.preferences_dialog.autoheal_checkbox.get_label()
-        self.assertEquals("Enabled", display_text)
-        identity = require(IDENTITY)
-        MockUep.assert_called_with(identity.uuid, autoheal=True)
-
-        self.preferences_dialog.autoheal_checkbox.set_active(0)
-        display_text = self.preferences_dialog.autoheal_checkbox.get_label()
-        self.assertEquals("Disabled", display_text)
-        MockUep.assert_called_with(identity.uuid, autoheal=False)
 
     def testReleaseUnset(self):
         self._getPrefDialog()

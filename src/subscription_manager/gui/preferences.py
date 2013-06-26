@@ -41,7 +41,7 @@ class PreferencesDialog(object):
     """
 
     def __init__(self, backend, parent):
-
+	self.loading = False
         self.backend = backend
         self.identity = require(IDENTITY)
         self.release_backend = release.ReleaseBackend(ent_dir=self.backend.entitlement_dir,
@@ -93,9 +93,11 @@ class PreferencesDialog(object):
             self.autoheal_preference.set_sensitive(False)
             return
 
+        self.loading = True
         self.load_releases(consumer_json)
         self.load_servicelevel(consumer_json)
         self.load_autoheal(consumer_json)
+        self.loading = False
 
     def load_servicelevel(self, consumer_json):
         # The combo box you get from the widget tree already has a
@@ -155,8 +157,9 @@ class PreferencesDialog(object):
 
     def load_autoheal(self, consumer_json):
         if 'autoheal' not in consumer_json:
-            log.warn("Disabling autoheal checkbox, server does not support autoheal/auto-attach.")
+            log.warn("Disabling auto-attach checkbox, server does not support autoheal/auto-attach.")
             self.autoheal_checkbox.set_sensitive(False)
+            self.autoheal_preference.set_sensitive(False)
             return
 
         self.autoheal_checkbox.set_sensitive(True)
@@ -207,10 +210,11 @@ class PreferencesDialog(object):
         return True
 
     def _on_autoheal_checkbox_toggled(self, checkbox):
-        log.info("Auto-attach (autoheal) changed to: %s" % checkbox.get_active())
+        log.info("Auto-attach preference changed to: %s" % checkbox.get_active())
 
-        self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
-                                autoheal=checkbox.get_active())
+        if not self.loading:
+            self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
+                                    autoheal=checkbox.get_active())
 
         if (checkbox.get_active()):
             self.autoheal_preference.set_label(_("Enabled"))
@@ -220,7 +224,9 @@ class PreferencesDialog(object):
         return True
 
     def _on_autoheal_preference_press(self, widget, event):
+        # NOTE: We have this function/event so the textbox label
+        #       next to the checkbox can be clicked, then trigger
+        #       the checkbox
         self.autoheal_checkbox.set_active(not self.autoheal_checkbox.get_active())
-        self.autoheal_checkbox.toggled()
 
         return True
