@@ -37,10 +37,15 @@ import dbus
 import dbus.service
 import dbus.glib
 import dbus.exceptions
-import gtk
 import logging
 import gettext
 _ = gettext.gettext
+
+try:
+    import gtk
+except RuntimeError, e:
+    print _("Unable to open a display")
+    sys.exit(1)
 
 # Since the location of these def's keeps moving, hardcoded them here as per the spec
 # see http://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-names
