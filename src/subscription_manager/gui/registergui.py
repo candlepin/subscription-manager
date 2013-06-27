@@ -1138,12 +1138,14 @@ class AsyncBackend(object):
     def get_owner_list(self, username, callback):
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._get_owner_list,
-                args=(username, callback)).start()
+                         name="GetOwnerListThread",
+                         args=(username, callback)).start()
 
     def get_environment_list(self, owner_key, callback):
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._get_environment_list,
-                args=(owner_key, callback)).start()
+                         name="GetEnvironmentListThread",
+                         args=(owner_key, callback)).start()
 
     def register_consumer(self, name, facts, owner, env, activation_keys, callback):
         """
@@ -1151,19 +1153,25 @@ class AsyncBackend(object):
         """
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._register_consumer,
-                args=(name, facts, owner, env, activation_keys, callback)).start()
+                         name="RegisterConsumerThread",
+                         args=(name, facts, owner,
+                               env, activation_keys, callback)).start()
 
     def subscribe(self, uuid, current_sla, dry_run_result, callback):
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._subscribe,
-                args=(uuid, current_sla, dry_run_result, callback)).start()
+                         name="SubscribeThread",
+                         args=(uuid, current_sla,
+                               dry_run_result, callback)).start()
 
     def find_service_levels(self, consumer, facts, callback):
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._find_service_levels,
-                args=(consumer, facts, callback)).start()
+                         name="FindServiceLevelsThread",
+                         args=(consumer, facts, callback)).start()
 
     def refresh(self, callback):
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._refresh,
-                args=(callback,)).start()
+                         name="RefreshThread",
+                         args=(callback,)).start()
