@@ -82,8 +82,6 @@
                                 <property name="label" translatable="yes">Enabled</property>
                                 <property name="justify">right</property>
                                 <property name="width_chars">8</property>
-                                <signal name="button_press_event" handler="button_press_event" />
-                                <signal name="proximity_in_event" handler="mouse_move_event" />
                               </widget>
                             </child>
                           </widget>

@@ -41,7 +41,6 @@ class PreferencesDialog(object):
     """
 
     def __init__(self, backend, parent):
-	self.loading = False
         self.backend = backend
         self.identity = require(IDENTITY)
         self.release_backend = release.ReleaseBackend(ent_dir=self.backend.entitlement_dir,
@@ -57,6 +56,7 @@ class PreferencesDialog(object):
         self.sla_combobox = GLADE_XML.get_widget('sla_combobox')
         self.autoheal_checkbox = GLADE_XML.get_widget('autoheal_checkbox')
         self.autoheal_preference = GLADE_XML.get_widget('label_preference')
+        self.autoheal_event = GLADE_XML.get_widget('autoheal_event')
 
         # The first string is the displayed service level; the second is
         # the value sent to Candlepin.
@@ -93,11 +93,13 @@ class PreferencesDialog(object):
             self.autoheal_preference.set_sensitive(False)
             return
 
-        self.loading = True
+        handler_id = self.autoheal_checkbox.connect("toggled", self._on_autoheal_checkbox_toggled)
+
+        self.autoheal_checkbox.handler_block(handler_id)
         self.load_releases(consumer_json)
         self.load_servicelevel(consumer_json)
         self.load_autoheal(consumer_json)
-        self.loading = False
+        self.autoheal_checkbox.handler_unblock(handler_id)
 
     def load_servicelevel(self, consumer_json):
         # The combo box you get from the widget tree already has a
@@ -210,11 +212,11 @@ class PreferencesDialog(object):
         return True
 
     def _on_autoheal_checkbox_toggled(self, checkbox):
+
         log.info("Auto-attach preference changed to: %s" % checkbox.get_active())
 
-        if not self.loading:
-            self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
-                                    autoheal=checkbox.get_active())
+        self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
+                                autoheal=checkbox.get_active())
 
         if (checkbox.get_active()):
             self.autoheal_preference.set_label(_("Enabled"))
