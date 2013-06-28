@@ -1022,6 +1022,8 @@ class RegisterCommand(UserPassCommand):
                 old_uuid = ConsumerIdentity.read().getConsumerId()
                 try:
                     managerlib.unregister(self.cp, old_uuid)
+                    self.entitlement_dir.__init__()
+                    self.product_dir.__init__()
                     log.info("--force specified, unregistered old consumer: %s" % old_uuid)
                     print(_("The system with UUID %s has been unregistered") % old_uuid)
                 except Exception, e:
