@@ -240,7 +240,6 @@ class UpdateAction(Action):
         rogue_serials = self._find_rogue_serials(local, expected)
         self.delete(rogue_serials, report)
         exceptions = self.install(missing_serials, report)
-        self.purge_expired(report)
         log.info('certs updated:\n%s', report)
         self.syslog_results(report)
         # WARNING: TODO: XXX: this is returning a tuple, the parent class and
@@ -270,12 +269,6 @@ class UpdateAction(Action):
                        (cert.order.name, cert.order.contract))
             for product in cert.products:
                 system_log("Removed subscription for product '%s'" %
-                           (product.name))
-        for cert in report.expired:
-            system_log("Expired subscription for '%s' contract '%s'" %
-                       (cert.order.name, cert.order.contract))
-            for product in cert.products:
-                system_log("Expired subscription for product '%s'" %
                            (product.name))
 
     def _get_local_serials(self, report):
@@ -343,16 +336,6 @@ class UpdateAction(Action):
         for bundle in self.get_certificates_by_serial_list(serials):
             try:
                 key, cert = self.build(bundle)
-                # Skip any expired certs coming from the server
-                # as they will be cleaned up during the next refresh
-                # pools, and will be deleted.
-                if cert.is_expired():
-                    log.info("Certificate from server was expired, not installing: %d" %
-                             cert.serial)
-                    if cert.serial in report.expected:
-                        report.expected.remove(cert.serial)
-                    continue
-
                 br.write(key, cert)
                 report.added.append(cert)
             except Exception, e:
@@ -363,11 +346,6 @@ class UpdateAction(Action):
                     e)
                 exceptions.append(e)
         return exceptions
-
-    def purge_expired(self, report):
-        for cert in self.entdir.list_expired():
-            report.expired.append(cert)
-            cert.delete()
 
 
 class Disconnected(Exception):
@@ -381,10 +359,9 @@ class UpdateReport:
         self.expected = []
         self.added = []
         self.rogue = []
-        self.expired = []
 
     def updates(self):
-        return (len(self.added) + len(self.rogue) + len(self.expired))
+        return (len(self.added) + len(self.rogue))
 
     def write(self, s, title, certificates):
         indent = '  '
@@ -414,7 +391,6 @@ class UpdateReport:
         s.append(_('Expected (UEP) serial# %s') % self.expected)
         self.write(s, _('Added (new)'), self.added)
         self.write(s, _('Deleted (rogue):'), self.rogue)
-        self.write(s, _('Expired (deleted):'), self.expired)
         return '\n'.join(s)
 
 

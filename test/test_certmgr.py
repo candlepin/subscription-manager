@@ -300,7 +300,6 @@ class TestCertmgr(SubManFixture):
         # the expired certs should be delete/rogue and expired
         report = self.update_action_syslog_mock.call_args[0][0]
         self.assertTrue(self.stub_ent1 in report.rogue)
-        self.assertTrue(self.stub_ent1 in report.expired)
 
     @mock.patch.object(certlib.Action, 'build')
     @mock.patch('subscription_manager.certlib.log')
