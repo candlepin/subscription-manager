@@ -41,8 +41,8 @@ def init_dep_injection():
     inj.provide(inj.ENT_DIR, EntitlementDirectory, singleton=True)
     inj.provide(inj.PROD_DIR, ProductDirectory, singleton=True)
 
-    inj.provide(inj.STATUS_CACHE, StatusCache)
-    inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache)
+    inj.provide(inj.STATUS_CACHE, StatusCache, singleton=True)
+    inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache, singleton=True)
 
     inj.provide(inj.CP_PROVIDER, CPProvider, singleton=True)
 
