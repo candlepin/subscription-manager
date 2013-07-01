@@ -1460,6 +1460,7 @@ class AttachCommand(CliCommand):
             result = None
             if cert_update:
                 result = self.certlib.update()
+                self.sorter.load()
 
             if result and result[1]:
                 print 'Entitlement Certificate(s) update failed due to the following reasons:'
