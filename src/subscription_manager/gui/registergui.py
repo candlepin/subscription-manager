@@ -314,6 +314,7 @@ class PerformRegisterScreen(NoGuiScreen):
 
             managerlib.persist_consumer_cert(new_account)
             self._parent.identity.reload()
+            self._parent.backend.cs.load()
             if self._parent.activation_keys:
                 self._parent.pre_done(REFRESH_SUBSCRIPTIONS_PAGE)
             elif self._parent.skip_auto_bind:
@@ -1068,10 +1069,6 @@ class AsyncBackend(object):
 
         # This is often "", set to None in that case:
         current_sla = consumer_json['serviceLevel'] or None
-
-        # Using the current date time, we may need to expand this to work
-        # with arbitrary dates for future entitling someday:
-        self.backend.cs.load()
 
         if len(self.backend.cs.installed_products) == 0:
             raise NoProductsException()
