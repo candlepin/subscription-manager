@@ -156,6 +156,9 @@ class CertificateDirectory(Directory):
                     return c
         return None
 
+    #Set up an alias for backwards compatibility
+    findByProduct = find_by_product
+
 
 class ProductDirectory(CertificateDirectory):
 
