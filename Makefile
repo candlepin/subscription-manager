@@ -372,7 +372,7 @@ pyflakes:
 # and other tools detect the valid cases, so ignore these
 #
 	@TMPFILE=`mktemp` || exit 1; \
-	pyflakes $(STYLEFILES) |  grep -v "redefinition of unused.*from line.*" |  tee $$TMPFILE; \
+	pyflakes $(STYLEFILES) |  grep -v "redefinition of unused.*from line.*" |  grep -v "'site' imported but unused" |  tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 pylint:
