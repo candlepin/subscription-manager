@@ -23,14 +23,14 @@ import gtk
 from rhsm.certificate import GMT
 
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
-from subscription_manager.injection import require, IDENTITY
+from subscription_manager.injection import require, IDENTITY, DBUS_IFACE
 from subscription_manager.certlib import Disconnected
 from subscription_manager.injection import IDENTITY, require
 
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui import widgets
-from subscription_manager.gui.utils import get_cell_background_color, get_dbus_iface, handle_gui_exception
+from subscription_manager.gui.utils import get_cell_background_color, handle_gui_exception
 from subscription_manager.utils import is_true_value
 
 
@@ -165,8 +165,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         for idx, group in enumerate(sorter.groups):
             self._add_group(idx, group)
         self.top_view.expand_all()
-        dbus_iface = get_dbus_iface()
-        dbus_iface.check_status(ignore_reply=True)
+        require(DBUS_IFACE).update()
         self.unsubscribe_button.set_property('sensitive', False)
         # 841396: Select first item in My Subscriptions table by default
         selection = self.top_view.get_selection()

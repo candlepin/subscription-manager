@@ -13,6 +13,7 @@
 # in this software or its documentation.
 #
 
+import dbus
 import gettext
 import logging
 import os
@@ -215,6 +216,19 @@ def parse_url(local_server_entry,
 
 class MissingCaCertException(Exception):
     pass
+
+
+class DbusIface(object):
+
+    def __init__(self):
+        bus = dbus.SystemBus()
+        validity_obj = bus.get_object('com.redhat.SubscriptionManager',
+                '/EntitlementStatus')
+        self.validity_iface = dbus.Interface(validity_obj,
+                dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
+
+    def update(self):
+        self.validity_iface.check_status(ignore_reply=True)
 
 
 # TODO: make sure this works with --proxy cli options
