@@ -21,7 +21,6 @@ from socket import error as socket_error
 
 from M2Crypto import SSL
 
-import dbus
 import gobject
 import gtk
 import gtk.glade
@@ -205,18 +204,6 @@ def make_today_now(today):
         today = today.replace(hour=now.hour, minute=now.minute,
                 second=now.second, tzinfo=managerlib.LocalTz())
     return today
-
-
-def get_dbus_iface():
-    """
-    Set up the dbus proxy for calling remote methods
-    """
-    bus = dbus.SystemBus()
-    validity_obj = bus.get_object('com.redhat.SubscriptionManager',
-                      '/EntitlementStatus')
-    validity_iface = dbus.Interface(validity_obj,
-                        dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
-    return validity_iface
 
 
 def get_cell_background_color(item_idx):
