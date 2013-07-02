@@ -99,7 +99,6 @@ class PreferencesDialog(object):
         self.load_releases(consumer_json)
         self.load_servicelevel(consumer_json)
         self.load_autoheal(consumer_json)
-        self.autoheal_checkbox.handler_unblock(handler_id)
 
     def load_servicelevel(self, consumer_json):
         # The combo box you get from the widget tree already has a
