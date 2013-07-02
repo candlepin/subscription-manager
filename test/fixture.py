@@ -40,6 +40,7 @@ class SubManFixture(unittest.TestCase):
         # setup and mock the plugin_manager
         plugin_manager_mock = Mock()
         inj.provide(inj.PLUGIN_MANAGER, plugin_manager_mock)
+        inj.provide(inj.DBUS_IFACE, Mock())
 
         self.dbus_patcher = patch('subscription_manager.managercli.CliCommand._request_validity_check')
         self.dbus_patcher.start()
