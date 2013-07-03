@@ -78,14 +78,17 @@ class CertSorter(object):
         # Sync installed product info with server.
         # This will be done on register if we aren't registered
         self.installed_mgr = InstalledProductsManager()
-        if self.is_registered():
-            self.installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+        self.update_product_manager()
 
         self.product_monitor.connect('changed', self.on_prod_dir_changed)
         self.entitlement_monitor.connect('changed', self.on_ent_dir_changed)
         self.identity_monitor.connect('changed', self.on_identity_changed)
 
         self.load()
+
+    def update_product_manager(self):
+        if self.is_registered():
+            self.installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
 
     def force_cert_check(self):
         self.identity_monitor.run_check()
@@ -112,8 +115,7 @@ class CertSorter(object):
 
     def on_prod_dir_changed(self, filemonitor):
         self.product_dir.refresh()
-        if self.is_registered():
-            self.installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+        self.update_product_manager()
         self.on_change()
 
     def on_ent_dir_changed(self, filemonitor):
