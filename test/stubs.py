@@ -487,6 +487,9 @@ class StubCertSorter(CertSorter):
     def __init__(self):
         super(StubCertSorter, self).__init__()
 
+    def update_product_manager(self):
+        pass
+
     def _parse_server_status(self):
         # Override this method to just leave all fields uninitialized so
         # tests can do whatever they wish with them.
