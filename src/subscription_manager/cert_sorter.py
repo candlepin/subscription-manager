@@ -12,6 +12,7 @@
 # in this software or its documentation.
 #
 
+from copy import copy
 from datetime import datetime, timedelta
 import logging
 
@@ -23,6 +24,8 @@ log = logging.getLogger('rhsm-app.' + __name__)
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
 from subscription_manager.cache import InstalledProductsManager
+from subscription_manager.identity import ConsumerIdentity
+from subscription_manager import file_monitor
 
 import gettext
 _ = gettext.gettext
@@ -61,11 +64,66 @@ class CertSorter(object):
     reporting unknown.
     """
     def __init__(self):
+        self.callbacks = set()
+
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.identity = inj.require(inj.IDENTITY)
+
+        self.product_monitor = file_monitor.Monitor(self.product_dir.path)
+        self.entitlement_monitor = file_monitor.Monitor(self.entitlement_dir.path)
+        self.identity_monitor = file_monitor.Monitor(ConsumerIdentity.PATH)
+
+        # Sync installed product info with server.
+        # This will be done on register if we aren't registered
+        self.installed_mgr = InstalledProductsManager()
+        if self.is_registered():
+            self.installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+
+        self.product_monitor.connect('changed', self.on_prod_dir_changed)
+        self.entitlement_monitor.connect('changed', self.on_ent_dir_changed)
+        self.identity_monitor.connect('changed', self.on_identity_changed)
+
         self.load()
+
+    def force_cert_check(self):
+        self.identity_monitor.run_check()
+        self.product_monitor.run_check()
+        self.entitlement_monitor.run_check()
+
+    def notify(self):
+        for callback in copy(self.callbacks):
+            callback()
+
+    def add_callback(self, cb):
+        self.callbacks.add(cb)
+
+    def remove_callback(self, cb):
+        try:
+            self.callbacks.remove(cb)
+            return True
+        except KeyError:
+            return False
+
+    def on_change(self):
+        self.load()
+        self.notify()
+
+    def on_prod_dir_changed(self, filemonitor):
+        self.product_dir.refresh()
+        if self.is_registered():
+            self.installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+        self.on_change()
+
+    def on_ent_dir_changed(self, filemonitor):
+        self.entitlement_dir.refresh()
+        self.on_change()
+
+    def on_identity_changed(self, filemonitor):
+        self.identity.reload()
+        self.cp_provider.clean()
+        self.on_change()
 
     def load(self):
         # All products installed on this machine, regardless of status. Maps
@@ -123,12 +181,6 @@ class CertSorter(object):
         if not self.is_registered():
             log.debug("Unregistered, skipping server compliance check.")
             return
-
-        # Update installed product information so everything is
-        # accounted for.  Time expensive, maybe we only need to
-        # sync once?
-        installed_mgr = InstalledProductsManager()
-        installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
 
         # TODO: handle temporarily disconnected use case / caching
         status_cache = inj.require(inj.STATUS_CACHE)

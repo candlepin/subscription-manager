@@ -112,12 +112,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.glade.signal_autoconnect({'on_unsubscribe_button_clicked': self.unsubscribe_button_clicked})
 
-        # Monitor entitlements/products for additions/deletions
-        def on_cert_change(filemonitor):
-            self.update_subscriptions()
-
-        self.backend.monitor_certs(on_cert_change)
-
     def get_store(self):
         return MappedTreeStore(self.get_type_map())
 
@@ -142,8 +136,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         else:
             # unregistered, just delete the certs directly
             self.backend.certlib.delete([serial])
-
-        self.update_subscriptions()
+        self.backend.cs.force_cert_check()
 
     def unsubscribe_button_clicked(self, widget):
         selection = widgets.SelectionWrapper(self.top_view.get_selection(), self.store)

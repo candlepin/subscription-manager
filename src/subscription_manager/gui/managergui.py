@@ -37,12 +37,10 @@ from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib
 from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import ClassicCheck
-from subscription_manager.identity import ConsumerIdentity
 from subscription_manager import managerlib
 from subscription_manager.utils import get_client_versions, get_server_versions, parse_baseurl_info, restart_virt_who
 
 from subscription_manager.gui import factsgui
-from subscription_manager.gui import file_monitor
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import redeem
@@ -87,37 +85,17 @@ class Backend(object):
     def __init__(self):
         self.identity = require(IDENTITY)
         self.cp_provider = require(CP_PROVIDER)
-        self.create_uep()
 
-        self.create_content_connection()
+        self.update()
 
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.certlib = CertLib(uep=self.cp_provider.get_consumer_auth_cp())
 
-        self.product_monitor = file_monitor.Monitor(self.product_dir.path)
-        self.entitlement_monitor = file_monitor.Monitor(
-                self.entitlement_dir.path)
-        self.identity_monitor = file_monitor.Monitor(ConsumerIdentity.PATH)
-
-        # connect handlers to refresh the cached data when we notice a change.
-        # do this before any other handlers might connect
-        self.product_monitor.connect("changed",
-                lambda monitor: self.product_dir.refresh())
-        self.entitlement_monitor.connect("changed",
-                lambda monitor: self.entitlement_dir.refresh())
-
         self.cs = require(CERT_SORTER)
-
-        # Only need to refresh here, rather than in every file
-        def on_cert_change(filemonitor):
-            self.cs.load()
-
-        self.monitor_certs(on_cert_change)
 
     # make a create that does the init
     # and a update() for a name
-
     def update(self):
         self.create_uep()
         self.content_connection = self._create_content_connection()
@@ -140,13 +118,6 @@ class Backend(object):
                                             proxy_port=cfg.get_int('server', 'proxy_port'),
                                             proxy_user=cfg.get('server', 'proxy_user'),
                                             proxy_password=cfg.get('server', 'proxy_password'))
-
-    def monitor_certs(self, callback):
-        self.product_monitor.connect('changed', callback)
-        self.entitlement_monitor.connect('changed', callback)
-
-    def monitor_identity(self, callback):
-        self.identity_monitor.connect('changed', callback)
 
 
 class MainWindow(widgets.GladeWidget):
@@ -237,12 +208,16 @@ class MainWindow(widgets.GladeWidget):
             "on_quit_menu_item_activate": gtk.main_quit,
         })
 
-        def on_identity_change(filemonitor):
-            self.identity.reload()
+        def on_cert_change():
+            # Update installed products
             self.installed_tab.update_products()
+            self.installed_tab._set_validity_status()
+            # Update attached subs
+            self.my_subs_tab.update_subscriptions()
+            # Update main window
             self.refresh()
 
-        self.backend.monitor_identity(on_identity_change)
+        self.backend.cs.add_callback(on_cert_change)
 
         self.main_window.show_all()
         self.refresh()
@@ -250,6 +225,9 @@ class MainWindow(widgets.GladeWidget):
         # Check to see if already registered to old RHN/Spacewalk
         # and show dialog if so
         self._check_rhn_classic()
+
+        # Update everything with compliance data
+        self.backend.cs.notify()
 
         if auto_launch_registration and not self.registered():
             self._register_item_clicked(None)
@@ -349,7 +327,6 @@ class MainWindow(widgets.GladeWidget):
         # managerlib.unregister removes product and entitlement directories
         self.backend.product_dir.__init__()
         self.backend.entitlement_dir.__init__()
-        self.identity.reload()
 
         # We have new credentials, restart virt-who
         restart_virt_who()
@@ -357,7 +334,7 @@ class MainWindow(widgets.GladeWidget):
         # we've unregistered, clear pools from all subscriptions tab
         # so it's correct if we reshow it
         self.all_subs_tab.clear_pools()
-        self.refresh()
+        self.backend.cs.force_cert_check()
 
     def _unregister_item_clicked(self, widget):
         log.info("Unregister button pressed, asking for confirmation.")
