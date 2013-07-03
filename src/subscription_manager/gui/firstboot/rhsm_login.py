@@ -106,7 +106,8 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
                 raise error
 
             managerlib.persist_consumer_cert(new_account)
-            self._parent.identity.reload()
+            self._parent.backend.cs.force_cert_check()  # Ensure there isn't much wait time
+
             if self._parent.activation_keys:
                 self._parent.pre_done(registergui.REFRESH_SUBSCRIPTIONS_PAGE)
             elif self._parent.skip_auto_bind:
@@ -144,7 +145,6 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
                         self._parent.identity.uuid)
             except socket.error, e:
                 handle_gui_exception(e, e, self._parent.window)
-            self._parent.identity.reload()
             self._parent._registration_finished = False
 
         return registergui.PerformRegisterScreen.pre(self)

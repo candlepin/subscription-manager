@@ -39,7 +39,7 @@ class Monitor(gobject.GObject):
         self._exists = exists
 
         # poll every 2 seconds for changes
-        gobject.timeout_add(2000, self._run_check)
+        gobject.timeout_add(2000, self.run_check)
 
     def _check_mtime(self):
         mtime = 0
@@ -51,7 +51,7 @@ class Monitor(gobject.GObject):
 
         return (mtime, exists)
 
-    def _run_check(self):
+    def run_check(self):
         (mtime, exists) = self._check_mtime()
 
         if (mtime != self._last_mtime) or (exists != self._exists):

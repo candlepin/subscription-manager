@@ -106,15 +106,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             "on_register_button_clicked": parent._register_item_clicked,
         })
 
-        self.update_products()
-
-        # Monitor entitlements/products for additions/deletions
-        def on_cert_change(filemonitor):
-            self.update_products()
-            self._set_validity_status()
-
-        backend.monitor_certs(on_cert_change)
-
     def _calc_subs_providing(self, product_id, compliant_range):
         """
         Calculates the relevant contract IDs and subscription names which are

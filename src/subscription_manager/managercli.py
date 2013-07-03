@@ -1117,6 +1117,8 @@ class RegisterCommand(UserPassCommand):
         # run this after certlib update, so we have the new entitlements
         subscribed = 0
         if self.autoattach:
+            self.sorter = inj.require(inj.CERT_SORTER)
+            self.sorter.force_cert_check()
             subscribed = show_autosubscribe_output(self.cp)
         self._request_validity_check()
         return subscribed
@@ -1460,6 +1462,7 @@ class AttachCommand(CliCommand):
             result = None
             if cert_update:
                 result = self.certlib.update()
+                self.sorter.force_cert_check()
 
             if result and result[1]:
                 print 'Entitlement Certificate(s) update failed due to the following reasons:'

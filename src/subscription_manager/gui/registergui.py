@@ -313,14 +313,14 @@ class PerformRegisterScreen(NoGuiScreen):
                 raise error
 
             managerlib.persist_consumer_cert(new_account)
-            self._parent.identity.reload()
+            self._parent.backend.cs.force_cert_check()  # Ensure there isn't much wait time
+
             if self._parent.activation_keys:
                 self._parent.pre_done(REFRESH_SUBSCRIPTIONS_PAGE)
             elif self._parent.skip_auto_bind:
                 self._parent.pre_done(FINISH)
             else:
                 self._parent.pre_done(SELECT_SLA_PAGE)
-
         except Exception, e:
             handle_gui_exception(e, REGISTER_ERROR, self._parent.parent)
             self._parent.finish_registration(failed=True)
@@ -350,7 +350,7 @@ class PerformSubscribeScreen(NoGuiScreen):
             if error is not None:
                 raise error
             self._parent.pre_done(FINISH)
-
+            self._parent.backend.cs.force_cert_check()
         except Exception, e:
             handle_gui_exception(e, _("Error subscribing: %s"),
                                  self._parent.parent)
@@ -1068,10 +1068,6 @@ class AsyncBackend(object):
 
         # This is often "", set to None in that case:
         current_sla = consumer_json['serviceLevel'] or None
-
-        # Using the current date time, we may need to expand this to work
-        # with arbitrary dates for future entitling someday:
-        self.backend.cs.load()
 
         if len(self.backend.cs.installed_products) == 0:
             raise NoProductsException()
