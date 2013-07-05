@@ -1401,6 +1401,7 @@ class AttachCommand(CliCommand):
             certmgr.update()
             return_code = 0
             cert_update = True
+            self.sorter = inj.require(inj.CERT_SORTER)
             if self.options.pool:
                 subscribed = False
                 for pool in self.options.pool:
@@ -1437,8 +1438,6 @@ class AttachCommand(CliCommand):
             else:
                 products_installed = len(managerlib.get_installed_product_status(self.product_dir,
                                  self.entitlement_dir, self.cp))
-                # if we are green, we don't need to go to the server
-                self.sorter = inj.require(inj.CERT_SORTER)
 
                 if self.sorter.is_valid():
                     if not products_installed:
