@@ -695,7 +695,6 @@ class BasePluginManager(object):
             SlotNameException: slot_name isn't found
             (Anything else is plugin and conduit specific)
         """
-        log.debug("PluginManager.run called for %s with args: %s" % (slot_name, kwargs))
         # slot's called should always exist here, if not
         if slot_name not in self._slot_to_funcs:
             raise SlotNameException(slot_name)
