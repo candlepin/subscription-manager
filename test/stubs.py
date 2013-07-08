@@ -383,7 +383,7 @@ class StubUEP:
     def getServiceLevelList(self, owner):
         return ['Pro', 'Super Pro', 'ProSumer']
 
-    def updateConsumer(self, consumer, installed_products=None, service_level=None, release=None):
+    def updateConsumer(self, consumer, installed_products=None, service_level=None, release=None, autoheal=None):
         return consumer
 
     def setEnvironmentList(self, env_list):
