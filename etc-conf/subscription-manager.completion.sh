@@ -9,7 +9,7 @@ _subscription_manager_common_opts="-h --help --proxy --proxyuser --proxypassword
 _subscription_manager_common_url_opts="--serverurl"
 # complete functions for subcommands ($1 - current opt, $2 - previous opt)
 
-_subscription_manager_autoheal()
+_subscription_manager_auto_attach()
 {
   local opts="--enable --disable --show ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
@@ -189,7 +189,6 @@ _subscription_manager()
         unregister unsubscribe version"
 
   case "${first}" in
-      auto-attach|\
       clean|\
       config|\
       environments|\
@@ -219,6 +218,10 @@ _subscription_manager()
       ;;
       remove|unsubscribe)
       "_subscription_manager_remove" "${cur}" "${prev}"
+      return 0
+      ;;
+      auto-attach)
+      "_subscription_manager_auto_attach" "${cur}" "${prev}"
       return 0
       ;;
       *)
