@@ -1462,7 +1462,6 @@ class AttachCommand(CliCommand):
             result = None
             if cert_update:
                 result = self.certlib.update()
-                self.sorter.force_cert_check()
 
             if result and result[1]:
                 print 'Entitlement Certificate(s) update failed due to the following reasons:'
@@ -1472,6 +1471,7 @@ class AttachCommand(CliCommand):
                 if not products_installed:
                     return_code = 1
                 else:
+                    self.sorter.force_cert_check()
                     # run this after certlib update, so we have the new entitlements
                     return_code = show_autosubscribe_output(self.cp)
 
