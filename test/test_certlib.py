@@ -42,7 +42,7 @@ class TestingUpdateAction(UpdateAction):
 class UpdateActionTests(SubManFixture):
 
     @patch.object(Writer, "write")
-    def test_expired_are_ignored_when_installing_certs(self, write_mock):
+    def test_expired_are_not_ignored_when_installing_certs(self, write_mock):
         valid_ent = StubEntitlementCertificate(StubProduct("PValid"))
         expired_ent = StubEntitlementCertificate(StubProduct("PExpired"),
                 start_date=datetime.now() - timedelta(days=365),
@@ -63,4 +63,4 @@ class UpdateActionTests(SubManFixture):
         self.assertEqual(0, len(exceptions), "No exceptions should have been thrown")
         self.assertTrue(valid_ent in report.added)
         self.assertTrue(valid_ent.serial in report.expected)
-        self.assertFalse(expired_ent.serial in report.expected)
+        self.assertTrue(expired_ent.serial in report.expected)
