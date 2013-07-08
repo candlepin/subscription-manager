@@ -142,12 +142,28 @@ class CertificateDirectory(Directory):
         return None
 
     def find_all_by_product(self, p_hash):
-        certs = []
+        certs = set()
+        providing_stack_ids = set()
+        stack_id_map = {}
         for c in self.list():
             for p in c.products:
                 if p.id == p_hash:
-                    certs.append(c)
-        return certs
+                    certs.add(c)
+                    # Keep track of stacks that provide our product
+                    if c.order.stacking_id:
+                        providing_stack_ids.add(c.order.stacking_id)
+
+            # Keep track of stack ids in case we need them later.  avoids another loop
+            if c.order.stacking_id:
+                if c.order.stacking_id not in stack_id_map:
+                    stack_id_map[c.order.stacking_id] = set()
+                stack_id_map[c.order.stacking_id].add(c)
+
+        # Complete
+        for stack_id in providing_stack_ids:
+            certs |= stack_id_map[stack_id]
+
+        return list(certs)
 
     def find_by_product(self, p_hash):
         for c in self.list():
