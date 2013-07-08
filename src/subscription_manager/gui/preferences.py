@@ -41,7 +41,6 @@ class PreferencesDialog(object):
     """
 
     def __init__(self, backend, parent):
-
         self.backend = backend
         self.identity = require(IDENTITY)
         self.release_backend = release.ReleaseBackend(ent_dir=self.backend.entitlement_dir,
@@ -56,6 +55,8 @@ class PreferencesDialog(object):
         self.release_combobox = GLADE_XML.get_widget('release_combobox')
         self.sla_combobox = GLADE_XML.get_widget('sla_combobox')
         self.autoheal_checkbox = GLADE_XML.get_widget('autoheal_checkbox')
+        self.autoheal_preference = GLADE_XML.get_widget('label_preference')
+        self.autoheal_event = GLADE_XML.get_widget('autoheal_event')
 
         # The first string is the displayed service level; the second is
         # the value sent to Candlepin.
@@ -70,6 +71,7 @@ class PreferencesDialog(object):
             "on_sla_combobox_changed": self._sla_changed,
             "on_release_combobox_changed": self._release_changed,
             "on_autoheal_checkbox_toggled": self._on_autoheal_checkbox_toggled,
+            "on_autoheal_label_press_event": self._on_autoheal_preference_press,
         })
 
         # Handle the dialog's delete event when ESC key is pressed.
@@ -88,8 +90,12 @@ class PreferencesDialog(object):
             self.sla_combobox.set_sensitive(False)
             self.release_combobox.set_sensitive(False)
             self.autoheal_checkbox.set_sensitive(False)
+            self.autoheal_preference.set_sensitive(False)
             return
 
+        handler_id = self.autoheal_checkbox.connect("toggled", self._on_autoheal_checkbox_toggled)
+
+        self.autoheal_checkbox.handler_block(handler_id)
         self.load_releases(consumer_json)
         self.load_servicelevel(consumer_json)
         self.load_autoheal(consumer_json)
@@ -152,18 +158,20 @@ class PreferencesDialog(object):
 
     def load_autoheal(self, consumer_json):
         if 'autoheal' not in consumer_json:
-            log.warn("Disabling autoheal checkbox, server does not support autoheal/autto-attach.")
+            log.warn("Disabling auto-attach checkbox, server does not support autoheal/auto-attach.")
             self.autoheal_checkbox.set_sensitive(False)
+            self.autoheal_preference.set_sensitive(False)
             return
 
         self.autoheal_checkbox.set_sensitive(True)
+        self.autoheal_preference.set_sensitive(True)
         current_autoheal = consumer_json['autoheal']
         self.autoheal_checkbox.set_active(current_autoheal)
 
         if current_autoheal:
-            self.autoheal_checkbox.set_label(_("Enabled"))
+            self.autoheal_preference.set_label(_("Enabled"))
         else:
-            self.autoheal_checkbox.set_label(_("Disabled"))
+            self.autoheal_preference.set_label(_("Disabled"))
 
     def _close_button_clicked(self, widget):
         self._close_dialog()
@@ -203,11 +211,23 @@ class PreferencesDialog(object):
         return True
 
     def _on_autoheal_checkbox_toggled(self, checkbox):
-        log.info("Auto-attach (autoheal) changed to: %s" % checkbox.get_active())
+
+        log.info("Auto-attach preference changed to: %s" % checkbox.get_active())
+
+        self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
+                                autoheal=checkbox.get_active())
 
         if (checkbox.get_active()):
-            checkbox.set_label(_("Enabled"))
+            self.autoheal_preference.set_label(_("Enabled"))
         else:
-            checkbox.set_label(_("Disabled"))
+            self.autoheal_preference.set_label(_("Disabled"))
+
+        return True
+
+    def _on_autoheal_preference_press(self, widget, event):
+        # NOTE: We have this function/event so the textbox label
+        #       next to the checkbox can be clicked, then trigger
+        #       the checkbox
+        self.autoheal_checkbox.set_active(not self.autoheal_checkbox.get_active())
 
         return True
