@@ -70,6 +70,7 @@ class MessageWindow(gobject.GObject):
 
         # escape product strings see rh bz#633438
         self.dialog.set_markup(text)
+
         self.dialog.set_default_response(0)
 
         self.dialog.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
