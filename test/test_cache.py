@@ -11,8 +11,13 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
+import os
 import unittest
+import random
+import shutil
 import socket
+import tempfile
+import threading
 from mock import Mock
 import simplejson as json
 
@@ -286,3 +291,28 @@ class TestStatusCache(SubManFixture):
         uep.getCompliance = Mock(side_effect=socket.error("boom"))
         self.status_cache._cache_exists = Mock(return_value=False)
         self.assertEquals(None, self.status_cache.load_status(uep, "SOMEUUID"))
+
+    def test_write_cache(self):
+        mock_server_status = {'fake server status': random.uniform(1, 2 ** 32)}
+        status_cache = StatusCache()
+        status_cache.server_status = mock_server_status
+        cache_dir = tempfile.mkdtemp()
+        cache_file = os.path.join(cache_dir, 'status_cache.json')
+        status_cache.CACHE_FILE = cache_file
+        status_cache.write_cache()
+
+        def threadActive(name):
+            for thread in threading.enumerate():
+                if thread.getName() == name:
+                    return True
+            return False
+
+        # If the file exists, and the thread that writes it does not, we know writing has completed
+        while not (os.path.exists(cache_file) and not threadActive("WriteCacheStatusCache")):
+            pass
+        try:
+            new_status_buf = open(cache_file).read()
+            new_status = json.loads(new_status_buf)
+            self.assertEquals(new_status, mock_server_status)
+        finally:
+            shutil.rmtree(cache_dir)

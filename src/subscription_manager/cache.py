@@ -24,6 +24,7 @@ import logging
 import os
 import simplejson as json
 import socket
+import threading
 from M2Crypto import SSL
 
 from rhsm.config import initConfig
@@ -248,6 +249,35 @@ class StatusCache(CacheManager):
     def _load_data(self, open_file):
         json_str = open_file.read()
         return json.loads(json_str)
+
+    def _read_cache(self):
+        """
+        Prefer in memory cache to avoid io.  If it doesn't exist, save
+        the disk cache to the in-memory cache to avoid reading again.
+        """
+        if not self.server_status:
+            self.server_status = super(StatusCache, self)._read_cache()
+        return self.server_status
+
+    def _cache_exists(self):
+        """
+        If a cache exists in memory, we have written it to the disk
+        No need for unnecessary disk io here.
+        """
+        if self.server_status:
+            return True
+        return super(StatusCache, self)._cache_exists()
+
+    def write_cache(self):
+        """
+        This is threaded because it should never block in runtime.
+        Writing to disk means it will be read from memory for the rest of this run.
+        """
+        threading.Thread(target=super(StatusCache, self).write_cache, name="WriteCache%s" % self.__class__.__name__).start()
+
+    def delete_cache(self):
+        super(StatusCache, self).delete_cache()
+        self.server_status = None
 
 
 class ProductStatusCache(StatusCache):
