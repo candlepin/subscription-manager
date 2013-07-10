@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.12
+Version: 1.8.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -382,6 +382,10 @@ fi
 %endif
 
 %changelog
+* Wed Jul 10 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.13-1
+- Latest translations from zanata. (dgoodwin@redhat.com)
+- new strings (jesusr@redhat.com)
+
 * Wed Jul 10 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.12-1
 - 877331: Add --org and --environment options to migration script.  (awood@redhat.com)
 - 915847: Clear old proxy settings if the --no-proxy option is used. (awood@redhat.com)
