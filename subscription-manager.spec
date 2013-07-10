@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.11
+Version: 1.8.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -382,6 +382,35 @@ fi
 %endif
 
 %changelog
+* Wed Jul 10 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.12-1
+- 877331: Add --org and --environment options to migration script.  (awood@redhat.com)
+- 915847: Clear old proxy settings if the --no-proxy option is used. (awood@redhat.com)
+- 928401: Fixed translation issue in redeem dialog (cschevia@redhat.com)
+- 974123: default behavior is help, no longer status (ckozak@redhat.com)
+- 976689: Handle no xorg server, allow help (ckozak@redhat.com)
+- 976848: 976851: thread cache write, limit disk reads, singleton
+- 976865: dbus iface singleton for gui (ckozak@redhat.com)
+- 976866: single instance of ProdDir and EntDir (ckozak@redhat.com)
+- 976868: improve rhsmd logging (alikins@redhat.com)
+- 976868: enable logging from /usr/libexec/rhsmd (alikins@redhat.com)
+- 976924: empty service level and type (ckozak@redhat.com)
+- 977481: added proxy options to status (ckozak@redhat.com)
+- 977535: cli uses utf8 too (ckozak@redhat.com)
+- 977851: 977321: Centralize CertSorter, drive updates, refresh properly
+- 978322: fixed client deleting certs (ckozak@redhat.com)
+- 979492: register auto-attach force recreates cert dirs (ckozak@redhat.com)
+- 980209: removed injection calls from migration script (ckozak@redhat.com)
+- 980640: include stacked ents in provided (ckozak@redhat.com)
+- 981689: fix attach command (ckozak@redhat.com)
+- 982286: Fixed empty dialog message (cschevia@redhat.com)
+- latests strings from zanata and new keys.pot (alikins@redhat.com)
+- Fixed Preferences dialog to be non-threaded (cschevia@redhat.com)
+- updated spec to require python-rhsm v1.8.13-1 or greater (cschevia@redhat.com)
+- Added auto-attach property in the preferences dialog (cschevia@redhat.com)
+- Added autoheal command to subman CLI (cschevia@redhat.com)
+- Add support for SUBMAN_DEBUG to log to stdout (alikins@redhat.com)
+- remove logging of plugin args (alikins@redhat.com)
+- Fixed auto-complete script for auto-attach command (cschevia@redhat.com)
 * Thu Jun 20 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.11-1
 - 844532: xen dom0 cpu topology lies, work around it (alikins@redhat.com)
 - 854380: fix overlap filter (ckozak@redhat.com)
