@@ -20,6 +20,7 @@ import tempfile
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import StatusCache, ProductStatusCache
+from rhsm.certificate import GMT
 
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """
@@ -231,6 +232,7 @@ class StubEntitlementCertificate(EntitlementCertificate):
                     stacking_id=stacking_id, socket_limit=sockets,
                     service_level=service_level, quantity_used=quantity,
                     ram_limit=ram)
+        order.warning_period = 42
 
         if content is None:
             content = []
@@ -251,6 +253,14 @@ class StubEntitlementCertificate(EntitlementCertificate):
 
     def delete(self):
         self.is_deleted = True
+
+    def is_expiring(self, on_date=None):
+        gmt = datetime.utcnow()
+        if on_date:
+            gmt = on_date
+        gmt = gmt.replace(tzinfo=GMT())
+        warning_time = timedelta(days=int(self.order.warning_period))
+        return self.valid_range.end() - warning_time < gmt
 
 
 class StubCertificateDirectory(EntitlementDirectory):

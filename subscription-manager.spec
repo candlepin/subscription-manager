@@ -31,7 +31,7 @@ Requires:  python-simplejson
 Requires:  python-iniparse
 Requires:  pygobject2
 Requires:  virt-what
-Requires:  python-rhsm >= 1.8.13-1
+Requires:  python-rhsm >= 1.8.14-1
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 Requires:  usermode

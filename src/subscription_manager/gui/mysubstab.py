@@ -15,7 +15,7 @@
 
 import gettext
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import gobject
 import gtk
@@ -35,8 +35,6 @@ from subscription_manager.utils import is_true_value
 
 
 _ = gettext.gettext
-
-WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
 
 prefix = os.path.dirname(__file__)
 WARNING_IMG = os.path.join(prefix, "data/icons/partial.svg")
@@ -276,7 +274,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                               support_type=order.service_type or "",
                               products=products,
                               sku=order.sku,
-                              reasons=reasons)
+                              reasons=reasons,
+                              expiring=cert.is_expiring())
 
     def on_no_selection(self):
         """
@@ -325,7 +324,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         if date_range.end() < now:
             return EXPIRED_IMG
 
-        if date_range.end() - timedelta(days=WARNING_DAYS) < now:
+        if cert.is_expiring():
             return EXPIRING_IMG
 
         if cert.subject and 'CN' in cert.subject and \
