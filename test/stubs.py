@@ -19,6 +19,7 @@ import random
 import tempfile
 
 from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.cache import StatusCache, ProductStatusCache
 
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """
@@ -530,3 +531,21 @@ class StubCPProvider(object):
 
     def get_no_auth_cp(self):
         return self.no_auth_cp
+
+
+class StubStatusCache(StatusCache):
+
+    def write_cache(self):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+
+class StubProductStatusCache(ProductStatusCache):
+
+    def write_cache(self):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
