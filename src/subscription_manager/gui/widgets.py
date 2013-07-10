@@ -273,7 +273,8 @@ class SubDetailsWidget(GladeWidget):
 
     def show(self, name, contract=None, start=None, end=None, account=None,
             management=None, support_level="", support_type="",
-            virt_only=None, products=None, highlight=None, sku=None, reasons=[]):
+            virt_only=None, products=None, highlight=None, sku=None,
+            reasons=[], expiring=False):
         """
         Show subscription details.
 
@@ -305,7 +306,7 @@ class SubDetailsWidget(GladeWidget):
 
         self._show_other_details(name, contract, start, end, account,
                                  management, support_level, support_type,
-                                 virt_only, products, highlight, sku, reasons)
+                                 virt_only, products, highlight, sku, reasons, expiring)
 
         self.bundled_products.clear()
         for product in products:
@@ -314,7 +315,8 @@ class SubDetailsWidget(GladeWidget):
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
-                           virt_only=None, products=None, highlight=None, sku=None, reasons=[]):
+                           virt_only=None, products=None, highlight=None, sku=None,
+                           reasons=[], expiring=False):
         pass
 
     def _set(self, text_view, text):
@@ -383,14 +385,14 @@ class ContractSubDetailsWidget(SubDetailsWidget):
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
                            virt_only=None, products=None, highlight=None, sku=None,
-                           reasons=[]):
+                           reasons=[], expiring=False):
         products = products or []
         reasons = reasons or []
 
         self._set(self.details_view, '\n'.join(reasons))
 
         self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
-                self._get_date_bg(end))
+                self._get_date_bg(end, expiring))
 
         self._set(self.contract_number_text, contract)
         self._set(self.start_end_date_text, "%s - %s" % (
@@ -413,13 +415,13 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         # already set in glade
         pass
 
-    def _get_date_bg(self, end):
+    def _get_date_bg(self, end, expiring):
         now = datetime.datetime.now(GMT())
 
         if end < now:
             return self.expired_color
 
-        if end - datetime.timedelta(days=WARNING_DAYS) < now:
+        if expiring:
             return self.warning_color
 
         return self.original_bg
