@@ -143,7 +143,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         if not selection.is_valid():
             return
 
-        prompt = messageWindow.YesNoDialog(_("Are you sure you want to remove %s?") % selection['subscription'],
+        # remove all markup, see rh bz#982286
+        subscription_text = gobject.markup_escape_text(selection['subscription'])
+
+        prompt = messageWindow.YesNoDialog(_("Are you sure you want to remove %s?") % subscription_text,
                 self.content.get_toplevel())
         prompt.connect('response', self._on_unsubscribe_prompt_response, selection)
 
