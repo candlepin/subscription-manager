@@ -14,16 +14,46 @@
 #
 
 import dbus
+import logging
+import subscription_manager.injection as inj
+
+log = logging.getLogger('rhsm-app.' + __name__)
 
 
 class DbusIface(object):
 
+    service_name = 'com.redhat.SubscriptionManager'
+
     def __init__(self):
-        bus = dbus.SystemBus()
-        validity_obj = bus.get_object('com.redhat.SubscriptionManager',
-                '/EntitlementStatus')
-        self.validity_iface = dbus.Interface(validity_obj,
-                dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
+        try:
+            # Only follow names if there is a default main loop
+            self.is_gui = dbus.get_default_main_loop() is not None
+
+            self.bus = dbus.SystemBus()
+            validity_obj = self.bus.get_object(self.service_name,
+                    '/EntitlementStatus',
+                    follow_name_owner_changes=self.is_gui)
+            self.validity_iface = dbus.Interface(validity_obj,
+                    dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
+
+            # Activate methods now that we're connected
+            # Avoids some messy exception handling if dbus isn't installed
+            self.update = self._update
+        except dbus.DBusException, e:
+            # we can't connect to dbus. it's not running, likely from a minimal
+            # install. we can't do anything here, so just ignore it.
+            log.debug("Unable to connect to dbus")
+            log.exception(e)
 
     def update(self):
-        self.validity_iface.check_status(ignore_reply=True)
+        pass
+
+    def _update(self):
+        try:
+            self.validity_iface.update_status(
+                    inj.require(inj.CERT_SORTER).get_status_for_icon(),
+                    ignore_reply=self.is_gui)
+        except dbus.DBusException, e:
+            # Should be unreachable in the gui
+            log.debug("Failed to update rhsmd")
+            log.exception(e)

@@ -26,6 +26,7 @@ from subscription_manager.reasons import Reasons
 from subscription_manager.cache import InstalledProductsManager
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager import file_monitor
+from rhsm.connection import RestlibException
 
 import gettext
 _ = gettext.gettext
@@ -46,6 +47,13 @@ STATUS_MAP = {'valid': _('Current'),
         'partial': _('Insufficient'),
         'invalid': _('Invalid'),
         'unknown': _('Unknown')}
+
+RHSM_VALID = 0
+RHSM_EXPIRED = 1
+RHSM_WARNING = 2
+RHN_CLASSIC = 3
+RHSM_PARTIALLY_VALID = 4
+RHSM_REGISTRATION_REQUIRED = 5
 
 
 class CertSorter(object):
@@ -88,7 +96,11 @@ class CertSorter(object):
 
     def update_product_manager(self):
         if self.is_registered():
-            self.installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+            try:
+                self.installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+            except RestlibException:
+                # Invalid consumer certificate
+                pass
 
     def force_cert_check(self):
         self.identity_monitor.run_check()
@@ -333,6 +345,22 @@ class CertSorter(object):
             # Can only really happen if server doesn't support compliance
             # API call:
             return UNKNOWN
+
+    def in_warning_period(self):
+        for entitlement in self.valid_entitlement_certs:
+            if entitlement.is_expiring():
+                return True
+        return False
+
+    # Assumes classic and identity validity have been tested
+    def get_status_for_icon(self):
+        if self.system_status == 'invalid':
+            return RHSM_EXPIRED
+        if self.system_status == 'partial':
+            return RHSM_PARTIALLY_VALID
+        if self.in_warning_period():
+            return RHSM_WARNING
+        return RHSM_VALID  # Correct when unknown
 
 
 class StackingGroupSorter(object):
