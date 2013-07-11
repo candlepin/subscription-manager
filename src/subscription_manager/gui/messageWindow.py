@@ -56,11 +56,6 @@ class MessageWindow(gobject.GObject):
         gobject.GObject.__init__(self)
         self.rc = None
 
-        # escape product strings see rh bz#982286
-        # NOTE: fixes whatever the fix below (bz#633438)
-        #       did not fix
-        text = gobject.markup_escape_text(text)
-
         # this seems to be wordwrapping text passed to
         # it, which is making for ugly error messages
         self.dialog = gtk.MessageDialog(parent, 0, self.STYLE, self.BUTTONS)
