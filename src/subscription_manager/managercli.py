@@ -17,7 +17,6 @@
 #
 
 import datetime
-import dbus
 import fnmatch
 import getpass
 import gettext
@@ -238,24 +237,9 @@ class CliCommand(AbstractCLICommand):
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
 
     def _request_validity_check(self):
-        try:
-            bus = dbus.SystemBus()
-            validity_obj = bus.get_object('com.redhat.SubscriptionManager',
-                              '/EntitlementStatus')
-            validity_iface = dbus.Interface(validity_obj,
-                                dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
-        except dbus.DBusException:
-            # we can't connect to dbus. it's not running, likely from a minimal
-            # install. we can't do anything here, so just ignore it.
-            return
-
-        try:
-            validity_iface.check_status()
-        except dbus.DBusException:
-            # the call timed out, or something similar. we don't really care
-            # about a timely reply or what the result might be, we just want
-            # the method to run. So we can safely ignore this.
-            pass
+        # Make sure the sorter is fresh (low footprint if it is)
+        inj.require(inj.CERT_SORTER).force_cert_check()
+        inj.require(inj.DBUS_IFACE).update()
 
     def _add_url_options(self):
         """ Add options that allow the setting of the server URL."""
