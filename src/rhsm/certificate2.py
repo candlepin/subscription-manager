@@ -23,7 +23,7 @@ import zlib
 
 log = logging.getLogger(__name__)
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from rhsm import _certificate
 
@@ -518,6 +518,14 @@ class EntitlementCertificate(ProductCertificate):
             data = self.extensions[EXT_ENT_PAYLOAD]
             self._path_tree_object = PathTree(data)
         return self._path_tree_object
+
+    def is_expiring(self, on_date=None):
+        gmt = datetime.utcnow()
+        if on_date:
+            gmt = on_date
+        gmt = gmt.replace(tzinfo=GMT())
+        warning_time = timedelta(days=int(self.order.warning_period))
+        return self.valid_range.end() - warning_time < gmt
 
     def check_path(self, path):
         """
