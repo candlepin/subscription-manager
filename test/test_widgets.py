@@ -69,14 +69,14 @@ class TestContractSubDetailsWidget(TestSubDetailsWidget):
         details = self.widget(None)
         self.show(details)
         yesterday = datetime.now(GMT()) - timedelta(days=1)
-        bg_color = details._get_date_bg(yesterday)
+        bg_color = details._get_date_bg(yesterday, True)
         self.assertEqual(details.expired_color, bg_color)
 
     def test_get_warning_bg(self):
         details = self.widget(None)
         self.show(details)
         tomorrow = datetime.now(GMT()) + timedelta(days=1)
-        bg_color = details._get_date_bg(tomorrow)
+        bg_color = details._get_date_bg(tomorrow, True)
         self.assertEqual(details.warning_color, bg_color)
 
     def test_get_details(self):
