@@ -16,7 +16,6 @@
 # in this software or its documentation.
 #
 
-import datetime
 import syslog
 import gobject
 import dbus
@@ -40,7 +39,6 @@ from subscription_manager.injection import require, CERT_SORTER
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
-import rhsm.certificate as certificate
 
 import rhsm.config
 CFG = rhsm.config.initConfig()
@@ -64,14 +62,8 @@ def debug(msg):
 def in_warning_period(sorter):
 
     for entitlement in sorter.valid_entitlement_certs:
-        warning_period = datetime.timedelta(
-                days=int(entitlement.order.warning_period))
-        valid_range = entitlement.valid_range
-        warning_range = certificate.DateRange(
-                valid_range.end() - warning_period, valid_range.end())
-        if warning_range.has_now():
+        if entitlement.is_expiring():
             return True
-
     return False
 
 
@@ -91,12 +83,12 @@ def check_status(force_signal):
 
     sorter = require(CERT_SORTER)
 
-    if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
+    if sorter.system_status == 'invalid':
         debug("System has one or more certificates that are not valid")
         debug(sorter.unentitled_products.keys())
         debug(sorter.expired_products.keys())
         return RHSM_EXPIRED
-    elif len(sorter.partially_valid_products) > 0:
+    elif sorter.system_status == 'partial':
         debug("System has one or more partially entitled products")
         return RHSM_PARTIALLY_VALID
     elif in_warning_period(sorter):
