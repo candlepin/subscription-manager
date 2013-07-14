@@ -16,7 +16,7 @@ import unittest
 import datetime
 from mock import Mock
 from stubs import StubUEP, StubEntitlementCertificate, StubCertificateDirectory, StubProduct, StubBackend, StubFacts
-from subscription_manager.gui.mysubstab import MySubscriptionsTab
+from subscription_manager.gui.mysubstab import MySubscriptionsTab, WARNING_IMG, EXPIRED_IMG
 
 
 class MySubscriptionsTabTest(unittest.TestCase):
@@ -34,9 +34,26 @@ class MySubscriptionsTabTest(unittest.TestCase):
             quantity="10", stacking_id=None)
 
         self.cert_dir = StubCertificateDirectory([self.cert1])
+        self.my_subs_tab = MySubscriptionsTab(self.backend, self.consumer,
+                self.facts, None, self.cert_dir)
 
     def tearDown(self):
         pass
+
+    def test_image_rank_both_none(self):
+        self.assertFalse(self.my_subs_tab.image_ranks_higher(None, None))
+
+    def test_image_rank_new_image_none(self):
+        self.assertFalse(self.my_subs_tab.image_ranks_higher(WARNING_IMG, None))
+
+    def test_image_rank_new_image_lower(self):
+        self.assertFalse(self.my_subs_tab.image_ranks_higher(EXPIRED_IMG, WARNING_IMG))
+
+    def test_image_rank_new_image_higher(self):
+        self.assertTrue(self.my_subs_tab.image_ranks_higher(WARNING_IMG, EXPIRED_IMG))
+
+    def test_image_rank_old_image_none(self):
+        self.assertTrue(self.my_subs_tab.image_ranks_higher(None, EXPIRED_IMG))
 
     def test_correct_cert_data_inserted_into_store(self):
         self.cert1.order.stacking_id = None
@@ -64,10 +81,8 @@ class MySubscriptionsTabTest(unittest.TestCase):
             column_entries.append(entry)
 
         # Test that the data from a subscription is loaded into the store.
-        my_subs_tab = MySubscriptionsTab(self.backend, self.consumer, self.facts,
-                None, self.cert_dir)
-        my_subs_tab.store.add_map = collect_entries
-        my_subs_tab.update_subscriptions()
+        self.my_subs_tab.store.add_map = collect_entries
+        self.my_subs_tab.update_subscriptions()
         return column_entries
 
     def _assert_entry(self, entry):
