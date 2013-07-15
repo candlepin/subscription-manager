@@ -29,6 +29,7 @@ from time import localtime, strftime, strptime
 import unicodedata
 
 from M2Crypto import SSL
+from M2Crypto.SSL import SSLError
 from M2Crypto import X509
 
 import rhsm.config
@@ -884,8 +885,13 @@ class ServiceLevelCommand(OrgCommand):
         print _("Service level preference has been unset")
 
     def show_service_level(self):
-        consumer_uuid = self.consumerIdentity.read().getConsumerId()
-        consumer = self.cp.getConsumer(consumer_uuid)
+        try:
+            consumer_uuid = inj.require(inj.IDENTITY).uuid
+            consumer = self.cp.getConsumer(consumer_uuid)
+        except SSLError, ss:
+            log.error(u"Error: Cannot set service level when already registered to a different system. Error type: %s" % ss)
+            system_exit(-1, _("Error: Cannot set service level when already registered to a different system"))
+
         if 'serviceLevel' not in consumer:
             system_exit(-1, _("Error: The service-level command is not supported by "
                              "the server."))
