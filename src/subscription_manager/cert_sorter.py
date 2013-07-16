@@ -377,7 +377,13 @@ class EntitlementCertStackingGroupSorter(StackingGroupSorter):
         StackingGroupSorter.__init__(self, certs)
 
     def _get_stacking_id(self, cert):
-        return cert.order.stacking_id
+        if cert.order:
+            return cert.order.stacking_id
+        else:
+            return None
 
     def _get_identity_name(self, cert):
-        return cert.order.name
+        if cert.order:
+            return cert.order.name
+        else:
+            return None
