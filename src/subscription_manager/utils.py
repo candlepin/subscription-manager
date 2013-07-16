@@ -387,7 +387,7 @@ def friendly_join(items):
     first = items[0:-1]
     last = items[-1]
     first_string = ", ".join(first)
-    return first_string + _(" and ") + last
+    return first_string + " %s " % _("and") + last
 
 
 def is_true_value(test_string):
