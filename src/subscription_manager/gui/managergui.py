@@ -57,6 +57,8 @@ from subscription_manager.gui.mysubstab import MySubscriptionsTab
 from subscription_manager.gui.preferences import PreferencesDialog
 from subscription_manager.gui.utils import handle_gui_exception, linkify
 
+from rhsm.connection import RestlibException
+
 
 _ = gettext.gettext
 
@@ -323,8 +325,12 @@ class MainWindow(widgets.GladeWidget):
     def _preferences_item_clicked(self, widget):
         try:
             self.preferences_dialog.show()
+        except RestlibException, rle:
+            handle_gui_exception(rle, _("Error in preferences dialog. "
+                                        "Please register with proper credentials and try again."),
+                                 self._get_window())
         except Exception, e:
-            handle_gui_exception(e, _("Error in preferences dialog."
+            handle_gui_exception(e, _("Error in preferences dialog. "
                                       "Please see /var/log/rhsm/rhsm.log for more information."),
                                  self._get_window())
 
