@@ -746,11 +746,14 @@ class UEPConnection:
 
         return self.conn.request_get(method)
 
-    def getCompliance(self, uuid):
+    def getCompliance(self, uuid, on_date=None):
         """
         Returns a compliance object with compliance status information
         """
         method = '/consumers/%s/compliance' % self.sanitize(uuid)
+        if on_date:
+            method = "%s?on_date=%s" % (method,
+                    self.sanitize(on_date.isoformat(), plus=True))
         return self.conn.request_get(method)
 
     def createOwner(self, ownerKey, ownerDisplayName=None):
