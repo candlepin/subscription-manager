@@ -56,88 +56,17 @@ RHSM_PARTIALLY_VALID = 4
 RHSM_REGISTRATION_REQUIRED = 5
 
 
-class CertSorter(object):
-    """
-    Queries the server for compliance information and breaks out the response
-    for use in the client code.
+class ComplianceManager(object):
 
-    Originally this class actually sorted certificates and calculated status,
-    but this is handled by the server today.
-
-    If unregistered we report status as unknown.
-
-    On every successful server fetch (for *right now*), we cache the results.
-    In the event we are unable to reach the server periodically, we will
-    re-use this cached data for a period of time, before falling back to
-    reporting unknown.
-    """
-    def __init__(self):
-        self.callbacks = set()
-
+    def __init__(self, on_date=None):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.identity = inj.require(inj.IDENTITY)
 
-        self.product_monitor = file_monitor.Monitor(self.product_dir.path)
-        self.entitlement_monitor = file_monitor.Monitor(self.entitlement_dir.path)
-        self.identity_monitor = file_monitor.Monitor(ConsumerIdentity.PATH)
-
-        # Sync installed product info with server.
-        # This will be done on register if we aren't registered
-        self.installed_mgr = InstalledProductsManager()
-        self.update_product_manager()
-
-        self.product_monitor.connect('changed', self.on_prod_dir_changed)
-        self.entitlement_monitor.connect('changed', self.on_ent_dir_changed)
-        self.identity_monitor.connect('changed', self.on_identity_changed)
+        self.on_date = on_date
 
         self.load()
-
-    def update_product_manager(self):
-        if self.is_registered():
-            try:
-                self.installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
-            except RestlibException:
-                # Invalid consumer certificate
-                pass
-
-    def force_cert_check(self):
-        self.identity_monitor.run_check()
-        self.product_monitor.run_check()
-        self.entitlement_monitor.run_check()
-
-    def notify(self):
-        for callback in copy(self.callbacks):
-            callback()
-
-    def add_callback(self, cb):
-        self.callbacks.add(cb)
-
-    def remove_callback(self, cb):
-        try:
-            self.callbacks.remove(cb)
-            return True
-        except KeyError:
-            return False
-
-    def on_change(self):
-        self.load()
-        self.notify()
-
-    def on_prod_dir_changed(self, filemonitor):
-        self.product_dir.refresh()
-        self.update_product_manager()
-        self.on_change()
-
-    def on_ent_dir_changed(self, filemonitor):
-        self.entitlement_dir.refresh()
-        self.on_change()
-
-    def on_identity_changed(self, filemonitor):
-        self.identity.reload()
-        self.cp_provider.clean()
-        self.on_change()
 
     def load(self):
         # All products installed on this machine, regardless of status. Maps
@@ -189,6 +118,15 @@ class CertSorter(object):
 
         self._parse_server_status()
 
+    def get_compliance_status(self):
+        # Defaults to now
+        try:
+            return self.cp_provider.get_consumer_auth_cp().getCompliance(self.identity.uuid, self.on_date)
+        except Exception, e:
+            log.debug("Failed to get compliance data from the server")
+            log.exception(e)
+            return None
+
     def _parse_server_status(self):
         """ Fetch entitlement status info from server and parse. """
 
@@ -196,9 +134,8 @@ class CertSorter(object):
             log.debug("Unregistered, skipping server compliance check.")
             return
 
-        # TODO: handle temporarily disconnected use case / caching
-        status_cache = inj.require(inj.STATUS_CACHE)
-        status = status_cache.load_status(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+        # Override get_status
+        status = self.get_compliance_status()
         if status is None:
             return
 
@@ -361,6 +298,88 @@ class CertSorter(object):
         if self.in_warning_period():
             return RHSM_WARNING
         return RHSM_VALID  # Correct when unknown
+
+
+class CertSorter(ComplianceManager):
+    """
+    Queries the server for compliance information and breaks out the response
+    for use in the client code.
+
+    Originally this class actually sorted certificates and calculated status,
+    but this is handled by the server today.
+
+    If unregistered we report status as unknown.
+
+    On every successful server fetch (for *right now*), we cache the results.
+    In the event we are unable to reach the server periodically, we will
+    re-use this cached data for a period of time, before falling back to
+    reporting unknown.
+    """
+    def __init__(self):
+        super(CertSorter, self).__init__()
+        self.callbacks = set()
+
+        self.product_monitor = file_monitor.Monitor(self.product_dir.path)
+        self.entitlement_monitor = file_monitor.Monitor(self.entitlement_dir.path)
+        self.identity_monitor = file_monitor.Monitor(ConsumerIdentity.PATH)
+
+        # Sync installed product info with server.
+        # This will be done on register if we aren't registered
+        self.installed_mgr = InstalledProductsManager()
+        self.update_product_manager()
+
+        self.product_monitor.connect('changed', self.on_prod_dir_changed)
+        self.entitlement_monitor.connect('changed', self.on_ent_dir_changed)
+        self.identity_monitor.connect('changed', self.on_identity_changed)
+
+    def get_compliance_status(self):
+        status_cache = inj.require(inj.STATUS_CACHE)
+        return status_cache.load_status(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+
+    def update_product_manager(self):
+        if self.is_registered():
+            try:
+                self.installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+            except RestlibException:
+                # Invalid consumer certificate
+                pass
+
+    def force_cert_check(self):
+        self.identity_monitor.run_check()
+        self.product_monitor.run_check()
+        self.entitlement_monitor.run_check()
+
+    def notify(self):
+        for callback in copy(self.callbacks):
+            callback()
+
+    def add_callback(self, cb):
+        self.callbacks.add(cb)
+
+    def remove_callback(self, cb):
+        try:
+            self.callbacks.remove(cb)
+            return True
+        except KeyError:
+            return False
+
+    def on_change(self):
+        self.load()
+        self.notify()
+
+    def on_prod_dir_changed(self, filemonitor):
+        self.product_dir.refresh()
+        self.update_product_manager()
+        self.on_change()
+
+    def on_ent_dir_changed(self, filemonitor):
+        self.entitlement_dir.refresh()
+        self.on_change()
+
+    def on_identity_changed(self, filemonitor):
+        self.identity.reload()
+        self.cp_provider.clean()
+        self.on_change()
 
 
 class StackingGroupSorter(object):
