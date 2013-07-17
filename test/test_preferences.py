@@ -57,26 +57,19 @@ class TestPreferencesDialog(SubManFixture):
     def testAutohealChanged(self, MockUep):
         self._getPrefDialog()
         self.preferences_dialog.show()
-        self.preferences_dialog.autoheal_checkbox.set_active(0)
-        display_text = self.preferences_dialog.autoheal_preference.get_label()
-        self.assertEquals("Disabled", display_text)
         identity = require(IDENTITY)
+        event = gtk.gdk.Event(gtk.gdk.BUTTON_PRESS)
+
+        self.preferences_dialog.autoheal_event.emit("button-press-event", event)
+        MockUep.assert_called_with(identity.uuid, autoheal=False)
+
+        self.preferences_dialog.autoheal_event.emit("button-press-event", event)
+        MockUep.assert_called_with(identity.uuid, autoheal=True)
+
+        self.preferences_dialog.autoheal_checkbox.set_active(0)
         MockUep.assert_called_with(identity.uuid, autoheal=False)
 
         self.preferences_dialog.autoheal_checkbox.set_active(1)
-        display_text = self.preferences_dialog.autoheal_preference.get_label()
-        self.assertEquals("Enabled", display_text)
-        MockUep.assert_called_with(identity.uuid, autoheal=True)
-
-        event = gtk.gdk.Event(gtk.gdk.BUTTON_PRESS)
-        self.preferences_dialog.autoheal_event.emit("button-press-event", event)
-        display_text = self.preferences_dialog.autoheal_preference.get_label()
-        self.assertEquals("Disabled", display_text)
-        MockUep.assert_called_with(identity.uuid, autoheal=False)
-
-        self.preferences_dialog.autoheal_event.emit("button-press-event", event)
-        display_text = self.preferences_dialog.autoheal_preference.get_label()
-        self.assertEquals("Enabled", display_text)
         MockUep.assert_called_with(identity.uuid, autoheal=True)
 
     def _getPrefDialog(self):
