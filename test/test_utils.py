@@ -449,7 +449,7 @@ class TestFriendlyJoin(unittest.TestCase):
     def test_join(self):
         self.assertEquals("One", friendly_join(["One"]))
         self.assertEquals("One and Two", friendly_join(["One", "Two"]))
-        self.assertEquals("One, Two and Three", friendly_join(["One", "Two", "Three"]))
-        self.assertEquals("Three, Two and One", friendly_join(set(["One", "Two", "Three"])))
+        self.assertEquals("One, Two, and Three", friendly_join(["One", "Two", "Three"]))
+        self.assertEquals("Three, Two, and One", friendly_join(set(["One", "Two", "Three"])))
         self.assertEquals("", friendly_join([]))
         self.assertEquals("", friendly_join(None))
