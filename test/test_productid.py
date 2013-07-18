@@ -728,11 +728,11 @@ class TestProductManager(SubManFixture):
 
     def _create_desktop_cert(self):
         return self._create_cert("68", "Red Hat Enterprise Linux Desktop",
-                                 "5", "rhel-5-client")
+                                 "5.9", "rhel-5,rhel-5-client")
 
     def _create_workstation_cert(self):
         return self._create_cert("71", "Red Hat Enterprise Linux Workstation",
-                                 "5", "rhel-5-client-workstation")
+                                 "5.9", "rhel-5-client-workstation,rhel-5-workstation")
 
     def _create_server_cert(self):
         return self._create_cert("69", "Red Hat Enterprise Linux Server",
@@ -751,6 +751,66 @@ class TestProductManager(SubManFixture):
         desktop_cert = self._create_desktop_cert()
         self.assertTrue(self.prod_mgr._is_desktop(
             desktop_cert.products[0]))
+
+    def _gen_pc_list(self, cert_list):
+        return [(cert.products[0], cert) for cert in cert_list]
+
+    def test_list_has_workstation_and_desktop_cert(self):
+        desktop_cert = self._create_desktop_cert()
+        workstation_cert = self._create_workstation_cert()
+        server_cert = self._create_server_cert()
+
+        all_cert_list = self._gen_pc_list([desktop_cert, workstation_cert, server_cert])
+        just_desktop_cert_list = self._gen_pc_list([desktop_cert])
+        just_workstation_cert_list = self._gen_pc_list([workstation_cert])
+        no_workstation_cert_list = self._gen_pc_list([desktop_cert, server_cert])
+        neither_cert_list = self._gen_pc_list([server_cert])
+        just_both_cert_list = self._gen_pc_list([workstation_cert, desktop_cert])
+
+        # has desktop and workstation
+        self.assertTrue(self.prod_mgr._list_has_workstation_and_desktop_cert(all_cert_list))
+        self.assertTrue(self.prod_mgr._list_has_workstation_and_desktop_cert(just_both_cert_list))
+
+        self.assertFalse(self.prod_mgr._list_has_workstation_and_desktop_cert(just_desktop_cert_list))
+        self.assertFalse(self.prod_mgr._list_has_workstation_and_desktop_cert(just_workstation_cert_list))
+        self.assertFalse(self.prod_mgr._list_has_workstation_and_desktop_cert(neither_cert_list))
+        self.assertFalse(self.prod_mgr._list_has_workstation_and_desktop_cert(no_workstation_cert_list))
+
+    def test_desktop_workstation_cleanup(self):
+        desktop_cert = self._create_desktop_cert()
+        workstation_cert = self._create_workstation_cert()
+        server_cert = self._create_server_cert()
+
+        all_cert_list = self._gen_pc_list([desktop_cert, workstation_cert, server_cert])
+        just_desktop_cert_list = self._gen_pc_list([desktop_cert])
+        just_workstation_cert_list = self._gen_pc_list([workstation_cert])
+        no_workstation_cert_list = self._gen_pc_list([desktop_cert, server_cert])
+        neither_cert_list = self._gen_pc_list([server_cert])
+        just_both_cert_list = self._gen_pc_list([workstation_cert, desktop_cert])
+
+        filtered = self.prod_mgr._desktop_workstation_cleanup(all_cert_list)
+        filtered_certs = set([cert for (product, cert) in filtered])
+        self.assertEquals(filtered_certs, set([workstation_cert, server_cert]))
+
+        filtered = self.prod_mgr._desktop_workstation_cleanup(just_desktop_cert_list)
+        filtered_certs = set([cert for (product, cert) in filtered])
+        self.assertEquals(filtered_certs, set([desktop_cert]))
+
+        filtered = self.prod_mgr._desktop_workstation_cleanup(just_workstation_cert_list)
+        filtered_certs = set([cert for (product, cert) in filtered])
+        self.assertEquals(filtered_certs, set([workstation_cert]))
+
+        filtered = self.prod_mgr._desktop_workstation_cleanup(no_workstation_cert_list)
+        filtered_certs = set([cert for (product, cert) in filtered])
+        self.assertEquals(filtered_certs, set([server_cert, desktop_cert]))
+
+        filtered = self.prod_mgr._desktop_workstation_cleanup(neither_cert_list)
+        filtered_certs = set([cert for (product, cert) in filtered])
+        self.assertEquals(filtered_certs, set([server_cert]))
+
+        filtered = self.prod_mgr._desktop_workstation_cleanup(just_both_cert_list)
+        filtered_certs = set([cert for (product, cert) in filtered])
+        self.assertEquals(filtered_certs, set([workstation_cert]))
 
     def find_repos_side_effect(self, product_hash):
         return self.prod_repo_map.get(product_hash)
@@ -776,6 +836,7 @@ class TestProductManager(SubManFixture):
 
         self.assertTrue(desktop_cert.delete.called)
 
+        self.assertFalse(desktop_cert.write.called)
         self.assertTrue(workstation_cert.write.called)
         self.prod_db_mock.delete.assert_called_with("68")
 
@@ -814,6 +875,49 @@ class TestProductManager(SubManFixture):
         self.assertFalse(some_other_cert.delete.called)
 
         self.assertFalse(self.prod_db_mock.delete.called)
+
+    def test_workstation_desktop_same_time(self):
+
+        desktop_cert = self._create_desktop_cert()
+        workstation_cert = self._create_workstation_cert()
+        #self.prod_dir.certs.append(workstation_cert)
+
+        self.prod_repo_map = {}
+        self.prod_db_mock.find_repos = Mock(side_effect=self.find_repos_side_effect)
+
+        # Desktop comes first in this scenario:
+        enabled = [
+                (desktop_cert, 'repo1'),
+                (workstation_cert, 'repo2'),
+        ]
+
+        products_installed = self.prod_mgr.update_installed(enabled, ['repo1', 'repo2'])
+        self.assertFalse(desktop_cert.delete.called)
+
+        self.assertFalse(desktop_cert.write.called)
+        self.assertTrue(workstation_cert.write.called)
+
+        self.assertFalse(desktop_cert.delete.called)
+        self.assertFalse(workstation_cert.delete.called)
+
+        self.assertTrue(workstation_cert in products_installed)
+        self.assertFalse(desktop_cert in products_installed)
+
+        self.assertTrue(self.prod_db_mock.add.called)
+        self.assertTrue(self.prod_db_mock.write.called)
+
+        # verify the list order doesnt matter
+        products_installed = self.prod_mgr.update_installed(enabled, ['repo2', 'repo1'])
+        self.assertFalse(desktop_cert.delete.called)
+
+        self.assertFalse(desktop_cert.write.called)
+        self.assertTrue(workstation_cert.write.called)
+
+        self.assertFalse(desktop_cert.delete.called)
+        self.assertFalse(workstation_cert.delete.called)
+
+        self.assertTrue(workstation_cert in products_installed)
+        self.assertFalse(desktop_cert in products_installed)
 
     @patch("subscription_manager.productid.yum")
     def test_yum_version_tracks_repos(self, yum_mock):
