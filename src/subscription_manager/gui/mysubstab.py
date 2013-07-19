@@ -267,7 +267,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def _create_stacking_header_entry(self, title, background_color):
         entry = {}
-        entry['image'] = None
         entry['subscription'] = title
         entry['installed_value'] = 0.0
         entry['align'] = 0.5         # Center horizontally
@@ -283,7 +282,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         # Initialize an entry list of the proper length
         entry = {}
-        entry['image'] = None
         if image:
             entry['image'] = gtk.gdk.pixbuf_new_from_file_at_size(image, 13, 13)
         entry['subscription'] = order.getName()
