@@ -66,10 +66,11 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         # Set up columns on the view
         text_renderer = gtk.CellRendererText()
         image_renderer = gtk.CellRendererPixbuf()
-        column = gtk.TreeViewColumn(_('Subscription'), image_renderer,
-                                    pixbuf=self.store['image'])
+        column = gtk.TreeViewColumn(_('Subscription'))
         column.set_expand(True)
-        column.pack_end(text_renderer, True)
+        column.pack_start(image_renderer, False)
+        column.pack_start(text_renderer, False)
+        column.add_attribute(image_renderer, 'pixbuf', self.store['image'])
         column.add_attribute(text_renderer, 'text', self.store['subscription'])
         column.add_attribute(text_renderer, 'cell-background',
                             self.store['background'])
