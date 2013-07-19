@@ -24,7 +24,6 @@ from subscription_manager.certdirectory import EntitlementDirectory, ProductDire
 from subscription_manager.certlib import Disconnected
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import widgets
-from subscription_manager.gui.treeViewTooltips import TreeViewTooltips
 from subscription_manager.gui.utils import handle_gui_exception, get_dbus_iface,\
     get_cell_background_color
 
@@ -38,23 +37,6 @@ WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
 prefix = os.path.dirname(__file__)
 WARNING_IMG = os.path.join(prefix, "data/icons/partial.svg")
 EXPIRED_IMG = os.path.join(prefix, "data/icons/invalid.svg")
-
-
-class ProductStatusTips(TreeViewTooltips):
-
-    def __init__(self, product_column):
-        self.product_column = product_column
-        TreeViewTooltips.__init__(self)
-
-    def get_tooltip(self, view, column, path):
-        model = view.get_model()
-        image = model.get_value(model.get_iter(path), model['image'])
-        if column is self.product_column:
-            if image == EXPIRED_IMG:
-                return (_('Subscription Expired'))
-            if image == WARNING_IMG:
-                return (_('Subscription Expiring Soon'))
-        return None
 
 
 class MySubscriptionsTab(widgets.SubscriptionManagerTab):
@@ -85,7 +67,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         text_renderer = gtk.CellRendererText()
         image_renderer = gtk.CellRendererPixbuf()
         column = gtk.TreeViewColumn(_('Subscription'), image_renderer,
-                                    pixbuf=self.store['pixbuf'])
+                                    pixbuf=self.store['image'])
         column.set_expand(True)
         column.pack_end(text_renderer, True)
         column.add_attribute(text_renderer, 'text', self.store['subscription'])
@@ -95,10 +77,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                             self.store['background'])
 
         self.top_view.append_column(column)
-
-        tips = ProductStatusTips(column)
-        tips.add_view(self.top_view)
-
         cols = []
         cols.append((column, 'text', 'subscription'))
 
@@ -206,8 +184,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         # Update the parent image if required.
         if new_parent_image and iter:
-            self.store.set_value(iter, self.store['image'], new_parent_image)
-            self.store.set_value(iter, self.store['pixbuf'],
+            self.store.set_value(iter, self.store['image'],
                     gtk.gdk.pixbuf_new_from_file_at_size(new_parent_image, 13, 13))
 
     def image_ranks_higher(self, old_image, new_image):
@@ -227,8 +204,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def get_type_map(self):
         return {
-            'image': str,
-            'pixbuf': gtk.gdk.Pixbuf,
+            'image': gtk.gdk.Pixbuf,
             'subscription': str,
             'installed_value': float,
             'installed_text': str,
@@ -291,6 +267,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def _create_stacking_header_entry(self, title, background_color):
         entry = {}
+        entry['image'] = None
         entry['subscription'] = title
         entry['installed_value'] = 0.0
         entry['align'] = 0.5         # Center horizontally
@@ -306,9 +283,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         # Initialize an entry list of the proper length
         entry = {}
+        entry['image'] = None
         if image:
-            entry['pixbuf'] = gtk.gdk.pixbuf_new_from_file_at_size(image, 13, 13)
-            entry['image'] = image
+            entry['image'] = gtk.gdk.pixbuf_new_from_file_at_size(image, 13, 13)
         entry['subscription'] = order.getName()
         entry['installed_value'] = self._percentage(installed, products)
         entry['installed_text'] = '%s / %s' % (len(installed), len(products))
