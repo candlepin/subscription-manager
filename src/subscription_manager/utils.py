@@ -404,7 +404,7 @@ def friendly_join(items):
 
     if len(items) > 2:
         first_string = first_string + ','
-        
+
     return first_string + " %s " % _("and") + last
 
 
