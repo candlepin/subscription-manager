@@ -220,7 +220,6 @@ class MainWindow(widgets.GladeWidget):
         self.backend.cs.add_callback(on_cert_change)
 
         self.main_window.show_all()
-        self.refresh()
 
         # Check to see if already registered to old RHN/Spacewalk
         # and show dialog if so
@@ -242,8 +241,7 @@ class MainWindow(widgets.GladeWidget):
     def _on_sla_cancel_button_press(self):
         self._perform_unregister()
 
-    def refresh(self):
-        """ Refresh the UI. """
+    def on_registration_changed(self):
         # Show the All Subscriptions tab if registered, hide it otherwise:
         if self.registered() and self.notebook.get_n_pages() == 2:
             self.notebook.append_page(self.all_subs_tab.get_content(),
@@ -252,14 +250,26 @@ class MainWindow(widgets.GladeWidget):
             self.notebook.set_current_page(0)
             self.notebook.remove_page(2)
 
-        self.all_subs_tab.refresh()
-        self.installed_tab.refresh()
-        self.my_subs_tab.refresh()
+        # we've unregistered, clear pools from all subscriptions tab
+        # so it's correct if we reshow it
+        self.all_subs_tab.sub_details.clear()
+        self.all_subs_tab.clear_pools()
 
         self.installed_tab.set_registered(self.registered())
 
         self._show_buttons()
         self._show_redemption_buttons()
+
+    def refresh(self):
+        """ Refresh the UI. """
+        # Always run on startup, when there is no last_uuid
+        if not hasattr(self, 'last_uuid') or self.identity.uuid != self.last_uuid:
+            self.last_uuid = self.identity.uuid
+            self.on_registration_changed()
+
+        self.all_subs_tab.refresh()
+        self.installed_tab.refresh()
+        self.my_subs_tab.refresh()
 
     def _get_window(self):
         """
@@ -331,9 +341,6 @@ class MainWindow(widgets.GladeWidget):
         # We have new credentials, restart virt-who
         restart_virt_who()
 
-        # we've unregistered, clear pools from all subscriptions tab
-        # so it's correct if we reshow it
-        self.all_subs_tab.clear_pools()
         self.backend.cs.force_cert_check()
 
     def _unregister_item_clicked(self, widget):
