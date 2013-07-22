@@ -220,7 +220,7 @@ class MainWindow(widgets.GladeWidget):
         self.backend.cs.add_callback(on_cert_change)
 
         self.main_window.show_all()
-        self.refresh()
+        self._show_redemption_buttons()
 
         # Check to see if already registered to old RHN/Spacewalk
         # and show dialog if so
@@ -259,7 +259,6 @@ class MainWindow(widgets.GladeWidget):
         self.installed_tab.set_registered(self.registered())
 
         self._show_buttons()
-        self._show_redemption_buttons()
 
     def _get_window(self):
         """
