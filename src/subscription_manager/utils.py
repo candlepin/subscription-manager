@@ -18,6 +18,7 @@ import logging
 import os
 import re
 import signal
+import socket
 from urlparse import urlparse
 
 from M2Crypto.SSL import SSLError
@@ -321,7 +322,7 @@ def get_client_versions():
             "python-rhsm": pr_version}
 
 
-def get_server_versions(cp):
+def get_server_versions(cp, exception_on_timeout=False):
     cp_version = _("Unknown")
     server_type = _("This system is currently not registered.")
 
@@ -342,6 +343,16 @@ def get_server_versions(cp):
                 cp_version = '-'.join([status['version'], status['release']])
             else:
                 cp_version = _("Unknown")
+        except socket.timeout, e:
+            log.error("Timeout error while checking server version")
+            log.exception(e)
+            # for cli, we can assume if we get a timeout here, the rest
+            # of the calls will timeout as well, so raise exception here
+            # instead of waiting for all the calls to timeout
+            if exception_on_timeout:
+                log.error("Timeout error while checking server version")
+                raise
+            # otherwise, ignore the timeout exception
         except Exception, e:
             if isinstance(e, GoneException):
                 log.info("Server Versions: Error: consumer has been deleted, unable to check server version")
