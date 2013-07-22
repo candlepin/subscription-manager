@@ -263,7 +263,6 @@ Order:
 	Socket Limit: 2
 	RAM Limit: 
 	Core Limit: 
-	Virt Limit: 
 	Virt Only: False
 	Subscription: 
 	Stacking ID: 
@@ -384,7 +383,6 @@ Order:
 	Socket Limit: 1
 	RAM Limit: 
 	Core Limit: 
-	Virt Limit: 
 	Virt Only: False
 	Subscription: 
 	Stacking ID: 1
