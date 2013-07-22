@@ -89,7 +89,7 @@ AVAILABLE_SUBS_LIST = [
     _("Subscription Name:"),
     _("SKU:"),
     _("Pool ID:"),
-    _("Quantity:"),
+    _("Available:"),
     _("Service Level:"),
     _("Service Type:"),
     _("Multi-Entitlement:"),
