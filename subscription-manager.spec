@@ -203,6 +203,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/certmgr.py*
 %{_datadir}/rhsm/subscription_manager/cert_sorter.py*
 %{_datadir}/rhsm/subscription_manager/cli.py*
+%{_datadir}/rhsm/subscription_manager/dbus_interface.py*
 %{_datadir}/rhsm/subscription_manager/factlib.py*
 %{_datadir}/rhsm/subscription_manager/facts.py*
 %{_datadir}/rhsm/subscription_manager/hwprobe.py*
