@@ -22,7 +22,6 @@ from subscription_manager.identity import Identity
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.cp_provider import CPProvider
 from subscription_manager.plugins import PluginManager
-from subscription_manager.utils import DbusIface
 
 
 def init_dep_injection():
@@ -54,4 +53,10 @@ def init_dep_injection():
     # create a PluginManager we should probably raise an exception all the way up
     inj.provide(inj.PLUGIN_MANAGER, PluginManager, singleton=True)
 
-    inj.provide(inj.DBUS_IFACE, DbusIface, singleton=True)
+    try:
+        # This catch fixes the product-id module on anaconda
+        # Anaconda does not have dbus module, which is imported in dbus_interface
+        from subscription_manager.dbus_interface import DbusIface
+        inj.provide(inj.DBUS_IFACE, DbusIface, singleton=True)
+    except ImportError:
+        pass
