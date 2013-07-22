@@ -126,7 +126,7 @@ class MainWindow(widgets.GladeWidget):
     """
     widget_names = ['main_window', 'notebook', 'system_name_label',
                     'register_menu_item', 'unregister_menu_item',
-                    'redeem_menu_item']
+                    'redeem_menu_item', 'settings_menu_item']
 
     def __init__(self, backend=None, facts=None,
                  ent_dir=None, prod_dir=None,
@@ -285,9 +285,11 @@ class MainWindow(widgets.GladeWidget):
         if self.registered():
             self.register_menu_item.hide()
             self.unregister_menu_item.show()
+            self.settings_menu_item.show()  # preferences
         else:
             self.register_menu_item.show()
             self.unregister_menu_item.hide()
+            self.settings_menu_item.hide()
 
     def _show_redemption_buttons(self):
         # Check if consumer can redeem a subscription - if an identity cert exists
