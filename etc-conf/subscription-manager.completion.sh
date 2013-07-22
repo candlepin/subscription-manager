@@ -168,6 +168,12 @@ _subscription_manager_service_level()
     COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
+_subscription_manager_status()
+{
+  local opts="${_subscription_manager_common_opts}"
+  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
 _subscription_manager_version()
 {
   local opts="${_subscription_manager_common_opts}"
@@ -185,8 +191,8 @@ _subscription_manager()
 
   # top-level commands and options
   opts="attach auto-attach clean config environments facts identity import list orgs
-        plugins redeem refresh register release remove repos service-level subscribe
-        unregister unsubscribe version"
+        plugins redeem refresh register release remove repos service-level status
+        subscribe unregister unsubscribe version"
 
   case "${first}" in
       clean|\
@@ -203,6 +209,7 @@ _subscription_manager()
       register|\
       release|\
       repos|\
+      status|\
       unregister|\
       version)
       "_subscription_manager_$first" "${cur}" "${prev}"
