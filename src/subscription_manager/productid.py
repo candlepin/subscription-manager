@@ -271,6 +271,12 @@ class ProductManager:
             if known_repos is None or repo not in known_repos:
                 products_to_update_db.append((p, repo))
 
+        # see rhbz #977896
+        # handle cases where we end up with workstation and desktop certs in
+        # the same "transaction".
+        products_to_install = self._desktop_workstation_cleanup(products_to_install)
+        products_to_update_db = self._desktop_workstation_cleanup(products_to_update_db)
+
         # collect info, then do the needful later, so we can hook
         # up a plugin in between and let it munge these lists, so a plugin
         # could blacklist a product cert for example.
@@ -305,6 +311,26 @@ class ProductManager:
             if self._is_workstation(pc.products[0]):
                 return True
         return False
+
+    def _desktop_workstation_cleanup(self, product_cert_list):
+        """Remove desktop product if desktop and workstations are marked for install/update"""
+        if not self._list_has_workstation_and_desktop_cert(product_cert_list):
+            # list doesnt have desktop and workstation, so do nothing
+            return product_cert_list
+
+        log.debug("Workstation and Desktop product certs found, removing Desktop cert from list to update")
+        return [(product, cert) for (product, cert) in product_cert_list if not self._is_desktop(product)]
+
+    def _list_has_workstation_and_desktop_cert(self, product_cert_list):
+        """determine if product cert list has desktop and workstation certs"""
+        has_workstation = False
+        has_desktop = False
+        for product, product_cert in product_cert_list:
+            if self._is_workstation(product):
+                has_workstation = True
+            if self._is_desktop(product):
+                has_desktop = True
+        return (has_desktop and has_workstation)
 
     def _is_rhel_product_cert(self, product):
         """return true if this is a rhel product cert"""
