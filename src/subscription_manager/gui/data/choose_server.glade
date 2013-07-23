@@ -35,11 +35,17 @@
                 <property name="tooltip" translatable="yes">Registering with Customer Portal, Subscription Asset Manager, CloudForms System Engine or Candlepin servers can be used to provide your system with updates and allow management through the selected server's interface.</property>
                 <property name="visible_window">False</property>
                 <child>
-                  <widget class="GtkImage" id="image2">
+                  <widget class="GtkAlignment" id="alignment2">
                     <property name="visible">True</property>
-                    <property name="tooltip" translatable="yes">Registering with Customer Portal, Subscription Asset Manager, CloudForms System Engine or Candlepin servers can be used to provide your system with updates and allow management through the selected server's interface.</property>
-                    <property name="xpad">16</property>
-                    <property name="stock">gtk-info</property>
+                    <property name="right_padding">16</property>
+                    <child>
+                      <widget class="GtkImage" id="image2">
+                        <property name="visible">True</property>
+                        <property name="tooltip" translatable="yes">Registering with Customer Portal, Subscription Asset Manager, CloudForms System Engine or Candlepin servers can be used to provide your system with updates and allow management through the selected server's interface.</property>
+                        <property name="xalign">1</property>
+                        <property name="stock">gtk-info</property>
+                      </widget>
+                    </child>
                   </widget>
                 </child>
               </widget>
@@ -116,11 +122,17 @@
                 <property name="tooltip" translatable="yes">Activation Keys are alphanumeric strings that are pre-configured by your system administrators to automatically register your system and attach all necessary subscriptions.</property>
                 <property name="visible_window">False</property>
                 <child>
-                  <widget class="GtkImage" id="image3">
+                  <widget class="GtkAlignment" id="alignment3">
                     <property name="visible">True</property>
-                    <property name="tooltip" translatable="yes">Activation Keys are alphanumeric strings that are pre-configured by your system administrators to automatically register your system and attach all necessary subscriptions.</property>
-                    <property name="xalign">1</property>
-                    <property name="stock">gtk-info</property>
+                    <property name="right_padding">16</property>
+                    <child>
+                      <widget class="GtkImage" id="image3">
+                        <property name="visible">True</property>
+                        <property name="tooltip" translatable="yes">Activation Keys are alphanumeric strings that are pre-configured by your system administrators to automatically register your system and attach all necessary subscriptions.</property>
+                        <property name="xalign">1</property>
+                        <property name="stock">gtk-info</property>
+                      </widget>
+                    </child>
                   </widget>
                 </child>
               </widget>
