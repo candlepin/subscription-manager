@@ -106,7 +106,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.top_view.connect("row_activated",
                               widgets.expand_collapse_on_row_activated_callback)
 
-        self.update_subscriptions()
+        # Don't update the icon in the first run, we don't have real compliance data yet
+        self.update_subscriptions(update_dbus=False)
 
         self.glade.signal_autoconnect({'on_unsubscribe_button_clicked': self.unsubscribe_button_clicked})
 
@@ -150,7 +151,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                 self.content.get_toplevel())
         prompt.connect('response', self._on_unsubscribe_prompt_response, selection)
 
-    def update_subscriptions(self):
+    def update_subscriptions(self, update_dbus=True):
         """
         Pulls the entitlement certificates and updates the subscription model.
         """
@@ -159,7 +160,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         for idx, group in enumerate(sorter.groups):
             self._add_group(idx, group)
         self.top_view.expand_all()
-        require(DBUS_IFACE).update()
+        if update_dbus:
+            require(DBUS_IFACE).update()
         self.unsubscribe_button.set_property('sensitive', False)
         # 841396: Select first item in My Subscriptions table by default
         selection = self.top_view.get_selection()

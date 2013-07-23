@@ -39,18 +39,14 @@ from subscription_manager.injection import require, CERT_SORTER
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
+from subscription_manager.cert_sorter import RHSM_VALID, \
+        RHSM_EXPIRED, RHSM_WARNING, RHSM_PARTIALLY_VALID, \
+        RHN_CLASSIC, RHSM_REGISTRATION_REQUIRED
 
 import rhsm.config
 CFG = rhsm.config.initConfig()
 
 enable_debug = False
-
-RHSM_VALID = 0
-RHSM_EXPIRED = 1
-RHSM_WARNING = 2
-RHN_CLASSIC = 3
-RHSM_PARTIALLY_VALID = 4
-RHSM_REGISTRATION_REQUIRED = 5
 
 
 def debug(msg):
@@ -67,8 +63,7 @@ def in_warning_period(sorter):
     return False
 
 
-def check_status(force_signal):
-
+def pre_check_status(force_signal):
     if force_signal is not None:
         debug("forcing status signal from cli arg")
         return force_signal
@@ -80,23 +75,17 @@ def check_status(force_signal):
     if not ConsumerIdentity.existsAndValid():
         debug("The system is not currently registered.")
         return RHSM_REGISTRATION_REQUIRED
+    return None
+
+
+def check_status(force_signal):
+    pre_result = pre_check_status(force_signal)
+    if pre_result is not None:
+        return pre_result
 
     sorter = require(CERT_SORTER)
 
-    if sorter.system_status == 'invalid':
-        debug("System has one or more certificates that are not valid")
-        debug(sorter.unentitled_products.keys())
-        debug(sorter.expired_products.keys())
-        return RHSM_EXPIRED
-    elif sorter.system_status == 'partial':
-        debug("System has one or more partially entitled products")
-        return RHSM_PARTIALLY_VALID
-    elif in_warning_period(sorter):
-        debug("System has one or more entitlements in their warning period")
-        return RHSM_WARNING
-    else:
-        debug("System entitlements appear valid")
-        return RHSM_VALID
+    return sorter.get_status_for_icon()
 
 
 def check_if_ran_once(checker, loop):
@@ -150,6 +139,21 @@ class StatusChecker(dbus.service.Object):
         self.has_run = True
         self.watchdog()
         return ret
+
+    @dbus.service.method(
+            dbus_interface="com.redhat.SubscriptionManager.EntitlementStatus",
+            in_signature='i')
+    def update_status(self, status):
+        log.info("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.update_status called with status = %s" % status)
+        pre_result = pre_check_status(self.force_signal)
+        if pre_result is not None:
+            status = pre_result
+        if status != self.last_status:
+            debug("Validity status changed, fire signal")
+            self.entitlement_status_changed(status)
+        self.last_status = status
+        self.has_run = True
+        self.watchdog()
 
 
 def parse_force_signal(cli_arg):
