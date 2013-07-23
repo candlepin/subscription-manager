@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.13
+Version: 1.8.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -383,6 +383,22 @@ fi
 %endif
 
 %changelog
+* Tue Jul 23 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.14-1
+- 921222: add 'status' to bash completion (alikins@redhat.com)
+- 974587: Add more checks for no order portion being present (bkearney@redhat.com)
+- 977580: Preferences dialog hide and show (cschevia@redhat.com)
+- 977481: make proxy cli check require_connection (alikins@redhat.com)
+- 977896: Fixes for Workstation/Desktop certs (alikins@redhat.com)
+- 980724: allsubstab cleared on identity change, check redeem on register (ckozak@redhat.com)
+- 982286: Fixed empty dialog message (cschevia@redhat.com)
+- 982286: Adjusted markup removal (cschevia@redhat.com)
+- 983193: remove unused 'Virt Limit' cat-cert field (alikins@redhat.com)
+- 983250: 983281: certs check warning period (ckozak@redhat.com)
+- 984203: Fix german translations (bkearney@redhat.com)
+- 985515: moved DbusIface to fix anaconda productId (ckozak@redhat.com)
+- added at-spi locator for autoheal checkbox (jmolet@redhat.com)
+- remove fedora and rhel 6.5, 7.0 (jesusr@redhat.com)
+
 * Wed Jul 10 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.13-1
 - Latest translations from zanata. (dgoodwin@redhat.com)
 - new strings (jesusr@redhat.com)
