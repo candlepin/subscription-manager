@@ -95,7 +95,8 @@ Obsoletes: %{name}-gnome < 1.0.3-1
 Provides: %{name}-gnome = %{version}-%{release}
 
 # Fedora can figure this out automatically, but RHEL cannot:
-Requires: librsvg2
+# See #987071
+Requires: librsvg2%{?_isa}
 
 %description -n subscription-manager-gui
 This package contains a GTK+ graphical interface for configuring and
