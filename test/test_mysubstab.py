@@ -40,6 +40,25 @@ class MySubscriptionsTabTest(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_get_entry_image_expired(self):
+        cert = StubEntitlementCertificate(
+                    StubProduct('product2'),
+                    start_date=datetime.datetime(2010, 1, 1),
+                    end_date=datetime.datetime(2011, 1, 1),
+                    quantity="10", stacking_id=None)
+        image = self.my_subs_tab._get_entry_image(cert)
+        self.assertEqual(EXPIRED_IMG, image)
+
+    def test_get_entry_image_warning(self):
+        tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
+        cert = StubEntitlementCertificate(
+                    StubProduct('product2'),
+                    start_date=datetime.datetime(2010, 1, 1),
+                    end_date=tomorrow,
+                    quantity="10", stacking_id=None)
+        image = self.my_subs_tab._get_entry_image(cert)
+        self.assertEqual(WARNING_IMG, image)
+
     def test_image_rank_both_none(self):
         self.assertFalse(self.my_subs_tab.image_ranks_higher(None, None))
 

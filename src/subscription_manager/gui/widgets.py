@@ -342,7 +342,8 @@ class SubDetailsWidget(GladeWidget):
         self._set(self.support_type_text, support_type)
 
         if self.show_contract:
-            self._highlight_dates(self.start_end_date_text, end)
+            self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
+                    self._get_date_bg(end))
 
             self._set(self.contract_number_text, contract)
             self._set(self.start_end_date_text, "%s - %s" % (
@@ -362,17 +363,16 @@ class SubDetailsWidget(GladeWidget):
             text = _("None")
         text_view.get_buffer().set_text(text)
 
-    def _highlight_dates(self, text_view, end):
+    def _get_date_bg(self, end):
         now = datetime.datetime.now(GMT())
 
         if end < now:
-            text_view.modify_base(gtk.STATE_NORMAL,
-                    gtk.gdk.color_parse(EXPIRED_COLOR))
-        elif end - datetime.timedelta(days=WARNING_DAYS) < now:
-            text_view.modify_base(gtk.STATE_NORMAL,
-                    gtk.gdk.color_parse(WARNING_COLOR))
-        else:
-            text_view.modify_base(gtk.STATE_NORMAL, self.original_bg)
+            return gtk.gdk.color_parse(EXPIRED_COLOR)
+
+        if end - datetime.timedelta(days=WARNING_DAYS) < now:
+            return gtk.gdk.color_parse(WARNING_COLOR)
+
+        return self.original_bg
 
     def clear(self):
         """ No subscription to display. """
