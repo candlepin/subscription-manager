@@ -242,6 +242,10 @@ class StatusCache(CacheManager):
 
             log.warn("Unable to reach server, using cached status.")
             return self._read_cache()
+        except connection.ExpiredIdentityCertException, ex:
+            log.exception(ex)
+            log.error("Bad identity, unable to connect to server")
+            return None
 
     def to_dict(self):
         return self.server_status
