@@ -385,14 +385,13 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         pass
 
     def finish_registration(self, failed=False):
-        registergui.RegisterScreen.finish_registration(self, failed=failed)
-        if not failed:
+        if failed:
+            self._set_navigation_sensitive(True)
+            self._run_pre(registergui.CREDENTIALS_PAGE)
+        else:
+            registergui.RegisterScreen.finish_registration(self, failed=failed)
             self._registration_finished = True
             self._skip_remaining_screens(self.interface)
-        # if something did fail, we will have shown the user an error message
-        # from the superclass _finish_registration. then just leave them on the
-        # rhsm_login page so they can try again (or go back and select to skip
-        # registration).
 
     def _skip_remaining_screens(self, interface):
         """
