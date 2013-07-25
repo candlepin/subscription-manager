@@ -148,9 +148,9 @@ class TestPreferencesDialog(SubManFixture):
 
         self.preferences_dialog.release_backend.get_releases = get_releases
         self.preferences_dialog.show()
-        self.preferences_dialog.release_combobox.set_active(1)
+        self.preferences_dialog.release_combobox.set_active(5)
         identity = require(IDENTITY)
-        MockUep.assert_called_with(identity.uuid, release="123123")
+        MockUep.assert_called_with(identity.uuid, release="blippy")
 
     def testReleaseUnset(self):
         self._getPrefDialog()
