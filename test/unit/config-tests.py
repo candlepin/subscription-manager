@@ -48,7 +48,7 @@ report_package_profile = 1
 pluginDir = /usr/lib/rhsm-plugins
 
 [rhsmcertd]
-certCheckInterval = 240
+certCheckInterval = 245
 """
 
 
@@ -77,6 +77,30 @@ class ConfigTests(unittest.TestCase):
     def test_get_empty(self):
         value = self.cfgParser.get("foo", "bar")
         self.assertEquals("", value)
+
+    def test_has_default_true(self):
+        value = self.cfgParser.has_default('server', 'hostname')
+        self.assertTrue(value)
+
+    def test_has_default_false(self):
+        value = self.cfgParser.has_default('foo', 'port')
+        self.assertFalse(value)
+
+    def test_is_default_true(self):
+        value = self.cfgParser.is_default('server', 'hostname', 'subscription.rhn.redhat.com')
+        self.assertTrue(value)
+
+    def test_is_default_false(self):
+        value = self.cfgParser.is_default('server', 'hostname', 'localhost')
+        self.assertFalse(value)
+
+    def test_get_default_camel_case(self):
+        value = self.cfgParser.get_default('rhsmcertd', 'certCheckInterval')
+        self.assertEquals('240', value)
+
+    def test_get_default(self):
+        value = self.cfgParser.get_default('rhsmcertd', 'certcheckinterval')
+        self.assertEquals('240', value)
 
     def test_get_int(self):
         value = self.cfgParser.get_int("server", "port")
