@@ -102,7 +102,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip" translatable="yes">Reset to register with Customer Portal.</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">default_button</atkproperty>
@@ -118,7 +117,6 @@
             <child>
               <widget class="GtkEventBox" id="eventbox2">
                 <property name="visible">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip" translatable="yes">Activation Keys are alphanumeric strings that are pre-configured by your system administrators to automatically register your system and attach all necessary subscriptions.</property>
                 <property name="visible_window">False</property>
                 <child>
