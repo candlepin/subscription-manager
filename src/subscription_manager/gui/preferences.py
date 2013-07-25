@@ -42,6 +42,7 @@ class PreferencesDialog(object):
 
     def __init__(self, backend, parent):
         self.backend = backend
+        self.allow_callbacks = False
         self.identity = require(IDENTITY)
         self.release_backend = release.ReleaseBackend(ent_dir=self.backend.entitlement_dir,
                                                       prod_dir=self.backend.product_dir,
@@ -93,12 +94,11 @@ class PreferencesDialog(object):
             self.autoheal_preference.set_sensitive(False)
             return
 
-        handler_id = self.autoheal_checkbox.connect("toggled", self._on_autoheal_checkbox_toggled)
-
-        self.autoheal_checkbox.handler_block(handler_id)
+        self.allow_callbacks = False
         self.load_releases(consumer_json)
         self.load_servicelevel(consumer_json)
         self.load_autoheal(consumer_json)
+        self.allow_callbacks = True
 
     def load_servicelevel(self, consumer_json):
         # The combo box you get from the widget tree already has a
@@ -177,27 +177,29 @@ class PreferencesDialog(object):
         self._close_dialog()
 
     def _sla_changed(self, combobox):
-        model = combobox.get_model()
-        active = combobox.get_active()
-        if active < 0:
-            log.info("SLA changed but nothing selected? Ignoring.")
-            return
+        if self.allow_callbacks:
+            model = combobox.get_model()
+            active = combobox.get_active()
+            if active < 0:
+                log.info("SLA changed but nothing selected? Ignoring.")
+                return
 
-        new_sla = model[active][1]
-        log.info("SLA changed to: %s" % new_sla)
-        self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
-                                        service_level=new_sla)
+            new_sla = model[active][1]
+            log.info("SLA changed to: %s" % new_sla)
+            self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
+                                            service_level=new_sla)
 
     def _release_changed(self, combobox):
-        model = combobox.get_model()
-        active = combobox.get_active()
-        if active < 0:
-            log.info("release changed but nothing selected? Ignoring.")
-            return
-        new_release = model[active][1]
-        log.info("release changed to: %s" % new_release)
-        self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
-                                        release=new_release)
+        if self.allow_callbacks:
+            model = combobox.get_model()
+            active = combobox.get_active()
+            if active < 0:
+                log.info("release changed but nothing selected? Ignoring.")
+                return
+            new_release = model[active][1]
+            log.info("release changed to: %s" % new_release)
+            self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
+                                            release=new_release)
 
     def show(self):
         self.load_current_settings()
@@ -211,16 +213,16 @@ class PreferencesDialog(object):
         return True
 
     def _on_autoheal_checkbox_toggled(self, checkbox):
+        if self.allow_callbacks:
+            log.info("Auto-attach preference changed to: %s" % checkbox.get_active())
 
-        log.info("Auto-attach preference changed to: %s" % checkbox.get_active())
+            self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
+                                    autoheal=checkbox.get_active())
 
-        self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
-                                autoheal=checkbox.get_active())
-
-        if (checkbox.get_active()):
-            self.autoheal_preference.set_label(_("Enabled"))
-        else:
-            self.autoheal_preference.set_label(_("Disabled"))
+            if (checkbox.get_active()):
+                self.autoheal_preference.set_label(_("Enabled"))
+            else:
+                self.autoheal_preference.set_label(_("Disabled"))
 
         return True
 
