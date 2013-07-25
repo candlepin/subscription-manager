@@ -382,7 +382,7 @@ class HardwareProbeTests(fixture.SubManFixture):
         reload(hwprobe)
         hw = hwprobe.Hardware()
 
-        ret = hw._parse_s390_sysinfo(cpu_count, sysinfo_lines)
+        ret = hw._parse_s390x_sysinfo_topology(cpu_count, sysinfo_lines)
         self.assertTrue(ret is None)
 
     def test_parse_s390_sysinfo(self):
@@ -392,7 +392,7 @@ class HardwareProbeTests(fixture.SubManFixture):
         reload(hwprobe)
         hw = hwprobe.Hardware()
 
-        ret = hw._parse_s390_sysinfo(cpu_count, sysinfo_lines)
+        ret = hw._parse_s390x_sysinfo_topology(cpu_count, sysinfo_lines)
 
         self.assertEquals(24, ret['socket_count'])
         self.assertEquals(4, ret['book_count'])
@@ -426,11 +426,12 @@ class HardwareProbeTests(fixture.SubManFixture):
                                 'cpu.cpu_socket(s)': 3,
                                 'cpu.book(s)': 3,
                                 'cpu.book(s)_per_cpu': 1,
-                                'cpu.cpu_socket(s)': 3},
+                                'cpu.cpu_socket(s)': 3,
+                                'cpu.topology_source': 's390 book_siblings_list'},
                                hw.get_cpu_info())
 
-    @patch("subscription_manager.hwprobe.Hardware.has_s390_sysinfo")
-    @patch("subscription_manager.hwprobe.Hardware.read_s390_sysinfo")
+    @patch("subscription_manager.hwprobe.Hardware.has_s390x_sysinfo")
+    @patch("subscription_manager.hwprobe.Hardware.read_s390x_sysinfo")
     @patch("os.listdir")
     def test_cpu_info_s390_sysinfo(self, mock_list_dir,
                                    mock_read_sysinfo, mock_has_sysinfo):
@@ -441,28 +442,40 @@ class HardwareProbeTests(fixture.SubManFixture):
         mock_read_sysinfo.return_value = ["CPU Topology SW:      0 0 0 4 6 4"]
 
         hw = hwprobe.Hardware()
+        hw.arch = "s390x"
 
         def count_cpumask(cpu, field):
             return self.cpumask_vals[field]
 
         # 20 cpus
-        # 24 cores, 1 threads per core = each cpu has two thread siblings
-        # 1 core per socket 1 sockets per book via /sys, but
+        # 24 cores, 1 threads per core
+        # 1 thread per core, 1 core per socket, 1 socket per book via /sys, but
         # /proc/sysinfo says 4 books of 6 sockets of 4 cores
+        #
+        # even though we have cpu topo from sysinfo, we also have
+        # info from the kernel, which we use in that case
+        #
         # and we prefer /proc/sysinfo
-        # how does 24 sockets have 20 cpu? 4 are offline
+        # how do 24 sockets have 20 cpu? The hardware itself
+        # has 96 cpus. 54 of those are enabled at the
+        # hardware level. Of those 51, 21 are "configured".
+        # The LPAR is setup to use 20 of those 21 cpus
+        # (and in this setup, actually only 18 of those
+        # are "configured").
         self.cpumask_vals = {'thread_siblings_list': 1,
                              'core_siblings_list': 1,
                              'book_siblings_list': 1}
 
+        # for this case, we prefer the sysinfo numbers
         hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
         self.assert_equal_dict({'cpu.cpu(s)': 20,
                                 'cpu.socket(s)_per_book': 6,
                                 'cpu.core(s)_per_socket': 4,
                                 'cpu.thread(s)_per_core': 1,
                                 'cpu.book(s)': 4,
-                                'cpu.book(s)_per_cpu': 1,
-                                'cpu.cpu_socket(s)': 24},
+                                'cpu.cpu_socket(s)': 24,
+                                'cpu.topology_source':
+                                    's390x sysinfo'},
                                hw.get_cpu_info())
 
     @patch('subscription_manager.hwprobe.Hardware.count_cpumask_entries')
@@ -481,15 +494,65 @@ class HardwareProbeTests(fixture.SubManFixture):
         mock_list_dir.return_value = ["cpu0", "cpu1"]
         hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
         #print hw.get_cpu_info()
-        self.assert_equal_dict(hw.get_cpu_info(), {'cpu.cpu(s)': 2,
-                                              'cpu.core(s)_per_socket': 2,
-                                              'cpu.cpu_socket(s)': 1,
-                                              'cpu.thread(s)_per_core': 1})
+        self.assert_equal_dict({'cpu.cpu(s)': 2,
+                                'cpu.core(s)_per_socket': 2,
+                                'cpu.cpu_socket(s)': 1,
+                                'cpu.thread(s)_per_core': 1,
+                                'cpu.topology_source':
+                                    'kernel /sys cpu sibling lists'},
+                               hw.get_cpu_info())
 
-        #self.assertEquals(hw.get_cpu_info(), {'cpu.cpu(s)': 2,
-                                              #'cpu.core(s)_per_socket': 2,
-                                              #'cpu.cpu_socket(s)': 1,
-                                              #'cpu.thread(s)_per_core': 1})
+    @patch("os.listdir")
+    def test_cpu_info_no_topo(self, mock_list_dir):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+
+        def count_cpumask(cpu, field):
+            return self.cpumask_vals[field]
+
+        self.cpumask_vals = {'thread_siblings_list': None,
+                             'core_siblings_list': None,
+                             'book_siblings_list': None}
+
+        mock_list_dir.return_value = ["cpu%s" % i for i in range(0, 16)]
+        hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
+
+        self.assert_equal_dict({'cpu.cpu(s)': 16,
+                                'cpu.core(s)_per_socket': 1,
+                                'cpu.cpu_socket(s)': 16,
+                                'cpu.thread(s)_per_core': 1,
+                                'cpu.topology_source': "fallback one socket"},
+                               hw.get_cpu_info())
+
+    @patch("subscription_manager.hwprobe.Hardware.read_physical_id")
+    @patch("os.listdir")
+    def test_cpu_info_no_topo_ppc64_physical_id(self, mock_list_dir,
+                                                mock_read_physical):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        hw.arch = "ppc64"
+
+        def get_physical(cpu_file):
+            # pretend we have two physical package ids
+            return int(cpu_file[-1]) % 2
+
+        def count_cpumask(cpu, field):
+            return self.cpumask_vals[field]
+
+        self.cpumask_vals = {'thread_siblings_list': None,
+                             'core_siblings_list': None,
+                             'book_siblings_list': None}
+
+        mock_list_dir.return_value = ["cpu%s" % i for i in range(0, 8)]
+        hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
+        hw.read_physical_id = Mock(side_effect=get_physical)
+
+        self.assert_equal_dict({'cpu.cpu(s)': 8,
+                                'cpu.core(s)_per_socket': 4,
+                                'cpu.cpu_socket(s)': 2,
+                                'cpu.thread(s)_per_core': 1,
+                                'cpu.topology_source': 'ppc64 physical_package_id'},
+                               hw.get_cpu_info())
 
     @patch("os.listdir")
     def test_cpu_info_lots_cpu(self, mock_list_dir):
@@ -506,11 +569,14 @@ class HardwareProbeTests(fixture.SubManFixture):
             return vals[field]
 
         hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
-        self.assert_equal_dict(hw.get_cpu_info(),
-                              {'cpu.cpu(s)': 2000,
+        self.assert_equal_dict({'cpu.cpu(s)': 2000,
                                'cpu.core(s)_per_socket': 2000,
                                'cpu.thread(s)_per_core': 1,
-                               'cpu.cpu_socket(s)': 1})
+                               'cpu.cpu_socket(s)': 1,
+                               'cpu.topology_source':
+                                    'kernel /sys cpu sibling lists'},
+                               hw.get_cpu_info(),
+)
 
     @patch("os.listdir")
     def test_cpu_info_other_files(self, mock_list_dir):
@@ -534,8 +600,10 @@ class HardwareProbeTests(fixture.SubManFixture):
             return vals[field]
 
         hw.count_cpumask_entries = Mock(side_effect=count_cpumask)
-        self.assert_equal_dict(hw.get_cpu_info(),
-                               {'cpu.cpu(s)': 4,
+        self.assert_equal_dict({'cpu.cpu(s)': 4,
                                 'cpu.core(s)_per_socket': 4,
                                 'cpu.thread(s)_per_core': 1,
-                                'cpu.cpu_socket(s)': 1})
+                                'cpu.cpu_socket(s)': 1,
+                                'cpu.topology_source':
+                                    'kernel /sys cpu sibling lists'},
+                               hw.get_cpu_info())
