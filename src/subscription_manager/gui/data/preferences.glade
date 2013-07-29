@@ -31,19 +31,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <widget class="GtkLabel" id="label_autoheal">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">0.15999999642372131</property>
-                        <property name="label" translatable="yes">Auto-attach preference:</property>
-                      </widget>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
                       <widget class="GtkHBox" id="hbox1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -64,40 +51,38 @@
                             <signal name="toggled" handler="on_autoheal_checkbox_toggled" />
                           </widget>
                           <packing>
-                            <property name="expand">False</property>
+                            <property name="expand">True</property>
                             <property name="fill">False</property>
                             <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkEventBox" id="autoheal_event">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="visible_window">False</property>
-                            <property name="above_child">True</property>
-                            <signal name="button_press_event" handler="on_autoheal_label_press_event" />
-                            <child>
-                              <widget class="GtkLabel" id="label_preference">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="xalign">0</property>
-                                <property name="xpad">1</property>
-                                <property name="label" translatable="yes">Enabled</property>
-                                <property name="justify">right</property>
-                                <property name="width_chars">8</property>
-                              </widget>
-                            </child>
-                          </widget>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkEventBox" id="autoheal_event">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="visible_window">False</property>
+                        <property name="above_child">True</property>
+                        <signal name="button_press_event" handler="on_autoheal_label_press_event" />
+                        <child>
+                          <widget class="GtkLabel" id="label_autoheal">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="xalign">0.029999999329447746</property>
+                            <property name="yalign">0.51999998092651367</property>
+                            <property name="label" translatable="yes">Enable auto-attach preference</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
