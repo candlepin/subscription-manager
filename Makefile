@@ -417,7 +417,7 @@ find-missing-signals:
 # also remove unneeded 'orientation' property for vbox's
 # since it causes warnings on RHEL5
 fix-glade:
-	perl -pi -e 's/(swapped=\"no\")//' $(GLADEFILES)
+	perl -pi -e 's/(swapped=\".*?\")//' $(GLADEFILES)
 	perl -pi -e 's/^.*property\s*name=\"orientation\">vertical.*$$//' $(GLADEFILES)
 
 
