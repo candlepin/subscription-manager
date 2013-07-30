@@ -20,6 +20,7 @@ import logging
 import Queue
 import re
 import socket
+import sys
 import threading
 
 import gobject
@@ -308,10 +309,12 @@ class PerformRegisterScreen(NoGuiScreen):
         self.pre_message = _("Registering your system")
 
     def _on_registration_finished_cb(self, new_account, error=None):
-        try:
-            if error is not None:
-                raise error
+        if error is not None:
+            handle_gui_exception(error, REGISTER_ERROR, self._parent.parent)
+            self._parent.finish_registration(failed=True)
+            return
 
+        try:
             managerlib.persist_consumer_cert(new_account)
             self._parent.backend.cs.force_cert_check()  # Ensure there isn't much wait time
 
@@ -346,15 +349,14 @@ class PerformSubscribeScreen(NoGuiScreen):
         self.pre_message = _("Attaching subscriptions")
 
     def _on_subscribing_finished_cb(self, unused, error=None):
-        try:
-            if error is not None:
-                raise error
-            self._parent.pre_done(FINISH)
-            self._parent.backend.cs.force_cert_check()
-        except Exception, e:
-            handle_gui_exception(e, _("Error subscribing: %s"),
+        if error is not None:
+            handle_gui_exception(error, _("Error subscribing: %s"),
                                  self._parent.parent)
             self._parent.finish_registration(failed=True)
+            return
+
+        self._parent.pre_done(FINISH)
+        self._parent.backend.cs.force_cert_check()
 
     def pre(self):
         self._parent.async.subscribe(self._parent.identity.uuid,
@@ -824,15 +826,13 @@ class RefreshSubscriptionsScreen(NoGuiScreen):
         self.pre_message = _("Attaching subscriptions")
 
     def _on_refresh_cb(self, error=None):
-        try:
-            if error is not None:
-                raise error
-            self._parent.pre_done(FINISH)
-
-        except Exception, e:
-            handle_gui_exception(e, _("Error subscribing: %s"),
+        if error is not None:
+            handle_gui_exception(error, _("Error subscribing: %s"),
                                  self._parent.parent)
             self._parent.finish_registration(failed=True)
+            return
+
+        self._parent.pre_done(FINISH)
 
     def pre(self):
         self._parent.async.refresh(self._on_refresh_cb)
@@ -954,8 +954,8 @@ class AsyncBackend(object):
         try:
             retval = self.backend.cp_provider.get_basic_auth_cp().getOwnerList(username)
             self.queue.put((callback, retval, None))
-        except Exception, e:
-            self.queue.put((callback, None, e))
+        except Exception:
+            self.queue.put((callback, None, sys.exc_info()))
 
     def _get_environment_list(self, owner_key, callback):
         """
@@ -978,10 +978,8 @@ class AsyncBackend(object):
                         "none are available."))
 
             self.queue.put((callback, retval, None))
-        except Exception, e:
-            log.error("Error listing environments:")
-            log.exception(e)
-            self.queue.put((callback, None, e))
+        except Exception:
+            self.queue.put((callback, None, sys.exc_info()))
 
     def _register_consumer(self, name, facts, owner, env, activation_keys, callback):
         """
@@ -1021,8 +1019,8 @@ class AsyncBackend(object):
             restart_virt_who()
 
             self.queue.put((callback, retval, None))
-        except Exception, e:
-            self.queue.put((callback, None, e))
+        except Exception:
+            self.queue.put((callback, None, sys.exc_info()))
 
     def _subscribe(self, uuid, current_sla, dry_run_result, callback):
         """
@@ -1045,7 +1043,7 @@ class AsyncBackend(object):
                 ents = self.backend.cp_provider.get_consumer_auth_cp().bindByEntitlementPool(uuid, pool_id, quantity)
                 self.plugin_manager.run("post_subscribe", consumer_uuid=uuid, entitlement_data=ents)
             managerlib.fetch_certificates(self.backend)
-        except Exception, e:
+        except Exception:
             # Going to try to update certificates just in case we errored out
             # mid-way through a bunch of binds:
             try:
@@ -1053,7 +1051,7 @@ class AsyncBackend(object):
             except Exception, cert_update_ex:
                 log.info("Error updating certificates after error:")
                 log.exception(cert_update_ex)
-            self.queue.put((callback, None, e))
+            self.queue.put((callback, None, sys.exc_info()))
             return
         self.queue.put((callback, None, None))
 
@@ -1106,15 +1104,15 @@ class AsyncBackend(object):
         try:
             suitable_slas = self._find_suitable_service_levels(consumer, facts)
             self.queue.put((callback, suitable_slas, None))
-        except Exception, e:
-            self.queue.put((callback, None, e))
+        except Exception:
+            self.queue.put((callback, None, sys.exc_info()))
 
     def _refresh(self, callback):
         try:
             managerlib.fetch_certificates(self.backend)
             self.queue.put((callback, None, None))
-        except Exception, e:
-            self.queue.put((callback, None, e))
+        except Exception:
+            self.queue.put((callback, None, sys.exc_info()))
 
     def _watch_thread(self):
         """
