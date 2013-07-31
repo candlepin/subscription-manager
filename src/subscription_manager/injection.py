@@ -51,7 +51,6 @@ class FeatureBroker:
         Can also pass an actual instance which will be returned on every
         invocation. (i.e. pass an actual instance if you want a "singleton".
         """
-        log.debug("Registering provider for feature %s: %s" % (feature, provider))
         self.providers[feature] = provider
 
     def require(self, feature, *args, **kwargs):
@@ -69,15 +68,11 @@ class FeatureBroker:
             raise KeyError("Unknown feature: %r" % feature)
 
         if isinstance(provider, (type, types.ClassType)):
-            log.debug("Initializing singleton for feature %s" % feature)
             # Args should never be used with singletons, they are ignored
             self.providers[feature] = provider()
         elif callable(provider):
-            log.debug("Returning callable provider for feature %s: %s" %
-                    (feature, provider))
             return provider(*args, **kwargs)
 
-        log.debug("Returning instance for feature %s" % feature)
         return self.providers[feature]
 
 
