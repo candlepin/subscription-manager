@@ -539,7 +539,7 @@ class UEPConnection:
         self.username = username
         self.password = password
 
-        self.ca_cert_dir = config.get('server', 'ca_cert_dir')
+        self.ca_cert_dir = config.get('rhsm', 'ca_cert_dir')
         self.ssl_verify_depth = safe_int(config.get('server', 'ssl_verify_depth'))
 
         self.insecure = insecure
