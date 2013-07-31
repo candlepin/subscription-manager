@@ -111,3 +111,14 @@ class ValidProductDateRangeCalculatorTests(SubManFixture):
         self.calculator = ValidProductDateRangeCalculator(None)
         for pid in (INST_PID_1, INST_PID_2, INST_PID_3):
             self.assertTrue(self.calculator.calculate(pid) is None)
+
+    def test_partial(self):
+        sorter = inj.require(inj.CERT_SORTER)
+        sorter.partially_valid_products = {'69': [{'startDate': "2013-02-26T00:00:00.000+0000",
+            'endDate': "2014-02-26T00:00:00.000+0000"},
+            {'startDate': "2014-01-26T00:00:00.000+0000",
+             'endDate': "2015-01-26T00:00:00.000+0000"}]}
+
+        date_range = self.calculator.calculate(INST_PID_3)
+        self.assertEquals(datetime(2013, 02, 26, 0, 0, 0, 0, GMT()), date_range.begin())
+        self.assertEquals(datetime(2015, 01, 26, 0, 0, 0, 0, GMT()), date_range.end())

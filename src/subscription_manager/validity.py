@@ -60,7 +60,7 @@ class ValidProductDateRangeCalculator(object):
 
                 # Unentitled product:
                 if prod['startDate'] is None or prod['endDate'] is None:
-                    return None
+                    return self.get_range_for_partial(prod)
 
                 return DateRange(parse_date(prod['startDate']),
                     parse_date(prod['endDate']))
@@ -75,4 +75,24 @@ class ValidProductDateRangeCalculator(object):
         # but we will log and handle gracefully:
         log.error("Requested status for installed product server does not "
                 "know about: %s" % product_hash)
+        return None
+
+    def get_range_for_partial(self, prod):
+        # Calculates the date range for a product that isn't fully entitled
+        sorter = inj.require(inj.CERT_SORTER)
+        # Gets the list of ents that partially cover prod, else empty list
+        prod_ents = sorter.partially_valid_products.get(prod['productId'], [])
+        start_date = None
+        end_date = None
+        for ent in prod_ents:
+            ent_start = parse_date(ent['startDate'])
+            ent_end = parse_date(ent['endDate'])
+            if start_date is None or (ent_start < start_date):
+                start_date = ent_start
+            if end_date is None or (ent_end > end_date):
+                end_date = ent_end
+
+        if start_date and end_date:
+            return DateRange(start_date, end_date)
+        # If this product was not in 'partially_valid_products' return None
         return None
