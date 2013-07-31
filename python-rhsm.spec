@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.9.0
+Version: 1.9.1
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,13 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Jul 31 2013 Alex Wood <awood@redhat.com> 1.9.1-1
+- fix config failure (ckozak@redhat.com)
+- 988476, 988085: fix default hostname, remove excess config list output
+  (ckozak@redhat.com)
+- rev master to 1.9.x (alikins@redhat.com)
+- add compliance date option (ckozak@redhat.com)
+
 * Fri Jul 12 2013 Adrian Likins <alikins@redhat.com> 1.8.14-1
 - certs check warning period (ckozak@redhat.com)
 
