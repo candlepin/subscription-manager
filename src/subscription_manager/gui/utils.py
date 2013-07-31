@@ -59,15 +59,21 @@ def handle_gui_exception(e, msg, parent, format_msg=True, log_msg=None):
     Handles an exception for the gui by logging the stack trace and
     displaying a user-friendly internationalized message.
 
+    e = either an exception or a tuple returned from sys.exc_info()
     msg = User friendly message to display in GUI.
     parent = Parent window where the error originates.
     log_msg = Optional message to be logged in addition to stack trace.
     format_msg = if true, string sub the exception error in the msg
     """
 
-    if log_msg:
-        log.error(log_msg)
-    log.exception(e)
+    if isinstance(e, tuple):
+        log.error(log_msg, exc_info=e)
+        # Get the class instance of the exception
+        e = e[1]
+    else:
+        if log_msg:
+            log.error(log_msg)
+        log.exception(e)
 
     # If exception is of these types we ignore the given display msg:
     if isinstance(e, socket_error):
