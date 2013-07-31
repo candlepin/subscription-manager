@@ -33,13 +33,14 @@ DEFAULT_CDN_HOSTNAME = "cdn.redhat.com"
 DEFAULT_CDN_PORT = "443"
 DEFAULT_CDN_PREFIX = "/"
 
+DEFAULT_CA_CERT_DIR = '/etc/rhsm/ca/'
+
 SERVER_DEFAULTS = {
         'hostname': DEFAULT_HOSTNAME,
         'prefix': DEFAULT_PREFIX,
         'port': DEFAULT_PORT,
         'insecure': '0',
         'ssl_verify_depth': '3',
-        'ca_cert_dir': '/etc/rhsm/ca/',
         'proxy_hostname': '',
         'proxy_user': '',
         'proxy_port': '',
@@ -47,7 +48,8 @@ SERVER_DEFAULTS = {
         }
 RHSM_DEFAULTS = {
         'baseurl': 'https://' + DEFAULT_CDN_HOSTNAME,
-        'repo_ca_cert': '/etc/rhsm/ca/redhat-uep.pem',
+        'ca_cert_dir': DEFAULT_CA_CERT_DIR,
+        'repo_ca_cert': DEFAULT_CA_CERT_DIR + 'redhat-uep.pem',
         'productcertdir': '/etc/pki/product',
         'entitlementcertdir': '/etc/pki/entitlement',
         'consumercertdir': '/etc/pki/consumer',
@@ -97,7 +99,7 @@ class RhsmConfigParser(SafeConfigParser):
         """
         try:
             return SafeConfigParser.get(self, section, prop)
-        except NoOptionError, er:
+        except Exception, er:
             try:
                 return DEFAULTS[section][prop.lower()]
             except KeyError:
