@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-29 15:07-0400\n"
+"POT-Creation-Date: 2013-07-31 13:25-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -166,15 +166,14 @@ msgstr ""
 msgid "Not Set"
 msgstr ""
 
-#: ../src/subscription_manager/gui/preferences.py:172
-#: ../src/subscription_manager/gui/preferences.py:221
+#: ../src/subscription_manager/gui/preferences.py:171
+#: ../src/subscription_manager/gui/preferences.py:222
 #: ../src/rct/printing.py:86
-#: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "Enabled"
 msgstr ""
 
-#: ../src/subscription_manager/gui/preferences.py:174
-#: ../src/subscription_manager/gui/preferences.py:223
+#: ../src/subscription_manager/gui/preferences.py:173
+#: ../src/subscription_manager/gui/preferences.py:224
 msgid "Disabled"
 msgstr ""
 
@@ -249,11 +248,11 @@ msgstr ""
 #: ../src/subscription_manager/managercli.py:1648
 #: ../src/subscription_manager/managercli.py:2199
 #: ../src/subscription_manager/reasons.py:83
-#: ../src/subscription_manager/utils.py:309
 #: ../src/subscription_manager/utils.py:310
-#: ../src/subscription_manager/utils.py:325
-#: ../src/subscription_manager/utils.py:344
-#: ../src/subscription_manager/utils.py:353
+#: ../src/subscription_manager/utils.py:311
+#: ../src/subscription_manager/utils.py:326
+#: ../src/subscription_manager/utils.py:345
+#: ../src/subscription_manager/utils.py:364
 msgid "Unknown"
 msgstr ""
 
@@ -1878,7 +1877,7 @@ msgid ""
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1171
-#: ../src/subscription_manager/utils.py:326
+#: ../src/subscription_manager/utils.py:327
 msgid "This system is currently not registered."
 msgstr ""
 
@@ -2401,33 +2400,33 @@ msgstr ""
 msgid "Stack "
 msgstr ""
 
-#: ../src/subscription_manager/utils.py:129
+#: ../src/subscription_manager/utils.py:130
 msgid ""
 "Server URL is just a schema. Should include hostname, and/or port and path"
 msgstr ""
 
-#: ../src/subscription_manager/utils.py:151
+#: ../src/subscription_manager/utils.py:152
 msgid "Server URL can not be empty"
 msgstr ""
 
-#: ../src/subscription_manager/utils.py:155
+#: ../src/subscription_manager/utils.py:156
 msgid "Server URL can not be None"
 msgstr ""
 
-#: ../src/subscription_manager/utils.py:164
+#: ../src/subscription_manager/utils.py:165
 msgid "Server URL has an invalid scheme. http:// and https:// are supported"
 msgstr ""
 
-#: ../src/subscription_manager/utils.py:194
+#: ../src/subscription_manager/utils.py:195
 msgid "Server URL port could not be parsed"
 msgstr ""
 
-#: ../src/subscription_manager/utils.py:211
+#: ../src/subscription_manager/utils.py:212
 msgid "Server URL port should be numeric"
 msgstr ""
 
-#: ../src/subscription_manager/utils.py:390
-msgid " and "
+#: ../src/subscription_manager/utils.py:405
+msgid "and"
 msgstr ""
 
 #: ../src/rct/printing.py:36
@@ -3480,27 +3479,23 @@ msgstr ""
 msgid "Auto-attach preference:"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:6
+#: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "Release version:"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:7
+#: ../src/subscription_manager/gui/data/preferences.glade.h:6
 msgid "Service level preference:"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:8
+#: ../src/subscription_manager/gui/data/preferences.glade.h:7
 msgid "System Preferences"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:9
-msgid "autoheal_checkbox"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/preferences.glade.h:10
+#: ../src/subscription_manager/gui/data/preferences.glade.h:8
 msgid "release_selection_combobox"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:11
+#: ../src/subscription_manager/gui/data/preferences.glade.h:9
 msgid "sla_selection_combobox"
 msgstr ""
 

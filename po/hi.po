@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-29 15:07-0400\n"
+"POT-Creation-Date: 2013-07-31 13:25-0400\n"
 "PO-Revision-Date: 2013-07-24 04:37-0400\n"
 "Last-Translator: rajesh <rajesh@fedoraproject.org>\n"
 "Language-Team: Hindi\n"
@@ -229,15 +229,14 @@ msgstr "सेट नहीं"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/preferences.py:172
-#: ../src/subscription_manager/gui/preferences.py:221
+#: ../src/subscription_manager/gui/preferences.py:171
+#: ../src/subscription_manager/gui/preferences.py:222
 #: ../src/rct/printing.py:86
-#: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "Enabled"
 msgstr "सक्रिय"
 
-#: ../src/subscription_manager/gui/preferences.py:174
-#: ../src/subscription_manager/gui/preferences.py:223
+#: ../src/subscription_manager/gui/preferences.py:173
+#: ../src/subscription_manager/gui/preferences.py:224
 msgid "Disabled"
 msgstr "निष्क्रिय"
 
@@ -334,11 +333,11 @@ msgstr "अंशतः सदस्यता लिया हुआ"
 #: ../src/subscription_manager/managercli.py:1648
 #: ../src/subscription_manager/managercli.py:2199
 #: ../src/subscription_manager/reasons.py:83
-#: ../src/subscription_manager/utils.py:309
 #: ../src/subscription_manager/utils.py:310
-#: ../src/subscription_manager/utils.py:325
-#: ../src/subscription_manager/utils.py:344
-#: ../src/subscription_manager/utils.py:353
+#: ../src/subscription_manager/utils.py:311
+#: ../src/subscription_manager/utils.py:326
+#: ../src/subscription_manager/utils.py:345
+#: ../src/subscription_manager/utils.py:364
 msgid "Unknown"
 msgstr "अज्ञात"
 
@@ -2546,7 +2545,7 @@ msgstr ""
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
 #: ../src/subscription_manager/managercli.py:1171
-#: ../src/subscription_manager/utils.py:326
+#: ../src/subscription_manager/utils.py:327
 msgid "This system is currently not registered."
 msgstr "यह तंत्र अभी पंजीकृत नहीं है."
 
@@ -3273,40 +3272,40 @@ msgstr "स्टैक"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author rajesh
-#: ../src/subscription_manager/utils.py:129
+#: ../src/subscription_manager/utils.py:130
 msgid ""
 "Server URL is just a schema. Should include hostname, and/or port and path"
 msgstr "सर्वर URL योजना है. इसमें मेजबाननाम और/या पोर्ट और पथ समाहित होना चाहिए"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author rajesh
-#: ../src/subscription_manager/utils.py:151
+#: ../src/subscription_manager/utils.py:152
 msgid "Server URL can not be empty"
 msgstr "सर्वर URL रिक्त नहीं हो सकता है"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author rajesh
-#: ../src/subscription_manager/utils.py:155
+#: ../src/subscription_manager/utils.py:156
 msgid "Server URL can not be None"
 msgstr "सर्वर URL कोई नहीं नहीं हो सकता है"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author rajesh
-#: ../src/subscription_manager/utils.py:164
+#: ../src/subscription_manager/utils.py:165
 msgid "Server URL has an invalid scheme. http:// and https:// are supported"
 msgstr "सर्वर URL की अवैध योजना है. http:// and https:// समर्थित है"
 
-#: ../src/subscription_manager/utils.py:194
+#: ../src/subscription_manager/utils.py:195
 msgid "Server URL port could not be parsed"
 msgstr "सर्वर यूआरएल विश्लेषित नहीं की जा सकती है."
 
-#: ../src/subscription_manager/utils.py:211
+#: ../src/subscription_manager/utils.py:212
 msgid "Server URL port should be numeric"
 msgstr "सर्वर यूआरएल अंक में नहीं हो सकता है."
 
-#: ../src/subscription_manager/utils.py:390
-msgid " and "
-msgstr "और"
+#: ../src/subscription_manager/utils.py:405
+msgid "and"
+msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
 # document keys, author rajesh
@@ -4772,29 +4771,25 @@ msgstr "स्वतः संलग्न वरीयता:"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author rajesh
-#: ../src/subscription_manager/gui/data/preferences.glade.h:6
+#: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "Release version:"
 msgstr "रिलीज संस्करण:"
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:7
+#: ../src/subscription_manager/gui/data/preferences.glade.h:6
 msgid "Service level preference:"
 msgstr "सेवा स्तर वरीयता:"
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:8
+#: ../src/subscription_manager/gui/data/preferences.glade.h:7
 msgid "System Preferences"
 msgstr "तंत्र वरीयताएँ"
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:9
-msgid "autoheal_checkbox"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/preferences.glade.h:10
+#: ../src/subscription_manager/gui/data/preferences.glade.h:8
 msgid "release_selection_combobox"
 msgstr "release_selection_combobox"
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:11
+#: ../src/subscription_manager/gui/data/preferences.glade.h:9
 msgid "sla_selection_combobox"
 msgstr "sla_selection_combobox"
 

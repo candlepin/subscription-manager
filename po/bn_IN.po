@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-29 15:07-0400\n"
+"POT-Creation-Date: 2013-07-31 13:25-0400\n"
 "PO-Revision-Date: 2013-01-23 12:31-0500\n"
 "Last-Translator: Runa Bhattacharjee <runab@redhat.com>\n"
 "Language-Team: Bengali (India)\n"
@@ -227,15 +227,14 @@ msgstr "নির্ধারণ করা হয়নি"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/preferences.py:172
-#: ../src/subscription_manager/gui/preferences.py:221
+#: ../src/subscription_manager/gui/preferences.py:171
+#: ../src/subscription_manager/gui/preferences.py:222
 #: ../src/rct/printing.py:86
-#: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "Enabled"
 msgstr "সক্রিয়"
 
-#: ../src/subscription_manager/gui/preferences.py:174
-#: ../src/subscription_manager/gui/preferences.py:223
+#: ../src/subscription_manager/gui/preferences.py:173
+#: ../src/subscription_manager/gui/preferences.py:224
 msgid "Disabled"
 msgstr ""
 
@@ -332,11 +331,11 @@ msgstr "আংশিক সাবস্ক্রিপশন উপস্থি�
 #: ../src/subscription_manager/managercli.py:1648
 #: ../src/subscription_manager/managercli.py:2199
 #: ../src/subscription_manager/reasons.py:83
-#: ../src/subscription_manager/utils.py:309
 #: ../src/subscription_manager/utils.py:310
-#: ../src/subscription_manager/utils.py:325
-#: ../src/subscription_manager/utils.py:344
-#: ../src/subscription_manager/utils.py:353
+#: ../src/subscription_manager/utils.py:311
+#: ../src/subscription_manager/utils.py:326
+#: ../src/subscription_manager/utils.py:345
+#: ../src/subscription_manager/utils.py:364
 msgid "Unknown"
 msgstr "অজানা"
 
@@ -1027,9 +1026,11 @@ msgstr ""
 msgid "Insufficient"
 msgstr ""
 
+# translation auto-copied from project Subscription Manager, version 1.9.X,
+# document keys
 #: ../src/subscription_manager/cert_sorter.py:48
 msgid "Invalid"
-msgstr ""
+msgstr "অবৈধ"
 
 #: ../src/subscription_manager/migrate/migrate.py:61
 msgid "Could not find up2date_client.config module!"
@@ -2554,7 +2555,7 @@ msgstr ""
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
 #: ../src/subscription_manager/managercli.py:1171
-#: ../src/subscription_manager/utils.py:326
+#: ../src/subscription_manager/utils.py:327
 msgid "This system is currently not registered."
 msgstr "সিস্টেমটি বর্তমানে নিবন্ধিত নয়।"
 
@@ -3287,7 +3288,7 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author Runa Bhattacharjee
-#: ../src/subscription_manager/utils.py:129
+#: ../src/subscription_manager/utils.py:130
 msgid ""
 "Server URL is just a schema. Should include hostname, and/or port and path"
 msgstr ""
@@ -3296,33 +3297,33 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author Runa Bhattacharjee
-#: ../src/subscription_manager/utils.py:151
+#: ../src/subscription_manager/utils.py:152
 msgid "Server URL can not be empty"
 msgstr "সার্ভার URL ফাঁকা রাখা চলবে না"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author Runa Bhattacharjee
-#: ../src/subscription_manager/utils.py:155
+#: ../src/subscription_manager/utils.py:156
 msgid "Server URL can not be None"
 msgstr "সার্ভার URL-র ক্ষেত্রে None ব্যবহার করা চলবে না"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author Runa Bhattacharjee
-#: ../src/subscription_manager/utils.py:164
+#: ../src/subscription_manager/utils.py:165
 msgid "Server URL has an invalid scheme. http:// and https:// are supported"
 msgstr ""
 "সার্ভার URL-র ক্ষেত্রে অবৈধ স্কিম ব্যবহার করা হয়েছে। http:// ও https:// সমর্থিত হবে"
 
-#: ../src/subscription_manager/utils.py:194
+#: ../src/subscription_manager/utils.py:195
 msgid "Server URL port could not be parsed"
 msgstr ""
 
-#: ../src/subscription_manager/utils.py:211
+#: ../src/subscription_manager/utils.py:212
 msgid "Server URL port should be numeric"
 msgstr ""
 
-#: ../src/subscription_manager/utils.py:390
-msgid " and "
+#: ../src/subscription_manager/utils.py:405
+msgid "and"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.1.X,
@@ -3756,9 +3757,11 @@ msgstr ""
 msgid "The manifest has been dumped to the current directory"
 msgstr ""
 
+# translation auto-copied from project Subscription Manager, version 1.9.X,
+# document keys
 #: ../src/daemons/rhsmcertd-worker.py:43
 msgid "Updating entitlement certificates & repositories"
-msgstr ""
+msgstr "এনটাইটেলমেন্ট সার্টিফিকেট ও সংগ্রহস্থল আপডেট করা হচ্ছে"
 
 #: ../src/daemons/rhsmcertd-worker.py:59
 msgid ""
@@ -4781,29 +4784,25 @@ msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author Runa Bhattacharjee
-#: ../src/subscription_manager/gui/data/preferences.glade.h:6
+#: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "Release version:"
 msgstr "রিলিজের সংস্করণ:"
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:7
+#: ../src/subscription_manager/gui/data/preferences.glade.h:6
 msgid "Service level preference:"
 msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:8
+#: ../src/subscription_manager/gui/data/preferences.glade.h:7
 msgid "System Preferences"
 msgstr "সিস্টেম সংক্রান্ত পছন্দ"
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:9
-msgid "autoheal_checkbox"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/preferences.glade.h:10
+#: ../src/subscription_manager/gui/data/preferences.glade.h:8
 msgid "release_selection_combobox"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:11
+#: ../src/subscription_manager/gui/data/preferences.glade.h:9
 msgid "sla_selection_combobox"
 msgstr ""
 

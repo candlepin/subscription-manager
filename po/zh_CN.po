@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-29 15:07-0400\n"
+"POT-Creation-Date: 2013-07-31 13:25-0400\n"
 "PO-Revision-Date: 2013-07-23 08:21-0400\n"
 "Last-Translator: leahliu <lliu@redhat.com>\n"
 "Language-Team: Chinese (Simplified, China)\n"
@@ -231,15 +231,14 @@ msgstr "未设置"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
-#: ../src/subscription_manager/gui/preferences.py:172
-#: ../src/subscription_manager/gui/preferences.py:221
+#: ../src/subscription_manager/gui/preferences.py:171
+#: ../src/subscription_manager/gui/preferences.py:222
 #: ../src/rct/printing.py:86
-#: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "Enabled"
 msgstr "已启用"
 
-#: ../src/subscription_manager/gui/preferences.py:174
-#: ../src/subscription_manager/gui/preferences.py:223
+#: ../src/subscription_manager/gui/preferences.py:173
+#: ../src/subscription_manager/gui/preferences.py:224
 msgid "Disabled"
 msgstr "已禁用"
 
@@ -336,11 +335,11 @@ msgstr "部分已订阅"
 #: ../src/subscription_manager/managercli.py:1648
 #: ../src/subscription_manager/managercli.py:2199
 #: ../src/subscription_manager/reasons.py:83
-#: ../src/subscription_manager/utils.py:309
 #: ../src/subscription_manager/utils.py:310
-#: ../src/subscription_manager/utils.py:325
-#: ../src/subscription_manager/utils.py:344
-#: ../src/subscription_manager/utils.py:353
+#: ../src/subscription_manager/utils.py:311
+#: ../src/subscription_manager/utils.py:326
+#: ../src/subscription_manager/utils.py:345
+#: ../src/subscription_manager/utils.py:364
 msgid "Unknown"
 msgstr "未知的"
 
@@ -2511,7 +2510,7 @@ msgstr "错误：该服务器不支持 --servicelevel 选项。未完成您的�
 # translation auto-copied from project Subscription Manager, version 0.96.X,
 # document keys
 #: ../src/subscription_manager/managercli.py:1171
-#: ../src/subscription_manager/utils.py:326
+#: ../src/subscription_manager/utils.py:327
 msgid "This system is currently not registered."
 msgstr "这个系统目前没有注册。"
 
@@ -3217,40 +3216,40 @@ msgstr "堆栈 "
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author leahliu
-#: ../src/subscription_manager/utils.py:129
+#: ../src/subscription_manager/utils.py:130
 msgid ""
 "Server URL is just a schema. Should include hostname, and/or port and path"
 msgstr "服务器 URL 只是一个方案。应包含主机名和（/或者）端口和路径。"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author leahliu
-#: ../src/subscription_manager/utils.py:151
+#: ../src/subscription_manager/utils.py:152
 msgid "Server URL can not be empty"
 msgstr "服务器 URL 不能为空"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author leahliu
-#: ../src/subscription_manager/utils.py:155
+#: ../src/subscription_manager/utils.py:156
 msgid "Server URL can not be None"
 msgstr "服务器 URL 不能为无"
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author leahliu
-#: ../src/subscription_manager/utils.py:164
+#: ../src/subscription_manager/utils.py:165
 msgid "Server URL has an invalid scheme. http:// and https:// are supported"
 msgstr "服务器 URL 包含无效方案。支持 http：// 和 https：//。"
 
-#: ../src/subscription_manager/utils.py:194
+#: ../src/subscription_manager/utils.py:195
 msgid "Server URL port could not be parsed"
 msgstr "无法解析服务器 URL 端口"
 
-#: ../src/subscription_manager/utils.py:211
+#: ../src/subscription_manager/utils.py:212
 msgid "Server URL port should be numeric"
 msgstr "服务器 URL 端口应该是数字"
 
-#: ../src/subscription_manager/utils.py:390
-msgid " and "
-msgstr " 以及 "
+#: ../src/subscription_manager/utils.py:405
+msgid "and"
+msgstr ""
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys
@@ -4706,29 +4705,25 @@ msgstr "自动附加属性："
 
 # translation auto-copied from project Subscription Manager, version 1.0.X,
 # document keys, author leahliu
-#: ../src/subscription_manager/gui/data/preferences.glade.h:6
+#: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "Release version:"
 msgstr "发行版本："
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:7
+#: ../src/subscription_manager/gui/data/preferences.glade.h:6
 msgid "Service level preference:"
 msgstr "服务等级属性："
 
 # translation auto-copied from project Subscription Manager, version 0.99.X,
 # document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:8
+#: ../src/subscription_manager/gui/data/preferences.glade.h:7
 msgid "System Preferences"
 msgstr "系统属性"
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:9
-msgid "autoheal_checkbox"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/preferences.glade.h:10
+#: ../src/subscription_manager/gui/data/preferences.glade.h:8
 msgid "release_selection_combobox"
 msgstr "release_selection_combobox"
 
-#: ../src/subscription_manager/gui/data/preferences.glade.h:11
+#: ../src/subscription_manager/gui/data/preferences.glade.h:9
 msgid "sla_selection_combobox"
 msgstr "sla_selection_combobox"
 
