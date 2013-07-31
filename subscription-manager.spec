@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.14
+Version: 1.8.15
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,32 @@ fi
 %endif
 
 %changelog
+* Wed Jul 31 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.15-1
+- Preserve traceback when an exception is thrown from background thread.  (awood@redhat.com)
+- 908521: latest strings from zanata (alikins@redhat.com)
+- 912460: latest translations from zanata (alikins@redhat.com)
+- 927990: latest strings from zanata (alikins@redhat.com)
+- 928469: latest strings from zanata (alikins@redhat.com)
+- 950892: add ents-nag-warning.png to docs install (alikins@redhat.com)
+- 966422: Do not hang firstboot if there is an exception during registration. (awood@redhat.com)
+- 968820: raise timeout exceptions for cli calls (alikins@redhat.com)
+- 978329: catch IdentityCertException gracefully (ckozak@redhat.com)
+- 978466: fix missing socket info s390x/ppc64 (alikins@redhat.com)
+- 981565: fixed icon and text truncation (ckozak@redhat.com)
+- 981611: fixed icon and text truncation (ckozak@redhat.com)
+- 984206: Added comma to satisfy grammar rules (alikins@redhat.com)
+- 984206: Removed Spaces from String (cschevia@redhat.com)
+- 985515: fixed dbus on rhel5 (ckozak@redhat.com)
+- 987071: specify arch of librsvg dep (alikins@redhat.com)
+- 987551: correctly reconnect to rhsmd daemon (ckozak@redhat.com)
+- 987579: Use existing string for tranlations (alikins@redhat.com)
+- 987579: Make clicking autoheal label work (cschevia@redhat.com)
+- 987626: Remove PUTS while opening preferences dialog, fix related test (cschevia@redhat.com)
+- 988430: remove logging from write_cache to avoid segfault (ckozak@redhat.com)
+- 988482: fix gtk warnings on gtk-2.10 (alikins@redhat.com)
+- 988861: remove logging from write_cache to avoid segfault (ckozak@redhat.com)
+
+
 * Tue Jul 23 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.14-1
 - 921222: add 'status' to bash completion (alikins@redhat.com)
 - 974587: Add more checks for no order portion being present (bkearney@redhat.com)
