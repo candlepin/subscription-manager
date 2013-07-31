@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.9.0
+Version: 1.9.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,57 @@ fi
 %endif
 
 %changelog
+* Wed Jul 31 2013 Alex Wood <awood@redhat.com> 1.9.1-1
+- latest translations from zanata (alikins@redhat.com)
+- Preserve traceback when an exception is thrown from background thread.
+  (awood@redhat.com)
+- Remove logging of injection setup (alikins@redhat.com)
+- 988411: more at-spi changes for QA (ckozak@redhat.com)
+- 908521: Pull in the latest mr strings (bkearney@redhat.com)
+- 928469: Pull in latest ml strings from zanata (bkearney@redhat.com)
+- 927990: Pull in latest ta_IN strings from zanata (bkearney@redhat.com)
+- 987579: Make clicking autoheal label work (cschevia@redhat.com)
+- 988430, 988861: remove logging from write_cache to avoid segfault
+  (ckozak@redhat.com)
+- 966422: Do not hang firstboot if there is an exception during registration.
+  (awood@redhat.com)
+- 978329: catch IdentityCertException gracefully (ckozak@redhat.com)
+- 988482: fix gtk warnings on gtk-2.10 (alikins@redhat.com)
+- 988411: fixed at-spi locator name (ckozak@redhat.com)
+- fixed dbus on rhel5 (ckozak@redhat.com)
+- 987071: specify arch of librsvg dep (alikins@redhat.com)
+- 987626: Remove PUTS while opening preferences dialog, fix related test
+  (cschevia@redhat.com)
+- 987551: correctly reconnect to rhsmd daemon (ckozak@redhat.com)
+- 981611, 981565: fixed icon and text truncation (ckozak@redhat.com)
+- rev zanata branch to 1.9.X (alikins@redhat.com)
+- Rev master to 1.9.x (alikins@redhat.com)
+- 968820: raise timeout exceptions for cli calls (alikins@redhat.com)
+- 950892: add ents-nag-warning.png to docs install (alikins@redhat.com)
+- add new file to spec (ckozak@redhat.com)
+- 978466: fix missing socket info s390x/ppc64 (alikins@redhat.com)
+- 985515: moved DbusIface to fix anaconda productId (ckozak@redhat.com)
+- 983193: remove unused 'Virt Limit' cat-cert field (alikins@redhat.com)
+- Correcting whitespace error. (awood@redhat.com)
+- 986971: String Update: Quantity > Available (cschevia@redhat.com)
+- 980724: allsubstab cleared on identity change, check redeem on register
+  (ckozak@redhat.com)
+- 921222: add 'status' to bash completion (alikins@redhat.com)
+- 977580: Preferences dialog hide and show (cschevia@redhat.com)
+- 977481: make proxy cli check require_connection (alikins@redhat.com)
+- 977896: Fixes for Workstation/Desktop certs (alikins@redhat.com)
+- Added comma to satisfy grammar rules (cschevia@redhat.com)
+- added at-spi locator for autoheal checkbox (jmolet@redhat.com)
+- 984203: Fix german translations (bkearney@redhat.com)
+- 974587: Add more checks for no order portion being present
+  (bkearney@redhat.com)
+- 984206: Removed Spaces from String (cschevia@redhat.com)
+- Remove releasers due to branching. (dgoodwin@redhat.com)
+- 983670: Improved auto-attach description (cschevia@redhat.com)
+- 982286: Adjusted markup removal (cschevia@redhat.com)
+- 983250: 983281: certs check warning period (ckozak@redhat.com)
+- Adding Fedora 19 Yum releasers. (awood@redhat.com)
+
 * Wed Jul 10 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.13-1
 - Latest translations from zanata. (dgoodwin@redhat.com)
 - new strings (jesusr@redhat.com)
