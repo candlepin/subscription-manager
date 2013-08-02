@@ -263,6 +263,15 @@ class UpdateActionTests(unittest.TestCase):
         self.assertTrue(self._find_content(content, "c5") is None)
         self.assertTrue(self._find_content(content, "c6") is None)
 
+    def test_no_content(self):
+        self.stub_ent_cert
+        self.stub_ent_cert.content = None
+        try:
+            content = self.update_action.get_unique_content()
+        except TypeError:
+            self.fail("Must check that entitlement content is non-null")
+        self.assertEquals(set(), content)
+
 
 class TidyWriterTests(unittest.TestCase):
 
