@@ -200,7 +200,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
     def find_unique_name_count(self, entitlements):
         result = dict()
         for ent in entitlements:
-            result[ent.order.name] = ent.order.name
+            if ent.order:
+                result[ent.order.name] = ent.order.name
         return len(result)
 
     def image_ranks_higher(self, old_image, new_image):
@@ -258,27 +259,43 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         else:
             reasons.append(_("Subscription management service doesn't support Status Details."))
 
-        if is_true_value(order.virt_only):
-            virt_only = _("Virtual")
-        else:
-            virt_only = _("Physical")
+        name = ''
+        support_level = ''
+        contract = ''
+        account = ''
+        support_type = ''
+        sku = ''
+        management = ''
+        virt_only = ''
 
-        if is_true_value(order.provides_management):
-            management = _("Yes")
-        else:
-            management = _("No")
+        if order:
+            if is_true_value(order.virt_only):
+                virt_only = _("Virtual")
+            else:
+                virt_only = _("Physical")
 
-        self.sub_details.show(order.name,
-                              contract=order.contract or "",
+            if is_true_value(order.provides_management):
+                management = _("Yes")
+            else:
+                management = _("No")
+            name = order.name
+            support_level = order.service_level
+            contract = order.contract
+            account = order.account
+            support_type = order.service_type
+            sku = order.sku
+
+        self.sub_details.show(name,
+                              contract=contract or "",
                               start=cert.valid_range.begin(),
                               end=cert.valid_range.end(),
-                              account=order.account or "",
+                              account=account or "",
                               management=management,
                               virt_only=virt_only or "",
-                              support_level=order.service_level or "",
-                              support_type=order.service_type or "",
+                              support_level=support_level or "",
+                              support_type=support_type or "",
                               products=products,
-                              sku=order.sku,
+                              sku=sku,
                               reasons=reasons,
                               expiring=cert.is_expiring())
 
@@ -309,12 +326,17 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         entry = {}
         if image:
             entry['image'] = gtk.gdk.pixbuf_new_from_file_at_size(image, 13, 13)
-        entry['subscription'] = order.name
+        name = ''
+        quantity = None
+        if order:
+            name = order.name
+            quantity = order.quantity_used
+        entry['subscription'] = name
         entry['installed_value'] = self._percentage(installed, products)
         entry['installed_text'] = '%s / %s' % (len(installed), len(products))
         entry['start_date'] = cert.valid_range.begin()
         entry['expiration_date'] = cert.valid_range.end()
-        entry['quantity'] = order.quantity_used
+        entry['quantity'] = quantity
         entry['serial'] = cert.serial
         entry['align'] = 0.5         # Center horizontally
         entry['background'] = background_color
