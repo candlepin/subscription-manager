@@ -64,3 +64,17 @@ class UpdateActionTests(SubManFixture):
         self.assertTrue(valid_ent in report.added)
         self.assertTrue(valid_ent.serial in report.expected)
         self.assertTrue(expired_ent.serial in report.expected)
+
+    def test_delete(self):
+        ent = StubEntitlementCertificate(StubProduct("Prod"))
+        ent.delete = Mock(side_effect=OSError("Cert has already been deleted"))
+        mock_uep = Mock()
+        mock_uep.getCertificates = Mock(return_value=[])
+        mock_uep.getCertificateSerials = Mock(return_value=[])
+        update_action = TestingUpdateAction(mock_uep, StubEntitlementDirectory([ent]))
+        try:
+            updates, exceptions = update_action.perform()
+        except OSError:
+            self.fail("operation failed when certificate wasn't deleted")
+        self.assertEquals(0, updates)
+        self.assertEquals([], exceptions)
