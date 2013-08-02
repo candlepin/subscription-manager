@@ -21,7 +21,7 @@
 rhn-migrate-classic-to-rhsm \- Migrates a system profile from Red Hat Network Classic Hosted to Customer Portal Subscription Management (hosted) or Subscription Asset Manager (on-premise).
 
 .SH SYNOPSIS
-rhn-migrate-classic-to-rhsm [--force | --gui | --no-auto | --servicelevel=SERVICE_LEVEL | --serverurl=URL | --help]
+rhn-migrate-classic-to-rhsm [--force] | [--gui] | [--no-auto] | [--servicelevel=SERVICE_LEVEL] | [--serverurl=URL] | [--org=ORG] | [--environment=ENVIRONMEN] | [--no-proxy] | [--help]
 
 .SH DESCRIPTION
 \fBrhn-migrate-classic-to-rhsm\fP migrates a system profile which is registered with Red Hat Network Classic to Customer Portal Subscription Management. This is intended for migrating from the host service, not for migrating from a Satellite system.
@@ -71,6 +71,18 @@ Sets a preferred service level for the system, such as premium or standard. This
 .TP
 .B --serverurl=URL
 Gives the URL of the subscription management service to which to register the system. This is used for environments which have an on-premise subscription management service such as Subscription Asset Manager. If no URL is given, the migration tool uses the Customer Portal Subscription Management Service. 
+
+.TP
+.B --org=ORG
+Sets the organization within the account structure to which to register the system. Every account is divided into subgroups called \fIorganizations\fP, which represent some kind of organizational or logical division in the infrastructure. Organizations are further divided into \fIenvironments\fP, which organize content streams.
+
+.TP
+.B --environment=ENVIRONMENT
+Sets which environment within the organization the system belongs to. Every account is divided into subgroups called \fIorganizations\fP, which are further divided into \fIenvironments\fP Environments define different content streams.
+
+.TP
+.B --no-proxy
+Disables or ignores any previous RHN proxy settings when migrating to the new subscription management service.
 
 .SH USAGE
 The migration process moves the system from the inventory in one subscription management service (Red Hat Network Classic) to the new subscription management service (Customer Portal Subscription Management), and then re-applies the subscriptions to the system. The script runs through these steps:
