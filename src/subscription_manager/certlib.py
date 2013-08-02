@@ -277,6 +277,7 @@ class UpdateAction(Action):
         #this makes sure we don't try to re-write certificates in
         #grace period
         # XXX since we don't use grace period, this might not be needed
+        self.entdir.refresh()
         for valid in self.entdir.list():
             sn = valid.serial
             report.valid.append(sn)
@@ -309,8 +310,13 @@ class UpdateAction(Action):
 
     def delete(self, rogue, report):
         for cert in rogue:
-            cert.delete()
-            report.rogue.append(cert)
+            try:
+                cert.delete()
+                report.rogue.append(cert)
+            except OSError, er:
+                log.exception(er)
+                log.warn("Failed to delete cert")
+
         # If we just deleted certs, we need to refresh the now stale
         # entitlement directory before we go to delete expired certs.
         rogue_count = len(report.rogue)
