@@ -68,55 +68,58 @@ has specific options available for each command, depending on what operation is 
 3. attach
 
 .IP
-4. remove
+4. auto-attach
 
 .IP
-5. release
+5.remove
 
 .IP
-6. service-level
+6. release
 
 .IP
-7. import 
+7. service-level
 
 .IP
-8. redeem
+8. import 
 
 .IP
-9. list
+9. redeem
 
 .IP
-10. refresh
+10. list
 
 .IP
-11. environments
+11. refresh
 
 .IP
-12. repos
+12. environments
 
 .IP
-13. orgs
+13. repos
 
 .IP
-13. plugins
+14. orgs
 
 .IP
-14. identity
+15. plugins
 
 .IP
-15. facts
+16. identity
 
 .IP
-16. clean
+17. facts
 
 .IP
-17. config
+18. clean
 
 .IP
-18. version
+19. config
 
 .IP
-19. status
+20. version
+
+.IP
+21. status
 
 
 .SS COMMON OPTIONS
@@ -272,6 +275,23 @@ Automatically attaches the best-matched compatible subscription or subscriptions
 Sets the preferred service level to use with subscriptions attached to the system. Service levels are commonly premium, standard, and none, though other levels may be available depending on the product and the contract. This preference can only be used in conjunction with the 
 .B --auto
 option, and then it is used as one of the factors for matching subscriptions.
+
+.SS AUTO-ATTACH OPTIONS
+The 
+.B auto-attach
+command sets whether the ability to check, attach, and update subscriptions occurs automatically on the system. Auto-attaching subscriptions checks the currently-installed products, attached subscriptions, and any changes in available subscriptions every four hours using the \fBrhsmcertd\fP daemon.
+
+.TP
+.B --enable
+Enables the auto-attach option for the system. If there is any change in the subscriptions for the system, any subscriptions expire, or any new products are installed, then \fBsubscription-manager\fP detects the changes and automatically attaches the appropriate subscriptions so that the system remains covered.
+
+.TP
+.B --disable
+Disables the auto-attach option for the system. If auto-attach is disabled, then any changes in installed products or subscriptions for the system (including expirations) must be addressed manually by the administrator.
+
+.TP
+.B --show
+Shows whetehr auto-attach is enabled on the systems.
 
 .SS REMOVE OPTIONS
 The 
