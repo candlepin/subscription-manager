@@ -481,13 +481,13 @@ class SelectSLAScreen(Screen):
         # by finish_registration() after displaying the dialogs.  See
         # BZ #855762.
         if error is not None:
-            if isinstance(error, ServiceLevelNotSupportedException):
+            if isinstance(error[1], ServiceLevelNotSupportedException):
                 OkDialog(_("Unable to auto-attach, server does not support service levels."),
                         parent=self._parent.parent)
-            elif isinstance(error, NoProductsException):
+            elif isinstance(error[1], NoProductsException):
                 InfoDialog(_("No installed products on system. No need to attach subscriptions at this time."),
                            parent=self._parent.parent)
-            elif isinstance(error, AllProductsCoveredException):
+            elif isinstance(error[1], AllProductsCoveredException):
                 InfoDialog(_("All installed products are covered by valid entitlements. No need to attach subscriptions at this time."),
                            parent=self._parent.parent)
             else:
