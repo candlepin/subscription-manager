@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.15
+Version: 1.8.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,10 @@ fi
 %endif
 
 %changelog
+* Fri Aug 02 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.16-1
+- 991214: refresh ent dir, catch exception gracefully (ckozak@redhat.com)
+- 977920, 983660: manpage updates (dlackey@redhat.com.com)
+
 * Wed Jul 31 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.15-1
 - Preserve traceback when an exception is thrown from background thread.  (awood@redhat.com)
 - 908521: latest strings from zanata (alikins@redhat.com)
