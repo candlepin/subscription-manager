@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.16
+Version: 1.8.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,11 @@ fi
 %endif
 
 %changelog
+* Mon Aug 05 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.17-1
+- 987579: Re-arranged preferences dialog (cschevia@redhat.com)
+- 991548: Display correct error message for registration failures. (awood@redhat.com)
+- 991580: add rhsmd debug to stdout (ckozak@redhat.com)
+
 * Fri Aug 02 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.16-1
 - 991214: refresh ent dir, catch exception gracefully (ckozak@redhat.com)
 - 977920, 983660: manpage updates (dlackey@redhat.com.com)
