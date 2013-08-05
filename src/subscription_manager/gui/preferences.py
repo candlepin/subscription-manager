@@ -167,10 +167,6 @@ class PreferencesDialog(object):
         self.autoheal_checkbox.set_sensitive(True)
         current_autoheal = consumer_json['autoheal']
         self.autoheal_checkbox.set_active(current_autoheal)
-        if current_autoheal:
-            self.autoheal_label.set_label(_("Enabled"))
-        else:
-            self.autoheal_label.set_label(_("Disabled"))
 
     def _close_button_clicked(self, widget):
         self._close_dialog()
@@ -212,16 +208,11 @@ class PreferencesDialog(object):
         return True
 
     def _on_autoheal_checkbox_toggled(self, checkbox):
-        if self.allow_callbacks:
-            log.info("Auto-attach preference changed to: %s" % checkbox.get_active())
 
-            self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
-                                    autoheal=checkbox.get_active())
+        log.info("Auto-attach preference changed to: %s" % checkbox.get_active())
 
-            if (checkbox.get_active()):
-                self.autoheal_label.set_label(_("Enabled"))
-            else:
-                self.autoheal_label.set_label(_("Disabled"))
+        self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
+                                autoheal=checkbox.get_active())
 
         return True
 
