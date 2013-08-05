@@ -183,6 +183,8 @@ def log_syslog(level, msg):
     syslog.openlog("rhsmd")
     syslog.syslog(level, msg)
     log.info("rhsmd: %s" % msg)
+    if enable_debug:
+        print msg
 
 
 def main():
