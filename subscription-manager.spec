@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.17
+Version: 1.8.18
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,10 @@ fi
 %endif
 
 %changelog
+* Tue Aug 06 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.18-1
+- 993202: fix default config, take advantage of rhsmconfig options (ckozak@redhat.com)
+- Bump requirement for already tagged python-rhsm config changes. (dgoodwin@redhat.com)
+
 * Mon Aug 05 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.17-1
 - 987579: Re-arranged preferences dialog (cschevia@redhat.com)
 - 991548: Display correct error message for registration failures. (awood@redhat.com)
