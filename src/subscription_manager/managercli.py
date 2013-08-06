@@ -1937,7 +1937,7 @@ class ConfigCommand(CliCommand):
                 for (name, value) in source_list:
                     indicator1 = ''
                     indicator2 = ''
-                    if (value == cfg.defaults().get(name)):
+                    if (value == cfg.get_default(section, name)):
                         indicator1 = '['
                         indicator2 = ']'
                     print '   %s = %s%s%s' % (name, indicator1, value, indicator2)
@@ -1949,7 +1949,7 @@ class ConfigCommand(CliCommand):
                 section = r.split('.')[0]
                 name = r.split('.')[1]
                 try:
-                    if not name in cfg.defaults().keys():
+                    if not cfg.has_default(section, name):
                         cfg.set(section, name, '')
                         print _("You have removed the value for section %s and name %s.") % (section, name)
                     else:
