@@ -13,9 +13,13 @@
 # in this software or its documentation.
 #
 
+import collections
 import gettext
 import logging
 import os
+import re
+import pprint
+
 import signal
 import socket
 
@@ -39,6 +43,15 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 
 gettext.textdomain("rhsm")
 
+
+class DefaultDict(collections.defaultdict):
+    """defaultdict wrapper that pretty prints"""
+
+    def as_dict(self):
+        return dict(self)
+
+    def __repr__(self):
+        return pprint.pformat(self.as_dict())
 
 def parse_server_info(local_server_entry):
     return parse_url(local_server_entry,
