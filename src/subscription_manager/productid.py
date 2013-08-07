@@ -26,7 +26,11 @@ from rhsm.certificate import create_from_pem
 
 from subscription_manager.certdirectory import Directory
 from subscription_manager.injection import PLUGIN_MANAGER, require
+
 from subscription_manager import rhelproduct
+
+from subscription_manager.utils import DefaultDict
+
 import subscription_manager.injection as inj
 from rhsm import ourjson as json
 
@@ -43,38 +47,31 @@ class DatabaseDirectory(Directory):
         self.create()
 
 
+class ProductIdRepoMap(DefaultDict):
+
+    def __init__(self, *args, **kwargs):
+        self.default_factory = list
+
+
 class ProductDatabase:
 
     def __init__(self):
         self.dir = DatabaseDirectory()
-        self.content = {}
+        self.content = ProductIdRepoMap()
         self.create()
 
     def add(self, product, repo):
-        if product not in self.content:
-            self.content[product] = []
-        # handle existing old format values
-        if isinstance(self.content[product], types.StringType):
-            self.content[product] = [self.content[product]]
         self.content[product].append(repo)
 
+    # TODO: need way to delete one prod->repo map
     def delete(self, product):
         try:
             del self.content[product]
         except Exception:
             pass
 
-    # need way to delete one prod->repo map
-
     def find_repos(self, product):
-        repo_value = self.content.get(product)
-        # support the old format as well by
-        # listafying if it's just a string value
-        if isinstance(repo_value, types.ListType):
-            return repo_value
-        if repo_value is None:
-            return None
-        return [repo_value]
+        return self.content.get(product, None)
 
     def create(self):
         if not os.path.exists(self.__fn()):
@@ -84,10 +81,23 @@ class ProductDatabase:
         f = open(self.__fn())
         try:
             d = json.load(f)
-            self.content = d
+            # munge old format to new if need be
+            self.populate_content(d)
         except Exception:
             pass
         f.close()
+
+    def populate_content(self, db_dict):
+        """Populate map with info from a productid -> [repoids] map.
+
+        Note this needs to support the old form of
+        a {"productid": "repoid"} as well as the
+        new form of {"productid: ["repoid1",...]}"""
+        for productid, repo_data in db_dict.items():
+            if isinstance(repo_data, types.StringType):
+                self.content[productid].append(repo_data)
+            else:
+                self.content[productid] = repo_data
 
     def write(self):
         f = open(self.__fn(), 'w')
@@ -99,6 +109,7 @@ class ProductDatabase:
 
     def __fn(self):
         return self.dir.abspath('productid.js')
+
 
 
 class ComparableMixin(object):
@@ -170,6 +181,25 @@ class ComparableProductCert(ComparableMixin):
     # Product.version. This could include say, certificate serial or issue date
     def compare_keys(self, other):
         return self.comp_product.compare_keys(other.comp_product)
+
+class ProductId(object):
+    def __init__(self, product_cert):
+        self.product_cert = product_cert
+
+    # write out the cert
+    def install(self):
+        """Write out the product cert and run anything
+        to trigger based on that"""
+
+        pass
+
+    def remove(self):
+        """Delete product cert from the filesystem.
+
+        Subclasses should override this."""
+        pass
+
+    # def compare(self, other):   # version check?
 
 
 class ProductManager:
@@ -300,6 +330,12 @@ class ProductManager:
         # for it, and we understand that metadata. The cert for that productid
         # may or may not be installed at this point. If it is not installed,
         # we try to install it if there are packages installed from that repo
+
+        # a ProductRepo object? ProductRepo's would have Repos and a
+        # ProductCertificate
+        #   .delete() -> delete ProductCert and it's entries in ProductDatabase
+        #
+
         for cert, repo in enabled:
             log.debug("product cert: %s repo: %s" % (cert.products[0].id, repo))
 
@@ -315,25 +351,25 @@ class ProductManager:
             p = cert.products[0]
             prod_hash = p.id
 
-            # This is all workaround for some messed up certs in RHEL5
-            # Are we installing Workstation cert?
+            # this is all workaround for some messed up certs in rhel5
+            # are we installing workstation cert?
             if self._is_workstation(p):
-                # is the Desktop product cert installed?
+                # is the desktop product cert installed?
                 for pc in self.pdir.list():
                     if self._is_desktop(pc.products[0]):
-                        log.info("Removing obsolete Desktop cert: %s" % pc.path)
-                        # Desktop product cert is installed,
-                        # delete the Desktop product cert
+                        log.info("removing obsolete desktop cert: %s" % pc.path)
+                        # desktop product cert is installed,
+                        # delete the desktop product cert
                         pc.delete()
                         self.pdir.refresh()  # must refresh to see the removal of the cert
                         self.db.delete(pc.products[0].id)
                         self.db.write()
 
-            # If installing Desktop cert, see if Workstation exists on disk and skip
+            # if installing desktop cert, see if workstation exists on disk and skip
             # the write if so:
             if self._is_desktop(p):
                 if self._workstation_cert_exists():
-                    log.info("Skipping obsolete Desktop cert")
+                    log.info("skipping obsolete desktop cert")
                     continue
 
             # See if the product cert already exists, if so no need to write it
@@ -342,6 +378,9 @@ class ProductManager:
             # needs to be updated
             #
             # if we dont find this product cert, install it
+            #
+            # ProductCert.is_installed() -> search pdir for ProductCert
+            # ProductCert.install() -> add to install list
             if not self.pdir.find_by_product(prod_hash):
                 products_to_install.append((p, cert))
             else:
@@ -363,6 +402,10 @@ class ProductManager:
                             (p.name, p.version))
 
             # look up what repo's we know about for that prod id
+
+
+            # ProductCertDb.install() could do this?
+            # look up what repo's we know about for that prod has
             known_repos = self.db.find_repos(prod_hash)
 
             # ??? What happens for a installed product with no repo info, that
@@ -374,9 +417,15 @@ class ProductManager:
         # see rhbz #977896
         # handle cases where we end up with workstation and desktop certs in
         # the same "transaction".
+
+        # ProductCertDB.cleanup_workstation()
+        # if we do this after setting up the lists, we dont need
+        # to check per ProductRepo
         products_to_install = self._desktop_workstation_cleanup(products_to_install)
         products_to_update_db = self._desktop_workstation_cleanup(products_to_update_db)
         products_to_update = self._desktop_workstation_cleanup(products_to_update)
+
+  
 
         db_updated = False
         for (product, repo) in products_to_update_db:
@@ -400,7 +449,12 @@ class ProductManager:
         # up a plugin in between and let it munge these lists, so a plugin
         # could blacklist a product cert for example.
         self.plugin_manager.run('pre_product_id_install', product_list=product_certs)
-
+        # ProductCertDb.install()
+        #  -> for each ProductCert:
+        #         ProductCert.install()
+        #           - if that needs to update the db, do it
+        #           - if db needs written, do it
+        #   ProductCertDb.list_installed()
         products_installed = self.write_product_certs(product_certs)
 
         # FIXME: we should include productid db with the conduit here
@@ -483,6 +537,24 @@ class ProductManager:
             deletes certs that need to be deleted
         """
         certs_to_delete = []
+
+        # ProductCertDb.load()
+        # ProductCertDb.find_deletable()
+        #    ProductCertDb.filter_installed_products()
+        #                     .filter_rhel()
+        #                     .filter_unknown_repos()
+        #                     .filter_metadata_errors()
+        #                     .filter_active()
+        #                     .filter_plugin_hook() ?
+        #                  # anything left needs to be deleted
+        #    ProductCertDb.delete_delatable()
+        #                    .delete_pluginhook
+        #                  for each deletable:
+        #                      # plugin hook?
+        #                      ProductCert.delete()
+        #                                  # delete cert,
+        #                                  # delete db entry
+        #                      # post delete plugin hook?
         for cert in self.pdir.list():
             p = cert.products[0]
             prod_hash = p.id
@@ -584,6 +656,7 @@ class ProductManager:
         lst = []
         enabled = yb.repos.listEnabled()
 
+        self.enabled_products = []
         # skip repo's that we don't have productid info for...
         for repo in enabled:
             try:
@@ -591,6 +664,10 @@ class ProductManager:
                 cert = self._get_cert(fn)
                 if cert is None:
                     continue
+                # create a ProductCert/Repo here
+                product_id = ProductId(cert)
+                product_cert_repo = ProductCertRepo(cert, repo.id)
+                self.enabled_products.append(product_cert_repo)
                 lst.append((cert, repo.id))
             except yum.Errors.RepoMDError, e:
                 log.warn("Error loading productid metadata for %s." % repo)
