@@ -34,8 +34,6 @@ _ = gettext.gettext
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
 
-WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
-
 WARNING_COLOR = '#FFFB82'
 EXPIRED_COLOR = '#FFAF99'
 
