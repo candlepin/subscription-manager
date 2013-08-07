@@ -538,6 +538,36 @@ Product:
 	Brand Name: 
 """
 
+PRODUCT_CERT_WITH_OS_NAME_V1_0_OUTPUT = """
++-------------------------------------------+
+	Product Certificate
++-------------------------------------------+
+
+Certificate:
+	Path: 
+	Version: 1.0
+	Serial: 48785926
+	Start Date: 2013-08-07 19:21:14+00:00
+	End Date: 2023-08-07 19:21:14+00:00
+
+Subject:
+	CN: 37060
+
+Issuer:
+	C: US
+	CN: dhcp231-28.rdu.redhat.com
+	L: Raleigh
+
+Product:
+	ID: 37060
+	Name: Awesome OS Server Bits
+	Version: 6.1
+	Arch: ALL
+	Tags: 
+	OS Name: Awesome OS Server Bits
+
+"""
+
 IDENTITY_CERT_OUTPUT = """
 +-------------------------------------------+
 \tIdentity Certificate
