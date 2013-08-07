@@ -85,6 +85,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                                              progress_renderer,
                                              value=self.store['installed_value'],
                                              text=self.store['installed_text'])
+        products_column.add_attribute(progress_renderer, 'cell-background',
+                            self.store['background'])
         self.empty_progress_renderer = gtk.CellRendererText()
         products_column.pack_end(self.empty_progress_renderer, True)
         products_column.set_cell_data_func(progress_renderer, self._update_progress_renderer)
