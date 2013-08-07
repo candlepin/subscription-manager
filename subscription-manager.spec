@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.18
+Version: 1.8.19
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,9 @@ fi
 %endif
 
 %changelog
+* Wed Aug 07 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.19-1
+- 974587: allow certs with no content (ckozak@redhat.com)
+
 * Tue Aug 06 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.18-1
 - 993202: fix default config, take advantage of rhsmconfig options (ckozak@redhat.com)
 - Bump requirement for already tagged python-rhsm config changes. (dgoodwin@redhat.com)
