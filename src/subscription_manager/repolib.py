@@ -182,6 +182,9 @@ class UpdateAction:
     def get_content(self, ent_cert, baseurl, ca_cert):
         lst = []
 
+        if not ent_cert.content:
+            return lst
+
         tags_we_have = self.prod_dir.get_provided_tags()
 
         for content in ent_cert.content:
