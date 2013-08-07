@@ -25,7 +25,6 @@ from rhsm.certificate import GMT
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
 from subscription_manager.injection import require, IDENTITY, DBUS_IFACE
 from subscription_manager.certlib import Disconnected
-from subscription_manager.injection import IDENTITY, require
 
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui.storage import MappedTreeStore
