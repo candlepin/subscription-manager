@@ -120,8 +120,9 @@ class SubscriptionManagerTab(GladeWidget):
         else:
             column.add_attribute(text_renderer, 'xalign', self.store['align'])
 
-        column.add_attribute(text_renderer, 'cell-background',
-                             self.store['background'])
+        if 'background' in self.store:
+            column.add_attribute(text_renderer, 'cell-background',
+                                self.store['background'])
 
         self.top_view.append_column(column)
         return column
@@ -136,8 +137,9 @@ class SubscriptionManagerTab(GladeWidget):
         else:
             column.add_attribute(date_renderer, 'xalign', self.store['align'])
 
-        column.add_attribute(date_renderer, 'cell-background',
-                             self.store['background'])
+        if 'background' in self.store:
+            column.add_attribute(date_renderer, 'cell-background',
+                                 self.store['background'])
 
         self.top_view.append_column(column)
         return column
