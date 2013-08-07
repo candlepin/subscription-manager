@@ -93,10 +93,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         column = self.add_date_column(_("End Date"), 'expiration_date')
         cols.append((column, 'date', 'expiration_date'))
 
-        # Disable row striping on the tree view as we are overriding the behavior
-        # to display stacking groups as one color.
-        self.top_view.set_rules_hint(False)
-
         column = self.add_text_column(_("Quantity"), 'quantity')
         cols.append((column, 'text', 'quantity'))
 
