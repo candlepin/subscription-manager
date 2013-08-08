@@ -1,12 +1,14 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
     <property name="icon_name">subscription-manager</property>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <child>
           <widget class="GtkVPaned" id="content">
             <property name="visible">True</property>
@@ -15,17 +17,21 @@
             <child>
               <widget class="GtkVBox" id="vbox5">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
                   <widget class="GtkAlignment" id="alignment2">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="bottom_padding">3</property>
                     <child>
                       <widget class="GtkHBox" id="hbox1">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="spacing">3</property>
                         <child>
                           <widget class="GtkLabel" id="label1">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="yalign">0</property>
                             <property name="ypad">6</property>
                             <property name="label" translatable="yes">&lt;b&gt;Status:&lt;/b&gt;</property>
@@ -40,12 +46,15 @@
                         <child>
                           <widget class="GtkLabel" id="subscription_status_label">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
                             <property name="ypad">6</property>
                             <property name="label" translatable="yes">label</property>
                           </widget>
                           <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -60,10 +69,11 @@
                             <accessibility>
                               <atkproperty name="AtkObject::accessible-name" translatable="yes">Register System</atkproperty>
                             </accessibility>
-                            <signal name="clicked" handler="on_register_button_clicked"/>
+                            <signal name="clicked" handler="on_register_button_clicked" />
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">3</property>
                           </packing>
                         </child>
@@ -75,7 +85,7 @@
                             <accessibility>
                               <atkproperty name="AtkObject::accessible-name" translatable="yes">Auto-attach</atkproperty>
                             </accessibility>
-                            <signal name="clicked" handler="on_update_certificates_button_clicked"/>
+                            <signal name="clicked" handler="on_update_certificates_button_clicked" />
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -113,6 +123,8 @@
                     </child>
                   </widget>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -126,41 +138,48 @@
               <widget class="GtkVBox" id="details_vbox">
                 <property name="height_request">50</property>
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
                   <widget class="GtkVBox" id="vbox2">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <widget class="GtkFrame" id="frame1">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="label_xalign">0</property>
                         <property name="shadow_type">none</property>
                         <child>
                           <widget class="GtkAlignment" id="alignment1">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="left_padding">12</property>
                             <child>
                               <widget class="GtkScrolledWindow" id="scrolledwindow3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="border_width">3</property>
-                                <property name="vadjustment">0 0 199 19.900000000000002 179.09999999999999 199</property>
+                                <property name="vadjustment">0 0 124 8.0999999999999996 72.900000000000006 81</property>
                                 <property name="hscrollbar_policy">automatic</property>
                                 <property name="vscrollbar_policy">automatic</property>
                                 <property name="shadow_type">in</property>
                                 <child>
                                   <widget class="GtkViewport" id="viewport2">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="resize_mode">queue</property>
                                     <property name="shadow_type">none</property>
                                     <child>
                                       <widget class="GtkTable" id="table2">
                                         <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="n_rows">4</property>
                                         <property name="n_columns">2</property>
                                         <property name="column_spacing">8</property>
                                         <child>
                                           <widget class="GtkLabel" id="product_label">
                                             <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
                                             <property name="xalign">0</property>
                                             <property name="label" translatable="yes">&lt;b&gt;Product:&lt;/b&gt;</property>
                                             <property name="use_markup">True</property>
@@ -177,6 +196,7 @@
                                         <child>
                                           <widget class="GtkLabel" id="subscription_label">
                                             <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
                                             <property name="xalign">0</property>
                                             <property name="yalign">0</property>
                                             <property name="label" translatable="yes">&lt;b&gt;Subscriptions:&lt;/b&gt;</property>
@@ -234,6 +254,7 @@
                                         <child>
                                           <widget class="GtkLabel" id="validity_label">
                                             <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
                                             <property name="xalign">0</property>
                                             <property name="label" translatable="yes">&lt;b&gt;Status:&lt;/b&gt;</property>
                                             <property name="use_markup">True</property>
@@ -266,6 +287,7 @@
                                         <child>
                                           <widget class="GtkLabel" id="product_arch_label">
                                             <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
                                             <property name="xalign">0</property>
                                             <property name="label" translatable="yes">&lt;b&gt;Arch:&lt;/b&gt;</property>
                                             <property name="use_markup">True</property>
@@ -310,6 +332,7 @@
                         <child>
                           <widget class="GtkLabel" id="label2">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="label" translatable="yes">&lt;b&gt;Product's Subscription Details&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
                           </widget>
@@ -319,11 +342,15 @@
                         </child>
                       </widget>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                   </widget>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -335,6 +362,8 @@
             </child>
           </widget>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
