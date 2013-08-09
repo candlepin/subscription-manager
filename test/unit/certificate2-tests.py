@@ -36,14 +36,14 @@ class V1ProductCertTests(unittest.TestCase):
                 self.prod_cert.products[0].name)
         self.assertEquals('100000000000002', self.prod_cert.subject['CN'])
 
-    def test_os_name_old_cert(self):
-        self.assertTrue(self.prod_cert.products[0].os_name is None)
+    def test_os_old_cert(self):
+        self.assertTrue(self.prod_cert.products[0].os is None)
 
-    def test_set_os_name(self):
-        os_name = "Awesome OS (System Builders Edition)"
+    def test_set_os(self):
+        os = "OS"
 
-        self.prod_cert.products[0].os_name = os_name
-        self.assertEquals(os_name, self.prod_cert.products[0].os_name)
+        self.prod_cert.products[0].os = os
+        self.assertEquals(os, self.prod_cert.products[0].os)
 
 
 class V1EntCertTests(unittest.TestCase):
@@ -325,16 +325,16 @@ class ProductTests(unittest.TestCase):
         self.assertTrue(p.architectures is not None)
         self.assertTrue(isinstance(p.architectures, list))
 
-    def test_no_os_name(self):
+    def test_no_os(self):
         p = Product(id="pid", name="pname")
-        self.assertTrue(p.os_name is None)
+        self.assertTrue(p.os is None)
 
-    def test_os_name(self):
+    def test_os(self):
         p = Product(id="pid", name="pname",
-                    os_name="pos_name")
-        self.assertTrue(p.os_name == "pos_name")
+                    os="pos")
+        self.assertTrue(p.os == "pos")
 
-    def test_os_name_none(self):
+    def test_os_none(self):
         p = Product(id="pid", name="pname",
-                    os_name=None)
-        self.assertTrue(p.os_name is None)
+                    os=None)
+        self.assertTrue(p.os is None)
