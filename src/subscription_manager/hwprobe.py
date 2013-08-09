@@ -24,7 +24,6 @@ import logging
 import os
 import platform
 import re
-import signal
 import socket
 from subprocess import PIPE, Popen
 import sys
@@ -729,12 +728,8 @@ class Hardware:
         return virt_dict
 
     def _get_output(self, cmd):
-        signal.signal(signal.SIGPIPE, signal.SIG_DFL)
-
         process = Popen([cmd], stdout=PIPE)
         output = process.communicate()[0].strip()
-
-        signal.signal(signal.SIGPIPE, signal.SIG_IGN)
 
         returncode = process.poll()
         if returncode:
