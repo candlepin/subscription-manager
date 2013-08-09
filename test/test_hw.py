@@ -122,50 +122,45 @@ class TestGatherEntries(unittest.TestCase):
 
 class HardwareProbeTests(fixture.SubManFixture):
 
-    @patch('subprocess.Popen')
-    def test_command_error(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['', None]
-        MockPopen.return_value.poll.return_value = 2
+    @patch('commands.getstatusoutput')
+    def test_command_error(self, MockCommands):
+        MockCommands.return_value = (2, '')
 
         # Pick up the mocked class
         reload(hwprobe)
         hw = hwprobe.Hardware()
         self.assertRaises(hwprobe.CalledProcessError, hw._get_output, 'test')
 
-    @patch('subprocess.Popen')
-    def test_command_valid(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['this is valid', None]
-        MockPopen.return_value.poll.return_value = 0
+    @patch('commands.getstatusoutput')
+    def test_command_valid(self, MockCommands):
+        MockCommands.return_value = [0, 'this is valid']
 
         # Pick up the mocked class
         reload(hwprobe)
         hw = hwprobe.Hardware()
         self.assertEquals('this is valid', hw._get_output('testing'))
 
-    @patch('subprocess.Popen')
-    def test_virt_guest(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['kvm', None]
-        MockPopen.return_value.poll.return_value = 0
+    @patch('commands.getstatusoutput')
+    def test_virt_guest(self, MockCommands):
+        MockCommands.return_value = [0, 'kvm']
 
         reload(hwprobe)
         hw = hwprobe.Hardware()
         expected = {'virt.is_guest': True, 'virt.host_type': 'kvm'}
         self.assertEquals(expected, hw.get_virt_info())
 
-    @patch('subprocess.Popen')
-    def test_virt_bare_metal(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['', None]
-        MockPopen.return_value.poll.return_value = 0
+    @patch('commands.getstatusoutput')
+    def test_virt_bare_metal(self, MockCommands):
+        MockCommands.return_value = [0, '']
 
         reload(hwprobe)
         hw = hwprobe.Hardware()
         expected = {'virt.is_guest': False, 'virt.host_type': 'Not Applicable'}
         self.assertEquals(expected, hw.get_virt_info())
 
-    @patch('subprocess.Popen')
-    def test_virt_error(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['', None]
-        MockPopen.return_value.poll.return_value = 255
+    @patch('commands.getstatusoutput')
+    def test_virt_error(self, MockCommands):
+        MockCommands.return_value = [255, '']
 
         reload(hwprobe)
         hw = hwprobe.Hardware()
