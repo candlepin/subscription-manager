@@ -233,3 +233,17 @@ def set_background_model_index(tree_view, model_idx):
     for col in tree_view.get_columns():
         for renderer in col.get_cell_renderers():
             col.add_attribute(renderer, 'cell-background', model_idx)
+
+
+def gather_group(store, iter, group):
+    """
+    Returns a list of TreeRowReferences for an iter and every child of the iter
+    """
+    if store.iter_has_child(iter):
+        child_iter = store.iter_children(iter)
+        while child_iter:
+            gather_group(store, child_iter, group)
+            child_iter = store.iter_next(child_iter)
+
+    group.append(gtk.TreeRowReference(store, store.get_path(iter)))
+    return group

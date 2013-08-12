@@ -151,6 +151,8 @@ class SubscriptionManagerTab(GladeWidget):
             column_data[0].set_sort_column_id(index)
             sort_func = getattr(self, 'sort_' + column_data[1])
             self.store.set_sort_func(index, sort_func, column_data[2])
+            # We want to re-stripe the model after the default class signal handler
+            column_data[0].connect_after('clicked', self._stripe_rows, self.store)
 
     def sort_text(self, model, row1, row2, key):
         # model is a MappedListStore which maps column names to
@@ -187,6 +189,30 @@ class SubscriptionManagerTab(GladeWidget):
 
     def refresh(self):
         pass
+
+    def _stripe_rows(self, column, store):
+        """
+        This method repaints the row stripes when the rows are re-arranged
+        due to the user sorting a column
+        """
+        if 'background' in store:
+            iter = store.get_iter_first()
+            i = 0
+            rows = []
+
+            # Making changes to a TreeModel while you are iterating over it can lead
+            # to weird behavior so we save all the rows that need to be recolored as
+            # TreeRowReferences and set the color on them after the iteration is finished.
+            while iter:
+                bg_color = utils.get_cell_background_color(i)
+                rows += [(ref, bg_color) for ref in utils.gather_group(store, iter, [])]
+                i += 1
+                iter = store.iter_next(iter)
+
+            for r in rows:
+                model = r[0].get_model()
+                iter = model.get_iter(r[0].get_path())
+                model.set_value(iter, model['background'], r[1])
 
 
 class SelectionWrapper(object):
