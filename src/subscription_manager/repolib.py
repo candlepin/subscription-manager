@@ -220,7 +220,9 @@ class UpdateAction:
         else:
             certs = self.ent_dir.list_valid()
 
+
         lst = set()
+
 
         for cert in certs:
             if not cert.content:
@@ -449,6 +451,17 @@ class Repo(dict):
         if key not in self._order:
             self._order.append(key)
         dict.__setitem__(self, key, value)
+
+    def __str__(self):
+        s = []
+        s.append('[%s]' % self.id)
+        for k in self.PROPERTIES:
+            v = self.get(k)
+            if v is None:
+                continue
+            s.append('%s=%s' % (k, v))
+
+        return '\n'.join(s)
 
     def __eq__(self, other):
         return (self.id == other.id)

@@ -19,21 +19,16 @@ from datetime import timedelta, datetime
 from stubs import StubEntitlementCertificate, StubProduct, StubEntitlementDirectory, \
             StubConsumerIdentity
 
-from subscription_manager.certlib import UpdateAction, UpdateReport
-from subscription_manager.certdirectory import Writer
 from fixture import SubManFixture
 
+from subscription_manager.certdirectory import Writer
+from subscription_manager import certlib
 
-class TestingUpdateAction(UpdateAction):
+
+class TestingUpdateAction(certlib.UpdateAction):
 
     def __init__(self, mock_uep, mock_entdir):
-        UpdateAction.__init__(self, uep=mock_uep, entdir=mock_entdir)
-
-    def build(self, cert):
-        '''
-          Override so that we can specify stubs as certificates.
-        '''
-        return (Mock(), cert)
+        certlib.UpdateAction.__init__(self, uep=mock_uep, entdir=mock_entdir)
 
     def _get_consumer_id(self):
         return StubConsumerIdentity("ConsumerKey", "ConsumerCert")
@@ -41,26 +36,35 @@ class TestingUpdateAction(UpdateAction):
 
 class UpdateActionTests(SubManFixture):
 
+    @patch("subscription_manager.certlib.EntitlementCertBundleInstaller.build_cert")
     @patch.object(Writer, "write")
-    def test_expired_are_not_ignored_when_installing_certs(self, write_mock):
+    def test_expired_are_not_ignored_when_installing_certs(self, write_mock, build_cert_mock):
         valid_ent = StubEntitlementCertificate(StubProduct("PValid"))
         expired_ent = StubEntitlementCertificate(StubProduct("PExpired"),
                 start_date=datetime.now() - timedelta(days=365),
                 end_date=datetime.now() - timedelta(days=10))
 
         cp_certificates = [valid_ent, expired_ent]
+        # get certificates actually returns cert bundles
+        cp_bundles = [{'key': Mock(), 'cert': x} for x in cp_certificates]
+
+        # so we dont try to build actual x509 objects from stub certs
+        def mock_build_cert(bundle):
+            return (bundle['key'], bundle['cert'])
+
+        build_cert_mock.side_effect = mock_build_cert
 
         mock_uep = Mock()
-        mock_uep.getCertificates.return_value = cp_certificates  # Passed into build(cert)
+        mock_uep.getCertificates.return_value = cp_bundles  # Passed into build_cert(bundle)
 
         update_action = TestingUpdateAction(mock_uep,
                                             StubEntitlementDirectory([]))
-        report = UpdateReport()
+        report = certlib.UpdateReport()
         report.expected.append(valid_ent.serial)
         report.expected.append(expired_ent.serial)
 
-        exceptions = update_action.install([valid_ent.serial, expired_ent.serial], report)
-        self.assertEqual(0, len(exceptions), "No exceptions should have been thrown")
+        update_action.install([valid_ent.serial, expired_ent.serial], report)
+        self.assertEqual(0, len(update_action.exceptions), "No exceptions should have been thrown")
         self.assertTrue(valid_ent in report.added)
         self.assertTrue(valid_ent.serial in report.expected)
         self.assertTrue(expired_ent.serial in report.expected)

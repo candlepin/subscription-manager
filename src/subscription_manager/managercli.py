@@ -165,6 +165,7 @@ def handle_exception(msg, ex):
         system_exit(-1, ex)
 
 
+import pprint
 def autosubscribe(cp, consumer_uuid, service_level=None):
     """
     This is a wrapper for bind/bindByProduct. Eventually, we will exclusively
@@ -178,6 +179,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
     try:
         plugin_manager.run("pre_auto_attach", consumer_uuid=consumer_uuid)
         ents = cp.bind(consumer_uuid)  # new style
+        pprint.pprint(ents)
         plugin_manager.run("post_auto_attach", consumer_uuid=consumer_uuid, entitlement_data=ents)
 
     except Exception, e:
