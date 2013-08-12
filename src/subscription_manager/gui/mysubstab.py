@@ -29,7 +29,7 @@ from subscription_manager.certlib import Disconnected
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui import widgets
-from subscription_manager.gui.utils import get_cell_background_color, handle_gui_exception
+from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.utils import is_true_value
 
 
@@ -154,9 +154,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         self.store.clear()
         sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
-        for idx, group in enumerate(sorter.groups):
-            self._add_group(idx, group)
+        for group in sorter.groups:
+            self._add_group(group)
         self.top_view.expand_all()
+        self._stripe_rows(None, self.store)
         if update_dbus:
             require(DBUS_IFACE).update()
         self.unsubscribe_button.set_property('sensitive', False)
@@ -164,9 +165,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         selection = self.top_view.get_selection()
         selection.select_path(0)
 
-    def _add_group(self, group_idx, group):
+    def _add_group(self, group):
         tree_iter = None
-        bg_color = get_cell_background_color(group_idx)
         if group.name and len(group.entitlements) > 1:
             unique = self.find_unique_name_count(group.entitlements)
             if unique - 1 > 1:
@@ -176,12 +176,12 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                 name_string = _("Stack of %s and 1 other") % (group.name)
             else:
                 name_string = _("Stack of %s") % (group.name)
-            tree_iter = self.store.add_map(tree_iter, self._create_stacking_header_entry(name_string,
-                                                                               bg_color))
+            tree_iter = self.store.add_map(tree_iter, self._create_stacking_header_entry(name_string))
+
         new_parent_image = None
         for i, cert in enumerate(group.entitlements):
             image = self._get_entry_image(cert)
-            self.store.add_map(tree_iter, self._create_entry_map(cert, bg_color, image))
+            self.store.add_map(tree_iter, self._create_entry_map(cert, image))
 
             # Determine if we need to change the parent's image. We
             # will match the parent's image with the children if any of
@@ -287,17 +287,17 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.sub_details.clear()
         self.unsubscribe_button.set_property('sensitive', False)
 
-    def _create_stacking_header_entry(self, title, background_color):
+    def _create_stacking_header_entry(self, title):
         entry = {}
         entry['subscription'] = title
         entry['installed_value'] = 0.0
         entry['align'] = 0.5         # Center horizontally
-        entry['background'] = background_color
+        entry['background'] = None
         entry['is_group_row'] = True
 
         return entry
 
-    def _create_entry_map(self, cert, background_color, image):
+    def _create_entry_map(self, cert, image):
         order = cert.order
         products = cert.products
         installed = self._get_installed(products)
@@ -314,7 +314,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         entry['quantity'] = order.quantity_used
         entry['serial'] = cert.serial
         entry['align'] = 0.5         # Center horizontally
-        entry['background'] = background_color
+        entry['background'] = None
         entry['is_group_row'] = False
 
         return entry

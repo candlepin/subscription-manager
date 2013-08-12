@@ -25,7 +25,7 @@ from subscription_manager.gui.contract_selection import ContractSelectionWindow
 from subscription_manager.gui.filter import FilterOptionsWindow, Filters
 from subscription_manager.gui import progress
 from subscription_manager.gui.storage import MappedTreeStore
-from subscription_manager.gui.utils import apply_highlight, show_error_window, get_cell_background_color, handle_gui_exception, set_background_model_index
+from subscription_manager.gui.utils import apply_highlight, show_error_window, handle_gui_exception, set_background_model_index
 from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require
 from subscription_manager.jsonwrapper import PoolWrapper
@@ -207,11 +207,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.no_subs_label.hide()
 
         sorter = managerlib.MergedPoolsStackingGroupSorter(merged_pools.values())
-        for group_idx, group in enumerate(sorter.groups):
-            bg_color = get_cell_background_color(group_idx)
+        for group in sorter.groups:
             tree_iter = None
             if group.name and len(group.entitlements) > 1:
-                tree_iter = self.store.add_map(tree_iter, self._create_parent_map(group.name, bg_color))
+                tree_iter = self.store.add_map(tree_iter, self._create_parent_map(group.name))
 
             for entry in group.entitlements:
                 quantity_available = 0
@@ -252,7 +251,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'merged_pools': entry,  # likewise not displayed, for subscription
                     'align': 0.5,
                     'multi-entitlement': allows_multi_entitlement(pool),
-                    'background': bg_color,
+                    'background': None,
                     'quantity_available': quantity_available,
                     'support_level': support_level,
                     'support_type': support_type,
@@ -261,6 +260,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         # Ensure that all nodes are expanded in the tree view.
         self.top_view.expand_all()
+        self._stripe_rows(None, self.store)
 
         # set the selection/details back to what they were, if possible
         found = False
@@ -303,7 +303,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     return None
         return virt_only
 
-    def _create_parent_map(self, title, bg_color):
+    def _create_parent_map(self, title):
         return {
                     'virt_only': False,
                     'product_name': title,
@@ -315,7 +315,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'merged_pools': None,  # likewise not displayed, for subscription
                     'align': 0.5,
                     'multi-entitlement': False,
-                    'background': bg_color,
+                    'background': None,
                     'quantity_available': 0,
                     'support_level': "",
                     'support_type': "",
