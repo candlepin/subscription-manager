@@ -25,6 +25,7 @@ from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
 from subscription_manager.certlib import CertLib, ActionLock, HealingLib, IdentityCertLib
 from subscription_manager.factlib import FactLib
 from subscription_manager.repolib import RepoLib
+from subscription_manager.brandlib import BrandLib
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -54,6 +55,7 @@ class CertManager:
         #healinglib requires a fact set in order to get socket count
         self.healinglib = HealingLib(self.lock, self.uep, product_dir)
         self.idcertlib = IdentityCertLib(self.lock, uep=self.uep)
+        self.brandlib = BrandLib(self.lock, uep=self.uep, product_dir)
 
     def update(self, autoheal=False):
         """
