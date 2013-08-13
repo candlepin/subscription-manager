@@ -23,6 +23,7 @@ import gtk
 import gtk.glade
 
 from subscription_manager.gui import widgets
+from subscription_manager.gui.storage import MappedListStore
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.managerlib import allows_multi_entitlement
@@ -63,17 +64,23 @@ class ContractSelectionWindow(object):
             "on_subscribe_button_clicked": self._subscribe_button_clicked,
         })
 
-        self.model = gtk.ListStore(str, str,
-                                   gobject.TYPE_PYOBJECT,
-                                   gobject.TYPE_PYOBJECT,
-                                   int,
-                                   str,
-                                   gobject.TYPE_PYOBJECT,
-                                   bool,
-                                   bool,
-                                   int,
-                                   int)
+        self.model = MappedListStore(self.get_type_map())
         self.contract_selection_treeview.set_model(self.model)
+
+    def get_type_map(self):
+        return {
+                'contract_number': str,
+                'consumed_fraction': str,
+                'start_date': gobject.TYPE_PYOBJECT,
+                'end_date': gobject.TYPE_PYOBJECT,
+                'default_quantity': int,
+                'product_name': str,
+                'pool': gobject.TYPE_PYOBJECT,
+                'is_virt_only': bool,
+                'multi_entitlement': bool,
+                'quantity_available': int,
+                'quantity_increment': int,
+                }
 
     def show(self):
         self.populate_treeview()
@@ -85,36 +92,40 @@ class ContractSelectionWindow(object):
     def populate_treeview(self):
         renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(_("Contract"), renderer,
-                text=0)
+                text=self.model['contract_number'])
         column.set_expand(True)
-        column.set_sort_column_id(0)
-        self.model.set_sort_func(0, self._sort_text, None)
+        column.set_sort_column_id(self.model['contract_number'])
+        self.model.set_sort_func(self.model['contract_number'], self._sort_text, None)
         self.contract_selection_treeview.append_column(column)
 
-        column = widgets.MachineTypeColumn(7)
-        column.set_sort_column_id(7)
-        self.model.set_sort_func(7, self._sort_machine_type, column)
+        column = widgets.MachineTypeColumn(self.model['is_virt_only'])
+        column.set_sort_column_id(self.model['is_virt_only'])
+        self.model.set_sort_func(self.model['is_virt_only'], self._sort_machine_type, column)
         self.contract_selection_treeview.append_column(column)
 
         renderer = gtk.CellRendererText()
         renderer.set_property("xalign", 0.5)
         column = gtk.TreeViewColumn(_("Used / Total"), renderer,
-                text=1)
+                text=self.model['consumed_fraction'])
         self.contract_selection_treeview.append_column(column)
 
         renderer = widgets.CellRendererDate()
-        column = gtk.TreeViewColumn(_("Start Date"), renderer, date=2)
-        column.set_sort_column_id(2)
-        self.model.set_sort_func(2, self._sort_date, None)
+        column = gtk.TreeViewColumn(_("Start Date"), renderer, date=self.model['start_date'])
+        column.set_sort_column_id(self.model['start_date'])
+        self.model.set_sort_func(self.model['start_date'], self._sort_date, None)
         self.contract_selection_treeview.append_column(column)
 
         renderer = widgets.CellRendererDate()
-        column = gtk.TreeViewColumn(_("End Date"), renderer, date=3)
-        column.set_sort_column_id(3)
-        self.model.set_sort_func(3, self._sort_date, None)
+        column = gtk.TreeViewColumn(_("End Date"), renderer, date=self.model['end_date'])
+        column.set_sort_column_id(self.model['end_date'])
+        self.model.set_sort_func(self.model['end_date'], self._sort_date, None)
         self.contract_selection_treeview.append_column(column)
 
-        column = widgets.QuantitySelectionColumn(_("Quantity"), self.model, 4, 8, 9, 10)
+        column = widgets.QuantitySelectionColumn(_("Quantity"), self.model,
+                self.model['default_quantity'],
+                self.model['multi_entitlement'],
+                self.model['quantity_available'],
+                self.model['quantity_increment'])
         self.contract_selection_treeview.append_column(column)
 
         self.edit_quantity_label.set_label(column.get_column_legend_text())
@@ -145,17 +156,19 @@ class ContractSelectionWindow(object):
             if 'quantity_increment' in calculated_attrs:
                 quantity_increment = int(calculated_attrs['quantity_increment'])
 
-        row = [pool['contractNumber'],
-                "%s / %s" % (pool['consumed'], quantity),
-               isodate.parse_date(pool['startDate']),
-               isodate.parse_date(pool['endDate']),
-               default_quantity_value,
-               pool['productName'], pool,
-               PoolWrapper(pool).is_virt_only(),
-               allows_multi_entitlement(pool),
-               quantity_available,
-               quantity_increment]
-        self.model.append(row)
+        self.model.add_map({
+            'contract_number': pool['contractNumber'],
+            'consumed_fraction': "%s / %s" % (pool['consumed'], quantity),
+            'start_date': isodate.parse_date(pool['startDate']),
+            'end_date': isodate.parse_date(pool['endDate']),
+            'default_quantity': default_quantity_value,
+            'product_name': pool['productName'],
+            'pool': pool,
+            'is_virt_only': PoolWrapper(pool).is_virt_only(),
+            'multi_entitlement': allows_multi_entitlement(pool),
+            'quantity_available': quantity_available,
+            'quantity_increment': quantity_increment,
+            })
 
     def set_parent_window(self, window):
         self.contract_selection_win.set_transient_for(window)
@@ -164,10 +177,11 @@ class ContractSelectionWindow(object):
         self._cancel_callback()
 
     def _subscribe_button_clicked(self, button):
-        row = self.model[self.contract_selection_treeview.get_cursor()[0][0]]
-        pool = row[6]
-        quantity = row[4]
-        self._selected_callback(pool, quantity)
+        selection = self.contract_selection_treeview.get_selection()
+        model, iter = selection.get_selected()
+        if iter is not None:
+            pool, quantity = model.get(iter, model['pool'], model['default_quantity'])
+            self._selected_callback(pool, quantity)
 
     def _on_contract_selection(self, widget):
         model, tree_iter = widget.get_selected()
@@ -191,7 +205,7 @@ class ContractSelectionWindow(object):
         # displayed for the boolean value.
         sort_column, sort_type = model.get_sort_column_id()
         results = []
-        for i, row in enumerate([row1, row2]):
+        for row in [row1, row2]:
             _bool = model.get_value(row, sort_column)
             if _bool is None:
                 text = col._get_none_text()
