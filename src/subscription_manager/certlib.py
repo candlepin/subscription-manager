@@ -18,8 +18,8 @@
 from datetime import datetime, timedelta
 import gettext
 import logging
-import syslog
 import socket
+import syslog
 
 from rhsm.config import initConfig
 from rhsm.certificate import Key, create_from_pem, GMT
@@ -50,7 +50,10 @@ class ActionLock(Lock):
     def __init__(self):
         Lock.__init__(self, self.PATH)
 
-
+# TODO: *Lib objects should probably all support a Report object
+#        ala CertLib, even if most of them would be simple or
+#        or noops. Would make logging easier and more useful
+#        and reduce some of the random variations in *Lib
 class DataLib(object):
 
     def __init__(self, lock=None, uep=None):
@@ -204,7 +207,7 @@ class Action:
         self.uep = uep
 
 
-
+# TODO: rename to EntitlementCertDeleteAction
 class DeleteAction(Action):
 
     def perform(self, serial_numbers):
@@ -216,12 +219,16 @@ class DeleteAction(Action):
         return self
 
 
+# TODO: rename to EntitlementCertUpdateAction
 class UpdateAction(Action):
 
     def __init__(self, uep=None, entdir=None):
         Action.__init__(self, uep=uep, entdir=entdir)
+        self.identity = require(IDENTITY)
 
-    def perform(self, lock=None):
+    # NOTE: this is slightly at odds with the manual cert import
+    #       path, manual import certs wont get a 'report', etc
+    def perform(self):
         report = UpdateReport()
         local = self._get_local_serials(report)
         try:
@@ -230,11 +237,12 @@ class UpdateAction(Action):
             log.exception(ex)
             log.error('Cannot modify subscriptions while disconnected')
             raise Disconnected()
+
         missing_serials = self._find_missing_serials(local, expected)
         rogue_serials = self._find_rogue_serials(local, expected)
-        self.delete(rogue_serials, report)
 
-        exceptions = self.install(missing_serials, report)
+        self.delete(rogue_serials, report)
+        self.install(missing_serials, report)
 
         log.info('certs updated:\n%s', report)
         self.syslog_results(report)
@@ -251,16 +259,19 @@ class UpdateAction(Action):
             # reload certs and update branding
             self.branding_hook()
 
-        # WARNING: TODO: XXX: this is returning a tuple, the parent class and
-        # all other sub-classes return an int, which somewhat defeats
-        # the purpose...
-        return (report.updates(), exceptions)
+        # if we want the full report, we can get it, but
+        # this makes CertLib.update() have same sig as reset
+        # of *Lib.update
+        return report.updates()
 
     def install(self, missing_serials, report):
 
-        ent_cert_installer = EntitlementCertInstaller(self.uep)
-        ent_cert_installer.install(missing_serials, report)
-        return ent_cert_installer.exceptions
+        cert_bundles = self.get_certificates_by_serial_list(missing_serials)
+
+        ent_cert_bundles_installer = EntitlementCertBundlesInstaller(report)
+        ent_cert_bundles_installer.install(cert_bundles)
+        self.report = ent_cert_bundles_installer.report
+        self.exceptions = ent_cert_bundles_installer.exceptions
 
     def _find_missing_serials(self, local, expected):
         """ Find serials from the server we do not have locally. """
@@ -318,6 +329,19 @@ class UpdateAction(Action):
             results.append(sn)
         return results
 
+    def get_certificates_by_serial_list(self, sn_list):
+        """Fetch a list of entitlement certificates specified by a list of serial numbers"""
+        result = []
+        if sn_list:
+            sn_list = [str(sn) for sn in sn_list]
+            # NOTE: use injected IDENTITY, need to validate this
+            # handles disconnected errors properly
+            reply = self.uep.getCertificates(self.identity.getConsumerId(),
+                                              serials=sn_list)
+            for cert in reply:
+                result.append(cert)
+        return result
+
     def _get_expected_serials(self, report):
         exp = self.get_certificate_serials_list()
         report.expected = exp
@@ -342,27 +366,30 @@ class UpdateAction(Action):
             self.entdir.refresh()
 
 
-# could split this to just something that writes the certs
-class EntitlementCertInstaller(object):
-    """Install entitlement certs"""
+class EntitlementCertBundlesInstaller(object):
+    """Install a list of entitlement cert bundles"""
 
-    def __init__(self, uep=None):
-        self.uep = uep
-        self.identity = require(IDENTITY)
+    def __init__(self, report):
         self.exceptions = []
+        self.report = report
 
-    def get_certificates_by_serial_list(self, sn_list):
-        """Fetch a list of entitlement certificates specified by a list of serial numbers"""
-        result = []
-        if sn_list:
-            sn_list = [str(sn) for sn in sn_list]
-            # NOTE: use injected IDENTITY, need to validate this
-            # handles disconnected errors properly
-            reply = self.uep.getCertificates(self.identity.getConsumerId(),
-                                              serials=sn_list)
-            for cert in reply:
-                result.append(cert)
-        return result
+    def install(self, cert_bundles):
+        """Fetch entitliement certs, install them, and update the report"""
+        bundle_installer = EntitlementCertBundleInstaller()
+        for cert_bundle in cert_bundles:
+            bundle_installer.install(cert_bundle, self.report)
+        self.exceptions = bundle_installer.exceptions
+        self.post_install()
+
+    # pre and post
+    def post_install(self):
+        """after all cert bundles have been installed"""
+        for installed in self._get_installed():
+            print "installed! list", installed
+
+    def get_installed(self):
+        return self._get_installed()
+
 
     def repo_hook(self, lock):
         """Update yum repos
@@ -408,16 +435,42 @@ class EntitlementCertInstaller(object):
         for bundle in self.get_certificates_by_serial_list(serials):
             self.install_cert_bundle(bundle, report)
 
-    def install_cert_bundle(self, bundle, report):
+    # we have a UpdateReport, use it
+    def _get_installed(self):
+        return self.report.added
+
+
+
+class EntitlementCertBundleInstaller(object):
+
+    def __init__(self):
+        self.exceptions = []
+
+    def pre_install(self, bundle):
+        print "Ecbi.pre_install", bundle
+
+    def install(self, bundle, report):
+        self.pre_install(bundle)
+
         cert_bundle_writer = Writer()
         try:
             key, cert = self.build_cert(bundle)
             cert_bundle_writer.write(key, cert)
+
             report.added.append(cert)
         except Exception, e:
-            log.exception(e)
-            log.error('Bundle not loaded:\n%s\n%s', bundle, e)
-            self.exceptions.append(e)
+            self.install_exception(e)
+
+        self.post_install(bundle)
+
+    def install_exception(self, exception):
+        log.exception(e)
+        log.error('Bundle not loaded:\n%s\n%s', bundle, e)
+        self.exceptions.append(e)
+
+    def post_install(self, bundle):
+
+        print "Ecbi.post_install"
 
     # should probably be in python-rhsm/certificate
     def build_cert(self, bundle):
@@ -428,7 +481,6 @@ class EntitlementCertInstaller(object):
         cert = create_from_pem(crtpem)
 
         return (key, cert)
->>>>>>> split out the ent cert installer code
 
 
 class Disconnected(Exception):
@@ -442,6 +494,7 @@ class UpdateReport:
         self.expected = []
         self.added = []
         self.rogue = []
+        self.exceptions = []
 
     def updates(self):
         return (len(self.added) + len(self.rogue))

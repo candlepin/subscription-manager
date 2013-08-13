@@ -168,7 +168,7 @@ class TestCertmgr(SubManFixture):
         mgr.update(autoheal=True)
         self.assertTrue(self.mock_uep.bind.called)
 
-    @mock.patch.object(certlib.Action, 'build')
+    @mock.patch.object(certlib.EntitlementCertBundleInstaller, 'build_cert')
     def test_healing_needs_heal_tomorrow(self, cert_build_mock):
         # Valid today, but not valid 24h from now:
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
@@ -258,7 +258,7 @@ class TestCertmgr(SubManFixture):
         self.mock_uep.getCertificates.return_value = stub_certificate_list
 
     # we need to simulate the client missing some ent certs
-    @mock.patch.object(certlib.Action, 'build')
+    @mock.patch.object(certlib.EntitlementCertBundleInstaller, 'build_cert')
     def test_missing(self, cert_build_mock):
         # mock no certs client side
         self._stub_certificate_calls()
@@ -283,7 +283,7 @@ class TestCertmgr(SubManFixture):
         self.assertTrue(self.local_ent_certs[0] in report.rogue)
         self.assertTrue(self.local_ent_certs[1] in report.rogue)
 
-    @mock.patch.object(certlib.Action, 'build')
+    @mock.patch.object(certlib.EntitlementCertBundleInstaller, 'build_cert')
     def test_expired(self, cert_build_mock):
         cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
 
@@ -301,7 +301,7 @@ class TestCertmgr(SubManFixture):
         report = self.update_action_syslog_mock.call_args[0][0]
         self.assertTrue(self.stub_ent1 in report.rogue)
 
-    @mock.patch.object(certlib.Action, 'build')
+    @mock.patch.object(certlib.EntitlementCertBundleInstaller, 'build_cert')
     @mock.patch('subscription_manager.certlib.log')
     def test_exception_on_cert_write(self, mock_log, mock_cert_build):
         # this is basically the same as test_missing, expect we throw

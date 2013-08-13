@@ -25,7 +25,6 @@ from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
 from subscription_manager.certlib import CertLib, ActionLock, HealingLib, IdentityCertLib
 from subscription_manager.factlib import FactLib
 from subscription_manager.repolib import RepoLib
-from subscription_manager.brandlib import BrandLib
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -55,7 +54,6 @@ class CertManager:
         #healinglib requires a fact set in order to get socket count
         self.healinglib = HealingLib(self.lock, self.uep, product_dir)
         self.idcertlib = IdentityCertLib(self.lock, uep=self.uep)
-        self.brandlib = BrandLib(self.lock, uep=self.uep, product_dir)
 
     def update(self, autoheal=False):
         """
@@ -75,15 +73,19 @@ class CertManager:
             if autoheal:
                 libset = [self.installedprodlib, self.healinglib]
             else:
-                libset = [self.idcertlib, self.repolib, self.factlib, self.profilelib, self.installedprodlib]
+                libset = [self.idcertlib, self.repolib,
+                          self.factlib, self.profilelib,
+                          self.installedprodlib]
 
             # WARNING
             # Certlib inherits DataLib as well as the above 'lib' objects,
             # but for some reason it's update method returns a tuple instead
             # of an int:
-            ret = []
+
+            # run the certlib update first as it will talk to candlepin,
+            # and we can find out if we got deleted or not.
             try:
-                ret = self.certlib.update()
+                updates += self.certlib.update()
             # see bz#852706, reraise GoneException so that
             # consumer cert deletion works
             except GoneException, e:
@@ -95,8 +97,6 @@ class CertManager:
                 log.warning("Exception caught while running certlib update")
                 log.exception(e)
 
-            # run the certlib update first as it will talk to candlepin,
-            # and we can find out if we got deleted or not.
             for lib in libset:
                 try:
                     updates += lib.update()
@@ -111,7 +111,19 @@ class CertManager:
 
             # NOTE: with no consumer cert, most of these actually
             # fail
-            if ret:
+            #
+            # NOTE: the only thing that reads the results return here
+            # is a print in rhsmcertd-worker
+            # ret was a tuple of (upateReport.updates(), exceptions)
+            # now is just a UpdateReport, with a .updates and .exceptions
+            #
+            # also, if there were only exceptions, this wouldm't do anything
+            # not that it does much now
+            #
+            # erk, is this whole thing supposed to count updates for all the
+            # *libs? because it doesnt
+            updates = ent_cert_
+            if ent_cert_update_report.updates():
                 updates += ret[0]
                 for e in ret[1]:
                     print ' '.join(str(e).split('-')[1:]).strip()
