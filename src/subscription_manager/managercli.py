@@ -2093,7 +2093,7 @@ class ListCommand(CliCommand):
     def print_consumed(self, service_level=None):
         # list all certificates that have not yet expired, even those
         # that are not yet active.
-        certs = [cert for cert in self.entitlement_dir.list() if not cert.is_expired()]
+        certs = self.entitlement_dir.list()
 
         # Filter certs by service level, if specified.
         # Allowing "" here.
