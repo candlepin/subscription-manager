@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.19
+Version: 1.8.20
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,10 @@ fi
 %endif
 
 %changelog
+* Tue Aug 13 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.20-1
+- 994997: Fix Unknown is_guest during firstboot. (dgoodwin@redhat.com)
+- Updated strings (jesusr@redhat.com)
+
 * Wed Aug 07 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.19-1
 - 974587: allow certs with no content (ckozak@redhat.com)
 
