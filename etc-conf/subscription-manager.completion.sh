@@ -136,7 +136,7 @@ _subscription_manager_refresh()
 
 _subscription_manager_register()
 {
-  local opts="--activationkey --auto-attach --autosubscribe --consumerid
+  local opts="--activationkey --auto-attach --consumerid
               --environment --force --name --org --password --release
               --servicelevel --type --username
               ${_subscription_manager_common_url_opts}
@@ -192,7 +192,7 @@ _subscription_manager()
   # top-level commands and options
   opts="attach auto-attach clean config environments facts identity import list orgs
         plugins redeem refresh register release remove repos service-level status
-        subscribe unregister unsubscribe version"
+        unregister version"
 
   case "${first}" in
       clean|\
@@ -219,11 +219,11 @@ _subscription_manager()
       "_subscription_manager_service_level" "${cur}" "${prev}"
       return 0
       ;;
-      attach|subscribe)
+      attach)
       "_subscription_manager_attach" "${cur}" "${prev}"
       return 0
       ;;
-      remove|unsubscribe)
+      remove)
       "_subscription_manager_remove" "${cur}" "${prev}"
       return 0
       ;;
