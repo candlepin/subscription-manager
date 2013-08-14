@@ -76,6 +76,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                             self.store['background'])
         column.add_attribute(image_renderer, 'cell-background',
                             self.store['background'])
+        column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
 
         self.top_view.append_column(column)
         cols = []
