@@ -37,8 +37,8 @@ from subscription_manager.branding import get_branding
 from subscription_manager.cache import InstalledProductsManager, ProfileManager
 from subscription_manager.certlib import CertLib, ConsumerIdentity, Disconnected
 from subscription_manager.certmgr import CertManager
-from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
-        NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
+from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
+        SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
 from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import ClassicCheck
@@ -2185,11 +2185,26 @@ class StatusCommand(CliCommand):
     def __init__(self):
         shortdesc = _("Show status information for this system's subscriptions and products")
         super(StatusCommand, self).__init__("status", shortdesc, True)
+        self.parser.add_option("--ondate", dest="on_date",
+                                help=(_("future date to check status on, defaults to today's date (example: %s)")
+                                      % strftime("%Y-%m-%d", localtime())))
 
     def _do_command(self):
         # list status and all reasons it is not valid
-
-        self.sorter = inj.require(inj.CERT_SORTER)
+        if self.options.on_date:
+            try:
+                # doing it this ugly way for pre python 2.5
+                on_date = datetime.datetime(
+                        *(strptime(self.options.on_date, '%Y-%m-%d')[0:6]))
+                if on_date.date() < datetime.datetime.now().date():
+                    print (_("Past dates are not allowed"))
+                    sys.exit(1)
+                self.sorter = ComplianceManager(on_date)
+            except Exception:
+                print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
+                sys.exit(1)
+        else:
+            self.sorter = inj.require(inj.CERT_SORTER)
 
         print("+-------------------------------------------+")
         print("   " + _("System Status Details"))
