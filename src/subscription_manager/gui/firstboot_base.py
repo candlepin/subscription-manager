@@ -98,7 +98,7 @@ class RhsmFirstbootModule(ParentClass):
         return self.vbox, self.icon, self.windowTitle
 
     def passInParent(self, parent):
-        self.parent = parent
+        self.compat_parent = parent
 
         self.register_button = parent.nextButton
         self.cancel_button = parent.backButton

@@ -353,8 +353,8 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # yet. See bz#863572
         # EL5:
         if self._is_compat:
-            self.parent.backButton.set_sensitive(sensitive)
-            self.parent.nextButton.set_sensitive(sensitive)
+            self.compat_parent.backButton.set_sensitive(sensitive)
+            self.compat_parent.nextButton.set_sensitive(sensitive)
         # EL6:
         else:
             if self.interface is not None:
@@ -406,7 +406,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
             # el5 is easy, we can just pretend the next button was clicked,
             # and tell our own logic not to run for the button press.
             self._skip_apply_for_page_jump = True
-            self.parent.nextClicked()
+            self.compat_parent.nextClicked()
         else:
             # for newer firstboots, we have to iterate over all firstboot
             # modules, to find our location in the list. then we can just jump
