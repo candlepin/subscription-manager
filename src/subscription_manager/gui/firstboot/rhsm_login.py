@@ -268,7 +268,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         try:
             valid_registration = self.register()
         except socket.error, e:
-            handle_gui_exception(e, e, self._parent.window)
+            handle_gui_exception(e, e, self.window)
             return self._RESULT_FAILURE
 
         if valid_registration:
