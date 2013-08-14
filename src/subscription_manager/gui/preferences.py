@@ -17,6 +17,7 @@ import gettext
 import logging
 import os
 
+import gobject
 import gtk
 import gtk.glade
 
@@ -77,6 +78,44 @@ class PreferencesDialog(object):
 
         # Handle the dialog's delete event when ESC key is pressed.
         self.dialog.connect("delete-event", self._dialog_deleted)
+
+        self.rgb = [255, 0, 0]
+        self.dec_color = 0
+        self.inc_color = 1
+        self.iteration = 0
+
+        self.rgb2 = [0, 255, 0]
+
+        gobject.timeout_add(6, self.party)
+
+    def party(self):
+
+        if self.autoheal_checkbox.get_active() == False:
+            return True
+
+        import time
+        import struct
+
+        self.rgb[self.dec_color] -= 1
+        self.rgb[self.inc_color] += 1
+        self.dialog.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('#%s' % struct.pack('BBB',*self.rgb).encode('hex')))
+
+        self.iteration += 1
+
+        if self.iteration == 255:
+            self.dec_color += 1
+            if self.dec_color < 3:
+                if self.dec_color == 2:
+                    self.inc_color = 0
+                else:
+                    self.inc_color = self.dec_color + 1
+            else:
+                self.dec_color = 0
+                self.inc_color = self.dec_color + 1
+
+            self.iteration = 0
+
+        return True
 
     def load_current_settings(self):
         self.sla_combobox.get_model().clear()

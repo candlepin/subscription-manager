@@ -29,6 +29,7 @@ import webbrowser
 
 import gtk
 import gtk.glade
+import gobject
 
 import rhsm.config as config
 import rhsm.connection as connection
@@ -219,6 +220,13 @@ class MainWindow(widgets.GladeWidget):
 
         self.backend.cs.add_callback(on_cert_change)
 
+        self.rgb = [255, 0, 0]
+        self.dec_color = 0
+        self.inc_color = 1
+        self.iteration = 0
+
+        gobject.timeout_add(2, self.party)
+
         self.main_window.show_all()
 
         # Check to see if already registered to old RHN/Spacewalk
@@ -230,6 +238,35 @@ class MainWindow(widgets.GladeWidget):
 
         if auto_launch_registration and not self.registered():
             self._register_item_clicked(None)
+
+    def party(self):
+
+        if not self.preferences_dialog.autoheal_checkbox.get_active():
+            return True
+
+        import time
+        import struct
+
+        self.rgb[self.dec_color] -= 1
+        self.rgb[self.inc_color] += 1
+        self.main_window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('#%s' % struct.pack('BBB',*self.rgb).encode('hex')))
+
+        self.iteration += 1
+
+        if self.iteration == 255:
+            self.dec_color += 1
+            if self.dec_color < 3:
+                if self.dec_color == 2:
+                    self.inc_color = 0
+                else:
+                    self.inc_color = self.dec_color + 1
+            else:
+                self.dec_color = 0
+                self.inc_color = self.dec_color + 1
+
+            self.iteration = 0
+
+        return True
 
     def registered(self):
         return self.identity.is_valid()
