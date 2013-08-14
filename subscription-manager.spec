@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.9.1
+Version: 1.9.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,24 @@ fi
 %endif
 
 %changelog
+* Wed Aug 14 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.2-1
+- 851321: Refresh/redraw tables after removing subscriptions (cschevia@redhat.com)
+- 974587: allow certs with no content (ckozak@redhat.com)
+- 977920, 983660: manpage updates (dlackey@redhat.com.com)
+- 987579: Re-arranged preferences dialog (cschevia@redhat.com)
+- 990195: remove subscribe options (ckozak@redhat.com)
+- 991214: refresh ent dir, catch exception gracefully (ckozak@redhat.com)
+- 991548: Display correct error message for registration failures.  (awood@redhat.com)
+- 991580: add rhsmd debug to stdout (ckozak@redhat.com)
+- 993202: fix default config, take advantage of rhsmconfig options (ckozak@redhat.com)
+- 994266: list consumed shows expired bugs (ckozak@redhat.com)
+- 994997: Fix Unknown is_guest during firstboot. (dgoodwin@redhat.com)
+- Changed 'It is' to possessive 'Its' (cschevia@redhat.com)
+- Remove unused WARNING_DAYS variable (ckozak@redhat.com)
+- Bump python-rhsm requires to 1.9.1 for config changes. (dgoodwin@redhat.com)
+- add ondate to status (ckozak@redhat.com)
+- Fedora 17 is at end of life. (awood@redhat.com)
+
 * Wed Jul 31 2013 Alex Wood <awood@redhat.com> 1.9.1-1
 - latest translations from zanata (alikins@redhat.com)
 - Preserve traceback when an exception is thrown from background thread.
