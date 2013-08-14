@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.9.2
+Version: 1.9.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,9 @@ fi
 %endif
 
 %changelog
+* Wed Aug 14 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.3-1
+- remove obsolete releasers. keep rhel6.5 (jesusr@redhat.com)
+- 950118: rebuilding for rhel 6.5
 * Wed Aug 14 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.2-1
 - 851321: Refresh/redraw tables after removing subscriptions (cschevia@redhat.com)
 - 974587: allow certs with no content (ckozak@redhat.com)
