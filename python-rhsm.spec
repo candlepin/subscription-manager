@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.9.1
+Version: 1.9.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,10 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Aug 14 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.2-1
+- remove rhel 5.9, 5.10, 6.3, 6.4 (jesusr@redhat.com)
+- Fedora 17 is at end of life. (awood@redhat.com)
+
 * Wed Jul 31 2013 Alex Wood <awood@redhat.com> 1.9.1-1
 - fix config failure (ckozak@redhat.com)
 - 988476, 988085: fix default hostname, remove excess config list output
