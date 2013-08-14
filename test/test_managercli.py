@@ -503,7 +503,7 @@ class TestAttachCommand(TestCliProxyCommand):
 
 # Test Attach and Subscribe are the same
 class TestSubscribeCommand(TestCliProxyCommand):
-    command_class = managercli.SubscribeCommand
+    command_class = managercli.AttachCommand
 
     def _test_quantity_exception(self, arg):
         try:
@@ -540,7 +540,7 @@ class TestRemoveCommand(TestCliProxyCommand):
 
 
 class TestUnSubscribeCommand(TestCliProxyCommand):
-    command_class = managercli.UnSubscribeCommand
+    command_class = managercli.RemoveCommand
 
 
 class TestFactsCommand(TestCliProxyCommand):

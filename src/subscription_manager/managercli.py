@@ -930,8 +930,6 @@ class RegisterCommand(UserPassCommand):
                                help=_("register with a specific environment in the destination org"))
         self.parser.add_option("--release", dest="release",
                                help=_("set a release version"))
-        self.parser.add_option("--autosubscribe", action='store_true',
-                               help=_("Deprecated, see --auto-attach"))
         self.parser.add_option("--auto-attach", action='store_true', dest="autoattach",
                                help=_("automatically attach compatible subscriptions to this system"))
         self.parser.add_option("--force", action='store_true',
@@ -945,7 +943,7 @@ class RegisterCommand(UserPassCommand):
                            prod_dir=self.product_dir)
 
     def _validate_options(self):
-        self.autoattach = self.options.autosubscribe or self.options.autoattach
+        self.autoattach = self.options.autoattach
         if self.consumerIdentity.exists() and not self.options.force:
             print(_("This system is already registered. Use --force to override"))
             sys.exit(1)
@@ -1473,20 +1471,6 @@ class AttachCommand(CliCommand):
         return return_code
 
 
-class SubscribeCommand(AttachCommand):
-    def __init__(self):
-        super(SubscribeCommand, self).__init__()
-
-    def _short_description(self):
-        return _("Deprecated, see attach")
-
-    def _command_name(self):
-        return "subscribe"
-
-    def _primary(self):
-        return False
-
-
 class RemoveCommand(CliCommand):
 
     def __init__(self):
@@ -1596,20 +1580,6 @@ class RemoveCommand(CliCommand):
         # it's just a notification to perform a check
         self._request_validity_check()
         return return_code
-
-
-class UnSubscribeCommand(RemoveCommand):
-    def __init__(self):
-        super(UnSubscribeCommand, self).__init__()
-
-    def _short_description(self):
-        return _("Deprecated, see remove")
-
-    def _command_name(self):
-        return "unsubscribe"
-
-    def _primary(self):
-        return False
 
 
 class FactsCommand(CliCommand):
@@ -2215,7 +2185,7 @@ class ManagerCLI(CLI):
 
     def __init__(self):
         commands = [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand,
-                    SubscribeCommand, UnSubscribeCommand, FactsCommand,
+                    FactsCommand,
                     IdentityCommand, OwnersCommand, RefreshCommand, CleanCommand,
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
