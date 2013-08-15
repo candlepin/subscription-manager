@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.20
+Version: 1.8.21
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,12 @@ fi
 %endif
 
 %changelog
+* Thu Aug 15 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.21-1
+- Prevent name collision over the parent variable in RHEL 5 Firstboot.
+  (awood@redhat.com)
+- 997189: error is now a sys.exc_info() tuple. (awood@redhat.com)
+- self._parent is not defined here. (awood@redhat.com)
+
 * Tue Aug 13 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.20-1
 - 994997: Fix Unknown is_guest during firstboot. (dgoodwin@redhat.com)
 - Updated strings (jesusr@redhat.com)
