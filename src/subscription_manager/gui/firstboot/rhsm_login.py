@@ -49,18 +49,18 @@ class SelectSLAScreen(registergui.SelectSLAScreen):
     """
     def _on_get_service_levels_cb(self, result, error=None):
         if error is not None:
-            if isinstance(error, ServiceLevelNotSupportedException):
+            if isinstance(error[1], ServiceLevelNotSupportedException):
                 message = _("Unable to auto-attach, server does not support "
                             "service levels. Please run 'Subscription Manager' "
                             "to manually attach a subscription.")
                 self._parent.manual_message = message
                 self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
-            elif isinstance(error, NoProductsException):
+            elif isinstance(error[1], NoProductsException):
                 message = _("No installed products on system. No need to "
                             "update subscriptions at this time.")
                 self._parent.manual_message = message
                 self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
-            elif isinstance(error, AllProductsCoveredException):
+            elif isinstance(error[1], AllProductsCoveredException):
                 message = _("All installed products are fully subscribed.")
                 self._parent.manual_message = message
                 self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
@@ -101,10 +101,13 @@ class SelectSLAScreen(registergui.SelectSLAScreen):
 class PerformRegisterScreen(registergui.PerformRegisterScreen):
 
     def _on_registration_finished_cb(self, new_account, error=None):
-        try:
-            if error is not None:
-                raise error
+        if error is not None:
+            handle_gui_exception(error, registergui.REGISTER_ERROR,
+                    self._parent.window)
+            self._parent.finish_registration(failed=True)
+            return
 
+        try:
             managerlib.persist_consumer_cert(new_account)
             self._parent.backend.cs.force_cert_check()  # Ensure there isn't much wait time
 
@@ -268,7 +271,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         try:
             valid_registration = self.register()
         except socket.error, e:
-            handle_gui_exception(e, e, self._parent.window)
+            handle_gui_exception(e, e, self.window)
             return self._RESULT_FAILURE
 
         if valid_registration:
@@ -350,8 +353,8 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # yet. See bz#863572
         # EL5:
         if self._is_compat:
-            self.parent.backButton.set_sensitive(sensitive)
-            self.parent.nextButton.set_sensitive(sensitive)
+            self.compat_parent.backButton.set_sensitive(sensitive)
+            self.compat_parent.nextButton.set_sensitive(sensitive)
         # EL6:
         else:
             if self.interface is not None:
@@ -403,7 +406,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
             # el5 is easy, we can just pretend the next button was clicked,
             # and tell our own logic not to run for the button press.
             self._skip_apply_for_page_jump = True
-            self.parent.nextClicked()
+            self.compat_parent.nextClicked()
         else:
             # for newer firstboots, we have to iterate over all firstboot
             # modules, to find our location in the list. then we can just jump
