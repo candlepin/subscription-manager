@@ -17,7 +17,8 @@
 #
 
 from iniparse import SafeConfigParser
-from iniparse.compat import NoOptionError
+from iniparse.compat import NoOptionError, InterpolationMissingOptionError
+import re
 
 DEFAULT_CONFIG_DIR = "/etc/rhsm"
 DEFAULT_CONFIG_PATH = "%s/rhsm.conf" % DEFAULT_CONFIG_DIR
@@ -99,10 +100,27 @@ class RhsmConfigParser(SafeConfigParser):
         """
         try:
             return SafeConfigParser.get(self, section, prop)
-        except Exception, er:
+        except InterpolationMissingOptionError:
+            #if there is an interpolation error, resolve it
+            raw_val = super(RhsmConfigParser, self).get(section, prop, True)
+            interpolations = re.findall("%\((.*?)\)s", raw_val)
+            changed = False
+            for interp in interpolations:
+                # Defaults aren't interpolated by default, so bake them in as necessary
+                # has_option throws an exception if the section doesn't exist, but at this point we know it does
+                if self.has_option(section, interp):
+                    super(RhsmConfigParser, self).set(section, interp, self.get(section, interp))
+                    changed = True
+            if changed:
+                # Now that we have the required values, we can interpolate
+                return self.get(section, prop)
+            # If nothing has been changed (we couldn't fix it) re-raise the exception
+            raise
+        except NoOptionError, er:
             try:
                 return DEFAULTS[section][prop.lower()]
             except KeyError:
+                # re-raise the NoOptionError, not the key error
                 raise er
 
     def set(self, section, name, value):
