@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.9.3
+Version: 1.9.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,12 @@ fi
 %endif
 
 %changelog
+* Thu Aug 15 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.4-1
+- Prevent name collision over the parent variable in RHEL 5 Firstboot.
+  (awood@redhat.com)
+- 997189: error is now a sys.exc_info() tuple. (awood@redhat.com)
+- self._parent is not defined here. (awood@redhat.com)
+
 * Wed Aug 14 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.3-1
 - remove obsolete releasers. keep rhel6.5 (jesusr@redhat.com)
 - 950118: rebuilding for rhel 6.5
