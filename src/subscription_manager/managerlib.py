@@ -769,6 +769,7 @@ def unregister(uep, consumer_uuid):
 
     # Clean up certificates, these are no longer valid:
     shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
+    require(IDENTITY).reload()
     shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
     cache.ProfileManager.delete_cache()
     Facts.delete_cache()
