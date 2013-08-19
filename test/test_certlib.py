@@ -59,7 +59,7 @@ class UpdateActionTests(SubManFixture):
         mock_uep = Mock()
         mock_uep.getCertificates.return_value = cp_bundles  # Passed into build_cert(bundle)
 
-        report = certlib.UpdateReport()
+        report = certlib.EntCertReport()
         update_action = TestingUpdateAction(mock_uep,
                                             StubEntitlementDirectory([]),
                                             report=report)
@@ -78,7 +78,7 @@ class UpdateActionTests(SubManFixture):
         mock_uep = Mock()
         mock_uep.getCertificates = Mock(return_value=[])
         mock_uep.getCertificateSerials = Mock(return_value=[])
-        report = certlib.UpdateReport()
+        report = certlib.EntCertReport()
         update_action = TestingUpdateAction(mock_uep,
                                             StubEntitlementDirectory([ent]),
                                             report=report)
