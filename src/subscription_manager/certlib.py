@@ -116,6 +116,8 @@ class HealingLib(DataLib):
     never have invalid certificats if subscriptions are available.
     """
 
+    # We always run EntCertLib, then sometimes run this, which basically
+    # dupes EntCertLib behaviour
     def __init__(self, lock=ActionLock(), uep=None, product_dir=None):
         DataLib.__init__(self, lock, uep)
 
@@ -135,7 +137,7 @@ class HealingUpdateAction(Action):
         Action.__init__(self, uep, entdir=entdir)
         self.report = EntCertUpdateReport()
 
-    def perform(self, uep, product_dir):
+    def perform(self):
         uuid = ConsumerIdentity.read().getConsumerId()
         consumer = self.uep.getConsumer(uuid)
 
@@ -162,7 +164,9 @@ class HealingUpdateAction(Action):
                 ents = self.uep.bind(uuid, today)
                 self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,
                                         entitlement_data=ents)
-                cert_updater.update()
+
+                # just use the EntCertLib.EntCertUpdateAction report
+                self.report = cert_updater.update()
             else:
                 log.info("Entitlements are valid for today: %s" %
                         today)
@@ -179,7 +183,7 @@ class HealingUpdateAction(Action):
                     ents = self.uep.bind(uuid, tomorrow)
                     self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,
                                             entitlement_data=ents)
-                    cert_updater.update()
+                    self.report = cert_updater.update()
                 else:
                     log.info("Entitlements are valid for tomorrow: %s" %
                             tomorrow)
@@ -278,7 +282,7 @@ class EntCertUpdateAction(Action):
         # if we want the full report, we can get it, but
         # this makes CertLib.update() have same sig as reset
         # of *Lib.update
-        return self.report.updates()
+        return self.report
 
     def install(self, missing_serials):
 
