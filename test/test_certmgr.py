@@ -68,7 +68,7 @@ class TestCertmgr(SubManFixture):
         self.patcher2 = mock.patch.object(certlib.EntCertUpdateAction, '_get_consumer_id')
         self.certlib_updateaction_getconsumerid = self.patcher2.start()
 
-        self.patcher3 = mock.patch.object(repolib.UpdateAction, 'perform')
+        self.patcher3 = mock.patch.object(repolib.RepoUpdateAction, 'perform')
         self.repolib_updateaction_perform = self.patcher3.start()
 
         self.patcher4 = mock.patch('subscription_manager.factlib.ConsumerIdentity')

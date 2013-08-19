@@ -47,7 +47,11 @@ def main(options, log):
     try:
         uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
                                        key_file=ConsumerIdentity.keypath())
-        mgr = certmgr.CertManager(uep=uep)
+        if options.autoheal:
+            mgr = certmgr.HealingCertManager(uep=uep)
+        else:
+            mgr = certmgr.CertManager(uep=uep)
+
         update_reports = mgr.update(options.autoheal)
 
         for update_report in update_reports:
