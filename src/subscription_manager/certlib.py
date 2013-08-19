@@ -81,7 +81,7 @@ class CertLib(DataLib):
 
     def __init__(self, lock=ActionLock(), uep=None):
         DataLib.__init__(self, lock, uep)
-        self.report = UpdateReport()
+        self.report = EntCertReport()
 
     def delete(self, serial_numbers):
         lock = self.lock
@@ -491,7 +491,19 @@ class Disconnected(Exception):
     pass
 
 
-class UpdateReport:
+class ActionReport(object):
+    def updates(self):
+        """return an int representing how many "updates" were done"""
+        raise NotImplementedError
+
+    def log_entry(self):
+        """log report entries"""
+
+        # assuming a useful repr
+        log.info(self)
+
+
+class EntCertReport(ActionReport):
 
     def __init__(self):
         self.valid = []
