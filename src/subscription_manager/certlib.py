@@ -282,7 +282,7 @@ class EntCertUpdateAction(Action):
         # if we want the full report, we can get it, but
         # this makes CertLib.update() have same sig as reset
         # of *Lib.update
-        return self.report
+        return self.report.updates()
 
     def install(self, missing_serials):
 
@@ -518,6 +518,15 @@ class ActionReport(object):
         # assuming a useful repr
         log.info(self)
 
+    def updates(self):
+        """return an int indicating number of updates"""
+        raise NotImplementedError
+
+    def exceptions(self):
+        """return a list of exceptions"""
+        return []
+#        raise NotImplementedError
+
 
 class EntCertUpdateReport(ActionReport):
     """Report entitlement cert update action changes"""
@@ -531,6 +540,21 @@ class EntCertUpdateReport(ActionReport):
     def updates(self):
         """total number of ent certs installed and deleted"""
         return (len(self.added) + len(self.rogue))
+
+    # need an ExceptionsReport?
+    def exceptions(self):
+        return self.exceptions
+
+    def format_exceptions(self):
+        buf = ''
+        for e in self.exceptions:
+            buf += ' '.join(str(e).split('-')[1:]).strip()
+            buf += '\n'
+        return buf
+
+    def print_exceptions(self):
+        if self.exceptions:
+            print self.format_exceptions()
 
     def write(self, s, title, certificates):
         indent = '  '
