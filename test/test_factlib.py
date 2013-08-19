@@ -11,16 +11,17 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
-import unittest
 
 import stubs
+import fixture
 
 from subscription_manager import factlib
 
 
-class TestFactlib(unittest.TestCase):
+class TestFactlib(fixture.SubManFixture):
 
     def setUp(self):
+        super(TestFactlib, self).setUp()
         self.stub_uep = stubs.StubUEP()
         self.expected_facts = {'fact1': 'F1', 'fact2': 'F2'}
         self.fl = factlib.FactLib(lock=stubs.MockActionLock(),
@@ -28,7 +29,8 @@ class TestFactlib(unittest.TestCase):
 
     def test_factlib_updates_when_identity_does_not_exist(self):
         factlib.ConsumerIdentity = stubs.StubConsumerIdentity
-        count = self.fl.update()
+        update_report = self.fl.update()
+        count = update_report.updates()
         self.assertEquals(len(self.expected_facts), count)
 
     def test_factlib_updates_when_identity_exists(self):
@@ -43,7 +45,8 @@ class TestFactlib(unittest.TestCase):
 
         self.stub_uep.updateConsumerFacts = track_facts_update
 
-        count = self.fl.update()
+        update_report = self.fl.update()
+        count = update_report.updates()
         self.assertEquals(len(self.expected_facts), count)
         self.assertEquals(self.expected_facts, self.facts_passed_to_server)
         self.assertEquals(stubs.StubConsumerIdentity.CONSUMER_ID, self.consumer_uuid_passed_to_server)
