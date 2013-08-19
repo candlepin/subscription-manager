@@ -22,7 +22,7 @@ import logging
 from rhsm.connection import GoneException, ExpiredIdentityCertException
 
 from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
-from subscription_manager.certlib import CertLib, ActionLock, HealingLib, IdentityCertLib
+from subscription_manager.certlib import EntCertLib, ActionLock, HealingLib, IdentityCertLib
 from subscription_manager.factlib import FactLib
 from subscription_manager.repolib import RepoLib
 
@@ -33,20 +33,14 @@ _ = gettext.gettext
 
 class CertManager:
     """
-    An object used to update the certficates, yum repos, and facts for
-    the system.
-
-    @ivar certlib: The RHSM I{entitlement} certificate management lib.
-    @type certlib: L{CertLib}
-    @ivar repolib: The RHSM repository management lib.
-    @type repolib: L{RepoLib}
+    An object used to update the certficates, yum repos, and facts for the system.
     """
 
     def __init__(self, lock=ActionLock(), uep=None, product_dir=None,
             facts=None):
         self.lock = lock
         self.uep = uep
-        self.certlib = CertLib(self.lock, uep=self.uep)
+        self.certlib = EntCertLib(self.lock, uep=self.uep)
         self.repolib = RepoLib(self.lock, uep=self.uep)
         self.factlib = FactLib(self.lock, uep=self.uep, facts=facts)
         self.profilelib = PackageProfileLib(self.lock, uep=self.uep)
@@ -59,10 +53,11 @@ class CertManager:
         """
         Update I{entitlement} certificates and corresponding
         yum repositiories.
-        @return: The number of updates required.
-        @rtype: int
+        @return: A list of update reports
+        @rtype: list
         """
-        updates = 0
+        # dict of certlib->report?
+        update_reports = []
         lock = self.lock
         try:
             lock.acquire()
@@ -85,7 +80,7 @@ class CertManager:
             # run the certlib update first as it will talk to candlepin,
             # and we can find out if we got deleted or not.
             try:
-                updates += self.certlib.update()
+                update_reports.append(self.certlib.update())
             # see bz#852706, reraise GoneException so that
             # consumer cert deletion works
             except GoneException, e:
@@ -99,7 +94,7 @@ class CertManager:
 
             for lib in libset:
                 try:
-                    updates += lib.update()
+                    update_reports.append(lib.update())
                 except GoneException, e:
                     raise
                 # raise this so it can be exposed clearly
@@ -124,6 +119,8 @@ class CertManager:
             # *libs? because it doesnt
 
             # exceptions report Printer?
+            # FIXME: this seems like an incomplete way to deal
+            # with ent cert updates
             exceptions = self.certlib.report.exceptions
             for e in exceptions:
                 print ' '.join(str(e).split('-')[1:]).strip()
@@ -133,5 +130,5 @@ class CertManager:
 
         # updates at this point is a int representing how many
         # things were updated, which is pretty much completely useless
-        print "updates: ", updates
-        return updates
+        print "update reports: ", update_reports
+        return update_reports

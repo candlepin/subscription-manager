@@ -65,7 +65,7 @@ class TestCertmgr(SubManFixture):
     def setUp(self):
         SubManFixture.setUp(self)
         # we have to have a reference to the patchers
-        self.patcher2 = mock.patch.object(certlib.UpdateAction, '_get_consumer_id')
+        self.patcher2 = mock.patch.object(certlib.EntCertUpdateAction, '_get_consumer_id')
         self.certlib_updateaction_getconsumerid = self.patcher2.start()
 
         self.patcher3 = mock.patch.object(repolib.UpdateAction, 'perform')
@@ -91,8 +91,8 @@ class TestCertmgr(SubManFixture):
         self.patcher_certlib_writer = mock.patch("subscription_manager.certlib.Writer")
         self.certlib_writer = self.patcher_certlib_writer.start()
 
-        self.patcher_certlib_action_syslogreport = mock.patch.object(certlib.UpdateAction, 'syslog_results')
-        self.update_action_syslog_mock = self.patcher_certlib_action_syslogreport.start()
+        self.patcher_entcertlib_action_syslogreport = mock.patch.object(certlib.EntCertUpdateAction, 'syslog_results')
+        self.update_action_syslog_mock = self.patcher_entcertlib_action_syslogreport.start()
 
         # some stub certs
         stub_product = stubs.StubProduct('stub_product')
@@ -144,7 +144,7 @@ class TestCertmgr(SubManFixture):
         self.patcher_certlib_writer.stop()
 
         self.hwprobe_getall_patcher.stop()
-        self.patcher_certlib_action_syslogreport.stop()
+        self.patcher_entcertlib_action_syslogreport.stop()
 
     def test_init(self):
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
@@ -200,7 +200,7 @@ class TestCertmgr(SubManFixture):
         self.fail("Did not see TypeError in the logged exceptions")
 
     # see bz #852706
-    @mock.patch.object(certlib.CertLib, 'update')
+    @mock.patch.object(certlib.EntCertLib, 'update')
     def test_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
@@ -217,7 +217,7 @@ class TestCertmgr(SubManFixture):
         report = self.update_action_syslog_mock.call_args[0][0]
         self.assertTrue(self.stub_ent1.serial in report.valid)
 
-    @mock.patch.object(certlib.CertLib, 'update')
+    @mock.patch.object(certlib.EntCertLib, 'update')
     @mock.patch('subscription_manager.certmgr.log')
     def test_certlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()

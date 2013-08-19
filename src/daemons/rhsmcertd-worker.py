@@ -48,10 +48,13 @@ def main(options, log):
         uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
                                        key_file=ConsumerIdentity.keypath())
         mgr = certmgr.CertManager(uep=uep)
-        updates = mgr.update(options.autoheal)
+        update_reports = mgr.update(options.autoheal)
 
-        print _('%d updates required') % updates
-        print _('done')
+        for update_report in update_reports:
+            print update_report
+        # move to report bits
+        #print _('%d updates required') % updates
+        #print _('done')
     except connection.ExpiredIdentityCertException, e:
         log.critical(_("Your identity certificate has expired"))
         raise e

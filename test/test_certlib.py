@@ -25,12 +25,11 @@ from subscription_manager.certdirectory import Writer
 from subscription_manager import certlib
 
 
-class TestingUpdateAction(certlib.UpdateAction):
+class TestingUpdateAction(certlib.EntCertUpdateAction):
 
-    def __init__(self, mock_uep, mock_entdir, report):
-        certlib.UpdateAction.__init__(self, uep=mock_uep,
-                                      entdir=mock_entdir,
-                                      report=report)
+    def __init__(self, mock_uep, mock_entdir):
+        certlib.EntCertUpdateAction.__init__(self, uep=mock_uep,
+                                      entdir=mock_entdir)
 
     def _get_consumer_id(self):
         return StubConsumerIdentity("ConsumerKey", "ConsumerCert")
@@ -57,20 +56,24 @@ class UpdateActionTests(SubManFixture):
         build_cert_mock.side_effect = mock_build_cert
 
         mock_uep = Mock()
+        mock_uep.getCertificateSerials.return_value = [x.serial for x in cp_certificates]
         mock_uep.getCertificates.return_value = cp_bundles  # Passed into build_cert(bundle)
 
-        report = certlib.EntCertReport()
         update_action = TestingUpdateAction(mock_uep,
-                                            StubEntitlementDirectory([]),
-                                            report=report)
-        report.expected.append(valid_ent.serial)
-        report.expected.append(expired_ent.serial)
+                                            StubEntitlementDirectory([]))
+        # we skip getting the expected serials, where this is normally
+        # populated
+        update_action.report.expected.append(valid_ent.serial)
+        update_action.report.expected.append(expired_ent.serial)
 
-        update_action.install([valid_ent.serial, expired_ent.serial], report)
-        self.assertEqual(0, len(update_action.exceptions), "No exceptions should have been thrown")
-        self.assertTrue(valid_ent in report.added)
-        self.assertTrue(valid_ent.serial in report.expected)
-        self.assertTrue(expired_ent.serial in report.expected)
+        update_action.install([valid_ent.serial, expired_ent.serial])
+        print "exceptions", update_action.report.exceptions
+        print update_action.report
+        print type(update_action.report)
+        self.assertEqual(0, len(update_action.report.exceptions), "No exceptions should have been thrown")
+        self.assertTrue(valid_ent in update_action.report.added)
+        self.assertTrue(valid_ent.serial in update_action.report.expected)
+        self.assertTrue(expired_ent.serial in update_action.report.expected)
 
     def test_delete(self):
         ent = StubEntitlementCertificate(StubProduct("Prod"))
@@ -78,10 +81,8 @@ class UpdateActionTests(SubManFixture):
         mock_uep = Mock()
         mock_uep.getCertificates = Mock(return_value=[])
         mock_uep.getCertificateSerials = Mock(return_value=[])
-        report = certlib.EntCertReport()
         update_action = TestingUpdateAction(mock_uep,
-                                            StubEntitlementDirectory([ent]),
-                                            report=report)
+                                            StubEntitlementDirectory([ent]))
         try:
             updates = update_action.perform()
         except OSError:
