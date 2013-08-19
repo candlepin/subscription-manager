@@ -506,7 +506,7 @@ class StubConsumer:
         return "12341234234"
 
 
-class StubCertLib:
+class StubEntCertLib:
     def __init__(self, uep=StubUEP()):
         self.uep = uep
 

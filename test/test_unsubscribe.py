@@ -15,7 +15,7 @@
 import mock
 
 from stubs import StubUEP, StubEntitlementDirectory, StubProductDirectory
-from stubs import StubConsumerIdentity, StubCertLib, StubEntitlementCertificate
+from stubs import StubConsumerIdentity, StubEntCertLib, StubEntitlementCertificate
 from stubs import StubProduct
 from fixture import SubManFixture
 import rhsm.connection as connection
@@ -47,7 +47,7 @@ class CliUnSubscribeTests(SubManFixture):
         managercli.ConsumerIdentity = StubConsumerIdentity
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: True)
         StubConsumerIdentity.exists = classmethod(lambda cls: True)
-        managercli.CertLib = StubCertLib
+        managercli.EntCertLib = StubEntCertLib
 
         cmd.main(['unsubscribe', '--all'])
         self.assertEquals(cmd.cp.called_unbind_uuid,

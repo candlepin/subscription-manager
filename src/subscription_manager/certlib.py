@@ -51,6 +51,14 @@ class ActionLock(Lock):
         Lock.__init__(self, self.PATH)
 
 
+# This guys seems unneccasary
+class Action:
+
+    def __init__(self, uep=None, entdir=None):
+        self.entdir = entdir or inj.require(inj.ENT_DIR)
+        self.uep = uep
+
+
 # TODO: *Lib objects should probably all support a Report object
 #        ala CertLib, even if most of them would be simple or
 #        or noops. Would make logging easier and more useful
@@ -93,6 +101,7 @@ class EntCertLib(DataLib):
 
     def _do_update(self):
         action = EntCertUpdateAction(uep=self.uep)
+
         return action.perform()
 
     def _do_delete(self, serial_numbers):
@@ -114,61 +123,74 @@ class HealingLib(DataLib):
         self.plugin_manager = require(PLUGIN_MANAGER)
 
     def _do_update(self):
+        action = HealingUpdateAction(uep=self.uep,
+                                     product_dir=self._product_dir)
+        return action.perform()
+
+
+class HealingUpdateAction(Action):
+    # no real point to passing in entdir and product_dir, we
+    # can inject?
+    def __init__(self, uep=None, entdir=None, product_dir=None):
+        Action.__init__(self, uep, entdir=entdir)
+        self.report = EntCertUpdateReport()
+
+    def perform(self, uep, product_dir):
         uuid = ConsumerIdentity.read().getConsumerId()
         consumer = self.uep.getConsumer(uuid)
 
-        if 'autoheal' in consumer and consumer['autoheal']:
-            try:
-                log.info("Checking if system requires healing.")
+        if 'autoheal' not in consumer or not consumer['autoheal']:
+            log.info("Auto-heal disabled on server, skipping.")
+            return 0
 
-                today = datetime.now(GMT())
-                tomorrow = today + timedelta(days=1)
+        try:
+            log.info("Checking if system requires healing.")
 
-                # Check if we're invalid today and heal if so. If we are
-                # valid, see if 24h from now is greater than our "valid until"
-                # date, and heal for tomorrow if so.
+            today = datetime.now(GMT())
+            tomorrow = today + timedelta(days=1)
 
-                cs = require(CERT_SORTER)
-                cert_updater = EntCertLib(lock=self.lock, uep=self.uep)
-                if not cs.is_valid():
-                    log.warn("Found invalid entitlements for today: %s" %
-                            today)
+            # Check if we're invalid today and heal if so. If we are
+            # valid, see if 24h from now is greater than our "valid until"
+            # date, and heal for tomorrow if so.
+
+            cs = require(CERT_SORTER)
+            cert_updater = EntCertLib(lock=self.lock, uep=self.uep)
+            if not cs.is_valid():
+                log.warn("Found invalid entitlements for today: %s" %
+                        today)
+                self.plugin_manager.run("pre_auto_attach", consumer_uuid=uuid)
+                ents = self.uep.bind(uuid, today)
+                self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,
+                                        entitlement_data=ents)
+                cert_updater.update()
+            else:
+                log.info("Entitlements are valid for today: %s" %
+                        today)
+
+                if cs.compliant_until is None:
+                    # Edge case here, not even sure this can happen as we
+                    # should have a compliant until date if we're valid
+                    # today, but just in case:
+                    log.warn("Got valid status from server but no valid until date.")
+                elif tomorrow > cs.compliant_until:
+                    log.warn("Entitlements will be invalid by tomorrow: %s" %
+                            tomorrow)
                     self.plugin_manager.run("pre_auto_attach", consumer_uuid=uuid)
-                    ents = self.uep.bind(uuid, today)
+                    ents = self.uep.bind(uuid, tomorrow)
                     self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,
                                             entitlement_data=ents)
                     cert_updater.update()
                 else:
-                    log.info("Entitlements are valid for today: %s" %
-                            today)
+                    log.info("Entitlements are valid for tomorrow: %s" %
+                            tomorrow)
 
-                    if cs.compliant_until is None:
-                        # Edge case here, not even sure this can happen as we
-                        # should have a compliant until date if we're valid
-                        # today, but just in case:
-                        log.warn("Got valid status from server but no valid until date.")
-                    elif tomorrow > cs.compliant_until:
-                        log.warn("Entitlements will be invalid by tomorrow: %s" %
-                                tomorrow)
-                        self.plugin_manager.run("pre_auto_attach", consumer_uuid=uuid)
-                        ents = self.uep.bind(uuid, tomorrow)
-                        self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,
-                                                entitlement_data=ents)
-                        cert_updater.update()
-                    else:
-                        log.info("Entitlements are valid for tomorrow: %s" %
-                                tomorrow)
-
-            except Exception, e:
-                log.error("Error attempting to auto-heal:")
-                log.exception(e)
-                return 0
-            else:
-                log.info("Auto-heal check complete.")
-                return 1
-        else:
-            log.info("Auto-heal disabled on server, skipping.")
+        except Exception, e:
+            log.error("Error attempting to auto-heal:")
+            log.exception(e)
             return 0
+        else:
+            log.info("Auto-heal check complete.")
+            return 1
 
 
 class IdentityCertLib(DataLib):
@@ -201,13 +223,6 @@ class IdentityCertLib(DataLib):
         return 1
 
 
-class Action:
-
-    def __init__(self, uep=None, entdir=None):
-        self.entdir = entdir or inj.require(inj.ENT_DIR)
-        self.uep = uep
-
-
 # TODO: rename to EntitlementCertDeleteAction
 class EntCertDeleteAction(Action):
 
@@ -231,9 +246,9 @@ class EntCertUpdateAction(Action):
     # NOTE: this is slightly at odds with the manual cert import
     #       path, manual import certs wont get a 'report', etc
     def perform(self):
-        local = self._get_local_serials(self.report)
+        local = self._get_local_serials()
         try:
-            expected = self._get_expected_serials(self.report)
+            expected = self._get_expected_serials()
         except socket.error, ex:
             log.exception(ex)
             log.error('Cannot modify subscriptions while disconnected')
@@ -242,11 +257,11 @@ class EntCertUpdateAction(Action):
         missing_serials = self._find_missing_serials(local, expected)
         rogue_serials = self._find_rogue_serials(local, expected)
 
-        self.delete(rogue_serials, self.report)
-        self.install(missing_serials, self.report)
+        self.delete(rogue_serials)
+        self.install(missing_serials)
 
         log.info('certs updated:\n%s', self.report)
-        self.syslog_results(self.report)
+        self.syslog_results()
 
         if missing_serials or rogue_serials:
             # refresh yum repo's now
@@ -265,14 +280,12 @@ class EntCertUpdateAction(Action):
         # of *Lib.update
         return self.report.updates()
 
-    def install(self, missing_serials, report):
+    def install(self, missing_serials):
 
         cert_bundles = self.get_certificates_by_serial_list(missing_serials)
 
-        ent_cert_bundles_installer = EntitlementCertBundlesInstaller(report)
+        ent_cert_bundles_installer = EntitlementCertBundlesInstaller(self.report)
         ent_cert_bundles_installer.install(cert_bundles)
-        self.report = ent_cert_bundles_installer.report
-        self.exceptions = ent_cert_bundles_installer.exceptions
 
     def _find_missing_serials(self, local, expected):
         """ Find serials from the server we do not have locally. """
@@ -284,21 +297,21 @@ class EntCertUpdateAction(Action):
         rogue = [local[sn] for sn in local if not sn in expected]
         return rogue
 
-    def syslog_results(self, report):
-        for cert in report.added:
+    def syslog_results(self):
+        for cert in self.report.added:
             system_log("Added subscription for '%s' contract '%s'" %
                        (cert.order.name, cert.order.contract))
             for product in cert.products:
                 system_log("Added subscription for product '%s'" %
                            (product.name))
-        for cert in report.rogue:
+        for cert in self.report.rogue:
             system_log("Removed subscription for '%s' contract '%s'" %
                        (cert.order.name, cert.order.contract))
             for product in cert.products:
                 system_log("Removed subscription for product '%s'" %
                            (product.name))
 
-    def _get_local_serials(self, report):
+    def _get_local_serials(self):
         local = {}
         #certificates in grace period were being renamed everytime.
         #this makes sure we don't try to re-write certificates in
@@ -307,7 +320,7 @@ class EntCertUpdateAction(Action):
         self.entdir.refresh()
         for valid in self.entdir.list():
             sn = valid.serial
-            report.valid.append(sn)
+            self.report.valid.append(sn)
             local[sn] = valid
         return local
 
@@ -333,33 +346,36 @@ class EntCertUpdateAction(Action):
     def get_certificates_by_serial_list(self, sn_list):
         """Fetch a list of entitlement certificates specified by a list of serial numbers"""
         result = []
+        print "sn_list"
         if sn_list:
             sn_list = [str(sn) for sn in sn_list]
             # NOTE: use injected IDENTITY, need to validate this
             # handles disconnected errors properly
+            print "sn_list", sn_list
             reply = self.uep.getCertificates(self.identity.getConsumerId(),
                                               serials=sn_list)
             for cert in reply:
                 result.append(cert)
         return result
 
-    def _get_expected_serials(self, report):
+    def _get_expected_serials(self):
         exp = self.get_certificate_serials_list()
-        report.expected = exp
+        print "exp", exp
+        self.report.expected = exp
         return exp
 
-    def delete(self, rogue, report):
+    def delete(self, rogue):
         for cert in rogue:
             try:
                 cert.delete()
-                report.rogue.append(cert)
+                self.report.rogue.append(cert)
             except OSError, er:
                 log.exception(er)
                 log.warn("Failed to delete cert")
 
         # If we just deleted certs, we need to refresh the now stale
         # entitlement directory before we go to delete expired certs.
-        rogue_count = len(report.rogue)
+        rogue_count = len(self.report.rogue)
         if rogue_count > 0:
             print gettext.ngettext("%s local certificate has been deleted.",
                                    "%s local certificates have been deleted.",
@@ -376,9 +392,9 @@ class EntitlementCertBundlesInstaller(object):
 
     def install(self, cert_bundles):
         """Fetch entitliement certs, install them, and update the report"""
-        bundle_installer = EntitlementCertBundleInstaller()
+        bundle_installer = EntitlementCertBundleInstaller(self.report)
         for cert_bundle in cert_bundles:
-            bundle_installer.install(cert_bundle, self.report)
+            bundle_installer.install(cert_bundle)
         self.exceptions = bundle_installer.exceptions
         self.post_install()
 
@@ -444,13 +460,14 @@ class EntitlementCertBundlesInstaller(object):
 
 class EntitlementCertBundleInstaller(object):
 
-    def __init__(self):
+    def __init__(self, report):
         self.exceptions = []
+        self.report = report
 
     def pre_install(self, bundle):
         print "Ecbi.pre_install", bundle
 
-    def install(self, bundle, report):
+    def install(self, bundle):
         self.pre_install(bundle)
 
         cert_bundle_writer = Writer()
@@ -458,7 +475,7 @@ class EntitlementCertBundleInstaller(object):
             key, cert = self.build_cert(bundle)
             cert_bundle_writer.write(key, cert)
 
-            report.added.append(cert)
+            self.report.added.append(cert)
         except Exception, e:
             self.install_exception(bundle, e)
 
@@ -468,8 +485,6 @@ class EntitlementCertBundleInstaller(object):
         log.exception(exception)
         log.error('Bundle not loaded:\n%s\n%s', bundle, exception)
 
-        # FIXME: pick one
-        self.exceptions.append(exception)
         self.report.exceptions.append(exception)
 
     def post_install(self, bundle):
@@ -493,10 +508,6 @@ class Disconnected(Exception):
 
 class ActionReport(object):
     """Base class for cert lib and action reports"""
-    def updates(self):
-        """return an int representing how many "updates" were done"""
-        raise NotImplementedError
-
     def log_entry(self):
         """log report entries"""
 
@@ -550,7 +561,7 @@ class EntCertUpdateReport(ActionReport):
 
 def main():
     print _('Updating entitlement certificates')
-    certlib = CertLib()
+    certlib = EntCertLib()
     updates = certlib.update()
     print _('%d updates required') % updates
     print _('done')
