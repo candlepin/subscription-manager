@@ -27,7 +27,8 @@ from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
 from rhsm.utils import UnsupportedOperationException
 
-from certlib import ActionLock, DataLib
+
+from certlib import ActionLock, ActionReport, DataLib
 from certdirectory import Path, ProductDirectory, EntitlementDirectory
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -39,22 +40,22 @@ ALLOWED_CONTENT_TYPES = ["yum"]
 
 class RepoLib(DataLib):
 
-    def __init__(self, lock=ActionLock(), uep=None, cache_only=False, identity=None):
+    def __init__(self, lock=ActionLock(), uep=None, cache_only=False):
         self.cache_only = cache_only
         DataLib.__init__(self, lock, uep)
         self.identity = identity or inj.require(inj.IDENTITY)
 
     def _do_update(self):
-        action = UpdateAction(self.uep, cache_only=self.cache_only, identity=self.identity)
+        action = RepoUpdateAction(uep=self.uep, cache_only=self.cache_only)
         return action.perform()
 
     def is_managed(self, repo):
-        action = UpdateAction(self.uep, cache_only=self.cache_only)
+        action = RepoUpdateAction(uep=self.uep, cache_only=self.cache_only)
         return repo in [c.label for c in action.matching_content()]
-
     def get_repos(self, apply_overrides=True):
-        action = UpdateAction(self.uep, cache_only=self.cache_only,
-                apply_overrides=apply_overrides, identity=self.identity)
+        action = RepoUpdateAction(uep=self.uep,
+							      cache_only=self.cache_only,
+							      apply_overrides=apply_overrides)
         repos = action.get_unique_content()
         if self.identity.is_valid() and action.override_supported:
             return repos
@@ -89,11 +90,10 @@ class RepoLib(DataLib):
 # TODO: This is the third disjoint "Action" class hierarchy, this one inherits nothing
 # but exposes similar methods, all of which are already abstracted behind the
 # Datalib.update() method anyhow. Pretty sure these can go away.
-class UpdateAction:
+class RepoUpdateAction:
 
-    def __init__(self, uep, ent_dir=None, prod_dir=None,
-            cache_only=False, apply_overrides=True, identity=None):
-        self.identity = identity or inj.require(inj.IDENTITY)
+    def __init__(self, uep, ent_dir=None, prod_dir=None, cache_only=False, apply_overrides=True):
+        self.identity = inj.require(inj.IDENTITY)
         if ent_dir:
             self.ent_dir = ent_dir
         else:
@@ -114,6 +114,9 @@ class UpdateAction:
         self.overrides = []
         self.override_supported = bool(self.uep and self.uep.supports_resource('content_overrides'))
 
+        # FIXME: empty report at the moment, should be changed to include
+        # info about updated repos
+        self.report = ActionReport()
         # If we are not registered, skip trying to refresh the
         # data from the server
         if not self.identity.is_valid():
