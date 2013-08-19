@@ -27,8 +27,10 @@ from subscription_manager import certlib
 
 class TestingUpdateAction(certlib.UpdateAction):
 
-    def __init__(self, mock_uep, mock_entdir):
-        certlib.UpdateAction.__init__(self, uep=mock_uep, entdir=mock_entdir)
+    def __init__(self, mock_uep, mock_entdir, report):
+        certlib.UpdateAction.__init__(self, uep=mock_uep,
+                                      entdir=mock_entdir,
+                                      report=report)
 
     def _get_consumer_id(self):
         return StubConsumerIdentity("ConsumerKey", "ConsumerCert")
@@ -57,9 +59,10 @@ class UpdateActionTests(SubManFixture):
         mock_uep = Mock()
         mock_uep.getCertificates.return_value = cp_bundles  # Passed into build_cert(bundle)
 
-        update_action = TestingUpdateAction(mock_uep,
-                                            StubEntitlementDirectory([]))
         report = certlib.UpdateReport()
+        update_action = TestingUpdateAction(mock_uep,
+                                            StubEntitlementDirectory([]),
+                                            report=report)
         report.expected.append(valid_ent.serial)
         report.expected.append(expired_ent.serial)
 
@@ -75,10 +78,15 @@ class UpdateActionTests(SubManFixture):
         mock_uep = Mock()
         mock_uep.getCertificates = Mock(return_value=[])
         mock_uep.getCertificateSerials = Mock(return_value=[])
-        update_action = TestingUpdateAction(mock_uep, StubEntitlementDirectory([ent]))
+        report = certlib.UpdateReport()
+        update_action = TestingUpdateAction(mock_uep,
+                                            StubEntitlementDirectory([ent]),
+                                            report=report)
         try:
-            updates, exceptions = update_action.perform()
+            updates = update_action.perform()
         except OSError:
             self.fail("operation failed when certificate wasn't deleted")
         self.assertEquals(0, updates)
+
+        exceptions = update_action.report.exceptions
         self.assertEquals([], exceptions)
