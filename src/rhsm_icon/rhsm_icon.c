@@ -215,7 +215,7 @@ display_icon (Context * context, StatusType status_type)
 			_("This system is missing one or more "
 			  "subscriptions.");
 	} else if (status_type == RHSM_PARTIALLY_VALID) {
-		tooltip = _("Partially Entitled Products");
+		tooltip = _("Partially Entitled Subscriptions");
 		notification_title = tooltip;
 		notification_body =
 			_("This system is missing one or more "
