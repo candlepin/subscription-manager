@@ -1070,7 +1070,8 @@ class AsyncBackend(object):
         if len(self.backend.cs.installed_products) == 0:
             raise NoProductsException()
 
-        if len(self.backend.cs.unentitled_products) == 0:
+        if len(self.backend.cs.valid_products) == len(self.backend.cs.installed_products) and \
+                len(self.backend.cs.partial_stacks) == 0:
             raise AllProductsCoveredException()
 
         if current_sla:
