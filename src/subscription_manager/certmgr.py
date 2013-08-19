@@ -122,12 +122,16 @@ class CertManager:
             #
             # erk, is this whole thing supposed to count updates for all the
             # *libs? because it doesnt
-            updates = ent_cert_
-            if ent_cert_update_report.updates():
-                updates += ret[0]
-                for e in ret[1]:
-                    print ' '.join(str(e).split('-')[1:]).strip()
+
+            # exceptions report Printer?
+            exceptions = self.certlib.report.exceptions
+            for e in exceptions:
+                print ' '.join(str(e).split('-')[1:]).strip()
 
         finally:
             lock.release()
+
+        # updates at this point is a int representing how many
+        # things were updated, which is pretty much completely useless
+        print "updates: ", updates
         return updates
