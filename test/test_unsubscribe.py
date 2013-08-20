@@ -42,7 +42,7 @@ class CliUnSubscribeTests(SubManFixture):
                 StubEntitlementDirectory([ent1, ent2, ent3]))
         inj.provide(inj.PROD_DIR,
                 StubProductDirectory([]))
-        cmd = managercli.RemoveCommand()
+        cmd = managercli.UnSubscribeCommand()
 
         managercli.ConsumerIdentity = StubConsumerIdentity
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: True)
@@ -75,7 +75,7 @@ class CliUnSubscribeTests(SubManFixture):
                 StubEntitlementDirectory([ent]))
         inj.provide(inj.PROD_DIR,
                 StubProductDirectory([]))
-        cmd = managercli.RemoveCommand()
+        cmd = managercli.UnSubscribeCommand()
 
         managercli.ConsumerIdentity = StubConsumerIdentity
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
@@ -94,7 +94,7 @@ class CliUnSubscribeTests(SubManFixture):
                 StubEntitlementDirectory([ent1, ent2, ent3]))
         inj.provide(inj.PROD_DIR,
                 StubProductDirectory([]))
-        cmd = managercli.RemoveCommand()
+        cmd = managercli.UnSubscribeCommand()
         managercli.ConsumerIdentity = StubConsumerIdentity
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
         StubConsumerIdentity.exists = classmethod(lambda cls: False)
