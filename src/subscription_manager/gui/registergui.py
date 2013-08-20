@@ -516,6 +516,7 @@ class SelectSLAScreen(Screen):
                 prod_str += ", "
         return prod_str
 
+    # so much for service level simplifying things
     def _on_get_service_levels_cb(self, result, error=None):
         # The parent for the dialogs is set to the grandparent window
         # (which is MainWindow) because the parent window is closed
@@ -1097,6 +1098,8 @@ class AsyncBackend(object):
             return
         self.queue.put((callback, None, None))
 
+    # This guy is really ugly to run in a thread, can we run it
+    # in the main thread with just the network stuff threaded?
     def _find_suitable_service_levels(self, consumer, facts):
         consumer_json = self.backend.cp_provider.get_consumer_auth_cp().getConsumer(
                 consumer.getConsumerId())
@@ -1127,8 +1130,11 @@ class AsyncBackend(object):
         # Will map service level (string) to the results of the dry-run
         # autobind results for each SLA that covers all installed products:
         suitable_slas = {}
+
+        # eek, in a thread
         certmgr = CertManager(uep=self.backend.cp_provider.get_consumer_auth_cp(), facts=facts)
         certmgr.update()
+
         for sla in available_slas:
             dry_run_json = self.backend.cp_provider.get_consumer_auth_cp().dryRunBind(consumer.uuid, sla)
             dry_run = DryRunResult(sla, dry_run_json, self.backend.cs)

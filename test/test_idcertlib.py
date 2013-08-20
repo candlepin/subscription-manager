@@ -11,10 +11,10 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
-import unittest
 from mock import Mock
 
 import stubs
+import fixture
 
 from subscription_manager import certlib, managerlib
 
@@ -42,7 +42,7 @@ class InvalidConsumerIdentity(certlib.ConsumerIdentity):
         return False
 
 
-class TestIdentityCertlib(unittest.TestCase):
+class TestIdentityCertlib(fixture.SubManFixture):
 
     def setUp(self):
         self.old_ci = certlib.ConsumerIdentity
@@ -51,7 +51,7 @@ class TestIdentityCertlib(unittest.TestCase):
         self.stub_uep = stubs.StubUEP()
         self.stub_uep.getConsumer = getConsumerData
         self.stub_uep.getSerialNumber = getSerialNumber
-        return certlib.IdentityCertLib(lock=stubs.MockActionLock(), uep=self.stub_uep)
+        return certlib.IdentityCertLib(uep=self.stub_uep)
 
     def test_idcertlib_persists_cert(self):
         idcertlib = self._get_idcertlib()

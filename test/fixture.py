@@ -9,6 +9,8 @@ from mock import Mock, NonCallableMock, patch
 import stubs
 import subscription_manager.injection as inj
 
+# use instead of the normal pid file based ActionLock
+from threading import RLock
 
 class FakeLogger:
     def __init__(self):
@@ -88,6 +90,8 @@ class SubManFixture(unittest.TestCase):
 
         pooltype_cache = Mock()
         inj.provide(inj.POOLTYPE_CACHE, pooltype_cache)
+        # don't use file based locks for tests
+        inj.provide(inj.ACTION_LOCK, RLock)
 
         self.dbus_patcher = patch('subscription_manager.managercli.CliCommand._request_validity_check')
         self.dbus_patcher.start()

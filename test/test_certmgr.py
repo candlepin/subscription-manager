@@ -57,7 +57,7 @@ class ExceptionalException(Exception):
     pass
 
 
-class TestCertmgr(SubManFixture):
+class CertManagerTestBase(SubManFixture):
 
     # on python 2.6+ we could set class decorators, but that doesn't
     # work on python2.4, so this...
@@ -146,71 +146,25 @@ class TestCertmgr(SubManFixture):
         self.hwprobe_getall_patcher.stop()
         self.patcher_entcertlib_action_syslogreport.stop()
 
+
+class TestCertManager(CertManagerTestBase):
+
     def test_init(self):
-        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(uep=self.mock_uep)
         mgr.update()
-
-    def test_healing_no_heal(self):
-        self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
-        self.mock_cert_sorter.compliant_until = datetime.now() + \
-                timedelta(days=15)
-        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
-                                  product_dir=self.stub_entitled_proddir)
-        mgr.update(autoheal=True)
-        self.assertFalse(self.mock_uep.bind.called)
-
-    def test_healing_needs_heal(self):
-        # need a stub product dir with prods with no entitlements,
-        # don't have to mock here since we can actually pass in a product
-        self.mock_cert_sorter.is_valid = mock.Mock(return_value=False)
-        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
-                                  product_dir=mock.Mock())
-        mgr.update(autoheal=True)
-        self.assertTrue(self.mock_uep.bind.called)
-
-    @mock.patch.object(certlib.EntitlementCertBundleInstaller, 'build_cert')
-    def test_healing_needs_heal_tomorrow(self, cert_build_mock):
-        # Valid today, but not valid 24h from now:
-        self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
-        self.mock_cert_sorter.compliant_until = datetime.now(GMT()) + \
-                timedelta(hours=6)
-        cert_build_mock.return_value = (mock.Mock(),
-                self.stub_ent_expires_tomorrow)
-
-        self._stub_certificate_calls([self.stub_ent_expires_tomorrow])
-        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
-                                  product_dir=self.stub_entitled_proddir)
-        mgr.update(autoheal=True)
-        # see if we tried to update certs
-        self.assertTrue(self.mock_uep.bind.called)
-
-    # TODO: use Mock(wraps=) instead of hiding all logging
-    @mock.patch('subscription_manager.certlib.log')
-    def test_healing_trigger_exception(self, mock_log):
-        # Forcing is_valid to throw the type error we used to expect from
-        # cert sorter using the product dir. Just making sure an unexpected
-        # exception is logged and not bubbling up.
-        self.mock_cert_sorter.is_valid = mock.Mock(side_effect=TypeError())
-        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
-                                  product_dir=mock.Mock())
-        mgr.update(autoheal=True)
-        for call in mock_log.method_calls:
-            if call[0] == 'exception' and isinstance(call[1][0], TypeError):
-                return
-        self.fail("Did not see TypeError in the logged exceptions")
 
     # see bz #852706
     @mock.patch.object(certlib.EntCertLib, 'update')
     def test_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
-        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(uep=self.mock_uep)
         self.assertRaises(GoneException, mgr.update)
 
     # see bz #852706, except this time for idcertlib
     @mock.patch.object(certlib.IdentityCertLib, 'update')
     def test_idcertlib_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
-        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(uep=self.mock_uep)
         self.assertRaises(GoneException, mgr.update)
 
         # just verify the certlib update worked
@@ -221,7 +175,7 @@ class TestCertmgr(SubManFixture):
     @mock.patch('subscription_manager.certmgr.log')
     def test_certlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
-        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(uep=self.mock_uep)
         mgr.update()
 
         for call in mock_log.method_calls:
@@ -233,7 +187,7 @@ class TestCertmgr(SubManFixture):
     @mock.patch('subscription_manager.certmgr.log')
     def test_idcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
-        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(uep=self.mock_uep)
         mgr.update()
 
         for call in mock_log.method_calls:
@@ -264,7 +218,7 @@ class TestCertmgr(SubManFixture):
         self._stub_certificate_calls()
 
         cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
-        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(uep=self.mock_uep)
         mgr.update()
 
         report = self.update_action_syslog_mock.call_args[0][0]
@@ -274,7 +228,7 @@ class TestCertmgr(SubManFixture):
         # to mock "rogue" certs we need some local, that are not known to the
         # server so getCertificateSerials to return nothing
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
-        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(uep=self.mock_uep)
         mgr.update()
 
         report = self.update_action_syslog_mock.call_args[0][0]
@@ -294,7 +248,7 @@ class TestCertmgr(SubManFixture):
 
         # we don't want to find replacements, so this forces a delete
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
-        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(uep=self.mock_uep)
         mgr.update()
 
         # the expired certs should be delete/rogue and expired
@@ -309,7 +263,7 @@ class TestCertmgr(SubManFixture):
         self._stub_certificate_calls()
 
         mock_cert_build.side_effect = ExceptionalException()
-        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(uep=self.mock_uep)
         # we should fail on the certlib.update, but keep going...
         # and handle it well.
         mgr.update()
@@ -318,3 +272,50 @@ class TestCertmgr(SubManFixture):
             if call[0] == 'exception' and isinstance(call[1][0], ExceptionalException):
                 return
         self.fail("Did not ExceptionException in the logged exceptions")
+
+
+class TestHealingCertManager(TestCertManager):
+    def test_healing_no_heal(self):
+        self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
+        self.mock_cert_sorter.compliant_until = datetime.now() + \
+                timedelta(days=15)
+        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr.update(autoheal=True)
+        self.assertFalse(self.mock_uep.bind.called)
+
+    def test_healing_needs_heal(self):
+        # need a stub product dir with prods with no entitlements,
+        # don't have to mock here since we can actually pass in a product
+        self.mock_cert_sorter.is_valid = mock.Mock(return_value=False)
+        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr.update(autoheal=True)
+        self.assertTrue(self.mock_uep.bind.called)
+
+    @mock.patch.object(certlib.EntitlementCertBundleInstaller, 'build_cert')
+    def test_healing_needs_heal_tomorrow(self, cert_build_mock):
+        # Valid today, but not valid 24h from now:
+        self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
+        self.mock_cert_sorter.compliant_until = datetime.now(GMT()) + \
+                timedelta(hours=6)
+        cert_build_mock.return_value = (mock.Mock(),
+                self.stub_ent_expires_tomorrow)
+
+        self._stub_certificate_calls([self.stub_ent_expires_tomorrow])
+        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr.update(autoheal=True)
+        # see if we tried to update certs
+        self.assertTrue(self.mock_uep.bind.called)
+
+    # TODO: use Mock(wraps=) instead of hiding all logging
+    @mock.patch('subscription_manager.certlib.log')
+    def test_healing_trigger_exception(self, mock_log):
+        # Forcing is_valid to throw the type error we used to expect from
+        # cert sorter using the product dir. Just making sure an unexpected
+        # exception is logged and not bubbling up.
+        self.mock_cert_sorter.is_valid = mock.Mock(side_effect=TypeError())
+        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr.update(autoheal=True)
+        for call in mock_log.method_calls:
+            if call[0] == 'exception' and isinstance(call[1][0], TypeError):
+                return
+        self.fail("Did not see TypeError in the logged exceptions")

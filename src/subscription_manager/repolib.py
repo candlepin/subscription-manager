@@ -27,7 +27,6 @@ from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
 from rhsm.utils import UnsupportedOperationException
 
-
 from certlib import ActionLock, ActionReport, DataLib
 from certdirectory import Path, ProductDirectory, EntitlementDirectory
 
@@ -39,6 +38,7 @@ ALLOWED_CONTENT_TYPES = ["yum"]
 
 
 class RepoLib(DataLib):
+
 
     def __init__(self, lock=ActionLock(), uep=None, cache_only=False):
         self.cache_only = cache_only
@@ -52,6 +52,7 @@ class RepoLib(DataLib):
     def is_managed(self, repo):
         action = RepoUpdateAction(uep=self.uep, cache_only=self.cache_only)
         return repo in [c.label for c in action.matching_content()]
+
     def get_repos(self, apply_overrides=True):
         action = RepoUpdateAction(uep=self.uep,
 							      cache_only=self.cache_only,
@@ -117,6 +118,7 @@ class RepoUpdateAction:
         # FIXME: empty report at the moment, should be changed to include
         # info about updated repos
         self.report = ActionReport()
+        self.report.name = "Repo updates"
         # If we are not registered, skip trying to refresh the
         # data from the server
         if not self.identity.is_valid():
