@@ -22,9 +22,10 @@ import logging
 from rhsm.connection import GoneException, ExpiredIdentityCertException
 
 from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
-from subscription_manager.certlib import EntCertLib, ActionLock, HealingLib, IdentityCertLib
+from subscription_manager.certlib import EntCertLib, HealingLib, IdentityCertLib
 from subscription_manager.factlib import FactLib
 from subscription_manager.repolib import RepoLib
+from subscription_manager import injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -36,16 +37,16 @@ class BaseCertManager:
     An object used to update the certficates, yum repos, and facts for the system.
     """
 
-    def __init__(self, lock=ActionLock(), uep=None, product_dir=None,
-            facts=None):
-        self.lock = lock
+    # can we inject both of these?
+    def __init__(self, uep=None, facts=None):
 
         # inject?
         self.uep = uep
         self.facts = facts
-        self.product_dir = product_dir
 
         self._libset = self._get_libset()
+        self.lock = inj.require(inj.ACTION_LOCK)
+        self.report = None
 
     def _get_libset(self):
         return []
@@ -71,7 +72,7 @@ class BaseCertManager:
         print "update reports: ", update_reports
         return update_reports
 
-    def _run_update(self, lib, update_reports):
+    def _run_update(self, lib):
         update_report = None
 
         try:
@@ -99,7 +100,7 @@ class BaseCertManager:
         for lib in self._libset:
             update_report = self._run_update(lib)
 
-            # a map/dict may make more sence here
+            # a map/dict may make more sense here
             update_reports.append(update_report)
 
         return update_reports
@@ -109,18 +110,18 @@ class CertManager(BaseCertManager):
 
     def _get_libset(self):
 
-        self.certlib = EntCertLib(self.lock, uep=self.uep)
-        self.repolib = RepoLib(self.lock, uep=self.uep)
-        self.factlib = FactLib(self.lock, uep=self.uep, facts=self.facts)
-        self.profilelib = PackageProfileLib(self.lock, uep=self.uep)
-        self.installedprodlib = InstalledProductsLib(self.lock, uep=self.uep)
-        self.healinglib = HealingLib(self.lock, self.uep, self.product_dir)
-        self.idcertlib = IdentityCertLib(self.lock, uep=self.uep)
+        self.entcertlib = EntCertLib(uep=self.uep)
+        self.repolib = RepoLib(uep=self.uep)
+        self.factlib = FactLib(uep=self.uep, facts=self.facts)
+        self.profilelib = PackageProfileLib(uep=self.uep)
+        self.installedprodlib = InstalledProductsLib(uep=self.uep)
+        self.healinglib = HealingLib(self.uep)
+        self.idcertlib = IdentityCertLib(uep=self.uep)
 
         # WARNING: order is important here, we need to update a number
         # of things before attempting to autoheal, and we need to autoheal
         # before attempting to fetch our certificates:
-        lib_set = [self.certlib, self.idcertlib, self.repolib,
+        lib_set = [self.entcertlib, self.idcertlib, self.repolib,
                    self.factlib, self.profilelib,
                    self.installedprodlib]
 
@@ -130,10 +131,14 @@ class CertManager(BaseCertManager):
 class HealingCertManager(BaseCertManager):
     def _get_libset(self):
 
-        self.certlib = EntCertLib(self.lock, uep=self.uep)
-        self.installedprodlib = InstalledProductsLib(self.lock, uep=self.uep)
-        self.healinglib = HealingLib(self.lock, self.uep, self.product_dir)
+        self.entcertlib = EntCertLib(uep=self.uep)
+        self.installedprodlib = InstalledProductsLib(uep=self.uep)
+        self.healinglib = HealingLib(self.uep)
 
-        lib_set = [self.certlib, self.installedprodlib, self.healinglib]
+        # FIXME: note this runs entcertlib twice, once to make sure we are
+        # setup, then again after heal to get any additional certs. We may be
+        # able to avoid that by conditionally calling entcertlib from within
+        # healinglib (as we did before)
+        lib_set = [self.entcertlib, self.installedprodlib, self.healinglib, self.entcertlib]
 
         return lib_set

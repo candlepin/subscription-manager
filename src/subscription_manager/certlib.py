@@ -27,9 +27,8 @@ from rhsm.certificate import Key, create_from_pem, GMT
 from subscription_manager.certdirectory import Writer
 from subscription_manager import rhelentbranding
 from subscription_manager.identity import ConsumerIdentity
-from subscription_manager.injection import CERT_SORTER, PLUGIN_MANAGER, IDENTITY, require
+from subscription_manager.injection import CERT_SORTER, PLUGIN_MANAGER, IDENTITY, ACTION_LOCK, require
 import subscription_manager.injection as inj
-from subscription_manager.lock import Lock
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -41,14 +40,6 @@ cfg = initConfig()
 def system_log(message, priority=syslog.LOG_NOTICE):
     syslog.openlog("subscription-manager")
     syslog.syslog(priority, message.encode("utf-8"))
-
-
-class ActionLock(Lock):
-
-    PATH = '/var/run/rhsm/cert.pid'
-
-    def __init__(self):
-        Lock.__init__(self, self.PATH)
 
 
 # This guys seems unneccasary
@@ -63,54 +54,52 @@ class ActionLock(Lock):
 #        ala CertLib, even if most of them would be simple or
 #        or noops. Would make logging easier and more useful
 #        and reduce some of the random variations in *Lib
-class DataLib(object):
+class Locker(object):
 
-    def __init__(self, lock=None, uep=None):
-        self.lock = lock
+    def __init__(self):
+        self.lock = self._get_lock()
 
-        # Need to do this here rather than with a default argument to prevent
-        # circular dependency problems:
-        if not self.lock:
-            self.lock = ActionLock()
-
-        self.uep = uep
-
-    def update(self):
+    def run(self, action):
         self.lock.acquire()
         try:
-            return self._do_update()
+            return action()
         finally:
             self.lock.release()
 
+    def _get_lock(self):
+        return inj.require(ACTION_LOCK)
+
+
+class DataLib(object):
+    def __init__(self, uep=None):
+        self.locker = Locker()
+        self.uep = uep
+        self.report = None
+
+    def update(self):
+        self.report = self.locker.run(self._do_update)
+        return self.report
+
     def _do_update(self):
+        """Thing the "lib" needs to do"""
         return
 
 
 class EntCertLib(DataLib):
-
-    def __init__(self, lock=ActionLock(), uep=None):
-        DataLib.__init__(self, lock, uep)
-
     def _do_update(self):
         action = EntCertUpdateAction(uep=self.uep)
-
         return action.perform()
 
 
 # this guy is an oddball
-class EntCertDeleteLib(DataLib):
-    def __init__(self, serial_numbers=None, lock=ActionLock(), uep=None,
+class EntCertDeleteLib(object):
+    def __init__(self, serial_numbers=None,
                 entdir=None):
-        DataLib.__init__(self, lock, uep)
+        self.locker = Locker()
         self.entdir = entdir
 
     def delete(self):
-        lock = self.lock
-        lock.acquire()
-        try:
-            return self._do_delete()
-        finally:
-            lock.release()
+        self.locker.run(self._do_delete)
 
     def _do_delete(self):
         action = EntCertDeleteAction(entdir=self.entdir,
@@ -123,14 +112,11 @@ class HealingLib(DataLib):
     An object used to run healing nightly. Checks cert validity for today, heals
     if necessary, then checks for 24 hours from now, so we theoretically will
     never have invalid certificats if subscriptions are available.
+
+    NOTE: We may update entitlement status in this class, but we do not
+          update entitlement certs, since we are inside a lock. So a
+          EntCertLib.update() needs to follow a HealingLib.update()
     """
-
-    # We always run EntCertLib, then sometimes run this, which basically
-    # dupes EntCertLib behaviour
-    def __init__(self, lock=ActionLock(), uep=None):
-        DataLib.__init__(self, lock, uep)
-
-        self.plugin_manager = require(PLUGIN_MANAGER)
 
     def _do_update(self):
         action = HealingUpdateAction(uep=self.uep)
@@ -142,6 +128,7 @@ class HealingUpdateAction(object):
     # can inject?
     def __init__(self, uep=None):
         self.report = EntCertUpdateReport()
+        self.plugin_manager = require(PLUGIN_MANAGER)
 
     def perform(self):
         uuid = ConsumerIdentity.read().getConsumerId()
@@ -162,7 +149,8 @@ class HealingUpdateAction(object):
             # date, and heal for tomorrow if so.
 
             cs = require(CERT_SORTER)
-            cert_updater = EntCertLib(lock=self.lock, uep=self.uep)
+
+            cert_updater = EntCertLib(uep=self.uep)
             if not cs.is_valid():
                 log.warn("Found invalid entitlements for today: %s" %
                         today)
@@ -171,7 +159,9 @@ class HealingUpdateAction(object):
                 self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,
                                         entitlement_data=ents)
 
-                # just use the EntCertLib.EntCertUpdateAction report
+                # NOTE: we need to call EntCertLib.update after Healing.update
+                # otherwise, the locking get's crazy
+                # hmm, we use RLock, maybe we could use it here
                 self.report = cert_updater.update()
             else:
                 log.info("Entitlements are valid for today: %s" %
@@ -197,10 +187,11 @@ class HealingUpdateAction(object):
         except Exception, e:
             log.error("Error attempting to auto-heal:")
             log.exception(e)
-            return 0
+            self.report.exceptions.append(e)
+            return self.report
         else:
             log.info("Auto-heal check complete.")
-            return 1
+            return self.report
 
 
 class IdentityCertLib(DataLib):
@@ -211,15 +202,15 @@ class IdentityCertLib(DataLib):
     for updates.
     """
 
-    def __init__(self, lock=ActionLock(), uep=None):
-        super(IdentityCertLib, self).__init__(lock, uep)
-
     def _do_update(self):
+        report = ActionReport()
         if not ConsumerIdentity.existsAndValid():
             # we could in theory try to update the id in the
             # case of it being bogus/corrupted, ala #844069,
             # but that seems unneeded
-            return 0
+            # FIXME: more details
+            report._status = 0
+            return report
 
         from subscription_manager import managerlib
 
@@ -230,7 +221,8 @@ class IdentityCertLib(DataLib):
         if idcert.getSerialNumber() != consumer['idCert']['serial']['serial']:
             log.debug('identity certificate changed, writing new one')
             managerlib.persist_consumer_cert(consumer)
-        return 1
+        report._status = 1
+        return report
 
 
 # TODO: rename to EntitlementCertDeleteAction
@@ -252,7 +244,7 @@ class EntCertUpdateAction(object):
 
     def __init__(self, uep=None, entdir=None, report=None):
         self.uep = uep
-        self.entdir = entdir
+        self.entdir = entdir or inj.require(inj.ENT_DIR)
         self.identity = require(IDENTITY)
         self.report = EntCertUpdateReport()
 
@@ -291,7 +283,7 @@ class EntCertUpdateAction(object):
         # if we want the full report, we can get it, but
         # this makes CertLib.update() have same sig as reset
         # of *Lib.update
-        return self.report.updates()
+        return self.report
 
     def install(self, missing_serials):
 
@@ -521,20 +513,35 @@ class Disconnected(Exception):
 
 class ActionReport(object):
     """Base class for cert lib and action reports"""
+    def __init__(self):
+        self._status = None
+        self._exceptions = []
+        self._updates = []
+
     def log_entry(self):
         """log report entries"""
 
         # assuming a useful repr
         log.info(self)
 
-    def updates(self):
-        """return an int indicating number of updates"""
-        raise NotImplementedError
+    def format_exceptions(self):
+        buf = ''
+        for e in self._exceptions:
+            buf += ' '.join(str(e).split('-')[1:]).strip()
+            buf += '\n'
+        return buf
 
-    def exceptions(self):
-        """return a list of exceptions"""
-        return []
-#        raise NotImplementedError
+    def print_exceptions(self):
+        if self._exceptions:
+            print self.format_exceptions()
+
+    def __str__(self):
+        template = """status: %(status)s
+        updates: %(updates)s
+        exceptions: %(exceptions)s"""
+        return template % {'status': self._status,
+                           'updates': self._updates,
+                           'exceptions': self.format_exceptions()}
 
 
 class EntCertUpdateReport(ActionReport):
@@ -544,26 +551,16 @@ class EntCertUpdateReport(ActionReport):
         self.expected = []
         self.added = []
         self.rogue = []
-        self.exceptions = []
+        self._exceptions = []
 
     def updates(self):
         """total number of ent certs installed and deleted"""
         return (len(self.added) + len(self.rogue))
 
     # need an ExceptionsReport?
+    # FIXME: needs to be properties
     def exceptions(self):
-        return self.exceptions
-
-    def format_exceptions(self):
-        buf = ''
-        for e in self.exceptions:
-            buf += ' '.join(str(e).split('-')[1:]).strip()
-            buf += '\n'
-        return buf
-
-    def print_exceptions(self):
-        if self.exceptions:
-            print self.format_exceptions()
+        return self._exceptions
 
     def write(self, s, title, certificates):
         indent = '  '

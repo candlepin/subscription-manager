@@ -23,6 +23,7 @@ from subscription_manager.identity import Identity
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.cp_provider import CPProvider
 from subscription_manager.plugins import PluginManager
+from subscription_manager.lock import ActionLock
 
 
 def init_dep_injection():
@@ -56,6 +57,7 @@ def init_dep_injection():
     inj.provide(inj.PLUGIN_MANAGER, PluginManager, singleton=True)
 
     inj.provide(inj.POOLTYPE_CACHE, PoolTypeCache, singleton=True)
+    inj.provide(inj.ACTION_LOCKER, ActionLock)
 
     try:
         # This catch fixes the product-id module on anaconda

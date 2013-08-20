@@ -18,7 +18,7 @@
 import gettext
 import logging
 
-from certlib import ConsumerIdentity, DataLib, Action, ActionReport
+from certlib import ConsumerIdentity, Locker, ActionReport
 from subscription_manager.facts import Facts
 
 _ = gettext.gettext
@@ -30,18 +30,22 @@ log = logging.getLogger('rhsm-app.' + __name__)
 #   Facts is a CacheManager
 # Facts as a CacheManager seems to be doing alot
 # of stuff, split actual facts gather code out?
-class FactLib(DataLib):
+class FactLib(object):
     """
     Used by CertManager to update a system's facts with the server, used
     primarily by the cron job but in a couple other places as well.
 
     Makes use of the facts module as well.
     """
-    def __init__(self, lock=None, uep=None, facts=None):
-        DataLib.__init__(self, lock, uep)
+    def __init__(self, uep=None, facts=None):
+        self.locker = Locker()
         self.facts = facts
+        self.uep = uep
         if not self.facts:
             self.facts = Facts()
+
+    def update(self):
+        return self.locker.run(self._do_update)
 
     def _do_update(self):
         action = FactAction(uep=self.uep, facts=self.facts)
@@ -51,22 +55,22 @@ class FactLib(DataLib):
 class FactActionReport(ActionReport):
     def __init__(self):
         self.fact_updates = []
+        self._exceptions = []
+        self._updates = []
 
     def updates(self):
         """how many facts were updated"""
         return len(self.fact_updates)
 
 
-class FactAction(Action):
+class FactAction(object):
     # FIXME: pretty sure Action doesn't need any of this
-    def __init__(self, uep=None, entdir=None, product_dir=None,
-                 facts=None):
-        Action.__init__(self, uep, entdir=entdir)
+    def __init__(self, uep=None, facts=None):
+        self.uep = uep
         self.report = FactActionReport()
         self.facts = facts
 
     def perform(self):
-        updates = 0
 
         # figure out the diff between latest facts and
         # report that as updates
