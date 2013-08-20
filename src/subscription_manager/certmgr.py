@@ -96,7 +96,7 @@ class BaseCertManager:
 
         update_reports = []
 
-        for lib in self.libset:
+        for lib in self._libset:
             update_report = self._run_update(lib)
 
             # a map/dict may make more sence here
@@ -121,8 +121,8 @@ class CertManager(BaseCertManager):
         # of things before attempting to autoheal, and we need to autoheal
         # before attempting to fetch our certificates:
         lib_set = [self.certlib, self.idcertlib, self.repolib,
--                  self.factlib, self.profilelib,
--                  self.installedprodlib]
+                   self.factlib, self.profilelib,
+                   self.installedprodlib]
 
         return lib_set
 
@@ -137,4 +137,3 @@ class HealingCertManager(BaseCertManager):
         lib_set = [self.certlib, self.installedprodlib, self.healinglib]
 
         return lib_set
-
