@@ -502,44 +502,32 @@ class TestAttachCommand(TestCliProxyCommand):
 
 
 # Test Attach and Subscribe are the same
-class TestSubscribeCommand(TestCliProxyCommand):
+class TestSubscribeCommand(TestAttachCommand):
     command_class = managercli.SubscribeCommand
-
-    def _test_quantity_exception(self, arg):
-        try:
-            self.cc.main(["--auto", "--quantity", arg])
-            self.cc._validate_options()
-        except SystemExit, e:
-            self.assertEquals(e.code, -1)
-        else:
-            self.fail("No Exception Raised")
-
-    def test_zero_quantity(self):
-        self._test_quantity_exception("0")
-
-    def test_negative_quantity(self):
-        self._test_quantity_exception("-1")
-
-    def test_text_quantity(self):
-        self._test_quantity_exception("JarJarBinks")
-
-    def test_positive_quantity(self):
-        self.cc.main(["--auto", "--quantity", "1"])
-        self.cc._validate_options()
-
-    def test_positive_quantity_with_plus(self):
-        self.cc.main(["--auto", "--quantity", "+1"])
-        self.cc._validate_options()
-
-    def test_positive_quantity_as_float(self):
-        self._test_quantity_exception("2.0")
 
 
 class TestRemoveCommand(TestCliProxyCommand):
     command_class = managercli.RemoveCommand
 
+    def test_validate_serial(self):
+        self.cc.main(["--serial", "12345"])
+        self.cc._validate_options()
 
-class TestUnSubscribeCommand(TestCliProxyCommand):
+    def test_validate_serial_not_numbers(self):
+        self.cc.main(["--serial", "this is not a number"])
+        try:
+            self.cc._validate_options()
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+
+    def test_serial_no_value(self):
+        try:
+            self.cc.main(["--serial"])
+        except SystemExit, e:
+            self.assertEquals(e.code, 2)
+
+
+class TestUnSubscribeCommand(TestRemoveCommand):
     command_class = managercli.UnSubscribeCommand
 
 
