@@ -57,6 +57,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def __init__(self, backend, facts, tab_icon,
                  parent, ent_dir, prod_dir):
+        # The row striping in this TreeView is handled automatically
+        # because we have the rules_hint set to True in the Glade file.
         super(InstalledProductsTab, self).__init__('installed.glade')
 
         self.tab_icon = tab_icon
@@ -78,8 +80,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         column.pack_start(text_renderer, False)
         column.add_attribute(image_renderer, 'pixbuf', self.store['image'])
         column.add_attribute(text_renderer, 'text', self.store['product'])
-        column.add_attribute(text_renderer, 'cell-background',
-                             self.store['background'])
         self.top_view.append_column(column)
         cols = []
         cols.append((column, 'text', 'product'))
@@ -262,8 +262,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             'start_date': gobject.TYPE_PYOBJECT,
             'expiration_date': gobject.TYPE_PYOBJECT,
             'serial': str,
-            'align': float,
-            'background': str
+            'align': float
         }
 
     def get_label(self):
