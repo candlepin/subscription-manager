@@ -52,11 +52,11 @@ class ActionLock(Lock):
 
 
 # This guys seems unneccasary
-class Action:
+#class Action:
 
-    def __init__(self, uep=None, entdir=None):
-        self.entdir = entdir or inj.require(inj.ENT_DIR)
-        self.uep = uep
+#    def __init__(self, uep=None, entdir=None):
+#        self.entdir = entdir or inj.require(inj.ENT_DIR)
+#        self.uep = uep
 
 
 # TODO: *Lib objects should probably all support a Report object
@@ -91,22 +91,31 @@ class EntCertLib(DataLib):
     def __init__(self, lock=ActionLock(), uep=None):
         DataLib.__init__(self, lock, uep)
 
-    def delete(self, serial_numbers):
-        lock = self.lock
-        lock.acquire()
-        try:
-            return self._do_delete(serial_numbers)
-        finally:
-            lock.release()
-
     def _do_update(self):
         action = EntCertUpdateAction(uep=self.uep)
 
         return action.perform()
 
-    def _do_delete(self, serial_numbers):
-        action = EntCertDeleteAction()
-        return action.perform(serial_numbers)
+
+# this guy is an oddball
+class EntCertDeleteLib(DataLib):
+    def __init__(self, serial_numbers=None, lock=ActionLock(), uep=None,
+                entdir=None):
+        DataLib.__init__(self, lock, uep)
+        self.entdir = entdir
+
+    def delete(self):
+        lock = self.lock
+        lock.acquire()
+        try:
+            return self._do_delete()
+        finally:
+            lock.release()
+
+    def _do_delete(self):
+        action = EntCertDeleteAction(entdir=self.entdir,
+                                    serial_numbers=self.serial_numbers)
+        return action.perform()
 
 
 class HealingLib(DataLib):
@@ -118,23 +127,20 @@ class HealingLib(DataLib):
 
     # We always run EntCertLib, then sometimes run this, which basically
     # dupes EntCertLib behaviour
-    def __init__(self, lock=ActionLock(), uep=None, product_dir=None):
+    def __init__(self, lock=ActionLock(), uep=None):
         DataLib.__init__(self, lock, uep)
 
-        self._product_dir = product_dir or inj.require(inj.PROD_DIR)
         self.plugin_manager = require(PLUGIN_MANAGER)
 
     def _do_update(self):
-        action = HealingUpdateAction(uep=self.uep,
-                                     product_dir=self._product_dir)
+        action = HealingUpdateAction(uep=self.uep)
         return action.perform()
 
 
-class HealingUpdateAction(Action):
+class HealingUpdateAction(object):
     # no real point to passing in entdir and product_dir, we
     # can inject?
-    def __init__(self, uep=None, entdir=None, product_dir=None):
-        Action.__init__(self, uep, entdir=entdir)
+    def __init__(self, uep=None):
         self.report = EntCertUpdateReport()
 
     def perform(self):
@@ -228,7 +234,9 @@ class IdentityCertLib(DataLib):
 
 
 # TODO: rename to EntitlementCertDeleteAction
-class EntCertDeleteAction(Action):
+class EntCertDeleteAction(object):
+    def __init__(self, entdir=None):
+        self.entdir = entdir
 
     def perform(self, serial_numbers):
         for sn in serial_numbers:
@@ -240,10 +248,11 @@ class EntCertDeleteAction(Action):
 
 
 # TODO: rename to EntitlementCertUpdateAction
-class EntCertUpdateAction(Action):
+class EntCertUpdateAction(object):
 
     def __init__(self, uep=None, entdir=None, report=None):
-        Action.__init__(self, uep=uep, entdir=entdir)
+        self.uep = uep
+        self.entdir = entdir
         self.identity = require(IDENTITY)
         self.report = EntCertUpdateReport()
 
