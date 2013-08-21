@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.9.4
+Version: 1.9.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,12 @@ fi
 %endif
 
 %changelog
+* Wed Aug 21 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.5-1
+- Revert "990195: remove subscribe options" (alikins@redhat.com)
+- 994620: reword tooltip message (ckozak@redhat.com)
+- 997740: allow autoheal call more often (ckozak@redhat.com)
+- 997935: stop making requests after unregister (ckozak@redhat.com)
+
 * Thu Aug 15 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.4-1
 - Prevent name collision over the parent variable in RHEL 5 Firstboot.
   (awood@redhat.com)
