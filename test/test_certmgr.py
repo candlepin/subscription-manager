@@ -168,7 +168,7 @@ class TestCertManager(CertManagerTestBase):
         self.assertRaises(GoneException, mgr.update)
 
         # just verify the certlib update worked
-        report = self.update_action_syslog_mock.call_args[0][0]
+        report = mgr.entcertlib.report
         self.assertTrue(self.stub_ent1.serial in report.valid)
 
     @mock.patch.object(certlib.EntCertLib, 'update')
@@ -221,7 +221,7 @@ class TestCertManager(CertManagerTestBase):
         mgr = certmgr.CertManager(uep=self.mock_uep)
         mgr.update()
 
-        report = self.update_action_syslog_mock.call_args[0][0]
+        report = mgr.entcertlib.report
         self.assertTrue(self.stub_ent1 in report.added)
 
     def test_rogue(self):
@@ -231,8 +231,7 @@ class TestCertManager(CertManagerTestBase):
         mgr = certmgr.CertManager(uep=self.mock_uep)
         mgr.update()
 
-        report = self.update_action_syslog_mock.call_args[0][0]
-
+        report = mgr.entcertlib.report
         # our local ent certs should be showing up as rogue
         self.assertTrue(self.local_ent_certs[0] in report.rogue)
         self.assertTrue(self.local_ent_certs[1] in report.rogue)
@@ -251,8 +250,9 @@ class TestCertManager(CertManagerTestBase):
         mgr = certmgr.CertManager(uep=self.mock_uep)
         mgr.update()
 
+        report = mgr.entcertlib.report
         # the expired certs should be delete/rogue and expired
-        report = self.update_action_syslog_mock.call_args[0][0]
+        #report = self.update_action_syslog_mock.call_args[0][0]
         self.assertTrue(self.stub_ent1 in report.rogue)
 
     @mock.patch.object(certlib.EntitlementCertBundleInstaller, 'build_cert')
@@ -279,7 +279,7 @@ class TestHealingCertManager(TestCertManager):
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
         self.mock_cert_sorter.compliant_until = datetime.now() + \
                 timedelta(days=15)
-        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr = certmgr.HealingCertManager(uep=self.mock_uep)
         mgr.update(autoheal=True)
         self.assertFalse(self.mock_uep.bind.called)
 
@@ -287,7 +287,7 @@ class TestHealingCertManager(TestCertManager):
         # need a stub product dir with prods with no entitlements,
         # don't have to mock here since we can actually pass in a product
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=False)
-        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr = certmgr.HealingCertManager(uep=self.mock_uep)
         mgr.update(autoheal=True)
         self.assertTrue(self.mock_uep.bind.called)
 
@@ -301,7 +301,7 @@ class TestHealingCertManager(TestCertManager):
                 self.stub_ent_expires_tomorrow)
 
         self._stub_certificate_calls([self.stub_ent_expires_tomorrow])
-        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr = certmgr.HealingCertManager(uep=self.mock_uep)
         mgr.update(autoheal=True)
         # see if we tried to update certs
         self.assertTrue(self.mock_uep.bind.called)
@@ -313,7 +313,7 @@ class TestHealingCertManager(TestCertManager):
         # cert sorter using the product dir. Just making sure an unexpected
         # exception is logged and not bubbling up.
         self.mock_cert_sorter.is_valid = mock.Mock(side_effect=TypeError())
-        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr = certmgr.HealingCertManager(uep=self.mock_uep)
         mgr.update(autoheal=True)
         for call in mock_log.method_calls:
             if call[0] == 'exception' and isinstance(call[1][0], TypeError):
