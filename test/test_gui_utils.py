@@ -11,6 +11,7 @@ import rhsm_display
 rhsm_display.set_display()
 
 from subscription_manager.gui import utils
+from subscription_manager.gui import storage
 
 
 class TestLinkify(unittest.TestCase):
@@ -67,3 +68,30 @@ class TestLinkify(unittest.TestCase):
     def test_example_2(self):
         ret = utils.linkify(self.example_2)
         self.assertEquals(ret, self.expected_example_2)
+
+
+class TestGatherGroup(unittest.TestCase):
+    def test_gather_group(self):
+        """
+        The tree for this test looks like:
+            root
+                child-1
+                    grandchild-1
+                child-2
+            root-sibling
+        utils.gather_group() should return root and all its children and
+        not return root-sibling.
+        """
+        store = storage.MappedTreeStore({'name': str})
+        root_iter = store.add_map(None, {'name': 'root'})
+        store.add_map(None, {'name': 'root-sibling'})
+        child_1_iter = store.add_map(root_iter, {'name': 'child-1'})
+        store.add_map(root_iter, {'name': 'child-2'})
+        store.add_map(child_1_iter, {'name': 'grandchild-1'})
+
+        refs = utils.gather_group(store, root_iter, [])
+        names = set()
+        for r in refs:
+            m = r.get_model()
+            names.add(m.get_value(m.get_iter(r.get_path()), 0))
+        self.assertEqual(names, set(['root', 'child-1', 'child-2', 'grandchild-1']))

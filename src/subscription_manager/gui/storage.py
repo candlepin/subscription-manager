@@ -36,6 +36,9 @@ class MappedStore(object):
             entry[self[key]] = value
         return entry
 
+    def __contains__(self, item):
+        return item in self.type_index.keys()
+
 
 class MappedListStore(MappedStore, gtk.ListStore):
 
