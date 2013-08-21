@@ -266,6 +266,9 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 check:
 	nosetests
 
+smoke:
+	test/smoke.sh
+
 coverage:
 	nosetests --with-cover --cover-package subscription_manager --cover-erase
 
