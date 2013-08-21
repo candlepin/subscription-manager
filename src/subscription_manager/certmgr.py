@@ -69,9 +69,9 @@ class BaseCertManager:
 
         # updates at this point is a int representing how many
         # things were updated, which is pretty much completely useless
-        print "update reports: "
-        for upr in update_reports:
-            print upr
+        #print "update reports: "
+        #for upr in update_reports:
+        #    print upr
 
     def _run_update(self, lib):
         update_report = None
@@ -113,7 +113,7 @@ class CertManager(BaseCertManager):
 
         self.entcertlib = EntCertLib(uep=self.uep)
         self.repolib = RepoLib(uep=self.uep)
-        self.factlib = FactLib(uep=self.uep, facts=self.facts)
+        self.factlib = FactLib(uep=self.uep)
         self.profilelib = PackageProfileLib(uep=self.uep)
         self.installedprodlib = InstalledProductsLib(uep=self.uep)
         self.healinglib = HealingLib(self.uep)

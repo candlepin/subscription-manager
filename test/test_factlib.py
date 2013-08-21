@@ -16,6 +16,7 @@ import stubs
 import fixture
 
 from subscription_manager import factlib
+from subscription_manager import injection as inj
 
 
 class TestFactlib(fixture.SubManFixture):
@@ -24,8 +25,9 @@ class TestFactlib(fixture.SubManFixture):
         super(TestFactlib, self).setUp()
         self.stub_uep = stubs.StubUEP()
         self.expected_facts = {'fact1': 'F1', 'fact2': 'F2'}
-        self.fl = factlib.FactLib(lock=stubs.MockActionLock(),
-                uep=self.stub_uep, facts=stubs.StubFacts(self.expected_facts))
+
+        inj.provide(inj.FACTS, stubs.StubFacts(self.expected_facts))
+        self.fl = factlib.FactLib(uep=self.stub_uep)
 
     def test_factlib_updates_when_identity_does_not_exist(self):
         factlib.ConsumerIdentity = stubs.StubConsumerIdentity

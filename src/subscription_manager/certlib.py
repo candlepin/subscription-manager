@@ -127,6 +127,7 @@ class HealingUpdateAction(object):
     # no real point to passing in entdir and product_dir, we
     # can inject?
     def __init__(self, uep=None):
+        self.uep = uep
         self.report = EntCertUpdateReport()
         self.plugin_manager = require(PLUGIN_MANAGER)
 

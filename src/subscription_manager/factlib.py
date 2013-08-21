@@ -20,6 +20,7 @@ import logging
 
 from certlib import ConsumerIdentity, Locker, ActionReport
 from subscription_manager.facts import Facts
+from subscription_manager import injection as inj
 
 _ = gettext.gettext
 
@@ -37,12 +38,10 @@ class FactLib(object):
 
     Makes use of the facts module as well.
     """
-    def __init__(self, uep=None, facts=None):
+    def __init__(self, uep=None):
         self.locker = Locker()
-        self.facts = facts
         self.uep = uep
-        if not self.facts:
-            self.facts = Facts()
+        self.facts = inj.require(inj.FACTS)
 
     def update(self):
         return self.locker.run(self._do_update)
