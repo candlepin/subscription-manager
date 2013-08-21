@@ -16,11 +16,11 @@
 import StringIO
 from rhsm import config
 import random
-import tempfile
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
         OverrideStatusCache
+from subscription_manager.facts import Facts
 from rhsm.certificate import GMT
 from subscription_manager.gui.utils import AsyncWidgetUpdater, handle_gui_exception
 from rhsm.certificate2 import Version
@@ -470,7 +470,7 @@ class StubContentConnection:
         pass
 
 
-class StubFacts(object):
+class StubFacts(Facts):
     def __init__(self, fact_dict=None, facts_changed=True):
         fact_dict = fact_dict or {}
         self.facts = fact_dict
@@ -491,6 +491,12 @@ class StubFacts(object):
 
     def get_last_update(self):
         return None
+
+    def write_cache(self):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
 
 
 class StubConsumer:

@@ -93,6 +93,8 @@ class SubManFixture(unittest.TestCase):
         # don't use file based locks for tests
         inj.provide(inj.ACTION_LOCK, RLock)
 
+        inj.provide(inj.FACTS, stubs.StubFacts())
+
         self.dbus_patcher = patch('subscription_manager.managercli.CliCommand._request_validity_check')
         self.dbus_patcher.start()
 

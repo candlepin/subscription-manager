@@ -19,6 +19,7 @@ from subscription_manager.cache import ProductStatusCache, EntitlementStatusCach
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
+from subscription_manager.facts import Facts
 from subscription_manager.identity import Identity
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.cp_provider import CPProvider
@@ -58,6 +59,9 @@ def init_dep_injection():
 
     inj.provide(inj.POOLTYPE_CACHE, PoolTypeCache, singleton=True)
     inj.provide(inj.ACTION_LOCKER, ActionLock)
+
+    # see what happens with non singleton, callable
+    inj.provides(inj.FACTS, Facts)
 
     try:
         # This catch fixes the product-id module on anaconda
