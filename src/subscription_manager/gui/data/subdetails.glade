@@ -1,22 +1,39 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkWindow" id="window1">
-    <property name="icon-name">subscription-manager</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">subscription-manager</property>
     <child>
       <widget class="GtkVBox" id="sub_details_vbox">
         <property name="height_request">50</property>
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <widget class="GtkLabel" id="label2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">&lt;b&gt;Subscription Details&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
         <child>
           <widget class="GtkFrame" id="frame1">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
               <widget class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
-                <property name="left_padding">12</property>
+                <property name="can_focus">False</property>
                 <child>
                   <widget class="GtkScrolledWindow" id="scrolledwindow2">
                     <property name="visible">True</property>
@@ -27,18 +44,21 @@
                     <child>
                       <widget class="GtkViewport" id="viewport2">
                         <property name="visible">True</property>
-                        <property name="border_width">2</property>
+                        <property name="can_focus">False</property>
                         <property name="resize_mode">queue</property>
+                        <property name="vadjustment">0 0 206 20.600000000000001 185.40000000000001 206</property>
                         <property name="shadow_type">none</property>
                         <child>
                           <widget class="GtkTable" id="table2">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="n_rows">4</property>
                             <property name="n_columns">2</property>
-                            <property name="column_spacing">8</property>
+                            <property name="column_spacing">3</property>
                             <child>
                               <widget class="GtkLabel" id="subscription_label">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">&lt;b&gt;Subscription:&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
@@ -46,8 +66,8 @@
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
-                                <property name="x_padding">10</property>
-                                <property name="y_padding">5</property>
+                                <property name="x_padding">4</property>
+                                <property name="y_padding">4</property>
                               </packing>
                             </child>
                             <child>
@@ -72,6 +92,7 @@
                             <child>
                               <widget class="GtkLabel" id="products_label">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
                                 <property name="yalign">0</property>
                                 <property name="label" translatable="yes">&lt;b&gt;Products:&lt;/b&gt;</property>
@@ -82,8 +103,8 @@
                                 <property name="bottom_attach">4</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
-                                <property name="x_padding">10</property>
-                                <property name="y_padding">5</property>
+                                <property name="x_padding">4</property>
+                                <property name="y_padding">4</property>
                               </packing>
                             </child>
                             <child>
@@ -108,6 +129,7 @@
                             <child>
                               <widget class="GtkLabel" id="support_level_and_type_label">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">&lt;b&gt;Service Level, Type:&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
@@ -117,8 +139,8 @@
                                 <property name="bottom_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
-                                <property name="x_padding">10</property>
-                                <property name="y_padding">5</property>
+                                <property name="x_padding">4</property>
+                                <property name="y_padding">4</property>
                               </packing>
                             </child>
                             <child>
@@ -145,6 +167,7 @@
                             <child>
                               <widget class="GtkLabel" id="sku_label">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">&lt;b&gt;SKU:&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
@@ -154,8 +177,8 @@
                                 <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
-                                <property name="x_padding">10</property>
-                                <property name="y_padding">5</property>
+                                <property name="x_padding">4</property>
+                                <property name="y_padding">4</property>
                               </packing>
                             </child>
                             <child>
@@ -188,18 +211,16 @@
               </widget>
             </child>
             <child>
-              <widget class="GtkLabel" id="label2">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">&lt;b&gt;Subscription Details&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-              </widget>
+              <placeholder/>
               <packing>
                 <property name="type">label_item</property>
               </packing>
             </child>
           </widget>
           <packing>
-            <property name="position">0</property>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </widget>
