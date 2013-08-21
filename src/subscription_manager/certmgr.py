@@ -69,8 +69,9 @@ class BaseCertManager:
 
         # updates at this point is a int representing how many
         # things were updated, which is pretty much completely useless
-        print "update reports: ", update_reports
-        return update_reports
+        print "update reports: "
+        for upr in update_reports:
+            print upr
 
     def _run_update(self, lib):
         update_report = None

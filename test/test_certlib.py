@@ -68,10 +68,10 @@ class UpdateActionTests(SubManFixture):
 
         update_action.install([valid_ent.serial, expired_ent.serial])
         update_report = update_action.report
-        print "exceptions", update_report.exceptions
+        print "exceptions", update_report.exceptions()
         print update_report
         print type(update_report)
-        self.assertEqual(0, len(update_report.exceptions), "No exceptions should have been thrown")
+        self.assertEqual(0, len(update_report.exceptions()), "No exceptions should have been thrown")
         self.assertTrue(valid_ent in update_report.added)
         self.assertTrue(valid_ent.serial in update_report.expected)
         self.assertTrue(expired_ent.serial in update_report.expected)
@@ -90,5 +90,5 @@ class UpdateActionTests(SubManFixture):
             self.fail("operation failed when certificate wasn't deleted")
         self.assertEquals(0, update_report.updates())
 
-        exceptions = update_action.report.exceptions
+        exceptions = update_action.report.exceptions()
         self.assertEquals([], exceptions)

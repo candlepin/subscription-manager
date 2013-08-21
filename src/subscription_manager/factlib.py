@@ -53,10 +53,13 @@ class FactLib(object):
 
 
 class FactActionReport(ActionReport):
+    name = "Fact updates"
+
     def __init__(self):
         self.fact_updates = []
         self._exceptions = []
         self._updates = []
+        self._status = None
 
     def updates(self):
         """how many facts were updated"""

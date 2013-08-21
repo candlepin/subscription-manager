@@ -513,6 +513,8 @@ class Disconnected(Exception):
 
 class ActionReport(object):
     """Base class for cert lib and action reports"""
+    name = "Report"
+
     def __init__(self):
         self._status = None
         self._exceptions = []
@@ -536,16 +538,21 @@ class ActionReport(object):
             print self.format_exceptions()
 
     def __str__(self):
-        template = """status: %(status)s
+        template = """%(report_name)s
+        status: %(status)s
         updates: %(updates)s
-        exceptions: %(exceptions)s"""
-        return template % {'status': self._status,
+        exceptions: %(exceptions)s
+        """
+        return template % {'report_name': self.name,
+                           'status': self._status,
                            'updates': self._updates,
                            'exceptions': self.format_exceptions()}
 
 
 class EntCertUpdateReport(ActionReport):
     """Report entitlement cert update action changes"""
+    name = "Entitlement Cert Updates"
+
     def __init__(self):
         self.valid = []
         self.expected = []

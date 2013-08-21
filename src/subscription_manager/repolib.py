@@ -117,6 +117,7 @@ class RepoUpdateAction:
         # FIXME: empty report at the moment, should be changed to include
         # info about updated repos
         self.report = ActionReport()
+        self.report.name = "Repo updates"
         # If we are not registered, skip trying to refresh the
         # data from the server
         if not self.identity.is_valid():
