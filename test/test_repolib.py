@@ -23,9 +23,13 @@ from rhsm.utils import UnsupportedOperationException
 from fixture import SubManFixture
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
+
         StubProductDirectory, StubUEP, StubConsumerIdentity
 import subscription_manager.injection as inj
-from subscription_manager.repolib import Repo, UpdateAction, TidyWriter
+
+from subscription_manager.repolib import Repo, RepoUpdateAction, TidyWriter
+from subscription_manager.utils import UnsupportedOperationException
+
 from subscription_manager import repolib
 
 
@@ -56,10 +60,10 @@ class RepoTests(unittest.TestCase):
         self.assertFalse(("proxy", "") in r.items())
 
 
-class UpdateActionTests(SubManFixture):
+class RepoUpdateActionTests(SubManFixture):
 
     def setUp(self):
-        super(UpdateActionTests, self).setUp()
+        super(RepoUpdateActionTests, self).setUp()
         stub_prod = StubProduct("fauxprod", provided_tags="TAG1,TAG2")
         stub_prod2 = StubProduct("fauxprovidedprod", provided_tags="TAG4")
         stub_prod_cert = StubProductCertificate(stub_prod, provided_products=[stub_prod2])
@@ -81,7 +85,7 @@ class UpdateActionTests(SubManFixture):
 
         repolib.ConsumerIdentity = StubConsumerIdentity
         stub_uep = StubUEP()
-        self.update_action = UpdateAction(stub_uep, prod_dir=stub_prod_dir,
+        self.update_action = RepoUpdateAction(uep=stub_uep, prod_dir=stub_prod_dir,
                 ent_dir=stub_ent_dir)
 
     def _find_content(self, content_list, name):
