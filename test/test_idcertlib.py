@@ -45,6 +45,7 @@ class InvalidConsumerIdentity(certlib.ConsumerIdentity):
 class TestIdentityCertlib(fixture.SubManFixture):
 
     def setUp(self):
+        super(TestIdentityCertlib, self).setUp()
         self.old_ci = certlib.ConsumerIdentity
 
     def _get_idcertlib(self):
@@ -72,8 +73,8 @@ class TestIdentityCertlib(fixture.SubManFixture):
     def test_idcertlib_no_id_cert(self):
         certlib.ConsumerIdentity = InvalidConsumerIdentity
         idcertlib = self._get_idcertlib()
-        ret = idcertlib._do_update()
-        self.assertEquals(ret, 0)
+        report = idcertlib._do_update()
+        self.assertEquals(report._status, 0)
 
     def tearDown(self):
         certlib.ConsumerIdentity = self.old_ci
