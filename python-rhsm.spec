@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.10.0
+Version: 1.10.1
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,11 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Aug 22 2013 Alex Wood <awood@redhat.com> 1.10.1-1
+- 997194: fix interpolation of default values (ckozak@redhat.com)
+- bump version to 1.10.x (jesusr@redhat.com)
+- remove 6.5 releaser (jesusr@redhat.com)
+
 * Wed Aug 14 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.2-1
 - remove rhel 5.9, 5.10, 6.3, 6.4 (jesusr@redhat.com)
 - Fedora 17 is at end of life. (awood@redhat.com)
