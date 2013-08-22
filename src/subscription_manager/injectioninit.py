@@ -58,10 +58,10 @@ def init_dep_injection():
     inj.provide(inj.PLUGIN_MANAGER, PluginManager, singleton=True)
 
     inj.provide(inj.POOLTYPE_CACHE, PoolTypeCache, singleton=True)
-    inj.provide(inj.ACTION_LOCKER, ActionLock)
+    inj.provide(inj.ACTION_LOCK, ActionLock)
 
     # see what happens with non singleton, callable
-    inj.provides(inj.FACTS, Facts)
+    inj.provide(inj.FACTS, Facts)
 
     try:
         # This catch fixes the product-id module on anaconda
