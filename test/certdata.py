@@ -556,7 +556,6 @@ Product:
 	Version: 6.1
 	Arch: ALL
 	Tags: 
-	OS Name: Awesome OS Server Bits
 
 """
 
