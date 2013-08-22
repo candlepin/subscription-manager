@@ -107,37 +107,6 @@ class EntCertDeleteLib(object):
         return action.perform()
 
 
-class IdentityCertLib(DataLib):
-    """
-    An object to update the identity certificate in the event the server
-    deems it is about to expire. This is done to prevent the identity
-    certificate from expiring thus disallowing connection to the server
-    for updates.
-    """
-
-    def _do_update(self):
-        report = ActionReport()
-        if not ConsumerIdentity.existsAndValid():
-            # we could in theory try to update the id in the
-            # case of it being bogus/corrupted, ala #844069,
-            # but that seems unneeded
-            # FIXME: more details
-            report._status = 0
-            return report
-
-        from subscription_manager import managerlib
-
-        idcert = ConsumerIdentity.read()
-        uuid = idcert.getConsumerId()
-        consumer = self.uep.getConsumer(uuid)
-        # only write the cert if the serial has changed
-        if idcert.getSerialNumber() != consumer['idCert']['serial']['serial']:
-            log.debug('identity certificate changed, writing new one')
-            managerlib.persist_consumer_cert(consumer)
-        report._status = 1
-        return report
-
-
 # TODO: rename to EntitlementCertDeleteAction
 class EntCertDeleteAction(object):
     def __init__(self, entdir=None):
