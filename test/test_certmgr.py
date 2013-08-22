@@ -21,6 +21,7 @@ import stubs
 from rhsm import ourjson as json
 from subscription_manager import certmgr
 from subscription_manager import certlib
+from subscription_manager import identitycertlib
 from subscription_manager import repolib
 from subscription_manager import facts
 from subscription_manager import hwprobe
@@ -161,7 +162,7 @@ class TestCertManager(CertManagerTestBase):
         self.assertRaises(GoneException, mgr.update)
 
     # see bz #852706, except this time for idcertlib
-    @mock.patch.object(certlib.IdentityCertLib, 'update')
+    @mock.patch.object(identitycertlib.IdentityCertLib, 'update')
     def test_idcertlib_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
         mgr = certmgr.CertManager(uep=self.mock_uep)
@@ -183,7 +184,7 @@ class TestCertManager(CertManagerTestBase):
                 return
         self.fail("Did not ExceptionException in the logged exceptions")
 
-    @mock.patch.object(certlib.IdentityCertLib, 'update')
+    @mock.patch.object(identitycertlib.IdentityCertLib, 'update')
     @mock.patch('subscription_manager.certmgr.log')
     def test_idcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
