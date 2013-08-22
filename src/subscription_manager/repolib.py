@@ -221,9 +221,7 @@ class RepoUpdateAction:
         else:
             certs = self.ent_dir.list_valid()
 
-
         lst = set()
-
 
         for cert in certs:
             if not cert.content:
