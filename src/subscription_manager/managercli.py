@@ -1441,13 +1441,13 @@ class AttachCommand(CliCommand):
                                              "complete your request."))
                     autosubscribe(self.cp, consumer_uuid,
                                   service_level=self.options.service_level)
-            result = None
+            report = None
             if cert_update:
-                result = self.certlib.update()
+                report = self.certlib.update()
 
-            if result and result[1]:
+            if report and report.exceptions():
                 print 'Entitlement Certificate(s) update failed due to the following reasons:'
-                for e in result[1]:
+                for e in report.exceptions():
                     print '\t-', str(e)
             elif self.options.auto:
                 if not products_installed:
