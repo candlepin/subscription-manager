@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.0
+Version: 1.10.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,32 @@ fi
 %endif
 
 %changelog
+* Thu Aug 22 2013 Alex Wood <awood@redhat.com> 1.10.1-1
+- Adding Fedora 20 branch to releaser. (awood@redhat.com)
+- Subscribe/unsubscribe mirror attach/remove tests (alikins@redhat.com)
+- Revert "990195: remove subscribe options" (alikins@redhat.com)
+- 994620: reword tooltip message (ckozak@redhat.com)
+- 997935: stop making requests after unregister (ckozak@redhat.com)
+- 997740: allow autoheal call more often (ckozak@redhat.com)
+- Prevent name collision over the parent variable in RHEL 5 Firstboot.
+  (awood@redhat.com)
+- 997189: error is now a sys.exc_info() tuple. (awood@redhat.com)
+- self._parent is not defined here. (awood@redhat.com)
+- bump version and remove rhel-6.5 releaser (jesusr@redhat.com)
+- Convert contract selection window to use a MappedListStore.
+  (awood@redhat.com)
+- Stripe rows whenever the My Subs or All Available tabs are shown.
+  (awood@redhat.com)
+- 991165: Refresh row striping after the TreeView is resorted.
+  (awood@redhat.com)
+- Remove unused background attribute in Installed Products tab.
+  (awood@redhat.com)
+- Set background color on progress bar renderer. (awood@redhat.com)
+- No need to set a hint to true in glade then false in code. (awood@redhat.com)
+- Remove duplicate import. (awood@redhat.com)
+- Add a very simple "smoke" test script (alikins@redhat.com)
+- 842402: Re-aligning Subscription Manager Gui (cschevia@redhat.com)
+
 * Wed Aug 14 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.2-1
 - 851321: Refresh/redraw tables after removing subscriptions (cschevia@redhat.com)
 - 974587: allow certs with no content (ckozak@redhat.com)
