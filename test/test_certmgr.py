@@ -307,7 +307,7 @@ class TestHealingCertManager(TestCertManager):
         self.assertTrue(self.mock_uep.bind.called)
 
     # TODO: use Mock(wraps=) instead of hiding all logging
-    @mock.patch('subscription_manager.certlib.log')
+    @mock.patch('subscription_manager.healinglib.log')
     def test_healing_trigger_exception(self, mock_log):
         # Forcing is_valid to throw the type error we used to expect from
         # cert sorter using the product dir. Just making sure an unexpected
