@@ -308,16 +308,6 @@ class VersionsNoRhsmStub(Versions):
 
 class TestGetServerVersions(fixture.SubManFixture):
 
-    def _valid_consumer(self):
-        identity = NonCallableMock(name='IdentityMock')
-        identity.is_valid = Mock(return_value=True)
-        inj.provide(inj.IDENTITY, identity)
-
-    def _invalid_consumer(self):
-        invalid_identity = NonCallableMock(name='IdentityMock')
-        invalid_identity.is_valid = Mock(return_value=False)
-        inj.provide(inj.IDENTITY, invalid_identity)
-
     @patch('subscription_manager.utils.ClassicCheck')
     def test_get_server_versions_classic(self, MockClassicCheck):
         self._invalid_consumer()
