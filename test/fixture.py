@@ -108,7 +108,7 @@ class SubManFixture(unittest.TestCase):
         return consumer_cp
 
     # For changing injection consumer id to one that fails "is_valid"
-    def _valid_consumer(self):
+    def _inject_mock_valid_consumer(self):
         """For changing injected consumer identity to one that passes is_valid()
 
         Returns the injected identity if it need to be examined.
@@ -119,7 +119,7 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.IDENTITY, identity)
         return identity
 
-    def _invalid_consumer(self):
+    def _inject_mock_invalid_consumer(self):
         """For chaning injected consumer identity to one that fails is_valid()
 
         Returns the injected identity if it need to be examined.
