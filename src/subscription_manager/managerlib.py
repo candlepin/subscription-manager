@@ -29,7 +29,6 @@ from rhsm.certificate import Key, CertificateException, create_from_pem
 import subscription_manager.cache as cache
 from subscription_manager.cert_sorter import StackingGroupSorter, ComplianceManager
 from subscription_manager import certlib
-from subscription_manager.certlib import system_log as inner_system_log
 from subscription_manager.facts import Facts
 from subscription_manager.injection import require, CERT_SORTER, \
         PRODUCT_DATE_RANGE_CALCULATOR, IDENTITY, ENTITLEMENT_STATUS_CACHE, \
@@ -39,8 +38,12 @@ from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoLib
 from subscription_manager.utils import is_true_value
+
+# FIXME FIXME
 from subscription_manager.identity import ConsumerIdentity
 from dateutil.tz import tzlocal
+
+from subscription_manager import utils
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -54,7 +57,7 @@ ID_CERT_PERMS = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP
 
 
 def system_log(message, priority=syslog.LOG_NOTICE):
-    inner_system_log(message, priority)
+    utils.system_log(message, priority)
 
 
 def persist_consumer_cert(consumerinfo):
@@ -836,6 +839,7 @@ def clean_all_data(backup=True):
         log.info("Backing up %s to %s." % (consumer_dir, consumer_dir_backup))
         shutil.copytree(consumer_dir, consumer_dir_backup)
 
+# FIXME FIXME
     # Delete current consumer certs:
     for path in [ConsumerIdentity.keypath(), ConsumerIdentity.certpath()]:
         if (os.path.exists(path)):
@@ -884,6 +888,6 @@ def allows_multi_entitlement(pool):
     """
     for attribute in pool['productAttributes']:
         if attribute['name'] == "multi-entitlement" and \
-            is_true_value(attribute['value']):
+            utils.is_true_value(attribute['value']):
             return True
     return False

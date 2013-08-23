@@ -22,7 +22,7 @@ import logging
 from rhsm.connection import GoneException, ExpiredIdentityCertException
 
 from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
-from subscription_manager.certlib import EntCertLib
+from subscription_manager.entcertlib import EntCertLib
 from subscription_manager.identitycertlib import IdentityCertLib
 from subscription_manager.healinglib import HealingLib
 from subscription_manager.factlib import FactLib

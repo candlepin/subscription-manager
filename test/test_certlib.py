@@ -22,13 +22,13 @@ from stubs import StubEntitlementCertificate, StubProduct, StubEntitlementDirect
 from fixture import SubManFixture
 
 from subscription_manager.certdirectory import Writer
-from subscription_manager import certlib
+from subscription_manager import entcertlib
 
 
-class TestingUpdateAction(certlib.EntCertUpdateAction):
+class TestingUpdateAction(entcertlib.EntCertUpdateAction):
 
     def __init__(self, mock_uep, mock_entdir):
-        certlib.EntCertUpdateAction.__init__(self, uep=mock_uep,
+        entcertlib.EntCertUpdateAction.__init__(self, uep=mock_uep,
                                       entdir=mock_entdir)
 
     def _get_consumer_id(self):
@@ -37,7 +37,7 @@ class TestingUpdateAction(certlib.EntCertUpdateAction):
 
 class UpdateActionTests(SubManFixture):
 
-    @patch("subscription_manager.certlib.EntitlementCertBundleInstaller.build_cert")
+    @patch("subscription_manager.entcertlib.EntitlementCertBundleInstaller.build_cert")
     @patch.object(Writer, "write")
     def test_expired_are_not_ignored_when_installing_certs(self, write_mock, build_cert_mock):
         valid_ent = StubEntitlementCertificate(StubProduct("PValid"))

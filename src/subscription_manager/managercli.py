@@ -35,8 +35,8 @@ from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import InstalledProductsManager, ProfileManager
-from subscription_manager.certlib import EntCertLib, ConsumerIdentity
-
+from subscription_manager.certlib import ConsumerIdentity
+from subscription_manager.entcertlib import EntCertLib, Disconnected
 from subscription_manager.certmgr import CertManager
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
@@ -422,7 +422,7 @@ class CliCommand(AbstractCLICommand):
             self.no_auth_cp = self.cp_provider.get_no_auth_cp()
             self.log_server_version()
 
-            self.certlib = EntCertLib(uep=self.cp)
+            self.entcertlib = EntCertLib(uep=self.cp)
 
         else:
             self.cp = None
@@ -546,7 +546,7 @@ class RefreshCommand(CliCommand):
     def _do_command(self):
         check_registration()
         try:
-            self.certlib.update()
+            self.entcertlib.update()
             log.info("Refreshed local data")
             print (_("All local data refreshed"))
         except connection.RestlibException, re:
@@ -1443,7 +1443,7 @@ class AttachCommand(CliCommand):
                                   service_level=self.options.service_level)
             report = None
             if cert_update:
-                report = self.certlib.update()
+                report = self.entcertlib.update()
 
             if report and report.exceptions():
                 print 'Entitlement Certificate(s) update failed due to the following reasons:'
@@ -1454,7 +1454,7 @@ class AttachCommand(CliCommand):
                     return_code = 1
                 else:
                     self.sorter.force_cert_check()
-                    # run this after certlib update, so we have the new entitlements
+                    # run this after entcertlib update, so we have the new entitlements
                     return_code = show_autosubscribe_output(self.cp)
 
         except Exception, e:
@@ -1557,7 +1557,7 @@ class RemoveCommand(CliCommand):
                             print "   %s" % fail
                     if not success:
                         return_code = 1
-                self.certlib.update()
+                self.entcertlib.update()
             except connection.RestlibException, re:
                 log.error(re)
                 system_exit(-1, re.msg)
