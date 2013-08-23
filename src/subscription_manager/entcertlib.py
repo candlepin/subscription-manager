@@ -24,8 +24,6 @@ from rhsm.certificate import Key, create_from_pem
 
 from subscription_manager import certlib
 from subscription_manager.certdirectory import Writer
-from subscription_manager import rhelentbranding
-from subscription_manager.identity import ConsumerIdentity
 from subscription_manager import utils
 from subscription_manager.injection import IDENTITY, require
 import subscription_manager.injection as inj
@@ -165,8 +163,7 @@ class EntCertUpdateAction(object):
 
     def _get_consumer_id(self):
         try:
-            cid = ConsumerIdentity.read()
-            return cid.getConsumerId()
+            return self.identity.getConsumerId()
         except Exception, e:
             log.error(e)
             raise Disconnected()
