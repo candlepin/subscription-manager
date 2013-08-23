@@ -101,10 +101,34 @@ class SubManFixture(unittest.TestCase):
     def tearDown(self):
         self.dbus_patcher.stop()
 
+
     def get_consumer_cp(self):
         cp_provider = inj.require(inj.CP_PROVIDER)
         consumer_cp = cp_provider.get_consumer_auth_cp()
         return consumer_cp
+
+    # For changing injection consumer id to one that fails "is_valid"
+    def _valid_consumer(self):
+        """For changing injected consumer identity to one that passes is_valid()
+
+        Returns the injected identity if it need to be examined.
+        """
+        identity = NonCallableMock(name='IdentityMock')
+        identity.uuid = "VALIDCONSUMERUUID"
+        identity.is_valid = Mock(return_value=True)
+        inj.provide(inj.IDENTITY, identity)
+        return identity
+
+    def _invalid_consumer(self):
+        """For chaning injected consumer identity to one that fails is_valid()
+
+        Returns the injected identity if it need to be examined.
+        """
+        invalid_identity = NonCallableMock(name='IdentityMock')
+        invalid_identity.is_valid = Mock(return_value=False)
+        invalid_identity.uuid = "INVALIDCONSUMERUUID"
+        inj.provide(inj.IDENTITY, invalid_identity)
+        return invalid_identity
 
     # use our naming convention here to make it clear
     # this is our extension. Note that python 2.7 adds a
