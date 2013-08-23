@@ -27,8 +27,12 @@ from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
 from rhsm.utils import UnsupportedOperationException
 
+# FIXME: local imports
 from certlib import ActionLock, ActionReport, DataLib
+
 from certdirectory import Path, ProductDirectory, EntitlementDirectory
+
+from subscription_manager import injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
