@@ -28,7 +28,7 @@ from rhsm.certificate import Key, CertificateException, create_from_pem
 
 import subscription_manager.cache as cache
 from subscription_manager.cert_sorter import StackingGroupSorter, ComplianceManager
-from subscription_manager import certlib
+from subscription_manager import identity
 from subscription_manager.facts import Facts
 from subscription_manager.injection import require, CERT_SORTER, \
         PRODUCT_DATE_RANGE_CALCULATOR, IDENTITY, ENTITLEMENT_STATUS_CACHE, \
@@ -59,7 +59,7 @@ ID_CERT_PERMS = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP
 def system_log(message, priority=syslog.LOG_NOTICE):
     utils.system_log(message, priority)
 
-
+# FIXME: move me to identity.py
 def persist_consumer_cert(consumerinfo):
     """
      Calls the consumerIdentity, persists and gets consumer info
@@ -67,8 +67,9 @@ def persist_consumer_cert(consumerinfo):
     cert_dir = cfg.get('rhsm', 'consumerCertDir')
     if not os.path.isdir(cert_dir):
         os.mkdir(cert_dir)
-    consumer = certlib.ConsumerIdentity(consumerinfo['idCert']['key'],
-                                        consumerinfo['idCert']['cert'])
+    # unsure if this could be injected?
+    consumer = identity.ConsumerIdentity(consumerinfo['idCert']['key'],
+                                         consumerinfo['idCert']['cert'])
     consumer.write()
     consumer_info = {"consumer_name": consumer.getConsumerName(),
                      "uuid": consumer.getConsumerId()}
@@ -803,12 +804,13 @@ def unregister(uep, consumer_uuid):
     clean_all_data(backup=False)
 
 
+# FIXME: move me to identity.py
 def check_identity_cert_perms():
     """
     Ensure the identity certs on this system have the correct permissions, and
     fix them if not.
     """
-    certs = [certlib.ConsumerIdentity.keypath(), certlib.ConsumerIdentity.certpath()]
+    certs = [identity.ConsumerIdentity.keypath(), identity.ConsumerIdentity.certpath()]
     for cert in certs:
         if not os.path.exists(cert):
             # Only relevant if these files exist.
