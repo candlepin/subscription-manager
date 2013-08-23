@@ -72,12 +72,6 @@ class CertManagerTestBase(SubManFixture):
         self.patcher3 = mock.patch.object(repolib.RepoUpdateAction, 'perform')
         self.repolib_updateaction_perform = self.patcher3.start()
 
-        self.patcher4 = mock.patch('subscription_manager.factlib.ConsumerIdentity')
-        self.factlib_consumeridentity = self.patcher4.start()
-
-        self.patcher5 = mock.patch('subscription_manager.entcertlib.ConsumerIdentity')
-        self.entcertlib_consumeridentity = self.patcher5.start()
-
         self.patcher6 = mock.patch('subscription_manager.managerlib.persist_consumer_cert')
         self.managerlib_persist_consumer_cert = self.patcher6.start()
 
@@ -124,9 +118,6 @@ class CertManagerTestBase(SubManFixture):
         self.repolib_updateaction_perform.return_value = 0
         self.facts_getlastupdate.return_value = None
 
-        self.factlib_consumeridentity.read.return_value = stubs.StubConsumerIdentity("sdfsdf", "sdfsdf")
-        self.entcertlib_consumeridentity.read.return_value = stubs.StubConsumerIdentity("sdfsdf", "sdfsdf")
-
         # Setup a mock cert sorter to initiate the behaviour we want to test.
         # Must use a non-callable mock for our features dep injection
         # framework.
@@ -137,8 +128,6 @@ class CertManagerTestBase(SubManFixture):
     def tearDown(self):
         self.patcher2.stop()
         self.patcher3.stop()
-        self.patcher4.stop()
-        self.patcher5.stop()
         self.patcher6.stop()
         self.patcher8.stop()
 
