@@ -1,4 +1,4 @@
-import unittest
+import fixture
 
 from mock import Mock, patch
 from rhsm.utils import ServerUrlParseErrorEmpty, \
@@ -9,11 +9,13 @@ from subscription_manager.utils import parse_server_info, \
     get_version, get_client_versions, \
     get_server_versions, Versions, friendly_join, is_true_value
 from subscription_manager import certlib
+from subscription_manager import injection as inj
+
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 
 
-class TestParseServerInfo(unittest.TestCase):
+class TestParseServerInfo(fixture.SubManFixture):
 
     def test_fully_specified(self):
         local_url = "myhost.example.com:900/myapp"
@@ -216,7 +218,7 @@ class TestParseServerInfo(unittest.TestCase):
 
 
 # TestParseServerInfo pretty much covers this code wise
-class TestParseBaseUrlInfo(unittest.TestCase):
+class TestParseBaseUrlInfo(fixture.SubManFixture):
     def test_hostname_with_scheme(self):
         # this is the default, so test it here
         local_url = "https://cdn.redhat.com"
@@ -247,6 +249,28 @@ class TestParseBaseUrlInfo(unittest.TestCase):
         (hostname, port, prefix) = parse_baseurl_info(local_url)
         self.assertEquals(prefix, DEFAULT_CDN_PREFIX)
         self.assertEquals("https://foo-bar:8088", format_baseurl(hostname, port, prefix))
+
+
+class TestRemoveScheme(fixture.SubManFixture):
+    def test_colon_port(self):
+        proxy_url = "proxy.example.com:3128"
+        res = remove_scheme(proxy_url)
+        self.assertEquals(res, proxy_url)
+
+    def test_http_scheme(self):
+        proxy_url = "http://example.com:3128"
+        res = remove_scheme(proxy_url)
+        self.assertEquals(res, "example.com:3128")
+
+    def test_https_scheme(self):
+        proxy_url = "https://example.com:3128"
+        res = remove_scheme(proxy_url)
+        self.assertEquals(res, "example.com:3128")
+
+    def test_no_port(self):
+        proxy_url = "proxy.example.com"
+        res = remove_scheme(proxy_url)
+        self.assertEquals(res, proxy_url)
 
 
 NOT_COLLECTED = "non-collected-package"
@@ -282,15 +306,24 @@ class VersionsNoRhsmStub(Versions):
         return package_set
 
 
-class TestGetServerVersions(unittest.TestCase):
+class TestGetServerVersions(fixture.SubManFixture):
+
+    def _valid_consumer(self):
+        identity = NonCallableMock(name='IdentityMock')
+        identity.is_valid = Mock(return_value=True)
+        inj.provide(inj.IDENTITY, identity)
+
+    def _invalid_consumer(self):
+        invalid_identity = NonCallableMock(name='IdentityMock')
+        invalid_identity.is_valid = Mock(return_value=False)
+        inj.provide(inj.IDENTITY, invalid_identity)
 
     @patch('subscription_manager.utils.ClassicCheck')
-    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
-    def test_get_server_versions_classic(self, mci_exists_and_valid, MockClassicCheck):
+    def test_get_server_versions_classic(self, MockClassicCheck):
+        self._invalid_consumer()
         from subscription_manager import utils
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = True
-        mci_exists_and_valid.return_value = False
         utils.Versions = VersionsStub
 
         sv = get_server_versions(None)
@@ -299,11 +332,10 @@ class TestGetServerVersions(unittest.TestCase):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
-    def test_get_server_versions_cp_no_status(self, mci_exists_and_valid, MockClassicCheck, MockUep):
+    def test_get_server_versions_cp_no_status(self, MockClassicCheck, MockUep):
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = False
-        mci_exists_and_valid.return_value = True
+        self._valid_consumer()
         MockUep.supports_resource.return_value = False
         sv = get_server_versions(MockUep)
         self.assertEquals(sv['server-type'], 'Red Hat Subscription Management')
@@ -311,11 +343,10 @@ class TestGetServerVersions(unittest.TestCase):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
-    def test_get_server_versions_cp_with_status(self, mci_exists_and_valid, MockClassicCheck, MockUep):
+    def test_get_server_versions_cp_with_status(self, MockClassicCheck, MockUep):
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = False
-        mci_exists_and_valid.return_value = True
+        self._valid_consumer()
         MockUep.supports_resource.return_value = True
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
@@ -324,11 +355,10 @@ class TestGetServerVersions(unittest.TestCase):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
-    def test_get_server_versions_cp_with_status_and_classic(self, mci_exists_and_valid, MockClassicCheck, MockUep):
+    def test_get_server_versions_cp_with_status_and_classic(self, MockClassicCheck, MockUep):
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = True
-        mci_exists_and_valid.return_value = True
+        self._valid_consumer()
         MockUep.supports_resource.return_value = True
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
@@ -337,13 +367,12 @@ class TestGetServerVersions(unittest.TestCase):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
-    def test_get_server_versions_cp_exception(self, mci_exists_and_valid, MockClassicCheck, MockUep):
+    def test_get_server_versions_cp_exception(self, MockClassicCheck, MockUep):
         def raise_exception(arg):
             raise Exception("boom")
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = False
-        mci_exists_and_valid.return_value = True
+        self._valid_consumer()
         MockUep.supports_resource.side_effect = raise_exception
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
@@ -352,13 +381,12 @@ class TestGetServerVersions(unittest.TestCase):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
-    def test_get_server_versions_cp_exception_and_classic(self, mci_exists_and_valid, MockClassicCheck, MockUep):
+    def test_get_server_versions_cp_exception_and_classic(self, MockClassicCheck, MockUep):
         def raise_exception(arg):
             raise Exception("boom")
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = True
-        mci_exists_and_valid.return_value = False
+        self._invalid_consumer()
         MockUep.supports_resource.side_effect = raise_exception
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
@@ -366,7 +394,7 @@ class TestGetServerVersions(unittest.TestCase):
         self.assertEquals(sv['candlepin'], "Unknown")
 
 
-class TestGetClientVersions(unittest.TestCase):
+class TestGetClientVersions(fixture.SubManFixture):
     @patch('subscription_manager.utils.Versions')
     def test_get_client_versions(self, MockVersions):
         # FIXME: the singleton-esqu nature of subscription_manager.utils.Versions
@@ -406,7 +434,7 @@ class TestGetClientVersions(unittest.TestCase):
         self.assertEquals(cv['python-rhsm'], 'Unknown')
 
 
-class TestGetVersion(unittest.TestCase):
+class TestGetVersion(fixture.SubManFixture):
     def test_version_and_release_present(self):
         versions = Mock()
         versions.get_version.return_value = "1.0"
@@ -422,7 +450,7 @@ class TestGetVersion(unittest.TestCase):
         self.assertEquals("1.0", result)
 
 
-class TestFriendlyJoin(unittest.TestCase):
+class TestFriendlyJoin(fixture.SubManFixture):
 
     def test_join(self):
         self.assertEquals("One", friendly_join(["One"]))
