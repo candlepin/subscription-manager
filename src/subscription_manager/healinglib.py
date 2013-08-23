@@ -19,6 +19,7 @@ import logging
 from rhsm import certificate
 
 from subscription_manager import certlib
+from subscription_manager import entcertlib
 from subscription_manager import injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -45,7 +46,7 @@ class HealingUpdateAction(object):
     # can inject?
     def __init__(self, uep=None):
         self.uep = uep
-        self.report = certlib.EntCertUpdateReport()
+        self.report = entcertlib.EntCertUpdateReport()
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
 
     def perform(self):
@@ -70,7 +71,7 @@ class HealingUpdateAction(object):
 
             cs = inj.require(inj.CERT_SORTER)
 
-            cert_updater = certlib.EntCertLib(uep=self.uep)
+            cert_updater = entcertlib.EntCertLib(uep=self.uep)
             if not cs.is_valid():
                 log.warn("Found invalid entitlements for today: %s" %
                         today)

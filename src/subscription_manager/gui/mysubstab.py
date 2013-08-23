@@ -24,7 +24,7 @@ from rhsm.certificate import GMT
 
 from subscription_manager.async import AsyncBind
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
-from subscription_manager.injection import require, IDENTITY, DBUS_IFACE, POOLTYPE_CACHE
+from subscription_manager.injection import require, IDENTITY, DBUS_IFACE
 
 from subscription_manager.gui import messageWindow, progress
 from subscription_manager.gui.storage import MappedTreeStore
@@ -148,8 +148,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             self.async_bind.unbind(serial, selection, self._unsubscribe_callback, self._handle_unbind_exception)
         else:
             # unregistered, just delete the certs directly
-            self.backend.certlib.delete([serial])
+            self.backend.entcertlib.delete([serial])
             self.backend.cs.force_cert_check()
+
 
     def unsubscribe_button_clicked(self, widget):
         selection = widgets.SelectionWrapper(self.top_view.get_selection(), self.store)

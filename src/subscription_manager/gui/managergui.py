@@ -34,7 +34,7 @@ import rhsm.config as config
 import rhsm.connection as connection
 
 from subscription_manager.branding import get_branding
-from subscription_manager.certlib import EntCertLib
+from subscription_manager.entcertlib import EntCertLib
 from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager import managerlib

@@ -22,6 +22,8 @@ import pprint
 
 import signal
 import socket
+import syslog
+from urlparse import urlparse
 
 from M2Crypto.SSL import SSLError
 
@@ -282,3 +284,8 @@ def friendly_join(items):
 def is_true_value(test_string):
     val = str(test_string).lower()
     return val == "1" or val == "true" or val == "yes"
+
+
+def system_log(message, priority=syslog.LOG_NOTICE):
+    syslog.openlog("subscription-manager")
+    syslog.syslog(priority, message.encode("utf-8"))
