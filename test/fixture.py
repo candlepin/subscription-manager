@@ -60,7 +60,7 @@ class SubManFixture(unittest.TestCase):
     def setUp(self):
         # By default mock that we are registered. Individual test cases
         # can override if they are testing disconnected scenario.
-        id_mock = Mock()
+        id_mock = Mock(name='FixtureIdentityMock')
         id_mock.exists_and_valid = Mock(return_value=True)
 
         # Don't really care about date ranges here:
@@ -84,9 +84,9 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
 
         # setup and mock the plugin_manager
-        plugin_manager_mock = Mock()
+        plugin_manager_mock = Mock(name='FixturePluginManagerMock')
         inj.provide(inj.PLUGIN_MANAGER, plugin_manager_mock)
-        inj.provide(inj.DBUS_IFACE, Mock())
+        inj.provide(inj.DBUS_IFACE, Mock(name='FixtureDbusIfaceMock'))
 
         pooltype_cache = Mock()
         inj.provide(inj.POOLTYPE_CACHE, pooltype_cache)
