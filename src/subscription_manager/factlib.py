@@ -18,7 +18,7 @@
 import gettext
 import logging
 
-from certlib import ConsumerIdentity, Locker, ActionReport
+from certlib import Locker, ActionReport
 from subscription_manager.facts import Facts
 from subscription_manager import injection as inj
 
@@ -80,15 +80,15 @@ class FactAction(object):
         if self.facts.has_changed():
             fact_updates = self.facts.get_facts()
             self.report.fact_updates = fact_updates
-            # FIXME: changed to injected
-            if not ConsumerIdentity.exists():
+
+            consumer_identity = inj.require(inj.IDENTITY)
+            if not consumer_identity.is_valid():
+                # FIXME: more info
                 return self.report
-            consumer = ConsumerIdentity.read()
-            consumer_uuid = consumer.getConsumerId()
 
             # CacheManager.update_check calls self.has_changed,
             # is the self.facts.has_changed above redundant?
-            self.facts.update_check(self.uep, consumer_uuid)
+            self.facts.update_check(self.uep, consumer_identity.uuid)
         else:
             log.info("Facts have not changed, skipping upload.")
 
