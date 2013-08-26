@@ -318,7 +318,7 @@ class EntitlementCertBundleInstaller(object):
         log.exception(exception)
         log.error('Bundle not loaded:\n%s\n%s', bundle, exception)
 
-        self.report.exceptions.append(exception)
+        self.report._exceptions.append(exception)
 
     def post_install(self, bundle):
         log.debug("ent cert bundle post_install")
