@@ -16,7 +16,10 @@
 import sys
 
 sys.path.append("/usr/share/rhsm")
-from subscription_manager.certlib import ConsumerIdentity
+
+# rhsm_login init the injector before we are loaded
+from subscription_manager import injection as inj
+
 from subscription_manager.i18n import configure_i18n
 
 configure_i18n(with_glade=True)
@@ -87,7 +90,8 @@ class RhsmFirstbootModule(ParentClass):
         we want to skip over this screen if there is already an identity
         certificate on the machine (most likely laid down in a kickstart).
         """
-        return not ConsumerIdentity.existsAndValid()
+        identity = inj.require(inj.IDENTITY)
+        return not identity.is_valid()
 
     ##############################
     # el5 compat functions follow
