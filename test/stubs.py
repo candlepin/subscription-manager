@@ -16,10 +16,12 @@
 import StringIO
 from rhsm import config
 import random
+import mock
+import simplejson as json
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
-        OverrideStatusCache
+        OverrideStatusCache, ProfileManager, InstalledProductsManager
 from subscription_manager.facts import Facts
 from rhsm.certificate import GMT
 from subscription_manager.gui.utils import AsyncWidgetUpdater, handle_gui_exception
@@ -95,9 +97,11 @@ from datetime import datetime, timedelta
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 
 from subscription_manager.certlib import ActionLock
+
 from rhsm.certificate import parse_tags
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
         Product, Content, Order
+from rhsm import profile
 
 
 class MockActionLock(ActionLock):
@@ -558,6 +562,7 @@ class StubCPProvider(object):
     def set_user_pass(self, username=None, password=None):
         pass
 
+# tries to write to /var/lib and it reads the rpm db
     def clean(self):
         pass
 
@@ -616,3 +621,55 @@ class StubAsyncUpdater(AsyncWidgetUpdater):
             handle_gui_exception(e, message, self.parent_window)
         finally:
             widget_update.finished()
+
+
+class StubInstalledProductsManager(InstalledProductsManager):
+    def write_cache(self):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+
+class StubProfileManager(ProfileManager):
+
+    def write_cache(self):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+    def _get_current_profile(self):
+        mock_packages = [
+                  profile.Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+                  profile.Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
+        return StubRpmProfile(mock_packages=mock_packages)
+
+
+# could be a Mock
+class StubRpmProfile(profile.RPMProfile):
+    def __init__(self, from_file=None, mock_packages=None):
+        self.mock_packages = mock_packages
+        mock_file = self._mock_pkg_profile_file()
+
+        # create an RPMProfile from the mock_packages list
+        super(StubRpmProfile, self).__init__(from_file=mock_file)
+
+    def _get_packages(self):
+        """return a list of profile.Package objects"""
+        if self.mock_packages:
+            return self.mock_packages
+        return []
+
+    def _mock_pkg_profile_file(self):
+        """
+        Turn a list of package objects into an RPMProfile object.
+        """
+
+        packages = self._get_packages()
+        dict_list = []
+        for pkg in packages:
+            dict_list.append(pkg.to_dict())
+
+        mock_file = mock.Mock()
+        mock_file.read = mock.Mock(return_value=json.dumps(dict_list))
