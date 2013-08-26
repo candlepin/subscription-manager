@@ -113,6 +113,9 @@ class CertManagerTestBase(SubManFixture):
                                                                         {'serial': self.stub_ent2.serial}])
         self.mock_uep.getConsumer = mock.Mock(return_value=CONSUMER_DATA)
 
+        stub_release = {'releaseVer': '6.4'}
+        self.mock_uep.getRelease = mock.Mock(return_value=stub_release)
+
         self.entcertlib_updateaction_getconsumerid.return_value = "234234"
 
         self.repolib_updateaction_perform.return_value = 0
@@ -122,6 +125,8 @@ class CertManagerTestBase(SubManFixture):
         # Must use a non-callable mock for our features dep injection
         # framework.
         self.mock_cert_sorter = mock.NonCallableMock()
+
+        # TODO: need to provide return for "getRelease" for repolib stuff
 
         injection.provide(injection.CERT_SORTER, self.mock_cert_sorter)
 
