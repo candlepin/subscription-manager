@@ -312,16 +312,22 @@ class CertSorter(ComplianceManager):
     reporting unknown.
     """
     def __init__(self):
+
         # Sync installed product info with server.
         # This will be done on register if we aren't registered
-        self.installed_mgr = InstalledProductsManager()
+        self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
         self.update_product_manager()
 
         super(CertSorter, self).__init__()
         self.callbacks = set()
 
+
         self.cert_monitor = file_monitor.Monitor()
         self.cert_monitor.connect('changed', self.on_cert_changed)
+
+
+
+
 
     def get_compliance_status(self):
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
@@ -330,10 +336,10 @@ class CertSorter(ComplianceManager):
     def update_product_manager(self):
         if self.is_registered():
             try:
-                self.installed_mgr.update_check(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp(), inj.require(inj.IDENTITY).uuid)
-            except Exception, e:
-                log.debug("Failed to sync installed products with the server")
-                log.debug(e)
+                self.installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+            except RestlibException:
+                # Invalid consumer certificate
+                pass
 
     def force_cert_check(self):
         self.cert_monitor.run_check()
