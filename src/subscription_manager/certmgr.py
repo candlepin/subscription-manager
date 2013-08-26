@@ -21,12 +21,13 @@ import logging
 
 from rhsm.connection import GoneException, ExpiredIdentityCertException
 
-from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
 from subscription_manager.entcertlib import EntCertLib
 from subscription_manager.identitycertlib import IdentityCertLib
 from subscription_manager.healinglib import HealingLib
 from subscription_manager.factlib import FactLib
 from subscription_manager.repolib import RepoLib
+from subscription_manager.packageprofilelib import PackageProfileLib
+from subscription_manager.installedproductslib import InstalledProductsLib
 from subscription_manager import injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -88,7 +89,7 @@ class BaseCertManager:
         except ExpiredIdentityCertException, e:
             raise
         except Exception, e:
-            log.warning("Exception caught while running certlib update")
+            log.warning("Exception caught while running %s update" % lib)
             log.exception(e)
 
         if update_report:

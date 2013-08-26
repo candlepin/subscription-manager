@@ -42,36 +42,6 @@ PACKAGES_RESOURCE = "packages"
 cfg = initConfig()
 
 
-class PackageProfileLib(DataLib):
-    """
-    Another "Lib" object, used by rhsmcertd to update the profile
-    periodically.
-    """
-    def _do_update(self):
-        profile_mgr = ProfileManager()
-        try:
-            consumer = ConsumerIdentity.read()
-        except IOError:
-            return 0
-        consumer_uuid = consumer.getConsumerId()
-        return profile_mgr.update_check(self.uep, consumer_uuid)
-
-
-class InstalledProductsLib(DataLib):
-    """
-    Another "Lib" object, used by rhsmcertd to update the installed
-    products on this system periodically.
-    """
-    def _do_update(self):
-        mgr = InstalledProductsManager()
-        try:
-            consumer = ConsumerIdentity.read()
-        except IOError:
-            return 0
-        consumer_uuid = consumer.getConsumerId()
-        return mgr.update_check(self.uep, consumer_uuid)
-
-
 class CacheManager(object):
     """
     Parent class used for common logic in a number of collections
@@ -289,6 +259,7 @@ class StatusCache(CacheManager):
         threading.Thread(target=super(StatusCache, self).write_cache, args=[False], name="WriteCache%s" % self.__class__.__name__).start()
         log.debug("Started thread to write cache: %s" % self.CACHE_FILE)
 
+    # we override a @classmethod with an instance method in the sub class?
     def delete_cache(self):
         super(StatusCache, self).delete_cache()
         self.server_status = None
@@ -321,6 +292,7 @@ class ProductStatusCache(StatusCache):
             self.server_status = consumer_data['installedProducts']
 
 
+
 class OverrideStatusCache(StatusCache):
     """
     Manages the cache of yum repo overrides set on the server.
@@ -331,6 +303,8 @@ class OverrideStatusCache(StatusCache):
         self.server_status = uep.getContentOverrides(consumer_uuid)
 
 
+
+# this is injected normally
 class ProfileManager(CacheManager):
     """
     Manages the profile of packages installed on this system.
@@ -400,13 +374,24 @@ class InstalledProductsManager(CacheManager):
     """
     CACHE_FILE = "/var/lib/rhsm/cache/installed_products.json"
 
-    def __init__(self, product_dir=None):
+    def __init__(self):
+        self._installed = None
+
+    def _get_installed(self):
+        if self._installed:
+            return self._installed
 
         self.product_dir = product_dir
         if not product_dir:
             self.product_dir = inj.require(inj.PROD_DIR)
 
         self._setup_installed()
+        return self._installed
+
+    def _set_installed(self, value):
+        self._installed = value
+
+    installed = property(_get_installed, _set_installed)
 
     def to_dict(self):
         return self.installed
