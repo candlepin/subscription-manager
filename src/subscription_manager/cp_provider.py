@@ -12,7 +12,8 @@
 # in this software or its documentation.
 #
 
-from subscription_manager.certlib import ConsumerIdentity
+from subscription_manager.identity import ConsumerIdentity
+from subscription_manager.utils import remove_scheme
 import rhsm.connection as connection
 
 
