@@ -643,7 +643,13 @@ class StubProfileManager(ProfileManager):
         mock_packages = [
                   profile.Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                   profile.Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
-        return StubRpmProfile(mock_packages=mock_packages)
+        self._current_profile = StubRpmProfile(mock_packages=mock_packages)
+        return self._current_profile
+
+    # NOTE: ProfileManager asks the ether for it's profile, so
+    # stub that as well
+    def _get_profile(self, profile_type):
+        return self._get_current_profile()
 
 
 # could be a Mock
@@ -673,3 +679,5 @@ class StubRpmProfile(profile.RPMProfile):
 
         mock_file = mock.Mock()
         mock_file.read = mock.Mock(return_value=json.dumps(dict_list))
+
+        return mock_file

@@ -318,10 +318,14 @@ class ProfileManager(CacheManager):
         self._current_profile = current_profile
         self._report_package_profile = cfg.get_int('rhsm', 'report_package_profile')
 
+    # give tests a chance to use something other than RPMProfile
+    def _get_profile(self, profile_type):
+        return get_profile(profile_type)
+
     def _get_current_profile(self):
         # If we weren't given a profile, load the current systems packages:
         if not self._current_profile:
-            self._current_profile = get_profile('rpm')
+            self._current_profile = self._get_profile('rpm')
         return self._current_profile
 
     def _set_current_profile(self, value):
