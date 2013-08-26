@@ -213,3 +213,9 @@ class RCTManifestExtractTests(unittest.TestCase):
         self.assertTrue(os.path.exists(os.path.join(tmp_dir, "./some/path")))
         archive.close()
         shutil.rmtree(tmp_dir)
+
+    @mock.patch("sys.exit")
+    def test_extractall_nonzip(self, mock_exit):
+        not_zip_file_object = StringIO()
+        ZipExtractAll(not_zip_file_object, "r")
+        mock_exit.assert_called_with(1)

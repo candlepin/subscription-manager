@@ -17,8 +17,9 @@ from cStringIO import StringIO
 import errno
 import gettext
 import os
+import sys
 import simplejson as json
-from zipfile import ZipFile
+from zipfile import ZipFile, BadZipfile
 
 from rhsm import certificate
 
@@ -52,6 +53,16 @@ class ZipExtractAll(ZipFile):
     the zipfile more easily in memory"""
 
     inner_zip = None
+
+    def __init__(self, *args, **kwargs):
+        """
+        Validates the zip file
+        """
+        try:
+            ZipFile.__init__(self, *args, **kwargs)
+        except BadZipfile:
+            print _("Manifest zip is invalid.")
+            sys.exit(1)
 
     def _get_inner_zip(self):
         if self.inner_zip is None:
