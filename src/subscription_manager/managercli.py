@@ -181,7 +181,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
     This is a wrapper for bind/bindByProduct. Eventually, we will exclusively
     use bind, but for now, we support both.
     """
-    if service_level:
+    if service_level is not None:
         cp.updateConsumer(consumer_uuid, service_level=service_level)
         print(_("Service level set to: %s") % service_level)
 
