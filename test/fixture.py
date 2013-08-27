@@ -83,7 +83,8 @@ class SubManFixture(unittest.TestCase):
         self.prod_dir = stubs.StubProductDirectory()
         inj.provide(inj.PROD_DIR, self.prod_dir)
 
-        inj.provide(inj.CP_PROVIDER, stubs.StubCPProvider())
+        self.stub_cp_provider = stubs.StubCPProvider()
+        inj.provide(inj.CP_PROVIDER, self.stub_cp_provider)
         inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
 
         # setup and mock the plugin_manager
@@ -116,7 +117,7 @@ class SubManFixture(unittest.TestCase):
 
         Returns the injected identity if it need to be examined.
         """
-        identity = NonCallableMock(name='IdentityMock')
+        identity = NonCallableMock(name='ValidIdentityMock')
         identity.uuid = "VALIDCONSUMERUUID"
         identity.is_valid = Mock(return_value=True)
         inj.provide(inj.IDENTITY, identity)
@@ -127,7 +128,7 @@ class SubManFixture(unittest.TestCase):
 
         Returns the injected identity if it need to be examined.
         """
-        invalid_identity = NonCallableMock(name='IdentityMock')
+        invalid_identity = NonCallableMock(name='InvalidIdentityMock')
         invalid_identity.is_valid = Mock(return_value=False)
         invalid_identity.uuid = "INVALIDCONSUMERUUID"
         inj.provide(inj.IDENTITY, invalid_identity)

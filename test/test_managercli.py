@@ -12,6 +12,7 @@ from subscription_manager.printing_utils import format_name, columnize, \
         _echo, _none_wrap
 from subscription_manager.repolib import Repo
 from stubs import MockStderr, StubEntitlementCertificate, \
+from subscription_manager import injection as inj
         StubConsumerIdentity, StubProduct, StubUEP
 from fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher
@@ -72,29 +73,22 @@ class TestCliCommand(SubManFixture):
     command_class = managercli.CliCommand
 
     def setUp(self):
-        SubManFixture.setUp(self)
+        super(TestCliCommand, self).setUp()
         self.cc = self.command_class()
         # neuter the _do_command, since this is mostly
         # for testing arg parsing
         self._orig_do_command = self.cc._do_command
         self.cc._do_command = self._do_command
-        self.cc.assert_should_be_registered = self._asert_should_be_registered
+#        self.cc.assert_should_be_registered = self._asert_should_be_registered
 
-        # stub out uep
-        managercli.connection.UEPConnection = self._uep_connection
+        self.mock_stdout = MockStdout()
         self.mock_stderr = MockStderr()
         sys.stderr = self.mock_stderr
 
     def tearDown(self):
         sys.stderr = sys.__stderr__
 
-    def _uep_connection(self, *args, **kwargs):
-        pass
-
     def _do_command(self):
-        pass
-
-    def _asert_should_be_registered(self):
         pass
 
     def test_main_no_args(self):
@@ -212,8 +206,9 @@ class TestRegisterCommand(TestCliProxyCommand):
     command_class = managercli.RegisterCommand
 
     def setUp(self):
-        TestCliProxyCommand.setUp(self)
-        self.cc.consumerIdentity = StubConsumerIdentity
+        super(TestRegisterCommand, self).setUp()
+        self._inject_mock_invalid_consumer()
+        # TODO: two versions of this, one registered, one not registered
 
     def _test_exception(self, args):
         try:
@@ -283,12 +278,10 @@ class TestListCommand(TestCliProxyCommand):
             StubProduct("test-product"), service_level="Premium")
         TestCliProxyCommand.setUp(self)
 
+
     @mock.patch('subscription_manager.managerlib.get_available_entitlements')
-    @mock.patch.object(managercli.ConsumerIdentity, 'existsAndValid')
-    @mock.patch.object(managercli.ConsumerIdentity, 'exists')
-    @mock.patch('subscription_manager.managercli.check_registration')
-    def test_none_wrap_available_pool_id(self, mcli, mc_exists, mc_exists_and_valid,
-            mget_ents):
+    def test_none_wrap_available_pool_id(self, mget_ents):
+    def test_none_wrap_available_pool_id(self):
         listCommand = managercli.ListCommand()
 
         def create_pool_list(*args, **kwargs):
@@ -307,9 +300,6 @@ class TestListCommand(TestCliProxyCommand):
                      'endDate': '',
                      'suggested': '2'}]
         mget_ents.return_value = create_pool_list()
-
-        mc_exists_and_valid.return_value = True
-        mc_exists.return_value = True
 
         mcli.return_value = {'consumer_name': 'stub_name', 'uuid': 'stub_uuid'}
         with Capture() as cap:

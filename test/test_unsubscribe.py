@@ -14,25 +14,22 @@
 #
 import mock
 
-from stubs import StubUEP, StubEntitlementDirectory, StubProductDirectory
-from stubs import StubConsumerIdentity, StubEntCertLib, StubEntitlementCertificate
+from stubs import StubEntitlementDirectory, StubProductDirectory
+from stubs import StubEntCertLib, StubEntitlementCertificate
 from stubs import StubProduct
 from fixture import SubManFixture
 import rhsm.connection as connection
 from subscription_manager import managercli
-import subscription_manager.injection as inj
+from subscription_manager import injection as inj
 
 
 # This is a dupe of test_remove
 class CliUnSubscribeTests(SubManFixture):
 
     def setUp(self):
-        self.oldCI = managercli.ConsumerIdentity
         super(CliUnSubscribeTests, self).setUp()
 
     def test_unsubscribe_registered(self):
-        connection.UEPConnection = StubUEP
-
         prod = StubProduct('stub_product')
         ent1 = StubEntitlementCertificate(prod)
         ent2 = StubEntitlementCertificate(prod)
@@ -44,14 +41,12 @@ class CliUnSubscribeTests(SubManFixture):
                 StubProductDirectory([]))
         cmd = managercli.UnSubscribeCommand()
 
-        managercli.ConsumerIdentity = StubConsumerIdentity
-        StubConsumerIdentity.existsAndValid = classmethod(lambda cls: True)
-        StubConsumerIdentity.exists = classmethod(lambda cls: True)
+        mock_identity = self._inject_mock_valid_consumer()
         managercli.EntCertLib = StubEntCertLib
 
         cmd.main(['unsubscribe', '--all'])
         self.assertEquals(cmd.cp.called_unbind_uuid,
-                          StubConsumerIdentity.CONSUMER_ID)
+                          mock_identity.uuid)
 
         cmd.main(['unsubscribe', '--serial=%s' % ent1.serial])
         self.assertEquals(cmd.cp.called_unbind_serial, ['%s' % ent1.serial])
@@ -60,14 +55,13 @@ class CliUnSubscribeTests(SubManFixture):
         self.assertEquals(cmd.cp.called_unbind_serial, ['%s' % ent2.serial, '%s' % ent3.serial])
         self.assertEquals(code, 0)
 
-        connection.UEPConnection.unbindBySerial = mock.Mock(
-            side_effect=connection.RestlibException("Entitlement Certificate with serial number 2300922701043065601 could not be found."))
+        self.stub_cp_provider.get_consumer_auth_cp().unbindBySerial = mock.Mock(side_effect=
+            connection.RestlibException("Entitlement Certificate with serial number "
+                                        "2300922701043065601 could not be found."))
         code = cmd.main(['unsubscribe', '--serial=%s' % '2300922701043065601'])
         self.assertEquals(code, 1)
 
     def test_unsubscribe_unregistered(self):
-        connection.UEPConnection = StubUEP
-
         prod = StubProduct('stub_product')
         ent = StubEntitlementCertificate(prod)
 
@@ -77,9 +71,7 @@ class CliUnSubscribeTests(SubManFixture):
                 StubProductDirectory([]))
         cmd = managercli.UnSubscribeCommand()
 
-        managercli.ConsumerIdentity = StubConsumerIdentity
-        StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
-        StubConsumerIdentity.exists = classmethod(lambda cls: False)
+        self._inject_mock_invalid_consumer()
 
         cmd.main(['unsubscribe', '--all'])
         self.assertTrue(cmd.entitlement_dir.list_called)
@@ -95,9 +87,6 @@ class CliUnSubscribeTests(SubManFixture):
         inj.provide(inj.PROD_DIR,
                 StubProductDirectory([]))
         cmd = managercli.UnSubscribeCommand()
-        managercli.ConsumerIdentity = StubConsumerIdentity
-        StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
-        StubConsumerIdentity.exists = classmethod(lambda cls: False)
 
         code = cmd.main(['unsubscribe', '--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial])
         self.assertTrue(cmd.entitlement_dir.list_called)
@@ -109,5 +98,3 @@ class CliUnSubscribeTests(SubManFixture):
         code = cmd.main(['unsubscribe', '--serial=%s' % '33333333'])
         self.assertEquals(code, 1)
 
-    def tearDown(self):
-        managercli.ConsumerIdentity = self.oldCI

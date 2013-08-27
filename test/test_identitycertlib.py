@@ -29,28 +29,34 @@ CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},
 
 mock_consumer_identity = Mock(spec=identity.ConsumerIdentity)
 mock_consumer_identity.getSerialNumber.return_value = 3787455826750723380
+mock_consumer_identity.getConsumerName.return_value = "Mock Consumer Identity"
+mock_consumer_identity.getConsumerId.return_value = "11111-00000-11111-0000"
 
 
 # Identities to inject for testing
-class InvalidConsumerIdentity(identity.Identity):
-    consumer = mock_consumer_identity
+class StubIdentity(identity.Identity):
+    _consumer = None
 
-    def is_valid(self):
-        return False
+    def _get_consumer_identity(self):
+        return self._consumer
 
 
-class ValidConsumerIdentity(identity.Identity):
-    consumer = mock_consumer_identity
+class InvalidIdentity(StubIdentity):
+    pass
 
-    def is_valid(self):
-        return True
+
+class ValidIdentity(StubIdentity):
+    _consumer = mock_consumer_identity
+
 
 different_mock_consumer_identity = Mock(spec=identity.ConsumerIdentity)
 different_mock_consumer_identity.getSerialNumber.return_value = 123123123123
+different_mock_consumer_identity.getConsumerName.return_value = "A Different Mock Consumer Identity"
+different_mock_consumer_identity.getConsumerId.return_value = "AAAAAA-BBBBB-CCCCCC-DDDDD"
 
 
-class DifferentValidConsumerIdentity(ValidConsumerIdentity):
-    consumer = different_mock_consumer_identity
+class DifferentValidConsumerIdentity(StubIdentity):
+    _consumer = different_mock_consumer_identity
 
 mock_cp_provider = Mock(spec=cp_provider.CPProvider)
 
@@ -69,11 +75,9 @@ class TestIdentityCertLib(fixture.SubManFixture):
 
     def test_idcertlib_persists_cert(self):
         idcertlib = self._get_idcertlib()
-#        certlib.ConsumerIdentity = stubs.StubConsumerIdentity
-#        certlib.ConsumerIdentity.getSerialNumber = getDifferentSerialNumber
         managerlib.persist_consumer_cert = Mock()
 
-        inj.provide(inj.IDENTITY, DifferentValidConsumerIdentity)
+        inj.provide(inj.IDENTITY, DifferentValidConsumerIdentity())
         idcertlib.update()
         managerlib.persist_consumer_cert.assert_called_once_with(CONSUMER_DATA)
 
@@ -83,13 +87,13 @@ class TestIdentityCertLib(fixture.SubManFixture):
         #certlib.ConsumerIdentity.getSerialNumber = getSerialNumber
         managerlib.persist_consumer_cert = Mock()
 
-        inj.provide(inj.IDENTITY, InvalidConsumerIdentity)
+        inj.provide(inj.IDENTITY, InvalidIdentity())
 
         idcertlib.update()
         self.assertFalse(managerlib.persist_consumer_cert.called)
 
     def test_idcertlib_no_id_cert(self):
-        inj.provide(inj.IDENTITY, InvalidConsumerIdentity)
+        inj.provide(inj.IDENTITY, InvalidIdentity())
         idcertlib = self._get_idcertlib()
         report = idcertlib.update()
         self.assertEquals(report._status, 0)

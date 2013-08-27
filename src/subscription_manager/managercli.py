@@ -34,7 +34,6 @@ import rhsm.connection as connection
 from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager.branding import get_branding
-from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.entcertlib import EntCertLib, Disconnected
 from subscription_manager.certmgr import CertManager
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
@@ -237,6 +236,8 @@ class CliCommand(AbstractCLICommand):
 
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
 
+        self.identity = inj.require(inj.IDENTITY)
+
     def _request_validity_check(self):
         # Make sure the sorter is fresh (low footprint if it is)
         inj.require(inj.CERT_SORTER).force_cert_check()
@@ -261,13 +262,18 @@ class CliCommand(AbstractCLICommand):
     def _do_command(self):
         pass
 
+    def _sys_exit(self, exit_code):
+        sys.exit(exit_code)
+
     def assert_should_be_registered(self):
         if not self.is_registered():
             print(NOT_REGISTERED)
-            sys.exit(-1)
+            self._sys_exit(-1)
 
     def is_registered(self):
-        return ConsumerIdentity.existsAndValid()
+        self.identity = inj.require(inj.IDENTITY)
+        log.info("self.identity: %s" % self.identity)
+        return self.identity.is_valid()
 
     def persist_server_options(self):
         """
@@ -319,7 +325,7 @@ class CliCommand(AbstractCLICommand):
         if self.args:
             for arg in self.args:
                 print _("cannot parse argument: %s") % arg
-            sys.exit(-1)
+            self._sys_exit(-1)
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             cfg.set("server", "insecure", "1")
@@ -343,10 +349,10 @@ class CliCommand(AbstractCLICommand):
                             (self.server_hostname,
                              self.server_port,
                              self.server_prefix)
-                    sys.exit(-1)
+                    self._sys_exit(-1)
             except MissingCaCertException:
                 print _("Error: CA certificate for subscription service has not been installed.")
-                sys.exit(-1)
+                self._sys_exit(-1)
 
             cfg.set("server", "hostname", self.server_hostname)
             cfg.set("server", "port", self.server_port)
@@ -362,6 +368,7 @@ class CliCommand(AbstractCLICommand):
             except ServerUrlParseError, e:
                 print _("Error parsing baseurl:")
                 handle_exception("Error parsing baseurl:", e)
+
 
             cfg.set("rhsm", "baseurl", format_baseurl(baseurl_server_hostname,
                                                       baseurl_server_port,
@@ -541,7 +548,7 @@ class RefreshCommand(CliCommand):
         super(RefreshCommand, self).__init__("refresh", shortdesc, True)
 
     def _do_command(self):
-        check_registration()
+        self.assert_should_be_registered()
         try:
             self.entcertlib.update()
             log.info("Refreshed local data")
@@ -578,9 +585,12 @@ class IdentityCommand(UserPassCommand):
             sys.exit(-1)
 
     def _do_command(self):
+        # get current consumer identity
+        identity = inj.require(inj.IDENTITY)
+
         # check for Classic before doing anything else
         if ClassicCheck().is_registered_with_classic():
-            if ConsumerIdentity.existsAndValid():
+            if identity.is_valid():
                 print _("server type: %s") % get_branding().REGISTERED_TO_BOTH_SUMMARY
             else:
                 # no need to continue if user is only registered to Classic
@@ -588,10 +598,9 @@ class IdentityCommand(UserPassCommand):
                 return
 
         try:
-            consumer = check_registration()
             self._validate_options()
-            consumerid = consumer['uuid']
-            consumer_name = consumer['consumer_name']
+            consumerid = self.identity.uuid
+            consumer_name = self.identity.name
             if not self.options.regenerate:
                 owner = self.cp.getOwner(consumerid)
                 ownername = owner['displayName']
@@ -617,6 +626,11 @@ class IdentityCommand(UserPassCommand):
                     self.cp = self.cp_provider.get_basic_auth_cp()
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
+
+                # do this in persist_consumer_cert? or some other
+                # high level, "I just registered" thing
+                self.identity.reload()
+
                 print _("Identity certificate has been regenerated.")
 
                 log.info("Successfully generated a new identity from server.")
@@ -752,7 +766,6 @@ class AutohealCommand(CliCommand):
 class ServiceLevelCommand(OrgCommand):
 
     def __init__(self):
-        self.consumerIdentity = ConsumerIdentity
 
         shortdesc = _("Manage service levels for this system")
         self._org_help_text = \
@@ -771,8 +784,10 @@ class ServiceLevelCommand(OrgCommand):
                                action='store_true',
                                help=_("unset the service level for this system"))
 
+        self.consumer_identity = inj.require(inj.IDENTITY)
+
     def _set_service_level(self, service_level):
-        consumer_uuid = self.consumerIdentity.read().getConsumerId()
+        consumer_uuid = self.consumer_identity.uuid
         consumer = self.cp.getConsumer(consumer_uuid)
         if 'serviceLevel' not in consumer:
             system_exit(-1, _("Error: The service-level command is not supported "
@@ -797,7 +812,7 @@ class ServiceLevelCommand(OrgCommand):
             print(_("Error: --org is only supported with the --list option"))
             sys.exit(-1)
 
-        if not self.consumerIdentity.existsAndValid():
+        if not self.is_registered():
             if self.options.list:
                 if not (self.options.username and self.options.password):
                     print(_("Error: you must register or specify --username and --password to list service levels"))
@@ -850,8 +865,7 @@ class ServiceLevelCommand(OrgCommand):
         print _("Service level preference has been unset")
 
     def show_service_level(self):
-        consumer_uuid = self.consumerIdentity.read().getConsumerId()
-        consumer = self.cp.getConsumer(consumer_uuid)
+        consumer = self.cp.getConsumer(self.consumer_identity.uuid)
         if 'serviceLevel' not in consumer:
             system_exit(-1, _("Error: The service-level command is not supported by "
                              "the server."))
@@ -867,9 +881,8 @@ class ServiceLevelCommand(OrgCommand):
 
         org_key = self.options.org
         if not org_key:
-            if self.consumerIdentity.existsAndValid():
-                consumer_uuid = self.consumerIdentity.read().getConsumerId()
-                org_key = self.cp.getOwner(consumer_uuid)['key']
+            if self.is_registered():
+                org_key = self.cp.getOwner(self.consumer_identity.uuid)['key']
             else:
                 org_key = self.org
 
@@ -896,7 +909,6 @@ class ServiceLevelCommand(OrgCommand):
 class RegisterCommand(UserPassCommand):
     def __init__(self):
         shortdesc = get_branding().CLI_REGISTER
-        self.consumerIdentity = ConsumerIdentity
 
         super(RegisterCommand, self).__init__("register", shortdesc, True)
 
@@ -926,12 +938,16 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("system preference used when subscribing automatically, requires --auto-attach"))
 
+        self.consumer_identity = inj.require(inj.IDENTITY)
+
+        # FIXME: we shouldn't create facts in command __init__, it's gets ran
+        # at managercli import time
         self.facts = Facts(ent_dir=self.entitlement_dir,
                            prod_dir=self.product_dir)
 
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
-        if self.consumerIdentity.exists() and not self.options.force:
+        if self.is_registered() and not self.options.force:
             print(_("This system is already registered. Use --force to override"))
             sys.exit(1)
         elif (self.options.consumername == ''):
@@ -988,21 +1004,20 @@ class RegisterCommand(UserPassCommand):
         if consumername is None:
             consumername = socket.gethostname()
 
-        if ConsumerIdentity.exists() and self.options.force:
+        if self.is_registered() and self.options.force:
             # First let's try to un-register previous consumer. This may fail
             # if consumer has already been deleted so we will continue even if
             # errors are encountered.
-            if ConsumerIdentity.existsAndValid():
-                old_uuid = ConsumerIdentity.read().getConsumerId()
-                try:
-                    managerlib.unregister(self.cp, old_uuid)
-                    self.entitlement_dir.__init__()
-                    self.product_dir.__init__()
-                    log.info("--force specified, unregistered old consumer: %s" % old_uuid)
-                    print(_("The system with UUID %s has been unregistered") % old_uuid)
-                except Exception, e:
-                    log.error("Unable to unregister consumer: %s" % old_uuid)
-                    log.exception(e)
+            old_uuid = self.consumer_identity.uuid
+            try:
+                managerlib.unregister(self.cp, old_uuid)
+                self.entitlement_dir.__init__()
+                self.product_dir.__init__()
+                log.info("--force specified, unregistered old consumer: %s" % old_uuid)
+                print(_("The system with UUID %s has been unregistered") % old_uuid)
+            except Exception, e:
+                log.error("Unable to unregister consumer: %s" % old_uuid)
+                log.exception(e)
 
         # Proceed with new registration:
         try:
@@ -1054,8 +1069,7 @@ class RegisterCommand(UserPassCommand):
         self.cp = self.cp_provider.get_consumer_auth_cp()
 
         # Reload the consumer identity:
-        self.identity = inj.FEATURES.require(inj.IDENTITY)
-        self.identity.reload()
+        self.consumer_identity.reload()
 
         # log the version of the server we registered to
         self.log_server_version()
@@ -1153,11 +1167,13 @@ class UnRegisterCommand(CliCommand):
         super(UnRegisterCommand, self).__init__("unregister", shortdesc,
                                                 True)
 
+        self.consumer_identity = inj.require(inj.IDENTITY)
+
     def _validate_options(self):
         pass
 
     def _do_command(self):
-        if not ConsumerIdentity.exists():
+        if not self.is_registered():
             print(_("This system is currently not registered."))
             sys.exit(1)
 
@@ -1519,11 +1535,11 @@ class RemoveCommand(CliCommand):
         """
         self._validate_options()
         return_code = 0
-        if ConsumerIdentity.exists():
-            consumer = ConsumerIdentity.read().getConsumerId()
+        if self.is_registered():
+            identity = inj.require(inj.IDENTITY)
             try:
                 if self.options.all:
-                    total = self.cp.unbindAll(consumer)
+                    total = self.cp.unbindAll(identity.uuid)
                     # total will be None on older Candlepins that don't
                     # support returning the number of subscriptions unsubscribed from
                     if total is None:
@@ -1538,7 +1554,7 @@ class RemoveCommand(CliCommand):
                     failure = []
                     for serial in self.options.serials:
                         try:
-                            self.cp.unbindBySerial(consumer, serial)
+                            self.cp.unbindBySerial(identity.consumer, serial)
                             success.append(serial)
                         except connection.RestlibException, re:
                             if re.code == 410:
@@ -2049,7 +2065,7 @@ class ListCommand(CliCommand):
                                 status, product[5], product[6], product[7]) + "\n"
 
         if self.options.available:
-            check_registration()
+            self.assert_should_be_registered()
             on_date = None
             if self.options.on_date:
                 try:
@@ -2060,11 +2076,8 @@ class ListCommand(CliCommand):
                     print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
                     sys.exit(1)
 
-            epools = managerlib.get_available_entitlements(facts=self.facts,
-                                                           get_all=self.options.all,
-                                                           active_on=on_date,
-                                                           overlapping=self.options.no_overlap,
-                                                           uninstalled=self.options.match_installed)
+            epools = managerlib.get_available_entitlements(self.cp, self.identity.uuid,
+                    self.facts, self.options.all, on_date)
 
             # Filter certs by service level, if specified.
             # Allowing "" here.
@@ -2406,6 +2419,7 @@ class ManagerCLI(CLI):
 
 def check_registration():
     # TODO: replace consumer_info and ConsumerIdentity usage with Identity
+
     if not ConsumerIdentity.existsAndValid():
         print(NOT_REGISTERED)
         sys.exit(-1)
