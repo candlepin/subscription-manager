@@ -23,11 +23,11 @@ _subscription_manager_attach()
       --pool)
           # wee bit of a hack to handle that we can't actually run subscription-manager list --available unless
           # we are root. try it directly (as opposed to userhelper links) and if it fails,ignore it
-          POOLS=$(/usr/sbin/subscription-manager list --available 2>/dev/null | sed -ne "s|PoolId:\s*\(\S*\)|\1|p" )
+          POOLS=$(LANG=C /usr/sbin/subscription-manager list --available 2>/dev/null | sed -ne "s|Pool ID:\s*\(\S*\)|\1|p" )
           COMPREPLY=($(compgen -W "${POOLS}" -- ${1}))
           return 0
   esac
-  local opts="i--auto --pool --quantity --servicelevel
+  local opts="--auto --pool --quantity --servicelevel
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -43,7 +43,7 @@ _subscription_manager_remove()
  # try to autocomplete serial number as well
   case $prev in
       --serial)
-          SERIALS=$(/usr/sbin/subscription-manager list --consumed 2>/dev/null | sed -ne "s|SerialNumber:\s*\(\S*\)|\1|p" )
+          SERIALS=$(LANG=C /usr/sbin/subscription-manager list --consumed 2>/dev/null | sed -ne "s|Serial:\s*\(\S*\)|\1|p" )
           COMPREPLY=($(compgen -W "${SERIALS}" -- ${1}))
           return 0
   esac
@@ -54,17 +54,17 @@ _subscription_manager_remove()
 
 _subscription_manager_clean()
 {
-  local opts="${_subscription_manager_common_opts}"
+  local opts="-h --help"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
 _subscription_manager_config()
 {
   # TODO: we could probably generate the options from the help
-  CONFIG_OPTS=$(subscription-manager config --help | sed -ne "s|\s*\(\-\-.*\..*\)\=.*\..*|\1|p")
+  CONFIG_OPTS=$(LANG=C subscription-manager config --help | sed -ne "s|\s*\(\-\-.*\..*\)\=.*\..*|\1|p")
   local opts="--list --remove
               ${CONFIG_OPTS}
-              ${_subscription_manager_common_opts}"
+              -h --help"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
@@ -94,21 +94,21 @@ _subscription_manager_import()
 {
   # TODO: auto complete *.pem?
   local opts="--certificate
-              ${_subscription_manager_common_opts}"
+              -h --help"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
 _subscription_manager_list()
 {
   local opts="--all --available --consumed --installed
-              --ondate --servicelevel --status
+              --ondate --servicelevel
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
 _subscription_manager_orgs()
 {
-  local opts="--password --username
+  local opts="--password --username --insecure --serverurl
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -116,7 +116,7 @@ _subscription_manager_orgs()
 _subscription_manager_plugins()
 {
   local opts="--list --listhooks --listslots --verbose
-              ${_subscription_manager_common_opts}"
+              -h --help"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
@@ -136,8 +136,8 @@ _subscription_manager_refresh()
 
 _subscription_manager_register()
 {
-  local opts="--activationkey --auto-attach --autosubscribe --consumerid
-              --environment --force --name --org --password --release
+  local opts="--activationkey --auto-attach --autosubscribe --baseurl --consumerid
+              --environment --force --insecure --name --org --password --release
               --servicelevel --type --username
               ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
@@ -162,7 +162,8 @@ _subscription_manager_repos()
 
 _subscription_manager_service_level()
 {
-    local opts="--list --org --set --show --unset
+    local opts="--insecure --list --org --set --show
+                --unset --username --password
                 ${_subscription_manager_common_url_opts}
                 ${_subscription_manager_common_opts}"
     COMPREPLY=($(compgen -W "${opts}" -- ${1}))
