@@ -59,6 +59,7 @@ ID_CERT_PERMS = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP
 def system_log(message, priority=syslog.LOG_NOTICE):
     utils.system_log(message, priority)
 
+
 # FIXME: move me to identity.py
 def persist_consumer_cert(consumerinfo):
     """

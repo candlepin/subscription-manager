@@ -38,7 +38,7 @@ SOxSnd1U0dX6pzEwMaJD9lCW8xZ2jsmdLUtLzQ==
 -----END CERTIFICATE-----
 """
 
-# A product cert from Candlepin's test data (product 37060, Awesome 
+# A product cert from Candlepin's test data (product 37060, Awesome
 # OS server bits", this one with the "os_name" oid added.
 PRODUCT_CERT_WITH_OS_NAME_V1_0 = """
 -----BEGIN CERTIFICATE-----
@@ -220,7 +220,7 @@ ENTITLEMENT_CERT_V1_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path: 
+	Path:
 	Version: 1.0
 	Serial: 60063758564076674
 	Start Date: 2012-09-07 00:00:00+00:00
@@ -240,48 +240,48 @@ Product:
 	Name: Awesome OS Server Bits
 	Version: 6.1
 	Arch: ALL
-	Tags: 
-	Brand Type: 
+	Tags:
+	Brand Type:
 
 Product:
 	ID: 37065
 	Name: Clustering Bits
 	Version: 1.0
 	Arch: ALL
-	Tags: 
-	Brand Type: 
+	Tags:
+	Brand Type:
 
 Product:
 	ID: 37067
 	Name: Shared Storage Bits
 	Version: 1.0
 	Arch: ALL
-	Tags: 
-	Brand Type: 
+	Tags:
+	Brand Type:
 
 Product:
 	ID: 37068
 	Name: Large File Support Bits
 	Version: 1.0
 	Arch: ALL
-	Tags: 
-	Brand Type: 
+	Tags:
+	Brand Type:
 
 Product:
 	ID: 37069
 	Name: Management Bits
 	Version: 1.0
 	Arch: ALL
-	Tags: 
-	Brand Type: 
+	Tags:
+	Brand Type:
 
 Product:
 	ID: 37070
 	Name: Load Balancing Bits
 	Version: 1.0
 	Arch: ALL
-	Tags: 
-	Brand Type: 
+	Tags:
+	Brand Type:
 
 Order:
 	Name: Awesome OS Server Bundled
@@ -294,8 +294,8 @@ Order:
 	Quantity: 10
 	Quantity Used: 1
 	Socket Limit: 2
-	RAM Limit: 
-	Core Limit: 
+	RAM Limit:
+	Core Limit:
 	Virt Only: False
 	Stacking ID: 
 	Warning Period: 30
@@ -310,8 +310,8 @@ Content:
 	GPG: /foo/path/always/gpg
 	Enabled: True
 	Expires: 200
-	Required Tags: 
-	Arches: 
+	Required Tags:
+	Arches:
 
 Content:
 	Type: yum
@@ -322,8 +322,8 @@ Content:
 	GPG: /foo/path/gpg/
 	Enabled: True
 	Expires: 0
-	Required Tags: 
-	Arches: 
+	Required Tags:
+	Arches:
 
 Content:
 	Type: yum
@@ -331,11 +331,11 @@ Content:
 	Label: content-label-empty-gpg
 	Vendor: test-vendor
 	URL: /foo/path
-	GPG: 
+	GPG:
 	Enabled: True
 	Expires: 0
-	Required Tags: 
-	Arches: 
+	Required Tags:
+	Arches:
 
 Content:
 	Type: yum
@@ -343,11 +343,11 @@ Content:
 	Label: content-label-no-gpg
 	Vendor: test-vendor
 	URL: /foo/path
-	GPG: 
+	GPG:
 	Enabled: True
 	Expires: 0
-	Required Tags: 
-	Arches: 
+	Required Tags:
+	Arches:
 
 Content:
 	Type: yum
@@ -358,8 +358,8 @@ Content:
 	GPG: /foo/path/never/gpg
 	Enabled: False
 	Expires: 600
-	Required Tags: 
-	Arches: 
+	Required Tags:
+	Arches:
 
 Content:
 	Type: yum
@@ -369,9 +369,9 @@ Content:
 	URL: /foo/path/always
 	GPG: /foo/path/always/gpg
 	Enabled: True
-	Expires: 
+	Expires:
 	Required Tags: TAG1, TAG2
-	Arches: 
+	Arches:
 """
 
 ENTITLEMENT_CERT_V3_0_OUTPUT = """
@@ -380,7 +380,7 @@ ENTITLEMENT_CERT_V3_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path: 
+	Path:
 	Version: 3.0
 	Serial: 1306183239866671852
 	Start Date: 2012-09-18 00:00:00+00:00
@@ -400,8 +400,8 @@ Product:
 	Name: Awesome OS for x86_64 Bits
 	Version: 3.11
 	Arch: x86_64
-	Tags: 
-	Brand Type: 
+	Tags:
+	Brand Type:
 
 Order:
 	Name: Awesome OS for x86_64
@@ -409,13 +409,13 @@ Order:
 	SKU: awesomeos-x86_64
 	Contract: 67
 	Account: 12331131231
-	Service Level: 
-	Service Type: 
+	Service Level:
+	Service Type:
 	Quantity: 10
 	Quantity Used: 2
 	Socket Limit: 1
-	RAM Limit: 
-	Core Limit: 
+	RAM Limit:
+	Core Limit:
 	Virt Only: False
 	Stacking ID: 1
 	Warning Period: 30
@@ -430,8 +430,8 @@ Content:
 	GPG: /foo/path/always/gpg
 	Enabled: True
 	Expires: 200
-	Required Tags: 
-	Arches: 
+	Required Tags:
+	Arches:
 
 Content:
 	Type: yum
@@ -442,8 +442,8 @@ Content:
 	GPG: /path/to/awesomeos/gpg/
 	Enabled: True
 	Expires: 3600
-	Required Tags: 
-	Arches: 
+	Required Tags:
+	Arches:
 
 Content:
 	Type: yum
@@ -454,8 +454,8 @@ Content:
 	GPG: /path/to/awesomeos/gpg/
 	Enabled: False
 	Expires: 3600
-	Required Tags: 
-	Arches: 
+	Required Tags:
+	Arches:
 
 Content:
 	Type: yum
@@ -466,8 +466,8 @@ Content:
 	GPG: /foo/path/never/gpg
 	Enabled: False
 	Expires: 600
-	Required Tags: 
-	Arches: 
+	Required Tags:
+	Arches:
 """
 
 PRODUCT_CERT_V1_0_OUTPUT = """
@@ -476,7 +476,7 @@ PRODUCT_CERT_V1_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path: 
+	Path:
 	Version: 1.0
 	Serial: 168296333
 	Start Date: 2011-08-23 17:41:39+00:00
@@ -495,8 +495,8 @@ Product:
 	Name: Awesome OS for x86_64 Bits
 	Version: 3.11
 	Arch: x86_64
-	Tags: 
-	Brand Type: 
+	Tags:
+	Brand Type:
 
 """
 
@@ -506,7 +506,7 @@ PRODUCT_CERT_WITH_OS_NAME_V1_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path: 
+	Path:
 	Version: 1.0
 	Serial: 48785926
 	Start Date: 2013-08-07 19:21:14+00:00
@@ -525,8 +525,8 @@ Product:
 	Name: Awesome OS Server Bits
 	Version: 6.1
 	Arch: ALL
-	Tags: 
-	Brand Type: 
+	Tags:
+	Brand Type:
 
 """
 
@@ -536,7 +536,7 @@ PRODUCT_CERT_WITH_OS_NAME_V1_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path: 
+	Path:
 	Version: 1.0
 	Serial: 48785926
 	Start Date: 2013-08-07 19:21:14+00:00
@@ -555,7 +555,7 @@ Product:
 	Name: Awesome OS Server Bits
 	Version: 6.1
 	Arch: ALL
-	Tags: 
+	Tags:
 
 """
 
@@ -565,7 +565,7 @@ IDENTITY_CERT_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path: 
+	Path:
 	Version: 1.0
 	Serial: 5412106042110780569
 	Start Date: 2012-07-10 12:21:27+00:00

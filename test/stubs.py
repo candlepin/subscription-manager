@@ -18,6 +18,7 @@ from rhsm import config
 import random
 import mock
 import simplejson as json
+import sys
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
@@ -108,18 +109,17 @@ class MockActionLock(ActionLock):
     PATH = tempfile.mkstemp()[1]
 
 
-class MockStderr:
+class MockStdout(object):
     def __init__(self):
         self.buffer = ""
 
     def write(self, buf):
         self.buffer = self.buffer + buf
 
+
     @staticmethod
     def isatty(buf=None):
         return False
-
-
 class StubProduct(Product):
 
     def __init__(self, product_id, name=None, version=None,

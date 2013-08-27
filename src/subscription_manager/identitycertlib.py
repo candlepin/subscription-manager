@@ -44,7 +44,7 @@ class IdentityCertLib(certlib.DataLib):
 
         from subscription_manager import managerlib
 
-        idcert = identity.consumer
+        idcert = identity.getConsumerCert()
         consumer = self.uep.getConsumer(identity.uuid)
         # only write the cert if the serial has changed
         if idcert.getSerialNumber() != consumer['idCert']['serial']['serial']:
