@@ -1416,7 +1416,7 @@ class AttachCommand(CliCommand):
                         log.exception(re)
                         if re.code == 403:
                             print re.msg  # already subscribed.
-                        elif re.code == 400:
+                        elif re.code == 400 or re.code == 404:
                             print re.msg  # no such pool.
                         else:
                             system_exit(-1, re.msg)  # some other error.. don't try again
