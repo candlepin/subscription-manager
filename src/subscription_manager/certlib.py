@@ -337,51 +337,19 @@ class UpdateAction(Action):
                 result.append(cert)
         return result
 
-    def branding_hook(self, cert):
-        products = cert.products or []
-        for product in products:
-            # could support other types of branded products
-            if not self._is_rhel_branded_product(product):
-                continue
-
-            # this is a RHEL branded product
-            product_id = product.id
-
-            prod_dir = inj.require(inj.PROD_DIR)
-            installed_products = prod_dir.get_installed_products()
-
-            if product_id in installed_products:
-                # this is an ent cert for an installed RHEL branded product
-                product_name = product.name
-                self._install_rhel_branding(product_name)
-
-    def _is_rhel_branded_product(self, product):
-        """Return True if product is a RHEL branded product"""
-        if not hasattr(product, 'os'):
-            return False
-        elif product.os != 'OS':
-            return False
-
-        if not product.name:
-            return False
-
-        return True
-
-    def _install_rhel_branding(self, product_name):
-        """Create Brand object and save it."""
-
-        log.info("Updating product branding info for: %s" % product_name)
-        brand = entbranding.Brand(product_name)
-        brand.save()
+    def branding_hook(self, installed_certs):
+        brand_installer = entbranding.BrandInstaller(installed_certs)
+        brand_installer.install()
 
     def install(self, serials, report):
         br = Writer()
         exceptions = []
+        installed_certs = []
         for bundle in self.get_certificates_by_serial_list(serials):
             try:
                 key, cert = self.build(bundle)
                 br.write(key, cert)
-                self.branding_hook(cert)
+                installed_certs.append(cert)
                 report.added.append(cert)
             except Exception, e:
                 log.exception(e)
@@ -390,6 +358,10 @@ class UpdateAction(Action):
                     bundle,
                     e)
                 exceptions.append(e)
+
+        if installed_certs:
+            self.branding_hook(installed_certs)
+
         return exceptions
 
 

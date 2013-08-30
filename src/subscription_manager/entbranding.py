@@ -20,39 +20,88 @@
 #  hmm, we can subscribe before we have a product
 #       cert installed? Would we need to check
 #       on product cert install as well?
+import logging
+
+from subscription_manager import injection as inj
+
+log = logging.getLogger('rhsm-app.' + __name__)
 
 
-from subscription_manager.certdirectory import Path
+class BrandInstaller(object):
+    """Install any branding info for a set of entititlement certs."""
 
+    def __init__(self, ent_certs):
+        self.ent_certs = ent_certs
 
-class BrandFile(object):
-    """The file used for storing product branding info.
+        prod_dir = inj.require(inj.PROD_DIR)
+        self.installed_products = prod_dir.get_installed_products()
 
-    Default is "/var/lib/rhsm/branded_name
-    """
-    PATH = "/var/lib/rhsm/branded_name"
+    def install(self):
+        branded_certs = self.get_branded_certs()
 
-    @classmethod
-    def brand_path(cls):
-        return Path.abs(cls.PATH)
+        if not branded_certs:
+            return
+        elif len(branded_certs) > 1:
+            log.warning("More than one entitlement provided branding information for an installed RHEL product")
+            return
 
-    def read(self):
-        brand_info = ''
-        with open(self.brand_path()) as brand_file:
-            brand_info = brand_file.read()
+        cert, branded_product = branded_certs[0]
+        log.info("Entitlement cert %s is providing branding info for product %s" %
+                 (cert, branded_product.name))
+        self._install_rhel_branding(branded_product.name)
 
-        return brand_info
+    def get_branded_certs(self):
+        branded_cert_products = []
+        for cert in self.ent_certs:
+            products = cert.products or []
+            installed_branded_products = self.get_installed_branded_products(products)
 
-    def write(self, brand_info):
-        self._write(self.brand_path(), brand_info)
+            # this cert does not match any installed branded products
+            if not installed_branded_products:
+                continue
+            # more than one brandable product installed
+            elif len(installed_branded_products) > 1:
+                log.warning("More than one installed product with RHEL branding information is installed")
+                continue
+            else:
+                branded_cert_products.append((cert, installed_branded_products[0]))
+        return branded_cert_products
 
-    def _write(self, path, brand_info):
+    def get_installed_branded_products(self, products):
+        branded_products = []
 
-        # python 2.5+, woohoo!
-        with open(path, 'w') as brand_file:
-            brand_file.write(brand_info)
+        for product in products:
+            # could support other types of branded products
+            if not self._is_rhel_branded_product(product):
+                continue
 
-        # set perms?
+            if not self._is_installed_rhel_branded_product(product):
+                continue
+
+            branded_products.append(product)
+
+        return branded_products
+
+    def _is_installed_rhel_branded_product(self, product):
+        return product.id in self.installed_products
+
+    def _is_rhel_branded_product(self, product):
+        if not hasattr(product, 'os'):
+            return False
+        elif product.os != 'OS':
+            return False
+
+        if not product.name:
+            return False
+
+        return True
+
+    def _install_rhel_branding(self, product_name):
+        """Create Brand object and save it."""
+
+        log.info("Updating product branding info for: %s" % product_name)
+        brand = Brand(product_name)
+        brand.save()
 
 
 class Brand(object):
@@ -62,11 +111,26 @@ class Brand(object):
         self.brand = brand
 
     def save(self):
-        brand = self._format_brand(self.brand)
+        brand = self.format_brand(self.brand)
         self.brand_file.write(brand)
 
-    def _format_brand(self, brand):
-        if brand[-1] != '\n':
+    @staticmethod
+    def format_brand(brand):
+        if not brand.endswith('\n'):
             brand += '\n'
 
         return brand
+
+
+class BrandFile(object):
+    """The file used for storing product branding info.
+
+    Default is "/var/lib/rhsm/branded_name
+    """
+
+    brand_path = "/var/lib/rhsm/branded_name"
+
+    def write(self, brand_info):
+        # python 2.5+, woohoo!
+        with open(self.brand_path, 'w') as brand_file:
+            brand_file.write(brand_info)
