@@ -27,6 +27,7 @@ from rhsm.certificate import Key, create_from_pem, GMT
 from subscription_manager.certdirectory import Writer
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.injection import CERT_SORTER, PLUGIN_MANAGER, require
+from subscription_manager import entbranding
 import subscription_manager.injection as inj
 from subscription_manager.lock import Lock
 
@@ -336,6 +337,35 @@ class UpdateAction(Action):
                 result.append(cert)
         return result
 
+    def install_hook(self, cert):
+        products = cert.products or []
+        for product in products:
+            # could support other types of branded products
+            if product.os != 'OS':
+                continue
+
+            if not product.name:
+                continue
+
+            # this is a RHEL branded product
+            product_id = product.id
+
+            prod_dir = inj.require(inj.PROD_DIR)
+            installed_products = prod_dir.get_installed_products()
+
+            if product_id in installed_products:
+                # this is an ent cert for an installed RHEL branded product
+                product_name = product.name
+                self._install_branding(product_name)
+
+    def _install_branding(self, product_name):
+        if product_name is None:
+            return
+        if product_name[-1] != "\n":
+            product_name += "\n"
+        brand = entbranding.Brand(product_name)
+        brand.save()
+
     def install(self, serials, report):
         br = Writer()
         exceptions = []
@@ -343,6 +373,7 @@ class UpdateAction(Action):
             try:
                 key, cert = self.build(bundle)
                 br.write(key, cert)
+                self.install_hook(cert)
                 report.added.append(cert)
             except Exception, e:
                 log.exception(e)
