@@ -337,14 +337,11 @@ class UpdateAction(Action):
                 result.append(cert)
         return result
 
-    def install_hook(self, cert):
+    def branding_hook(self, cert):
         products = cert.products or []
         for product in products:
             # could support other types of branded products
-            if product.os != 'OS':
-                continue
-
-            if not product.name:
+            if not self._is_rhel_branded_product(product):
                 continue
 
             # this is a RHEL branded product
@@ -356,13 +353,24 @@ class UpdateAction(Action):
             if product_id in installed_products:
                 # this is an ent cert for an installed RHEL branded product
                 product_name = product.name
-                self._install_branding(product_name)
+                self._install_rhel_branding(product_name)
 
-    def _install_branding(self, product_name):
-        if product_name is None:
-            return
-        if product_name[-1] != "\n":
-            product_name += "\n"
+    def _is_rhel_branded_product(self, product):
+        """Return True if product is a RHEL branded product"""
+        if not hasattr(product, 'os'):
+            return False
+        elif product.os != 'OS':
+            return False
+
+        if not product.name:
+            return False
+
+        return True
+
+    def _install_rhel_branding(self, product_name):
+        """Create Brand object and save it."""
+
+        log.info("Updating product branding info for: %s" % product_name)
         brand = entbranding.Brand(product_name)
         brand.save()
 
@@ -373,7 +381,7 @@ class UpdateAction(Action):
             try:
                 key, cert = self.build(bundle)
                 br.write(key, cert)
-                self.install_hook(cert)
+                self.branding_hook(cert)
                 report.added.append(cert)
             except Exception, e:
                 log.exception(e)

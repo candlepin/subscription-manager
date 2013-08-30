@@ -62,4 +62,11 @@ class Brand(object):
         self.brand = brand
 
     def save(self):
-        self.brand_file.write(self.brand)
+        brand = self._format_brand(self.brand)
+        self.brand_file.write(brand)
+
+    def _format_brand(self, brand):
+        if brand[-1] != '\n':
+            brand += '\n'
+
+        return brand
