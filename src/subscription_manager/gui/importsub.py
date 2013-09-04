@@ -21,6 +21,7 @@ import gtk
 
 _ = gettext.gettext
 
+from subscription_manager import entbranding
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui.utils import show_error_window
 from subscription_manager.managerlib import ImportFileExtractor
@@ -83,6 +84,7 @@ class ImportSubDialog(object):
         invalid_certs = []
         error_certs = []
         good_certs = []
+        imported_certs = []
         non_cert_files = []
 
         for cert_file in src_cert_files:
@@ -102,10 +104,15 @@ class ImportSubDialog(object):
                     else:
                         extractor.write_to_disk()
                         good_certs.append(cert_file)
+                        imported_certs.append(extractor.get_cert())
                 except Exception, e:
                     # Should not get here unless something really bad happened.
                     log.exception(e)
                     error_certs.append(cert_file)
+
+        if imported_certs:
+            brand_installer = entbranding.BrandInstaller(imported_certs)
+            brand_installer.install()
 
         if len(error_certs) > 0 \
             or len(invalid_certs) > 0 \
