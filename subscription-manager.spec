@@ -300,6 +300,7 @@ rm -rf %{buildroot}
 
 %{_sysconfdir}/pam.d/subscription-manager-gui
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
+%{_sysconfdir}/bash_completion.d/subscription-manager-gui
 
 %doc
 %{_mandir}/man8/subscription-manager-gui.8*
