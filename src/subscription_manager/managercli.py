@@ -1680,6 +1680,10 @@ class ImportCertCommand(CliCommand):
         imported = False
         for src_cert_file in self.options.certificate_file:
             if os.path.exists(src_cert_file):
+                # make sure we have a cert sorter to work for
+                # ent changes
+                cs = inj.require(inj.CERT_SORTER)
+
                 try:
                     extractor = managerlib.ImportFileExtractor(src_cert_file)
 

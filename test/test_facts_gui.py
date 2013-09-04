@@ -14,6 +14,8 @@ class FactDialogTests(SubManFixture):
 
     def setUp(self):
 
+        super(FactDialogTests, self).setUp()
+
         expected_facts = {'fact1': 'one',
                           'fact2': 'two',
                           'system': 'Unknown',

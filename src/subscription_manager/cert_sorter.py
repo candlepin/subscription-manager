@@ -24,6 +24,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
 from subscription_manager.cache import InstalledProductsManager
+from subscription_manager import entbranding
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager import file_monitor
 from rhsm.connection import RestlibException
@@ -371,15 +372,30 @@ class CertSorter(ComplianceManager):
         self.product_dir.refresh()
         self.update_product_manager()
         self.on_change()
+        self.update_branding()
 
     def on_ent_dir_changed(self, filemonitor):
         self.entitlement_dir.refresh()
         self.on_change()
 
+        # branding info will have been updated when the
+        # entitlement certs are installed, so only need to
+        # check on product cert changes.
+        #
+        # We also do not need to handle branding changes on
+        # cert deletions, so not needed here.
+
     def on_identity_changed(self, filemonitor):
         self.identity.reload()
         self.cp_provider.clean()
         self.on_change()
+
+    def update_branding(self):
+        import time
+        st = time.time()
+        brand_installer = entbranding.BrandInstaller(self.valid_entitlement_certs)
+        brand_installer.install()
+        log.debug("branding update took: %s s" % (time.time() - st))
 
 
 class StackingGroupSorter(object):
