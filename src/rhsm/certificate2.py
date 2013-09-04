@@ -96,7 +96,8 @@ class _CertFactory(object):
         except CertificateException, e:
             raise e
         except Exception, e:
-            raise CertificateException(e.message)
+            log.exception(e)
+            raise CertificateException(str(e))
 
     def _create_v1_cert(self, version, extensions, x509, path):
 
