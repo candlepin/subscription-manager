@@ -9,6 +9,8 @@ from subscription_manager import injection as inj
 
 
 class BaseBrandFixture(fixture.SubManFixture):
+    current_brand = "Current Awesome OS Brand"
+
     def setUp(self):
         super(BaseBrandFixture, self).setUp()
         brand_file_write_patcher = mock.patch("subscription_manager.entbranding.BrandFile.write",
@@ -16,7 +18,7 @@ class BaseBrandFixture(fixture.SubManFixture):
         self.mock_write = brand_file_write_patcher.start()
 
         brand_file_read_patcher = mock.patch("subscription_manager.entbranding.BrandFile.read",
-                                             return_value="The Artist Previously Known as Awesome OS\n",
+                                             return_value="%s\n" % self.current_brand,
                                              name="MockBrandFile.read")
         self.mock_brand_read = brand_file_read_patcher.start()
 
@@ -210,6 +212,144 @@ class TestProductBrandPicker(BaseBrandFixture):
 
         self.assertEquals(None, brand)
 
+    def test_get_brand(self):
+        # inj a prod dir with some installed products
+        mock_product = mock.Mock(id=123)
+        mock_product.name = "Mock Product"
+        mock_product.os = "OS"
+
+        mock_product_dir = mock.NonCallableMock()
+        mock_product_dir.get_installed_products.return_value = [mock_product.id]
+        inj.provide(inj.PROD_DIR, mock_product_dir)
+
+        mock_ent_cert = mock.Mock()
+        mock_ent_cert.products = [mock_product]
+        ent_certs = [mock_ent_cert]
+
+        brand_picker = entbranding.BrandPicker(ent_certs)
+        brand = brand_picker.get_brand()
+        self.assertTrue("Mock Product", brand.name)
+
+    def test_get_brand_multiple_ents_with_branding_same_name(self):
+        # inj a prod dir with some installed products
+        mock_product = mock.Mock(id=123)
+        mock_product.name = "Mock Product"
+        mock_product.os = "OS"
+
+        mock_product_dir = mock.NonCallableMock()
+        mock_product_dir.get_installed_products.return_value = [mock_product.id]
+        inj.provide(inj.PROD_DIR, mock_product_dir)
+
+        mock_ent_cert = mock.Mock()
+        mock_ent_cert.products = [mock_product]
+
+        mock_ent_cert_2 = mock.Mock()
+        mock_ent_cert_2.products = [mock_product]
+        ent_certs = [mock_ent_cert, mock_ent_cert_2]
+
+        brand_picker = entbranding.BrandPicker(ent_certs)
+        brand = brand_picker.get_brand()
+        self.assertFalse("Mock Product", brand.name)
+
+    def test_get_brand_multiple_ents_with_branding_different_branded_name(self):
+        # inj a prod dir with some installed products
+        mock_product = mock.Mock(id=123)
+        mock_product.name = "Mock Product"
+        mock_product.os = "OS"
+
+        # same product id, different name
+        mock_product_2 = mock.Mock(id=123)
+        mock_product_2.name = "Different Mock Product"
+        mock_product.os = "OS"
+
+        mock_product_dir = mock.NonCallableMock()
+        # note mock_product.id=123 will match the Product from both ents
+        mock_product_dir.get_installed_products.return_value = [mock_product.id]
+        inj.provide(inj.PROD_DIR, mock_product_dir)
+
+        mock_ent_cert = mock.Mock()
+        mock_ent_cert.products = [mock_product]
+
+        mock_ent_cert_2 = mock.Mock()
+        mock_ent_cert_2.products = [mock_product_2]
+        ent_certs = [mock_ent_cert, mock_ent_cert_2]
+
+        brand_picker = entbranding.BrandPicker(ent_certs)
+        brand = brand_picker.get_brand()
+        self.assertFalse("Mock Product", brand.name)
+
+    def test_get_brand_not_installed(self):
+
+        mock_product = mock.Mock(id=123)
+        mock_product.name = "Mock Product"
+        mock_product.os = "OS"
+
+        mock_other_product = mock.Mock(id=321)
+        mock_other_product.name = "A Non Branded Product"
+
+        mock_product_dir = mock.NonCallableMock()
+        mock_product_dir.get_installed_products.return_value = [mock_other_product.id]
+        inj.provide(inj.PROD_DIR, mock_product_dir)
+
+        mock_ent_cert = mock.Mock()
+        mock_ent_cert.products = [mock_product]
+        ent_certs = [mock_ent_cert]
+
+        brand_picker = entbranding.BrandPicker(ent_certs)
+        brand = brand_picker.get_brand()
+        self.assertTrue(brand is None)
+
+    def test_get_brand_branded(self):
+
+        mock_product = mock.Mock(id=123)
+        mock_product.name = "Mock Product"
+        mock_product.os = "Awesome Middleware"
+
+        mock_other_product = mock.Mock(id=321)
+        mock_other_product.name = "A Non Branded Product"
+
+        mock_product_dir = mock.NonCallableMock()
+        mock_product_dir.get_installed_products.return_value = [mock_product.id, mock_other_product.id]
+        inj.provide(inj.PROD_DIR, mock_product_dir)
+
+        mock_ent_cert = mock.Mock()
+        mock_ent_cert.products = [mock_product]
+        ent_certs = [mock_ent_cert]
+
+        brand_picker = entbranding.BrandPicker(ent_certs)
+        brand = brand_picker.get_brand()
+        self.assertTrue(brand is None)
+
+    def test_is_installed_rhel_branded_product_not_installed(self):
+        brand_picker = entbranding.BrandPicker([])
+        mock_product = mock.Mock(id=123)
+        irp = brand_picker._is_installed_rhel_branded_product(mock_product)
+        self.assertFalse(irp)
+
+    def test_is_installed_rhel_branded_product_is_installed(self):
+        mock_product = mock.Mock(id=123)
+        mock_product.name = "Mock Product"
+
+        mock_product_dir = mock.NonCallableMock()
+        mock_product_dir.get_installed_products.return_value = [mock_product.id]
+        inj.provide(inj.PROD_DIR, mock_product_dir)
+
+        brand_picker = entbranding.BrandPicker([])
+        irp = brand_picker._is_installed_rhel_branded_product(mock_product)
+        self.assertTrue(irp)
+
+    def test_get_installed_branded_products(self):
+        mock_product = mock.Mock(id=123)
+        mock_product.name = "Mock Product"
+
+        mock_product_dir = mock.NonCallableMock()
+        mock_product_dir.get_installed_products.return_value = [mock_product.id]
+        inj.provide(inj.PROD_DIR, mock_product_dir)
+
+        brand_picker = entbranding.BrandPicker([])
+        irp = brand_picker._is_installed_rhel_branded_product(mock_product)
+        self.assertTrue(irp)
+
     def test_is_rhel_branded_product(self):
         brand_picker = entbranding.BrandPicker([])
 
@@ -232,28 +372,70 @@ class TestProductBrandPicker(BaseBrandFixture):
         self.assertFalse(brand_picker._is_rhel_branded_product(mock_no_os))
 
 
-@mock.patch("subscription_manager.entbranding.BrandFile.write",
-            name="MockBrandFile.write")
-class TestProductBrand(fixture.SubManFixture):
+class TestProductBrand(BaseBrandFixture):
 
-    def test_init(self, mock_write):
+    def test_init(self):
         entbranding.ProductBrand("Awesome OS")
 
-    def test_brand(self, mock_write):
+    def test_brand(self):
         brand = entbranding.ProductBrand("Awesome OS")
         self.assertEquals("Awesome OS", brand.name)
 
-    def test_brand_save(self, mock_write):
+    def test_brand_save(self):
         brand = entbranding.ProductBrand("Foo")
         brand.save()
-        mock_write.assert_called_with("Foo\n")
+        self.mock_write.assert_called_with("Foo\n")
 
-    def test_format_brand(self, mock_write):
+    def test_exception_on_save(self):
+        self.mock_write.side_effect = IOError
+        brand = entbranding.ProductBrand("Foo")
+        self.assertRaises(IOError, brand.save)
+
+    def test_from_product(self):
+        product_name = "Awesome Mock OS"
+        mock_product = mock.Mock()
+        mock_product.id = 123
+        mock_product.name = product_name
+
+        brand = entbranding.ProductBrand.from_product(mock_product)
+        self.assertEquals(product_name, brand.name)
+
+    def test_format_brand(self):
         fb = entbranding.ProductBrand.format_brand('Blip')
         self.assert_string_equals(fb, 'Blip\n')
 
         fb = entbranding.ProductBrand.format_brand('')
         self.assert_string_equals(fb, '\n')
+
+        fb = entbranding.ProductBrand.format_brand('Foo\n')
+        self.assert_string_equals(fb, 'Foo\n')
+
+
+class TestCurrentBrand(BaseBrandFixture):
+    def test_init(self):
+        entbranding.CurrentBrand()
+
+    def test_load(self):
+        cb = entbranding.CurrentBrand()
+        self.assertEquals(self.current_brand, cb.name)
+
+    def test_unformat_brand(self):
+        cb_class = entbranding.CurrentBrand
+        self.assertEquals("foo", cb_class.unformat_brand("foo"))
+        self.assertEquals("foo", cb_class.unformat_brand("foo\n"))
+
+    def test_unformat_brand_none(self):
+        cb_class = entbranding.CurrentBrand
+        self.assertTrue(cb_class.unformat_brand(None) is None)
+
+    def test_io_exception_on_brandfile_read(self):
+        self.mock_brand_read.side_effect = IOError
+        cb = entbranding.CurrentBrand()
+        self.assertTrue(cb.name is None)
+
+    def test_exception_on_brandfile_read(self):
+        self.mock_brand_read.side_effect = Exception
+        self.assertRaises(Exception, entbranding.CurrentBrand)
 
 
 class TestBrandFile(fixture.SubManFixture):
