@@ -17,9 +17,6 @@
 # on subscription
 
 
-#  hmm, we can subscribe before we have a product
-#       cert installed? Would we need to check
-#       on product cert install as well?
 import logging
 
 from subscription_manager import injection as inj
