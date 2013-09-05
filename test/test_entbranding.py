@@ -91,6 +91,22 @@ class TestBrandInstaller(BaseBrandFixture):
         self.assertTrue(isinstance(brand_arg, entbranding.ProductBrand))
         self.assertEquals("Awesome OS", brand_arg.name)
 
+    def test_no_need_to_update_branding(self):
+        stub_product = StubProduct(id=123, os='OS', name=self.current_brand)
+
+        mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
+        mock_prod_dir.get_installed_products.return_value = [stub_product.id]
+
+        inj.provide(inj.PROD_DIR, mock_prod_dir)
+
+        mock_ent_cert = mock.Mock(name='MockEntCert')
+        mock_ent_cert.products = [stub_product]
+
+        brand_installer = entbranding.BrandInstaller([mock_ent_cert])
+        brand_installer.install()
+
+        self.assertFalse(self.mock_install.called)
+
     def test_no_os_on_product(self):
         # no .os
         stub_product = StubProduct(id=123, name="Awesome OS Super")
@@ -135,7 +151,7 @@ class TestBrandInstaller(BaseBrandFixture):
         self.assertFalse(self.mock_install.called)
 
     def test_multiple_branded_ent_certs_for_installed_product(self):
-        stub_product = StubProduct()
+        stub_product = DefaultStubProduct()
 
         mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
         mock_prod_dir.get_installed_products.return_value = [stub_product.id]
@@ -151,8 +167,7 @@ class TestBrandInstaller(BaseBrandFixture):
         brand_installer = entbranding.BrandInstaller([mock_ent_cert, mock_ent_cert_2])
         brand_installer.install()
 
-        #FIXME
-        #self.assertTrue(self.mock_install.called)
+        self.assertTrue(self.mock_install.called)
 
 
 class TestBrand(fixture.SubManFixture):
@@ -356,6 +371,11 @@ class TestProductBrandPicker(BaseBrandFixture):
         no_os_stub_product = StubProduct(name="Awesome NoOS", id=123)
         self.assertFalse(brand_picker._is_rhel_branded_product(no_os_stub_product))
 
+        # product.name is none
+        no_name_stub_product = DefaultStubProduct()
+        no_name_stub_product.name = None
+        self.assertFalse(brand_picker._is_rhel_branded_product(no_name_stub_product))
+
 
 class TestProductBrand(BaseBrandFixture):
 
@@ -432,3 +452,11 @@ class TestBrandFile(fixture.SubManFixture):
             brand_file.write("Foo OS")
 
         mo.assert_called_once_with('/var/lib/rhsm/branded_name', 'w')
+
+    def test_read(self):
+        brand_file = entbranding.BrandFile()
+        brand_string = "Some Branding Info"
+        mo = mock.mock_open(read_data=brand_string)
+        with mock.patch('subscription_manager.entbranding.open', mo, create=True):
+            b = brand_file.read()
+        self.assert_string_equals(brand_string, b)

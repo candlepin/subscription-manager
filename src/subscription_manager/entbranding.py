@@ -51,10 +51,12 @@ class BrandInstaller(object):
         current_brand = CurrentBrand()
 
         log.debug("Current branded name info, if any: %s" % current_brand.name)
-        log.debug("New branded product info: %s" % new_brand.name)
+        log.debug("Fresh ent cert has branded product info: %s" % new_brand.name)
 
         if current_brand.is_outdated_by(new_brand):
             self._install(new_brand)
+        else:
+            log.info("Product branding info does not need to be updated")
 
     def _install(self, brand):
         log.info("Updating product branding info for: %s" % brand.name)
