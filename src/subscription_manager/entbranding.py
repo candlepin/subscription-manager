@@ -80,23 +80,54 @@ class BrandPicker(object):
         # on connected status, etc.
 
     def get_brand(self):
-        branded_certs = self._get_branded_certs()
+        branded_cert_product = self._get_branded_cert_product()
+
+        if not branded_cert_product:
+            return None
+
+        branded_product = branded_cert_product[1]
+        return ProductBrand.from_product(branded_product)
+
+    def _get_branded_cert_product(self):
+        """Given a list of ent certs providing product branding, return one.
+
+        If we can collapse them into one, do it. Otherwise, return nothing
+        and log errors."""
+
+        branded_certs = self._get_branded_cert_products()
 
         if not branded_certs:
             return None
 
-        if len(branded_certs) > 1:
+        # Try to find cases where multiple ent certs provide the same branding
+        # information. This can happen for say, two similar ent certs that
+        # overlap at the moment.
+
+        # There is potentially more than cert providing branding info, see if they are for the
+        # same product, with the same branded name.
+
+        branded_name_set = set([])
+        for cert, product in branded_certs:
+            # uniq on product id and product name
+            branded_name_set.add(product.name)
+
+        log.debug("branded_name_set: %s" % branded_name_set)
+
+        if len(branded_name_set) == 1:
+            # all the ent certs provide the same branding info,
+            # so return the first one
+            return branded_certs[0]
+        else:
+            # note product_name_set should never be empty here, since we check
+            # for emtpty branded_certs
             log.warning("More than one entitlement provided branded name information for an installed RHEL product")
             for branded_cert in branded_certs:
                 log.debug("Entitlement cert %s (%s) provided branded name information for (%s, %s)" %
-                          (branded_cert[0].serial, branded_cert[0].order.name,
-                           branded_cert[1].id, branded_cert[1].name))
+                            (branded_cert[0].serial, branded_cert[0].order.name,
+                            branded_cert[1].id, branded_cert[1].name))
             return None
 
-        branded_product = branded_certs[0][1]
-        return ProductBrand.from_product(branded_product)
-
-    def _get_branded_certs(self):
+    def _get_branded_cert_products(self):
         branded_cert_products = []
         for cert in self.ent_certs:
             products = cert.products or []
@@ -114,7 +145,9 @@ class BrandPicker(object):
                              (cert, installed_branded_product))
                 continue
             else:
-                branded_cert_products.append((cert, installed_branded_products[0]))
+                log.debug("installed_branded_products %s" % installed_branded_products)
+                installed_branded_product = installed_branded_products[0]
+                branded_cert_products.append((cert, installed_branded_product))
 
         log.debug("%s entitlement certs with brand info found" % len(branded_cert_products))
 
