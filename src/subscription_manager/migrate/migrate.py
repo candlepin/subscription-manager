@@ -161,6 +161,14 @@ class MigrationEngine(object):
                 "level use --servicelevel=\"\""))
         self.parser.add_option("--serverurl", dest='serverurl',
             help=_("specify the subscription management server to migrate to"))
+        self.parser.add_option("--redhat-account-name", 
+            help=_("specify the redhat account username"))
+        self.parser.add_option("--redhat-password",
+            help=_("specify the redhat password"))
+        self.parser.add_option("--system-engine-user",
+            help=_("specify the system engine username"))
+        self.parser.add_option("--system-engine-password",
+            help=_("specify the system engine password"))
         # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
         self.parser.add_option("--no-proxy", action="store_true", dest='noproxy',
             help=_("don't use RHN proxy settings with subscription management server"))
@@ -186,15 +194,20 @@ class MigrationEngine(object):
             return False
 
     def get_auth(self):
-        if self.options.serverurl:
-            self.rhncreds = self.authenticate(_("Red Hat account: "))
-            self.secreds = self.authenticate(_("System Engine Username: "))
+        if self.options.redhat_account_name:
+                    rh_pass = self.options.redhat_password or getpass.getpass()
+                    self.rhncreds = UserCredentials(self.options.redhat_account_name, rh_pass)
         else:
-            self.rhncreds = self.authenticate(_("Red Hat account: "))
-            if not self.is_hosted():
-                self.secreds = self.authenticate(_("System Engine Username: "))
-            else:
-                self.secreds = self.rhncreds  # make them the same
+                    self.rhncreds = self.authenticate(_("Red Hat account: "))
+
+        if not self.is_hosted() or self.options.serverurl:
+                    if self.options.system_engine_user:
+                            se_pass = self.options.system_engine_password or getpass.getpass()
+                            self.secreds = UserCredentials(self.options.system_engine_user, se_pass)
+                    else:
+                            self.secreds = self.authenticate(_("System Engine Username: "))
+        else:
+                    self.secreds = self.rhncreds # make them the same
 
     def transfer_http_proxy_settings(self):
         if self.rhncfg['enableProxy']:
