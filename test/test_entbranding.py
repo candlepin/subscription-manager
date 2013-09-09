@@ -5,6 +5,7 @@ import fixture
 import stubs
 
 from subscription_manager import entbranding
+from subscription_manager import rhelentbranding
 from subscription_manager import injection as inj
 
 
@@ -39,7 +40,7 @@ class BaseBrandFixture(fixture.SubManFixture):
                                              name="MockBrandFile.read")
         self.mock_brand_read = self.brand_file_read_patcher.start()
 
-        self.mock_install_patcher = mock.patch("subscription_manager.entbranding.RHELBrandInstaller._install",
+        self.mock_install_patcher = mock.patch("subscription_manager.rhelentbranding.RHELBrandInstaller._install",
                                                name="Mock_install_branding")
 
         self.mock_install = self.mock_install_patcher.start()
@@ -60,10 +61,10 @@ class TestBrandInstaller(BaseBrandFixture):
 
 
 class TestRHELBrandInstaller(BaseBrandFixture):
-    brand_installer_class = entbranding.RHELBrandInstaller
+    brand_installer_class = rhelentbranding.RHELBrandInstaller
 
     def test_init_empty_cert_list(self):
-        entbranding.RHELBrandInstaller([])
+        self.brand_installer_class([])
 
     def test_no_installed_products_no_ent_certs(self):
         brand_installer = self.brand_installer_class([])
@@ -97,7 +98,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
         call_args = self.mock_install.call_args
         brand_arg = call_args[0][0]
         self.assertTrue(isinstance(brand_arg, entbranding.ProductBrand))
-        self.assertTrue(isinstance(brand_arg, entbranding.RHELProductBrand))
+        self.assertTrue(isinstance(brand_arg, rhelentbranding.RHELProductBrand))
         self.assertEquals("Awesome OS", brand_arg.name)
 
     def test_no_need_to_update_branding(self):
@@ -179,7 +180,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
         self.assertTrue(self.mock_install.called)
 
 
-class TestBrandsInstaller(TestRHELBrandInstaller):
+class TestBrandsInstaller(TestBrandInstaller):
     brand_installer_class = entbranding.BrandsInstaller
 
 
@@ -203,10 +204,10 @@ class TestMultipleBrandsInstaller(TestBrandInstaller):
     brand_installer_class = StubMultipleBrandsInstaller
 
 
-class StubRhelAndMockBrandsInstaller(entbranding.BrandsInstaller):
+class StubRhelAndMockBrandsInstaller(rhelentbranding.RHELBrandsInstaller):
     def _get_brand_installers(self):
         return [mock.Mock(),
-                entbranding.RHELBrandInstaller(self.ent_certs),
+                rhelentbranding.RHELBrandInstaller(self.ent_certs),
                 mock.Mock()]
 
 
@@ -232,7 +233,7 @@ class TestRhelAndMockBrandsInstaller(TestRHELBrandInstaller):
         call_args = self.mock_install.call_args
         brand_arg = call_args[0][0]
         self.assertTrue(isinstance(brand_arg, entbranding.ProductBrand))
-        self.assertTrue(isinstance(brand_arg, entbranding.RHELProductBrand))
+        self.assertTrue(isinstance(brand_arg, rhelentbranding.RHELProductBrand))
         self.assertEquals("Awesome OS", brand_arg.name)
 
         # verify the install on all the installers got called
@@ -290,19 +291,19 @@ class TestBrandPicker(BaseBrandFixture):
 
 
 class TestRHELBrandPicker(BaseBrandFixture):
-    @mock.patch("subscription_manager.entbranding.RHELBrandPicker._get_branded_cert_products",
+    @mock.patch("subscription_manager.rhelentbranding.RHELBrandPicker._get_branded_cert_products",
                 return_value=[(mock.Mock(name="Mock Certificate 1"), DefaultStubProduct()),
                               (mock.Mock(name="Mock Certificate 2"), DefaultStubProduct())])
     def test_more_than_one_ent_cert_with_branding(self, mock_branded_certs):
-        brand_picker = entbranding.RHELBrandPicker([])
+        brand_picker = rhelentbranding.RHELBrandPicker([])
         brand = brand_picker.get_brand()
         self.assertEquals("Awesome OS", brand.name)
 
-    @mock.patch("subscription_manager.entbranding.RHELBrandPicker._get_branded_cert_products",
+    @mock.patch("subscription_manager.rhelentbranding.RHELBrandPicker._get_branded_cert_products",
                 return_value=[])
     def test_branded_certs_returns_empty(self, mock_branded_certs):
 
-        brand_picker = entbranding.RHELBrandPicker([])
+        brand_picker = rhelentbranding.RHELBrandPicker([])
         brand = brand_picker.get_brand()
 
         self.assertEquals(None, brand)
@@ -319,7 +320,7 @@ class TestRHELBrandPicker(BaseBrandFixture):
         mock_ent_cert.products = [stub_product]
         ent_certs = [mock_ent_cert]
 
-        brand_picker = entbranding.RHELBrandPicker(ent_certs)
+        brand_picker = rhelentbranding.RHELBrandPicker(ent_certs)
         brand = brand_picker.get_brand()
         self.assertTrue("Mock Product", brand.name)
 
@@ -341,7 +342,7 @@ class TestRHELBrandPicker(BaseBrandFixture):
 
         ent_certs = [mock_ent_cert, mock_ent_cert_2]
 
-        brand_picker = entbranding.RHELBrandPicker(ent_certs)
+        brand_picker = rhelentbranding.RHELBrandPicker(ent_certs)
         brand = brand_picker.get_brand()
         self.assertTrue(brand is not None)
         self.assertTrue("Awesome OS", brand.name)
@@ -365,7 +366,7 @@ class TestRHELBrandPicker(BaseBrandFixture):
         mock_ent_cert_2.products = [stub_product_2]
         ent_certs = [mock_ent_cert, mock_ent_cert_2]
 
-        brand_picker = entbranding.RHELBrandPicker(ent_certs)
+        brand_picker = rhelentbranding.RHELBrandPicker(ent_certs)
         brand = brand_picker.get_brand()
         self.assertTrue(brand is None)
 
@@ -384,7 +385,7 @@ class TestRHELBrandPicker(BaseBrandFixture):
         mock_ent_cert.products = [stub_product]
         ent_certs = [mock_ent_cert]
 
-        brand_picker = entbranding.RHELBrandPicker(ent_certs)
+        brand_picker = rhelentbranding.RHELBrandPicker(ent_certs)
         brand = brand_picker.get_brand()
         self.assertTrue(brand is None)
 
@@ -403,12 +404,12 @@ class TestRHELBrandPicker(BaseBrandFixture):
         mock_ent_cert.products = [stub_product]
         ent_certs = [mock_ent_cert]
 
-        brand_picker = entbranding.RHELBrandPicker(ent_certs)
+        brand_picker = rhelentbranding.RHELBrandPicker(ent_certs)
         brand = brand_picker.get_brand()
         self.assertTrue(brand is None)
 
     def test_is_installed_rhel_branded_product_not_installed(self):
-        brand_picker = entbranding.RHELBrandPicker([])
+        brand_picker = rhelentbranding.RHELBrandPicker([])
         stub_product = DefaultStubProduct()
         # note no installed products in injected installed products
         irp = brand_picker._is_installed_rhel_branded_product(stub_product)
@@ -421,7 +422,7 @@ class TestRHELBrandPicker(BaseBrandFixture):
         mock_product_dir.get_installed_products.return_value = [stub_product.id]
         inj.provide(inj.PROD_DIR, mock_product_dir)
 
-        brand_picker = entbranding.RHELBrandPicker([])
+        brand_picker = rhelentbranding.RHELBrandPicker([])
         irp = brand_picker._is_installed_rhel_branded_product(stub_product)
         self.assertTrue(irp)
 
@@ -432,12 +433,12 @@ class TestRHELBrandPicker(BaseBrandFixture):
         mock_product_dir.get_installed_products.return_value = [stub_product.id]
         inj.provide(inj.PROD_DIR, mock_product_dir)
 
-        brand_picker = entbranding.RHELBrandPicker([])
+        brand_picker = rhelentbranding.RHELBrandPicker([])
         irp = brand_picker._is_installed_rhel_branded_product(stub_product)
         self.assertTrue(irp)
 
     def test_is_rhel_branded_product(self):
-        brand_picker = entbranding.RHELBrandPicker([])
+        brand_picker = rhelentbranding.RHELBrandPicker([])
 
         stub_product = DefaultStubProduct()
         self.assertTrue(brand_picker._is_rhel_branded_product(stub_product))
@@ -493,7 +494,7 @@ class TestProductBrand(BaseBrandFixture):
 
 
 class TestRHELProductBrand(TestProductBrand):
-    brand_class = entbranding.RHELProductBrand
+    brand_class = rhelentbranding.RHELProductBrand
 
 
 class TestCurrentBrand(BaseBrandFixture):
@@ -524,7 +525,7 @@ class TestCurrentBrand(BaseBrandFixture):
 
 
 class TestRHELCurrentBrand(TestCurrentBrand):
-    brand_class = entbranding.RHELCurrentBrand
+    brand_class = rhelentbranding.RHELCurrentBrand
 
 
 class TestBrandFile(fixture.SubManFixture):
@@ -551,4 +552,4 @@ class TestBrandFile(fixture.SubManFixture):
 
 
 class TestRHELBrandFile(TestBrandFile):
-    brandfile_class = entbranding.RHELBrandFile
+    brandfile_class = rhelentbranding.RHELBrandFile
