@@ -152,6 +152,24 @@ class RemoteServerException(ConnectionException):
         return "Server returned %s" % self.code
 
 
+class AuthenticationException(RemoteServerException):
+    prefix = "Authentication error"
+
+    def __str__(self):
+        buf = super(AuthenticationException, self).__str__()
+        buf += "\n"
+        buf += "%s: Invalid credentials for request." % self.prefix
+        return buf
+
+
+class UnauthorizedException(AuthenticationException):
+    prefix = "Unauthorized"
+
+
+class ForbiddenException(AuthenticationException):
+    prefix = "Forbidden"
+
+
 class ExpiredIdentityCertException(ConnectionException):
 
     pass
@@ -461,7 +479,7 @@ class Restlib(object):
         # FIXME: what are we supposed to do with a 204?
         if str(response['status']) not in ["200", "204"]:
             parsed = {}
-            if not response['content']:
+            if not response.get('content'):
                 parsed = {}
             else:
                 # try vaguely to see if it had a json parseable body
@@ -492,10 +510,19 @@ class Restlib(object):
                 error_msg = self._parse_msg_from_error_response_body(parsed)
                 raise RestlibException(response['status'], error_msg)
             else:
+                # This really needs an exception mapper too...
                 if str(response['status']) in ["404", "410", "500", "502", "503", "504"]:
                     raise RemoteServerException(response['status'],
                                                 request_type=request_type,
                                                 handler=handler)
+                elif str(response['status']) in ["401"]:
+                    raise UnauthorizedException(response['status'],
+                                                request_type=request_type,
+                                                handler=handler)
+                elif str(response['status']) in ["403"]:
+                    raise ForbiddenException(response['status'],
+                                             request_type=request_type,
+                                             handler=handler)
                 else:
                     # unexpected with no valid content
                     raise NetworkException(response['status'])

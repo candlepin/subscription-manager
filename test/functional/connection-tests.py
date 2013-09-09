@@ -15,9 +15,11 @@
 
 import unittest
 
-from rhsm.connection import ContentConnection, UEPConnection, drift_check, Restlib
+from rhsm.connection import ContentConnection, UEPConnection, drift_check, Restlib,\
+    UnauthorizedException, ForbiddenException, AuthenticationException, RestlibException
 import simplejson as json
 import mock
+
 
 class ConnectionTests(unittest.TestCase):
 
@@ -102,3 +104,47 @@ class HypervisorCheckinTests(unittest.TestCase):
         self.assertEqual(len(response['failedUpdate']), 0)
         self.assertEqual(len(response['updated']), 0)
         self.assertEqual(len(response['created']), 0)
+
+
+class RestlibTests(unittest.TestCase):
+
+    def setUp(self):
+        # Get handle to Restlib
+        self.conn = UEPConnection().conn
+        self.request_type = "GET"
+        self.handler = "https://server/path"
+
+    def _validate_response(self, response):
+        # wrapper to specify request_type and handler
+        return self.conn.validateResponse(response,
+                                          request_type=self.request_type,
+                                          handler=self.handler)
+
+    def test_invalid_credentitals_thrown_on_401_with_empty_body(self):
+        mock_response = {"status": 401}
+        self.assertRaises(UnauthorizedException, self._validate_response,
+                          mock_response)
+
+    def test_standard_error_handling_on_401_with_defined_body(self):
+        self._run_standard_error_handling_test(401)
+
+    def test_invalid_credentitals_thrown_on_403_with_empty_body(self):
+        mock_response = {"status": 403}
+        self.assertRaises(ForbiddenException, self._validate_response,
+                          mock_response)
+
+    def test_standard_error_handling_on_403_with_defined_body(self):
+        self._run_standard_error_handling_test(403)
+
+    def _run_standard_error_handling_test(self, expected_error):
+        expected_error = "My Expected Error."
+        mock_response = {"status": expected_error,
+                         "content": '{"displayMessage":"%s"}' % expected_error}
+
+        try:
+            self._validate_response(mock_response)
+            self.fail("An exception should have been thrown.")
+        except Exception, ex:
+            self.assertTrue(isinstance(ex, RestlibException))
+            self.assertEqual(expected_error, str(ex))
+            self.assertEquals(expected_error, ex.code)

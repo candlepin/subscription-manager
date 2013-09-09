@@ -18,7 +18,8 @@ import unittest
 
 from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
         BadCertificateException, RestlibException, GoneException, NetworkException, \
-        RemoteServerException, drift_check, ExpiredIdentityCertException
+        RemoteServerException, drift_check, ExpiredIdentityCertException, UnauthorizedException, \
+        ForbiddenException, AuthenticationException
 
 from mock import Mock
 from datetime import date
@@ -109,12 +110,13 @@ class RestlibValidateResponseTests(unittest.TestCase):
         self.vr("204", "")
 
     # no exceptions is okay
-    def test_204_None(self):
+    def test_204_none(self):
         self.vr("204", None)
 
     # MOVED PERMANENTLY
-    def test_301_empty(self):
-        self.vr("301", "")
+    # FIXME: implement 301 support?
+    #def test_301_empty(self):
+    #    self.vr("301", "")
 
     def test_400_empty(self):
         # FIXME: not sure 400 makes sense as "NetworkException"
@@ -127,6 +129,50 @@ class RestlibValidateResponseTests(unittest.TestCase):
                           "400",
                           "")
 
+    def test_401_empty(self):
+        try:
+            self.vr("401", "")
+        except UnauthorizedException, e:
+            self.assertEquals(self.request_type, e.request_type)
+            self.assertEquals("401", e.code)
+            expected_str = "Server error attempting a GET to https://server/path returned status 401\n" \
+                       "Unauthorized: Invalid credentials for request."
+            self.assertEquals(expected_str, str(e))
+        else:
+            self.fail("Should have raised UnauthorizedException")
+
+    def test_403_valid(self):
+        content = u'{"errors": ["Forbidden message"]}'
+        try:
+            self.vr("403", content)
+        except RestlibException, e:
+            self.assertEquals("403", e.code)
+            self.assertEquals("Forbidden message", e.msg)
+        else:
+            self.fails("Should have raised a RestlibException")
+
+    def test_403_empty(self):
+        try:
+            self.vr("403", "")
+        except ForbiddenException, e:
+            self.assertEquals(self.request_type, e.request_type)
+            self.assertEquals("403", e.code)
+            expected_str = "Server error attempting a GET to https://server/path returned status 403\n" \
+                       "Forbidden: Invalid credentials for request."
+            self.assertEquals(expected_str, str(e))
+        else:
+            self.fail("Should have raised ForbiddenException")
+
+    def test_401_valid(self):
+        content = u'{"errors": ["Unauthorized message"]}'
+        try:
+            self.vr("401", content)
+        except RestlibException, e:
+            self.assertEquals("401", e.code)
+            self.assertEquals("Unauthorized message", e.msg)
+        else:
+            self.fails("Should have raised a RestlibException")
+
     def test_404_empty(self):
         try:
             self.vr("404", "")
@@ -136,7 +182,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.assertEquals("404", e.code)
             self.assertEquals("Server error attempting a GET to https://server/path returned status 404", str(e))
         else:
-            self.fails("Should of raise RemoteServerException")
+            self.fails("Should have raise RemoteServerException")
 
     def test_404_valid_but_irrelevant_json(self):
         content = u'{"something": "whatever"}'
@@ -146,7 +192,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.assertEquals("404", e.code)
             self.assertEquals("", e.msg)
         else:
-            self.fails("Should of raised a RemoteServerException")
+            self.fails("Should have raised a RemoteServerException")
 
     def test_404_valid_body_old_style(self):
         content = u'{"displayMessage": "not found"}'
@@ -235,6 +281,7 @@ class RestlibTests(unittest.TestCase):
 # str/repr work and that cases weirdness
 class ExceptionTest(unittest.TestCase):
     exception = Exception
+    parent_exception = Exception
 
     def _stringify(self, e):
         # FIXME: validate results are strings, unicode, etc
@@ -254,6 +301,15 @@ class ExceptionTest(unittest.TestCase):
     def test_exception_str(self):
         self._test()
 
+    def _raise(self):
+        raise self._create_exception()
+
+    def test_catch_exception(self):
+        self.assertRaises(Exception, self._raise)
+
+    def test_catch_parent(self):
+        self.assertRaises(self.parent_exception, self._raise)
+
 
 # not all our exceptions take a msg arg
 class ExceptionMsgTest(ExceptionTest):
@@ -268,10 +324,12 @@ class ConnectionExceptionText(ExceptionMsgTest):
 
 class ConnectionSetupExceptionTest(ExceptionMsgTest):
     exception = ConnectionSetupException
+    parent_exception = ConnectionException
 
 
-class BadCertificateException(ExceptionTest):
+class BadCertificateExceptionTest(ExceptionTest):
     exception = BadCertificateException
+    parent_exception = ConnectionException
 
     def _create_exception(self, *args, **kwargs):
         kwargs['cert_path'] = "/etc/sdfsd"
@@ -280,11 +338,44 @@ class BadCertificateException(ExceptionTest):
 
 class RestlibExceptionTest(ExceptionTest):
     exception = RestlibException
+    parent_exception = ConnectionException
 
     def _create_exception(self, *args, **kwargs):
         kwargs['msg'] = "foo"
         kwargs['code'] = 404
         return self.exception(*args, **kwargs)
+
+
+class RemoteServerExceptionTest(ExceptionTest):
+    exception = RemoteServerException
+    parent_exception = ConnectionException
+    code = 500
+    request_type = "GET"
+    handler = "htttps://server/path"
+
+    def _create_exception(self, *args, **kwargs):
+        kwargs['code'] = self.code
+        kwargs['request_type'] = self.request_type
+        kwargs['handler'] = self.handler
+        return self.exception(*args, **kwargs)
+
+
+class AuthenticationExceptionTest(RemoteServerExceptionTest):
+    exception = AuthenticationException
+    parent_exception = RemoteServerException
+    code = 401
+
+
+class UnauthorizedExceptionTest(RemoteServerExceptionTest):
+    exception = UnauthorizedException
+    parent_exception = AuthenticationException
+    code = 401
+
+
+class ForbiddenExceptionTest(RemoteServerExceptionTest):
+    exception = ForbiddenException
+    parent_exception = AuthenticationException
+    code = 403
 
 
 class DriftTest(unittest.TestCase):
@@ -301,6 +392,7 @@ class DriftTest(unittest.TestCase):
 
 class GoneExceptionTest(ExceptionTest):
     exception = GoneException
+    parent_exception = RestlibException
 
     def setUp(self):
         self.code = 410
@@ -324,6 +416,7 @@ class GoneExceptionTest(ExceptionTest):
 
 class ExpiredIdentityCertTest(ExceptionTest):
     exception = ExpiredIdentityCertException
+    parent_exception = ConnectionException
 
     def _create_exception(self, *args, **kwargs):
         return self.exception(*args, **kwargs)
