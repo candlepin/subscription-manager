@@ -25,7 +25,7 @@ from rhsm.config import initConfig
 from rhsm.certificate import Key, create_from_pem, GMT
 
 from subscription_manager.certdirectory import Writer
-from subscription_manager import entbranding
+from subscription_manager import rhelentbranding
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.injection import CERT_SORTER, PLUGIN_MANAGER, require
 import subscription_manager.injection as inj
@@ -338,7 +338,7 @@ class UpdateAction(Action):
         return result
 
     def branding_hook(self, installed_ent_certs):
-        brands_installer = entbranding.BrandsInstaller(installed_ent_certs)
+        brands_installer = rhelentbranding.RHELBrandsInstaller(installed_ent_certs)
         brands_installer.install()
 
     def install(self, serials, report):

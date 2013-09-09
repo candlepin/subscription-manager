@@ -24,7 +24,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
 from subscription_manager.cache import InstalledProductsManager
-from subscription_manager import entbranding
+from subscription_manager import rhelentbranding
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager import file_monitor
 from rhsm.connection import RestlibException
@@ -393,7 +393,7 @@ class CertSorter(ComplianceManager):
     def update_branding(self):
         import time
         st = time.time()
-        brands_installer = entbranding.BrandsInstaller(self.valid_entitlement_certs)
+        brands_installer = rhelentbranding.RHELBrandsInstaller(self.valid_entitlement_certs)
         brands_installer.install()
         log.debug("branding update took: %s s" % (time.time() - st))
 

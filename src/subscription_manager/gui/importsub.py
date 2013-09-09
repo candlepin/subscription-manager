@@ -21,7 +21,7 @@ import gtk
 
 _ = gettext.gettext
 
-from subscription_manager import entbranding
+from subscription_manager import rhelentbranding
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui.utils import show_error_window
 from subscription_manager.managerlib import ImportFileExtractor
@@ -111,7 +111,7 @@ class ImportSubDialog(object):
                     error_certs.append(cert_file)
 
         if imported_certs:
-            brands_installer = entbranding.BrandsInstaller(imported_certs)
+            brands_installer = rhelentbranding.RHELBrandsInstaller(imported_certs)
             brands_installer.install()
 
         if len(error_certs) > 0 \

@@ -226,6 +226,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/productid.py*
 %{_datadir}/rhsm/subscription_manager/release.py*
 %{_datadir}/rhsm/subscription_manager/repolib.py*
+%{_datadir}/rhsm/subscription_manager/rhelentbranding.py*
 %{_datadir}/rhsm/subscription_manager/utils.py*
 %{_datadir}/rhsm/subscription_manager/validity.py*
 %{_datadir}/rhsm/subscription_manager/reasons.py*

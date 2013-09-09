@@ -40,7 +40,7 @@ from subscription_manager.certmgr import CertManager
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
-from subscription_manager import entbranding
+from subscription_manager import rhelentbranding
 from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import ClassicCheck
 import subscription_manager.injection as inj
@@ -1708,7 +1708,7 @@ class ImportCertCommand(CliCommand):
 
         # update branding info for the imported certs, if needed
         if imported_certs:
-            brands_installer = entbranding.BrandsInstaller(imported_certs)
+            brands_installer = rhelentbranding.RHELBrandsInstaller(imported_certs)
             brands_installer.install()
 
         self._request_validity_check()
