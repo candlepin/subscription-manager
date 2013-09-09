@@ -24,28 +24,47 @@ from subscription_manager import injection as inj
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
+class BrandsInstaller(object):
+    def __init__(self, ent_certs):
+        self.ent_certs = ent_certs
+
+        # find brand installers
+        self.brand_installers = self._get_brand_installers()
+
+    def _get_brand_installers(self):
+        brand_installers = []
+
+        # only one brand installer at the moment
+        brand_installer = BrandInstaller(self.ent_certs)
+        brand_installers.append(brand_installer)
+
+        return brand_installers
+
+    def install(self):
+        for brand_installer in self.brand_installers:
+            brand_installer.install()
+
+
 class BrandInstaller(object):
-    """Install any branding info for a set of entititlement certs."""
+    """Install branding info for a set of entititlement certs."""
 
     def __init__(self, ent_certs):
         self.ent_certs = ent_certs
 
         log.debug("BrandInstaller ent_certs:  %s" % [x.serial for x in ent_certs])
 
-        # disconnected case we use proddir/entdir based, otherwise
-        # use server version
 
     def install(self):
         """Create a Brand object if needed, and save it."""
 
-        brand_picker = BrandPicker(self.ent_certs)
+        brand_picker = self._get_brand_picker()
         new_brand = brand_picker.get_brand()
 
         # no branded name info to install
         if not new_brand:
             return
 
-        current_brand = CurrentBrand()
+        current_brand = self._get_current_brand()
 
         log.debug("Current branded name info, if any: %s" % current_brand.name)
         log.debug("Fresh ent cert has branded product info: %s" % new_brand.name)
@@ -54,6 +73,23 @@ class BrandInstaller(object):
             self._install(new_brand)
         else:
             log.info("Product branding info does not need to be updated")
+
+    def _get_brand_picker(self):
+        raise NotImplementedError
+
+    def _get_current_brand(self):
+        raise NotImplementedError
+
+    def _install(self, brand):
+        raise NotImplementedError
+
+
+def RHELBrandInstaller(BrandInstaller):
+    def _get_brand_picker(self):
+        return RHELBrandPicker(self.ent_certs)
+
+    def _get_current_brand(self):
+        return RHELCurrentBrand()
 
     def _install(self, brand):
         log.info("Updating product branding info for: %s" % brand.name)
@@ -72,12 +108,11 @@ class BrandPicker(object):
         prod_dir = inj.require(inj.PROD_DIR)
         self.installed_products = prod_dir.get_installed_products()
 
-        # We could decide to say, ask the server what our branded name should
-        # be, or look it up in our Consumer object, etc.
+    def get_brand(self):
+        raise NotImplementedError
 
-        # This could easily pick a brand picking strategy as well, based
-        # on connected status, etc.
 
+class RHELBrandPicker(BrandPicker):
     def get_brand(self):
         branded_cert_product = self._get_branded_cert_product()
 
@@ -85,7 +120,7 @@ class BrandPicker(object):
             return None
 
         branded_product = branded_cert_product[1]
-        return ProductBrand.from_product(branded_product)
+        return RHELProductBrand.from_product(branded_product)
 
     def _get_branded_cert_product(self):
         """Given a list of ent certs providing product branding, return one.
@@ -207,8 +242,11 @@ class Brand(object):
 class ProductBrand(Brand):
     """A brand for a branded product"""
     def __init__(self, name):
-        self.brand_file = BrandFile()
+        self.brand_file = self._get_brand_file()
         self.name = name
+
+    def _get_brand_file(self):
+        return BrandFile()
 
     def save(self):
         brand = self.format_brand(self.name)
@@ -226,11 +264,19 @@ class ProductBrand(Brand):
         return brand
 
 
+class RHELProductBrand(ProductBrand):
+    def _get_brand_file(self):
+        return RHELBrandFile()
+
+
 class CurrentBrand(Brand):
     """The currently installed brand"""
     def __init__(self):
-        self.brand_file = BrandFile()
+        self.brand_file = self._get_brand_file()
         self.load()
+
+    def _get_brand_file(self):
+        return BrandFile()
 
     def load(self):
         try:
@@ -248,6 +294,11 @@ class CurrentBrand(Brand):
         return None
 
 
+class RHELCurrentBrand(CurrentBrand):
+    def _get_brand_file(self):
+        return RHELBrandFile()
+
+
 class BrandFile(object):
     """The file used for storing product branding info.
 
@@ -257,7 +308,6 @@ class BrandFile(object):
     path = "/var/lib/rhsm/branded_name"
 
     def write(self, brand_info):
-        # python 2.5+, woohoo!
         with open(self.path, 'w') as brand_file:
             brand_file.write(brand_info)
 
@@ -266,6 +316,13 @@ class BrandFile(object):
         with open(self.path, 'r') as brand_file:
             brand_info = brand_file.read()
         return brand_info
+
+    def __str__(self):
+        return "<BrandFile path=%s>" % self.path
+
+
+class RHELBrandFile(BrandFile):
+    path = "/var/lib/rhsm/branded_name"
 
     def __str__(self):
         return "<BrandFile path=%s>" % self.path
