@@ -111,8 +111,8 @@ class ImportSubDialog(object):
                     error_certs.append(cert_file)
 
         if imported_certs:
-            brand_installer = entbranding.BrandInstaller(imported_certs)
-            brand_installer.install()
+            brands_installer = entbranding.BrandsInstaller(imported_certs)
+            brands_installer.install()
 
         if len(error_certs) > 0 \
             or len(invalid_certs) > 0 \

@@ -35,7 +35,7 @@ class BrandsInstaller(object):
         brand_installers = []
 
         # only one brand installer at the moment
-        brand_installer = BrandInstaller(self.ent_certs)
+        brand_installer = RHELBrandInstaller(self.ent_certs)
         brand_installers.append(brand_installer)
 
         return brand_installers
@@ -52,7 +52,6 @@ class BrandInstaller(object):
         self.ent_certs = ent_certs
 
         log.debug("BrandInstaller ent_certs:  %s" % [x.serial for x in ent_certs])
-
 
     def install(self):
         """Create a Brand object if needed, and save it."""
@@ -84,7 +83,7 @@ class BrandInstaller(object):
         raise NotImplementedError
 
 
-def RHELBrandInstaller(BrandInstaller):
+class RHELBrandInstaller(BrandInstaller):
     def _get_brand_picker(self):
         return RHELBrandPicker(self.ent_certs)
 

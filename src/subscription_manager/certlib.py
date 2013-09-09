@@ -338,8 +338,8 @@ class UpdateAction(Action):
         return result
 
     def branding_hook(self, installed_ent_certs):
-        brand_installer = entbranding.BrandInstaller(installed_ent_certs)
-        brand_installer.install()
+        brands_installer = entbranding.BrandsInstaller(installed_ent_certs)
+        brands_installer.install()
 
     def install(self, serials, report):
         br = Writer()

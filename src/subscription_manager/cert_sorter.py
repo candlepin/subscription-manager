@@ -393,8 +393,8 @@ class CertSorter(ComplianceManager):
     def update_branding(self):
         import time
         st = time.time()
-        brand_installer = entbranding.BrandInstaller(self.valid_entitlement_certs)
-        brand_installer.install()
+        brands_installer = entbranding.BrandsInstaller(self.valid_entitlement_certs)
+        brands_installer.install()
         log.debug("branding update took: %s s" % (time.time() - st))
 
 

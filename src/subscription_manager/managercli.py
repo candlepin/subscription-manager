@@ -1708,8 +1708,8 @@ class ImportCertCommand(CliCommand):
 
         # update branding info for the imported certs, if needed
         if imported_certs:
-            brand_installer = entbranding.BrandInstaller(imported_certs)
-            brand_installer.install()
+            brands_installer = entbranding.BrandsInstaller(imported_certs)
+            brands_installer.install()
 
         self._request_validity_check()
 
