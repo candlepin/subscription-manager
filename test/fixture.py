@@ -138,11 +138,11 @@ class SubManFixture(unittest.TestCase):
     # this is our extension. Note that python 2.7 adds a
     # assertMultilineEquals that assertEqual of strings does
     # automatically
-    def assert_string_equals(self, first_str, second_str, msg=None):
-        if first_str != second_str:
-            first_lines = first_str.splitlines(True)
-            second_lines = second_str.splitlines(True)
-            delta = difflib.unified_diff(first_lines, second_lines)
+    def assert_string_equals(self, expected_str, actual_str, msg=None):
+        if expected_str != actual_str:
+            expected_lines = expected_str.splitlines(True)
+            actual_lines = actual_str.splitlines(True)
+            delta = difflib.unified_diff(expected_lines, actual_lines, "expected", "actual")
             message = ''.join(delta)
 
             if msg:
