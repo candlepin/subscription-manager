@@ -47,7 +47,6 @@ Requires: PyXML
 %endif
 
 
-%{?el5:Requires: rhn-setup-gnome}
 # There's no dmi to read on these arches, so don't pull in this dep.
 %ifnarch ppc ppc64 s390 s390x
 Requires:  python-dmidecode
