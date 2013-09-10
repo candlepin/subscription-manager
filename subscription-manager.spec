@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.21
+Version: 1.8.22
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -383,6 +383,9 @@ fi
 %endif
 
 %changelog
+* Tue Sep 10 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.22-1
+- 1004908: Remove unneeded rhn-setup-gnome Requires (alikins@redhat.com)
+
 * Thu Aug 15 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.21-1
 - Prevent name collision over the parent variable in RHEL 5 Firstboot.
   (awood@redhat.com)
