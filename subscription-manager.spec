@@ -88,7 +88,6 @@ Requires: usermode-gtk
 Requires: dbus-x11
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
-%{?el5:Requires: rhn-setup-gnome}
 
 # Renamed from -gnome, so obsolete it properly
 Obsoletes: %{name}-gnome < 1.0.3-1
