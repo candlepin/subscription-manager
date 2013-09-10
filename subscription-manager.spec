@@ -47,7 +47,6 @@ Requires: PyXML
 %endif
 
 
-%{?el5:Requires: rhn-setup-gnome}
 # There's no dmi to read on these arches, so don't pull in this dep.
 %ifnarch ppc ppc64 s390 s390x
 Requires:  python-dmidecode
@@ -89,6 +88,7 @@ Requires: usermode-gtk
 Requires: dbus-x11
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
+%{?el5:Requires: rhn-setup-gnome}
 
 # Renamed from -gnome, so obsolete it properly
 Obsoletes: %{name}-gnome < 1.0.3-1
