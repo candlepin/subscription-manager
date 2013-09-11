@@ -177,7 +177,7 @@ class TestMigration(unittest.TestCase):
     @patch("getpass.getpass")
     def test_get_auth_without_serverurl_and_is_hosted(self, mock_getpass, mock_input):
         self.engine.options = self.create_options(["serverurl", "redhataccountname",
-            "redhataccountpassword", "systemengineuser", "systemenginepassword"])
+            "redhatpassword", "systemengineuser", "systemenginepassword"])
 
         mock_input.return_value = "rhn_username"
         mock_getpass.return_value = "rhn_password"
@@ -188,6 +188,59 @@ class TestMigration(unittest.TestCase):
         self.assertEquals(self.engine.rhncreds.password, "rhn_password")
         self.assertEquals(self.engine.secreds.username, "rhn_username")
         self.assertEquals(self.engine.secreds.password, "rhn_password")
+
+    def test_get_auth_with_provided_rhn_creds(self):
+        self.engine.options = self.create_options(
+            {'redhataccountname': 'rhn_username', 'redhatpassword': 'rhn_password'},
+            ["serverurl", "systemengineuser", "systemenginepassword"])
+        self.engine.is_hosted = lambda: True
+        self.engine.get_auth()
+        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
+        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
+        self.assertEquals(self.engine.secreds.username, "rhn_username")
+        self.assertEquals(self.engine.secreds.password, "rhn_password")
+
+    @patch("getpass.getpass")
+    def test_gets_password_when_only_username_give(self, mock_getpass):
+        self.engine.options = self.create_options(
+            {'redhataccountname': 'rhn_username'},
+            ["serverurl", "redhatpassword", "systemengineuser", "systemenginepassword"])
+
+        mock_getpass.return_value = "rhn_password"
+        self.engine.is_hosted = lambda: True
+        self.engine.get_auth()
+        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
+        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
+        self.assertEquals(self.engine.secreds.username, "rhn_username")
+        self.assertEquals(self.engine.secreds.password, "rhn_password")
+
+    @patch("getpass.getpass")
+    def test_gets_se_password_when_only_se_username_give(self, mock_getpass):
+        self.engine.options = self.create_options(
+            {'redhataccountname': 'rhn_username', 'redhatpassword': 'rhn_password',
+                'systemengineuser': 'se_username'},
+            ["serverurl", "systemenginepassword"])
+
+        mock_getpass.return_value = "se_password"
+        self.engine.is_hosted = lambda: False
+        self.engine.get_auth()
+        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
+        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
+        self.assertEquals(self.engine.secreds.username, "se_username")
+        self.assertEquals(self.engine.secreds.password, "se_password")
+
+    def test_all_auth_provided(self):
+        self.engine.options = self.create_options(
+            {'redhataccountname': 'rhn_username', 'redhatpassword': 'rhn_password',
+                'systemengineuser': 'se_username', 'systemenginepassword': 'se_password'},
+            ["serverurl"])
+
+        self.engine.is_hosted = lambda: False
+        self.engine.get_auth()
+        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
+        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
+        self.assertEquals(self.engine.secreds.username, "se_username")
+        self.assertEquals(self.engine.secreds.password, "se_password")
 
     def test_setting_unauthenticated_proxy(self):
         self.engine.rhsmcfg = MagicMock()
