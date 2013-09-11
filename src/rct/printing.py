@@ -19,6 +19,9 @@ _ = gettext.gettext
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, IdentityCertificate
 
 
+# TODO: to be extra paranoid, we could ask to print
+#       the attribute of the object, and handle it
+#       not existing at all
 def xstr(value):
     if value is None:
         return ''
@@ -38,6 +41,8 @@ class ProductPrinter(object):
         s.append("\t%s: %s" % (_("Version"), xstr(product.version)))
         s.append("\t%s: %s" % (_("Arch"), ",".join(product.architectures)))
         s.append("\t%s: %s" % (_("Tags"), ",".join(product.provided_tags)))
+        if hasattr(product, 'os') and product.os:
+            s.append("\t%s: %s" % (_("OS Name"), xstr(product.os)))
         return "%s\n" % '\n'.join(s)
 
 
