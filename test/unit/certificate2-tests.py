@@ -37,13 +37,13 @@ class V1ProductCertTests(unittest.TestCase):
         self.assertEquals('100000000000002', self.prod_cert.subject['CN'])
 
     def test_os_old_cert(self):
-        self.assertTrue(self.prod_cert.products[0].os is None)
+        self.assertTrue(self.prod_cert.products[0].brand_type is None)
 
-    def test_set_os(self):
-        os = "OS"
+    def test_set_brand_type(self):
+        brand_type = "OS"
 
-        self.prod_cert.products[0].os = os
-        self.assertEquals(os, self.prod_cert.products[0].os)
+        self.prod_cert.products[0].brand_type = brand_type
+        self.assertEquals(brand_type, self.prod_cert.products[0].brand_type)
 
 
 class V1EntCertTests(unittest.TestCase):
@@ -325,16 +325,16 @@ class ProductTests(unittest.TestCase):
         self.assertTrue(p.architectures is not None)
         self.assertTrue(isinstance(p.architectures, list))
 
-    def test_no_os(self):
+    def test_no_brand_type(self):
         p = Product(id="pid", name="pname")
-        self.assertTrue(p.os is None)
+        self.assertTrue(p.brand_type is None)
 
-    def test_os(self):
+    def test_brand_type(self):
         p = Product(id="pid", name="pname",
-                    os="pos")
-        self.assertTrue(p.os == "pos")
+                    brand_type="pbrand_type")
+        self.assertTrue(p.brand_type == "pbrand_type")
 
-    def test_os_none(self):
+    def test_brand_type_none(self):
         p = Product(id="pid", name="pname",
-                    os=None)
-        self.assertTrue(p.os is None)
+                    brand_type=None)
+        self.assertTrue(p.brand_type is None)
