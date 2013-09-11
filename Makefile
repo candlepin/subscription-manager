@@ -168,6 +168,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -m 644 -p $(SRC_DIR)/migrate/*.py $(CODE_DIR)/migrate
 	install -m 644 -p $(SRC_DIR)/branding/*.py $(CODE_DIR)/branding
 	install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/
+	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager-gui
 
 	install -m 644 $(SRC_DIR)/gui/data/*.glade $(CODE_DIR)/gui/data/
 
