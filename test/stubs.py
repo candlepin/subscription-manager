@@ -138,7 +138,7 @@ class StubProduct(Product):
         super(StubProduct, self).__init__(id=product_id, name=name, version=version,
                                           architectures=architectures,
                                           provided_tags=provided_tags,
-                                          os=os)
+                                          brand_type=os)
 
 
 class StubContent(Content):

@@ -144,9 +144,9 @@ class RHELBrandPicker(entbranding.BrandPicker):
         return product.id in self.installed_products
 
     def _is_rhel_branded_product(self, product):
-        if not hasattr(product, 'os'):
+        if not hasattr(product, 'brand_type'):
             return False
-        elif product.os != 'OS':
+        elif product.brand_type != 'OS':
             return False
 
         if not product.name:

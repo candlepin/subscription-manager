@@ -241,6 +241,7 @@ Product:
 	Version: 6.1
 	Arch: ALL
 	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37065
@@ -248,6 +249,7 @@ Product:
 	Version: 1.0
 	Arch: ALL
 	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37067
@@ -255,6 +257,7 @@ Product:
 	Version: 1.0
 	Arch: ALL
 	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37068
@@ -262,6 +265,7 @@ Product:
 	Version: 1.0
 	Arch: ALL
 	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37069
@@ -269,6 +273,7 @@ Product:
 	Version: 1.0
 	Arch: ALL
 	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37070
@@ -276,6 +281,7 @@ Product:
 	Version: 1.0
 	Arch: ALL
 	Tags: 
+	Brand Type: 
 
 Order:
 	Name: Awesome OS Server Bundled
@@ -396,6 +402,7 @@ Product:
 	Version: 3.11
 	Arch: x86_64
 	Tags: 
+	Brand Type: 
 
 Order:
 	Name: Awesome OS for x86_64
@@ -491,6 +498,7 @@ Product:
 	Version: 3.11
 	Arch: x86_64
 	Tags: 
+	Brand Type: 
 
 """
 
@@ -520,6 +528,7 @@ Product:
 	Version: 6.1
 	Arch: ALL
 	Tags: 
+	Brand Type: 
 
 """
 
