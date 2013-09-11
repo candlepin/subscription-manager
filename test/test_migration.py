@@ -63,6 +63,20 @@ class TestMenu(unittest.TestCase):
 
 
 class TestMigration(unittest.TestCase):
+    def create_options(self, *options):
+        """
+        Create a mock options object.  Send in a dictionary with the option names and values
+        and they will be set.  For options that should be None, just send in a list of the
+        option names.
+        """
+        mock_opts = MagicMock()
+        for entry in options:
+            if isinstance(entry, dict):
+                [setattr(mock_opts, k, v) for k, v in entry.items()]
+            else:
+                [setattr(mock_opts, x, None) for x in entry]
+        return mock_opts
+
     def setUp(self):
         migrate.initUp2dateConfig = lambda: {}
         self.engine = migrate.MigrationEngine()
@@ -131,8 +145,8 @@ class TestMigration(unittest.TestCase):
     @patch("__builtin__.raw_input")
     @patch("getpass.getpass")
     def test_get_auth_with_serverurl(self, mock_getpass, mock_input):
-        self.engine.options = MagicMock()
-        self.engine.options.serverurl = "foobar"
+        self.engine.options = self.create_options({'serverurl': 'foobar'},
+            ["redhataccountname", "redhataccountpassword", "systemengineuser", "systemenginepassword"])
 
         mock_input.side_effect = ["rhn_username", "se_username"]
         mock_getpass.side_effect = ["rhn_password", "se_password"]
@@ -146,8 +160,8 @@ class TestMigration(unittest.TestCase):
     @patch("__builtin__.raw_input")
     @patch("getpass.getpass")
     def test_get_auth_without_serverurl_and_not_hosted(self, mock_getpass, mock_input):
-        self.engine.options = MagicMock()
-        self.engine.options.serverurl = None
+        self.engine.options = self.create_options(["serverurl", "redhataccountname",
+            "redhataccountpassword", "systemengineuser", "systemenginepassword"])
 
         mock_input.side_effect = ["rhn_username", "se_username"]
         mock_getpass.side_effect = ["rhn_password", "se_password"]
@@ -162,8 +176,8 @@ class TestMigration(unittest.TestCase):
     @patch("__builtin__.raw_input")
     @patch("getpass.getpass")
     def test_get_auth_without_serverurl_and_is_hosted(self, mock_getpass, mock_input):
-        self.engine.options = MagicMock()
-        self.engine.options.serverurl = None
+        self.engine.options = self.create_options(["serverurl", "redhataccountname",
+            "redhataccountpassword", "systemengineuser", "systemenginepassword"])
 
         mock_input.return_value = "rhn_username"
         mock_getpass.return_value = "rhn_password"
@@ -177,8 +191,7 @@ class TestMigration(unittest.TestCase):
 
     def test_setting_unauthenticated_proxy(self):
         self.engine.rhsmcfg = MagicMock()
-        self.engine.options = MagicMock()
-        self.engine.options.noproxy = False
+        self.engine.options = self.create_options({'noproxy': False})
 
         rhn_config = {
             "enableProxy": True,
@@ -197,8 +210,7 @@ class TestMigration(unittest.TestCase):
 
     def test_setting_authenticated_proxy(self):
         self.engine.rhsmcfg = MagicMock()
-        self.engine.options = MagicMock()
-        self.engine.options.noproxy = False
+        self.engine.options = self.create_options({'noproxy': False})
 
         rhn_config = {
             "enableProxy": True,
@@ -219,8 +231,7 @@ class TestMigration(unittest.TestCase):
 
     def test_setting_prefixed_proxy(self):
         self.engine.rhsmcfg = MagicMock()
-        self.engine.options = MagicMock()
-        self.engine.options.noproxy = False
+        self.engine.options = self.create_options({'noproxy': False})
 
         rhn_config = {
             "enableProxy": True,
@@ -239,8 +250,7 @@ class TestMigration(unittest.TestCase):
 
     def test_noproxy_option(self):
         self.engine.rhsmcfg = MagicMock()
-        self.engine.options = MagicMock()
-        self.engine.options.noproxy = True
+        self.engine.options = self.create_options({'noproxy': True})
 
         rhn_config = {
             "enableProxy": True,
@@ -262,8 +272,7 @@ class TestMigration(unittest.TestCase):
 
     @patch("rhsm.connection.UEPConnection")
     def test_no_server_url_provided(self, mock_uep):
-        self.engine.options = MagicMock()
-        self.engine.options.serverurl = None
+        self.engine.options = self.create_options(['serverurl'])
 
         self.engine.rhsmcfg = MagicMock()
         self.engine.rhsmcfg.get = MagicMock(side_effect=[
@@ -283,8 +292,7 @@ class TestMigration(unittest.TestCase):
 
     def test_bad_server_url(self):
         try:
-            self.engine.options = MagicMock()
-            self.engine.options.serverurl = "http://"
+            self.engine.options = self.create_options({'serverurl': 'http://'})
             self.engine.get_candlepin_connection("some_username", "some_password")
         except SystemExit, e:
             self.assertEquals(e.code, -1)
@@ -325,8 +333,7 @@ class TestMigration(unittest.TestCase):
             self.fail("No exception raised")
 
     def test_one_org(self):
-        self.engine.options = MagicMock()
-        self.engine.options.org = None
+        self.engine.options = self.create_options(['org'])
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [{"key": "my_org", "displayName": "My Org"}]
         org = self.engine.get_org("some_username")
@@ -334,8 +341,7 @@ class TestMigration(unittest.TestCase):
 
     @patch("__builtin__.raw_input")
     def test_enter_org_key(self, mock_input):
-        self.engine.options = MagicMock()
-        self.engine.options.org = None
+        self.engine.options = self.create_options(['org'])
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
@@ -347,8 +353,7 @@ class TestMigration(unittest.TestCase):
 
     @patch("__builtin__.raw_input")
     def test_enter_org_name(self, mock_input):
-        self.engine.options = MagicMock()
-        self.engine.options.org = None
+        self.engine.options = self.create_options(['org'])
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
@@ -360,8 +365,7 @@ class TestMigration(unittest.TestCase):
 
     @patch("__builtin__.raw_input")
     def test_enter_bad_org(self, mock_input):
-        self.engine.options = MagicMock()
-        self.engine.options.org = None
+        self.engine.options = self.create_options(['org'])
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
@@ -376,8 +380,7 @@ class TestMigration(unittest.TestCase):
             self.fail("No exception raised")
 
     def test_org_option(self):
-        self.engine.options = MagicMock()
-        self.engine.options.org = "my_org"
+        self.engine.options = self.create_options({'org': 'my_org'})
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
@@ -387,8 +390,7 @@ class TestMigration(unittest.TestCase):
         self.assertEquals(org, "my_org")
 
     def test_bad_org_option(self):
-        self.engine.options = MagicMock()
-        self.engine.options.org = "nonsense"
+        self.engine.options = self.create_options({'org': 'nonsense'})
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
@@ -411,16 +413,14 @@ class TestMigration(unittest.TestCase):
             self.fail("No exception raised")
 
     def test_environment_with_no_resource(self):
-        self.engine.options = MagicMock()
-        self.engine.options.environment = None
+        self.engine.options = self.create_options(['environment'])
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = False
         env = self.engine.get_environment("some_org")
         self.assertEquals(env, None)
 
     def test_single_environment_requires_no_input(self):
-        self.engine.options = MagicMock()
-        self.engine.options.environment = None
+        self.engine.options = self.create_options(['environment'])
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
 
@@ -434,8 +434,7 @@ class TestMigration(unittest.TestCase):
 
     @patch("__builtin__.raw_input")
     def test_enter_environment_name(self, mock_input):
-        self.engine.options = MagicMock()
-        self.engine.options.environment = None
+        self.engine.options = self.create_options(['environment'])
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
 
@@ -451,8 +450,7 @@ class TestMigration(unittest.TestCase):
 
     @patch("__builtin__.raw_input")
     def test_enter_environment_label(self, mock_input):
-        self.engine.options = MagicMock()
-        self.engine.options.environment = None
+        self.engine.options = self.create_options(['environment'])
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
 
@@ -468,8 +466,7 @@ class TestMigration(unittest.TestCase):
 
     @patch("__builtin__.raw_input")
     def test_enter_environment_displayName(self, mock_input):
-        self.engine.options = MagicMock()
-        self.engine.options.environment = None
+        self.engine.options = self.create_options(['environment'])
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
 
@@ -485,8 +482,7 @@ class TestMigration(unittest.TestCase):
 
     @patch("__builtin__.raw_input")
     def test_enter_bad_environment(self, mock_input):
-        self.engine.options = MagicMock()
-        self.engine.options.environment = None
+        self.engine.options = self.create_options(['environment'])
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
         self.engine.cp.getEnvironmentList = MagicMock()
@@ -504,8 +500,7 @@ class TestMigration(unittest.TestCase):
             self.fail("No exception raised")
 
     def test_environment_option(self):
-        self.engine.options = MagicMock()
-        self.engine.options.environment = "My Environment"
+        self.engine.options = self.create_options({'environment': 'My Environment'})
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
         self.engine.cp.getEnvironmentList = MagicMock()
@@ -518,8 +513,7 @@ class TestMigration(unittest.TestCase):
         self.assertEquals(env, "My Environment")
 
     def test_bad_environment_option(self):
-        self.engine.options = MagicMock()
-        self.engine.options.environment = "nonsense"
+        self.engine.options = self.create_options({'environment': 'nonsense'})
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
         self.engine.cp.getEnvironmentList = MagicMock()
@@ -535,8 +529,7 @@ class TestMigration(unittest.TestCase):
             self.fail("No exception raised")
 
     def test_environment_option_with_no_resource(self):
-        self.engine.options = MagicMock()
-        self.engine.options.environment = "My Environment"
+        self.engine.options = self.create_options({'environment': 'My Environment'})
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = False
         try:
@@ -626,8 +619,7 @@ class TestMigration(unittest.TestCase):
         subscribed_channels = ["a", "b", "c", "d"]
         self.engine.read_channel_cert_mapping = stub_read_channel_cert_mapping
         self.engine.get_release = stub_get_release
-        self.engine.options = MagicMock()
-        self.engine.options.force = None
+        self.engine.options = self.create_options(['force'])
 
         try:
             self.engine.deploy_prod_certificates(subscribed_channels)
@@ -759,8 +751,7 @@ class TestMigration(unittest.TestCase):
 
     @patch("subprocess.call")
     def test_register_failure(self, mock_subprocess):
-        self.engine.options = MagicMock()
-        self.engine.options.serverurl = "foobar"
+        self.engine.options = self.create_options({'serverurl': 'foobar'})
 
         credentials = MagicMock()
         credentials.username = "foo"
@@ -777,8 +768,7 @@ class TestMigration(unittest.TestCase):
     @patch("subprocess.call")
     @patch.object(certlib.ConsumerIdentity, "read")
     def test_register(self, mock_read, mock_subprocess):
-        self.engine.options = MagicMock()
-        self.engine.options.serverurl = "foobar"
+        self.engine.options = self.create_options({'serverurl': 'foobar'})
 
         credentials = MagicMock()
         credentials.username = "foo"
@@ -817,8 +807,7 @@ class TestMigration(unittest.TestCase):
     @patch("os.getenv")
     @patch("os.path.exists")
     def test_subscribe(self, mock_exists, mock_getenv, mock_subprocess):
-        self.engine.options = MagicMock()
-        self.engine.options.gui = False
+        self.engine.options = self.create_options({'gui': False})
         mock_getenv.return_value = True
         mock_exists.return_value = True
 
