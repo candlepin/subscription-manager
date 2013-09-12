@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.9.5
+Version: 1.9.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -385,6 +385,14 @@ fi
 %endif
 
 %changelog
+* Thu Sep 12 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.6-1
+- 994344: messaging for bad filetypes (ckozak@redhat.com)
+- 995597: continue attaching if a pool cannot be found (ckozak@redhat.com)
+- 1001169: fix pythonic empty string identity problems (ckozak@redhat.com)
+- 1001820: fix autocompletion (ckozak@redhat.com)
+- 1004341: add gui completion (ckozak@redhat.com)
+- 1004385: rhsm icon completion fix (ckozak@redhat.com)
+
 * Wed Aug 21 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.5-1
 - Revert "990195: remove subscribe options" (alikins@redhat.com)
 - 994620: reword tooltip message (ckozak@redhat.com)
