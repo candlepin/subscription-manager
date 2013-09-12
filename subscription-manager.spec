@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.1
+Version: 1.10.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -384,6 +384,20 @@ fi
 %endif
 
 %changelog
+* Thu Sep 12 2013 Alex Wood <awood@redhat.com> 1.10.2-1
+- update translations from zanata (alikins@redhat.com)
+- 1004893: update prods before compliance (ckozak@redhat.com)
+- 1004908: Remove the rhn-setup-gnome dep even more. (alikins@redhat.com)
+- 1004908: move rhn-setup-gnome requires to -gui subpackage
+  (pbabinca@redhat.com)
+- 1004385: rhsm icon completion fix (ckozak@redhat.com)
+- 1004341: add gui completion (ckozak@redhat.com)
+- 1001820: fix autocompletion (ckozak@redhat.com)
+- rev min python version for "make stylish" to 2.6 (alikins@redhat.com)
+- 994344: messaging for bad filetypes (ckozak@redhat.com)
+- 995597: continue attaching if a pool cannot be found (ckozak@redhat.com)
+- 1001169: fix pythonic empty string identity problems (ckozak@redhat.com)
+
 * Thu Aug 22 2013 Alex Wood <awood@redhat.com> 1.10.1-1
 - Adding Fedora 20 branch to releaser. (awood@redhat.com)
 - Subscribe/unsubscribe mirror attach/remove tests (alikins@redhat.com)
