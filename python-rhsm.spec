@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.10.1
+Version: 1.10.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,12 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Sep 12 2013 Alex Wood <awood@redhat.com> 1.10.2-1
+- 998033: Handle 401 and 403 with no response body (alikins@redhat.com)
+- Ignore json errors in validate_response (alikins@redhat.com)
+- Add unit tests for Restlib.validate_response (alikins@redhat.com)
+- 1000145: Fix deprecated exception message warning. (dgoodwin@redhat.com)
+
 * Thu Aug 22 2013 Alex Wood <awood@redhat.com> 1.10.1-1
 - 997194: fix interpolation of default values (ckozak@redhat.com)
 - bump version to 1.10.x (jesusr@redhat.com)
