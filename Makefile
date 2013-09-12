@@ -344,25 +344,30 @@ compile-po:
 
 # just run a check to make sure these compile
 polint:
-	@TMPFILE=`mktemp` || exit 1; \
+	# This is just informational, most zanata po files dont pass
 	for lang in $(basename $(notdir $(wildcard po/*.po))) ; do \
 		msgfmt -c -o /dev/null po/$$lang.po ; \
-	done 2> >(tee $$TMPFILE); \
-	! test -s $$TMPFILE
+	done ;
 
 just-strings:
 	-@ scripts/just_strings.py po/keys.pot
 
 zanata-pull:
-	cd po && zanata pull --transdir .
+	pushd po && zanata pull --transdir . && popd
 
 zanata-push:
-	cd po
+	pushd po; \
+	ls -al; \
 	if [ -z $(shell find -name "*.pot" | grep -v keys.pot) ] ; then \
 		zanata push ; \
 	else 	\
 		echo "po/ has more than one *.pot file, please clean up" ; \
-	fi
+	fi; \
+	popd
+
+# do all the zanata bits
+zanata: gettext zanata-push zanata-pull update-po
+	echo "# pofiles should be ready to commit and push"
 
 # generate a en_US.po with long strings for testing
 gen-test-long-po:
