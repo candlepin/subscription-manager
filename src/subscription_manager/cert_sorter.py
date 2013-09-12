@@ -63,9 +63,7 @@ class ComplianceManager(object):
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.identity = inj.require(inj.IDENTITY)
-
         self.on_date = on_date
-
         self.load()
 
     def load(self):
@@ -262,7 +260,7 @@ class ComplianceManager(object):
         return self.system_status == 'valid'
 
     def is_registered(self):
-        return self.identity.is_valid()
+        return inj.require(inj.IDENTITY).is_valid()
 
     def get_status(self, product_id):
         """Return the status of a given product"""
@@ -316,18 +314,17 @@ class CertSorter(ComplianceManager):
     reporting unknown.
     """
     def __init__(self):
+        # Sync installed product info with server.
+        # This will be done on register if we aren't registered
+        self.installed_mgr = InstalledProductsManager()
+        self.update_product_manager()
+
         super(CertSorter, self).__init__()
         self.callbacks = set()
 
         self.product_monitor = file_monitor.Monitor(self.product_dir.path)
         self.entitlement_monitor = file_monitor.Monitor(self.entitlement_dir.path)
         self.identity_monitor = file_monitor.Monitor(ConsumerIdentity.PATH)
-
-        # Sync installed product info with server.
-        # This will be done on register if we aren't registered
-        self.installed_mgr = InstalledProductsManager()
-        self.update_product_manager()
-
         self.product_monitor.connect('changed', self.on_prod_dir_changed)
         self.entitlement_monitor.connect('changed', self.on_ent_dir_changed)
         self.identity_monitor.connect('changed', self.on_identity_changed)
@@ -339,7 +336,7 @@ class CertSorter(ComplianceManager):
     def update_product_manager(self):
         if self.is_registered():
             try:
-                self.installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+                self.installed_mgr.update_check(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp(), inj.require(inj.IDENTITY).uuid)
             except RestlibException:
                 # Invalid consumer certificate
                 pass
