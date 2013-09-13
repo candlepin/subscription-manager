@@ -25,6 +25,7 @@ from rhsm.config import initConfig
 from rhsm.certificate import Key, create_from_pem, GMT
 
 from subscription_manager.certdirectory import Writer
+from subscription_manager import rhelentbranding
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.injection import CERT_SORTER, PLUGIN_MANAGER, require
 import subscription_manager.injection as inj
@@ -336,13 +337,19 @@ class UpdateAction(Action):
                 result.append(cert)
         return result
 
+    def branding_hook(self, installed_ent_certs):
+        brands_installer = rhelentbranding.RHELBrandsInstaller(installed_ent_certs)
+        brands_installer.install()
+
     def install(self, serials, report):
         br = Writer()
         exceptions = []
+        installed_ent_certs = []
         for bundle in self.get_certificates_by_serial_list(serials):
             try:
                 key, cert = self.build(bundle)
                 br.write(key, cert)
+                installed_ent_certs.append(cert)
                 report.added.append(cert)
             except Exception, e:
                 log.exception(e)
@@ -351,6 +358,10 @@ class UpdateAction(Action):
                     bundle,
                     e)
                 exceptions.append(e)
+
+        if installed_ent_certs:
+            self.branding_hook(installed_ent_certs)
+
         return exceptions
 
 

@@ -40,6 +40,7 @@ from subscription_manager.certmgr import CertManager
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
+from subscription_manager import rhelentbranding
 from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import ClassicCheck
 import subscription_manager.injection as inj
@@ -1677,7 +1678,7 @@ class ImportCertCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
         # Return code
-        imported = False
+        imported_certs = []
         for src_cert_file in self.options.certificate_file:
             if os.path.exists(src_cert_file):
                 try:
@@ -1688,7 +1689,7 @@ class ImportCertCommand(CliCommand):
                         extractor.write_to_disk()
                         print(_("Successfully imported certificate %s") %
                                     os.path.basename(src_cert_file))
-                        imported = True
+                        imported_certs.append(extractor.get_cert())
                     else:
                         log.error("Error parsing manually imported entitlement "
                             "certificate: %s" % src_cert_file)
@@ -1705,10 +1706,15 @@ class ImportCertCommand(CliCommand):
                 print(_("%s is not a valid certificate file. Please use a valid certificate.") %
                     os.path.basename(src_cert_file))
 
+        # update branding info for the imported certs, if needed
+        if imported_certs:
+            brands_installer = rhelentbranding.RHELBrandsInstaller(imported_certs)
+            brands_installer.install()
+
         self._request_validity_check()
 
         return_code = 0
-        if not imported:
+        if not imported_certs:
             return_code = 1
 
         return return_code

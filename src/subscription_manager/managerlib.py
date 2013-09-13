@@ -672,8 +672,7 @@ class ImportFileExtractor(object):
         @return: True if valid, False otherwise.
         """
         try:
-            cert_content = self.get_cert_content()
-            cert = create_from_pem(cert_content)
+            cert = self.get_cert()
             # Don't want to check class explicitly, instead we'll look for
             # order info, which only an entitlement cert could have:
             if not hasattr(cert, 'order'):
@@ -720,9 +719,13 @@ class ImportFileExtractor(object):
 
     def _create_filename_from_cert_serial_number(self):
         "create from serial"
+        ent_cert = self.get_cert()
+        return "%s.pem" % (ent_cert.serial)
+
+    def get_cert(self):
         cert_content = self.get_cert_content()
         ent_cert = create_from_pem(cert_content)
-        return "%s.pem" % (ent_cert.serial)
+        return ent_cert
 
 
 def _sub_dict(datadict, subkeys, default=None):

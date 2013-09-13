@@ -59,12 +59,19 @@ class StatCertCommandTests(fixture.SubManFixture):
         super(StatCertCommandTests, self).tearDown()
         self._restore_stdout()
 
-    def test_basic_cert_output(self):
+    def test_product_cert_output(self):
         command = StatCertCommandStub(certdata.PRODUCT_CERT_V1_0)
         command.main(['will_use_stub'])
 
         cert_output = self.mock_stdout.buffer
         self.assert_string_equals(certdata.PRODUCT_CERT_V1_0_STAT_OUTPUT, cert_output)
+
+    def test_product_cert_with_os_name_output(self):
+        command = StatCertCommandStub(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0)
+        command.main(['will_use_stub'])
+
+        cert_output = self.mock_stdout.buffer
+        self.assert_string_equals(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0_STAT_OUTPUT, cert_output)
 
     def test_entitlement_cert_output_includes_content_sets(self):
         command = StatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
