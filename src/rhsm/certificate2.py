@@ -186,6 +186,7 @@ class _CertFactory(object):
                 version=ext.get('2'),
                 architectures=ext.get('3'),
                 provided_tags=parse_tags(ext.get('4')),
+                brand_type=ext.get('5')
                 ))
         return products
 
@@ -323,6 +324,7 @@ class _CertFactory(object):
                 name=product['name'],
                 version=product.get('version', None),
                 architectures=product.get('architectures', []),
+                brand_type=product.get('brand_type', None)
                 ))
             # TODO: skipping provided tags here, we don't yet generate
             # v3 product certs, we may never, which is the only place provided
@@ -613,7 +615,7 @@ class Product(object):
     Represents the product information from a certificate.
     """
     def __init__(self, id=None, name=None, version=None, architectures=None,
-            provided_tags=None):
+            provided_tags=None, brand_type=None):
 
         if name is None:
             raise CertificateException("Product missing name")
@@ -635,6 +637,8 @@ class Product(object):
         self.provided_tags = provided_tags
         if self.provided_tags is None:
             self.provided_tags = []
+
+        self.brand_type = brand_type
 
     def __eq__(self, other):
         return (self.id == other.id)

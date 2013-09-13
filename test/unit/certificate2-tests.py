@@ -24,18 +24,9 @@ from rhsm.certificate2 import *
 from mock import patch
 
 
-class V1CertTests(unittest.TestCase):
-
+class V1ProductCertTests(unittest.TestCase):
     def setUp(self):
         self.prod_cert = create_from_pem(certdata.PRODUCT_CERT_V1_0)
-        self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V1_0)
-
-    def test_no_contents_throws_exception(self):
-        self.assertRaises(CertificateException, create_from_pem, "")
-
-    def test_junk_contents_throws_exception(self):
-        self.assertRaises(CertificateException, create_from_pem,
-                "DOESTHISLOOKLIKEACERTTOYOU?")
 
     def test_factory_method_on_product_cert(self):
         self.assertEquals("1.0", str(self.prod_cert.version))
@@ -44,6 +35,28 @@ class V1CertTests(unittest.TestCase):
         self.assertEquals('Awesome OS for x86_64 Bits',
                 self.prod_cert.products[0].name)
         self.assertEquals('100000000000002', self.prod_cert.subject['CN'])
+
+    def test_os_old_cert(self):
+        self.assertTrue(self.prod_cert.products[0].brand_type is None)
+
+    def test_set_brand_type(self):
+        brand_type = "OS"
+
+        self.prod_cert.products[0].brand_type = brand_type
+        self.assertEquals(brand_type, self.prod_cert.products[0].brand_type)
+
+
+class V1EntCertTests(unittest.TestCase):
+
+    def setUp(self):
+        self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V1_0)
+
+    def test_no_contents_throws_exception(self):
+        self.assertRaises(CertificateException, create_from_pem, "")
+
+    def test_junk_contents_throws_exception(self):
+        self.assertRaises(CertificateException, create_from_pem,
+                "DOESTHISLOOKLIKEACERTTOYOU?")
 
     def test_factory_method_on_ent_cert(self):
         self.assertEquals("1.0", str(self.ent_cert.version))
@@ -311,3 +324,17 @@ class ProductTests(unittest.TestCase):
         p = Product(id="pid", name="pname")
         self.assertTrue(p.architectures is not None)
         self.assertTrue(isinstance(p.architectures, list))
+
+    def test_no_brand_type(self):
+        p = Product(id="pid", name="pname")
+        self.assertTrue(p.brand_type is None)
+
+    def test_brand_type(self):
+        p = Product(id="pid", name="pname",
+                    brand_type="pbrand_type")
+        self.assertTrue(p.brand_type == "pbrand_type")
+
+    def test_brand_type_none(self):
+        p = Product(id="pid", name="pname",
+                    brand_type=None)
+        self.assertTrue(p.brand_type is None)
