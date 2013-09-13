@@ -62,6 +62,7 @@ class TestAsyncPool(unittest.TestCase):
         provide(inj.CP_PROVIDER, stubs.StubCPProvider())
         inj.provide(inj.PROD_DIR, stubs.StubProductDirectory())
         inj.provide(inj.ENT_DIR, stubs.StubEntitlementDirectory())
+        inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
         facts_mock = mock.Mock()
         facts_mock.update_check.return_value = None
 

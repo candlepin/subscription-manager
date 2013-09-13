@@ -442,7 +442,7 @@ class PoolStash(object):
         self.backend = backend
         self.identity = require(IDENTITY)
         self.facts = facts
-        self.active_on = None
+        self.sorter = require(CERT_SORTER)
 
         # Pools which passed rules server side for this consumer:
         self.compatible_pools = {}
@@ -464,7 +464,10 @@ class PoolStash(object):
         Refresh the list of pools from the server, active on the given date.
         """
 
-        self.active_on = active_on
+        if active_on:
+            self.sorter = ComplianceManager(active_on)
+        else:
+            self.sorter = require(CERT_SORTER)
         self.all_pools = {}
         self.compatible_pools = {}
         log.debug("Refreshing pools from server...")
@@ -508,12 +511,8 @@ class PoolStash(object):
             log.debug("\tRemoved %d incompatible pools" %
                        len(self.incompatible_pools))
 
-        sorter = require(CERT_SORTER)
-        if self.active_on and self.active_on.date() != datetime.datetime.now().date():
-            sorter = ComplianceManager(self.active_on)
-
         pool_filter = PoolFilter(self.backend.product_dir,
-                self.backend.entitlement_dir, sorter)
+                self.backend.entitlement_dir, self.sorter)
 
         # Filter out products that are not installed if necessary:
         if uninstalled:
