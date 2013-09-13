@@ -30,7 +30,6 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 import rhsm.connection as connection
 
 from subscription_manager.gui import messageWindow
-from subscription_manager import managerlib
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -198,17 +197,15 @@ def find_text(haystack, needle):
     return finds
 
 
-def make_today_now(today):
+def make_today_none(today):
     """
     Given a datetime, return either that datetime, or, if the value is today's
-    date, return the datetime representing 'right now'.
+    date, return None, to use the servers current time
 
     Useful for asking for subscriptions that are valid now.
     """
     if today.date() == datetime.date.today():
-        now = datetime.datetime.today()
-        today = today.replace(hour=now.hour, minute=now.minute,
-                second=now.second, tzinfo=managerlib.LocalTz())
+        return None
     return today
 
 

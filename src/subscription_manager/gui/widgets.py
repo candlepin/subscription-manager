@@ -502,10 +502,10 @@ class DatePicker(gtk.HBox):
 
     @property
     def date(self):
-        # if the selected date is today, set the time to be the current time.
-        # then we can avoid any time zone issues that may occur for subs that
-        # started or ended today.
-        return utils.make_today_now(self._date)
+        # if the selected date is today, set the time to be None
+        # then we can avoid any time zone issues by letting
+        # the server get time.
+        return utils.make_today_none(self._date)
 
     def date_entry_validate(self):
         """
