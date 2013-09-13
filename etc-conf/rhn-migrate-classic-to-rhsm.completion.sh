@@ -11,7 +11,7 @@ _rhn-migrate-classic-to-rhsm()
 	first="${COMP_WORDS[1]}"
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
-	opts="-h --help --environment -f --force -g --gui -n --no-auto --no-proxy --org -s --servicelevel --serverurl"
+	opts="-h --help --environment -f --force -g --gui -n --no-auto --no-proxy --org -s --servicelevel --serverurl --redhat-account-name --redhat-password --system-engine-user --system-engine-password"
 
 	case "${cur}" in	
 		-*)
