@@ -89,6 +89,7 @@ AVAILABLE_SUBS_LIST = [
     _("SKU:"),
     _("Pool ID:"),
     _("Available:"),
+    _("Suggested:"),
     _("Service Level:"),
     _("Service Type:"),
     _("Multi-Entitlement:"),
@@ -1402,7 +1403,7 @@ class AttachCommand(CliCommand):
                         self.plugin_manager.run("pre_subscribe",
                                                 consumer_uuid=consumer_uuid,
                                                 pool_id=pool,
-                                                quantity=self.options.quantity or 1)
+                                                quantity=self.options.quantity)
                         ents = self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
                         self.plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid, entitlement_data=ents)
                         # Usually just one, but may as well be safe:
@@ -2064,13 +2065,13 @@ class ListCommand(CliCommand):
                     machine_type = machine_type = _("Virtual")
                 else:
                     machine_type = _("Physical")
-
                 print columnize(AVAILABLE_SUBS_LIST, _none_wrap,
                         data['productName'],
                         data['productId'],
                         data['id'],
                         data['quantity'],
-                        data['service_level'] or "",
+                        data['suggested'],
+                        data['service_level'],
                         data['service_type'] or "",
                         data['multi-entitlement'],
                         data['endDate'],
