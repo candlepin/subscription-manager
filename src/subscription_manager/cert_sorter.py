@@ -391,11 +391,8 @@ class CertSorter(ComplianceManager):
         self.on_change()
 
     def update_branding(self):
-        import time
-        st = time.time()
         brands_installer = rhelentbranding.RHELBrandsInstaller(self.valid_entitlement_certs)
         brands_installer.install()
-        log.debug("branding update took: %s s" % (time.time() - st))
 
 
 class StackingGroupSorter(object):

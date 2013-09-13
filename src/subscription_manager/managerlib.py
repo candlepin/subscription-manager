@@ -693,7 +693,6 @@ class ImportFileExtractor(object):
                                       self._create_filename_from_cert_serial_number())
 
         # Write the key/cert content to new files
-        # certs know how to persist themselves, this is unneeded
         log.debug("Writing certificate file: %s" % (dest_file_path))
         cert_content = self.get_cert_content()
         self._write_file(dest_file_path, cert_content)
