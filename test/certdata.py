@@ -38,6 +38,33 @@ SOxSnd1U0dX6pzEwMaJD9lCW8xZ2jsmdLUtLzQ==
 -----END CERTIFICATE-----
 """
 
+# A product cert from Candlepin's test data (product 37060, Awesome 
+# OS server bits", this one with the "os_name" oid added.
+PRODUCT_CERT_WITH_OS_NAME_V1_0 = """
+-----BEGIN CERTIFICATE-----
+MIIDpTCCAw6gAwIBAgIEAuhqBjANBgkqhkiG9w0BAQUFADBDMSIwIAYDVQQDDBlk
+aGNwMjMxLTI4LnJkdS5yZWRoYXQuY29tMQswCQYDVQQGEwJVUzEQMA4GA1UEBwwH
+UmFsZWlnaDAeFw0xMzA4MDcxOTIxMTRaFw0yMzA4MDcxOTIxMTRaMBAxDjAMBgNV
+BAMTBTM3MDYwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAltwl2LOz
+wz/mVLJcMsOFKNOF76ZVn+U+ghYZcjoTBs51Z3SHQtxtuNl8qzIyYG+8WtBn+IRP
+0R7E18aMpjTBwH12GmvAvXbGs0dl2DkTy9U1ABWGBH5zoXuOQgYngTgFTQFsezj2
++COCqMWoxIoo6f+wAOjdOQjXRoQY++1xiV2vUcjrBNnJP5uQ8rR/i93O9LnJwwZb
+jOmPXth7j7Z+BbMF8Qlpcjzek5CgD9e9nXwGnXHEQOLYcNlrNdZ9ol0GZU4UgRPH
+l5QPl5tJb2x8vvucVPi6BePwtdnPb6LrkAYIs3+1sz96eW7rH/whoXgkYwlFzYTp
+f6nOFHq0FDMLOwIDAQABo4IBUzCCAU8wEQYJYIZIAYb4QgEBBAQDAgWgMAsGA1Ud
+DwQEAwIEsDBzBgNVHSMEbDBqgBSDdvsVOoqGnbd6CZpTN+h0abcYsKFHpEUwQzEi
+MCAGA1UEAwwZZGhjcDIzMS0yOC5yZHUucmVkaGF0LmNvbTELMAkGA1UEBhMCVVMx
+EDAOBgNVBAcMB1JhbGVpZ2iCCQCivgxh/4ZSUDAdBgNVHQ4EFgQU6beHs3n6KTqe
+7AHev5a6Ip0IB/4wEwYDVR0lBAwwCgYIKwYBBQUHAwIwKQYNKwYBBAGSCAkBgqFE
+AQQYDBZBd2Vzb21lIE9TIFNlcnZlciBCaXRzMBYGDSsGAQQBkggJAYKhRAMEBQwD
+QUxMMBYGDSsGAQQBkggJAYKhRAIEBQwDNi4xMCkGDSsGAQQBkggJAYKhRAUEGAwW
+QXdlc29tZSBPUyBTZXJ2ZXIgQml0czANBgkqhkiG9w0BAQUFAAOBgQA3XyscDR5Y
+UK5MXD4DPEGwJq1mFa34DgAPJR3THybLVeRSfZxEFk4zjcM2woDmJNMal2KR57uB
+3RaxHkdYtpu4HGrwZElJTMTXwHx4N3VQGCOGzUy7NJIIN5VFTgzuQnwXkuHOCry/
+Q8zxGCc+NSWiEtQIsjhegMIp8qSuuPCPHg==
+-----END CERTIFICATE-----
+"""
+
 # Test entitlement to the product cert above:
 ENTITLEMENT_CERT_V1_0 = """
 -----BEGIN CERTIFICATE-----
@@ -214,6 +241,7 @@ Product:
 	Version: 6.1
 	Arch: ALL
 	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37065
@@ -221,6 +249,7 @@ Product:
 	Version: 1.0
 	Arch: ALL
 	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37067
@@ -228,6 +257,7 @@ Product:
 	Version: 1.0
 	Arch: ALL
 	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37068
@@ -235,6 +265,7 @@ Product:
 	Version: 1.0
 	Arch: ALL
 	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37069
@@ -242,6 +273,7 @@ Product:
 	Version: 1.0
 	Arch: ALL
 	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37070
@@ -249,6 +281,7 @@ Product:
 	Version: 1.0
 	Arch: ALL
 	Tags: 
+	Brand Type: 
 
 Order:
 	Name: Awesome OS Server Bundled
@@ -369,6 +402,7 @@ Product:
 	Version: 3.11
 	Arch: x86_64
 	Tags: 
+	Brand Type: 
 
 Order:
 	Name: Awesome OS for x86_64
@@ -464,6 +498,37 @@ Product:
 	Version: 3.11
 	Arch: x86_64
 	Tags: 
+	Brand Type: 
+
+"""
+
+PRODUCT_CERT_WITH_OS_NAME_V1_0_OUTPUT = """
++-------------------------------------------+
+	Product Certificate
++-------------------------------------------+
+
+Certificate:
+	Path: 
+	Version: 1.0
+	Serial: 48785926
+	Start Date: 2013-08-07 19:21:14+00:00
+	End Date: 2023-08-07 19:21:14+00:00
+
+Subject:
+	CN: 37060
+
+Issuer:
+	C: US
+	CN: dhcp231-28.rdu.redhat.com
+	L: Raleigh
+
+Product:
+	ID: 37060
+	Name: Awesome OS Server Bits
+	Version: 6.1
+	Arch: ALL
+	Tags: 
+	Brand Type: 
 
 """
 
@@ -494,6 +559,13 @@ PRODUCT_CERT_V1_0_STAT_OUTPUT = \
 """Type: Product Certificate
 Version: 1.0
 DER size: 892b
+Subject Key ID size: 20b
+"""
+
+PRODUCT_CERT_WITH_OS_NAME_V1_0_STAT_OUTPUT = \
+"""Type: Product Certificate
+Version: 1.0
+DER size: 937b
 Subject Key ID size: 20b
 """
 

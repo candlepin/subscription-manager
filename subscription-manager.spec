@@ -204,6 +204,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/cert_sorter.py*
 %{_datadir}/rhsm/subscription_manager/cli.py*
 %{_datadir}/rhsm/subscription_manager/dbus_interface.py*
+%{_datadir}/rhsm/subscription_manager/entbranding.py*
 %{_datadir}/rhsm/subscription_manager/factlib.py*
 %{_datadir}/rhsm/subscription_manager/facts.py*
 %{_datadir}/rhsm/subscription_manager/hwprobe.py*
@@ -224,6 +225,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/productid.py*
 %{_datadir}/rhsm/subscription_manager/release.py*
 %{_datadir}/rhsm/subscription_manager/repolib.py*
+%{_datadir}/rhsm/subscription_manager/rhelentbranding.py*
 %{_datadir}/rhsm/subscription_manager/utils.py*
 %{_datadir}/rhsm/subscription_manager/validity.py*
 %{_datadir}/rhsm/subscription_manager/reasons.py*
