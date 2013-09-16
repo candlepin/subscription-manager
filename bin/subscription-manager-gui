@@ -111,11 +111,13 @@ try:
     from subscription_manager.i18n import configure_i18n
     configure_i18n(with_glade=True)
 
+    from subscription_manager import logutil
+    logutil.init_logger()
+
     from subscription_manager.injectioninit import init_dep_injection
     init_dep_injection()
 
     from subscription_manager.gui import managergui
-    from subscription_manager import logutil
     from subscription_manager.i18n_optparse import OptionParser, \
         WrappedIndentedHelpFormatter, USAGE
 except ImportError, e:
@@ -154,8 +156,8 @@ if __name__ == '__main__':
                       help=_("launches the registration dialog on startup"))
     options, args = parser.parse_args(args=sys.argv)
 
-    logutil.init_logger()
-    log = logging.getLogger('subscription-manager-gui')
+    log = logging.getLogger("rhsm-app.subscription-manager-gui")
+
     try:
         bus = dbus.SessionBus()
     except dbus.exceptions.DBusException:

@@ -19,13 +19,15 @@ sys.path.append("/usr/share/rhsm")
 
 import logging
 
+from subscription_manager import logutil
+logutil.init_logger()
+
 from rhsm import connection
 
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
 from subscription_manager import certmgr
-from subscription_manager import logutil
 from subscription_manager import managerlib
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.i18n_optparse import OptionParser, \

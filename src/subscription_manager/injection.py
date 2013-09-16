@@ -25,9 +25,7 @@ CP_PROVIDER = "CP_PROVIDER"
 PLUGIN_MANAGER = "PLUGIN_MANAGER"
 DBUS_IFACE = "DBUS_IFACE"
 
-import logging
 import types
-log = logging.getLogger('rhsm-app.' + __name__)
 
 
 class FeatureBroker:

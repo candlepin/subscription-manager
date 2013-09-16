@@ -46,6 +46,9 @@ try:
     from subscription_manager.i18n import configure_i18n
     configure_i18n()
 
+    from subscription_manager import logutil
+    logutil.init_logger()
+
     from subscription_manager.migrate import migrate
     from subscription_manager.managercli import handle_exception
 except KeyboardInterrupt:
@@ -53,10 +56,6 @@ except KeyboardInterrupt:
 except ImportError, e:
     system_exit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
-
-
-from subscription_manager import logutil
-logutil.init_logger()
 
 
 def main():

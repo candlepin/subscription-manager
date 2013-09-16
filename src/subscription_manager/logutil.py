@@ -12,14 +12,21 @@
 import logging
 from logging.handlers import RotatingFileHandler
 import os
+import sys
 
 CERT_LOG = '/var/log/rhsm/rhsmcertd.log'
 
 handler = None
 stdout_handler = None
 
-LOG_FORMAT = u'%(asctime)s [%(levelname)s]  @%(filename)s:%(lineno)d - %(message)s'
+LOG_FORMAT = u'%(asctime)s [%(levelname)s] %(cmd_name)s ' \
+              '@%(filename)s:%(lineno)d - %(message)s'
+
 LOG_LEVEL = logging.DEBUG
+
+DEBUG_LOG_FORMAT = u'%(asctime)s [%(name)s %(levelname)s] ' \
+                    '%(cmd_name)s(%(process)d):%(threadName)s ' \
+                    '@%(filename)s:%(funcName)s:%(lineno)d - %(message)s'
 
 
 def _get_handler():
@@ -45,6 +52,7 @@ def _get_handler():
 
     handler.setFormatter(logging.Formatter(LOG_FORMAT))
     handler.setLevel(LOG_LEVEL)
+    handler.addFilter(ContextLoggingFilter(name=""))
 
     return handler
 
@@ -55,40 +63,54 @@ def _get_stdout_handler():
         return stdout_handler
 
     handler = logging.StreamHandler()
-
-    handler.setFormatter(logging.Formatter(LOG_FORMAT))
-    handler.setLevel(logging.DEBUG)
+    handler.addFilter(ContextLoggingFilter(name=""))
 
     return handler
 
 
+class ContextLoggingFilter(object):
+    current_cmd = os.path.basename(sys.argv[0])
+    cmd_line = ' '.join(sys.argv)
+
+    def __init__(self, name):
+        self.name = name
+
+    def filter(self, record):
+        record.cmd_name = self.current_cmd
+        record.cmd_line = self.cmd_line
+
+        # TODO: if we merge "no-rpm-version" we could populate it here
+        return True
+
+
 def init_logger():
-    logging.getLogger().setLevel(LOG_LEVEL)
-    logging.getLogger().addHandler(_get_handler())
+
+    handler = _get_handler()
+
+    logging.getLogger("subscription_manager").setLevel(LOG_LEVEL)
+    logging.getLogger("rhsm").setLevel(LOG_LEVEL)
+    # FIXME: remove 'rhsm-app' when we rename all the loggers
+    logging.getLogger("rhsm-app").setLevel(LOG_LEVEL)
+
+    logging.getLogger("subscription_manager").addHandler(_get_handler())
+    logging.getLogger("rhsm").addHandler(_get_handler())
+    # FIXME: remove
+    logging.getLogger("rhsm-app").addHandler(_get_handler())
 
     # dump logs to stdout, and (re)set log level
     # to DEBUG
     if 'SUBMAN_DEBUG' in os.environ:
+        handler = _get_stdout_handler()
+
+        handler.setFormatter(logging.Formatter(DEBUG_LOG_FORMAT))
         logging.getLogger().setLevel(logging.DEBUG)
-        logging.getLogger().addHandler(_get_stdout_handler())
+        logging.getLogger().addHandler(handler)
 
 
 def init_logger_for_yum():
-    """
-    Logging initialization for the yum plugins. we want to grab log output only
-    for modules in the python-rhsm package, and subscription manager. let yum
-    handle everything else (and don't let yum handle our log output.
-    """
-    # NOTE: this get's called once by each yum plugin, so
-    # return the same global handler in those cases so
-    # we don't add two different instances of the handler
-    # to the loggers
-    log_handler = _get_handler()
+    init_logger()
 
-    logging.getLogger('rhsm').propagate = False
-    logging.getLogger('rhsm').setLevel(logging.DEBUG)
-    logging.getLogger('rhsm').addHandler(log_handler)
-
-    logging.getLogger('rhsm-app').propagate = False
-    logging.getLogger('rhsm-app').setLevel(logging.DEBUG)
-    logging.getLogger('rhsm-app').addHandler(log_handler)
+    # Don't send log records up to yum/yum plugin conduit loggers
+    logging.getLogger("subscription_manager").propagate = False
+    logging.getLogger("rhsm").propagate = False
+    logging.getLogger("rhsm-app").propagate = False
