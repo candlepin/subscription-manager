@@ -11,7 +11,8 @@ _rhsm-icon()
 	first="${COMP_WORDS[1]}"
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
-	opts="-h --help --help-all --help-gtk -c --check-period -d
+	opts="-h --help --help-all --help-gtk  -c --check-period -d
+        --gdk-debug --gdk-no-debug --gtk-debug --gtk-no-debug
 		--debug -f --force-icon -i --check-immediately --display"
 
 	case "${cur}" in	
