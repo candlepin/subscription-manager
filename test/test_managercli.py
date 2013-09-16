@@ -301,7 +301,7 @@ class TestListCommand(TestCliProxyCommand):
     def test_none_wrap_available_pool_id(self, mcli, mc_exists, mc_exists_and_valid):
         listCommand = managercli.ListCommand()
 
-        def create_pool_list(self, one, two, three, four):
+        def create_pool_list(*args, **kwargs):
             return [{'productName': 'dummy-name', 'productId': 'dummy-id',
                      'id': '888888888888', 'attributes': [{'name': 'is_virt_only', 'value': 'false'}],
                      'quantity': '4', 'service_level': '', 'service_type': '',

@@ -33,7 +33,8 @@ from subscription_manager import certlib
 from subscription_manager.certlib import system_log as inner_system_log
 from subscription_manager.facts import Facts
 from subscription_manager.injection import require, CERT_SORTER, \
-        PRODUCT_DATE_RANGE_CALCULATOR, IDENTITY, STATUS_CACHE, PROD_STATUS_CACHE
+        PRODUCT_DATE_RANGE_CALCULATOR, IDENTITY, STATUS_CACHE, \
+        PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoLib
@@ -299,7 +300,8 @@ def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
 # TODO: This method is morphing the actual pool json and returning a new
 # dict which does not contain all the pool info. Not sure if this is really
 # necessary. Also some "view" specific things going on in here.
-def get_available_entitlements(cpserver, consumer_uuid, facts, get_all=False, active_on=None):
+def get_available_entitlements(cpserver, consumer_uuid, facts, get_all=False, active_on=None,
+        overlapping=False, uninstalled=False, subscribed=False, text=None):
     """
     Returns a list of entitlement pools from the server.
 
@@ -313,7 +315,9 @@ def get_available_entitlements(cpserver, consumer_uuid, facts, get_all=False, ac
             'providedProducts', 'productId', 'attributes', 'multi-entitlement',
             'service_level', 'service_type', 'suggested']
 
-    dlist = list_pools(cpserver, consumer_uuid, facts, get_all, active_on)
+    pool_stash = PoolStash(Facts(require(ENT_DIR), require(PROD_DIR)))
+    dlist = pool_stash.get_filtered_pools_list(active_on, not get_all,
+           overlapping, uninstalled, subscribed, text)
 
     for pool in dlist:
         pool_wrapper = PoolWrapper(pool)
@@ -442,11 +446,10 @@ class PoolStash(object):
     Object used to fetch pools from the server, sort them into compatible,
     incompatible, and installed lists. Also does filtering based on name.
     """
-    def __init__(self, backend, facts):
-        self.backend = backend
+    def __init__(self, facts):
         self.identity = require(IDENTITY)
         self.facts = facts
-        self.sorter = require(CERT_SORTER)
+        self.sorter = None
 
         # Pools which passed rules server side for this consumer:
         self.compatible_pools = {}
@@ -475,7 +478,7 @@ class PoolStash(object):
         self.all_pools = {}
         self.compatible_pools = {}
         log.debug("Refreshing pools from server...")
-        for pool in list_pools(self.backend.cp_provider.get_consumer_auth_cp(),
+        for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
                 self.identity.uuid, self.facts, active_on=active_on):
             self.compatible_pools[pool['id']] = pool
             self.all_pools[pool['id']] = pool
@@ -483,20 +486,52 @@ class PoolStash(object):
         # Filter the list of all pools, removing those we know are compatible.
         # Sadly this currently requires a second query to the server.
         self.incompatible_pools = {}
-        for pool in list_pools(self.backend.cp_provider.get_consumer_auth_cp(),
+        for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
                 self.identity.uuid, self.facts, list_all=True, active_on=active_on):
             if not pool['id'] in self.compatible_pools:
                 self.incompatible_pools[pool['id']] = pool
                 self.all_pools[pool['id']] = pool
 
-        self.subscribed_pool_ids = []
-        for entitlement in self.backend.cp_provider.get_consumer_auth_cp().getEntitlementList(self.identity.uuid):
-            self.subscribed_pool_ids.append(entitlement['pool']['id'])
+        self.subscribed_pool_ids = self._get_subscribed_pool_ids()
 
         log.debug("found %s pools:" % len(self.all_pools))
         log.debug("   %s compatible" % len(self.compatible_pools))
         log.debug("   %s incompatible" % len(self.incompatible_pools))
         log.debug("   %s already subscribed" % len(self.subscribed_pool_ids))
+
+    def get_filtered_pools_list(self, active_on, incompatible,
+            overlapping, uninstalled, subscribed, text):
+        """
+        Used for CLI --available filtering
+        cuts down on api calls
+        """
+        self.all_pools = {}
+        self.compatible_pools = {}
+        if active_on and overlapping:
+            self.sorter = ComplianceManager(active_on)
+        elif not active_on and overlapping:
+            self.sorter = require(CERT_SORTER)
+        if incompatible or subscribed:
+            for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
+                    self.identity.uuid, self.facts, active_on=active_on):
+                self.compatible_pools[pool['id']] = pool
+                if subscribed and pool[pool['id']] not in self.compatible_pools:
+                    self.incompatible_pools[pool['id']] = pool
+        if not incompatible or subscribed:
+            for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
+                    self.identity.uuid, self.facts, list_all=True, active_on=active_on):
+                self.all_pools[pool['id']] = pool
+                if subscribed and pool[pool['id']] not in self.compatible_pools:
+                    self.incompatible_pools[pool['id']] = pool
+
+        if subscribed:
+            self.subscribed_pool_ids = self._get_subscribed_pool_ids()
+
+        return self._filter_pools(incompatible, overlapping, uninstalled, subscribed, text)
+
+    def _get_subscribed_pool_ids(self):
+        cp = require(CP_PROVIDER).get_consumer_auth_cp()
+        return [entitlement['pool']['id'] for entitlement in cp.getEntitlementList(self.identity.uuid)]
 
     def _filter_pools(self, incompatible, overlapping, uninstalled, subscribed,
             text):
@@ -515,8 +550,8 @@ class PoolStash(object):
             log.debug("\tRemoved %d incompatible pools" %
                        len(self.incompatible_pools))
 
-        pool_filter = PoolFilter(self.backend.product_dir,
-                self.backend.entitlement_dir, self.sorter)
+        pool_filter = PoolFilter(require(PROD_DIR),
+                require(ENT_DIR), self.sorter)
 
         # Filter out products that are not installed if necessary:
         if uninstalled:

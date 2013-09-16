@@ -2005,6 +2005,10 @@ class ListCommand(CliCommand):
                                help=_("show the subscriptions being consumed by this system"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("shows only subscriptions matching the specified service level; only used with --available and --consumed"))
+        self.parser.add_option("--no-overlap", action='store_true',
+                               help=_("show pools with this text in the name"))
+        self.parser.add_option("--match-installed", action="store_true",
+                               help=("shows only subscriptions matching products that are currently installed"))
 
         self.facts = Facts(ent_dir=self.entitlement_dir,
                           prod_dir=self.product_dir)
@@ -2022,6 +2026,12 @@ class ListCommand(CliCommand):
             sys.exit(-1)
         if not (self.options.available or self.options.consumed):
             self.options.installed = True
+        if not self.options.available and self.options.match_installed:
+            print _("Error: --match-installed is only applicable with --available")
+            sys.exit(-1)
+        if self.options.no_overlap and not self.options.available:
+            print _("Error: --no-overlap is only applicable with --available")
+            sys.exit(-1)
 
     def _do_command(self):
         """
@@ -2029,8 +2039,6 @@ class ListCommand(CliCommand):
         """
 
         self._validate_options()
-
-        self.sorter = inj.require(inj.CERT_SORTER)
 
         if self.options.installed:
             iproducts = managerlib.get_installed_product_status(self.product_dir,
@@ -2060,7 +2068,9 @@ class ListCommand(CliCommand):
                     sys.exit(1)
 
             epools = managerlib.get_available_entitlements(self.cp, consumer,
-                    self.facts, self.options.all, on_date)
+                    self.facts, self.options.all, on_date,
+                    overlapping=self.options.no_overlap,
+                    uninstalled=self.options.match_installed)
 
             # Filter certs by service level, if specified.
             # Allowing "" here.
@@ -2126,7 +2136,7 @@ class ListCommand(CliCommand):
             print(_("No consumed subscription pools to list"))
             sys.exit(0)
 
-        cert_reasons_map = self.sorter.reasons.get_subscription_reasons_map()
+        cert_reasons_map = inj.require(inj.CERT_SORTER).reasons.get_subscription_reasons_map()
 
         print("+-------------------------------------------+")
         print("   " + _("Consumed Subscriptions"))
