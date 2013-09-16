@@ -1715,7 +1715,8 @@ class ImportCertCommand(CliCommand):
 
         # update branding info for the imported certs, if needed
         if imported_certs:
-            brands_installer = rhelentbranding.RHELBrandsInstaller(imported_certs)
+            # RHELBrandsInstaller will load ent dir by default
+            brands_installer = rhelentbranding.RHELBrandsInstaller()
             brands_installer.install()
 
         self._request_validity_check()

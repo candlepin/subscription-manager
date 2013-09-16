@@ -59,12 +59,18 @@ class TestBrandInstaller(BaseBrandFixture):
     def test_init_empty_cert_list(self):
         self.brand_installer_class([])
 
+    def test_init_no_ent_cert(self):
+        self.brand_installer_class()
+
 
 class TestRHELBrandInstaller(BaseBrandFixture):
     brand_installer_class = rhelentbranding.RHELBrandInstaller
 
     def test_init_empty_cert_list(self):
         self.brand_installer_class([])
+
+    def test_init_no_ent_cert(self):
+        self.brand_installer_class()
 
     def test_no_installed_products_no_ent_certs(self):
         brand_installer = self.brand_installer_class([])
@@ -80,6 +86,13 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
         self.assertFalse(self.mock_install.called)
 
+    def _inj_mock_entdir(self, ents=None):
+        ent_list = ents or []
+        mock_ent_dir = mock.NonCallableMock(name='MockEntDir')
+        mock_ent_dir.list_valid.return_value = ent_list
+        inj.provide(inj.ENT_DIR, mock_ent_dir)
+        return mock_ent_dir
+
     def test(self):
         stub_product = DefaultStubProduct()
 
@@ -91,7 +104,8 @@ class TestRHELBrandInstaller(BaseBrandFixture):
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
 
-        brand_installer = self.brand_installer_class([mock_ent_cert])
+        self._inj_mock_entdir([mock_ent_cert])
+        brand_installer = self.brand_installer_class()
         brand_installer.install()
 
         self.assertTrue(self.mock_install.called)
@@ -112,7 +126,8 @@ class TestRHELBrandInstaller(BaseBrandFixture):
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
 
-        brand_installer = self.brand_installer_class([mock_ent_cert])
+        self._inj_mock_entdir([mock_ent_cert])
+        brand_installer = self.brand_installer_class()
         brand_installer.install()
 
         self.assertFalse(self.mock_install.called)
@@ -129,14 +144,24 @@ class TestRHELBrandInstaller(BaseBrandFixture):
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
 
-        brand_installer = self.brand_installer_class([mock_ent_cert])
+        self._inj_mock_entdir([mock_ent_cert])
+        brand_installer = self.brand_installer_class()
         brand_installer.install()
 
         self.assertFalse(self.mock_install.called)
 
-        stub_product = StubProduct(id=123, name=None, brand_type='OS')
+    def test_no_name_on_product(self):
+        stub_product = StubProduct(id=123, brand_type='OS')
+        stub_product.name = None
 
-        brand_installer = self.brand_installer_class([mock_ent_cert])
+        mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
+        mock_prod_dir.get_installed_products.return_value = [stub_product.id]
+
+        mock_ent_cert = mock.Mock(name='MockEntCert')
+        mock_ent_cert.products = [stub_product]
+        self._inj_mock_entdir([mock_ent_cert])
+
+        brand_installer = self.brand_installer_class()
         brand_installer.install()
 
         self.assertFalse(self.mock_install.called)

@@ -241,6 +241,7 @@ class UpdateAction(Action):
         rogue_serials = self._find_rogue_serials(local, expected)
         self.delete(rogue_serials, report)
         exceptions = self.install(missing_serials, report)
+
         if rogue_serials or missing_serials:
             try:
                 from subscription_manager.repolib import RepoLib
@@ -249,6 +250,11 @@ class UpdateAction(Action):
             except Exception, e:
                 log.debug(e)
                 log.debug("Failed to update repos")
+
+        if missing_serials or rogue_serials:
+            # reload certs and update branding
+            self.branding_hook()
+
         log.info('certs updated:\n%s', report)
         self.syslog_results(report)
         # WARNING: TODO: XXX: this is returning a tuple, the parent class and
@@ -345,19 +351,18 @@ class UpdateAction(Action):
                 result.append(cert)
         return result
 
-    def branding_hook(self, installed_ent_certs):
-        brands_installer = rhelentbranding.RHELBrandsInstaller(installed_ent_certs)
+    def branding_hook(self):
+        # RHELBrandsInstaller will use latest ent_dir contents
+        brands_installer = rhelentbranding.RHELBrandsInstaller()
         brands_installer.install()
 
     def install(self, serials, report):
         br = Writer()
         exceptions = []
-        installed_ent_certs = []
         for bundle in self.get_certificates_by_serial_list(serials):
             try:
                 key, cert = self.build(bundle)
                 br.write(key, cert)
-                installed_ent_certs.append(cert)
                 report.added.append(cert)
             except Exception, e:
                 log.exception(e)
@@ -366,9 +371,6 @@ class UpdateAction(Action):
                     bundle,
                     e)
                 exceptions.append(e)
-
-        if installed_ent_certs:
-            self.branding_hook(installed_ent_certs)
 
         return exceptions
 
