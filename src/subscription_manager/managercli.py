@@ -132,7 +132,8 @@ CONSUMED_LIST = [
     _("Service Type:"),
     _("Status Details:"),
     _("Starts:"),
-    _("Ends:")
+    _("Ends:"),
+    _("System Type:")
 ]
 
 
@@ -2127,6 +2128,7 @@ class ListCommand(CliCommand):
             quantity_used = ""
             service_level = ""
             service_type = ""
+            system_type = ""
 
             order = cert.order
 
@@ -2138,6 +2140,10 @@ class ListCommand(CliCommand):
                 contract = order.contract
                 account = order.account
                 quantity_used = order.quantity_used
+                if order.virt_only:
+                    system_type = _("Virtual")
+                else:
+                    system_type = _("Physical")
 
             pool_id = _("Not Available")
             if hasattr(cert.pool, "id"):
@@ -2161,7 +2167,8 @@ class ListCommand(CliCommand):
                     service_type,
                     reasons,
                     managerlib.format_date(cert.valid_range.begin()),
-                    managerlib.format_date(cert.valid_range.end())) + "\n"
+                    managerlib.format_date(cert.valid_range.end()),
+                    system_type) + "\n"
 
 
 class VersionCommand(CliCommand):
