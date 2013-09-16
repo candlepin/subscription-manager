@@ -311,7 +311,7 @@ def get_available_entitlements(cpserver, consumer_uuid, facts, get_all=False, ac
     """
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
             'providedProducts', 'productId', 'attributes', 'multi-entitlement',
-            'service_level', 'service_type']
+            'service_level', 'service_type', 'suggested']
 
     dlist = list_pools(cpserver, consumer_uuid, facts, get_all, active_on)
 
@@ -326,6 +326,9 @@ def get_available_entitlements(cpserver, consumer_uuid, facts, get_all=False, ac
                                                             "support_type")
         pool['service_level'] = support_attrs['support_level']
         pool['service_type'] = support_attrs['support_type']
+        pool['suggested'] = pool_wrapper.get_suggested_quantity()
+        if pool['suggested'] is None:
+            pool['suggested'] = ""
 
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:

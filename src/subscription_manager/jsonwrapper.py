@@ -14,7 +14,10 @@
 
 # This module contains wrappers for JSON returned from the CP server.
 
+import gettext
 from subscription_manager.utils import is_true_value
+
+_ = gettext.gettext
 
 
 class PoolWrapper(object):
@@ -59,6 +62,16 @@ class PoolWrapper(object):
             if name in attribute_names:
                 attrs[name] = attr['value']
         return attrs
+
+    def get_suggested_quantity(self):
+        result = None
+
+        try:
+            result = int(self.data['calculatedAttributes']['suggested_quantity'])
+        except:
+            pass
+
+        return result
 
     def _get_attribute_value(self, attr_list_name, attr_name):
         product_attrs = self.data[attr_list_name]
