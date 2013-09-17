@@ -131,7 +131,7 @@ clean:
 	./setup.py clean --all
 
 rhsmcertd: $(DAEMONS_SRC_DIR)/rhsmcertd.c
-	$(CC) $(CFLAGS) $(RHSMCERTD_CFLAGS) $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd $(LDFLAGS) $(RHSMCERTD_LDFLAGS)
+	$(CC) $(CFLAGS) $(RHSMCERTD_CFLAGS) -DLIBEXECDIR='"$(LIBEXEC_DIR)"' $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd $(LDFLAGS) $(RHSMCERTD_LDFLAGS)
 
 rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
 	$(CC) $(CFLAGS) $(ICON_CFLAGS) $(RHSM_ICON_SRC_DIR)/rhsm_icon.c -o bin/rhsm-icon $(LDFLAGS) $(ICON_LDFLAGS)

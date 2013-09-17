@@ -38,7 +38,7 @@
 #define UPDATEFILE "/var/run/rhsm/update"
 #define NEXT_CERT_UPDATE_FILE "/var/run/rhsm/next_cert_check_update"
 #define NEXT_AUTO_ATTACH_UPDATE_FILE "/var/run/rhsm/next_auto_attach_update"
-#define WORKER "/usr/libexec/rhsmcertd-worker"
+#define WORKER LIBEXECDIR"/rhsmcertd-worker"
 #define WORKER_NAME WORKER
 #define INITIAL_DELAY_SECONDS 120
 #define INITIAL_DELAY_OFFSET_MAX 600
