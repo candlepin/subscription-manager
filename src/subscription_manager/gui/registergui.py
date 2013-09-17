@@ -44,6 +44,7 @@ from subscription_manager.gui.autobind import DryRunResult, \
         ServiceLevelNotSupportedException, AllProductsCoveredException, \
         NoProductsException
 from subscription_manager.gui.messageWindow import InfoDialog, OkDialog
+from subscription_manager.jsonwrapper import PoolWrapper
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
@@ -380,10 +381,15 @@ class ConfirmSubscriptionsScreen(Screen):
                                                          backend)
         self.button_label = _("Attach")
 
-        self.store = gtk.ListStore(str, str)
+        self.store = gtk.ListStore(str, bool, str)
         self.subs_treeview.set_model(self.store)
         self.add_text_column(_("Subscription"), 0, True)
-        self.add_text_column(_("Quantity"), 1)
+
+        column = widgets.MachineTypeColumn(1)
+        column.set_sort_column_id(1)
+        self.subs_treeview.append_column(column)
+
+        self.add_text_column(_("Quantity"), 2)
 
     def add_text_column(self, name, index, expand=False):
         text_renderer = gtk.CellRendererText()
@@ -409,6 +415,7 @@ class ConfirmSubscriptionsScreen(Screen):
 
         for pool_quantity in self._dry_run_result.json:
             self.store.append([pool_quantity['pool']['productName'],
+                PoolWrapper(pool_quantity['pool']).is_virt_only(),
                 pool_quantity['quantity']])
 
     def pre(self):
