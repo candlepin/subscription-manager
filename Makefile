@@ -99,8 +99,10 @@ VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
 CFLAGS ?= -g -Wall
 LDFLAGS ?=
 
-RHSMCERTD_FLAGS = `pkg-config --cflags --libs glib-2.0`
-ICON_FLAGS=`pkg-config --cflags --libs "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
+RHSMCERTD_CFLAGS = `pkg-config --cflags glib-2.0`
+RHSMCERTD_LDFLAGS = `pkg-config --libs glib-2.0`
+ICON_CFLAGS=`pkg-config --cflags "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
+ICON_LDFLAGS=`pkg-config --libs "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
 
 PYFILES := `find src/ test/ -name "*.py"`
 BIN_FILES := bin/subscription-manager bin/subscription-manager-gui \
@@ -129,10 +131,10 @@ clean:
 	./setup.py clean --all
 
 rhsmcertd: $(DAEMONS_SRC_DIR)/rhsmcertd.c
-	$(CC) $(CFLAGS) $(LDFLAGS) $(RHSMCERTD_FLAGS) $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd
+	$(CC) $(CFLAGS) $(RHSMCERTD_CFLAGS) $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd $(LDFLAGS) $(RHSMCERTD_LDFLAGS)
 
 rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
-	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) $(RHSM_ICON_SRC_DIR)/rhsm_icon.c -o bin/rhsm-icon
+	$(CC) $(CFLAGS) $(ICON_CFLAGS) $(RHSM_ICON_SRC_DIR)/rhsm_icon.c -o bin/rhsm-icon $(LDFLAGS) $(ICON_LDFLAGS)
 
 .PHONY: check-syntax
 check-syntax:
