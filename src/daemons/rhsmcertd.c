@@ -33,7 +33,7 @@
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
 #define UPDATEFILE "/var/run/rhsm/update"
-#define WORKER "/usr/libexec/rhsmcertd-worker"
+#define WORKER LIBEXECDIR"/rhsmcertd-worker"
 #define WORKER_NAME WORKER
 #define INITIAL_DELAY_SECONDS 120;
 #define DEFAULT_CERT_INTERVAL_SECONDS 14400	/* 4 hours */
