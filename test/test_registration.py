@@ -60,3 +60,63 @@ class CliRegistrationTests(SubManFixture):
         cmd.main(['register', '--username=testuser1', '--password=password'])
 
         self.assertTrue(mock_ipm_wc.call_count > 0)
+
+    @patch('subscription_manager.managercli.RepoLib')
+    @patch('subscription_manager.managercli.CertLib')
+    @patch('subscription_manager.managercli.InstalledProductsManager.write_cache')
+    @patch('subscription_manager.certlib.ConsumerIdentity.exists')
+    def test_activation_keys_updates_certs_and_repos(self, mock_exists, mock_ipm_wc,
+                                                     mock_certlib, mock_repolib):
+        connection.UEPConnection = StubUEP
+
+        cmd = RegisterCommand()
+        cmd._persist_identity_cert = self.stub_persist
+        mock_exists.return_value = False
+
+        # Mock out facts and installed products:
+        cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
+        cmd.facts.write_cache = Mock()
+
+        mock_certlib_instance = mock_certlib.return_value
+        mock_repolib_instance = mock_repolib.return_value
+
+        cmd.main(['register', '--activationkey=test_key', '--org=test_org'])
+
+        self.assertTrue(mock_ipm_wc.call_count > 0)
+
+        self.assertTrue(mock_certlib_instance.update.called)
+        self.assertTrue(mock_repolib_instance.update.called)
+
+    @patch('subscription_manager.managercli.RepoLib')
+    @patch('subscription_manager.managercli.CertLib')
+    @patch('subscription_manager.managercli.InstalledProductsManager.write_cache')
+    @patch('subscription_manager.certlib.ConsumerIdentity.exists')
+    def test_consumerid_updates_certs_and_repos(self, mock_exists, mock_ipm_wc,
+                                                     mock_certlib, mock_repolib):
+
+        def getConsumer(self, *args, **kwargs):
+            pass
+
+        StubUEP.getConsumer = getConsumer
+        connection.UEPConnection = StubUEP
+
+        cmd = RegisterCommand()
+        cmd._persist_identity_cert = self.stub_persist
+        mock_exists.return_value = False
+
+        # Mock out facts and installed products:
+        cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
+        cmd.facts.write_cache = Mock()
+        cmd.facts.update_check = Mock()
+
+        mock_certlib_instance = mock_certlib.return_value
+        mock_repolib_instance = mock_repolib.return_value
+
+        connection.UEPConnection.getConsumer = Mock(return_value={'uuid': '123123'})
+
+        cmd.main(['register', '--consumerid=123456', '--username=testuser1', '--password=password', '--org=test_org'])
+
+        self.assertTrue(mock_ipm_wc.call_count > 0)
+
+        self.assertTrue(mock_certlib_instance.update.called)
+        self.assertTrue(mock_repolib_instance.update.called)

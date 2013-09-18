@@ -21,6 +21,7 @@ BACKUP_DIR="/tmp/sm-smoke/backup"
 USERNAME="${1:-admin}"
 PASSWORD="${2:-admin}"
 ORG="${3:-admin}"
+ACTIVATION_KEY="${4:-default_key}"
 
 #global_args="--help"
 GLOBAL_ARGS=""
@@ -68,6 +69,7 @@ run_sm service-level
 run_sm repos
 run_sm subscribe --auto
 run_sm list --consumed
+run_sm repos
 
 # others...
 run_sm config --list
@@ -79,6 +81,13 @@ run_sm orgs --username "${USERNAME}" --password "${PASSWORD}"
 run_sm release --list
 run_sm remove --all
 run_sm plugins --list
+run_sm unregister
+
+# activation keys
+run_sm unregister
+run_sm register --activationkey "${ACTIVATION_KEY}" --org "${ORG}" --force
+run_sm unregister
+run_sm register --activationkey "${ACTIVATION_KEY}" --org "${ORG}" --force --auto-attach
 run_sm unregister
 
 # what to run after the tests, ie, restore configs, etc
