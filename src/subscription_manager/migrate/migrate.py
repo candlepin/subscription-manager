@@ -406,6 +406,24 @@ class MigrationEngine(object):
                 dic_data[key] = val
         return dic_data
 
+    def handle_collisions(self, applicable_certs):
+        # if we have the same product IDs mapping to multiple certificates, we must abort.
+        collisions = dict((prod_id, mappings) for prod_id, mappings in applicable_certs.items() if len(mappings) > 1)
+        if collisions:
+            log.error("Aborting. Detected the following product ID collisions: %s", collisions)
+            self.print_banner(_("Unable to continue migration!"))
+            print _("You are subscribed to channels that have conflicting product certificates.")
+            for prod_id, mappings in collisions.items():
+                colliding_channels = [chan for cert, chan in mappings.items()]
+                # Flatten the list of lists
+                colliding_channels = [item for sublist in colliding_channels for item in sublist]
+                print _("The following channels map to product ID %s:") % prod_id
+                for c in sorted(colliding_channels):
+                    print "\t%s" % c
+            print _("Reduce the number of channels per product ID to 1 and run migration again.")
+            print _("To remove a channel, use 'rhn-channel --remove --channel=<conflicting_channel>'.")
+            sys.exit(1)
+
     def deploy_prod_certificates(self, subscribed_channels):
         release = self.get_release()
         mappingfile = "/usr/share/rhsm/product/" + release + "/channel-cert-mapping.txt"
@@ -418,7 +436,7 @@ class MigrationEngine(object):
             system_exit(1, _("Unable to read mapping file: %s.\n"
             "Do you have the subscription-manager-migration-data package installed?") % mappingfile)
 
-        applicable_certs = []
+        applicable_certs = {}
         valid_rhsm_channels = []
         invalid_rhsm_channels = []
         unrecognized_channels = []
@@ -427,9 +445,11 @@ class MigrationEngine(object):
             try:
                 if dic_data[channel] != 'none':
                     valid_rhsm_channels.append(channel)
-                    log.info("mapping found for: %s = %s", channel, dic_data[channel])
-                    if (channel, dic_data[channel]) not in applicable_certs:
-                        applicable_certs.append((channel, dic_data[channel]))
+                    cert = dic_data[channel]
+                    log.info("mapping found for: %s = %s", channel, cert)
+                    prod_id = cert.split('-')[-1].split('.pem')[0]
+                    cert_to_channels = applicable_certs.setdefault(prod_id, {})
+                    cert_to_channels.setdefault(cert, []).append(channel)
                 else:
                     invalid_rhsm_channels.append(channel)
                     log.info("%s is not mapped to any certificates", channel)
@@ -451,6 +471,15 @@ class MigrationEngine(object):
                 print(_("\nUse --force to ignore these channels and continue the migration.\n"))
                 sys.exit(1)
 
+        # At this point applicable_certs looks something like this
+        # { '1': { 'cert-a-1.pem': ['channel1', 'channel2'], 'cert-b-1.pem': ['channel3'] } }
+        # This is telling us that product ID 1 maps to two certificates, cert-a and cert-b.
+        # Two channels map to the cert-a certificate and one channel maps to cert-b.
+        # If we wind up in a situation where a user has channels that map to two different
+        # certificates with the same product ID, (e.g. len(hash[product_id]) > 1) we've got a
+        # collision and must abort.
+        self.handle_collisions(applicable_certs)
+
         log.info("certs to be installed: %s", applicable_certs)
 
         self.print_banner(_("Installing product certificates for these RHN Classic channels:"))
@@ -462,7 +491,9 @@ class MigrationEngine(object):
         # creates the product directory if it doesn't already exist
         product_dir = ProductDirectory()
         db_modified = False
-        for channel, cert in applicable_certs:
+        for cert_to_channels in applicable_certs.values():
+            # At this point handle_collisions should have verified that len(cert_to_channels) == 1
+            cert, channels = cert_to_channels.items()[0]
             source_path = os.path.join("/usr/share/rhsm/product", release, cert)
             truncated_cert_name = cert.split('-')[-1]
             destination_path = os.path.join(str(product_dir), truncated_cert_name)
@@ -473,8 +504,9 @@ class MigrationEngine(object):
             # that packages for this product were installed by the RHN repo which
             # conveniently uses the channel name for the repo name.
             db_id = truncated_cert_name.split('.pem')[0]
-            self.db.add(db_id, channel)
-            db_modified = True
+            for chan in channels:
+                self.db.add(db_id, chan)
+                db_modified = True
 
         if db_modified:
             self.db.write()
