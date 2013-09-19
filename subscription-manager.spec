@@ -47,7 +47,6 @@ Requires: PyXML
 %endif
 
 
-%{?el5:Requires: rhn-setup-gnome}
 # There's no dmi to read on these arches, so don't pull in this dep.
 %ifnarch ppc ppc64 s390 s390x
 Requires:  python-dmidecode
@@ -300,6 +299,7 @@ rm -rf %{buildroot}
 
 %{_sysconfdir}/pam.d/subscription-manager-gui
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
+%{_sysconfdir}/bash_completion.d/subscription-manager-gui
 
 %doc
 %{_mandir}/man8/subscription-manager-gui.8*
