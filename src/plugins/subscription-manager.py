@@ -21,11 +21,7 @@ from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 
 sys.path.append('/usr/share/rhsm')
 
-from subscription_manager.injectioninit import init_dep_injection
-init_dep_injection()
-import subscription_manager.injection as inj
-
-from subscription_manager import logutil
+from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoLib
 from rhsm import connection
 
@@ -123,9 +119,15 @@ def config_hook(conduit):
     """ update """
     # register rpm name for yum history recording"
     # yum on 5.7 doesn't have this method, so check for it
+
+    from subscription_manager import logutil
+    logutil.init_logger_for_yum()
+
+    from subscription_manager.injectioninit import init_dep_injection
+    init_dep_injection()
+
     if hasattr(conduit, 'registerPackageName'):
         conduit.registerPackageName("subscription-manager")
-    logutil.init_logger_for_yum()
     try:
         update(conduit)
         warnOrGiveUsageMessage(conduit)

@@ -26,9 +26,10 @@ import logging
 import sys
 sys.path.append("/usr/share/rhsm")
 
-from subscription_manager.logutil import init_logger
-init_logger()
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger("rhsm-app.rhsmd")
+
+from subscription_manager import logutil
+logutil.init_logger()
 
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()

@@ -21,8 +21,6 @@ from yum.plugins import TYPE_CORE
 
 sys.path.append('/usr/share/rhsm')
 
-from subscription_manager.injectioninit import init_dep_injection
-init_dep_injection()
 
 from subscription_manager import logutil
 from subscription_manager.productid import ProductManager
@@ -50,6 +48,9 @@ def posttrans_hook(conduit):
     # yum on 5.7 doesn't have this method, so check for it
     if hasattr(conduit, 'registerPackageName'):
         conduit.registerPackageName("subscription-manager")
+
+    from subscription_manager.injectioninit import init_dep_injection
+    init_dep_injection()
 
     logutil.init_logger_for_yum()
     chroot()
