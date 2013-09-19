@@ -138,7 +138,12 @@ class TestMigration(unittest.TestCase):
     def test_authenticate(self, mock_getpass, mock_input):
         mock_input.return_value = "username"
         mock_getpass.return_value = "password"
-        creds = self.engine.authenticate("Some prompt")
+        creds = self.engine.authenticate(None, None, "Some prompt", "Some other prompt")
+        self.assertEquals(creds.username, "username")
+        self.assertEquals(creds.password, "password")
+
+    def test_authenticate_when_values_given(self):
+        creds = self.engine.authenticate("username", "password", "Some prompt", "Some other prompt")
         self.assertEquals(creds.username, "username")
         self.assertEquals(creds.password, "password")
 
@@ -146,7 +151,7 @@ class TestMigration(unittest.TestCase):
     @patch("getpass.getpass")
     def test_get_auth_with_serverurl(self, mock_getpass, mock_input):
         self.engine.options = self.create_options({'serverurl': 'foobar'},
-            ["redhataccountname", "redhataccountpassword", "systemengineuser", "systemenginepassword"])
+            ["redhatuser", "redhatpassword", "subserviceuser", "subservicepassword"])
 
         mock_input.side_effect = ["rhn_username", "se_username"]
         mock_getpass.side_effect = ["rhn_password", "se_password"]
@@ -160,8 +165,8 @@ class TestMigration(unittest.TestCase):
     @patch("__builtin__.raw_input")
     @patch("getpass.getpass")
     def test_get_auth_without_serverurl_and_not_hosted(self, mock_getpass, mock_input):
-        self.engine.options = self.create_options(["serverurl", "redhataccountname",
-            "redhataccountpassword", "systemengineuser", "systemenginepassword"])
+        self.engine.options = self.create_options(["serverurl", "redhatuser",
+            "redhatpassword", "subserviceuser", "subservicepassword"])
 
         mock_input.side_effect = ["rhn_username", "se_username"]
         mock_getpass.side_effect = ["rhn_password", "se_password"]
@@ -176,8 +181,8 @@ class TestMigration(unittest.TestCase):
     @patch("__builtin__.raw_input")
     @patch("getpass.getpass")
     def test_get_auth_without_serverurl_and_is_hosted(self, mock_getpass, mock_input):
-        self.engine.options = self.create_options(["serverurl", "redhataccountname",
-            "redhatpassword", "systemengineuser", "systemenginepassword"])
+        self.engine.options = self.create_options(["serverurl", "redhatuser",
+            "redhatpassword", "subserviceuser", "subservicepassword"])
 
         mock_input.return_value = "rhn_username"
         mock_getpass.return_value = "rhn_password"
@@ -191,8 +196,8 @@ class TestMigration(unittest.TestCase):
 
     def test_get_auth_with_provided_rhn_creds(self):
         self.engine.options = self.create_options(
-            {'redhataccountname': 'rhn_username', 'redhatpassword': 'rhn_password'},
-            ["serverurl", "systemengineuser", "systemenginepassword"])
+            {'redhatuser': 'rhn_username', 'redhatpassword': 'rhn_password'},
+            ["serverurl", "subserviceuser", "subservicepassword"])
         self.engine.is_hosted = lambda: True
         self.engine.get_auth()
         self.assertEquals(self.engine.rhncreds.username, "rhn_username")
@@ -203,8 +208,8 @@ class TestMigration(unittest.TestCase):
     @patch("getpass.getpass")
     def test_gets_password_when_only_username_give(self, mock_getpass):
         self.engine.options = self.create_options(
-            {'redhataccountname': 'rhn_username'},
-            ["serverurl", "redhatpassword", "systemengineuser", "systemenginepassword"])
+            {'redhatuser': 'rhn_username'},
+            ["serverurl", "redhatpassword", "subserviceuser", "subservicepassword"])
 
         mock_getpass.return_value = "rhn_password"
         self.engine.is_hosted = lambda: True
@@ -217,9 +222,9 @@ class TestMigration(unittest.TestCase):
     @patch("getpass.getpass")
     def test_gets_se_password_when_only_se_username_give(self, mock_getpass):
         self.engine.options = self.create_options(
-            {'redhataccountname': 'rhn_username', 'redhatpassword': 'rhn_password',
-                'systemengineuser': 'se_username'},
-            ["serverurl", "systemenginepassword"])
+            {'redhatuser': 'rhn_username', 'redhatpassword': 'rhn_password',
+                'subserviceuser': 'se_username'},
+            ["serverurl", "subservicepassword"])
 
         mock_getpass.return_value = "se_password"
         self.engine.is_hosted = lambda: False
@@ -231,8 +236,8 @@ class TestMigration(unittest.TestCase):
 
     def test_all_auth_provided(self):
         self.engine.options = self.create_options(
-            {'redhataccountname': 'rhn_username', 'redhatpassword': 'rhn_password',
-                'systemengineuser': 'se_username', 'systemenginepassword': 'se_password'},
+            {'redhatuser': 'rhn_username', 'redhatpassword': 'rhn_password',
+                'subserviceuser': 'se_username', 'subservicepassword': 'se_password'},
             ["serverurl"])
 
         self.engine.is_hosted = lambda: False
