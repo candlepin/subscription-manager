@@ -28,7 +28,7 @@ from rhsm.config import initConfig
 from rhsm.certificate import Key, CertificateException, create_from_pem
 
 import subscription_manager.cache as cache
-from subscription_manager.cert_sorter import StackingGroupSorter
+from subscription_manager.cert_sorter import StackingGroupSorter, ComplianceManager
 from subscription_manager import certlib
 from subscription_manager.certlib import system_log as inner_system_log
 from subscription_manager.facts import Facts
@@ -445,6 +445,7 @@ class PoolStash(object):
         self.backend = backend
         self.identity = require(IDENTITY)
         self.facts = facts
+        self.sorter = require(CERT_SORTER)
 
         # Pools which passed rules server side for this consumer:
         self.compatible_pools = {}
@@ -466,6 +467,10 @@ class PoolStash(object):
         Refresh the list of pools from the server, active on the given date.
         """
 
+        if active_on:
+            self.sorter = ComplianceManager(active_on)
+        else:
+            self.sorter = require(CERT_SORTER)
         self.all_pools = {}
         self.compatible_pools = {}
         log.debug("Refreshing pools from server...")
@@ -509,9 +514,8 @@ class PoolStash(object):
             log.debug("\tRemoved %d incompatible pools" %
                        len(self.incompatible_pools))
 
-        sorter = require(CERT_SORTER)
         pool_filter = PoolFilter(self.backend.product_dir,
-                self.backend.entitlement_dir, sorter)
+                self.backend.entitlement_dir, self.sorter)
 
         # Filter out products that are not installed if necessary:
         if uninstalled:
