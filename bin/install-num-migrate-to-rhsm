@@ -33,11 +33,14 @@ if _LIBPATH not in sys.path:
 from subscription_manager.i18n import configure_i18n
 from subscription_manager.i18n_optparse import OptionParser, \
      WrappedIndentedHelpFormatter, USAGE
+from subscription_manager import logutil
 
 configure_i18n()
 
 import gettext
 _ = gettext.gettext
+
+logutil.init_logger()
 
 cfg = config.initConfig()
 PRODUCT_CERT_DIR = cfg.get('rhsm', 'productcertdir')
