@@ -27,7 +27,6 @@ from subscription_manager.cache import InstalledProductsManager
 from subscription_manager import rhelentbranding
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager import file_monitor
-from rhsm.connection import RestlibException
 
 import gettext
 _ = gettext.gettext
@@ -338,9 +337,9 @@ class CertSorter(ComplianceManager):
         if self.is_registered():
             try:
                 self.installed_mgr.update_check(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp(), inj.require(inj.IDENTITY).uuid)
-            except RestlibException:
-                # Invalid consumer certificate
-                pass
+            except Exception, e:
+                log.debug("Failed to sync installed products with the server")
+                log.debug(e)
 
     def force_cert_check(self):
         self.identity_monitor.run_check()
