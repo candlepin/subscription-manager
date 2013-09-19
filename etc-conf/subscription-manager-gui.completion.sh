@@ -7,14 +7,9 @@
 # main complete function
 _subscription_manager_gui()
 {
-  local first cur prev opts base
-  COMPREPLY=()
-  first=${COMP_WORDS[1]}
-  prev="${COMP_WORDS[COMP_CWORD-1]}"
-
-  # top-level commands and options
-
-  COMPREPLY=($(compgen -W "-h --help --register"))
+  local cur
+  cur=${COMP_WORDS[COMP_CWORD]}
+  COMPREPLY=($(compgen -W "-h --help --register" -- ${cur}))
   return 0
 }
 
