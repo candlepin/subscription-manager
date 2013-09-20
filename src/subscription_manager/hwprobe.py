@@ -731,8 +731,14 @@ class Hardware:
         return virt_dict
 
     def _get_output(self, cmd):
-        process = Popen([cmd], stdout=PIPE)
-        output = process.communicate()[0].strip()
+        log.debug("Running '%s'" % cmd)
+        process = Popen([cmd], stdout=PIPE, stderr=PIPE)
+        (std_output, std_error) = process.communicate()
+
+        log.debug("%s stdout: %s" % (cmd, std_output))
+        log.debug("%s stderr: %s" % (cmd, std_error))
+
+        output = std_output.strip()
 
         returncode = process.poll()
         if returncode:
