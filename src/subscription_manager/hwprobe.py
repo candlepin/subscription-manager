@@ -724,6 +724,9 @@ class Hardware:
             # if host_type is not defined, do nothing (#768397)
             pass
 
+        log.info("virt.is_guest: %s" % virt_dict.get('virt.is_guest', 'Not Set'))
+        log.info("virt.host_type: %s" % virt_dict.get('virt.host_type', 'Not Set'))
+
         self.allhw.update(virt_dict)
         return virt_dict
 
@@ -790,6 +793,8 @@ class Hardware:
             self.allhw['virt.uuid'] = uuid.rstrip("\r\n")
         except IOError:
             pass
+
+        log.info("virt.uuid: %s" % self.allhw.get('virt.uuid', 'Not Set'))
 
     def get_all(self):
         hardware_methods = [self.get_uname_info,
