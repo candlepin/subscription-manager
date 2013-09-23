@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.9.6
+Version: 1.9.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -385,6 +385,19 @@ fi
 %endif
 
 %changelog
+* Mon Sep 23 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.7-1
+- 767754: overlap filter ondate (ckozak@redhat.com)
+- 1001820: added ondate to completion (ckozak@redhat.com)
+- 1004385: Add missing rhsm-icon debug options (ckozak@redhat.com)
+- 1004893: update prods before compliance (ckozak@redhat.com)
+- 1008603: Catch and log connection error while updating installed products (ckozak@redhat.com)
+- 1009600: fix traceback when poolstash is empty (ckozak@redhat.com)
+- 1009600: remove call on filter change, use None instead of now (ckozak@redhat.com)
+- Add System Type to output of list --consumed (mstead@redhat.com)
+- Add Type column to Confirm Subscription screen (mstead@redhat.com)
+- update strings (jesusr@redhat.com)
+- suggested quantity in list available (ckozak@redhat.com)
+
 * Thu Sep 12 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.6-1
 - 994344: messaging for bad filetypes (ckozak@redhat.com)
 - 995597: continue attaching if a pool cannot be found (ckozak@redhat.com)
