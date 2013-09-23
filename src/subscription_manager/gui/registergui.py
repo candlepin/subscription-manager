@@ -638,6 +638,8 @@ class OrganizationScreen(Screen):
             return
 
         owners = [(owner['key'], owner['displayName']) for owner in owners]
+        # Sort by display name so the list doesn't randomly change.
+        owners = sorted(owners, key=lambda item: item[1])
 
         if len(owners) == 0:
             handle_gui_exception(None,
