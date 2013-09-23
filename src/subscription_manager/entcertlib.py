@@ -26,6 +26,7 @@ from subscription_manager import certlib
 from subscription_manager.certdirectory import Writer
 from subscription_manager import utils
 from subscription_manager.injection import IDENTITY, require
+from subscription_manager import rhelentbranding
 import subscription_manager.injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -102,7 +103,7 @@ class EntCertUpdateAction(object):
 
         if missing_serials or rogue_serials:
             # refresh yum repo's now
-            self.repo_hook(lock=lock)
+            self.repo_hook()
 
             # NOTE: Since we have the yum repos defined here now
             #       we could update product id certs here, or install
@@ -123,6 +124,32 @@ class EntCertUpdateAction(object):
 
         ent_cert_bundles_installer = EntitlementCertBundlesInstaller(self.report)
         ent_cert_bundles_installer.install(cert_bundles)
+
+    def branding_hook(self):
+        """Update branding info based on entitlement cert changes"""
+
+        # RHELBrandsInstaller will use latest ent_dir contents
+        brands_installer = rhelentbranding.RHELBrandsInstaller()
+        brands_installer.install()
+
+    def repo_hook(self):
+        """Update yum repos
+
+        Args:
+            lock: an ActionLock, in this case certlib.UpdateAction lock, since repo_kook
+                  is called when UpdateAction has already acquired a lock.
+        """
+        try:
+            # repolib/RepoLib imports certlib, so import late until
+            #  we factor out our circular deps
+            from subscription_manager.repolib import RepoLib
+            #rl = RepoLib(lock=lock, uep=self.uep)
+            # Let's try this without passing a lock...
+            rl = RepoLib(uep=self.uep)
+            rl.update()
+        except Exception, e:
+            log.debug(e)
+            log.debug("Failed to update repos")
 
     def _find_missing_serials(self, local, expected):
         """ Find serials from the server we do not have locally. """
@@ -243,32 +270,7 @@ class EntitlementCertBundlesInstaller(object):
     def get_installed(self):
         return self._get_installed()
 
-
-    def repo_hook(self, lock):
-        """Update yum repos
-
-        Args:
-            lock: an ActionLock, in this case certlib.UpdateAction lock, since repo_kook
-                  is called when UpdateAction has already acquired a lock.
-        """
-        try:
-            # repolib/RepoLib imports certlib, so import late until
-            #  we factor out our circular deps
-            from subscription_manager.repolib import RepoLib
-            rl = RepoLib(lock=lock, uep=self.uep)
-            rl.update()
-        except Exception, e:
-            log.debug(e)
-            log.debug("Failed to update repos")
-
-    def branding_hook(self):
-        """Update branding info based on entitlement cert changes"""
-
-        # RHELBrandsInstaller will use latest ent_dir contents
-        brands_installer = rhelentbranding.RHELBrandsInstaller()
-        brands_installer.install()
-
-    def install(self, serials, report):
+    def old_install(self, serials, report):
         br = Writer()
         exceptions = []
         for bundle in self.get_certificates_by_serial_list(serials):
@@ -291,7 +293,6 @@ class EntitlementCertBundlesInstaller(object):
     # we have a UpdateReport, use it
     def _get_installed(self):
         return self.report.added
-
 
 
 class EntitlementCertBundleInstaller(object):
