@@ -278,11 +278,9 @@ class TestListCommand(TestCliProxyCommand):
             StubProduct("test-product"), service_level="Premium")
         TestCliProxyCommand.setUp(self)
 
-
     @mock.patch('subscription_manager.managerlib.get_available_entitlements')
     def test_none_wrap_available_pool_id(self, mget_ents):
-    def test_none_wrap_available_pool_id(self):
-        listCommand = managercli.ListCommand()
+        list_command = managercli.ListCommand()
 
         def create_pool_list(*args, **kwargs):
             return [{'productName': 'dummy-name',
@@ -300,6 +298,7 @@ class TestListCommand(TestCliProxyCommand):
                      'endDate': '',
                      'suggested': '2'}]
         mget_ents.return_value = create_pool_list()
+
 
         mcli.return_value = {'consumer_name': 'stub_name', 'uuid': 'stub_uuid'}
         with Capture() as cap:

@@ -386,7 +386,7 @@ ENTITLEMENT_CERT_V3_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path:
+	Path: 
 	Version: 3.0
 	Serial: 1306183239866671852
 	Start Date: 2012-09-18 00:00:00+00:00
@@ -416,14 +416,15 @@ Order:
 	SKU: awesomeos-x86_64
 	Contract: 67
 	Account: 12331131231
-	Service Level:
-	Service Type:
+	Service Level: 
+	Service Type: 
 	Quantity: 10
 	Quantity Used: 2
 	Socket Limit: 1
-	RAM Limit:
-	Core Limit:
+	RAM Limit: 
+	Core Limit: 
 	Virt Only: False
+	Subscription: 
 	Stacking ID: 1
 	Warning Period: 30
 	Provides Management: False
@@ -437,8 +438,8 @@ Content:
 	GPG: /foo/path/always/gpg
 	Enabled: True
 	Expires: 200
-	Required Tags:
-	Arches:
+	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -449,8 +450,8 @@ Content:
 	GPG: /path/to/awesomeos/gpg/
 	Enabled: True
 	Expires: 3600
-	Required Tags:
-	Arches:
+	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -461,8 +462,8 @@ Content:
 	GPG: /path/to/awesomeos/gpg/
 	Enabled: False
 	Expires: 3600
-	Required Tags:
-	Arches:
+	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -473,8 +474,8 @@ Content:
 	GPG: /foo/path/never/gpg
 	Enabled: False
 	Expires: 600
-	Required Tags:
-	Arches:
+	Required Tags: 
+	Arches: 
 """
 
 PRODUCT_CERT_V1_0_OUTPUT = """
@@ -483,7 +484,7 @@ PRODUCT_CERT_V1_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path:
+	Path: 
 	Version: 1.0
 	Serial: 168296333
 	Start Date: 2011-08-23 17:41:39+00:00
@@ -514,7 +515,7 @@ PRODUCT_CERT_WITH_OS_NAME_V1_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path:
+	Path: 
 	Version: 1.0
 	Serial: 48785926
 	Start Date: 2013-08-07 19:21:14+00:00
@@ -573,7 +574,7 @@ IDENTITY_CERT_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path:
+	Path: 
 	Version: 1.0
 	Serial: 5412106042110780569
 	Start Date: 2012-07-10 12:21:27+00:00

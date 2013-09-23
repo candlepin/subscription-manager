@@ -1106,7 +1106,7 @@ class RegisterCommand(UserPassCommand):
             log.info("System registered, updating entitlements if needed")
             # update certs, repos, and caches.
             # FIXME: aside from the overhead, should this be certmgr.update?
-            self.certlib.update()
+            self.entcertlib.update()
 
             # update with latest cert info
             self.sorter = inj.require(inj.CERT_SORTER)
@@ -2428,6 +2428,5 @@ def check_registration():
                      "uuid": consumer.getConsumerId()}
 
     return consumer_info
-
 if __name__ == "__main__":
     ManagerCLI().main()

@@ -17,6 +17,7 @@ from datetime import datetime, timedelta
 import logging
 
 from rhsm.certificate import GMT
+from rhsm.connection import RestlibException
 import subscription_manager.injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)

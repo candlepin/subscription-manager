@@ -105,7 +105,6 @@ class SubManFixture(unittest.TestCase):
     def tearDown(self):
         self.dbus_patcher.stop()
 
-
     def get_consumer_cp(self):
         cp_provider = inj.require(inj.CP_PROVIDER)
         consumer_cp = cp_provider.get_consumer_auth_cp()
