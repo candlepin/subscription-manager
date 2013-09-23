@@ -1112,9 +1112,6 @@ class RegisterCommand(UserPassCommand):
             # FIXME: aside from the overhead, should this be certmgr.update?
             self.certlib.update()
 
-            rl = RepoLib(uep=self.cp)
-            rl.update()
-
             # update with latest cert info
             self.sorter = inj.require(inj.CERT_SORTER)
             self.sorter.force_cert_check()
