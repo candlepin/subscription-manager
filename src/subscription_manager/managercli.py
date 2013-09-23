@@ -2086,7 +2086,7 @@ class ListCommand(CliCommand):
                         data['id'],
                         data['quantity'],
                         data['suggested'],
-                        data['service_level'],
+                        data['service_level'] or "",
                         data['service_type'] or "",
                         data['multi-entitlement'],
                         data['endDate'],
