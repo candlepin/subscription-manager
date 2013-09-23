@@ -193,8 +193,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         if self.pool_stash.all_pools_size() == 0:
             self.sub_details.clear()
+            # If the date is None (now), use current time
+            on_date = self.date_picker.date or datetime.datetime.now()
             self.display_message(_("No subscriptions are available on %s.") %
-                                   self.date_picker.date.strftime("%Y-%m-%d"))
+                                   on_date.strftime("%Y-%m-%d"))
             return
 
         if len(merged_pools) == 0:
