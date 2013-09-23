@@ -88,7 +88,7 @@ class CertLib(DataLib):
 
     def _do_update(self):
         action = UpdateAction(uep=self.uep)
-        return action.perform()
+        return action.perform(lock=self.lock)
 
     def _do_delete(self, serial_numbers):
         action = DeleteAction()
@@ -227,7 +227,7 @@ class UpdateAction(Action):
     def __init__(self, uep=None, entdir=None):
         Action.__init__(self, uep=uep, entdir=entdir)
 
-    def perform(self):
+    def perform(self, lock=None):
         report = UpdateReport()
         local = self._get_local_serials(report)
         try:
@@ -240,6 +240,14 @@ class UpdateAction(Action):
         rogue_serials = self._find_rogue_serials(local, expected)
         self.delete(rogue_serials, report)
         exceptions = self.install(missing_serials, report)
+        if rogue_serials or missing_serials:
+            try:
+                from subscription_manager.repolib import RepoLib
+                rl = RepoLib(lock=lock, uep=self.uep)
+                rl.update()
+            except Exception, e:
+                log.debug(e)
+                log.debug("Failed to update repos")
         log.info('certs updated:\n%s', report)
         self.syslog_results(report)
         # WARNING: TODO: XXX: this is returning a tuple, the parent class and
