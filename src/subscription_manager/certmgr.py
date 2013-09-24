@@ -24,6 +24,7 @@ from rhsm.connection import GoneException, ExpiredIdentityCertException
 from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
 from subscription_manager.certlib import CertLib, ActionLock, HealingLib, IdentityCertLib
 from subscription_manager.factlib import FactLib
+from subscription_manager.repolib import RepoLib
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -46,6 +47,7 @@ class CertManager:
         self.lock = lock
         self.uep = uep
         self.certlib = CertLib(self.lock, uep=self.uep)
+        self.repolib = RepoLib(self.lock, uep=self.uep)
         self.factlib = FactLib(self.lock, uep=self.uep, facts=facts)
         self.profilelib = PackageProfileLib(self.lock, uep=self.uep)
         self.installedprodlib = InstalledProductsLib(self.lock, uep=self.uep)
@@ -71,7 +73,7 @@ class CertManager:
             if autoheal:
                 libset = [self.installedprodlib, self.healinglib]
             else:
-                libset = [self.idcertlib, self.factlib, self.profilelib, self.installedprodlib]
+                libset = [self.idcertlib, self.repolib, self.factlib, self.profilelib, self.installedprodlib]
 
             # WARNING
             # Certlib inherits DataLib as well as the above 'lib' objects,
