@@ -363,6 +363,15 @@ class CliCommand(AbstractCLICommand):
         self.server_versions = get_server_versions(self.no_auth_cp, exception_on_timeout=True)
         log.info("Server Versions: %s" % self.server_versions)
 
+    def _validate_args(self):
+        # we dont need argv[0] in this list...
+        self.args = self.args[1:]
+        # check for unparsed arguments
+        if self.args:
+            for arg in self.args:
+                print _("cannot parse argument: %s") % arg
+            system_exit(os.EX_USAGE)
+
     def main(self, args=None):
 
         # TODO: For now, we disable the CLI entirely. We may want to allow some commands in the future.
@@ -377,13 +386,7 @@ class CliCommand(AbstractCLICommand):
 
         (self.options, self.args) = self.parser.parse_args(args)
 
-        # we dont need argv[0] in this list...
-        self.args = self.args[1:]
-        # check for unparsed arguments
-        if self.args:
-            for arg in self.args:
-                print _("cannot parse argument: %s") % arg
-            system_exit(os.EX_USAGE)
+        self._validate_args()
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             cfg.set("server", "insecure", "1")

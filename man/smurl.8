@@ -1,0 +1,114 @@
+.TH smurl 8
+.SH NAME
+smurl \- Provides cli access to the RHSM REST API.
+
+.SH SYNOPSIS
+smurl command [options]
+
+.SH DESCRIPTION
+Provides a CLI to use the Red Hat subscription management REST APIS. It supports using the active
+configuration used by subscription-manager. It supports unauthenticated, user/pass authentication, and
+consumer identity certificate based authentication to the API. 
+
+.PP
+
+.SH COMMANDS
+.TP
+.B api
+Makes a call the Red Hat subscription management REST API and prints the results to stdout.
+
+
+.SH THE API COMMAND
+Makes a call the Red Hat subscription management REST API and prints the results to stdout.
+
+.SS OPTIONS
+.TP
+.B --proxy=PROXY
+Uses an HTTP proxy. The
+.I PROXY
+name has the format
+.I hostname:port.
+
+.TP
+.B --proxyuser=PROXYUSERNAME
+Gives the username to use to authenticate to the HTTP proxy.
+
+.TP
+.B --proxypass=PROXYPASSWORD
+Gives the password to use to authenticate to the HTTP proxy.
+
+.TP
+.B --username=USERNAME
+Gives the username for the account for using with username/password basic authentication to the API.
+
+.TP
+.B --password=PASSWORD
+Gives the user account password.
+
+.TP
+.B --org=ORG
+Specify the organization to use when authenticating to the API.
+
+.TP
+.B -X REQUEST_TYPE
+Type of http request: GET, POST, DELETE, etc. The default is GET if 
+.B -X
+is not specified. Analogous to curl's -X option.
+
+.TP
+.B
+-d DATA
+Data to send, @filename, or @- for stdin. Analogous to curl's -d option.
+
+.TP
+.B
+--method=API_METHOD
+The path to the REST resource. This is appended to the default rhsm server hostname, port, and prefix from /etc/rhsm/rhsm.conf. The default if not specified is '/'. The method can include method aliases, see METHOD ALIASES.
+
+.SS EXAMPLES
+.PP
+Query the REST api for it's /status method. The default will be to use the configured server, prefix, and
+to use the consumer identity certificate for authentication (/etc/pki/identity/).
+.RS
+.nf
+[root@server ~]# smurl api --method /status
+{
+    "managerCapabilities": [
+        "cores",
+        "ram",
+        "instance_multiplier",
+        "derived_product",
+        "cert_v3",
+        "guest_limit",
+        "vcpu"
+    ],
+    "release": "1",
+    "result": true,
+    "rulesSource": "DEFAULT",
+    "rulesVersion": "5.13",
+    "standalone": true,
+    "timeUTC": "2015-02-04T16:48:50.579+0000",
+    "version": "0.9.39"
+}
+
+.fi
+.RE
+
+.PP
+Query the API for the current 'release' of the consumer. Note the use of the {c} alias
+to refer to the systems consumer uuid.
+.RS
+.nf
+[root@server ~]# sudo smurl api --method /consumers/{c}/release
+{
+    "releaseVer": '7Server'
+}
+.fi
+.RE
+
+
+.SH BUGS
+This tool is part of Red Hat Subscription Manager. To file bugs against this command-line tool, go to <https://bugzilla.redhat.com>, and select Red Hat > Red Hat Enterprise Linux > subscription-manager.
+
+.SH COPYRIGHT
+Copyright (c) 2015 Red Hat, Inc. This is licensed under the GNU General Public License, version 2 (GPLv2). A copy of this license is available at http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
