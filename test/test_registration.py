@@ -61,12 +61,11 @@ class CliRegistrationTests(SubManFixture):
 
         self.assertTrue(mock_ipm_wc.call_count > 0)
 
-    @patch('subscription_manager.managercli.RepoLib')
     @patch('subscription_manager.managercli.CertLib')
     @patch('subscription_manager.managercli.InstalledProductsManager.write_cache')
     @patch('subscription_manager.certlib.ConsumerIdentity.exists')
     def test_activation_keys_updates_certs_and_repos(self, mock_exists, mock_ipm_wc,
-                                                     mock_certlib, mock_repolib):
+                                                     mock_certlib):
         connection.UEPConnection = StubUEP
 
         cmd = RegisterCommand()
@@ -78,21 +77,18 @@ class CliRegistrationTests(SubManFixture):
         cmd.facts.write_cache = Mock()
 
         mock_certlib_instance = mock_certlib.return_value
-        mock_repolib_instance = mock_repolib.return_value
 
         cmd.main(['register', '--activationkey=test_key', '--org=test_org'])
 
         self.assertTrue(mock_ipm_wc.call_count > 0)
 
         self.assertTrue(mock_certlib_instance.update.called)
-        self.assertTrue(mock_repolib_instance.update.called)
 
-    @patch('subscription_manager.managercli.RepoLib')
     @patch('subscription_manager.managercli.CertLib')
     @patch('subscription_manager.managercli.InstalledProductsManager.write_cache')
     @patch('subscription_manager.certlib.ConsumerIdentity.exists')
     def test_consumerid_updates_certs_and_repos(self, mock_exists, mock_ipm_wc,
-                                                     mock_certlib, mock_repolib):
+                                                     mock_certlib):
 
         def getConsumer(self, *args, **kwargs):
             pass
@@ -110,7 +106,6 @@ class CliRegistrationTests(SubManFixture):
         cmd.facts.update_check = Mock()
 
         mock_certlib_instance = mock_certlib.return_value
-        mock_repolib_instance = mock_repolib.return_value
 
         connection.UEPConnection.getConsumer = Mock(return_value={'uuid': '123123'})
 
@@ -119,4 +114,3 @@ class CliRegistrationTests(SubManFixture):
         self.assertTrue(mock_ipm_wc.call_count > 0)
 
         self.assertTrue(mock_certlib_instance.update.called)
-        self.assertTrue(mock_repolib_instance.update.called)
