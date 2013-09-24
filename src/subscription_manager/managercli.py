@@ -22,6 +22,7 @@ import getpass
 import gettext
 import logging
 import os
+import simplejson as json
 import socket
 import sys
 from time import localtime, strftime, strptime
@@ -2259,6 +2260,118 @@ class StatusCommand(CliCommand):
             print ''
 
 
+class ApiCommand(OrgCommand):
+    def __init__(self):
+        shortdesc = _("interface to rhsm API")
+
+        self.uuid = inj.require(inj.IDENTITY).uuid
+
+        super(ApiCommand, self).__init__("api", shortdesc, False)
+        self.parser.add_option("--auth", dest="auth_type", default="consumer",
+                               help=(_("auth type to use: consumer, user, none")))
+        self.parser.add_option("-X", dest="request_type", default="GET",
+                               help=(_("Type of http request: GET, POST, etc")))
+        self.parser.add_option("-d", dest="data",
+                               help=(_("Data to send, @filename, or @- for stdin")))
+        self.parser.add_option("--method", dest="api_method",
+                               help=(_("URL to request")))
+
+        # we could move RegisterCommand._determine_owner to OrgCommand and
+        # we use it here to find the default org
+        self.aliases = {'{c}': 'uuid',
+                        '{consumer_uuid}': 'uuid',
+                        #'{o}': self.owner,
+                        '{u}': 'username',
+                        '{username}': 'username',
+                        '{owner_key}': 'username',
+                        '{org}': 'org'}
+
+    def expand_aliases(self, method_string):
+        # ie, {consumer_uuid} for consumer uuid
+        # {owner_key}
+        # FIXME: plenty of other ways to do more powerful formatting
+        log.debug("api method string: %s" % method_string)
+        full_method = method_string
+        for alias, attr in self.aliases.items():
+            if alias in full_method:
+                attr_value = getattr(self, attr)
+                log.debug("attr: %s %s" % (attr, attr_value))
+                if attr_value is None:
+                    raise Exception("value of expansion of %s in %s was None" % (attr, full_method))
+                full_method = full_method.replace(alias, getattr(self, attr))
+
+        log.debug("api method expanded strings: %s" % full_method)
+        return full_method
+
+    def _get_cp(self):
+        #if not self.options.consumer_api or not self.options.no_auth_api or not self.options.basic_auth_api:
+        #    return self.cp_provider.get_consumer_auth_cp()
+        #print self.options.consumer_api, self.options.basic_auth_api
+        if self.options.auth_type == 'consumer':
+            return self.cp_provider.get_consumer_auth_cp()
+        if self.options.auth_type == 'user':
+            self.cp_provider.set_user_pass(self.username, self.password)
+            return self.cp_provider.get_basic_auth_cp()
+        if self.options.auth_type == "none":
+            return self.cp_provider.get_no_auth_cp()
+
+        print "Unknown auth type: %s" % self.options.auth_type
+        self._exit()
+
+    def _exit(self):
+        sys.exit(1)
+
+    def _request(self, cp, request_type, method, info=None):
+        return cp.conn._request(request_type, method, info)
+
+    def _do_request(self, cp, request_type, method, info=None):
+        try:
+            result = self._request(cp, request_type, method, info)
+        except connection.RestlibException, e:
+            self._show_error(e)
+            return
+
+        self._show_result(result)
+
+    def _show_error(self, exc):
+        sys.stderr.write("%s\n" % exc)
+
+    def _show_result(self, result):
+        print json.dumps(result, indent=4, sort_keys=True)
+
+    def _read_data(self, data_label):
+        json_str = None
+        if data_label is None:
+            return None
+        # ala curl -d @-
+        elif data_label == '@-':
+            json_str = sys.stdin.read()
+        # ala curl -d @some_file
+        elif data_label.startswith("@"):
+            with open(data_label[1:], "r") as data_file:
+                json_str = data_file.read()
+
+        if json_str:
+            return json.loads(json_str)
+
+        return None
+
+    def _do_command(self):
+        log.debug("request_type: %s" % self.options.request_type)
+        log.debug("data: %s" % self.options.data)
+        log.debug("api_method: %s" % self.options.api_method)
+        log.debug("auth type: %s" % self.options.auth_type)
+        #print self.options.consumer_api
+        request_type = self.options.request_type.upper()
+        cp = self._get_cp()
+        log.debug("connection: %s" % cp)
+
+        self._do_request(self._get_cp(),
+                         request_type,
+                         self.expand_aliases(self.options.api_method),
+                         info=self._read_data(self.options.data))
+
+
 class ManagerCLI(CLI):
 
     def __init__(self):
@@ -2268,7 +2381,7 @@ class ManagerCLI(CLI):
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
                     VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
-                    AutohealCommand]
+                    AutohealCommand, ApiCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):
