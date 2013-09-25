@@ -108,6 +108,9 @@
                       <widget class="GtkTreeView" id="subs_treeview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <accessibility>
+                            <atkproperty name="AtkObject::accessible-name" translatable="yes">Selected Subscriptions Table</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="expand">True</property>
