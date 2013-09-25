@@ -383,6 +383,8 @@ class ConfirmSubscriptionsScreen(Screen):
 
         self.store = gtk.ListStore(str, bool, str)
         self.subs_treeview.set_model(self.store)
+        self.subs_treeview.get_selection().set_mode(gtk.SELECTION_NONE)
+
         self.add_text_column(_("Subscription"), 0, True)
 
         column = widgets.MachineTypeColumn(1)
