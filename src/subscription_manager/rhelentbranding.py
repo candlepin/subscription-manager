@@ -45,8 +45,8 @@ class RHELBrandInstaller(entbranding.BrandInstaller):
 
 
 class RHELBrandPicker(entbranding.BrandPicker):
-    def __init__(self, ent_certs):
-        super(RHELBrandPicker, self).__init__(ent_certs)
+    def __init__(self, ent_certs=None):
+        super(RHELBrandPicker, self).__init__(ent_certs=ent_certs)
 
         prod_dir = inj.require(inj.PROD_DIR)
         self.installed_products = prod_dir.get_installed_products()
@@ -83,8 +83,6 @@ class RHELBrandPicker(entbranding.BrandPicker):
             # uniq on product id and product name
             branded_name_set.add(product.name)
 
-        log.debug("branded_name_set: %s" % branded_name_set)
-
         if len(branded_name_set) == 1:
             # all the ent certs provide the same branding info,
             # so return the first one
@@ -101,7 +99,7 @@ class RHELBrandPicker(entbranding.BrandPicker):
 
     def _get_branded_cert_products(self):
         branded_cert_products = []
-        for cert in self.ent_certs:
+        for cert in self._get_ent_certs():
             products = cert.products or []
             installed_branded_products = self._get_installed_branded_products(products)
 
@@ -117,13 +115,21 @@ class RHELBrandPicker(entbranding.BrandPicker):
                              (cert, installed_branded_product))
                 continue
             else:
-                log.debug("installed_branded_products %s" % installed_branded_products)
                 installed_branded_product = installed_branded_products[0]
+                log.debug("Installed branded product: %s" % installed_branded_product)
                 branded_cert_products.append((cert, installed_branded_product))
 
         log.debug("%s entitlement certs with brand info found" % len(branded_cert_products))
 
         return branded_cert_products
+
+    def _get_ent_certs(self):
+        """Returns contents of injected ENT_DIR, or self.ent_dir if set"""
+        if self.ent_certs:
+            return self.ent_certs
+        ent_dir = inj.require(inj.ENT_DIR)
+        ent_dir.refresh()
+        return ent_dir.list_valid()
 
     def _get_installed_branded_products(self, products):
         branded_products = []

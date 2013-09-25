@@ -23,7 +23,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 
 class BrandsInstaller(object):
-    def __init__(self, ent_certs):
+    def __init__(self, ent_certs=None):
         self.ent_certs = ent_certs
 
         # find brand installers
@@ -41,10 +41,10 @@ class BrandsInstaller(object):
 class BrandInstaller(object):
     """Install branding info for a set of entititlement certs."""
 
-    def __init__(self, ent_certs):
+    def __init__(self, ent_certs=None):
         self.ent_certs = ent_certs
 
-        log.debug("BrandInstaller ent_certs:  %s" % [x.serial for x in ent_certs])
+        log.debug("BrandInstaller ent_certs:  %s" % [x.serial for x in ent_certs or []])
 
     def install(self):
         """Create a Brand object if needed, and save it."""
@@ -82,7 +82,7 @@ class BrandPicker(object):
     Check installed product certs, and the list of entitlement certs
     passed in, and find the correct branded name, if any."""
 
-    def __init__(self, ent_certs):
+    def __init__(self, ent_certs=None):
         self.ent_certs = ent_certs
 
     def get_brand(self):
