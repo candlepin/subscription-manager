@@ -111,7 +111,7 @@ class ImportSubDialog(object):
                     error_certs.append(cert_file)
 
         if imported_certs:
-            brands_installer = rhelentbranding.RHELBrandsInstaller(imported_certs)
+            brands_installer = rhelentbranding.RHELBrandsInstaller()
             brands_installer.install()
 
         if len(error_certs) > 0 \
