@@ -242,21 +242,21 @@ class UpdateAction(Action):
         self.delete(rogue_serials, report)
         exceptions = self.install(missing_serials, report)
 
-        if rogue_serials or missing_serials:
-            try:
-                from subscription_manager.repolib import RepoLib
-                rl = RepoLib(lock=lock, uep=self.uep)
-                rl.update()
-            except Exception, e:
-                log.debug(e)
-                log.debug("Failed to update repos")
+        log.info('certs updated:\n%s', report)
+        self.syslog_results(report)
 
         if missing_serials or rogue_serials:
+            # refresh yum repo's now
+            self.repo_hook(lock=lock)
+
+            # NOTE: Since we have the yum repos defined here now
+            #       we could update product id certs here, or install
+            #       them if they are needed, but missing. That way the
+            #       branding installs could be more accurate.
+
             # reload certs and update branding
             self.branding_hook()
 
-        log.info('certs updated:\n%s', report)
-        self.syslog_results(report)
         # WARNING: TODO: XXX: this is returning a tuple, the parent class and
         # all other sub-classes return an int, which somewhat defeats
         # the purpose...
@@ -351,7 +351,26 @@ class UpdateAction(Action):
                 result.append(cert)
         return result
 
+    def repo_hook(self, lock):
+        """Update yum repos
+
+        Args:
+            lock: an ActionLock, in this case certlib.UpdateAction lock, since repo_kook
+                  is called when UpdateAction has already acquired a lock.
+        """
+        try:
+            # repolib/RepoLib imports certlib, so import late until
+            #  we factor out our circular deps
+            from subscription_manager.repolib import RepoLib
+            rl = RepoLib(lock=lock, uep=self.uep)
+            rl.update()
+        except Exception, e:
+            log.debug(e)
+            log.debug("Failed to update repos")
+
     def branding_hook(self):
+        """Update branding info based on entitlement cert changes"""
+
         # RHELBrandsInstaller will use latest ent_dir contents
         brands_installer = rhelentbranding.RHELBrandsInstaller()
         brands_installer.install()
