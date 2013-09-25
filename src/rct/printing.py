@@ -57,7 +57,10 @@ class OrderPrinter(object):
         s.append("\t%s: %s" % (_("Account"), xstr(order.account)))
         s.append("\t%s: %s" % (_("Service Level"), xstr(order.service_level)))
         s.append("\t%s: %s" % (_("Service Type"), xstr(order.service_type)))
-        s.append("\t%s: %s" % (_("Quantity"), xstr(order.quantity)))
+        quantity = xstr(order.quantity)
+        if quantity == '-1':
+            quantity = _('Unlimited')
+        s.append("\t%s: %s" % (_("Quantity"), quantity))
         s.append("\t%s: %s" % (_("Quantity Used"), xstr(order.quantity_used)))
         s.append("\t%s: %s" % (_("Socket Limit"), xstr(order.socket_limit)))
         s.append("\t%s: %s" % (_("RAM Limit"), xstr(order.ram_limit)))
