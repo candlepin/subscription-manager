@@ -317,6 +317,7 @@ def get_available_entitlements(cpserver, consumer_uuid, facts, get_all=False, ac
 
     for pool in dlist:
         pool_wrapper = PoolWrapper(pool)
+        pool['providedProducts'] = pool_wrapper.get_provided_products()
         if allows_multi_entitlement(pool):
             pool['multi-entitlement'] = "Yes"
         else:

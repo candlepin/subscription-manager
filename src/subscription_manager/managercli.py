@@ -86,6 +86,7 @@ INSTALLED_PRODUCT_STATUS = [
 
 AVAILABLE_SUBS_LIST = [
     _("Subscription Name:"),
+    _("Provides:"),
     _("SKU:"),
     _("Pool ID:"),
     _("Available:"),
@@ -2068,6 +2069,7 @@ class ListCommand(CliCommand):
                     machine_type = _("Physical")
                 print columnize(AVAILABLE_SUBS_LIST, _none_wrap,
                         data['productName'],
+                        data['providedProducts'],
                         data['productId'],
                         data['id'],
                         data['quantity'],
