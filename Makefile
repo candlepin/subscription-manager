@@ -240,7 +240,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 		$(PREFIX)/etc/xdg/autostart;\
 	install bin/rhsm-icon $(PREFIX)/usr/bin;\
 
-	install -m 755 etc-conf/rhsmd.cron \
+	install -m 700 etc-conf/rhsmd.cron \
 		$(PREFIX)/etc/cron.daily/rhsmd
 	install -m 644 etc-conf/subscription-manager-gui.desktop \
 		$(PREFIX)/$(INSTALL_DIR)/applications
