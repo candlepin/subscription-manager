@@ -81,3 +81,7 @@ class PoolWrapper(object):
             if name == attr_name and value:
                 return value
         return None
+
+    def get_provided_products(self):
+        products = self.data.get('providedProducts', [])
+        return [prod.get('productName') for prod in products]
