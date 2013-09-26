@@ -293,8 +293,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         is_registered = self.identity.is_valid()
         self.set_registered(is_registered)
 
-        warn_count = len(self.backend.cs.expired_products) + \
-                len(self.backend.cs.unentitled_products)
+        warn_count = len(self.backend.cs.unentitled_products)
 
         if self.backend.cs.system_status == 'valid':
             self._set_status_icons(VALID_STATUS)
