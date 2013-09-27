@@ -161,6 +161,14 @@ class MigrationEngine(object):
                 "level use --servicelevel=\"\""))
         self.parser.add_option("--serverurl", dest='serverurl',
             help=_("specify the subscription management server to migrate to"))
+        self.parser.add_option("--redhat-user", dest="redhatuser",
+            help=_("specify the Red Hat user name"))
+        self.parser.add_option("--redhat-password", dest="redhatpassword",
+            help=_("specify the Red Hat password"))
+        self.parser.add_option("--subscription-service-user", dest="subserviceuser",
+            help=_("specify the subscription service user name"))
+        self.parser.add_option("--subscription-service-password", dest="subservicepassword",
+            help=_("specify the subscription service password"))
         # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
         self.parser.add_option("--no-proxy", action="store_true", dest='noproxy',
             help=_("don't use RHN proxy settings with subscription management server"))
@@ -173,9 +181,13 @@ class MigrationEngine(object):
         if self.options.servicelevel and self.options.noauto:
             system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))
 
-    def authenticate(self, prompt):
-        username = raw_input(prompt).strip()
-        password = getpass.getpass()
+    def authenticate(self, username, password, user_prompt, pw_prompt):
+        if not username:
+            username = raw_input(user_prompt).strip()
+
+        if not password:
+            password = getpass.getpass(prompt=pw_prompt)
+
         return UserCredentials(username, password)
 
     def is_hosted(self):
@@ -186,15 +198,14 @@ class MigrationEngine(object):
             return False
 
     def get_auth(self):
-        if self.options.serverurl:
-            self.rhncreds = self.authenticate(_("Red Hat account: "))
-            self.secreds = self.authenticate(_("System Engine Username: "))
+        self.rhncreds = self.authenticate(self.options.redhatuser, self.options.redhatpassword,
+                _("Red Hat username: "), _("Red Hat password: "))
+
+        if not self.is_hosted() or self.options.serverurl:
+            self.secreds = self.authenticate(self.options.subserviceuser, self.options.subservicepassword,
+                    _("Subscription Service username: "), _("Subscription Service password: "))
         else:
-            self.rhncreds = self.authenticate(_("Red Hat account: "))
-            if not self.is_hosted():
-                self.secreds = self.authenticate(_("System Engine Username: "))
-            else:
-                self.secreds = self.rhncreds  # make them the same
+            self.secreds = self.rhncreds   # make them the same
 
     def transfer_http_proxy_settings(self):
         if self.rhncfg['enableProxy']:
