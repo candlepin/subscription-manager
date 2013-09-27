@@ -21,6 +21,7 @@ import StringIO
 import unittest
 
 import stubs
+from fixture import capture
 
 import rhsm.config
 from subscription_manager.migrate import migrate
@@ -666,6 +667,52 @@ class TestMigration(unittest.TestCase):
             ]
         data_dict = self.engine.read_channel_cert_mapping(None)
         self.assertEquals(data_dict, {"xyz": "abc"})
+
+    def test_handle_collisions(self):
+        cmap = {
+                '1': {'cert-a-1.pem': ['chan1', 'chan2'], 'cert-b-1.pem': ['chan3']},
+                '2': {'cert-x-2.pem': ['chan4', 'chan5']},
+                '3': {'cert-m-3.pem': ['chanA'], 'cert-n-3.pem': ['chanB'], 'cert-o-3.pem': ['chanC']}
+        }
+
+        with capture() as out:
+            try:
+                self.engine.handle_collisions(cmap)
+            except SystemExit, e:
+                self.assertEquals(e.code, 1)
+            else:
+                self.fail("No exception raised")
+            output = out.getvalue().strip()
+            self.assertTrue(re.search("chan1\s*chan2\s*chan3", output))
+            self.assertFalse(re.search("chan4", output))
+            self.assertTrue(re.search("chanA\s*chanB", output))
+
+    def test_accept_channels_mapping_to_same_cert(self):
+        cmap = {'1': {'cert-a-1.pem': ['channel1', 'channel2']},
+                '2': {'cert-x-2.pem': ['channel3']}
+        }
+        try:
+            self.engine.handle_collisions(cmap)
+        except SystemExit:
+            self.fail("Exception raised unexpectedly")
+
+    def test_detects_collisions(self):
+        def stub_read_channel_cert_mapping(mappingfile):
+            return {"a": "a-1.pem", "b": "b-1.pem"}
+
+        def stub_get_release():
+            return "RHEL-6"
+
+        subscribed_channels = ["a", "b"]
+        self.engine.read_channel_cert_mapping = stub_read_channel_cert_mapping
+        self.engine.get_release = stub_get_release
+
+        try:
+            self.engine.deploy_prod_certificates(subscribed_channels)
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
 
     def test_require_force(self):
         def stub_read_channel_cert_mapping(mappingfile):

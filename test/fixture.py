@@ -2,6 +2,7 @@ import difflib
 import pprint
 import unittest
 
+from contextlib import contextmanager
 from mock import Mock, NonCallableMock, patch
 
 import stubs
@@ -106,3 +107,16 @@ class SubManFixture(unittest.TestCase):
 
         if mismatches or missing_keys or extra:
             self.fail(message)
+
+
+@contextmanager
+def capture():
+    import sys
+    import StringIO
+    old_out = sys.stdout
+    try:
+        out = StringIO.StringIO()
+        sys.stdout = out
+        yield out
+    finally:
+        sys.stdout = old_out
