@@ -409,20 +409,21 @@ class MigrationEngine(object):
     def handle_collisions(self, applicable_certs):
         # if we have the same product IDs mapping to multiple certificates, we must abort.
         collisions = dict((prod_id, mappings) for prod_id, mappings in applicable_certs.items() if len(mappings) > 1)
-        if collisions:
-            log.error("Aborting. Detected the following product ID collisions: %s", collisions)
-            self.print_banner(_("Unable to continue migration!"))
-            print _("You are subscribed to channels that have conflicting product certificates.")
-            for prod_id, mappings in collisions.items():
-                colliding_channels = [chan for cert, chan in mappings.items()]
-                # Flatten the list of lists
-                colliding_channels = [item for sublist in colliding_channels for item in sublist]
-                print _("The following channels map to product ID %s:") % prod_id
-                for c in sorted(colliding_channels):
-                    print "\t%s" % c
-            print _("Reduce the number of channels per product ID to 1 and run migration again.")
-            print _("To remove a channel, use 'rhn-channel --remove --channel=<conflicting_channel>'.")
-            sys.exit(1)
+        if not collisions:
+            return
+
+        log.error("Aborting. Detected the following product ID collisions: %s", collisions)
+        self.print_banner(_("Unable to continue migration!"))
+        print _("You are subscribed to channels that have conflicting product certificates.")
+        for prod_id, mappings in collisions.items():
+            # Flatten the list of lists
+            colliding_channels = [item for sublist in mappings.values() for item in sublist]
+            print _("The following channels map to product ID %s:") % prod_id
+            for c in sorted(colliding_channels):
+                print "\t%s" % c
+        print _("Reduce the number of channels per product ID to 1 and run migration again.")
+        print _("To remove a channel, use 'rhn-channel --remove --channel=<conflicting_channel>'.")
+        sys.exit(1)
 
     def deploy_prod_certificates(self, subscribed_channels):
         release = self.get_release()

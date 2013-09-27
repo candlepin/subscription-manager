@@ -21,7 +21,7 @@ import StringIO
 import unittest
 
 import stubs
-from test import capture
+from fixture import capture
 
 import rhsm.config
 from subscription_manager.migrate import migrate
