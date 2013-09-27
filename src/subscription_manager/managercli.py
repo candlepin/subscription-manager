@@ -2067,10 +2067,11 @@ class ListCommand(CliCommand):
                     print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
                     sys.exit(1)
 
-            epools = managerlib.get_available_entitlements(
-                    self.facts, self.options.all, on_date,
-                    overlapping=self.options.no_overlap,
-                    uninstalled=self.options.match_installed)
+            epools = managerlib.get_available_entitlements(facts=self.facts,
+                                                           get_all=self.options.all,
+                                                           active_on=on_date,
+                                                           overlapping=self.options.no_overlap,
+                                                           uninstalled=self.options.match_installed)
 
             # Filter certs by service level, if specified.
             # Allowing "" here.
