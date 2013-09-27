@@ -2056,7 +2056,7 @@ class ListCommand(CliCommand):
                                 status, product[5], product[6], product[7]) + "\n"
 
         if self.options.available:
-            consumer = check_registration()['uuid']
+            check_registration()
             on_date = None
             if self.options.on_date:
                 try:
@@ -2067,7 +2067,7 @@ class ListCommand(CliCommand):
                     print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
                     sys.exit(1)
 
-            epools = managerlib.get_available_entitlements(self.cp, consumer,
+            epools = managerlib.get_available_entitlements(
                     self.facts, self.options.all, on_date,
                     overlapping=self.options.no_overlap,
                     uninstalled=self.options.match_installed)
@@ -2406,6 +2406,7 @@ def to_unicode_or_bust(obj, encoding='utf-8'):
 
 
 def check_registration():
+    # TODO: replace consumer_info and ConsumerIdentity usage with Identity
     if not ConsumerIdentity.existsAndValid():
         print(NOT_REGISTERED)
         sys.exit(-1)
