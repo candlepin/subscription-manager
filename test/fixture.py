@@ -51,6 +51,11 @@ class SubManFixture(unittest.TestCase):
     def tearDown(self):
         self.dbus_patcher.stop()
 
+    def get_consumer_cp(self):
+        cp_provider = inj.require(inj.CP_PROVIDER)
+        consumer_cp = cp_provider.get_consumer_auth_cp()
+        return consumer_cp
+
     # use our naming convention here to make it clear
     # this is our extension. Note that python 2.7 adds a
     # assertMultilineEquals that assertEqual of strings does

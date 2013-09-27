@@ -54,8 +54,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.identity = require(IDENTITY)
         self.facts = facts
 
-        self.pool_stash = managerlib.PoolStash(self.backend,
-                                               self.facts)
+        self.pool_stash = managerlib.PoolStash(self.facts)
         self.plugin_manager = require(PLUGIN_MANAGER)
 
         today = datetime.date.today()
