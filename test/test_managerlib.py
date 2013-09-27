@@ -30,8 +30,8 @@ from subscription_manager.injection import provide, CERT_SORTER, PROD_DIR
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
-from rhsm.certificate import create_from_pem, DateRange
-from mock import Mock
+from rhsm.certificate import create_from_pem, DateRange, GMT
+from mock import Mock, patch
 
 cfg = rhsm.config.initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
@@ -1122,3 +1122,97 @@ class TestValidQuantity(unittest.TestCase):
 
     def test_string_quantity_not_valid(self):
         self.assertFalse(valid_quantity("12dfg2"))
+
+
+class StubPool(object):
+    def __init__(self, id=None):
+        self.id = id
+
+
+class TestGetAvailableEntitlements(SubManFixture):
+    def setUp(self):
+        super(TestGetAvailableEntitlements, self).setUp()
+        #self.facts_patcher = patch("subscription_manager.managerlib
+
+    def test_no_pools(self):
+        # get the injected stub uep
+        cp = self.get_consumer_cp()
+        consumer_uuid = "1234"
+
+        def getPoolsList(consumer=None, listAll=False, active_on=None, owner=None):
+            return []
+        cp.getPoolsList = Mock(side_effect=getPoolsList)
+        res = managerlib.get_available_entitlements(facts={})
+        print res
+
+    def test_subscribed(self):
+        cp = self.get_consumer_cp()
+        consumer_uuid = "1234"
+
+        def getPoolsList(consumer=None, listAll=False, active_on=None, owner=None):
+            return [{'id': '123123',
+                     # note things fail if any of these are not set, or
+                     # incorrect types
+                     'quantity': 5,
+                     'consumed': 1,
+                     'endDate': datetime.now(GMT()).isoformat(),
+                     'productAttributes': [{'name': 'foo',
+                                           'value': 'blip'}]
+                     }
+                    ]
+        cp.getPoolsList = Mock(side_effect=getPoolsList)
+
+        def getEntitlementList(consumer_uuid):
+            return []
+        cp.getEntitlementList = Mock(side_effect=getEntitlementList)
+
+        res = managerlib.get_available_entitlements(facts={}, subscribed=True)
+        print res
+
+    def test_incompatible(self):
+        cp = self.get_consumer_cp()
+        consumer_uuid = "1234"
+
+        def getPoolsList(consumer=None, listAll=False, active_on=None, owner=None):
+            return [{'id': '123123',
+                     # note things fail if any of these are not set, or
+                     # incorrect types
+                     'quantity': 5,
+                     'consumed': 1,
+                     'endDate': datetime.now(GMT()).isoformat(),
+                     'productAttributes': [{'name': 'foo',
+                                           'value': 'blip'}]
+                     }
+                    ]
+        cp.getPoolsList = Mock(side_effect=getPoolsList)
+
+        def getEntitlementList(consumer_uuid):
+            return []
+        cp.getEntitlementList = Mock(side_effect=getEntitlementList)
+
+        res = managerlib.get_available_entitlements(facts={}, get_all=True)
+        print res
+
+    def test_incompatible_and_subscribed(self):
+        cp = self.get_consumer_cp()
+        consumer_uuid = "1234"
+
+        def getPoolsList(consumer=None, listAll=False, active_on=None, owner=None):
+            return [{'id': '123123',
+                     # note things fail if any of these are not set, or
+                     # incorrect types
+                     'quantity': 5,
+                     'consumed': 1,
+                     'endDate': datetime.now(GMT()).isoformat(),
+                     'productAttributes': [{'name': 'foo',
+                                           'value': 'blip'}]
+                     }
+                    ]
+        cp.getPoolsList = Mock(side_effect=getPoolsList)
+
+        def getEntitlementList(consumer_uuid):
+            return []
+        cp.getEntitlementList = Mock(side_effect=getEntitlementList)
+
+        res = managerlib.get_available_entitlements(facts={}, get_all=True, subscribed=True)
+        print res

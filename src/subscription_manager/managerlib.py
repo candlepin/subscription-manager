@@ -319,6 +319,8 @@ def get_available_entitlements(facts, get_all=False, active_on=None,
     dlist = pool_stash.get_filtered_pools_list(active_on, not get_all,
            overlapping, uninstalled, subscribed, text)
 
+    import pprint
+    pprint.pprint(dlist)
     for pool in dlist:
         pool_wrapper = PoolWrapper(pool)
         pool['providedProducts'] = pool_wrapper.get_provided_products()
@@ -335,6 +337,7 @@ def get_available_entitlements(facts, get_all=False, active_on=None,
         if pool['suggested'] is None:
             pool['suggested'] = ""
 
+    # no default, so default is None if key not found
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         if int(d['quantity']) < 0:
@@ -505,6 +508,7 @@ class PoolStash(object):
         Used for CLI --available filtering
         cuts down on api calls
         """
+        import pprint
         self.all_pools = {}
         self.compatible_pools = {}
         if active_on and overlapping:
@@ -514,6 +518,9 @@ class PoolStash(object):
         if incompatible or subscribed:
             for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
                     self.identity.uuid, self.facts, active_on=active_on):
+        #        print "pool:"
+                #pprint.pprint(pool)
+         #       print "pool[pool['id']] ", pool[pool['id']]
                 self.compatible_pools[pool['id']] = pool
                 if subscribed and pool['id'] not in self.compatible_pools:
                     self.incompatible_pools[pool['id']] = pool
@@ -772,6 +779,7 @@ class ImportFileExtractor(object):
 
 
 def _sub_dict(datadict, subkeys, default=None):
+    """Return a dict that is a subset of datadict matching only the keys in subkeys"""
     return dict([(k, datadict.get(k, default)) for k in subkeys])
 
 
