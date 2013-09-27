@@ -515,13 +515,13 @@ class PoolStash(object):
             for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
                     self.identity.uuid, self.facts, active_on=active_on):
                 self.compatible_pools[pool['id']] = pool
-                if subscribed and pool[pool['id']] not in self.compatible_pools:
+                if subscribed and pool['id'] not in self.compatible_pools:
                     self.incompatible_pools[pool['id']] = pool
         if not incompatible or subscribed:
             for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
                     self.identity.uuid, self.facts, list_all=True, active_on=active_on):
                 self.all_pools[pool['id']] = pool
-                if subscribed and pool[pool['id']] not in self.compatible_pools:
+                if subscribed and pool['id'] not in self.compatible_pools:
                     self.incompatible_pools[pool['id']] = pool
 
         if subscribed:
