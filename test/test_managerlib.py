@@ -26,7 +26,8 @@ from subscription_manager.managerlib import merge_pools, PoolFilter, \
         get_installed_product_status, LocalTz, \
         MergedPoolsStackingGroupSorter, MergedPools, \
         PoolStash, allows_multi_entitlement, valid_quantity
-from subscription_manager.injection import provide, CERT_SORTER, PROD_DIR
+from subscription_manager.injection import provide, \
+        CERT_SORTER, PROD_DIR
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
@@ -1130,89 +1131,65 @@ class StubPool(object):
 
 
 class TestGetAvailableEntitlements(SubManFixture):
-    def setUp(self):
+
+    @patch('subscription_manager.cache.CacheManager.write_cache')
+    def setUp(self, write_cache_mock):
         super(TestGetAvailableEntitlements, self).setUp()
-        #self.facts_patcher = patch("subscription_manager.managerlib
 
     def test_no_pools(self):
         # get the injected stub uep
         cp = self.get_consumer_cp()
-        consumer_uuid = "1234"
-
-        def getPoolsList(consumer=None, listAll=False, active_on=None, owner=None):
-            return []
-        cp.getPoolsList = Mock(side_effect=getPoolsList)
+        cp.getPoolsList = Mock(return_value=[])
         res = managerlib.get_available_entitlements(facts={})
-        print res
-
-    def test_subscribed(self):
-        cp = self.get_consumer_cp()
-        consumer_uuid = "1234"
-
-        def getPoolsList(consumer=None, listAll=False, active_on=None, owner=None):
-            return [{'id': '123123',
-                     # note things fail if any of these are not set, or
-                     # incorrect types
-                     'quantity': 5,
-                     'consumed': 1,
-                     'endDate': datetime.now(GMT()).isoformat(),
-                     'productAttributes': [{'name': 'foo',
-                                           'value': 'blip'}]
-                     }
-                    ]
-        cp.getPoolsList = Mock(side_effect=getPoolsList)
-
-        def getEntitlementList(consumer_uuid):
-            return []
-        cp.getEntitlementList = Mock(side_effect=getEntitlementList)
-
-        res = managerlib.get_available_entitlements(facts={}, subscribed=True)
-        print res
+        self.assertEquals(0, len(res))
 
     def test_incompatible(self):
         cp = self.get_consumer_cp()
-        consumer_uuid = "1234"
 
         def getPoolsList(consumer=None, listAll=False, active_on=None, owner=None):
-            return [{'id': '123123',
-                     # note things fail if any of these are not set, or
-                     # incorrect types
-                     'quantity': 5,
-                     'consumed': 1,
-                     'endDate': datetime.now(GMT()).isoformat(),
-                     'productAttributes': [{'name': 'foo',
-                                           'value': 'blip'}]
-                     }
-                    ]
-        cp.getPoolsList = Mock(side_effect=getPoolsList)
+            if listAll:
+                return [self.buildPoolDict('1234'), self.buildPoolDict('4321')]
+            else:
+                return [self.buildPoolDict('1234')]
 
-        def getEntitlementList(consumer_uuid):
-            return []
-        cp.getEntitlementList = Mock(side_effect=getEntitlementList)
+        cp.getPoolsList = Mock(side_effect=getPoolsList)
 
         res = managerlib.get_available_entitlements(facts={}, get_all=True)
-        print res
+        self.assertEquals(2, len(res))
 
-    def test_incompatible_and_subscribed(self):
+        res = managerlib.get_available_entitlements(facts={}, get_all=False)
+        self.assertEquals(1, len(res))
+
+    def test_installed(self):
         cp = self.get_consumer_cp()
-        consumer_uuid = "1234"
 
         def getPoolsList(consumer=None, listAll=False, active_on=None, owner=None):
-            return [{'id': '123123',
-                     # note things fail if any of these are not set, or
-                     # incorrect types
-                     'quantity': 5,
-                     'consumed': 1,
-                     'endDate': datetime.now(GMT()).isoformat(),
-                     'productAttributes': [{'name': 'foo',
-                                           'value': 'blip'}]
-                     }
-                    ]
+            if listAll:
+                return [self.buildPoolDict('1234', ['some_product']), self.buildPoolDict('4321'),
+                        self.buildPoolDict('12321', ['some_product'])]
+            else:
+                return [self.buildPoolDict('1234', ['some_product'])]
+
         cp.getPoolsList = Mock(side_effect=getPoolsList)
 
-        def getEntitlementList(consumer_uuid):
-            return []
-        cp.getEntitlementList = Mock(side_effect=getEntitlementList)
+        product_directory = StubProductDirectory(pids=['some_product'])
+        provide(PROD_DIR, product_directory)
 
-        res = managerlib.get_available_entitlements(facts={}, get_all=True, subscribed=True)
-        print res
+        res = managerlib.get_available_entitlements(facts={}, get_all=True, uninstalled=True)
+        self.assertEquals(2, len(res))
+
+        res = managerlib.get_available_entitlements(facts={}, uninstalled=True)
+        self.assertEquals(1, len(res))
+
+    def buildPoolDict(self, poolId, provided_products=[]):
+        return {'id': str(poolId),
+            # note things fail if any of these are not set, or
+            # incorrect types
+            'quantity': 5,
+            'consumed': 1,
+            'productId': '',
+            'endDate': datetime.now(GMT()).isoformat(),
+            'providedProducts': [{'productId': prodId} for prodId in provided_products],
+            'productAttributes': [{'name': 'foo',
+                'value': 'blip'}]
+            }

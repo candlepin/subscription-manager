@@ -301,7 +301,7 @@ def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
 # dict which does not contain all the pool info. Not sure if this is really
 # necessary. Also some "view" specific things going on in here.
 def get_available_entitlements(facts, get_all=False, active_on=None,
-        overlapping=False, uninstalled=False, subscribed=False, text=None):
+        overlapping=False, uninstalled=False, text=None):
     """
     Returns a list of entitlement pools from the server.
 
@@ -317,7 +317,7 @@ def get_available_entitlements(facts, get_all=False, active_on=None,
 
     pool_stash = PoolStash(Facts(require(ENT_DIR), require(PROD_DIR)))
     dlist = pool_stash.get_filtered_pools_list(active_on, not get_all,
-           overlapping, uninstalled, subscribed, text)
+           overlapping, uninstalled, text)
 
     import pprint
     pprint.pprint(dlist)
@@ -503,38 +503,28 @@ class PoolStash(object):
         log.debug("   %s already subscribed" % len(self.subscribed_pool_ids))
 
     def get_filtered_pools_list(self, active_on, incompatible,
-            overlapping, uninstalled, subscribed, text):
+            overlapping, uninstalled, text):
         """
         Used for CLI --available filtering
         cuts down on api calls
         """
-        import pprint
         self.all_pools = {}
         self.compatible_pools = {}
         if active_on and overlapping:
             self.sorter = ComplianceManager(active_on)
         elif not active_on and overlapping:
             self.sorter = require(CERT_SORTER)
-        if incompatible or subscribed:
+
+        if incompatible:
             for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
                     self.identity.uuid, self.facts, active_on=active_on):
-        #        print "pool:"
-                #pprint.pprint(pool)
-         #       print "pool[pool['id']] ", pool[pool['id']]
                 self.compatible_pools[pool['id']] = pool
-                if subscribed and pool['id'] not in self.compatible_pools:
-                    self.incompatible_pools[pool['id']] = pool
-        if not incompatible or subscribed:
+        else:  # --all has been used
             for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
                     self.identity.uuid, self.facts, list_all=True, active_on=active_on):
                 self.all_pools[pool['id']] = pool
-                if subscribed and pool['id'] not in self.compatible_pools:
-                    self.incompatible_pools[pool['id']] = pool
 
-        if subscribed:
-            self.subscribed_pool_ids = self._get_subscribed_pool_ids()
-
-        return self._filter_pools(incompatible, overlapping, uninstalled, subscribed, text)
+        return self._filter_pools(incompatible, overlapping, uninstalled, False, text)
 
     def _get_subscribed_pool_ids(self):
         cp = require(CP_PROVIDER).get_consumer_auth_cp()

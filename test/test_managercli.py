@@ -295,19 +295,20 @@ class TestListCommand(TestCliProxyCommand):
             StubProduct("test-product"), service_level="Premium")
         TestCliProxyCommand.setUp(self)
 
+    @mock.patch('subscription_manager.managerlib.get_available_entitlements')
     @mock.patch.object(managercli.ConsumerIdentity, 'existsAndValid')
     @mock.patch.object(managercli.ConsumerIdentity, 'exists')
     @mock.patch('subscription_manager.managercli.check_registration')
-    def test_none_wrap_available_pool_id(self, mcli, mc_exists, mc_exists_and_valid):
+    def test_none_wrap_available_pool_id(self, mcli, mc_exists, mc_exists_and_valid,
+            mget_ents):
         listCommand = managercli.ListCommand()
 
         def create_pool_list(*args, **kwargs):
             return [{'productName': 'dummy-name', 'productId': 'dummy-id',
                      'id': '888888888888', 'attributes': [{'name': 'is_virt_only', 'value': 'false'}],
                      'quantity': '4', 'service_level': '', 'service_type': '',
-                     'multi-entitlement': 'false', 'endDate': '', 'suggested': '2',
-                     'providedProducts': []}]
-        managerlib.get_available_entitlements = create_pool_list
+                     'multi-entitlement': 'false', 'endDate': '', 'suggested': '2'}]
+        mget_ents.return_value = create_pool_list()
 
         mc_exists_and_valid.return_value = True
         mc_exists.return_value = True
