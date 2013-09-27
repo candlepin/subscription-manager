@@ -381,7 +381,7 @@ class StubUEP:
     def getOwnerList(self, username):
         return [{'key': 'dummyowner'}]
 
-    def getOwner(self):
+    def getOwner(self, consumer_uuid):
         return {'key': 'dummyowner'}
 
     def updatePackageProfile(self, uuid, pkg_dicts):
@@ -396,7 +396,8 @@ class StubUEP:
     def getServiceLevelList(self, owner):
         return ['Pro', 'Super Pro', 'ProSumer']
 
-    def updateConsumer(self, consumer, installed_products=None, service_level=None, release=None, autoheal=None):
+    def updateConsumer(self, consumer, facts=None, installed_products=None,
+                       guest_uuids=None, service_level=None, release=None, autoheal=None):
         return consumer
 
     def setEnvironmentList(self, env_list):

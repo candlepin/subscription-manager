@@ -26,12 +26,13 @@ from subscription_manager.managerlib import merge_pools, PoolFilter, \
         get_installed_product_status, LocalTz, \
         MergedPoolsStackingGroupSorter, MergedPools, \
         PoolStash, allows_multi_entitlement, valid_quantity
-from subscription_manager.injection import provide, CERT_SORTER, PROD_DIR
+from subscription_manager.injection import provide, \
+        CERT_SORTER, PROD_DIR
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
-from rhsm.certificate import create_from_pem, DateRange
-from mock import Mock
+from rhsm.certificate import create_from_pem, DateRange, GMT
+from mock import Mock, patch
 
 cfg = rhsm.config.initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
@@ -1065,7 +1066,7 @@ class MergedPoolsTests(unittest.TestCase):
 class PoolStashTest(unittest.TestCase):
 
     def test_empty_stash_zero_length(self):
-        my_stash = PoolStash(None, None)
+        my_stash = PoolStash(None)
         self.assertTrue(my_stash.all_pools_size() == 0)
 
 
@@ -1122,3 +1123,71 @@ class TestValidQuantity(unittest.TestCase):
 
     def test_string_quantity_not_valid(self):
         self.assertFalse(valid_quantity("12dfg2"))
+
+
+class TestGetAvailableEntitlements(SubManFixture):
+
+    @patch('subscription_manager.cache.CacheManager.write_cache')
+    def setUp(self, write_cache_mock):
+        super(TestGetAvailableEntitlements, self).setUp()
+
+    def test_no_pools(self):
+        # get the injected stub uep
+        cp = self.get_consumer_cp()
+        cp.getPoolsList = Mock(return_value=[])
+        res = managerlib.get_available_entitlements(facts={})
+        self.assertEquals(0, len(res))
+
+    def test_incompatible(self):
+        cp = self.get_consumer_cp()
+
+        # patch the mock for getPoolsList
+        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None):
+            if listAll:
+                return [self.build_pool_dict('1234'),
+                        self.build_pool_dict('4321')]
+            else:
+                return [self.build_pool_dict('1234')]
+
+        cp.getPoolsList = Mock(side_effect=get_pools_list)
+
+        res = managerlib.get_available_entitlements(facts={}, get_all=True)
+        self.assertEquals(2, len(res))
+
+        res = managerlib.get_available_entitlements(facts={}, get_all=False)
+        self.assertEquals(1, len(res))
+
+    def test_installed(self):
+        cp = self.get_consumer_cp()
+
+        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None):
+            if listAll:
+                return [self.build_pool_dict('1234', ['some_product']),
+                        self.build_pool_dict('4321'),
+                        self.build_pool_dict('12321', ['some_product'])]
+            else:
+                return [self.build_pool_dict('1234', ['some_product'])]
+
+        cp.getPoolsList = Mock(side_effect=get_pools_list)
+
+        product_directory = StubProductDirectory(pids=['some_product'])
+        provide(PROD_DIR, product_directory)
+
+        res = managerlib.get_available_entitlements(facts={}, get_all=True, uninstalled=True)
+        self.assertEquals(2, len(res))
+
+        res = managerlib.get_available_entitlements(facts={}, uninstalled=True)
+        self.assertEquals(1, len(res))
+
+    def build_pool_dict(self, pool_id, provided_products=[]):
+        return {'id': str(pool_id),
+            # note things fail if any of these are not set, or
+            # incorrect types
+            'quantity': 5,
+            'consumed': 1,
+            'productId': '',
+            'endDate': datetime.now(GMT()).isoformat(),
+            'providedProducts': [{'productId': prod_id} for prod_id in provided_products],
+            'productAttributes': [{'name': 'foo',
+                'value': 'blip'}]
+            }

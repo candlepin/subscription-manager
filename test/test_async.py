@@ -67,8 +67,7 @@ class TestAsyncPool(unittest.TestCase):
         facts_mock.update_check.return_value = None
 
         self.pool_stash = \
-            managerlib.PoolStash(backend=stubs.StubBackend(uep=ListPoolsStubUEP()),
-                                                           facts=facts_mock)
+            managerlib.PoolStash(facts=facts_mock)
 
         self.ap = async.AsyncPool(self.pool_stash)
 
