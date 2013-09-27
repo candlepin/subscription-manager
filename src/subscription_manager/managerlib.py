@@ -319,8 +319,6 @@ def get_available_entitlements(facts, get_all=False, active_on=None,
     dlist = pool_stash.get_filtered_pools_list(active_on, not get_all,
            overlapping, uninstalled, text)
 
-    import pprint
-    pprint.pprint(dlist)
     for pool in dlist:
         pool_wrapper = PoolWrapper(pool)
         pool['providedProducts'] = pool_wrapper.get_provided_products()

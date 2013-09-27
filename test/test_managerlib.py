@@ -1125,11 +1125,6 @@ class TestValidQuantity(unittest.TestCase):
         self.assertFalse(valid_quantity("12dfg2"))
 
 
-class StubPool(object):
-    def __init__(self, id=None):
-        self.id = id
-
-
 class TestGetAvailableEntitlements(SubManFixture):
 
     @patch('subscription_manager.cache.CacheManager.write_cache')
@@ -1146,13 +1141,15 @@ class TestGetAvailableEntitlements(SubManFixture):
     def test_incompatible(self):
         cp = self.get_consumer_cp()
 
-        def getPoolsList(consumer=None, listAll=False, active_on=None, owner=None):
+        # patch the mock for getPoolsList
+        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None):
             if listAll:
-                return [self.buildPoolDict('1234'), self.buildPoolDict('4321')]
+                return [self.build_pool_dict('1234'),
+                        self.build_pool_dict('4321')]
             else:
-                return [self.buildPoolDict('1234')]
+                return [self.build_pool_dict('1234')]
 
-        cp.getPoolsList = Mock(side_effect=getPoolsList)
+        cp.getPoolsList = Mock(side_effect=get_pools_list)
 
         res = managerlib.get_available_entitlements(facts={}, get_all=True)
         self.assertEquals(2, len(res))
@@ -1163,14 +1160,15 @@ class TestGetAvailableEntitlements(SubManFixture):
     def test_installed(self):
         cp = self.get_consumer_cp()
 
-        def getPoolsList(consumer=None, listAll=False, active_on=None, owner=None):
+        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None):
             if listAll:
-                return [self.buildPoolDict('1234', ['some_product']), self.buildPoolDict('4321'),
-                        self.buildPoolDict('12321', ['some_product'])]
+                return [self.build_pool_dict('1234', ['some_product']),
+                        self.build_pool_dict('4321'),
+                        self.build_pool_dict('12321', ['some_product'])]
             else:
-                return [self.buildPoolDict('1234', ['some_product'])]
+                return [self.build_pool_dict('1234', ['some_product'])]
 
-        cp.getPoolsList = Mock(side_effect=getPoolsList)
+        cp.getPoolsList = Mock(side_effect=get_pools_list)
 
         product_directory = StubProductDirectory(pids=['some_product'])
         provide(PROD_DIR, product_directory)
@@ -1181,15 +1179,15 @@ class TestGetAvailableEntitlements(SubManFixture):
         res = managerlib.get_available_entitlements(facts={}, uninstalled=True)
         self.assertEquals(1, len(res))
 
-    def buildPoolDict(self, poolId, provided_products=[]):
-        return {'id': str(poolId),
+    def build_pool_dict(self, pool_id, provided_products=[]):
+        return {'id': str(pool_id),
             # note things fail if any of these are not set, or
             # incorrect types
             'quantity': 5,
             'consumed': 1,
             'productId': '',
             'endDate': datetime.now(GMT()).isoformat(),
-            'providedProducts': [{'productId': prodId} for prodId in provided_products],
+            'providedProducts': [{'productId': prod_id} for prod_id in provided_products],
             'productAttributes': [{'name': 'foo',
                 'value': 'blip'}]
             }
