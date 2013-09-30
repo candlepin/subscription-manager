@@ -188,19 +188,17 @@ class EntCertUpdateAction(object):
             local[sn] = valid
         return local
 
-    def _get_consumer_id(self):
-        try:
-            return self.identity.getConsumerId()
-        except Exception, e:
-            log.error(e)
-            raise Disconnected()
-
     def get_certificate_serials_list(self):
         results = []
         # if there is no UEP object, short circuit
         if self.uep is None:
             return results
-        reply = self.uep.getCertificateSerials(self._get_consumer_id())
+
+        identity = inj.require(inj.IDENTITY)
+        if not identity.is_valid():
+            raise Disconnected()
+
+        reply = self.uep.getCertificateSerials(identity.uuid)
         for d in reply:
             sn = d['serial']
             results.append(sn)

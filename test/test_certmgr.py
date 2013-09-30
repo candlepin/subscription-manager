@@ -66,8 +66,8 @@ class CertManagerTestBase(SubManFixture):
     def setUp(self):
         SubManFixture.setUp(self)
         # we have to have a reference to the patchers
-        self.patcher2 = mock.patch.object(entcertlib.EntCertUpdateAction, '_get_consumer_id')
-        self.entcertlib_updateaction_getconsumerid = self.patcher2.start()
+        #self.patcher2 = mock.patch.object(entcertlib.EntCertUpdateAction, '_get_consumer_id')
+        #self.entcertlib_updateaction_getconsumerid = self.patcher2.start()
 
         self.patcher3 = mock.patch.object(repolib.RepoUpdateAction, 'perform')
         self.repolib_updateaction_perform = self.patcher3.start()
@@ -116,7 +116,9 @@ class CertManagerTestBase(SubManFixture):
         stub_release = {'releaseVer': '6.4'}
         self.mock_uep.getRelease = mock.Mock(return_value=stub_release)
 
-        self.entcertlib_updateaction_getconsumerid.return_value = "234234"
+        # we need to mock the consumers uuid with the mocked GoneExceptions
+        # uuid
+        self._inject_mock_valid_consumer(uuid="234234")
 
         self.repolib_updateaction_perform.return_value = 0
         self.facts_getlastupdate.return_value = None
@@ -131,7 +133,6 @@ class CertManagerTestBase(SubManFixture):
         injection.provide(injection.CERT_SORTER, self.mock_cert_sorter)
 
     def tearDown(self):
-        self.patcher2.stop()
         self.patcher3.stop()
         self.patcher6.stop()
         self.patcher8.stop()

@@ -111,25 +111,25 @@ class SubManFixture(unittest.TestCase):
         return consumer_cp
 
     # For changing injection consumer id to one that fails "is_valid"
-    def _inject_mock_valid_consumer(self):
+    def _inject_mock_valid_consumer(self, uuid=None):
         """For changing injected consumer identity to one that passes is_valid()
 
         Returns the injected identity if it need to be examined.
         """
         identity = NonCallableMock(name='ValidIdentityMock')
-        identity.uuid = "VALIDCONSUMERUUID"
+        identity.uuid = uuid or "VALIDCONSUMERUUID"
         identity.is_valid = Mock(return_value=True)
         inj.provide(inj.IDENTITY, identity)
         return identity
 
-    def _inject_mock_invalid_consumer(self):
+    def _inject_mock_invalid_consumer(self, uuid=None):
         """For chaning injected consumer identity to one that fails is_valid()
 
         Returns the injected identity if it need to be examined.
         """
         invalid_identity = NonCallableMock(name='InvalidIdentityMock')
         invalid_identity.is_valid = Mock(return_value=False)
-        invalid_identity.uuid = "INVALIDCONSUMERUUID"
+        invalid_identity.uuid = uuid or "INVALIDCONSUMERUUID"
         inj.provide(inj.IDENTITY, invalid_identity)
         return invalid_identity
 

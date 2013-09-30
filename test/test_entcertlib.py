@@ -23,16 +23,13 @@ from fixture import SubManFixture
 
 from subscription_manager.certdirectory import Writer
 from subscription_manager import entcertlib
+from subscription_manager import injection as inj
 
 
 class TestingUpdateAction(entcertlib.EntCertUpdateAction):
 
-    def __init__(self, mock_uep, mock_entdir):
-        entcertlib.EntCertUpdateAction.__init__(self, uep=mock_uep,
-                                      entdir=mock_entdir)
-
-    def _get_consumer_id(self):
-        return StubConsumerIdentity("ConsumerKey", "ConsumerCert")
+    def __init__(self, mock_uep):
+        entcertlib.EntCertUpdateAction.__init__(self, uep=mock_uep)
 
 
 class UpdateActionTests(SubManFixture):
@@ -59,8 +56,9 @@ class UpdateActionTests(SubManFixture):
         mock_uep.getCertificateSerials.return_value = [x.serial for x in cp_certificates]
         mock_uep.getCertificates.return_value = cp_bundles  # Passed into build_cert(bundle)
 
-        update_action = TestingUpdateAction(mock_uep,
-                                            StubEntitlementDirectory([]))
+        stub_ent_dir = StubEntitlementDirectory([])
+        inj.provide(inj.ENT_DIR, stub_ent_dir)
+        update_action = TestingUpdateAction(mock_uep)
         # we skip getting the expected serials, where this is normally
         # populated
         update_action.report.expected.append(valid_ent.serial)
@@ -68,9 +66,7 @@ class UpdateActionTests(SubManFixture):
 
         update_action.install([valid_ent.serial, expired_ent.serial])
         update_report = update_action.report
-        print "exceptions", update_report.exceptions()
-        print update_report
-        print type(update_report)
+
         self.assertEqual(0, len(update_report.exceptions()), "No exceptions should have been thrown")
         self.assertTrue(valid_ent in update_report.added)
         self.assertTrue(valid_ent.serial in update_report.expected)
@@ -82,8 +78,11 @@ class UpdateActionTests(SubManFixture):
         mock_uep = Mock()
         mock_uep.getCertificates = Mock(return_value=[])
         mock_uep.getCertificateSerials = Mock(return_value=[])
-        update_action = TestingUpdateAction(mock_uep,
-                                            StubEntitlementDirectory([ent]))
+
+        stub_ent_dir = StubEntitlementDirectory([ent])
+        inj.provide(inj.ENT_DIR, stub_ent_dir)
+        update_action = TestingUpdateAction(mock_uep)
+
         try:
             update_report = update_action.perform()
         except OSError:
