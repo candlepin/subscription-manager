@@ -6,7 +6,7 @@
 
 # options common to all subcommands (+ 3rd level opts for simplicity)
 _subscription_manager_common_opts="-h --help --proxy --proxyuser --proxypassword"
-_subscription_manager_common_url_opts="--serverurl"
+_subscription_manager_common_url_opts="--insecure --serverurl"
 # complete functions for subcommands ($1 - current opt, $2 - previous opt)
 
 _subscription_manager_auto_attach()
@@ -70,7 +70,7 @@ _subscription_manager_config()
 
 _subscription_manager_environments()
 {
-  local opts="--org --password --password
+  local opts="--org --password --username
               ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
@@ -109,7 +109,8 @@ _subscription_manager_list()
 
 _subscription_manager_orgs()
 {
-  local opts="--password --username --insecure --serverurl
+  local opts="--password --username
+              ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -138,7 +139,7 @@ _subscription_manager_refresh()
 _subscription_manager_register()
 {
   local opts="--activationkey --auto-attach --autosubscribe --baseurl --consumerid
-              --environment --force --insecure --name --org --password --release
+              --environment --force --name --org --password --release
               --servicelevel --type --username
               ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
@@ -163,7 +164,7 @@ _subscription_manager_repos()
 
 _subscription_manager_service_level()
 {
-    local opts="--insecure --list --org --set --show
+    local opts="--list --org --set --show
                 --unset --username --password
                 ${_subscription_manager_common_url_opts}
                 ${_subscription_manager_common_opts}"
