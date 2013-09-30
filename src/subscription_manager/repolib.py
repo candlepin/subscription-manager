@@ -91,6 +91,18 @@ class RepoLib(DataLib):
             os.unlink(repo_file.path)
 
 
+class RepoActionReport(ActionReport):
+    name = "Repo Updates"
+
+    def __init__(self):
+        super(RepoActionReport, self).__init__(self)
+        self.repos_updates = []
+
+    def updates(self):
+        """How many repos were updated"""
+        return len(self.fact_updates)
+
+
 # WARNING: exact same name as another action in factlib and certlib.
 # TODO: This is the third disjoint "Action" class hierarchy, this one inherits nothing
 # but exposes similar methods, all of which are already abstracted behind the
@@ -172,7 +184,6 @@ class RepoUpdateAction:
 
         repo_file.read()
         valid = set()
-        updates = 0
 
         # Iterate content from entitlement certs, and create/delete each section
         # in the RepoFile as appropriate:
@@ -181,26 +192,27 @@ class RepoUpdateAction:
             existing = repo_file.section(cont.id)
             if existing is None:
                 repo_file.add(cont)
-                updates += 1
+				self.report_update(cont)
             else:
                 # In the non-disconnected case, destroy the old repo and replace it with
                 # what's in the entitlement cert plus any overrides.
                 if self.identity.is_valid() and self.override_supported:
                     repo_file.update(cont)
-                    updates += 1
                 else:
-                    updates += self.update_repo(existing, cont)
+                    self.update_repo(existing, cont)
                     repo_file.update(existing)
+		        # TODO: add repoting for overrides
+				self.report_update(cont)
 
         for section in repo_file.sections():
             if section not in valid:
-                updates += 1
+                self.report_update(section)
                 repo_file.delete(section)
 
         # Write new RepoFile to disk:
         repo_file.write()
-        log.info("repos updated: %s" % updates)
-        return updates
+        log.info("repos updated: %s" % self.report)
+        return self.report
 
     def get_unique_content(self):
         unique = set()
@@ -382,6 +394,8 @@ class RepoUpdateAction:
                 changes_made += 1
 
         return changes_made
+    def report_update(self, update):
+        self.report.repo_updates.append(self)
 
 
 class Repo(dict):
