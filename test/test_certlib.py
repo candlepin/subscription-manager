@@ -12,83 +12,71 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import threading
 
-from mock import Mock, patch
-from datetime import timedelta, datetime
+from mock import patch
 
-from stubs import StubEntitlementCertificate, StubProduct, StubEntitlementDirectory, \
-            StubConsumerIdentity
-
-from fixture import SubManFixture
-
-from subscription_manager.certdirectory import Writer
-from subscription_manager import entcertlib
+import fixture
 
 
-class TestingUpdateAction(entcertlib.EntCertUpdateAction):
-
-    def __init__(self, mock_uep, mock_entdir):
-        entcertlib.EntCertUpdateAction.__init__(self, uep=mock_uep,
-                                      entdir=mock_entdir)
-
-    def _get_consumer_id(self):
-        return StubConsumerIdentity("ConsumerKey", "ConsumerCert")
+from subscription_manager import certlib
+#from subscription_manager import injection as inj
 
 
-class UpdateActionTests(SubManFixture):
+class TestLocker(fixture.SubManFixture):
+    def test(self):
+        l = certlib.Locker()
+        # we inject threading.RLock as the lock implementation in
+        # the fixture init. RLock() is actually a factory method
+        # that returns a _RLock
+        self.assertTrue(isinstance(l.lock, threading._RLock))
 
-    @patch("subscription_manager.entcertlib.EntitlementCertBundleInstaller.build_cert")
-    @patch.object(Writer, "write")
-    def test_expired_are_not_ignored_when_installing_certs(self, write_mock, build_cert_mock):
-        valid_ent = StubEntitlementCertificate(StubProduct("PValid"))
-        expired_ent = StubEntitlementCertificate(StubProduct("PExpired"),
-                start_date=datetime.now() - timedelta(days=365),
-                end_date=datetime.now() - timedelta(days=10))
+    def test_run(self):
+        def return_four():
+            return 4
 
-        cp_certificates = [valid_ent, expired_ent]
-        # get certificates actually returns cert bundles
-        cp_bundles = [{'key': Mock(), 'cert': x} for x in cp_certificates]
+        l = certlib.Locker()
+        res = l.run(return_four)
+        self.assertEquals(4, res)
 
-        # so we dont try to build actual x509 objects from stub certs
-        def mock_build_cert(bundle):
-            return (bundle['key'], bundle['cert'])
 
-        build_cert_mock.side_effect = mock_build_cert
+class TestDataLib(fixture.SubManFixture):
+    def test(self):
+        dl = certlib.DataLib()
+        self.assertTrue(dl.uep is None)
+        self.assertTrue(dl.report is None)
+        # we use the fixture inject RLock as the default lock
+        self.assertTrue(isinstance(dl.locker, certlib.Locker))
 
-        mock_uep = Mock()
-        mock_uep.getCertificateSerials.return_value = [x.serial for x in cp_certificates]
-        mock_uep.getCertificates.return_value = cp_bundles  # Passed into build_cert(bundle)
+    def test_update(self):
+        dl = certlib.DataLib()
+        report = dl.update()
+        # default returns None instead of a report
+        self.assertTrue(report is None)
 
-        update_action = TestingUpdateAction(mock_uep,
-                                            StubEntitlementDirectory([]))
-        # we skip getting the expected serials, where this is normally
-        # populated
-        update_action.report.expected.append(valid_ent.serial)
-        update_action.report.expected.append(expired_ent.serial)
+    @patch("subscription_manager.certlib.Locker", spec=certlib.Locker)
+    def test_update_locker(self, mocker_locker):
+        dl = certlib.DataLib()
+        dl.update()
+        mocker_locker_instance = mocker_locker.return_value
+        self.assertTrue(mocker_locker_instance.run.called)
 
-        update_action.install([valid_ent.serial, expired_ent.serial])
-        update_report = update_action.report
-        print "exceptions", update_report.exceptions()
-        print update_report
-        print type(update_report)
-        self.assertEqual(0, len(update_report.exceptions()), "No exceptions should have been thrown")
-        self.assertTrue(valid_ent in update_report.added)
-        self.assertTrue(valid_ent.serial in update_report.expected)
-        self.assertTrue(expired_ent.serial in update_report.expected)
 
-    def test_delete(self):
-        ent = StubEntitlementCertificate(StubProduct("Prod"))
-        ent.delete = Mock(side_effect=OSError("Cert has already been deleted"))
-        mock_uep = Mock()
-        mock_uep.getCertificates = Mock(return_value=[])
-        mock_uep.getCertificateSerials = Mock(return_value=[])
-        update_action = TestingUpdateAction(mock_uep,
-                                            StubEntitlementDirectory([ent]))
-        try:
-            update_report = update_action.perform()
-        except OSError:
-            self.fail("operation failed when certificate wasn't deleted")
-        self.assertEquals(0, update_report.updates())
+class TestActionReport(fixture.SubManFixture):
+    def test(self):
+        ar = certlib.ActionReport()
+        self.assertEquals(None, ar._status)
+        self.assertEquals([], ar._exceptions)
+        self.assertEquals([], ar._updates)
+        self.assertEquals("Report", ar.name)
 
-        exceptions = update_action.report.exceptions()
-        self.assertEquals([], exceptions)
+    def test_format_exceptions(self):
+        ar = certlib.ActionReport()
+        exc_list = [Exception("foo"),
+                    IOError("blip")]
+
+        for exc in exc_list:
+            ar._exceptions.append(exc)
+
+        for exc in exc_list:
+            self.assertTrue(exc in ar._exceptions)
