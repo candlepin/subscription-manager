@@ -35,7 +35,7 @@ from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertLib, Disconnected
-from subscription_manager.certmgr import CertManager
+from subscription_manager.certmgr import CertManager, UnregisterCertManager
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
@@ -1183,8 +1183,8 @@ class UnRegisterCommand(CliCommand):
         try:
             # there is no consumer cert at this point, a uep object
             # is not useful
-            certmgr = CertManager(uep=None)
-            certmgr.update()
+            cleanup_certmgr = UnregisterCertManager(uep=None)
+            cleanup_certmgr.update()
         except Exception, e:
             pass
 
@@ -1267,7 +1267,7 @@ class ReleaseCommand(CliCommand):
 
     def _get_consumer_release(self):
         err_msg = _("Error: The 'release' command is not supported by the server.")
-        consumer = self.cp.getConsumer(self.self.identity.uuid)
+        consumer = self.cp.getConsumer(self.identity.uuid)
         if 'releaseVer' not in consumer:
             system_exit(-1, err_msg)
         return consumer['releaseVer']['releaseVer']

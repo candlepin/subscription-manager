@@ -119,7 +119,6 @@ class CertManager(BaseCertManager):
         self.factlib = FactLib(uep=self.uep)
         self.profilelib = PackageProfileLib(uep=self.uep)
         self.installedprodlib = InstalledProductsLib(uep=self.uep)
-        self.healinglib = HealingLib(self.uep)
         self.idcertlib = IdentityCertLib(uep=self.uep)
 
         # WARNING: order is important here, we need to update a number
@@ -145,4 +144,23 @@ class HealingCertManager(BaseCertManager):
         # healinglib (as we did before)
         lib_set = [self.entcertlib, self.installedprodlib, self.healinglib, self.entcertlib]
 
+        return lib_set
+
+
+# it may make more sence to have *Lib.cleanup actions?
+# *Lib things are weird, since some are idempotent, but
+# some arent. entcertlib/repolib .update can both install
+# certs, and/or delete all of them.
+class UnregisterCertManager(BaseCertManager):
+    """CertManager for cleaning up on unregister.
+
+    This class should not need a consumer id, or a uep connection, since it
+    is running post unregister.
+    """
+    def _get_libset(self):
+
+        self.entcertlib = EntCertLib(uep=self.uep)
+        self.repolib = RepoLib(uep=self.uep)
+
+        lib_set = [self.entcertlib, self.repolib]
         return lib_set
