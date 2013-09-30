@@ -41,6 +41,7 @@ class ConsumerIdentity:
 
     @classmethod
     def read(cls):
+        # TODO: replace with with
         f = open(cls.keypath())
         key = f.read()
         f.close()
@@ -137,6 +138,7 @@ class Identity(object):
         # XXX shouldn't catch the global exception here, but that's what
         # existsAndValid did, so this is better.
         except Exception, e:
+            # FIXME: can probably remove this exception logging
             log.exception(e)
             log.info("Error reading consumer identity cert")
             self.consumer = None
@@ -144,6 +146,7 @@ class Identity(object):
             self.uuid = None
 
     def _get_consumer_identity(self):
+        # FIXME: wrap in exceptions, catch IOErrors etc, raise anything else
         return ConsumerIdentity.read()
 
     # this name is weird, since Certificate.is_valid actually checks the data
