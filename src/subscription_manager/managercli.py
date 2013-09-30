@@ -784,15 +784,14 @@ class ServiceLevelCommand(OrgCommand):
                                action='store_true',
                                help=_("unset the service level for this system"))
 
-        self.consumer_identity = inj.require(inj.IDENTITY)
+        self.identity = inj.require(inj.IDENTITY)
 
     def _set_service_level(self, service_level):
-        consumer_uuid = self.consumer_identity.uuid
-        consumer = self.cp.getConsumer(consumer_uuid)
+        consumer = self.cp.getConsumer(self.identity.uuid)
         if 'serviceLevel' not in consumer:
             system_exit(-1, _("Error: The service-level command is not supported "
                              "by the server."))
-        self.cp.updateConsumer(consumer_uuid, service_level=service_level)
+        self.cp.updateConsumer(self.identity.uuid, service_level=service_level)
 
     def _validate_options(self):
 
@@ -865,7 +864,7 @@ class ServiceLevelCommand(OrgCommand):
         print _("Service level preference has been unset")
 
     def show_service_level(self):
-        consumer = self.cp.getConsumer(self.consumer_identity.uuid)
+        consumer = self.cp.getConsumer(self.identity.uuid)
         if 'serviceLevel' not in consumer:
             system_exit(-1, _("Error: The service-level command is not supported by "
                              "the server."))
@@ -882,7 +881,7 @@ class ServiceLevelCommand(OrgCommand):
         org_key = self.options.org
         if not org_key:
             if self.is_registered():
-                org_key = self.cp.getOwner(self.consumer_identity.uuid)['key']
+                org_key = self.cp.getOwner(self.identity.uuid)['key']
             else:
                 org_key = self.org
 
@@ -937,8 +936,6 @@ class RegisterCommand(UserPassCommand):
                                help=_("activation key to use for registration (can be specified more than once)"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("system preference used when subscribing automatically, requires --auto-attach"))
-
-        self.consumer_identity = inj.require(inj.IDENTITY)
 
         # FIXME: we shouldn't create facts in command __init__, it's gets ran
         # at managercli import time
@@ -1008,7 +1005,7 @@ class RegisterCommand(UserPassCommand):
             # First let's try to un-register previous consumer. This may fail
             # if consumer has already been deleted so we will continue even if
             # errors are encountered.
-            old_uuid = self.consumer_identity.uuid
+            old_uuid = self.identity.uuid
             try:
                 managerlib.unregister(self.cp, old_uuid)
                 self.entitlement_dir.__init__()
@@ -1069,7 +1066,7 @@ class RegisterCommand(UserPassCommand):
         self.cp = self.cp_provider.get_consumer_auth_cp()
 
         # Reload the consumer identity:
-        self.consumer_identity.reload()
+        self.identity.reload()
 
         # log the version of the server we registered to
         self.log_server_version()
@@ -1167,8 +1164,6 @@ class UnRegisterCommand(CliCommand):
         super(UnRegisterCommand, self).__init__("unregister", shortdesc,
                                                 True)
 
-        self.consumer_identity = inj.require(inj.IDENTITY)
-
     def _validate_options(self):
         pass
 
@@ -1178,8 +1173,7 @@ class UnRegisterCommand(CliCommand):
             sys.exit(1)
 
         try:
-            consumer = check_registration()['uuid']
-            managerlib.unregister(self.cp, consumer)
+            managerlib.unregister(self.cp, self.identity.uuid)
         except Exception, e:
             handle_exception("Unregister failed", e)
 
@@ -1225,7 +1219,8 @@ class RedeemCommand(CliCommand):
         """
         Executes the command.
         """
-        consumer_uuid = check_registration()['uuid']
+        self.assert_should_be_registered()
+
         self._validate_options()
 
         try:
@@ -1233,12 +1228,12 @@ class RedeemCommand(CliCommand):
             # update facts first, if we need to
             facts = Facts(ent_dir=self.entitlement_dir,
                           prod_dir=self.product_dir)
-            facts.update_check(self.cp, consumer_uuid)
+            facts.update_check(self.cp, self.identity.uuid)
 
             profile_mgr = inj.require(inj.PROFILE_MANAGER)
-            profile_mgr.update_check(self.cp, consumer_uuid)
+            profile_mgr.update_check(self.cp, self.identity.uuid)
 
-            self.cp.activateMachine(consumer_uuid, self.options.email, self.options.locale)
+            self.cp.activateMachine(self.identity.uuid, self.options.email, self.options.locale)
 
         except connection.RestlibException, e:
             #candlepin throws an exception during activateMachine, even for
@@ -1272,7 +1267,7 @@ class ReleaseCommand(CliCommand):
 
     def _get_consumer_release(self):
         err_msg = _("Error: The 'release' command is not supported by the server.")
-        consumer = self.cp.getConsumer(self.consumer['uuid'])
+        consumer = self.cp.getConsumer(self.self.identity.uuid)
         if 'releaseVer' not in consumer:
             system_exit(-1, err_msg)
         return consumer['releaseVer']['releaseVer']
@@ -1301,9 +1296,10 @@ class ReleaseCommand(CliCommand):
                                               content_connection=self.cc,
                                               uep=self.cp)
 
-        self.consumer = check_registration()
+        self.assert_should_be_registered()
+
         if self.options.unset:
-            self.cp.updateConsumer(self.consumer['uuid'],
+            self.cp.updateConsumer(self.identity.uuid,
                         release="")
             print _("Release preference has been unset")
         elif self.options.release is not None:
@@ -1311,7 +1307,7 @@ class ReleaseCommand(CliCommand):
             self._get_consumer_release()
             releases = self.release_backend.get_releases()
             if self.options.release in releases:
-                self.cp.updateConsumer(self.consumer['uuid'],
+                self.cp.updateConsumer(self.identity.uuid,
                         release=self.options.release)
             else:
                 system_exit(-1, _("No releases match '%s'.  "
@@ -1390,7 +1386,7 @@ class AttachCommand(CliCommand):
         """
         Executes the command.
         """
-        consumer_uuid = check_registration()['uuid']
+        self.assert_should_be_registered()
         self._validate_options()
         try:
             certmgr = CertManager(uep=self.cp)
@@ -1407,11 +1403,11 @@ class AttachCommand(CliCommand):
                         # If quantity is None, server will assume 1. pre_subscribe will
                         # report the same.
                         self.plugin_manager.run("pre_subscribe",
-                                                consumer_uuid=consumer_uuid,
+                                                consumer_uuid=self.identity.uuid,
                                                 pool_id=pool,
                                                 quantity=self.options.quantity)
-                        ents = self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
-                        self.plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid, entitlement_data=ents)
+                        ents = self.cp.bindByEntitlementPool(self.identity.uuid, pool, self.options.quantity)
+                        self.plugin_manager.run("post_subscribe", consumer_uuid=self.identity.uuid, entitlement_data=ents)
                         # Usually just one, but may as well be safe:
                         for ent in ents:
                             pool_json = ent['pool']
@@ -1448,12 +1444,12 @@ class AttachCommand(CliCommand):
                     # If service level specified, make an additional request to
                     # verify service levels are supported on the server:
                     if self.options.service_level:
-                        consumer = self.cp.getConsumer(consumer_uuid)
+                        consumer = self.cp.getConsumer(self.identity.uuid)
                         if 'serviceLevel' not in consumer:
                             system_exit(-1, _("Error: The --servicelevel option is not "
                                              "supported by the server. Did not "
                                              "complete your request."))
-                    autosubscribe(self.cp, consumer_uuid,
+                    autosubscribe(self.cp, self.identity.uuid,
                                   service_level=self.options.service_level)
             report = None
             if cert_update:
@@ -1641,6 +1637,8 @@ class FactsCommand(CliCommand):
 
     def _do_command(self):
         self._validate_options()
+
+        identity = inj.require(inj.IDENTITY)
         if self.options.list:
             facts = Facts(ent_dir=self.entitlement_dir,
                           prod_dir=self.product_dir)
@@ -1656,9 +1654,8 @@ class FactsCommand(CliCommand):
         if self.options.update:
             facts = Facts(ent_dir=self.entitlement_dir,
                           prod_dir=self.product_dir)
-            consumer = check_registration()['uuid']
             try:
-                facts.update_check(self.cp, consumer, force=True)
+                facts.update_check(self.cp, identity.uuid, force=True)
             except connection.RestlibException, re:
                 log.exception(re)
                 system_exit(-1, re.msg)
@@ -2076,8 +2073,9 @@ class ListCommand(CliCommand):
                     print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
                     sys.exit(1)
 
-            epools = managerlib.get_available_entitlements(self.cp, self.identity.uuid,
-                    self.facts, self.options.all, on_date)
+            epools = managerlib.get_available_entitlements(facts=self.facts,
+                                                           get_all=self.options.all,
+                                                           active_on=on_date)
 
             # Filter certs by service level, if specified.
             # Allowing "" here.
