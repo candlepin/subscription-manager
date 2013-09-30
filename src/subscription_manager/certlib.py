@@ -1,9 +1,6 @@
 
 import logging
 
-# ugh, why does everything monkey patch this
-# replace with identity injection
-from subscription_manager.identity import ConsumerIdentity
 from subscription_manager import injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)
