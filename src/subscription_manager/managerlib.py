@@ -125,8 +125,9 @@ class CertificateFetchError(Exception):
 def fetch_certificates(certlib):
     # Force fetch all certs
     result = certlib.update()
-    if result[1]:
-        raise CertificateFetchError(result[1])
+    exceptions = result.exceptions()
+    if exceptions:
+        raise CertificateFetchError(exceptions)
 
     return True
 
