@@ -1224,8 +1224,7 @@ class RedeemCommand(CliCommand):
         """
         Executes the command.
         """
-        if not self.is_registered():
-            return
+        self.assert_should_be_registered()
 
         self._validate_options()
 
@@ -1302,7 +1301,7 @@ class ReleaseCommand(CliCommand):
                                               content_connection=self.cc,
                                               uep=self.cp)
 
-        # check for registered?
+        self.assert_should_be_registered()
 
         if self.options.unset:
             self.cp.updateConsumer(self.consumer_identity.uuid,
@@ -1392,7 +1391,7 @@ class AttachCommand(CliCommand):
         """
         Executes the command.
         """
-        consumer_uuid = check_registration()['uuid']
+        self.assert_should_be_registered()
         self._validate_options()
         try:
             certmgr = CertManager(uep=self.cp)
@@ -1409,11 +1408,11 @@ class AttachCommand(CliCommand):
                         # If quantity is None, server will assume 1. pre_subscribe will
                         # report the same.
                         self.plugin_manager.run("pre_subscribe",
-                                                consumer_uuid=consumer_uuid,
+                                                consumer_uuid=self.consumer_identity.uuid,
                                                 pool_id=pool,
                                                 quantity=self.options.quantity)
-                        ents = self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
-                        self.plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid, entitlement_data=ents)
+                        ents = self.cp.bindByEntitlementPool(self.consumer_identity.uuid, pool, self.options.quantity)
+                        self.plugin_manager.run("post_subscribe", consumer_uuid=self.consumer_identity.uuid, entitlement_data=ents)
                         # Usually just one, but may as well be safe:
                         for ent in ents:
                             pool_json = ent['pool']
@@ -1450,12 +1449,12 @@ class AttachCommand(CliCommand):
                     # If service level specified, make an additional request to
                     # verify service levels are supported on the server:
                     if self.options.service_level:
-                        consumer = self.cp.getConsumer(consumer_uuid)
+                        consumer = self.cp.getConsumer(self.consumer_identity.uuid)
                         if 'serviceLevel' not in consumer:
                             system_exit(-1, _("Error: The --servicelevel option is not "
                                              "supported by the server. Did not "
                                              "complete your request."))
-                    autosubscribe(self.cp, consumer_uuid,
+                    autosubscribe(self.cp, self.consumer_identity.uuid,
                                   service_level=self.options.service_level)
             report = None
             if cert_update:

@@ -27,16 +27,12 @@ class CliUnRegistrationTests(SubManFixture):
     def test_unregister_removes_consumer_cert(self, clean_data_mock):
         connection.UEPConnection = StubUEP
 
+        mock_injected_identity = self._inject_mock_valid_consumer()
+
+        # When
         cmd = managercli.UnRegisterCommand()
 
-        ConsumerIdentity.existsAndValid = classmethod(lambda cls: True)
-        ConsumerIdentity.exists = classmethod(lambda cls: True)
-
-        def stub_consumer():
-            return {'consumer_name': 'stub_name', 'uuid': 'stub_uuid'}
-
-        managercli.check_registration = stub_consumer
+        CacheManager.delete_cache = classmethod(lambda cls: None)
 
         cmd.main(['unregister'])
-        self.assertEquals('stub_uuid', cmd.cp.called_unregister_uuid)
-        clean_data_mock.assert_called_with(backup=False)
+        self.assertEquals(mock_injected_identity.uuid, cmd.cp.called_unregister_uuid)
