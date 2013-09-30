@@ -15,6 +15,7 @@
 # in this software or its documentation.
 #
 
+import gettext
 from iniparse import ConfigParser
 import logging
 import os
@@ -39,6 +40,8 @@ log = logging.getLogger('rhsm-app.' + __name__)
 CFG = initConfig()
 
 ALLOWED_CONTENT_TYPES = ["yum"]
+
+_ = gettext.gettext
 
 
 class RepoLib(DataLib):
@@ -91,18 +94,6 @@ class RepoLib(DataLib):
             os.unlink(repo_file.path)
 
 
-class RepoActionReport(ActionReport):
-    name = "Repo Updates"
-
-    def __init__(self):
-        super(RepoActionReport, self).__init__(self)
-        self.repos_updates = []
-
-    def updates(self):
-        """How many repos were updated"""
-        return len(self.fact_updates)
-
-
 # WARNING: exact same name as another action in factlib and certlib.
 # TODO: This is the third disjoint "Action" class hierarchy, this one inherits nothing
 # but exposes similar methods, all of which are already abstracted behind the
@@ -133,7 +124,7 @@ class RepoUpdateAction:
 
         # FIXME: empty report at the moment, should be changed to include
         # info about updated repos
-        self.report = ActionReport()
+        self.report = RepoActionReport()
         self.report.name = "Repo updates"
         # If we are not registered, skip trying to refresh the
         # data from the server
@@ -192,7 +183,8 @@ class RepoUpdateAction:
             existing = repo_file.section(cont.id)
             if existing is None:
                 repo_file.add(cont)
-				self.report_update(cont)
+
+				self.report_add(cont)
             else:
                 # In the non-disconnected case, destroy the old repo and replace it with
                 # what's in the entitlement cert plus any overrides.
@@ -204,9 +196,10 @@ class RepoUpdateAction:
 		        # TODO: add repoting for overrides
 				self.report_update(cont)
 
+
         for section in repo_file.sections():
             if section not in valid:
-                self.report_update(section)
+                self.report_delete(section)
                 repo_file.delete(section)
 
         # Write new RepoFile to disk:
@@ -394,8 +387,64 @@ class RepoUpdateAction:
                 changes_made += 1
 
         return changes_made
-    def report_update(self, update):
-        self.report.repo_updates.append(self)
+    def report_update(self, repo):
+        self.report.repo_updates.append(repo)
+
+    def report_add(self, repo):
+        self.report.repo_added.append(repo)
+
+    def report_delete(self, section):
+        self.report.repo_deleted.append(section)
+
+
+class RepoActionReport(ActionReport):
+    """Report class for reporting yum repo updates"""
+    name = "Repo Updates"
+
+    def __init__(self):
+        super(RepoActionReport, self).__init__()
+        self.repo_updates = []
+        self.repo_added = []
+        self.repo_deleted = []
+
+    def updates(self):
+        """How many repos were updated"""
+        return len(self.repo_updates) + len(self.repo_added) + len(self.repo_deleted)
+
+    def format_repos_info(self, repos, formatter):
+        indent = '    '
+        if not repos:
+            return '%s<NONE>' % indent
+
+        r = []
+        for repo in repos:
+            r.append("%s%s" % (indent, formatter(repo)))
+        return '\n'.join(r)
+
+    def repo_format(self, repo):
+        return "[id:%s %s]" % (repo.id, repo['name'])
+
+    def section_format(self, section):
+        return "[%s]" % section
+
+    def format_repos(self, repos):
+        return self.format_repos_info(repos, self.repo_format)
+
+    def format_sections(self, sections):
+        return self.format_repos_info(sections, self.section_format)
+
+    def __str__(self):
+        s = ['Repo updates\n']
+        s.append(_('Total repo updates: %d') % self.updates())
+        s.append(_('Updated'))
+        s.append(self.format_repos(self.repo_updates))
+        s.append(_('Added (new)'))
+        s.append(self.format_repos(self.repo_added))
+        s.append(_('Deleted'))
+        # deleted are former repo sections, but they are the same type
+        s.append(self.format_sections(self.repo_deleted))
+        return '\n'.join(s)
+>>>>>>> Add a RepoActionReport formatter
 
 
 class Repo(dict):
