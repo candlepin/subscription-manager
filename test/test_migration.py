@@ -13,7 +13,7 @@
 # in this software or its documentation.
 #
 
-from mock import patch, MagicMock, call
+from mock import patch, NonCallableMock, MagicMock, call
 from M2Crypto import SSL
 import re
 import sys
@@ -21,11 +21,16 @@ import StringIO
 import unittest
 
 import stubs
+
 from fixture import Capture
+import fixture
+
 
 import rhsm.config
+from subscription_manager import injection as inj
 from subscription_manager.migrate import migrate
-from subscription_manager import certlib
+from subscription_manager import identity
+from subscription_manager.certdirectory import ProductDirectory
 
 
 class TestMenu(unittest.TestCase):
@@ -58,7 +63,7 @@ class TestMenu(unittest.TestCase):
         self.assertEqual(choice, "Hello")
 
 
-class TestMigration(unittest.TestCase):
+class TestMigration(fixture.SubManFixture):
     def create_options(self, *options):
         """
         Create a mock options object.  Send in a dictionary with the option names and values
@@ -74,6 +79,7 @@ class TestMigration(unittest.TestCase):
         return mock_opts
 
     def setUp(self):
+        super(TestMigration, self).setUp()
         migrate.initUp2dateConfig = lambda: {}
         patch('subscription_manager.migrate.migrate.ProductDatabase').start()
         self.engine = migrate.MigrationEngine()
@@ -321,8 +327,7 @@ class TestMigration(unittest.TestCase):
         self.assertEquals(None, self.engine.proxy_user)
         self.assertEquals(None, self.engine.proxy_pass)
 
-    @patch("rhsm.connection.UEPConnection")
-    def test_no_server_url_provided(self, mock_uep):
+    def test_no_server_url_provided(self):
         self.engine.options = self.create_options(['serverurl'])
 
         self.engine.rhsmcfg = MagicMock()
@@ -350,23 +355,19 @@ class TestMigration(unittest.TestCase):
         else:
             self.fail("No exception raised")
 
-    @patch.object(certlib.ConsumerIdentity, "existsAndValid")
-    @patch.object(certlib.ConsumerIdentity, "read")
-    def test_already_registered_to_rhsm(self, mock_read, mock_exists):
-        mock_read.return_value = MagicMock()
+    # default injected identity is "valid"
+    def test_already_registered_to_rhsm(self):
         try:
-            mock_exists.return_value = True
             self.engine.check_ok_to_proceed("some_username")
         except SystemExit, e:
             self.assertEquals(e.code, 1)
         else:
             self.fail("No exception raised")
 
-    @patch.object(certlib.ConsumerIdentity, "existsAndValid")
-    def test_ssl_error(self, mock_exists):
+    def test_ssl_error(self):
+        mock_id = self._inject_mock_invalid_consumer()
         self.engine.cp.getOwnerList = MagicMock(side_effect=SSL.SSLError)
         try:
-            mock_exists.return_value = False
             self.engine.check_ok_to_proceed("some_username")
         except SystemExit, e:
             self.assertEquals(e.code, 1)
@@ -667,7 +668,9 @@ class TestMigration(unittest.TestCase):
                 '3': {'cert-m-3.pem': ['chanA'], 'cert-n-3.pem': ['chanB'], 'cert-o-3.pem': ['chanC']}
         }
 
+
         with Capture() as cap:
+
             try:
                 self.engine.handle_collisions(cmap)
             except SystemExit, e:
@@ -725,10 +728,11 @@ class TestMigration(unittest.TestCase):
         else:
             self.fail("No exception raised")
 
-    @patch("subscription_manager.migrate.migrate.ProductDirectory")
     @patch("shutil.copy2")
-    def test_deploy_prod_certificates(self, mock_shutil, mock_product_directory):
-        mock_product_directory.return_value = "/some/path"
+    def test_deploy_prod_certificates(self, mock_shutil):
+        mock_product_directory = NonCallableMock(spec=ProductDirectory, path="/some/path")
+        inj.provide(inj.PROD_DIR, mock_product_directory)
+
         mock_shutil.return_value = True
         self.engine.db = MagicMock()
 
@@ -747,11 +751,12 @@ class TestMigration(unittest.TestCase):
         self.engine.db.add.assert_called_with("1", "a")
         self.engine.db.write.assert_called_with()
 
-    @patch("subscription_manager.migrate.migrate.ProductDirectory")
     @patch("os.path.isfile")
     @patch("os.remove")
-    def test_clean_up_remove_68_pem(self, mock_remove, mock_isfile, mock_product_directory):
-        mock_product_directory.return_value = "/some/path"
+    def test_clean_up_remove_68_pem(self, mock_remove, mock_isfile):
+        mock_product_directory = NonCallableMock(spec=ProductDirectory)
+        mock_product_directory.path = "/some/path"
+        inj.provide(inj.PROD_DIR, mock_product_directory)
         self.engine.db = MagicMock()
         mock_isfile.side_effect = [True, True]
         self.engine.clean_up([])
@@ -759,11 +764,13 @@ class TestMigration(unittest.TestCase):
         self.engine.db.delete.assert_called_with("68")
         self.engine.db.write.assert_called_with()
 
-    @patch("subscription_manager.migrate.migrate.ProductDirectory")
     @patch("os.path.isfile")
     @patch("os.remove")
-    def test_clean_up_remove_180_pem(self, mock_remove, mock_isfile, mock_product_directory):
-        mock_product_directory.return_value = "/some/path"
+    def test_clean_up_remove_180_pem(self, mock_remove, mock_isfile):
+        mock_product_directory = NonCallableMock(spec=ProductDirectory)
+        mock_product_directory.path = "/some/path"
+        inj.provide(inj.PROD_DIR, mock_product_directory)
+
         self.engine.db = MagicMock()
         mock_isfile.side_effect = [False, False]
         self.engine.clean_up([
@@ -863,7 +870,7 @@ class TestMigration(unittest.TestCase):
             self.fail("No exception raised")
 
     @patch("subprocess.call")
-    @patch.object(certlib.ConsumerIdentity, "read")
+    @patch.object(identity.ConsumerIdentity, "read")
     def test_register(self, mock_read, mock_subprocess):
         self.engine.options = self.create_options({'serverurl': 'foobar'})
 

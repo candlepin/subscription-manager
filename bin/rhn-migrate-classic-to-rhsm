@@ -51,6 +51,9 @@ try:
     from subscription_manager import logutil
     logutil.init_logger()
 
+    from subscription_manager.injectioninit import init_dep_injection
+    init_dep_injection()
+
     from subscription_manager.migrate import migrate
     from subscription_manager.managercli import handle_exception
 except KeyboardInterrupt:
