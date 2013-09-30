@@ -24,9 +24,8 @@ running_as_firstboot()
 
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
-from subscription_manager.injection import PLUGIN_MANAGER, require
+from subscription_manager.injection import PLUGIN_MANAGER, IDENTITY, require
 
-from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import Hardware
 from subscription_manager.gui.firstboot_base import RhsmFirstbootModule
@@ -154,7 +153,8 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
         # identity certs exist, someone must have hit the back button.
         # TODO: i'd like this call to be inside the async progress stuff,
         # since it does take some time
-        if ConsumerIdentity.exists():
+        identity = require(IDENTITY)
+        if identity.is_valid():
             try:
                 managerlib.unregister(self._parent.backend.cp_provider.get_consumer_auth_cp(),
                         self._parent.identity.uuid)
