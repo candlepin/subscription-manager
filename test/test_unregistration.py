@@ -15,7 +15,7 @@
 
 from stubs import StubUEP
 import rhsm.connection as connection
-from subscription_manager.certlib import ConsumerIdentity
+from subscription_manager.cache import CacheManager
 from subscription_manager import managercli
 from fixture import SubManFixture
 from mock import patch
