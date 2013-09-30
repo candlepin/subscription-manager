@@ -209,12 +209,10 @@ class EntCertUpdateAction(object):
     def get_certificates_by_serial_list(self, sn_list):
         """Fetch a list of entitlement certificates specified by a list of serial numbers"""
         result = []
-        print "sn_list"
         if sn_list:
             sn_list = [str(sn) for sn in sn_list]
             # NOTE: use injected IDENTITY, need to validate this
             # handles disconnected errors properly
-            print "sn_list", sn_list
             reply = self.uep.getCertificates(self.identity.getConsumerId(),
                                               serials=sn_list)
             for cert in reply:
@@ -223,7 +221,6 @@ class EntCertUpdateAction(object):
 
     def _get_expected_serials(self):
         exp = self.get_certificate_serials_list()
-        print "exp", exp
         self.report.expected = exp
         return exp
 
@@ -265,7 +262,7 @@ class EntitlementCertBundlesInstaller(object):
     def post_install(self):
         """after all cert bundles have been installed"""
         for installed in self._get_installed():
-            print "installed! list", installed
+            log.debug("cert bundles post_install: %s" % installed)
 
     def get_installed(self):
         return self._get_installed()
@@ -302,7 +299,7 @@ class EntitlementCertBundleInstaller(object):
         self.report = report
 
     def pre_install(self, bundle):
-        print "Ecbi.pre_install", bundle
+        log.debug("Ent cert bundle pre_install")
 
     def install(self, bundle):
         self.pre_install(bundle)
@@ -325,8 +322,7 @@ class EntitlementCertBundleInstaller(object):
         self.report._exceptions.append(exception)
 
     def post_install(self, bundle):
-
-        print "Ecbi.post_install"
+        log.debug("ent cert bundle post_install")
 
     # should probably be in python-rhsm/certificate
     def build_cert(self, bundle):
