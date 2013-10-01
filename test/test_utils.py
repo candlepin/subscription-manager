@@ -8,7 +8,6 @@ from subscription_manager.utils import parse_server_info, \
     parse_baseurl_info, format_baseurl, \
     get_version, get_client_versions, \
     get_server_versions, Versions, friendly_join, is_true_value
-from subscription_manager import certlib
 from subscription_manager import injection as inj
 
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
@@ -276,45 +275,14 @@ class TestRemoveScheme(fixture.SubManFixture):
 NOT_COLLECTED = "non-collected-package"
 
 
-# Note, this is duped from python-rhsm/test/unit/version_tests.py
-class VersionsStub(Versions):
-    def _get_packages(self):
-        package_set = [{'name': Versions.SUBSCRIPTION_MANAGER,
-                        'version': '1',
-                        'release': "1"},
-                       {'name': Versions.PYTHON_RHSM,
-                        'version': '2',
-                        'release': "2"},
-                       {'name': NOT_COLLECTED,
-                        'version': '3',
-                        'release': "3"}]
-        return package_set
-
-
-# Versions with python-rhsm or subscription-manager
-class VersionsNoRhsmStub(Versions):
-    def _get_packages(self):
-        package_set = [{'name': 'awesome-package',
-                        'version': '1',
-                        'release': "1"},
-                       {'name': 'totally-awesome-package',
-                        'version': '2',
-                        'release': "2"},
-                       {'name': 'something else',
-                        'version': '3',
-                        'release': "3"}]
-        return package_set
-
-
 class TestGetServerVersions(fixture.SubManFixture):
 
+    @patch('subscription_manager.utils.Versions', spec=Versions)
     @patch('subscription_manager.utils.ClassicCheck')
-    def test_get_server_versions_classic(self, MockClassicCheck):
+    def test_get_server_versions_classic(self, mock_classic, mock_versions):
         self._inject_mock_invalid_consumer()
-        from subscription_manager import utils
-        instance = MockClassicCheck.return_value
+        instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = True
-        utils.Versions = VersionsStub
 
         sv = get_server_versions(None)
         self.assertEquals(sv['server-type'], "RHN Classic")
@@ -322,8 +290,8 @@ class TestGetServerVersions(fixture.SubManFixture):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    def test_get_server_versions_cp_no_status(self, MockClassicCheck, MockUep):
-        instance = MockClassicCheck.return_value
+    def test_get_server_versions_cp_no_status(self, mock_classic, MockUep):
+        instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = False
@@ -333,8 +301,8 @@ class TestGetServerVersions(fixture.SubManFixture):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    def test_get_server_versions_cp_with_status(self, MockClassicCheck, MockUep):
-        instance = MockClassicCheck.return_value
+    def test_get_server_versions_cp_with_status(self, mock_classic, MockUep):
+        instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
@@ -345,8 +313,8 @@ class TestGetServerVersions(fixture.SubManFixture):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    def test_get_server_versions_cp_with_status_and_classic(self, MockClassicCheck, MockUep):
-        instance = MockClassicCheck.return_value
+    def test_get_server_versions_cp_with_status_and_classic(self, mock_classic, MockUep):
+        instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = True
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
@@ -357,10 +325,10 @@ class TestGetServerVersions(fixture.SubManFixture):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    def test_get_server_versions_cp_exception(self, MockClassicCheck, MockUep):
+    def test_get_server_versions_cp_exception(self, mock_classic, MockUep):
         def raise_exception(arg):
             raise Exception("boom")
-        instance = MockClassicCheck.return_value
+        instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.side_effect = raise_exception
@@ -371,10 +339,10 @@ class TestGetServerVersions(fixture.SubManFixture):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
-    def test_get_server_versions_cp_exception_and_classic(self, MockClassicCheck, MockUep):
+    def test_get_server_versions_cp_exception_and_classic(self, mock_classic, MockUep):
         def raise_exception(arg):
             raise Exception("boom")
-        instance = MockClassicCheck.return_value
+        instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = True
         self._inject_mock_invalid_consumer()
         MockUep.supports_resource.side_effect = raise_exception

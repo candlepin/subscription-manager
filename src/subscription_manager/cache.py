@@ -29,8 +29,6 @@ from M2Crypto import SSL
 from rhsm.config import initConfig
 import rhsm.connection as connection
 from rhsm.profile import get_profile, RPMProfile
-from subscription_manager.certlib import ConsumerIdentity, DataLib
-from subscription_manager.jsonwrapper import PoolWrapper
 import subscription_manager.injection as inj
 from rhsm import ourjson as json
 

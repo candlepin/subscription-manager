@@ -35,7 +35,6 @@ class TestHealingLib(fixture.SubManFixture):
         mock_uep.getConsumer = mock.Mock(return_value=consumer)
         hl = healinglib.HealingLib(uep=mock_uep)
         report = hl.update()
-        print report
         report.print_exceptions()
 
     def _consumer(self):
@@ -43,6 +42,7 @@ class TestHealingLib(fixture.SubManFixture):
         return consumer
 
 
+# FIXME: assert something
 class TestHealingUpdateAction(fixture.SubManFixture):
     # HealingLib is very thin wrapper to HealingUpdateAction atm,
     # so basically the same tests
@@ -55,15 +55,11 @@ class TestHealingUpdateAction(fixture.SubManFixture):
         consumer = {}
         mock_uep.getConsumer = mock.Mock(return_value=consumer)
         hl = healinglib.HealingUpdateAction(uep=mock_uep)
-        report = hl.perform()
-        print report
+        hl.perform()
 
     def test_autoheal_on(self):
         mock_uep = mock.Mock()
         consumer = {'autoheal': True}
         mock_uep.getConsumer = mock.Mock(return_value=consumer)
         hl = healinglib.HealingUpdateAction(uep=mock_uep)
-        report = hl.perform()
-        print report
-        report.print_exceptions()
-
+        hl.perform()

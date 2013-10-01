@@ -13,24 +13,21 @@
 # in this software or its documentation.
 #
 
-from stubs import StubUEP, StubEntitlementDirectory, StubProductDirectory
-from stubs import StubConsumerIdentity, StubEntCertLib, StubEntitlementCertificate
-from stubs import StubProduct
-import rhsm.connection as connection
 from subscription_manager import managercli
-import subscription_manager.injection as inj
-from fixture import SubManFixture
+from subscription_manager import injection as inj
+
+from stubs import StubEntitlementDirectory, StubProductDirectory, StubEntCertLib, \
+        StubEntitlementCertificate, StubProduct
+import fixture
 
 
 # This is a copy of CliUnSubscribeTests for the new name.
-class CliRemoveTests(SubManFixture):
+class CliRemoveTests(fixture.SubManFixture):
 
     def setUp(self):
         super(CliRemoveTests, self).setUp()
 
     def test_unsubscribe_registered(self):
- #       connection.UEPConnection = StubUEP
-
         cmd = managercli.RemoveCommand()
 
         mock_identity = self._inject_mock_valid_consumer()
@@ -49,8 +46,6 @@ class CliRemoveTests(SubManFixture):
         self.assertEquals(cmd.cp.called_unbind_serial, [serial1, serial2])
 
     def test_unsubscribe_unregistered(self):
-#        connection.UEPConnection = StubUEP
-
         prod = StubProduct('stub_product')
         ent = StubEntitlementCertificate(prod)
 
