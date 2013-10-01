@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:29-0400\n"
-"Last-Translator: hedda <hedda@fedoraproject.org>\n"
+"PO-Revision-Date: 2013-09-17 11:47-0400\n"
+"Last-Translator: rgromans <rgromans@redhat.com>\n"
 "Language-Team: German (Germany)\n"
 "Language: de-DE\n"
 "MIME-Version: 1.0\n"
@@ -170,11 +170,11 @@ msgstr "Pool-ID:"
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "Verfügbar:"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "Empfohlen:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author hedda
@@ -674,6 +674,8 @@ msgstr "Fehler: Umgebungsliste konnte nicht von Server abgerufen werden"
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgstr ""
+"Gesetzt, wenn Subskriptionen an einem Zeitplan angebracht sind (Standard "
+"täglich)"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author rgromans
@@ -688,7 +690,7 @@ msgstr ""
 #: ../src/subscription_manager/managercli.py:738
 msgid "try to attach subscriptions for uncovered products each check-in"
 msgstr ""
-"versuchen, Subskriptionen für alle entdeckt Produkte bei jedem Check-in zu "
+"versuchen, Subskriptionen für alle entdeckten Produkte bei jedem Check-in zu "
 "befestigen"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
@@ -1765,10 +1767,12 @@ msgstr ""
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr ""
+"Zukünftiges Datum, an dem der Status überprüft wird, standardmäßig heutiges "
+"Datum (Beispiel: %s)"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "Vergangenen Termine sind nicht erlaubt"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author rgromans
@@ -3357,7 +3361,7 @@ msgstr "Server-URL-Port sollte numerisch sein"
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "und"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author hedda
@@ -3881,7 +3885,7 @@ msgstr "Unbekannter Zertifikatstyp"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "Manifest zip ist ungültig."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author rgromans
@@ -4176,6 +4180,8 @@ msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr ""
+"Das Profil dieses Verbrauchers wurde vom Server gelöscht. Seine lokalen "
+"Zertifikate werden jetzt archiviert"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author rgromans
@@ -4984,7 +4990,7 @@ msgstr "Produkt - Text"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "Bereitstellung Subskriptions-Text"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5018,17 +5024,19 @@ msgstr "Systemeinstellungen"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "autoheal_checkbox"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "Aktivieren auto-attach Präferenz"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>Wenn aktiviert, werden Subskriptionen für alle freigelegten Produkte "
+"nach einem Zeitplan angebracht (Standard täglich).</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author hedda
@@ -5118,7 +5126,7 @@ msgstr "Startdatum Enddatum - Text"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "Vertragsnummer Text"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author hedda
@@ -5140,7 +5148,7 @@ msgstr "<b>Status Details:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "Status Details Text"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5523,7 +5531,7 @@ msgstr "Diesem System fehlen ein oder mehrere Subskriptionen."
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "Teilweise berechtigte Subskriptionen"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

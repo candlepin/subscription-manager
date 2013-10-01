@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:28-0400\n"
+"PO-Revision-Date: 2013-09-18 08:37-0400\n"
 "Last-Translator: gcintra <gcintra@fedoraproject.org>\n"
 "Language-Team: Portuguese (Brazil)\n"
 "Language: pt-BR\n"
@@ -170,11 +170,11 @@ msgstr "Id do Pool:"
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "Disponível:"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "Sugestões:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gcintra
@@ -670,6 +670,8 @@ msgstr "Erro: Incapaz de recuperar a lista de ambiente do servidor"
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgstr ""
+"Definido se subscrições forem conectadas em uma agenda (padrão de "
+"diariamente)"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gcintra
@@ -1756,10 +1758,11 @@ msgstr ""
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr ""
+"próxima data a verificar o estado, padrão para a data de hoje (exemplo> %s)"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "Datas passadas não são permitidas"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gcintra
@@ -3338,7 +3341,7 @@ msgstr "Porta de URL do servidor deve ser numérica"
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "e"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gcintra
@@ -3862,7 +3865,7 @@ msgstr "Tipo de Certificado Desconhecido"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "Zip do manifesto é inválido."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gcintra
@@ -4153,6 +4156,8 @@ msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr ""
+"O perfil deste consumidor foi removido do servidor. Seus certificados locais "
+"serão arquivados."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gcintra
@@ -4960,7 +4965,7 @@ msgstr "Texto do Produto"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "Fornecendo Texto de Subscrições "
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gcintra
@@ -4994,17 +4999,19 @@ msgstr "Preferências de Sistema"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "autoheal_checkbox"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "Habilitar a preferência do auto-attach"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>Se habilitado, as subscrições serão anexadas para qualquer produto "
+"descoberto dentro da agenda (padrão ou diariamente).</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5094,7 +5101,7 @@ msgstr "Texto da Data de Início Final "
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "Texto de Número de Contrato"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gcintra
@@ -5116,7 +5123,7 @@ msgstr "<b>Detalhes de Status:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "Texto de Detalhes de Estado"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5498,7 +5505,7 @@ msgstr "Estão faltando uma ou mais subscrições neste sistema."
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "Subscrições com Direitos Parciais"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

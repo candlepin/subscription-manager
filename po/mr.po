@@ -1,3 +1,4 @@
+# Sandeep Shedmake <sshedmak@redhat.com>, 2013.
 # John Sefler <jsefler@redhat.com>, 2013. #zanata
 # sandeeps <sandeeps@fedoraproject.org>, 2013. #zanata
 msgid ""
@@ -5,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-09-06 03:55-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2013-09-18 02:42-0400\n"
+"Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
 "Language-Team: Marathi\n"
 "Language: mr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Zanata 2.2.2\n"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
@@ -168,11 +169,11 @@ msgstr "पूल ID:"
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "उपलब्ध:"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "शिफारसीय:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -661,7 +662,7 @@ msgstr "त्रुटी: सर्व्हरपासून वाताव
 
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
-msgstr ""
+msgstr "वेळपत्रकसह जुळले असल्यास सबस्क्रिप्शन्स सेट करा (दररोजकरिता पूर्वनिर्धारित आहे)"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -1705,10 +1706,12 @@ msgstr "ह्या प्रणालीच्या सबस्क्रि�
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr ""
+"स्थिती तपासण्याकरिता भविष्यातील दिनांक, आजच्या दिनांककरिता पूर्वनिर्धारित आहे "
+"(उदाहरणार्थ: %s)"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "मागील दिनांक स्वीकार्य नाही"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -3253,7 +3256,7 @@ msgstr "सर्व्हर URL पोर्ट संख्यायीक �
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "आणि"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -3474,19 +3477,19 @@ msgstr ""
 # document keys
 #: ../src/subscription_manager/reasons.py:75
 msgid "Product "
-msgstr "उत्पादन"
+msgstr "उत्पादन "
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
 #: ../src/subscription_manager/reasons.py:77
 msgid "Subscription "
-msgstr "सबस्क्रिप्शन"
+msgstr "सबस्क्रिप्शन "
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
 #: ../src/subscription_manager/reasons.py:79
 msgid "Stack "
-msgstr "स्टॅक"
+msgstr "स्टॅक "
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -3766,7 +3769,7 @@ msgstr "अपरिचीत सर्टिफिकेट प्रकार"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "मॅनिफेस्ट zip अवैध आहे."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4057,6 +4060,7 @@ msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr ""
+"ह्या ग्राहकाचे प्रोफाइल सर्व्हरपासून नष्ट केले आहे. स्थानीय प्रमाणपत्र आत्ता साठवले जाईल"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4855,7 +4859,7 @@ msgstr "उत्पादन मजकूर"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "सबस्क्रिप्शन्स मजकूर पुरवत आहे"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4889,17 +4893,19 @@ msgstr "प्रणाली पसंती"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "autoheal_checkbox"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "auto-attach पसंती सुरू करा"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>सुरू असल्यास, वेळपत्रक प्रमाणे सबस्क्रिप्शन्स कोणत्याही उत्पादनांकरिता जुळले जातात "
+"(दररोजकरिता पूर्वनिर्धारित).</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author sandeeps
@@ -4988,7 +4994,7 @@ msgstr "सुरवात समाप्त दिनांक मजकूर
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "काँट्रॅक्ट क्रमांक मजकूर"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author sandeeps
@@ -5010,7 +5016,7 @@ msgstr "<b>स्थिती तपशील:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "स्थिती तपशील मजकूर"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5390,7 +5396,7 @@ msgstr "ह्या प्रणालीत एक किंवा त्य�
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "अंशतः एंटाइटल केलेले सबस्क्रिप्शन्स"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

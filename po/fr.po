@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:31-0400\n"
+"PO-Revision-Date: 2013-09-17 09:50-0400\n"
 "Last-Translator: samfreemanz <sfriedma@redhat.com>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -168,11 +168,11 @@ msgstr "ID du pool :"
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "Disponible :"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "Suggestion(s) :"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author samfreemanz
@@ -678,30 +678,37 @@ msgstr ""
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgstr ""
+"Paramétrer si les abonnements sont attachés à une programmation (par "
+"défaut : quotidien)"
 
 #: ../src/subscription_manager/managercli.py:733
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
 msgstr ""
+"spécifier s'il faut activer ou désactiver auto-attach pour les abonnements"
 
 #: ../src/subscription_manager/managercli.py:738
 msgid "try to attach subscriptions for uncovered products each check-in"
 msgstr ""
+"tenter d'attacher des abonnements pour des produits non-couverts à chaque "
+"enregistrement"
 
 #: ../src/subscription_manager/managercli.py:740
 msgid "do not try to automatically attach subscriptions each check-in"
 msgstr ""
+"ne pas tenter d'attacher les abonnements automatiquement à chaque "
+"enregistrement"
 
 #: ../src/subscription_manager/managercli.py:742
 msgid "show the current auto-attach preference"
-msgstr ""
+msgstr "afficher les préférences auto-attach actuelles"
 
 #: ../src/subscription_manager/managercli.py:755
 msgid "Auto-attach preference: enabled"
-msgstr ""
+msgstr "Préférence auto-attach : activé"
 
 #: ../src/subscription_manager/managercli.py:757
 msgid "Auto-attach preference: disabled"
-msgstr ""
+msgstr "Préférence auto-attach : désactivé"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author samfreemanz
@@ -1761,10 +1768,12 @@ msgstr ""
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr ""
+"future date de vérification du statut, défini par défaut sur la date "
+"d'aujourd'hui (exemple : %s)"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "Les dates révolues ne sont pas autorisées"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author samfreemanz
@@ -3375,7 +3384,7 @@ msgstr "Le port de l'URL du serveur doit être numérique"
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "et"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author samfreemanz
@@ -3899,7 +3908,7 @@ msgstr "Type de certificat inconnu"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "Le fichier zip du manifeste est invalide."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author samfreemanz
@@ -4194,6 +4203,8 @@ msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr ""
+"Le profil de ce consommateur a été supprimé du serveur, Ses certificats "
+"locaux vont maintenant être archivés"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author samfreemanz
@@ -5002,7 +5013,7 @@ msgstr "Texte du produit"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "Fournir des textes d'abonnements"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5036,17 +5047,19 @@ msgstr "Préférences système"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "autoheal_checkbox "
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "Activer la préférence pour auto-attach"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>Si activé, les abonnements sont attachés pour tout produit non-"
+"couvert programmé (par défaut : quotidien).</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author samfreemanz
@@ -5136,7 +5149,7 @@ msgstr "Texte des dates de début et fin"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "Texte du numéro de contrat"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author samfreemanz
@@ -5158,7 +5171,7 @@ msgstr "<b>Détails du statut :</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "Texte des détails du statut"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5543,7 +5556,7 @@ msgstr "Il manque un ou plusieurs abonnement(s) à ce système."
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "Abonnements aux droits d'accès partiels"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

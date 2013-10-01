@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:24-0400\n"
+"PO-Revision-Date: 2013-09-17 09:28-0400\n"
 "Last-Translator: shanky <shanky@fedoraproject.org>\n"
 "Language-Team: Kannada\n"
 "Language: kn\n"
@@ -168,11 +168,11 @@ msgstr "ಪೂಲ್‌ ID:"
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "ಲಭ್ಯವಿರುವ:"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "ಸಲಹೆ ಮಾಡಲಾಗುವುದು:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author shanky
@@ -667,30 +667,34 @@ msgstr "ದೋಷ: ಪೂರೈಕೆಗಣಕದಿಂದ ಪರಿಸರದ �
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgstr ""
+"ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಒಂದು ಸೂಚಿಯಲ್ಲಿ ಲಗತ್ತಿಸಲಾಗಿದ್ದರೆ ಹೊಂದಿಸಿ (ಪ್ರತಿದಿನಿ ಪೂರ್ವನಿಯೋಜಿತ)"
 
 #: ../src/subscription_manager/managercli.py:733
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
 msgstr ""
+"ಚಂದಾದಾರಿಕೆಗಳ ಸ್ವಯಂ-ಲಗತ್ತನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಬೇಕೆ ಅಥವ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಬೇಕೆ ಎನ್ನುವುದನ್ನು "
+"ಸೂಚಿಸಿ"
 
 #: ../src/subscription_manager/managercli.py:738
 msgid "try to attach subscriptions for uncovered products each check-in"
-msgstr ""
+msgstr "ಪ್ರತಿ ಬಾರಿಯ ಚೆಕ್-ಇನ್‌ನಲ್ಲಿ ಅಡಿಯಲ್ಲಿ ಬರದೆ ಇರುವ ಉತ್ಪನ್ನಗಳನ್ನ ಲಗತ್ತಿಸಲು ಪ್ರಯತ್ನಿಸು."
 
 #: ../src/subscription_manager/managercli.py:740
 msgid "do not try to automatically attach subscriptions each check-in"
 msgstr ""
+"ಪ್ರತಿ ಬಾರಿಯ ಚೆಕ್-ಇನ್‌ನಲ್ಲಿ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಲಗತ್ತಿಸಲು ಪ್ರಯತ್ನಿಸದಿರು"
 
 #: ../src/subscription_manager/managercli.py:742
 msgid "show the current auto-attach preference"
-msgstr ""
+msgstr "ಪ್ರಸಕ್ತ ಸ್ವಯಂ-ಲಗತ್ತಿನ ಆದ್ಯತೆಯನ್ನು ತೋರಿಸು"
 
 #: ../src/subscription_manager/managercli.py:755
 msgid "Auto-attach preference: enabled"
-msgstr ""
+msgstr "ಸ್ವಯಂ-ಲಗತ್ತಿನ ಆದ್ಯತೆ: ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ"
 
 #: ../src/subscription_manager/managercli.py:757
 msgid "Auto-attach preference: disabled"
-msgstr ""
+msgstr "ಸ್ವಯಂ-ಲಗತ್ತಿನ ಆದ್ಯತೆ: ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author shanky
@@ -1723,10 +1727,12 @@ msgstr "ಈ ವ್ಯವಸ್ಥೆಯ ಚಂದಾದಾರಿಕೆಗಳು 
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr ""
+"ಸ್ಥಿತಿಯನ್ನು ಪರಿಶೀಲಿಸಬೇಕಿರುವ ಭವಿಷ್ಯದ ದಿನಗಳು, ಇಂದಿನ ದಿನಾಂಕಕ್ಕೆ "
+"ಪೂರ್ವನಿಯೋಜಿತಗೊಂಡಿರುತ್ತದೆ (ಉದಾಹರಣೆ: %s)"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "ಹಿಂದಿನ ದಿನಾಂಕಗಳಿಗೆ ಅನುಮತಿ ಇರುವುದಿಲ್ಲ"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author shanky
@@ -3293,7 +3299,7 @@ msgstr "ಪೂರೈಕೆಗಣಕದ URL ಸಂಪರ್ಕಸ್ಥಾನವ�
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "ಮತ್ತು"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author shanky
@@ -3816,7 +3822,7 @@ msgstr "ಅಜ್ಞಾತ ಪ್ರಮಾಣಪತ್ರದ ಬಗೆ"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "ಮ್ಯಾನಿಫೆಸ್ಟ್‌ ಜಿಪ್ ಅನ್ನು ಅಮಾನ್ಯವಾಗಿದೆ."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author shanky
@@ -4109,6 +4115,8 @@ msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr ""
+"ಗ್ರಾಹಕರ ಪ್ರೊಫೈಲನ್ನು ಪೂರೈಕೆಗಣಕದಿಂದ ಅಳಿಸಲಾಗಿದೆ. ಅದರ ಸ್ಥಳೀಯ ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ಆರ್ಕೈವ್ "
+"ಮಾಡಲಾಗುತ್ತವೆ."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author shanky
@@ -4911,7 +4919,7 @@ msgstr "ಉತ್ಪನ್ನದ ಪಠ್ಯ"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ಪಠ್ಯಗಳನ್ನು ಒದಗಿಸಲಾಗುತ್ತಿದೆ"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4945,17 +4953,19 @@ msgstr "ವ್ಯವಸ್ಥೆಯ ಆದ್ಯತೆಗಳು"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "autoheal_checkbox"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "ಪ್ರಸಕ್ತ ಸ್ವಯಂ-ಲಗತ್ತಿನ ಆದ್ಯತೆಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸು"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದ್ದರೆ, ಒಂದು ಸೂಚಿಯಲ್ಲಿರುವ ಅಡಿಯಲ್ಲಿ ಬರದೆ ಇರುವ ಉತ್ಪನ್ನಗಳಿಗಾಗಿ "
+"ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಲಗತ್ತಿಸಲಾಗುತ್ತದೆ. </small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author shanky
@@ -5045,7 +5055,7 @@ msgstr "ಆರಂಭದ ಅಂತ್ಯದ ದಿನಾಂಕದ ಪಠ್ಯ"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "ಸಂಪರ್ಕದ ಸಂಖ್ಯೆಯ ಪಠ್ಯ"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author shanky
@@ -5067,7 +5077,7 @@ msgstr "<b>ಸ್ಥಿತಿ ವಿವರಗಳು:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "ಸ್ಥಿತಿ ವಿವರಗಳ ಪಠ್ಯ"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5449,7 +5459,7 @@ msgstr "ಈ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ಒಂದು ಅಥವ ಹ�
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "ಆಂಶಿಕ ಎಂಟೈಟಲ್ ಮಾಡಲಾದ ಚಂದಾದರಿಕೆಗಳು"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

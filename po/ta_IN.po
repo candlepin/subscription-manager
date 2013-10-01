@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:26-0400\n"
+"PO-Revision-Date: 2013-09-17 07:36-0400\n"
 "Last-Translator: Shantha kumar <shkumar@redhat.com>\n"
 "Language-Team: Tamil (India)\n"
 "Language: ta-IN\n"
@@ -170,11 +170,11 @@ msgstr "தொகுப்பக ID:"
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "கிடைக்கக்கூடியது:"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "பரிந்துரைக்கப்படுவது:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author Shantha kumar
@@ -668,6 +668,7 @@ msgstr "பிழை: சேவையகத்தில் இருந்து
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgstr ""
+"சந்தாக்கள் ஒரு நேரத் திட்டத்தில் இணைக்கப்பட்டிருந்தால் அமைக்கவும் (தினசரியின் முன்னிருப்பு)"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -1745,10 +1746,12 @@ msgstr "இந்த கணினியின் சந்தாக்கள் 
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr ""
+"நிலையை சோதிக்க வேண்டிய எதிர்கால தேதி, இன்றைய தேதி முன்னிருப்பாகும் (எடுத்துக்காட்டு: "
+"%s)"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "கடந்த தேதிகள் அனுமதிக்கப்படாது"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -3307,7 +3310,7 @@ msgstr "சேவையக URL முனையம் எண்களாக இ�
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "மற்றும்"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -3829,7 +3832,7 @@ msgstr "தெரியாத சான்றிதழ் வகை"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "மேனிஃபெஸ்ட் ஜிப் செல்லுபடியாகாதது."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author Shantha kumar
@@ -4119,6 +4122,8 @@ msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr ""
+"இந்த நுகர்வோரின் சுயவிவரம் சேவையகத்திலிருந்து நீக்கப்பட்டது. இப்போது அதன் அக சான்றிதழ்கள் "
+"காப்பகப்படுத்தப்படும்"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4918,7 +4923,7 @@ msgstr "தயாரிப்பு உரை"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "சந்தாக்கள் உரையை வழங்குகிறது"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4952,17 +4957,19 @@ msgstr "சிஸ்டம் விருப்பங்கள்"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "ஆட்டோஹீல் தேர்வுப்பெட்டி (_c)"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "தானியக்க இணைப்பு முன்னுரிமைகளை செயல்படுத்து"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>செயல்படுத்தப்பட்டால், ஒரு நேரத்திட்டத்தில் உள்ள சந்தா பெறாத தயாரிப்புகள் இருப்பின் "
+"அவற்றுக்கு சந்தா இணைக்கப்படும் (முன்னிருப்ப தினசரியாகும்).</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5052,7 +5059,7 @@ msgstr "துவக்க முடிவு தேதி உரை"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "ஒப்பந்த எண் உரை"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5074,7 +5081,7 @@ msgstr "<b>நிலை விவரங்கள்:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "நிலை விவரங்கள் உரை"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5456,7 +5463,7 @@ msgstr "இந்தக் கணினியில் ஒன்று அல்
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "பாதி உரிமையாக்கப்பட்ட சந்தாக்கள்"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

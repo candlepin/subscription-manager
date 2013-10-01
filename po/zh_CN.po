@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:32-0400\n"
+"PO-Revision-Date: 2013-09-18 09:28-0400\n"
 "Last-Translator: leahliu <lliu@redhat.com>\n"
 "Language-Team: Chinese (Simplified, China)\n"
 "Language: zh-Hans-CN\n"
@@ -169,11 +169,11 @@ msgstr "池子 Id："
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "可用："
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "推荐的："
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author leahliu
@@ -658,31 +658,31 @@ msgstr "错误：无法从服务器中搜索环境列表"
 
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
-msgstr ""
+msgstr "如果在调度中附加订阅则设置（默认为每日）"
 
 #: ../src/subscription_manager/managercli.py:733
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
-msgstr ""
+msgstr "指定是否启用或者禁用订阅的自动附加功能"
 
 #: ../src/subscription_manager/managercli.py:738
 msgid "try to attach subscriptions for uncovered products each check-in"
-msgstr ""
+msgstr "尝试在每次登录时为没有覆盖的产品附加订阅"
 
 #: ../src/subscription_manager/managercli.py:740
 msgid "do not try to automatically attach subscriptions each check-in"
-msgstr ""
+msgstr "不要尝试在每次登录时自动附加订阅"
 
 #: ../src/subscription_manager/managercli.py:742
 msgid "show the current auto-attach preference"
-msgstr ""
+msgstr "显示当前 auto-attach 属性"
 
 #: ../src/subscription_manager/managercli.py:755
 msgid "Auto-attach preference: enabled"
-msgstr ""
+msgstr "Auro-attach 属性：启用"
 
 #: ../src/subscription_manager/managercli.py:757
 msgid "Auto-attach preference: disabled"
-msgstr ""
+msgstr "Auro-attach 属性：禁用"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author leahliu
@@ -1668,11 +1668,11 @@ msgstr "显示这个系统订阅和产品的状态信息"
 #: ../src/subscription_manager/managercli.py:2190
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
-msgstr ""
+msgstr "以后要查看状态的日期，默认为今天的日期（例如：%s）"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "不允许使用过去的日期"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author leahliu
@@ -3193,7 +3193,7 @@ msgstr "服务器 URL 端口应该是数字"
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "和"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author leahliu
@@ -3700,7 +3700,7 @@ msgstr "未知证书类型"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "清单压缩文件无效。"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author leahliu
@@ -3989,7 +3989,7 @@ msgstr "更新授权证书和库"
 msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
-msgstr ""
+msgstr "这个用户的侧写已从该服务器中删除。现在将归档其本地证书。"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author leahliu
@@ -4784,7 +4784,7 @@ msgstr "产品文本"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "提供订阅文本"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4818,17 +4818,18 @@ msgstr "系统属性"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "autoheal_checkbox"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "启用 auto-attach 属性"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>如果启用，则会为所有调度中未覆盖的产品附加订阅（默认为每日）。</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author leahliu
@@ -4914,7 +4915,7 @@ msgstr "起始终止日期文本"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "合同号文本"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author leahliu
@@ -4936,7 +4937,7 @@ msgstr "<b>订阅详情：</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "状态详情文本"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5315,7 +5316,7 @@ msgstr "这个系统缺少一个或者多个订阅。"
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "有部分权利的订阅"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

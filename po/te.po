@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:25-0400\n"
+"PO-Revision-Date: 2013-09-17 07:52-0400\n"
 "Last-Translator: kkrothap <kkrothap@fedoraproject.org>\n"
 "Language-Team: Telugu\n"
 "Language: te\n"
@@ -168,11 +168,11 @@ msgstr "పూల్  ID:"
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "అందుబాటులోనివి:"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "సూచించినవి:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -661,7 +661,7 @@ msgstr "దోషం: సేవిక నుండి యెన్విరా�
 
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
-msgstr ""
+msgstr "ప్రణాళిక నందు అనుబందించితేనే సబ్‌స్క్రిప్షన్లను అమర్చుము (ప్రతినిత్యం అనునది అప్రమేయం)"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author kkrothap
@@ -1696,11 +1696,11 @@ msgstr "ఈ వ్యవస్థ యొక్క సబ్‌స్క్రి
 #: ../src/subscription_manager/managercli.py:2190
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
-msgstr ""
+msgstr "స్థితిని పరిశీలించుటకు భవిష్య తేది, అప్రమేయంగా ఇవాల్టి తేది వుండును (ఉదాహరణకు: %s)"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "గత తేదీలు అనుమతించబడవు"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author kkrothap
@@ -3238,7 +3238,7 @@ msgstr "సేవిక URL పోర్టు సంఖ్యాత్మకం
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "మరియు"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -3748,7 +3748,7 @@ msgstr "తెలియని దృవీకరణపత్రం రకం"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "మానిఫెస్ట్ జిప్ చేల్లనిది."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author kkrothap
@@ -4038,6 +4038,7 @@ msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr ""
+"ఈ వినియోగదారి ప్రొఫైల్ సేవిక నుండి తొలగించబడింది. దాని స్థానిక ధృవీకరణపత్రాలు యిప్పుడు ఆర్కైవ్ చేయబడును"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author kkrothap
@@ -4836,7 +4837,7 @@ msgstr "ఉత్పత్తి పాఠము"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "సబ్‌స్క్రిప్షన్స్ పాఠం అందించుతోంది"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4870,17 +4871,19 @@ msgstr "వ్యవస్థ అభీష్టాలు"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "autoheal_checkbox"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "స్వయంచాలక-అనుబందం అభీష్టం చేతనంచేయి"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>ప్రణాళిక (ప్రతినిత్యం అనునది అప్రమేయం) పైన ఏదేని కవర్‌కాని వుత్పత్తులకు సబ్‌స్క్రిప్షన్లు "
+"అనుబందించితే, చేతనమగును.</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author kkrothap
@@ -4970,7 +4973,7 @@ msgstr "ప్రారంభం ముగింపు తేదీ పాఠం
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "కాంట్రాక్ట్ సంఖ్య పాఠం"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author kkrothap
@@ -4992,7 +4995,7 @@ msgstr "<b>స్థితి వివరాలు:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "స్థితి వివరాల పాఠం"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5372,7 +5375,7 @@ msgstr "ఈ వ్యవస్థకు వొకటి లేదా అంత�
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "పాక్షికంగా ఎన్టైటిల్ అయిన సబ్‌స్క్రిప్షన్లు"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

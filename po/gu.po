@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:26-0400\n"
+"PO-Revision-Date: 2013-09-18 01:48-0400\n"
 "Last-Translator: swkothar <swkothar@redhat.com>\n"
 "Language-Team: Gujarati\n"
 "Language: gu\n"
@@ -169,11 +169,11 @@ msgstr "પુલ ID:"
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "ઉપલબ્ધ"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "સૂચન:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author swkothar
@@ -662,7 +662,7 @@ msgstr "ભૂલ: સર્વરમાંથી પર્યાવરણને
 
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
-msgstr ""
+msgstr "સુયોજિત કરો જો ઉમેદવારીઓ સંચાલન પર જોડાયેલ હોય (દૈનિકની મૂળભૂત)"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author swkothar
@@ -1703,11 +1703,11 @@ msgstr "આ સિસ્ટમની ઉમેદવારીઓ અને પ�
 #: ../src/subscription_manager/managercli.py:2190
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
-msgstr ""
+msgstr "તેની પર સ્થિતિને ચકાસવા માટે ભવિષ્યની તારીખ, આજની તારીખનું મૂળભૂત (ઉદાહરણ: %s)"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "ભૂતકાળની તારીખોને પરવાનગી મળેલ નથી"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author swkothar
@@ -3254,7 +3254,7 @@ msgstr "સર્વર URL પોર્ટ આંકડાકીય હોવ�
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "અને"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author swkothar
@@ -3768,7 +3768,7 @@ msgstr "અજ્ઞાત પ્રમાણપત્ર પ્રકાર"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "મેનિફેસ્ટ zip અયોગ્ય છે."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author swkothar
@@ -4058,6 +4058,8 @@ msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr ""
+"આ ગ્રાહકની રૂપરેખાં સર્વરમાંથી કાઢી નાંખવામાં આવી છે. તે સ્થાનિક પ્રમાણપત્રો છે કે તેને પેટી "
+"બનાવેલ છે"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author swkothar
@@ -4857,7 +4859,7 @@ msgstr "પ્રોડક્ટ લખાણ"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "ઉમેદવારી લખાણને પૂરુ પાડી રહ્યા છે"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4891,17 +4893,19 @@ msgstr "સિસ્ટમ પસંદગીઓ"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "જાતે જ સુધારવા ચેકબોક્સ (_c)"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "જાતે જોડાવાની પસંદગીને સક્રિય કરો"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>જો સક્રિય થયેલ હોય તો, ઉમેદવારીઓ એ સંચાલન પર કોઇપણ ન આવરેલ પ્રોડક્ટ માટે "
+"જોડાયેલ છે (દૈનિકની મૂળભૂત).</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author swkothar
@@ -4991,7 +4995,7 @@ msgstr "શરૂઆત અંતિમ તારીખ લખાણ"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "કરાર ક્રમ લખાણ"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author swkothar
@@ -5013,7 +5017,7 @@ msgstr "<b>સ્થિતિ વિગતો:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "પરિસ્થિતિ વિગત લખાણ"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5394,7 +5398,7 @@ msgstr "આ સિસ્ટમએ એક અથવા વધારે ઉમે�
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "પ્રારંભિક અધિકારીત ઉમેદવારીઓ"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

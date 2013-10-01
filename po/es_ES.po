@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:29-0400\n"
+"PO-Revision-Date: 2013-09-17 08:57-0400\n"
 "Last-Translator: Gladys Guerrero Lozano <gladysguerrerolozano419@gmail.com>\n"
 "Language-Team: Spanish (Spain)\n"
 "Language: es-ES\n"
@@ -116,7 +116,7 @@ msgstr "Versión:"
 # document keys, author gguerrer
 #: ../src/subscription_manager/managercli.py:80
 msgid "Arch:"
-msgstr "Arq: "
+msgstr "Arq.: "
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
@@ -170,11 +170,11 @@ msgstr "ID de grupo:"
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "Disponible:"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "Sugerido:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
@@ -194,7 +194,7 @@ msgstr "Tipo de servicio:"
 # document keys, author gguerrer
 #: ../src/subscription_manager/managercli.py:95
 msgid "Multi-Entitlement:"
-msgstr "Multi-derechos:"
+msgstr "Multiderechos:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
@@ -382,13 +382,13 @@ msgstr "URL del proxy en la forma de proxy_hostname:proxy_port"
 # document keys, author gguerrer
 #: ../src/subscription_manager/managercli.py:257
 msgid "user for HTTP proxy with basic authentication"
-msgstr "Usuario para proxy http con autenticación básica"
+msgstr "Usuario para proxy HTTP con autenticación básica"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
 #: ../src/subscription_manager/managercli.py:259
 msgid "password for HTTP proxy with basic authentication"
-msgstr "Contraseña para proxy http con autenticación básica"
+msgstr "Contraseña para proxy HTTP con autenticación básica"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
@@ -677,6 +677,8 @@ msgstr "Error: No se puede recuperar lista de entornos desde el servidor"
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgstr ""
+"Establece si las suscripciones están vinculadas en un programa "
+"(predeterminado de diario)"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author Gladys Guerrero Lozano
@@ -1105,7 +1107,7 @@ msgstr "Se ha deshecho la preferencia de lanzamiento"
 #, python-format
 msgid "No releases match '%s'.  Consult 'release --list' for a full listing."
 msgstr ""
-"No hay lanzamientos  que coincidan con '%s'.  Consulte 'release --list' para "
+"No hay lanzamientos  que coincidan con '%s'. Consulte 'release --list' para "
 "obtener todo el listado."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
@@ -1113,7 +1115,7 @@ msgstr ""
 #: ../src/subscription_manager/managercli.py:1314
 #, python-format
 msgid "Release set to: %s"
-msgstr "Lanzamiento establecido a:  %s"
+msgstr "Lanzamiento establecido a: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
@@ -1222,7 +1224,7 @@ msgstr ""
 # document keys, author gguerrer
 #: ../src/subscription_manager/managercli.py:1482
 msgid "Deprecated, see attach"
-msgstr "Depreciado, ver attach"
+msgstr "Depreciado, ver adjuntar"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -1235,7 +1237,7 @@ msgstr ""
 # document keys
 #: ../src/subscription_manager/managercli.py:1502
 msgid "remove all subscriptions from this system"
-msgstr "borar todas las suscripciones de este sistema"
+msgstr "borrar todas las suscripciones de este sistema"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -1310,7 +1312,7 @@ msgstr "La suscripción con el número serial %s se borró de este sistema"
 # document keys, author gguerrer
 #: ../src/subscription_manager/managercli.py:1607
 msgid "Deprecated, see remove"
-msgstr "Depreciado, ver remove"
+msgstr "Depreciado, ver retirar"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
@@ -1389,13 +1391,13 @@ msgstr ""
 # document keys, author gguerrer
 #: ../src/subscription_manager/managercli.py:1723
 msgid "View and configure subscription-manager plugins"
-msgstr "Ver y confgurar los complementos subscription-manager"
+msgstr "Ver y configurar los complementos subscription-manager"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
 #: ../src/subscription_manager/managercli.py:1727
 msgid "list subscription-manager plugins"
-msgstr "Listar complementos subscription-manager"
+msgstr "Listar los complementos subscription-manager"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
@@ -1413,7 +1415,7 @@ msgstr "Listar ganchos de complementos subscription-manager"
 # document keys, author gguerrer
 #: ../src/subscription_manager/managercli.py:1734
 msgid "show verbose plugin info"
-msgstr "Mostrar información verbosa del complemento info"
+msgstr "Mostrar información verbosa de complemento"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
@@ -1619,7 +1621,7 @@ msgid ""
 "(example: %s)"
 msgstr ""
 "Fecha para buscar, se predetermina a la fecha de hoy, únicamente utilizados "
-"con --available (example: %s)"
+"con --available (Por ejemplo: %s)"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -1762,10 +1764,12 @@ msgstr ""
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr ""
+"Próxima fecha para revisar el estatus, se predetermina a la fecha de hoy "
+"(por ejemplo: %s)"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "No se aceptan fechas anteriores"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author Gladys Guerrero Lozano
@@ -2517,7 +2521,7 @@ msgstr ""
 # document keys, author Gladys Guerrero Lozano
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:117
 msgid "You have opted to skip auto-attach."
-msgstr "Seleccionó el saltarse el autoadjuntar."
+msgstr "Ha optado por saltarse 'autoadjuntar'."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -2532,7 +2536,7 @@ msgstr "Finalizar"
 #. firstboot modules, not just the rhsm ones. See bz #828042
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:184
 msgid "Subscription Management Registration"
-msgstr "Registro de administración de  suscripciones"
+msgstr "Registro de administración de suscripciones"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
@@ -3048,8 +3052,8 @@ msgid ""
 "\"All Available Subscriptions\" tab to manually attach subscriptions."
 msgstr ""
 "No hay suscripciones disponibles en el nivel de servicio actual: %s. Use la "
-"pestaña \"All Available Subscriptions\" para adjuntar manualmente las "
-"suscripciones."
+"pestaña \"Todas las suscripciones disponibles\" para adjuntar manualmente "
+"las suscripciones."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
@@ -3255,7 +3259,7 @@ msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
-"Error al actualizar los datos del sistema en el servicor, consulte /var/log/"
+"Error al actualizar los datos del sistema en el servidor, consulte /var/log/"
 "rhsm/rhsm.log para mayor información."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
@@ -3353,7 +3357,7 @@ msgstr "URL de servidor debe ser numérica "
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "y"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
@@ -3875,7 +3879,7 @@ msgstr "Tipo de certificado desconocido"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "El zip de manifiesto no es válido."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author Gladys Guerrero Lozano
@@ -4168,6 +4172,8 @@ msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr ""
+"El perfil del usuario ha sido  borrado desde el servidor. Sus certificados "
+"serán archivados ahora."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author Gladys Guerrero Lozano
@@ -4976,7 +4982,7 @@ msgstr "Texto del producto"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "Texto de suministro de suscripciones "
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5010,17 +5016,19 @@ msgstr "Preferencias de sistema"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "autoheal_checkbox"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "Habilita la preferencia actual de auto-attach"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>Si está habilitada, las suscripciones se vincularán para todos los "
+"productos descubiertos en un programa (predeterminado de diario).</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
@@ -5110,7 +5118,7 @@ msgstr "Texto de fecha de inicio y fin"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "Texto de número de contrato"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author gguerrer
@@ -5132,7 +5140,7 @@ msgstr "<b>Información de estatus:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "Texto de información de estatus"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5340,7 +5348,7 @@ msgid ""
 "Aborting."
 msgstr ""
 "No se pudo leer número de instalación desde /etc/sysconfig/rhn/install-num. "
-"Cancelando."
+"Abortando."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5514,7 +5522,7 @@ msgstr "A este sistema le falta una o más suscripciones."
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "Suscripciones con derechos parciales"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

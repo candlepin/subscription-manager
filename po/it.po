@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:25-0400\n"
+"PO-Revision-Date: 2013-09-17 07:00-0400\n"
 "Last-Translator: fvalen <fvalen@fedoraproject.org>\n"
 "Language-Team: Italian\n"
 "Language: it\n"
@@ -168,11 +168,11 @@ msgstr "Id del pool:"
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "Disponibile:"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "Consigliato:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author fvalen
@@ -676,30 +676,36 @@ msgstr "Errore: Impossibile recuperare l'elenco degli ambienti dal server"
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgstr ""
+"Impostato se le sottoscrizioni sono assegnate ad una programmazione (default "
+"giornaliero)"
 
 #: ../src/subscription_manager/managercli.py:733
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
 msgstr ""
+"specificare se abilitare o disabilitare l'auto-attaching delle sottoscrizioni"
 
 #: ../src/subscription_manager/managercli.py:738
 msgid "try to attach subscriptions for uncovered products each check-in"
 msgstr ""
+"cerca di assegnare ad ogni check-in le sottoscrizioni per prodotti che ne "
+"sono sprovvisti"
 
 #: ../src/subscription_manager/managercli.py:740
 msgid "do not try to automatically attach subscriptions each check-in"
 msgstr ""
+"non cercare di assegnare automaticamente le sottoscrizioni ad ogni check-in"
 
 #: ../src/subscription_manager/managercli.py:742
 msgid "show the current auto-attach preference"
-msgstr ""
+msgstr "mostra le preferenze correnti di auto-attach"
 
 #: ../src/subscription_manager/managercli.py:755
 msgid "Auto-attach preference: enabled"
-msgstr ""
+msgstr "Preferenze di auto-attach: abilitate"
 
 #: ../src/subscription_manager/managercli.py:757
 msgid "Auto-attach preference: disabled"
-msgstr ""
+msgstr "Preferenze di auto-attach: disabilitate"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author fvalen
@@ -1753,10 +1759,12 @@ msgstr ""
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr ""
+"data futura per il controllo dello stato, l'impostazione predefinita è la "
+"data odierna (esempio: %s)"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "Non è possibile usare le date passate."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author fvalen
@@ -3360,7 +3368,7 @@ msgstr "La porta dell'URL del server deve avere un valore numerico"
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "e"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author fvalen
@@ -3883,7 +3891,7 @@ msgstr "Tipo di certificato sconosciuto"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "Il Manifest zip non è valido."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author fvalen
@@ -4178,6 +4186,8 @@ msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr ""
+"Il profilo di questa utenza è stato rimosso dal server. I certificati locali "
+"relativi verranno archiviati"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author fvalen
@@ -4984,7 +4994,7 @@ msgstr "Testo del prodotto"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "Visualizzazione testo sottoscrizioni"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5018,17 +5028,20 @@ msgstr "Preferenze del sistema"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "autoheal_checkbox"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "Abilita preferenze di auto-attach"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>Se abilitato, per qualsiasi prodotto non incluso le sottoscrizioni "
+"verranno assegnate ad una programmazione (impostazione predefinita - "
+"giornaliaro).</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author fvalen
@@ -5118,7 +5131,7 @@ msgstr "Testo data di Inizio e Fine"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "Testo numero contratto"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author fvalen
@@ -5140,7 +5153,7 @@ msgstr "<b>Dettagli sullo stato:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "Testo dettagli sullo stato"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5522,7 +5535,7 @@ msgstr "Una o più sottoscrizioni risultano mancanti su questo sistema."
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "Sottoscrizioni con entitlement parziali"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

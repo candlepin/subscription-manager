@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:30-0400\n"
+"PO-Revision-Date: 2013-09-17 10:35-0400\n"
 "Last-Translator: noriko <noriko@fedoraproject.org>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -171,11 +171,11 @@ msgstr "プール ID:"
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "数量:"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "推奨:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author noriko
@@ -668,26 +668,30 @@ msgstr "エラー: サーバーから環境一覧を取り込むことができ�
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgstr ""
+"スケジュールに沿ってサブスクリプションを割り当てるかどうかを設定します (デ"
+"フォルトでは毎日)"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author htaira
 #: ../src/subscription_manager/managercli.py:733
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
-msgstr "サブスクリプションの自動割り当てを有効または無効を指定します。"
+msgstr "サブスクリプションの自動割り当てを有効するか無効するかを指定します"
 
 #: ../src/subscription_manager/managercli.py:738
 msgid "try to attach subscriptions for uncovered products each check-in"
 msgstr ""
+"チェックインの度、 サブスクリプションが適用されていない製品にはサブスクリプ"
+"ションの割り当てを試行します"
 
 #: ../src/subscription_manager/managercli.py:740
 msgid "do not try to automatically attach subscriptions each check-in"
-msgstr ""
+msgstr "チェックインの際、 サブスクリプションの自動割り当てを試行しません"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author htaira
 #: ../src/subscription_manager/managercli.py:742
 msgid "show the current auto-attach preference"
-msgstr "自動割り当ての設定状況を表示します。"
+msgstr "自動割り当ての設定状況を表示します"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author htaira
@@ -1729,11 +1733,11 @@ msgstr "このシステムのサブスクリプションと製品の状態に関
 #: ../src/subscription_manager/managercli.py:2190
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
-msgstr ""
+msgstr "状態の確認を行なう未来の日付、デフォルトは今日の日付です (例: %s)"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "過去の日付は使用できません"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author noriko
@@ -3307,7 +3311,7 @@ msgstr "サーバーの URL ポートは数値にしてください"
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "および"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author noriko
@@ -3828,7 +3832,7 @@ msgstr "不明な証明書タイプ"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "マニフェストの zip は無効です。"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author noriko
@@ -4120,6 +4124,8 @@ msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr ""
+"このコンシューマーのプロファイルはサーバーから削除されています。ローカルの証"
+"明書はアーカイブされます"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author noriko
@@ -4924,7 +4930,7 @@ msgstr "製品テキスト"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "サブスクリプションテキストの提供中"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4958,17 +4964,19 @@ msgstr "システムの設定"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "チェックボックスの自動修復(_C)"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "自動割り当ての設定を有効にする"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>有効にすると、スケジュールに沿ってサブスクリプションが適用されていない"
+"製品すべてにサブスクリプションが割り当てられます (デフォルトでは毎日)</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author khasida
@@ -5058,7 +5066,7 @@ msgstr "開始日と終了日のテキスト"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "コントラクト番号のテキスト"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author khasida
@@ -5080,7 +5088,7 @@ msgstr "<b>状態の詳細:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "状態の詳細テキスト"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5462,7 +5470,7 @@ msgstr "このシステムには 1 つ以上のサブスクリプションが不
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "部分的に付与されているサブスクリプション"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5477,13 +5485,15 @@ msgstr ""
 # document keys
 #: ../src/rhsm_icon/rhsm_icon.c:225
 msgid "This System's Subscriptions Are About to Expire"
-msgstr "このシステムのサブスクリプションはすぐに期限が切れます"
+msgstr "このシステムのサブスクリプションはもうすぐ期限切れになります"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
 #: ../src/rhsm_icon/rhsm_icon.c:228
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr "このシステムのサブスクリプションの１つ以上がすぐに期限切れです"
+msgstr ""
+"このシステムのサブスクリプションのうちの１つまたはそれ以上がもうすぐ期限切れ"
+"になります。"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

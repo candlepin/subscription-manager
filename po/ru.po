@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:30-0400\n"
+"PO-Revision-Date: 2013-09-18 01:39-0400\n"
 "Last-Translator: ypoyarko <ypoyarko@redhat.com>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
@@ -22,7 +22,7 @@ msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
 msgstr ""
-"Система еще не зарегистрирована. Выполните «subscription-manager register --"
+"Система не зарегистрирована. Выполните «subscription-manager register --"
 "help» для получения информации."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
@@ -102,7 +102,7 @@ msgstr "Имя:"
 # document keys, author ypoyarko
 #: ../src/subscription_manager/managercli.py:78
 msgid "Product ID:"
-msgstr "ID продукта:"
+msgstr "ID:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -168,11 +168,11 @@ msgstr "ID пула:"
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "Доступно:"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "Предлагается:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -315,7 +315,7 @@ msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
 msgstr ""
-"Удалённая ошибка сервера. Проверьте настройки подключения или обратитесь к /"
+"Удаленная ошибка сервера. Проверьте настройки подключения или обратитесь к /"
 "var/log/rhsm/rhsm.log"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
@@ -470,7 +470,7 @@ msgstr "Организация:"
 #: ../src/subscription_manager/managercli.py:530
 msgid ""
 "Remove all local system and subscription data without affecting the server"
-msgstr "Удалить локальные данные без отражения результатов на сервере"
+msgstr "Удаление локальных данных без отражения результатов на сервере"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -507,7 +507,7 @@ msgstr "Показать сертификат или запросить новы
 # document keys, author ypoyarko
 #: ../src/subscription_manager/managercli.py:576
 msgid "request a new certificate be generated"
-msgstr "запросить генерацию нового сертификата"
+msgstr "запросить новый сертификат"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -566,7 +566,7 @@ msgstr "организация: %s"
 #: ../src/subscription_manager/managercli.py:613
 #, python-format
 msgid "org ID: %s"
-msgstr "ID организации: %s"
+msgstr "ID: %s"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -588,7 +588,7 @@ msgstr "окружение: %s"
 # document keys, author ypoyarko
 #: ../src/subscription_manager/managercli.py:630
 msgid "Identity certificate has been regenerated."
-msgstr "Идентификационный сертификат создан повторно."
+msgstr "Идентификационный сертификат создан."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -633,7 +633,7 @@ msgstr "Показать доступные окружения"
 # document keys, author ypoyarko
 #: ../src/subscription_manager/managercli.py:682
 msgid "specify organization for environment list, using organization key"
-msgstr "выберите организацию по ключу организации"
+msgstr "выберите организацию по ключу"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -663,30 +663,34 @@ msgstr "Ошибка. Не удалось получить список окру
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgstr ""
+"Выберите, если подбор подписок осуществляется по расписанию (по умолчанию "
+"или ежедневно)."
 
 #: ../src/subscription_manager/managercli.py:733
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
-msgstr ""
+msgstr "здесь можно включить автоматический выбор подписок"
 
 #: ../src/subscription_manager/managercli.py:738
 msgid "try to attach subscriptions for uncovered products each check-in"
 msgstr ""
+"при входе подбирать подписки для продуктов, не контролируемых уровнями "
+"обслуживания"
 
 #: ../src/subscription_manager/managercli.py:740
 msgid "do not try to automatically attach subscriptions each check-in"
-msgstr ""
+msgstr "не подбирать подписки при входе"
 
 #: ../src/subscription_manager/managercli.py:742
 msgid "show the current auto-attach preference"
-msgstr ""
+msgstr "показать предпочтения подбора подписок"
 
 #: ../src/subscription_manager/managercli.py:755
 msgid "Auto-attach preference: enabled"
-msgstr ""
+msgstr "Автоматический выбор: включен"
 
 #: ../src/subscription_manager/managercli.py:757
 msgid "Auto-attach preference: disabled"
-msgstr ""
+msgstr "Автоматический выбор: выключен"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -726,7 +730,7 @@ msgstr "уровень обслуживания для системы"
 # document keys, author ypoyarko
 #: ../src/subscription_manager/managercli.py:788
 msgid "unset the service level for this system"
-msgstr "отменить выбор уровня обслуживания для системы"
+msgstr "отменить выбор уровня обслуживания"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -794,7 +798,7 @@ msgstr "В организации нет подписок с уровнями о
 # document keys, author ypoyarko
 #: ../src/subscription_manager/managercli.py:921
 msgid "base URL for content in form of https://hostname:443/prefix"
-msgstr "Адрес ресурса содержимого в формате https://hostname:443/prefix"
+msgstr "Адрес ресурса в формате https://узел:443/префикс"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -806,7 +810,7 @@ msgstr "тип регистрируемого компонента (по умо�
 # document keys
 #: ../src/subscription_manager/managercli.py:925
 msgid "name of the system to register, defaults to the hostname"
-msgstr "имя сервера регистрации (по умолчанию используется имя компьютера)"
+msgstr "имя сервера регистрации (по умолчанию имя компьютера)"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -828,7 +832,7 @@ msgstr ""
 # document keys, author ypoyarko
 #: ../src/subscription_manager/managercli.py:931
 msgid "register with a specific environment in the destination org"
-msgstr "зарегистрировать в выбранном окружении организации"
+msgstr "зарегистрировать в окружении организации"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -1197,7 +1201,7 @@ msgstr "удалить все подписки системы"
 # document keys
 #: ../src/subscription_manager/managercli.py:1505
 msgid "Remove all or specific subscriptions from this system"
-msgstr "Удалить подписки системы"
+msgstr "Удаление подписок"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -1700,17 +1704,17 @@ msgstr "Показать состояние подписок и продукто
 #: ../src/subscription_manager/managercli.py:2190
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
-msgstr ""
+msgstr "Дата проверки состояния (по умолчанию сегодня). Пример: %s"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "Необходимо выбрать будущую дату"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
 #: ../src/subscription_manager/managercli.py:2211
 msgid "System Status Details"
-msgstr "Свойства состояния системы"
+msgstr "Состояние системы"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -1931,7 +1935,7 @@ msgid ""
 "service level to follow when attaching subscriptions, for no service level "
 "use --servicelevel=\"\""
 msgstr ""
-"уровень обслуживания для назначения подписок. Если не требуется, укажите --"
+"Уровень обслуживания для назначения подписок. Если не требуется, укажите --"
 "servicelevel=\"\"."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
@@ -1945,8 +1949,7 @@ msgstr "Укажите сервер управления подписками д
 #: ../src/subscription_manager/migrate/migrate.py:166
 msgid "don't use RHN proxy settings with subscription management server"
 msgstr ""
-"не использовать параметры RHN Proxy для подключения к серверу управления "
-"подписками"
+"не использовать RHN Proxy для подключения к серверу управления подписками"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -1978,7 +1981,7 @@ msgstr "Учетная запись Red Hat:"
 #: ../src/subscription_manager/migrate/migrate.py:191
 #: ../src/subscription_manager/migrate/migrate.py:195
 msgid "System Engine Username: "
-msgstr "Имя пользователя System Engine:"
+msgstr "Пользователь System Engine:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -3254,7 +3257,7 @@ msgstr "Порт сервера должен быть в числовом фор
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "и"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -3372,8 +3375,8 @@ msgid ""
 "Register this system to the Customer Portal or another subscription "
 "management service"
 msgstr ""
-"Зарегистрируйте систему на портале пользователей или при помощи любой службы "
-"управления подписками "
+"Регистрация на портале пользователей или при помощи службы управления "
+"подписками "
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -3382,7 +3385,7 @@ msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
 msgstr ""
-"Удалите регистрацию системы на портале пользователей или при помощи службы "
+"Удаление регистрации на портале пользователей или при помощи службы "
 "управления подписками"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
@@ -3771,7 +3774,7 @@ msgstr "Неизвестный тип сертификата"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "Неверный zip манифеста."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -4062,6 +4065,8 @@ msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr ""
+"Профиль клиента удален с сервера. Его локальные сертификаты будут помещены в "
+"архив."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -4071,7 +4076,7 @@ msgid ""
 "administrator if you need more information."
 msgstr ""
 "Сертификаты сжаты в /etc/pki/consumer.old. За дальнейшей информацией "
-"обратитесь к системному админитсратору."
+"обратитесь к системному администратору."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -4379,7 +4384,7 @@ msgstr "_Выбрать подписку"
 # document keys, author ypoyarko
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:7
 msgid "View System _Facts"
-msgstr "Просмотр с_татистики"
+msgstr "С_татистика"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4539,7 +4544,7 @@ msgstr "Поле адреса прокси"
 # document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:9
 msgid "Use Au_thentication with HTTP Proxy:"
-msgstr "Включить _аутентификацию прокси:"
+msgstr "Включить _аутентификацию"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4551,7 +4556,7 @@ msgstr "Флажок аутентификации"
 # document keys, author ypoyarko
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:11
 msgid "Proxy _Username:"
-msgstr "_Имя пользователя:"
+msgstr "По_льзователь: "
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -4608,8 +4613,7 @@ msgid ""
 "The subscription management service you register with will provide your "
 "system with updates and allow additional management."
 msgstr ""
-"Служба управления подписками позволит системе своевременно получать "
-"обновления."
+"Служба управления подписками позволит своевременно получать обновления."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -4625,9 +4629,9 @@ msgid ""
 "System Engine or Candlepin servers can be used to provide your system with "
 "updates and allow management through the selected server's interface."
 msgstr ""
-"Регистрация на портале пользователей, в менеджере комплектов подписок, "
-"системной инфраструктуре CloudForms и на сервере Candlepin позволит системе "
-"своевременно получать обновления."
+"Регистрация на портале пользователей, в Subscription Asset Manager, "
+"CloudForms System Engine и на сервере Candlepin позволит своевременно "
+"получать обновления."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -4645,7 +4649,7 @@ msgstr "server_label"
 # document keys, author ypoyarko
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:6
 msgid "hostname[:port][/prefix]"
-msgstr "hostname[:port][/prefix]"
+msgstr "узел[:порт][/префикс]"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -4692,7 +4696,7 @@ msgstr "У меня есть ключ активации"
 # document keys, author ypoyarko
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:13
 msgid "If required, please configure your proxy before moving forward."
-msgstr "Если необходимо, на этой странице настройте прокси-сервер."
+msgstr "Если необходимо, настройте прокси-сервер."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -4737,13 +4741,13 @@ msgstr "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 # document keys, author ypoyarko
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:5
 msgid "<b>Select a common service level for this system's subscriptions:</b>"
-msgstr "<b>Выберите стандартный уровень обслуживания подписок:</b>"
+msgstr "<b>Выберите стандартный уровень обслуживания:</b>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
 #: ../src/subscription_manager/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
-msgstr "Прогресс"
+msgstr "Диалог хода выполнения"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4785,7 +4789,7 @@ msgstr "Совпадение по установленным"
 # document keys
 #: ../src/subscription_manager/gui/data/filters.glade.h:7
 msgid "have no overlap with existing subscriptions"
-msgstr "не пересекаться с существующими подписками"
+msgstr "без пересечения с текущими подписками"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -4861,7 +4865,7 @@ msgstr "Поле продукта"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "Поле предоставления подписок"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4895,17 +4899,19 @@ msgstr "Системные параметры"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "autoheal_checkbox"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "Использовать предпочтения"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>Включает автоматический выбор подписок по расписанию для продуктов, "
+"не охватываемых уровнями обслуживания.</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -4926,8 +4932,7 @@ msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
 msgstr ""
-"<small>При установке пакетов и обновлений будет учтена выбранная версия</"
-"small>"
+"<small>Выбор версии будет учтен при установке пакетов и обновлений</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -4961,7 +4966,7 @@ msgstr "Выбор контракта"
 # document keys
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
 msgid "<b>Choose the specific contract to use:</b>"
-msgstr "<b>Выберите контракт:</b>"
+msgstr "<b>Контракт:</b>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4979,7 +4984,7 @@ msgstr "* Нажмите для изменения числа"
 # document keys, author ypoyarko
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:2
 msgid "<b>Start - End Date:</b>"
-msgstr "<b>Дата начала и завершения:</b>"
+msgstr "<b>Дата начала и окончания:</b>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -4995,7 +5000,7 @@ msgstr "Поле даты начала и окончания"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "Текст номера контракта"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -5007,7 +5012,7 @@ msgstr "<b>Учетная запись:</b>"
 # document keys, author ypoyarko
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:8
 msgid "Account Text"
-msgstr "Текст учётной записи"
+msgstr "Текст учетной записи"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -5017,7 +5022,7 @@ msgstr "<b>Сведения о состоянии:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "Поле сведений о состоянии"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5257,7 +5262,7 @@ msgstr "Не удалось открыть дисплей"
 # document keys, author ypoyarko
 #: ../bin/subscription-manager-gui:146
 msgid "subscription-manager-gui is already running"
-msgstr "subscription-manager-gui уже запущен"
+msgstr "subscription-manager-gui уже выполняется"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -5269,7 +5274,7 @@ msgstr "открывает диалог регистрации при запус
 # document keys, author ypoyarko
 #: ../bin/rct:54
 msgid "User interrupted process."
-msgstr "Пользователь прервал работу."
+msgstr "Пользователь прервал процесс."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -5380,9 +5385,9 @@ msgid ""
 "system must be registered with the Customer Portal. Please enter your Red "
 "Hat login to ensure your system is up-to-date."
 msgstr ""
-"Для поддержки системы в обновленном состоянии необходимо зарегистрировать "
-"систему на портале пользователей. Введите имя пользователя и пароль Red Hat, "
-"чтобы проверить наличие обновлений."
+"Для поддержки системы в обновленном состоянии необходимо ее зарегистрировать "
+"на портале пользователей. Введите имя пользователя и пароль Red Hat, чтобы "
+"проверить наличие обновлений."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5398,7 +5403,7 @@ msgstr "Не хватает подписок для системы."
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "Подписки с неполными полномочиями"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5411,7 +5416,7 @@ msgstr "Недостаточно подписок для всех продукт
 # document keys
 #: ../src/rhsm_icon/rhsm_icon.c:225
 msgid "This System's Subscriptions Are About to Expire"
-msgstr "Подписки системы скоро истекут"
+msgstr "Срок действия подписок подходит к концу. "
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author ypoyarko
@@ -5429,7 +5434,7 @@ msgstr "Напомнить позже"
 # document keys
 #: ../src/rhsm_icon/rhsm_icon.c:254
 msgid "Register Now"
-msgstr "Зарегистрировать сейчас"
+msgstr "Зарегистрировать"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5442,7 +5447,7 @@ msgstr "Управление подписками..."
 #: ../src/rhsm_icon/rhsm_icon.c:339
 #, c-format
 msgid "Unknown argument to force-icon: %s\n"
-msgstr "Неизвестный аргумент для force-icon: %s\n"
+msgstr "Неизвестный аргумент force-icon: %s\n"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

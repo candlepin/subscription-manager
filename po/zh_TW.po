@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:31-0400\n"
-"Last-Translator: Chester Cheng <ccheng@redhat.com>\n"
+"PO-Revision-Date: 2013-09-17 08:15-0400\n"
+"Last-Translator: tchuang <tchuang@redhat.com>\n"
 "Language-Team: Chinese (Traditional, Taiwan)\n"
 "Language: zh-Hant-TW\n"
 "MIME-Version: 1.0\n"
@@ -170,11 +170,11 @@ msgstr "集區 ID："
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "可用的訂閱"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "建議的訂閱："
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author tchuang
@@ -662,7 +662,7 @@ msgstr "錯誤：無法由伺服器取得環境清單"
 
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
-msgstr ""
+msgstr "若訂閱連接至某個排程便設置（預設值為每天）"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author Chester Cheng
@@ -1683,11 +1683,11 @@ msgstr "顯示這台系統的訂閱與產品之狀態資訊"
 #: ../src/subscription_manager/managercli.py:2190
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
-msgstr ""
+msgstr "檢查狀態的未來日期，預設值為當天的日期（例如：%s）"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "不允許使用過去的日期"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author Chester Cheng
@@ -3213,7 +3213,7 @@ msgstr "伺服器 URL 的連接埠應是數字"
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "和"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author tchuang
@@ -3221,7 +3221,7 @@ msgstr ""
 #, python-format
 msgid "%s local certificate has been deleted."
 msgid_plural "%s local certificates have been deleted."
-msgstr[0] "已刪除了 %s 個本機憑證。"
+msgstr[0] "%s 個本機憑證已刪除。"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -3722,7 +3722,7 @@ msgstr "不明的憑證類型"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "清單壓縮檔無效。"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author Chester Cheng
@@ -4005,13 +4005,13 @@ msgstr "內容集：%s"
 # document keys, author Chester Cheng
 #: ../src/daemons/rhsmcertd-worker.py:43
 msgid "Updating entitlement certificates & repositories"
-msgstr "更新權利認證與軟體庫"
+msgstr "更新權利憑證與軟體庫"
 
 #: ../src/daemons/rhsmcertd-worker.py:59
 msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
-msgstr ""
+msgstr "消耗者的設定檔已從伺服器上刪除。其本機憑證現在將會被封存"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author Chester Cheng
@@ -4025,7 +4025,7 @@ msgstr "憑證已備份至「/etc/pki/consumer.old」。欲知更多資訊，請
 # document keys, author Chester Cheng
 #: ../src/daemons/rhsmcertd-worker.py:87
 msgid "Unable to update entitlement certificates and repositories"
-msgstr "無法更新權利認證與軟體庫"
+msgstr "無法更新權利憑證與軟體庫"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4803,7 +4803,7 @@ msgstr "產品文字"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "提供訂閱文字"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4837,17 +4837,19 @@ msgstr "取消註冊"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "autoheal 選取方塊(_c)"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "啓用 auto-attach 偏好設定"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>若啓用的話，任何未受到函蓋的產品皆會在排程的時候連接至訂閱服務（預設值"
+"為每天）。</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author snowlet
@@ -4933,7 +4935,7 @@ msgstr "起始結束日期文字"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "合約編號文字"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author tchuang
@@ -4955,7 +4957,7 @@ msgstr "<b>狀態的詳細資料：</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "狀態詳細資料文字"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5334,7 +5336,7 @@ msgstr "這部系統缺少一或更多項訂閱服務。"
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "部分取得權利的訂閱"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys

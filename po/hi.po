@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-16 13:48-0400\n"
-"PO-Revision-Date: 2013-07-23 11:27-0400\n"
+"PO-Revision-Date: 2013-09-19 07:56-0400\n"
 "Last-Translator: rajesh <rajesh@fedoraproject.org>\n"
 "Language-Team: Hindi\n"
 "Language: hi\n"
@@ -168,11 +168,11 @@ msgstr "पुल आईडी:"
 
 #: ../src/subscription_manager/managercli.py:91
 msgid "Available:"
-msgstr ""
+msgstr "उपलब्ध:"
 
 #: ../src/subscription_manager/managercli.py:92
 msgid "Suggested:"
-msgstr ""
+msgstr "अनुशंसित:"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author rajesh
@@ -661,31 +661,31 @@ msgstr "त्रुटि: सर्वर से वातावरण सू�
 
 #: ../src/subscription_manager/managercli.py:731
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
-msgstr ""
+msgstr "सेट करें यदि सदस्यता शेड्यूल पर संलग्न है (दैनिक का तयशुदा)"
 
 #: ../src/subscription_manager/managercli.py:733
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
-msgstr ""
+msgstr "सदस्यता के स्वतः संलग्नन को सक्रिय या निष्क्रिय करना है निर्दिष्ट करें"
 
 #: ../src/subscription_manager/managercli.py:738
 msgid "try to attach subscriptions for uncovered products each check-in"
-msgstr ""
+msgstr "हर चेकइन के लिए खुले उत्पादों के लिए सदस्यता संलग्न करने की कोशिश करता है"
 
 #: ../src/subscription_manager/managercli.py:740
 msgid "do not try to automatically attach subscriptions each check-in"
-msgstr ""
+msgstr "हर चेकइन पर हर सदस्यता को स्वतः संलग्न करने की कोशिश मत  करें"
 
 #: ../src/subscription_manager/managercli.py:742
 msgid "show the current auto-attach preference"
-msgstr ""
+msgstr "मौजूदा स्वतः संलग्न वरीयता दिखाएँ"
 
 #: ../src/subscription_manager/managercli.py:755
 msgid "Auto-attach preference: enabled"
-msgstr ""
+msgstr "स्वतः संलग्न वरीयताएँ: सक्रिय"
 
 #: ../src/subscription_manager/managercli.py:757
 msgid "Auto-attach preference: disabled"
-msgstr ""
+msgstr "स्वतः संलग्न वरीयताएँ: निष्क्रिय"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author rajesh
@@ -1696,11 +1696,11 @@ msgstr "इस तंत्र के सदस्यता और उत्प�
 #: ../src/subscription_manager/managercli.py:2190
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
-msgstr ""
+msgstr "स्थिति चालू जाँचने के लिए भविष्य की तिथि, आज के तिथि का तयशुदा (उदाहरण: %s)"
 
 #: ../src/subscription_manager/managercli.py:2201
 msgid "Past dates are not allowed"
-msgstr ""
+msgstr "पिछली तिथि की अनुमति नहीं"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author rajesh
@@ -3244,7 +3244,7 @@ msgstr "सर्वर यूआरएल अंक में नहीं ह�
 
 #: ../src/subscription_manager/utils.py:405
 msgid "and"
-msgstr ""
+msgstr "और"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author rajesh
@@ -3756,7 +3756,7 @@ msgstr "अज्ञात प्रमाणपत्र प्रकार"
 
 #: ../src/rct/manifest_commands.py:64
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "मेनिफेस्ट जिप अवैध है."
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author rajesh
@@ -4046,6 +4046,8 @@ msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr ""
+"इस ग्राहक का प्रोफ़ाइल को सर्वर से मिटा दिया गया है. इसका स्थानीय प्रमाणपत्र अभिलेखित "
+"किया जाएगा"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author rajesh
@@ -4844,7 +4846,7 @@ msgstr "उत्पाद पाठ"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Providing Subscriptions Text"
-msgstr ""
+msgstr "सदस्यता पाठ प्रदान कर रहा है"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -4878,17 +4880,19 @@ msgstr "तंत्र वरीयताएँ"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid "autoheal_checkbox"
-msgstr ""
+msgstr "autoheal_checkbox"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Enable auto-attach preference"
-msgstr ""
+msgstr "स्वतः संलग्न वरीयता सक्रिय करें"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
+"<small>यदि सक्रिय है, सदस्यता को किसी अनछुपे उत्पाद के लिए शेड्यूल पर संलग्न किया गया है "
+"(दैनिक का तयशुदा).</small>"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author rajesh
@@ -4978,7 +4982,7 @@ msgstr "आरंभ अंत तिथि पाठ"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "Contract Number Text"
-msgstr ""
+msgstr "संपर्क संख्या पाठ"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys, author rajesh
@@ -5000,7 +5004,7 @@ msgstr "<b>स्थिति विवरण:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
 msgid "Status Details Text"
-msgstr ""
+msgstr "स्थिति विवरण पाठ"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
@@ -5381,7 +5385,7 @@ msgstr "इस तंत्र में एक या अधिक सदस्
 
 #: ../src/rhsm_icon/rhsm_icon.c:218
 msgid "Partially Entitled Subscriptions"
-msgstr ""
+msgstr "आंशिक रूप से एंटाइटिल सदस्यता"
 
 # translation auto-copied from project Subscription Manager, version 1.8.X,
 # document keys
