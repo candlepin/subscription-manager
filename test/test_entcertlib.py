@@ -16,8 +16,7 @@
 from mock import Mock, patch
 from datetime import timedelta, datetime
 
-from stubs import StubEntitlementCertificate, StubProduct, StubEntitlementDirectory, \
-            StubConsumerIdentity
+from stubs import StubEntitlementCertificate, StubProduct, StubEntitlementDirectory
 
 from fixture import SubManFixture
 

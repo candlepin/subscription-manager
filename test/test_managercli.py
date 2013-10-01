@@ -11,8 +11,10 @@ from subscription_manager import managercli, managerlib
 from subscription_manager.printing_utils import format_name, columnize, \
         _echo, _none_wrap
 from subscription_manager.repolib import Repo
-from stubs import MockStderr, StubEntitlementCertificate, \
 from subscription_manager import injection as inj
+from stubs import MockStderr, MockStdout, \
+        StubEntitlementCertificate, \
+
         StubConsumerIdentity, StubProduct, StubUEP
 from fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher

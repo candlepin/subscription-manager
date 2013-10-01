@@ -63,7 +63,7 @@ class CliRegistrationTests(SubManFixture):
         self._inject_mock_invalid_consumer()
         cmd = RegisterCommand()
         cmd._persist_identity_cert = self.stub_persist
-        mock_ipm_wc = self._inject_ipm()
+        self._inject_ipm()
         # Mock out facts and installed products:
         cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
         cmd.facts.write_cache = Mock()
@@ -88,7 +88,7 @@ class CliRegistrationTests(SubManFixture):
 
         mock_entcertlib_instance = mock_entcertlib.return_value
 
-        mock_ipm_wc = self._inject_ipm()
+        self._inject_ipm()
         cmd.main(['register', '--activationkey=test_key', '--org=test_org'])
 
 #        self.assertTrue(mock_ipm_wc.call_count > 0)
@@ -98,10 +98,10 @@ class CliRegistrationTests(SubManFixture):
     @patch('subscription_manager.managercli.EntCertLib')
     def test_consumerid_updates_certs_and_repos(self, mock_entcertlib):
 
-        def getConsumer(self, *args, **kwargs):
+        def get_consumer(self, *args, **kwargs):
             pass
 
-        StubUEP.getConsumer = getConsumer
+        StubUEP.getConsumer = get_consumer
         connection.UEPConnection = StubUEP
 
         self._inject_mock_invalid_consumer()
@@ -117,7 +117,7 @@ class CliRegistrationTests(SubManFixture):
 
         connection.UEPConnection.getConsumer = Mock(return_value={'uuid': '123123'})
 
-        mock_ipm = self._inject_ipm()
+        self._inject_ipm()
         cmd.main(['register', '--consumerid=123456', '--username=testuser1', '--password=password', '--org=test_org'])
 
         #self.assertTrue(mock_ipm.write_cache.call_count > 0)

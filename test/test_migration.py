@@ -365,7 +365,7 @@ class TestMigration(fixture.SubManFixture):
             self.fail("No exception raised")
 
     def test_ssl_error(self):
-        mock_id = self._inject_mock_invalid_consumer()
+        self._inject_mock_invalid_consumer()
         self.engine.cp.getOwnerList = MagicMock(side_effect=SSL.SSLError)
         try:
             self.engine.check_ok_to_proceed("some_username")

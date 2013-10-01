@@ -55,9 +55,9 @@ class CliUnSubscribeTests(SubManFixture):
         self.assertEquals(cmd.cp.called_unbind_serial, ['%s' % ent2.serial, '%s' % ent3.serial])
         self.assertEquals(code, 0)
 
-        self.stub_cp_provider.get_consumer_auth_cp().unbindBySerial = mock.Mock(side_effect=
-            connection.RestlibException("Entitlement Certificate with serial number "
-                                        "2300922701043065601 could not be found."))
+        self.stub_cp_provider.get_consumer_auth_cp().unbindBySerial = mock.Mock(
+            side_effect=connection.RestlibException("Entitlement Certificate with serial number "
+                                                    "2300922701043065601 could not be found."))
         code = cmd.main(['unsubscribe', '--serial=%s' % '2300922701043065601'])
 
         # FIXME: this causes something to freak out deep in nosetests...
@@ -99,4 +99,3 @@ class CliUnSubscribeTests(SubManFixture):
 
         code = cmd.main(['unsubscribe', '--serial=%s' % '33333333'])
         self.assertEquals(code, 1)
-
