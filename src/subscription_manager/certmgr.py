@@ -50,6 +50,7 @@ class BaseCertManager:
         self._libset = self._get_libset()
         self.lock = inj.require(inj.ACTION_LOCK)
         self.report = None
+        self.update_reports = []
 
     def _get_libset(self):
         return []
@@ -61,20 +62,14 @@ class BaseCertManager:
         @return: A list of update reports
         @rtype: list
         """
-        # dict of certlib->report?
-        update_reports = []
         lock = self.lock
+
+        # TODO: move to using a lock context manager
         try:
             lock.acquire()
-            update_reports = self._run_updates(autoheal)
+            self.update_reports = self._run_updates(autoheal)
         finally:
             lock.release()
-
-        # updates at this point is a int representing how many
-        # things were updated, which is pretty much completely useless
-        #print "update reports: "
-        #for upr in update_reports:
-        #    print upr
 
     def _run_update(self, lib):
         update_report = None
@@ -147,7 +142,7 @@ class HealingCertManager(BaseCertManager):
         return lib_set
 
 
-# it may make more sence to have *Lib.cleanup actions?
+# it may make more sense to have *Lib.cleanup actions?
 # *Lib things are weird, since some are idempotent, but
 # some arent. entcertlib/repolib .update can both install
 # certs, and/or delete all of them.
