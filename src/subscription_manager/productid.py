@@ -656,7 +656,6 @@ class ProductManager:
         lst = []
         enabled = yb.repos.listEnabled()
 
-        self.enabled_products = []
         # skip repo's that we don't have productid info for...
         for repo in enabled:
             try:
@@ -664,10 +663,6 @@ class ProductManager:
                 cert = self._get_cert(fn)
                 if cert is None:
                     continue
-                # create a ProductCert/Repo here
-                product_id = ProductId(cert)
-                product_cert_repo = ProductCertRepo(cert, repo.id)
-                self.enabled_products.append(product_cert_repo)
                 lst.append((cert, repo.id))
             except yum.Errors.RepoMDError, e:
                 log.warn("Error loading productid metadata for %s." % repo)
