@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.10.2
+Version: 1.10.3
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,13 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Oct 02 2013 ckozak <ckozak@redhat.com> 1.10.3-1
+- Merge pull request #89 from candlepin/alikins/flex_branding
+  (c4kofony@gmail.com)
+- Change brand attr 'os' to 'brand_type' (alikins@redhat.com)
+- s/os_name/os (alikins@redhat.com)
+- add support for 'os_name' productid attribute (alikins@redhat.com)
+
 * Thu Sep 12 2013 Alex Wood <awood@redhat.com> 1.10.2-1
 - 998033: Handle 401 and 403 with no response body (alikins@redhat.com)
 - Ignore json errors in validate_response (alikins@redhat.com)
