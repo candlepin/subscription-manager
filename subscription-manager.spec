@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.2
+Version: 1.10.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -386,6 +386,118 @@ fi
 %endif
 
 %changelog
+* Wed Oct 02 2013 ckozak <ckozak@redhat.com> 1.10.3-1
+- Latest strings from zanata. (alikins@redhat.com)
+- Latest string catalog. (alikins@redhat.com)
+- point at the zanata 1.10.x version/branch (alikins@redhat.com)
+- Run 'make update-po' on translations. (awood@redhat.com)
+- Latest translations from Zanata. (awood@redhat.com)
+- Merge pull request #782 from candlepin/ckozak/environment_completion
+  (alikins@redhat.com)
+- Merge pull request #776 from candlepin/alikins/1008462_log_virt_what
+  (c4kofony@gmail.com)
+- 1011712: add missing environments completion (ckozak@redhat.com)
+- Merge pull request #773 from candlepin/ckozak/match_gui_filters
+  (alikins@redhat.com)
+- Merge pull request #787 from candlepin/awood/1006985-abort-migration
+  (alikins@redhat.com)
+- Use all keywords args for call to get_avail_ents (alikins@redhat.com)
+- Add 'providedProducts' to test pool (alikins@redhat.com)
+- stylish cleanups (alikins@redhat.com)
+- removed subscribed filter, added testing (ckozak@redhat.com)
+- Add some tests cases for managerlib.get_avail_ents (alikins@redhat.com)
+- fix wrong index in get_filtered_pools_list (ckozak@redhat.com)
+- remove unused args, remove unnecessary idcert read (ckozak@redhat.com)
+- add completion for new CLI filters (ckozak@redhat.com)
+- 654501: add some filtering to list available (ckozak@redhat.com)
+- Merge pull request #765 from candlepin/alikins/redhataccount
+  (awood@redhat.com)
+- Move capture() context manager to fixtures.py (awood@redhat.com)
+- Merge pull request #786 from candlepin/ckozak/cli_list_provided
+  (alikins@redhat.com)
+- 1006985: Abort migration when we detect different certs with the same ID.
+  (awood@redhat.com)
+- Merge pull request #781 from candlepin/ckozak/cat_cert_unlimited
+  (alikins@redhat.com)
+- 996993: add provided to list available (ckozak@redhat.com)
+- Merge pull request #784 from candlepin/ckozak/gui_unentitled_string
+  (alikins@redhat.com)
+- 1012501: Correct number of entitled products with expired ents
+  (ckozak@redhat.com)
+- 1012566: rhsmd cron job 700 (ckozak@redhat.com)
+- 1011703: Do not allow selection on listview (mstead@redhat.com)
+- Merge pull request #779 from candlepin/alikins/flex_branding3
+  (c4kofony@gmail.com)
+- 1011961: -1 quantity is printed as unlimited (ckozak@redhat.com)
+- Merge pull request #774 from candlepin/ckozak/fix_gui_completion
+  (alikins@redhat.com)
+- Make certlib repo and brand updating similar. (alikins@redhat.com)
+- 1004385: remove some gtk help options (ckozak@redhat.com)
+- Make BrandingInstaller run every cert install/rm (alikins@redhat.com)
+- Merge pull request #778 from candlepin/ckozak/update_repolib_attach
+  (alikins@redhat.com)
+- keep repolib in certmgr (ckozak@redhat.com)
+- 1011234: no service level displays empty string (ckozak@redhat.com)
+- 1008016: update repos on certlib change (ckozak@redhat.com)
+- fix traceback when poolstash is empty (ckozak@redhat.com)
+- 1008462: log more virt-what output (alikins@redhat.com)
+- 1008462: Log detected virt info as we detect it. (alikins@redhat.com)
+- 1004341: gui completion no longer resets (ckozak@redhat.com)
+- Merge pull request #761 from candlepin/ckozak/overlap_filter_ondate
+  (alikins@redhat.com)
+- Refactor credentials gathering. (awood@redhat.com)
+- Merge pull request #771 from candlepin/alikins/cmd_name_logging
+  (jmrodri@nc.rr.com)
+- Merge pull request #769 from
+  candlepin/ckozak/catch_exception_updating_installed (jmrodri@nc.rr.com)
+- Merge remote branch 'origin/master' into alikins/redhataccount
+  (awood@redhat.com)
+- Merge pull request #768 from candlepin/ckozak/status_ondate_completion
+  (jmrodri@nc.rr.com)
+- Merge pull request #766 from candlepin/alikins/make_zanata
+  (jmrodri@nc.rr.com)
+- 973838: refresh redhat.repo after register (alikins@redhat.com)
+- make default logger include sys.argv[0] (alikins@redhat.com)
+- Merge pull request #770 from candlepin/mstead/add-virt-type-info
+  (c4kofony@gmail.com)
+- Add System Type to output of list --consumed (mstead@redhat.com)
+- Add Type column to Confirm Subscription screen (mstead@redhat.com)
+- 1008603: Catch and log connection error while updating installed products
+  (ckozak@redhat.com)
+- Merge pull request #767 from candlepin/ckozak/attach_suggested_quantity
+  (wpoteat@redhat.com)
+- 1004385: Add missing rhsm-icon debug options (ckozak@redhat.com)
+- suggested quantity in list available (ckozak@redhat.com)
+- Merge pull request #754 from candlepin/alikins/flex_branding2
+  (c4kofony@gmail.com)
+- 1001820: added ondate to completion (ckozak@redhat.com)
+- cleanup comments (alikins@redhat.com)
+- remove call on filter change, use None instead of now (ckozak@redhat.com)
+- Adding autocomplete stuff for new migration script options.
+  (awood@redhat.com)
+- 767754: overlap filter ondate (ckozak@redhat.com)
+- Add a 'make zanata' target that syncs zanata (alikins@redhat.com)
+- Adding unit tests for new migration script options. (awood@redhat.com)
+- Correct failing unit tests and add convenience method. (awood@redhat.com)
+- Change brand attribute from 'os' to 'brand_type' (alikins@redhat.com)
+- Make rct show branding info (alikins@redhat.com)
+- Move to RHELBrandsInstaller by default. (alikins@redhat.com)
+- Split RHEL specific brand install bits (alikins@redhat.com)
+- Add a BrandsInstaller that handles multiple brands (alikins@redhat.com)
+- Invert dependencies, and add RHEL specific impls. (alikins@redhat.com)
+- Stylish cleanups. (alikins@redhat.com)
+- Added new parameters to the script (tazimkolhar@gmail.com)
+- clean up comments (alikins@redhat.com)
+- More entbranding logging and testing. (alikins@redhat.com)
+- Allow multi ents that provide identical branding (alikins@redhat.com)
+- More entbranding test cases. (alikins@redhat.com)
+- Add BrandPicker and Brand base class. (alikins@redhat.com)
+- Add branding support to ent cert importer. (alikins@redhat.com)
+- Update branding on cert sorter dir moniter event (alikins@redhat.com)
+- Move all branded product logic to entbranding (alikins@redhat.com)
+- make it more clear this is for RHEL branded ents (alikins@redhat.com)
+- Add support for populating product branding info. (alikins@redhat.com)
+
 * Thu Sep 12 2013 Alex Wood <awood@redhat.com> 1.10.2-1
 - update translations from zanata (alikins@redhat.com)
 - 1004893: update prods before compliance (ckozak@redhat.com)
