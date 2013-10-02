@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.9.7
+Version: 1.9.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -385,6 +385,18 @@ fi
 %endif
 
 %changelog
+* Wed Oct 02 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.8-1
+- 996993: add provided to list available (ckozak@redhat.com)
+- 1004341: gui completion no longer resets (ckozak@redhat.com)
+- 1004385: remove some gtk help options (ckozak@redhat.com)
+- 1008016: update repos on certlib change (ckozak@redhat.com)
+- 1011712: add missing environments completion (ckozak@redhat.com)
+- 1011961: -1 quantity is printed as unlimited (ckozak@redhat.com)
+- 1012501: Correct number of entitled products with expired ents (ckozak@redhat.com)
+- 1012566: rhsmd cron job 700 (ckozak@redhat.com)
+- 1011234: no service level displays empty string (ckozak@redhat.com)
+- Newest translations from Zanata. (awood@redhat.com)
+
 * Mon Sep 23 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.7-1
 - 767754: overlap filter ondate (ckozak@redhat.com)
 - 1001820: added ondate to completion (ckozak@redhat.com)
