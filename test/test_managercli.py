@@ -12,8 +12,7 @@ from subscription_manager.managercli import format_name, columnize, \
 from stubs import MockStderr, MockStdout, \
         StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
-from test_handle_gui_exception import FakeException, FakeLogger
-from fixture import SubManFixture
+from fixture import FakeException, FakeLogger, SubManFixture
 
 import mock
 from mock import patch

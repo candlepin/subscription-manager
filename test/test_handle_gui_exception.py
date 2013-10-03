@@ -6,42 +6,14 @@ import rhsm_display
 rhsm_display.set_display()
 
 from subscription_manager.gui import utils
+from fixture import FakeException, FakeLogger
+
 import rhsm.connection as connection
-
-
-class FakeLogger:
-    def __init__(self):
-        self.expected_msg = ""
-        self.msg = None
-        self.logged_exception = None
-
-    def debug(self, buf):
-        self.msg = buf
-
-    def error(self, buf):
-        self.msg = buf
-
-    def exception(self, e):
-        self.logged_exception = e
-
-    def set_expected_msg(self, msg):
-        self.expected_msg = msg
-
-    def info(self, buf):
-        self.msg = buf
 
 
 class FakeErrorWindow:
     def __init__(self, msg, parent=None):
         self.msg = msg
-
-
-class FakeException(Exception):
-    def __init__(self, msg=None):
-        self.msg = msg
-
-    def __str__(self):
-        return repr(self.msg)
 
 
 class HandleGuiExceptionTests(unittest.TestCase):
