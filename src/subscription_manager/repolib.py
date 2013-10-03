@@ -50,8 +50,8 @@ class RepoLib(DataLib):
         action = UpdateAction(self.uep)
         return repo in [c.label for c in action.matching_content()]
 
-    def get_repos(self):
-        action = UpdateAction(self.uep)
+    def get_repos(self, apply_overrides=True):
+        action = UpdateAction(self.uep, apply_overrides=apply_overrides)
         repos = action.get_unique_content()
         if ConsumerIdentity.existsAndValid() and action.override_supported:
             return repos
@@ -88,7 +88,8 @@ class RepoLib(DataLib):
 # Datalib.update() method anyhow. Pretty sure these can go away.
 class UpdateAction:
 
-    def __init__(self, uep, ent_dir=None, prod_dir=None):
+    def __init__(self, uep, ent_dir=None, prod_dir=None, apply_overrides=True):
+        self.apply_overrides = apply_overrides
         if ent_dir:
             self.ent_dir = ent_dir
         else:
@@ -117,9 +118,11 @@ class UpdateAction:
 
         if self.consumer:
             self.consumer_uuid = self.consumer.getConsumerId()
-            status = inj.require(inj.OVERRIDE_STATUS_CACHE).load_status(self.uep, self.consumer_uuid)
-            if status is not None:
-                self.overrides = status
+
+            if self.apply_overrides:
+                status = inj.require(inj.OVERRIDE_STATUS_CACHE).load_status(self.uep, self.consumer_uuid)
+                if status is not None:
+                    self.overrides = status
 
             message = "Release API is not supported by the server. Using default."
             try:
@@ -266,8 +269,10 @@ class UpdateAction:
             repo['metadata_expire'] = content.metadata_expire
 
             self._set_proxy_info(repo)
-            if self.override_supported:
+
+            if self.override_supported and self.apply_overrides:
                 self._set_override_info(repo)
+
             lst.append(repo)
         return lst
 

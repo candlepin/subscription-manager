@@ -67,7 +67,59 @@ class GladeWidget(object):
             setattr(self, name, self.glade.get_widget(name))
 
 
-class SubscriptionManagerTab(GladeWidget):
+class HasSortableWidget(object):
+
+    def set_sorts(self, store, columns):
+        # columns is a list of tuples where the tuple is in the format
+        # (column object, column type, column key)
+        for index, column_data in enumerate(columns):
+            column_data[0].set_sort_column_id(index)
+            sort_func = getattr(self, 'sort_' + column_data[1])
+            store.set_sort_func(index, sort_func, column_data[2])
+            # We want to re-stripe the model after the default class signal handler
+            column_data[0].connect_after('clicked', self._stripe_rows, store)
+
+    def sort_text(self, model, row1, row2, key):
+        # model is a MappedListStore which maps column names to
+        # column indexes.  The column name is passed in through 'key'.
+        str1 = model.get_value(row1, model[key])
+        str2 = model.get_value(row2, model[key])
+        return cmp(str1, str2)
+
+    def sort_date(self, model, row1, row2, key):
+        date1 = model.get_value(row1, model[key]) \
+            or datetime.date(datetime.MINYEAR, 1, 1)
+        date2 = model.get_value(row2, model[key]) \
+            or datetime.date(datetime.MINYEAR, 1, 1)
+        epoch1 = time.mktime(date1.timetuple())
+        epoch2 = time.mktime(date2.timetuple())
+        return cmp(epoch1, epoch2)
+
+    def _stripe_rows(self, column, store):
+        """
+        This method repaints the row stripes when the rows are re-arranged
+        due to the user sorting a column
+        """
+        if 'background' in store:
+            iter = store.get_iter_first()
+            i = 0
+            rows = []
+
+            # Making changes to a TreeModel while you are iterating over it can lead
+            # to weird behavior so we save all the rows that need to be recolored as
+            # TreeRowReferences and set the color on them after the iteration is finished.
+            while iter:
+                bg_color = utils.get_cell_background_color(i)
+                rows += [(ref, bg_color) for ref in utils.gather_group(store, iter, [])]
+                i += 1
+                iter = store.iter_next(iter)
+
+            for r in rows:
+                model = r[0].get_model()
+                iter = model.get_iter(r[0].get_path())
+                model.set_value(iter, model['background'], r[1])
+
+class SubscriptionManagerTab(GladeWidget, HasSortableWidget):
     widget_names = ['top_view', 'content']
     # approx gtk version we need for grid lines to work
     # and not throw errors, this relates to basically rhel6
@@ -142,32 +194,6 @@ class SubscriptionManagerTab(GladeWidget):
         self.top_view.append_column(column)
         return column
 
-    def set_sorts(self, columns):
-        # columns is a list of tuples where the tuple is in the format
-        # (column object, column type, column key)
-        for index, column_data in enumerate(columns):
-            column_data[0].set_sort_column_id(index)
-            sort_func = getattr(self, 'sort_' + column_data[1])
-            self.store.set_sort_func(index, sort_func, column_data[2])
-            # We want to re-stripe the model after the default class signal handler
-            column_data[0].connect_after('clicked', self._stripe_rows, self.store)
-
-    def sort_text(self, model, row1, row2, key):
-        # model is a MappedListStore which maps column names to
-        # column indexes.  The column name is passed in through 'key'.
-        str1 = model.get_value(row1, model[key])
-        str2 = model.get_value(row2, model[key])
-        return cmp(str1, str2)
-
-    def sort_date(self, model, row1, row2, key):
-        date1 = model.get_value(row1, model[key]) \
-            or datetime.date(datetime.MINYEAR, 1, 1)
-        date2 = model.get_value(row2, model[key]) \
-            or datetime.date(datetime.MINYEAR, 1, 1)
-        epoch1 = time.mktime(date1.timetuple())
-        epoch2 = time.mktime(date2.timetuple())
-        return cmp(epoch1, epoch2)
-
     def get_content(self):
         return self.content
 
@@ -187,30 +213,6 @@ class SubscriptionManagerTab(GladeWidget):
 
     def refresh(self):
         pass
-
-    def _stripe_rows(self, column, store):
-        """
-        This method repaints the row stripes when the rows are re-arranged
-        due to the user sorting a column
-        """
-        if 'background' in store:
-            iter = store.get_iter_first()
-            i = 0
-            rows = []
-
-            # Making changes to a TreeModel while you are iterating over it can lead
-            # to weird behavior so we save all the rows that need to be recolored as
-            # TreeRowReferences and set the color on them after the iteration is finished.
-            while iter:
-                bg_color = utils.get_cell_background_color(i)
-                rows += [(ref, bg_color) for ref in utils.gather_group(store, iter, [])]
-                i += 1
-                iter = store.iter_next(iter)
-
-            for r in rows:
-                model = r[0].get_model()
-                iter = model.get_iter(r[0].get_path())
-                model.set_value(iter, model['background'], r[1])
 
 
 class SelectionWrapper(object):
@@ -629,6 +631,30 @@ class DatePicker(gtk.HBox):
         self._destroy()
 
 
+class CheckBoxColumn(gtk.TreeViewColumn):
+
+    def __init__(self, column_title, store, store_key, toggle_callback=None):
+        self.store = store
+        self.store_key = store_key;
+        self._toggle_callback = toggle_callback
+        self.renderer = gtk.CellRendererToggle()
+        self.renderer.set_radio(False)
+        gtk.TreeViewColumn.__init__(self, column_title, self.renderer, active=self.store[self.store_key])
+        self.renderer.connect("toggled", self._on_toggle)
+
+    def _on_toggle(self, widget, path):
+        tree_iter = self.store.get_iter(path)
+        if not tree_iter:
+            return
+
+        column = self.store[self.store_key]
+        new_state = not self.store.get_value(tree_iter, column)
+        self.store.set(tree_iter, column, new_state)
+
+        if self._toggle_callback:
+            self._toggle_callback(tree_iter, new_state)
+
+
 class ToggleTextColumn(gtk.TreeViewColumn):
     """
     A gtk.TreeViewColumn that toggles between two text values based on a boolean
@@ -799,6 +825,31 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
 
                 cell_renderer.set_property("adjustment",
                     gtk.Adjustment(lower=int(increment), upper=int(available), step_incr=int(increment)))
+
+
+class TextTreeViewColumn(gtk.TreeViewColumn):
+    def __init__(self, store, column_title, store_key, expand=False, markup=False):
+        self.column_title = column_title
+        self.text_renderer = gtk.CellRendererText()
+        self.store_key = store_key
+
+        if markup:
+            gtk.TreeViewColumn.__init__(self, self.column_title,
+                                        self.text_renderer,
+                                        markup=store[store_key])
+        else:
+            gtk.TreeViewColumn.__init__(self, self.column_title,
+                                        self.text_renderer,
+                                        text=store[store_key])
+
+        if expand:
+            self.set_expand(True)
+        elif 'align' in store:
+            self.add_attribute(self.text_renderer, 'xalign', store['align'])
+
+        if 'background' in store:
+            self.add_attribute(self.text_renderer, 'cell-background',
+                                store['background'])
 
 
 def expand_collapse_on_row_activated_callback(treeview, path, view_column):

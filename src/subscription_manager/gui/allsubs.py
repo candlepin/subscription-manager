@@ -88,7 +88,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                                                           self.store['quantity_increment'])
         self.top_view.append_column(quantity_column)
 
-        self.set_sorts(cols)
+        self.set_sorts(self.store, cols)
 
         self.edit_quantity_label.set_label(quantity_column.get_column_legend_text())
 

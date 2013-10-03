@@ -324,6 +324,10 @@ class OverrideStatusCache(StatusCache):
     def _sync_with_server(self, uep, consumer_uuid):
         self.server_status = uep.getContentOverrides(consumer_uuid)
 
+    def update_local(self, override_json):
+        self.server_status = override_json
+        self.write_cache()
+
 
 class LocalOnlyOverrideStatusCache(OverrideStatusCache):
     """
