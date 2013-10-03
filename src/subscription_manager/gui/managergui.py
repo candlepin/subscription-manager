@@ -54,6 +54,7 @@ from subscription_manager.gui.installedtab import InstalledProductsTab
 from subscription_manager.gui.mysubstab import MySubscriptionsTab
 from subscription_manager.gui.preferences import PreferencesDialog
 from subscription_manager.gui.utils import handle_gui_exception, linkify
+from subscription_manager.gui.reposgui import RepositoriesDialog
 
 
 _ = gettext.gettext
@@ -126,7 +127,7 @@ class MainWindow(widgets.GladeWidget):
     """
     widget_names = ['main_window', 'notebook', 'system_name_label',
                     'register_menu_item', 'unregister_menu_item',
-                    'redeem_menu_item', 'settings_menu_item']
+                    'redeem_menu_item', 'settings_menu_item', 'repos_menu_item']
 
     def __init__(self, backend=None, facts=None,
                  ent_dir=None, prod_dir=None,
@@ -158,6 +159,8 @@ class MainWindow(widgets.GladeWidget):
 
         self.preferences_dialog = PreferencesDialog(self.backend,
                                                     self._get_window())
+
+        self.repos_dialog = RepositoriesDialog(self.backend, self._get_window())
 
         self.import_sub_dialog = ImportSubDialog()
 
@@ -202,6 +205,7 @@ class MainWindow(widgets.GladeWidget):
             "on_proxy_config_menu_item_activate": self._proxy_config_item_clicked,
             "on_redeem_menu_item_activate": self._redeem_item_clicked,
             "on_preferences_menu_item_activate": self._preferences_item_clicked,
+            "on_repos_menu_item_activate": self._repos_item_clicked,
             "on_about_menu_item_activate": self._about_item_clicked,
             "on_getting_started_menu_item_activate": self._getting_started_item_clicked,
             "on_online_docs_menu_item_activate": self._online_docs_item_clicked,
@@ -317,6 +321,15 @@ class MainWindow(widgets.GladeWidget):
             handle_gui_exception(e, _("Error in preferences dialog."
                                       "Please see /var/log/rhsm/rhsm.log for more information."),
                                  self._get_window())
+
+    def _repos_item_clicked(self, widget):
+        try:
+            self.repos_dialog.show()
+        except Exception, e:
+            handle_gui_exception(e, _("Error in preferences dialog."
+                                      "Please see /var/log/rhsm/rhsm.log for more information."),
+                                 self._get_window())
+
 
     def _on_unregister_prompt_response(self, dialog, response):
         if not response:

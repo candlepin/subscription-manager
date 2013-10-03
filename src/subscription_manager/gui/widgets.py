@@ -629,6 +629,21 @@ class DatePicker(gtk.HBox):
         self._destroy()
 
 
+class CheckBoxColumn(gtk.TreeViewColumn):
+
+    def __init__(self, column_title, store, store_key):
+        gtk.TreeViewColumn.__init__(self, column_title)
+        self.store = store
+        self.store_key = store_key;
+        self.renderer = gtk.CellRendererToggle()
+        self.renderer.set_radio(False)
+        self.renderer.connect("toggled", self._on_toggle)
+        self.pack_start(self.renderer, False)
+
+    def _on_toggle(self, widget, path):
+        self.store[path][self.store_key] = not self.store[path][self.store_key]
+
+
 class ToggleTextColumn(gtk.TreeViewColumn):
     """
     A gtk.TreeViewColumn that toggles between two text values based on a boolean
@@ -799,6 +814,31 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
 
                 cell_renderer.set_property("adjustment",
                     gtk.Adjustment(lower=int(increment), upper=int(available), step_incr=int(increment)))
+
+
+class TextTreeViewColumn(gtk.TreeViewColumn):
+    def __init__(self, store, column_title, store_key, expand=False, markup=False):
+        self.column_title = column_title
+        self.text_renderer = gtk.CellRendererText()
+        self.store_key = store_key
+
+        if markup:
+            gtk.TreeViewColumn.__init__(self, self.column_title,
+                                        self.text_renderer,
+                                        markup=store[store_key])
+        else:
+            gtk.TreeViewColumn.__init__(self, self.column_title,
+                                        self.text_renderer,
+                                        text=store[store_key])
+
+        if expand:
+            self.set_expand(True)
+        elif 'align' in store:
+            self.add_attribute(self.text_renderer, 'xalign', store['align'])
+
+        if 'background' in store:
+            self.add_attribute(self.text_renderer, 'cell-background',
+                                store['background'])
 
 
 def expand_collapse_on_row_activated_callback(treeview, path, view_column):
