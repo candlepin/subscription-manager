@@ -21,6 +21,7 @@ import fnmatch
 import getpass
 import gettext
 import logging
+from optparse import OptionValueError
 import os
 import socket
 import sys
@@ -2197,6 +2198,49 @@ class ListCommand(CliCommand):
                     system_type) + "\n"
 
 
+class OverrideCommand(CliCommand):
+    def __init__(self):
+        shortdesc = _("Override content repository settings")
+        super(OverrideCommand, self).__init__("override", shortdesc, False)
+        self.parser.add_option("--repo", dest="repos", action="append",
+            help=_("The repository or repositories to operate on. May be provided multiple times"))
+        self.parser.add_option("--remove", dest="removals", action="append",
+            help=_("The name of the override to remove"))
+        self.parser.add_option("--add", dest="additions", action="callback", callback=self._colon_split,
+            type="string",
+            help=_("The name of the option to overide and value of the override separated by a colon"))
+        self.parser.add_option("--remove-all", action="store_true",
+            help=_("Remove all overrides. Can be specific to a repository by providing --repo"))
+        self.parser.add_option("--list", action="store_true",
+            help=_("List all overrides. Can be specific to a repository by providing --repo"))
+
+    def _colon_split(self, option, opt_str, value, parser):
+        if parser.values.additions is None:
+            parser.values.additions = {}
+
+        k, colon, v = value.partition(':')
+        if not v:
+            raise OptionValueError(_("--add arguments should be in the form of \"name:value\""))
+
+        parser.values.additions[k] = v
+
+    def _validate_options(self):
+        if self.options.additions or self.options.removals:
+            if not self.options.repos:
+                print _("Error: You must specify a repository to modify")
+                sys.exit(-1)
+            if self.options.remove_all or self.options.list:
+                print _("Error: You may not use --add or --remove with --remove-all and --list")
+                sys.exit(-1)
+        if self.options.list and self.options.remove_all:
+                print _("Error: You may not use --list with --remove-all")
+                sys.exit(-1)
+
+    def _do_command(self):
+        self._validate_options()
+        consumer = check_registration()['uuid']
+
+
 class VersionCommand(CliCommand):
 
     def __init__(self):
@@ -2268,7 +2312,7 @@ class ManagerCLI(CLI):
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
                     VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
-                    AutohealCommand]
+                    AutohealCommand, OverrideCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):

@@ -646,6 +646,54 @@ class TestPluginsCommand(TestCliCommand):
     command_class = managercli.PluginsCommand
 
 
+class TestOverrideCommand(TestCliProxyCommand):
+    command_class = managercli.OverrideCommand
+
+    def setUp(self):
+        TestCliProxyCommand.setUp(self)
+
+    def _test_exception(self, args):
+        self.cc.main(args)
+        self.assertRaises(SystemExit, self.cc._validate_options)
+
+    def test_bad_add_format(self):
+        self.assertRaises(SystemExit, self.cc.main, ["--add", "hello"])
+        self.assertRaises(SystemExit, self.cc.main, ["--add", "hello:"])
+
+    def test_add_and_remove_with_no_repo(self):
+        self._test_exception(["--add", "hello:world"])
+        self._test_exception(["--remove", "hello"])
+
+    def test_add_and_remove_with_list(self):
+        self._test_exception(["--add", "x:y", "--repo", "x", "--list"])
+        self._test_exception(["--remove", "y", "--repo", "x", "--list"])
+
+    def test_add_and_remove_with_remove_all(self):
+        self._test_exception(["--add", "x:y", "--repo", "x", "--remove-all"])
+        self._test_exception(["--remove", "y", "--repo", "x", "--remove-all"])
+
+    def test_list_and_remove_all_mutuall_exclusive(self):
+        self._test_exception(["--list", "--remove-all"])
+
+    def test_add_with_multiple_colons(self):
+        self.cc.main(["--repo", "x", "--add", "url:http://example.com"])
+        self.cc._validate_options()
+        self.assertEquals(self.cc.options.additions, {'url': 'http://example.com'})
+
+    def test_add_and_remove_with_multi_repos(self):
+        self.cc.main(["--repo", "x", "--repo", "y", "--add", "a:b", "--remove", "a"])
+        self.cc._validate_options()
+        self.assertEquals(self.cc.options.repos, ['x', 'y'])
+        self.assertEquals(self.cc.options.additions, {'a': 'b'})
+        self.assertEquals(self.cc.options.removals, ['a'])
+
+    def test_list_and_remove_all_work_with_repos(self):
+        self.cc.main(["--repo", "x", "--list"])
+        self.cc._validate_options()
+        self.cc.main(["--repo", "x", "--remove-all"])
+        self.cc._validate_options()
+
+
 class TestSystemExit(unittest.TestCase):
     def setUp(self):
         sys.stderr = MockStderr()
