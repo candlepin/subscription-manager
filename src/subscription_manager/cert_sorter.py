@@ -329,7 +329,7 @@ class CertSorter(ComplianceManager):
         self.identity_monitor.connect('changed', self.on_identity_changed)
 
     def get_compliance_status(self):
-        status_cache = inj.require(inj.STATUS_CACHE)
+        status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
         return status_cache.load_status(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
 
     def update_product_manager(self):

@@ -58,7 +58,7 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.IDENTITY, id_mock)
         inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR, self.mock_calc)
 
-        inj.provide(inj.STATUS_CACHE, stubs.StubStatusCache())
+        inj.provide(inj.ENTITLEMENT_STATUS_CACHE, stubs.StubEntitlementStatusCache())
         inj.provide(inj.PROD_STATUS_CACHE, stubs.StubProductStatusCache())
         # By default set up an empty stub entitlement and product dir.
         # Tests need to modify or create their own but nothing should hit

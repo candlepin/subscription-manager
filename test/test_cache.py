@@ -26,7 +26,7 @@ from stubs import StubProduct, StubProductCertificate, StubCertificateDirectory
 from fixture import SubManFixture
 
 from subscription_manager.cache import ProfileManager, \
-        InstalledProductsManager, StatusCache
+        InstalledProductsManager, EntitlementStatusCache
 from rhsm.profile import Package, RPMProfile
 from rhsm.connection import RestlibException
 
@@ -252,11 +252,11 @@ class TestInstalledProductsCache(unittest.TestCase):
         self.assertEquals(0, self.mgr.write_cache.call_count)
 
 
-class TestStatusCache(SubManFixture):
+class TestEntitlementStatusCache(SubManFixture):
 
     def setUp(self):
-        super(TestStatusCache, self).setUp()
-        self.status_cache = StatusCache()
+        super(TestEntitlementStatusCache, self).setUp()
+        self.status_cache = EntitlementStatusCache()
         self.status_cache.write_cache = Mock()
 
     def test_load_from_server(self):
@@ -294,7 +294,7 @@ class TestStatusCache(SubManFixture):
 
     def test_write_cache(self):
         mock_server_status = {'fake server status': random.uniform(1, 2 ** 32)}
-        status_cache = StatusCache()
+        status_cache = EntitlementStatusCache()
         status_cache.server_status = mock_server_status
         cache_dir = tempfile.mkdtemp()
         cache_file = os.path.join(cache_dir, 'status_cache.json')

@@ -19,7 +19,7 @@ import random
 import tempfile
 
 from subscription_manager.cert_sorter import CertSorter
-from subscription_manager.cache import StatusCache, ProductStatusCache
+from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache
 from rhsm.certificate import GMT
 
 # config file is root only, so just fill in a stringbuffer
@@ -546,7 +546,7 @@ class StubCPProvider(object):
         return self.no_auth_cp
 
 
-class StubStatusCache(StatusCache):
+class StubEntitlementStatusCache(EntitlementStatusCache):
 
     def write_cache(self):
         pass

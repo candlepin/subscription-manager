@@ -33,7 +33,7 @@ from subscription_manager import certlib
 from subscription_manager.certlib import system_log as inner_system_log
 from subscription_manager.facts import Facts
 from subscription_manager.injection import require, CERT_SORTER, \
-        PRODUCT_DATE_RANGE_CALCULATOR, IDENTITY, STATUS_CACHE, \
+        PRODUCT_DATE_RANGE_CALCULATOR, IDENTITY, ENTITLEMENT_STATUS_CACHE, \
         PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
@@ -818,7 +818,7 @@ def unregister(uep, consumer_uuid):
     cache.InstalledProductsManager.delete_cache()
 
     # Must also delete in-memory cache
-    require(STATUS_CACHE).delete_cache()
+    require(ENTITLEMENT_STATUS_CACHE).delete_cache()
     require(PROD_STATUS_CACHE).delete_cache()
 
 
@@ -869,8 +869,8 @@ def clean_all_data(backup=True):
     cache.InstalledProductsManager.delete_cache()
     Facts.delete_cache()
 
-    # Must also delete in-menory cache
-    require(STATUS_CACHE).delete_cache()
+    # Must also delete in-memory cache
+    require(ENTITLEMENT_STATUS_CACHE).delete_cache()
     require(PROD_STATUS_CACHE).delete_cache()
     RepoLib.delete_repo_file()
     log.info("Cleaned local data")

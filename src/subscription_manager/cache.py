@@ -188,17 +188,11 @@ class CacheManager(object):
 
 class StatusCache(CacheManager):
     """
-    Manages the system cache of entitlement status from the server.
     Unlike other cache managers, this one gets info from the server rather
     than sending it.
     """
-    CACHE_FILE = "/var/lib/rhsm/cache/entitlement_status.json"
-
     def __init__(self):
         self.server_status = None
-
-    def _sync_with_server(self, uep, uuid):
-        self.server_status = uep.getCompliance(uuid)
 
     def load_status(self, uep, uuid):
         """
@@ -222,8 +216,7 @@ class StatusCache(CacheManager):
             return None
         except connection.RestlibException:
             # Indicates we may be talking to a very old candlepin server
-            # which does not have the compliance API call. Report everything
-            # as unknown in this case.
+            # which does not have the necessary API call.
             return None
 
         # If we hit a network error, but no cache exists (extremely unlikely)
@@ -286,6 +279,18 @@ class StatusCache(CacheManager):
     def delete_cache(self):
         super(StatusCache, self).delete_cache()
         self.server_status = None
+
+
+class EntitlementStatusCache(StatusCache):
+    """
+    Manages the system cache of entitlement status from the server.
+    Unlike other cache managers, this one gets info from the server rather
+    than sending it.
+    """
+    CACHE_FILE = "/var/lib/rhsm/cache/entitlement_status.json"
+
+    def _sync_with_server(self, uep, uuid):
+        self.server_status = uep.getCompliance(uuid)
 
 
 class ProductStatusCache(StatusCache):
