@@ -1053,7 +1053,7 @@ class UEPConnection:
         Get all the overrides for the specified consumer.
         """
         method = "/consumers/%s/content_overrides" % self.sanitize(consumerId)
-        return self.conn.request_get(method);
+        return self.conn.request_get(method)
 
     def setContentOverrides(self, consumerId, overrides):
         """
