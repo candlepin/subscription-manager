@@ -23,7 +23,9 @@ sys.path.append('/usr/share/rhsm')
 
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoLib
+from subscription_manager.cache import LocalOnlyOverrideStatusCache
 from rhsm import connection
+from rhsm import config
 
 requires_api_version = '2.5'
 plugin_type = (TYPE_CORE, TYPE_INTERACTIVE)
@@ -125,6 +127,11 @@ def config_hook(conduit):
 
     from subscription_manager.injectioninit import init_dep_injection
     init_dep_injection()
+
+    cfg = config.initConfig()
+    if not cfg.get_int('rhsm', 'full_refresh_on_yum'):
+        # Don't go to the server if full_refresh_on_yum is zero.
+        inj.provide(inj.OVERRIDE_STATUS_CACHE, LocalOnlyOverrideStatusCache, singleton=True)
 
     if hasattr(conduit, 'registerPackageName'):
         conduit.registerPackageName("subscription-manager")

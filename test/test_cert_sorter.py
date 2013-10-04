@@ -20,7 +20,7 @@ from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificat
     StubUEP, StubCertSorter
 import subscription_manager.cert_sorter
 from subscription_manager.cert_sorter import CertSorter, UNKNOWN
-from subscription_manager.cache import StatusCache
+from subscription_manager.cache import EntitlementStatusCache
 from datetime import timedelta, datetime
 from mock import Mock, patch
 from rhsm import ourjson as json
@@ -81,11 +81,11 @@ class CertSorterTests(SubManFixture):
 
         self.mock_uep = StubUEP()
 
-        self.status_mgr = StatusCache()
+        self.status_mgr = EntitlementStatusCache()
         self.status_mgr.load_status = Mock(
                 return_value=SAMPLE_COMPLIANCE_JSON)
         self.status_mgr.write_cache = Mock()
-        inj.provide(inj.STATUS_CACHE, self.status_mgr)
+        inj.provide(inj.ENTITLEMENT_STATUS_CACHE, self.status_mgr)
         inj.provide(inj.PROD_DIR, self.prod_dir)
         inj.provide(inj.ENT_DIR, self.ent_dir)
         self.sorter = CertSorter()

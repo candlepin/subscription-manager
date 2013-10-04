@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
+import re
 import sys
 import socket
 
@@ -9,10 +10,12 @@ import stubs
 from subscription_manager import managercli, managerlib
 from subscription_manager.managercli import format_name, columnize, \
         _echo, _none_wrap
+from subscription_manager.repolib import Repo
 from stubs import MockStderr, MockStdout, \
         StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
-from fixture import FakeException, FakeLogger, SubManFixture
+from fixture import FakeException, FakeLogger, SubManFixture, \
+        capture, Matcher, dict_list_equals
 
 import mock
 from mock import patch
@@ -389,6 +392,10 @@ class TestRedeemCommand(TestCliProxyCommand):
 class TestReposCommand(TestCliCommand):
     command_class = managercli.ReposCommand
 
+    def setUp(self):
+        super(TestReposCommand, self).setUp()
+        self.cc.cp = Mock()
+
     def test_list(self):
         self.cc.main(["--list"])
         self.cc._validate_options()
@@ -401,31 +408,76 @@ class TestReposCommand(TestCliCommand):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
 
+    @mock.patch("subscription_manager.managercli.RepoLib")
+    @mock.patch("subscription_manager.managercli.check_registration")
+    @mock.patch("subscription_manager.managercli.ConsumerIdentity")
+    def test_set_repo_status(self, mock_ident, mock_registration, mock_repolib):
+        mock_ident.existsAndValid.return_value = True
+        repolib_instance = mock_repolib.return_value
+        mock_registration.return_value = {'uuid': 'fake_id', 'consumer_name':
+                'fake_name'}
+
+        repos = [Repo('x'), Repo('y'), Repo('z')]
+        items = ['x', 'y']
+        self.cc.use_overrides = True
+        self.cc._set_repo_status(repos, repolib_instance, items, False)
+
+        expected_overrides = [{'contentLabel': i, 'name': 'enabled', 'value':
+            '0'} for i in items]
+
+        # The list of overrides sent to setContentOverrides is really a set of
+        # dictionaries (since we don't know the order of the overrides).
+        # However, since the dict class is not hashable, we can't actually use
+        # a set.  So we need a custom matcher to make sure that the
+        # JSON passed in to setContentOverrides is what we expect.
+        match_dict_list = Matcher(dict_list_equals, expected_overrides)
+        self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
+                match_dict_list)
+        repolib_instance.update.assert_called()
+
+    @mock.patch("subscription_manager.managercli.RepoLib")
+    @mock.patch("subscription_manager.managercli.check_registration")
+    @mock.patch("subscription_manager.managercli.ConsumerIdentity")
+    def test_set_repo_status_with_wildcards(self, mock_ident, mock_registration, mock_repolib):
+        mock_ident.existsAndValid.return_value = True
+        repolib_instance = mock_repolib.return_value
+        mock_registration.return_value = {'uuid': 'fake_id', 'consumer_name':
+                'fake_name'}
+
+        repos = [Repo('zoo'), Repo('zebra'), Repo('zip')]
+        items = ['z*']
+        self.cc.use_overrides = True
+        self.cc._set_repo_status(repos, repolib_instance, items, False)
+
+        expected_overrides = [{'contentLabel': i.id, 'name': 'enabled', 'value':
+            '0'} for i in repos]
+        match_dict_list = Matcher(dict_list_equals, expected_overrides)
+        self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
+                match_dict_list)
+        repolib_instance.update.assert_called()
+
     @mock.patch("subscription_manager.managercli.RepoFile")
-    def test_set_repo_status(self, mock_repofile):
-        repos = mock.MagicMock()
-        repo = mock.MagicMock()
+    @mock.patch("subscription_manager.managercli.ConsumerIdentity")
+    def test_set_repo_status_when_disconnected(self, mock_ident, mock_repofile):
+        mock_ident.existsAndValid.return_value = False
         mock_repofile_inst = mock_repofile.return_value
 
-        repos.__iter__.return_value = iter([repo])
+        enabled = {'enabled': '1'}.items()
+        disabled = {'enabled': '0'}.items()
 
-        repo_dict = {'enabled': '1'}
+        zoo = Repo('zoo', enabled)
+        zebra = Repo('zebra', disabled)
+        zippy = Repo('zippy', enabled)
+        zero = Repo('zero', disabled)
+        repos = [zoo, zebra, zippy, zero]
+        items = ['z*']
 
-        def getitem(name):
-            return repo_dict[name]
-
-        def setitem(name, val):
-            repo_dict[name] = val
-
-        repo.__getitem__.side_effect = getitem
-        repo.__setitem__.side_effect = setitem
-        repo.id = "foo"
-
-        items = ["foo"]
-        self.cc._set_repo_status(repos, items, False)
-        mock_repofile_inst.read.assert_called()
-        mock_repofile_inst.update.assert_called_with(repo)
-        mock_repofile_inst.write.assert_called()
+        self.cc._set_repo_status(repos, None, items, False)
+        calls = [mock.call(r) for r in repos if r['enabled'] == 1]
+        mock_repofile_inst.update.assert_has_calls(calls)
+        for r in repos:
+            self.assertEquals('0', r['enabled'])
+        mock_repofile_inst.write.assert_called_once_with()
 
 
 class TestConfigCommand(TestCliCommand):
@@ -654,6 +706,138 @@ class TestPluginsCommand(TestCliCommand):
     command_class = managercli.PluginsCommand
 
 
+class TestOverrideCommand(TestCliProxyCommand):
+    command_class = managercli.OverrideCommand
+
+    def setUp(self):
+        TestCliProxyCommand.setUp(self)
+
+    def _test_exception(self, args):
+        self.cc.main(args)
+        self.assertRaises(SystemExit, self.cc._validate_options)
+
+    def test_bad_add_format(self):
+        self.assertRaises(SystemExit, self.cc.main, ["--add", "hello"])
+        self.assertRaises(SystemExit, self.cc.main, ["--add", "hello:"])
+
+    def test_add_and_remove_with_no_repo(self):
+        self._test_exception(["--add", "hello:world"])
+        self._test_exception(["--remove", "hello"])
+
+    def test_add_and_remove_with_list(self):
+        self._test_exception(["--add", "x:y", "--repo", "x", "--list"])
+        self._test_exception(["--remove", "y", "--repo", "x", "--list"])
+
+    def test_add_and_remove_with_remove_all(self):
+        self._test_exception(["--add", "x:y", "--repo", "x", "--remove-all"])
+        self._test_exception(["--remove", "y", "--repo", "x", "--remove-all"])
+
+    def test_list_and_remove_all_mutuall_exclusive(self):
+        self._test_exception(["--list", "--remove-all"])
+
+    def test_add_with_multiple_colons(self):
+        self.cc.main(["--repo", "x", "--add", "url:http://example.com"])
+        self.cc._validate_options()
+        self.assertEquals(self.cc.options.additions, {'url': 'http://example.com'})
+
+    def test_add_and_remove_with_multi_repos(self):
+        self.cc.main(["--repo", "x", "--repo", "y", "--add", "a:b", "--remove", "a"])
+        self.cc._validate_options()
+        self.assertEquals(self.cc.options.repos, ['x', 'y'])
+        self.assertEquals(self.cc.options.additions, {'a': 'b'})
+        self.assertEquals(self.cc.options.removals, ['a'])
+
+    def test_list_and_remove_all_work_with_repos(self):
+        self.cc.main(["--repo", "x", "--list"])
+        self.cc._validate_options()
+        self.cc.main(["--repo", "x", "--remove-all"])
+        self.cc._validate_options()
+
+    def _build_override(self, repo, name=None, value=None):
+        data = {'contentLabel': repo}
+        if name:
+            data['name'] = name
+        if value:
+            data['value'] = value
+        return data
+
+    def test_list_function(self):
+        data = []
+        data.append(self._build_override('x', 'hello', 'world'))
+        data.append(self._build_override('x', 'blast-off', 'space'))
+        data.append(self._build_override('y', 'goodbye', 'earth'))
+        data.append(self._build_override('z', 'greetings', 'mars'))
+        with capture() as out:
+            self.cc._list(data, None)
+            output = out.getvalue()
+            self.assertTrue(re.search('Repository: x', output))
+            self.assertTrue(re.search('\s+hello:\s+world', output))
+            self.assertTrue(re.search('\s+blast-off:\s+space', output))
+            self.assertTrue(re.search('Repository: y', output))
+            self.assertTrue(re.search('\s+goodbye:\s+earth', output))
+            self.assertTrue(re.search('Repository: z', output))
+            self.assertTrue(re.search('\s+greetings:\s+mars', output))
+
+    def test_list_specific_repos(self):
+        data = []
+        data.append(self._build_override('x', 'hello', 'world'))
+        data.append(self._build_override('z', 'greetings', 'mars'))
+        with capture() as out:
+            self.cc._list(data, ['x'])
+            output = out.getvalue()
+            self.assertTrue(re.search('Repository: x', output))
+            self.assertTrue(re.search('\s+hello:\s+world', output))
+            self.assertFalse(re.search('Repository: z', output))
+
+    def test_list_nonexistant_repos(self):
+        data = []
+        data.append(self._build_override('x', 'hello', 'world'))
+        with capture() as out:
+            self.cc._list(data, ['x', 'z'])
+            output = out.getvalue()
+            self.assertTrue(re.search("Nothing is known about 'z'", output))
+            self.assertTrue(re.search('Repository: x', output))
+            self.assertTrue(re.search('\s+hello:\s+world', output))
+
+    def test_add_function(self):
+        repos = ['x', 'y']
+        overrides = {'a': 'b', 'c': 'd'}
+        expected = [
+            {'contentLabel': 'x', 'name': 'a', 'value': 'b'},
+            {'contentLabel': 'x', 'name': 'c', 'value': 'd'},
+            {'contentLabel': 'y', 'name': 'a', 'value': 'b'},
+            {'contentLabel': 'y', 'name': 'c', 'value': 'd'},
+        ]
+        result = self.cc._add(repos, overrides)
+        self.assertTrue(dict_list_equals(expected, result))
+
+    def test_remove_function(self):
+        repos = ['x', 'y']
+        removes = ['a', 'b']
+        expected = [
+            {'contentLabel': 'x', 'name': 'a'},
+            {'contentLabel': 'x', 'name': 'b'},
+            {'contentLabel': 'y', 'name': 'a'},
+            {'contentLabel': 'y', 'name': 'b'},
+        ]
+        result = self.cc._remove(repos, removes)
+        self.assertTrue(dict_list_equals(expected, result))
+
+    def test_remove_all(self):
+        repos = ['x', 'y']
+        expected = [
+            {'contentLabel': 'x'},
+            {'contentLabel': 'y'},
+        ]
+        result = self.cc._remove_all(repos)
+        self.assertTrue(dict_list_equals(expected, result))
+
+    def test_remove_all_with_no_repos_given(self):
+        repos = []
+        result = self.cc._remove_all(repos)
+        self.assertEquals(None, result)
+
+
 class TestSystemExit(unittest.TestCase):
     def setUp(self):
         sys.stderr = MockStderr()
@@ -832,6 +1016,16 @@ class TestFormatName(unittest.TestCase):
         name = None
         new_name = format_name(name, self.indent, self.max_length)
         self.assertTrue(new_name is None)
+
+    def test_leading_spaces(self):
+        name = " " * 4 + "I have four leading spaces"
+        new_name = format_name(name, 3, 10)
+        self.assertEquals("    I have\n   four\n   leading\n   spaces", new_name)
+
+    def test_leading_tabs(self):
+        name = "\t" * 4 + "I have four leading tabs"
+        new_name = format_name(name, self.indent, self.max_length)
+        self.assertEquals("\t" * 4, new_name[0:4])
 
 
 class TestNoneWrap(unittest.TestCase):
