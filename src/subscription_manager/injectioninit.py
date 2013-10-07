@@ -14,7 +14,7 @@
 
 import subscription_manager.injection as inj
 
-from subscription_manager.cache import ProductStatusCache, EntitlementStatusCache
+from subscription_manager.cache import ProductStatusCache, EntitlementStatusCache, OverrideStatusCache
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
@@ -43,6 +43,7 @@ def init_dep_injection():
 
     inj.provide(inj.ENTITLEMENT_STATUS_CACHE, EntitlementStatusCache, singleton=True)
     inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache, singleton=True)
+    inj.provide(inj.OVERRIDE_STATUS_CACHE, OverrideStatusCache, singleton=True)
 
     inj.provide(inj.CP_PROVIDER, CPProvider, singleton=True)
 

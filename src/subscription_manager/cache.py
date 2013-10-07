@@ -308,6 +308,16 @@ class ProductStatusCache(StatusCache):
             self.server_status = consumer_data['installedProducts']
 
 
+class OverrideStatusCache(StatusCache):
+    """
+    Manages the cache of yum repo overrides set on the server.
+    """
+    CACHE_FILE = "/var/lib/rhsm/cache/content_overrides.json"
+
+    def _sync_with_server(self, uep, consumer_uuid):
+        self.server_status = uep.getContentOverrides(consumer_uuid)
+
+
 class ProfileManager(CacheManager):
     """
     Manages the profile of packages installed on this system.
