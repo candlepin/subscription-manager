@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.9.8
+Version: 1.9.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -385,6 +385,11 @@ fi
 %endif
 
 %changelog
+* Mon Oct 07 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.9-1
+- 1006985: Abort migration when we detect different certs with the same ID.  (awood@redhat.com)
+- 1008557: suggested quantity in list available (ckozak@redhat.com)
+- 1011703: Do not allow selection on listview (mstead@redhat.com)
+
 * Wed Oct 02 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.8-1
 - 996993: add provided to list available (ckozak@redhat.com)
 - 1004341: gui completion no longer resets (ckozak@redhat.com)
