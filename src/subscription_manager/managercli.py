@@ -2238,10 +2238,17 @@ class OverrideCommand(CliCommand):
 
     def _do_command(self):
         self._validate_options()
+        if not self.entitlement_dir.list():
+            print _("This system does not have any subscriptions.")
+            return 1
+
         consumer = check_registration()['uuid']
         cache = inj.require(inj.OVERRIDE_STATUS_CACHE).load_status(self.cp, consumer)
         if self.options.list:
-            self._list(cache, self.options.repos)
+            if cache:
+                self._list(cache, self.options.repos)
+            else:
+                print _("This system does not have any content overrides applied to it.")
             return
         if self.options.additions:
             overrides = self._add(self.options.repos, self.options.additions)
@@ -2262,9 +2269,9 @@ class OverrideCommand(CliCommand):
             # overrides is a hash of hashes.  Like this: {'repo_x': {'enabled': '1', 'gpgcheck': '1'}}
             overrides.setdefault(repo, {})[name] = value
 
-        specific_repos = set(specific_repos)
         to_show = set(overrides.keys())
         if specific_repos:
+            specific_repos = set(specific_repos)
             for r in specific_repos.difference(to_show):
                 print _("Nothing is known about %s") % r
             # Take the intersection of the sets

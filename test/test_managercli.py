@@ -709,7 +709,7 @@ class TestOverrideCommand(TestCliProxyCommand):
         data.append(self._build_override('y', 'goodbye', 'earth'))
         data.append(self._build_override('z', 'greetings', 'mars'))
         with capture() as out:
-            self.cc._list(data, ['x', 'y', 'z'])
+            self.cc._list(data, None)
             output = out.getvalue()
             self.assertTrue(re.search('Repository: x', output))
             self.assertTrue(re.search('\s+hello:\s+world', output))
