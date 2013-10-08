@@ -712,12 +712,12 @@ class TestOverrideCommand(TestCliProxyCommand):
             self.cc._list(data, ['x', 'y', 'z'])
             output = out.getvalue()
             self.assertTrue(re.search('Repository: x', output))
-            self.assertTrue(re.search('hello:\s+world', output))
-            self.assertTrue(re.search('blast-off:\s+space', output))
+            self.assertTrue(re.search('\s+hello:\s+world', output))
+            self.assertTrue(re.search('\s+blast-off:\s+space', output))
             self.assertTrue(re.search('Repository: y', output))
-            self.assertTrue(re.search('goodbye:\s+earth', output))
+            self.assertTrue(re.search('\s+goodbye:\s+earth', output))
             self.assertTrue(re.search('Repository: z', output))
-            self.assertTrue(re.search('greetings:\s+mars', output))
+            self.assertTrue(re.search('\s+greetings:\s+mars', output))
 
     def test_list_specific_repos(self):
         data = []
@@ -727,7 +727,7 @@ class TestOverrideCommand(TestCliProxyCommand):
             self.cc._list(data, ['x'])
             output = out.getvalue()
             self.assertTrue(re.search('Repository: x', output))
-            self.assertTrue(re.search('hello:\s+world', output))
+            self.assertTrue(re.search('\s+hello:\s+world', output))
             self.assertFalse(re.search('Repository: z', output))
 
     def test_list_nonexistant_repos(self):
@@ -738,7 +738,7 @@ class TestOverrideCommand(TestCliProxyCommand):
             output = out.getvalue()
             self.assertTrue(re.search('Nothing is known about z', output))
             self.assertTrue(re.search('Repository: x', output))
-            self.assertTrue(re.search('hello:\s+world', output))
+            self.assertTrue(re.search('\s+hello:\s+world', output))
 
 
 class TestSystemExit(unittest.TestCase):

@@ -2265,8 +2265,8 @@ class OverrideCommand(CliCommand):
             repo_data = sorted(overrides[repo].items(), key=lambda x: x[0])
             # Split the hash into a list of names and a list of keys
             names, values = zip(*repo_data)
-            names = ["  %s:" % x for x in names]
-            print columnize(names, _echo, *values) + "\n"
+            names = ["%s:" % x for x in names]
+            print columnize(names, _echo, *values, indent=2) + "\n"
 
 
 class VersionCommand(CliCommand):
