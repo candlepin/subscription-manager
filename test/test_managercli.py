@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
+import re
 import sys
 import socket
 
@@ -12,7 +13,7 @@ from subscription_manager.managercli import format_name, columnize, \
 from stubs import MockStderr, MockStdout, \
         StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
-from fixture import FakeException, FakeLogger, SubManFixture
+from fixture import FakeException, FakeLogger, SubManFixture, capture
 
 import mock
 from mock import patch
@@ -692,6 +693,52 @@ class TestOverrideCommand(TestCliProxyCommand):
         self.cc._validate_options()
         self.cc.main(["--repo", "x", "--remove-all"])
         self.cc._validate_options()
+
+    def _build_override(self, repo, name=None, value=None):
+        data = {'contentLabel': repo}
+        if name:
+            data['name'] = name
+        if value:
+            data['value'] = value
+        return data
+
+    def test_list_function(self):
+        data = []
+        data.append(self._build_override('x', 'hello', 'world'))
+        data.append(self._build_override('x', 'blast-off', 'space'))
+        data.append(self._build_override('y', 'goodbye', 'earth'))
+        data.append(self._build_override('z', 'greetings', 'mars'))
+        with capture() as out:
+            self.cc._list(data, ['x', 'y', 'z'])
+            output = out.getvalue()
+            self.assertTrue(re.search('Repository: x', output))
+            self.assertTrue(re.search('hello:\s+world', output))
+            self.assertTrue(re.search('blast-off:\s+space', output))
+            self.assertTrue(re.search('Repository: y', output))
+            self.assertTrue(re.search('goodbye:\s+earth', output))
+            self.assertTrue(re.search('Repository: z', output))
+            self.assertTrue(re.search('greetings:\s+mars', output))
+
+    def test_list_specific_repos(self):
+        data = []
+        data.append(self._build_override('x', 'hello', 'world'))
+        data.append(self._build_override('z', 'greetings', 'mars'))
+        with capture() as out:
+            self.cc._list(data, ['x'])
+            output = out.getvalue()
+            self.assertTrue(re.search('Repository: x', output))
+            self.assertTrue(re.search('hello:\s+world', output))
+            self.assertFalse(re.search('Repository: z', output))
+
+    def test_list_nonexistant_repos(self):
+        data = []
+        data.append(self._build_override('x', 'hello', 'world'))
+        with capture() as out:
+            self.cc._list(data, ['x', 'z'])
+            output = out.getvalue()
+            self.assertTrue(re.search('Nothing is known about z', output))
+            self.assertTrue(re.search('Repository: x', output))
+            self.assertTrue(re.search('hello:\s+world', output))
 
 
 class TestSystemExit(unittest.TestCase):

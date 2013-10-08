@@ -2239,6 +2239,34 @@ class OverrideCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
         consumer = check_registration()['uuid']
+        cache = inj.require(inj.OVERRIDE_STATUS_CACHE).load_status(self.cp, consumer)
+        if self.options.list:
+            self._list(cache, self.options.repos)
+
+    def _list(self, json, specific_repos):
+        overrides = {}
+        for entry in json:
+            repo = entry['contentLabel']
+            name = entry['name']
+            value = entry['value']
+            # overrides is a hash of hashes.  Like this: {'repo_x': {'enabled': '1', 'gpgcheck': '1'}}
+            overrides.setdefault(repo, {})[name] = value
+
+        specific_repos = set(specific_repos)
+        to_show = set(overrides.keys())
+        if specific_repos:
+            for r in specific_repos.difference(to_show):
+                print _("Nothing is known about %s") % r
+            # Take the intersection of the sets
+            to_show &= specific_repos
+
+        for repo in sorted(to_show):
+            print _("Repository: %s") % repo
+            repo_data = sorted(overrides[repo].items(), key=lambda x: x[0])
+            # Split the hash into a list of names and a list of keys
+            names, values = zip(*repo_data)
+            names = ["  %s:" % x for x in names]
+            print columnize(names, _echo, *values) + "\n"
 
 
 class VersionCommand(CliCommand):
