@@ -2359,7 +2359,7 @@ def ljust_wide(in_str, padding):
     return in_str + ' ' * (padding - width(in_str))
 
 
-def columnize(caption_list, callback, *args):
+def columnize(caption_list, callback, *args, **kwargs):
     """
     Take a list of captions and values and columnize the output so that
     shorter captions are padded to be the same length as the longest caption.
@@ -2371,11 +2371,13 @@ def columnize(caption_list, callback, *args):
     The callback gives us the ability to do things like replacing None values
     with the string "None" (see _none_wrap()).
     """
+    indent = kwargs.get('indent', 0)
+    caption_list = [" " * indent + caption for caption in caption_list]
     padding = min(sorted(map(width, caption_list))[-1] + 1,
             int(get_terminal_width() / 2))
     padded_list = []
     for caption in caption_list:
-        lines = format_name(caption, 0, padding - 1).split('\n')
+        lines = format_name(caption, indent, padding - 1).split('\n')
         lines[-1] = ljust_wide(lines[-1], padding) + '%s'
         fixed_caption = '\n'.join(lines)
         padded_list.append(fixed_caption)
@@ -2413,11 +2415,19 @@ def format_name(name, indent, max_length):
     if not isinstance(name, unicode):
         name = name.decode("utf-8")
     words = name.split()
-    current = indent
     lines = []
     # handle emtpty names
     if not words:
         return name
+
+    # Preserve leading whitespace in front of the first word
+    leading_space = len(name) - len(name.lstrip())
+    words[0] = name[0:leading_space] + words[0]
+    # If there is leading whitespace, we've already indented the word and don't
+    # want to double count.
+    current = indent - leading_space
+    if current < 0:
+        current = 0
 
     def add_line():
         lines.append(' '.join(line))

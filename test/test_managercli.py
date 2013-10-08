@@ -920,6 +920,16 @@ class TestFormatName(unittest.TestCase):
         new_name = format_name(name, self.indent, self.max_length)
         self.assertTrue(new_name is None)
 
+    def test_leading_spaces(self):
+        name = " " * 4 + "I have four leading spaces"
+        new_name = format_name(name, 3, 10)
+        self.assertEquals("    I have\n   four\n   leading\n   spaces", new_name)
+
+    def test_leading_tabs(self):
+        name = "\t" * 4 + "I have four leading tabs"
+        new_name = format_name(name, self.indent, self.max_length)
+        self.assertEquals("\t" * 4, new_name[0:4])
+
 
 class TestNoneWrap(unittest.TestCase):
     def test_none_wrap(self):
