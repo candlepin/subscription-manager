@@ -2242,6 +2242,16 @@ class OverrideCommand(CliCommand):
         cache = inj.require(inj.OVERRIDE_STATUS_CACHE).load_status(self.cp, consumer)
         if self.options.list:
             self._list(cache, self.options.repos)
+            return
+        if self.options.additions:
+            overrides = self._add(self.options.repos, self.options.additions)
+            self.cp.setContentOverrides(consumer, overrides)
+        if self.options.removals:
+            overrides = self._remove(self.options.repos, self.options.removals)
+            self.cp.deleteContentOverrides(consumer, overrides)
+        if self.options.remove_all:
+            overrides = self._remove_all(self.options.repos)
+            self.cp.deleteContentOverrides(consumer, overrides)
 
     def _list(self, json, specific_repos):
         overrides = {}
@@ -2267,6 +2277,18 @@ class OverrideCommand(CliCommand):
             names, values = zip(*repo_data)
             names = ["%s:" % x for x in names]
             print columnize(names, _echo, *values, indent=2) + "\n"
+
+    def _add(self, repos, additions):
+        return [{'contentLabel': repo, 'name': k, 'value': v} for repo in repos for k, v in additions.items()]
+
+    def _remove(self, repos, removals):
+        return [{'contentLabel': repo, 'name': item} for repo in repos for item in removals]
+
+    def _remove_all(self, repos):
+        if repos:
+            return [{'contentLabel': repo} for repo in repos]
+        else:
+            return None
 
 
 class VersionCommand(CliCommand):
