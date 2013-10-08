@@ -2006,9 +2006,9 @@ class ListCommand(CliCommand):
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("shows only subscriptions matching the specified service level; only used with --available and --consumed"))
         self.parser.add_option("--no-overlap", action='store_true',
-                               help=_("show pools with this text in the name"))
+                               help=_("shows pools which provide products that are not already covered; only used with --available"))
         self.parser.add_option("--match-installed", action="store_true",
-                               help=("shows only subscriptions matching products that are currently installed"))
+                               help=("shows only subscriptions matching products that are currently installed; only used with --available"))
 
         self.facts = Facts(ent_dir=self.entitlement_dir,
                           prod_dir=self.product_dir)
