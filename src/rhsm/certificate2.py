@@ -734,6 +734,9 @@ class Content(object):
         return "<Content: content_type=%s name=%s label=%s enabled=%s>" % \
                 (self.content_type, self.name, self.label, self.enabled)
 
+    def __hash__(self):
+        return hash(self.label)
+
 
 class Pool(object):
     """

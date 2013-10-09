@@ -1168,6 +1168,9 @@ class Content(Entitlement):
     def __repr__(self):
         return str(self)
 
+    def __hash__(self):
+        return hash(self.label)
+
 
 class Role(Entitlement):
 
