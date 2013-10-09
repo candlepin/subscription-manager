@@ -43,6 +43,10 @@ class RepoLib(DataLib):
         action = UpdateAction(uep=self.uep)
         return action.perform()
 
+    def is_managed(self, repo):
+        action = UpdateAction(uep=self.uep)
+        return repo in [c.label for c in action.matching_content()]
+
     def get_repos(self):
         current = set()
         action = UpdateAction(uep=self.uep)
@@ -179,30 +183,41 @@ class UpdateAction:
         key_path = os.path.join(dir_path, key_filename)
         return key_path
 
+    def matching_content(self, ent_cert=None):
+        if ent_cert:
+            certs = [ent_cert]
+        else:
+            certs = self.ent_dir.list_valid()
+
+        lst = set()
+
+        for cert in certs:
+            if not cert.content:
+                continue
+
+            tags_we_have = self.prod_dir.get_provided_tags()
+
+            for content in cert.content:
+                if not content.content_type in ALLOWED_CONTENT_TYPES:
+                    log.debug("Content type %s not allowed, skipping content: %s" % (
+                        content.content_type, content.label))
+                    continue
+
+                all_tags_found = True
+                for tag in content.required_tags:
+                    if not tag in tags_we_have:
+                        log.debug("Missing required tag '%s', skipping content: %s" % (
+                            tag, content.label))
+                        all_tags_found = False
+                if all_tags_found:
+                    lst.add(content)
+
+        return lst
+
     def get_content(self, ent_cert, baseurl, ca_cert):
         lst = []
 
-        if not ent_cert.content:
-            return lst
-
-        tags_we_have = self.prod_dir.get_provided_tags()
-
-        for content in ent_cert.content:
-            if not content.content_type in ALLOWED_CONTENT_TYPES:
-                log.debug("Content type %s not allowed, skipping content: %s" % (
-                    content.content_type, content.label))
-                continue
-
-            all_tags_found = True
-            for tag in content.required_tags:
-                if not tag in tags_we_have:
-                    log.debug("Missing required tag '%s', skipping content: %s" % (
-                        tag, content.label))
-                    all_tags_found = False
-            if not all_tags_found:
-                # Skip this content:
-                continue
-
+        for content in self.matching_content(ent_cert):
             content_id = content.label
             repo = Repo(content_id)
             repo['name'] = content.name
