@@ -35,6 +35,7 @@
                 <child>
                   <widget class="GtkCheckButton" id="compatible_checkbutton">
                     <property name="label" translatable="yes">match my system</property>
+                    <property name="tooltip" translatable="yes">Only show subscriptions which can be attached to this machine and architecture</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -51,6 +52,7 @@
                 <child>
                   <widget class="GtkCheckButton" id="installed_checkbutton">
                     <property name="label" translatable="yes">match my installed products</property>
+                    <property name="tooltip" translatable="yes">Only show subscriptions which can be applied to products installed on this machine</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -67,6 +69,7 @@
                 <child>
                   <widget class="GtkCheckButton" id="no_overlapping_checkbutton">
                     <property name="label" translatable="yes">have no overlap with existing subscriptions</property>
+                    <property name="tooltip" translatable="yes">Hide subscriptions which are active for dates currently covered</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
