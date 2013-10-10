@@ -22,8 +22,10 @@ from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, OVERRIDE_STATUS_CACHE, require
 from subscription_manager.repolib import RepoLib
-from subscription_manager.gui.storage import MappedTreeStore
-from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn
+from subscription_manager.gui.storage import MappedListStore
+from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\
+    SelectionWrapper
+from subscription_manager.gui.messageWindow import ContinueDialog
 
 _ = gettext.gettext
 
@@ -34,7 +36,10 @@ class RepositoriesDialog(widgets.GladeWidget):
     """
     GTK dialog for managing repositories and their overrides.
     """
-    widget_names = ['main_window', 'overrides_treeview', 'reset_button', 'close_button']
+    widget_names = ['main_window', 'overrides_treeview', 'reset_button', 'close_button',
+                    'name_text', 'gpgcheck_text', 'gpgcheck_combo_box',
+                    'gpgcheck_remove_button', 'gpgcheck_lock_button',
+                    'baseurl_text']
 
     def __init__(self, backend, parent):
         super(RepositoriesDialog, self).__init__('repositories.glade')
@@ -42,30 +47,69 @@ class RepositoriesDialog(widgets.GladeWidget):
         self.identity = require(IDENTITY)
         self.cache = require(OVERRIDE_STATUS_CACHE)
         self.repo_lib = RepoLib(uep=self.backend.cp_provider.get_consumer_auth_cp())
-        self.overrides = {}
 
         self.glade.signal_autoconnect({
                 "on_dialog_delete_event": self._on_close,
                 "on_close_button_clicked": self._on_close,
                 "on_reset_button_clicked": self._on_reset_repo,
+                "on_gpgcheck_lock_button_clicked": self._on_gpgcheck_lock_button_clicked,
+                "on_gpgcheck_remove_button_clicked": self._on_gpgcheck_remove_button_clicked,
+                "on_gpgcheck_combo_box_changed": self._on_gpgcheck_combo_box_changed,
         })
 
-        self.overrides_store = MappedTreeStore({
-            "enabled": bool,
+        self.overrides_store = MappedListStore({
             "repo_id": str,
-            "modified": str,
+            "enabled": bool,
+            "modified": bool,
+            "modified-icon": gtk.gdk.Pixbuf,
+            "name": str,
+            "baseurl": str,
+            "gpgcheck": bool,
+            "gpgcheck_modified": bool,
         })
+
+        # Gnome will hide all button icons by default (gnome setting),
+        # so force the icons to show in this case as there is no button
+        # text, just the icon.
+        gpgcheck_lock_image = gtk.Image()
+        gpgcheck_lock_image.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_BUTTON)
+        self.gpgcheck_lock_button.set_image(gpgcheck_lock_image)
+        self.gpgcheck_lock_button.get_image().show()
+
+        gpgcheck_reset_image = gtk.Image()
+        gpgcheck_reset_image.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_BUTTON)
+        self.gpgcheck_remove_button.set_image(gpgcheck_reset_image)
+        self.gpgcheck_remove_button.get_image().show()
+
         self.overrides_treeview.set_model(self.overrides_store)
 
-        enabled_col = CheckBoxColumn(_("Enabled"), self.overrides_store, 'enabled')
+        self.modified_icon = self.overrides_treeview.render_icon(gtk.STOCK_APPLY,
+                                                                 gtk.ICON_SIZE_MENU)
+
+        enabled_col = CheckBoxColumn(_("Enabled"), self.overrides_store, 'enabled',
+            self._on_enable_repo_toggle)
         self.overrides_treeview.append_column(enabled_col)
 
         repo_id_col = TextTreeViewColumn(self.overrides_store, _("Repository ID"), 'repo_id',
                                          expand=True)
         self.overrides_treeview.append_column(repo_id_col)
 
-        modified_col = TextTreeViewColumn(self.overrides_store, _("Modified"), 'modified')
+        modified_col = gtk.TreeViewColumn(_("Modified"), gtk.CellRendererPixbuf(),
+                                          pixbuf=self.overrides_store['modified-icon'])
         self.overrides_treeview.append_column(modified_col)
+
+        self.overrides_treeview.get_selection().connect('changed', self._on_selection)
+        self.overrides_treeview.set_rules_hint(True)
+
+        self.gpgcheck_cb_model = gtk.ListStore(str, bool)
+        self.gpgcheck_cb_model.append((_("Enabled"), True))
+        self.gpgcheck_cb_model.append((_("Disabled"), False))
+
+        gpgcheck_cell_renderer = gtk.CellRendererText()
+        self.gpgcheck_combo_box.pack_start(gpgcheck_cell_renderer, True)
+        self.gpgcheck_combo_box.add_attribute(gpgcheck_cell_renderer, "text", 0)
+        self.gpgcheck_combo_box.set_model(self.gpgcheck_cb_model)
+        self.gpgcheck_combo_box.set_active(0)
 
         self.main_window.set_transient_for(parent)
         self.parent = parent
@@ -74,64 +118,130 @@ class RepositoriesDialog(widgets.GladeWidget):
         self.main_window.hide()
 
     def show(self):
-        """Make this dialog visible."""
-#        self._init_overrides()
-#        self._init_available_repos()
-
         self._load_data()
         self.main_window.present()
 
     def _load_data(self):
-        print "Loading data..."
-        current_repos = [repo.id for repo in self.repo_lib.get_repos()]
         cp = self.backend.cp_provider.get_consumer_auth_cp()
-        overrides = self.cache.load_status(cp, self.identity.uuid)
+        current_overrides = self.cache.load_status(cp, self.identity.uuid) or []
+        self._refresh(current_overrides)
 
-        for override in overrides:
-            if not override['contentLabel'] in current_repos:
-                continue
+    def _refresh(self, current_overrides, repo_id_to_select=None):
 
-            self.overrides[override['contentLabel']] = override
+        overrides_per_repo = {}
 
+        for override in current_overrides:
+            repo_id = override['contentLabel']
+            overrides_per_repo.setdefault(repo_id, {})
+            overrides_per_repo[repo_id][override['name']] = override['value']
+
+        self.overrides_store.clear();
+        current_repos = self.repo_lib.get_repos(read_repo_file=True)
+        for repo in current_repos:
+            overrides = overrides_per_repo.get(repo.id, None)
+            modified = not overrides is None
+            enabled = self._get_model_value(repo, overrides, 'enabled')[0]
+            gpgcheck, gpgcheck_modified = self._get_model_value(repo, overrides, 'gpgcheck')
+            self.overrides_store.add_map({
+                'enabled': bool(int(enabled)),
+                'repo_id': repo.id,
+                'modified': modified,
+                'modified-icon': self._get_modified_icon(modified),
+                'name': repo['name'],
+                'baseurl': repo['baseurl'],
+                'gpgcheck': bool(int(gpgcheck)),
+                'gpgcheck_modified': gpgcheck_modified,
+            })
+
+        first_row_iter = self.overrides_store.get_iter_first()
+        if not first_row_iter:
+            self._set_details_visible(False)
+        elif repo_id_to_select:
+            self._select_by_repo_id(repo_id_to_select)
+        else:
+            self.overrides_treeview.get_selection().select_iter(first_row_iter)
+
+    def _get_modified_icon(self, modified):
+        icon = None
+        if modified:
+            icon = self.modified_icon
+        return icon
+
+    def _get_selected_repo_id(self):
+        selected = None
+        override_selection = SelectionWrapper(self.overrides_treeview.get_selection(),
+                                              self.overrides_store)
+        if override_selection.is_valid():
+            selected = override_selection['repo_id']
+        return selected
+
+    def _select_by_repo_id(self, repo_id):
+        repo_data = (repo_id, self.overrides_store['repo_id'])
+        self.overrides_store.foreach(self._select_repo_row, repo_data)
+
+    def _select_repo_row(self, model, path, tree_iter, repo_data_tuple):
+        """
+        Passed to model's foreach method to select the row if the repo_id
+        matches. Returning True tells foreach to stop processing rows.
+        """
+        repo_id, check_idx = repo_data_tuple
+        row_repo_id = model.get_value(tree_iter, check_idx)
+        if repo_id == row_repo_id:
+            self.overrides_treeview.get_selection().select_iter(tree_iter)
+            return True
+        return False
+
+    def _get_model_value(self, repo, overrides, property_name):
+        if not overrides or not property_name in overrides:
+            return (repo[property_name], False)
+        return (overrides[property_name], True)
 
     def _on_reset_repo(self, button):
-        print "Resetting overrides on selected repo"
+        selection = SelectionWrapper(self.overrides_treeview.get_selection(),
+                                     self.overrides_store)
 
-    def _init_overrides(self):
-        cp = self.backend.cp_provider.get_consumer_auth_cp()
-        overrides = self.cache.load_status(cp, self.identity.uuid)
-#        self.loaded_overridees.clear()
-        for override_json in overrides:
-            repo_label = override_json['contentLabel']
-            if repo_label in self.loaded_overrides.keys():
-                self.loaded_overrides[repo_label].add_override(override_json)
-            else:
-                override = OverrideWidgetModel(repo_label)
-                override.add_override(override_json)
-                self.loaded_overrides[repo_label] = override
+        if not selection.is_valid():
+            return
 
-        self._refresh_overrides()
+        confirm = ContinueDialog(_("Are you sure you would like to remove all overrides for %s?") % selection['repo_id'],
+                                 self.parent, _("Confirm Reset Repository"))
+        confirm.connect("response", self._on_reset_repo_response)
 
-    def _on_update_repos(self, button):
-        overrides = []
-        for override in self.loaded_overrides.values():
-            overrides.extend(override.as_json_object())
 
-        # We can't update the content overrides on the server unless
-        # we are registered. If not, we just update the overrides in
-        # cache.
-        if self.identity.is_valid():
-            try:
-                client = self.backend.cp_provider.get_consumer_auth_cp()
-                client.setContentOverrides(self.identity.uuid, overrides)
-            except Exception, e:
-                handle_gui_exception(e, _("Could not update repository overrides.\n\n%s" % e), self.parent)
-                return
+    def _on_reset_repo_response(self, dialog, response):
+        if not response:
+            return
 
-        # TODO: Update the content override cache.
-        self.cache.write_cache()
-        self.hide()
+        selection = SelectionWrapper(self.overrides_treeview.get_selection(),
+                                     self.overrides_store)
 
+        if not selection.is_valid():
+            return
+
+        repo_id = selection['repo_id']
+
+        try:
+            self._delete_all_overrides(repo_id)
+        except Exception, e:
+            handle_gui_exception(e, _("Unable to reset repository overrides."), self.parent)
+
+    def _on_selection(self, tree_selection):
+        selection = SelectionWrapper(tree_selection, self.overrides_store)
+
+        self._set_details_visible(selection.is_valid())
+        self.reset_button.set_sensitive(selection.is_valid() and selection['modified'])
+        if selection.is_valid():
+            gpgcheck_enabled = selection['gpgcheck']
+            gpgcheck_str = _("Enabled")
+            if not gpgcheck_enabled:
+                gpgcheck_str = _("Disabled")
+
+            self.name_text.get_buffer().set_text(selection['name'])
+            self.baseurl_text.get_buffer().set_text(selection['baseurl'])
+            self.gpgcheck_text.get_buffer().set_text(gpgcheck_str)
+            # Used 'not' here because we enabled is index 0 in the model.
+            self.gpgcheck_combo_box.set_active(int(not gpgcheck_enabled))
+            self._set_gpg_lock_state(not selection['gpgcheck_modified'])
 
     def _on_close(self, button, event=None):
         self.hide()
@@ -141,31 +251,123 @@ class RepositoriesDialog(widgets.GladeWidget):
         num_selected = self.overrides_treeview.get_selection().count_selected_rows()
         self.refresh_button.set_sensitive(num_selected > 0)
 
+    def _on_enable_repo_toggle(self, override_model_iter, enabled):
+        repo_id = self.overrides_store.get_value(override_model_iter,
+                                              self.overrides_store['repo_id'])
+        # We get True/False from the model, convert to int so that
+        # the override gets the correct value.
+        override = self._create_override_json_object(repo_id, "enabled", int(enabled))
+        self._send_override(override)
 
-class OverrideModel(object):
-    '''
-    Represents a set of content overrides for a single repo.
-    '''
-    def __init__(self, repo_label):
-        self.repo_label = repo_label
+    def _on_gpgcheck_combo_box_changed(self, combo_box):
+        override_selection = SelectionWrapper(self.overrides_treeview.get_selection(),
+                                              self.overrides_store)
 
-        # Set the defaults
-        self.enabled = 1
-        self.gpg_check = 1
+        # Ignore combo box changes when the dialog is first loadded.
+        if not override_selection.is_valid():
+            return
+
+        column = self.gpgcheck_combo_box.get_active()
+        if column < 0:
+            return
+
+        current_cb_value = self.gpgcheck_cb_model[column][1]
+        override_value = override_selection['gpgcheck']
+
+        # Ignore combo box changes that are identical to the current model value.
+        # This can happen on initial data load.
+        if current_cb_value == override_value:
+            return
+
+        override = self._create_override_json_object(override_selection['repo_id'],
+                                                     "gpgcheck", int(current_cb_value))
+
+        self._send_override(override)
 
 
-    def add_override(self, override_json):
-        if override_json['name'] == 'enabled' and override_json['value'] == '0':
-            self.enabled = 0
-        elif override_json['name'] == 'gpg-check' and override_json['value'] == '0':
-            self.gpg_check = 0
+    def _set_gpg_lock_state(self, locked):
+        self.gpgcheck_text.set_visible(locked)
+        self.gpgcheck_lock_button.set_visible(locked)
+        self.gpgcheck_remove_button.set_visible(not locked)
+        self.gpgcheck_combo_box.set_visible(not locked)
 
-    def as_json_object(self):
-        # return a list in prep for other overrides later on.
-        return [
-            self._create_override_json(self.repo_label, 'enabled', str(self.enabled)),
-            self._create_override_json(self.repo_label, 'gpg-check', str(self.gpg_check))
-        ]
+    def _on_gpgcheck_lock_button_clicked(self, button):
+        override_selection = SelectionWrapper(self.overrides_treeview.get_selection(),
+                                              self.overrides_store)
+        if not override_selection.is_valid():
+            # TODO Should never happen, but we should update the UI somewho
+            # to make sure that nothing bad can happen.
+            return
 
-    def _create_override_json(self, repo, name, value):
-        return {'contentLabel': repo, 'name': name, 'value': value}
+        current_value = override_selection['gpgcheck']
+        self.gpgcheck_combo_box.set_active(not current_value)
+
+        # Create an override despite the fact that the values are likely the same.
+        try:
+            override = self._create_override_json_object(override_selection['repo_id'],
+                                                         "gpgcheck", int(current_value))
+            self._send_override(override)
+        except Exception, e:
+            handle_gui_exception(e, _("Unable to update the gpgcheck override."), self.parent)
+            return
+
+        self._set_gpg_lock_state(False)
+
+    def _on_gpgcheck_remove_button_clicked(self, button):
+        confirm = ContinueDialog(_("Are you sure you would like to remove this override?"),
+                                 self.parent, _("Confirm Override Removal"))
+        confirm.connect("response", self._on_remove_gpgcheck_confirmation)
+
+    def _on_remove_gpgcheck_confirmation(self, dialog, response):
+        if not response:
+            return
+
+        override_selection = SelectionWrapper(self.overrides_treeview.get_selection(),
+                                              self.overrides_store)
+        if not override_selection.is_valid():
+            # TODO Should never happen, but we should update the UI somehow
+            # to make sure that nothing bad can happen.
+            return
+
+        # Delete the override
+        try:
+            override = self._create_override_json_object(override_selection['repo_id'],
+                                                         'gpgcheck')
+            self._delete_override(override)
+        except Exception, e:
+            handle_gui_exception(e, _("Unable to delete the gpgcheck override."), self.parent)
+            return
+        self._set_gpg_lock_state(True)
+
+    def _set_details_visible(self, visible):
+        self.gpgcheck_text.set_visible(visible)
+        self.gpgcheck_lock_button.set_visible(visible)
+        self.gpgcheck_remove_button.set_visible(visible)
+        self.gpgcheck_combo_box.set_visible(visible)
+        self.name_text.set_visible(visible)
+        self.baseurl_text.set_visible(visible)
+
+    def _send_override(self, override):
+        cp = self.backend.cp_provider.get_consumer_auth_cp()
+        overrides = cp.setContentOverrides(self.identity.uuid, [override])
+        self.cache.write_cache()
+        self._refresh(overrides, self._get_selected_repo_id())
+
+    def _delete_override(self, override):
+        cp = self.backend.cp_provider.get_consumer_auth_cp()
+        overrides = cp.deleteContentOverrides(self.identity.uuid, [override])
+        self.cache.write_cache()
+        self._refresh(overrides, self._get_selected_repo_id())
+
+    def _delete_all_overrides(self, repo_id):
+        delete_data = self._create_override_json_object(repo_id)
+        self._delete_override(delete_data)
+
+    def _create_override_json_object(self, repo, name=None, value=None):
+        override = {'contentLabel': repo}
+        if name:
+            override['name'] = name
+            if value is not None:
+                override['value'] = value
+
+        return override

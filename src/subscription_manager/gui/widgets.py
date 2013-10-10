@@ -631,17 +631,26 @@ class DatePicker(gtk.HBox):
 
 class CheckBoxColumn(gtk.TreeViewColumn):
 
-    def __init__(self, column_title, store, store_key):
-        gtk.TreeViewColumn.__init__(self, column_title)
+    def __init__(self, column_title, store, store_key, toggle_callback=None):
         self.store = store
         self.store_key = store_key;
+        self._toggle_callback = toggle_callback
         self.renderer = gtk.CellRendererToggle()
         self.renderer.set_radio(False)
+        gtk.TreeViewColumn.__init__(self, column_title, self.renderer, active=self.store[self.store_key])
         self.renderer.connect("toggled", self._on_toggle)
-        self.pack_start(self.renderer, False)
 
     def _on_toggle(self, widget, path):
-        self.store[path][self.store_key] = not self.store[path][self.store_key]
+        tree_iter = self.store.get_iter(path)
+        if not tree_iter:
+            return
+
+        column = self.store[self.store_key]
+        new_state = not self.store.get_value(tree_iter, column)
+        self.store.set(tree_iter, column, new_state)
+
+        if self._toggle_callback:
+            self._toggle_callback(tree_iter, new_state)
 
 
 class ToggleTextColumn(gtk.TreeViewColumn):
