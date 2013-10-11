@@ -23,7 +23,7 @@ from subscription_manager.cert_sorter import CertSorter, UNKNOWN
 from subscription_manager.cache import StatusCache
 from datetime import timedelta, datetime
 from mock import Mock, patch
-import simplejson as json
+from rhsm import ourjson as json
 
 
 def cert_list_has_product(cert_list, product_id):

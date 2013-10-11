@@ -19,12 +19,12 @@ import socket
 import tempfile
 import threading
 from mock import Mock
-import simplejson as json
 
 # used to get a user readable cfg class for test cases
 from stubs import StubProduct, StubProductCertificate, StubCertificateDirectory
 from fixture import SubManFixture
 
+from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \
         InstalledProductsManager, StatusCache
 from rhsm.profile import Package, RPMProfile

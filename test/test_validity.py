@@ -13,12 +13,12 @@
 # in this software or its documentation.
 #
 
-import simplejson as json
 from mock import Mock, NonCallableMock
 from datetime import datetime
 
 from fixture import SubManFixture
 from subscription_manager.validity import ValidProductDateRangeCalculator
+from rhsm import ourjson as json
 import subscription_manager.injection as inj
 
 from rhsm.certificate import GMT

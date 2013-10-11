@@ -18,7 +18,6 @@ import errno
 import gettext
 import os
 import sys
-import simplejson as json
 from zipfile import ZipFile, BadZipfile
 
 from rhsm import certificate
@@ -26,6 +25,7 @@ from rhsm import certificate
 from rct.commands import RCTCliCommand
 from rct.printing import xstr
 from subscription_manager.cli import InvalidCLIOptionError
+from rhsm import ourjson as json
 
 _ = gettext.gettext
 
