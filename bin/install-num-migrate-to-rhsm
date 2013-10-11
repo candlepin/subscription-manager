@@ -20,7 +20,7 @@ import platform
 import sys
 import glob
 import shutil
-import simplejson as json
+import json
 import rhsm.config as config
 from instnum import InstallationNumber, InstallationNumberError
 from datetime import datetime

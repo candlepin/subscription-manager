@@ -19,7 +19,7 @@ import gettext
 from gzip import GzipFile
 import logging
 import os
-import simplejson as json
+import json
 import types
 import yum
 
