@@ -89,6 +89,7 @@ AVAILABLE_SUBS_LIST = [
     _("Subscription Name:"),
     _("Provides:"),
     _("SKU:"),
+    _("Contract:"),
     _("Pool ID:"),
     _("Available:"),
     _("Suggested:"),
@@ -2090,10 +2091,12 @@ class ListCommand(CliCommand):
                     machine_type = machine_type = _("Virtual")
                 else:
                     machine_type = _("Physical")
+
                 print columnize(AVAILABLE_SUBS_LIST, _none_wrap,
                         data['productName'],
                         data['providedProducts'],
                         data['productId'],
+                        data['contractNumber'],
                         data['id'],
                         data['quantity'],
                         data['suggested'],
