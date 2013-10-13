@@ -655,25 +655,23 @@ command shows the current status of the products and attached subscriptions for 
 .nf
 [root@server ~]# subscription-manager status
 +-------------------------------------------+
-    Installed Product Status
+     System Status Details
 +-------------------------------------------+
-Product Name: Red Hat Enterprise Linux
-Product ID: 69
-Version: 7
-Arch: x86_64
-Status: Subscribed
-Status Details:
-Starts: 01/01/2012
-Ends: 01/01/2022
+Overall Status: Valid
+.fi
 
+
+.TP
+.B --ondate=DATE
+Shows the system status for a specific date \fIin the future\fP. The format of the date is \fIYYYY-MM-DD\fP.
+
+.nf
+[root@server ~]# subscription-manager status --ondate=2014-01-01
 +-------------------------------------------+
      System Status Details
 +-------------------------------------------+
-Overall Status: Subscribed
+Overall Status: Insufficient
 .fi
-
-.PP
-This command has no options.
 
 .SH USAGE
 .B subscription-manager 
