@@ -304,11 +304,19 @@ class TestListCommand(TestCliProxyCommand):
         listCommand = managercli.ListCommand()
 
         def create_pool_list(*args, **kwargs):
-            return [{'productName': 'dummy-name', 'productId': 'dummy-id',
+            return [{'productName': 'dummy-name',
+                     'productId': 'dummy-id',
                      'providedProducts': [],
-                     'id': '888888888888', 'attributes': [{'name': 'is_virt_only', 'value': 'false'}],
-                     'quantity': '4', 'service_level': '', 'service_type': '',
-                     'multi-entitlement': 'false', 'endDate': '', 'suggested': '2'}]
+                     'id': '888888888888',
+                     'attributes': [{'name': 'is_virt_only',
+                                     'value': 'false'}],
+                     'quantity': '4',
+                     'service_level': '',
+                     'service_type': '',
+                     'contractNumber': '5',
+                     'multi-entitlement': 'false',
+                     'endDate': '',
+                     'suggested': '2'}]
         mget_ents.return_value = create_pool_list()
 
         mc_exists_and_valid.return_value = True
