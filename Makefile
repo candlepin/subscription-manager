@@ -155,7 +155,8 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d $(PREFIX)/usr/share/icons/hicolor/48x48/apps
 	install -d $(PREFIX)/usr/share/icons/hicolor/scalable/apps
 	install -d $(PREFIX)/usr/share/rhn/up2date_client/firstboot/
-	if [ $(OS_VERSION) = 5 ]; then install -d $(PREFIX)/usr/share/firstboot/modules; fi
+	install -d $(PREFIX)/usr/share/rhsm/subscription_manager/gui/firstboot
+	if [ $(OS_VERSION) = 7 ]; then install -d $(PREFIX)/usr/share/firstboot/modules; fi
 
 	install -d $(PREFIX)/usr/libexec
 	install -m 755 $(DAEMONS_SRC_DIR)/rhsmcertd-worker.py \
@@ -220,10 +221,9 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 		fi; \
 	fi; \
 
-	# RHEL 5 Customizations:
-	if [ $(OS_VERSION) = 5 ]; then \
-		install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/rhn/up2date_client/firstboot;\
-		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_login.py $(PREFIX)/usr/share/firstboot/modules/;\
+	# RHEL 7 Customizations:
+	if [ $(OS_VERSION) = 7 ]; then \
+		install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/firstboot/modules/;\
 	else \
 		install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/rhn/up2date_client/firstboot;\
 	fi;\

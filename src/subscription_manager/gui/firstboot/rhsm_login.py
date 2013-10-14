@@ -2,6 +2,7 @@
 import gettext
 import socket
 import sys
+import logging
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
@@ -14,6 +15,10 @@ sys.path.append("/usr/share/rhsm")
 # enable logging for firstboot
 from subscription_manager import logutil
 logutil.init_logger()
+
+import debug_logger
+
+log = logging.getLogger("rhsm-app." + __name__)
 
 # neuter linkify in firstboot
 from subscription_manager.gui.utils import running_as_firstboot
@@ -41,7 +46,6 @@ sys.path.append("/usr/share/rhn")
 from up2date_client import config
 
 MANUALLY_SUBSCRIBE_PAGE = 10
-
 
 class SelectSLAScreen(registergui.SelectSLAScreen):
     """
@@ -171,7 +175,6 @@ class ManuallySubscribeScreen(registergui.Screen):
         # XXX set message here.
         return False
 
-
 class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
     def __init__(self):
@@ -183,7 +186,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # firstboot modules, not just the rhsm ones. See bz #828042
                 _("Subscription Management Registration"),
                 _("Subscription Registration"),
-                200.1, 109.10)
+                10.1, 109.10)
 
         backend = managergui.Backend()
         self.plugin_manager = require(PLUGIN_MANAGER)
@@ -264,7 +267,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         self.interface = interface
 
-        self._read_rhn_proxy_settings()
+        #self._read_rhn_proxy_settings()
 
         # bad proxy settings can cause socket.error or friends here
         # see bz #810363
@@ -276,6 +279,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         if valid_registration:
             self._cached_credentials = self._get_credentials_hash()
+	    return self._RESULT_SUCCESS
         return self._RESULT_FAILURE
 
     def close_window(self):
