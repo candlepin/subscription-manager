@@ -24,8 +24,7 @@ from rhsm.connection import UEPConnection, Restlib, ConnectionException, Connect
 from mock import Mock
 from datetime import date
 from time import strftime, gmtime
-import simplejson as json
-
+from rhsm import ourjson as json
 
 class ConnectionTests(unittest.TestCase):
 
