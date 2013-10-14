@@ -313,7 +313,7 @@ def get_available_entitlements(facts, get_all=False, active_on=None,
     """
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
             'providedProducts', 'productId', 'attributes', 'multi-entitlement',
-            'service_level', 'service_type', 'suggested']
+            'service_level', 'service_type', 'suggested', 'contractNumber']
 
     pool_stash = PoolStash(Facts(require(ENT_DIR), require(PROD_DIR)))
     dlist = pool_stash.get_filtered_pools_list(active_on, not get_all,
