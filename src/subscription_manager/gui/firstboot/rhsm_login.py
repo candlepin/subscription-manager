@@ -16,8 +16,6 @@ sys.path.append("/usr/share/rhsm")
 from subscription_manager import logutil
 logutil.init_logger()
 
-import debug_logger
-
 log = logging.getLogger("rhsm-app." + __name__)
 
 # neuter linkify in firstboot
@@ -43,9 +41,15 @@ from subscription_manager.utils import remove_scheme
 from rhsm.connection import RestlibException
 
 sys.path.append("/usr/share/rhn")
-from up2date_client import config
+rhn_config = None
+
+try:
+    from up2date_client import config as rhn_config
+except ImportError:
+    log.debug("no rhn-client-tools modules could be imported")
 
 MANUALLY_SUBSCRIBE_PAGE = 10
+
 
 class SelectSLAScreen(registergui.SelectSLAScreen):
     """
@@ -175,6 +179,7 @@ class ManuallySubscribeScreen(registergui.Screen):
         # XXX set message here.
         return False
 
+
 class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
     def __init__(self):
@@ -186,7 +191,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # firstboot modules, not just the rhsm ones. See bz #828042
                 _("Subscription Management Registration"),
                 _("Subscription Registration"),
-                10.1, 109.10)
+                200.1, 109.10)
 
         backend = managergui.Backend()
         self.plugin_manager = require(PLUGIN_MANAGER)
@@ -215,10 +220,14 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         self.interface = None
 
+        self._apply_result = self._RESULT_FAILURE
+
     def _read_rhn_proxy_settings(self):
+        if not rhn_config:
+            return
         # Read and store rhn-setup's proxy settings, as they have been set
         # on the prior screen (which is owned by rhn-setup)
-        up2date_cfg = config.initUp2dateConfig()
+        up2date_cfg = rhn_config.initUp2dateConfig()
         cfg = rhsm.config.initConfig()
 
         if up2date_cfg['enableProxy']:
@@ -267,20 +276,28 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         self.interface = interface
 
-        #self._read_rhn_proxy_settings()
+        self._read_rhn_proxy_settings()
 
         # bad proxy settings can cause socket.error or friends here
         # see bz #810363
         try:
             valid_registration = self.register()
+
         except socket.error, e:
             handle_gui_exception(e, e, self.window)
             return self._RESULT_FAILURE
 
+        # run main_iteration till we have no events, like idle
+        # loop sources, aka, the thread watchers are finished.
+        while gtk.events_pending():
+            gtk.main_iteration()
+
         if valid_registration:
             self._cached_credentials = self._get_credentials_hash()
-	    return self._RESULT_SUCCESS
-        return self._RESULT_FAILURE
+
+        # finish_registration/skip_remaining_screens should set
+        # __apply_result to RESULT_JUMP
+        return self._apply_result
 
     def close_window(self):
         """
@@ -314,8 +331,9 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # In firstboot, we leverage the RHN setup proxy settings already
         # presented to the user, so hide the choose server screen's proxy
         # text and button.
-        screen = self._screens[registergui.CHOOSE_SERVER_PAGE]
-        screen.proxy_frame.destroy()
+        if rhn_config:
+            screen = self._screens[registergui.CHOOSE_SERVER_PAGE]
+            screen.proxy_frame.destroy()
 
     def initializeUI(self):
         # Need to make sure that each time the UI is initialized we reset back
@@ -396,9 +414,9 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
             self._set_navigation_sensitive(True)
             self._run_pre(registergui.CREDENTIALS_PAGE)
         else:
-            registergui.RegisterScreen.finish_registration(self, failed=failed)
             self._registration_finished = True
             self._skip_remaining_screens(self.interface)
+            registergui.RegisterScreen.finish_registration(self, failed=failed)
 
     def _skip_remaining_screens(self, interface):
         """
@@ -412,15 +430,8 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
             self._skip_apply_for_page_jump = True
             self.compat_parent.nextClicked()
         else:
-            # for newer firstboots, we have to iterate over all firstboot
-            # modules, to find our location in the list. then we can just jump
-            # to the next one after us.
-            i = 0
-            while not interface.moduleList[i].__module__.startswith('rhsm_'):
-                i += 1
-
-            i += 1
-            interface.moveToPage(pageNum=i)
+            self._apply_result = self._RESULT_SUCCESS
+            return
 
 # for el5
 childWindow = moduleClass

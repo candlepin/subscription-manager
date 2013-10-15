@@ -178,6 +178,7 @@ class RegisterScreen(widgets.GladeWidget):
         self.register()
 
     def register(self):
+
         result = self._screens[self._current_screen].apply()
 
         if result == FINISH:
