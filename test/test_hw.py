@@ -120,6 +120,19 @@ class TestGatherEntries(unittest.TestCase):
         self.assertEquals(2, len(ent_list))
 
 
+class GenericPlatformSpecificInfoProviderTests(fixture.SubManFixture):
+    def test(self):
+        hw_info = {}
+        platform_info = hwprobe.GenericPlatformSpecificInfoProvider(hw_info)
+        self.assertEquals(0, len(platform_info.info))
+
+    def test_does_nothing(self):
+        hw_info = {'foo': '1'}
+        platform_info = hwprobe.GenericPlatformSpecificInfoProvider(hw_info)
+        self.assertEquals(0, len(platform_info.info))
+        self.assertFalse('foo' in platform_info.info)
+
+
 class HardwareProbeTests(fixture.SubManFixture):
 
     @patch('subprocess.Popen')
@@ -200,6 +213,36 @@ class HardwareProbeTests(fixture.SubManFixture):
         hw = hwprobe.Hardware()
         MockOpen.return_value.readline.return_value = "Awesome OS release 42 (Go4It)\n\n"
         self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS', 'distribution.id': 'Go4It'})
+
+    def test_get_arch(self):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        arch = hw.get_arch()
+        import platform
+        self.assertEquals(platform.machine(), arch)
+
+    def test_get_platform_specific_info_provider(self):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        info_provider = hw.get_platform_specific_info_provider()
+        self.assertTrue(info_provider is not None)
+
+    @patch("subscription_manager.hwprobe.Hardware.get_arch")
+    def test_get_platform_specific_info_provider_not_dmi(self, mock_get_arch):
+        mock_get_arch.return_value = "s390x"
+        hw = hwprobe.Hardware()
+        info_provider = hw.get_platform_specific_info_provider()
+        self.assertEquals(hwprobe.GenericPlatformSpecificInfoProvider, info_provider)
+
+    @patch("subscription_manager.hwprobe.Hardware.get_arch")
+    def test_get_platform_specific_info_not_dmi(self, mock_get_arch):
+        mock_get_arch.return_value = "s390x"
+        hw = hwprobe.Hardware()
+        hw_info = {"foo": "bar"}
+        hw.allhw = hw_info
+        hw.get_platform_specific_info()
+        # we dont gather any additional info with the default
+        self.assertEquals(hw.allhw, hw_info)
 
     def test_meminfo(self):
         reload(hwprobe)

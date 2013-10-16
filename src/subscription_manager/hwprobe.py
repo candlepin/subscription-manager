@@ -91,78 +91,16 @@ def gather_entries(entries_string):
     return entries
 
 
-class DmiInfo(object):
+class GenericPlatformSpecificInfoProvider(object):
+    """Default provider for platform without a specific platform info provider.
 
+    ie, all platforms except those with DMI (ie, intel platforms)"""
     def __init__(self, hardware_info, dump_file=None):
-        self.hardware_info = hardware_info
-        self.dump_file = dump_file
-        self.socket_designation = []
-        self.info = self.get_gmi_info()
+        self.info = {}
 
-    def get_gmi_info(self):
-        import dmidecode
-        if self.dump_file:
-            if os.access(self.dump_file, os.R_OK):
-                dmidecode.set_dev(self.dump_file)
-
-        dmiinfo = {}
-        dmi_data = {
-            "dmi.bios.": self._read_dmi(dmidecode.bios),
-            "dmi.processor.": self._read_dmi(dmidecode.processor),
-            "dmi.baseboard.": self._read_dmi(dmidecode.baseboard),
-            "dmi.chassis.": self._read_dmi(dmidecode.chassis),
-            "dmi.slot.": self._read_dmi(dmidecode.slot),
-            "dmi.system.": self._read_dmi(dmidecode.system),
-            "dmi.memory.": self._read_dmi(dmidecode.memory),
-            "dmi.connector.": self._read_dmi(dmidecode.connector),
-        }
-
-        try:
-            for tag, func in dmi_data.items():
-                dmiinfo = self._get_dmi_data(func, tag, dmiinfo)
-        except Exception, e:
-            log.warn(_("Error reading system DMI information: %s"), e)
-
-        # cpu topology reporting on xen dom0 machines is wrong. So
-        # if we are a xen dom0, and we found socket info in dmiinfo,
-        # replace our normal cpu socket calculation with the dmiinfo one
-        # we have to do it after the virt data and cpu data collection
-        if 'virt.host_type' in self.hardware_info:
-            if self.hardware_info['virt.host_type'].find('dom0') > -1:
-                if self.socket_designation:
-                    socket_count = len(self.socket_designation)
-                    self.hardware_info['cpu.cpu_socket(s)'] = socket_count
-                    if 'cpu.cpu(s)' in self.hardware_info:
-                        self.hardware_info['cpu.core(s)_per_socket'] = \
-                                int(self.hardware_info['cpu.cpu(s)']) / socket_count
-
-        return dmiinfo
-
-    def _read_dmi(self, func):
-        try:
-            return func()
-        except Exception, e:
-            log.warn(_("Error reading system DMI information with %s: %s"), func, e)
-            return None
-
-    def _get_dmi_data(self, func, tag, ddict):
-        for key, value in func.items():
-            for key1, value1 in value['data'].items():
-                # FIXME: this loses useful data...
-                if not isinstance(value1, str):
-                    # we are skipping things like int and bool values, as
-                    # well as lists and dicts
-                    continue
-
-                # keep track of any cpu socket info we find, we have to do
-                # it here, since we flatten it and lose the info creating nkey
-                if tag == 'dmi.processor.' and key1 == 'Socket Designation':
-                    self.socket_designation.append(value1)
-
-                nkey = ''.join([tag, key1.lower()]).replace(" ", "_")
-                ddict[nkey] = str(value1)
-
-        return ddict
+    @staticmethod
+    def log_warnings():
+        pass
 
 
 class Hardware:
@@ -173,24 +111,12 @@ class Hardware:
         self.prefix = prefix or ''
         self.testing = testing or False
 
+        self.no_dmi_arches = ['s390x', 'ppc64', 'ppc']
         # we need this so we can decide which of the
         # arch specific code bases to follow
-        self.arch = self._get_arch()
+        self.arch = self.get_arch()
 
-    def _get_arch(self):
-
-        if self.testing and self.prefix:
-            arch_file = "%s/arch" % self.prefix
-            if os.access(arch_file, os.R_OK):
-                try:
-                    f = open(arch_file, 'r')
-                except IOError:
-                    return platform.machine()
-                buf = f.read().strip()
-                f.close()
-                return buf
-            return platform.machine()
-        return platform.machine()
+        self.platform_specific_info_provider = self.get_platform_specific_info_provider()
 
     def get_uname_info(self):
 
@@ -210,6 +136,59 @@ class Hardware:
 
     def _open_release(self, filename):
         return open(filename, 'r')
+
+    # Determine which rough arch we are, so we know where to
+    # look for hardware info. Also support a test mode that
+    # specifies the arch
+    def get_arch(self, prefix=None, testing=None):
+        if self.testing and self.prefix:
+            arch_file = "%s/arch" % self.prefix
+            if os.access(arch_file, os.R_OK):
+                try:
+                    f = open(arch_file, 'r')
+                except IOError:
+                    return platform.machine()
+                buf = f.read().strip()
+                f.close()
+                return buf
+            return platform.machine()
+        return platform.machine()
+
+    def get_platform_specific_info_provider(self):
+        """
+        Return a class that can be used to get firmware info specific to
+        this systems platform.
+
+        ie, DmiFirmwareInfoProvider on intel platforms, and a EmptyInfo otherwise.
+        """
+        # we could potential consider /proc/sysinfo as a FirmwareInfoProvider
+        # but at the moment, it is just firmware/dmi stuff.
+        if self.arch in self.no_dmi_arches:
+            log.debug("Not looking for DMI info since it is not available on '%s'" % self.arch)
+            platform_specific_info_provider = GenericPlatformSpecificInfoProvider
+        else:
+            try:
+                from subscription_manager import dmiinfo
+                platform_specific_info_provider = dmiinfo.DmiFirmwareInfoProvider
+            except ImportError:
+                log.warn("Unable to load dmidecode module. No DMI info will be collected")
+                platform_specific_info_provider = GenericPlatformSpecificInfoProvider
+
+        return platform_specific_info_provider
+
+    def get_platform_specific_info(self):
+        """Read and parse data that comes from platform specific interfaces.
+
+        This is only dmi/smbios data for now (which isn't on ppc/s390).
+        """
+
+        if self.testing and self.prefix:
+            dump_file = "%s/dmi.dump" % self.prefix
+            platform_info = self.platform_specific_info_provider(self.allhw, dump_file=dump_file).info
+        else:
+            platform_info = self.platform_specific_info_provider(self.allhw).info
+
+        self.allhw.update(platform_info)
 
     # this version os very RHEL/Fedora specific...
     def get_distribution(self):
@@ -748,26 +727,6 @@ class Hardware:
 
         return output
 
-    def get_platform_specific_info(self):
-        """
-        Read and parse data that comes from platform specific interfaces.
-        This is only dmi/smbios data for now (which isn't on ppc/s390).
-        """
-
-        no_dmi_arches = ['ppc', 'ppc64', 's390', 's390x']
-        arch = self.arch
-        if arch in no_dmi_arches:
-            log.debug("not looking for dmi info due to system arch '%s'" % arch)
-            platform_specific_info = {}
-        else:
-            if self.testing and self.prefix:
-                dump_file = "%s/dmi.dump" % self.prefix
-                platform_specific_info = DmiInfo(self.allhw, dump_file=dump_file).info
-            else:
-                platform_specific_info = DmiInfo(self.allhw).info
-
-        self.allhw.update(platform_specific_info)
-
     def get_virt_uuid(self):
         """
         Given a populated fact list, add on a virt.uuid fact if appropriate.
@@ -802,6 +761,10 @@ class Hardware:
 
         log.info("virt.uuid: %s" % self.allhw.get('virt.uuid', 'Not Set'))
 
+    def log_platform_firmware_warnings(self):
+        "Log any warnings from firmware info gather,and/or clear them."
+        self.get_platform_specific_info_provider().log_warnings()
+
     def get_all(self):
         hardware_methods = [self.get_uname_info,
                             self.get_release_info,
@@ -828,11 +791,6 @@ class Hardware:
         if self.allhw.get('virt.is_guest'):
             self.get_virt_uuid()
 
-        import dmidecode
-        dmiwarnings = dmidecode.get_warnings()
-        if dmiwarnings:
-            log.warn(_("Error reading system DMI information: %s"), dmiwarnings)
-            dmidecode.clear_warnings()
         return self.allhw
 
 
@@ -852,8 +810,9 @@ if __name__ == '__main__':
         hw.testing = True
     hw_dict = hw.get_all()
 
-    # just show the facts collected
-    if not hw.testing:
+    # just show the facts collected, unless we specify data dir and well,
+    # anything else
+    if len(sys.argv) > 2:
         for hkey, hvalue in sorted(hw_dict.items()):
             print "'%s' : '%s'" % (hkey, hvalue)
 
