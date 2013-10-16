@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.9.9
+Version: 1.9.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -385,6 +385,9 @@ fi
 %endif
 
 %changelog
+* Wed Oct 16 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.10-1
+- 1003017: updated strings (jesusr@redhat.com)
+
 * Mon Oct 07 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.9-1
 - 1006985: Abort migration when we detect different certs with the same ID.  (awood@redhat.com)
 - 1008557: suggested quantity in list available (ckozak@redhat.com)
