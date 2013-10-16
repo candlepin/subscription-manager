@@ -22,10 +22,10 @@ import string
 from urllib import basejoin
 
 from rhsm.config import initConfig
-from rhsm.connection import RemoteServerException, RestlibException
 
 from certlib import ActionLock, DataLib, ConsumerIdentity
 from certdirectory import Path, ProductDirectory, EntitlementDirectory
+from utils import attempt
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -48,21 +48,8 @@ class RepoLib(DataLib):
         return repo in [c.label for c in action.matching_content()]
 
     def get_repos(self):
-        current = set()
         action = UpdateAction(uep=self.uep)
-        repos = action.get_unique_content()
-        # Add the current repo data
-        repo_file = RepoFile()
-        repo_file.read()
-        for repo in repos:
-            existing = repo_file.section(repo.id)
-            if existing is None:
-                current.add(repo)
-            else:
-                existing.update(repo)
-                current.add(existing)
-
-        return current
+        return action.get_unique_content()
 
     def get_repo_file(self):
         repo_file = RepoFile()
@@ -98,6 +85,7 @@ class UpdateAction:
             self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
 
         self.release = None
+        self.overrides = []
 
         # If we are not registered, skip trying to refresh the
         # data from the server
@@ -108,19 +96,17 @@ class UpdateAction:
 
         if self.consumer:
             self.consumer_uuid = self.consumer.getConsumerId()
-            try:
-                result = self.uep.getRelease(self.consumer_uuid)
-                self.release = result['releaseVer']
-            # ie, a 404 from a old server that doesn't support the release API
-            except RemoteServerException, e:
-                log.debug("Release API not supported by the server. Using default.")
-                self.release = None
-            except RestlibException, e:
-                if e.code == 404:
-                    log.debug("Release API not supported by the server. Using default.")
-                    self.release = None
-                else:
-                    raise e
+            self.set_release(self.consumer_uuid)
+            self.set_overrides(self.consumer_uuid)
+
+    @attempt("Release API not supported by the server. Using default.")
+    def set_release(self, consumer_uuid):
+        result = self.uep.getRelease(consumer_uuid)
+        self.release = result['releaseVer']
+
+    @attempt("Override API not supported by the server. Using default.")
+    def set_overrides(self, consumer_uuid):
+        self.overrides = self.uep.getContentOverrides(consumer_uuid)
 
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
@@ -141,17 +127,16 @@ class UpdateAction:
         valid = set()
         updates = 0
 
-        # Iterate content from entitlement certs, and update/create/delete each section
+        # Iterate content from entitlement certs, and create/delete each section
         # in the RepoFile as appropriate:
         for cont in self.get_unique_content():
             valid.add(cont.id)
-            existing = repo_file.section(cont.id)
-            if existing is None:
-                updates += 1
+            if repo_file.has_section(cont.id):
+                repo_file.update(cont)
+            else:
                 repo_file.add(cont)
-                continue
-            updates += existing.update(cont)
-            repo_file.update(existing)
+            updates += 1
+
         for section in repo_file.sections():
             if section not in valid:
                 updates += 1
@@ -229,12 +214,8 @@ class UpdateAction:
 
             # Extract the variables from thr url
             repo_parts = repo['baseurl'].split("/")
-            repoid_vars = []
-
-            for part in repo_parts:
-                if part.startswith("$"):
-                    repoid_vars.append(part[1:])
-            if len(repoid_vars):
+            repoid_vars = [part[1:] for part in repo_parts if part.startswith("$")]
+            if repoid_vars:
                 repo['ui_repoid_vars'] = " ".join(repoid_vars)
 
             # If no GPG key URL is specified, turn gpgcheck off:
@@ -252,6 +233,7 @@ class UpdateAction:
             repo['metadata_expire'] = content.metadata_expire
 
             self._set_proxy_info(repo)
+            self._set_override_info(repo)
             lst.append(repo)
         return lst
 
@@ -261,6 +243,11 @@ class UpdateAction:
            len(self.release) == 0:
             return contenturl
         return contenturl.replace("$releasever", "%s" % self.release)
+
+    def _set_override_info(self, repo):
+        for entry in self.overrides:
+            if entry['contentLabel'] == repo.id:
+                repo[entry['name']] = entry['value']
 
     def _set_proxy_info(self, repo):
         proxy = ""
@@ -294,26 +281,27 @@ class UpdateAction:
 
 class Repo(dict):
 
-    # (name, mutable, default)
-    PROPERTIES = (
-        ('name', 0, None),
-        ('baseurl', 0, None),
-        ('enabled', 1, '1'),
-        ('gpgcheck', 1, '1'),
-        ('gpgkey', 0, None),
-        ('sslverify', 1, '1'),
-        ('sslcacert', 0, None),
-        ('sslclientkey', 0, None),
-        ('sslclientcert', 0, None),
-        ('metadata_expire', 1, None),
-        ('proxy', 0, None),
-        ('proxy_username', 0, None),
-        ('proxy_password', 0, None),
-        ('ui_repoid_vars', 0, None),
-    )
+    # name => default
+    PROPERTIES = {
+            'name': None,
+            'baseurl': None,
+            'enabled': '1',
+            'gpgcheck': '1',
+            'gpgkey': None,
+            'sslverify': '1',
+            'sslcacert': None,
+            'sslclientkey': None,
+            'sslclientcert': None,
+            'metadata_expire': None,
+            'proxy': None,
+            'proxy_username': None,
+            'proxy_password': None,
+            'ui_repoid_vars': None,
+    }
 
     def __init__(self, repo_id, existing_values=None):
-        existing_values = existing_values or {}
+        # existing_values is a list of 2-tuples
+        existing_values = existing_values or []
         self.id = self._clean_id(repo_id)
 
         # used to store key order, so we can write things out in the order
@@ -329,7 +317,7 @@ class Repo(dict):
         # NOTE: This sets the above properties to the default values even if
         # they are not defined on disk. i.e. these properties will always
         # appear in this dict, but their values may be None.
-        for k, m, d in self.PROPERTIES:
+        for k, d in self.PROPERTIES.items():
             if k not in self.keys():
                 self[k] = d
 
@@ -362,61 +350,10 @@ class Repo(dict):
         return tuple([(k, self[k]) for k in self._order if
                      k in self and self[k]])
 
-    def update(self, new_repo):
-        """
-        Checks an existing repo definition against a potentially updated
-        version created from most recent entitlement certificates and
-        configuration. Creates, updates, and removes properties as
-        appropriate and returns the number of changes made. (if any)
-        """
-        changes_made = 0
-
-        for key, mutable, default in self.PROPERTIES:
-            new_val = new_repo.get(key)
-
-            # Mutable properties should be added if not currently defined,
-            # otherwise left alone.
-            if mutable:
-                if (new_val is not None) and (not self[key]):
-                    if self[key] == new_val:
-                        continue
-                    self[key] = new_val
-                    changes_made += 1
-
-            # Immutable properties should be always be added/updated,
-            # and removed if undefined in the new repo definition.
-            else:
-                if new_val is None or (new_val.strip() == ""):
-                    # Immutable property should be removed:
-                    if key in self.keys():
-                        del self[key]
-                        changes_made += 1
-                    continue
-
-                # Unchanged:
-                if self[key] == new_val:
-                    continue
-
-                self[key] = new_val
-                changes_made += 1
-
-        return changes_made
-
     def __setitem__(self, key, value):
         if key not in self._order:
             self._order.append(key)
         dict.__setitem__(self, key, value)
-
-    def __str__(self):
-        s = []
-        s.append('[%s]' % self.id)
-        for k in self.PROPERTIES:
-            v = self.get(k)
-            if v is None:
-                continue
-            s.append('%s=%s' % (k, v))
-
-        return '\n'.join(s)
 
     def __eq__(self, other):
         return (self.id == other.id)
@@ -537,6 +474,9 @@ class RepoFile(ConfigParser):
         s.append('#')
         s.append('# Certificate-Based Repositories')
         s.append('# Managed by (rhsm) subscription-manager')
+        s.append('#')
+        s.append('# *** This file is auto-generated.  Changes made here will be over-written. ***')
+        s.append('# *** Use "subscription-manager override" if you wish to make changes. ***')
         s.append('#')
         s.append('# If this file is empty and this system is subscribed consider ')
         s.append('# a "yum repolist" to refresh available repos')

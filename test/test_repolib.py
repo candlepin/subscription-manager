@@ -40,120 +40,6 @@ class RepoTests(unittest.TestCase):
         repo = Repo(repo_id)
         self.assertEquals('label-with-spaces', repo.id)
 
-    def test_mutable_property(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = 1000
-        incoming_repo = {'metadata_expire': 2000}
-        existing_repo.update(incoming_repo)
-        self.assertEqual(1000, existing_repo['metadata_expire'])
-
-    def test_gpgcheck_is_mutable(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['gpgcheck'] = "0"
-        incoming_repo = {'gpgcheck': "1"}
-        existing_repo.update(incoming_repo)
-        self.assertEqual("0", existing_repo['gpgcheck'])
-
-    def test_mutable_property_in_repo_but_not_in_cert(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = 1000
-        incoming_repo = {}
-        existing_repo.update(incoming_repo)
-        self.assertEqual(1000, existing_repo['metadata_expire'])
-
-    def test_immutable_property(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['name'] = "meow"
-        incoming_repo = {'name': "woof"}
-        existing_repo.update(incoming_repo)
-        self.assertEqual("woof", existing_repo['name'])
-
-    # If the user removed a mutable property completely, or the property
-    # is new in a new version of the entitlement certificate, the new value
-    # should get written out.
-    def test_unset_mutable_property(self):
-        existing_repo = Repo('testrepo')
-        incoming_repo = {'metadata_expire': 2000}
-        existing_repo.update(incoming_repo)
-        self.assertEqual(2000, existing_repo['metadata_expire'])
-
-    def test_unset_immutable_property(self):
-        existing_repo = Repo('testrepo')
-        incoming_repo = {'name': "woof"}
-        existing_repo.update(incoming_repo)
-        self.assertEqual("woof", existing_repo['name'])
-
-    # Test repo on disk has an immutable property set which has since been
-    # unset in the new repo definition. This property should be removed.
-    def test_set_immutable_property_now_empty(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {}
-        existing_repo.update(incoming_repo)
-        self.assertFalse("proxy_username" in existing_repo.keys())
-
-    def test_set_mutable_property_now_empty_value(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = "blah"
-        incoming_repo = {'metadata_expire': ''}
-        existing_repo.update(incoming_repo)
-        # re comments in repolib
-        # Mutable properties should be added if not currently defined,
-        # otherwise left alone.
-        self.assertTrue("metadata_expire" in existing_repo.keys())
-
-    def test_set_immutable_property_now_empty_value(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {'proxy_username': ''}
-        existing_repo.update(incoming_repo)
-        # Immutable properties should be always be added/updated,
-        # and removed if undefined in the new repo definition.
-        self.assertFalse("proxy_username" in existing_repo.keys())
-
-    def test_set_mutable_property_now_none(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = "blah"
-        incoming_repo = {'metadata_expire': None}
-        existing_repo.update(incoming_repo)
-        # re comments in repolib
-        # Mutable properties should be added if not currently defined,
-        # otherwise left alone.
-        self.assertTrue("metadata_expire" in existing_repo.keys())
-
-    def test_set_mutable_property_now_not_in_cert(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = "blah"
-        incoming_repo = {}
-        existing_repo.update(incoming_repo)
-        # re comments in repolib
-        # Mutable properties should be added if not currently defined,
-        # otherwise left alone.
-        self.assertTrue("metadata_expire" in existing_repo.keys())
-
-    def test_set_immutable_property_now_none(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {'proxy_username': None}
-        existing_repo.update(incoming_repo)
-        # Immutable properties should be always be added/updated,
-        # and removed if undefined in the new repo definition.
-        self.assertFalse("proxy_username" in existing_repo.keys())
-
-    def test_set_immutable_property_now_not_in_cert(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {}
-        existing_repo.update(incoming_repo)
-        # Immutable properties should be always be added/updated,
-        # and removed if undefined in the new repo definition.
-        self.assertFalse("proxy_username" in existing_repo.keys())
-
-    def test_unknown_property_is_preserved(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['fake_prop'] = 'fake'
-        self.assertTrue(('fake_prop', 'fake') in existing_repo.items())
-
     def test_existing_order_is_preserved(self):
         config = (('key 1', 'value 1'), ('key b', 'value b'),
                 ('key 3', 'value 3'))
@@ -203,6 +89,18 @@ class UpdateActionTests(unittest.TestCase):
             if content['name'] == name:
                 return content
         return None
+
+    def test_overrides_trump_ent_cert(self):
+        self.update_action.overrides = [{
+            'contentLabel': 'x',
+            'name': 'gpgcheck',
+            'value': 'blah'
+        }]
+        r = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
+        self.assertEquals('original', r['gpgcheck'])
+        self.update_action._set_override_info(r)
+        self.assertEquals('blah', r['gpgcheck'])
+        self.assertEquals('some_key', r['gpgkey'])
 
     def test_no_gpg_key(self):
         content = self.update_action.get_content(self.stub_ent_cert,
