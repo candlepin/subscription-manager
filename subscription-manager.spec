@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.9.10
+Version: 1.9.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -385,6 +385,9 @@ fi
 %endif
 
 %changelog
+* Wed Oct 16 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.11-1
+- 1005420: adding --ondate to manpage (dlackey@redhat.com.com)
+
 * Wed Oct 16 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.10-1
 - 1003017: updated strings (jesusr@redhat.com)
 
