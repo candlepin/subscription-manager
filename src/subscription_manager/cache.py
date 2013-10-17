@@ -234,7 +234,7 @@ class StatusCache(CacheManager):
             log.exception(ex)
             if not self._cache_exists():
                 log.error("Server unreachable, registered, but no cache exists.")
-                raise ex
+                raise
 
             log.warn("Unable to reach server, using cached status.")
             return self._read_cache()

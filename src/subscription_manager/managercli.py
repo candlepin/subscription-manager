@@ -2243,22 +2243,30 @@ class OverrideCommand(CliCommand):
             return 1
 
         consumer = check_registration()['uuid']
-        cache = inj.require(inj.OVERRIDE_STATUS_CACHE).load_status(self.cp, consumer)
+        cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+        results = cache.load_status(self.cp, consumer)
         if self.options.list:
-            if cache:
+            if results:
                 self._list(cache, self.options.repos)
             else:
                 print _("This system does not have any content overrides applied to it.")
             return
+
         if self.options.additions:
             overrides = self._add(self.options.repos, self.options.additions)
-            self.cp.setContentOverrides(consumer, overrides)
+            results = self.cp.setContentOverrides(consumer, overrides)
         if self.options.removals:
             overrides = self._remove(self.options.repos, self.options.removals)
-            self.cp.deleteContentOverrides(consumer, overrides)
+            results = self.cp.deleteContentOverrides(consumer, overrides)
         if self.options.remove_all:
             overrides = self._remove_all(self.options.repos)
-            self.cp.deleteContentOverrides(consumer, overrides)
+            results = self.cp.deleteContentOverrides(consumer, overrides)
+        # Write result to cache
+        cache.server_status = results
+        cache.write_cache()
+
+        # Update repo file
+        RepoLib(uep=self.cp).update()
 
     def _list(self, json, specific_repos):
         overrides = {}
@@ -2280,7 +2288,7 @@ class OverrideCommand(CliCommand):
         for repo in sorted(to_show):
             print _("Repository: %s") % repo
             repo_data = sorted(overrides[repo].items(), key=lambda x: x[0])
-            # Split the hash into a list of names and a list of keys
+            # Split the list of 2-tuples into a list of names and a list of keys
             names, values = zip(*repo_data)
             names = ["%s:" % x for x in names]
             print columnize(names, _echo, *values, indent=2) + "\n"
