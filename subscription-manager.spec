@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.3
+Version: 1.10.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -386,6 +386,17 @@ fi
 %endif
 
 %changelog
+* Thu Oct 17 2013 ckozak <ckozak@redhat.com> 1.10.4-1
+- 1017351: ignore dbus failures on show_window (alikins@redhat.com)
+- 1016643: Fix firstboot issues with new firstboot. (alikins@redhat.com)
+- 1005420: adding --ondate to manpage (dlackey@redhat.com.com)
+- 1007580: Add contract number to the output of list --available
+  (bkearney@redhat.com)
+- 1017299: handle dmidecode module not installed (alikins@redhat.com)
+- 846331: Add tooltips to the filters page (bkearney@redhat.com)
+- 1015553: fix help message for no-overlap. display usage requirement
+  (ckozak@redhat.com)
+
 * Wed Oct 02 2013 ckozak <ckozak@redhat.com> 1.10.3-1
 - Latest strings from zanata. (alikins@redhat.com)
 - Latest string catalog. (alikins@redhat.com)
