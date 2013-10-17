@@ -160,32 +160,45 @@ if __name__ == '__main__':
 
     try:
         bus = dbus.SessionBus()
-    except dbus.exceptions.DBusException:
+    except dbus.exceptions.DBusException, e:
+        log.debug("Enabled to connect to dbus SessionBus")
+        log.exception(e)
         # Just ignore it if for some reason we can't find the session bus
         bus = None
 
     if already_running(bus):
         # Attempt to raise the running instance to the forefront
-        remote_object = bus.get_object(BUS_NAME, BUS_PATH)
-        remote_object.show_window(dbus_interface=BUS_NAME)
-    else:
         try:
-            main = managergui.MainWindow(auto_launch_registration=options.register)
+            remote_object = bus.get_object(BUS_NAME, BUS_PATH)
+            remote_object.show_window(dbus_interface=BUS_NAME)
+            log.debug("subscription-manager-gui already running, showing main window")
+        except dbus.exceptions.DBusException, e:
+            log.debug("Error attempting to show main window via dbus")
+            log.debug("dbus remote_object with no show_window: %s" % remote_object)
+            log.debug(e)
+            # failed to raise the window, maybe we raced dbus?
+            # fallback to opening a new window
+        else:
+            # we raised the existing window, we are done
+            sys.exit()
 
-            # Hook into dbus service - only if it is available
-            if bus:
-                SubscriptionManagerService(main.main_window)
+    try:
+        main = managergui.MainWindow(auto_launch_registration=options.register)
 
-            # Exit the gtk loop when the window is closed
-            main.main_window.connect('hide', gtk.main_quit)
+        # Hook into dbus service - only if it is available
+        if bus:
+            SubscriptionManagerService(main.main_window)
 
-            sys.exit(gtk.main() or 0)
-        except SystemExit, e:
-            #this is a non-exceptional exception thrown by Python 2.4, just
-            #re-raise, bypassing handle_exception
-            raise e
-        except KeyboardInterrupt:
-            system_exit(0, "\nUser interrupted process.")
-        except Exception, e:
-            log.exception(e)
-            system_exit(1, e)
+        # Exit the gtk loop when the window is closed
+        main.main_window.connect('hide', gtk.main_quit)
+
+        sys.exit(gtk.main() or 0)
+    except SystemExit, e:
+        # this is a non-exceptional exception thrown by Python 2.4, just
+        # re-raise, bypassing handle_exception
+        raise e
+    except KeyboardInterrupt:
+        system_exit(0, "\nUser interrupted process.")
+    except Exception, e:
+        log.exception(e)
+        system_exit(1, e)
