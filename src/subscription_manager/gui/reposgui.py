@@ -24,7 +24,7 @@ from subscription_manager.injection import IDENTITY, OVERRIDE_STATUS_CACHE, requ
 from subscription_manager.repolib import RepoLib
 from subscription_manager.gui.storage import MappedListStore
 from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\
-    SelectionWrapper
+    SelectionWrapper, HasSortableWidget
 from subscription_manager.gui.messageWindow import ContinueDialog
 
 _ = gettext.gettext
@@ -32,7 +32,7 @@ _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class RepositoriesDialog(widgets.GladeWidget):
+class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     """
     GTK dialog for managing repositories and their overrides.
     """
@@ -86,6 +86,7 @@ class RepositoriesDialog(widgets.GladeWidget):
         self.modified_icon = self.overrides_treeview.render_icon(gtk.STOCK_APPLY,
                                                                  gtk.ICON_SIZE_MENU)
 
+        sortable_cols = []
         enabled_col = CheckBoxColumn(_("Enabled"), self.overrides_store, 'enabled',
             self._on_enable_repo_toggle)
         self.overrides_treeview.append_column(enabled_col)
@@ -93,10 +94,16 @@ class RepositoriesDialog(widgets.GladeWidget):
         repo_id_col = TextTreeViewColumn(self.overrides_store, _("Repository ID"), 'repo_id',
                                          expand=True)
         self.overrides_treeview.append_column(repo_id_col)
+        sortable_cols.append((repo_id_col, 'text', 'repo_id'))
 
         modified_col = gtk.TreeViewColumn(_("Modified"), gtk.CellRendererPixbuf(),
                                           pixbuf=self.overrides_store['modified-icon'])
         self.overrides_treeview.append_column(modified_col)
+        # Even though we set the sort function to 'text', we will get the correct sorting
+        # due to the cmp function.
+        sortable_cols.append((modified_col, 'text', 'modified-icon'))
+
+        self.set_sorts(self.overrides_store, sortable_cols)
 
         self.overrides_treeview.get_selection().connect('changed', self._on_selection)
         self.overrides_treeview.set_rules_hint(True)

@@ -96,7 +96,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         column = self.add_date_column(_('End Date'), 'expiration_date')
         cols.append((column, 'date', 'expiration_date'))
 
-        self.set_sorts(cols)
+        self.set_sorts(self.store, cols)
 
         self.glade.signal_autoconnect({
             "on_update_certificates_button_clicked":
