@@ -270,19 +270,23 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
         repo_enabled = repo['enabled']
         has_enabled_override = overrides and 'enabled' in overrides
-        if not has_enabled_override and enabled != int(repo_enabled):
-            # We get True/False from the model, convert to int so that
-            # the override gets the correct value.
-            override = self._create_override_json_object(repo.id, "enabled", int(enabled))
-            self._send_override(override)
 
-        elif has_enabled_override and overrides['enabled'] != repo_enabled:
-            override = self._create_override_json_object(repo.id, 'enabled')
-            self._delete_override(override)
-        else:
-            # Should only ever be one path here, else we have a UI logic error.
-            override = self._create_override_json_object(repo.id, "enabled", int(enabled))
-            self._send_override(override)
+        try:
+            if not has_enabled_override and enabled != int(repo_enabled):
+                # We get True/False from the model, convert to int so that
+                # the override gets the correct value.
+                override = self._create_override_json_object(repo.id, "enabled", int(enabled))
+                self._send_override(override)
+
+            elif has_enabled_override and overrides['enabled'] != repo_enabled:
+                override = self._create_override_json_object(repo.id, 'enabled')
+                self._delete_override(override)
+            else:
+                # Should only ever be one path here, else we have a UI logic error.
+                override = self._create_override_json_object(repo.id, "enabled", int(enabled))
+                self._send_override(override)
+        except Exception, e:
+            handle_gui_exception(e, _("Unable to update enabled override."), self.parent)
 
     def _on_gpgcheck_combo_box_changed(self, combo_box):
         override_selection = SelectionWrapper(self.overrides_treeview.get_selection(),
