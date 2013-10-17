@@ -178,6 +178,7 @@ class RegisterScreen(widgets.GladeWidget):
         self.register()
 
     def register(self):
+
         result = self._screens[self._current_screen].apply()
 
         if result == FINISH:
@@ -294,7 +295,7 @@ class NoGuiScreen(object):
         return True
 
     def apply(self):
-        pass
+        return 1
 
     def post(self):
         pass
@@ -411,7 +412,6 @@ class ConfirmSubscriptionsScreen(Screen):
         # Make sure that the store is cleared each time
         # the data is loaded into the screen.
         self.store.clear()
-        log.info("Using service level: %s" % self._dry_run_result.service_level)
         self.sla_label.set_markup("<b>" + self._dry_run_result.service_level +
                                   "</b>")
 

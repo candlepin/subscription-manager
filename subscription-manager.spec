@@ -316,14 +316,13 @@ rm -rf %{buildroot}
 
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
+# RHEL7 and beyond:
+%if 0%{?rhel} > 6
+%{_datadir}/firstboot/modules/rhsm_login.py*
+%else
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
-
-%if 0%{?rhel} < 6
-  %if 0%{?fedora} <= 12
-    # we are building for fedora <= 12 or rhel < 6
-    %{_prefix}/share/firstboot/modules/rhsm_login.py*
-  %endif
 %endif
+
 
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)
