@@ -13,7 +13,6 @@
 # in this software or its documentation.
 #
 
-import functools
 import gettext
 import logging
 import os
@@ -27,8 +26,7 @@ from M2Crypto.SSL import SSLError
 from subscription_manager.branding import get_branding
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.hwprobe import ClassicCheck
-from rhsm.connection import UEPConnection, RestlibException, GoneException, \
-    RemoteServerException
+from rhsm.connection import UEPConnection, RestlibException, GoneException
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 from rhsm.version import Versions
@@ -43,25 +41,6 @@ gettext.textdomain("rhsm")
 def remove_scheme(uri):
     """Remove the scheme component from a URI."""
     return re.sub("^[A-Za-z][A-Za-z0-9+-.]*://", "", uri)
-
-
-class attempt(object):
-    def __init__(self, message):
-        self.message = message
-
-    def __call__(self, func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            try:
-                return func(*args, **kwargs)
-            except RemoteServerException, e:
-                log.debug(self.message)
-            except RestlibException, e:
-                if e.code == 404:
-                    log.debug(self.message)
-                else:
-                    raise
-        return wrapper
 
 
 class ServerUrlParseError(Exception):

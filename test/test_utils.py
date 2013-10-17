@@ -5,50 +5,10 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
     parse_baseurl_info, format_baseurl, ServerUrlParseErrorEmpty, \
     ServerUrlParseErrorNone, ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
     ServerUrlParseErrorJustScheme, get_version, get_client_versions, \
-    get_server_versions, Versions, friendly_join, attempt
+    get_server_versions, Versions, friendly_join
 from subscription_manager import certlib
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
-from rhsm.connection import RemoteServerException, RestlibException
-
-
-class TestAttemptDecorator(unittest.TestCase):
-    def test_keeps_docstring(self):
-        @attempt("Some message")
-        def foo(x):
-            """This is my docstring."""
-            return "foo %s" % x
-        self.assertEquals("This is my docstring.", foo.__doc__)
-        self.assertEquals("foo", foo.__name__)
-        self.assertEquals("foo xyzzy", foo("xyzzy"))
-
-    @patch('subscription_manager.utils.log')
-    def test_handles_remote_server_errors(self, mock_log):
-        @attempt("Some message")
-        def foo():
-            raise RemoteServerException(500)
-        foo()
-        mock_log.debug.assert_called_once_with("Some message")
-
-    def test_raises_non404_restlib_errors(self):
-        @attempt("Some message")
-        def foo():
-            raise RestlibException(500)
-        self.assertRaises(RestlibException, foo)
-
-    @patch('subscription_manager.utils.log')
-    def test_handles_404_restlib_errors(self, mock_log):
-        @attempt("Some message")
-        def foo():
-            raise RestlibException(404)
-        foo()
-        mock_log.debug.assert_called_once_with("Some message")
-
-    def test_raises_other_errors(self):
-        @attempt("Some message")
-        def foo():
-            raise KeyError()
-        self.assertRaises(KeyError, foo)
 
 
 class TestParseServerInfo(unittest.TestCase):

@@ -19,13 +19,14 @@ from iniparse import ConfigParser
 import logging
 import os
 import string
+import subscription_manager.injection as inj
 from urllib import basejoin
 
 from rhsm.config import initConfig
+from rhsm.connection import RemoteServerException, RestlibException
 
 from certlib import ActionLock, DataLib, ConsumerIdentity
 from certdirectory import Path, ProductDirectory, EntitlementDirectory
-from utils import attempt
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -96,17 +97,21 @@ class UpdateAction:
 
         if self.consumer:
             self.consumer_uuid = self.consumer.getConsumerId()
-            self.set_release(self.consumer_uuid)
-            self.set_overrides(self.consumer_uuid)
+            cache = inj.require(inj.OVERRIDE_STATUS_CACHE).load_status(self.uep, self.consumer_uuid)
+            if cache is not None:
+                self.overrides = cache
 
-    @attempt("Release API not supported by the server. Using default.")
-    def set_release(self, consumer_uuid):
-        result = self.uep.getRelease(consumer_uuid)
-        self.release = result['releaseVer']
-
-    @attempt("Override API not supported by the server. Using default.")
-    def set_overrides(self, consumer_uuid):
-        self.overrides = self.uep.getContentOverrides(consumer_uuid)
+            message = "Release API is not supported by the server. Using default."
+            try:
+                result = self.uep.getRelease(self.consumer_uuid)
+                self.release = result['releaseVer']
+            except RemoteServerException, e:
+                log.debug(message)
+            except RestlibException, e:
+                if e.code == 404:
+                    log.debug(message)
+                else:
+                    raise
 
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:

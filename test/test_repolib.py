@@ -17,10 +17,10 @@ import unittest
 
 from StringIO import StringIO
 
-import stubs
+from fixture import SubManFixture
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
-        StubProductDirectory
+        StubProductDirectory, StubUEP, StubConsumerIdentity
 from subscription_manager.repolib import Repo, UpdateAction, TidyWriter
 from subscription_manager import repolib
 
@@ -50,13 +50,12 @@ class RepoTests(unittest.TestCase):
         r = Repo('testrepo', (('proxy', ""),))
         r['proxy'] = ""
         self.assertFalse(("proxy", "") in r.items())
-        r.update({"proxy": ""})
-        self.assertFalse(("proxy", "") in r.items())
 
 
-class UpdateActionTests(unittest.TestCase):
+class UpdateActionTests(SubManFixture):
 
     def setUp(self):
+        super(UpdateActionTests, self).setUp()
         stub_prod = StubProduct("fauxprod", provided_tags="TAG1,TAG2")
         stub_prod2 = StubProduct("fauxprovidedprod", provided_tags="TAG4")
         stub_prod_cert = StubProductCertificate(stub_prod, provided_products=[stub_prod2])
@@ -76,8 +75,8 @@ class UpdateActionTests(unittest.TestCase):
         self.stub_ent_cert = StubEntitlementCertificate(stub_prod, content=stub_content)
         stub_ent_dir = StubCertificateDirectory([self.stub_ent_cert])
 
-        repolib.ConsumerIdentity = stubs.StubConsumerIdentity
-        stub_uep = stubs.StubUEP()
+        repolib.ConsumerIdentity = StubConsumerIdentity
+        stub_uep = StubUEP()
         self.update_action = UpdateAction(prod_dir=stub_prod_dir,
                 ent_dir=stub_ent_dir, uep=stub_uep)
 

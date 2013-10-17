@@ -60,6 +60,7 @@ class SubManFixture(unittest.TestCase):
 
         inj.provide(inj.ENTITLEMENT_STATUS_CACHE, stubs.StubEntitlementStatusCache())
         inj.provide(inj.PROD_STATUS_CACHE, stubs.StubProductStatusCache())
+        inj.provide(inj.OVERRIDE_STATUS_CACHE, stubs.StubOverrideStatusCache())
         # By default set up an empty stub entitlement and product dir.
         # Tests need to modify or create their own but nothing should hit
         # the system.

@@ -19,7 +19,8 @@ import random
 import tempfile
 
 from subscription_manager.cert_sorter import CertSorter
-from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache
+from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
+        OverrideStatusCache
 from rhsm.certificate import GMT
 
 # config file is root only, so just fill in a stringbuffer
@@ -91,7 +92,7 @@ from datetime import datetime, timedelta
 
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.certlib import ActionLock
-from rhsm.certificate import parse_tags, Content
+from rhsm.certificate import parse_tags
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
         Product, Content, Order
 
@@ -424,6 +425,9 @@ class StubUEP:
     def getCompliance(self, uuid):
         return {}
 
+    def getContentOverrides(self, uuid):
+        return []
+
 
 class StubBackend:
     def __init__(self, uep=StubUEP()):
@@ -556,6 +560,15 @@ class StubEntitlementStatusCache(EntitlementStatusCache):
 
 
 class StubProductStatusCache(ProductStatusCache):
+
+    def write_cache(self):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+
+class StubOverrideStatusCache(OverrideStatusCache):
 
     def write_cache(self):
         pass
