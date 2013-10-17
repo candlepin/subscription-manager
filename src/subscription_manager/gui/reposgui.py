@@ -66,6 +66,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             "baseurl": str,
             "gpgcheck": bool,
             "gpgcheck_modified": bool,
+            "repo_data": object,
+            "override_data": object
         })
 
         # Gnome will hide all button icons by default (gnome setting),
@@ -143,8 +145,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             overrides_per_repo[repo_id][override['name']] = override['value']
 
         self.overrides_store.clear();
-        current_repos = self.repo_lib.get_repos(read_repo_file=True)
-        for repo in current_repos:
+        self.current_repos = dict((repodef.id, repodef) for repodef in self.repo_lib.get_repos(read_repo_file=False))
+        for repo in self.current_repos.itervalues():
             overrides = overrides_per_repo.get(repo.id, None)
             modified = not overrides is None
             enabled = self._get_model_value(repo, overrides, 'enabled')[0]
@@ -158,6 +160,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
                 'baseurl': repo['baseurl'],
                 'gpgcheck': bool(int(gpgcheck)),
                 'gpgcheck_modified': gpgcheck_modified,
+                'repo_data': repo,
+                'override_data': overrides
             })
 
         first_row_iter = self.overrides_store.get_iter_first()
@@ -259,12 +263,26 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         self.refresh_button.set_sensitive(num_selected > 0)
 
     def _on_enable_repo_toggle(self, override_model_iter, enabled):
-        repo_id = self.overrides_store.get_value(override_model_iter,
-                                              self.overrides_store['repo_id'])
-        # We get True/False from the model, convert to int so that
-        # the override gets the correct value.
-        override = self._create_override_json_object(repo_id, "enabled", int(enabled))
-        self._send_override(override)
+        repo = self.overrides_store.get_value(override_model_iter,
+                                              self.overrides_store['repo_data'])
+        overrides = self.overrides_store.get_value(override_model_iter,
+                                              self.overrides_store['override_data'])
+
+        repo_enabled = repo['enabled']
+        has_enabled_override = overrides and 'enabled' in overrides
+        if not has_enabled_override and enabled != int(repo_enabled):
+            # We get True/False from the model, convert to int so that
+            # the override gets the correct value.
+            override = self._create_override_json_object(repo.id, "enabled", int(enabled))
+            self._send_override(override)
+
+        elif has_enabled_override and overrides['enabled'] != repo_enabled:
+            override = self._create_override_json_object(repo.id, 'enabled')
+            self._delete_override(override)
+        else:
+            # Should only ever be one path here, else we have a UI logic error.
+            override = self._create_override_json_object(repo.id, "enabled", int(enabled))
+            self._send_override(override)
 
     def _on_gpgcheck_combo_box_changed(self, combo_box):
         override_selection = SelectionWrapper(self.overrides_treeview.get_selection(),
