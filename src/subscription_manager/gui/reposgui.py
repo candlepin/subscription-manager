@@ -145,7 +145,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             overrides_per_repo[repo_id][override['name']] = override['value']
 
         self.overrides_store.clear();
-        self.current_repos = dict((repodef.id, repodef) for repodef in self.repo_lib.get_repos(read_repo_file=False))
+        self.current_repos = dict((repodef.id, repodef) for repodef in self.repo_lib.get_repos())
         for repo in self.current_repos.itervalues():
             overrides = overrides_per_repo.get(repo.id, None)
             modified = not overrides is None
