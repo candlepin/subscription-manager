@@ -1067,6 +1067,8 @@ class UEPConnection:
         Delete an override on a content object.
         """
         method = "/consumers/%s/content_overrides" % self.sanitize(consumerId)
+        if not params:
+            params = []
         return self.conn.request_delete(method, params)
 
     def activateMachine(self, consumerId, email=None, lang=None):
