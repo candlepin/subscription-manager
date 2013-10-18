@@ -71,6 +71,14 @@ class RepoLib(DataLib):
 
         return current
 
+    def get_repos_from_certs(self):
+        '''
+        Gets the repositories from the certificates without applying
+        any overrides, or reading the repo file.
+        '''
+        action = UpdateAction(uep=self.uep)
+        return action.get_unique_content(apply_overrides=False)
+
     def get_repo_file(self):
         repo_file = RepoFile()
         return repo_file.path
@@ -180,7 +188,7 @@ class UpdateAction:
         log.info("repos updated: %s" % updates)
         return updates
 
-    def get_unique_content(self):
+    def get_unique_content(self, apply_overrides=True):
         unique = set()
         if not self.manage_repos:
             return unique
@@ -188,7 +196,7 @@ class UpdateAction:
         baseurl = CFG.get('rhsm', 'baseurl')
         ca_cert = CFG.get('rhsm', 'repo_ca_cert')
         for ent_cert in ent_certs:
-            for r in self.get_content(ent_cert, baseurl, ca_cert):
+            for r in self.get_content(ent_cert, baseurl, ca_cert, apply_overrides):
                 unique.add(r)
         return unique
 
@@ -232,7 +240,7 @@ class UpdateAction:
 
         return lst
 
-    def get_content(self, ent_cert, baseurl, ca_cert):
+    def get_content(self, ent_cert, baseurl, ca_cert, apply_overrides=True):
         lst = []
 
         for content in self.matching_content(ent_cert):
@@ -266,8 +274,10 @@ class UpdateAction:
             repo['metadata_expire'] = content.metadata_expire
 
             self._set_proxy_info(repo)
-            if self.override_supported:
+
+            if self.override_supported and apply_overrides:
                 self._set_override_info(repo)
+
             lst.append(repo)
         return lst
 
