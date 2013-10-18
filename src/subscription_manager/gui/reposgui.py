@@ -44,8 +44,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     def __init__(self, backend, parent):
         super(RepositoriesDialog, self).__init__('repositories.glade')
         self.backend = backend
-        self.identity = require(IDENTITY)
         self.cache = require(OVERRIDE_STATUS_CACHE)
+        self.identity = require(IDENTITY)
         self.repo_lib = RepoLib(uep=self.backend.cp_provider.get_consumer_auth_cp())
 
         self.glade.signal_autoconnect({
@@ -379,13 +379,13 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     def _send_override(self, override):
         cp = self.backend.cp_provider.get_consumer_auth_cp()
         overrides = cp.setContentOverrides(self.identity.uuid, [override])
-        self.cache.write_cache()
+        self.cache.update_local(overrides)
         self._refresh(overrides, self._get_selected_repo_id())
 
     def _delete_override(self, override):
         cp = self.backend.cp_provider.get_consumer_auth_cp()
         overrides = cp.deleteContentOverrides(self.identity.uuid, [override])
-        self.cache.write_cache()
+        self.cache.update_local(overrides)
         self._refresh(overrides, self._get_selected_repo_id())
 
     def _delete_all_overrides(self, repo_id):
