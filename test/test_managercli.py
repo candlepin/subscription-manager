@@ -10,10 +10,12 @@ import stubs
 from subscription_manager import managercli, managerlib
 from subscription_manager.managercli import format_name, columnize, \
         _echo, _none_wrap
+from subscription_manager.repolib import Repo
 from stubs import MockStderr, MockStdout, \
         StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
-from fixture import FakeException, FakeLogger, SubManFixture, capture
+from fixture import FakeException, FakeLogger, SubManFixture, \
+        capture, Matcher, dict_list_equals
 
 import mock
 from mock import patch
@@ -382,6 +384,10 @@ class TestRedeemCommand(TestCliProxyCommand):
 class TestReposCommand(TestCliCommand):
     command_class = managercli.ReposCommand
 
+    def setUp(self):
+        super(TestReposCommand, self).setUp()
+        self.cc.cp = Mock()
+
     def test_list(self):
         self.cc.main(["--list"])
         self.cc._validate_options()
@@ -394,31 +400,47 @@ class TestReposCommand(TestCliCommand):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
 
-    @mock.patch("subscription_manager.managercli.RepoFile")
-    def test_set_repo_status(self, mock_repofile):
-        repos = mock.MagicMock()
-        repo = mock.MagicMock()
-        mock_repofile_inst = mock_repofile.return_value
+    @mock.patch("subscription_manager.managercli.RepoLib")
+    @mock.patch("subscription_manager.managercli.check_registration")
+    def test_set_repo_status(self, mock_registration, mock_repolib):
+        repolib_instance = mock_repolib.return_value
+        mock_registration.return_value = {'uuid': 'fake_id', 'consumer_name':
+                'fake_name'}
 
-        repos.__iter__.return_value = iter([repo])
+        repos = [Repo('x'), Repo('y'), Repo('z')]
+        items = ['x', 'y']
+        self.cc._set_repo_status(repos, repolib_instance, items, False)
 
-        repo_dict = {'enabled': '1'}
+        expected_overrides = [{'contentLabel': i, 'name': 'enabled', 'value':
+            '0'} for i in items]
 
-        def getitem(name):
-            return repo_dict[name]
+        # The list of overrides sent to setContentOverrides is really a set of
+        # dictionaries (since we don't know the order of the overrides).
+        # However, since the dict class is not hashable, we can't actually use
+        # a set.  So we need a custom matcher to make sure that the
+        # JSON passed in to setContentOverrides is what we expect.
+        match_dict_list = Matcher(dict_list_equals, expected_overrides)
+        self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
+                match_dict_list)
+        repolib_instance.update.assert_called()
 
-        def setitem(name, val):
-            repo_dict[name] = val
+    @mock.patch("subscription_manager.managercli.RepoLib")
+    @mock.patch("subscription_manager.managercli.check_registration")
+    def test_set_repo_status_with_wildcards(self, mock_registration, mock_repolib):
+        repolib_instance = mock_repolib.return_value
+        mock_registration.return_value = {'uuid': 'fake_id', 'consumer_name':
+                'fake_name'}
 
-        repo.__getitem__.side_effect = getitem
-        repo.__setitem__.side_effect = setitem
-        repo.id = "foo"
+        repos = [Repo('zoo'), Repo('zebra'), Repo('zip')]
+        items = ['z*']
+        self.cc._set_repo_status(repos, repolib_instance, items, False)
 
-        items = ["foo"]
-        self.cc._set_repo_status(repos, items, False)
-        mock_repofile_inst.read.assert_called()
-        mock_repofile_inst.update.assert_called_with(repo)
-        mock_repofile_inst.write.assert_called()
+        expected_overrides = [{'contentLabel': i.id, 'name': 'enabled', 'value':
+            '0'} for i in repos]
+        match_dict_list = Matcher(dict_list_equals, expected_overrides)
+        self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
+                match_dict_list)
+        repolib_instance.update.assert_called()
 
 
 class TestConfigCommand(TestCliCommand):

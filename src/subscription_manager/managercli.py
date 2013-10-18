@@ -49,7 +49,7 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import valid_quantity
 from subscription_manager.release import ReleaseBackend
-from subscription_manager.repolib import RepoFile, RepoLib
+from subscription_manager.repolib import RepoLib
 from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
@@ -1804,20 +1804,24 @@ class ReposCommand(CliCommand):
 
     def _do_command(self):
         self._validate_options()
-        certmgr = CertManager(uep=self.cp)
-        certmgr.update()
-        rl = RepoLib(uep=self.cp)
-        repos = rl.get_repos()
         rc = 0
         if cfg.has_option('rhsm', 'manage_repos') and \
                 not int(cfg.get('rhsm', 'manage_repos')):
             print _("Repositories disabled by configuration.")
             return rc
 
+        # Pull down any new entitlements and refresh the entitlements directory
+        certmgr = CertManager(uep=self.cp)
+        certmgr.update()
+        self._request_validity_check()
+
+        rl = RepoLib(uep=self.cp)
+        repos = rl.get_repos()
+
         if self.options.enable:
-            rc = rc or self._set_repo_status(repos, self.options.enable, True)
+            rc = rc or self._set_repo_status(repos, rl, self.options.enable, True)
         if self.options.disable:
-            rc = self._set_repo_status(repos, self.options.disable, False) or rc
+            rc = self._set_repo_status(repos, rl, self.options.disable, False) or rc
 
         if self.options.list:
             if len(repos) > 0:
@@ -1834,9 +1838,8 @@ class ReposCommand(CliCommand):
                 print _("This system has no repositories available through subscriptions.")
         return rc
 
-    def _set_repo_status(self, repos, items, enable):
-        repos_modified = []
-        change_repos = []
+    def _set_repo_status(self, repos, repolib, items, enable):
+        repos_modified = set()
         rc = 0
         if enable:
             status = '1'
@@ -1844,40 +1847,29 @@ class ReposCommand(CliCommand):
             status = '0'
 
         for item in items:
-            found = False
-            contains_wildcard = self._contains_wildcard(item)
-            for repo in repos:
-                if fnmatch.fnmatch(repo.id, item):
-                    if repo['enabled'] != status:
-                        repo['enabled'] = status
-                        change_repos.append(repo)
-                    repos_modified.append(repo.id)
-                    found = True
-                    if not contains_wildcard:
-                        break
-            if not found:
+            matches = set([repo.id for repo in repos if fnmatch.fnmatch(repo.id, item)])
+            if not matches:
                 rc = 1
                 print _("Error: %s is not a valid repo ID. "
                         "Use --list option to see valid repos.") % item
-        if change_repos:
-            repo_file = RepoFile()
-            repo_file.read()
-            for repo in change_repos:
-                repo_file.update(repo)
-            repo_file.write()
+            repos_modified |= matches
+
+        if repos_modified:
+            overrides = [{'contentLabel': repo, 'name': 'enabled', 'value': status} for repo in repos_modified]
+            consumer = check_registration()['uuid']
+            results = self.cp.setContentOverrides(consumer, overrides)
+
+            cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+            cache.server_status = results
+            cache.write_cache()
+
+            repolib.update()
         for repo in repos_modified:
             if enable:
                 print _("Repo %s is enabled for this system.") % repo
             else:
                 print _("Repo %s is disabled for this system.") % repo
         return rc
-
-    def _contains_wildcard(self, item):
-        return "*" in item or \
-            "?" in item or \
-            "[" in item or \
-            "!" in item or \
-            "]" in item
 
 
 class ConfigCommand(CliCommand):
@@ -2238,6 +2230,11 @@ class OverrideCommand(CliCommand):
 
     def _do_command(self):
         self._validate_options()
+        # update entitlement certificates if necessary
+        CertManager(uep=self.cp).update()
+        # make sure the EntitlementDirectory singleton is refreshed
+        self._request_validity_check()
+
         if not self.entitlement_dir.list():
             print _("This system does not have any subscriptions.")
             return 1
