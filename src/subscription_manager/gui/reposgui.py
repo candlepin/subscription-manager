@@ -121,7 +121,6 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         self.gpgcheck_combo_box.set_active(0)
 
         self.main_window.set_transient_for(parent)
-        self.parent = parent
 
     def hide(self):
         self.main_window.hide()
@@ -214,7 +213,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             return
 
         confirm = ContinueDialog(_("Are you sure you would like to remove all overrides for %s?") % selection['repo_id'],
-                                 self.parent, _("Confirm Reset Repository"))
+                                 self._get_dialog_widget(), _("Confirm Reset Repository"))
         confirm.connect("response", self._on_reset_repo_response)
 
 
@@ -233,7 +232,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         try:
             self._delete_all_overrides(repo_id)
         except Exception, e:
-            handle_gui_exception(e, _("Unable to reset repository overrides."), self.parent)
+            handle_gui_exception(e, _("Unable to reset repository overrides."),
+                                 self._get_dialog_widget())
 
     def _on_selection(self, tree_selection):
         selection = SelectionWrapper(tree_selection, self.overrides_store)
@@ -285,7 +285,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
                 override = self._create_override_json_object(repo.id, "enabled", int(enabled))
                 self._send_override(override)
         except Exception, e:
-            handle_gui_exception(e, _("Unable to update enabled override."), self.parent)
+            handle_gui_exception(e, _("Unable to update enabled override."),
+                                 self._get_dialog_widget())
 
     def _on_gpgcheck_combo_box_changed(self, combo_box):
         override_selection = SelectionWrapper(self.overrides_treeview.get_selection(),
@@ -336,14 +337,15 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
                                                          "gpgcheck", int(current_value))
             self._send_override(override)
         except Exception, e:
-            handle_gui_exception(e, _("Unable to update the gpgcheck override."), self.parent)
+            handle_gui_exception(e, _("Unable to update the gpgcheck override."),
+                                 self._get_dialog_widget())
             return
 
         self._set_gpg_lock_state(False)
 
     def _on_gpgcheck_remove_button_clicked(self, button):
         confirm = ContinueDialog(_("Are you sure you would like to remove this override?"),
-                                 self.parent, _("Confirm Override Removal"))
+                                 self._get_dialog_widget(), _("Confirm Override Removal"))
         confirm.connect("response", self._on_remove_gpgcheck_confirmation)
 
     def _on_remove_gpgcheck_confirmation(self, dialog, response):
@@ -363,7 +365,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
                                                          'gpgcheck')
             self._delete_override(override)
         except Exception, e:
-            handle_gui_exception(e, _("Unable to delete the gpgcheck override."), self.parent)
+            handle_gui_exception(e, _("Unable to delete the gpgcheck override."),
+                                 self._get_dialog_widget())
             return
         self._set_gpg_lock_state(True)
 
@@ -399,3 +402,6 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
                 override['value'] = value
 
         return override
+
+    def _get_dialog_widget(self):
+        return self.main_window
