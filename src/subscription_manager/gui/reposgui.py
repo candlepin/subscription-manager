@@ -133,6 +133,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         cp = self.backend.cp_provider.get_consumer_auth_cp()
         current_overrides = self.cache.load_status(cp, self.identity.uuid) or []
         self._refresh(current_overrides)
+        # By default sort by repo_id
+        self.overrides_store.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
     def _refresh(self, current_overrides, repo_id_to_select=None):
 
@@ -165,6 +167,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         first_row_iter = self.overrides_store.get_iter_first()
         if not first_row_iter:
             self._set_details_visible(False)
+            self.reset_button.set_sensitive(False)
         elif repo_id_to_select:
             self._select_by_repo_id(repo_id_to_select)
         else:
@@ -256,10 +259,6 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     def _on_close(self, button, event=None):
         self.hide()
         return True
-
-    def _set_refresh_button_state(self):
-        num_selected = self.overrides_treeview.get_selection().count_selected_rows()
-        self.refresh_button.set_sensitive(num_selected > 0)
 
     def _on_enable_repo_toggle(self, override_model_iter, enabled):
         repo = self.overrides_store.get_value(override_model_iter,
