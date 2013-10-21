@@ -144,7 +144,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             overrides_per_repo[repo_id][override['name']] = override['value']
 
         self.overrides_store.clear();
-        for repo in self.repo_lib.get_repos_from_certs():
+        for repo in self.repo_lib.get_repos(apply_overrides=False):
             overrides = overrides_per_repo.get(repo.id, None)
             modified = not overrides is None
             enabled = self._get_model_value(repo, overrides, 'enabled')[0]

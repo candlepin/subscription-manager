@@ -50,8 +50,8 @@ class RepoLib(DataLib):
         action = UpdateAction(self.uep)
         return repo in [c.label for c in action.matching_content()]
 
-    def get_repos(self):
-        action = UpdateAction(self.uep)
+    def get_repos(self, apply_overrides):
+        action = UpdateAction(self.uep, apply_overrides=apply_overrides)
         repos = action.get_unique_content()
         if ConsumerIdentity.existsAndValid() and action.override_supported:
             return repos
@@ -71,14 +71,6 @@ class RepoLib(DataLib):
 
         return current
 
-    def get_repos_from_certs(self):
-        '''
-        Gets the repositories from the certificates without applying
-        any overrides, or reading the repo file.
-        '''
-        action = UpdateAction(uep=self.uep)
-        return action.get_unique_content(apply_overrides=False)
-
     def get_repo_file(self):
         repo_file = RepoFile()
         return repo_file.path
@@ -96,7 +88,8 @@ class RepoLib(DataLib):
 # Datalib.update() method anyhow. Pretty sure these can go away.
 class UpdateAction:
 
-    def __init__(self, uep, ent_dir=None, prod_dir=None):
+    def __init__(self, uep, ent_dir=None, prod_dir=None, apply_overrides=True):
+        self.apply_overrides = apply_overrides
         if ent_dir:
             self.ent_dir = ent_dir
         else:
@@ -123,7 +116,7 @@ class UpdateAction:
         except Exception:
             self.consumer = None
 
-        if self.consumer:
+        if self.consumer and self.apply_overrides:
             self.consumer_uuid = self.consumer.getConsumerId()
             status = inj.require(inj.OVERRIDE_STATUS_CACHE).load_status(self.uep, self.consumer_uuid)
             if status is not None:
@@ -188,7 +181,7 @@ class UpdateAction:
         log.info("repos updated: %s" % updates)
         return updates
 
-    def get_unique_content(self, apply_overrides=True):
+    def get_unique_content(self):
         unique = set()
         if not self.manage_repos:
             return unique
@@ -196,7 +189,7 @@ class UpdateAction:
         baseurl = CFG.get('rhsm', 'baseurl')
         ca_cert = CFG.get('rhsm', 'repo_ca_cert')
         for ent_cert in ent_certs:
-            for r in self.get_content(ent_cert, baseurl, ca_cert, apply_overrides):
+            for r in self.get_content(ent_cert, baseurl, ca_cert):
                 unique.add(r)
         return unique
 
@@ -240,7 +233,7 @@ class UpdateAction:
 
         return lst
 
-    def get_content(self, ent_cert, baseurl, ca_cert, apply_overrides=True):
+    def get_content(self, ent_cert, baseurl, ca_cert):
         lst = []
 
         for content in self.matching_content(ent_cert):
@@ -275,7 +268,7 @@ class UpdateAction:
 
             self._set_proxy_info(repo)
 
-            if self.override_supported and apply_overrides:
+            if self.override_supported and self.apply_overrides:
                 self._set_override_info(repo)
 
             lst.append(repo)
