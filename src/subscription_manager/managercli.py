@@ -2166,8 +2166,8 @@ class ListCommand(CliCommand):
                 service_type = order.service_type or ""
                 name = order.name
                 sku = order.sku
-                contract = order.contract
-                account = order.account
+                contract = order.contract or ""
+                account = order.account or ""
                 quantity_used = order.quantity_used
                 if order.virt_only:
                     system_type = _("Virtual")
