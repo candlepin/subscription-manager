@@ -101,9 +101,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         modified_col = gtk.TreeViewColumn(_("Modified"), gtk.CellRendererPixbuf(),
                                           pixbuf=self.overrides_store['modified-icon'])
         self.overrides_treeview.append_column(modified_col)
-        # Even though we set the sort function to 'text', we will get the correct sorting
-        # due to the cmp function.
-        sortable_cols.append((modified_col, 'text', 'modified-icon'))
+        sortable_cols.append((modified_col, 'text', 'modified'))
 
         self.set_sorts(self.overrides_store, sortable_cols)
 
