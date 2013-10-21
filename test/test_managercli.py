@@ -402,7 +402,9 @@ class TestReposCommand(TestCliCommand):
 
     @mock.patch("subscription_manager.managercli.RepoLib")
     @mock.patch("subscription_manager.managercli.check_registration")
-    def test_set_repo_status(self, mock_registration, mock_repolib):
+    @mock.patch("subscription_manager.managercli.ConsumerIdentity")
+    def test_set_repo_status(self, mock_ident, mock_registration, mock_repolib):
+        mock_ident.existsAndValid.return_value = True
         repolib_instance = mock_repolib.return_value
         mock_registration.return_value = {'uuid': 'fake_id', 'consumer_name':
                 'fake_name'}
@@ -426,7 +428,9 @@ class TestReposCommand(TestCliCommand):
 
     @mock.patch("subscription_manager.managercli.RepoLib")
     @mock.patch("subscription_manager.managercli.check_registration")
-    def test_set_repo_status_with_wildcards(self, mock_registration, mock_repolib):
+    @mock.patch("subscription_manager.managercli.ConsumerIdentity")
+    def test_set_repo_status_with_wildcards(self, mock_ident, mock_registration, mock_repolib):
+        mock_ident.existsAndValid.return_value = True
         repolib_instance = mock_repolib.return_value
         mock_registration.return_value = {'uuid': 'fake_id', 'consumer_name':
                 'fake_name'}
@@ -441,6 +445,29 @@ class TestReposCommand(TestCliCommand):
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
                 match_dict_list)
         repolib_instance.update.assert_called()
+
+    @mock.patch("subscription_manager.managercli.RepoFile")
+    @mock.patch("subscription_manager.managercli.ConsumerIdentity")
+    def test_set_repo_status_when_disconnected(self, mock_ident, mock_repofile):
+        mock_ident.existsAndValid.return_value = False
+        mock_repofile_inst = mock_repofile.return_value
+
+        enabled = {'enabled': '1'}.items()
+        disabled = {'enabled': '0'}.items()
+
+        zoo = Repo('zoo', enabled)
+        zebra = Repo('zebra', disabled)
+        zippy = Repo('zippy', enabled)
+        zero = Repo('zero', disabled)
+        repos = [zoo, zebra, zippy, zero]
+        items = ['z*']
+
+        self.cc._set_repo_status(repos, None, items, False)
+        calls = [mock.call(r) for r in repos if r['enabled'] == 1]
+        mock_repofile_inst.update.assert_has_calls(calls)
+        for r in repos:
+            self.assertEquals('0', r['enabled'])
+        mock_repofile_inst.write.assert_called_once_with()
 
 
 class TestConfigCommand(TestCliCommand):

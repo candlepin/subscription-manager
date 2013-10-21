@@ -49,7 +49,7 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import valid_quantity
 from subscription_manager.release import ReleaseBackend
-from subscription_manager.repolib import RepoLib
+from subscription_manager.repolib import RepoLib, RepoFile
 from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
@@ -1847,23 +1847,37 @@ class ReposCommand(CliCommand):
             status = '0'
 
         for item in items:
-            matches = set([repo.id for repo in repos if fnmatch.fnmatch(repo.id, item)])
+            matches = set([repo for repo in repos if fnmatch.fnmatch(repo.id, item)])
             if not matches:
                 rc = 1
                 print _("Error: %s is not a valid repo ID. "
                         "Use --list option to see valid repos.") % item
+            # Take the union
             repos_modified |= matches
 
         if repos_modified:
-            overrides = [{'contentLabel': repo, 'name': 'enabled', 'value': status} for repo in repos_modified]
-            consumer = check_registration()['uuid']
-            results = self.cp.setContentOverrides(consumer, overrides)
+            if ConsumerIdentity.existsAndValid():
+                overrides = [{'contentLabel': repo.id, 'name': 'enabled', 'value': status} for repo in repos_modified]
+                consumer = check_registration()['uuid']
+                results = self.cp.setContentOverrides(consumer, overrides)
 
-            cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-            cache.server_status = results
-            cache.write_cache()
+                cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+                cache.server_status = results
+                cache.write_cache()
 
-            repolib.update()
+                repolib.update()
+            else:
+                # In the disconnected case we must modify the repo file directly.
+                changed_repos = [repo for repo in repos_modified if repo['enabled'] != status]
+                for repo in changed_repos:
+                    repo['enabled'] = status
+                if changed_repos:
+                    repo_file = RepoFile()
+                    repo_file.read()
+                    for repo in changed_repos:
+                        repo_file.update(repo)
+                    repo_file.write()
+
         for repo in repos_modified:
             if enable:
                 print _("Repo %s is enabled for this system.") % repo
