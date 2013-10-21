@@ -308,7 +308,7 @@ class TestEntitlementStatusCache(SubManFixture):
             return False
 
         # If the file exists, and the thread that writes it does not, we know writing has completed
-        while not (os.path.exists(cache_file) and not threadActive("WriteCacheStatusCache")):
+        while not (os.path.exists(cache_file) and not threadActive("WriteCacheEntitlementStatusCache")):
             pass
         try:
             new_status_buf = open(cache_file).read()
