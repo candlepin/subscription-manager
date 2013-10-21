@@ -2230,6 +2230,9 @@ class OverrideCommand(CliCommand):
 
     def _do_command(self):
         self._validate_options()
+        # Abort if not registered
+        consumer = check_registration()['uuid']
+
         # update entitlement certificates if necessary
         CertManager(uep=self.cp).update()
         # make sure the EntitlementDirectory singleton is refreshed
@@ -2239,7 +2242,6 @@ class OverrideCommand(CliCommand):
             print _("This system does not have any subscriptions.")
             return 1
 
-        consumer = check_registration()['uuid']
         cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
         results = cache.load_status(self.cp, consumer)
         if self.options.list:

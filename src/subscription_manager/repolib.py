@@ -25,8 +25,10 @@ from urllib import basejoin
 from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
 
-from certlib import ActionLock, DataLib, ConsumerIdentity
+from certlib import ActionLock, DataLib
 from certdirectory import Path, ProductDirectory, EntitlementDirectory
+from identity import ConsumerIdentity
+from utils import UnsupportedOperationException
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -50,7 +52,24 @@ class RepoLib(DataLib):
 
     def get_repos(self):
         action = UpdateAction(uep=self.uep)
-        return action.get_unique_content()
+        repos = action.get_unique_content()
+        if ConsumerIdentity.existsAndValid():
+            return repos
+
+        # Otherwise we are in a disconnected case
+        current = set()
+        # Add the current repo data
+        repo_file = RepoFile()
+        repo_file.read()
+        for repo in repos:
+            existing = repo_file.section(repo.id)
+            if existing is None:
+                current.add(repo)
+            else:
+                existing.update(repo)
+                current.add(existing)
+
+        return current
 
     def get_repo_file(self):
         repo_file = RepoFile()
@@ -136,11 +155,19 @@ class UpdateAction:
         # in the RepoFile as appropriate:
         for cont in self.get_unique_content():
             valid.add(cont.id)
-            if repo_file.has_section(cont.id):
-                repo_file.update(cont)
-            else:
+            existing = repo_file.section(cont.id)
+            if existing is None:
                 repo_file.add(cont)
-            updates += 1
+                updates += 1
+            else:
+                # In the non-disconnected case, destroy the old repo and replace it with
+                # what's in the entitlement cert plus any overrides.
+                if ConsumerIdentity.existsAndValid():
+                    repo_file.update(cont)
+                    updates += 1
+                else:
+                    updates += existing.update(cont)
+                    repo_file.update(existing)
 
         for section in repo_file.sections():
             if section not in valid:
@@ -250,6 +277,7 @@ class UpdateAction:
         return contenturl.replace("$releasever", "%s" % self.release)
 
     def _set_override_info(self, repo):
+        # In the disconnected case, self.overrides will be an empty list
         for entry in self.overrides:
             if entry['contentLabel'] == repo.id:
                 repo[entry['name']] = entry['value']
@@ -285,24 +313,23 @@ class UpdateAction:
 
 
 class Repo(dict):
-
-    # name => default
-    PROPERTIES = {
-            'name': None,
-            'baseurl': None,
-            'enabled': '1',
-            'gpgcheck': '1',
-            'gpgkey': None,
-            'sslverify': '1',
-            'sslcacert': None,
-            'sslclientkey': None,
-            'sslclientcert': None,
-            'metadata_expire': None,
-            'proxy': None,
-            'proxy_username': None,
-            'proxy_password': None,
-            'ui_repoid_vars': None,
-    }
+    # (name, mutable, default) - The mutability information is only used in disconnected cases
+    PROPERTIES = (
+        ('name', 0, None),
+        ('baseurl', 0, None),
+        ('enabled', 1, '1'),
+        ('gpgcheck', 1, '1'),
+        ('gpgkey', 0, None),
+        ('sslverify', 1, '1'),
+        ('sslcacert', 0, None),
+        ('sslclientkey', 0, None),
+        ('sslclientcert', 0, None),
+        ('metadata_expire', 1, None),
+        ('proxy', 0, None),
+        ('proxy_username', 0, None),
+        ('proxy_password', 0, None),
+        ('ui_repoid_vars', 0, None),
+    )
 
     def __init__(self, repo_id, existing_values=None):
         # existing_values is a list of 2-tuples
@@ -322,7 +349,7 @@ class Repo(dict):
         # NOTE: This sets the above properties to the default values even if
         # they are not defined on disk. i.e. these properties will always
         # appear in this dict, but their values may be None.
-        for k, d in self.PROPERTIES.items():
+        for k, m, d in self.PROPERTIES:
             if k not in self.keys():
                 self[k] = d
 
@@ -354,6 +381,52 @@ class Repo(dict):
         # to get into our dict.
         return tuple([(k, self[k]) for k in self._order if
                      k in self and self[k]])
+
+    def update(self, new_repo):
+        """
+        Checks an existing repo definition against a potentially updated
+        version created from most recent entitlement certificates and
+        configuration. Creates, updates, and removes properties as
+        appropriate and returns the number of changes made. (if any)
+
+        This method should only be used in disconnected cases!
+        """
+        if ConsumerIdentity.existsAndValid():
+            log.error("Can not update repos when registered!")
+            raise UnsupportedOperationException()
+
+        changes_made = 0
+
+        for key, mutable, default in self.PROPERTIES:
+            new_val = new_repo.get(key)
+
+            # Mutable properties should be added if not currently defined,
+            # otherwise left alone.
+            if mutable:
+                if (new_val is not None) and (not self[key]):
+                    if self[key] == new_val:
+                        continue
+                    self[key] = new_val
+                    changes_made += 1
+
+            # Immutable properties should be always be added/updated,
+            # and removed if undefined in the new repo definition.
+            else:
+                if new_val is None or (new_val.strip() == ""):
+                    # Immutable property should be removed:
+                    if key in self.keys():
+                        del self[key]
+                        changes_made += 1
+                    continue
+
+                # Unchanged:
+                if self[key] == new_val:
+                    continue
+
+                self[key] = new_val
+                changes_made += 1
+
+        return changes_made
 
     def __setitem__(self, key, value):
         if key not in self._order:
