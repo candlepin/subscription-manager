@@ -714,7 +714,7 @@ class EnvironmentsCommand(OrgCommand):
                         print columnize(ENVIRONMENT_LIST, _echo, env['name'],
                                 env['description']) + "\n"
                 else:
-                    print _("Error: This org does not have environments.")
+                    print _("This org does not have any environments.")
             else:
                 print _("Error: Server does not support environments.")
 
