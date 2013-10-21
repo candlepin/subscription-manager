@@ -290,10 +290,12 @@ class MainWindow(widgets.GladeWidget):
             self.register_menu_item.hide()
             self.unregister_menu_item.show()
             self.settings_menu_item.show()  # preferences
+            self.repos_menu_item.show();
         else:
             self.register_menu_item.show()
             self.unregister_menu_item.hide()
             self.settings_menu_item.hide()
+            self.repos_menu_item.hide()
 
     def _show_redemption_buttons(self):
         # Check if consumer can redeem a subscription - if an identity cert exists
