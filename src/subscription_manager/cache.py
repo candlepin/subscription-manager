@@ -318,6 +318,16 @@ class OverrideStatusCache(StatusCache):
         self.server_status = uep.getContentOverrides(consumer_uuid)
 
 
+class LocalOnlyOverrideStatusCache(OverrideStatusCache):
+    """
+    Just echoes back the existing override cache.  Used by the yum
+    plugin if full_refresh_on_yum is set to false.
+    """
+
+    def _sync_with_server(self, uep, consumer_uuid):
+        self.server_status = self._read_cache()
+
+
 class ProfileManager(CacheManager):
     """
     Manages the profile of packages installed on this system.
