@@ -785,7 +785,7 @@ class TestOverrideCommand(TestCliProxyCommand):
         with capture() as out:
             self.cc._list(data, ['x', 'z'])
             output = out.getvalue()
-            self.assertTrue(re.search('Nothing is known about z', output))
+            self.assertTrue(re.search("Nothing is known about 'z'", output))
             self.assertTrue(re.search('Repository: x', output))
             self.assertTrue(re.search('\s+hello:\s+world', output))
 
@@ -799,7 +799,7 @@ class TestOverrideCommand(TestCliProxyCommand):
             {'contentLabel': 'y', 'name': 'c', 'value': 'd'},
         ]
         result = self.cc._add(repos, overrides)
-        self.assertEquals(expected, result)
+        self.assertTrue(dict_list_equals(expected, result))
 
     def test_remove_function(self):
         repos = ['x', 'y']
@@ -811,7 +811,7 @@ class TestOverrideCommand(TestCliProxyCommand):
             {'contentLabel': 'y', 'name': 'b'},
         ]
         result = self.cc._remove(repos, removes)
-        self.assertEquals(expected, result)
+        self.assertTrue(dict_list_equals(expected, result))
 
     def test_remove_all(self):
         repos = ['x', 'y']
@@ -820,7 +820,7 @@ class TestOverrideCommand(TestCliProxyCommand):
             {'contentLabel': 'y'},
         ]
         result = self.cc._remove_all(repos)
-        self.assertEquals(expected, result)
+        self.assertTrue(dict_list_equals(expected, result))
 
     def test_remove_all_with_no_repos_given(self):
         repos = []

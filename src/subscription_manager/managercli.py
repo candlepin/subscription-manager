@@ -2294,7 +2294,7 @@ class OverrideCommand(CliCommand):
         if specific_repos:
             specific_repos = set(specific_repos)
             for r in specific_repos.difference(to_show):
-                print _("Nothing is known about %s") % r
+                print _("Nothing is known about '%s'") % r
             # Take the intersection of the sets
             to_show &= specific_repos
 
