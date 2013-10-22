@@ -2208,12 +2208,12 @@ class OverrideCommand(CliCommand):
     def __init__(self):
         shortdesc = _("Override content repository settings")
         super(OverrideCommand, self).__init__("override", shortdesc, False)
-        self.parser.add_option("--repo", dest="repos", action="append",
+        self.parser.add_option("--repo", dest="repos", action="append", metavar="REPO",
             help=_("The repository or repositories to operate on. May be provided multiple times"))
-        self.parser.add_option("--remove", dest="removals", action="append",
+        self.parser.add_option("--remove", dest="removals", action="append", metavar="NAME",
             help=_("The name of the override to remove"))
         self.parser.add_option("--add", dest="additions", action="callback", callback=self._colon_split,
-            type="string",
+            type="string", metavar="NAME:OPTION",
             help=_("The name of the option to overide and value of the override separated by a colon"))
         self.parser.add_option("--remove-all", action="store_true",
             help=_("Remove all overrides. Can be specific to a repository by providing --repo"))
