@@ -1880,9 +1880,9 @@ class ReposCommand(CliCommand):
 
         for repo in repos_modified:
             if enable:
-                print _("Repo %s is enabled for this system.") % repo
+                print _("Repo '%s' is enabled for this system.") % repo.id
             else:
-                print _("Repo %s is disabled for this system.") % repo
+                print _("Repo '%s' is disabled for this system.") % repo.id
         return rc
 
 
