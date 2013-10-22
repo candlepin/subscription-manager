@@ -2260,7 +2260,7 @@ class OverrideCommand(CliCommand):
         results = cache.load_status(self.cp, consumer)
         if self.options.list:
             if results:
-                self._list(cache, self.options.repos)
+                self._list(results, self.options.repos)
             else:
                 print _("This system does not have any content overrides applied to it.")
             return
