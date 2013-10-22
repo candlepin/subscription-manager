@@ -312,10 +312,16 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
 
     def _set_gpg_lock_state(self, locked):
-        self.gpgcheck_text.set_visible(locked)
-        self.gpgcheck_lock_button.set_visible(locked)
-        self.gpgcheck_remove_button.set_visible(not locked)
-        self.gpgcheck_combo_box.set_visible(not locked)
+        if locked:
+            self.gpgcheck_text.show()
+            self.gpgcheck_lock_button.show()
+            self.gpgcheck_remove_button.hide()
+            self.gpgcheck_combo_box.hide()
+        else:
+            self.gpgcheck_text.hide()
+            self.gpgcheck_lock_button.hide()
+            self.gpgcheck_remove_button.show()
+            self.gpgcheck_combo_box.show()
 
     def _on_gpgcheck_lock_button_clicked(self, button):
         override_selection = SelectionWrapper(self.overrides_treeview.get_selection(),
@@ -368,12 +374,20 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         self._set_gpg_lock_state(True)
 
     def _set_details_visible(self, visible):
-        self.gpgcheck_text.set_visible(visible)
-        self.gpgcheck_lock_button.set_visible(visible)
-        self.gpgcheck_remove_button.set_visible(visible)
-        self.gpgcheck_combo_box.set_visible(visible)
-        self.name_text.set_visible(visible)
-        self.baseurl_text.set_visible(visible)
+        if visible:
+            self.gpgcheck_text.show()
+            self.gpgcheck_lock_button.show()
+            self.gpgcheck_remove_button.show()
+            self.gpgcheck_combo_box.show()
+            self.name_text.show()
+            self.baseurl_text.show()
+        else:
+            self.gpgcheck_text.hide()
+            self.gpgcheck_lock_button.hide()
+            self.gpgcheck_remove_button.hide()
+            self.gpgcheck_combo_box.hide()
+            self.name_text.hide()
+            self.baseurl_text.hide()
 
     def _send_override(self, override):
         cp = self.backend.cp_provider.get_consumer_auth_cp()
