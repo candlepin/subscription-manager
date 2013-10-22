@@ -213,7 +213,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         if not selection.is_valid():
             return
 
-        confirm = ContinueDialog(_("Are you sure you would like to remove all overrides for %s?") % selection['repo_id'],
+        confirm = ContinueDialog(_("Are you sure you would like to remove all overrides for <b>%s</b>?") % selection['repo_id'],
                                  self._get_dialog_widget(), _("Confirm Reset Repository"))
         confirm.connect("response", self._on_reset_repo_response)
 
