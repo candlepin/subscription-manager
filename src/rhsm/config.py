@@ -55,6 +55,7 @@ RHSM_DEFAULTS = {
         'entitlementcertdir': '/etc/pki/entitlement',
         'consumercertdir': '/etc/pki/consumer',
         'manage_repos': '1',
+        'full_refresh_on_yum': '0',
         'report_package_profile': '1',
         'plugindir': '/usr/share/rhsm-plugins',
         'pluginconfdir': '/etc/rhsm/pluginconf.d'
