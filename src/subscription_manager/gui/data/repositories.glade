@@ -11,9 +11,10 @@
     <property name="default_width">600</property>
     <property name="default_height">400</property>
     <property name="destroy_with_parent">True</property>
+    <property name="icon_name">subscription-manager</property>
     <property name="type_hint">dialog</property>
     <property name="deletable">False</property>
-    <signal name="delete_event" handler="on_dialog_delete_event" swapped="no"/>
+    <signal name="delete_event" handler="on_dialog_delete_event" />
     <child internal-child="vbox">
       <widget class="GtkVBox" id="main_container">
         <property name="visible">True</property>
@@ -31,7 +32,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="xalign">0.44999998807907104</property>
-                <signal name="clicked" handler="on_reset_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_reset_button_clicked" />
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -45,7 +46,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_close_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_close_button_clicked" />
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -253,7 +254,7 @@
                                     <property name="height_request">10</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <signal name="changed" handler="on_gpgcheck_combo_box_changed" swapped="no"/>
+                                    <signal name="changed" handler="on_gpgcheck_combo_box_changed" />
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -266,7 +267,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <signal name="clicked" handler="on_gpgcheck_lock_button_clicked" swapped="no"/>
+                                    <signal name="clicked" handler="on_gpgcheck_lock_button_clicked" />
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -280,7 +281,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <signal name="clicked" handler="on_gpgcheck_remove_button_clicked" swapped="no"/>
+                                    <signal name="clicked" handler="on_gpgcheck_remove_button_clicked" />
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
