@@ -231,6 +231,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/reasons.py*
 %{_datadir}/rhsm/subscription_manager/cp_provider.py*
 %{_datadir}/rhsm/subscription_manager/file_monitor.py*
+%{_datadir}/rhsm/subscription_manager/overrides.py*
 
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}

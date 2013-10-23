@@ -54,6 +54,7 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width
+from subscription_manager.overrides import OverrideLib
 
 _ = gettext.gettext
 
@@ -2277,10 +2278,10 @@ class OverrideCommand(CliCommand):
             print _("This system does not have any subscriptions.")
             return 1
 
-        cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+        override_lib = OverrideLib(self.cp)
 
         if self.options.list:
-            results = cache.load_status(self.cp, consumer)
+            results = override_lib.get_overrides(consumer)
             if results:
                 self._list(results, self.options.repos)
             else:
@@ -2288,22 +2289,14 @@ class OverrideCommand(CliCommand):
             return
 
         if self.options.additions:
-            overrides = self._add(self.options.repos, self.options.additions)
-            results = self.cp.setContentOverrides(consumer, overrides)
+            results = override_lib.add_overrides(consumer, self.options.repos, self.options.additions)
         if self.options.removals:
-            overrides = self._remove(self.options.repos, self.options.removals)
-            results = self.cp.deleteContentOverrides(consumer, overrides)
+            results = override_lib.remove_overrides(consumer, self.options.repos, self.options.removals)
         if self.options.remove_all:
-            overrides = self._remove_all(self.options.repos)
-            results = self.cp.deleteContentOverrides(consumer, overrides)
-        # Write result to cache
-        cache.server_status = results
-        cache.write_cache()
+            results = override_lib.remove_all_overrides(consumer, self.options.repos)
 
-        # Update repo file
-        # The overrides cache is already up to date from the adds/removes above so there
-        # is no need for RepoLib to refresh them again.
-        RepoLib(uep=self.cp, cache_only=True).update()
+        # Update the cache and refresh the repo file.
+        override_lib.update(results)
 
     def _list(self, json, specific_repos):
         overrides = {}
@@ -2329,18 +2322,6 @@ class OverrideCommand(CliCommand):
             names, values = zip(*repo_data)
             names = ["%s:" % x for x in names]
             print columnize(names, _echo, *values, indent=2) + "\n"
-
-    def _add(self, repos, additions):
-        return [{'contentLabel': repo, 'name': k, 'value': v} for repo in repos for k, v in additions.items()]
-
-    def _remove(self, repos, removals):
-        return [{'contentLabel': repo, 'name': item} for repo in repos for item in removals]
-
-    def _remove_all(self, repos):
-        if repos:
-            return [{'contentLabel': repo} for repo in repos]
-        else:
-            return None
 
 
 class VersionCommand(CliCommand):

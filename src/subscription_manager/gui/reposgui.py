@@ -20,12 +20,12 @@ import gtk
 
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.gui import widgets
-from subscription_manager.injection import IDENTITY, OVERRIDE_STATUS_CACHE, require
-from subscription_manager.repolib import RepoLib
+from subscription_manager.injection import IDENTITY, require
 from subscription_manager.gui.storage import MappedListStore
 from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\
     SelectionWrapper, HasSortableWidget
 from subscription_manager.gui.messageWindow import YesNoDialog
+from subscription_manager.overrides import OverrideLib
 
 _ = gettext.gettext
 
@@ -44,13 +44,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     def __init__(self, backend, parent):
         super(RepositoriesDialog, self).__init__('repositories.glade')
         self.backend = backend
-        self.cache = require(OVERRIDE_STATUS_CACHE)
         self.identity = require(IDENTITY)
-
-        # No need to have RepoLib refresh the overrides since the override cache
-        # will be updated for each action.
-        self.repo_lib = RepoLib(uep=self.backend.cp_provider.get_consumer_auth_cp(),
-                                cache_only=True)
+        self.override_lib = OverrideLib(self.backend.cp_provider.get_consumer_auth_cp())
 
         self.glade.signal_autoconnect({
                 "on_dialog_delete_event": self._on_close,
@@ -132,9 +127,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         self.main_window.present()
 
     def _load_data(self):
-        cp = self.backend.cp_provider.get_consumer_auth_cp()
         # pull the latest overrides from the cache which will be the ones from the server.
-        current_overrides = self.cache.load_status(cp, self.identity.uuid) or []
+        current_overrides = self.override_lib.get_overrides(self.identity.uuid) or []
         self._refresh(current_overrides)
         # By default sort by repo_id
         self.overrides_store.set_sort_column_id(0, gtk.SORT_ASCENDING)
@@ -153,7 +147,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         # Fetch the repositories from repolib without any overrides applied.
         # We do this so that we can tell if anything has been modified by
         # overrides.
-        for repo in self.repo_lib.get_repos(apply_overrides=False):
+        for repo in self.override_lib.repo_lib.get_repos(apply_overrides=False):
             overrides = overrides_per_repo.get(repo.id, None)
             modified = not overrides is None
             enabled = self._get_boolean(self._get_model_value(repo, overrides, 'enabled')[0])
@@ -235,7 +229,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             return
 
         confirm = YesNoDialog(_("Are you sure you want to remove all overrides for <b>%s</b>?") % selection['repo_id'],
-                                 self._get_dialog_widget(), _("Confirm Remove All Overrides"))
+                                 self._get_dialog_widget(), _("Confirm Remove All OverrideLib"))
         confirm.connect("response", self._on_reset_repo_response)
 
     def _on_reset_repo_response(self, dialog, response):
@@ -291,16 +285,13 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             if not has_enabled_override and enabled != int(repo_enabled):
                 # We get True/False from the model, convert to int so that
                 # the override gets the correct value.
-                override = self._create_override_json_object(repo.id, "enabled", int(enabled))
-                self._send_override(override)
+                self._add_override(repo.id, "enabled", int(enabled))
 
             elif has_enabled_override and overrides['enabled'] != repo_enabled:
-                override = self._create_override_json_object(repo.id, 'enabled')
-                self._delete_override(override)
+                self._delete_override(repo.id, 'enabled')
             else:
                 # Should only ever be one path here, else we have a UI logic error.
-                override = self._create_override_json_object(repo.id, "enabled", int(enabled))
-                self._send_override(override)
+                self._add_override(repo.id, "enabled", int(enabled))
         except Exception, e:
             handle_gui_exception(e, _("Unable to update enabled override."),
                                  self._get_dialog_widget())
@@ -325,10 +316,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         if current_cb_value == override_value:
             return
 
-        override = self._create_override_json_object(override_selection['repo_id'],
-                                                     "gpgcheck", int(current_cb_value))
-
-        self._send_override(override)
+        self._add_override(override_selection['repo_id'], "gpgcheck", int(current_cb_value))
 
     def _set_gpg_lock_state(self, locked):
         if locked:
@@ -355,9 +343,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
         # Create an override despite the fact that the values are likely the same.
         try:
-            override = self._create_override_json_object(override_selection['repo_id'],
-                                                         "gpgcheck", int(current_value))
-            self._send_override(override)
+            self._add_override(override_selection['repo_id'], "gpgcheck",
+                               int(current_value))
         except Exception, e:
             handle_gui_exception(e, _("Unable to update the gpgcheck override."),
                                  self._get_dialog_widget())
@@ -383,9 +370,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
         # Delete the override
         try:
-            override = self._create_override_json_object(override_selection['repo_id'],
-                                                         'gpgcheck')
-            self._delete_override(override)
+            self._delete_override(override_selection['repo_id'], 'gpgcheck')
         except Exception, e:
             handle_gui_exception(e, _("Unable to delete the gpgcheck override."),
                                  self._get_dialog_widget())
@@ -408,32 +393,21 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             self.name_text.hide()
             self.baseurl_text.hide()
 
-    def _send_override(self, override):
-        cp = self.backend.cp_provider.get_consumer_auth_cp()
-        overrides = cp.setContentOverrides(self.identity.uuid, [override])
-        self.cache.update_local(overrides)
+    def _add_override(self, repo, name, value):
+        overrides = self.override_lib.add_overrides(self.identity.uuid, [repo],
+                                                    {name:value})
+        self.override_lib.update(overrides)
         self._refresh(overrides, self._get_selected_repo_id())
-        self.repo_lib.update()
 
-    def _delete_override(self, override):
-        cp = self.backend.cp_provider.get_consumer_auth_cp()
-        overrides = cp.deleteContentOverrides(self.identity.uuid, [override])
-        self.cache.update_local(overrides)
+    def _delete_override(self, repo, name):
+        overrides = self.override_lib.remove_overrides(self.identity.uuid, [repo], [name])
+        self.override_lib.update(overrides)
         self._refresh(overrides, self._get_selected_repo_id())
-        self.repo_lib.update()
 
     def _delete_all_overrides(self, repo_id):
-        delete_data = self._create_override_json_object(repo_id)
-        self._delete_override(delete_data)
-
-    def _create_override_json_object(self, repo, name=None, value=None):
-        override = {'contentLabel': repo}
-        if name:
-            override['name'] = name
-            if value is not None:
-                override['value'] = value
-
-        return override
+        overrides = self.override_lib.remove_all_overrides(self.identity.uuid, [repo_id])
+        self.override_lib.update(overrides)
+        self._refresh(overrides, self._get_selected_repo_id())
 
     def _get_dialog_widget(self):
         return self.main_window
