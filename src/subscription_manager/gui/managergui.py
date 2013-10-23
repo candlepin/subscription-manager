@@ -328,7 +328,7 @@ class MainWindow(widgets.GladeWidget):
         try:
             self.repos_dialog.show()
         except Exception, e:
-            handle_gui_exception(e, _("Error in repos dialog."
+            handle_gui_exception(e, _("Error in repos dialog. "
                                       "Please see /var/log/rhsm/rhsm.log for more information."),
                                  self._get_window())
 

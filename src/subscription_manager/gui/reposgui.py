@@ -25,7 +25,7 @@ from subscription_manager.repolib import RepoLib
 from subscription_manager.gui.storage import MappedListStore
 from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\
     SelectionWrapper, HasSortableWidget
-from subscription_manager.gui.messageWindow import ContinueDialog
+from subscription_manager.gui.messageWindow import YesNoDialog
 
 _ = gettext.gettext
 
@@ -213,7 +213,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         if not selection.is_valid():
             return
 
-        confirm = ContinueDialog(_("Are you sure you would like to remove all overrides for <b>%s</b>?") % selection['repo_id'],
+        confirm = YesNoDialog(_("Are you sure you want to remove all overrides for <b>%s</b>?") % selection['repo_id'],
                                  self._get_dialog_widget(), _("Confirm Reset Repository"))
         confirm.connect("response", self._on_reset_repo_response)
 
@@ -347,7 +347,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         self._set_gpg_lock_state(False)
 
     def _on_gpgcheck_remove_button_clicked(self, button):
-        confirm = ContinueDialog(_("Are you sure you would like to remove this override?"),
+        confirm = YesNoDialog(_("Are you sure you want to remove this override?"),
                                  self._get_dialog_widget(), _("Confirm Override Removal"))
         confirm.connect("response", self._on_remove_gpgcheck_confirmation)
 
