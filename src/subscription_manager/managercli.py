@@ -2213,7 +2213,7 @@ class OverrideCommand(CliCommand):
         self.parser.add_option("--remove", dest="removals", action="append", metavar="NAME",
             help=_("The name of the override to remove"))
         self.parser.add_option("--add", dest="additions", action="callback", callback=self._colon_split,
-            type="string", metavar="NAME:OPTION",
+            type="string", metavar="NAME:VALUE",
             help=_("The name of the option to overide and value of the override separated by a colon"))
         self.parser.add_option("--remove-all", action="store_true",
             help=_("Remove all overrides. Can be specific to a repository by providing --repo"))
