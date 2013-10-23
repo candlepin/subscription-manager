@@ -34,7 +34,7 @@ from subscription_manager.certlib import system_log as inner_system_log
 from subscription_manager.facts import Facts
 from subscription_manager.injection import require, CERT_SORTER, \
         PRODUCT_DATE_RANGE_CALCULATOR, IDENTITY, ENTITLEMENT_STATUS_CACHE, \
-        PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER
+        PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoLib
@@ -872,6 +872,7 @@ def clean_all_data(backup=True):
     # Must also delete in-memory cache
     require(ENTITLEMENT_STATUS_CACHE).delete_cache()
     require(PROD_STATUS_CACHE).delete_cache()
+    require(OVERRIDE_STATUS_CACHE).delete_cache()
     RepoLib.delete_repo_file()
     log.info("Cleaned local data")
 
