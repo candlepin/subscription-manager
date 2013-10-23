@@ -1,5 +1,5 @@
 import tempfile
-import simplejson as json
+import json
 import shutil
 from mock import patch
 

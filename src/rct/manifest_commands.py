@@ -18,7 +18,7 @@ import errno
 import gettext
 import os
 import sys
-import simplejson as json
+import json
 from zipfile import ZipFile, BadZipfile
 
 from rhsm import certificate

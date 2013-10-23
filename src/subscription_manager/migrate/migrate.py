@@ -21,7 +21,7 @@ import logging
 import os
 import re
 import shutil
-import simplejson as json
+import json
 import subprocess
 import sys
 import traceback

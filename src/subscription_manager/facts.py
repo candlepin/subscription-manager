@@ -16,7 +16,7 @@ import gettext
 import glob
 import logging
 import os
-import simplejson as json
+import json
 
 import rhsm.config
 

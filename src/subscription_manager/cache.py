@@ -22,7 +22,7 @@ necessary.
 import gettext
 import logging
 import os
-import simplejson as json
+import json
 import socket
 import threading
 from M2Crypto import SSL

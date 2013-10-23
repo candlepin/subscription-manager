@@ -13,7 +13,7 @@
 # in this software or its documentation.
 #
 
-import simplejson as json
+import json
 from mock import Mock, NonCallableMock
 from datetime import datetime
 
