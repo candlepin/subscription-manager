@@ -53,10 +53,10 @@ class RepoLib(DataLib):
     def get_repos(self):
         action = UpdateAction(uep=self.uep)
         repos = action.get_unique_content()
-        if ConsumerIdentity.existsAndValid():
+        if ConsumerIdentity.existsAndValid() and action.override_supported:
             return repos
 
-        # Otherwise we are in a disconnected case
+        # Otherwise we are in a disconnected case or dealing with an old server
         current = set()
         # Add the current repo data
         repo_file = RepoFile()
@@ -66,7 +66,7 @@ class RepoLib(DataLib):
             if existing is None:
                 current.add(repo)
             else:
-                existing.update(repo)
+                action.update_repo(existing, repo)
                 current.add(existing)
 
         return current
@@ -106,6 +106,7 @@ class UpdateAction:
 
         self.release = None
         self.overrides = []
+        self.override_supported = True
 
         # If we are not registered, skip trying to refresh the
         # data from the server
@@ -116,9 +117,13 @@ class UpdateAction:
 
         if self.consumer:
             self.consumer_uuid = self.consumer.getConsumerId()
-            cache = inj.require(inj.OVERRIDE_STATUS_CACHE).load_status(self.uep, self.consumer_uuid)
-            if cache is not None:
-                self.overrides = cache
+            cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+            status = cache.load_status(self.uep, self.consumer_uuid)
+            if status is not None:
+                self.overrides = status
+            elif not cache.is_api_available():
+                self.override_supported = False
+                log.debug("Override API is not supported by the server.")
 
             message = "Release API is not supported by the server. Using default."
             try:
@@ -162,11 +167,11 @@ class UpdateAction:
             else:
                 # In the non-disconnected case, destroy the old repo and replace it with
                 # what's in the entitlement cert plus any overrides.
-                if ConsumerIdentity.existsAndValid():
+                if ConsumerIdentity.existsAndValid() and self.override_supported:
                     repo_file.update(cont)
                     updates += 1
                 else:
-                    updates += existing.update(cont)
+                    updates += self.update_repo(existing, cont)
                     repo_file.update(existing)
 
         for section in repo_file.sections():
@@ -265,7 +270,8 @@ class UpdateAction:
             repo['metadata_expire'] = content.metadata_expire
 
             self._set_proxy_info(repo)
-            self._set_override_info(repo)
+            if self.override_supported:
+                self._set_override_info(repo)
             lst.append(repo)
         return lst
 
@@ -310,6 +316,52 @@ class UpdateAction:
             if (url and (url.startswith('/'))):
                 url = url.lstrip('/')
             return basejoin(base, url)
+
+    def update_repo(self, old_repo, new_repo):
+        """
+        Checks an existing repo definition against a potentially updated
+        version created from most recent entitlement certificates and
+        configuration. Creates, updates, and removes properties as
+        appropriate and returns the number of changes made. (if any)
+
+        This method should only be used in disconnected cases!
+        """
+        if ConsumerIdentity.existsAndValid() and self.override_supported:
+            log.error("Can not update repos when registered!")
+            raise UnsupportedOperationException()
+
+        changes_made = 0
+
+        for key, mutable, default in Repo.PROPERTIES:
+            new_val = new_repo.get(key)
+
+            # Mutable properties should be added if not currently defined,
+            # otherwise left alone.
+            if mutable:
+                if (new_val is not None) and (not old_repo[key]):
+                    if old_repo[key] == new_val:
+                        continue
+                    old_repo[key] = new_val
+                    changes_made += 1
+
+            # Immutable properties should be always be added/updated,
+            # and removed if undefined in the new repo definition.
+            else:
+                if new_val is None or (new_val.strip() == ""):
+                    # Immutable property should be removed:
+                    if key in old_repo.keys():
+                        del old_repo[key]
+                        changes_made += 1
+                    continue
+
+                # Unchanged:
+                if old_repo[key] == new_val:
+                    continue
+
+                old_repo[key] = new_val
+                changes_made += 1
+
+        return changes_made
 
 
 class Repo(dict):
@@ -381,52 +433,6 @@ class Repo(dict):
         # to get into our dict.
         return tuple([(k, self[k]) for k in self._order if
                      k in self and self[k]])
-
-    def update(self, new_repo):
-        """
-        Checks an existing repo definition against a potentially updated
-        version created from most recent entitlement certificates and
-        configuration. Creates, updates, and removes properties as
-        appropriate and returns the number of changes made. (if any)
-
-        This method should only be used in disconnected cases!
-        """
-        if ConsumerIdentity.existsAndValid():
-            log.error("Can not update repos when registered!")
-            raise UnsupportedOperationException()
-
-        changes_made = 0
-
-        for key, mutable, default in self.PROPERTIES:
-            new_val = new_repo.get(key)
-
-            # Mutable properties should be added if not currently defined,
-            # otherwise left alone.
-            if mutable:
-                if (new_val is not None) and (not self[key]):
-                    if self[key] == new_val:
-                        continue
-                    self[key] = new_val
-                    changes_made += 1
-
-            # Immutable properties should be always be added/updated,
-            # and removed if undefined in the new repo definition.
-            else:
-                if new_val is None or (new_val.strip() == ""):
-                    # Immutable property should be removed:
-                    if key in self.keys():
-                        del self[key]
-                        changes_made += 1
-                    continue
-
-                # Unchanged:
-                if self[key] == new_val:
-                    continue
-
-                self[key] = new_val
-                changes_made += 1
-
-        return changes_made
 
     def __setitem__(self, key, value):
         if key not in self._order:

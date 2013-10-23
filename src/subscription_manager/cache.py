@@ -31,6 +31,7 @@ from rhsm.config import initConfig
 import rhsm.connection as connection
 from rhsm.profile import get_profile, RPMProfile
 from subscription_manager.certlib import ConsumerIdentity, DataLib
+from subscription_manager.utils import UnsupportedOperationException
 import subscription_manager.injection as inj
 
 _ = gettext.gettext
@@ -193,6 +194,7 @@ class StatusCache(CacheManager):
     """
     def __init__(self):
         self.server_status = None
+        self.last_error = None
 
     def load_status(self, uep, uuid):
         """
@@ -209,20 +211,24 @@ class StatusCache(CacheManager):
         try:
             self._sync_with_server(uep, uuid)
             self.write_cache()
+            self.last_error = False
             return self.server_status
         except SSL.SSLError, ex:
             log.exception(ex)
+            self.last_error = ex
             log.error("Consumer certificate is invalid")
             return None
-        except connection.RestlibException:
+        except connection.RestlibException, ex:
             # Indicates we may be talking to a very old candlepin server
             # which does not have the necessary API call.
+            self.last_error = ex
             return None
 
         # If we hit a network error, but no cache exists (extremely unlikely)
         # then we are disconnected
         except socket.error, ex:
             log.exception(ex)
+            self.last_error = ex
             if not self._cache_exists():
                 log.error("Server unreachable, registered, but no cache exists.")
                 return None
@@ -232,6 +238,7 @@ class StatusCache(CacheManager):
 
         except connection.NetworkException, ex:
             log.exception(ex)
+            self.last_error = ex
             if not self._cache_exists():
                 log.error("Server unreachable, registered, but no cache exists.")
                 raise
@@ -240,6 +247,7 @@ class StatusCache(CacheManager):
             return self._read_cache()
         except connection.ExpiredIdentityCertException, ex:
             log.exception(ex)
+            self.last_error = ex
             log.error("Bad identity, unable to connect to server")
             return None
 
@@ -316,6 +324,13 @@ class OverrideStatusCache(StatusCache):
 
     def _sync_with_server(self, uep, consumer_uuid):
         self.server_status = uep.getContentOverrides(consumer_uuid)
+
+    def is_api_available(self):
+        if self.last_error is None:
+            raise UnsupportedOperationException("The cache has not been initialized.")
+        elif isinstance(self.last_error, connection.RestlibException) and self.last_error.code == 404:
+            return False
+        return True
 
 
 class LocalOnlyOverrideStatusCache(OverrideStatusCache):

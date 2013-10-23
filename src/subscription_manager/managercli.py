@@ -1856,12 +1856,16 @@ class ReposCommand(CliCommand):
             repos_modified |= matches
 
         if repos_modified:
-            if ConsumerIdentity.existsAndValid():
+            # The cache should be primed at this point by the repolib.get_repos()
+            cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+            if ConsumerIdentity.existsAndValid() and cache.is_api_available():
                 overrides = [{'contentLabel': repo.id, 'name': 'enabled', 'value': status} for repo in repos_modified]
                 consumer = check_registration()['uuid']
                 results = self.cp.setContentOverrides(consumer, overrides)
 
                 cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+
+                # Update the cache with the returned JSON
                 cache.server_status = results
                 cache.write_cache()
 
@@ -2247,6 +2251,12 @@ class OverrideCommand(CliCommand):
         # Abort if not registered
         consumer = check_registration()['uuid']
 
+        cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+        results = cache.load_status(self.cp, consumer)
+
+        if not cache.is_api_available():
+            system_exit(-1, _("Error: The 'override' command is not supported by the server."))
+
         # update entitlement certificates if necessary
         CertManager(uep=self.cp).update()
         # make sure the EntitlementDirectory singleton is refreshed
@@ -2256,8 +2266,6 @@ class OverrideCommand(CliCommand):
             print _("This system does not have any subscriptions.")
             return 1
 
-        cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-        results = cache.load_status(self.cp, consumer)
         if self.options.list:
             if results:
                 self._list(results, self.options.repos)

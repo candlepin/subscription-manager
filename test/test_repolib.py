@@ -25,7 +25,6 @@ from stubs import StubCertificateDirectory, StubProductCertificate, \
 from subscription_manager.repolib import Repo, UpdateAction, TidyWriter
 from subscription_manager.utils import UnsupportedOperationException
 from subscription_manager import repolib
-from subscription_manager import identity
 
 
 class RepoTests(unittest.TestCase):
@@ -53,156 +52,6 @@ class RepoTests(unittest.TestCase):
         r = Repo('testrepo', (('proxy', ""),))
         r['proxy'] = ""
         self.assertFalse(("proxy", "") in r.items())
-
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_mutable_property(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = 1000
-        incoming_repo = {'metadata_expire': 2000}
-        existing_repo.update(incoming_repo)
-        self.assertEqual(1000, existing_repo['metadata_expire'])
-
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_gpgcheck_is_mutable(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        existing_repo['gpgcheck'] = "0"
-        incoming_repo = {'gpgcheck': "1"}
-        existing_repo.update(incoming_repo)
-        self.assertEqual("0", existing_repo['gpgcheck'])
-
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_mutable_property_in_repo_but_not_in_cert(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = 1000
-        incoming_repo = {}
-        existing_repo.update(incoming_repo)
-        self.assertEqual(1000, existing_repo['metadata_expire'])
-
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_immutable_property(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        existing_repo['name'] = "meow"
-        incoming_repo = {'name': "woof"}
-        existing_repo.update(incoming_repo)
-        self.assertEqual("woof", existing_repo['name'])
-
-    # If the user removed a mutable property completely, or the property
-    # is new in a new version of the entitlement certificate, the new value
-    # should get written out.
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_unset_mutable_property(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        incoming_repo = {'metadata_expire': 2000}
-        existing_repo.update(incoming_repo)
-        self.assertEqual(2000, existing_repo['metadata_expire'])
-
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_unset_immutable_property(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        incoming_repo = {'name': "woof"}
-        existing_repo.update(incoming_repo)
-        self.assertEqual("woof", existing_repo['name'])
-
-    # Test repo on disk has an immutable property set which has since been
-    # unset in the new repo definition. This property should be removed.
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_set_immutable_property_now_empty(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {}
-        existing_repo.update(incoming_repo)
-        self.assertFalse("proxy_username" in existing_repo.keys())
-
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_set_mutable_property_now_empty_value(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = "blah"
-        incoming_repo = {'metadata_expire': ''}
-        existing_repo.update(incoming_repo)
-        # re comments in repolib
-        # Mutable properties should be added if not currently defined,
-        # otherwise left alone.
-        self.assertTrue("metadata_expire" in existing_repo.keys())
-
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_set_immutable_property_now_empty_value(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {'proxy_username': ''}
-        existing_repo.update(incoming_repo)
-        # Immutable properties should be always be added/updated,
-        # and removed if undefined in the new repo definition.
-        self.assertFalse("proxy_username" in existing_repo.keys())
-
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_set_mutable_property_now_none(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = "blah"
-        incoming_repo = {'metadata_expire': None}
-        existing_repo.update(incoming_repo)
-        # re comments in repolib
-        # Mutable properties should be added if not currently defined,
-        # otherwise left alone.
-        self.assertTrue("metadata_expire" in existing_repo.keys())
-
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_set_mutable_property_now_not_in_cert(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = "blah"
-        incoming_repo = {}
-        existing_repo.update(incoming_repo)
-        # re comments in repolib
-        # Mutable properties should be added if not currently defined,
-        # otherwise left alone.
-        self.assertTrue("metadata_expire" in existing_repo.keys())
-
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_set_immutable_property_now_none(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {'proxy_username': None}
-        existing_repo.update(incoming_repo)
-        # Immutable properties should be always be added/updated,
-        # and removed if undefined in the new repo definition.
-        self.assertFalse("proxy_username" in existing_repo.keys())
-
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_set_immutable_property_now_not_in_cert(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {}
-        existing_repo.update(incoming_repo)
-        # Immutable properties should be always be added/updated,
-        # and removed if undefined in the new repo definition.
-        self.assertFalse("proxy_username" in existing_repo.keys())
-
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_unknown_property_is_preserved(self, mock_ident):
-        mock_ident.return_value = False
-        existing_repo = Repo('testrepo')
-        existing_repo['fake_prop'] = 'fake'
-        self.assertTrue(('fake_prop', 'fake') in existing_repo.items())
-
-    @patch.object(identity.ConsumerIdentity, "existsAndValid")
-    def test_repo_update_forbidden_when_registered(self, mock_ident):
-        mock_ident.return_value = True
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {'proxy_username': 'foo'}
-        self.assertRaises(UnsupportedOperationException, existing_repo.update, incoming_repo)
 
 
 class UpdateActionTests(SubManFixture):
@@ -357,6 +206,156 @@ class UpdateActionTests(SubManFixture):
         self.assertTrue(self._find_content(content, "c1") is not None)
         self.assertTrue(self._find_content(content, "c5") is None)
         self.assertTrue(self._find_content(content, "c6") is None)
+
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_mutable_property(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        existing_repo['metadata_expire'] = 1000
+        incoming_repo = {'metadata_expire': 2000}
+        self.update_action.update_repo(existing_repo, incoming_repo)
+        self.assertEqual(1000, existing_repo['metadata_expire'])
+
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_gpgcheck_is_mutable(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        existing_repo['gpgcheck'] = "0"
+        incoming_repo = {'gpgcheck': "1"}
+        self.update_action.update_repo(existing_repo, incoming_repo)
+        self.assertEqual("0", existing_repo['gpgcheck'])
+
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_mutable_property_in_repo_but_not_in_cert(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        existing_repo['metadata_expire'] = 1000
+        incoming_repo = {}
+        self.update_action.update_repo(existing_repo, incoming_repo)
+        self.assertEqual(1000, existing_repo['metadata_expire'])
+
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_immutable_property(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        existing_repo['name'] = "meow"
+        incoming_repo = {'name': "woof"}
+        self.update_action.update_repo(existing_repo, incoming_repo)
+        self.assertEqual("woof", existing_repo['name'])
+
+    # If the user removed a mutable property completely, or the property
+    # is new in a new version of the entitlement certificate, the new value
+    # should get written out.
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_unset_mutable_property(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        incoming_repo = {'metadata_expire': 2000}
+        self.update_action.update_repo(existing_repo, incoming_repo)
+        self.assertEqual(2000, existing_repo['metadata_expire'])
+
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_unset_immutable_property(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        incoming_repo = {'name': "woof"}
+        self.update_action.update_repo(existing_repo, incoming_repo)
+        self.assertEqual("woof", existing_repo['name'])
+
+    # Test repo on disk has an immutable property set which has since been
+    # unset in the new repo definition. This property should be removed.
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_set_immutable_property_now_empty(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        existing_repo['proxy_username'] = "blah"
+        incoming_repo = {}
+        self.update_action.update_repo(existing_repo, incoming_repo)
+        self.assertFalse("proxy_username" in existing_repo.keys())
+
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_set_mutable_property_now_empty_value(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        existing_repo['metadata_expire'] = "blah"
+        incoming_repo = {'metadata_expire': ''}
+        self.update_action.update_repo(existing_repo, incoming_repo)
+        # re comments in repolib
+        # Mutable properties should be added if not currently defined,
+        # otherwise left alone.
+        self.assertTrue("metadata_expire" in existing_repo.keys())
+
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_set_immutable_property_now_empty_value(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        existing_repo['proxy_username'] = "blah"
+        incoming_repo = {'proxy_username': ''}
+        self.update_action.update_repo(existing_repo, incoming_repo)
+        # Immutable properties should be always be added/updated,
+        # and removed if undefined in the new repo definition.
+        self.assertFalse("proxy_username" in existing_repo.keys())
+
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_set_mutable_property_now_none(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        existing_repo['metadata_expire'] = "blah"
+        incoming_repo = {'metadata_expire': None}
+        self.update_action.update_repo(existing_repo, incoming_repo)
+        # re comments in repolib
+        # Mutable properties should be added if not currently defined,
+        # otherwise left alone.
+        self.assertTrue("metadata_expire" in existing_repo.keys())
+
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_set_mutable_property_now_not_in_cert(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        existing_repo['metadata_expire'] = "blah"
+        incoming_repo = {}
+        self.update_action.update_repo(existing_repo, incoming_repo)
+        # re comments in repolib
+        # Mutable properties should be added if not currently defined,
+        # otherwise left alone.
+        self.assertTrue("metadata_expire" in existing_repo.keys())
+
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_set_immutable_property_now_none(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        existing_repo['proxy_username'] = "blah"
+        incoming_repo = {'proxy_username': None}
+        self.update_action.update_repo(existing_repo, incoming_repo)
+        # Immutable properties should be always be added/updated,
+        # and removed if undefined in the new repo definition.
+        self.assertFalse("proxy_username" in existing_repo.keys())
+
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_set_immutable_property_now_not_in_cert(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        existing_repo['proxy_username'] = "blah"
+        incoming_repo = {}
+        self.update_action.update_repo(existing_repo, incoming_repo)
+        # Immutable properties should be always be added/updated,
+        # and removed if undefined in the new repo definition.
+        self.assertFalse("proxy_username" in existing_repo.keys())
+
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_unknown_property_is_preserved(self, mock_ident):
+        mock_ident.existsAndValid.return_value = False
+        existing_repo = Repo('testrepo')
+        existing_repo['fake_prop'] = 'fake'
+        self.assertTrue(('fake_prop', 'fake') in existing_repo.items())
+
+    @patch("subscription_manager.repolib.ConsumerIdentity")
+    def test_repo_update_forbidden_when_registered(self, mock_ident):
+        mock_ident.existsAndValid.return_value = True
+        existing_repo = Repo('testrepo')
+        existing_repo['proxy_username'] = "blah"
+        incoming_repo = {'proxy_username': 'foo'}
+        self.assertRaises(UnsupportedOperationException, self.update_action.update_repo, existing_repo, incoming_repo)
 
 
 class TidyWriterTests(unittest.TestCase):
