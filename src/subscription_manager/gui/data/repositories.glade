@@ -14,6 +14,9 @@
     <property name="icon_name">subscription-manager</property>
     <property name="type_hint">dialog</property>
     <property name="deletable">False</property>
+    <accessibility>
+      <atkproperty name="AtkObject::accessible-name" translatable="yes">manage_repositories_dialog</atkproperty>
+    </accessibility>
     <signal name="delete_event" handler="on_dialog_delete_event" />
     <child internal-child="vbox">
       <widget class="GtkVBox" id="main_container">
@@ -32,6 +35,9 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="xalign">0.44999998807907104</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">remove_all_overrides_button</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_reset_button_clicked" />
               </widget>
               <packing>
@@ -46,6 +52,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">close_button</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_close_button_clicked" />
               </widget>
               <packing>
@@ -96,6 +105,9 @@
                       <widget class="GtkTreeView" id="overrides_treeview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">repository_listview</atkproperty>
+                        </accessibility>
                       </widget>
                     </child>
                   </widget>
@@ -152,6 +164,9 @@
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="wrap_mode">word-char</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">name_value</atkproperty>
+                                </accessibility>
                               </widget>
                               <packing>
                                 <property name="expand">True</property>
@@ -194,6 +209,9 @@
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="wrap_mode">word-char</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">base_url_value</atkproperty>
+                                </accessibility>
                               </widget>
                               <packing>
                                 <property name="expand">True</property>
@@ -242,6 +260,9 @@
                                     <property name="justification">center</property>
                                     <property name="left_margin">4</property>
                                     <property name="text" translatable="yes">Enabled (1)</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">gpgcheck_readonly</atkproperty>
+                                    </accessibility>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -254,6 +275,9 @@
                                     <property name="height_request">10</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">gpgcheck_combobox</atkproperty>
+                                    </accessibility>
                                     <signal name="changed" handler="on_gpgcheck_combo_box_changed" />
                                   </widget>
                                   <packing>
@@ -267,6 +291,9 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">gpgcheck_edit_button</atkproperty>
+                                    </accessibility>
                                     <signal name="clicked" handler="on_gpgcheck_lock_button_clicked" />
                                   </widget>
                                   <packing>
@@ -281,6 +308,9 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">gpgcheck_remove_button</atkproperty>
+                                    </accessibility>
                                     <signal name="clicked" handler="on_gpgcheck_remove_button_clicked" />
                                   </widget>
                                   <packing>
