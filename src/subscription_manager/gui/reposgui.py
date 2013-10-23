@@ -214,7 +214,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             return
 
         confirm = YesNoDialog(_("Are you sure you want to remove all overrides for <b>%s</b>?") % selection['repo_id'],
-                                 self._get_dialog_widget(), _("Confirm Reset Repository"))
+                                 self._get_dialog_widget(), _("Confirm Remove All Overrides"))
         confirm.connect("response", self._on_reset_repo_response)
 
 
@@ -394,12 +394,14 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         overrides = cp.setContentOverrides(self.identity.uuid, [override])
         self.cache.update_local(overrides)
         self._refresh(overrides, self._get_selected_repo_id())
+        self.repo_lib.update()
 
     def _delete_override(self, override):
         cp = self.backend.cp_provider.get_consumer_auth_cp()
         overrides = cp.deleteContentOverrides(self.identity.uuid, [override])
         self.cache.update_local(overrides)
         self._refresh(overrides, self._get_selected_repo_id())
+        self.repo_lib.update()
 
     def _delete_all_overrides(self, repo_id):
         delete_data = self._create_override_json_object(repo_id)
