@@ -2210,19 +2210,19 @@ class ListCommand(CliCommand):
 
 class OverrideCommand(CliCommand):
     def __init__(self):
-        shortdesc = _("Override content repository settings")
+        shortdesc = _("Manage custom content repository settings")
         super(OverrideCommand, self).__init__("override", shortdesc, False)
-        self.parser.add_option("--repo", dest="repos", action="append", metavar="REPO",
-            help=_("The repository or repositories to operate on. May be provided multiple times"))
+        self.parser.add_option("--repo", dest="repos", action="append", metavar="REPOID",
+            help=_("repository to modify (can be specified more than once)"))
         self.parser.add_option("--remove", dest="removals", action="append", metavar="NAME",
-            help=_("The name of the override to remove"))
+            help=_("name of the override to remove (can be specified more than once)"))
         self.parser.add_option("--add", dest="additions", action="callback", callback=self._colon_split,
             type="string", metavar="NAME:VALUE",
-            help=_("The name of the option to overide and value of the override separated by a colon"))
+            help=_("name and value of the option to override separated by a colon (can be specified more than once)"))
         self.parser.add_option("--remove-all", action="store_true",
-            help=_("Remove all overrides. Can be specific to a repository by providing --repo"))
+            help=_("remove all overrides; can be specific to a repository by providing --repo"))
         self.parser.add_option("--list", action="store_true",
-            help=_("List all overrides. Can be specific to a repository by providing --repo"))
+            help=_("list all overrides; can be specific to a repository by providing --repo"))
 
     def _colon_split(self, option, opt_str, value, parser):
         if parser.values.additions is None:
