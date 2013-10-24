@@ -43,15 +43,15 @@ class RepoLib(DataLib):
         DataLib.__init__(self, lock, uep)
 
     def _do_update(self):
-        action = UpdateAction(uep=self.uep)
+        action = UpdateAction(self.uep)
         return action.perform()
 
     def is_managed(self, repo):
-        action = UpdateAction(uep=self.uep)
+        action = UpdateAction(self.uep)
         return repo in [c.label for c in action.matching_content()]
 
     def get_repos(self):
-        action = UpdateAction(uep=self.uep)
+        action = UpdateAction(self.uep)
         repos = action.get_unique_content()
         if ConsumerIdentity.existsAndValid() and action.override_supported:
             return repos
@@ -88,7 +88,7 @@ class RepoLib(DataLib):
 # Datalib.update() method anyhow. Pretty sure these can go away.
 class UpdateAction:
 
-    def __init__(self, uep=None, ent_dir=None, prod_dir=None):
+    def __init__(self, uep, ent_dir=None, prod_dir=None):
         if ent_dir:
             self.ent_dir = ent_dir
         else:
@@ -563,14 +563,3 @@ class RepoFile(ConfigParser):
         s.append('#')
         f.write('\n'.join(s))
         f.close()
-
-
-def main():
-    print 'Updating Certificate based repositories'
-    repolib = RepoLib()
-    updates = repolib.update()
-    print '%d updates required' % updates
-    print 'done'
-
-if __name__ == '__main__':
-    main()

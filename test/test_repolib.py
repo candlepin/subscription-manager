@@ -79,8 +79,8 @@ class UpdateActionTests(SubManFixture):
 
         repolib.ConsumerIdentity = StubConsumerIdentity
         stub_uep = StubUEP()
-        self.update_action = UpdateAction(prod_dir=stub_prod_dir,
-                ent_dir=stub_ent_dir, uep=stub_uep)
+        self.update_action = UpdateAction(stub_uep, prod_dir=stub_prod_dir,
+                ent_dir=stub_ent_dir)
 
     def _find_content(self, content_list, name):
         """
