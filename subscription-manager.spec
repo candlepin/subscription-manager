@@ -27,11 +27,10 @@ URL:     https://fedorahosted.org/subscription-manager/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires:  python-ethtool
-Requires:  python-simplejson
 Requires:  python-iniparse
 Requires:  pygobject2
 Requires:  virt-what
-Requires:  python-rhsm >= 1.9.1-1
+Requires:  python-rhsm >= 1.10.3
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 Requires:  usermode

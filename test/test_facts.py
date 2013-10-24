@@ -1,11 +1,11 @@
 import tempfile
-import simplejson as json
 import shutil
 from mock import patch
 
 import fixture
 from stubs import StubEntitlementDirectory, StubProductDirectory
 from subscription_manager import facts
+from rhsm import ourjson as json
 
 facts_buf = """
 {

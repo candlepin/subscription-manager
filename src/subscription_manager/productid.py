@@ -19,7 +19,6 @@ import gettext
 from gzip import GzipFile
 import logging
 import os
-import simplejson as json
 import types
 import yum
 
@@ -28,6 +27,7 @@ from rhsm.certificate import create_from_pem
 from subscription_manager.certdirectory import Directory
 from subscription_manager.injection import PLUGIN_MANAGER, require
 import subscription_manager.injection as inj
+from rhsm import ourjson as json
 
 _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)

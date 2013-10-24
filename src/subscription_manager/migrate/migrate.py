@@ -21,7 +21,6 @@ import logging
 import os
 import re
 import shutil
-import simplejson as json
 import subprocess
 import sys
 import traceback
@@ -48,6 +47,7 @@ from subscription_manager.i18n_optparse import OptionParser, \
 from subscription_manager.productid import ProductDatabase
 from subscription_manager import repolib
 from subscription_manager.utils import parse_server_info, ServerUrlParseError
+from rhsm import ourjson as json
 
 _RHNLIBPATH = "/usr/share/rhn"
 if _RHNLIBPATH not in sys.path:

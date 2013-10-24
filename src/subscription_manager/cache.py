@@ -22,7 +22,6 @@ necessary.
 import gettext
 import logging
 import os
-import simplejson as json
 import socket
 import threading
 from M2Crypto import SSL
@@ -32,6 +31,7 @@ import rhsm.connection as connection
 from rhsm.profile import get_profile, RPMProfile
 from subscription_manager.certlib import ConsumerIdentity, DataLib
 import subscription_manager.injection as inj
+from rhsm import ourjson as json
 
 _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)

@@ -13,12 +13,12 @@
 # in this software or its documentation.
 #
 
-import simplejson as json
 from datetime import datetime, timedelta
 
 import mock
 import stubs
 
+from rhsm import ourjson as json
 from subscription_manager import certmgr
 from subscription_manager import certlib
 from subscription_manager import repolib
