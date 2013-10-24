@@ -18,7 +18,6 @@ import logging
 import os
 import posixpath
 import re
-import simplejson as json
 import zlib
 
 log = logging.getLogger(__name__)
@@ -31,6 +30,7 @@ from rhsm.connection import safe_int
 from rhsm.certificate import Extensions, OID, DateRange, GMT, \
         get_datetime_from_x509, parse_tags, CertificateException
 from rhsm.pathtree import PathTree
+from rhsm import ourjson as json
 
 REDHAT_OID_NAMESPACE = "1.3.6.1.4.1.2312.9"
 ORDER_NAMESPACE = "4"

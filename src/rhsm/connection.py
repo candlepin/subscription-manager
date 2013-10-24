@@ -20,7 +20,6 @@ import datetime
 import locale
 import logging
 import os
-import simplejson as json
 import socket
 import sys
 import time
@@ -32,6 +31,8 @@ from urllib import urlencode
 
 from config import initConfig
 from version import Versions
+
+from rhsm import ourjson as json
 
 # on EL5, there is a really long socket timeout. The
 # best thing we can do is set a process wide default socket timeout.

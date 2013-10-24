@@ -17,7 +17,6 @@ import unittest
 
 from rhsm.connection import ContentConnection, UEPConnection, drift_check, Restlib,\
     UnauthorizedException, ForbiddenException, AuthenticationException, RestlibException
-import simplejson as json
 import mock
 
 

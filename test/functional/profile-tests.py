@@ -14,8 +14,8 @@
 import unittest
 
 from rhsm.profile import Package, RPMProfile, get_profile, InvalidProfileType
+from rhsm import ourjson as json
 from mock import Mock
-import simplejson as json
 
 
 class ProfileTests(unittest.TestCase):

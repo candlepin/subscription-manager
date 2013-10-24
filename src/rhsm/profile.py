@@ -11,9 +11,10 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 import logging
-import simplejson as json
 
 import rpm
+
+from rhsm import ourjson as json
 
 log = logging.getLogger(__name__)
 
