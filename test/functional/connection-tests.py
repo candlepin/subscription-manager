@@ -16,7 +16,8 @@
 import unittest
 
 from rhsm.connection import ContentConnection, UEPConnection, drift_check, Restlib,\
-    UnauthorizedException, ForbiddenException, AuthenticationException, RestlibException
+    UnauthorizedException, ForbiddenException, AuthenticationException, RestlibException, \
+    RemoteServerException
 import mock
 
 
@@ -127,6 +128,9 @@ class RestlibTests(unittest.TestCase):
     def test_standard_error_handling_on_401_with_defined_body(self):
         self._run_standard_error_handling_test(401)
 
+    def test_standard_error_handling_on_401_with_invalid_json_body(self):
+        self._run_standard_error_handling_test_invalid_json(401, UnauthorizedException)
+
     def test_invalid_credentitals_thrown_on_403_with_empty_body(self):
         mock_response = {"status": 403}
         self.assertRaises(ForbiddenException, self._validate_response,
@@ -134,6 +138,18 @@ class RestlibTests(unittest.TestCase):
 
     def test_standard_error_handling_on_403_with_defined_body(self):
         self._run_standard_error_handling_test(403)
+
+    def test_standard_error_handling_on_403_with_invalid_json_body(self):
+        self._run_standard_error_handling_test_invalid_json(403, ForbiddenException)
+
+    def _run_standard_error_handling_test_invalid_json(self, expected_error_code,
+                                                       expected_exception):
+        mock_response = {"status": expected_error_code,
+                         "content": '<this is not valid json>>'}
+
+        self._check_for_remote_server_exception(expected_error_code,
+                                                expected_exception,
+                                                mock_response)
 
     def _run_standard_error_handling_test(self, expected_error):
         expected_error = "My Expected Error."
@@ -145,5 +161,14 @@ class RestlibTests(unittest.TestCase):
             self.fail("An exception should have been thrown.")
         except Exception, ex:
             self.assertTrue(isinstance(ex, RestlibException))
-            self.assertEqual(expected_error, str(ex))
             self.assertEquals(expected_error, ex.code)
+            self.assertEqual(expected_error, str(ex))
+
+    def _check_for_remote_server_exception(self, expected_error_code,
+                                           expected_exception, mock_response):
+        try:
+            self._validate_response(mock_response)
+            self.fail("An %s exception should have been thrown." % expected_exception)
+        except Exception, ex:
+            self.assertTrue(isinstance(ex, expected_exception))
+            self.assertEquals(expected_error_code, ex.code)

@@ -492,7 +492,7 @@ class Restlib(object):
                     parsed = json.loads(response['content'], object_hook=self._decode_dict)
                 except ValueError, e:
                     log.error("Response: %s" % response['status'])
-                    log.error("JSON parsing error: %s" % e.msg)
+                    log.error("JSON parsing error: %s" % e)
                 except Exception, e:
                     log.error("Response: %s" % response['status'])
                     log.exception(e)

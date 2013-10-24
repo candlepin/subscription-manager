@@ -21,7 +21,7 @@ from rhsm.connection import UEPConnection, Restlib, ConnectionException, Connect
         RemoteServerException, drift_check, ExpiredIdentityCertException, UnauthorizedException, \
         ForbiddenException, AuthenticationException
 
-from mock import Mock
+from mock import Mock, patch
 from datetime import date
 from time import strftime, gmtime
 from rhsm import ourjson as json
@@ -131,6 +131,34 @@ class RestlibValidateResponseTests(unittest.TestCase):
     def test_401_empty(self):
         try:
             self.vr("401", "")
+        except UnauthorizedException, e:
+            self.assertEquals(self.request_type, e.request_type)
+            self.assertEquals("401", e.code)
+            expected_str = "Server error attempting a GET to https://server/path returned status 401\n" \
+                       "Unauthorized: Invalid credentials for request."
+            self.assertEquals(expected_str, str(e))
+        else:
+            self.fail("Should have raised UnauthorizedException")
+
+    def test_401_invalid_json(self):
+        content = u'{this is not json</> dfsdf"" '
+        try:
+            self.vr("401", content)
+        except UnauthorizedException, e:
+            self.assertEquals(self.request_type, e.request_type)
+            self.assertEquals("401", e.code)
+            expected_str = "Server error attempting a GET to https://server/path returned status 401\n" \
+                       "Unauthorized: Invalid credentials for request."
+            self.assertEquals(expected_str, str(e))
+        else:
+            self.fail("Should have raised UnauthorizedException")
+
+    @patch("rhsm.connection.json.loads")
+    def test_401_json_exception(self, mock_json_loads):
+        mock_json_loads.side_effect = Exception
+        content = u'{"errors": ["Forbidden message"]}'
+        try:
+            self.vr("401", content)
         except UnauthorizedException, e:
             self.assertEquals(self.request_type, e.request_type)
             self.assertEquals("401", e.code)
