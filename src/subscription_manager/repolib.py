@@ -106,7 +106,7 @@ class UpdateAction:
 
         self.release = None
         self.overrides = []
-        self.override_supported = True
+        self.override_supported = self.uep.supports_resource('content_overrides')
 
         # If we are not registered, skip trying to refresh the
         # data from the server
@@ -117,13 +117,9 @@ class UpdateAction:
 
         if self.consumer:
             self.consumer_uuid = self.consumer.getConsumerId()
-            cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-            status = cache.load_status(self.uep, self.consumer_uuid)
+            status = inj.require(inj.OVERRIDE_STATUS_CACHE).load_status(self.uep, self.consumer_uuid)
             if status is not None:
                 self.overrides = status
-            elif not cache.is_api_available():
-                self.override_supported = False
-                log.debug("Override API is not supported by the server.")
 
             message = "Release API is not supported by the server. Using default."
             try:

@@ -31,7 +31,6 @@ from rhsm.config import initConfig
 import rhsm.connection as connection
 from rhsm.profile import get_profile, RPMProfile
 from subscription_manager.certlib import ConsumerIdentity, DataLib
-from subscription_manager.utils import UnsupportedOperationException
 import subscription_manager.injection as inj
 
 _ = gettext.gettext
@@ -324,13 +323,6 @@ class OverrideStatusCache(StatusCache):
 
     def _sync_with_server(self, uep, consumer_uuid):
         self.server_status = uep.getContentOverrides(consumer_uuid)
-
-    def is_api_available(self):
-        if self.last_error is None:
-            raise UnsupportedOperationException("The cache has not been initialized.")
-        elif isinstance(self.last_error, connection.RestlibException) and self.last_error.code == 404:
-            return False
-        return True
 
 
 class LocalOnlyOverrideStatusCache(OverrideStatusCache):

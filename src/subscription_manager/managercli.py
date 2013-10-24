@@ -1815,6 +1815,8 @@ class ReposCommand(CliCommand):
         certmgr.update()
         self._request_validity_check()
 
+        self.use_overrides = self.cp.supports_resource('content_overrides')
+
         rl = RepoLib(uep=self.cp)
         repos = rl.get_repos()
 
@@ -1858,7 +1860,7 @@ class ReposCommand(CliCommand):
         if repos_modified:
             # The cache should be primed at this point by the repolib.get_repos()
             cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-            if ConsumerIdentity.existsAndValid() and cache.is_api_available():
+            if ConsumerIdentity.existsAndValid() and self.use_overrides:
                 overrides = [{'contentLabel': repo.id, 'name': 'enabled', 'value': status} for repo in repos_modified]
                 consumer = check_registration()['uuid']
                 results = self.cp.setContentOverrides(consumer, overrides)
@@ -2251,20 +2253,21 @@ class OverrideCommand(CliCommand):
         # Abort if not registered
         consumer = check_registration()['uuid']
 
-        cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-        results = cache.load_status(self.cp, consumer)
-
-        if not cache.is_api_available():
+        if not self.cp.supports_resource('content_overrides'):
             system_exit(-1, _("Error: The 'override' command is not supported by the server."))
 
-        # update entitlement certificates if necessary
-        CertManager(uep=self.cp).update()
+        # update entitlement certificates if necessary. If we do have new entitlements
+        # CertLib.update() will call RepoLib.update().
+        CertLib(uep=self.cp).update()
         # make sure the EntitlementDirectory singleton is refreshed
         self._request_validity_check()
 
         if not self.entitlement_dir.list():
             print _("This system does not have any subscriptions.")
             return 1
+
+        cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+        results = cache.load_status(self.cp, consumer)
 
         if self.options.list:
             if results:

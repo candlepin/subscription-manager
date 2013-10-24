@@ -127,6 +127,7 @@ class UpdateActionTests(SubManFixture):
         def stub_content():
             return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key')])]
         self.update_action.get_unique_content = stub_content
+        self.update_action.override_supported = True
         updates = self.update_action.perform()
         written_repo = mock_file.update.call_args[0][0]
         self.assertEquals('new', written_repo['gpgcheck'])
@@ -355,6 +356,7 @@ class UpdateActionTests(SubManFixture):
         existing_repo = Repo('testrepo')
         existing_repo['proxy_username'] = "blah"
         incoming_repo = {'proxy_username': 'foo'}
+        self.update_action.override_supported = True
         self.assertRaises(UnsupportedOperationException, self.update_action.update_repo, existing_repo, incoming_repo)
 
 

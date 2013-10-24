@@ -7,7 +7,6 @@ import socket
 # for monkey patching config
 import stubs
 
-import subscription_manager.injection as inj
 from subscription_manager import managercli, managerlib
 from subscription_manager.managercli import format_name, columnize, \
         _echo, _none_wrap
@@ -412,7 +411,7 @@ class TestReposCommand(TestCliCommand):
 
         repos = [Repo('x'), Repo('y'), Repo('z')]
         items = ['x', 'y']
-        inj.require(inj.OVERRIDE_STATUS_CACHE).last_error = False
+        self.cc.use_overrides = True
         self.cc._set_repo_status(repos, repolib_instance, items, False)
 
         expected_overrides = [{'contentLabel': i, 'name': 'enabled', 'value':
@@ -439,7 +438,7 @@ class TestReposCommand(TestCliCommand):
 
         repos = [Repo('zoo'), Repo('zebra'), Repo('zip')]
         items = ['z*']
-        inj.require(inj.OVERRIDE_STATUS_CACHE).last_error = False
+        self.cc.use_overrides = True
         self.cc._set_repo_status(repos, repolib_instance, items, False)
 
         expected_overrides = [{'contentLabel': i.id, 'name': 'enabled', 'value':
