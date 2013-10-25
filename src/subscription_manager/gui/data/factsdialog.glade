@@ -90,6 +90,7 @@
                 <child>
                   <widget class="GtkLabel" id="system_id_label">
                     <property name="visible">True</property>
+                    <property name="selectable">True</property>
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name" translatable="yes">System Identity Value</atkproperty>
                     </accessibility>
@@ -127,6 +128,7 @@
                 <child>
                   <widget class="GtkLabel" id="owner_label">
                     <property name="visible">True</property>
+                    <property name="selectable">True</property>
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name" translatable="yes">Organization Value</atkproperty>
                     </accessibility>
@@ -165,6 +167,7 @@
                 <child>
                   <widget class="GtkLabel" id="owner_id_label">
                     <property name="visible">True</property>
+                    <property name="selectable">True</property>
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name" translatable="yes">Organization ID Value</atkproperty>
                     </accessibility>
@@ -202,6 +205,7 @@
                 <child>
                   <widget class="GtkLabel" id="environment_label">
                     <property name="visible">True</property>
+                    <property name="selectable">True</property>
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name" translatable="yes">Environment</atkproperty>
                     </accessibility>
