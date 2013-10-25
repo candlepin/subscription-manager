@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.4
+Version: 1.10.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -385,6 +385,12 @@ fi
 %endif
 
 %changelog
+* Fri Oct 25 2013 ckozak <ckozak@redhat.com> 1.10.5-1
+- 1021581: account/contract display nothing when no data exists
+  (ckozak@redhat.com)
+- Swap heading of selectsla/confirmsubs widgets. (alikins@redhat.com)
+- 1006748: replace simplejson with 'ourjson' (alikins@redhat.com)
+
 * Thu Oct 17 2013 ckozak <ckozak@redhat.com> 1.10.4-1
 - 1017351: ignore dbus failures on show_window (alikins@redhat.com)
 - 1016643: Fix firstboot issues with new firstboot. (alikins@redhat.com)
