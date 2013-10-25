@@ -116,11 +116,13 @@ class UpdateAction:
         except Exception:
             self.consumer = None
 
-        if self.consumer and self.apply_overrides:
+        if self.consumer:
             self.consumer_uuid = self.consumer.getConsumerId()
-            status = inj.require(inj.OVERRIDE_STATUS_CACHE).load_status(self.uep, self.consumer_uuid)
-            if status is not None:
-                self.overrides = status
+
+            if self.apply_overrides:
+                status = inj.require(inj.OVERRIDE_STATUS_CACHE).load_status(self.uep, self.consumer_uuid)
+                if status is not None:
+                    self.overrides = status
 
             message = "Release API is not supported by the server. Using default."
             try:
