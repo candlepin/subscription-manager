@@ -50,7 +50,7 @@ class RepoLib(DataLib):
         action = UpdateAction(self.uep)
         return repo in [c.label for c in action.matching_content()]
 
-    def get_repos(self, apply_overrides):
+    def get_repos(self, apply_overrides=True):
         action = UpdateAction(self.uep, apply_overrides=apply_overrides)
         repos = action.get_unique_content()
         if ConsumerIdentity.existsAndValid() and action.override_supported:
