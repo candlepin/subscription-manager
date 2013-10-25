@@ -62,7 +62,6 @@ cfg = rhsm.config.initConfig()
 
 
 NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
-LIBRARY_ENV_NAME = "library"
 
 # Translates the cert sorter status constants:
 STATUS_MAP = {
@@ -690,13 +689,7 @@ class EnvironmentsCommand(OrgCommand):
         self._add_url_options()
 
     def _get_enviornments(self, org):
-        raw_environments = self.cp.getEnvironmentList(org)
-        environments = []
-        # Remove the library environemnt
-        for env in raw_environments:
-            if env['name'].lower() != LIBRARY_ENV_NAME.lower():
-                environments.append(env)
-        return environments
+        return self.cp.getEnvironmentList(org)
 
     def _do_command(self):
         self._validate_options()

@@ -206,7 +206,7 @@ class TestEnvironmentsCommand(TestCliProxyCommand):
     def test_insecure(self):
         self.cc.main(["--insecure"])
 
-    def test_no_library(self):
+    def test_library_no_longer_filtered(self):
         self.cc.cp = StubUEP()
         environments = []
         environments.append({'name': 'JarJar'})
@@ -215,9 +215,7 @@ class TestEnvironmentsCommand(TestCliProxyCommand):
         environments.append({'name': 'Binks'})
         self.cc.cp.setEnvironmentList(environments)
         results = self.cc._get_enviornments("Anikan")
-        self.assertTrue(len(results) == 2)
-        self.assertTrue(results[0]['name'] == 'JarJar')
-        self.assertTrue(results[1]['name'] == 'Binks')
+        self.assertTrue(len(results) == 4)
 
 
 class TestRegisterCommand(TestCliProxyCommand):
