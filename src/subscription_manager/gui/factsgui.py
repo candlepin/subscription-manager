@@ -34,7 +34,8 @@ class SystemFactsDialog(widgets.GladeWidget):
     """
     widget_names = ['system_facts_dialog', 'facts_view', 'update_button',
                     'last_update_label', 'owner_label', 'environment_label',
-                    'environment_hbox', 'owner_id_label', 'owner_id_hbox']
+                    'environment_hbox', 'owner_id_label', 'owner_id_hbox',
+                    'system_id_label', 'system_id_hbox']
 
     def __init__(self, backend, facts):
 
@@ -80,6 +81,13 @@ class SystemFactsDialog(widgets.GladeWidget):
         """Make this dialog invisible."""
         self.system_facts_dialog.hide()
 
+    def _display_system_id(self):
+        if self.identity.getConsumerId():
+            self.system_id_label.set_text(self.identity.getConsumerId())
+            self.system_id_hbox.show()
+        else:
+            self.system_id_hbox.hide()
+
     def display_facts(self):
         """Updates the list store with the current system facts."""
         self.facts_store.clear()
@@ -106,6 +114,8 @@ class SystemFactsDialog(widgets.GladeWidget):
                 value = _("Unknown")
             self.facts_store.append(parent, [fact, value])
 
+        self._display_system_id()
+
         # TODO: could stand to check if registered before trying to do this:
         display_name = _('Unknown')
         try:
@@ -115,7 +125,7 @@ class SystemFactsDialog(widgets.GladeWidget):
             self.owner_id_label.set_text(key)
             self.owner_id_hbox.show()
         except Exception, e:
-            log.error("Could not get owner name \nError: %s" % e)
+            log.error("Could not get owner name: %s" % e)
             self.owner_id_hbox.hide()
         self.owner_label.set_text(display_name)
 
