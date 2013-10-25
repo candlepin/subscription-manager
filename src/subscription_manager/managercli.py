@@ -1641,8 +1641,6 @@ class FactsCommand(CliCommand):
             facts = Facts(ent_dir=self.entitlement_dir,
                           prod_dir=self.product_dir)
             fact_dict = facts.get_facts()
-            if ConsumerIdentity.exists():
-                managerlib.enhance_facts(fact_dict, ConsumerIdentity.read())
             fact_keys = fact_dict.keys()
             fact_keys.sort()
             for key in fact_keys:

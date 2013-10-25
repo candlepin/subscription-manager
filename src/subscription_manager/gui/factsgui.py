@@ -21,7 +21,6 @@ import gtk
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception, linkify
 from subscription_manager.injection import IDENTITY, require
-from subscription_manager.managerlib import enhance_facts
 
 _ = gettext.gettext
 
@@ -93,7 +92,6 @@ class SystemFactsDialog(widgets.GladeWidget):
 
         # make sure we get fresh facts, since entitlement validity status could         # change
         system_facts_dict = self.facts.get_facts()
-        enhance_facts(system_facts_dict, self.identity)
 
         system_facts = system_facts_dict.items()
 
