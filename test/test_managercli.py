@@ -735,6 +735,19 @@ class TestOverrideCommand(TestCliProxyCommand):
     def test_list_and_remove_all_mutuall_exclusive(self):
         self._test_exception(["--list", "--remove-all"])
 
+    def test_no_bare_repo(self):
+        self._test_exception(["--repo", "x"])
+
+    def test_list_by_default(self):
+        self.cc.main([])
+        self.cc._validate_options()
+        self.assertTrue(self.cc.options.list)
+
+    def test_list_by_default_with_options_from_super_class(self):
+        self.cc.main(["--proxy", "http://www.example.com", "--proxyuser", "foo", "--proxypassword", "bar"])
+        self.cc._validate_options()
+        self.assertTrue(self.cc.options.list)
+
     def test_add_with_multiple_colons(self):
         self.cc.main(["--repo", "x", "--add", "url:http://example.com"])
         self.cc._validate_options()
