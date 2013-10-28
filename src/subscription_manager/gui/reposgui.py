@@ -156,8 +156,9 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         for repo in self.repo_lib.get_repos(apply_overrides=False):
             overrides = overrides_per_repo.get(repo.id, None)
             modified = not overrides is None
-            enabled = self._get_model_value(repo, overrides, 'enabled')[0]
+            enabled = self._get_boolean(self._get_model_value(repo, overrides, 'enabled')[0])
             gpgcheck, gpgcheck_modified = self._get_model_value(repo, overrides, 'gpgcheck')
+            gpgcheck = self._get_boolean(gpgcheck)
             self.overrides_store.add_map({
                 'enabled': bool(int(enabled)),
                 'repo_id': repo.id,
@@ -165,7 +166,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
                 'modified-icon': self._get_modified_icon(modified),
                 'name': repo['name'],
                 'baseurl': repo['baseurl'],
-                'gpgcheck': bool(int(gpgcheck)),
+                'gpgcheck': gpgcheck,
                 'gpgcheck_modified': gpgcheck_modified,
                 'repo_data': repo,
                 'override_data': overrides
@@ -209,6 +210,18 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             self.overrides_treeview.get_selection().select_iter(tree_iter)
             return True
         return False
+
+    def _get_boolean(self, override_value):
+        # An override value might come in as an int or a boolean string.
+        # Try our best to convert it, and default to 0.
+        try:
+            val = int(override_value)
+        except Exception:
+            val = 0
+            if override_value is not None and override_value.upper() == "TRUE":
+                val = 1
+        return bool(val)
+
 
     def _get_model_value(self, repo, overrides, property_name):
         if not overrides or not property_name in overrides:
