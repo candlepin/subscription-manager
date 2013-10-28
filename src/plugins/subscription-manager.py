@@ -23,7 +23,6 @@ sys.path.append('/usr/share/rhsm')
 
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoLib
-from subscription_manager.cache import LocalOnlyOverrideStatusCache
 from rhsm import connection
 from rhsm import config
 
@@ -49,7 +48,7 @@ no_subs_warning = \
 "This system is registered to Red Hat Subscription Management, but is not receiving updates. You can use subscription-manager to assign subscriptions."
 
 
-def update(conduit):
+def update(conduit, cache_only):
     """ update entitlement certificates """
     if os.getuid() != 0:
         conduit.info(3, 'Not root, Subscription Management repositories not updated')
@@ -76,7 +75,7 @@ def update(conduit):
         conduit.info(2, "Unable to connect to Subscription Management Service")
         return
 
-    rl = RepoLib(uep=uep)
+    rl = RepoLib(uep=uep, cache_only=cache_only)
     rl.update()
 
 
@@ -129,14 +128,12 @@ def config_hook(conduit):
     init_dep_injection()
 
     cfg = config.initConfig()
-    if not cfg.get_int('rhsm', 'full_refresh_on_yum'):
-        # Don't go to the server if full_refresh_on_yum is zero.
-        inj.provide(inj.OVERRIDE_STATUS_CACHE, LocalOnlyOverrideStatusCache, singleton=True)
+    cache_only = not bool(cfg.get_int('rhsm', 'full_refresh_on_yum'))
 
     if hasattr(conduit, 'registerPackageName'):
         conduit.registerPackageName("subscription-manager")
     try:
-        update(conduit)
+        update(conduit, cache_only)
         warnOrGiveUsageMessage(conduit)
         warnExpired(conduit)
     except Exception, e:

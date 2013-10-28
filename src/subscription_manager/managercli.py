@@ -2295,7 +2295,7 @@ class OverrideCommand(CliCommand):
         # Update repo file
         # The overrides cache is already up to date from the adds/removes above so there
         # is no need for RepoLib to refresh them again.
-        RepoLib(uep=self.cp, refresh_overrides=False).update()
+        RepoLib(uep=self.cp, cache_only=True).update()
 
     def _list(self, json, specific_repos):
         overrides = {}

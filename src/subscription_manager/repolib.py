@@ -39,21 +39,21 @@ ALLOWED_CONTENT_TYPES = ["yum"]
 
 class RepoLib(DataLib):
 
-    def __init__(self, lock=ActionLock(), uep=None, refresh_overrides=True):
-        self.refresh_overrides = refresh_overrides
+    def __init__(self, lock=ActionLock(), uep=None, cache_only=False):
+        self.cache_only = cache_only
         DataLib.__init__(self, lock, uep)
 
     def _do_update(self):
-        action = UpdateAction(self.uep, refresh_overrides=self.refresh_overrides)
+        action = UpdateAction(self.uep, cache_only=self.cache_only)
         return action.perform()
 
     def is_managed(self, repo):
-        action = UpdateAction(self.uep, refresh_overrides=self.refresh_overrides)
+        action = UpdateAction(self.uep, cache_only=self.cache_only)
         return repo in [c.label for c in action.matching_content()]
 
     def get_repos(self, apply_overrides=True):
-        action = UpdateAction(self.uep, refresh_overrides=self.refresh_overrides)
-        repos = action.get_unique_content(apply_overrides)
+        action = UpdateAction(self.uep, cache_only=self.cache_only, apply_overrides=apply_overrides)
+        repos = action.get_unique_content()
         if ConsumerIdentity.existsAndValid() and action.override_supported:
             return repos
 
@@ -89,7 +89,7 @@ class RepoLib(DataLib):
 # Datalib.update() method anyhow. Pretty sure these can go away.
 class UpdateAction:
 
-    def __init__(self, uep, ent_dir=None, prod_dir=None, refresh_overrides=True):
+    def __init__(self, uep, ent_dir=None, prod_dir=None, cache_only=False, apply_overrides=True):
         if ent_dir:
             self.ent_dir = ent_dir
         else:
@@ -102,6 +102,7 @@ class UpdateAction:
 
         self.uep = uep
         self.manage_repos = 1
+        self.apply_overrides = apply_overrides
         if CFG.has_option('rhsm', 'manage_repos'):
             self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
 
@@ -120,10 +121,10 @@ class UpdateAction:
             self.consumer_uuid = self.consumer.getConsumerId()
 
             override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-            if refresh_overrides:
-                status = override_cache.load_status(self.uep, self.consumer_uuid)
+            if cache_only:
+                status = override_cache._read_cache()
             else:
-                status = override_cache.server_status
+                status = override_cache.load_status(self.uep, self.consumer_uuid)
 
             if status is not None:
                 self.overrides = status
@@ -187,7 +188,7 @@ class UpdateAction:
         log.info("repos updated: %s" % updates)
         return updates
 
-    def get_unique_content(self, apply_overrides=True):
+    def get_unique_content(self):
         unique = set()
         if not self.manage_repos:
             return unique
@@ -195,7 +196,7 @@ class UpdateAction:
         baseurl = CFG.get('rhsm', 'baseurl')
         ca_cert = CFG.get('rhsm', 'repo_ca_cert')
         for ent_cert in ent_certs:
-            for r in self.get_content(ent_cert, baseurl, ca_cert, apply_overrides):
+            for r in self.get_content(ent_cert, baseurl, ca_cert):
                 unique.add(r)
         return unique
 
@@ -239,7 +240,7 @@ class UpdateAction:
 
         return lst
 
-    def get_content(self, ent_cert, baseurl, ca_cert, apply_overrides=True):
+    def get_content(self, ent_cert, baseurl, ca_cert):
         lst = []
 
         for content in self.matching_content(ent_cert):
@@ -274,7 +275,7 @@ class UpdateAction:
 
             self._set_proxy_info(repo)
 
-            if self.override_supported and apply_overrides:
+            if self.override_supported and self.apply_overrides:
                 self._set_override_info(repo)
 
             lst.append(repo)

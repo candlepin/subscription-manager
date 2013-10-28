@@ -50,7 +50,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         # No need to have RepoLib refresh the overrides since the override cache
         # will be updated for each action.
         self.repo_lib = RepoLib(uep=self.backend.cp_provider.get_consumer_auth_cp(),
-                                refresh_overrides=False)
+                                cache_only=True)
 
         self.glade.signal_autoconnect({
                 "on_dialog_delete_event": self._on_close,
