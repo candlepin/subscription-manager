@@ -7,7 +7,7 @@ rhsm_display.set_display()
 from subscription_manager.injection import provide, IDENTITY
 from stubs import MockStderr, MockStdout, StubUEP, StubBackend, StubFacts
 from subscription_manager.gui import factsgui
-from mock import Mock, patch
+from mock import Mock, NonCallableMock, patch
 
 
 class FactDialogTests(SubManFixture):
@@ -26,18 +26,12 @@ class FactDialogTests(SubManFixture):
 
         self.backend = StubBackend()
 
-        id_mock = Mock()
+        id_mock = NonCallableMock()
         id_mock.name = 'system'
         id_mock.uuid = 'Random UUID'
         id_mock.exists_and_valid = Mock(return_value=True)
-        provide(IDENTITY, id_mock)
-
-        sys.stderr = MockStderr
-        sys.stdout = MockStdout
-
-    def tearDown(self):
-        sys.stderr = sys.__stderr__
-        sys.stdout = sys.__stdout__
+        id_mock.getConsumerId.return_value = 'Random UUID'
+        provide(IDENTITY, id_mock, singleton=True)
 
     def test_facts_are_displayed(self):
         found_facts = {}
@@ -99,7 +93,7 @@ class FactDialogTests(SubManFixture):
 
     def test_update_button_disabled(self):
         # Need an unregistered consumer object:
-        id_mock = Mock()
+        id_mock = NonCallableMock()
         id_mock.name = None
         id_mock.uuid = None
 
@@ -116,12 +110,6 @@ class FactDialogTests(SubManFixture):
         self.assertFalse(enabled)
 
     def test_update_button_enabled(self):
-
-        id_mock = Mock()
-        id_mock.getConsumerName.return_value = 'system'
-        id_mock.getConsumerId.return_value = 'Random UUID'
-        provide(IDENTITY, id_mock)
-
         dialog = factsgui.SystemFactsDialog(self.backend,
                                             self.stub_facts)
         dialog.show()

@@ -82,8 +82,8 @@ class SystemFactsDialog(widgets.GladeWidget):
         self.system_facts_dialog.hide()
 
     def _display_system_id(self):
-        if self.identity.getConsumerId():
-            self.system_id_label.set_text(self.identity.getConsumerId())
+        if self.identity.uuid:
+            self.system_id_label.set_text(self.identity.uuid)
             self.system_id_hbox.show()
         else:
             self.system_id_hbox.hide()
