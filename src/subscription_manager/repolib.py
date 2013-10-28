@@ -39,20 +39,21 @@ ALLOWED_CONTENT_TYPES = ["yum"]
 
 class RepoLib(DataLib):
 
-    def __init__(self, lock=ActionLock(), uep=None):
+    def __init__(self, lock=ActionLock(), uep=None, refresh_overrides=True):
+        self.refresh_overrides = refresh_overrides
         DataLib.__init__(self, lock, uep)
 
     def _do_update(self):
-        action = UpdateAction(self.uep)
+        action = UpdateAction(self.uep, refresh_overrides=self.refresh_overrides)
         return action.perform()
 
     def is_managed(self, repo):
-        action = UpdateAction(self.uep)
+        action = UpdateAction(self.uep, refresh_overrides=self.refresh_overrides)
         return repo in [c.label for c in action.matching_content()]
 
     def get_repos(self, apply_overrides=True):
-        action = UpdateAction(self.uep, apply_overrides=apply_overrides)
-        repos = action.get_unique_content()
+        action = UpdateAction(self.uep, refresh_overrides=self.refresh_overrides)
+        repos = action.get_unique_content(apply_overrides)
         if ConsumerIdentity.existsAndValid() and action.override_supported:
             return repos
 
@@ -88,8 +89,7 @@ class RepoLib(DataLib):
 # Datalib.update() method anyhow. Pretty sure these can go away.
 class UpdateAction:
 
-    def __init__(self, uep, ent_dir=None, prod_dir=None, apply_overrides=True):
-        self.apply_overrides = apply_overrides
+    def __init__(self, uep, ent_dir=None, prod_dir=None, refresh_overrides=True):
         if ent_dir:
             self.ent_dir = ent_dir
         else:
@@ -119,10 +119,14 @@ class UpdateAction:
         if self.consumer:
             self.consumer_uuid = self.consumer.getConsumerId()
 
-            if self.apply_overrides:
-                status = inj.require(inj.OVERRIDE_STATUS_CACHE).load_status(self.uep, self.consumer_uuid)
-                if status is not None:
-                    self.overrides = status
+            override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+            if refresh_overrides:
+                status = override_cache.load_status(self.uep, self.consumer_uuid)
+            else:
+                status = override_cache.server_status
+
+            if status is not None:
+                self.overrides = status
 
             message = "Release API is not supported by the server. Using default."
             try:
@@ -183,7 +187,7 @@ class UpdateAction:
         log.info("repos updated: %s" % updates)
         return updates
 
-    def get_unique_content(self):
+    def get_unique_content(self, apply_overrides=True):
         unique = set()
         if not self.manage_repos:
             return unique
@@ -191,7 +195,7 @@ class UpdateAction:
         baseurl = CFG.get('rhsm', 'baseurl')
         ca_cert = CFG.get('rhsm', 'repo_ca_cert')
         for ent_cert in ent_certs:
-            for r in self.get_content(ent_cert, baseurl, ca_cert):
+            for r in self.get_content(ent_cert, baseurl, ca_cert, apply_overrides):
                 unique.add(r)
         return unique
 
@@ -235,7 +239,7 @@ class UpdateAction:
 
         return lst
 
-    def get_content(self, ent_cert, baseurl, ca_cert):
+    def get_content(self, ent_cert, baseurl, ca_cert, apply_overrides=True):
         lst = []
 
         for content in self.matching_content(ent_cert):
@@ -270,7 +274,7 @@ class UpdateAction:
 
             self._set_proxy_info(repo)
 
-            if self.override_supported and self.apply_overrides:
+            if self.override_supported and apply_overrides:
                 self._set_override_info(repo)
 
             lst.append(repo)

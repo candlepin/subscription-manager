@@ -119,6 +119,7 @@ class HasSortableWidget(object):
                 iter = model.get_iter(r[0].get_path())
                 model.set_value(iter, model['background'], r[1])
 
+
 class SubscriptionManagerTab(GladeWidget, HasSortableWidget):
     widget_names = ['top_view', 'content']
     # approx gtk version we need for grid lines to work
@@ -635,7 +636,7 @@ class CheckBoxColumn(gtk.TreeViewColumn):
 
     def __init__(self, column_title, store, store_key, toggle_callback=None):
         self.store = store
-        self.store_key = store_key;
+        self.store_key = store_key
         self._toggle_callback = toggle_callback
         self.renderer = gtk.CellRendererToggle()
         self.renderer.set_radio(False)

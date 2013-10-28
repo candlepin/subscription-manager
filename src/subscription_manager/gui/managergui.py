@@ -290,7 +290,7 @@ class MainWindow(widgets.GladeWidget):
             self.register_menu_item.hide()
             self.unregister_menu_item.show()
             self.settings_menu_item.show()  # preferences
-            self.repos_menu_item.show();
+            self.repos_menu_item.show()
         else:
             self.register_menu_item.show()
             self.unregister_menu_item.hide()
@@ -331,7 +331,6 @@ class MainWindow(widgets.GladeWidget):
             handle_gui_exception(e, _("Error in repos dialog. "
                                       "Please see /var/log/rhsm/rhsm.log for more information."),
                                  self._get_window())
-
 
     def _on_unregister_prompt_response(self, dialog, response):
         if not response:

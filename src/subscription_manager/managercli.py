@@ -2270,9 +2270,9 @@ class OverrideCommand(CliCommand):
             return 1
 
         cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-        results = cache.load_status(self.cp, consumer)
 
         if self.options.list:
+            results = cache.load_status(self.cp, consumer)
             if results:
                 self._list(results, self.options.repos)
             else:
@@ -2293,7 +2293,9 @@ class OverrideCommand(CliCommand):
         cache.write_cache()
 
         # Update repo file
-        RepoLib(uep=self.cp).update()
+        # The overrides cache is already up to date from the adds/removes above so there
+        # is no need for RepoLib to refresh them again.
+        RepoLib(uep=self.cp, refresh_overrides=False).update()
 
     def _list(self, json, specific_repos):
         overrides = {}
