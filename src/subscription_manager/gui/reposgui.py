@@ -222,7 +222,6 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
                 val = 1
         return bool(val)
 
-
     def _get_model_value(self, repo, overrides, property_name):
         if not overrides or not property_name in overrides:
             return (repo[property_name], False)
