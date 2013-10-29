@@ -38,7 +38,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     """
     widget_names = ['main_window', 'overrides_treeview', 'reset_button', 'close_button',
                     'name_text', 'gpgcheck_text', 'gpgcheck_combo_box',
-                    'gpgcheck_remove_button', 'gpgcheck_lock_button',
+                    'gpgcheck_remove_button', 'gpgcheck_edit_button',
                     'baseurl_text']
 
     def __init__(self, backend, parent):
@@ -51,7 +51,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
                 "on_dialog_delete_event": self._on_close,
                 "on_close_button_clicked": self._on_close,
                 "on_reset_button_clicked": self._on_reset_repo,
-                "on_gpgcheck_lock_button_clicked": self._on_gpgcheck_lock_button_clicked,
+                "on_gpgcheck_edit_button_clicked": self._on_gpgcheck_edit_button_clicked,
                 "on_gpgcheck_remove_button_clicked": self._on_gpgcheck_remove_button_clicked,
                 "on_gpgcheck_combo_box_changed": self._on_gpgcheck_combo_box_changed,
         })
@@ -72,10 +72,10 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         # Gnome will hide all button icons by default (gnome setting),
         # so force the icons to show in this case as there is no button
         # text, just the icon.
-        gpgcheck_lock_image = gtk.Image()
-        gpgcheck_lock_image.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_BUTTON)
-        self.gpgcheck_lock_button.set_image(gpgcheck_lock_image)
-        self.gpgcheck_lock_button.get_image().show()
+        gpgcheck_edit_image = gtk.Image()
+        gpgcheck_edit_image.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_BUTTON)
+        self.gpgcheck_edit_button.set_image(gpgcheck_edit_image)
+        self.gpgcheck_edit_button.get_image().show()
 
         gpgcheck_reset_image = gtk.Image()
         gpgcheck_reset_image.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_BUTTON)
@@ -321,16 +321,16 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     def _set_gpg_lock_state(self, locked):
         if locked:
             self.gpgcheck_text.show()
-            self.gpgcheck_lock_button.show()
+            self.gpgcheck_edit_button.show()
             self.gpgcheck_remove_button.hide()
             self.gpgcheck_combo_box.hide()
         else:
             self.gpgcheck_text.hide()
-            self.gpgcheck_lock_button.hide()
+            self.gpgcheck_edit_button.hide()
             self.gpgcheck_remove_button.show()
             self.gpgcheck_combo_box.show()
 
-    def _on_gpgcheck_lock_button_clicked(self, button):
+    def _on_gpgcheck_edit_button_clicked(self, button):
         override_selection = SelectionWrapper(self.overrides_treeview.get_selection(),
                                               self.overrides_store)
         if not override_selection.is_valid():
@@ -380,14 +380,14 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     def _set_details_visible(self, visible):
         if visible:
             self.gpgcheck_text.show()
-            self.gpgcheck_lock_button.show()
+            self.gpgcheck_edit_button.show()
             self.gpgcheck_remove_button.show()
             self.gpgcheck_combo_box.show()
             self.name_text.show()
             self.baseurl_text.show()
         else:
             self.gpgcheck_text.hide()
-            self.gpgcheck_lock_button.hide()
+            self.gpgcheck_edit_button.hide()
             self.gpgcheck_remove_button.hide()
             self.gpgcheck_combo_box.hide()
             self.name_text.hide()
