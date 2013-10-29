@@ -34,8 +34,8 @@ class SystemFactsDialog(widgets.GladeWidget):
     """
     widget_names = ['system_facts_dialog', 'facts_view', 'update_button',
                     'last_update_label', 'owner_label', 'environment_label',
-                    'environment_hbox', 'owner_id_label', 'owner_id_hbox',
-                    'system_id_label', 'system_id_hbox']
+                    'environment_title',
+                    'owner_id_label', 'owner_id_title', 'system_id_label']
 
     def __init__(self, backend, facts):
 
@@ -84,9 +84,8 @@ class SystemFactsDialog(widgets.GladeWidget):
     def _display_system_id(self):
         if self.identity.uuid:
             self.system_id_label.set_text(self.identity.uuid)
-            self.system_id_hbox.show()
         else:
-            self.system_id_hbox.hide()
+            self.system_id_label.set_text(_('Unknown'))
 
     def display_facts(self):
         """Updates the list store with the current system facts."""
@@ -123,10 +122,12 @@ class SystemFactsDialog(widgets.GladeWidget):
             display_name = owner['displayName']
             key = owner['key']
             self.owner_id_label.set_text(key)
-            self.owner_id_hbox.show()
+            self.owner_id_label.show()
+            self.owner_id_title.show()
         except Exception, e:
             log.error("Could not get owner name: %s" % e)
-            self.owner_id_hbox.hide()
+            self.owner_id_label.hide()
+            self.owner_id_title.hide()
         self.owner_label.set_text(display_name)
 
         try:
@@ -140,12 +141,15 @@ class SystemFactsDialog(widgets.GladeWidget):
 
                 log.info("Environment is %s" % environment_name)
                 self.environment_label.set_text(environment_name)
-                self.environment_hbox.show()
+                self.environment_label.show()
+                self.environment_title.show()
             else:
-                self.environment_hbox.hide()
+                self.environment_label.hide()
+                self.environment_title.hide()
         except Exception, e:
             log.error("Could not get environment \nError: %s" % e)
-            self.environment_hbox.hide()
+            self.environment_label.hide()
+            self.environment_title.hide()
 
     def update_facts(self):
         """Sends the current system facts to the UEP server."""

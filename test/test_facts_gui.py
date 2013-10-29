@@ -1,11 +1,10 @@
-import sys
 from fixture import SubManFixture
 
 import rhsm_display
 rhsm_display.set_display()
 
 from subscription_manager.injection import provide, IDENTITY
-from stubs import MockStderr, MockStdout, StubUEP, StubBackend, StubFacts
+from stubs import StubUEP, StubBackend, StubFacts
 from subscription_manager.gui import factsgui
 from mock import Mock, NonCallableMock, patch
 
@@ -50,14 +49,16 @@ class FactDialogTests(SubManFixture):
         dialog = factsgui.SystemFactsDialog(self.backend,
                                             self.stub_facts)
         dialog.display_facts()
-        self.assertEquals(False, dialog.environment_hbox.get_property("visible"))
+        self.assertEquals(False, dialog.environment_title.get_property("visible"))
+        self.assertEquals(False, dialog.environment_label.get_property("visible"))
 
     def test_shows_unknown_for_no_org(self):
         dialog = factsgui.SystemFactsDialog(self.backend,
                                             self.stub_facts)
         dialog.display_facts()
         #No owner id should show if we have no owner
-        self.assertEquals(False, dialog.owner_id_hbox.get_property("visible"))
+        self.assertEquals(False, dialog.owner_id_label.get_property("visible"))
+        self.assertEquals(False, dialog.owner_id_title.get_property("visible"))
         self.assertEquals('Unknown', dialog.owner_label.get_label())
 
     @patch.object(StubUEP, 'getOwner')
@@ -66,7 +67,8 @@ class FactDialogTests(SubManFixture):
         dialog = factsgui.SystemFactsDialog(self.backend,
                                             self.stub_facts)
         dialog.display_facts()
-        self.assertEquals(True, dialog.owner_id_hbox.get_property("visible"))
+        self.assertEquals(True, dialog.owner_id_label.get_property("visible"))
+        self.assertEquals(True, dialog.owner_id_title.get_property("visible"))
         self.assertEquals('bar', dialog.owner_id_label.get_label())
 
     @patch.object(StubUEP, 'supports_resource')
@@ -77,7 +79,8 @@ class FactDialogTests(SubManFixture):
         dialog = factsgui.SystemFactsDialog(self.backend,
                                             self.stub_facts)
         dialog.display_facts()
-        self.assertEquals(True, dialog.environment_hbox.get_property("visible"))
+        self.assertEquals(True, dialog.environment_title.get_property("visible"))
+        self.assertEquals(True, dialog.environment_label.get_property("visible"))
         self.assertEquals("foobar", dialog.environment_label.get_text())
 
     @patch.object(StubUEP, 'supports_resource')
@@ -88,7 +91,8 @@ class FactDialogTests(SubManFixture):
         dialog = factsgui.SystemFactsDialog(self.backend,
                                             self.stub_facts)
         dialog.display_facts()
-        self.assertEquals(True, dialog.environment_hbox.get_property("visible"))
+        self.assertEquals(True, dialog.environment_title.get_property("visible"))
+        self.assertEquals(True, dialog.environment_label.get_property("visible"))
         self.assertEquals("None", dialog.environment_label.get_text())
 
     def test_update_button_disabled(self):
