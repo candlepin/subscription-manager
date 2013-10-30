@@ -114,3 +114,13 @@ class CliRegistrationTests(SubManFixture):
         self.assertTrue(mock_ipm_wc.call_count > 0)
 
         self.assertTrue(mock_certlib_instance.update.called)
+
+    def test_strip_username_and_password(self):
+
+        username, password = RegisterCommand._get_username_and_password(" ", " ")
+        self.assertTrue(username == "")
+        self.assertTrue(password == "")
+
+        username, password = RegisterCommand._get_username_and_password(" Jar Jar ", " Binks ")
+        self.assertTrue(username == "Jar Jar")
+        self.assertTrue(password == "Binks")

@@ -483,7 +483,7 @@ class UserPassCommand(CliCommand):
         if not password:
             while not password:
                 password = getpass.getpass(_("Password: "))
-        return (username, password)
+        return (username.strip(), password.strip())
 
     # lazy load the username and password, prompting for them if they weren't
     # given as options. this lets us not prompt if another option fails,
