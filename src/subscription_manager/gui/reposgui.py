@@ -229,7 +229,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             return
 
         confirm = YesNoDialog(_("Are you sure you want to remove all overrides for <b>%s</b>?") % selection['repo_id'],
-                                 self._get_dialog_widget(), _("Confirm Remove All OverrideLib"))
+                                 self._get_dialog_widget(), _("Confirm Remove All Overrides"))
         confirm.connect("response", self._on_reset_repo_response)
 
     def _on_reset_repo_response(self, dialog, response):
