@@ -21,7 +21,7 @@ from subscription_manager.repolib import RepoLib
 
 class OverrideLib(object):
     def __init__(self, cp):
-        self.cp = cp;
+        self.cp = cp
         self.cache = injection.require(injection.OVERRIDE_STATUS_CACHE)
         self.repo_lib = RepoLib(uep=self.cp, cache_only=True)
 

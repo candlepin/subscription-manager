@@ -395,7 +395,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
     def _add_override(self, repo, name, value):
         overrides = self.override_lib.add_overrides(self.identity.uuid, [repo],
-                                                    {name:value})
+                                                    {name: value})
         self.override_lib.update(overrides)
         self._refresh(overrides, self._get_selected_repo_id())
 

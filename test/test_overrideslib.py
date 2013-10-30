@@ -3,6 +3,7 @@ from fixture import SubManFixture, dict_list_equals
 from subscription_manager.overrides import OverrideLib
 from subscription_manager.injection import require, CP_PROVIDER
 
+
 class OverrideTests(SubManFixture):
 
     def setUp(self):
