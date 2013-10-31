@@ -39,7 +39,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     widget_names = ['main_window', 'overrides_treeview', 'reset_button', 'close_button',
                     'name_text', 'gpgcheck_text', 'gpgcheck_combo_box',
                     'gpgcheck_remove_button', 'gpgcheck_edit_button',
-                    'baseurl_text']
+                    'baseurl_text', 'no_repos_label_container', 'no_repos_label']
 
     def __init__(self, backend, parent):
         super(RepositoriesDialog, self).__init__('repositories.glade')
@@ -68,6 +68,11 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             "repo_data": object,
             "override_data": object
         })
+
+        # Change the background color of the no_repos_label_container to the same color
+        # as the label's base color. The event container allows us to change the color.
+        label_base_color = self.no_repos_label.style.base[gtk.STATE_NORMAL]
+        self.no_repos_label_container.modify_bg(gtk.STATE_NORMAL, label_base_color)
 
         # Gnome will hide all button icons by default (gnome setting),
         # so force the icons to show in this case as there is no button
@@ -144,10 +149,18 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
         self.overrides_store.clear()
 
+        current_repos = self.override_lib.repo_lib.get_repos(apply_overrides=False)
+        if (current_repos):
+            self.overrides_treeview.show()
+            self.no_repos_label_container.hide()
+        else:
+            self.overrides_treeview.hide()
+            self.no_repos_label_container.show()
+
         # Fetch the repositories from repolib without any overrides applied.
         # We do this so that we can tell if anything has been modified by
         # overrides.
-        for repo in self.override_lib.repo_lib.get_repos(apply_overrides=False):
+        for repo in current_repos:
             overrides = overrides_per_repo.get(repo.id, None)
             modified = not overrides is None
             enabled = self._get_boolean(self._get_model_value(repo, overrides, 'enabled')[0])
