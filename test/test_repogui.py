@@ -43,8 +43,8 @@ class TestReposGui(SubManFixture):
         # Check that the model is populated correctly
         store = self.dialog.overrides_store
         tree_iter = store.get_iter_first()
-        self.assertIsNotNone(tree_iter)
-        self.assertIsNone(store.iter_next(tree_iter))
+        self.assertTrue(tree_iter is not None)
+        self.assertTrue(store.iter_next(tree_iter) is None)
 
         self.assertEquals("my_repo", store.get_value(tree_iter, store['repo_id']))
         self.assertFalse(store.get_value(tree_iter, store['enabled']))
@@ -58,7 +58,7 @@ class TestReposGui(SubManFixture):
 
         # verify that the model stores the correct override info for this repo
         override_data = store.get_value(tree_iter, store['override_data'])
-        self.assertIsNone(override_data)
+        self.assertTrue(override_data is None)
 
         # Check that the correct repo was stored in the model
         self.assertEquals(repo, store.get_value(tree_iter, store['repo_data']))
@@ -92,15 +92,15 @@ class TestReposGui(SubManFixture):
         # Check that the model is populated correctly
         store = self.dialog.overrides_store
         tree_iter = store.get_iter_first()
-        self.assertIsNotNone(tree_iter)
-        self.assertIsNone(store.iter_next(tree_iter))
+        self.assertTrue(tree_iter is not None)
+        self.assertTrue(store.iter_next(tree_iter) is None)
 
         self.assertEquals("my_repo", store.get_value(tree_iter, store['repo_id']))
         self.assertTrue(store.get_value(tree_iter, store['enabled']))
         # has overrides so make sure that we are modified
         self.assertTrue(store.get_value(tree_iter, store['modified']))
         # make sure that there is an icon since we are modified
-        self.assertIsNotNone(store.get_value(tree_iter, store['modified-icon']))
+        self.assertTrue(store.get_value(tree_iter, store['modified-icon']) is not None)
         self.assertEquals("MY_REPO", store.get_value(tree_iter, store['name']))
         self.assertEquals('http://foo.bar', store.get_value(tree_iter, store['baseurl']))
         self.assertFalse(store.get_value(tree_iter, store['gpgcheck']))
