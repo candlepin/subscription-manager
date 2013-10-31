@@ -73,6 +73,7 @@ SELECT_SLA_PAGE = 6
 CONFIRM_SUBS_PAGE = 7
 PERFORM_SUBSCRIBE_PAGE = 8
 REFRESH_SUBSCRIPTIONS_PAGE = 9
+INFO_PAGE = 10
 FINISH = 100
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
@@ -116,7 +117,8 @@ class RegisterScreen(widgets.GladeWidget):
                           CredentialsScreen, OrganizationScreen,
                           EnvironmentScreen, PerformRegisterScreen,
                           SelectSLAScreen, ConfirmSubscriptionsScreen,
-                          PerformSubscribeScreen, RefreshSubscriptionsScreen]
+                          PerformSubscribeScreen, RefreshSubscriptionsScreen,
+                          InfoScreen]
         self._screens = []
         for screen_class in screen_classes:
             screen = screen_class(self, self.backend)
@@ -143,12 +145,15 @@ class RegisterScreen(widgets.GladeWidget):
     def show(self):
         # Ensure that we start on the first page and that
         # all widgets are cleared.
-        self._set_screen(CHOOSE_SERVER_PAGE)
+        self._set_initial_screen()
 
         self._set_navigation_sensitive(True)
         self._clear_registration_widgets()
         self.timer = gobject.timeout_add(100, self._timeout_callback)
         self.register_dialog.show()
+
+    def _set_initial_screen(self):
+        self._set_screen(CHOOSE_SERVER_PAGE)
 
     def _set_navigation_sensitive(self, sensitive):
         self.cancel_button.set_sensitive(sensitive)
@@ -1179,3 +1184,38 @@ class AsyncBackend(object):
         threading.Thread(target=self._refresh,
                          name="RefreshThread",
                          args=(callback,)).start()
+
+
+class InfoScreen(Screen):
+    """
+    An informational screen taken from rhn-client-tools and only displayed
+    in firstboot when we're not working alongside that package. (i.e.
+    Fedora or RHEL 7 and beyond)
+
+    Also allows the user to skip registration if they wish.
+    """
+    widget_names = Screen.widget_names + [
+                'register_radio',
+                'skip_radio'
+        ]
+
+    def __init__(self, parent, backend):
+        super(InfoScreen, self).__init__(
+                "registration_info.glade", parent, backend)
+        self.button_label = _("Next")
+
+    def pre(self):
+        return True
+
+    def apply(self):
+        if self.register_radio.get_active():
+            log.debug("Proceeding with registration.")
+            return CHOOSE_SERVER_PAGE
+        else:
+            log.info("Skipping registration.")
+            return FINISH
+
+    def post(self):
+        pass
+
+
