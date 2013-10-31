@@ -78,7 +78,7 @@ class TestReposGui(SubManFixture):
         gpgcheck_text = self._get_text(self.dialog.gpgcheck_text)
         self.assertEquals("Disabled", gpgcheck_text)
         self.assertTrue(self.dialog.gpgcheck_edit_button.props.visible)
-        self.assertTrue(self.dialog.gpgcheck_edit_button.get_sensitive())
+        self.assertTrue(self.dialog.gpgcheck_edit_button.props.sensitive)
 
     def test_show_dialog_with_overrides(self):
         repo = self._create_repo("my_repo", [('enabled', '0')])
@@ -130,15 +130,15 @@ class TestReposGui(SubManFixture):
         self.assertFalse(self.dialog.gpgcheck_edit_button.props.visible)
 
         self.assertTrue(self.dialog.gpgcheck_combo_box.props.visible)
-        self.assertTrue(self.dialog.gpgcheck_combo_box.get_sensitive())
+        self.assertTrue(self.dialog.gpgcheck_combo_box.props.sensitive)
         self.assertFalse(self._get_combo_box_value(self.dialog.gpgcheck_combo_box))
         self.assertTrue(self.dialog.gpgcheck_remove_button.props.visible)
-        self.assertTrue(self.dialog.gpgcheck_remove_button.get_sensitive())
+        self.assertTrue(self.dialog.gpgcheck_remove_button.props.sensitive)
 
     def test_remove_all_button_disabled_when_repo_has_no_modifications(self):
         self.repo_lib.get_repos.return_value = [self._create_repo("my_repo", [('enabled', '0')])]
         self.dialog.show()
-        self.assertFalse(self.dialog.reset_button.get_sensitive())
+        self.assertFalse(self.dialog.reset_button.props.sensitive)
 
     def test_remove_all_button_enabled_when_repo_has_modifications(self):
         self.repo_lib.get_repos.return_value = [self._create_repo("my_repo", [('enabled', '0')])]
@@ -146,7 +146,7 @@ class TestReposGui(SubManFixture):
             {'contentLabel': 'my_repo', 'name': 'enabled', 'value': '1'}
         ]
         self.dialog.show()
-        self.assertTrue(self.dialog.reset_button.get_sensitive())
+        self.assertTrue(self.dialog.reset_button.props.sensitive)
 
     def _create_repo(self, repo_id, attribute_tuple_list):
         attrs = [('name', repo_id.upper()), ('baseurl', 'http://foo.bar')]
