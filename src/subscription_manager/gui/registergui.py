@@ -58,9 +58,6 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 CFG = config.initConfig()
 
-# An implied Katello environment which we can't actual register to.
-LIBRARY_ENV_NAME = "library"
-
 DONT_CHANGE = -2
 PROGRESS_PAGE = -1
 CHOOSE_SERVER_PAGE = 0
@@ -978,10 +975,7 @@ class AsyncBackend(object):
                          "environment to register with.")
                 retval = []
                 for env in self.backend.cp_provider.get_basic_auth_cp().getEnvironmentList(owner_key):
-                    # We need to ignore the "locker" environment, you can't
-                    # register to it:
-                    if env['name'].lower() != LIBRARY_ENV_NAME.lower():
-                        retval.append(env)
+                    retval.append(env)
                 if len(retval) == 0:
                     raise Exception(_("Server supports environments, but "
                         "none are available."))
