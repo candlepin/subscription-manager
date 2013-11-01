@@ -1,6 +1,7 @@
 # Prefer systemd over sysv on Fedora 17+ and RHEL 7+
 %define use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
 %define use_dateutil (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 6)
+%define use_old_firstboot (0%{?fedora} && 0%{?fedora} <= 18) || (0%{?rhel} && 0%{?rhel} <= 6)
 
 
 %define rhsm_plugins_dir   /usr/share/rhsm-plugins
@@ -105,7 +106,11 @@ subscriptions.
 Summary: Firstboot screens for subscription manager
 Group: System Environment/Base
 Requires: %{name}-gui = %{version}-%{release}
+
+# Required for firstboot before RHEL 7:
+%if %use_old_firstboot
 Requires: rhn-setup-gnome
+%endif
 
 # Fedora can figure this out automatically, but RHEL cannot:
 Requires: librsvg2
@@ -315,11 +320,11 @@ rm -rf %{buildroot}
 
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
-# RHEL7 and beyond:
-%if 0%{?rhel} > 6
-%{_datadir}/firstboot/modules/rhsm_login.py*
-%else
+# RHEL 6 needs a different location for firstboot modules:
+%if %use_old_firstboot
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
+%else
+%{_datadir}/firstboot/modules/rhsm_login.py*
 %endif
 
 
