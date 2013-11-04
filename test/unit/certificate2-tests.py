@@ -311,6 +311,19 @@ class ContentTests(unittest.TestCase):
         self.assertTrue(isinstance(c.arches, types.ListType))
         self.assertTrue('ALL' in c.arches)
 
+    def test_compare(self):
+        c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=1, arches=['ALL'])
+        d = c
+        e = Content(content_type="yum", name="mycontent", label="mycontent", enabled=1, arches=['ALL'])
+        f = Content(content_type="yum", name="othercontent", label="othercontent", enabled=1)
+
+        self.assertEqual(c, c)
+        self.assertNotEqual(c, None)
+        self.assertNotEquals(c, "not a content")
+        self.assertEqual(c, d)
+        self.assertEqual(c, e)
+        self.assertNotEqual(c, f)
+
 
 class ProductTests(unittest.TestCase):
 
