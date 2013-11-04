@@ -286,15 +286,20 @@ class MainWindow(widgets.GladeWidget):
         """
         Renders the Tools buttons dynamically.
         """
-        if self.registered():
+        is_registered = self.registered()
+        if is_registered:
             self.register_menu_item.hide()
             self.unregister_menu_item.show()
             self.settings_menu_item.show()  # preferences
-            self.repos_menu_item.show()
         else:
             self.register_menu_item.show()
             self.unregister_menu_item.hide()
             self.settings_menu_item.hide()
+
+        supports_overrides = self.backend.cp_provider.get_consumer_auth_cp().supports_resource('content_overrides')
+        if is_registered and supports_overrides:
+            self.repos_menu_item.show()
+        else:
             self.repos_menu_item.hide()
 
     def _show_redemption_buttons(self):
