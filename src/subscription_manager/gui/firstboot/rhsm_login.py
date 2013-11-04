@@ -247,7 +247,10 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         Override parent method as in some cases, we use a different
         starting screen.
         """
-        self._set_screen(registergui.INFO_PAGE)
+        if self.standalone:
+            self._set_screen(registergui.INFO_PAGE)
+        else:
+            self._set_screen(registergui.CHOOSE_SERVER_PAGE)
 
     def _read_rhn_proxy_settings(self):
         if not rhn_config:
