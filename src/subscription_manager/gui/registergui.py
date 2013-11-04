@@ -1196,13 +1196,21 @@ class InfoScreen(Screen):
     """
     widget_names = Screen.widget_names + [
                 'register_radio',
-                'skip_radio'
+                'skip_radio',
+                'why_register_dialog'
         ]
 
     def __init__(self, parent, backend):
         super(InfoScreen, self).__init__(
                 "registration_info.glade", parent, backend)
         self.button_label = _("Next")
+        callbacks = {
+                "on_why_register_button_clicked":
+                    self._on_why_register_button_clicked,
+                "on_back_to_reg_button_clicked":
+                    self._on_back_to_reg_button_clicked
+            }
+        self.glade.signal_autoconnect(callbacks)
 
     def pre(self):
         return True
@@ -1218,4 +1226,8 @@ class InfoScreen(Screen):
     def post(self):
         pass
 
+    def _on_why_register_button_clicked(self, button):
+        self.why_register_dialog.show()
 
+    def _on_back_to_reg_button_clicked(self, button):
+        self.why_register_dialog.hide()
