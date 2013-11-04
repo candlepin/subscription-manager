@@ -153,69 +153,11 @@ class SubManFixture(unittest.TestCase):
         if mismatches or missing_keys or extra:
             self.fail(message)
 
-
-def dict_list_equals(a, b):
-    """
-    Meant to compare two lists of dictionaries and see if they
-    contain the same dictionaries regardless of order.  We can't
-    actually use set() with dictionaries because dictionaries are
-    not hashable.
-    """
-    if a is b:
+    def assert_items_equals(self, a, b):
+        """Assert that two lists contain the same items regardless of order."""
+        if sorted(a) != sorted(b):
+            self.fail("%s != %s" % (a, b))
         return True
-    if len(a) != len(b):
-        return False
-    b = list(b)
-    for a_item in a:
-        for b_item in b:
-            if a_item == b_item:
-                b.remove(b_item)
-                break
-        else:
-            return False
-    return len(b) == 0
-
-
-class TestDictListEquals(unittest.TestCase):
-    def test_identical(self):
-        a = [{'a': 'b'}]
-        b = a
-        self.assertTrue(dict_list_equals(a, b))
-
-    def test_equal(self):
-        a = [{'a': 'b'}]
-        b = [{'a': 'b'}]
-        self.assertTrue(dict_list_equals(a, b))
-
-    def test_same_dicts_different_order(self):
-        a = [{'c': 'd'}, {'a': 'b'}]
-        b = [{'a': 'b'}, {'c': 'd'}]
-        self.assertTrue(dict_list_equals(a, b))
-
-    def test_b_has_others(self):
-        a = [{'c': 'd'}, {'e': 'f'}]
-        b = [{'a': 'b'}, {'c': 'd'}]
-        self.assertFalse(dict_list_equals(a, b))
-
-    def test_a_has_extras(self):
-        a = [{'a': 'b'}, {'c': 'd'}]
-        b = [{'c': 'd'}]
-        self.assertFalse(dict_list_equals(a, b))
-
-    def test_not_equals_at_all(self):
-        a = [{'a': 'b'}]
-        b = [{'c': 'd'}]
-        self.assertFalse(dict_list_equals(a, b))
-
-    def test_equals_with_dupes(self):
-        a = [{'a': 'b'}, {'a': 'b'}, {'c': 'd'}]
-        b = [{'c': 'd'}, {'a': 'b'}, {'a': 'b'}]
-        self.assertTrue(dict_list_equals(a, b))
-
-    def test_one_dict_is_super_set(self):
-        a = [{'a': 'b'}]
-        b = [{'a': 'b', 'c': 'd'}]
-        self.assertFalse(dict_list_equals(a, b))
 
 
 @contextmanager

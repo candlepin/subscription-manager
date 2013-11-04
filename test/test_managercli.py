@@ -15,7 +15,7 @@ from stubs import MockStderr, MockStdout, \
         StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
 from fixture import FakeException, FakeLogger, SubManFixture, \
-        capture, Matcher, dict_list_equals
+        capture, Matcher
 
 import mock
 from mock import patch
@@ -427,10 +427,10 @@ class TestReposCommand(TestCliCommand):
 
         # The list of overrides sent to setContentOverrides is really a set of
         # dictionaries (since we don't know the order of the overrides).
-        # However, since the dict class is not hashable, we can't actually use
+        # However, since the dict class is not hashable, we cssert_items_equalsan't actually use
         # a set.  So we need a custom matcher to make sure that the
         # JSON passed in to setContentOverrides is what we expect.
-        match_dict_list = Matcher(dict_list_equals, expected_overrides)
+        match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
                 match_dict_list)
         repolib_instance.update.assert_called()
@@ -451,7 +451,7 @@ class TestReposCommand(TestCliCommand):
 
         expected_overrides = [{'contentLabel': i.id, 'name': 'enabled', 'value':
             '0'} for i in repos]
-        match_dict_list = Matcher(dict_list_equals, expected_overrides)
+        match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
                 match_dict_list)
         repolib_instance.update.assert_called()

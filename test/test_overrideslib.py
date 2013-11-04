@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from fixture import SubManFixture, dict_list_equals
+from fixture import SubManFixture
 from subscription_manager.overrides import OverrideLib
 from subscription_manager.injection import require, CP_PROVIDER
 
@@ -21,7 +21,7 @@ class OverrideTests(SubManFixture):
             {'contentLabel': 'y', 'name': 'c', 'value': 'd'},
         ]
         result = self.override_lib._add(repos, overrides)
-        self.assertTrue(dict_list_equals(expected, result))
+        self.assertTrue(self.assert_items_equals(expected, result))
 
     def test_remove_function(self):
         repos = ['x', 'y']
@@ -33,7 +33,7 @@ class OverrideTests(SubManFixture):
             {'contentLabel': 'y', 'name': 'b'},
         ]
         result = self.override_lib._remove(repos, removes)
-        self.assertTrue(dict_list_equals(expected, result))
+        self.assertTrue(self.assert_items_equals(expected, result))
 
     def test_remove_all(self):
         repos = ['x', 'y']
@@ -42,7 +42,7 @@ class OverrideTests(SubManFixture):
             {'contentLabel': 'y'},
         ]
         result = self.override_lib._remove_all(repos)
-        self.assertTrue(dict_list_equals(expected, result))
+        self.assertTrue(self.assert_items_equals(expected, result))
 
     def test_remove_all_with_no_repos_given(self):
         repos = []
