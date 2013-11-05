@@ -1147,7 +1147,7 @@ class Content(Entitlement):
         return self.required_tags
 
     def __eq__(self, rhs):
-        return (self.getLabel() == rhs.getLabel())
+        return isinstance(rhs, self.__class__) and (self.label == rhs.label)
 
     def __str__(self):
         s = []
