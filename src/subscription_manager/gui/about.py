@@ -36,6 +36,7 @@ LICENSE = _("\nThis software is licensed to you under the GNU General Public Lic
             "in this software or its documentation.\n")
 
 UPDATE_FILE = '/var/run/rhsm/update'
+LOCK_FILE = '/var/lock/subsys/rhsmcertd'
 
 prefix = os.path.dirname(__file__)
 
@@ -87,7 +88,10 @@ class AboutDialog(object):
 
     def _set_next_update(self, next_update_label):
         try:
-            next_update = long(file(UPDATE_FILE).read())
+            if(os.path.exists(LOCK_FILE)):
+                next_update = long(file(UPDATE_FILE).read())
+            else:
+                next_update = None
         except Exception:
             next_update = None
 
