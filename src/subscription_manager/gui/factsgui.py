@@ -20,8 +20,7 @@ import gtk
 
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception, linkify
-from subscription_manager.injection import IDENTITY, require
-from subscription_manager.managerlib import enhance_facts
+from subscription_manager.injection import IDENTITY, CP_PROVIDER, require
 
 _ = gettext.gettext
 
@@ -34,17 +33,18 @@ class SystemFactsDialog(widgets.GladeWidget):
     system facts.
     """
     widget_names = ['system_facts_dialog', 'facts_view', 'update_button',
-                    'last_update_label', 'owner_label', 'environment_label',
-                    'environment_hbox', 'owner_id_label', 'owner_id_hbox']
+                    'last_update_label', 'owner_label', 'owner_title',
+                    'environment_label', 'environment_title',
+                    'system_id_label', 'system_id_title']
 
-    def __init__(self, backend, facts):
+    def __init__(self, facts):
 
         super(SystemFactsDialog, self).__init__('factsdialog.glade')
 
         #self.consumer = consumer
         self.identity = require(IDENTITY)
+        self.cp_provider = require(CP_PROVIDER)
         self.facts = facts
-        self.backend = backend
         self.glade.signal_autoconnect({
                 "on_system_facts_dialog_delete_event": self._hide_callback,
                 "on_close_button_clicked": self._hide_callback,
@@ -81,6 +81,16 @@ class SystemFactsDialog(widgets.GladeWidget):
         """Make this dialog invisible."""
         self.system_facts_dialog.hide()
 
+    def _display_system_id(self):
+        if self.identity.uuid:
+            self.system_id_label.set_text(self.identity.uuid)
+            self.system_id_title.show()
+            self.system_id_label.show()
+        else:
+            self.system_id_label.set_text(_('Unknown'))
+            self.system_id_title.hide()
+            self.system_id_label.hide()
+
     def display_facts(self):
         """Updates the list store with the current system facts."""
         self.facts_store.clear()
@@ -93,7 +103,6 @@ class SystemFactsDialog(widgets.GladeWidget):
 
         # make sure we get fresh facts, since entitlement validity status could         # change
         system_facts_dict = self.facts.get_facts()
-        enhance_facts(system_facts_dict, self.identity)
 
         system_facts = system_facts_dict.items()
 
@@ -108,22 +117,23 @@ class SystemFactsDialog(widgets.GladeWidget):
                 value = _("Unknown")
             self.facts_store.append(parent, [fact, value])
 
+        self._display_system_id()
+
         # TODO: could stand to check if registered before trying to do this:
-        display_name = _('Unknown')
         try:
-            owner = self.backend.cp_provider.get_consumer_auth_cp().getOwner(self.identity.uuid)
-            display_name = owner['displayName']
-            key = owner['key']
-            self.owner_id_label.set_text(key)
-            self.owner_id_hbox.show()
+            owner = self.cp_provider.get_consumer_auth_cp().getOwner(self.identity.uuid)
+            self.owner_label.set_text("%s (%s)" %
+                    (owner['displayName'], owner['key']))
+            self.owner_label.show()
+            self.owner_title.show()
         except Exception, e:
-            log.error("Could not get owner name \nError: %s" % e)
-            self.owner_id_hbox.hide()
-        self.owner_label.set_text(display_name)
+            log.error("Could not get owner name: %s" % e)
+            self.owner_label.hide()
+            self.owner_title.hide()
 
         try:
-            if self.backend.cp_provider.get_consumer_auth_cp().supports_resource('environments'):
-                consumer = self.backend.cp_provider.get_consumer_auth_cp().getConsumer(self.identity.uuid)
+            if self.cp_provider.get_consumer_auth_cp().supports_resource('environments'):
+                consumer = self.cp_provider.get_consumer_auth_cp().getConsumer(self.identity.uuid)
                 environment = consumer['environment']
                 if environment:
                     environment_name = environment['name']
@@ -132,19 +142,22 @@ class SystemFactsDialog(widgets.GladeWidget):
 
                 log.info("Environment is %s" % environment_name)
                 self.environment_label.set_text(environment_name)
-                self.environment_hbox.show()
+                self.environment_label.show()
+                self.environment_title.show()
             else:
-                self.environment_hbox.hide()
+                self.environment_label.hide()
+                self.environment_title.hide()
         except Exception, e:
             log.error("Could not get environment \nError: %s" % e)
-            self.environment_hbox.hide()
+            self.environment_label.hide()
+            self.environment_title.hide()
 
     def update_facts(self):
         """Sends the current system facts to the UEP server."""
         consumer_uuid = self.identity.uuid
 
         try:
-            self.facts.update_check(self.backend.cp_provider.get_consumer_auth_cp(), consumer_uuid, force=True)
+            self.facts.update_check(self.cp_provider.get_consumer_auth_cp(), consumer_uuid, force=True)
         except Exception, e:
             log.error("Could not update system facts \nError: %s" % e)
             handle_gui_exception(e, linkify(str(e)), self.system_facts_dialog)

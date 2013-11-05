@@ -843,13 +843,6 @@ def check_identity_cert_perms():
             log.warn("Corrected incorrect permissions on %s." % cert)
 
 
-def enhance_facts(facts, consumer):
-    if consumer.getConsumerId():
-        facts.update({'system.uuid': consumer.getConsumerId()})
-    if consumer.getConsumerName():
-        facts.update({"system.name": consumer.getConsumerName()})
-
-
 def clean_all_data(backup=True):
     consumer_dir = cfg.get('rhsm', 'consumerCertDir')
     if backup:

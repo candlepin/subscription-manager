@@ -610,7 +610,7 @@ class IdentityCommand(UserPassCommand):
                 ownername = owner['displayName']
                 ownerid = owner['key']
 
-                print _('Current identity is: %s') % consumerid
+                print _('system identity: %s') % consumerid
                 print _('name: %s') % consumer_name
                 print _('org name: %s') % ownername
                 print _('org ID: %s') % ownerid
@@ -1641,8 +1641,6 @@ class FactsCommand(CliCommand):
             facts = Facts(ent_dir=self.entitlement_dir,
                           prod_dir=self.product_dir)
             fact_dict = facts.get_facts()
-            if ConsumerIdentity.exists():
-                managerlib.enhance_facts(fact_dict, ConsumerIdentity.read())
             fact_keys = fact_dict.keys()
             fact_keys.sort()
             for key in fact_keys:
