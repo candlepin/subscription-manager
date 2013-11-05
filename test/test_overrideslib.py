@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from fixture import SubManFixture
-from subscription_manager.overrides import OverrideLib
+from subscription_manager.overrides import OverrideLib, Override
 from subscription_manager.injection import require, CP_PROVIDER
 
 
@@ -13,26 +13,28 @@ class OverrideTests(SubManFixture):
 
     def test_add_function(self):
         repos = ['x', 'y']
-        overrides = {'a': 'b', 'c': 'd'}
+        override_props = {'a': 'b', 'c': 'd'}
+        overrides = [Override(repo, name, value) for repo in repos for name, value in override_props.items()]
         expected = [
             {'contentLabel': 'x', 'name': 'a', 'value': 'b'},
             {'contentLabel': 'x', 'name': 'c', 'value': 'd'},
             {'contentLabel': 'y', 'name': 'a', 'value': 'b'},
             {'contentLabel': 'y', 'name': 'c', 'value': 'd'},
         ]
-        result = self.override_lib._add(repos, overrides)
+        result = self.override_lib._add(overrides)
         self.assertTrue(self.assert_items_equals(expected, result))
 
     def test_remove_function(self):
         repos = ['x', 'y']
-        removes = ['a', 'b']
+        props_to_remove = ['a', 'b']
+        removes = [Override(repo, name) for repo in repos for name in props_to_remove]
         expected = [
             {'contentLabel': 'x', 'name': 'a'},
             {'contentLabel': 'x', 'name': 'b'},
             {'contentLabel': 'y', 'name': 'a'},
             {'contentLabel': 'y', 'name': 'b'},
         ]
-        result = self.override_lib._remove(repos, removes)
+        result = self.override_lib._remove(removes)
         self.assertTrue(self.assert_items_equals(expected, result))
 
     def test_remove_all(self):

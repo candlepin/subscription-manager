@@ -54,7 +54,7 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width
-from subscription_manager.overrides import OverrideLib
+from subscription_manager.overrides import OverrideLib, Override
 
 _ = gettext.gettext
 
@@ -2289,21 +2289,23 @@ class OverrideCommand(CliCommand):
             return
 
         if self.options.additions:
-            results = override_lib.add_overrides(consumer, self.options.repos, self.options.additions)
+            overrides = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
+            results = override_lib.add_overrides(consumer, overrides)
         if self.options.removals:
-            results = override_lib.remove_overrides(consumer, self.options.repos, self.options.removals)
+            to_remove = [Override(repo, item) for repo in self.options.repos for item in self.options.removals]
+            results = override_lib.remove_overrides(consumer, to_remove)
         if self.options.remove_all:
             results = override_lib.remove_all_overrides(consumer, self.options.repos)
 
         # Update the cache and refresh the repo file.
         override_lib.update(results)
 
-    def _list(self, json, specific_repos):
+    def _list(self, all_overrides, specific_repos):
         overrides = {}
-        for entry in json:
-            repo = entry['contentLabel']
-            name = entry['name']
-            value = entry['value']
+        for override in all_overrides:
+            repo = override.repo_id
+            name = override.name
+            value = override.value
             # overrides is a hash of hashes.  Like this: {'repo_x': {'enabled': '1', 'gpgcheck': '1'}}
             overrides.setdefault(repo, {})[name] = value
 

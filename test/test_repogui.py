@@ -17,6 +17,7 @@ from fixture import SubManFixture
 from subscription_manager.gui.reposgui import RepositoriesDialog
 from stubs import StubBackend
 from subscription_manager.repolib import Repo
+from subscription_manager.overrides import Override
 
 
 class TestReposGui(SubManFixture):
@@ -84,8 +85,8 @@ class TestReposGui(SubManFixture):
         repo = self._create_repo("my_repo", [('enabled', '0')])
         self.repo_lib.get_repos.return_value = [repo]
         self.override_lib.get_overrides.return_value = [
-            {'contentLabel': 'my_repo', 'name': 'enabled', 'value': '1'},
-            {'contentLabel': 'my_repo', 'name': 'gpgcheck', 'value': '0'}
+            Override('my_repo', 'enabled', '1'),
+            Override('my_repo', 'gpgcheck', '0')
         ]
         self.dialog.show()
 
@@ -143,7 +144,7 @@ class TestReposGui(SubManFixture):
     def test_remove_all_button_enabled_when_repo_has_modifications(self):
         self.repo_lib.get_repos.return_value = [self._create_repo("my_repo", [('enabled', '0')])]
         self.override_lib.get_overrides.return_value = [
-            {'contentLabel': 'my_repo', 'name': 'enabled', 'value': '1'}
+            Override('my_repo', 'enabled', '1')
         ]
         self.dialog.show()
         self.assertTrue(self.dialog.reset_button.props.sensitive)

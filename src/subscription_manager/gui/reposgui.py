@@ -25,7 +25,7 @@ from subscription_manager.gui.storage import MappedListStore
 from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\
     SelectionWrapper, HasSortableWidget
 from subscription_manager.gui.messageWindow import YesNoDialog
-from subscription_manager.overrides import OverrideLib
+from subscription_manager.overrides import OverrideLib, Override
 
 _ = gettext.gettext
 
@@ -143,9 +143,9 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         overrides_per_repo = {}
 
         for override in current_overrides:
-            repo_id = override['contentLabel']
+            repo_id = override.repo_id
             overrides_per_repo.setdefault(repo_id, {})
-            overrides_per_repo[repo_id][override['name']] = override['value']
+            overrides_per_repo[repo_id][override.name] = override.value
 
         self.overrides_store.clear()
 
@@ -407,13 +407,14 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             self.baseurl_text.hide()
 
     def _add_override(self, repo, name, value):
-        overrides = self.override_lib.add_overrides(self.identity.uuid, [repo],
-                                                    {name: value})
+        override = Override(repo, name, value)
+        overrides = self.override_lib.add_overrides(self.identity.uuid, [override])
         self.override_lib.update(overrides)
         self._refresh(overrides, self._get_selected_repo_id())
 
     def _delete_override(self, repo, name):
-        overrides = self.override_lib.remove_overrides(self.identity.uuid, [repo], [name])
+        to_delete = Override(repo, name)
+        overrides = self.override_lib.remove_overrides(self.identity.uuid, [to_delete])
         self.override_lib.update(overrides)
         self._refresh(overrides, self._get_selected_repo_id())
 

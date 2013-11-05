@@ -23,6 +23,7 @@ from mock import Mock
 # for some exceptions
 from rhsm import connection
 from M2Crypto import SSL
+from subscription_manager.overrides import Override
 
 # FIXME: temp fix till we merge test fixture merged
 # Note: we don't tear this patch down, everything needs it mocked,
@@ -775,11 +776,12 @@ class TestOverrideCommand(TestCliProxyCommand):
         return data
 
     def test_list_function(self):
-        data = []
-        data.append(self._build_override('x', 'hello', 'world'))
-        data.append(self._build_override('x', 'blast-off', 'space'))
-        data.append(self._build_override('y', 'goodbye', 'earth'))
-        data.append(self._build_override('z', 'greetings', 'mars'))
+        data = [
+            Override('x', 'hello', 'world'),
+            Override('x', 'blast-off', 'space'),
+            Override('y', 'goodbye', 'earth'),
+            Override('z', 'greetings', 'mars')
+        ]
         with capture() as out:
             self.cc._list(data, None)
             output = out.getvalue()
@@ -792,9 +794,10 @@ class TestOverrideCommand(TestCliProxyCommand):
             self.assertTrue(re.search('\s+greetings:\s+mars', output))
 
     def test_list_specific_repos(self):
-        data = []
-        data.append(self._build_override('x', 'hello', 'world'))
-        data.append(self._build_override('z', 'greetings', 'mars'))
+        data = [
+            Override('x', 'hello', 'world'),
+            Override('z', 'greetings', 'mars')
+        ]
         with capture() as out:
             self.cc._list(data, ['x'])
             output = out.getvalue()
@@ -803,8 +806,9 @@ class TestOverrideCommand(TestCliProxyCommand):
             self.assertFalse(re.search('Repository: z', output))
 
     def test_list_nonexistant_repos(self):
-        data = []
-        data.append(self._build_override('x', 'hello', 'world'))
+        data = [
+            Override('x', 'hello', 'world')
+        ]
         with capture() as out:
             self.cc._list(data, ['x', 'z'])
             output = out.getvalue()
