@@ -150,8 +150,7 @@ class MainWindow(widgets.GladeWidget):
         self.product_dir = prod_dir or self.backend.product_dir
         self.entitlement_dir = ent_dir or self.backend.entitlement_dir
 
-        self.system_facts_dialog = factsgui.SystemFactsDialog(self.backend,
-                                                              self.facts)
+        self.system_facts_dialog = factsgui.SystemFactsDialog(self.facts)
 
         self.registration_dialog = registergui.RegisterScreen(self.backend, self.facts,
                                                               self._get_window())
