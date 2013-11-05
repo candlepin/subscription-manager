@@ -223,6 +223,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     quantity_available = entry.quantity - entry.consumed
 
                 pool = entry.pools[0]
+                # Use the maximum suggested quantity, not the first one.  BZ 1022198
+                # This is still incorrect when quantities from multiple merged pools are required
+                suggested_quantity = max(map(lambda p: self.calculate_default_quantity(p), entry.pools))
+
                 attrs = self._product_attrs_to_dict(pool['productAttributes'])
 
                 # Display support level and type if the attributes are present:
@@ -245,7 +249,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'product_name': entry.product_name,
                     'product_name_formatted': apply_highlight(entry.product_name,
                                                               self.get_filter_text()),
-                    'quantity_to_consume': self.calculate_default_quantity(pool),
+                    'quantity_to_consume': suggested_quantity,
                     'available': available,
                     'product_id': entry.product_id,
                     'pool_id': entry.pools[0]['id'],  # not displayed, just for lookup later

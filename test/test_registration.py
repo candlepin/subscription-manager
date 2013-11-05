@@ -14,10 +14,12 @@
 #
 from mock import Mock, patch
 
-from stubs import StubUEP
+from stubs import StubUEP, StubProductCertificate, StubProduct
 import rhsm.connection as connection
 from subscription_manager.managercli import RegisterCommand
 from fixture import SubManFixture
+
+import subscription_manager.injection as inj
 
 
 class CliRegistrationTests(SubManFixture):
@@ -104,6 +106,9 @@ class CliRegistrationTests(SubManFixture):
         cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
         cmd.facts.write_cache = Mock()
         cmd.facts.update_check = Mock()
+
+        prod_dir = inj.require(inj.PROD_DIR)
+        prod_dir.certs = [StubProductCertificate(StubProduct('900'))]
 
         mock_certlib_instance = mock_certlib.return_value
 
