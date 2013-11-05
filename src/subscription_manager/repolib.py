@@ -27,7 +27,6 @@ from rhsm.connection import RemoteServerException, RestlibException
 
 from certlib import ActionLock, DataLib
 from certdirectory import Path, ProductDirectory, EntitlementDirectory
-from identity import ConsumerIdentity
 from utils import UnsupportedOperationException
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -42,6 +41,7 @@ class RepoLib(DataLib):
     def __init__(self, lock=ActionLock(), uep=None, cache_only=False):
         self.cache_only = cache_only
         DataLib.__init__(self, lock, uep)
+        self.identity = inj.require(inj.IDENTITY)
 
     def _do_update(self):
         action = UpdateAction(self.uep, cache_only=self.cache_only)
@@ -54,7 +54,7 @@ class RepoLib(DataLib):
     def get_repos(self, apply_overrides=True):
         action = UpdateAction(self.uep, cache_only=self.cache_only, apply_overrides=apply_overrides)
         repos = action.get_unique_content()
-        if ConsumerIdentity.existsAndValid() and action.override_supported:
+        if self.identity.is_valid() and action.override_supported:
             return repos
 
         # Otherwise we are in a disconnected case or dealing with an old server
@@ -90,6 +90,7 @@ class RepoLib(DataLib):
 class UpdateAction:
 
     def __init__(self, uep, ent_dir=None, prod_dir=None, cache_only=False, apply_overrides=True):
+        self.identity = inj.require(inj.IDENTITY)
         if ent_dir:
             self.ent_dir = ent_dir
         else:
@@ -112,26 +113,19 @@ class UpdateAction:
 
         # If we are not registered, skip trying to refresh the
         # data from the server
-        try:
-            self.consumer = ConsumerIdentity.read()
-        except Exception:
-            self.consumer = None
-
-        if self.consumer:
-            self.consumer_uuid = self.consumer.getConsumerId()
-
+        if self.identity.is_valid():
             override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
             if cache_only:
                 status = override_cache._read_cache()
             else:
-                status = override_cache.load_status(self.uep, self.consumer_uuid)
+                status = override_cache.load_status(self.uep, self.identity.uuid)
 
             if status is not None:
                 self.overrides = status
 
             message = "Release API is not supported by the server. Using default."
             try:
-                result = self.uep.getRelease(self.consumer_uuid)
+                result = self.uep.getRelease(self.identity.uuid)
                 self.release = result['releaseVer']
             except RemoteServerException, e:
                 log.debug(message)
@@ -171,7 +165,7 @@ class UpdateAction:
             else:
                 # In the non-disconnected case, destroy the old repo and replace it with
                 # what's in the entitlement cert plus any overrides.
-                if ConsumerIdentity.existsAndValid() and self.override_supported:
+                if self.identity.is_valid() and self.override_supported:
                     repo_file.update(cont)
                     updates += 1
                 else:
@@ -332,7 +326,7 @@ class UpdateAction:
 
         This method should only be used in disconnected cases!
         """
-        if ConsumerIdentity.existsAndValid() and self.override_supported:
+        if self.identity.is_valid() and self.override_supported:
             log.error("Can not update repos when registered!")
             raise UnsupportedOperationException()
 
