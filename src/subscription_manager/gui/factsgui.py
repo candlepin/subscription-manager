@@ -33,9 +33,9 @@ class SystemFactsDialog(widgets.GladeWidget):
     system facts.
     """
     widget_names = ['system_facts_dialog', 'facts_view', 'update_button',
-                    'last_update_label', 'owner_label', 'environment_label',
-                    'environment_title',
-                    'owner_id_label', 'owner_id_title', 'system_id_label']
+                    'last_update_label', 'owner_label', 'owner_title',
+                    'environment_label', 'environment_title',
+                    'system_id_label', 'system_id_title']
 
     def __init__(self, backend, facts):
 
@@ -84,8 +84,12 @@ class SystemFactsDialog(widgets.GladeWidget):
     def _display_system_id(self):
         if self.identity.uuid:
             self.system_id_label.set_text(self.identity.uuid)
+            self.system_id_title.show()
+            self.system_id_label.show()
         else:
             self.system_id_label.set_text(_('Unknown'))
+            self.system_id_title.hide()
+            self.system_id_label.hide()
 
     def display_facts(self):
         """Updates the list store with the current system facts."""
@@ -116,19 +120,16 @@ class SystemFactsDialog(widgets.GladeWidget):
         self._display_system_id()
 
         # TODO: could stand to check if registered before trying to do this:
-        display_name = _('Unknown')
         try:
             owner = self.backend.cp_provider.get_consumer_auth_cp().getOwner(self.identity.uuid)
-            display_name = owner['displayName']
-            key = owner['key']
-            self.owner_id_label.set_text(key)
-            self.owner_id_label.show()
-            self.owner_id_title.show()
+            self.owner_label.set_text("%s (%s)" %
+                    (owner['displayName'], owner['key']))
+            self.owner_label.show()
+            self.owner_title.show()
         except Exception, e:
             log.error("Could not get owner name: %s" % e)
-            self.owner_id_label.hide()
-            self.owner_id_title.hide()
-        self.owner_label.set_text(display_name)
+            self.owner_label.hide()
+            self.owner_title.hide()
 
         try:
             if self.backend.cp_provider.get_consumer_auth_cp().supports_resource('environments'):
