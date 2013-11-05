@@ -223,7 +223,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         # Try our best to convert it, and default to 0.
         try:
             val = int(override_value)
-        except Exception:
+        except ValueError:
             val = 0
             if override_value is not None and override_value.upper() == "TRUE":
                 val = 1
