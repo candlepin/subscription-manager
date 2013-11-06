@@ -396,17 +396,20 @@ class Restlib(object):
         return rv
 
     def _load_ca_certificates(self, context):
+        loaded_ca_certs = []
         try:
             for cert_file in os.listdir(self.ca_dir):
                 if cert_file.endswith(".pem"):
                     cert_path = os.path.join(self.ca_dir, cert_file)
-                    log.debug("Loading CA certificate: '%s'" % cert_path)
                     res = context.load_verify_info(cert_path)
-
+                    loaded_ca_certs.append(cert_file)
                     if res == 0:
                         raise BadCertificateException(cert_path)
         except OSError, e:
             raise ConnectionSetupException(e.strerror)
+
+        if loaded_ca_certs:
+            log.debug("Loaded CA certificates from %s: %s" % (self.ca_dir, ', '.join(loaded_ca_certs)))
 
     # FIXME: can method be emtpty?
     def _request(self, request_type, method, info=None):
@@ -418,7 +421,6 @@ class Restlib(object):
         else:
             context.set_verify(SSL.verify_fail_if_no_peer_cert, self.ssl_verify_depth)
             if self.ca_dir is not None:
-                log.debug('Loading CA PEM certificates from: %s', self.ca_dir)
                 self._load_ca_certificates(context)
         if self.cert_file and os.path.exists(self.cert_file):
             context.load_cert(self.cert_file, keyfile=self.key_file)
