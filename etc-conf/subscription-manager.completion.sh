@@ -193,7 +193,7 @@ _subscription_manager()
   prev="${COMP_WORDS[COMP_CWORD-1]}"
 
   # top-level commands and options
-  opts="attach auto-attach clean config environments facts identity import list orgs
+  opts="api attach auto-attach clean config environments facts identity import list orgs
         plugins redeem refresh register release remove repos service-level status
         subscribe unregister unsubscribe version"
 
@@ -232,6 +232,10 @@ _subscription_manager()
       ;;
       auto-attach)
       "_subscription_manager_auto_attach" "${cur}" "${prev}"
+      return 0
+      ;;
+      api)
+      "_subscription_manager_api" "${cur}" "${prev}"
       return 0
       ;;
       *)
