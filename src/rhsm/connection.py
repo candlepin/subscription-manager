@@ -554,8 +554,8 @@ class Restlib(object):
     def request_put(self, method, params=None):
         return self._request("PUT", method, params)
 
-    def request_delete(self, method):
-        return self._request("DELETE", method)
+    def request_delete(self, method, params=None):
+        return self._request("DELETE", method, params)
 
 
 # FIXME: there should probably be a class here for just
@@ -1047,6 +1047,29 @@ class UEPConnection:
     def getStatus(self):
         method = "/status"
         return self.conn.request_get(method)
+
+    def getContentOverrides(self, consumerId):
+        """
+        Get all the overrides for the specified consumer.
+        """
+        method = "/consumers/%s/content_overrides" % self.sanitize(consumerId)
+        return self.conn.request_get(method)
+
+    def setContentOverrides(self, consumerId, overrides):
+        """
+        Set an override on a content object.
+        """
+        method = "/consumers/%s/content_overrides" % self.sanitize(consumerId)
+        return self.conn.request_put(method, overrides)
+
+    def deleteContentOverrides(self, consumerId, params=None):
+        """
+        Delete an override on a content object.
+        """
+        method = "/consumers/%s/content_overrides" % self.sanitize(consumerId)
+        if not params:
+            params = []
+        return self.conn.request_delete(method, params)
 
     def activateMachine(self, consumerId, email=None, lang=None):
         """

@@ -728,11 +728,14 @@ class Content(object):
         self.arches = arches or []
 
     def __eq__(self, other):
-        return (self.label == other.label)
+        return isinstance(other, self.__class__) and (self.label == other.label)
 
     def __str__(self):
         return "<Content: content_type=%s name=%s label=%s enabled=%s>" % \
                 (self.content_type, self.name, self.label, self.enabled)
+
+    def __hash__(self):
+        return hash(self.label)
 
 
 class Pool(object):
