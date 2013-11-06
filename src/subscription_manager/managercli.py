@@ -2217,7 +2217,7 @@ class ListCommand(CliCommand):
 class OverrideCommand(CliCommand):
     def __init__(self):
         shortdesc = _("Manage custom content repository settings")
-        super(OverrideCommand, self).__init__("override", shortdesc, False)
+        super(OverrideCommand, self).__init__("repo-override", shortdesc, False)
         self.parser.add_option("--repo", dest="repos", action="append", metavar="REPOID",
             help=_("repository to modify (can be specified more than once)"))
         self.parser.add_option("--remove", dest="removals", action="append", metavar="NAME",
