@@ -1,7 +1,7 @@
 # Prefer systemd over sysv on Fedora 17+ and RHEL 7+
 %define use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
 %define use_dateutil (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 6)
-%define use_old_firstboot (0%{?fedora} && 0%{?fedora} <= 18) || (0%{?rhel} && 0%{?rhel} <= 6)
+%define use_old_firstboot (0%{?rhel} && 0%{?rhel} <= 6)
 
 
 %define rhsm_plugins_dir   /usr/share/rhsm-plugins
