@@ -15,8 +15,8 @@
         <property name="use_markup">True</property>
       </widget>
       <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
         <property name="position">0</property>
       </packing>
     </child>
@@ -111,6 +111,7 @@
                       <widget class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">label</property>
                       </widget>
                       <packing>
@@ -123,6 +124,7 @@
                       <widget class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">label</property>
                       </widget>
                       <packing>
