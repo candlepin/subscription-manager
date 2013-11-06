@@ -17,7 +17,8 @@
 #
 
 from iniparse import SafeConfigParser
-from iniparse.compat import NoOptionError, InterpolationMissingOptionError
+from iniparse.compat import NoOptionError, InterpolationMissingOptionError, \
+        NoSectionError
 import re
 
 DEFAULT_CONFIG_DIR = "/etc/rhsm"
@@ -116,7 +117,7 @@ class RhsmConfigParser(SafeConfigParser):
                 return self.get(section, prop)
             # If nothing has been changed (we couldn't fix it) re-raise the exception
             raise
-        except NoOptionError, er:
+        except (NoOptionError, NoSectionError) as er:
             try:
                 return DEFAULTS[section][prop.lower()]
             except KeyError:
