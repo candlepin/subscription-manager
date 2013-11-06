@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from fixture import SubManFixture
-from subscription_manager.overrides import OverrideLib, Override
+from subscription_manager.overrides import Overrides, Override
 from subscription_manager.injection import require, CP_PROVIDER
 
 
@@ -9,7 +9,7 @@ class OverrideTests(SubManFixture):
     def setUp(self):
         SubManFixture.setUp(self)
         self.cp = require(CP_PROVIDER).consumer_auth_cp
-        self.override_lib = OverrideLib(self.cp)
+        self.overrides = Overrides(self.cp)
 
     def test_add_function(self):
         repos = ['x', 'y']
@@ -21,7 +21,7 @@ class OverrideTests(SubManFixture):
             {'contentLabel': 'y', 'name': 'a', 'value': 'b'},
             {'contentLabel': 'y', 'name': 'c', 'value': 'd'},
         ]
-        result = self.override_lib._add(overrides)
+        result = self.overrides._add(overrides)
         self.assertTrue(self.assert_items_equals(expected, result))
 
     def test_remove_function(self):
@@ -34,7 +34,7 @@ class OverrideTests(SubManFixture):
             {'contentLabel': 'y', 'name': 'a'},
             {'contentLabel': 'y', 'name': 'b'},
         ]
-        result = self.override_lib._remove(removes)
+        result = self.overrides._remove(removes)
         self.assertTrue(self.assert_items_equals(expected, result))
 
     def test_remove_all(self):
@@ -43,10 +43,10 @@ class OverrideTests(SubManFixture):
             {'contentLabel': 'x'},
             {'contentLabel': 'y'},
         ]
-        result = self.override_lib._remove_all(repos)
+        result = self.overrides._remove_all(repos)
         self.assertTrue(self.assert_items_equals(expected, result))
 
     def test_remove_all_with_no_repos_given(self):
         repos = []
-        result = self.override_lib._remove_all(repos)
+        result = self.overrides._remove_all(repos)
         self.assertEquals(None, result)

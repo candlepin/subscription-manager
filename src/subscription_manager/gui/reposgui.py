@@ -25,7 +25,7 @@ from subscription_manager.gui.storage import MappedListStore
 from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\
     SelectionWrapper, HasSortableWidget
 from subscription_manager.gui.messageWindow import YesNoDialog
-from subscription_manager.overrides import OverrideLib, Override
+from subscription_manager.overrides import Overrides, Override
 
 _ = gettext.gettext
 
@@ -45,7 +45,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         super(RepositoriesDialog, self).__init__('repositories.glade')
         self.backend = backend
         self.identity = require(IDENTITY)
-        self.override_lib = OverrideLib(self.backend.cp_provider.get_consumer_auth_cp())
+        self.overrides = Overrides(self.backend.cp_provider.get_consumer_auth_cp())
 
         self.glade.signal_autoconnect({
                 "on_dialog_delete_event": self._on_close,
@@ -133,7 +133,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
     def _load_data(self):
         # pull the latest overrides from the cache which will be the ones from the server.
-        current_overrides = self.override_lib.get_overrides(self.identity.uuid) or []
+        current_overrides = self.overrides.get_overrides(self.identity.uuid) or []
         self._refresh(current_overrides)
         # By default sort by repo_id
         self.overrides_store.set_sort_column_id(0, gtk.SORT_ASCENDING)
@@ -149,7 +149,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
         self.overrides_store.clear()
 
-        current_repos = self.override_lib.repo_lib.get_repos(apply_overrides=False)
+        current_repos = self.overrides.repo_lib.get_repos(apply_overrides=False)
         if (current_repos):
             self.overrides_treeview.show()
             self.no_repos_label_container.hide()
@@ -407,21 +407,21 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             self.baseurl_text.hide()
 
     def _add_override(self, repo, name, value):
-        override = Override(repo, name, value)
-        overrides = self.override_lib.add_overrides(self.identity.uuid, [override])
-        self.override_lib.update(overrides)
-        self._refresh(overrides, self._get_selected_repo_id())
+        to_add = Override(repo, name, value)
+        current_overrides = self.overrides.add_overrides(self.identity.uuid, [to_add])
+        self.overrides.update(current_overrides)
+        self._refresh(current_overrides, self._get_selected_repo_id())
 
     def _delete_override(self, repo, name):
         to_delete = Override(repo, name)
-        overrides = self.override_lib.remove_overrides(self.identity.uuid, [to_delete])
-        self.override_lib.update(overrides)
-        self._refresh(overrides, self._get_selected_repo_id())
+        current_overrides = self.overrides.remove_overrides(self.identity.uuid, [to_delete])
+        self.overrides.update(current_overrides)
+        self._refresh(current_overrides, self._get_selected_repo_id())
 
     def _delete_all_overrides(self, repo_id):
-        overrides = self.override_lib.remove_all_overrides(self.identity.uuid, [repo_id])
-        self.override_lib.update(overrides)
-        self._refresh(overrides, self._get_selected_repo_id())
+        current_overrides = self.overrides.remove_all_overrides(self.identity.uuid, [repo_id])
+        self.overrides.update(current_overrides)
+        self._refresh(current_overrides, self._get_selected_repo_id())
 
     def _get_dialog_widget(self):
         return self.main_window

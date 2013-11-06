@@ -29,12 +29,12 @@ class TestReposGui(SubManFixture):
         self.repo_lib = Mock()
         self.repo_lib.get_repos.return_value = []
 
-        self.override_lib = Mock()
-        self.override_lib.repo_lib = self.repo_lib
-        self.override_lib.get_overrides.return_value = []
+        self.overrides = Mock()
+        self.overrides.repo_lib = self.repo_lib
+        self.overrides.get_overrides.return_value = []
 
         self.dialog = RepositoriesDialog(self.backend, None)
-        self.dialog.override_lib = self.override_lib
+        self.dialog.overrides = self.overrides
 
     def test_show_dialog_with_no_overrides(self):
         repo = self._create_repo("my_repo", [('enabled', '0'), ('gpgcheck', '0')])
@@ -84,7 +84,7 @@ class TestReposGui(SubManFixture):
     def test_show_dialog_with_overrides(self):
         repo = self._create_repo("my_repo", [('enabled', '0')])
         self.repo_lib.get_repos.return_value = [repo]
-        self.override_lib.get_overrides.return_value = [
+        self.overrides.get_overrides.return_value = [
             Override('my_repo', 'enabled', '1'),
             Override('my_repo', 'gpgcheck', '0')
         ]
@@ -143,7 +143,7 @@ class TestReposGui(SubManFixture):
 
     def test_remove_all_button_enabled_when_repo_has_modifications(self):
         self.repo_lib.get_repos.return_value = [self._create_repo("my_repo", [('enabled', '0')])]
-        self.override_lib.get_overrides.return_value = [
+        self.overrides.get_overrides.return_value = [
             Override('my_repo', 'enabled', '1')
         ]
         self.dialog.show()

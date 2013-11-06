@@ -54,7 +54,7 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width
-from subscription_manager.overrides import OverrideLib, Override
+from subscription_manager.overrides import Overrides, Override
 
 _ = gettext.gettext
 
@@ -2278,10 +2278,10 @@ class OverrideCommand(CliCommand):
             print _("This system does not have any subscriptions.")
             return 1
 
-        override_lib = OverrideLib(self.cp)
+        overrides = Overrides(self.cp)
 
         if self.options.list:
-            results = override_lib.get_overrides(consumer)
+            results = overrides.get_overrides(consumer)
             if results:
                 self._list(results, self.options.repos)
             else:
@@ -2289,16 +2289,16 @@ class OverrideCommand(CliCommand):
             return
 
         if self.options.additions:
-            overrides = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
-            results = override_lib.add_overrides(consumer, overrides)
+            to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
+            results = overrides.add_overrides(consumer, to_add)
         if self.options.removals:
             to_remove = [Override(repo, item) for repo in self.options.repos for item in self.options.removals]
-            results = override_lib.remove_overrides(consumer, to_remove)
+            results = overrides.remove_overrides(consumer, to_remove)
         if self.options.remove_all:
-            results = override_lib.remove_all_overrides(consumer, self.options.repos)
+            results = overrides.remove_all_overrides(consumer, self.options.repos)
 
         # Update the cache and refresh the repo file.
-        override_lib.update(results)
+        overrides.update(results)
 
     def _list(self, all_overrides, specific_repos):
         overrides = {}

@@ -19,7 +19,7 @@ from subscription_manager.repolib import RepoLib
 
 # Module for manipulating content overrides
 
-class OverrideLib(object):
+class Overrides(object):
     def __init__(self, cp):
         self.cp = cp
         self.cache = injection.require(injection.OVERRIDE_STATUS_CACHE)
@@ -74,4 +74,3 @@ class Override(object):
 
     def to_json(self):
         return {'contentLabel': self.repo_id, 'name': self.name, 'value': self.value}
-
