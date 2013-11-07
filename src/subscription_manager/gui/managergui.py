@@ -295,8 +295,7 @@ class MainWindow(widgets.GladeWidget):
             self.unregister_menu_item.hide()
             self.settings_menu_item.hide()
 
-        supports_overrides = self.backend.cp_provider.get_consumer_auth_cp().supports_resource('content_overrides')
-        if is_registered and supports_overrides:
+        if is_registered and self.backend.cp_provider.get_consumer_auth_cp().supports_resource('content_overrides'):
             self.repos_menu_item.show()
         else:
             self.repos_menu_item.hide()
