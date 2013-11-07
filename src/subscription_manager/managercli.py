@@ -25,7 +25,6 @@ import os
 import socket
 import sys
 from time import localtime, strftime, strptime
-import unicodedata
 
 from M2Crypto import SSL
 from M2Crypto import X509
@@ -53,6 +52,8 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width
+
+from yum.i18n import utf8_width
 
 _ = gettext.gettext
 
@@ -2270,15 +2271,8 @@ class ManagerCLI(CLI):
         return CLI.main(self)
 
 
-def width(in_str):
-    if not isinstance(in_str, unicode):
-        in_str = in_str.decode("utf-8")
-    # From http://stackoverflow.com/questions/2476953/ user Josh Lee
-    return sum(1 + (unicodedata.east_asian_width(c) in "WF") for c in in_str)
-
-
 def ljust_wide(in_str, padding):
-    return in_str + ' ' * (padding - width(in_str))
+    return in_str + ' ' * (padding - utf8_width(in_str))
 
 
 def columnize(caption_list, callback, *args):
@@ -2293,7 +2287,7 @@ def columnize(caption_list, callback, *args):
     The callback gives us the ability to do things like replacing None values
     with the string "None" (see _none_wrap()).
     """
-    padding = min(sorted(map(width, caption_list))[-1] + 1,
+    padding = min(sorted(map(utf8_width, caption_list))[-1] + 1,
             int(get_terminal_width() / 2))
     padded_list = []
     for caption in caption_list:
@@ -2348,23 +2342,23 @@ def format_name(name, indent, max_length):
     # Split here and build it back up by word, this way we get word wrapping
     while words:
         word = words.pop(0)
-        if current + width(word) <= max_length:
-            current += width(word) + 1  # Have to account for the extra space
+        if current + utf8_width(word) <= max_length:
+            current += utf8_width(word) + 1  # Have to account for the extra space
             line.append(word)
         else:
             if line:
                 add_line()
             # If the word will not fit, break it
-            if indent + width(word) > max_length:
+            if indent + utf8_width(word) > max_length:
                 split_index = 0
-                while(width(word[:split_index + 1]) + indent <= max_length):
+                while(utf8_width(word[:split_index + 1]) + indent <= max_length):
                     split_index += 1
                 words.insert(0, word[split_index:])
                 word = word[:split_index]
             line = [word]
             if indent and lines:
                 line.insert(0, ' ' * (indent - 1))
-            current = indent + width(word) + 1
+            current = indent + utf8_width(word) + 1
 
     add_line()
     return '\n'.join(lines)
