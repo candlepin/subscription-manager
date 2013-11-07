@@ -21,6 +21,7 @@ import fnmatch
 import getpass
 import gettext
 import logging
+from optparse import OptionValueError
 import os
 import socket
 import sys
@@ -47,11 +48,12 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import valid_quantity
 from subscription_manager.release import ReleaseBackend
-from subscription_manager.repolib import RepoFile, RepoLib
+from subscription_manager.repolib import RepoLib, RepoFile
 from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width
+from subscription_manager.overrides import Overrides, Override
 
 from yum.i18n import utf8_width
 
@@ -1796,20 +1798,26 @@ class ReposCommand(CliCommand):
 
     def _do_command(self):
         self._validate_options()
-        certmgr = CertManager(uep=self.cp)
-        certmgr.update()
-        rl = RepoLib(uep=self.cp)
-        repos = rl.get_repos()
         rc = 0
         if cfg.has_option('rhsm', 'manage_repos') and \
                 not int(cfg.get('rhsm', 'manage_repos')):
             print _("Repositories disabled by configuration.")
             return rc
 
+        # Pull down any new entitlements and refresh the entitlements directory
+        certmgr = CertManager(uep=self.cp)
+        certmgr.update()
+        self._request_validity_check()
+
+        self.use_overrides = self.cp.supports_resource('content_overrides')
+
+        rl = RepoLib(uep=self.cp)
+        repos = rl.get_repos()
+
         if self.options.enable:
-            rc = rc or self._set_repo_status(repos, self.options.enable, True)
+            rc = rc or self._set_repo_status(repos, rl, self.options.enable, True)
         if self.options.disable:
-            rc = self._set_repo_status(repos, self.options.disable, False) or rc
+            rc = self._set_repo_status(repos, rl, self.options.disable, False) or rc
 
         if self.options.list:
             if len(repos) > 0:
@@ -1826,9 +1834,8 @@ class ReposCommand(CliCommand):
                 print _("This system has no repositories available through subscriptions.")
         return rc
 
-    def _set_repo_status(self, repos, items, enable):
-        repos_modified = []
-        change_repos = []
+    def _set_repo_status(self, repos, repolib, items, enable):
+        repos_modified = set()
         rc = 0
         if enable:
             status = '1'
@@ -1836,40 +1843,47 @@ class ReposCommand(CliCommand):
             status = '0'
 
         for item in items:
-            found = False
-            contains_wildcard = self._contains_wildcard(item)
-            for repo in repos:
-                if fnmatch.fnmatch(repo.id, item):
-                    if repo['enabled'] != status:
-                        repo['enabled'] = status
-                        change_repos.append(repo)
-                    repos_modified.append(repo.id)
-                    found = True
-                    if not contains_wildcard:
-                        break
-            if not found:
+            matches = set([repo for repo in repos if fnmatch.fnmatch(repo.id, item)])
+            if not matches:
                 rc = 1
                 print _("Error: %s is not a valid repo ID. "
                         "Use --list option to see valid repos.") % item
-        if change_repos:
-            repo_file = RepoFile()
-            repo_file.read()
-            for repo in change_repos:
-                repo_file.update(repo)
-            repo_file.write()
+            # Take the union
+            repos_modified |= matches
+
+        if repos_modified:
+            # The cache should be primed at this point by the repolib.get_repos()
+            cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+            if ConsumerIdentity.existsAndValid() and self.use_overrides:
+                overrides = [{'contentLabel': repo.id, 'name': 'enabled', 'value': status} for repo in repos_modified]
+                consumer = check_registration()['uuid']
+                results = self.cp.setContentOverrides(consumer, overrides)
+
+                cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+
+                # Update the cache with the returned JSON
+                cache.server_status = results
+                cache.write_cache()
+
+                repolib.update()
+            else:
+                # In the disconnected case we must modify the repo file directly.
+                changed_repos = [repo for repo in repos_modified if repo['enabled'] != status]
+                for repo in changed_repos:
+                    repo['enabled'] = status
+                if changed_repos:
+                    repo_file = RepoFile()
+                    repo_file.read()
+                    for repo in changed_repos:
+                        repo_file.update(repo)
+                    repo_file.write()
+
         for repo in repos_modified:
             if enable:
-                print _("Repo %s is enabled for this system.") % repo
+                print _("Repo '%s' is enabled for this system.") % repo.id
             else:
-                print _("Repo %s is disabled for this system.") % repo
+                print _("Repo '%s' is disabled for this system.") % repo.id
         return rc
-
-    def _contains_wildcard(self, item):
-        return "*" in item or \
-            "?" in item or \
-            "[" in item or \
-            "!" in item or \
-            "]" in item
 
 
 class ConfigCommand(CliCommand):
@@ -2192,6 +2206,118 @@ class ListCommand(CliCommand):
                     system_type) + "\n"
 
 
+class OverrideCommand(CliCommand):
+    def __init__(self):
+        shortdesc = _("Manage custom content repository settings")
+        super(OverrideCommand, self).__init__("repo-override", shortdesc, False)
+        self.parser.add_option("--repo", dest="repos", action="append", metavar="REPOID",
+            help=_("repository to modify (can be specified more than once)"))
+        self.parser.add_option("--remove", dest="removals", action="append", metavar="NAME",
+            help=_("name of the override to remove (can be specified more than once)"))
+        self.parser.add_option("--add", dest="additions", action="callback", callback=self._colon_split,
+            type="string", metavar="NAME:VALUE",
+            help=_("name and value of the option to override separated by a colon (can be specified more than once)"))
+        self.parser.add_option("--remove-all", action="store_true",
+            help=_("remove all overrides; can be specific to a repository by providing --repo"))
+        self.parser.add_option("--list", action="store_true",
+            help=_("list all overrides; can be specific to a repository by providing --repo"))
+
+    def _colon_split(self, option, opt_str, value, parser):
+        if parser.values.additions is None:
+            parser.values.additions = {}
+
+        k, colon, v = value.partition(':')
+        if not v:
+            raise OptionValueError(_("--add arguments should be in the form of \"name:value\""))
+
+        parser.values.additions[k] = v
+
+    def _validate_options(self):
+        if self.options.additions or self.options.removals:
+            if not self.options.repos:
+                print _("Error: You must specify a repository to modify")
+                sys.exit(-1)
+            if self.options.remove_all or self.options.list:
+                print _("Error: You may not use --add or --remove with --remove-all and --list")
+                sys.exit(-1)
+        if self.options.list and self.options.remove_all:
+            print _("Error: You may not use --list with --remove-all")
+            sys.exit(-1)
+        if self.options.repos and not (self.options.list or self.options.additions
+                or self.options.removals or self.options.remove_all):
+            print _("Error: The --repo option must be used with --list or --add or --remove.")
+            sys.exit(-1)
+        # If no relevant options were given, just show a list
+        if not (self.options.repos or self.options.additions
+                or self.options.removals or self.options.remove_all or self.options.list):
+            self.options.list = True
+
+    def _do_command(self):
+        self._validate_options()
+        # Abort if not registered
+        consumer = check_registration()['uuid']
+
+        if not self.cp.supports_resource('content_overrides'):
+            system_exit(-1, _("Error: The 'override' command is not supported by the server."))
+
+        # update entitlement certificates if necessary. If we do have new entitlements
+        # CertLib.update() will call RepoLib.update().
+        CertLib(uep=self.cp).update()
+        # make sure the EntitlementDirectory singleton is refreshed
+        self._request_validity_check()
+
+        if not self.entitlement_dir.list():
+            print _("This system does not have any subscriptions.")
+            return 1
+
+        overrides = Overrides(self.cp)
+
+        if self.options.list:
+            results = overrides.get_overrides(consumer)
+            if results:
+                self._list(results, self.options.repos)
+            else:
+                print _("This system does not have any content overrides applied to it.")
+            return
+
+        if self.options.additions:
+            to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
+            results = overrides.add_overrides(consumer, to_add)
+        if self.options.removals:
+            to_remove = [Override(repo, item) for repo in self.options.repos for item in self.options.removals]
+            results = overrides.remove_overrides(consumer, to_remove)
+        if self.options.remove_all:
+            results = overrides.remove_all_overrides(consumer, self.options.repos)
+
+        # Update the cache and refresh the repo file.
+        overrides.update(results)
+
+    def _list(self, all_overrides, specific_repos):
+        overrides = {}
+        for override in all_overrides:
+            repo = override.repo_id
+            name = override.name
+            value = override.value
+            # overrides is a hash of hashes.  Like this: {'repo_x': {'enabled': '1', 'gpgcheck': '1'}}
+            overrides.setdefault(repo, {})[name] = value
+
+        to_show = set(overrides.keys())
+        if specific_repos:
+            specific_repos = set(specific_repos)
+            for r in specific_repos.difference(to_show):
+                print _("Nothing is known about '%s'") % r
+            # Take the intersection of the sets
+            to_show &= specific_repos
+
+        for repo in sorted(to_show):
+            print _("Repository: %s") % repo
+            repo_data = sorted(overrides[repo].items(), key=lambda x: x[0])
+            # Split the list of 2-tuples into a list of names and a list of keys
+            names, values = zip(*repo_data)
+            names = ["%s:" % x for x in names]
+            print columnize(names, _echo, *values, indent=2) + "\n"
+
+
 class VersionCommand(CliCommand):
 
     def __init__(self):
@@ -2263,7 +2389,7 @@ class ManagerCLI(CLI):
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
                     VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
-                    AutohealCommand]
+                    AutohealCommand, OverrideCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):
@@ -2275,7 +2401,7 @@ def ljust_wide(in_str, padding):
     return in_str + ' ' * (padding - utf8_width(in_str))
 
 
-def columnize(caption_list, callback, *args):
+def columnize(caption_list, callback, *args, **kwargs):
     """
     Take a list of captions and values and columnize the output so that
     shorter captions are padded to be the same length as the longest caption.
@@ -2287,11 +2413,13 @@ def columnize(caption_list, callback, *args):
     The callback gives us the ability to do things like replacing None values
     with the string "None" (see _none_wrap()).
     """
+    indent = kwargs.get('indent', 0)
+    caption_list = [" " * indent + caption for caption in caption_list]
     padding = min(sorted(map(utf8_width, caption_list))[-1] + 1,
             int(get_terminal_width() / 2))
     padded_list = []
     for caption in caption_list:
-        lines = format_name(caption, 0, padding - 1).split('\n')
+        lines = format_name(caption, indent, padding - 1).split('\n')
         lines[-1] = ljust_wide(lines[-1], padding) + '%s'
         fixed_caption = '\n'.join(lines)
         padded_list.append(fixed_caption)
@@ -2329,11 +2457,19 @@ def format_name(name, indent, max_length):
     if not isinstance(name, unicode):
         name = name.decode("utf-8")
     words = name.split()
-    current = indent
     lines = []
     # handle emtpty names
     if not words:
         return name
+
+    # Preserve leading whitespace in front of the first word
+    leading_space = len(name) - len(name.lstrip())
+    words[0] = name[0:leading_space] + words[0]
+    # If there is leading whitespace, we've already indented the word and don't
+    # want to double count.
+    current = indent - leading_space
+    if current < 0:
+        current = 0
 
     def add_line():
         lines.append(' '.join(line))

@@ -10,8 +10,6 @@ from subscription_manager import certlib
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 
-from rhsm.version import Versions
-
 
 class TestParseServerInfo(unittest.TestCase):
 

@@ -188,17 +188,12 @@ class CacheManager(object):
 
 class StatusCache(CacheManager):
     """
-    Manages the system cache of entitlement status from the server.
     Unlike other cache managers, this one gets info from the server rather
     than sending it.
     """
-    CACHE_FILE = "/var/lib/rhsm/cache/entitlement_status.json"
-
     def __init__(self):
         self.server_status = None
-
-    def _sync_with_server(self, uep, uuid):
-        self.server_status = uep.getCompliance(uuid)
+        self.last_error = None
 
     def load_status(self, uep, uuid):
         """
@@ -215,21 +210,24 @@ class StatusCache(CacheManager):
         try:
             self._sync_with_server(uep, uuid)
             self.write_cache()
+            self.last_error = False
             return self.server_status
         except SSL.SSLError, ex:
             log.exception(ex)
+            self.last_error = ex
             log.error("Consumer certificate is invalid")
             return None
-        except connection.RestlibException:
+        except connection.RestlibException, ex:
             # Indicates we may be talking to a very old candlepin server
-            # which does not have the compliance API call. Report everything
-            # as unknown in this case.
+            # which does not have the necessary API call.
+            self.last_error = ex
             return None
 
         # If we hit a network error, but no cache exists (extremely unlikely)
         # then we are disconnected
         except socket.error, ex:
             log.exception(ex)
+            self.last_error = ex
             if not self._cache_exists():
                 log.error("Server unreachable, registered, but no cache exists.")
                 return None
@@ -239,14 +237,16 @@ class StatusCache(CacheManager):
 
         except connection.NetworkException, ex:
             log.exception(ex)
+            self.last_error = ex
             if not self._cache_exists():
                 log.error("Server unreachable, registered, but no cache exists.")
-                raise ex
+                raise
 
             log.warn("Unable to reach server, using cached status.")
             return self._read_cache()
         except connection.ExpiredIdentityCertException, ex:
             log.exception(ex)
+            self.last_error = ex
             log.error("Bad identity, unable to connect to server")
             return None
 
@@ -288,6 +288,18 @@ class StatusCache(CacheManager):
         self.server_status = None
 
 
+class EntitlementStatusCache(StatusCache):
+    """
+    Manages the system cache of entitlement status from the server.
+    Unlike other cache managers, this one gets info from the server rather
+    than sending it.
+    """
+    CACHE_FILE = "/var/lib/rhsm/cache/entitlement_status.json"
+
+    def _sync_with_server(self, uep, uuid):
+        self.server_status = uep.getCompliance(uuid)
+
+
 class ProductStatusCache(StatusCache):
     """
     Manages the system cache of installed product valid date ranges.
@@ -301,6 +313,16 @@ class ProductStatusCache(StatusCache):
             log.warn("Server does not support product date ranges.")
         else:
             self.server_status = consumer_data['installedProducts']
+
+
+class OverrideStatusCache(StatusCache):
+    """
+    Manages the cache of yum repo overrides set on the server.
+    """
+    CACHE_FILE = "/var/lib/rhsm/cache/content_overrides.json"
+
+    def _sync_with_server(self, uep, consumer_uuid):
+        self.server_status = uep.getContentOverrides(consumer_uuid)
 
 
 class ProfileManager(CacheManager):

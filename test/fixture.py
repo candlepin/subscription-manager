@@ -9,6 +9,45 @@ import stubs
 import subscription_manager.injection as inj
 
 
+class FakeLogger:
+    def __init__(self):
+        self.expected_msg = ""
+        self.msg = None
+        self.logged_exception = None
+
+    def debug(self, buf):
+        self.msg = buf
+
+    def error(self, buf):
+        self.msg = buf
+
+    def exception(self, e):
+        self.logged_exception = e
+
+    def set_expected_msg(self, msg):
+        self.expected_msg = msg
+
+    def info(self, buf):
+        self.msg = buf
+
+
+class FakeException(Exception):
+    def __init__(self, msg=None):
+        self.msg = msg
+
+    def __str__(self):
+        return repr(self.msg)
+
+
+class Matcher(object):
+    def __init__(self, compare, some_obj):
+        self.compare = compare
+        self.some_obj = some_obj
+
+    def __eq__(self, other):
+        return self.compare(self.some_obj, other)
+
+
 class SubManFixture(unittest.TestCase):
     """
     Can be extended by any subscription manager test case to make
@@ -28,8 +67,9 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.IDENTITY, id_mock)
         inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR, self.mock_calc)
 
-        inj.provide(inj.STATUS_CACHE, stubs.StubStatusCache())
+        inj.provide(inj.ENTITLEMENT_STATUS_CACHE, stubs.StubEntitlementStatusCache())
         inj.provide(inj.PROD_STATUS_CACHE, stubs.StubProductStatusCache())
+        inj.provide(inj.OVERRIDE_STATUS_CACHE, stubs.StubOverrideStatusCache())
         # By default set up an empty stub entitlement and product dir.
         # Tests need to modify or create their own but nothing should hit
         # the system.
@@ -112,6 +152,12 @@ class SubManFixture(unittest.TestCase):
 
         if mismatches or missing_keys or extra:
             self.fail(message)
+
+    def assert_items_equals(self, a, b):
+        """Assert that two lists contain the same items regardless of order."""
+        if sorted(a) != sorted(b):
+            self.fail("%s != %s" % (a, b))
+        return True
 
 
 @contextmanager

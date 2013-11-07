@@ -73,6 +73,14 @@ class ServerUrlParseErrorJustScheme(ServerUrlParseError):
     pass
 
 
+class UnsupportedOperationException(Exception):
+    """Thrown when a call is made that is unsupported in the current
+    state.  For example, if a call is made to a deprecated API when
+    a newer API is available.
+    """
+    pass
+
+
 def parse_server_info(local_server_entry):
     return parse_url(local_server_entry,
                      DEFAULT_HOSTNAME,

@@ -99,7 +99,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         column = self.add_text_column(_("Quantity"), 'quantity')
         cols.append((column, 'text', 'quantity'))
 
-        self.set_sorts(cols)
+        self.set_sorts(self.store, cols)
 
         self.top_view.connect("row_activated",
                               widgets.expand_collapse_on_row_activated_callback)

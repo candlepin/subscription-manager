@@ -19,13 +19,15 @@ from iniparse import ConfigParser
 import logging
 import os
 import string
+import subscription_manager.injection as inj
 from urllib import basejoin
 
 from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
 
-from certlib import ActionLock, DataLib, ConsumerIdentity
+from certlib import ActionLock, DataLib
 from certdirectory import Path, ProductDirectory, EntitlementDirectory
+from utils import UnsupportedOperationException
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -36,17 +38,27 @@ ALLOWED_CONTENT_TYPES = ["yum"]
 
 class RepoLib(DataLib):
 
-    def __init__(self, lock=ActionLock(), uep=None):
+    def __init__(self, lock=ActionLock(), uep=None, cache_only=False):
+        self.cache_only = cache_only
         DataLib.__init__(self, lock, uep)
+        self.identity = inj.require(inj.IDENTITY)
 
     def _do_update(self):
-        action = UpdateAction(uep=self.uep)
+        action = UpdateAction(self.uep, cache_only=self.cache_only)
         return action.perform()
 
-    def get_repos(self):
-        current = set()
-        action = UpdateAction(uep=self.uep)
+    def is_managed(self, repo):
+        action = UpdateAction(self.uep, cache_only=self.cache_only)
+        return repo in [c.label for c in action.matching_content()]
+
+    def get_repos(self, apply_overrides=True):
+        action = UpdateAction(self.uep, cache_only=self.cache_only, apply_overrides=apply_overrides)
         repos = action.get_unique_content()
+        if self.identity.is_valid() and action.override_supported:
+            return repos
+
+        # Otherwise we are in a disconnected case or dealing with an old server
+        current = set()
         # Add the current repo data
         repo_file = RepoFile()
         repo_file.read()
@@ -55,7 +67,7 @@ class RepoLib(DataLib):
             if existing is None:
                 current.add(repo)
             else:
-                existing.update(repo)
+                action.update_repo(existing, repo)
                 current.add(existing)
 
         return current
@@ -77,7 +89,8 @@ class RepoLib(DataLib):
 # Datalib.update() method anyhow. Pretty sure these can go away.
 class UpdateAction:
 
-    def __init__(self, uep=None, ent_dir=None, prod_dir=None):
+    def __init__(self, uep, ent_dir=None, prod_dir=None, cache_only=False, apply_overrides=True):
+        self.identity = inj.require(inj.IDENTITY)
         if ent_dir:
             self.ent_dir = ent_dir
         else:
@@ -90,33 +103,37 @@ class UpdateAction:
 
         self.uep = uep
         self.manage_repos = 1
+        self.apply_overrides = apply_overrides
         if CFG.has_option('rhsm', 'manage_repos'):
             self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
 
         self.release = None
+        self.overrides = []
+        self.override_supported = self.uep.supports_resource('content_overrides')
 
         # If we are not registered, skip trying to refresh the
         # data from the server
-        try:
-            self.consumer = ConsumerIdentity.read()
-        except Exception:
-            self.consumer = None
+        if self.identity.is_valid():
+            override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+            if cache_only:
+                status = override_cache._read_cache()
+            else:
+                status = override_cache.load_status(self.uep, self.identity.uuid)
 
-        if self.consumer:
-            self.consumer_uuid = self.consumer.getConsumerId()
+            if status is not None:
+                self.overrides = status
+
+            message = "Release API is not supported by the server. Using default."
             try:
-                result = self.uep.getRelease(self.consumer_uuid)
+                result = self.uep.getRelease(self.identity.uuid)
                 self.release = result['releaseVer']
-            # ie, a 404 from a old server that doesn't support the release API
             except RemoteServerException, e:
-                log.debug("Release API not supported by the server. Using default.")
-                self.release = None
+                log.debug(message)
             except RestlibException, e:
                 if e.code == 404:
-                    log.debug("Release API not supported by the server. Using default.")
-                    self.release = None
+                    log.debug(message)
                 else:
-                    raise e
+                    raise
 
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
@@ -137,17 +154,24 @@ class UpdateAction:
         valid = set()
         updates = 0
 
-        # Iterate content from entitlement certs, and update/create/delete each section
+        # Iterate content from entitlement certs, and create/delete each section
         # in the RepoFile as appropriate:
         for cont in self.get_unique_content():
             valid.add(cont.id)
             existing = repo_file.section(cont.id)
             if existing is None:
-                updates += 1
                 repo_file.add(cont)
-                continue
-            updates += existing.update(cont)
-            repo_file.update(existing)
+                updates += 1
+            else:
+                # In the non-disconnected case, destroy the old repo and replace it with
+                # what's in the entitlement cert plus any overrides.
+                if self.identity.is_valid() and self.override_supported:
+                    repo_file.update(cont)
+                    updates += 1
+                else:
+                    updates += self.update_repo(existing, cont)
+                    repo_file.update(existing)
+
         for section in repo_file.sections():
             if section not in valid:
                 updates += 1
@@ -179,30 +203,41 @@ class UpdateAction:
         key_path = os.path.join(dir_path, key_filename)
         return key_path
 
+    def matching_content(self, ent_cert=None):
+        if ent_cert:
+            certs = [ent_cert]
+        else:
+            certs = self.ent_dir.list_valid()
+
+        lst = set()
+
+        for cert in certs:
+            if not cert.content:
+                continue
+
+            tags_we_have = self.prod_dir.get_provided_tags()
+
+            for content in cert.content:
+                if not content.content_type in ALLOWED_CONTENT_TYPES:
+                    log.debug("Content type %s not allowed, skipping content: %s" % (
+                        content.content_type, content.label))
+                    continue
+
+                all_tags_found = True
+                for tag in content.required_tags:
+                    if not tag in tags_we_have:
+                        log.debug("Missing required tag '%s', skipping content: %s" % (
+                            tag, content.label))
+                        all_tags_found = False
+                if all_tags_found:
+                    lst.add(content)
+
+        return lst
+
     def get_content(self, ent_cert, baseurl, ca_cert):
         lst = []
 
-        if not ent_cert.content:
-            return lst
-
-        tags_we_have = self.prod_dir.get_provided_tags()
-
-        for content in ent_cert.content:
-            if not content.content_type in ALLOWED_CONTENT_TYPES:
-                log.debug("Content type %s not allowed, skipping content: %s" % (
-                    content.content_type, content.label))
-                continue
-
-            all_tags_found = True
-            for tag in content.required_tags:
-                if not tag in tags_we_have:
-                    log.debug("Missing required tag '%s', skipping content: %s" % (
-                        tag, content.label))
-                    all_tags_found = False
-            if not all_tags_found:
-                # Skip this content:
-                continue
-
+        for content in self.matching_content(ent_cert):
             content_id = content.label
             repo = Repo(content_id)
             repo['name'] = content.name
@@ -214,12 +249,8 @@ class UpdateAction:
 
             # Extract the variables from thr url
             repo_parts = repo['baseurl'].split("/")
-            repoid_vars = []
-
-            for part in repo_parts:
-                if part.startswith("$"):
-                    repoid_vars.append(part[1:])
-            if len(repoid_vars):
+            repoid_vars = [part[1:] for part in repo_parts if part.startswith("$")]
+            if repoid_vars:
                 repo['ui_repoid_vars'] = " ".join(repoid_vars)
 
             # If no GPG key URL is specified, turn gpgcheck off:
@@ -237,6 +268,10 @@ class UpdateAction:
             repo['metadata_expire'] = content.metadata_expire
 
             self._set_proxy_info(repo)
+
+            if self.override_supported and self.apply_overrides:
+                self._set_override_info(repo)
+
             lst.append(repo)
         return lst
 
@@ -246,6 +281,12 @@ class UpdateAction:
            len(self.release) == 0:
             return contenturl
         return contenturl.replace("$releasever", "%s" % self.release)
+
+    def _set_override_info(self, repo):
+        # In the disconnected case, self.overrides will be an empty list
+        for entry in self.overrides:
+            if entry['contentLabel'] == repo.id:
+                repo[entry['name']] = entry['value']
 
     def _set_proxy_info(self, repo):
         proxy = ""
@@ -276,10 +317,55 @@ class UpdateAction:
                 url = url.lstrip('/')
             return basejoin(base, url)
 
+    def update_repo(self, old_repo, new_repo):
+        """
+        Checks an existing repo definition against a potentially updated
+        version created from most recent entitlement certificates and
+        configuration. Creates, updates, and removes properties as
+        appropriate and returns the number of changes made. (if any)
+
+        This method should only be used in disconnected cases!
+        """
+        if self.identity.is_valid() and self.override_supported:
+            log.error("Can not update repos when registered!")
+            raise UnsupportedOperationException()
+
+        changes_made = 0
+
+        for key, mutable, default in Repo.PROPERTIES:
+            new_val = new_repo.get(key)
+
+            # Mutable properties should be added if not currently defined,
+            # otherwise left alone.
+            if mutable:
+                if (new_val is not None) and (not old_repo[key]):
+                    if old_repo[key] == new_val:
+                        continue
+                    old_repo[key] = new_val
+                    changes_made += 1
+
+            # Immutable properties should be always be added/updated,
+            # and removed if undefined in the new repo definition.
+            else:
+                if new_val is None or (new_val.strip() == ""):
+                    # Immutable property should be removed:
+                    if key in old_repo.keys():
+                        del old_repo[key]
+                        changes_made += 1
+                    continue
+
+                # Unchanged:
+                if old_repo[key] == new_val:
+                    continue
+
+                old_repo[key] = new_val
+                changes_made += 1
+
+        return changes_made
+
 
 class Repo(dict):
-
-    # (name, mutable, default)
+    # (name, mutable, default) - The mutability information is only used in disconnected cases
     PROPERTIES = (
         ('name', 0, None),
         ('baseurl', 0, None),
@@ -298,7 +384,8 @@ class Repo(dict):
     )
 
     def __init__(self, repo_id, existing_values=None):
-        existing_values = existing_values or {}
+        # existing_values is a list of 2-tuples
+        existing_values = existing_values or []
         self.id = self._clean_id(repo_id)
 
         # used to store key order, so we can write things out in the order
@@ -347,61 +434,10 @@ class Repo(dict):
         return tuple([(k, self[k]) for k in self._order if
                      k in self and self[k]])
 
-    def update(self, new_repo):
-        """
-        Checks an existing repo definition against a potentially updated
-        version created from most recent entitlement certificates and
-        configuration. Creates, updates, and removes properties as
-        appropriate and returns the number of changes made. (if any)
-        """
-        changes_made = 0
-
-        for key, mutable, default in self.PROPERTIES:
-            new_val = new_repo.get(key)
-
-            # Mutable properties should be added if not currently defined,
-            # otherwise left alone.
-            if mutable:
-                if (new_val is not None) and (not self[key]):
-                    if self[key] == new_val:
-                        continue
-                    self[key] = new_val
-                    changes_made += 1
-
-            # Immutable properties should be always be added/updated,
-            # and removed if undefined in the new repo definition.
-            else:
-                if new_val is None or (new_val.strip() == ""):
-                    # Immutable property should be removed:
-                    if key in self.keys():
-                        del self[key]
-                        changes_made += 1
-                    continue
-
-                # Unchanged:
-                if self[key] == new_val:
-                    continue
-
-                self[key] = new_val
-                changes_made += 1
-
-        return changes_made
-
     def __setitem__(self, key, value):
         if key not in self._order:
             self._order.append(key)
         dict.__setitem__(self, key, value)
-
-    def __str__(self):
-        s = []
-        s.append('[%s]' % self.id)
-        for k in self.PROPERTIES:
-            v = self.get(k)
-            if v is None:
-                continue
-            s.append('%s=%s' % (k, v))
-
-        return '\n'.join(s)
 
     def __eq__(self, other):
         return (self.id == other.id)
@@ -523,19 +559,11 @@ class RepoFile(ConfigParser):
         s.append('# Certificate-Based Repositories')
         s.append('# Managed by (rhsm) subscription-manager')
         s.append('#')
+        s.append('# *** This file is auto-generated.  Changes made here will be over-written. ***')
+        s.append('# *** Use "subscription-manager override" if you wish to make changes. ***')
+        s.append('#')
         s.append('# If this file is empty and this system is subscribed consider ')
         s.append('# a "yum repolist" to refresh available repos')
         s.append('#')
         f.write('\n'.join(s))
         f.close()
-
-
-def main():
-    print 'Updating Certificate based repositories'
-    repolib = RepoLib()
-    updates = repolib.update()
-    print '%d updates required' % updates
-    print 'done'
-
-if __name__ == '__main__':
-    main()

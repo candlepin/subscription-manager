@@ -115,6 +115,13 @@ _subscription_manager_orgs()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
+_subscription_manager_repo_override()
+{
+  local opts="--repo --list --add --remove --remove-all
+              ${_subscription_manager_common_opts}"
+  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
 _subscription_manager_plugins()
 {
   local opts="--list --listhooks --listslots --verbose
@@ -194,7 +201,7 @@ _subscription_manager()
 
   # top-level commands and options
   opts="attach auto-attach clean config environments facts identity import list orgs
-        plugins redeem refresh register release remove repos service-level status
+        repo-override plugins redeem refresh register release remove repos service-level status
         subscribe unregister unsubscribe version"
 
   case "${first}" in
@@ -232,6 +239,10 @@ _subscription_manager()
       ;;
       auto-attach)
       "_subscription_manager_auto_attach" "${cur}" "${prev}"
+      return 0
+      ;;
+      repo-override)
+      "_subscription_manager_repo_override" "${cur}" "${prev}"
       return 0
       ;;
       *)
