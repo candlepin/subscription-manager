@@ -75,6 +75,30 @@ Permanent HW addr: 52:54:00:66:20:f7
 Slave queue ID: 0
 """
 
+OS_RELEASE = """NAME="Awesome OS"
+VERSION="42 (Go4It)"
+ID="awesomeos"
+VERSION_ID="42"
+PRETTY_NAME="Awesome OS 42 (Go4It)"
+CPE_NAME="cpe:/o:awesomeos:best_linux:42:beta:server"
+
+REDHAT_BUGZILLA_PRODUCT="AwesomeOS Enterprise 42"
+REDHAT_BUGZILLA_PRODUCT_VERSION=42.0
+REDHAT_SUPPORT_PRODUCT="AwesomeOS Enterprise"
+REDHAT_SUPPORT_PRODUCT_VERSION=42.0"""
+
+OS_RELEASE_COLON = """NAME="Awesome OS"
+VERSION="42 (Go4It)"
+ID="awesomeos"
+VERSION_ID="42"
+PRETTY_NAME="Awesome OS 42 (Go4It)"
+CPE_NAME="cpe:/o:awesomeos:best_linux:42:be\:ta:server"
+
+REDHAT_BUGZILLA_PRODUCT="AwesomeOS Enterprise 42"
+REDHAT_BUGZILLA_PRODUCT_VERSION=42.0
+REDHAT_SUPPORT_PRODUCT="AwesomeOS Enterprise"
+REDHAT_SUPPORT_PRODUCT_VERSION=42.0"""
+
 
 class TestParseRange(unittest.TestCase):
     def test_single(self):
@@ -192,27 +216,91 @@ class HardwareProbeTests(fixture.SubManFixture):
         MockOpen.side_effect = IOError()
         self.assertRaises(IOError, hw.get_release_info)
 
+    @patch("os.path.exists")
     @patch("__builtin__.open")
-    def test_distro_bogus_content_no_platform_module(self, MockOpen):
+    def test_distro_bogus_content_no_platform_module(self, MockOpen, MockExists):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        MockExists.side_effect = [False, True]
+        hwprobe.platform = None
+        MockOpen.return_value.readline.return_value = "this is not really a release file of any sort"
+        self.assertEquals(hw.get_release_info(), {'distribution.version': 'Unknown',
+            'distribution.name': 'Unknown', 'distribution.id': 'Unknown'})
+
+    @patch("os.path.exists")
+    @patch("__builtin__.open")
+    def test_distro(self, MockOpen, MockExists):
+        reload(hwprobe)
+        MockExists.side_effect = [False, True]
+        hw = hwprobe.Hardware()
+        MockOpen.return_value.readline.return_value = "Awesome OS release 42 (Go4It)"
+        self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
+            'distribution.id': 'Go4It'})
+
+    @patch("os.path.exists")
+    @patch("__builtin__.open")
+    def test_distro_newline_in_release(self, MockOpen, MockExists):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        MockExists.side_effect = [False, True]
+        MockOpen.return_value.readline.return_value = "Awesome OS release 42 (Go4It)\n\n"
+        self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
+            'distribution.id': 'Go4It'})
+
+    @patch("os.path.exists")
+    @patch("__builtin__.open")
+    def test_manual_distro_bogus_content_os_release(self, MockOpen, MockExists):
         reload(hwprobe)
         hw = hwprobe.Hardware()
         hwprobe.platform = None
-        MockOpen.return_value.readline.return_value = "this is not really a release file of any sort"
-        self.assertEquals(hw.get_release_info(), {'distribution.version': 'Unknown', 'distribution.name': 'Unknown', 'distribution.id': 'Unknown'})
+        MockExists.return_value = True
+        MockOpen.return_value.readlines.return_value = ["This is not really a release file of any sort"]
+        self.assertEquals(hw.get_release_info(), {'distribution.version': 'Unknown',
+            'distribution.name': 'Unknown', 'distribution.id': 'Unknown'})
 
+    @patch("os.path.exists")
     @patch("__builtin__.open")
-    def test_distro(self, MockOpen):
+    def test_distro_with_platform(self, MockOpen, MockExists):
         reload(hwprobe)
+        MockExists.return_value = False
         hw = hwprobe.Hardware()
         MockOpen.return_value.readline.return_value = "Awesome OS release 42 (Go4It)"
-        self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS', 'distribution.id': 'Go4It'})
+        MockOpen.return_value.read.return_value = "Awesome OS release 42 (Go4It)"
+        self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
+            'distribution.id': 'Go4It', 'distribution.version.modifier': 'Unknown'})
 
+    @patch("os.path.exists")
     @patch("__builtin__.open")
-    def test_distro_newline_in_release(self, MockOpen):
+    def test_manual_distro_with_modifier(self, MockOpen, MockExists):
         reload(hwprobe)
+        MockExists.side_effect = [False, True]
         hw = hwprobe.Hardware()
-        MockOpen.return_value.readline.return_value = "Awesome OS release 42 (Go4It)\n\n"
-        self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS', 'distribution.id': 'Go4It'})
+        hwprobe.platform = None
+        MockOpen.return_value.readline.return_value = "Awesome OS release 42 Mega (Go4It)"
+        self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
+            'distribution.id': 'Go4It', 'distribution.version.modifier': 'mega'})
+
+    @patch("os.path.exists")
+    @patch("__builtin__.open")
+    def test_distro_os_release(self, MockOpen, MockExists):
+        reload(hwprobe)
+        MockExists.return_value = True
+        hw = hwprobe.Hardware()
+        hwprobe.platform = None
+        MockOpen.return_value.readlines.return_value = OS_RELEASE.split('\n')
+        self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
+            'distribution.id': 'Go4It', 'distribution.version.modifier': 'beta'})
+
+    @patch("os.path.exists")
+    @patch("__builtin__.open")
+    def test_distro_os_release_colon(self, MockOpen, MockExists):
+        reload(hwprobe)
+        MockExists.return_value = True
+        hw = hwprobe.Hardware()
+        hwprobe.platform = None
+        MockOpen.return_value.readlines.return_value = OS_RELEASE_COLON.split('\n')
+        self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
+            'distribution.id': 'Go4It', 'distribution.version.modifier': 'be:ta'})
 
     def test_get_arch(self):
         reload(hwprobe)

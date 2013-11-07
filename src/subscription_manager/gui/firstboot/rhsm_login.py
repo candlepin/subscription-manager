@@ -28,6 +28,7 @@ from subscription_manager.injection import PLUGIN_MANAGER, require
 
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
+from subscription_manager.hwprobe import Hardware
 from subscription_manager.gui.firstboot_base import RhsmFirstbootModule
 from subscription_manager.gui import managergui
 from subscription_manager.gui import registergui
@@ -48,7 +49,7 @@ try:
 except ImportError:
     log.debug("no rhn-client-tools modules could be imported")
 
-MANUALLY_SUBSCRIBE_PAGE = 10
+MANUALLY_SUBSCRIBE_PAGE = 11
 
 
 class SelectSLAScreen(registergui.SelectSLAScreen):
@@ -145,6 +146,9 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
             self._parent.finish_registration(failed=True)
 
     def pre(self):
+        # TODO: this looks like it needs updating now that we run
+        # firstboot without rhn client tools.
+
         # Because the RHN client tools check if certs exist and bypass our
         # firstboot module if so, we know that if we reach this point and
         # identity certs exist, someone must have hit the back button.
@@ -212,6 +216,22 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         self._screens.append(screen)
         screen.index = self.register_notebook.append_page(screen.container)
 
+        # Will be False if we are on an older RHEL version where
+        # rhn-client-tools already does some things so we don't have to.
+        self.standalone = True
+        distribution = Hardware().get_distribution()
+        log.debug("Distribution: %s" % str(distribution))
+        try:
+            dist_version = float(distribution[1])
+            # We run this for Fedora as well, but all we really care about here
+            # is if this is prior to RHEL 7, so this comparison should be safe.
+            if dist_version < 7:
+                self.standalone = False
+        except Exception, e:
+            log.error("Unable to parse a distribution version.")
+            log.exception(e)
+        log.debug("Running standalone firstboot: %s" % self.standalone)
+
         self.manual_message = None
 
         self._skip_apply_for_page_jump = False
@@ -221,6 +241,16 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         self.interface = None
 
         self._apply_result = self._RESULT_FAILURE
+
+    def _set_initial_screen(self):
+        """
+        Override parent method as in some cases, we use a different
+        starting screen.
+        """
+        if self.standalone:
+            self._set_screen(registergui.INFO_PAGE)
+        else:
+            self._set_screen(registergui.CHOOSE_SERVER_PAGE)
 
     def _read_rhn_proxy_settings(self):
         if not rhn_config:
@@ -340,7 +370,6 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # to the main register screen.
         # NOTE: On EL5 this does not appear to be called when the user
         # presses Back, only when they go through the first time.
-
         self.show()
 
     def focus(self):
@@ -410,6 +439,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         pass
 
     def finish_registration(self, failed=False):
+        log.info("Finishing registration, failed=%s" % failed)
         if failed:
             self._set_navigation_sensitive(True)
             self._run_pre(registergui.CREDENTIALS_PAGE)

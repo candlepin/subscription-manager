@@ -16,6 +16,7 @@
 import gettext
 import logging
 import os
+import gtk
 
 from subscription_manager.gui import widgets
 
@@ -49,6 +50,10 @@ class FilterOptionsWindow(widgets.GladeWidget):
         super(FilterOptionsWindow, self).__init__(GLADE_XML)
         self.filters = filters
         self.parent = parent
+
+        # Center on parent when opened.
+        self.filter_product_window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+        self.filter_product_window.set_transient_for(self.parent.parent_win)
 
         # Set all the filters to their default values before the signals are
         # connected.  Otherwise, their callbacks will be triggered when we

@@ -131,7 +131,7 @@ r_log (const char *level, const char *message, ...)
 #define error(msg, ...) r_log ("ERROR", msg, ##__VA_ARGS__)
 #define debug(msg, ...) if (show_debug) r_log ("DEBUG", msg, ##__VA_ARGS__)
 
-void
+static gboolean
 log_update (int delay)
 {
 	time_t update = time (NULL);
@@ -149,6 +149,7 @@ log_update (int delay)
 		fprintf (updatefile, "%s", buf);
 		fclose (updatefile);
 	}
+	return TRUE;
 }
 
 /* Handle program signals */

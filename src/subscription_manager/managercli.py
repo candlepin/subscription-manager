@@ -26,7 +26,6 @@ import os
 import socket
 import sys
 from time import localtime, strftime, strptime
-import unicodedata
 
 from M2Crypto import SSL
 from M2Crypto import X509
@@ -56,6 +55,8 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
         restart_virt_who, get_terminal_width
 from subscription_manager.overrides import Overrides, Override
 
+from yum.i18n import utf8_width
+
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -64,7 +65,6 @@ cfg = rhsm.config.initConfig()
 
 
 NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
-LIBRARY_ENV_NAME = "library"
 
 # Translates the cert sorter status constants:
 STATUS_MAP = {
@@ -485,7 +485,7 @@ class UserPassCommand(CliCommand):
         if not password:
             while not password:
                 password = getpass.getpass(_("Password: "))
-        return (username, password)
+        return (username.strip(), password.strip())
 
     # lazy load the username and password, prompting for them if they weren't
     # given as options. this lets us not prompt if another option fails,
@@ -613,7 +613,7 @@ class IdentityCommand(UserPassCommand):
                 ownername = owner['displayName']
                 ownerid = owner['key']
 
-                print _('Current identity is: %s') % consumerid
+                print _('system identity: %s') % consumerid
                 print _('name: %s') % consumer_name
                 print _('org name: %s') % ownername
                 print _('org ID: %s') % ownerid
@@ -692,13 +692,7 @@ class EnvironmentsCommand(OrgCommand):
         self._add_url_options()
 
     def _get_enviornments(self, org):
-        raw_environments = self.cp.getEnvironmentList(org)
-        environments = []
-        # Remove the library environemnt
-        for env in raw_environments:
-            if env['name'].lower() != LIBRARY_ENV_NAME.lower():
-                environments.append(env)
-        return environments
+        return self.cp.getEnvironmentList(org)
 
     def _do_command(self):
         self._validate_options()
@@ -1650,8 +1644,6 @@ class FactsCommand(CliCommand):
             facts = Facts(ent_dir=self.entitlement_dir,
                           prod_dir=self.product_dir)
             fact_dict = facts.get_facts()
-            if ConsumerIdentity.exists():
-                managerlib.enhance_facts(fact_dict, ConsumerIdentity.read())
             fact_keys = fact_dict.keys()
             fact_keys.sort()
             for key in fact_keys:
@@ -2405,15 +2397,8 @@ class ManagerCLI(CLI):
         return CLI.main(self)
 
 
-def width(in_str):
-    if not isinstance(in_str, unicode):
-        in_str = in_str.decode("utf-8")
-    # From http://stackoverflow.com/questions/2476953/ user Josh Lee
-    return sum(1 + (unicodedata.east_asian_width(c) in "WF") for c in in_str)
-
-
 def ljust_wide(in_str, padding):
-    return in_str + ' ' * (padding - width(in_str))
+    return in_str + ' ' * (padding - utf8_width(in_str))
 
 
 def columnize(caption_list, callback, *args, **kwargs):
@@ -2430,7 +2415,7 @@ def columnize(caption_list, callback, *args, **kwargs):
     """
     indent = kwargs.get('indent', 0)
     caption_list = [" " * indent + caption for caption in caption_list]
-    padding = min(sorted(map(width, caption_list))[-1] + 1,
+    padding = min(sorted(map(utf8_width, caption_list))[-1] + 1,
             int(get_terminal_width() / 2))
     padded_list = []
     for caption in caption_list:
@@ -2493,23 +2478,23 @@ def format_name(name, indent, max_length):
     # Split here and build it back up by word, this way we get word wrapping
     while words:
         word = words.pop(0)
-        if current + width(word) <= max_length:
-            current += width(word) + 1  # Have to account for the extra space
+        if current + utf8_width(word) <= max_length:
+            current += utf8_width(word) + 1  # Have to account for the extra space
             line.append(word)
         else:
             if line:
                 add_line()
             # If the word will not fit, break it
-            if indent + width(word) > max_length:
+            if indent + utf8_width(word) > max_length:
                 split_index = 0
-                while(width(word[:split_index + 1]) + indent <= max_length):
+                while(utf8_width(word[:split_index + 1]) + indent <= max_length):
                     split_index += 1
                 words.insert(0, word[split_index:])
                 word = word[:split_index]
             line = [word]
             if indent and lines:
                 line.insert(0, ' ' * (indent - 1))
-            current = indent + width(word) + 1
+            current = indent + utf8_width(word) + 1
 
     add_line()
     return '\n'.join(lines)

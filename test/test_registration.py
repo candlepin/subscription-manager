@@ -14,10 +14,12 @@
 #
 from mock import Mock, patch
 
-from stubs import StubUEP
+from stubs import StubUEP, StubProductCertificate, StubProduct
 import rhsm.connection as connection
 from subscription_manager.managercli import RegisterCommand
 from fixture import SubManFixture
+
+import subscription_manager.injection as inj
 
 
 class CliRegistrationTests(SubManFixture):
@@ -105,6 +107,9 @@ class CliRegistrationTests(SubManFixture):
         cmd.facts.write_cache = Mock()
         cmd.facts.update_check = Mock()
 
+        prod_dir = inj.require(inj.PROD_DIR)
+        prod_dir.certs = [StubProductCertificate(StubProduct('900'))]
+
         mock_certlib_instance = mock_certlib.return_value
 
         connection.UEPConnection.getConsumer = Mock(return_value={'uuid': '123123'})
@@ -114,3 +119,13 @@ class CliRegistrationTests(SubManFixture):
         self.assertTrue(mock_ipm_wc.call_count > 0)
 
         self.assertTrue(mock_certlib_instance.update.called)
+
+    def test_strip_username_and_password(self):
+
+        username, password = RegisterCommand._get_username_and_password(" ", " ")
+        self.assertTrue(username == "")
+        self.assertTrue(password == "")
+
+        username, password = RegisterCommand._get_username_and_password(" Jar Jar ", " Binks ")
+        self.assertTrue(username == "Jar Jar")
+        self.assertTrue(password == "Binks")

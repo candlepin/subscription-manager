@@ -1,6 +1,7 @@
 # Prefer systemd over sysv on Fedora 17+ and RHEL 7+
 %define use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
 %define use_dateutil (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 6)
+%define use_old_firstboot (0%{?rhel} && 0%{?rhel} <= 6)
 
 
 %define rhsm_plugins_dir   /usr/share/rhsm-plugins
@@ -11,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.5
+Version: 1.10.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -105,7 +106,11 @@ subscriptions.
 Summary: Firstboot screens for subscription manager
 Group: System Environment/Base
 Requires: %{name}-gui = %{version}-%{release}
+
+# Required for firstboot before RHEL 7:
+%if %use_old_firstboot
 Requires: rhn-setup-gnome
+%endif
 
 # Fedora can figure this out automatically, but RHEL cannot:
 Requires: librsvg2
@@ -316,11 +321,11 @@ rm -rf %{buildroot}
 
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
-# RHEL7 and beyond:
-%if 0%{?rhel} > 6
-%{_datadir}/firstboot/modules/rhsm_login.py*
-%else
+# RHEL 6 needs a different location for firstboot modules:
+%if %use_old_firstboot
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
+%else
+%{_datadir}/firstboot/modules/rhsm_login.py*
 %endif
 
 
@@ -386,6 +391,30 @@ fi
 %endif
 
 %changelog
+* Thu Nov 07 2013 ckozak <ckozak@redhat.com> 1.10.6-1
+- 985502: Use yum.i18n utf8_width function for string length in CLI
+  (ckozak@redhat.com)
+- 916666: Displayed 'Next System Check-In' is inaccuarate (wpoteat@redhat.com)
+- Change wording for identity in CLI command. (dgoodwin@redhat.com)
+- 1019753: Stop including a fake consumer UUID fact. (dgoodwin@redhat.com)
+- 1022198: Display highest suggested quantity in contract selection
+  (ckozak@redhat.com)
+- Hook up the 'why register' dialog from old rhn-client-tools.
+  (dgoodwin@redhat.com)
+- Add screen to describe and skip registration in Fedora/EL7 firstboot.
+  (dgoodwin@redhat.com)
+- Fix firstboot on Fedora 19. (dgoodwin@redhat.com)
+- Report distribution.version.modifier fact. ex 'beta' (ckozak@redhat.com)
+- Center filter dialog on parent window when opened (mstead@redhat.com)
+- Sort owner list in org selection screen (mstead@redhat.com)
+- 1004318: Bash completion for rct was not handing options and file lists
+  correctly. (bkearney@redhat.com)
+- 1023166: Strip leading and trailing whitespaces from all usernames and
+  passwords provided on the cli (bkearney@redhat.com)
+- 963579: Stop hiding the Library environment. (dgoodwin@redhat.com)
+- Fix layout issues with select sla screen in firstboot. (alikins@redhat.com)
+- Fix the layout for "Confirm Subscriptions" screen. (alikins@redhat.com)
+
 * Fri Oct 25 2013 ckozak <ckozak@redhat.com> 1.10.5-1
 - 1021581: account/contract display nothing when no data exists
   (ckozak@redhat.com)
