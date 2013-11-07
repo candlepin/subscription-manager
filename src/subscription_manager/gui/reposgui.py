@@ -20,7 +20,7 @@ import gtk
 
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.gui import widgets
-from subscription_manager.injection import IDENTITY, require
+from subscription_manager.injection import IDENTITY, CP_PROVIDER, require
 from subscription_manager.gui.storage import MappedListStore
 from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\
     SelectionWrapper, HasSortableWidget
@@ -41,11 +41,11 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
                     'gpgcheck_remove_button', 'gpgcheck_edit_button',
                     'baseurl_text', 'no_repos_label_container', 'no_repos_label']
 
-    def __init__(self, backend, parent):
+    def __init__(self, parent):
         super(RepositoriesDialog, self).__init__('repositories.glade')
-        self.backend = backend
         self.identity = require(IDENTITY)
-        self.overrides = Overrides(self.backend.cp_provider.get_consumer_auth_cp())
+        cp_provider = require(CP_PROVIDER)
+        self.overrides = Overrides(cp_provider.get_consumer_auth_cp())
 
         self.glade.signal_autoconnect({
                 "on_dialog_delete_event": self._on_close,

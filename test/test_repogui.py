@@ -15,7 +15,6 @@
 from mock import Mock
 from fixture import SubManFixture
 from subscription_manager.gui.reposgui import RepositoriesDialog
-from stubs import StubBackend
 from subscription_manager.repolib import Repo
 from subscription_manager.overrides import Override
 
@@ -24,7 +23,6 @@ class TestReposGui(SubManFixture):
 
     def setUp(self):
         SubManFixture.setUp(self)
-        self.backend = StubBackend()
 
         self.repo_lib = Mock()
         self.repo_lib.get_repos.return_value = []
@@ -33,7 +31,7 @@ class TestReposGui(SubManFixture):
         self.overrides.repo_lib = self.repo_lib
         self.overrides.get_overrides.return_value = []
 
-        self.dialog = RepositoriesDialog(self.backend, None)
+        self.dialog = RepositoriesDialog(None)
         self.dialog.overrides = self.overrides
 
     def test_show_dialog_with_no_overrides(self):

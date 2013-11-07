@@ -159,7 +159,7 @@ class MainWindow(widgets.GladeWidget):
         self.preferences_dialog = PreferencesDialog(self.backend,
                                                     self._get_window())
 
-        self.repos_dialog = RepositoriesDialog(self.backend, self._get_window())
+        self.repos_dialog = RepositoriesDialog(self._get_window())
 
         self.import_sub_dialog = ImportSubDialog()
 
