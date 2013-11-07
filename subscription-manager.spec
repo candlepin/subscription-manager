@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.5
+Version: 1.10.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -390,6 +390,30 @@ fi
 %endif
 
 %changelog
+* Thu Nov 07 2013 ckozak <ckozak@redhat.com> 1.10.6-1
+- 985502: Use yum.i18n utf8_width function for string length in CLI
+  (ckozak@redhat.com)
+- 916666: Displayed 'Next System Check-In' is inaccuarate (wpoteat@redhat.com)
+- Change wording for identity in CLI command. (dgoodwin@redhat.com)
+- 1019753: Stop including a fake consumer UUID fact. (dgoodwin@redhat.com)
+- 1022198: Display highest suggested quantity in contract selection
+  (ckozak@redhat.com)
+- Hook up the 'why register' dialog from old rhn-client-tools.
+  (dgoodwin@redhat.com)
+- Add screen to describe and skip registration in Fedora/EL7 firstboot.
+  (dgoodwin@redhat.com)
+- Fix firstboot on Fedora 19. (dgoodwin@redhat.com)
+- Report distribution.version.modifier fact. ex 'beta' (ckozak@redhat.com)
+- Center filter dialog on parent window when opened (mstead@redhat.com)
+- Sort owner list in org selection screen (mstead@redhat.com)
+- 1004318: Bash completion for rct was not handing options and file lists
+  correctly. (bkearney@redhat.com)
+- 1023166: Strip leading and trailing whitespaces from all usernames and
+  passwords provided on the cli (bkearney@redhat.com)
+- 963579: Stop hiding the Library environment. (dgoodwin@redhat.com)
+- Fix layout issues with select sla screen in firstboot. (alikins@redhat.com)
+- Fix the layout for "Confirm Subscriptions" screen. (alikins@redhat.com)
+
 * Fri Oct 25 2013 ckozak <ckozak@redhat.com> 1.10.5-1
 - 1021581: account/contract display nothing when no data exists
   (ckozak@redhat.com)
