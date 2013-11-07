@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.10.5
+Version: 1.10.6
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,17 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Nov 07 2013 ckozak <ckozak@redhat.com> 1.10.6-1
+- Fix a crash that occurs when rhsm.conf is missing (ckozak@redhat.com)
+- Correct implementation of __eq__ for Content objects. (awood@redhat.com)
+- Log ca_dir and loaded ca pems on one line. (alikins@redhat.com)
+- Add default full_refresh_on_yum option. (awood@redhat.com)
+- Send empty JSON list when deleting all overrides. (awood@redhat.com)
+- Add __hash__ method to Content classes. (awood@redhat.com)
+- Add method to get all content overrides for a consumer (mstead@redhat.com)
+- Add methods to set and delete content overrides. (awood@redhat.com)
+- 1008808: json ValueErrors have no .msg attribute (alikins@redhat.com)
+
 * Fri Oct 25 2013 ckozak <ckozak@redhat.com> 1.10.5-1
 - 1006748: replace simplejson with 'ourjson' (alikins@redhat.com)
 - Log the new requestUuid from candlepin if it is present in the response.
