@@ -19,6 +19,7 @@ from rhsm.connection import ContentConnection, UEPConnection, drift_check, Restl
     UnauthorizedException, ForbiddenException, AuthenticationException, RestlibException, \
     RemoteServerException
 import mock
+import random
 
 
 class ConnectionTests(unittest.TestCase):
@@ -172,3 +173,16 @@ class RestlibTests(unittest.TestCase):
         except Exception, ex:
             self.assertTrue(isinstance(ex, expected_exception))
             self.assertEquals(expected_error_code, ex.code)
+
+
+class OwnerInfoTests(unittest.TestCase):
+    def setUp(self):
+        self.cp = UEPConnection(username="admin", password="admin",
+                                insecure=True)
+        self.owner_key = "test_owner_%d" % (random.randint(1, 5000))
+        self.cp.conn.request_post('/owners', {'key': self.owner_key,
+                                              'displayName': self.owner_key})
+
+    def test_get_owner_info(self):
+        owner_info = self.cp.getOwnerInfo(self.owner_key)
+        self.assertTrue(owner_info is not None)
