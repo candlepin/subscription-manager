@@ -16,16 +16,15 @@
 import gettext
 import logging
 import os
-import re
 import signal
 import socket
-from urlparse import urlparse
 
 from M2Crypto.SSL import SSLError
 
 from subscription_manager.branding import get_branding
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.hwprobe import ClassicCheck
+from rhsm.utils import parse_url
 from rhsm.connection import UEPConnection, RestlibException, GoneException
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
@@ -38,61 +37,18 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 gettext.textdomain("rhsm")
 
 
-def remove_scheme(uri):
-    """Remove the scheme component from a URI."""
-    return re.sub("^[A-Za-z][A-Za-z0-9+-.]*://", "", uri)
-
-
-class ServerUrlParseError(Exception):
-    def __init__(self, serverurl, msg=None):
-        self.serverurl = serverurl
-        self.msg = msg
-
-
-class ServerUrlParseErrorEmpty(ServerUrlParseError):
-    pass
-
-
-class ServerUrlParseErrorNone(ServerUrlParseError):
-    pass
-
-
-class ServerUrlParseErrorPort(ServerUrlParseError):
-    pass
-
-
-class ServerUrlParseErrorPath(ServerUrlParseError):
-    pass
-
-
-class ServerUrlParseErrorScheme(ServerUrlParseError):
-    pass
-
-
-class ServerUrlParseErrorJustScheme(ServerUrlParseError):
-    pass
-
-
-class UnsupportedOperationException(Exception):
-    """Thrown when a call is made that is unsupported in the current
-    state.  For example, if a call is made to a deprecated API when
-    a newer API is available.
-    """
-    pass
-
-
 def parse_server_info(local_server_entry):
     return parse_url(local_server_entry,
                      DEFAULT_HOSTNAME,
                      DEFAULT_PORT,
-                     DEFAULT_PREFIX)
+                     DEFAULT_PREFIX)[2:]
 
 
 def parse_baseurl_info(local_server_entry):
     return parse_url(local_server_entry,
                      DEFAULT_CDN_HOSTNAME,
                      DEFAULT_CDN_PORT,
-                     DEFAULT_CDN_PREFIX)
+                     DEFAULT_CDN_PREFIX)[2:]
 
 
 def format_baseurl(hostname, port, prefix):
@@ -114,112 +70,6 @@ def format_baseurl(hostname, port, prefix):
     return "https://%s:%s%s" % (hostname,
                                  port,
                                  prefix)
-
-
-def has_bad_scheme(url):
-    # Don't allow urls to start with :/ http/ https/ non http/httpsm or http(s) with single /
-    match_bad = '(https?[:/])|(:/)|(\S+://)'
-    match_good = 'https?://'
-    # Testing good first allows us to exclude some regex for bad
-    if re.match(match_good, url):
-        return False
-    if re.match(match_bad, url):
-        return True
-    return False
-
-
-def has_good_scheme(url):
-    match = re.match("https?://(\S+)?", url)
-    if not match:
-        return False
-    # a good scheme alone is not really a good scheme
-    if not match.group(1):
-        raise ServerUrlParseErrorJustScheme(url,
-                msg=_("Server URL is just a schema. Should include hostname, and/or port and path"))
-    return True
-
-
-def parse_url(local_server_entry,
-              default_hostname=None,
-              default_port=None,
-              default_prefix=None):
-    """
-    Parse hostname, port, and webapp prefix from the string a user entered.
-
-    Expected format: hostname:port/prefix
-
-    Port and prefix are optional.
-
-    Returns:
-        a tuple of (hostname, port, path)
-    """
-    # Adding http:// onto the front of the hostname
-
-    if local_server_entry == "":
-        raise ServerUrlParseErrorEmpty(local_server_entry,
-                                       msg=_("Server URL can not be empty"))
-
-    if local_server_entry is None:
-        raise ServerUrlParseErrorNone(local_server_entry,
-                                      msg=_("Server URL can not be None"))
-
-    # good_url in this case meaning a schema we support, and
-    # _something_ else. This is to make urlparse happy
-    good_url = None
-
-    # handle any known or troublesome or bogus typo's, etc
-    if has_bad_scheme(local_server_entry):
-        raise ServerUrlParseErrorScheme(local_server_entry,
-            msg=_("Server URL has an invalid scheme. http:// and https:// are supported"))
-
-    # we want to see if we have a good scheme, and
-    # at least _something_ else
-    if has_good_scheme(local_server_entry):
-        good_url = local_server_entry
-
-    # not having a good scheme could just mean we don't have a scheme,
-    # so let's include one so urlparse doesn't freak
-    if not good_url:
-        good_url = "https://%s" % local_server_entry
-
-    #FIXME: need a try except here? docs
-    # don't seem to indicate any expected exceptions
-    result = urlparse(good_url)
-    netloc = result[1].split(":")
-
-    # in some cases, if we try the attr accessors, we'll
-    # get a ValueError deep down in urlparse, particular if
-    # port ends up being None
-    #
-    # So maybe check result.port/path/hostname for None, and
-    # throw an exception in those cases.
-    # adding the schem seems to avoid this though
-    port = default_port
-    if len(netloc) > 1:
-        if netloc[1] != "":
-            port = str(netloc[1])
-        else:
-            raise ServerUrlParseErrorPort(local_server_entry,
-                                      msg=_("Server URL port could not be parsed"))
-
-    # path can be None?
-    prefix = default_prefix
-    if result[2] is not None:
-        if result[2] != '':
-            prefix = result[2]
-
-    hostname = default_hostname
-    if netloc[0] is not None:
-        if netloc[0] != "":
-            hostname = netloc[0]
-
-    try:
-        int(port)
-    except ValueError:
-        raise ServerUrlParseErrorPort(local_server_entry,
-                                      msg=_("Server URL port should be numeric"))
-
-    return (hostname, port, prefix)
 
 
 class MissingCaCertException(Exception):

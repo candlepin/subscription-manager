@@ -1,11 +1,13 @@
 import unittest
 
 from mock import Mock, patch
-from subscription_manager.utils import remove_scheme, parse_server_info, \
-    parse_baseurl_info, format_baseurl, ServerUrlParseErrorEmpty, \
-    ServerUrlParseErrorNone, ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
-    ServerUrlParseErrorJustScheme, get_version, get_client_versions, \
-    get_server_versions, Versions, friendly_join
+from rhsm.utils import ServerUrlParseErrorEmpty, \
+    ServerUrlParseErrorNone, ServerUrlParseErrorPort, \
+    ServerUrlParseErrorScheme, ServerUrlParseErrorJustScheme
+from subscription_manager.utils import parse_server_info, \
+    parse_baseurl_info, format_baseurl, \
+    get_version, get_client_versions, \
+    get_server_versions, Versions, friendly_join, is_true_value
 from subscription_manager import certlib
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
@@ -247,28 +249,6 @@ class TestParseBaseUrlInfo(unittest.TestCase):
         self.assertEquals("https://foo-bar:8088", format_baseurl(hostname, port, prefix))
 
 
-class TestRemoveScheme(unittest.TestCase):
-    def test_colon_port(self):
-        proxy_url = "proxy.example.com:3128"
-        res = remove_scheme(proxy_url)
-        self.assertEquals(res, proxy_url)
-
-    def test_http_scheme(self):
-        proxy_url = "http://example.com:3128"
-        res = remove_scheme(proxy_url)
-        self.assertEquals(res, "example.com:3128")
-
-    def test_https_scheme(self):
-        proxy_url = "https://example.com:3128"
-        res = remove_scheme(proxy_url)
-        self.assertEquals(res, "example.com:3128")
-
-    def test_no_port(self):
-        proxy_url = "proxy.example.com"
-        res = remove_scheme(proxy_url)
-        self.assertEquals(res, proxy_url)
-
-
 NOT_COLLECTED = "non-collected-package"
 
 
@@ -451,3 +431,25 @@ class TestFriendlyJoin(unittest.TestCase):
         self.assertEquals("Three, Two, and One", friendly_join(set(["One", "Two", "Three"])))
         self.assertEquals("", friendly_join([]))
         self.assertEquals("", friendly_join(None))
+
+
+class TestTrueValue(unittest.TestCase):
+
+    def test_true_value(self):
+        self.assertTrue(is_true_value("1"))
+        self.assertTrue(is_true_value("True"))
+        self.assertTrue(is_true_value("true"))
+        self.assertTrue(is_true_value("truE"))
+        self.assertTrue(is_true_value("yes"))
+        self.assertTrue(is_true_value("YeS"))
+
+    def test_false_value(self):
+        self.assertFalse(is_true_value("0"))
+        self.assertFalse(is_true_value("False"))
+        self.assertFalse(is_true_value("FalsE"))
+        self.assertFalse(is_true_value("no"))
+        self.assertFalse(is_true_value("nO"))
+        self.assertFalse(is_true_value("y"))
+        self.assertFalse(is_true_value("n"))
+        self.assertFalse(is_true_value("t"))
+        self.assertFalse(is_true_value("f"))

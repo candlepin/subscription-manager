@@ -32,6 +32,7 @@ from rhn import rpclib
 
 import rhsm.config
 from rhsm.connection import UEPConnection, RemoteServerException, RestlibException
+from rhsm.utils import ServerUrlParseError
 
 _ = gettext.gettext
 
@@ -46,7 +47,7 @@ from subscription_manager.i18n_optparse import OptionParser, \
         USAGE, WrappedIndentedHelpFormatter
 from subscription_manager.productid import ProductDatabase
 from subscription_manager import repolib
-from subscription_manager.utils import parse_server_info, ServerUrlParseError
+from subscription_manager.utils import parse_server_info
 from rhsm import ourjson as json
 
 _RHNLIBPATH = "/usr/share/rhn"

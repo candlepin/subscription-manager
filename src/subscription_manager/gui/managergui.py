@@ -32,6 +32,7 @@ import gtk.glade
 
 import rhsm.config as config
 import rhsm.connection as connection
+from rhsm.utils import get_env_proxy_info
 
 from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib
@@ -118,12 +119,15 @@ class Backend(object):
 
     def _create_content_connection(self):
         (cdn_hostname, cdn_port, cdn_prefix) = parse_baseurl_info(cfg.get('rhsm', 'baseurl'))
+        # get the proxy info from the env if available
+        info = get_env_proxy_info()
+
         return connection.ContentConnection(host=cdn_hostname,
-                                            ssl_port=cdn_port,
-                                            proxy_hostname=cfg.get('server', 'proxy_hostname'),
-                                            proxy_port=cfg.get_int('server', 'proxy_port'),
-                                            proxy_user=cfg.get('server', 'proxy_user'),
-                                            proxy_password=cfg.get('server', 'proxy_password'))
+                ssl_port=cdn_port,
+                proxy_hostname=cfg.get('server', 'proxy_hostname') or info['proxy_hostname'],
+                proxy_port=cfg.get_int('server', 'proxy_port') or info['proxy_port'],
+                proxy_user=cfg.get('server', 'proxy_user') or info['proxy_username'],
+                proxy_password=cfg.get('server', 'proxy_password') or info['proxy_password'])
 
 
 class MainWindow(widgets.GladeWidget):
