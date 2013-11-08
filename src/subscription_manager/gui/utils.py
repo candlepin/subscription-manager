@@ -87,6 +87,10 @@ def handle_gui_exception(e, msg, parent, format_msg=True, log_msg=None):
         # NOTE: yes this looks a lot like the socket error, but I think these
         # were actually intended to display slightly different messages:
         show_error_window(_("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."), parent=parent)
+    elif isinstance(e, connection.UnauthorizedException):
+        show_error_window(_("Unauthorized: Invalid credentials for request."), parent=parent)
+    elif isinstance(e, connection.ForbiddenException):
+        show_error_window(_("Forbidden: Invalid credentials for request."), parent=parent)
     elif isinstance(e, connection.RemoteServerException):
         # This is what happens when there's an issue with the server on the other side of the wire
         show_error_window(_("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."), parent=parent)
