@@ -52,7 +52,7 @@ from subscription_manager.repolib import RepoLib, RepoFile
 from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
-        restart_virt_who, get_terminal_width
+        restart_virt_who, get_terminal_width, get_env_proxy_info
 from subscription_manager.overrides import Overrides, Override
 
 from yum.i18n import utf8_width
@@ -334,11 +334,14 @@ class CliCommand(AbstractCLICommand):
                 print _("cannot parse argument: %s") % arg
             sys.exit(-1)
 
+        # get proxy information from env variable if available
+        info = get_env_proxy_info()
+
         # set proxy before we try to connect to server
-        self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
-        self.proxy_port = cfg.get_int('server', 'proxy_port')
-        self.proxy_user = cfg.get('server', 'proxy_user')
-        self.proxy_password = cfg.get('server', 'proxy_password')
+        self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname')) or info['proxy_hostname']
+        self.proxy_port = cfg.get_int('server', 'proxy_port') or info['proxy_port']
+        self.proxy_user = cfg.get('server', 'proxy_user') or info['proxy_username']
+        self.proxy_password = cfg.get('server', 'proxy_password') or info['proxy_password']
 
         self.server_hostname = cfg.get("server", "hostname")
         self.server_port = cfg.get("server", "port")

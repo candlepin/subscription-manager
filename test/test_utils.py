@@ -1,3 +1,4 @@
+import os
 import unittest
 
 from mock import Mock, patch
@@ -5,7 +6,8 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
     parse_baseurl_info, format_baseurl, ServerUrlParseErrorEmpty, \
     ServerUrlParseErrorNone, ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
     ServerUrlParseErrorJustScheme, get_version, get_client_versions, \
-    get_server_versions, Versions, friendly_join
+    get_server_versions, Versions, friendly_join, parse_url, is_true_value,\
+    get_env_proxy_info
 from subscription_manager import certlib
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
@@ -451,3 +453,133 @@ class TestFriendlyJoin(unittest.TestCase):
         self.assertEquals("Three, Two, and One", friendly_join(set(["One", "Two", "Three"])))
         self.assertEquals("", friendly_join([]))
         self.assertEquals("", friendly_join(None))
+
+
+class TestParseUrl(unittest.TestCase):
+
+    def test_username_password(self):
+        local_url = "http://user:pass@hostname:1111/prefix"
+        (username, password, hostname, port, prefix) = parse_url(local_url)
+        self.assertEquals("user", username)
+        self.assertEquals("pass", password)
+        self.assertEquals("hostname", hostname)
+        self.assertEquals("1111", port)
+        self.assertEquals("/prefix", prefix)
+
+    def test_no_password(self):
+        local_url = "http://user@hostname:1111/prefix"
+        (username, password, hostname, port, prefix) = parse_url(local_url)
+        self.assertEquals("user", username)
+        self.assertEquals(None, password)
+        self.assertEquals("hostname", hostname)
+        self.assertEquals("1111", port)
+        self.assertEquals("/prefix", prefix)
+
+    def test_no_userinfo(self):
+        local_url = "http://hostname:1111/prefix"
+        (username, password, hostname, port, prefix) = parse_url(local_url)
+        self.assertEquals(None, username)
+        self.assertEquals(None, password)
+        self.assertEquals("hostname", hostname)
+        self.assertEquals("1111", port)
+        self.assertEquals("/prefix", prefix)
+
+    def test_no_userinfo_with_at(self):
+        local_url = "http://@hostname:1111/prefix"
+        (username, password, hostname, port, prefix) = parse_url(local_url)
+        self.assertEquals(None, username)
+        self.assertEquals(None, password)
+        self.assertEquals("hostname", hostname)
+        self.assertEquals("1111", port)
+        self.assertEquals("/prefix", prefix)
+
+
+class TestProxyInfo(unittest.TestCase):
+
+    def test_https_proxy_info(self):
+        os.environ["https_proxy"] = "https://u:p@host:1111"
+        proxy_info = get_env_proxy_info()
+        self.assertEquals("u", proxy_info["proxy_username"])
+        self.assertEquals("p", proxy_info["proxy_password"])
+        self.assertEquals("host", proxy_info["proxy_hostname"])
+        self.assertEquals(int("1111"), proxy_info["proxy_port"])
+        os.environ.pop("https_proxy")
+
+    def test_http_proxy_info(self):
+        os.environ["http_proxy"] = "http://u:p@host:2222"
+        proxy_info = get_env_proxy_info()
+        self.assertEquals("u", proxy_info["proxy_username"])
+        self.assertEquals("p", proxy_info["proxy_password"])
+        self.assertEquals("host", proxy_info["proxy_hostname"])
+        self.assertEquals(int("2222"), proxy_info["proxy_port"])
+        os.environ.pop("http_proxy")
+
+    def test_http_proxy_info_allcaps(self):
+        os.environ["HTTP_PROXY"] = "http://u:p@host:3333"
+        proxy_info = get_env_proxy_info()
+        self.assertEquals("u", proxy_info["proxy_username"])
+        self.assertEquals("p", proxy_info["proxy_password"])
+        self.assertEquals("host", proxy_info["proxy_hostname"])
+        self.assertEquals(int("3333"), proxy_info["proxy_port"])
+        os.environ.pop("HTTP_PROXY")
+
+    def test_https_proxy_info_allcaps(self):
+        os.environ["HTTPS_PROXY"] = "http://u:p@host:4444"
+        proxy_info = get_env_proxy_info()
+        self.assertEquals("u", proxy_info["proxy_username"])
+        self.assertEquals("p", proxy_info["proxy_password"])
+        self.assertEquals("host", proxy_info["proxy_hostname"])
+        self.assertEquals(int("4444"), proxy_info["proxy_port"])
+        os.environ.pop("HTTPS_PROXY")
+
+    def test_order(self):
+        # should follow the order: HTTPS, https, HTTP, http
+        os.environ["HTTPS_PROXY"] = "http://u:p@host:1111"
+        os.environ["http_proxy"] = "http://notme:orme@host:2222"
+        proxy_info = get_env_proxy_info()
+        self.assertEquals("u", proxy_info["proxy_username"])
+        self.assertEquals("p", proxy_info["proxy_password"])
+        self.assertEquals("host", proxy_info["proxy_hostname"])
+        self.assertEquals(int("1111"), proxy_info["proxy_port"])
+        os.environ.pop("HTTPS_PROXY")
+        os.environ.pop("http_proxy")
+
+    def test_no_port(self):
+        os.environ["HTTPS_PROXY"] = "http://u:p@host"
+        proxy_info = get_env_proxy_info()
+        self.assertEquals("u", proxy_info["proxy_username"])
+        self.assertEquals("p", proxy_info["proxy_password"])
+        self.assertEquals("host", proxy_info["proxy_hostname"])
+        self.assertEquals(3128, proxy_info["proxy_port"])
+        os.environ.pop("HTTPS_PROXY")
+
+    def test_no_user_or_password(self):
+        os.environ["HTTPS_PROXY"] = "http://host:1111"
+        proxy_info = get_env_proxy_info()
+        self.assertEquals(None, proxy_info["proxy_username"])
+        self.assertEquals(None, proxy_info["proxy_password"])
+        self.assertEquals("host", proxy_info["proxy_hostname"])
+        self.assertEquals(int("1111"), proxy_info["proxy_port"])
+        os.environ.pop("HTTPS_PROXY")
+
+
+class TestTrueValue(unittest.TestCase):
+
+    def test_true_value(self):
+        self.assertTrue(is_true_value("1"))
+        self.assertTrue(is_true_value("True"))
+        self.assertTrue(is_true_value("true"))
+        self.assertTrue(is_true_value("truE"))
+        self.assertTrue(is_true_value("yes"))
+        self.assertTrue(is_true_value("YeS"))
+
+    def test_false_value(self):
+        self.assertFalse(is_true_value("0"))
+        self.assertFalse(is_true_value("False"))
+        self.assertFalse(is_true_value("FalsE"))
+        self.assertFalse(is_true_value("no"))
+        self.assertFalse(is_true_value("nO"))
+        self.assertFalse(is_true_value("y"))
+        self.assertFalse(is_true_value("n"))
+        self.assertFalse(is_true_value("t"))
+        self.assertFalse(is_true_value("f"))

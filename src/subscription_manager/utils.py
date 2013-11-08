@@ -28,7 +28,8 @@ from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.hwprobe import ClassicCheck
 from rhsm.connection import UEPConnection, RestlibException, GoneException
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
-    DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
+    DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX, \
+    DEFAULT_PROXY_PORT
 from rhsm.version import Versions
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -85,14 +86,14 @@ def parse_server_info(local_server_entry):
     return parse_url(local_server_entry,
                      DEFAULT_HOSTNAME,
                      DEFAULT_PORT,
-                     DEFAULT_PREFIX)
+                     DEFAULT_PREFIX)[2:]
 
 
 def parse_baseurl_info(local_server_entry):
     return parse_url(local_server_entry,
                      DEFAULT_CDN_HOSTNAME,
                      DEFAULT_CDN_PORT,
-                     DEFAULT_CDN_PREFIX)
+                     DEFAULT_CDN_PREFIX)[2:]
 
 
 def format_baseurl(hostname, port, prefix):
@@ -142,7 +143,9 @@ def has_good_scheme(url):
 def parse_url(local_server_entry,
               default_hostname=None,
               default_port=None,
-              default_prefix=None):
+              default_prefix=None,
+              default_username=None,
+              default_password=None):
     """
     Parse hostname, port, and webapp prefix from the string a user entered.
 
@@ -185,7 +188,27 @@ def parse_url(local_server_entry,
     #FIXME: need a try except here? docs
     # don't seem to indicate any expected exceptions
     result = urlparse(good_url)
-    netloc = result[1].split(":")
+    username = default_username
+    password = default_password
+    #netloc = result[1].split(":")
+
+    # to support username and password, let's split on @
+    # since the format will be username:password@hostname:port
+    foo = result[1].split("@")
+
+    # handle username/password portion, then deal with host:port
+    # just in case someone passed in @hostname without
+    # a username,  we default to the default_username
+    if len(foo) > 1:
+        creds = foo[0].split(":")
+        netloc = foo[1].split(":")
+
+        if len(creds) > 1:
+            password = creds[1]
+        if creds[0] is not None and len(creds[0]) > 0:
+            username = creds[0]
+    else:
+        netloc = foo[0].split(":")
 
     # in some cases, if we try the attr accessors, we'll
     # get a ValueError deep down in urlparse, particular if
@@ -219,7 +242,7 @@ def parse_url(local_server_entry,
         raise ServerUrlParseErrorPort(local_server_entry,
                                       msg=_("Server URL port should be numeric"))
 
-    return (hostname, port, prefix)
+    return (username, password, hostname, port, prefix)
 
 
 class MissingCaCertException(Exception):
@@ -416,3 +439,36 @@ def friendly_join(items):
 def is_true_value(test_string):
     val = str(test_string).lower()
     return val == "1" or val == "true" or val == "yes"
+
+
+def get_env_proxy_info():
+    the_proxy = {'proxy_username': '',
+                 'proxy_hostname': '',
+                 'proxy_port': '',
+                 'proxy_password': ''}
+
+    # get the proxy information from the environment variable
+    # if available
+    # look in the following order:
+    #   HTTPS_PROXY
+    #   https_proxy
+    #   HTTP_PROXY
+    #   http_proxy
+    # look through the list for the first one to match
+    info = ()
+    env_vars = ["HTTPS_PROXY", "https_proxy", "HTTP_PROXY", "http_proxy"]
+    for ev in env_vars:
+        proxy_info = os.getenv(ev)
+        if proxy_info is not None:
+            info = parse_url(proxy_info, default_port=DEFAULT_PROXY_PORT)
+            break
+
+    if len(info) > 1:
+        the_proxy['proxy_username'] = info[0]
+        the_proxy['proxy_password'] = info[1]
+        the_proxy['proxy_hostname'] = info[2]
+        if info[3] is None or info[3] == "":
+            the_proxy['proxy_port'] = None
+        else:
+            the_proxy['proxy_port'] = int(info[3])
+    return the_proxy
