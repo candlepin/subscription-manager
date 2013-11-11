@@ -97,7 +97,7 @@ AVAILABLE_SUBS_LIST = [
     _("Suggested:"),
     _("Service Level:"),
     _("Service Type:"),
-    _("Multi-Entitlement:"),
+    _("Subscription Type:"),
     _("Ends:"),
     _("System Type:")
 ]
@@ -137,6 +137,7 @@ CONSUMED_LIST = [
     _("Service Level:"),
     _("Service Type:"),
     _("Status Details:"),
+    _("Subscription Type:"),
     _("Starts:"),
     _("Ends:"),
     _("System Type:")
@@ -2115,7 +2116,7 @@ class ListCommand(CliCommand):
                         data['suggested'],
                         data['service_level'] or "",
                         data['service_type'] or "",
-                        data['multi-entitlement'],
+                        data['pool_type'],
                         data['endDate'],
                         machine_type) + "\n"
 
@@ -2154,6 +2155,7 @@ class ListCommand(CliCommand):
             sys.exit(0)
 
         cert_reasons_map = inj.require(inj.CERT_SORTER).reasons.get_subscription_reasons_map()
+        ent_pooltype_map = managerlib.get_entitlement_pooltype_map()
 
         print("+-------------------------------------------+")
         print("   " + _("Consumed Subscriptions"))
@@ -2192,9 +2194,15 @@ class ListCommand(CliCommand):
                 pool_id = cert.pool.id
 
             product_names = [p.name for p in cert.products]
+
             reasons = []
-            if cert.subject and 'CN' in cert.subject and cert.subject['CN'] in cert_reasons_map:
-                reasons = cert_reasons_map[cert.subject['CN']]
+            pool_type = ''
+
+            if cert.subject and 'CN' in cert.subject:
+                if cert.subject['CN'] in cert_reasons_map:
+                    reasons = cert_reasons_map[cert.subject['CN']]
+                pool_type = ent_pooltype_map.get(cert.subject['CN'], '')
+
             print columnize(CONSUMED_LIST, _none_wrap,
                     name,
                     product_names,
@@ -2208,6 +2216,7 @@ class ListCommand(CliCommand):
                     service_level,
                     service_type,
                     reasons,
+                    pool_type,
                     managerlib.format_date(cert.valid_range.begin()),
                     managerlib.format_date(cert.valid_range.end()),
                     system_type) + "\n"
