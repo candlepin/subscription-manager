@@ -856,6 +856,8 @@ def clean_all_data(backup=True):
     else:
         shutil.rmtree(consumer_dir, ignore_errors=True)
 
+    require(IDENTITY).reload()
+
     shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
 
     cache.ProfileManager.delete_cache()
