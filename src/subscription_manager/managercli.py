@@ -154,6 +154,7 @@ def handle_exception(msg, ex):
 
     log.error(msg)
     log.exception(ex)
+
     if isinstance(ex, socket.error) or isinstance(ex, Disconnected):
         print _("Network error, unable to connect to server.")
         print _("Please see /var/log/rhsm/rhsm.log for more information.")
@@ -162,6 +163,12 @@ def handle_exception(msg, ex):
         # NOTE: yes this looks a lot like the socket error, but I think these
         # were actually intended to display slightly different messages:
         print _("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.")
+        sys.exit(-1)
+    elif isinstance(ex, connection.UnauthorizedException):
+        print _("Unauthorized: Invalid credentials for request.")
+        sys.exit(-1)
+    elif isinstance(ex, connection.ForbiddenException):
+        print _("Forbidden: Invalid credentials for request.")
         sys.exit(-1)
     elif isinstance(ex, connection.RemoteServerException):
         # This is what happens when there's an issue with the server on the other side of the wire
