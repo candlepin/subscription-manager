@@ -388,13 +388,9 @@ class TestReposCommand(TestCliCommand):
         self.cc._validate_options()
 
     @mock.patch("subscription_manager.managercli.RepoLib")
-    @mock.patch("subscription_manager.managercli.check_registration")
-    @mock.patch("subscription_manager.managercli.ConsumerIdentity")
-    def test_set_repo_status(self, mock_ident, mock_registration, mock_repolib):
-        mock_ident.existsAndValid.return_value = True
+    def test_set_repo_status(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
-        mock_registration.return_value = {'uuid': 'fake_id', 'consumer_name':
-                'fake_name'}
+        identity = self._inject_mock_valid_consumer('fake_id')
 
         repos = [Repo('x'), Repo('y'), Repo('z')]
         items = ['x', 'y']
@@ -415,13 +411,9 @@ class TestReposCommand(TestCliCommand):
         repolib_instance.update.assert_called()
 
     @mock.patch("subscription_manager.managercli.RepoLib")
-    @mock.patch("subscription_manager.managercli.check_registration")
-    @mock.patch("subscription_manager.managercli.ConsumerIdentity")
-    def test_set_repo_status_with_wildcards(self, mock_ident, mock_registration, mock_repolib):
-        mock_ident.existsAndValid.return_value = True
+    def test_set_repo_status_with_wildcards(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
-        mock_registration.return_value = {'uuid': 'fake_id', 'consumer_name':
-                'fake_name'}
+        identity = self._inject_mock_valid_consumer('fake_id')
 
         repos = [Repo('zoo'), Repo('zebra'), Repo('zip')]
         items = ['z*']
@@ -436,9 +428,8 @@ class TestReposCommand(TestCliCommand):
         repolib_instance.update.assert_called()
 
     @mock.patch("subscription_manager.managercli.RepoFile")
-    @mock.patch("subscription_manager.managercli.ConsumerIdentity")
-    def test_set_repo_status_when_disconnected(self, mock_ident, mock_repofile):
-        mock_ident.existsAndValid.return_value = False
+    def test_set_repo_status_when_disconnected(self, mock_repofile):
+        self._inject_mock_invalid_consumer()
         mock_repofile_inst = mock_repofile.return_value
 
         enabled = {'enabled': '1'}.items()
