@@ -12,6 +12,7 @@ import subscription_manager.injection as inj
 # use instead of the normal pid file based ActionLock
 from threading import RLock
 
+
 class FakeLogger:
     def __init__(self):
         self.expected_msg = ""

@@ -14,7 +14,6 @@
 #
 from mock import Mock, NonCallableMock, patch
 
-from stubs import StubUEP, StubProductCertificate, StubProduct
 from stubs import StubUEP
 
 import rhsm.connection as connection
@@ -24,8 +23,6 @@ from subscription_manager import injection as inj
 from subscription_manager import cache
 
 from fixture import SubManFixture
-
-import subscription_manager.injection as inj
 
 
 class CliRegistrationTests(SubManFixture):

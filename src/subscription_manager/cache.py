@@ -290,7 +290,6 @@ class ProductStatusCache(StatusCache):
             self.server_status = consumer_data['installedProducts']
 
 
-
 class OverrideStatusCache(StatusCache):
     """
     Manages the cache of yum repo overrides set on the server.
@@ -299,7 +298,6 @@ class OverrideStatusCache(StatusCache):
 
     def _sync_with_server(self, uep, consumer_uuid):
         self.server_status = uep.getContentOverrides(consumer_uuid)
-
 
 
 # this is injected normally
