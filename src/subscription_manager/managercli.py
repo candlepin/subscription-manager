@@ -1853,10 +1853,9 @@ class ReposCommand(CliCommand):
         if repos_modified:
             # The cache should be primed at this point by the repolib.get_repos()
             cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-            if ConsumerIdentity.existsAndValid() and self.use_overrides:
+            if self.is_registered() and self.use_overrides:
                 overrides = [{'contentLabel': repo.id, 'name': 'enabled', 'value': status} for repo in repos_modified]
-                consumer = check_registration()['uuid']
-                results = self.cp.setContentOverrides(consumer, overrides)
+                results = self.cp.setContentOverrides(self.identity.uuid, overrides)
 
                 cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
 
@@ -2260,21 +2259,21 @@ class OverrideCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
         # Abort if not registered
-        consumer = check_registration()['uuid']
+        self.assert_should_be_registered()
 
         if not self.cp.supports_resource('content_overrides'):
             system_exit(-1, _("Error: The 'repo-override' command is not supported by the server."))
 
         # update entitlement certificates if necessary. If we do have new entitlements
         # CertLib.update() will call RepoLib.update().
-        CertLib(uep=self.cp).update()
+        self.entcertlib.update()
         # make sure the EntitlementDirectory singleton is refreshed
         self._request_validity_check()
 
         overrides = Overrides(self.cp)
 
         if self.options.list:
-            results = overrides.get_overrides(consumer)
+            results = overrides.get_overrides(self.identity.uuid)
             if results:
                 self._list(results, self.options.repos)
             else:
@@ -2284,7 +2283,6 @@ class OverrideCommand(CliCommand):
         if self.options.additions:
             repo_ids = [repo.id for repo in overrides.repo_lib.get_repos(apply_overrides=False)]
             to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
-
             try:
                 results = overrides.add_overrides(consumer, to_add)
             except connection.RestlibException, ex:
@@ -2303,9 +2301,9 @@ class OverrideCommand(CliCommand):
 
         if self.options.removals:
             to_remove = [Override(repo, item) for repo in self.options.repos for item in self.options.removals]
-            results = overrides.remove_overrides(consumer, to_remove)
+            results = overrides.remove_overrides(self.identity.uuid, to_remove)
         if self.options.remove_all:
-            results = overrides.remove_all_overrides(consumer, self.options.repos)
+            results = overrides.remove_all_overrides(self.identity.uuid, self.options.repos)
 
         # Update the cache and refresh the repo file.
         overrides.update(results)
