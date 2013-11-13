@@ -390,7 +390,7 @@ class TestReposCommand(TestCliCommand):
     @mock.patch("subscription_manager.managercli.RepoLib")
     def test_set_repo_status(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
-        identity = self._inject_mock_valid_consumer('fake_id')
+        self._inject_mock_valid_consumer('fake_id')
 
         repos = [Repo('x'), Repo('y'), Repo('z')]
         items = ['x', 'y']
@@ -413,7 +413,7 @@ class TestReposCommand(TestCliCommand):
     @mock.patch("subscription_manager.managercli.RepoLib")
     def test_set_repo_status_with_wildcards(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
-        identity = self._inject_mock_valid_consumer('fake_id')
+        self._inject_mock_valid_consumer('fake_id')
 
         repos = [Repo('zoo'), Repo('zebra'), Repo('zip')]
         items = ['z*']
