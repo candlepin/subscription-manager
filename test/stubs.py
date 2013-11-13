@@ -97,8 +97,6 @@ from datetime import datetime, timedelta
 
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 
-from subscription_manager.certlib import ActionLock
-
 from rhsm.certificate import parse_tags
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
         Product, Content, Order

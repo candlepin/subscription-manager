@@ -20,7 +20,6 @@ from iniparse import ConfigParser
 import logging
 import os
 import string
-import subscription_manager.injection as inj
 from urllib import basejoin
 
 from rhsm.config import initConfig
@@ -28,9 +27,12 @@ from rhsm.connection import RemoteServerException, RestlibException
 from rhsm.utils import UnsupportedOperationException
 
 # FIXME: local imports
-from certlib import ActionLock, ActionReport, DataLib
 
-from certdirectory import Path, ProductDirectory, EntitlementDirectory
+from subscription_manager.certlib import ActionReport, DataLib
+from subscription_manager.lock import ActionLock
+from subscription_manager.certdirectory import Path, ProductDirectory, EntitlementDirectory
+from subscription_manager.utils import UnsupportedOperationException
+
 
 from subscription_manager import injection as inj
 
@@ -44,7 +46,6 @@ _ = gettext.gettext
 
 
 class RepoLib(DataLib):
-
 
     def __init__(self, lock=ActionLock(), uep=None, cache_only=False):
         self.cache_only = cache_only
@@ -61,8 +62,8 @@ class RepoLib(DataLib):
 
     def get_repos(self, apply_overrides=True):
         action = RepoUpdateAction(uep=self.uep,
-							      cache_only=self.cache_only,
-							      apply_overrides=apply_overrides)
+                                  cache_only=self.cache_only,
+                                  apply_overrides=apply_overrides)
         repos = action.get_unique_content()
         if self.identity.is_valid() and action.override_supported:
             return repos
@@ -179,8 +180,7 @@ class RepoUpdateAction:
             existing = repo_file.section(cont.id)
             if existing is None:
                 repo_file.add(cont)
-
-				self.report_add(cont)
+                self.report_add(cont)
             else:
                 # In the non-disconnected case, destroy the old repo and replace it with
                 # what's in the entitlement cert plus any overrides.
@@ -189,9 +189,8 @@ class RepoUpdateAction:
                 else:
                     self.update_repo(existing, cont)
                     repo_file.update(existing)
-		        # TODO: add repoting for overrides
-				self.report_update(cont)
-
+                # TODO: add repoting for overrides
+                self.report_update(cont)
 
         for section in repo_file.sections():
             if section not in valid:
@@ -383,6 +382,7 @@ class RepoUpdateAction:
                 changes_made += 1
 
         return changes_made
+
     def report_update(self, repo):
         self.report.repo_updates.append(repo)
 
@@ -440,7 +440,6 @@ class RepoActionReport(ActionReport):
         # deleted are former repo sections, but they are the same type
         s.append(self.format_sections(self.repo_deleted))
         return '\n'.join(s)
->>>>>>> Add a RepoActionReport formatter
 
 
 class Repo(dict):
