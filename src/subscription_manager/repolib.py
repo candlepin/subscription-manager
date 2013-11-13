@@ -31,7 +31,6 @@ from rhsm.utils import UnsupportedOperationException
 # FIXME: local imports
 
 from subscription_manager.certlib import ActionReport, DataLib
-from subscription_manager.lock import ActionLock
 from subscription_manager.certdirectory import Path, ProductDirectory, EntitlementDirectory
 from subscription_manager.utils import UnsupportedOperationException
 
@@ -49,9 +48,9 @@ _ = gettext.gettext
 
 class RepoLib(DataLib):
 
-    def __init__(self, lock=ActionLock(), uep=None, cache_only=False):
+    def __init__(self, uep=None, cache_only=False):
         self.cache_only = cache_only
-        DataLib.__init__(self, lock, uep)
+        DataLib.__init__(self, uep)
         self.identity = inj.require(inj.IDENTITY)
 
     def _do_update(self):
