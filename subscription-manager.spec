@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.6
+Version: 1.10.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -391,6 +391,26 @@ fi
 %endif
 
 %changelog
+* Thu Nov 14 2013 ckozak <ckozak@redhat.com> 1.10.7-1
+- 998033: Handle Unauthorized/Forbidden exceptions in CLI/GUI
+  (mstead@redhat.com)
+- Remove unnecessary network calls after clean command (ckozak@redhat.com)
+- Bumping the python-rhsm required version (mstead@redhat.com)
+- Latest translations. (awood@redhat.com)
+- Introduced an Override model object to OverrideLib (mstead@redhat.com)
+- Use injected Identity instead of ConsumerIdentity in repolib
+  (mstead@redhat.com)
+- Catch ValueError when determining boolean value (mstead@redhat.com)
+- Use a simplier method to compare two lists of dictionaries.
+  (awood@redhat.com)
+- Hide item when server does not support overrides. (mstead@redhat.com)
+- Show message instead of repo table when no repos exist. (mstead@redhat.com)
+- Made Repository Details resemble Subscription Details (mstead@redhat.com)
+- Created an overrides module (mstead@redhat.com)
+- Created Repository Management Dialog (mstead@redhat.com)
+- Add 'repo-override' command to alter content repositories server-side.
+  (awood@redhat.com)
+
 * Thu Nov 07 2013 ckozak <ckozak@redhat.com> 1.10.6-1
 - 985502: Use yum.i18n utf8_width function for string length in CLI
   (ckozak@redhat.com)
