@@ -17,13 +17,11 @@ import datetime
 import gettext
 import logging
 import re
-from socket import error as socket_error
-
-from M2Crypto import SSL
 
 import gobject
 import gtk
 import gtk.glade
+from subscription_manager.exceptions import ExceptionMapper
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
@@ -64,7 +62,6 @@ def handle_gui_exception(e, msg, parent, format_msg=True, log_msg=None):
     log_msg = Optional message to be logged in addition to stack trace.
     format_msg = if true, string sub the exception error in the msg
     """
-
     if isinstance(e, tuple):
         log.error(log_msg, exc_info=e)
         # Get the class instance of the exception
@@ -74,47 +71,29 @@ def handle_gui_exception(e, msg, parent, format_msg=True, log_msg=None):
             log.error(log_msg)
         log.exception(e)
 
-    # If exception is of these types we ignore the given display msg:
-    if isinstance(e, socket_error):
-        show_error_window(_('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.'),
-                parent=parent)
-    elif isinstance(e, SSL.SSLError):
-        show_error_window(_('Unable to verify server\'s identity: %s') % str(e),
-                parent=parent)
-    elif isinstance(e, connection.ExpiredIdentityCertException):
-        show_error_window(_('Your identity certificate has expired'), parent=parent)
-    elif isinstance(e, connection.NetworkException):
-        # NOTE: yes this looks a lot like the socket error, but I think these
-        # were actually intended to display slightly different messages:
-        show_error_window(_("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."), parent=parent)
-    elif isinstance(e, connection.UnauthorizedException):
-        show_error_window(_("Unauthorized: Invalid credentials for request."), parent=parent)
-    elif isinstance(e, connection.ForbiddenException):
-        show_error_window(_("Forbidden: Invalid credentials for request."), parent=parent)
-    elif isinstance(e, connection.RemoteServerException):
-        # This is what happens when there's an issue with the server on the other side of the wire
-        show_error_window(_("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."), parent=parent)
-    elif isinstance(e, connection.RestlibException):
-        # If this exception's code is in the 200 range (such as 202 ACCEPTED)
-        # we're going to ignore the message we were given and just display
-        # the message from the server as an info dialog. (not an error)
-        if 200 < int(e.code) < 300:
-            message = linkify(e.msg)
-            messageWindow.InfoDialog(messageWindow.wrap_text(message))
+    exception_mapper = ExceptionMapper()
+    if exception_mapper.is_mapped(e):
+        mapped_message = exception_mapper.get_message(e)
+        if isinstance(e, connection.RestlibException):
+            # If this exception's code is in the 200 range (such as 202 ACCEPTED)
+            # we're going to ignore the message we were given and just display
+            # the message from the server as an info dialog. (not an error)
+            if 200 < int(e.code) < 300:
+                message = linkify(mapped_message)
+                messageWindow.InfoDialog(messageWindow.wrap_text(message))
 
+            else:
+                try:
+                    if format_msg:
+                        message = msg % linkify(mapped_message)
+                    else:
+                        message = linkify(mapped_message)
+                except Exception:
+                    message = msg
+
+                show_error_window(message, parent=parent)
         else:
-            try:
-                if format_msg:
-                    message = msg % linkify(e.msg)
-                else:
-                    message = linkify(e.msg)
-            except Exception:
-                message = msg
-
-            show_error_window(message, parent=parent)
-
-    elif isinstance(e, connection.BadCertificateException):
-        show_error_window(_("Bad CA certificate: %s") % e.cert_path, parent=parent)
+            show_error_window(mapped_message, parent)
     else:
         #catch-all, try to interpolate and if it doesn't work out, just display the message
         try:

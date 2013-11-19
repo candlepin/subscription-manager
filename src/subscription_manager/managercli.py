@@ -27,7 +27,6 @@ import socket
 import sys
 from time import localtime, strftime, strptime
 
-from M2Crypto import SSL
 from M2Crypto import X509
 
 import rhsm.config
@@ -35,7 +34,7 @@ import rhsm.connection as connection
 
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import InstalledProductsManager, ProfileManager
-from subscription_manager.certlib import CertLib, ConsumerIdentity, Disconnected
+from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.certmgr import CertManager
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
@@ -56,6 +55,7 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
 from subscription_manager.overrides import Overrides, Override
 
 from yum.i18n import utf8_width
+from subscription_manager.exceptions import ExceptionMapper
 
 _ = gettext.gettext
 
@@ -155,36 +155,10 @@ def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
 
-    if isinstance(ex, socket.error) or isinstance(ex, Disconnected):
-        print _("Network error, unable to connect to server.")
-        print _("Please see /var/log/rhsm/rhsm.log for more information.")
-        sys.exit(-1)
-    elif isinstance(ex, connection.NetworkException):
-        # NOTE: yes this looks a lot like the socket error, but I think these
-        # were actually intended to display slightly different messages:
-        print _("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.")
-        sys.exit(-1)
-    elif isinstance(ex, connection.UnauthorizedException):
-        print _("Unauthorized: Invalid credentials for request.")
-        sys.exit(-1)
-    elif isinstance(ex, connection.ForbiddenException):
-        print _("Forbidden: Invalid credentials for request.")
-        sys.exit(-1)
-    elif isinstance(ex, connection.RemoteServerException):
-        # This is what happens when there's an issue with the server on the other side of the wire
-        print _("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.")
-        sys.exit(-1)
-    elif isinstance(ex, connection.RestlibException):
-        print ex.msg
-        sys.exit(-1)
-    elif isinstance(ex, SSL.Checker.WrongHost):
-        print str(ex)
-        sys.exit(-1)
-    elif isinstance(ex, connection.BadCertificateException):
-        print _("Bad CA certificate: %s") % ex.cert_path
-        sys.exit(-1)
-    elif isinstance(ex, connection.ExpiredIdentityCertException):
-        print _("Your identity certificate has expired")
+    exception_mapper = ExceptionMapper()
+
+    if exception_mapper.is_mapped(ex):
+        print exception_mapper.get_message(ex)
         sys.exit(-1)
     else:
         system_exit(-1, ex)
