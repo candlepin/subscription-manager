@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.10.6
+Version: 1.10.7
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,9 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Nov 14 2013 ckozak <ckozak@redhat.com> 1.10.7-1
+- getOwnerInfo introduced (vitty@redhat.com)
+
 * Thu Nov 07 2013 ckozak <ckozak@redhat.com> 1.10.6-1
 - Fix a crash that occurs when rhsm.conf is missing (ckozak@redhat.com)
 - Correct implementation of __eq__ for Content objects. (awood@redhat.com)

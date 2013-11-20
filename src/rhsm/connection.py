@@ -851,6 +851,13 @@ class UEPConnection:
         method = '/owners'
         return self.conn.request_get(method)
 
+    def getOwnerInfo(self, owner):
+        """
+        Returns an owner info
+        """
+        method = '/owners/%s/info' % self.sanitize(owner)
+        return self.conn.request_get(method)
+
     def getOwnerList(self, username):
         """
         Returns an owner objects with pem/key for existing consumers
