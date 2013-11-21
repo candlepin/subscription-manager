@@ -560,7 +560,7 @@ class RepoFile(ConfigParser):
         s.append('# Managed by (rhsm) subscription-manager')
         s.append('#')
         s.append('# *** This file is auto-generated.  Changes made here will be over-written. ***')
-        s.append('# *** Use "subscription-manager override" if you wish to make changes. ***')
+        s.append('# *** Use "subscription-manager repo-override --help" if you wish to make changes. ***')
         s.append('#')
         s.append('# If this file is empty and this system is subscribed consider ')
         s.append('# a "yum repolist" to refresh available repos')
