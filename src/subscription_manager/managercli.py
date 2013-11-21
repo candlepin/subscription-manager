@@ -2220,10 +2220,10 @@ class OverrideCommand(CliCommand):
         self.parser.add_option("--repo", dest="repos", action="append", metavar="REPOID",
             help=_("repository to modify (can be specified more than once)"))
         self.parser.add_option("--remove", dest="removals", action="append", metavar="NAME",
-            help=_("name of the override to remove (can be specified more than once)"))
+            help=_("name of the override to remove (can be specified more than once); used with --repo option."))
         self.parser.add_option("--add", dest="additions", action="callback", callback=self._colon_split,
             type="string", metavar="NAME:VALUE",
-            help=_("name and value of the option to override separated by a colon (can be specified more than once)"))
+            help=_("name and value of the option to override separated by a colon (can be specified more than once); used with --repo option."))
         self.parser.add_option("--remove-all", action="store_true",
             help=_("remove all overrides; can be specific to a repository by providing --repo"))
         self.parser.add_option("--list", action="store_true",
