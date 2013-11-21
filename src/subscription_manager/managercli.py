@@ -2288,8 +2288,15 @@ class OverrideCommand(CliCommand):
             return
 
         if self.options.additions:
+            repo_ids = [repo.id for repo in overrides.repo_lib.get_repos(apply_overrides=False)]
             to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
             results = overrides.add_overrides(consumer, to_add)
+
+            # Print out warning messages if the specified repo does not exist in the repo file.
+            for repo in self.options.repos:
+                if repo not in repo_ids:
+                    print _("Repository '%s' does not currently exist, but the override has been added.") % repo
+
         if self.options.removals:
             to_remove = [Override(repo, item) for repo in self.options.repos for item in self.options.removals]
             results = overrides.remove_overrides(consumer, to_remove)
