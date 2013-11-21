@@ -411,7 +411,9 @@ class StubUEP:
         self.consumer = consumer
 
     def getConsumer(self, consumerId):
-        return self.consumer
+        if hasattr(self, 'consumer') and self.consumer:
+            return self.consumer
+        return self.registered_consumer_info
 
     def unbindAll(self, consumer):
         self.called_unbind_uuid = consumer
@@ -424,6 +426,15 @@ class StubUEP:
 
     def getCompliance(self, uuid):
         return {}
+
+    def getEntitlementList(self, uuid):
+        return [{'id':'ent1'}, {'id':'ent2'}]
+
+    def getPoolsList(self, uuid, listAll, active_on, owner):
+        return [{'id':'pool1'}, {'id':'pool2'}]
+
+    def getSubscriptionList(self, owner):
+        return [{'id':'sub1'}, {'id':'sub2'}]
 
     def getContentOverrides(self, uuid):
         return []
