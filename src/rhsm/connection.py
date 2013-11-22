@@ -1095,6 +1095,14 @@ class UEPConnection:
                 method += "&email_locale=%s" % lang
         return self.conn.request_post(method)
 
+    def getSubscriptionList(self, owner_key):
+        """
+        List the subscriptions for a particular owner.
+        """
+        method = "/owners/%s/subscriptions" % self.sanitize(owner_key)
+        results = self.conn.request_get(method)
+        return results
+
     def sanitize(self, url_param, plus=False):
         #This is a wrapper around urllib.quote to avoid issues like the one
         #discussed in http://bugs.python.org/issue9301
