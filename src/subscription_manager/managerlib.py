@@ -525,8 +525,7 @@ class PoolStash(object):
         return self._filter_pools(incompatible, overlapping, uninstalled, False, text)
 
     def _get_subscribed_pool_ids(self):
-        cp = require(CP_PROVIDER).get_consumer_auth_cp()
-        return [entitlement['pool']['id'] for entitlement in cp.getEntitlementList(self.identity.uuid)]
+        return [ent.pool.id for ent in require(ENT_DIR).list()]
 
     def _filter_pools(self, incompatible, overlapping, uninstalled, subscribed,
             text):
