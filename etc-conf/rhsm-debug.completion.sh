@@ -4,7 +4,7 @@
 
 
 # main complete function
-_consumer-debug()
+_rhsm-debug()
 {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   local first="${COMP_WORDS[1]}"
@@ -12,7 +12,7 @@ _consumer-debug()
   COMPREPLY=()
 
   case "${first}" in
-    compile)
+    system)
         case "${cur}" in
             -*)
                 COMPREPLY=( $( compgen -W "-h --help --destination" -- "$cur" ) )
@@ -24,8 +24,8 @@ _consumer-debug()
             ;;
   esac
 
-  COMPREPLY=($(compgen -W "compile" -- ${cur}))
+  COMPREPLY=($(compgen -W "system" -- ${cur}))
   return 0
 }
 
-complete -F _consumer-debug -o default consumer-debug
+complete -F _rhsm-debug -o default rhsm-debug

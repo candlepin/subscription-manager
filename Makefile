@@ -14,7 +14,7 @@ BIN_FILES := $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui
 			 $(BIN_DIR)/rhn-migrate-classic-to-rhsm \
 			 $(BIN_DIR)/install-num-migrate-to-rhsm \
 			 $(BIN_DIR)/rct \
-			 $(BIN_DIR)/consumer-debug
+			 $(BIN_DIR)/rhsm-debug
 SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
 
 RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
@@ -24,8 +24,8 @@ BASE_SRC_DIR := src
 SRC_DIR := $(BASE_SRC_DIR)/subscription_manager
 RCT_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
 RCT_SRC_DIR := $(BASE_SRC_DIR)/rct
-CD_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/consumer_debug
-CD_SRC_DIR := $(BASE_SRC_DIR)/consumer_debug
+CD_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
+CD_SRC_DIR := $(BASE_SRC_DIR)/rhsm_debug
 RHSM_ICON_SRC_DIR := $(BASE_SRC_DIR)/rhsm_icon
 DAEMONS_SRC_DIR := $(BASE_SRC_DIR)/daemons
 EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
@@ -86,7 +86,7 @@ install-conf:
 	install etc-conf/plugin/*.conf $(PREFIX)/etc/yum/pluginconf.d/
 	install -m 644 etc-conf/subscription-manager.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager
 	install -m 644 etc-conf/rct.completion.sh $(PREFIX)/etc/bash_completion.d/rct
-	install -m 644 etc-conf/consumer-debug.completion.sh $(PREFIX)/etc/bash_completion.d/consumer-debug
+	install -m 644 etc-conf/rhsm-debug.completion.sh $(PREFIX)/etc/bash_completion.d/rhsm-debug
 	install -m 644 etc-conf/rhn-migrate-classic-to-rhsm.completion.sh $(PREFIX)/etc/bash_completion.d/rhn-migrate-classic-to-rhsm
 	install -m 644 etc-conf/rhsm-icon.completion.sh $(PREFIX)/etc/bash_completion.d/rhsm-icon
 	install -m 644 etc-conf/rhsmcertd.completion.sh $(PREFIX)/etc/bash_completion.d/rhsmcertd
@@ -243,7 +243,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -m 644 man/subscription-manager.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/subscription-manager-gui.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rct.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
-	install -m 644 man/consumer-debug.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
+	install -m 644 man/rhsm-debug.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	if [ $(OS_VERSION) = 5 ]; then install -m 644 man/install-num-migrate-to-rhsm.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/; fi
 
 	install -m 644 etc-conf/rhsm-icon.desktop \
@@ -274,7 +274,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 
 	install -d $(CD_CODE_DIR)
 	install -m 644 -p $(CD_SRC_DIR)/*.py $(CD_CODE_DIR)
-	install bin/consumer-debug $(PREFIX)/usr/bin
+	install bin/rhsm-debug $(PREFIX)/usr/bin
 
 
 
@@ -325,7 +325,7 @@ po/POTFILES.in:
 	find $(BIN_DIR) -name "*-to-rhsm" >> po/POTFILES.in
 	find $(BIN_DIR) -name "subscription-manager*" >> po/POTFILES.in
 	find $(BIN_DIR) -name "rct" >> po/POTFILES.in
-	find $(BIN_DIR) -name "consumer-debug" >> po/POTFILES.in
+	find $(BIN_DIR) -name "rhsm-debug" >> po/POTFILES.in
 	find src/ -name "*.c" >> po/POTFILES.in
 	find etc-conf/ -name "*.desktop.in" >> po/POTFILES.in
 	find $(RCT_SRC_DIR)/ -name "*.py" >> po/POTFILES.in

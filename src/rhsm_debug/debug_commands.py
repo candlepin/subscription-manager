@@ -18,6 +18,7 @@ import os
 import sys
 import tempfile
 import shutil
+import logging
 import subscription_manager.injection as inj
 import subscription_manager.managercli as managercli
 
@@ -27,11 +28,14 @@ from subscription_manager.managercli import CliCommand
 
 _ = gettext.gettext
 
+log = logging.getLogger('rhsm-app.' + __name__)
+
 NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
 
-class CompileCommand(CliCommand):
 
-    def __init__(self, name="compile", shortdesc=None, primary=False):
+class SystemCommand(CliCommand):
+
+    def __init__(self, name="system", shortdesc=None, primary=False):
         CliCommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
 
         self.parser.add_option("--destination", dest="destination",
@@ -49,32 +53,35 @@ class CompileCommand(CliCommand):
         path = tempfile.mkdtemp()
 
         try:
+            original_path = os.getcwd()
             if not os.path.exists(path):
                 os.makedirs(path)
-            self.write_flat_file(path, "consumer.json", self.cp.getConsumer(consumerid))
-            self.write_flat_file(path, "compliance.json", self.cp.getCompliance(consumerid))
-            self.write_flat_file(path, "entitlements.json", self.cp.getEntitlementList(consumerid))
+            self._write_flat_file(path, "consumer.json", self.cp.getConsumer(consumerid))
+            self._write_flat_file(path, "compliance.json", self.cp.getCompliance(consumerid))
+            self._write_flat_file(path, "entitlements.json", self.cp.getEntitlementList(consumerid))
             owner = self.cp.getOwner(consumerid)
-            self.write_flat_file(path, "pools.json", self.cp.getPoolsList(consumerid, \
-                True, None, owner['key']))
-            self.write_flat_file(path, "subscriptions.json", self.cp.getSubscriptionList(owner['key']))
+            self._write_flat_file(path, "pools.json", self.cp.getPoolsList(consumerid, True, None, owner['key']))
+
+            try:
+                self._write_flat_file(path, "subscriptions.json", self.cp.getSubscriptionList(owner['key']))
+            except Exception, e:
+                log.warning("Server does not allow retrieval of subscriptions by owner.")
 
             destination = '/tmp'
             if self.options.destination:
                 destination = self.options.destination
             if not os.path.exists(destination):
                 os.makedirs(destination)
-            zippath = os.path.join(destination, "consumer-debug-%s.zip" % self.make_code())
+            zippath = os.path.join(destination, "system-debug-%s.zip" % self._make_code())
             zf = ZipFile(zippath, "w", ZIP_DEFLATED)
-            original_path = os.getcwd()
             os.chdir(path)
             for filename in os.listdir(path):
                 zf.write(filename)
             zf.write('/etc/rhsm/rhsm.conf')
-            self.dir_to_zip('/var/log/rhsm', zf)
-            self.dir_to_zip('/etc/pki/product', zf)
-            self.dir_to_zip('/etc/pki/entitlement', zf)
-            self.dir_to_zip('/etc/pki/consumer', zf)
+            self._dir_to_zip('/var/log/rhsm', zf)
+            self._dir_to_zip('/etc/pki/product', zf)
+            self._dir_to_zip('/etc/pki/entitlement', zf)
+            self._dir_to_zip('/etc/pki/consumer', zf)
             zf.close()
             shutil.rmtree(path)
         except Exception, e:
@@ -83,13 +90,13 @@ class CompileCommand(CliCommand):
         finally:
             os.chdir(original_path)
 
-    def dir_to_zip(self, directory, zipfile):
+    def _dir_to_zip(self, directory, zipfile):
         for dirname, subdirs, files in os.walk(directory):
             zipfile.write(dirname)
             for filename in files:
                 zipfile.write(os.path.join(dirname, filename))
 
-    def make_code(self):
+    def _make_code(self):
         codelist = []
         now = str(datetime.now())
         date = str.split(now, " ")[0]
@@ -103,7 +110,7 @@ class CompileCommand(CliCommand):
         codelist.append(milli)
         return ''.join(codelist)
 
-    def write_flat_file(self, path, filename, content):
+    def _write_flat_file(self, path, filename, content):
         path = os.path.join(path, filename)
         fo = open(path, "w+")
         try:

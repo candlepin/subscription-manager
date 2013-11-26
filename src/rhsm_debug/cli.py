@@ -14,20 +14,11 @@
 #
 
 from subscription_manager.cli import CLI
-from consumer_debug.debug_commands import CompileCommand
+from rhsm_debug.debug_commands import SystemCommand
 
 
-class ConsumerDebugCLI(CLI):
+class RhsmDebugCLI(CLI):
 
     def __init__(self):
-        commands = [CompileCommand]
+        commands = [SystemCommand]
         CLI.__init__(self, commands)
-
-
-def xstr(value):
-    if value is None:
-        return ''
-    elif isinstance(value, unicode):
-        return value.encode('utf-8')
-    else:
-        return str(value)

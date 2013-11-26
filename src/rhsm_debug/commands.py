@@ -39,8 +39,3 @@ class CliCommand(AbstractCLICommand):
         return_code = self._do_command()
         if return_code is not None:
             return return_code
-
-    def _get_file_from_args(self):
-        if not len(self.args) > self.FILE_ARG_IDX:
-            return ''
-        return self.args[self.FILE_ARG_IDX]
