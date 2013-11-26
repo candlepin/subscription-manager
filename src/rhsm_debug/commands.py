@@ -21,7 +21,6 @@ _ = gettext.gettext
 
 
 class CliCommand(AbstractCLICommand):
-    FILE_ARG_IDX = 0
 
     def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
         AbstractCLICommand.__init__(self, name=name, aliases=aliases,
@@ -39,8 +38,3 @@ class CliCommand(AbstractCLICommand):
         return_code = self._do_command()
         if return_code is not None:
             return return_code
-
-    def _get_file_from_args(self):
-        if not len(self.args) > self.FILE_ARG_IDX:
-            return ''
-        return self.args[self.FILE_ARG_IDX]

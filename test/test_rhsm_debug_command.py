@@ -16,14 +16,14 @@
 import os
 import tempfile
 import shutil
-from consumer_debug import debug_commands
+from rhsm_debug import debug_commands
 from test_managercli import TestCliCommand
 from zipfile import ZipFile, ZIP_DEFLATED
 
 
 class TestCompileCommand(TestCliCommand):
 
-    command_class = debug_commands.CompileCommand
+    command_class = debug_commands.SystemCommand
 
     # Runs the zip file creation.
     # It does not write the certs or log files because of
@@ -31,8 +31,8 @@ class TestCompileCommand(TestCliCommand):
     def test_command(self):
         try:
             self.cc._do_command = self._orig_do_command
-            self.cc.dir_to_zip = self.dir_to_zip
-            path = tempfile.mkdtemp()
+            self.cc._dir_to_zip = self._dir_to_zip
+            path = os.path.join(tempfile.mkdtemp(), "testing-dir")
             self.cc.main(["--destination", path])
         except SystemExit:
             self.fail("Exception Raised")
@@ -41,9 +41,11 @@ class TestCompileCommand(TestCliCommand):
         self.assertTrue(self.zip_file.getinfo("compliance.json") is not None)
         self.assertTrue(self.zip_file.getinfo("entitlements.json") is not None)
         self.assertTrue(self.zip_file.getinfo("pools.json") is not None)
+        self.assertTrue(self.zip_file.getinfo("version.json") is not None)
         self.assertTrue(self.zip_file.getinfo("subscriptions.json") is not None)
         self.assertTrue(self.zip_file.getinfo("etc/rhsm/rhsm.conf") is not None)
         self.assertTrue(self.zip_file.getinfo("var/log/rhsm/") is not None)
+        self.assertTrue(self.zip_file.getinfo("var/lib/rhsm/") is not None)
         self.assertTrue(self.zip_file.getinfo("etc/pki/product/") is not None)
         self.assertTrue(self.zip_file.getinfo("etc/pki/entitlement/") is not None)
         # cannot test for this. an unregistered system will fail
@@ -51,31 +53,32 @@ class TestCompileCommand(TestCliCommand):
         shutil.rmtree(path)
 
     # fake method to avoid permission issues
-    def dir_to_zip(self, directory, zipfile):
+    def _dir_to_zip(self, directory, zipfile):
         self.zip_file = zipfile
         for dirname, subdirs, files in os.walk(directory):
             zipfile.write(dirname)
 
     # test the real dir_to_zip method
     def test_dir_to_zip(self):
-        self._restore_stdout()
         zip_dir = tempfile.mkdtemp()
-        zip_temp = os.path.join(zip_dir, "test-%s.zip" % self.cc.make_code())
-        zip_file = ZipFile(zip_temp, "w", ZIP_DEFLATED)
         file_dir = tempfile.mkdtemp()
 
-        self.cc.write_flat_file(file_dir, "file1", "file1-content")
-        self.cc.write_flat_file(file_dir, "file2", "file2-content")
-        self.cc.write_flat_file(file_dir, "file3", "file3-content")
-        self.cc.dir_to_zip(file_dir, zip_file)
+        try:
+            self._restore_stdout()
+            zip_temp = os.path.join(zip_dir, "test-%s.zip" % self.cc._make_code())
+            zip_file = ZipFile(zip_temp, "w", ZIP_DEFLATED)
 
-        file_dir_str = str.lstrip(file_dir, "/")
-        self.assertTrue(zip_file.getinfo(os.path.join(file_dir_str, "file1")) is not None)
-        self.assertTrue(zip_file.getinfo(os.path.join(file_dir_str, "file1")).file_size > 0)
-        self.assertTrue(zip_file.getinfo(os.path.join(file_dir_str, "file2")) is not None)
-        self.assertTrue(zip_file.getinfo(os.path.join(file_dir_str, "file2")).file_size > 0)
-        self.assertTrue(zip_file.getinfo(os.path.join(file_dir_str, "file3")) is not None)
-        self.assertTrue(zip_file.getinfo(os.path.join(file_dir_str, "file3")).file_size > 0)
-
-        shutil.rmtree(file_dir)
-        shutil.rmtree(zip_dir)
+            self.cc._write_flat_file(file_dir, "file1", "file1-content")
+            self.cc._write_flat_file(file_dir, "file2", "file2-content")
+            self.cc._write_flat_file(file_dir, "file3", "file3-content")
+            self.cc._dir_to_zip(file_dir, zip_file)
+            strip_file_dir = file_dir.lstrip("/")
+            self.assertTrue(zip_file.getinfo(os.path.join(strip_file_dir, "file1")) is not None)
+            self.assertTrue(zip_file.getinfo(os.path.join(strip_file_dir, "file1")).file_size > 0)
+            self.assertTrue(zip_file.getinfo(os.path.join(strip_file_dir, "file2")) is not None)
+            self.assertTrue(zip_file.getinfo(os.path.join(strip_file_dir, "file2")).file_size > 0)
+            self.assertTrue(zip_file.getinfo(os.path.join(strip_file_dir, "file3")) is not None)
+            self.assertTrue(zip_file.getinfo(os.path.join(strip_file_dir, "file3")).file_size > 0)
+        finally:
+            shutil.rmtree(file_dir, True)
+            shutil.rmtree(zip_dir, True)

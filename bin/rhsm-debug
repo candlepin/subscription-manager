@@ -19,6 +19,7 @@ if __name__ != '__main__':
     raise ImportError("This module can not be imported.")
 
 import sys
+import os
 
 # Ensure that the RHSM libs are on the path.
 _LIBPATH = "/usr/share/rhsm"
@@ -31,7 +32,7 @@ configure_i18n()
 from subscription_manager import logutil
 logutil.init_logger()
 
-from consumer_debug.cli import ConsumerDebugCLI
+from rhsm_debug.cli import RhsmDebugCLI
 from subscription_manager.cli import system_exit
 
 import gettext
@@ -48,9 +49,14 @@ except ImportError, e:
     system_exit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
 
+# quick check to see if you are a super-user.
+if os.getuid() != 0:
+    sys.stderr.write('Error: this command requires root access to execute\n')
+    sys.exit(8)
+
 
 def main():
-    return ConsumerDebugCLI().main()
+    return RhsmDebugCLI().main()
 
 
 if __name__ == '__main__':

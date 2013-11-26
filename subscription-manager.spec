@@ -31,7 +31,7 @@ Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  pygobject2
 Requires:  virt-what
-Requires:  python-rhsm >= 1.10.7
+Requires:  python-rhsm >= 1.10.8
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 Requires:  usermode
@@ -188,7 +188,7 @@ rm -rf %{buildroot}
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
 %{_sysconfdir}/bash_completion.d/subscription-manager
 %{_sysconfdir}/bash_completion.d/rct
-%{_sysconfdir}/bash_completion.d/consumer-debug
+%{_sysconfdir}/bash_completion.d/rhsm-debug
 %{_sysconfdir}/bash_completion.d/rhn-migrate-classic-to-rhsm
 %{_sysconfdir}/bash_completion.d/rhsm-icon
 %{_sysconfdir}/bash_completion.d/rhsmcertd
@@ -280,17 +280,17 @@ rm -rf %{buildroot}
 %attr(755,root,root) %{_bindir}/rct
 
 # Include consumer debug CLI tool
-%dir %{_datadir}/rhsm/consumer_debug
-%{_datadir}/rhsm/consumer_debug/__init__.py*
-%{_datadir}/rhsm/consumer_debug/cli.py*
-%{_datadir}/rhsm/consumer_debug/*commands.py*
-%attr(755,root,root) %{_bindir}/consumer-debug
+%dir %{_datadir}/rhsm/rhsm_debug
+%{_datadir}/rhsm/rhsm_debug/__init__.py*
+%{_datadir}/rhsm/rhsm_debug/cli.py*
+%{_datadir}/rhsm/rhsm_debug/*commands.py*
+%attr(755,root,root) %{_bindir}/rhsm-debug
 
 %doc
 %{_mandir}/man8/subscription-manager.8*
 %{_mandir}/man8/rhsmcertd.8*
 %{_mandir}/man8/rct.8*
-%{_mandir}/man8/consumer-debug.8*
+%{_mandir}/man8/rhsm-debug.8*
 %doc LICENSE
 
 
