@@ -44,8 +44,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     def __init__(self, parent):
         super(RepositoriesDialog, self).__init__('repositories.glade')
         self.identity = require(IDENTITY)
-        cp_provider = require(CP_PROVIDER)
-        self.overrides = Overrides(cp_provider.get_consumer_auth_cp())
+        self.cp_provider = require(CP_PROVIDER)
 
         self.glade.signal_autoconnect({
                 "on_dialog_delete_event": self._on_close,
@@ -128,8 +127,16 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         self.main_window.hide()
 
     def show(self):
+        # we create the overrides object here because we want to ensure a
+        # fresh connection to candlepin when the gui is shown.
+        # See: BZ 1033741
+        self.overrides = self._refresh_overrides_connection()
         self._load_data()
         self.main_window.present()
+
+    # This method exists purely as an abstraction for testing purposes
+    def _refresh_overrides_connection(self):
+        return Overrides(self.cp_provider.get_consumer_auth_cp())
 
     def _load_data(self):
         # pull the latest overrides from the cache which will be the ones from the server.

@@ -27,12 +27,13 @@ class TestReposGui(SubManFixture):
         self.repo_lib = Mock()
         self.repo_lib.get_repos.return_value = []
 
-        self.overrides = Mock()
-        self.overrides.repo_lib = self.repo_lib
-        self.overrides.get_overrides.return_value = []
+        self.overrides_mock = Mock()
+        self.overrides_mock.repo_lib = self.repo_lib
+        self.overrides_mock.get_overrides.return_value = []
 
         self.dialog = RepositoriesDialog(None)
-        self.dialog.overrides = self.overrides
+        self.dialog._refresh_overrides_connection = self._refresh_overrides_connection
+        self.dialog.overrides_mock = self.overrides_mock
 
     def test_show_dialog_with_no_overrides(self):
         repo = self._create_repo("my_repo", [('enabled', '0'), ('gpgcheck', '0')])
@@ -47,7 +48,7 @@ class TestReposGui(SubManFixture):
 
         self.assertEquals("my_repo", store.get_value(tree_iter, store['repo_id']))
         self.assertFalse(store.get_value(tree_iter, store['enabled']))
-        # has no overrides so make sure that we are not modified
+        # has no overrides_mock so make sure that we are not modified
         self.assertFalse(store.get_value(tree_iter, store['modified']))
         self.assertEquals("MY_REPO", store.get_value(tree_iter, store['name']))
         self.assertEquals('http://foo.bar', store.get_value(tree_iter, store['baseurl']))
@@ -82,7 +83,7 @@ class TestReposGui(SubManFixture):
     def test_show_dialog_with_overrides(self):
         repo = self._create_repo("my_repo", [('enabled', '0')])
         self.repo_lib.get_repos.return_value = [repo]
-        self.overrides.get_overrides.return_value = [
+        self.overrides_mock.get_overrides.return_value = [
             Override('my_repo', 'enabled', '1'),
             Override('my_repo', 'gpgcheck', '0')
         ]
@@ -96,7 +97,7 @@ class TestReposGui(SubManFixture):
 
         self.assertEquals("my_repo", store.get_value(tree_iter, store['repo_id']))
         self.assertTrue(store.get_value(tree_iter, store['enabled']))
-        # has overrides so make sure that we are modified
+        # has overrides_mock so make sure that we are modified
         self.assertTrue(store.get_value(tree_iter, store['modified']))
         # make sure that there is an icon since we are modified
         self.assertTrue(store.get_value(tree_iter, store['modified-icon']) is not None)
@@ -141,7 +142,7 @@ class TestReposGui(SubManFixture):
 
     def test_remove_all_button_enabled_when_repo_has_modifications(self):
         self.repo_lib.get_repos.return_value = [self._create_repo("my_repo", [('enabled', '0')])]
-        self.overrides.get_overrides.return_value = [
+        self.overrides_mock.get_overrides.return_value = [
             Override('my_repo', 'enabled', '1')
         ]
         self.dialog.show()
@@ -159,3 +160,6 @@ class TestReposGui(SubManFixture):
     def _get_combo_box_value(self, combo_box):
         column = combo_box.get_active()
         return combo_box.get_model()[column][1]
+
+    def _refresh_overrides_connection(self):
+        return self.overrides_mock
