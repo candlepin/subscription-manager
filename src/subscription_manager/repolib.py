@@ -114,14 +114,18 @@ class UpdateAction:
         # If we are not registered, skip trying to refresh the
         # data from the server
         if self.identity.is_valid():
-            override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-            if cache_only:
-                status = override_cache._read_cache()
-            else:
-                status = override_cache.load_status(self.uep, self.identity.uuid)
+            # Only attempt to update the overrides if they are supported
+            # by the server.
+            self.overrides = []
+            if self.override_supported:
+                override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+                if cache_only:
+                    status = override_cache._read_cache()
+                else:
+                    status = override_cache.load_status(self.uep, self.identity.uuid)
 
-            if status is not None:
-                self.overrides = status
+                if status is not None:
+                    self.overrides = status
 
             message = "Release API is not supported by the server. Using default."
             try:
