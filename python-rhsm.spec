@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.10.7
+Version: 1.10.8
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,9 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Nov 27 2013 jesus m. rodriguez <jmrodri@gmail.com> 1.10.8-1
+- Add the method to retrieve all the subscriptions for an owner (wpoteat@redhat.com)
+
 * Thu Nov 14 2013 ckozak <ckozak@redhat.com> 1.10.7-1
 - getOwnerInfo introduced (vitty@redhat.com)
 
