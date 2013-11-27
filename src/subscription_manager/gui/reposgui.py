@@ -20,7 +20,7 @@ import gtk
 
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.gui import widgets
-from subscription_manager.injection import IDENTITY, CP_PROVIDER, require
+from subscription_manager.injection import IDENTITY, CP_PROVIDER, ENT_DIR, require
 from subscription_manager.gui.storage import MappedListStore
 from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\
     SelectionWrapper, HasSortableWidget
@@ -41,11 +41,15 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
                     'gpgcheck_remove_button', 'gpgcheck_edit_button',
                     'baseurl_text', 'no_repos_label_container', 'no_repos_label']
 
+    ENTS_PROVIDE_NO_REPOS = _("Attached subscriptions do not provide any repositories.")
+    NO_ATTACHED_SUBS = _("No repositories are available without an attached subscription.")
+
     def __init__(self, parent):
         super(RepositoriesDialog, self).__init__('repositories.glade')
         self.identity = require(IDENTITY)
         cp_provider = require(CP_PROVIDER)
         self.overrides = Overrides(cp_provider.get_consumer_auth_cp())
+        self.ent_dir = require(ENT_DIR)
 
         self.glade.signal_autoconnect({
                 "on_dialog_delete_event": self._on_close,
@@ -154,7 +158,13 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             self.overrides_treeview.show()
             self.no_repos_label_container.hide()
         else:
+            ent_count = len(self.ent_dir.list_valid())
+            no_repos_message = self.ENTS_PROVIDE_NO_REPOS
+            if ent_count == 0:
+                no_repos_message = self.NO_ATTACHED_SUBS
+
             self.overrides_treeview.hide()
+            self.no_repos_label.set_markup("<b>%s</b>" % no_repos_message)
             self.no_repos_label_container.show()
 
         # Fetch the repositories from repolib without any overrides applied.

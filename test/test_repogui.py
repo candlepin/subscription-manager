@@ -17,6 +17,7 @@ from fixture import SubManFixture
 from subscription_manager.gui.reposgui import RepositoriesDialog
 from subscription_manager.repolib import Repo
 from subscription_manager.overrides import Override
+from stubs import StubEntitlementCertificate, StubProduct
 
 
 class TestReposGui(SubManFixture):
@@ -146,6 +147,25 @@ class TestReposGui(SubManFixture):
         ]
         self.dialog.show()
         self.assertTrue(self.dialog.reset_button.props.sensitive)
+
+    def test_correct_no_repos_label_with_no_ent_certs(self):
+        self.repo_lib.get_repos.return_value = []
+        self.dialog.show()
+
+        self.assertTrue(self.dialog.no_repos_label.props.visible)
+        self.assertFalse(self.dialog.overrides_treeview.props.visible)
+        self.assertEqual(self.dialog.NO_ATTACHED_SUBS,
+                         self.dialog.no_repos_label.get_text())
+
+    def test_correct_no_repos_label_with_ent_certs_providing_no_repos(self):
+        self.ent_dir.certs.append(StubEntitlementCertificate(StubProduct("p1234")))
+        self.repo_lib.get_repos.return_value = []
+        self.dialog.show()
+
+        self.assertTrue(self.dialog.no_repos_label.props.visible)
+        self.assertFalse(self.dialog.overrides_treeview.props.visible)
+        self.assertEqual(self.dialog.ENTS_PROVIDE_NO_REPOS,
+                         self.dialog.no_repos_label.get_text())
 
     def _create_repo(self, repo_id, attribute_tuple_list):
         attrs = [('name', repo_id.upper()), ('baseurl', 'http://foo.bar')]
