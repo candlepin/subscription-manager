@@ -2273,10 +2273,6 @@ class OverrideCommand(CliCommand):
         # make sure the EntitlementDirectory singleton is refreshed
         self._request_validity_check()
 
-        if not self.entitlement_dir.list():
-            print _("This system does not have any subscriptions.")
-            return 1
-
         overrides = Overrides(self.cp)
 
         if self.options.list:
