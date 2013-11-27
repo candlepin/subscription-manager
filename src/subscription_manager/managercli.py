@@ -2265,7 +2265,7 @@ class OverrideCommand(CliCommand):
         consumer = check_registration()['uuid']
 
         if not self.cp.supports_resource('content_overrides'):
-            system_exit(-1, _("Error: The 'override' command is not supported by the server."))
+            system_exit(-1, _("Error: The 'repo-override' command is not supported by the server."))
 
         # update entitlement certificates if necessary. If we do have new entitlements
         # CertLib.update() will call RepoLib.update().
