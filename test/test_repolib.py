@@ -15,13 +15,14 @@
 
 import unittest
 
-from mock import patch
+from mock import Mock, patch
 from StringIO import StringIO
 
 from fixture import SubManFixture
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
         StubProductDirectory, StubUEP, StubConsumerIdentity
+import subscription_manager.injection as inj
 from subscription_manager.repolib import Repo, UpdateAction, TidyWriter
 from subscription_manager.utils import UnsupportedOperationException
 from subscription_manager import repolib
@@ -90,6 +91,23 @@ class UpdateActionTests(SubManFixture):
             if content['name'] == name:
                 return content
         return None
+
+    def test_override_cache_update_skipped_when_overrides_not_supported_on_server(self):
+        inj.provide(inj.OVERRIDE_STATUS_CACHE, Mock())
+        override_cache_mock = inj.require(inj.OVERRIDE_STATUS_CACHE)
+
+        mock_uep = Mock()
+        mock_uep.supports_resource = Mock(return_value=False)
+        mock_uep.getCertificates = Mock(return_value=[])
+        mock_uep.getCertificateSerials = Mock(return_value=[])
+        mock_uep.getRelease = Mock(return_value={'releaseVer': "dummyrelease"})
+
+        UpdateAction(mock_uep, prod_dir=StubProductDirectory(),
+                     ent_dir=StubCertificateDirectory())
+
+        # No cache calls should be made if overrides are not supported
+        self.assertFalse(override_cache_mock.read_cache.called)
+        self.assertFalse(override_cache_mock.load_status.called)
 
     def test_overrides_trump_ent_cert(self):
         self.update_action.overrides = [{
