@@ -1,8 +1,9 @@
 import difflib
 import pprint
 import unittest
+import sys
+import StringIO
 
-from contextlib import contextmanager
 from mock import Mock, NonCallableMock, patch
 
 import stubs
@@ -160,14 +161,20 @@ class SubManFixture(unittest.TestCase):
         return True
 
 
-@contextmanager
-def capture():
-    import sys
-    import StringIO
-    old_out = sys.stdout
-    try:
-        out = StringIO.StringIO()
-        sys.stdout = out
-        yield out
-    finally:
-        sys.stdout = old_out
+class capture:
+    @staticmethod
+    def isatty(buf=None):
+        return False
+
+    def write(self, data):
+        self.buf.write(data)
+        self.stdout.write(data)
+
+    def __enter__(self):
+        self.buf = StringIO.StringIO()
+        self.stdout = sys.stdout
+        sys.stdout = self
+        return self.buf
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        sys.stdout = self.stdout
