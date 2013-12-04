@@ -306,6 +306,8 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         self.interface = interface
 
+	# Note, even if we are standalone firstboot mode (no rhn modules),
+	# we may still have RHN installed, and possibly configured.
         self._read_rhn_proxy_settings()
 
         # bad proxy settings can cause socket.error or friends here
@@ -360,8 +362,8 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         # In firstboot, we leverage the RHN setup proxy settings already
         # presented to the user, so hide the choose server screen's proxy
-        # text and button.
-        if rhn_config:
+        # text and button. But, if we are standalone, show our versions.
+        if not self.standalone:
             screen = self._screens[registergui.CHOOSE_SERVER_PAGE]
             screen.proxy_frame.destroy()
 
