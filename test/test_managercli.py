@@ -11,8 +11,7 @@ from subscription_manager import managercli, managerlib
 from subscription_manager.managercli import format_name, columnize, \
         _echo, _none_wrap
 from subscription_manager.repolib import Repo
-from stubs import MockStderr, MockStdout, \
-        StubEntitlementCertificate, \
+from stubs import MockStderr, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
 from fixture import FakeException, FakeLogger, SubManFixture, \
         capture, Matcher
@@ -37,15 +36,10 @@ class TestCli(SubManFixture):
     # shut up stdout spew
     def setUp(self):
         SubManFixture.setUp(self)
-        sys.stdout = stubs.MockStdout()
         sys.stderr = stubs.MockStderr()
 
-    def _restore_stdout(self):
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
-
     def tearDown(self):
-        self._restore_stdout()
+        sys.stderr = sys.__stderr__
 
     def test_cli(self):
         cli = managercli.ManagerCLI()
@@ -88,17 +82,11 @@ class TestCliCommand(SubManFixture):
 
         # stub out uep
         managercli.connection.UEPConnection = self._uep_connection
-        self.mock_stdout = MockStdout()
         self.mock_stderr = MockStderr()
-        sys.stdout = self.mock_stdout
         sys.stderr = self.mock_stderr
 
-    def _restore_stdout(self):
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
-
     def tearDown(self):
-        self._restore_stdout()
+        sys.stderr = sys.__stderr__
 
     def _uep_connection(self, *args, **kwargs):
         pass
@@ -129,17 +117,16 @@ class TestCliCommand(SubManFixture):
             self.assertEquals(e.code, 2)
 
     def _main_help(self, args):
-        mstdout = MockStdout()
-        sys.stdout = mstdout
-        try:
-            self.cc.main(args)
-        except SystemExit, e:
-            # --help/-h returns 0
-            self.assertEquals(e.code, 0)
-        sys.stdout = sys.__stdout__
+        with capture() as out:
+            try:
+                self.cc.main(args)
+            except SystemExit, e:
+                # --help/-h returns 0
+                self.assertEquals(e.code, 0)
+        output = out.getvalue().strip()
         # I could test for strings here, but that
         # would break if we run tests in a locale/lang
-        assert len(mstdout.buffer) > 0
+        self.assertTrue(len(output) > 0)
 
     def test_main_short_help(self):
         self._main_help(["-h"])
@@ -324,8 +311,9 @@ class TestListCommand(TestCliProxyCommand):
         mc_exists.return_value = True
 
         mcli.return_value = {'consumer_name': 'stub_name', 'uuid': 'stub_uuid'}
-        listCommand.main(['list', '--available'])
-        self.assertTrue('888888888888' in sys.stdout.buffer)
+        with capture() as out:
+            listCommand.main(['list', '--available'])
+        self.assertTrue('888888888888' in out.getvalue())
 
     def test_print_consumed_no_ents(self):
         try:
@@ -511,9 +499,10 @@ class TestConfigCommand(TestCliCommand):
         self.assertEquals(managercli.cfg.store['rhsm.baseurl'], baseurl)
 
     def test_remove_config_default(self):
-        self.cc._do_command = self._orig_do_command
-        self.cc.main(['--remove', 'rhsm.baseurl'])
-        self.assertTrue('The default value for' in self.mock_stdout.buffer)
+        with capture() as out:
+            self.cc._do_command = self._orig_do_command
+            self.cc.main(['--remove', 'rhsm.baseurl'])
+        self.assertTrue('The default value for' in out.getvalue())
 
     def test_remove_config_section_does_not_exist(self):
         self.cc._do_command = self._orig_do_command
@@ -884,7 +873,6 @@ class HandleExceptionTests(unittest.TestCase):
         self.msg = "some thing to log home about"
         self.formatted_msg = "some thing else like: %s"
         sys.stderr = MockStderr()
-        sys.stdout = MockStdout()
         managercli.log = FakeLogger()
 
     def test_he(self):

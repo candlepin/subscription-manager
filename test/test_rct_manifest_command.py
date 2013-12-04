@@ -24,7 +24,6 @@ import unittest
 import zipfile
 from zipfile import ZipFile
 
-import fixture
 import manifestdata
 from rct.manifest_commands import CatManifestCommand
 from rct.manifest_commands import DumpManifestCommand
@@ -32,7 +31,8 @@ from rct.manifest_commands import get_value
 from rct.manifest_commands import RCTManifestCommand
 from rct.manifest_commands import ZipExtractAll
 
-from stubs import MockStdout, MockStderr
+from stubs import MockStderr
+from fixture import capture, SubManFixture
 
 
 def _build_valid_manifest():
@@ -53,7 +53,7 @@ def _build_valid_manifest():
     return manifest_zip
 
 
-class RCTManifestCommandTests(fixture.SubManFixture):
+class RCTManifestCommandTests(SubManFixture):
 
     def test_get_value(self):
         data = {"test": "value", "test2": {"key2": "value2", "key3": []}}
@@ -69,17 +69,14 @@ class RCTManifestCommandTests(fixture.SubManFixture):
         catman = CatManifestCommand()
         catman.args = [_build_valid_manifest()]
 
-        mock_out = MockStdout()
         mock_err = MockStderr()
-        sys.stdout = mock_out
         sys.stderr = mock_err
-
-        catman._do_command()
+        with capture() as out:
+            catman._do_command()
 
         self.assertEquals("", mock_err.buffer)
-        self.assert_string_equals(manifestdata.correct_manifest_output, mock_out.buffer)
+        self.assert_string_equals(manifestdata.correct_manifest_output, out.getvalue())
 
-        sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
 
     def test_extract_manifest(self):

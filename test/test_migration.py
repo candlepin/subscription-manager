@@ -34,15 +34,10 @@ class TestMenu(unittest.TestCase):
             ("displayed-hello", "Hello"),
             ("displayed-world", "World"),
             ], "")
-        sys.stdout = stubs.MockStdout()
         sys.stderr = stubs.MockStderr()
 
-    def _restore_stdout(self):
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
-
     def tearDown(self):
-        self._restore_stdout()
+        sys.stderr = sys.__stderr__
 
     def test_enter_negative(self):
         self.assertRaises(migrate.InvalidChoiceError, self.menu._get_item, -1)
@@ -85,7 +80,6 @@ class TestMigration(unittest.TestCase):
 
         # These tests print a lot to stdout and stderr
         # so quiet them.
-        sys.stdout = stubs.MockStdout()
         sys.stderr = stubs.MockStderr()
 
         self.double_mapped_channels = (
@@ -109,12 +103,8 @@ class TestMigration(unittest.TestCase):
             "rhel-x86_64-server-dts-5-debuginfo",
             )
 
-    def _restore_stdout(self):
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
-
     def tearDown(self):
-        self._restore_stdout()
+        sys.stderr = sys.__stderr__
 
     def test_mutually_exclusive_options(self):
         try:

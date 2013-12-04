@@ -58,7 +58,6 @@ class TestCompileCommand(TestCliCommand):
 
     # test the real dir_to_zip method
     def test_dir_to_zip(self):
-        self._restore_stdout()
         zip_dir = tempfile.mkdtemp()
         zip_temp = os.path.join(zip_dir, "test-%s.zip" % self.cc._make_code())
         zip_file = ZipFile(zip_temp, "w", ZIP_DEFLATED)

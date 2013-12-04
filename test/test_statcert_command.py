@@ -16,12 +16,12 @@
 import sys
 
 import certdata
-import fixture
 
 from rct.cert_commands import StatCertCommand
 from rhsm.certificate import create_from_pem
 
-from stubs import MockStdout, MockStderr
+from stubs import MockStderr
+from fixture import capture, SubManFixture
 
 
 class StatCertCommandStub(StatCertCommand):
@@ -42,41 +42,34 @@ class StatCertCommandStub(StatCertCommand):
         return self._pem
 
 
-class StatCertCommandTests(fixture.SubManFixture):
+class StatCertCommandTests(SubManFixture):
 
     def setUp(self):
         super(StatCertCommandTests, self).setUp()
-        self.mock_stdout = MockStdout()
         self.mock_stderr = MockStderr()
-        sys.stdout = self.mock_stdout
         sys.stderr = self.mock_stderr
-
-    def _restore_stdout(self):
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
 
     def tearDown(self):
         super(StatCertCommandTests, self).tearDown()
-        self._restore_stdout()
+        sys.stderr = sys.__stderr__
 
     def test_product_cert_output(self):
-        command = StatCertCommandStub(certdata.PRODUCT_CERT_V1_0)
-        command.main(['will_use_stub'])
-
-        cert_output = self.mock_stdout.buffer
+        with capture() as out:
+            command = StatCertCommandStub(certdata.PRODUCT_CERT_V1_0)
+            command.main(['will_use_stub'])
+        cert_output = out.getvalue()
         self.assert_string_equals(certdata.PRODUCT_CERT_V1_0_STAT_OUTPUT, cert_output)
 
     def test_product_cert_with_os_name_output(self):
-        command = StatCertCommandStub(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0)
-        command.main(['will_use_stub'])
-
-        cert_output = self.mock_stdout.buffer
+        with capture() as out:
+            command = StatCertCommandStub(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0)
+            command.main(['will_use_stub'])
+        cert_output = out.getvalue()
         self.assert_string_equals(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0_STAT_OUTPUT, cert_output)
 
     def test_entitlement_cert_output_includes_content_sets(self):
-        command = StatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
-        command.main(['will_use_stub'])
-
-        cert_output = self.mock_stdout.buffer
-        self.assert_string_equals(certdata.ENTITLEMENT_CERT_V3_0_STAT_OUTPUT,
-                cert_output)
+        with capture() as out:
+            command = StatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
+            command.main(['will_use_stub'])
+        cert_output = out.getvalue()
+        self.assert_string_equals(certdata.ENTITLEMENT_CERT_V3_0_STAT_OUTPUT, cert_output)

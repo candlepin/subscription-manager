@@ -16,13 +16,13 @@ import sys
 import unittest
 
 import certdata
-import fixture
+from fixture import capture, SubManFixture
 
 from rct.cert_commands import CatCertCommand
 from rct.printing import xstr
 from rhsm.certificate import create_from_pem
 
-from stubs import MockStdout, MockStderr
+from stubs import MockStderr
 
 
 class PrintingTests(unittest.TestCase):
@@ -50,61 +50,57 @@ class CatCertCommandStub(CatCertCommand):
         return self.cert
 
 
-class CatCertCommandTests(fixture.SubManFixture):
+class CatCertCommandTests(SubManFixture):
 
     def setUp(self):
         super(CatCertCommandTests, self).setUp()
-        self.mock_stdout = MockStdout()
         self.mock_stderr = MockStderr()
-        sys.stdout = self.mock_stdout
         sys.stderr = self.mock_stderr
-
-    def _restore_stdout(self):
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
 
     def tearDown(self):
         super(CatCertCommandTests, self).tearDown()
-        self._restore_stdout()
+        sys.stderr = sys.__stderr__
 
     def test_omit_content_list(self):
-        command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
-        command.main(["not_used.pem", "--no-content"])
-        cert_output = self.mock_stdout.buffer
+        with capture() as out:
+            command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
+            command.main(["not_used.pem", "--no-content"])
+        cert_output = out.getvalue()
         self.assertTrue(cert_output.find("Content:\n") == -1,
                         "Content was not excluded from the output.")
 
     def test_omit_product_list(self):
-        command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
-        command.main(["not_used.pem", "--no-products"])
-        cert_output = self.mock_stdout.buffer
+        with capture() as out:
+            command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
+            command.main(["not_used.pem", "--no-products"])
+        cert_output = out.getvalue()
         self.assertTrue(cert_output.find("Product:\n") == -1,
                         "Products were not excluded from the output.")
 
     def test_cert_v1_cat(self):
-        command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
-        command.main(['will_use_stub'])
-
-        cert_output = self.mock_stdout.buffer
+        with capture() as out:
+            command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
+            command.main(['will_use_stub'])
+        cert_output = out.getvalue()
         self.assert_string_equals(certdata.ENTITLEMENT_CERT_V1_0_OUTPUT, cert_output)
 
     def test_cert_v3_cat(self):
-        command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
-        command.main(['will_use_stub'])
-
-        cert_output = self.mock_stdout.buffer
+        with capture() as out:
+            command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
+            command.main(['will_use_stub'])
+        cert_output = out.getvalue()
         self.assert_string_equals(certdata.ENTITLEMENT_CERT_V3_0_OUTPUT, cert_output)
 
     def test_product_cert_output(self):
-        command = CatCertCommandStub(certdata.PRODUCT_CERT_V1_0)
-        command.main(['will_use_stub'])
-
-        cert_output = self.mock_stdout.buffer
+        with capture() as out:
+            command = CatCertCommandStub(certdata.PRODUCT_CERT_V1_0)
+            command.main(['will_use_stub'])
+        cert_output = out.getvalue()
         self.assert_string_equals(certdata.PRODUCT_CERT_V1_0_OUTPUT, cert_output)
 
     def test_identity_cert_output(self):
-        command = CatCertCommandStub(certdata.IDENTITY_CERT)
-        command.main(['will_use_stub'])
-
-        cert_output = self.mock_stdout.buffer
+        with capture() as out:
+            command = CatCertCommandStub(certdata.IDENTITY_CERT)
+            command.main(['will_use_stub'])
+        cert_output = out.getvalue()
         self.assert_string_equals(certdata.IDENTITY_CERT_OUTPUT, cert_output)
