@@ -306,8 +306,8 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         self.interface = interface
 
-	# Note, even if we are standalone firstboot mode (no rhn modules),
-	# we may still have RHN installed, and possibly configured.
+        # Note, even if we are standalone firstboot mode (no rhn modules),
+        # we may still have RHN installed, and possibly configured.
         self._read_rhn_proxy_settings()
 
         # bad proxy settings can cause socket.error or friends here
