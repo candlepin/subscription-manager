@@ -18,8 +18,6 @@ import mock
 import gtk
 
 import stubs
-import rhsm_display
-rhsm_display.set_display()
 
 from fixture import SubManFixture
 from subscription_manager.injection import require, provide, IDENTITY

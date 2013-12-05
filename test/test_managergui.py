@@ -1,8 +1,5 @@
 import unittest
 
-import rhsm_display
-rhsm_display.set_display()
-
 from fixture import SubManFixture
 import mock
 

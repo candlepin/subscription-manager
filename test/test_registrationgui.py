@@ -2,8 +2,6 @@
 from mock import Mock
 
 from fixture import SubManFixture
-import rhsm_display
-rhsm_display.set_display()
 
 from stubs import StubBackend, StubFacts
 from subscription_manager.gui.registergui import RegisterScreen, \
