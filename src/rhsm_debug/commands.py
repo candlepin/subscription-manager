@@ -21,7 +21,6 @@ _ = gettext.gettext
 
 
 class CliCommand(AbstractCLICommand):
-    FILE_ARG_IDX = 0
 
     def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
         AbstractCLICommand.__init__(self, name=name, aliases=aliases,

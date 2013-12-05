@@ -19,6 +19,7 @@ import sys
 import tempfile
 import shutil
 import logging
+import json
 import subscription_manager.injection as inj
 import subscription_manager.managercli as managercli
 
@@ -35,7 +36,9 @@ NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager
 
 class SystemCommand(CliCommand):
 
-    def __init__(self, name="system", shortdesc=None, primary=False):
+    def __init__(self, name="system",
+                 shortdesc=_("Create zip file with complete system information"),
+                 primary=True):
         CliCommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
 
         self.parser.add_option("--destination", dest="destination",
@@ -49,46 +52,58 @@ class SystemCommand(CliCommand):
         if not consumer.is_valid():
             print (NOT_REGISTERED)
             sys.exit(-1)
-        consumerid = consumer.uuid
-        path = tempfile.mkdtemp()
+        tmp_zip_path = ""
+        tmp_flat_path = ""
 
         try:
-            original_path = os.getcwd()
-            if not os.path.exists(path):
-                os.makedirs(path)
-            self._write_flat_file(path, "consumer.json", self.cp.getConsumer(consumerid))
-            self._write_flat_file(path, "compliance.json", self.cp.getCompliance(consumerid))
-            self._write_flat_file(path, "entitlements.json", self.cp.getEntitlementList(consumerid))
-            owner = self.cp.getOwner(consumerid)
-            self._write_flat_file(path, "pools.json", self.cp.getPoolsList(consumerid, True, None, owner['key']))
-
+            tmp_flat_path = tempfile.mkdtemp()
+            self._write_flat_file(tmp_flat_path, "consumer.json",
+                                  self.cp.getConsumer(consumer.uuid))
+            self._write_flat_file(tmp_flat_path, "compliance.json",
+                                  self.cp.getCompliance(consumer.uuid))
+            self._write_flat_file(tmp_flat_path, "entitlements.json",
+                                  self.cp.getEntitlementList(consumer.uuid))
+            owner = self.cp.getOwner(consumer.uuid)
+            self._write_flat_file(tmp_flat_path, "pools.json",
+                                  self.cp.getPoolsList(consumer.uuid, True, None, owner['key']))
             try:
-                self._write_flat_file(path, "subscriptions.json", self.cp.getSubscriptionList(owner['key']))
+                self._write_flat_file(tmp_flat_path, "subscriptions.json",
+                                      self.cp.getSubscriptionList(owner['key']))
             except Exception, e:
                 log.warning("Server does not allow retrieval of subscriptions by owner.")
+            self._write_flat_file(tmp_flat_path, "version.json",
+                                  self._get_version_info())
 
-            destination = '/tmp'
-            if self.options.destination:
-                destination = self.options.destination
-            if not os.path.exists(destination):
-                os.makedirs(destination)
-            zippath = os.path.join(destination, "system-debug-%s.zip" % self._make_code())
-            zf = ZipFile(zippath, "w", ZIP_DEFLATED)
-            os.chdir(path)
-            for filename in os.listdir(path):
-                zf.write(filename)
+            tmp_zip_path = tempfile.mkdtemp()
+            zip_path = os.path.join(tmp_zip_path, "tmp-system.zip")
+            zf = ZipFile(zip_path, "w", ZIP_DEFLATED)
+
+            for filename in os.listdir(tmp_flat_path):
+                zf.write(os.path.join(tmp_flat_path, filename), filename)
             zf.write('/etc/rhsm/rhsm.conf')
             self._dir_to_zip('/var/log/rhsm', zf)
+            self._dir_to_zip('/var/lib/rhsm', zf)
             self._dir_to_zip('/etc/pki/product', zf)
             self._dir_to_zip('/etc/pki/entitlement', zf)
             self._dir_to_zip('/etc/pki/consumer', zf)
             zf.close()
-            shutil.rmtree(path)
+
+            # move to final destination
+            destination = '/tmp'
+            if self.options.destination:
+                destination = self.options.destination
+                if not os.path.exists(destination):
+                    os.makedirs(destination)
+            final_zip_path = os.path.join(destination, "system-debug-%s.zip" % self._make_code())
+            shutil.move(zip_path, final_zip_path)
+
+            print _("Wrote: %s") % final_zip_path
         except Exception, e:
-            managercli.handle_exception(_("Unable to create zip file of consumer information: %s") % e, e)
+            managercli.handle_exception(_("Unable to create zip file of system information: %s") % e, e)
             sys.exit(-1)
         finally:
-            os.chdir(original_path)
+            shutil.rmtree(tmp_zip_path, True)
+            shutil.rmtree(tmp_flat_path, True)
 
     def _dir_to_zip(self, directory, zipfile):
         for dirname, subdirs, files in os.walk(directory):
@@ -97,23 +112,18 @@ class SystemCommand(CliCommand):
                 zipfile.write(os.path.join(dirname, filename))
 
     def _make_code(self):
-        codelist = []
-        now = str(datetime.now())
-        date = str.split(now, " ")[0]
-        datelist = str.split(date, "-")
-        milli = str.split(now, ".")[1]
+        return datetime.now().strftime("%Y%m%d-%f")
 
-        codelist.append(datelist[0])
-        codelist.append(datelist[1])
-        codelist.append(datelist[2])
-        codelist.append("-")
-        codelist.append(milli)
-        return ''.join(codelist)
+    def _get_version_info(self):
+        return [("server type: %s") % self.server_versions["server-type"],
+                ("subscription management server: %s") % self.server_versions["candlepin"],
+                ("subscription-manager: %s") % self.client_versions["subscription-manager"],
+                ("python-rhsm: %s") % self.client_versions["python-rhsm"]]
 
     def _write_flat_file(self, path, filename, content):
         path = os.path.join(path, filename)
-        fo = open(path, "w+")
         try:
-            fo.write(str(content))
+            with open(path, "a+") as fo:
+                fo.write(str(json.dumps(content, indent=4, sort_keys=True)))
         finally:
             fo.close()
