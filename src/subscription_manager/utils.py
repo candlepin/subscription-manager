@@ -24,6 +24,9 @@ from M2Crypto.SSL import SSLError
 from subscription_manager.branding import get_branding
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.hwprobe import ClassicCheck
+# we moved quite a bit of code from this module to rhsm.
+# we may want to import some of the other items for
+# compatibility.
 from rhsm.utils import parse_url
 from rhsm.connection import UEPConnection, RestlibException, GoneException
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
