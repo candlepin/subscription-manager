@@ -32,7 +32,7 @@ from M2Crypto import X509
 
 import rhsm.config
 import rhsm.connection as connection
-from rhsm.utils import remove_scheme, ServerUrlParseError, get_env_proxy_info
+from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import InstalledProductsManager, ProfileManager
@@ -239,6 +239,13 @@ class CliCommand(AbstractCLICommand):
 
         self.server_url = None
 
+        # TODO
+        self.server_hostname = None
+        self.server_port = None
+        self.server_prefix = None
+        self.proxy_user = None
+        self.proxy_password = None
+        #
         self.proxy_url = None
         self.proxy_hostname = None
         self.proxy_port = None
@@ -334,19 +341,6 @@ class CliCommand(AbstractCLICommand):
             for arg in self.args:
                 print _("cannot parse argument: %s") % arg
             sys.exit(-1)
-
-        # get proxy information from env variable if available
-        info = get_env_proxy_info()
-
-        # set proxy before we try to connect to server
-        self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname')) or info['proxy_hostname']
-        self.proxy_port = cfg.get_int('server', 'proxy_port') or info['proxy_port']
-        self.proxy_user = cfg.get('server', 'proxy_user') or info['proxy_username']
-        self.proxy_password = cfg.get('server', 'proxy_password') or info['proxy_password']
-
-        self.server_hostname = cfg.get("server", "hostname")
-        self.server_port = cfg.get("server", "port")
-        self.server_prefix = cfg.get("server", "prefix")
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             cfg.set("server", "insecure", "1")

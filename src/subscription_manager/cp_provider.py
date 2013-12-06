@@ -13,9 +13,7 @@
 #
 
 from subscription_manager.certlib import ConsumerIdentity
-from rhsm.utils import remove_scheme, get_env_proxy_info
 import rhsm.connection as connection
-import rhsm.config
 
 
 class CPProvider(object):
@@ -52,22 +50,18 @@ class CPProvider(object):
                 proxy_user_arg=None,
                 proxy_password_arg=None):
 
-        cfg = rhsm.config.initConfig()
-
         self.cert_file = ConsumerIdentity.certpath()
         self.key_file = ConsumerIdentity.keypath()
 
-        # get the proxy information from the environment variable
-        # if available
-        info = get_env_proxy_info()
-
-        self.server_hostname = host or cfg.get('server', 'hostname')
-        self.server_port = ssl_port or cfg.get_int('server', 'port')
-        self.server_prefix = handler or cfg.get('server', 'prefix')
-        self.proxy_hostname = proxy_hostname_arg or remove_scheme(cfg.get('server', 'proxy_hostname')) or info['proxy_hostname']
-        self.proxy_port = proxy_port_arg or cfg.get_int('server', 'proxy_port') or info['proxy_port']
-        self.proxy_user = proxy_user_arg or cfg.get('server', 'proxy_user') or info['proxy_username']
-        self.proxy_password = proxy_password_arg or cfg.get('server', 'proxy_password') or info['proxy_password']
+        # only use what was passed in, let the lowest level deal with
+        # no values and look elsewhere for them.
+        self.server_hostname = host
+        self.server_port = ssl_port
+        self.server_prefix = handler
+        self.proxy_hostname = proxy_hostname_arg
+        self.proxy_port = proxy_port_arg
+        self.proxy_user = proxy_user_arg
+        self.proxy_password = proxy_password_arg
         self.clean()
 
     # Set username and password used for basic_auth without

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
 import unittest
 import re
 import sys
@@ -160,33 +159,6 @@ class TestCliProxyCommand(TestCliCommand):
         self.assertEquals(type(proxy_url), type(self.cc.options.proxy_url))
         self.assertEquals(proxy_host, self.cc.proxy_hostname)
         self.assertEquals(int(proxy_port), self.cc.proxy_port)
-
-    def test_env_proxy_url(self):
-        os.environ["https_proxy"] = "https://user:pass@example.com:1111"
-        self.cc.main()
-        self.assertEquals("user", self.cc.proxy_user)
-        self.assertEquals("pass", self.cc.proxy_password)
-        self.assertEquals("example.com", self.cc.proxy_hostname)
-        self.assertEquals(1111, self.cc.proxy_port)
-        os.environ.pop("https_proxy")
-
-    def test_env_proxy_url_no_port(self):
-        os.environ["https_proxy"] = "https://user:pass@example.com"
-        self.cc.main()
-        self.assertEquals("user", self.cc.proxy_user)
-        self.assertEquals("pass", self.cc.proxy_password)
-        self.assertEquals("example.com", self.cc.proxy_hostname)
-        self.assertEquals(3128, self.cc.proxy_port)
-        os.environ.pop("https_proxy")
-
-    def test_env_proxy_url_nouser_or_pass(self):
-        os.environ["https_proxy"] = "https://example.com"
-        self.cc.main()
-        self.assertEquals(None, self.cc.proxy_user)
-        self.assertEquals(None, self.cc.proxy_password)
-        self.assertEquals("example.com", self.cc.proxy_hostname)
-        self.assertEquals(3128, self.cc.proxy_port)
-        os.environ.pop("https_proxy")
 
     def test_main_proxy_user(self):
         proxy_user = "buster"
