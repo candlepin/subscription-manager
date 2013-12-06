@@ -14,6 +14,7 @@
 # in this software or its documentation.
 #
 
+import inspect
 from socket import error as socket_error
 from M2Crypto.SSL import SSLError
 import gettext
@@ -64,11 +65,10 @@ class ExceptionMapper(object):
         return restlib_exception.msg
 
     def get_message(self, ex):
-        if self.is_mapped(ex):
-            message_template, formatter = self.message_map[type(ex)]
-            return formatter(ex, message_template)
-
+        # Lookup by __class__ instead of type to support old style classes
+        classes = inspect.getmro(ex.__class__)
+        for next_class in classes:
+            if next_class in self.message_map:
+                message_template, formatter = self.message_map[next_class]
+                return formatter(ex, message_template)
         return None
-
-    def is_mapped(self, ex):
-        return type(ex) in self.message_map

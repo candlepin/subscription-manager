@@ -156,9 +156,9 @@ def handle_exception(msg, ex):
     log.exception(ex)
 
     exception_mapper = ExceptionMapper()
-
-    if exception_mapper.is_mapped(ex):
-        print exception_mapper.get_message(ex)
+    mapped_message = exception_mapper.get_message(ex)
+    if mapped_message:
+        print mapped_message
         sys.exit(-1)
     else:
         system_exit(-1, ex)

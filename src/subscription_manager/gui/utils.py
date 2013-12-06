@@ -72,8 +72,8 @@ def handle_gui_exception(e, msg, parent, format_msg=True, log_msg=None):
         log.exception(e)
 
     exception_mapper = ExceptionMapper()
-    if exception_mapper.is_mapped(e):
-        mapped_message = exception_mapper.get_message(e)
+    mapped_message = exception_mapper.get_message(e)
+    if mapped_message:
         if isinstance(e, connection.RestlibException):
             # If this exception's code is in the 200 range (such as 202 ACCEPTED)
             # we're going to ignore the message we were given and just display
