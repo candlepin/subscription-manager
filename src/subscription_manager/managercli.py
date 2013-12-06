@@ -2294,7 +2294,8 @@ class OverrideCommand(CliCommand):
                 if ex.code == 400:
                     # black listed overrides specified.
                     # Print message and return a less severe code.
-                    system_exit(1, ex)
+                    print str(ex)
+                    sys.exit(1)
                 else:
                     raise ex
 
