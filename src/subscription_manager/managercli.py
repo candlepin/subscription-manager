@@ -53,9 +53,9 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width
 from subscription_manager.overrides import Overrides, Override
+from subscription_manager.exceptions import ExceptionMapper
 
 from yum.i18n import utf8_width
-from subscription_manager.exceptions import ExceptionMapper
 
 _ = gettext.gettext
 
@@ -2194,10 +2194,10 @@ class OverrideCommand(CliCommand):
         self.parser.add_option("--repo", dest="repos", action="append", metavar="REPOID",
             help=_("repository to modify (can be specified more than once)"))
         self.parser.add_option("--remove", dest="removals", action="append", metavar="NAME",
-            help=_("name of the override to remove (can be specified more than once)"))
+            help=_("name of the override to remove (can be specified more than once); used with --repo option."))
         self.parser.add_option("--add", dest="additions", action="callback", callback=self._colon_split,
             type="string", metavar="NAME:VALUE",
-            help=_("name and value of the option to override separated by a colon (can be specified more than once)"))
+            help=_("name and value of the option to override separated by a colon (can be specified more than once); used with --repo option."))
         self.parser.add_option("--remove-all", action="store_true",
             help=_("remove all overrides; can be specific to a repository by providing --repo"))
         self.parser.add_option("--list", action="store_true",
@@ -2239,17 +2239,13 @@ class OverrideCommand(CliCommand):
         consumer = check_registration()['uuid']
 
         if not self.cp.supports_resource('content_overrides'):
-            system_exit(-1, _("Error: The 'override' command is not supported by the server."))
+            system_exit(-1, _("Error: The 'repo-override' command is not supported by the server."))
 
         # update entitlement certificates if necessary. If we do have new entitlements
         # CertLib.update() will call RepoLib.update().
         CertLib(uep=self.cp).update()
         # make sure the EntitlementDirectory singleton is refreshed
         self._request_validity_check()
-
-        if not self.entitlement_dir.list():
-            print _("This system does not have any subscriptions.")
-            return 1
 
         overrides = Overrides(self.cp)
 
@@ -2262,8 +2258,24 @@ class OverrideCommand(CliCommand):
             return
 
         if self.options.additions:
+            repo_ids = [repo.id for repo in overrides.repo_lib.get_repos(apply_overrides=False)]
             to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
-            results = overrides.add_overrides(consumer, to_add)
+
+            try:
+                results = overrides.add_overrides(consumer, to_add)
+            except connection.RestlibException, ex:
+                if ex.code == 400:
+                    # black listed overrides specified.
+                    # Print message and return a less severe code.
+                    system_exit(1, ex)
+                else:
+                    raise ex
+
+            # Print out warning messages if the specified repo does not exist in the repo file.
+            for repo in self.options.repos:
+                if repo not in repo_ids:
+                    print _("Repository '%s' does not currently exist, but the override has been added.") % repo
+
         if self.options.removals:
             to_remove = [Override(repo, item) for repo in self.options.repos for item in self.options.removals]
             results = overrides.remove_overrides(consumer, to_remove)

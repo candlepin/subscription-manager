@@ -20,12 +20,13 @@ import gtk
 
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.gui import widgets
-from subscription_manager.injection import IDENTITY, CP_PROVIDER, require
+
+from subscription_manager.injection import IDENTITY, ENT_DIR, require
 from subscription_manager.gui.storage import MappedListStore
 from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\
     SelectionWrapper, HasSortableWidget
 from subscription_manager.gui.messageWindow import YesNoDialog
-from subscription_manager.overrides import Overrides, Override
+from subscription_manager.overrides import Override
 
 _ = gettext.gettext
 
@@ -41,11 +42,20 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
                     'gpgcheck_remove_button', 'gpgcheck_edit_button',
                     'baseurl_text', 'no_repos_label_container', 'no_repos_label']
 
-    def __init__(self, parent):
+    ENTS_PROVIDE_NO_REPOS = _("Attached subscriptions do not provide any repositories.")
+    NO_ATTACHED_SUBS = _("No repositories are available without an attached subscription.")
+
+    def __init__(self, backend, parent):
         super(RepositoriesDialog, self).__init__('repositories.glade')
+
+        # We require the backend here so that we can always use its version
+        # of Overrides which will guarantee that the CP UEPConnection is up
+        # to date.
+        # FIXME: We really shouldn't have to worry about our connection info
+        #        changing out from under us.
+        self.backend = backend
         self.identity = require(IDENTITY)
-        cp_provider = require(CP_PROVIDER)
-        self.overrides = Overrides(cp_provider.get_consumer_auth_cp())
+        self.ent_dir = require(ENT_DIR)
 
         self.glade.signal_autoconnect({
                 "on_dialog_delete_event": self._on_close,
@@ -133,7 +143,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
     def _load_data(self):
         # pull the latest overrides from the cache which will be the ones from the server.
-        current_overrides = self.overrides.get_overrides(self.identity.uuid) or []
+        current_overrides = self.backend.overrides.get_overrides(self.identity.uuid) or []
         self._refresh(current_overrides)
         # By default sort by repo_id
         self.overrides_store.set_sort_column_id(0, gtk.SORT_ASCENDING)
@@ -149,12 +159,18 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
         self.overrides_store.clear()
 
-        current_repos = self.overrides.repo_lib.get_repos(apply_overrides=False)
+        current_repos = self.backend.overrides.repo_lib.get_repos(apply_overrides=False)
         if (current_repos):
             self.overrides_treeview.show()
             self.no_repos_label_container.hide()
         else:
+            ent_count = len(self.ent_dir.list_valid())
+            no_repos_message = self.ENTS_PROVIDE_NO_REPOS
+            if ent_count == 0:
+                no_repos_message = self.NO_ATTACHED_SUBS
+
             self.overrides_treeview.hide()
+            self.no_repos_label.set_markup("<b>%s</b>" % no_repos_message)
             self.no_repos_label_container.show()
 
         # Fetch the repositories from repolib without any overrides applied.
@@ -408,19 +424,19 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
     def _add_override(self, repo, name, value):
         to_add = Override(repo, name, value)
-        current_overrides = self.overrides.add_overrides(self.identity.uuid, [to_add])
-        self.overrides.update(current_overrides)
+        current_overrides = self.backend.overrides.add_overrides(self.identity.uuid, [to_add])
+        self.backend.overrides.update(current_overrides)
         self._refresh(current_overrides, self._get_selected_repo_id())
 
     def _delete_override(self, repo, name):
         to_delete = Override(repo, name)
-        current_overrides = self.overrides.remove_overrides(self.identity.uuid, [to_delete])
-        self.overrides.update(current_overrides)
+        current_overrides = self.backend.overrides.remove_overrides(self.identity.uuid, [to_delete])
+        self.backend.overrides.update(current_overrides)
         self._refresh(current_overrides, self._get_selected_repo_id())
 
     def _delete_all_overrides(self, repo_id):
-        current_overrides = self.overrides.remove_all_overrides(self.identity.uuid, [repo_id])
-        self.overrides.update(current_overrides)
+        current_overrides = self.backend.overrides.remove_all_overrides(self.identity.uuid, [repo_id])
+        self.backend.overrides.update(current_overrides)
         self._refresh(current_overrides, self._get_selected_repo_id())
 
     def _get_dialog_widget(self):

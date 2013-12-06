@@ -113,7 +113,13 @@ class UpdateAction:
 
         # If we are not registered, skip trying to refresh the
         # data from the server
-        if self.identity.is_valid():
+        if not self.identity.is_valid():
+            return
+
+        # Only attempt to update the overrides if they are supported
+        # by the server.
+        self.overrides = []
+        if self.override_supported:
             override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
             if cache_only:
                 status = override_cache._read_cache()
@@ -123,17 +129,17 @@ class UpdateAction:
             if status is not None:
                 self.overrides = status
 
-            message = "Release API is not supported by the server. Using default."
-            try:
-                result = self.uep.getRelease(self.identity.uuid)
-                self.release = result['releaseVer']
-            except RemoteServerException, e:
+        message = "Release API is not supported by the server. Using default."
+        try:
+            result = self.uep.getRelease(self.identity.uuid)
+            self.release = result['releaseVer']
+        except RemoteServerException, e:
+            log.debug(message)
+        except RestlibException, e:
+            if e.code == 404:
                 log.debug(message)
-            except RestlibException, e:
-                if e.code == 404:
-                    log.debug(message)
-                else:
-                    raise
+            else:
+                raise
 
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
@@ -560,7 +566,7 @@ class RepoFile(ConfigParser):
         s.append('# Managed by (rhsm) subscription-manager')
         s.append('#')
         s.append('# *** This file is auto-generated.  Changes made here will be over-written. ***')
-        s.append('# *** Use "subscription-manager override" if you wish to make changes. ***')
+        s.append('# *** Use "subscription-manager repo-override --help" if you wish to make changes. ***')
         s.append('#')
         s.append('# If this file is empty and this system is subscribed consider ')
         s.append('# a "yum repolist" to refresh available repos')

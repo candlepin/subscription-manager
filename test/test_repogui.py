@@ -17,6 +17,7 @@ from fixture import SubManFixture
 from subscription_manager.gui.reposgui import RepositoriesDialog
 from subscription_manager.repolib import Repo
 from subscription_manager.overrides import Override
+from stubs import StubEntitlementCertificate, StubProduct
 
 
 class TestReposGui(SubManFixture):
@@ -27,12 +28,15 @@ class TestReposGui(SubManFixture):
         self.repo_lib = Mock()
         self.repo_lib.get_repos.return_value = []
 
-        self.overrides = Mock()
-        self.overrides.repo_lib = self.repo_lib
-        self.overrides.get_overrides.return_value = []
+        self.overrides_mock = Mock()
+        self.overrides_mock.repo_lib = self.repo_lib
+        self.overrides_mock.get_overrides.return_value = []
 
-        self.dialog = RepositoriesDialog(None)
-        self.dialog.overrides = self.overrides
+        backend = Mock()
+        backend.overrides = self.overrides_mock
+
+        self.dialog = RepositoriesDialog(backend, None)
+        self.dialog.overrides_mock = self.overrides_mock
 
     def test_show_dialog_with_no_overrides(self):
         repo = self._create_repo("my_repo", [('enabled', '0'), ('gpgcheck', '0')])
@@ -82,7 +86,7 @@ class TestReposGui(SubManFixture):
     def test_show_dialog_with_overrides(self):
         repo = self._create_repo("my_repo", [('enabled', '0')])
         self.repo_lib.get_repos.return_value = [repo]
-        self.overrides.get_overrides.return_value = [
+        self.overrides_mock.get_overrides.return_value = [
             Override('my_repo', 'enabled', '1'),
             Override('my_repo', 'gpgcheck', '0')
         ]
@@ -141,11 +145,30 @@ class TestReposGui(SubManFixture):
 
     def test_remove_all_button_enabled_when_repo_has_modifications(self):
         self.repo_lib.get_repos.return_value = [self._create_repo("my_repo", [('enabled', '0')])]
-        self.overrides.get_overrides.return_value = [
+        self.overrides_mock.get_overrides.return_value = [
             Override('my_repo', 'enabled', '1')
         ]
         self.dialog.show()
         self.assertTrue(self.dialog.reset_button.props.sensitive)
+
+    def test_correct_no_repos_label_with_no_ent_certs(self):
+        self.repo_lib.get_repos.return_value = []
+        self.dialog.show()
+
+        self.assertTrue(self.dialog.no_repos_label.props.visible)
+        self.assertFalse(self.dialog.overrides_treeview.props.visible)
+        self.assertEqual(self.dialog.NO_ATTACHED_SUBS,
+                         self.dialog.no_repos_label.get_text())
+
+    def test_correct_no_repos_label_with_ent_certs_providing_no_repos(self):
+        self.ent_dir.certs.append(StubEntitlementCertificate(StubProduct("p1234")))
+        self.repo_lib.get_repos.return_value = []
+        self.dialog.show()
+
+        self.assertTrue(self.dialog.no_repos_label.props.visible)
+        self.assertFalse(self.dialog.overrides_treeview.props.visible)
+        self.assertEqual(self.dialog.ENTS_PROVIDE_NO_REPOS,
+                         self.dialog.no_repos_label.get_text())
 
     def _create_repo(self, repo_id, attribute_tuple_list):
         attrs = [('name', repo_id.upper()), ('baseurl', 'http://foo.bar')]

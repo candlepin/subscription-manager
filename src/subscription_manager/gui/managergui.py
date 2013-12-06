@@ -55,6 +55,7 @@ from subscription_manager.gui.mysubstab import MySubscriptionsTab
 from subscription_manager.gui.preferences import PreferencesDialog
 from subscription_manager.gui.utils import handle_gui_exception, linkify
 from subscription_manager.gui.reposgui import RepositoriesDialog
+from subscription_manager.overrides import Overrides
 
 
 _ = gettext.gettext
@@ -92,6 +93,7 @@ class Backend(object):
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.certlib = CertLib(uep=self.cp_provider.get_consumer_auth_cp())
+        self.overrides = Overrides(self.cp_provider.get_consumer_auth_cp())
 
         self.cs = require(CERT_SORTER)
 
@@ -105,8 +107,11 @@ class Backend(object):
         # Re-initialize our connection:
         self.cp_provider.set_connection_info()
 
-        # Holds a reference to the old uep:
+        # These objects hold a reference to the old uep and must be updated:
+        # FIXME: We should find a way to update the connection so that the
+        #        conncection objects are refreshed rather than recreated.
         self.certlib = CertLib(uep=self.cp_provider.get_consumer_auth_cp())
+        self.overrides = Overrides(self.cp_provider.get_consumer_auth_cp())
 
     def create_content_connection(self):
         self.content_connection = self._create_content_connection()
@@ -159,7 +164,7 @@ class MainWindow(widgets.GladeWidget):
         self.preferences_dialog = PreferencesDialog(self.backend,
                                                     self._get_window())
 
-        self.repos_dialog = RepositoriesDialog(self._get_window())
+        self.repos_dialog = RepositoriesDialog(self.backend, self._get_window())
 
         self.import_sub_dialog = ImportSubDialog()
 
