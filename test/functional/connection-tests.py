@@ -95,31 +95,31 @@ class ContentConnectionTests(unittest.TestCase):
 
     # sigh camelCase
     def testEnvProxyUrl(self):
-        os.environ["https_proxy"] = "https://user:pass@example.com:1111"
-        cc = ContentConnection(host="127.0.0.1")
-        self.assertEquals("user", cc.proxy_user)
-        self.assertEquals("pass", cc.proxy_password)
-        self.assertEquals("example.com", cc.proxy_hostname)
-        self.assertEquals(1111, cc.proxy_port)
-        os.environ.pop("https_proxy")
+        with patch.dict('os.environ', {'https_proxy': 'https://user:pass@example.com:1111'}):
+            cc = ContentConnection(host="127.0.0.1")
+            self.assertEquals("user", cc.proxy_user)
+            self.assertEquals("pass", cc.proxy_password)
+            self.assertEquals("example.com", cc.proxy_hostname)
+            self.assertEquals(1111, cc.proxy_port)
+        assert 'https_proxy' not in os.environ
 
     def testEnvProxyUrlNoPort(self):
-        os.environ["https_proxy"] = "https://user:pass@example.com"
-        cc = ContentConnection(host="127.0.0.1")
-        self.assertEquals("user", cc.proxy_user)
-        self.assertEquals("pass", cc.proxy_password)
-        self.assertEquals("example.com", cc.proxy_hostname)
-        self.assertEquals(3128, cc.proxy_port)
-        os.environ.pop("https_proxy")
+        with patch.dict('os.environ', {'https_proxy': 'https://user:pass@example.com'}):
+            cc = ContentConnection(host="127.0.0.1")
+            self.assertEquals("user", cc.proxy_user)
+            self.assertEquals("pass", cc.proxy_password)
+            self.assertEquals("example.com", cc.proxy_hostname)
+            self.assertEquals(3128, cc.proxy_port)
+        assert 'https_proxy' not in os.environ
 
     def testEnvProxyUrlNouserOrPass(self):
-        os.environ["https_proxy"] = "https://example.com"
-        cc = ContentConnection(host="127.0.0.1")
-        self.assertEquals(None, cc.proxy_user)
-        self.assertEquals(None, cc.proxy_password)
-        self.assertEquals("example.com", cc.proxy_hostname)
-        self.assertEquals(3128, cc.proxy_port)
-        os.environ.pop("https_proxy")
+        with patch.dict('os.environ', {'https_proxy': 'https://example.com'}):
+            cc = ContentConnection(host="127.0.0.1")
+            self.assertEquals(None, cc.proxy_user)
+            self.assertEquals(None, cc.proxy_password)
+            self.assertEquals("example.com", cc.proxy_hostname)
+            self.assertEquals(3128, cc.proxy_port)
+        assert 'https_proxy' not in os.environ
 
 
 class HypervisorCheckinTests(unittest.TestCase):

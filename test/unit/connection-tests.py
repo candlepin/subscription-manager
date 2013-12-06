@@ -63,47 +63,46 @@ class ConnectionTests(unittest.TestCase):
         self.assertTrue(self.cp.handler == "/Test")
 
     def test_https_proxy_info_allcaps(self):
-        os.environ["HTTPS_PROXY"] = "http://u:p@host:4444"
-        uep = UEPConnection(username="dummy", password="dummy",
-             handler="/Test/", insecure=True)
-        self.assertEquals("u", uep.proxy_user)
-        self.assertEquals("p", uep.proxy_password)
-        self.assertEquals("host", uep.proxy_hostname)
-        self.assertEquals(int("4444"), uep.proxy_port)
-        os.environ.pop("HTTPS_PROXY")
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444'}):
+            uep = UEPConnection(username="dummy", password="dummy",
+                 handler="/Test/", insecure=True)
+            self.assertEquals("u", uep.proxy_user)
+            self.assertEquals("p", uep.proxy_password)
+            self.assertEquals("host", uep.proxy_hostname)
+            self.assertEquals(int("4444"), uep.proxy_port)
+        assert 'HTTPS_PROXY' not in os.environ
 
     def test_order(self):
         # should follow the order: HTTPS, https, HTTP, http
-        os.environ["HTTPS_PROXY"] = "http://u:p@host:1111"
-        os.environ["http_proxy"] = "http://notme:orme@host:2222"
-        uep = UEPConnection(username="dummy", password="dummy",
-             handler="/Test/", insecure=True)
-        self.assertEquals("u", uep.proxy_user)
-        self.assertEquals("p", uep.proxy_password)
-        self.assertEquals("host", uep.proxy_hostname)
-        self.assertEquals(int("1111"), uep.proxy_port)
-        os.environ.pop("HTTPS_PROXY")
-        os.environ.pop("http_proxy")
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444', 'http_proxy': 'http://notme:orme@host:2222'}):
+            uep = UEPConnection(username="dummy", password="dummy",
+                 handler="/Test/", insecure=True)
+            self.assertEquals("u", uep.proxy_user)
+            self.assertEquals("p", uep.proxy_password)
+            self.assertEquals("host", uep.proxy_hostname)
+            self.assertEquals(int("1111"), uep.proxy_port)
+        assert 'HTTPS_PROXY' not in os.environ
+        assert 'http_proxy' not in os.environ
 
     def test_no_port(self):
-        os.environ["HTTPS_PROXY"] = "http://u:p@host"
-        uep = UEPConnection(username="dummy", password="dummy",
-             handler="/Test/", insecure=True)
-        self.assertEquals("u", uep.proxy_user)
-        self.assertEquals("p", uep.proxy_password)
-        self.assertEquals("host", uep.proxy_hostname)
-        self.assertEquals(3128, uep.proxy_port)
-        os.environ.pop("HTTPS_PROXY")
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host'}):
+            uep = UEPConnection(username="dummy", password="dummy",
+                 handler="/Test/", insecure=True)
+            self.assertEquals("u", uep.proxy_user)
+            self.assertEquals("p", uep.proxy_password)
+            self.assertEquals("host", uep.proxy_hostname)
+            self.assertEquals(3128, uep.proxy_port)
+        assert 'HTTPS_PROXY' not in os.environ
 
     def test_no_user_or_password(self):
-        os.environ["HTTPS_PROXY"] = "http://host:1111"
-        uep = UEPConnection(username="dummy", password="dummy",
-             handler="/Test/", insecure=True)
-        self.assertEquals(None, uep.proxy_user)
-        self.assertEquals(None, uep.proxy_password)
-        self.assertEquals("host", uep.proxy_hostname)
-        self.assertEquals(int("1111"), uep.proxy_port)
-        os.environ.pop("HTTPS_PROXY")
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://host:1111'}):
+            uep = UEPConnection(username="dummy", password="dummy",
+                 handler="/Test/", insecure=True)
+            self.assertEquals(None, uep.proxy_user)
+            self.assertEquals(None, uep.proxy_password)
+            self.assertEquals("host", uep.proxy_hostname)
+            self.assertEquals(int("1111"), uep.proxy_port)
+        assert 'HTTPS_PROXY' not in os.environ
 
 
 class RestlibValidateResponseTests(unittest.TestCase):
