@@ -57,6 +57,7 @@ from subscription_manager.utils import parse_server_info, \
 from subscription_manager.overrides import Overrides, Override
 
 from yum.i18n import utf8_width
+from rhsm.connection import RestlibException
 
 _ = gettext.gettext
 
@@ -2284,7 +2285,16 @@ class OverrideCommand(CliCommand):
         if self.options.additions:
             repo_ids = [repo.id for repo in overrides.repo_lib.get_repos(apply_overrides=False)]
             to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
-            results = overrides.add_overrides(consumer, to_add)
+
+            try:
+                results = overrides.add_overrides(consumer, to_add)
+            except RestlibException, ex:
+                if ex.code == 400:
+                    # black listed overrides specified.
+                    # Print message and return a less severe code.
+                    system_exit(1, ex)
+                else:
+                    raise ex
 
             # Print out warning messages if the specified repo does not exist in the repo file.
             for repo in self.options.repos:
