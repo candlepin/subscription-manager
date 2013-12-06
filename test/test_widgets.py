@@ -31,6 +31,8 @@ from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui.widgets import MachineTypeColumn, QuantitySelectionColumn, \
                                              SubDetailsWidget, ContractSubDetailsWidget, \
                                              DatePicker
+from mock import patch
+from StringIO import StringIO
 
 
 class TestSubDetailsWidget(unittest.TestCase):
@@ -121,7 +123,10 @@ class TestDatePicker(unittest.TestCase):
 
     # why? because some locales fail to parse in dates with
     # double digt months
-    def test_date_validate_supported_locales_12_29_2020(self):
+    @patch("sys.stderr", new_callable=StringIO)
+    def test_date_validate_supported_locales_12_29_2020(self, mock_err):
+        # This test emits an annoying error message due to a problem with the
+        # GTK translations.  Dump stderr to a buffer to shut it up.  See BZ 868441
         d = datetime(2020, 12, 29, tzinfo=LocalTz())
         self.__date_validate_supported_locales(d)
 
