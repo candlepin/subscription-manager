@@ -18,7 +18,6 @@ import errno
 import mock
 import os
 import shutil
-import sys
 import tempfile
 import unittest
 import zipfile
@@ -31,7 +30,6 @@ from rct.manifest_commands import get_value
 from rct.manifest_commands import RCTManifestCommand
 from rct.manifest_commands import ZipExtractAll
 
-from stubs import MockStderr
 from fixture import Capture, SubManFixture
 
 
@@ -69,15 +67,11 @@ class RCTManifestCommandTests(SubManFixture):
         catman = CatManifestCommand()
         catman.args = [_build_valid_manifest()]
 
-        mock_err = MockStderr()
-        sys.stderr = mock_err
         with Capture() as cap:
             catman._do_command()
 
-        self.assertEquals("", mock_err.buffer)
+        self.assertEquals("", cap.err)
         self.assert_string_equals(manifestdata.correct_manifest_output, cap.out)
-
-        sys.stderr = sys.__stderr__
 
     def test_extract_manifest(self):
         tmp_dir = tempfile.mkdtemp()
