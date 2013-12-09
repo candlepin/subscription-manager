@@ -22,29 +22,34 @@ Perfers to use gio as the backend, but can fallback to polling.
 import gobject
 import os
 
+import rhsm.config
+
 
 class Monitor(gobject.GObject):
 
     __gsignals__ = {
-        'changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, tuple())
+        'changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
+            (gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN))
     }
 
-    def __init__(self, path):
+    def __init__(self):
         self.__gobject_init__()
+        cfg = rhsm.config.initConfig()
+        # Identity, Entitlements, Products
+        self.dirs = {cfg.get('rhsm', 'consumerCertDir'): None,
+                cfg.get('rhsm', 'entitlementCertDir'): None,
+                cfg.get('rhsm', 'productCertDir'): None}
 
-        self._path = path
-
-        (mtime, exists) = self._check_mtime()
-        self._last_mtime = mtime
-        self._exists = exists
+        for directory in self.dirs:
+            self.dirs[directory] = self._check_mtime(directory)
 
         # poll every 2 seconds for changes
         gobject.timeout_add(2000, self.run_check)
 
-    def _check_mtime(self):
+    def _check_mtime(self, path):
         mtime = 0
         try:
-            mtime = os.path.getmtime(self._path)
+            mtime = os.path.getmtime(path)
             exists = True
         except OSError:
             exists = False
@@ -52,12 +57,14 @@ class Monitor(gobject.GObject):
         return (mtime, exists)
 
     def run_check(self):
-        (mtime, exists) = self._check_mtime()
+        result = []
+        for directory in self.dirs:
+            (mtime, exists) = self._check_mtime(directory)
+            result.append((mtime != self.dirs[directory][0]) or
+                    (exists != self.dirs[directory][1]))
+            self.dirs[directory] = (mtime, exists)
 
-        if (mtime != self._last_mtime) or (exists != self._exists):
-            self.emit("changed")
-
-        self._last_mtime = mtime
-        self._exists = exists
-
+        # If something has changed
+        if True in result:
+            self.emit("changed", *result)
         return True
