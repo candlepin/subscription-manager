@@ -21,7 +21,7 @@ import StringIO
 import unittest
 
 import stubs
-from fixture import capture
+from fixture import Capture
 
 import rhsm.config
 from subscription_manager.migrate import migrate
@@ -665,7 +665,7 @@ class TestMigration(unittest.TestCase):
                 '3': {'cert-m-3.pem': ['chanA'], 'cert-n-3.pem': ['chanB'], 'cert-o-3.pem': ['chanC']}
         }
 
-        with capture() as out:
+        with Capture() as out:
             try:
                 self.engine.handle_collisions(cmap)
             except SystemExit, e:

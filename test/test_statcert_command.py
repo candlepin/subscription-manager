@@ -13,15 +13,12 @@
 # in this software or its documentation.
 #
 
-import sys
-
 import certdata
 
 from rct.cert_commands import StatCertCommand
 from rhsm.certificate import create_from_pem
 
-from stubs import MockStderr
-from fixture import capture, SubManFixture
+from fixture import Capture, SubManFixture
 
 
 class StatCertCommandStub(StatCertCommand):
@@ -46,29 +43,26 @@ class StatCertCommandTests(SubManFixture):
 
     def setUp(self):
         super(StatCertCommandTests, self).setUp()
-        self.mock_stderr = MockStderr()
-        sys.stderr = self.mock_stderr
 
     def tearDown(self):
         super(StatCertCommandTests, self).tearDown()
-        sys.stderr = sys.__stderr__
 
     def test_product_cert_output(self):
-        with capture() as out:
+        with Capture() as out:
             command = StatCertCommandStub(certdata.PRODUCT_CERT_V1_0)
             command.main(['will_use_stub'])
         cert_output = out.getvalue()
         self.assert_string_equals(certdata.PRODUCT_CERT_V1_0_STAT_OUTPUT, cert_output)
 
     def test_product_cert_with_os_name_output(self):
-        with capture() as out:
+        with Capture() as out:
             command = StatCertCommandStub(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0)
             command.main(['will_use_stub'])
         cert_output = out.getvalue()
         self.assert_string_equals(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0_STAT_OUTPUT, cert_output)
 
     def test_entitlement_cert_output_includes_content_sets(self):
-        with capture() as out:
+        with Capture() as out:
             command = StatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
             command.main(['will_use_stub'])
         cert_output = out.getvalue()

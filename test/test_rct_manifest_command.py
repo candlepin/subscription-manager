@@ -32,7 +32,7 @@ from rct.manifest_commands import RCTManifestCommand
 from rct.manifest_commands import ZipExtractAll
 
 from stubs import MockStderr
-from fixture import capture, SubManFixture
+from fixture import Capture, SubManFixture
 
 
 def _build_valid_manifest():
@@ -71,7 +71,7 @@ class RCTManifestCommandTests(SubManFixture):
 
         mock_err = MockStderr()
         sys.stderr = mock_err
-        with capture() as out:
+        with Capture() as out:
             catman._do_command()
 
         self.assertEquals("", mock_err.buffer)

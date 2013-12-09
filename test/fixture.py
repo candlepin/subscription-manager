@@ -161,11 +161,7 @@ class SubManFixture(unittest.TestCase):
         return True
 
 
-class capture:
-    @staticmethod
-    def isatty(buf=None):
-        return False
-
+class Capture(object):
     def write(self, data):
         self.buf.write(data)
         self.stdout.write(data)

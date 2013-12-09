@@ -16,7 +16,7 @@ import sys
 import unittest
 
 import certdata
-from fixture import capture, SubManFixture
+from fixture import Capture, SubManFixture
 
 from rct.cert_commands import CatCertCommand
 from rct.printing import xstr
@@ -62,7 +62,7 @@ class CatCertCommandTests(SubManFixture):
         sys.stderr = sys.__stderr__
 
     def test_omit_content_list(self):
-        with capture() as out:
+        with Capture() as out:
             command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
             command.main(["not_used.pem", "--no-content"])
         cert_output = out.getvalue()
@@ -70,7 +70,7 @@ class CatCertCommandTests(SubManFixture):
                         "Content was not excluded from the output.")
 
     def test_omit_product_list(self):
-        with capture() as out:
+        with Capture() as out:
             command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
             command.main(["not_used.pem", "--no-products"])
         cert_output = out.getvalue()
@@ -78,28 +78,28 @@ class CatCertCommandTests(SubManFixture):
                         "Products were not excluded from the output.")
 
     def test_cert_v1_cat(self):
-        with capture() as out:
+        with Capture() as out:
             command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
             command.main(['will_use_stub'])
         cert_output = out.getvalue()
         self.assert_string_equals(certdata.ENTITLEMENT_CERT_V1_0_OUTPUT, cert_output)
 
     def test_cert_v3_cat(self):
-        with capture() as out:
+        with Capture() as out:
             command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
             command.main(['will_use_stub'])
         cert_output = out.getvalue()
         self.assert_string_equals(certdata.ENTITLEMENT_CERT_V3_0_OUTPUT, cert_output)
 
     def test_product_cert_output(self):
-        with capture() as out:
+        with Capture() as out:
             command = CatCertCommandStub(certdata.PRODUCT_CERT_V1_0)
             command.main(['will_use_stub'])
         cert_output = out.getvalue()
         self.assert_string_equals(certdata.PRODUCT_CERT_V1_0_OUTPUT, cert_output)
 
     def test_identity_cert_output(self):
-        with capture() as out:
+        with Capture() as out:
             command = CatCertCommandStub(certdata.IDENTITY_CERT)
             command.main(['will_use_stub'])
         cert_output = out.getvalue()

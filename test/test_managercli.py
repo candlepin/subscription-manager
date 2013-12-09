@@ -14,7 +14,7 @@ from subscription_manager.repolib import Repo
 from stubs import MockStderr, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
 from fixture import FakeException, FakeLogger, SubManFixture, \
-        capture, Matcher
+        Capture, Matcher
 
 import mock
 from mock import patch
@@ -117,7 +117,7 @@ class TestCliCommand(SubManFixture):
             self.assertEquals(e.code, 2)
 
     def _main_help(self, args):
-        with capture() as out:
+        with Capture() as out:
             try:
                 self.cc.main(args)
             except SystemExit, e:
@@ -311,7 +311,7 @@ class TestListCommand(TestCliProxyCommand):
         mc_exists.return_value = True
 
         mcli.return_value = {'consumer_name': 'stub_name', 'uuid': 'stub_uuid'}
-        with capture() as out:
+        with Capture() as out:
             listCommand.main(['list', '--available'])
         self.assertTrue('888888888888' in out.getvalue())
 
@@ -499,7 +499,7 @@ class TestConfigCommand(TestCliCommand):
         self.assertEquals(managercli.cfg.store['rhsm.baseurl'], baseurl)
 
     def test_remove_config_default(self):
-        with capture() as out:
+        with Capture() as out:
             self.cc._do_command = self._orig_do_command
             self.cc.main(['--remove', 'rhsm.baseurl'])
         self.assertTrue('The default value for' in out.getvalue())
@@ -769,7 +769,7 @@ class TestOverrideCommand(TestCliProxyCommand):
             Override('y', 'goodbye', 'earth'),
             Override('z', 'greetings', 'mars')
         ]
-        with capture() as out:
+        with Capture() as out:
             self.cc._list(data, None)
             output = out.getvalue()
             self.assertTrue(re.search('Repository: x', output))
@@ -785,7 +785,7 @@ class TestOverrideCommand(TestCliProxyCommand):
             Override('x', 'hello', 'world'),
             Override('z', 'greetings', 'mars')
         ]
-        with capture() as out:
+        with Capture() as out:
             self.cc._list(data, ['x'])
             output = out.getvalue()
             self.assertTrue(re.search('Repository: x', output))
@@ -796,7 +796,7 @@ class TestOverrideCommand(TestCliProxyCommand):
         data = [
             Override('x', 'hello', 'world')
         ]
-        with capture() as out:
+        with Capture() as out:
             self.cc._list(data, ['x', 'z'])
             output = out.getvalue()
             self.assertTrue(re.search("Nothing is known about 'z'", output))
