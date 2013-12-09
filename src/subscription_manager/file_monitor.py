@@ -25,6 +25,36 @@ import os
 import rhsm.config
 
 
+class MonitorDirectory(object):
+
+    def __init__(self, path):
+        self.mtime = None
+        self.exists = None
+        self.path = path
+        self.update()
+
+    def _check_mtime(self):
+        mtime = 0
+        try:
+            mtime = os.path.getmtime(self.path)
+            exists = True
+        except OSError:
+            exists = False
+        return (mtime, exists)
+
+    def update(self):
+        mtime, exists = self._check_mtime()
+
+        # Has something changed?
+        result = mtime != self.mtime or exists != self.exists
+
+        # Update saved values
+        self.mtime = mtime
+        self.exists = exists
+
+        return result
+
+
 class Monitor(gobject.GObject):
 
     __gsignals__ = {
@@ -36,33 +66,15 @@ class Monitor(gobject.GObject):
         self.__gobject_init__()
         cfg = rhsm.config.initConfig()
         # Identity, Entitlements, Products
-        self.dirs = {cfg.get('rhsm', 'consumerCertDir'): None,
-                cfg.get('rhsm', 'entitlementCertDir'): None,
-                cfg.get('rhsm', 'productCertDir'): None}
-
-        for directory in self.dirs:
-            self.dirs[directory] = self._check_mtime(directory)
+        self.dirs = [MonitorDirectory(cfg.get('rhsm', 'consumerCertDir')),
+                MonitorDirectory(cfg.get('rhsm', 'entitlementCertDir')),
+                MonitorDirectory(cfg.get('rhsm', 'productCertDir'))]
 
         # poll every 2 seconds for changes
         gobject.timeout_add(2000, self.run_check)
 
-    def _check_mtime(self, path):
-        mtime = 0
-        try:
-            mtime = os.path.getmtime(path)
-            exists = True
-        except OSError:
-            exists = False
-
-        return (mtime, exists)
-
     def run_check(self):
-        result = []
-        for directory in self.dirs:
-            (mtime, exists) = self._check_mtime(directory)
-            result.append((mtime != self.dirs[directory][0]) or
-                    (exists != self.dirs[directory][1]))
-            self.dirs[directory] = (mtime, exists)
+        result = [directory.update() for directory in self.dirs]
 
         # If something has changed
         if True in result:

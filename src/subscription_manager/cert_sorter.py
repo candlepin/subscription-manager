@@ -356,15 +356,13 @@ class CertSorter(ComplianceManager):
         self.load()
         self.notify()
 
-    def on_cert_changed(self, monitor, *changed):
-        # Functions in order corresponding to monitor boolean order
-        changed_functions = [self.on_identity_changed,
-                self.on_ent_dir_changed, self.on_prod_dir_changed]
-
-        # Call correct corresponding on-change functions
-        for (changed, function) in filter(lambda l: l[0] is True,
-                zip(changed, changed_functions)):
-            function()
+    def on_cert_changed(self, monitor, ident_changed, ent_changed, prod_changed):
+        if ident_changed:
+            self.on_identity_changed()
+        if ent_changed:
+            self.on_ent_dir_changed()
+        if prod_changed:
+            self.on_prod_dir_changed()
 
         # Now that local data has been refreshed, updated compliance
         self.on_change()
