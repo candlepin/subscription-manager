@@ -665,14 +665,14 @@ class TestMigration(unittest.TestCase):
                 '3': {'cert-m-3.pem': ['chanA'], 'cert-n-3.pem': ['chanB'], 'cert-o-3.pem': ['chanC']}
         }
 
-        with Capture() as out:
+        with Capture() as cap:
             try:
                 self.engine.handle_collisions(cmap)
             except SystemExit, e:
                 self.assertEquals(e.code, 1)
             else:
                 self.fail("No exception raised")
-            output = out.getvalue().strip()
+            output = cap.out.strip()
             self.assertTrue(re.search("chan1\s*chan2\s*chan3", output))
             self.assertFalse(re.search("chan4", output))
             self.assertTrue(re.search("chanA\s*chanB", output))

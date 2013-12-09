@@ -62,45 +62,45 @@ class CatCertCommandTests(SubManFixture):
         sys.stderr = sys.__stderr__
 
     def test_omit_content_list(self):
-        with Capture() as out:
+        with Capture() as cap:
             command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
             command.main(["not_used.pem", "--no-content"])
-        cert_output = out.getvalue()
+        cert_output = cap.out
         self.assertTrue(cert_output.find("Content:\n") == -1,
                         "Content was not excluded from the output.")
 
     def test_omit_product_list(self):
-        with Capture() as out:
+        with Capture() as cap:
             command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
             command.main(["not_used.pem", "--no-products"])
-        cert_output = out.getvalue()
+        cert_output = cap.out
         self.assertTrue(cert_output.find("Product:\n") == -1,
                         "Products were not excluded from the output.")
 
     def test_cert_v1_cat(self):
-        with Capture() as out:
+        with Capture() as cap:
             command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
             command.main(['will_use_stub'])
-        cert_output = out.getvalue()
+        cert_output = cap.out
         self.assert_string_equals(certdata.ENTITLEMENT_CERT_V1_0_OUTPUT, cert_output)
 
     def test_cert_v3_cat(self):
-        with Capture() as out:
+        with Capture() as cap:
             command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
             command.main(['will_use_stub'])
-        cert_output = out.getvalue()
+        cert_output = cap.out
         self.assert_string_equals(certdata.ENTITLEMENT_CERT_V3_0_OUTPUT, cert_output)
 
     def test_product_cert_output(self):
-        with Capture() as out:
+        with Capture() as cap:
             command = CatCertCommandStub(certdata.PRODUCT_CERT_V1_0)
             command.main(['will_use_stub'])
-        cert_output = out.getvalue()
+        cert_output = cap.out
         self.assert_string_equals(certdata.PRODUCT_CERT_V1_0_OUTPUT, cert_output)
 
     def test_identity_cert_output(self):
-        with Capture() as out:
+        with Capture() as cap:
             command = CatCertCommandStub(certdata.IDENTITY_CERT)
             command.main(['will_use_stub'])
-        cert_output = out.getvalue()
+        cert_output = cap.out
         self.assert_string_equals(certdata.IDENTITY_CERT_OUTPUT, cert_output)

@@ -71,11 +71,11 @@ class RCTManifestCommandTests(SubManFixture):
 
         mock_err = MockStderr()
         sys.stderr = mock_err
-        with Capture() as out:
+        with Capture() as cap:
             catman._do_command()
 
         self.assertEquals("", mock_err.buffer)
-        self.assert_string_equals(manifestdata.correct_manifest_output, out.getvalue())
+        self.assert_string_equals(manifestdata.correct_manifest_output, cap.out)
 
         sys.stderr = sys.__stderr__
 
