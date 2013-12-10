@@ -161,7 +161,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d $(PREFIX)/usr/share/rhsm/subscription_manager/gui/firstboot
 
 	# Adjust firstboot screen location for RHEL 6:
-	if [ $(OS_VERSION) = 6 ]; then \
+	if [ $(OS_VERSION) -le 6 ]; then \
 		install -d $(PREFIX)/usr/share/rhn/up2date_client/firstboot; \
 	else \
 		install -d $(PREFIX)/usr/share/firstboot/modules; \
@@ -231,7 +231,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	fi; \
 
 	# RHEL 6 Customizations:
-	if [ $(OS_VERSION) = 6 ]; then \
+	if [ $(OS_VERSION) -le 6 ]; then \
 		install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/rhn/up2date_client/firstboot;\
 	else \
 		install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/firstboot/modules/;\
