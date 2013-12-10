@@ -52,6 +52,9 @@
                             <property name="yalign">0</property>
                             <property name="ypad">6</property>
                             <property name="label" translatable="yes">label</property>
+                            <accessibility>
+                                <atkproperty name="AtkObject::accessible-name" translatable="yes">Overall Status</atkproperty>
+                            </accessibility>
                           </widget>
                           <packing>
                             <property name="expand">True</property>
