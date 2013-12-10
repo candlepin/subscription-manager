@@ -19,7 +19,7 @@ import unittest
 from rhsm.connection import ContentConnection, UEPConnection, drift_check, Restlib,\
     UnauthorizedException, ForbiddenException, AuthenticationException, RestlibException, \
     RemoteServerException
-import mock
+from mock import patch
 import random
 
 
@@ -58,9 +58,9 @@ class BindRequestTests(unittest.TestCase):
         consumerInfo = self.cp.registerConsumer("test-consumer", "system", owner="admin")
         self.consumer_uuid = consumerInfo['uuid']
 
-    @mock.patch.object(Restlib,'validateResponse')
-    @mock.patch('rhsm.connection.drift_check', return_value=False)
-    @mock.patch('M2Crypto.httpslib.HTTPSConnection', auto_spec=True)
+    @patch.object(Restlib,'validateResponse')
+    @patch('rhsm.connection.drift_check', return_value=False)
+    @patch('M2Crypto.httpslib.HTTPSConnection', auto_spec=True)
     def test_bind_no_args(self, mock_conn, mock_drift, mock_validate):
 
         self.cp.bind(self.consumer_uuid)
@@ -73,9 +73,9 @@ class BindRequestTests(unittest.TestCase):
             if name == '().request':
                 self.assertEquals(None, kwargs['body'])
 
-    @mock.patch.object(Restlib,'validateResponse')
-    @mock.patch('rhsm.connection.drift_check', return_value=False)
-    @mock.patch('M2Crypto.httpslib.HTTPSConnection', auto_spec=True)
+    @patch.object(Restlib,'validateResponse')
+    @patch('rhsm.connection.drift_check', return_value=False)
+    @patch('M2Crypto.httpslib.HTTPSConnection', auto_spec=True)
     def test_bind_by_pool(self, mock_conn, mock_drift, mock_validate):
         # this test is just to verify we make the httplib connection with
         # right args, we don't validate the bind here

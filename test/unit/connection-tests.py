@@ -80,7 +80,7 @@ class ConnectionTests(unittest.TestCase):
             self.assertEquals("u", uep.proxy_user)
             self.assertEquals("p", uep.proxy_password)
             self.assertEquals("host", uep.proxy_hostname)
-            self.assertEquals(int("1111"), uep.proxy_port)
+            self.assertEquals(int("4444"), uep.proxy_port)
         assert 'HTTPS_PROXY' not in os.environ
         assert 'http_proxy' not in os.environ
 

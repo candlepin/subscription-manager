@@ -83,8 +83,7 @@ def has_good_scheme(url):
         return False
     # a good scheme alone is not really a good scheme
     if not match.group(1):
-        raise ServerUrlParseErrorJustScheme(url,
-                msg=_("Server URL is just a schema. Should include hostname, and/or port and path"))
+        raise ServerUrlParseErrorJustScheme(url)
     return True
 
 
@@ -107,12 +106,10 @@ def parse_url(local_server_entry,
     # Adding http:// onto the front of the hostname
 
     if local_server_entry == "":
-        raise ServerUrlParseErrorEmpty(local_server_entry,
-                                       msg=_("Server URL can not be empty"))
+        raise ServerUrlParseErrorEmpty(local_server_entry)
 
     if local_server_entry is None:
-        raise ServerUrlParseErrorNone(local_server_entry,
-                                      msg=_("Server URL can not be None"))
+        raise ServerUrlParseErrorNone(local_server_entry)
 
     # good_url in this case meaning a schema we support, and
     # _something_ else. This is to make urlparse happy
@@ -120,8 +117,7 @@ def parse_url(local_server_entry,
 
     # handle any known or troublesome or bogus typo's, etc
     if has_bad_scheme(local_server_entry):
-        raise ServerUrlParseErrorScheme(local_server_entry,
-            msg=_("Server URL has an invalid scheme. http:// and https:// are supported"))
+        raise ServerUrlParseErrorScheme(local_server_entry)
 
     # we want to see if we have a good scheme, and
     # at least _something_ else
@@ -170,8 +166,7 @@ def parse_url(local_server_entry,
         if netloc[1] != "":
             port = str(netloc[1])
         else:
-            raise ServerUrlParseErrorPort(local_server_entry,
-                                      msg=_("Server URL port could not be parsed"))
+            raise ServerUrlParseErrorPort(local_server_entry)
 
     # path can be None?
     prefix = default_prefix
@@ -188,11 +183,9 @@ def parse_url(local_server_entry,
         if port:
             int(port)
     except TypeError:
-        raise ServerUrlParseErrorPort(local_server_entry,
-                                      msg=_("Server URL port should be numeric"))
+        raise ServerUrlParseErrorPort(local_server_entry)
     except ValueError:
-        raise ServerUrlParseErrorPort(local_server_entry,
-                                      msg=_("Server URL port should be numeric"))
+        raise ServerUrlParseErrorPort(local_server_entry)
 
     return (username, password, hostname, port, prefix)
 
