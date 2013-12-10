@@ -285,7 +285,7 @@ class ProductsTable(object):
 
 class SubDetailsWidget(GladeWidget):
     widget_names = ["sub_details_vbox", "subscription_text", "products_view",
-                    "support_level_and_type_text", "sku_text"]
+                    "support_level_and_type_text", "sku_text", "pool_type_text"]
     glade_file = "subdetails.glade"
 
     def __init__(self, product_dir):
@@ -303,7 +303,7 @@ class SubDetailsWidget(GladeWidget):
     def show(self, name, contract=None, start=None, end=None, account=None,
             management=None, support_level="", support_type="",
             virt_only=None, products=None, highlight=None, sku=None,
-            reasons=[], expiring=False):
+            reasons=[], expiring=False, pool_type=""):
         """
         Show subscription details.
 
@@ -322,6 +322,7 @@ class SubDetailsWidget(GladeWidget):
                     buf.get_iter_at_offset(index + len(highlight)))
 
         self._set(self.sku_text, sku)
+        self._set(self.pool_type_text, pool_type)
 
         display_level = support_level
         if support_level == "":
@@ -335,7 +336,8 @@ class SubDetailsWidget(GladeWidget):
 
         self._show_other_details(name, contract, start, end, account,
                                  management, support_level, support_type,
-                                 virt_only, products, highlight, sku, reasons, expiring)
+                                 virt_only, products, highlight, sku,
+                                 reasons, expiring)
 
         self.bundled_products.clear()
         for product in products:
@@ -360,6 +362,7 @@ class SubDetailsWidget(GladeWidget):
         self.subscription_text.get_buffer().set_text("")
 
         self._set(self.sku_text, "")
+        self._set(self.pool_type_text, "")
 
         self._set(self.support_level_and_type_text, "")
 
@@ -390,6 +393,8 @@ class SubDetailsWidget(GladeWidget):
                 "All Available Support Level And Type Text")
         self.bundled_products.set_accessibility_name(
                 "All Available Bundled Product Table")
+        self.pool_type_text.get_accessible().set_name(
+                "All Available Subscription Type Text")
 
 
 # also show contract info on this details widget

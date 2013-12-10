@@ -140,6 +140,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             'multi-entitlement': bool,
             'quantity_available': int,
             'quantity_increment': int,
+            'pool_type': str
         }
 
     def get_filter_text(self):
@@ -227,6 +228,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 # This is still incorrect when quantities from multiple merged pools are required
                 suggested_quantity = max(map(lambda p: self.calculate_default_quantity(p), entry.pools))
 
+                pool_type = PoolWrapper(pool).get_pool_type()
+
                 attrs = self._product_attrs_to_dict(pool['productAttributes'])
 
                 # Display support level and type if the attributes are present:
@@ -261,6 +264,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'support_level': support_level,
                     'support_type': support_type,
                     'quantity_increment': quantity_increment,
+                    'pool_type': pool_type
                 })
 
         # Ensure that all nodes are expanded in the tree view.
@@ -325,6 +329,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'support_level': "",
                     'support_type': "",
                     'quantity_increment': 1,
+                    'pool_type': ''
                 }
 
     def get_label(self):
@@ -439,7 +444,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             self.sub_details.show(product_name, products=provided,
                     highlight=self.get_filter_text(),
                     support_level=support_level, support_type=support_type,
-                    sku=selection['product_id'])
+                    sku=selection['product_id'],
+                    pool_type=selection['pool_type'])
         else:
             self.sub_details.clear()
 
@@ -449,6 +455,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.subscribe_button.set_sensitive(False)
 
     def calculate_default_quantity(self, pool):
+
         try:
             return int(pool['calculatedAttributes']['suggested_quantity'])
         except:
