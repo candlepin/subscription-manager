@@ -311,6 +311,7 @@ class TestListCommand(TestCliProxyCommand):
                      'id': '888888888888',
                      'attributes': [{'name': 'is_virt_only',
                                      'value': 'false'}],
+                     'pool_type': 'Some Type',
                      'quantity': '4',
                      'service_level': '',
                      'service_type': '',

@@ -28,7 +28,7 @@ from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \
         InstalledProductsManager, EntitlementStatusCache
 from rhsm.profile import Package, RPMProfile
-from rhsm.connection import RestlibException
+from rhsm.connection import RestlibException, UnauthorizedException
 
 
 class _FACT_MATCHER(object):
@@ -316,3 +316,8 @@ class TestEntitlementStatusCache(SubManFixture):
             self.assertEquals(new_status, mock_server_status)
         finally:
             shutil.rmtree(cache_dir)
+
+    def test_unauthorized_exception_handled(self):
+        uep = Mock()
+        uep.getCompliance = Mock(side_effect=UnauthorizedException(401, "GET"))
+        self.assertEquals(None, self.status_cache.load_status(uep, "aaa"))

@@ -312,7 +312,7 @@ def get_available_entitlements(facts, get_all=False, active_on=None,
     not pass. (i.e. show pools that are incompatible for your hardware)
     """
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
-            'providedProducts', 'productId', 'attributes', 'multi-entitlement',
+            'providedProducts', 'productId', 'attributes', 'pool_type',
             'service_level', 'service_type', 'suggested', 'contractNumber']
 
     pool_stash = PoolStash(Facts(require(ENT_DIR), require(PROD_DIR)))
@@ -332,6 +332,8 @@ def get_available_entitlements(facts, get_all=False, active_on=None,
         pool['service_level'] = support_attrs['support_level']
         pool['service_type'] = support_attrs['support_type']
         pool['suggested'] = pool_wrapper.get_suggested_quantity()
+        pool['pool_type'] = pool_wrapper.get_pool_type()
+
         if pool['suggested'] is None:
             pool['suggested'] = ""
 
@@ -891,3 +893,22 @@ def allows_multi_entitlement(pool):
             is_true_value(attribute['value']):
             return True
     return False
+
+
+def get_entitlement_pooltype_map():
+    result = {}
+    identity = require(IDENTITY)
+    if identity.is_valid():
+        cp = require(CP_PROVIDER).get_consumer_auth_cp()
+        entitlement_list = []
+        try:
+            entitlement_list = cp.getEntitlementList(identity.uuid)
+        except Exception, e:
+            # In this case, return an empty map.  We just won't populate the field
+            log.debug('Problem attmepting to get entitlements from the server')
+            log.debug(e)
+
+        for ent in entitlement_list:
+            pool = PoolWrapper(ent.get('pool', {}))
+            result[ent['id']] = pool.get_pool_type()
+    return result

@@ -249,6 +249,11 @@ class StatusCache(CacheManager):
             self.last_error = ex
             log.error("Bad identity, unable to connect to server")
             return None
+        except connection.AuthenticationException, ex:
+            log.error("Could not authenticate with server, check registration status.")
+            log.exception(ex)
+            self.last_error = ex
+            return None
 
     def to_dict(self):
         return self.server_status

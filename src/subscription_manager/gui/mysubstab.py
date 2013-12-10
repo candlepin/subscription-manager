@@ -31,6 +31,7 @@ from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.utils import is_true_value
+from subscription_manager.managerlib import get_entitlement_pooltype_map
 
 
 _ = gettext.gettext
@@ -154,6 +155,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         Pulls the entitlement certificates and updates the subscription model.
         """
         self.store.clear()
+        self.ent_pool_map = get_entitlement_pooltype_map()
         sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
         for group in sorter.groups:
             self._add_group(group)
@@ -256,6 +258,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         else:
             reasons.append(_("Subscription management service doesn't support Status Details."))
 
+        pool_type = ''
+        if cert.subject and 'CN' in cert.subject:
+            pool_type = self.ent_pool_map.get(cert.subject['CN'], '')
+
         if is_true_value(order.virt_only):
             virt_only = _("Virtual")
         else:
@@ -278,7 +284,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                               products=products,
                               sku=order.sku,
                               reasons=reasons,
-                              expiring=cert.is_expiring())
+                              expiring=cert.is_expiring(),
+                              pool_type=pool_type)
 
     def on_no_selection(self):
         """

@@ -27,7 +27,6 @@ import socket
 import sys
 from time import localtime, strftime, strptime
 
-from M2Crypto import SSL
 from M2Crypto import X509
 
 import rhsm.config
@@ -36,7 +35,7 @@ from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import InstalledProductsManager, ProfileManager
-from subscription_manager.certlib import CertLib, ConsumerIdentity, Disconnected
+from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.certmgr import CertManager
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
@@ -55,9 +54,9 @@ from subscription_manager.utils import parse_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width
 from subscription_manager.overrides import Overrides, Override
+from subscription_manager.exceptions import ExceptionMapper
 
 from yum.i18n import utf8_width
-from rhsm.connection import RestlibException
 
 _ = gettext.gettext
 
@@ -99,7 +98,7 @@ AVAILABLE_SUBS_LIST = [
     _("Suggested:"),
     _("Service Level:"),
     _("Service Type:"),
-    _("Multi-Entitlement:"),
+    _("Subscription Type:"),
     _("Ends:"),
     _("System Type:")
 ]
@@ -139,6 +138,7 @@ CONSUMED_LIST = [
     _("Service Level:"),
     _("Service Type:"),
     _("Status Details:"),
+    _("Subscription Type:"),
     _("Starts:"),
     _("Ends:"),
     _("System Type:")
@@ -157,36 +157,10 @@ def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
 
-    if isinstance(ex, socket.error) or isinstance(ex, Disconnected):
-        print _("Network error, unable to connect to server.")
-        print _("Please see /var/log/rhsm/rhsm.log for more information.")
-        sys.exit(-1)
-    elif isinstance(ex, connection.NetworkException):
-        # NOTE: yes this looks a lot like the socket error, but I think these
-        # were actually intended to display slightly different messages:
-        print _("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.")
-        sys.exit(-1)
-    elif isinstance(ex, connection.UnauthorizedException):
-        print _("Unauthorized: Invalid credentials for request.")
-        sys.exit(-1)
-    elif isinstance(ex, connection.ForbiddenException):
-        print _("Forbidden: Invalid credentials for request.")
-        sys.exit(-1)
-    elif isinstance(ex, connection.RemoteServerException):
-        # This is what happens when there's an issue with the server on the other side of the wire
-        print _("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.")
-        sys.exit(-1)
-    elif isinstance(ex, connection.RestlibException):
-        print ex.msg
-        sys.exit(-1)
-    elif isinstance(ex, SSL.Checker.WrongHost):
-        print str(ex)
-        sys.exit(-1)
-    elif isinstance(ex, connection.BadCertificateException):
-        print _("Bad CA certificate: %s") % ex.cert_path
-        sys.exit(-1)
-    elif isinstance(ex, connection.ExpiredIdentityCertException):
-        print _("Your identity certificate has expired")
+    exception_mapper = ExceptionMapper()
+    mapped_message = exception_mapper.get_message(ex)
+    if mapped_message:
+        print mapped_message
         sys.exit(-1)
     else:
         system_exit(-1, ex)
@@ -2114,7 +2088,7 @@ class ListCommand(CliCommand):
                         data['suggested'],
                         data['service_level'] or "",
                         data['service_type'] or "",
-                        data['multi-entitlement'],
+                        data['pool_type'],
                         data['endDate'],
                         machine_type) + "\n"
 
@@ -2153,6 +2127,7 @@ class ListCommand(CliCommand):
             sys.exit(0)
 
         cert_reasons_map = inj.require(inj.CERT_SORTER).reasons.get_subscription_reasons_map()
+        ent_pooltype_map = managerlib.get_entitlement_pooltype_map()
 
         print("+-------------------------------------------+")
         print("   " + _("Consumed Subscriptions"))
@@ -2191,9 +2166,15 @@ class ListCommand(CliCommand):
                 pool_id = cert.pool.id
 
             product_names = [p.name for p in cert.products]
+
             reasons = []
-            if cert.subject and 'CN' in cert.subject and cert.subject['CN'] in cert_reasons_map:
-                reasons = cert_reasons_map[cert.subject['CN']]
+            pool_type = ''
+
+            if cert.subject and 'CN' in cert.subject:
+                if cert.subject['CN'] in cert_reasons_map:
+                    reasons = cert_reasons_map[cert.subject['CN']]
+                pool_type = ent_pooltype_map.get(cert.subject['CN'], '')
+
             print columnize(CONSUMED_LIST, _none_wrap,
                     name,
                     product_names,
@@ -2207,6 +2188,7 @@ class ListCommand(CliCommand):
                     service_level,
                     service_type,
                     reasons,
+                    pool_type,
                     managerlib.format_date(cert.valid_range.begin()),
                     managerlib.format_date(cert.valid_range.end()),
                     system_type) + "\n"
@@ -2288,11 +2270,12 @@ class OverrideCommand(CliCommand):
 
             try:
                 results = overrides.add_overrides(consumer, to_add)
-            except RestlibException, ex:
+            except connection.RestlibException, ex:
                 if ex.code == 400:
                     # black listed overrides specified.
                     # Print message and return a less severe code.
-                    system_exit(1, ex)
+                    print str(ex)
+                    sys.exit(1)
                 else:
                     raise ex
 
