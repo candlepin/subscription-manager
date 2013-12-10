@@ -20,7 +20,7 @@ from M2Crypto.SSL import SSLError
 import gettext
 _ = gettext.gettext
 
-from rhsm import connection
+from rhsm import connection, utils
 
 from subscription_manager.certlib import Disconnected
 
@@ -32,6 +32,11 @@ REMOTE_SERVER_MESSAGE = _("Remote server error. Please check the connection deta
 BAD_CA_CERT_MESSAGE = _("Bad CA certificate: %s")
 EXPIRED_ID_CERT_MESSAGE = _("Your identity certificate has expired")
 SSL_MESSAGE = _('Unable to verify server\'s identity: %s')
+PERROR_EMPTY_MESSAGE = _("Server URL can not be empty")
+PERROR_JUST_SCHEME_MESSAGE = _("Server URL is just a schema. Should include hostname, and/or port and path")
+PERROR_NONE_MESSAGE = _("Server URL can not be None")
+PERROR_PORT_MESSAGE = _("Server URL port should be numeric")
+PERROR_SCHEME_MESSAGE = _("Server URL has an invalid scheme. http:// and https:// are supported")
 
 
 class ExceptionMapper(object):
@@ -46,6 +51,11 @@ class ExceptionMapper(object):
             connection.RemoteServerException: (REMOTE_SERVER_MESSAGE, self.format_default),
             connection.BadCertificateException: (BAD_CA_CERT_MESSAGE, self.format_bad_ca_cert_exception),
             connection.ExpiredIdentityCertException: (EXPIRED_ID_CERT_MESSAGE, self.format_default),
+            utils.ServerUrlParseErrorEmpty: (PERROR_EMPTY_MESSAGE, self.format_default),
+            utils.ServerUrlParseErrorJustScheme: (PERROR_JUST_SCHEME_MESSAGE, self.format_default),
+            utils.ServerUrlParseErrorNone: (PERROR_NONE_MESSAGE, self.format_default),
+            utils.ServerUrlParseErrorPort: (PERROR_PORT_MESSAGE, self.format_default),
+            utils.ServerUrlParseErrorScheme: (PERROR_SCHEME_MESSAGE, self.format_default),
             SSLError: (SSL_MESSAGE, self.format_ssl_error),
             # The message template will always be none since the RestlibException's
             # message is already translated server-side.
