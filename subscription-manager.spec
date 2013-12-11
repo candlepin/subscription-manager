@@ -174,6 +174,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 
 %attr(755,root,root) %dir %{_var}/log/rhsm
+%attr(755,root,root) %dir %{_var}/spool/rhsm/debug
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
 

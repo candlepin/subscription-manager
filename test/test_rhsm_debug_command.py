@@ -14,71 +14,104 @@
 #
 
 import os
-import tempfile
 import shutil
+import tarfile
+from datetime import datetime
+
 from rhsm_debug import debug_commands
 from test_managercli import TestCliCommand
-from zipfile import ZipFile, ZIP_DEFLATED
+from rhsm.config import initConfig
+
+cfg = initConfig()
+
+
+def path_join(first, second):
+    if os.path.isabs(second):
+        second = second[1:]
+    return os.path.join(first, second)
 
 
 class TestCompileCommand(TestCliCommand):
 
     command_class = debug_commands.SystemCommand
 
-    # Runs the zip file creation.
+    # Runs the tar file creation.
     # It does not write the certs or log files because of
-    # permissions. It will make those dirs in zip.
-    def test_command(self):
+    # permissions. It will make those dirs in tar.
+    def test_command_tar(self):
         try:
             self.cc._do_command = self._orig_do_command
-            self.cc._dir_to_zip = self._dir_to_zip
-            path = os.path.join(tempfile.mkdtemp(), "testing-dir")
+            self.cc._make_code = self._make_code
+            self.cc._get_assemble_dir = self._get_assemble_dir
+            self.cc._copy_directory = self._copy_directory
+            self.test_dir = os.getcwd()
+            path = path_join(self.test_dir, "testing-dir")
             self.cc.main(["--destination", path])
         except SystemExit:
             self.fail("Exception Raised")
 
-        self.assertTrue(self.zip_file.getinfo("consumer.json") is not None)
-        self.assertTrue(self.zip_file.getinfo("compliance.json") is not None)
-        self.assertTrue(self.zip_file.getinfo("entitlements.json") is not None)
-        self.assertTrue(self.zip_file.getinfo("pools.json") is not None)
-        self.assertTrue(self.zip_file.getinfo("version.json") is not None)
-        self.assertTrue(self.zip_file.getinfo("subscriptions.json") is not None)
-        self.assertTrue(self.zip_file.getinfo("etc/rhsm/rhsm.conf") is not None)
-        self.assertTrue(self.zip_file.getinfo("var/log/rhsm/") is not None)
-        self.assertTrue(self.zip_file.getinfo("var/lib/rhsm/") is not None)
-        self.assertTrue(self.zip_file.getinfo("etc/pki/product/") is not None)
-        self.assertTrue(self.zip_file.getinfo("etc/pki/entitlement/") is not None)
-        # cannot test for this. an unregistered system will fail
-        # self.assertTrue(self.zip_file.getinfo("etc/pki/consumer/") is not None)
+        tar_path = path_join(path, "system-debug-%s.tar.gz" % self.code)
+        tar_file = tarfile.open(tar_path, "r")
+        self.assertTrue(tar_file.getmember(path_join(self.code, "consumer.json")) is not None)
+        self.assertTrue(tar_file.getmember(path_join(self.code, "compliance.json")) is not None)
+        self.assertTrue(tar_file.getmember(path_join(self.code, "entitlements.json")) is not None)
+        self.assertTrue(tar_file.getmember(path_join(self.code, "pools.json")) is not None)
+        self.assertTrue(tar_file.getmember(path_join(self.code, "version.json")) is not None)
+        self.assertTrue(tar_file.getmember(path_join(self.code, "subscriptions.json")) is not None)
+        self.assertTrue(tar_file.getmember(path_join(self.code, "/etc/rhsm")) is not None)
+        self.assertTrue(tar_file.getmember(path_join(self.code, "/var/log/rhsm")) is not None)
+        self.assertTrue(tar_file.getmember(path_join(self.code, "/var/lib/rhsm")) is not None)
+        self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'productCertDir'))) is not None)
+        self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'entitlementCertDir'))) is not None)
+        self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'consumerCertDir'))) is not None)
         shutil.rmtree(path)
 
-    # fake method to avoid permission issues
-    def _dir_to_zip(self, directory, zipfile):
-        self.zip_file = zipfile
-        for dirname, subdirs, files in os.walk(directory):
-            zipfile.write(dirname)
-
-    # test the real dir_to_zip method
-    def test_dir_to_zip(self):
-        zip_dir = tempfile.mkdtemp()
-        file_dir = tempfile.mkdtemp()
-
+    # Runs the non-tar tree creation.
+    # It does not write the certs or log files because of
+    # permissions. It will make those dirs in tree.
+    def test_command_tree(self):
         try:
-            self._restore_stdout()
-            zip_temp = os.path.join(zip_dir, "test-%s.zip" % self.cc._make_code())
-            zip_file = ZipFile(zip_temp, "w", ZIP_DEFLATED)
+            self.cc._do_command = self._orig_do_command
+            self.cc._make_code = self._make_code
+            self.cc._get_assemble_dir = self._get_assemble_dir
+            self.cc._copy_directory = self._copy_directory
+            self.test_dir = os.getcwd()
+            path = path_join(self.test_dir, "testing-dir")
+            self.cc.main(["--destination", path, "--no-archive"])
+        except SystemExit:
+            self.fail("Exception Raised")
 
-            self.cc._write_flat_file(file_dir, "file1", "file1-content")
-            self.cc._write_flat_file(file_dir, "file2", "file2-content")
-            self.cc._write_flat_file(file_dir, "file3", "file3-content")
-            self.cc._dir_to_zip(file_dir, zip_file)
-            strip_file_dir = file_dir.lstrip("/")
-            self.assertTrue(zip_file.getinfo(os.path.join(strip_file_dir, "file1")) is not None)
-            self.assertTrue(zip_file.getinfo(os.path.join(strip_file_dir, "file1")).file_size > 0)
-            self.assertTrue(zip_file.getinfo(os.path.join(strip_file_dir, "file2")) is not None)
-            self.assertTrue(zip_file.getinfo(os.path.join(strip_file_dir, "file2")).file_size > 0)
-            self.assertTrue(zip_file.getinfo(os.path.join(strip_file_dir, "file3")) is not None)
-            self.assertTrue(zip_file.getinfo(os.path.join(strip_file_dir, "file3")).file_size > 0)
-        finally:
-            shutil.rmtree(file_dir, True)
-            shutil.rmtree(zip_dir, True)
+        tree_path = path_join(path, self.code)
+        self.assertTrue(os.path.exists(path_join(tree_path, "consumer.json")))
+        self.assertTrue(os.path.exists(path_join(tree_path, "compliance.json")))
+        self.assertTrue(os.path.exists(path_join(tree_path, "entitlements.json")))
+        self.assertTrue(os.path.exists(path_join(tree_path, "pools.json")))
+        self.assertTrue(os.path.exists(path_join(tree_path, "version.json")))
+        self.assertTrue(os.path.exists(path_join(tree_path, "subscriptions.json")))
+        self.assertTrue(os.path.exists(path_join(tree_path, "/etc/rhsm")))
+        self.assertTrue(os.path.exists(path_join(tree_path, "/var/log/rhsm")))
+        self.assertTrue(os.path.exists(path_join(tree_path, "/var/lib/rhsm")))
+        self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'productCertDir'))))
+        self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'entitlementCertDir'))))
+        self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'consumerCertDir'))))
+        shutil.rmtree(path)
+
+    # method to capture code
+    def _make_code(self):
+        self.code = datetime.now().strftime("%Y%m%d-%f")
+        return self.code
+
+    # directory we can write to while not root
+    def _get_assemble_dir(self):
+        self.assemble_path = path_join(self.test_dir, "assemble-dir")
+        os.makedirs(path_join(self.assemble_path, "/etc/rhsm/"))
+        os.makedirs(path_join(self.assemble_path, "/var/log/rhsm/"))
+        os.makedirs(path_join(self.assemble_path, "/var/lib/rhsm/"))
+        os.makedirs(path_join(self.assemble_path, cfg.get('rhsm', 'productCertDir')))
+        os.makedirs(path_join(self.assemble_path, cfg.get('rhsm', 'entitlementCertDir')))
+        os.makedirs(path_join(self.assemble_path, cfg.get('rhsm', 'consumerCertDir')))
+        return self.assemble_path
+
+    # write to my directory instead
+    def _copy_directory(self, path, prefix):
+        shutil.copytree(path_join(self.assemble_path, path), path_join(prefix, path))

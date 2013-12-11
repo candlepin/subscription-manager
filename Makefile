@@ -146,6 +146,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -d $(PREFIX)/$(INSTALL_DIR)/applications
 	install -d $(PREFIX)/var/log/rhsm
+	install -d $(PREFIX)/var/spool/rhsm/debug
 	install -d $(PREFIX)/var/run/rhsm
 	install -d $(PREFIX)/var/lib/rhsm/facts
 	install -d $(PREFIX)/var/lib/rhsm/packages
