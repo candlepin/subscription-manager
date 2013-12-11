@@ -11,11 +11,10 @@ from subscription_manager import managercli, managerlib
 from subscription_manager.managercli import format_name, columnize, \
         _echo, _none_wrap
 from subscription_manager.repolib import Repo
-from stubs import MockStderr, MockStdout, \
-        StubEntitlementCertificate, \
+from stubs import MockStderr, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
 from fixture import FakeException, FakeLogger, SubManFixture, \
-        capture, Matcher
+        Capture, Matcher
 
 import mock
 from mock import patch
@@ -37,15 +36,10 @@ class TestCli(SubManFixture):
     # shut up stdout spew
     def setUp(self):
         SubManFixture.setUp(self)
-        sys.stdout = stubs.MockStdout()
         sys.stderr = stubs.MockStderr()
 
-    def _restore_stdout(self):
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
-
     def tearDown(self):
-        self._restore_stdout()
+        sys.stderr = sys.__stderr__
 
     def test_cli(self):
         cli = managercli.ManagerCLI()
@@ -88,17 +82,11 @@ class TestCliCommand(SubManFixture):
 
         # stub out uep
         managercli.connection.UEPConnection = self._uep_connection
-        self.mock_stdout = MockStdout()
         self.mock_stderr = MockStderr()
-        sys.stdout = self.mock_stdout
         sys.stderr = self.mock_stderr
 
-    def _restore_stdout(self):
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
-
     def tearDown(self):
-        self._restore_stdout()
+        sys.stderr = sys.__stderr__
 
     def _uep_connection(self, *args, **kwargs):
         pass
@@ -129,17 +117,16 @@ class TestCliCommand(SubManFixture):
             self.assertEquals(e.code, 2)
 
     def _main_help(self, args):
-        mstdout = MockStdout()
-        sys.stdout = mstdout
-        try:
-            self.cc.main(args)
-        except SystemExit, e:
-            # --help/-h returns 0
-            self.assertEquals(e.code, 0)
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            try:
+                self.cc.main(args)
+            except SystemExit, e:
+                # --help/-h returns 0
+                self.assertEquals(e.code, 0)
+        output = cap.out.strip()
         # I could test for strings here, but that
         # would break if we run tests in a locale/lang
-        assert len(mstdout.buffer) > 0
+        self.assertTrue(len(output) > 0)
 
     def test_main_short_help(self):
         self._main_help(["-h"])
@@ -325,8 +312,9 @@ class TestListCommand(TestCliProxyCommand):
         mc_exists.return_value = True
 
         mcli.return_value = {'consumer_name': 'stub_name', 'uuid': 'stub_uuid'}
-        listCommand.main(['list', '--available'])
-        self.assertTrue('888888888888' in sys.stdout.buffer)
+        with Capture() as cap:
+            listCommand.main(['list', '--available'])
+        self.assertTrue('888888888888' in cap.out)
 
     def test_print_consumed_no_ents(self):
         try:
@@ -512,9 +500,10 @@ class TestConfigCommand(TestCliCommand):
         self.assertEquals(managercli.cfg.store['rhsm.baseurl'], baseurl)
 
     def test_remove_config_default(self):
-        self.cc._do_command = self._orig_do_command
-        self.cc.main(['--remove', 'rhsm.baseurl'])
-        self.assertTrue('The default value for' in self.mock_stdout.buffer)
+        with Capture() as cap:
+            self.cc._do_command = self._orig_do_command
+            self.cc.main(['--remove', 'rhsm.baseurl'])
+        self.assertTrue('The default value for' in cap.out)
 
     def test_remove_config_section_does_not_exist(self):
         self.cc._do_command = self._orig_do_command
@@ -781,9 +770,9 @@ class TestOverrideCommand(TestCliProxyCommand):
             Override('y', 'goodbye', 'earth'),
             Override('z', 'greetings', 'mars')
         ]
-        with capture() as out:
+        with Capture() as cap:
             self.cc._list(data, None)
-            output = out.getvalue()
+            output = cap.out
             self.assertTrue(re.search('Repository: x', output))
             self.assertTrue(re.search('\s+hello:\s+world', output))
             self.assertTrue(re.search('\s+blast-off:\s+space', output))
@@ -797,9 +786,9 @@ class TestOverrideCommand(TestCliProxyCommand):
             Override('x', 'hello', 'world'),
             Override('z', 'greetings', 'mars')
         ]
-        with capture() as out:
+        with Capture() as cap:
             self.cc._list(data, ['x'])
-            output = out.getvalue()
+            output = cap.out
             self.assertTrue(re.search('Repository: x', output))
             self.assertTrue(re.search('\s+hello:\s+world', output))
             self.assertFalse(re.search('Repository: z', output))
@@ -808,9 +797,9 @@ class TestOverrideCommand(TestCliProxyCommand):
         data = [
             Override('x', 'hello', 'world')
         ]
-        with capture() as out:
+        with Capture() as cap:
             self.cc._list(data, ['x', 'z'])
-            output = out.getvalue()
+            output = cap.out
             self.assertTrue(re.search("Nothing is known about 'z'", output))
             self.assertTrue(re.search('Repository: x', output))
             self.assertTrue(re.search('\s+hello:\s+world', output))
@@ -822,46 +811,51 @@ class TestSystemExit(unittest.TestCase):
 
     def test_a_msg(self):
         msg = "some message"
-        try:
-            managercli.system_exit(1, msg)
-        except SystemExit:
-            pass
-        self.assertEquals("%s\n" % msg, sys.stderr.buffer)
+        with Capture() as cap:
+            try:
+                managercli.system_exit(1, msg)
+            except SystemExit:
+                pass
+        self.assertEquals("%s\n" % msg, cap.err)
 
     def test_msgs(self):
         msgs = ["a", "b", "c"]
-        try:
-            managercli.system_exit(1, msgs)
-        except SystemExit:
-            pass
-        self.assertEquals("%s\n" % ("\n".join(msgs)), sys.stderr.buffer)
+        with Capture() as cap:
+            try:
+                managercli.system_exit(1, msgs)
+            except SystemExit:
+                pass
+        self.assertEquals("%s\n" % ("\n".join(msgs)), cap.err)
 
     def test_msg_and_exception(self):
         msgs = ["a", ValueError()]
-        try:
-            managercli.system_exit(1, msgs)
-        except SystemExit:
-            pass
-        self.assertEquals("%s\n\n" % msgs[0], sys.stderr.buffer)
+        with Capture() as cap:
+            try:
+                managercli.system_exit(1, msgs)
+            except SystemExit:
+                pass
+        self.assertEquals("%s\n\n" % msgs[0], cap.err)
 
     def test_msg_and_exception_no_str(self):
         class NoStrException(Exception):
             pass
 
         msgs = ["a", NoStrException()]
-        try:
-            managercli.system_exit(1, msgs)
-        except SystemExit:
-            pass
-        self.assertEquals("%s\n\n" % msgs[0], sys.stderr.buffer)
+        with Capture() as cap:
+            try:
+                managercli.system_exit(1, msgs)
+            except SystemExit:
+                pass
+        self.assertEquals("%s\n\n" % msgs[0], cap.err)
 
     def test_msg_unicode(self):
         msgs = [u"\u2620 \u2603 \u203D"]
-        try:
-            managercli.system_exit(1, msgs)
-        except SystemExit:
-            pass
-        self.assertEquals("%s\n" % msgs[0].encode("utf8"), sys.stderr.buffer)
+        with Capture() as cap:
+            try:
+                managercli.system_exit(1, msgs)
+            except SystemExit:
+                pass
+        self.assertEquals("%s\n" % msgs[0].encode("utf8"), cap.err)
 
     def test_msg_and_exception_str(self):
         class StrException(Exception):
@@ -885,7 +879,6 @@ class HandleExceptionTests(unittest.TestCase):
         self.msg = "some thing to log home about"
         self.formatted_msg = "some thing else like: %s"
         sys.stderr = MockStderr()
-        sys.stdout = MockStdout()
         managercli.log = FakeLogger()
 
     def test_he(self):

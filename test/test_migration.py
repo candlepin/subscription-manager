@@ -21,7 +21,7 @@ import StringIO
 import unittest
 
 import stubs
-from fixture import capture
+from fixture import Capture
 
 import rhsm.config
 from subscription_manager.migrate import migrate
@@ -34,15 +34,10 @@ class TestMenu(unittest.TestCase):
             ("displayed-hello", "Hello"),
             ("displayed-world", "World"),
             ], "")
-        sys.stdout = stubs.MockStdout()
         sys.stderr = stubs.MockStderr()
 
-    def _restore_stdout(self):
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
-
     def tearDown(self):
-        self._restore_stdout()
+        sys.stderr = sys.__stderr__
 
     def test_enter_negative(self):
         self.assertRaises(migrate.InvalidChoiceError, self.menu._get_item, -1)
@@ -85,7 +80,6 @@ class TestMigration(unittest.TestCase):
 
         # These tests print a lot to stdout and stderr
         # so quiet them.
-        sys.stdout = stubs.MockStdout()
         sys.stderr = stubs.MockStderr()
 
         self.double_mapped_channels = (
@@ -109,12 +103,8 @@ class TestMigration(unittest.TestCase):
             "rhel-x86_64-server-dts-5-debuginfo",
             )
 
-    def _restore_stdout(self):
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
-
     def tearDown(self):
-        self._restore_stdout()
+        sys.stderr = sys.__stderr__
 
     def test_mutually_exclusive_options(self):
         try:
@@ -675,14 +665,14 @@ class TestMigration(unittest.TestCase):
                 '3': {'cert-m-3.pem': ['chanA'], 'cert-n-3.pem': ['chanB'], 'cert-o-3.pem': ['chanC']}
         }
 
-        with capture() as out:
+        with Capture() as cap:
             try:
                 self.engine.handle_collisions(cmap)
             except SystemExit, e:
                 self.assertEquals(e.code, 1)
             else:
                 self.fail("No exception raised")
-            output = out.getvalue().strip()
+            output = cap.out.strip()
             self.assertTrue(re.search("chan1\s*chan2\s*chan3", output))
             self.assertFalse(re.search("chan4", output))
             self.assertTrue(re.search("chanA\s*chanB", output))

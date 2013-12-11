@@ -1,8 +1,9 @@
 import difflib
 import pprint
 import unittest
+import sys
+import StringIO
 
-from contextlib import contextmanager
 from mock import Mock, NonCallableMock, patch
 
 import stubs
@@ -160,14 +161,39 @@ class SubManFixture(unittest.TestCase):
         return True
 
 
-@contextmanager
-def capture():
-    import sys
-    import StringIO
-    old_out = sys.stdout
-    try:
-        out = StringIO.StringIO()
-        sys.stdout = out
-        yield out
-    finally:
-        sys.stdout = old_out
+class Capture(object):
+    class Tee(object):
+        def __init__(self, stream, silent):
+            self.buf = StringIO.StringIO()
+            self.stream = stream
+            self.silent = silent
+
+        def write(self, data):
+            self.buf.write(data)
+            if not self.silent:
+                self.stream.write(data)
+
+        def getvalue(self):
+            return self.buf.getvalue()
+
+    def __init__(self, silent=False):
+        self.silent = silent
+
+    def __enter__(self):
+        self.buffs = (self.Tee(sys.stdout, self.silent), self.Tee(sys.stderr, self.silent))
+        self.stdout = sys.stdout
+        self.stderr = sys.stderr
+        sys.stdout, sys.stderr = self.buffs
+        return self
+
+    @property
+    def out(self):
+        return self.buffs[0].getvalue()
+
+    @property
+    def err(self):
+        return self.buffs[1].getvalue()
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        sys.stdout = self.stdout
+        sys.stderr = self.stderr

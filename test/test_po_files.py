@@ -10,7 +10,6 @@ _ = gettext.gettext
 #locale.setlocale(locale.LC_ALL, '')
 
 from stubs import MockStderr
-from stubs import MockStdout
 from subscription_manager import managercli
 
 # Localization domain:
@@ -70,7 +69,6 @@ class TestUnicodeGettext(TestLocale):
     def setUp(self):
         self._setupLang("ja_JP.UTF-8")
         sys.stderr = MockStderr()
-        sys.stdout = MockStdout()
 
     def tearDown(self):
         self._setupLang("en_US")
