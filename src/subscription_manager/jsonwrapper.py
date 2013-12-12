@@ -73,6 +73,9 @@ class PoolWrapper(object):
 
         return result
 
+    def get_pool_type(self):
+        return (self.data.get('calculatedAttributes') or {}).get('compliance_type', '')
+
     def _get_attribute_value(self, attr_list_name, attr_name):
         product_attrs = self.data[attr_list_name]
         for attribute in product_attrs:

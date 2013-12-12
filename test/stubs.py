@@ -101,7 +101,7 @@ class MockActionLock(ActionLock):
     PATH = tempfile.mkstemp()[1]
 
 
-class MockStdout:
+class MockStderr:
     def __init__(self):
         self.buffer = ""
 
@@ -111,9 +111,6 @@ class MockStdout:
     @staticmethod
     def isatty(buf=None):
         return False
-
-
-MockStderr = MockStdout
 
 
 class StubProduct(Product):

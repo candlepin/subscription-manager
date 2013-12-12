@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.7
+Version: 1.10.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -239,6 +239,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/cp_provider.py*
 %{_datadir}/rhsm/subscription_manager/file_monitor.py*
 %{_datadir}/rhsm/subscription_manager/overrides.py*
+%{_datadir}/rhsm/subscription_manager/exceptions.py*
 
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
@@ -401,6 +402,27 @@ fi
 %endif
 
 %changelog
+* Fri Dec 06 2013 ckozak <ckozak@redhat.com> 1.10.8-1
+- 1030604: Handle 400 code for add override (mstead@redhat.com)
+- Use backed to ensure a refreshed Overrides object (mstead@redhat.com)
+- 1034574: Alternate message based on why no repos exist in GUI 
+  (mstead@redhat.com)
+- 1034396: No longer require entitlements to run repo-override command
+  (mstead@redhat.com)
+- 1033741: Refresh Overrides CP connection when dialog is shown
+  (mstead@redhat.com)
+- 1033690: Updated repo-overrides not supported message (mstead@redhat.com)
+- 1034649: Only allow repolib to update override cache if supported by the 
+  server (mstead@redhat.com)
+- 1032673: Warn on add override if repo doesn't exist (mstead@redhat.com)
+- 1030996: Fixed usage text for repo-override add/remove options
+  (mstead@redhat.com)
+- 1032243: Updated the redhat.repo warning (mstead@redhat.com)
+- Use local ent certs to list attached pools (ckozak@redhat.com)
+- 1021013: Change wording on firstboot address screen (alikins@redhat.com)
+- 1020539: Show proxy info if no RHN in firstboot (alikins@redhat.com)
+- Make zip file of consumer information for debugging (wpoteat@redhat.com)
+
 * Thu Nov 14 2013 ckozak <ckozak@redhat.com> 1.10.7-1
 - 998033: Handle Unauthorized/Forbidden exceptions in CLI/GUI
   (mstead@redhat.com)
