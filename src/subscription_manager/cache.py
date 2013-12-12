@@ -401,17 +401,11 @@ class InstalledProductsManager(CacheManager):
 
     def __init__(self, product_dir=None):
 
+        self.product_dir = product_dir
         if not product_dir:
-            product_dir = inj.require(inj.PROD_DIR)
+            self.product_dir = inj.require(inj.PROD_DIR)
 
-        self.installed = {}
-        for prod_cert in product_dir.list():
-            prod = prod_cert.products[0]
-            self.installed[prod.id] = {'productId': prod.id,
-                    'productName': prod.name,
-                    'version': prod.version,
-                    'arch': ','.join(prod.architectures)
-                    }
+        self._setup_installed()
 
     def to_dict(self):
         return self.installed
@@ -427,6 +421,8 @@ class InstalledProductsManager(CacheManager):
 
         cached = self._read_cache()
 
+        self._setup_installed()
+
         if len(cached.keys()) != len(self.installed.keys()):
             return True
 
@@ -434,12 +430,27 @@ class InstalledProductsManager(CacheManager):
             return True
         return False
 
+    def _setup_installed(self):
+        """
+        Format installed product data to match the cache
+        and what the server can use.
+        """
+        self.installed = {}
+        for prod_cert in self.product_dir.list():
+            prod = prod_cert.products[0]
+            self.installed[prod.id] = {'productId': prod.id,
+                    'productName': prod.name,
+                    'version': prod.version,
+                    'arch': ','.join(prod.architectures)
+                    }
+
     def format_for_server(self):
         """
         Convert the format we store in this object (which is a little
         easier to work with) into the format the server expects for the
         consumer.
         """
+        self._setup_installed()
         final = [val for (key, val) in self.installed.items()]
         return final
 
