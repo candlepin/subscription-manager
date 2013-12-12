@@ -21,6 +21,8 @@ from datetime import datetime
 from rhsm_debug import debug_commands
 from test_managercli import TestCliCommand
 from rhsm.config import initConfig
+from subscription_manager.cli import InvalidCLIOptionError
+
 
 cfg = initConfig()
 
@@ -44,13 +46,15 @@ class TestCompileCommand(TestCliCommand):
             self.cc._make_code = self._make_code
             self.cc._get_assemble_dir = self._get_assemble_dir
             self.cc._copy_directory = self._copy_directory
+            self.cc._makedir = self._makedir
             self.test_dir = os.getcwd()
             path = path_join(self.test_dir, "testing-dir")
+            self._makedir(path)
             self.cc.main(["--destination", path])
         except SystemExit:
             self.fail("Exception Raised")
 
-        tar_path = path_join(path, "system-debug-%s.tar.gz" % self.code)
+        tar_path = path_join(path, "rhsm-debug-system-%s.tar.gz" % self.time_code)
         tar_file = tarfile.open(tar_path, "r")
         self.assertTrue(tar_file.getmember(path_join(self.code, "consumer.json")) is not None)
         self.assertTrue(tar_file.getmember(path_join(self.code, "compliance.json")) is not None)
@@ -75,6 +79,7 @@ class TestCompileCommand(TestCliCommand):
             self.cc._make_code = self._make_code
             self.cc._get_assemble_dir = self._get_assemble_dir
             self.cc._copy_directory = self._copy_directory
+            self.cc._makedir = self._makedir
             self.test_dir = os.getcwd()
             path = path_join(self.test_dir, "testing-dir")
             self.cc.main(["--destination", path, "--no-archive"])
@@ -96,10 +101,24 @@ class TestCompileCommand(TestCliCommand):
         self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'consumerCertDir'))))
         shutil.rmtree(path)
 
+    # by not creating of the destination directory
+    #  we expect the validation to fail
+    def test_archive_to_non_exist_dir(self):
+        self.test_dir = os.getcwd()
+        path = path_join(self.test_dir, "testing-dir")
+        try:
+            self.cc.main(["--destination", path])
+            self.cc._validate_options()
+        except InvalidCLIOptionError, e:
+            self.assertEquals(e.message, "The destination directory for the archive must already exist.")
+        else:
+            self.fail("No Exception Raised")
+
     # method to capture code
     def _make_code(self):
-        self.code = datetime.now().strftime("%Y%m%d-%f")
-        return self.code
+        self.time_code = datetime.now().strftime("%Y%m%d-%f")
+        self.code = "rhsm-debug-system-%s" % self.time_code
+        return self.time_code
 
     # directory we can write to while not root
     def _get_assemble_dir(self):
@@ -114,4 +133,13 @@ class TestCompileCommand(TestCliCommand):
 
     # write to my directory instead
     def _copy_directory(self, path, prefix):
+        #print "_copy_directory: %s, %s" % (path, prefix)
         shutil.copytree(path_join(self.assemble_path, path), path_join(prefix, path))
+
+    # tests run as non-root
+    def _makedir(self, dest_dir_name):
+        try:
+            os.makedirs(dest_dir_name)
+        except Exception:
+            # already there, move on
+            return

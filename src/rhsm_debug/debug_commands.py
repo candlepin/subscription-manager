@@ -24,6 +24,7 @@ from datetime import datetime
 import subscription_manager.injection as inj
 import subscription_manager.managercli as managercli
 from subscription_manager.managercli import CliCommand
+from subscription_manager.cli import InvalidCLIOptionError
 from rhsm import ourjson as json
 from rhsm.config import initConfig
 
@@ -35,6 +36,9 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
 
+ASSEMBLE_DIR = '/var/spool/rhsm/debug'
+ROOT_READ_ONLY = 0600
+
 
 class SystemCommand(CliCommand):
 
@@ -45,30 +49,48 @@ class SystemCommand(CliCommand):
 
         self.parser.add_option("--destination", dest="destination",
                                default="/tmp", help=_("the destination location of the result"))
-        self.parser.add_option("--no-archive", action='store_true',
+        # default is to build an archive, this skips the archive and clean up,
+        # just leaving the directory of debug info for sosreport to report
+        self.parser.add_option("--no-archive", action='store_false',
+                               default=True, dest="archive",
                                help=_("data will be in an uncompressed directory"))
 
     def _get_usage(self):
         return _("%%prog %s [OPTIONS] ") % self.name
 
+    def _validate_options(self):
+        if self.options.destination and self.options.archive:
+            if not os.path.exists(self.options.destination):
+                raise InvalidCLIOptionError(_("The destination directory for the archive must already exist."))
+
     def _do_command(self):
+        self._validate_options()
         consumer = inj.require(inj.IDENTITY)
         if not consumer.is_valid():
             print NOT_REGISTERED
             sys.exit(-1)
-        owner = self.cp.getOwner(consumer.uuid)
+
         code = self._make_code()
         assemble_path = self._get_assemble_dir()
-        content_path = os.path.join(assemble_path, code)
-        tar_path = os.path.join(assemble_path, "tar")
+        archive_name = "rhsm-debug-system-%s" % code
+        tar_file_name = "%s.tar.gz" % archive_name
+        # /var/log/rhsm/debuf/rhsm-debug-system-20131212-121234/
+        content_path = os.path.join(assemble_path, archive_name)
+        # /var/log/rhsm/debug/rhsm-debug-system-20131212-123413.tar.gz
+        tar_file_path = os.path.join(assemble_path, tar_file_name)
 
         try:
-            os.makedirs(content_path)
+            # assemble path is in the package, so should always exist
+            self._makedir(content_path)
+
+            owner = self.cp.getOwner(consumer.uuid)
+
             try:
                 self._write_flat_file(content_path, "subscriptions.json",
                                       self.cp.getSubscriptionList(owner['key']))
             except Exception, e:
                 log.warning("Server does not allow retrieval of subscriptions by owner.")
+
             self._write_flat_file(content_path, "consumer.json",
                                   self.cp.getConsumer(consumer.uuid))
             self._write_flat_file(content_path, "compliance.json",
@@ -80,6 +102,7 @@ class SystemCommand(CliCommand):
             self._write_flat_file(content_path, "version.json",
                                   self._get_version_info())
 
+            # FIXME: we need to anon proxy passwords?
             self._copy_directory('/etc/rhsm', content_path)
             self._copy_directory('/var/log/rhsm', content_path)
             self._copy_directory('/var/lib/rhsm', content_path)
@@ -87,22 +110,32 @@ class SystemCommand(CliCommand):
             self._copy_directory(cfg.get('rhsm', 'entitlementCertDir'), content_path)
             self._copy_directory(cfg.get('rhsm', 'consumerCertDir'), content_path)
 
-            if not os.path.exists(self.options.destination):
-                os.makedirs(self.options.destination)
+            # build an archive by default
+            if self.options.archive:
+                try:
+                    tf = tarfile.open(tar_file_path, "w:gz")
+                    tf.add(content_path, archive_name)
+                finally:
+                    tf.close()
 
-            if not self.options.no_archive:
-                os.makedirs(tar_path)
-                tar_file_path = os.path.join(tar_path, "tmp-system.tar")
-                tf = tarfile.open(tar_file_path, "w:gz")
-                tf.add(content_path, code)
-                tf.close()
-                final_path = os.path.join(self.options.destination, "system-debug-%s.tar.gz" % code)
-                shutil.move(tar_file_path, final_path)
+                final_path = os.path.join(self.options.destination, "rhsm-debug-system-%s.tar.gz" % code)
+                sfm = SaferFileMove()
+                sfm.move(tar_file_path, final_path)
                 print _("Wrote: %s") % final_path
             else:
-                shutil.move(content_path, self.options.destination)
+                # NOTE: this will fail across filesystems. We could add a force
+                # flag to for creation of a specific name with approriate
+                # warnings.
+                dest_dir_name = os.path.join(self.options.destination, archive_name)
 
-                print _("Wrote: %s/%s") % (self.options.destination, code)
+                # create the dest dir, and set it's perms, this is atomic ish
+                self._makedir(dest_dir_name)
+
+                # try to rename the dir atomically
+                # rename only works on the same filesystem, but it is atomic.
+                os.rename(content_path, dest_dir_name)
+
+                print _("Wrote: %s/%s") % (self.options.destination, archive_name)
 
         except Exception, e:
             managercli.handle_exception(_("Unable to create zip file of system information: %s") % e, e)
@@ -120,16 +153,61 @@ class SystemCommand(CliCommand):
                 "subscription-manager": self.client_versions["subscription-manager"],
                 "python-rhsm": self.client_versions["python-rhsm"]}
 
-    def _write_flat_file(self, path, filename, content):
-        file_path = os.path.join(path, filename)
-        with open(file_path, "w+") as fo:
+    def _write_flat_file(self, content_path, filename, content):
+        path = os.path.join(content_path, filename)
+        with open(path, "w+") as fo:
             fo.write(json.dumps(content, indent=4, sort_keys=True))
 
-    def _copy_directory(self, path, prefix):
-        dest_path = path
-        if os.path.isabs(dest_path):
-            dest_path = dest_path[1:]
-        shutil.copytree(path, os.path.join(prefix, dest_path))
+    def _copy_directory(self, src_path, dest_path):
+        rel_path = src_path
+        if os.path.isabs(src_path):
+            rel_path = src_path[1:]
+        shutil.copytree(src_path, os.path.join(dest_path, rel_path))
 
     def _get_assemble_dir(self):
-        return '/var/spool/rhsm/debug'
+        return ASSEMBLE_DIR
+
+    def _makedir(self, dest_dir_name):
+        os.makedirs(dest_dir_name, ROOT_READ_ONLY)
+
+
+class SaferFileMove(object):
+    """Try to copy a file avoiding race conditions.
+
+    Opens the dest file os.O_RDWR | os.O_CREAT | os.O_EXCL, which
+    guarantees that the file didn't exist before, that we created it,
+    and that we are the only process that has it open. We also make sure
+    the perms are so that only root can read the result.
+
+    Then we copy the contents of the src file to the new dest file,
+    and unlink the src file."""
+    def __init__(self):
+        # based on shutils copyfileob
+        self.buf_size = 16 * 1024
+        # only root can read
+        self.default_perms = ROOT_READ_ONLY
+
+    def move(self, src, dest):
+        """Move a file to a dest dir, potentially /tmp more safely.
+
+        If dest is /tmp, or a specific name in /tmp, we want to
+        create it excl if we can."""
+        with open(src, 'r') as src_fo:
+            # if dest doesn't exist, and we can open it excl, then open it,
+            # keep the fd, create a file object for it, and write to it
+            with self._open_excl(dest) as dest_fo:
+                self._copyfileobj(src_fo, dest_fo)
+
+        os.unlink(src)
+
+    def _open_excl(self, path):
+        """Return a file object that we know we created and nothing else owns."""
+        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL,
+                                 self.default_perms), 'w+')
+
+    def _copyfileobj(self, src_fo, dest_fo):
+        while 1:
+            buf = src_fo.read(self.buf_size)
+            if not buf:
+                break
+            dest_fo.write(buf)
