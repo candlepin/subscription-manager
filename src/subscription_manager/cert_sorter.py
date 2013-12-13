@@ -24,7 +24,6 @@ log = logging.getLogger('rhsm-app.' + __name__)
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
 from subscription_manager.cache import InstalledProductsManager
-from subscription_manager.identity import ConsumerIdentity
 from subscription_manager import file_monitor
 
 import gettext
@@ -321,12 +320,8 @@ class CertSorter(ComplianceManager):
         super(CertSorter, self).__init__()
         self.callbacks = set()
 
-        self.product_monitor = file_monitor.Monitor(self.product_dir.path)
-        self.entitlement_monitor = file_monitor.Monitor(self.entitlement_dir.path)
-        self.identity_monitor = file_monitor.Monitor(ConsumerIdentity.PATH)
-        self.product_monitor.connect('changed', self.on_prod_dir_changed)
-        self.entitlement_monitor.connect('changed', self.on_ent_dir_changed)
-        self.identity_monitor.connect('changed', self.on_identity_changed)
+        self.cert_monitor = file_monitor.Monitor()
+        self.cert_monitor.connect('changed', self.on_cert_changed)
 
     def get_compliance_status(self):
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
@@ -341,9 +336,7 @@ class CertSorter(ComplianceManager):
                 log.debug(e)
 
     def force_cert_check(self):
-        self.identity_monitor.run_check()
-        self.product_monitor.run_check()
-        self.entitlement_monitor.run_check()
+        self.cert_monitor.run_check()
 
     def notify(self):
         for callback in copy(self.callbacks):
@@ -363,19 +356,27 @@ class CertSorter(ComplianceManager):
         self.load()
         self.notify()
 
-    def on_prod_dir_changed(self, filemonitor):
+    def on_cert_changed(self, monitor, ident_changed, ent_changed, prod_changed):
+        if ident_changed:
+            self.on_identity_changed()
+        if ent_changed:
+            self.on_ent_dir_changed()
+        if prod_changed:
+            self.on_prod_dir_changed()
+
+        # Now that local data has been refreshed, updated compliance
+        self.on_change()
+
+    def on_prod_dir_changed(self):
         self.product_dir.refresh()
         self.update_product_manager()
-        self.on_change()
 
-    def on_ent_dir_changed(self, filemonitor):
+    def on_ent_dir_changed(self):
         self.entitlement_dir.refresh()
-        self.on_change()
 
-    def on_identity_changed(self, filemonitor):
+    def on_identity_changed(self):
         self.identity.reload()
         self.cp_provider.clean()
-        self.on_change()
 
 
 class StackingGroupSorter(object):
