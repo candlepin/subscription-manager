@@ -1002,7 +1002,9 @@ class UEPConnection:
 
     def getEntitlementList(self, consumerId):
         method = "/consumers/%s/entitlements" % self.sanitize(consumerId)
-        results = self.conn.request_get(method)
+        # It is unnecessary to download the certificate and key here
+        filters = "?exclude=certificates.key&exclude=certificates.cert"
+        results = self.conn.request_get(method + filters)
         return results
 
     def getServiceLevelList(self, owner_key):
