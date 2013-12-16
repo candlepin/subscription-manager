@@ -32,6 +32,8 @@ EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
 YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
 ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(CD_SRC_DIR) $(DAEMONS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
 
+# sets a version that is more or less latest tag plus commit sha
+VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
 CFLAGS = -Wall -g
 
 %.pyc: %.py
@@ -128,7 +130,11 @@ install-example-plugins-conf:
 .PHONY: install
 install: install-files install-conf install-help-files install-plugins-conf
 
-install-files: dbus-service-install compile-po desktop-files install-plugins
+set-versions:
+	sed -e 's/RPM_VERSION/$(VERSION)/g' $(SRC_DIR)/version.py.in > $(SRC_DIR)/version.py
+	sed -e 's/RPM_VERSION/$(VERSION)/g' $(RCT_SRC_DIR)/version.py.in > $(RCT_SRC_DIR)/version.py
+
+install-files: set-versions dbus-service-install compile-po desktop-files install-plugins
 	install -d $(CODE_DIR)/gui/data/icons
 	install -d $(CODE_DIR)/branding
 	install -d $(CODE_DIR)/migrate
