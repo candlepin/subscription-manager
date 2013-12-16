@@ -109,7 +109,7 @@ class UpdateAction:
 
         self.release = None
         self.overrides = []
-        self.override_supported = self.uep.supports_resource('content_overrides')
+        self.override_supported = bool(self.uep and self.uep.supports_resource('content_overrides'))
 
         # If we are not registered, skip trying to refresh the
         # data from the server
@@ -118,7 +118,6 @@ class UpdateAction:
 
         # Only attempt to update the overrides if they are supported
         # by the server.
-        self.overrides = []
         if self.override_supported:
             override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
             if cache_only:
