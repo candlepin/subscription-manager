@@ -70,7 +70,6 @@ class ConnectionTests(unittest.TestCase):
             self.assertEquals("p", uep.proxy_password)
             self.assertEquals("host", uep.proxy_hostname)
             self.assertEquals(int("4444"), uep.proxy_port)
-        assert 'HTTPS_PROXY' not in os.environ
 
     def test_order(self):
         # should follow the order: HTTPS, https, HTTP, http
@@ -81,8 +80,6 @@ class ConnectionTests(unittest.TestCase):
             self.assertEquals("p", uep.proxy_password)
             self.assertEquals("host", uep.proxy_hostname)
             self.assertEquals(int("4444"), uep.proxy_port)
-        assert 'HTTPS_PROXY' not in os.environ
-        assert 'http_proxy' not in os.environ
 
     def test_no_port(self):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host'}):
@@ -92,7 +89,6 @@ class ConnectionTests(unittest.TestCase):
             self.assertEquals("p", uep.proxy_password)
             self.assertEquals("host", uep.proxy_hostname)
             self.assertEquals(3128, uep.proxy_port)
-        assert 'HTTPS_PROXY' not in os.environ
 
     def test_no_user_or_password(self):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://host:1111'}):
@@ -102,7 +98,6 @@ class ConnectionTests(unittest.TestCase):
             self.assertEquals(None, uep.proxy_password)
             self.assertEquals("host", uep.proxy_hostname)
             self.assertEquals(int("1111"), uep.proxy_port)
-        assert 'HTTPS_PROXY' not in os.environ
 
 
 class RestlibValidateResponseTests(unittest.TestCase):
