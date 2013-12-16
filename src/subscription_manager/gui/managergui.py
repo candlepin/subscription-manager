@@ -119,12 +119,8 @@ class Backend(object):
     def _create_content_connection(self):
         (cdn_hostname, cdn_port, cdn_prefix) = parse_baseurl_info(cfg.get('rhsm', 'baseurl'))
 
-        return connection.ContentConnection(host=cdn_hostname,
-                ssl_port=cdn_port,
-                proxy_hostname=cfg.get('server', 'proxy_hostname'),
-                proxy_port=cfg.get_int('server', 'proxy_port'),
-                proxy_user=cfg.get('server', 'proxy_user'),
-                proxy_password=cfg.get('server', 'proxy_password'))
+        # ContentConnection now handles reading the proxy information
+        return connection.ContentConnection(host=cdn_hostname, ssl_port=cdn_port)
 
 
 class MainWindow(widgets.GladeWidget):
