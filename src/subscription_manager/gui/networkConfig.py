@@ -23,7 +23,7 @@ import gtk.glade
 
 import rhsm.config
 import rhsm.connection as connection
-from rhsm.utils import remove_scheme, get_env_proxy_info
+from rhsm.utils import remove_scheme
 
 from subscription_manager.gui.utils import show_error_window
 import subscription_manager.injection as inj
@@ -104,12 +104,9 @@ class NetworkConfigDialog:
         self.enable_action(self.xml.get_widget("enableProxyAuthButton"))
         self.enable_action(self.xml.get_widget("enableProxyButton"))
 
-        # get proxy information from env variable if available
-        info = get_env_proxy_info()
-
         # the extra or "" are to make sure we don't str None
-        self.xml.get_widget("proxyUserEntry").set_text(str(self.cfg.get("server", "proxy_user") or str(info["proxy_username"]) or ""))
-        self.xml.get_widget("proxyPasswordEntry").set_text(str(self.cfg.get("server", "proxy_password") or str(info["proxy_password"]) or ""))
+        self.xml.get_widget("proxyUserEntry").set_text(str(self.cfg.get("server", "proxy_user") or ""))
+        self.xml.get_widget("proxyPasswordEntry").set_text(str(self.cfg.get("server", "proxy_password") or ""))
         self.xml.get_widget("connectionStatusLabel").set_label("")
         # If there is no proxy information, disable the proxy test
         # button.
