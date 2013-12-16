@@ -1,9 +1,6 @@
 import unittest
 import datetime
 
-import rhsm_display
-rhsm_display.set_display()
-
 from subscription_manager.gui import contract_selection
 from subscription_manager import isodate
 

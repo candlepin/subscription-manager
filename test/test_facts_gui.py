@@ -1,8 +1,5 @@
 from fixture import SubManFixture
 
-import rhsm_display
-rhsm_display.set_display()
-
 from subscription_manager.injection import provide, IDENTITY
 from stubs import StubUEP, StubFacts
 from subscription_manager.gui import factsgui

@@ -17,9 +17,6 @@ import locale
 import gettext
 import unittest
 
-import rhsm_display
-rhsm_display.set_display()
-
 import test_po_files
 
 import gtk

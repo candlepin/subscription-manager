@@ -14,9 +14,6 @@
 
 import datetime
 
-import rhsm_display
-rhsm_display.set_display()
-
 from fixture import SubManFixture
 from stubs import StubUEP, StubEntitlementCertificate, \
         StubCertificateDirectory, StubProduct, StubBackend, \

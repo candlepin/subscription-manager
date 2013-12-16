@@ -2,9 +2,6 @@ import unittest
 import socket
 from M2Crypto import SSL
 
-import rhsm_display
-rhsm_display.set_display()
-
 from subscription_manager.gui import utils
 from fixture import FakeException, FakeLogger
 
