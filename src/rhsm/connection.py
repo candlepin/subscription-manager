@@ -33,6 +33,7 @@ from config import initConfig
 from version import Versions
 
 from rhsm import ourjson as json
+from rhsm.utils import get_env_proxy_info
 
 # on EL5, there is a really long socket timeout. The
 # best thing we can do is set a process wide default socket timeout.
@@ -229,17 +230,22 @@ class ContentConnection(object):
         self.handler = "/"
         self.ssl_verify_depth = ssl_verify_depth
 
-        self.host = host
-        self.ssl_port = ssl_port
+        self.host = host or config.get('server', 'hostname')
+        self.ssl_port = ssl_port or safe_int(config.get('server', 'port'))
         self.ca_dir = ca_dir
         self.insecure = insecure
         self.username = username
         self.password = password
         self.ssl_verify_depth = ssl_verify_depth
-        self.proxy_hostname = proxy_hostname
-        self.proxy_port = proxy_port
-        self.proxy_user = proxy_user
-        self.proxy_password = proxy_password
+
+        # get the proxy information from the environment variable
+        # if available
+        info = get_env_proxy_info()
+
+        self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname') or info['proxy_hostname']
+        self.proxy_port = proxy_port or config.get('server', 'proxy_port') or info['proxy_port']
+        self.proxy_user = proxy_user or config.get('server', 'proxy_user') or info['proxy_username']
+        self.proxy_password = proxy_password or config.get('server', 'proxy_password') or info['proxy_password']
 
     def _request(self, request_type, handler, body=None):
         context = SSL.Context("tlsv1")
@@ -596,10 +602,14 @@ class UEPConnection:
         # BZ848836
         self.handler = self.handler.rstrip("/")
 
-        self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname')
-        self.proxy_port = proxy_port or config.get('server', 'proxy_port')
-        self.proxy_user = proxy_user or config.get('server', 'proxy_user')
-        self.proxy_password = proxy_password or config.get('server', 'proxy_password')
+        # get the proxy information from the environment variable
+        # if available
+        info = get_env_proxy_info()
+
+        self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname') or info['proxy_hostname']
+        self.proxy_port = proxy_port or config.get('server', 'proxy_port') or info['proxy_port']
+        self.proxy_user = proxy_user or config.get('server', 'proxy_user') or info['proxy_username']
+        self.proxy_password = proxy_password or config.get('server', 'proxy_password') or info['proxy_password']
 
         self.cert_file = cert_file
         self.key_file = key_file

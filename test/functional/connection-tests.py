@@ -13,12 +13,13 @@
 # in this software or its documentation.
 #
 
+import os
 import unittest
 
 from rhsm.connection import ContentConnection, UEPConnection, drift_check, Restlib,\
     UnauthorizedException, ForbiddenException, AuthenticationException, RestlibException, \
     RemoteServerException
-import mock
+from mock import patch
 import random
 
 
@@ -57,9 +58,9 @@ class BindRequestTests(unittest.TestCase):
         consumerInfo = self.cp.registerConsumer("test-consumer", "system", owner="admin")
         self.consumer_uuid = consumerInfo['uuid']
 
-    @mock.patch.object(Restlib,'validateResponse')
-    @mock.patch('rhsm.connection.drift_check', return_value=False)
-    @mock.patch('M2Crypto.httpslib.HTTPSConnection', auto_spec=True)
+    @patch.object(Restlib,'validateResponse')
+    @patch('rhsm.connection.drift_check', return_value=False)
+    @patch('M2Crypto.httpslib.HTTPSConnection', auto_spec=True)
     def test_bind_no_args(self, mock_conn, mock_drift, mock_validate):
 
         self.cp.bind(self.consumer_uuid)
@@ -72,9 +73,9 @@ class BindRequestTests(unittest.TestCase):
             if name == '().request':
                 self.assertEquals(None, kwargs['body'])
 
-    @mock.patch.object(Restlib,'validateResponse')
-    @mock.patch('rhsm.connection.drift_check', return_value=False)
-    @mock.patch('M2Crypto.httpslib.HTTPSConnection', auto_spec=True)
+    @patch.object(Restlib,'validateResponse')
+    @patch('rhsm.connection.drift_check', return_value=False)
+    @patch('M2Crypto.httpslib.HTTPSConnection', auto_spec=True)
     def test_bind_by_pool(self, mock_conn, mock_drift, mock_validate):
         # this test is just to verify we make the httplib connection with
         # right args, we don't validate the bind here
@@ -91,6 +92,34 @@ class ContentConnectionTests(unittest.TestCase):
 
     def testInsecure(self):
         ContentConnection(host="127.0.0.1", insecure=True)
+
+    # sigh camelCase
+    def testEnvProxyUrl(self):
+        with patch.dict('os.environ', {'https_proxy': 'https://user:pass@example.com:1111'}):
+            cc = ContentConnection(host="127.0.0.1")
+            self.assertEquals("user", cc.proxy_user)
+            self.assertEquals("pass", cc.proxy_password)
+            self.assertEquals("example.com", cc.proxy_hostname)
+            self.assertEquals(1111, cc.proxy_port)
+        assert 'https_proxy' not in os.environ
+
+    def testEnvProxyUrlNoPort(self):
+        with patch.dict('os.environ', {'https_proxy': 'https://user:pass@example.com'}):
+            cc = ContentConnection(host="127.0.0.1")
+            self.assertEquals("user", cc.proxy_user)
+            self.assertEquals("pass", cc.proxy_password)
+            self.assertEquals("example.com", cc.proxy_hostname)
+            self.assertEquals(3128, cc.proxy_port)
+        assert 'https_proxy' not in os.environ
+
+    def testEnvProxyUrlNouserOrPass(self):
+        with patch.dict('os.environ', {'https_proxy': 'https://example.com'}):
+            cc = ContentConnection(host="127.0.0.1")
+            self.assertEquals(None, cc.proxy_user)
+            self.assertEquals(None, cc.proxy_password)
+            self.assertEquals("example.com", cc.proxy_hostname)
+            self.assertEquals(3128, cc.proxy_port)
+        assert 'https_proxy' not in os.environ
 
 
 class HypervisorCheckinTests(unittest.TestCase):
