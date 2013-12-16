@@ -24,10 +24,10 @@ from urllib import basejoin
 
 from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
+from rhsm.utils import UnsupportedOperationException
 
 from certlib import ActionLock, DataLib
 from certdirectory import Path, ProductDirectory, EntitlementDirectory
-from utils import UnsupportedOperationException
 
 log = logging.getLogger('rhsm-app.' + __name__)
 

@@ -28,6 +28,7 @@ import gtk
 import gtk.glade
 
 import rhsm.config as config
+from rhsm.utils import ServerUrlParseError
 
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import InstalledProductsManager, ProfileManager
@@ -37,7 +38,7 @@ from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require
 from subscription_manager import managerlib
 from subscription_manager.utils import is_valid_server_info, MissingCaCertException, \
-        parse_server_info, restart_virt_who, ServerUrlParseError
+        parse_server_info, restart_virt_who
 
 from subscription_manager.gui.utils import handle_gui_exception, show_error_window
 from subscription_manager.gui.autobind import DryRunResult, \

@@ -23,9 +23,9 @@ import gtk.glade
 
 import rhsm.config
 import rhsm.connection as connection
+from rhsm.utils import remove_scheme
 
 from subscription_manager.gui.utils import show_error_window
-from subscription_manager.utils import remove_scheme
 import subscription_manager.injection as inj
 
 _ = gettext.gettext

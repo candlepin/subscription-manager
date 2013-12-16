@@ -18,13 +18,14 @@ import unittest
 from mock import Mock, patch
 from StringIO import StringIO
 
+from rhsm.utils import UnsupportedOperationException
+
 from fixture import SubManFixture
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
         StubProductDirectory, StubUEP, StubConsumerIdentity
 import subscription_manager.injection as inj
 from subscription_manager.repolib import Repo, UpdateAction, TidyWriter
-from subscription_manager.utils import UnsupportedOperationException
 from subscription_manager import repolib
 
 

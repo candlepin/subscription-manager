@@ -31,6 +31,7 @@ from M2Crypto import X509
 
 import rhsm.config
 import rhsm.connection as connection
+from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import InstalledProductsManager, ProfileManager
@@ -48,8 +49,8 @@ from subscription_manager import managerlib
 from subscription_manager.managerlib import valid_quantity
 from subscription_manager.release import ReleaseBackend
 from subscription_manager.repolib import RepoLib, RepoFile
-from subscription_manager.utils import remove_scheme, parse_server_info, \
-        ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
+from subscription_manager.utils import parse_server_info, \
+        parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width
 from subscription_manager.overrides import Overrides, Override
@@ -213,6 +214,13 @@ class CliCommand(AbstractCLICommand):
 
         self.server_url = None
 
+        # TODO
+        self.server_hostname = None
+        self.server_port = None
+        self.server_prefix = None
+        self.proxy_user = None
+        self.proxy_password = None
+        #
         self.proxy_url = None
         self.proxy_hostname = None
         self.proxy_port = None
@@ -308,16 +316,6 @@ class CliCommand(AbstractCLICommand):
             for arg in self.args:
                 print _("cannot parse argument: %s") % arg
             sys.exit(-1)
-
-        # set proxy before we try to connect to server
-        self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
-        self.proxy_port = cfg.get_int('server', 'proxy_port')
-        self.proxy_user = cfg.get('server', 'proxy_user')
-        self.proxy_password = cfg.get('server', 'proxy_password')
-
-        self.server_hostname = cfg.get("server", "hostname")
-        self.server_port = cfg.get("server", "port")
-        self.server_prefix = cfg.get("server", "prefix")
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             cfg.set("server", "insecure", "1")

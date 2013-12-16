@@ -37,9 +37,9 @@ from subscription_manager.gui.autobind import \
         ServiceLevelNotSupportedException, NoProductsException, \
         AllProductsCoveredException
 from subscription_manager import managerlib
-from subscription_manager.utils import remove_scheme
 
 from rhsm.connection import RestlibException
+from rhsm.utils import remove_scheme
 
 sys.path.append("/usr/share/rhn")
 rhn_config = None
