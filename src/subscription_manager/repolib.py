@@ -24,7 +24,7 @@ from urllib import basejoin
 
 from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
-from rhsm.utils import UnsupportedOperationException, get_env_proxy_info
+from rhsm.utils import UnsupportedOperationException
 
 from certlib import ActionLock, DataLib
 from certdirectory import Path, ProductDirectory, EntitlementDirectory
@@ -297,12 +297,9 @@ class UpdateAction:
     def _set_proxy_info(self, repo):
         proxy = ""
 
-        # get proxy info from env variable if available
-        info = get_env_proxy_info()
-
-        proxy_host = CFG.get('server', 'proxy_hostname') or info['proxy_hostname']
+        proxy_host = CFG.get('server', 'proxy_hostname')
         # proxy_port as string is fine here
-        proxy_port = CFG.get('server', 'proxy_port') or info['proxy_port']
+        proxy_port = CFG.get('server', 'proxy_port')
         if proxy_host != "":
             proxy = "https://%s" % proxy_host
             if proxy_port != "":
@@ -311,8 +308,8 @@ class UpdateAction:
         # These could be empty string, in which case they will not be
         # set in the yum repo file:
         repo['proxy'] = proxy
-        repo['proxy_username'] = CFG.get('server', 'proxy_user') or info['proxy_username']
-        repo['proxy_password'] = CFG.get('server', 'proxy_password') or info['proxy_password']
+        repo['proxy_username'] = CFG.get('server', 'proxy_user')
+        repo['proxy_password'] = CFG.get('server', 'proxy_password')
 
     def join(self, base, url):
         if len(url) == 0:
