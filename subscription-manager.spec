@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.8
+Version: 1.10.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -401,6 +401,31 @@ fi
 %endif
 
 %changelog
+* Tue Dec 17 2013 ckozak <ckozak@redhat.com> 1.10.9-1
+- Check for RHSM_DISPLAY before loading any modules. (alikins@redhat.com)
+- 1034429: Fix stacktrace in logs on unregister. (dgoodwin@redhat.com)
+- add ServerUrlParseException strings to mapper (jesusr@redhat.com)
+- 1040167: Update installed products properly (ckozak@redhat.com)
+- Added atspi locator for overall status (ckozak@redhat.com)
+- ExceptionMapper will now traverse object graph looking for message
+  (mstead@redhat.com)
+- Convert tests on stderr to use Capture context manager. (awood@redhat.com)
+- Have Capture grab both stdout and stderr. (awood@redhat.com)
+- Updated for readability (ckozak@redhat.com)
+- replace file monitors with a single monitor (ckozak@redhat.com)
+- Rename capture context manager and use new-style classes. (awood@redhat.com)
+- Correct Makefile for RHEL 5. (awood@redhat.com)
+- 1030604: print to stdout instead of stderr for consistency
+  (mstead@redhat.com)
+- display pool type in cli and gui (ckozak@redhat.com)
+- 1031008: Properly handle exceptions when checking compliance
+  (mstead@redhat.com)
+- Change the capture() context manager to tee output. (awood@redhat.com)
+- Remove mock stdout. Nosetest captures stdout by default. (awood@redhat.com)
+- respect http(s)_proxy env variable for proxy information (jesusr@redhat.com)
+- Created ExceptionMapper to allow sharing exception messages
+  (mstead@redhat.com)
+
 * Fri Dec 06 2013 ckozak <ckozak@redhat.com> 1.10.8-1
 - 1030604: Handle 400 code for add override (mstead@redhat.com)
 - Use backed to ensure a refreshed Overrides object (mstead@redhat.com)
