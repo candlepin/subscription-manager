@@ -16,6 +16,7 @@
 import datetime
 import gettext
 import os
+import subprocess
 
 from gtk import RESPONSE_DELETE_EVENT, RESPONSE_CANCEL, \
                 AboutDialog as GtkAboutDialog, Label
@@ -36,7 +37,6 @@ LICENSE = _("\nThis software is licensed to you under the GNU General Public Lic
             "in this software or its documentation.\n")
 
 UPDATE_FILE = '/var/run/rhsm/update'
-LOCK_FILE = '/var/lock/subsys/rhsmcertd'
 
 prefix = os.path.dirname(__file__)
 
@@ -88,7 +88,7 @@ class AboutDialog(object):
 
     def _set_next_update(self, next_update_label):
         try:
-            if(os.path.exists(LOCK_FILE)):
+            if self._rhsmcertd_on():
                 next_update = long(file(UPDATE_FILE).read())
             else:
                 next_update = None
@@ -102,3 +102,11 @@ class AboutDialog(object):
             next_update_label.show()
         else:
             next_update_label.hide()
+
+    def _rhsmcertd_on(self):
+        try:
+            # if exists [method call returns pid] then true
+            return bool(subprocess.check_output(['pidof', 'rhsmcertd']))
+        except subprocess.CalledProcessError:
+            # if does not exist, returns CalledProcessError
+            return False
