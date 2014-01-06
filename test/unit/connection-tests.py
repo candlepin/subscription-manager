@@ -99,6 +99,36 @@ class ConnectionTests(unittest.TestCase):
             self.assertEquals("host", uep.proxy_hostname)
             self.assertEquals(int("1111"), uep.proxy_port)
 
+    def test_sanitizeGuestIds_supports_strs(self):
+        self.cp.supports_resource = Mock(return_value=True)
+        guestIds = ['test' + str(i) for i in range(3)]
+        resultGuestIds = self.cp.sanitizeGuestIds(guestIds)
+        # When strings are given, they should always be unchanged
+        self.assertEquals(guestIds, resultGuestIds)
+
+    def test_sanitizeGuestIds_no_support_strs(self):
+        self.cp.supports_resource = Mock(return_value=False)
+        guestIds = ['test' + str(i) for i in range(3)]
+        resultGuestIds = self.cp.sanitizeGuestIds(guestIds)
+        # When strings are given, they should always be unchanged
+        self.assertEquals(guestIds, resultGuestIds)
+
+    def test_sanitizeGuestIds_supports_data(self):
+        self.cp.supports_resource = Mock(return_value=True)
+        guestIds = [{'guestId': 'test' + str(i)} for i in range(3)]
+        resultGuestIds = self.cp.sanitizeGuestIds(guestIds)
+        # The dictionary should be unchanged because the server supports guestIds
+        self.assertEquals(guestIds, resultGuestIds)
+
+    def test_sanitizeGuestIds_doesnt_support_data(self):
+        self.cp.supports_resource = Mock(return_value=False)
+        guestIds = [{'guestId': 'test' + str(i)} for i in range(3)]
+        resultGuestIds = self.cp.sanitizeGuestIds(guestIds)
+        # The result list should only be string ids because the server
+        # doesn't support additional data
+        expected_guestIds = [guestId['guestId'] for guestId in guestIds]
+        self.assertEquals(expected_guestIds, resultGuestIds)
+
 
 class RestlibValidateResponseTests(unittest.TestCase):
     def setUp(self):

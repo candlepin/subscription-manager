@@ -776,7 +776,7 @@ class UEPConnection:
         if installed_products is not None:
             params['installedProducts'] = installed_products
         if guest_uuids is not None:
-            params['guestIds'] = guest_uuids
+            params['guestIds'] = self.sanitizeGuestIds(guest_uuids)
         if facts is not None:
             params['facts'] = facts
         if release is not None:
@@ -793,6 +793,21 @@ class UEPConnection:
         method = "/consumers/%s" % self.sanitize(uuid)
         ret = self.conn.request_put(method, params)
         return ret
+
+    def sanitizeGuestIds(self, guestIds):
+        result = []
+        supports_guestids = self.supports_resource('guestids')
+        for guestId in guestIds or []:
+            if isinstance(guestId, basestring):
+                result.append(guestId)
+            elif isinstance(guestId, dict) and "guestId" in guestId.keys():
+                if supports_guestids:
+                    # Upload full json
+                    result.append(guestId)
+                else:
+                    # Does not support the full guestId json, use the id string
+                    result.append(guestId["guestId"])
+        return result
 
     def updatePackageProfile(self, consumer_uuid, pkg_dicts):
         """
