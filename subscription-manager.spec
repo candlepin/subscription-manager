@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.9
+Version: 1.10.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -401,6 +401,12 @@ fi
 %endif
 
 %changelog
+* Mon Jan 06 2014 ckozak <ckozak@redhat.com> 1.10.10-1
+- 1039736: Modify the remote server string to reference Satellite instead of
+  CloudForms (bkearney@redhat.com)
+- 916666: Change method of service detection (wpoteat@redhat.com)
+- Correct at-spi name for subscription type text (ckozak@redhat.com)
+
 * Tue Dec 17 2013 ckozak <ckozak@redhat.com> 1.10.9-1
 - Check for RHSM_DISPLAY before loading any modules. (alikins@redhat.com)
 - 1034429: Fix stacktrace in logs on unregister. (dgoodwin@redhat.com)
