@@ -18,8 +18,11 @@ import shutil
 import tarfile
 from datetime import datetime
 
-from rhsm_debug import debug_commands
+import fixture
 from test_managercli import TestCliCommand
+
+from rhsm_debug import debug_commands
+from rhsm_debug import cli
 from rhsm.config import initConfig
 from subscription_manager.cli import InvalidCLIOptionError
 
@@ -31,6 +34,15 @@ def path_join(first, second):
     if os.path.isabs(second):
         second = second[1:]
     return os.path.join(first, second)
+
+
+class TestRhsmDebugCLI(fixture.SubManFixture):
+    def test_init(self):
+        cli_obj = cli.RhsmDebugCLI()
+        # we populated cli_commands
+        self.assertTrue(cli_obj.cli_commands)
+        # no aliases
+        self.assertFalse(cli_obj.cli_aliases)
 
 
 class TestCompileCommand(TestCliCommand):
