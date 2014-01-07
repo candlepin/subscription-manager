@@ -24,13 +24,13 @@ BASE_SRC_DIR := src
 SRC_DIR := $(BASE_SRC_DIR)/subscription_manager
 RCT_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
 RCT_SRC_DIR := $(BASE_SRC_DIR)/rct
-CD_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
-CD_SRC_DIR := $(BASE_SRC_DIR)/rhsm_debug
+RD_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
+RD_SRC_DIR := $(BASE_SRC_DIR)/rhsm_debug
 RHSM_ICON_SRC_DIR := $(BASE_SRC_DIR)/rhsm_icon
 DAEMONS_SRC_DIR := $(BASE_SRC_DIR)/daemons
 EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
 YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
-ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(CD_SRC_DIR) $(DAEMONS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
+ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
 
 CFLAGS = -Wall -g
 
@@ -146,6 +146,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -d $(PREFIX)/$(INSTALL_DIR)/applications
 	install -d $(PREFIX)/var/log/rhsm
+	install -d $(PREFIX)/var/spool/rhsm/debug
 	install -d $(PREFIX)/var/run/rhsm
 	install -d $(PREFIX)/var/lib/rhsm/facts
 	install -d $(PREFIX)/var/lib/rhsm/packages
@@ -272,8 +273,8 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -m 644 -p $(RCT_SRC_DIR)/*.py $(RCT_CODE_DIR)
 	install bin/rct $(PREFIX)/usr/bin
 
-	install -d $(CD_CODE_DIR)
-	install -m 644 -p $(CD_SRC_DIR)/*.py $(CD_CODE_DIR)
+	install -d $(RD_CODE_DIR)
+	install -m 644 -p $(RD_SRC_DIR)/*.py $(RD_CODE_DIR)
 	install bin/rhsm-debug $(PREFIX)/usr/bin
 
 
@@ -320,7 +321,7 @@ desktop-files: etc-conf/rhsm-icon.desktop \
 po/POTFILES.in:
 	# generate the POTFILES.in file expected by intltool. it wants one
 	# file per line, but we're lazy.
-	find $(SRC_DIR)/ $(RCT_SRC_DIR) $(CD_SRC_DIR) $(DAEMONS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) -name "*.py" > po/POTFILES.in
+	find $(SRC_DIR)/ $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) -name "*.py" > po/POTFILES.in
 	find $(SRC_DIR)/gui/data/ -name "*.glade" >> po/POTFILES.in
 	find $(BIN_DIR) -name "*-to-rhsm" >> po/POTFILES.in
 	find $(BIN_DIR) -name "subscription-manager*" >> po/POTFILES.in
@@ -329,7 +330,7 @@ po/POTFILES.in:
 	find src/ -name "*.c" >> po/POTFILES.in
 	find etc-conf/ -name "*.desktop.in" >> po/POTFILES.in
 	find $(RCT_SRC_DIR)/ -name "*.py" >> po/POTFILES.in
-	find $(CD_SRC_DIR)/ -name "*.py" >> po/POTFILES.in
+	find $(RD_SRC_DIR)/ -name "*.py" >> po/POTFILES.in
 
 .PHONY: po/POTFILES.in %.desktop
 
