@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python -S
 
 #
 # Copyright (c) 2010 - 2012 Red Hat, Inc.
@@ -19,6 +19,8 @@ if __name__ != '__main__':
     raise ImportError("This module can not be imported.")
 
 import sys
+sys.setdefaultencoding('utf-8')
+import site
 import os
 
 # Ensure that the RHSM libs are on the path.

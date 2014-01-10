@@ -18,6 +18,8 @@ if __name__ != '__main__':
     raise ImportError("module cannot be imported")
 
 import sys
+sys.setdefaultencoding('utf-8')
+import site
 import os
 
 
