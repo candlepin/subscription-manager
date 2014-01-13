@@ -121,6 +121,7 @@ class MockStdout(object):
 
 MockStderr = MockStdout
 
+
 class StubProduct(Product):
 
     def __init__(self, product_id, name=None, version=None,

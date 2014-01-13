@@ -668,9 +668,7 @@ class TestMigration(fixture.SubManFixture):
                 '3': {'cert-m-3.pem': ['chanA'], 'cert-n-3.pem': ['chanB'], 'cert-o-3.pem': ['chanC']}
         }
 
-
         with Capture() as cap:
-
             try:
                 self.engine.handle_collisions(cmap)
             except SystemExit, e:
