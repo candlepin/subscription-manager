@@ -11,10 +11,7 @@ from subscription_manager import managercli, managerlib
 from subscription_manager.printing_utils import format_name, columnize, \
         _echo, _none_wrap
 from subscription_manager.repolib import Repo
-from subscription_manager import injection as inj
-from stubs import MockStderr, MockStdout, \
-        StubEntitlementCertificate, \
-
+from stubs import MockStderr, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
 from fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher
@@ -83,7 +80,7 @@ class TestCliCommand(SubManFixture):
         self.cc._do_command = self._do_command
 #        self.cc.assert_should_be_registered = self._asert_should_be_registered
 
-        self.mock_stdout = MockStdout()
+        self.mock_stdout = MockStderr()
         self.mock_stderr = MockStderr()
         sys.stderr = self.mock_stderr
 
@@ -301,10 +298,8 @@ class TestListCommand(TestCliProxyCommand):
                      'suggested': '2'}]
         mget_ents.return_value = create_pool_list()
 
-
-        mcli.return_value = {'consumer_name': 'stub_name', 'uuid': 'stub_uuid'}
         with Capture() as cap:
-            listCommand.main(['list', '--available'])
+            list_command.main(['list', '--available'])
         self.assertTrue('888888888888' in cap.out)
 
     def test_print_consumed_no_ents(self):

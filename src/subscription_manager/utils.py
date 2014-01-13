@@ -17,18 +17,17 @@ import collections
 import gettext
 import logging
 import os
-import re
 import pprint
 
 import signal
 import socket
 import syslog
-from urlparse import urlparse
 
 from M2Crypto.SSL import SSLError
 
 from subscription_manager.branding import get_branding
 from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager import injection as inj
 
 # we moved quite a bit of code from this module to rhsm.
 # we may want to import some of the other items for
@@ -55,6 +54,7 @@ class DefaultDict(collections.defaultdict):
 
     def __repr__(self):
         return pprint.pformat(self.as_dict())
+
 
 def parse_server_info(local_server_entry):
     return parse_url(local_server_entry,

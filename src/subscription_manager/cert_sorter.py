@@ -24,7 +24,6 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
-from subscription_manager.cache import InstalledProductsManager
 from subscription_manager import file_monitor
 
 import gettext
@@ -314,21 +313,16 @@ class CertSorter(ComplianceManager):
     """
     def __init__(self):
 
+        super(CertSorter, self).__init__()
+        self.callbacks = set()
+
         # Sync installed product info with server.
         # This will be done on register if we aren't registered
         self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
         self.update_product_manager()
 
-        super(CertSorter, self).__init__()
-        self.callbacks = set()
-
-
         self.cert_monitor = file_monitor.Monitor()
         self.cert_monitor.connect('changed', self.on_cert_changed)
-
-
-
-
 
     def get_compliance_status(self):
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)

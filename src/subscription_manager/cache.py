@@ -377,13 +377,11 @@ class InstalledProductsManager(CacheManager):
     def __init__(self):
         self._installed = None
 
+        self.product_dir = inj.require(inj.PROD_DIR)
+
     def _get_installed(self):
         if self._installed:
             return self._installed
-
-        self.product_dir = product_dir
-        if not product_dir:
-            self.product_dir = inj.require(inj.PROD_DIR)
 
         self._setup_installed()
         return self._installed
