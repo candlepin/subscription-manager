@@ -379,11 +379,14 @@ class InstalledProductsManager(CacheManager):
 
         self.product_dir = inj.require(inj.PROD_DIR)
 
+        self._setup_installed()
+
     def _get_installed(self):
         if self._installed:
             return self._installed
 
         self._setup_installed()
+
         return self._installed
 
     def _set_installed(self, value):
@@ -419,10 +422,10 @@ class InstalledProductsManager(CacheManager):
         Format installed product data to match the cache
         and what the server can use.
         """
-        self.installed = {}
+        self._installed = {}
         for prod_cert in self.product_dir.list():
             prod = prod_cert.products[0]
-            self.installed[prod.id] = {'productId': prod.id,
+            self._installed[prod.id] = {'productId': prod.id,
                     'productName': prod.name,
                     'version': prod.version,
                     'arch': ','.join(prod.architectures)
