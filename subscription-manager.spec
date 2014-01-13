@@ -243,12 +243,14 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/injection.py*
 %{_datadir}/rhsm/subscription_manager/injectioninit.py*
 %{_datadir}/rhsm/subscription_manager/__init__.py*
+%{_datadir}/rhsm/subscription_manager/installedproductslib.py*
 %{_datadir}/rhsm/subscription_manager/jsonwrapper.py*
 %{_datadir}/rhsm/subscription_manager/listing.py*
 %{_datadir}/rhsm/subscription_manager/lock.py*
 %{_datadir}/rhsm/subscription_manager/logutil.py*
 %{_datadir}/rhsm/subscription_manager/managercli.py*
 %{_datadir}/rhsm/subscription_manager/managerlib.py*
+%{_datadir}/rhsm/subscription_manager/packageprofilelib.py*
 %{_datadir}/rhsm/subscription_manager/plugins.py*
 %{_datadir}/rhsm/subscription_manager/productid.py*
 %{_datadir}/rhsm/subscription_manager/release.py*
