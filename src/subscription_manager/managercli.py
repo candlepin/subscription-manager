@@ -34,7 +34,7 @@ import rhsm.connection as connection
 from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager.branding import get_branding
-from subscription_manager.entcertlib import EntCertLib, Disconnected
+from subscription_manager.entcertlib import EntCertLib
 from subscription_manager.certmgr import CertManager, UnregisterCertManager
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
@@ -2284,7 +2284,7 @@ class OverrideCommand(CliCommand):
             repo_ids = [repo.id for repo in overrides.repo_lib.get_repos(apply_overrides=False)]
             to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
             try:
-                results = overrides.add_overrides(consumer, to_add)
+                results = overrides.add_overrides(self.identity.uuid, to_add)
             except connection.RestlibException, ex:
                 if ex.code == 400:
                     # black listed overrides specified.
