@@ -220,7 +220,7 @@ ENTITLEMENT_CERT_V1_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path:
+	Path: 
 	Version: 1.0
 	Serial: 60063758564076674
 	Start Date: 2012-09-07 00:00:00+00:00
@@ -240,48 +240,48 @@ Product:
 	Name: Awesome OS Server Bits
 	Version: 6.1
 	Arch: ALL
-	Tags:
-	Brand Type:
+	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37065
 	Name: Clustering Bits
 	Version: 1.0
 	Arch: ALL
-	Tags:
-	Brand Type:
+	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37067
 	Name: Shared Storage Bits
 	Version: 1.0
 	Arch: ALL
-	Tags:
-	Brand Type:
+	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37068
 	Name: Large File Support Bits
 	Version: 1.0
 	Arch: ALL
-	Tags:
-	Brand Type:
+	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37069
 	Name: Management Bits
 	Version: 1.0
 	Arch: ALL
-	Tags:
-	Brand Type:
+	Tags: 
+	Brand Type: 
 
 Product:
 	ID: 37070
 	Name: Load Balancing Bits
 	Version: 1.0
 	Arch: ALL
-	Tags:
-	Brand Type:
+	Tags: 
+	Brand Type: 
 
 Order:
 	Name: Awesome OS Server Bundled
@@ -294,8 +294,8 @@ Order:
 	Quantity: 10
 	Quantity Used: 1
 	Socket Limit: 2
-	RAM Limit:
-	Core Limit:
+	RAM Limit: 
+	Core Limit: 
 	Virt Only: False
 	Stacking ID: 
 	Warning Period: 30
@@ -310,8 +310,8 @@ Content:
 	GPG: /foo/path/always/gpg
 	Enabled: True
 	Expires: 200
-	Required Tags:
-	Arches:
+	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -322,8 +322,8 @@ Content:
 	GPG: /foo/path/gpg/
 	Enabled: True
 	Expires: 0
-	Required Tags:
-	Arches:
+	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -331,11 +331,11 @@ Content:
 	Label: content-label-empty-gpg
 	Vendor: test-vendor
 	URL: /foo/path
-	GPG:
+	GPG: 
 	Enabled: True
 	Expires: 0
-	Required Tags:
-	Arches:
+	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -343,11 +343,11 @@ Content:
 	Label: content-label-no-gpg
 	Vendor: test-vendor
 	URL: /foo/path
-	GPG:
+	GPG: 
 	Enabled: True
 	Expires: 0
-	Required Tags:
-	Arches:
+	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -358,8 +358,8 @@ Content:
 	GPG: /foo/path/never/gpg
 	Enabled: False
 	Expires: 600
-	Required Tags:
-	Arches:
+	Required Tags: 
+	Arches: 
 
 Content:
 	Type: yum
@@ -369,9 +369,9 @@ Content:
 	URL: /foo/path/always
 	GPG: /foo/path/always/gpg
 	Enabled: True
-	Expires:
+	Expires: 
 	Required Tags: TAG1, TAG2
-	Arches:
+	Arches: 
 """
 
 ENTITLEMENT_CERT_V3_0_OUTPUT = """
