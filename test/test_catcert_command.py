@@ -12,7 +12,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import sys
 import unittest
 
 import certdata
@@ -21,8 +20,6 @@ from fixture import Capture, SubManFixture
 from rct.cert_commands import CatCertCommand
 from rct.printing import xstr
 from rhsm.certificate import create_from_pem
-
-from stubs import MockStderr
 
 
 class PrintingTests(unittest.TestCase):
@@ -54,12 +51,6 @@ class CatCertCommandTests(SubManFixture):
 
     def setUp(self):
         super(CatCertCommandTests, self).setUp()
-        self.mock_stderr = MockStderr()
-        sys.stderr = self.mock_stderr
-
-    def tearDown(self):
-        super(CatCertCommandTests, self).tearDown()
-        sys.stderr = sys.__stderr__
 
     def test_omit_content_list(self):
         with Capture() as cap:
@@ -99,10 +90,11 @@ class CatCertCommandTests(SubManFixture):
         self.assert_string_equals(certdata.PRODUCT_CERT_V1_0_OUTPUT, cert_output)
 
     def test_product_cert_with_os_name_output(self):
-        command = CatCertCommandStub(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0)
-        command.main(['will_use_stub'])
+        with Capture() as cap:
+            command = CatCertCommandStub(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0)
+            command.main(['will_use_stub'])
 
-        cert_output = self.mock_stdout.buffer
+        cert_output = cap.out
         self.assert_string_equals(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0_OUTPUT, cert_output)
 
     def test_identity_cert_output(self):
