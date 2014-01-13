@@ -18,12 +18,13 @@ from rhsm import config
 import random
 import mock
 import simplejson as json
-import sys
+import tempfile
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
         OverrideStatusCache, ProfileManager, InstalledProductsManager
 from subscription_manager.facts import Facts
+from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
 from subscription_manager.gui.utils import AsyncWidgetUpdater, handle_gui_exception
 from rhsm.certificate2 import Version
@@ -114,10 +115,12 @@ class MockStdout(object):
     def write(self, buf):
         self.buffer = self.buffer + buf
 
-
     @staticmethod
     def isatty(buf=None):
         return False
+
+MockStderr = MockStdout
+
 class StubProduct(Product):
 
     def __init__(self, product_id, name=None, version=None,

@@ -107,14 +107,12 @@ class Backend(object):
         # Re-initialize our connection:
         self.cp_provider.set_connection_info()
 
-
         # These objects hold a reference to the old uep and must be updated:
         # FIXME: We should find a way to update the connection so that the
         #        conncection objects are refreshed rather than recreated.
 
         self.certlib = EntCertLib(uep=self.cp_provider.get_consumer_auth_cp())
         self.overrides = Overrides(self.cp_provider.get_consumer_auth_cp())
-rtmgr expects a ActionReport from Action.perform
 
     def create_content_connection(self):
         self.content_connection = self._create_content_connection()

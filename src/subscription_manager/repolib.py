@@ -32,8 +32,6 @@ from rhsm.utils import UnsupportedOperationException
 
 from subscription_manager.certlib import ActionReport, DataLib
 from subscription_manager.certdirectory import Path, ProductDirectory, EntitlementDirectory
-from subscription_manager.utils import UnsupportedOperationException
-
 
 from subscription_manager import injection as inj
 

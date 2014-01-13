@@ -25,7 +25,7 @@ from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
         StubProductDirectory, StubUEP, StubConsumerIdentity
 from subscription_manager.repolib import Repo, RepoUpdateAction, TidyWriter
-from subscription_manager.utils import UnsupportedOperationException
+from subscription_manager import injection as inj
 
 from subscription_manager import repolib
 
@@ -104,7 +104,7 @@ class RepoUpdateActionTests(SubManFixture):
         mock_uep.getCertificateSerials = Mock(return_value=[])
         mock_uep.getRelease = Mock(return_value={'releaseVer': "dummyrelease"})
 
-        UpdateAction(mock_uep, prod_dir=StubProductDirectory(),
+        RepoUpdateAction(mock_uep, prod_dir=StubProductDirectory(),
                      ent_dir=StubCertificateDirectory())
 
         # No cache calls should be made if overrides are not supported
