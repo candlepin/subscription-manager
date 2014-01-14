@@ -1,7 +1,9 @@
 #
-# consumer-debug bash completion script
+# rhsm-debug bash completion script
 # vim:ts=2:sw=2:et:
 
+# common options
+_rhsm_debug_common_opts="-h --help --proxy --proxyuser --proxypassword"
 
 # main complete function
 _rhsm-debug()
@@ -15,7 +17,8 @@ _rhsm-debug()
     system)
         case "${cur}" in
             -*)
-                COMPREPLY=( $( compgen -W "-h --help --destination" -- "$cur" ) )
+                local opts="--destination --no-archive ${_rhsm_debug_common_opts}"
+                COMPREPLY=( $( compgen -W "${opts}" -- "$cur" ) )
                 return 0
                 ;;
         esac
