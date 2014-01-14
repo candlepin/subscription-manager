@@ -48,7 +48,7 @@ class SystemCommand(CliCommand):
         CliCommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
 
         self.parser.add_option("--destination", dest="destination",
-                               default="/tmp", help=_("the destination location of the result"))
+                               default="/tmp", help=_("the destination location of the result; default is /tmp"))
         # default is to build an archive, this skips the archive and clean up,
         # just leaving the directory of debug info for sosreport to report
         self.parser.add_option("--no-archive", action='store_false',
