@@ -53,7 +53,7 @@ class Facts(CacheManager):
         # can change constantly on laptops, it makes for a lot of
         # fact churn, so we report it, but ignore it as an indicator
         # that we need to update
-        self.graylist = ['cpu.cpu_mhz']
+        self.graylist = ['cpu.cpu_mhz', 'lscpu.cpu_mhz']
 
         # plugin manager so we can add custom facst via plugin
         self.plugin_manager = require(PLUGIN_MANAGER)
@@ -74,7 +74,8 @@ class Facts(CacheManager):
             return True
 
         cached_facts = self._read_cache() or {}
-        self.facts = self.get_facts()
+        # In order to accurately check for changes, we must refresh local data
+        self.facts = self.get_facts(True)
 
         for key in (set(self.facts) | set(cached_facts)) - set(self.graylist):
             if self.facts.get(key) != cached_facts.get(key):
