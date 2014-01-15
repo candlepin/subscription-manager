@@ -151,6 +151,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['status'] = _('Future Subscription')
                         entry['validity_note'] = _("Never Subscribed")
                     elif status == EXPIRED:
+                        #TODO: This order value may potentially be wrong in the case of
+                        # multi-entitlement.
+                        order = entitlement_cert.getOrder()
                         entry['image'] = self._render_icon('red')
                         entry['status'] = _('Expired')
                         entry['validity_note'] = \
