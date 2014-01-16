@@ -327,8 +327,8 @@ class CliCommand(AbstractCLICommand):
                  self.server_port,
                  self.server_prefix) = parse_server_info(self.options.server_url)
             except ServerUrlParseError, e:
-                print _("Error parsing serverurl: %s") % e.msg
-                sys.exit(-1)
+                sys.stdout.write(_("Error parsing serverurl: "))
+                handle_exception("Error parsing serverurl: ", e)
 
             # this trys to actually connect to the server and ping it
             try:
@@ -356,8 +356,8 @@ class CliCommand(AbstractCLICommand):
                  baseurl_server_port,
                  baseurl_server_prefix) = parse_baseurl_info(self.options.base_url)
             except ServerUrlParseError, e:
-                print _("Error parsing baseurl: %s") % e.msg
-                sys.exit(-1)
+                sys.stdout.write(_("Error parsing baseurl: "))
+                handle_exception("Error parsing baseurl: ", e)
 
             cfg.set("rhsm", "baseurl", format_baseurl(baseurl_server_hostname,
                                                       baseurl_server_port,
