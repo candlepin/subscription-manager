@@ -713,6 +713,9 @@ class Hardware:
 
         try:
             host_type = self._get_output('virt-what')
+            # BZ1018807 xen can report xen and xen-hvm.
+            # Force a single line
+            host_type = ", ".join(host_type.splitlines())
 
             # If this is blank, then not a guest
             virt_dict['virt.is_guest'] = bool(host_type)
