@@ -2082,7 +2082,7 @@ class ListCommand(CliCommand):
                         data['productName'],
                         data['providedProducts'],
                         data['productId'],
-                        data['contractNumber'],
+                        data['contractNumber'] or "",
                         data['id'],
                         data['quantity'],
                         data['suggested'],
