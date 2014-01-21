@@ -8,7 +8,7 @@ import socket
 import stubs
 
 from subscription_manager import managercli, managerlib
-from subscription_manager.managercli import format_name, columnize, \
+from subscription_manager.printing_utils import format_name, columnize, \
         _echo, _none_wrap
 from subscription_manager.repolib import Repo
 from stubs import MockStderr, StubEntitlementCertificate, \
@@ -1025,14 +1025,15 @@ class TestColumnize(unittest.TestCase):
         result = columnize(["Hello:", "Foo:"], _echo, [], "bar")
         self.assertEquals(result, "Hello: \nFoo:   bar")
 
-    def test_columnize_with_small_term(self):
+    @patch('subscription_manager.printing_utils.get_terminal_width')
+    def test_columnize_with_small_term(self, term_width_mock):
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
                 _echo, "This is a testing string", "This_is_another_testing_string")
         expected = 'Hello\nHello\nHello\nHello\n:     This\n      is a\n      ' \
                 'testin\n      g\n      string\nFoo\nFoo\nFoo\nFoo:  ' \
                 'This_i\n      s_anot\n      her_te\n      sting_\n      string'
         self.assertNotEquals(result, expected)
-        managercli.get_terminal_width = Mock(return_value=12)
+        term_width_mock.return_value = 12
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
                 _echo, "This is a testing string", "This_is_another_testing_string")
         self.assertEquals(result, expected)
@@ -1066,13 +1067,14 @@ class TestColumnize(unittest.TestCase):
         expected = 'a' * 9 + '\n ' + 'a' * 9 + '\n ' + 'aa'
         self.assertEquals(result, expected)
 
-    def test_columnize_multibyte(self):
+    @patch('subscription_manager.printing_utils.get_terminal_width')
+    def test_columnize_multibyte(self, term_width_mock):
         multibyte_str = u"このシステム用に"
-        managercli.get_terminal_width = Mock(return_value=40)
+        term_width_mock.return_value = 40
         result = columnize([multibyte_str], _echo, multibyte_str)
         expected = u"このシステム用に このシステム用に"
         self.assertEquals(result, expected)
-        managercli.get_terminal_width = Mock(return_value=14)
+        term_width_mock.return_value = 14
         result = columnize([multibyte_str], _echo, multibyte_str)
         expected = u"このシ\nステム\n用に   このシ\n       ステム\n       用に"
         self.assertEquals(result, expected)
