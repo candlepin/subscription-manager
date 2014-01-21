@@ -798,6 +798,12 @@ class TestProductConduit(unittest.TestCase):
         self.assertEquals([], conduit.product_list)
 
 
+class TestProductUpdateConduit(unittest.TestCase):
+    def test_product_update_conduit(self):
+        conduit = plugins.ProductUpdateConduit(StubPluginClass, product_list=[])
+        self.assertEquals([], conduit.product_list)
+
+
 class TestFactsConduit(unittest.TestCase):
     def test_facts_conduit(self):
         conduit = plugins.FactsConduit(StubPluginClass, facts={})
