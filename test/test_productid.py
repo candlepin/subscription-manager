@@ -9,6 +9,9 @@ import yum
 import stubs
 from subscription_manager import productid
 from subscription_manager import certdirectory
+
+from rhsm.certificate2 import Product
+
 from mock import Mock, patch
 from fixture import SubManFixture
 
@@ -16,6 +19,89 @@ from fixture import SubManFixture
 class StubDirectory(certdirectory.Directory):
     def __init__(self, path=None):
         self.path = path
+
+
+class TestComparableProduct(unittest.TestCase):
+    def setUp(self):
+        self.older_product = Product(id=70, name="Awesome OS", version="1.0",
+                                     architectures=["ALL"],
+                                     provided_tags="awesomeos-1, awesomeos-1-server")
+
+        self.newer_product = Product(id=70, name="Awesome OS", version="2.0",
+                                     architectures=["ALL"],
+                                     provided_tags="awesomeos-1, awesomeos-1-server")
+
+        self.same_as_older = Product(id=70, name="Awesome OS", version="1.0",
+                                     architectures=["ALL"],
+                                     provided_tags="awesomeos-1, awesomeos-1-server")
+
+        self.older = productid.ComparableProduct(self.older_product)
+        self.newer = productid.ComparableProduct(self.newer_product)
+        self.same_as_older = productid.ComparableProduct(self.same_as_older)
+
+    def test_equal(self):
+        self.assertTrue(self.older == self.same_as_older)
+        self.assertTrue(self.same_as_older == self.older)
+
+        self.assertFalse(self.older == self.newer)
+        self.assertFalse(self.newer == self.older)
+
+        self.assertTrue(self.older == self.older)
+
+    def test_not_equal(self):
+        self.assertTrue(self.older != self.newer)
+        self.assertTrue(self.newer != self.older)
+
+        self.assertFalse(self.older != self.same_as_older)
+        self.assertFalse(self.same_as_older != self.older)
+        self.assertFalse(self.older != self.older)
+
+    def test_lt(self):
+        self.assertTrue(self.older < self.newer)
+        self.assertFalse(self.newer < self.older)
+        self.assertFalse(self.older < self.older)
+
+    def test_gt(self):
+        self.assertTrue(self.newer > self.older)
+        self.assertFalse(self.older > self.newer)
+        self.assertFalse(self.older > self.older)
+
+    def test_ge(self):
+        self.assertTrue(self.newer >= self.older)
+        self.assertFalse(self.older >= self.newer)
+        self.assertTrue(self.older >= self.older)
+
+    def test_le(self):
+        self.assertTrue(self.older <= self.newer)
+        self.assertFalse(self.newer <= self.older)
+        self.assertTrue(self.older <= self.older)
+
+
+class TestComparableProductCert(TestComparableProduct):
+    def setUp(self):
+        self.older_product_cert = self._create_older_cert()
+        self.new_product_cert = self._create_newer_cert()
+        self.same_as_older_cert = self._create_older_cert()
+
+        self.older = productid.ComparableProductCert(self.older_product_cert)
+        self.newer = productid.ComparableProductCert(self.new_product_cert)
+        self.same_as_older = productid.ComparableProductCert(self.same_as_older_cert)
+
+    def _create_older_cert(self):
+        return self._create_cert("69", "Red Hat Enterprise Linux Server",
+                                 "6", "rhel-6,rhel-6-server")
+
+    def _create_newer_cert(self):
+        return self._create_cert("69", "Red Hat Enterprise Linux Server",
+                                 "6.1", "rhel-6,rhel-6-server")
+
+    def _create_cert(self, product_id, label, version, provided_tags):
+        cert = stubs.StubProductCertificate(
+                stubs.StubProduct(product_id, label, version=version,
+                                   provided_tags=provided_tags))
+        cert.delete = Mock()
+        cert.write = Mock()
+        return cert
 
 
 class TestProductDatabase(unittest.TestCase):
@@ -258,7 +344,7 @@ class TestProductManager(SubManFixture):
         # plugin should get called with empty list
         self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[])
         self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[])
-        self.assertEquals(2, self.prod_mgr.plugin_manager.run.call_count)
+        self.assertEquals(4, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_packages_no_repos_no_active_no_enabled(self):
         cert = self._create_server_cert()
@@ -270,7 +356,7 @@ class TestProductManager(SubManFixture):
 
         self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[])
         self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[])
-        self.assertEquals(2, self.prod_mgr.plugin_manager.run.call_count)
+        self.assertEquals(4, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_packages_no_repos_no_active_with_enabled(self):
         """if repos are enabled but not active, basically nothing should happen"""
@@ -284,7 +370,7 @@ class TestProductManager(SubManFixture):
 
         self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[])
         self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[])
-        self.assertEquals(2, self.prod_mgr.plugin_manager.run.call_count)
+        self.assertEquals(4, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_packages_no_repos_with_active_with_enabled(self):
         """rhel-6-server enabled and active, with product cert already installed should do nothing"""
@@ -313,7 +399,7 @@ class TestProductManager(SubManFixture):
         self.prod_dir.find_by_product.assert_called_with('69')
         self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[])
         self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[])
-        self.assertEquals(2, self.prod_mgr.plugin_manager.run.call_count)
+        self.assertEquals(4, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_product_certs_with_active_with_enabled(self):
         """no product cert, repo enabled and active, cert should be installed.
@@ -348,7 +434,7 @@ class TestProductManager(SubManFixture):
         self.prod_db_mock.add.assert_called_with('69', 'rhel-6-server')
         self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[(cert.product, cert)])
         self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[cert])
-        self.assertEquals(2, self.prod_mgr.plugin_manager.run.call_count)
+        self.assertEquals(4, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_active_with_product_certs_installed_anaconda(self):
         """simulate no active packages (since they are installed via anaconda) repos
@@ -599,6 +685,111 @@ class TestProductManager(SubManFixture):
         self.assertFalse(self.prod_db_mock.delete.called)
         self.assertFalse(self.prod_db_mock.delete.called)
 
+    @patch('yum.YumBase', spec=yum.YumBase)
+    def test_productid_update_repo_with_updated_product_cert(self, mock_yb):
+        """Test the case of a new product cert being available in an enabled
+        and active repo. This is testing product cert version updating."""
+        # create a rhel6 product cert and add to the local installed product
+        # dir.
+        old_cert = self._create_server_cert()
+        self.prod_dir.certs.append(old_cert)
+
+        # the repo has a new product cert in it's md
+        new_cert = self._create_newer_server_cert()
+        self.prod_mgr._get_cert = Mock(return_value=new_cert)
+
+        # make rhel-6-server-rpms active
+        mock_package = self._create_mock_package('some-cool-package',
+                                                 'noarch',
+                                                 'rhel-6-server-rpms')
+        mock_yb.pkgSack.returnPackages.return_value = [mock_package]
+
+        mock_yb.repos.listEnabled.return_value = self._create_mock_repos(['rhel-6-server-rpms'])
+
+        self.prod_db_mock.find_repos.return_value = ['rhel-6-server-rpms']
+
+        # disarm cert delete
+        old_cert.delete = Mock()
+
+        self.prod_mgr.update(mock_yb)
+
+        # not removing the product, should delete the cert...yet
+        self.assertFalse(new_cert.delete.called)
+        # product db should not change
+        self.assertFalse(self.prod_db_mock.delete.called)
+        # new cert is written
+        self.assertTrue(new_cert.write.called)
+
+    @patch('yum.YumBase', spec=yum.YumBase)
+    def test_productid_update_repo_with_same_product_cert(self, mock_yb):
+        """Test the case of a new product cert being available in an enabled
+        and active repo. This is testing product cert version updating."""
+        # create a rhel6 product cert and add to the local installed product
+        # dir.
+        old_cert = self._create_server_cert()
+        self.prod_dir.certs.append(old_cert)
+
+        # the repo has a new product cert in it's md
+        same_cert = self._create_server_cert()
+        self.prod_mgr._get_cert = Mock(return_value=same_cert)
+
+        # make rhel-6-server-rpms active
+        mock_package = self._create_mock_package('some-cool-package',
+                                                 'noarch',
+                                                 'rhel-6-server-rpms')
+        mock_yb.pkgSack.returnPackages.return_value = [mock_package]
+
+        mock_yb.repos.listEnabled.return_value = self._create_mock_repos(['rhel-6-server-rpms'])
+
+        self.prod_db_mock.find_repos.return_value = ['rhel-6-server-rpms']
+
+        # disarm cert delete
+        old_cert.delete = Mock()
+
+        self.prod_mgr.update(mock_yb)
+
+        # not removing the product, should delete the cert...yet
+        self.assertFalse(same_cert.delete.called)
+        # product db should not change
+        self.assertFalse(self.prod_db_mock.delete.called)
+        # new cert is not written or updated
+        self.assertFalse(same_cert.write.called)
+
+    @patch('yum.YumBase', spec=yum.YumBase)
+    def test_product_update_repo_with_older_product_cert(self, mock_yb):
+        """Test the case of a new product cert being available in an enabled
+        and active repo. This is testing product cert version updating."""
+        # create a rhel6 product cert and add to the local installed product
+        # dir.
+        installed_cert = self._create_newer_server_cert()
+        self.prod_dir.certs.append(installed_cert)
+
+        # the repo has a new product cert in it's md
+        older_cert = self._create_server_cert()
+        self.prod_mgr._get_cert = Mock(return_value=older_cert)
+
+        # make rhel-6-server-rpms active
+        mock_package = self._create_mock_package('some-cool-package',
+                                                 'noarch',
+                                                 'rhel-6-server-rpms')
+        mock_yb.pkgSack.returnPackages.return_value = [mock_package]
+
+        mock_yb.repos.listEnabled.return_value = self._create_mock_repos(['rhel-6-server-rpms'])
+
+        self.prod_db_mock.find_repos.return_value = ['rhel-6-server-rpms']
+
+        # disarm cert delete
+        installed_cert.delete = Mock()
+
+        self.prod_mgr.update(mock_yb)
+
+        # not removing the product, should delete the cert...yet
+        self.assertFalse(older_cert.delete.called)
+        # product db should not change
+        self.assertFalse(self.prod_db_mock.delete.called)
+        # new cert is not written or updated
+        self.assertFalse(older_cert.write.called)
+
     def test_update_removed_no_active_with_product_cert_anaconda_and_rhel(self):
         #"""simulate packages are installed with anaconda repo, and none
         #installed from the enabled repo. This currently causes a product
@@ -734,9 +925,17 @@ class TestProductManager(SubManFixture):
         return self._create_cert("71", "Red Hat Enterprise Linux Workstation",
                                  "5.9", "rhel-5-client-workstation,rhel-5-workstation")
 
+    def _create_newer_workstation_cert(self):
+        return self._create_cert("71", "Red Hat Enterprise Linux Workstation",
+                                 "5.10", "rhel-5-client-workstation,rhel-5-workstation")
+
     def _create_server_cert(self):
         return self._create_cert("69", "Red Hat Enterprise Linux Server",
                                  "6", "rhel-6,rhel-6-server")
+
+    def _create_newer_server_cert(self):
+        return self._create_cert("69", "Red Hat Enterprise Linux Server",
+                                 "6.1", "rhel-6,rhel-6-server")
 
     def _create_non_rhel_cert(self):
         return self._create_cert("1234568", "Mediocre OS",
@@ -891,7 +1090,7 @@ class TestProductManager(SubManFixture):
                 (workstation_cert, 'repo2'),
         ]
 
-        products_installed = self.prod_mgr.update_installed(enabled, ['repo1', 'repo2'])
+        products_installed, products_updated = self.prod_mgr.update_installed(enabled, ['repo1', 'repo2'])
         self.assertFalse(desktop_cert.delete.called)
 
         self.assertFalse(desktop_cert.write.called)
@@ -907,7 +1106,7 @@ class TestProductManager(SubManFixture):
         self.assertTrue(self.prod_db_mock.write.called)
 
         # verify the list order doesnt matter
-        products_installed = self.prod_mgr.update_installed(enabled, ['repo2', 'repo1'])
+        products_installed, products_updated = self.prod_mgr.update_installed(enabled, ['repo2', 'repo1'])
         self.assertFalse(desktop_cert.delete.called)
 
         self.assertFalse(desktop_cert.write.called)

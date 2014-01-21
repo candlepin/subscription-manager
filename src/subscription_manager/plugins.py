@@ -300,6 +300,20 @@ class ProductConduit(BaseConduit):
         self.product_list = product_list
 
 
+class ProductUpdateConduit(BaseConduit):
+    """Conduit for use with plugins that handle product id update functions."""
+    slots = ['pre_product_id_update', 'post_product_id_update']
+
+    def __init__(self, clazz, product_list):
+        """init for ProductUpdateConduit
+
+        Args:
+            product_list: A list of ProductCertificate objects
+        """
+        super(ProductUpdateConduit, self).__init__(clazz)
+        self.product_list = product_list
+
+
 class FactsConduit(BaseConduit):
     """Conduit for collecting facts."""
     slots = ['post_facts_collection']
@@ -815,7 +829,7 @@ class PluginManager(BasePluginManager):
     def _get_conduits(self):
         """get subscription-manager specific plugin conduits."""
         # we should be able to collect this from the sub classes of BaseConduit
-        return [BaseConduit, ProductConduit,
+        return [BaseConduit, ProductConduit, ProductUpdateConduit,
                 RegistrationConduit, PostRegistrationConduit,
                 FactsConduit, SubscriptionConduit,
                 PostSubscriptionConduit,
