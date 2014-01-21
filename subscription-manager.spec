@@ -125,6 +125,12 @@ Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 Requires: rhnlib
 
+# Since the migration data package is not in Fedora, we can only require it
+# on RHEL.
+%if 0%{?rhel}
+Requires: subscription-manager-migration-data
+%endif
+
 %description -n subscription-manager-migration
 This package contains scripts that aid in moving to certificate based
 subscriptions
