@@ -11,6 +11,7 @@ _ = gettext.gettext
 
 from stubs import MockStderr
 from subscription_manager import managercli
+from subscription_manager.printing_utils import to_unicode_or_bust
 
 # Localization domain:
 APP = "rhsm"
@@ -77,7 +78,7 @@ class TestUnicodeGettext(TestLocale):
 
     def test_ja_not_serial(self):
         msg = _("'%s' is not a valid serial number") % "123123"
-        unicode(managercli.to_unicode_or_bust(msg)).encode("UTF-8") + '\n'
+        unicode(to_unicode_or_bust(msg)).encode("UTF-8") + '\n'
 
     def test_system_exit(self):
         try:
