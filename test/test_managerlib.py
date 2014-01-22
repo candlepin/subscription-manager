@@ -14,7 +14,6 @@
 #
 
 from datetime import datetime, timedelta
-import time
 import unittest
 import os
 
@@ -23,7 +22,7 @@ from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubUEP, StubCertSorter
 from fixture import SubManFixture
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
-        get_installed_product_status, LocalTz, \
+        get_installed_product_status, \
         MergedPoolsStackingGroupSorter, MergedPools, \
         PoolStash, allows_multi_entitlement, valid_quantity
 from subscription_manager.injection import provide, \
@@ -672,34 +671,6 @@ class InstalledProductStatusTests(SubManFixture):
         self.assertEquals("subscribed", product_status[0][4])
         self.assertEquals("product1", product_status[1][0])
         self.assertEquals("subscribed", product_status[1][4])
-
-
-# http://docs.python.org/library/datetime.html
-# trying to verify the behaviour for dst() there
-class TestLocalTz(unittest.TestCase):
-    def _testDst(self):
-        tz = LocalTz()
-        epoch = time.time()
-        now_dt = datetime.fromtimestamp(epoch, tz=tz)
-        diff_now = tz.utcoffset(now_dt) - tz.dst(now_dt)
-        td = timedelta(weeks=26)
-        dt = now_dt + td
-
-        diff_six_months = tz.utcoffset(dt) - tz.dst(dt)
-
-        week_ago_dt = dt - timedelta(weeks=4)
-        diff_week_ago = tz.utcoffset(week_ago_dt) - tz.dst(week_ago_dt)
-
-        self.assertEquals(diff_now, diff_six_months)
-        self.assertEquals(diff_six_months, diff_week_ago)
-
-    def testDst(self):
-        time.daylight = 1
-        self._testDst()
-
-    def testNoDst(self):
-        time.daylight = 0
-        self._testDst()
 
 
 class MockLog:

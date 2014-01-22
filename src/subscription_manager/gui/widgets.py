@@ -24,6 +24,7 @@ import pango
 
 
 from rhsm.certificate import GMT
+from dateutil.tz import tzlocal
 
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import storage
@@ -508,7 +509,7 @@ class DatePicker(gtk.HBox):
 
         # set the timezone so we can sent it to the server
         self._date = datetime.datetime(date.year, date.month, date.day,
-                tzinfo=managerlib.LocalTz())
+                tzinfo=tzlocal())
         self._date_entry = gtk.Entry()
         self._date_entry.set_width_chars(10)
 
@@ -563,7 +564,7 @@ class DatePicker(gtk.HBox):
             date = datetime.datetime(
                     *(time.strptime(date_str, '%Y-%m-%d')[0:6]))
             self._date = datetime.datetime(date.year, date.month, date.day,
-                    tzinfo=managerlib.LocalTz())
+                    tzinfo=tzlocal())
         except ValueError:
             raise
 
@@ -582,7 +583,7 @@ class DatePicker(gtk.HBox):
         except ValueError:
             today = datetime.date.today()
             self._date = datetime.datetime(today.year, today.month, today.day,
-                tzinfo=managerlib.LocalTz())
+                tzinfo=tzlocal())
 
         self._calendar.select_month(self._date.month - 1, self._date.year)
         self._calendar.select_day(self._date.day)
@@ -625,14 +626,14 @@ class DatePicker(gtk.HBox):
     def _calendar_clicked(self, calendar):
         (year, month, day) = self._calendar.get_date()
         self._date = datetime.datetime(year, month + 1, day,
-                tzinfo=managerlib.LocalTz())
+                tzinfo=tzlocal())
         self.emit('date-picked-cal')
         self._destroy()
 
     def _today_clicked(self, button):
         day = datetime.date.today()
         self._date = datetime.datetime(day.year, day.month, day.day,
-                tzinfo=managerlib.LocalTz())
+                tzinfo=tzlocal())
         self.emit('date-picked-cal')
         self._destroy()
 

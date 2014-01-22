@@ -14,7 +14,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import datetime
 import gettext
 import logging
 import os
@@ -22,7 +21,6 @@ import re
 import shutil
 import stat
 import syslog
-import time
 
 from rhsm.config import initConfig
 from rhsm.certificate import Key, CertificateException, create_from_pem
@@ -39,6 +37,7 @@ from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoLib
 from subscription_manager.utils import is_true_value
+from dateutil.tz import tzlocal
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -774,32 +773,13 @@ def _sub_dict(datadict, subkeys, default=None):
 
 def format_date(dt):
     if dt:
-        return dt.astimezone(LocalTz()).strftime("%x")
+        try:
+            return dt.astimezone(tzlocal()).strftime("%x")
+        except ValueError:
+            log.warn("Datetime does not contain timezone information")
+            return dt.strftime("%x")
     else:
         return ""
-
-
-class LocalTz(datetime.tzinfo):
-
-    """
-    tzinfo object representing whatever this systems tz offset is.
-    """
-
-    def utcoffset(self, dt):
-        if time.daylight and time.localtime().tm_isdst:
-            return datetime.timedelta(seconds=-time.altzone)
-        return datetime.timedelta(seconds=-time.timezone)
-
-    def dst(self, dt):
-        if time.daylight and time.localtime().tm_isdst:
-            return datetime.timedelta(seconds=(time.timezone - time.altzone))
-        return datetime.timedelta(seconds=0)
-
-    def tzname(self, dt):
-        if time.daylight and time.localtime().tm_isdst:
-            return time.tzname[1]
-
-        return time.tzname[0]
 
 
 def unregister(uep, consumer_uuid):
