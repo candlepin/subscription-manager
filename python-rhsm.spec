@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.10.10
+Version: 1.10.11
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,9 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Jan 22 2014 ckozak <ckozak@redhat.com> 1.10.11-1
+- Fedora 18 is at end of life. (awood@redhat.com)
+
 * Mon Jan 06 2014 ckozak <ckozak@redhat.com> 1.10.10-1
 - make sure server supports guestId data (ckozak@redhat.com)
 
