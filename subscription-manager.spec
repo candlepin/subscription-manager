@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.10
+Version: 1.10.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -402,6 +402,26 @@ fi
 %endif
 
 %changelog
+* Wed Jan 22 2014 ckozak <ckozak@redhat.com> 1.10.11-1
+- 1018807: Ensure virt facts are a single line (bkearney@redhat.com)
+- 1007580: Print blank spaces if there is no contract number on the list
+  command (bkearney@redhat.com)
+- Fedora 18 is at end of life. (awood@redhat.com)
+- Updated translations. (dgoodwin@redhat.com)
+- 104338: add default dest dir to rhsm-debug help (alikins@redhat.com)
+- 1042897: add proxy info to rhsm-debug completion (alikins@redhat.com)
+- 914833: rct cat-cert output reports an Order: Subscription: field.
+  (wpoteat@redhat.com)
+- 1052297: delay import of site module (ckozak@redhat.com)
+- set default encoding to utf-8 in rhsm-debug and migrate scripts
+  (ckozak@redhat.com)
+- 1048325: Set default encoding to utf-8 when running the rct script
+  (ckozak@redhat.com)
+- 1050850: re-evaluate system facts when checking for updates
+  (ckozak@redhat.com)
+- Some refactoring of rhsm-debug (alikins@redhat.com)
+- Additional improvements to rhsm-debug (wpoteat@redhat.com)
+
 * Mon Jan 06 2014 ckozak <ckozak@redhat.com> 1.10.10-1
 - 1039736: Modify the remote server string to reference Satellite instead of
   CloudForms (bkearney@redhat.com)
