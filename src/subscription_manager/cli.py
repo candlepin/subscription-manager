@@ -17,6 +17,8 @@ import gettext
 import os
 import sys
 
+from subscription_manager.printing_utils import columnize, _echo
+
 _ = gettext.gettext
 
 from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter
@@ -96,26 +98,18 @@ class CLI:
         items_other = []
         for (name, cmd) in items:
             if (cmd.primary):
-                items_primary.append((name, cmd))
+                items_primary.append(("  " + name, cmd.shortdesc))
             else:
-                items_other.append((name, cmd))
+                items_other.append(("  " + name, cmd.shortdesc))
 
-        if len(items_primary) > 0:
-            print _("Primary Modules:")
-            print "\r"
+        all_items = [(_("Primary Modules:"), '\n')] + \
+                items_primary + [('\n' + _("Other Modules:"), '\n')] + \
+                items_other
+        self._do_columnize(all_items)
 
-            items_primary.sort()
-            for (name, cmd) in items_primary:
-                    print("  %-14s %s" % (name, cmd.shortdesc))
-
-            print("")
-
-        if (len(items_other)) > 0:
-            print _("Other Modules:")
-            print "\r"
-            for (name, cmd) in items_other:
-                print("  %-14s %s" % (name, cmd.shortdesc))
-            print("")
+    def _do_columnize(self, items_list):
+        modules, descriptions = zip(*items_list)
+        print columnize(modules, _echo, *descriptions) + '\n'
 
     def _find_best_match(self, args):
         """
