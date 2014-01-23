@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.13
+Version: 0.98.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -264,6 +264,14 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Thu Jan 23 2014 William Poteat <wpoteat@redhat.com> 0.98.14-1
+- 782549: Subscription manager throws exception when an expired cert exists.
+  (mstead@redhat.com)
+- 772921: Do not show message dialog when multiple sub-man launches detected.
+  (mstead@redhat.com)
+- 772921: Clicking notification icon shuts down subscription manager.
+  (mstead@redhat.com)
+
 * Tue Jan 17 2012 William Poteat <wpoteat@redhat.com> 0.98.13-1
 - 772338: Subscription-manager-gui help documentation review
   (wpoteat@redhat.com)
