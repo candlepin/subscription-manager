@@ -17,8 +17,16 @@
 
 import Queue
 import threading
+import gettext
 
 import gobject
+
+from subscription_manager.managerlib import fetch_certificates
+from subscription_manager.gui.utils import handle_gui_exception
+from subscription_manager.injection import IDENTITY, \
+        PLUGIN_MANAGER, CP_PROVIDER, require
+
+_ = gettext.gettext
 
 
 class AsyncPool(object):
@@ -56,3 +64,31 @@ class AsyncPool(object):
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._run_refresh,
                 args=(active_on, callback, data)).start()
+
+
+class AsyncBind(object):
+
+    def __init__(self, certlib):
+        self.cp_provider = require(CP_PROVIDER)
+        self.identity = require(IDENTITY)
+        self.plugin_manager = require(PLUGIN_MANAGER)
+        self.parent_win = None
+        self.certlib = certlib
+
+    def _run_bind(self, pool, quantity, parent_win, bind_callback, cert_callback):
+        try:
+            self.plugin_manager.run("pre_subscribe", consumer_uuid=self.identity.uuid,
+                    pool_id=pool['id'], quantity=quantity)
+            ents = self.cp_provider.get_consumer_auth_cp().bindByEntitlementPool(self.identity.uuid, pool['id'], quantity)
+            self.plugin_manager.run("post_subscribe", consumer_uuid=self.identity.uuid, entitlement_data=ents)
+            if bind_callback:
+                bind_callback()
+            fetch_certificates(self.certlib)
+            if cert_callback:
+                cert_callback()
+        except Exception, e:
+            handle_gui_exception(e, _("Error getting subscription: %s"), self.parent_win)
+
+    def bind(self, pool, quantity, parent_win, bind_callback=None, cert_callback=None):
+        threading.Thread(target=self._run_bind,
+                args=(pool, quantity, parent_win, bind_callback, cert_callback)).start()

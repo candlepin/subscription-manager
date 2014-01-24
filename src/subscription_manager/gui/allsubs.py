@@ -27,7 +27,7 @@ from subscription_manager.gui import progress
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui.utils import apply_highlight, show_error_window, handle_gui_exception, set_background_model_index
 from subscription_manager.gui import widgets
-from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require
+from subscription_manager.injection import IDENTITY, require
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import allows_multi_entitlement, valid_quantity
@@ -55,7 +55,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.facts = facts
 
         self.pool_stash = managerlib.PoolStash(self.facts)
-        self.plugin_manager = require(PLUGIN_MANAGER)
+
+        self.async_bind = async.AsyncBind(self.backend.certlib)
 
         today = datetime.date.today()
         self.date_picker = widgets.DatePicker(today)
@@ -335,7 +336,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
     def get_label(self):
         return _("All Available Subscriptions")
 
-    def search_button_clicked(self, widget):
+    def search_button_clicked(self, widget=None):
         """
         Reload the subscriptions from the server when the Search button
         is clicked.
@@ -374,20 +375,17 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             return
 
         self._contract_selection_cancelled()
-        try:
-            self.plugin_manager.run("pre_subscribe", consumer_uuid=self.identity.uuid,
-                                    pool_id=pool['id'], quantity=quantity)
-            ents = self.backend.cp_provider.get_consumer_auth_cp().bindByEntitlementPool(self.identity.uuid, pool['id'], quantity)
-            self.plugin_manager.run("post_subscribe", consumer_uuid=self.identity.uuid, entitlement_data=ents)
-            managerlib.fetch_certificates(self.backend)
-            self.backend.cs.force_cert_check()
 
-        except Exception, e:
-            handle_gui_exception(e, _("Error getting subscription: %s"),
-                    self.parent_win)
+        # Spin off a thread to handle binding the selected pool.
+        # After it has completed the actual bind call, available
+        # subs will be refreshed, but we won't re-run compliance
+        # until we have serialized the certificates
+        self.async_bind.bind(pool, quantity, self.parent_win,
+                bind_callback=self.search_button_clicked,
+                cert_callback=self.backend.cs.force_cert_check)
 
         #Force the search results to refresh with the new info
-        self.search_button_clicked(None)
+        #self.search_button_clicked(None)
 
     def _contract_selection_cancelled(self):
         if self.contract_selection:
