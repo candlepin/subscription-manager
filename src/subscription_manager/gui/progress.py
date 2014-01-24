@@ -13,20 +13,19 @@
 # in this software or its documentation.
 #
 
-import os
-
 import gtk
 import gtk.glade
 
+from subscription_manager.gui import widgets
 
-class Progress:
+
+class Progress(widgets.GladeWidget):
+
+    widget_names = ['progressWindow', 'progressLabel', 'progressBar', 'statusLabel']
 
     def __init__(self, title, label):
-        glade_prefix = os.path.dirname(__file__)
+        super(Progress, self).__init__('progress.glade')
 
-        self.xml = gtk.glade.XML(os.path.join(glade_prefix, "data/progress.glade"),
-                "progressWindow")
-        self.progressWindow = self.xml.get_widget("progressWindow")
         self.progressWindow.connect("delete-event", self._on_delete_event)
         cursor = gtk.gdk.Cursor(gtk.gdk.WATCH)
         self.progressWindow.window.set_cursor(cursor)
@@ -38,22 +37,23 @@ class Progress:
 
     def hide(self):
         self.progressWindow.hide()
-
         del self
 
     def set_title(self, text):
         self.progressWindow.set_title(text)
 
     def set_label(self, text):
-        label = self.xml.get_widget("progressLabel")
-        label.set_text(text)
+        self.progressLabel.set_text(text)
 
     def pulse(self):
         """
         pulse for a glib mainloop timeout callback
         """
-        self.xml.get_widget("progressBar").pulse()
-        return True
+        # If it's been closed, don't attempt to pulse
+        if self.progressBar:
+            self.progressBar.pulse()
+            return True
+        return False
 
     def set_progress(self, amount, total):
         if total:
@@ -62,20 +62,18 @@ class Progress:
             i = 1
 
         if i > self.lastProgress + .01 or i == 1:
-            self.xml.get_widget("progressBar").set_fraction(i)
+            self.progressBar.set_fraction(i)
             if i == 1:
                 # reset
                 i = 0
             self.lastProgress = i
 
     def set_status_label(self, text):
-        self.xml.get_widget("statusLabel").set_text(text)
-
-    def destroy(self):
-        self.progressWindow.destroy()
+        self.statusLabel.set_text(text)
 
     def set_parent_window(self, window):
         self.progressWindow.set_transient_for(window)
 
     def _on_delete_event(self, widget, event):
-        self.destroy()
+        # Block the progress bar from closing until we hide it
+        return True

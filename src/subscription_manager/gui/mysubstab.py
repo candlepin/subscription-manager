@@ -22,11 +22,11 @@ import gtk
 
 from rhsm.certificate import GMT
 
+from subscription_manager.async import AsyncBind
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
 from subscription_manager.injection import require, IDENTITY, DBUS_IFACE
-from subscription_manager.certlib import Disconnected
 
-from subscription_manager.gui import messageWindow
+from subscription_manager.gui import messageWindow, progress
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception
@@ -58,6 +58,11 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.entitlement_dir = ent_dir
         self.product_dir = prod_dir
         self.sub_details = widgets.ContractSubDetailsWidget(prod_dir)
+        self.async_bind = AsyncBind(self.backend.certlib)
+
+        # Progress bar
+        self.pb = None
+        self.timer = 0
 
         # Put the details widget in the middle
         details = self.sub_details.get_widget()
@@ -113,6 +118,22 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
     def get_store(self):
         return MappedTreeStore(self.get_type_map())
 
+    def _clear_progress_bar(self):
+        if self.pb:
+            self.pb.hide()
+            gobject.source_remove(self.timer)
+            self.timer = 0
+            self.pb = None
+
+    def _handle_unbind_exception(self, e, selection):
+        self._clear_progress_bar()
+        handle_gui_exception(e, _("There was an error removing %s with serial number %s") %
+                (selection['subscription'], selection['serial']), self.parent_win, format_msg=False)
+
+    def _unsubscribe_callback(self):
+        self.backend.cs.force_cert_check()
+        self._clear_progress_bar()
+
     def _on_unsubscribe_prompt_response(self, dialog, response, selection):
         if not response:
             return
@@ -120,21 +141,15 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         serial = long(selection['serial'])
 
         if self.identity.is_valid():
-            try:
-                self.backend.cp_provider.get_consumer_auth_cp().unbindBySerial(self.identity.uuid, serial)
-            except Exception, e:
-                handle_gui_exception(e, _("There was an error removing %s with serial number %s") %
-                                         (selection['subscription'], serial),
-                                     self.parent_win, format_msg=False)
-
-            try:
-                self.backend.certlib.update()
-            except Disconnected, e:
-                pass
+            self.pb = progress.Progress(_("Removing"),
+                    _("Removing subscription. Please wait."))
+            self.timer = gobject.timeout_add(100, self.pb.pulse)
+            self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
+            self.async_bind.unbind(serial, selection, self._unsubscribe_callback, self._handle_unbind_exception)
         else:
             # unregistered, just delete the certs directly
             self.backend.certlib.delete([serial])
-        self.backend.cs.force_cert_check()
+            self.backend.cs.force_cert_check()
 
     def unsubscribe_button_clicked(self, widget):
         selection = widgets.SelectionWrapper(self.top_view.get_selection(), self.store)
@@ -154,9 +169,11 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         Pulls the entitlement certificates and updates the subscription model.
         """
-        self.store.clear()
+        # Getting the pool type map hangs execution, we should move it
+        # out of the main loop
         self.ent_pool_map = get_entitlement_pooltype_map()
         sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
+        self.store.clear()
         for group in sorter.groups:
             self._add_group(group)
         self.top_view.expand_all()

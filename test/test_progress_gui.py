@@ -30,6 +30,3 @@ class TestProgress(unittest.TestCase):
 
     def test_set_progress_label(self):
         self.pw.set_status_label("Hey, I'm a status label")
-
-    def test_destroy(self):
-        self.pw.destroy()
