@@ -355,18 +355,36 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             handle_gui_exception(e, _("Error fetching subscriptions from server:  %s"),
                     self.parent_win)
 
-    def _update_display(self, data, error):
+    def contract_selection_progress(self):
+        self.pb = progress.Progress(_("Attaching"),
+                _("Attaching subscription. Please wait."))
+        self.timer = gobject.timeout_add(100, self.pb.pulse)
+        self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
+
+    def _clear_progress_bar(self):
         if self.pb:
             self.pb.hide()
             gobject.source_remove(self.timer)
             self.timer = 0
             self.pb = None
 
+    def _update_display(self, data, error):
+        self._clear_progress_bar()
+
         if error:
             handle_gui_exception(error, _("Unable to search for subscriptions:  %s"),
                     self.parent_win)
         else:
             self.display_pools()
+
+    # Called after the bind, but before certlib update
+    def _async_bind_callback(self):
+        self._clear_progress_bar()
+        self.search_button_clicked()
+
+    def _async_bind_exception_callback(self, e):
+        self._clear_progress_bar()
+        handle_gui_exception(e, _("Error getting subscription: %s"), self.parent_win)
 
     def _contract_selected(self, pool, quantity=1):
         if not valid_quantity(quantity):
@@ -381,11 +399,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         # subs will be refreshed, but we won't re-run compliance
         # until we have serialized the certificates
         self.async_bind.bind(pool, quantity, self.parent_win,
-                bind_callback=self.search_button_clicked,
-                cert_callback=self.backend.cs.force_cert_check)
-
-        #Force the search results to refresh with the new info
-        #self.search_button_clicked(None)
+                bind_callback=self._async_bind_callback,
+                cert_callback=self.backend.cs.force_cert_check,
+                except_callback=self._async_bind_exception_callback)
+        self.contract_selection_progress()
 
     def _contract_selection_cancelled(self):
         if self.contract_selection:

@@ -22,7 +22,6 @@ import gettext
 import gobject
 
 from subscription_manager.managerlib import fetch_certificates
-from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.injection import IDENTITY, \
         PLUGIN_MANAGER, CP_PROVIDER, require
 
@@ -75,7 +74,7 @@ class AsyncBind(object):
         self.parent_win = None
         self.certlib = certlib
 
-    def _run_bind(self, pool, quantity, parent_win, bind_callback, cert_callback):
+    def _run_bind(self, pool, quantity, parent_win, bind_callback, cert_callback, except_callback):
         try:
             self.plugin_manager.run("pre_subscribe", consumer_uuid=self.identity.uuid,
                     pool_id=pool['id'], quantity=quantity)
@@ -87,8 +86,8 @@ class AsyncBind(object):
             if cert_callback:
                 cert_callback()
         except Exception, e:
-            handle_gui_exception(e, _("Error getting subscription: %s"), self.parent_win)
+            except_callback(e)
 
-    def bind(self, pool, quantity, parent_win, bind_callback=None, cert_callback=None):
+    def bind(self, pool, quantity, parent_win, except_callback, bind_callback=None, cert_callback=None):
         threading.Thread(target=self._run_bind,
-                args=(pool, quantity, parent_win, bind_callback, cert_callback)).start()
+                args=(pool, quantity, parent_win, bind_callback, cert_callback, except_callback)).start()
