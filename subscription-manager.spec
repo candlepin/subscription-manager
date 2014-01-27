@@ -310,6 +310,8 @@ rm -rf %{buildroot}
 %{_datadir}/icons/hicolor/24x24/apps/*.png
 %{_datadir}/icons/hicolor/32x32/apps/*.png
 %{_datadir}/icons/hicolor/48x48/apps/*.png
+%{_datadir}/icons/hicolor/96x96/apps/*.png
+%{_datadir}/icons/hicolor/256x256/apps/*.png
 %{_datadir}/icons/hicolor/scalable/apps/*.svg
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui

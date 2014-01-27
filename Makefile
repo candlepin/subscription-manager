@@ -158,6 +158,8 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d $(PREFIX)/usr/share/icons/hicolor/24x24/apps
 	install -d $(PREFIX)/usr/share/icons/hicolor/32x32/apps
 	install -d $(PREFIX)/usr/share/icons/hicolor/48x48/apps
+	install -d $(PREFIX)/usr/share/icons/hicolor/96x96/apps
+	install -d $(PREFIX)/usr/share/icons/hicolor/256x256/apps
 	install -d $(PREFIX)/usr/share/icons/hicolor/scalable/apps
 	install -d $(PREFIX)/usr/share/rhsm/subscription_manager/gui/firstboot
 
@@ -194,6 +196,10 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 		$(PREFIX)/usr/share/icons/hicolor/32x32/apps
 	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/48x48/apps/*.png \
 		$(PREFIX)/usr/share/icons/hicolor/48x48/apps
+	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/96x96/apps/*.png \
+		$(PREFIX)/usr/share/icons/hicolor/96x96/apps
+	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/256x256/apps/*.png \
+		$(PREFIX)/usr/share/icons/hicolor/256x256/apps
 	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/scalable/apps/*.svg \
 		$(PREFIX)/usr/share/icons/hicolor/scalable/apps
 	install -m 644 $(SRC_DIR)/gui/data/icons/*.svg \
