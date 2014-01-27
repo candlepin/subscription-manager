@@ -1134,7 +1134,9 @@ class TestGetAvailableEntitlements(SubManFixture):
     def test_no_pools(self):
         # get the injected stub uep
         cp = self.get_consumer_cp()
-        cp.getPoolsList = Mock(return_value=[])
+        async_result = Mock()
+        async_result.read = Mock(return_value=[])
+        cp.getPoolsList = Mock(return_value=async_result)
         res = managerlib.get_available_entitlements(facts={})
         self.assertEquals(0, len(res))
 
@@ -1142,12 +1144,18 @@ class TestGetAvailableEntitlements(SubManFixture):
         cp = self.get_consumer_cp()
 
         # patch the mock for getPoolsList
-        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None):
+        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None, threaded=False):
+            result = []
             if listAll:
-                return [self.build_pool_dict('1234'),
+                result = [self.build_pool_dict('1234'),
                         self.build_pool_dict('4321')]
             else:
-                return [self.build_pool_dict('1234')]
+                result = [self.build_pool_dict('1234')]
+            if threaded:
+                async_result = Mock()
+                async_result.read = Mock(return_value=result)
+                return async_result
+            return result
 
         cp.getPoolsList = Mock(side_effect=get_pools_list)
 
@@ -1160,13 +1168,19 @@ class TestGetAvailableEntitlements(SubManFixture):
     def test_installed(self):
         cp = self.get_consumer_cp()
 
-        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None):
+        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None, threaded=False):
+            result = []
             if listAll:
-                return [self.build_pool_dict('1234', ['some_product']),
+                result = [self.build_pool_dict('1234', ['some_product']),
                         self.build_pool_dict('4321'),
                         self.build_pool_dict('12321', ['some_product'])]
             else:
-                return [self.build_pool_dict('1234', ['some_product'])]
+                result = [self.build_pool_dict('1234', ['some_product'])]
+            if threaded:
+                async_result = Mock()
+                async_result.read = Mock(return_value=result)
+                return async_result
+            return result
 
         cp.getPoolsList = Mock(side_effect=get_pools_list)
 
