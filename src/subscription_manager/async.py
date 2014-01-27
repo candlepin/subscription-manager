@@ -56,3 +56,57 @@ class AsyncPool(object):
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._run_refresh,
                 args=(active_on, callback, data)).start()
+
+
+class AsyncResponse(object):
+
+    def __init__(self, function, callback, *args, **kwargs):
+        self.result_queue = Queue.Queue()
+        threading.Thread(target=self._execute_function,
+                args=([function, callback] + list(args)), kwargs=kwargs).start()
+
+    def read(self):
+        result = self.result_queue.get(block=True)
+        # Throw the exception in the main thread if it arises
+        if isinstance(result, Exception):
+            raise result
+        return result
+
+    def _execute_function(self, function, callback, *args, **kwargs):
+        try:
+            result = function(*args, **kwargs)
+            callback(result, None)
+        except Exception, e:
+            result = e
+            callback(None, e)
+        self.result_queue.put(result)
+
+
+class AsyncCP(object):
+
+    def __init__(self, uep):
+        self.uep = uep
+
+    def __getattr__(self, name):
+        if name in self.__dict__:
+            return self.__dict__[name]
+        attribute = getattr(self.uep, name)
+        if hasattr(attribute, '__call__'):
+            async_function = self.build_function(attribute)
+            return async_function
+        # Don't need to modify attributes
+        return attribute
+
+    def dummy_callback(self, data, exception):
+        pass
+
+    def build_function(self, uep_function):
+        def generated_function(*args, **kwargs):
+            # Make sure async args are removed even if we aren't using them
+            threaded = kwargs.pop('threaded', None)
+            # If None is supplied, we still want dummy_callback
+            callback = kwargs.pop('callback', None) or self.dummy_callback
+            if threaded:
+                return AsyncResponse(uep_function, callback, *args, **kwargs)
+            return uep_function(*args, **kwargs)  # Passthrough
+        return generated_function

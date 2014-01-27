@@ -12,6 +12,7 @@
 # in this software or its documentation.
 #
 
+from subscription_manager.async import AsyncCP
 from subscription_manager.certlib import ConsumerIdentity
 import rhsm.connection as connection
 
@@ -79,30 +80,30 @@ class CPProvider(object):
 
     def get_consumer_auth_cp(self):
         if not self.consumer_auth_cp:
-            self.consumer_auth_cp = connection.UEPConnection(
+            self.consumer_auth_cp = AsyncCP(connection.UEPConnection(
                     proxy_hostname=self.proxy_hostname,
                     proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user,
                     proxy_password=self.proxy_password,
-                    cert_file=self.cert_file, key_file=self.key_file)
+                    cert_file=self.cert_file, key_file=self.key_file))
         return self.consumer_auth_cp
 
     def get_basic_auth_cp(self):
         if not self.basic_auth_cp:
-            self.basic_auth_cp = connection.UEPConnection(
+            self.basic_auth_cp = AsyncCP(connection.UEPConnection(
                     proxy_hostname=self.proxy_hostname,
                     proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user,
                     proxy_password=self.proxy_password,
                     username=self.username,
-                    password=self.password)
+                    password=self.password))
         return self.basic_auth_cp
 
     def get_no_auth_cp(self):
         if not self.no_auth_cp:
-            self.no_auth_cp = connection.UEPConnection(
+            self.no_auth_cp = AsyncCP(connection.UEPConnection(
                     proxy_hostname=self.proxy_hostname,
                     proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user,
-                    proxy_password=self.proxy_password)
+                    proxy_password=self.proxy_password))
         return self.no_auth_cp
