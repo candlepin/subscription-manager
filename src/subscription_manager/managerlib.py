@@ -279,7 +279,7 @@ class PoolFilter(object):
         return filtered_pools
 
 
-def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
+def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None, async=False):
     """
     Wrapper around the UEP call to fetch pools, which forces a facts update
     if anything has changed before making the request. This ensures the
@@ -294,7 +294,7 @@ def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
     owner = uep.getOwner(consumer_uuid)
     ownerid = owner['key']
     return uep.getPoolsList(consumer=consumer_uuid, listAll=list_all,
-            active_on=active_on, owner=ownerid)
+            active_on=active_on, owner=ownerid, threaded=async)
 
 
 # TODO: This method is morphing the actual pool json and returning a new
@@ -474,28 +474,32 @@ class PoolStash(object):
         Refresh the list of pools from the server, active on the given date.
         """
 
+        compat_pools_result = list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
+                self.identity.uuid, self.facts, active_on=active_on, async=True)
+        all_pools_result = list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
+                 self.identity.uuid, self.facts, active_on=active_on, async=True)
+
         if active_on:
             self.sorter = ComplianceManager(active_on)
         else:
             self.sorter = require(CERT_SORTER)
+
+        self.subscribed_pool_ids = self._get_subscribed_pool_ids()
+
         self.all_pools = {}
         self.compatible_pools = {}
         log.debug("Refreshing pools from server...")
-        for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                self.identity.uuid, self.facts, active_on=active_on):
+        for pool in compat_pools_result.read():
             self.compatible_pools[pool['id']] = pool
             self.all_pools[pool['id']] = pool
 
         # Filter the list of all pools, removing those we know are compatible.
         # Sadly this currently requires a second query to the server.
         self.incompatible_pools = {}
-        for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                self.identity.uuid, self.facts, list_all=True, active_on=active_on):
+        for pool in all_pools_result.read():
             if not pool['id'] in self.compatible_pools:
                 self.incompatible_pools[pool['id']] = pool
                 self.all_pools[pool['id']] = pool
-
-        self.subscribed_pool_ids = self._get_subscribed_pool_ids()
 
         log.debug("found %s pools:" % len(self.all_pools))
         log.debug("   %s compatible" % len(self.compatible_pools))
@@ -510,18 +514,22 @@ class PoolStash(object):
         """
         self.all_pools = {}
         self.compatible_pools = {}
+
+        # list_all should be the opposite of whether incompatible pools are filtered
+        pools_result = list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
+                self.identity.uuid, self.facts, list_all=(not incompatible),
+                active_on=active_on, async=True)
+
         if active_on and overlapping:
             self.sorter = ComplianceManager(active_on)
         elif not active_on and overlapping:
             self.sorter = require(CERT_SORTER)
 
         if incompatible:
-            for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                    self.identity.uuid, self.facts, active_on=active_on):
+            for pool in pools_result.read():
                 self.compatible_pools[pool['id']] = pool
         else:  # --all has been used
-            for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                    self.identity.uuid, self.facts, list_all=True, active_on=active_on):
+            for pool in pools_result.read():
                 self.all_pools[pool['id']] = pool
 
         return self._filter_pools(incompatible, overlapping, uninstalled, False, text)
