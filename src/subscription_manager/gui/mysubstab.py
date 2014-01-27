@@ -142,11 +142,11 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         serial = long(selection['serial'])
 
         if self.identity.is_valid():
-            self.async_bind.unbind(serial, selection, self._unsubscribe_callback, self._handle_unbind_exception)
             self.pb = progress.Progress(_("Unsubscribing"),
                     _("Unsubscribing from subscription. Please wait."))
             self.timer = gobject.timeout_add(100, self.pb.pulse)
             self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
+            self.async_bind.unbind(serial, selection, self._unsubscribe_callback, self._handle_unbind_exception)
         else:
             # unregistered, just delete the certs directly
             self.backend.certlib.delete([serial])

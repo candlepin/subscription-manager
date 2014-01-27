@@ -348,22 +348,18 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         if not self.date_picker.date_entry_validate():
             return
         try:
-            async_stash = async.AsyncPool(self.pool_stash)
-            async_stash.refresh(self.date_picker.date, self._update_display)
             # show pulsating progress bar while we wait for results
             self.pb = progress.Progress(_("Searching"),
                     _("Searching for subscriptions. Please wait."))
             self.timer = gobject.timeout_add(100, self.pb.pulse)
             self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
+
+            # fire off async refresh
+            async_stash = async.AsyncPool(self.pool_stash)
+            async_stash.refresh(self.date_picker.date, self._update_display)
         except Exception, e:
             handle_gui_exception(e, _("Error fetching subscriptions from server:  %s"),
                     self.parent_win)
-
-    def contract_selection_progress(self):
-        self.pb = progress.Progress(_("Attaching"),
-                _("Attaching subscription. Please wait."))
-        self.timer = gobject.timeout_add(100, self.pb.pulse)
-        self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
 
     def _clear_progress_bar(self):
         if self.pb:
@@ -398,6 +394,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self._contract_selection_cancelled()
 
+        # Start the progress bar
+        self.pb = progress.Progress(_("Attaching"),
+                _("Attaching subscription. Please wait."))
+        self.timer = gobject.timeout_add(100, self.pb.pulse)
+        self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
+
         # Spin off a thread to handle binding the selected pool.
         # After it has completed the actual bind call, available
         # subs will be refreshed, but we won't re-run compliance
@@ -406,7 +408,6 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 bind_callback=self._async_bind_callback,
                 cert_callback=self.backend.cs.force_cert_check,
                 except_callback=self._async_bind_exception_callback)
-        self.contract_selection_progress()
 
     def _contract_selection_cancelled(self):
         if self.contract_selection:

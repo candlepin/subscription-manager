@@ -52,8 +52,12 @@ class Progress:
         """
         pulse for a glib mainloop timeout callback
         """
-        self.xml.get_widget("progressBar").pulse()
-        return True
+        progress_bar = self.xml.get_widget("progressBar")
+        # If it's been closed, don't attempt to pulse
+        if progress_bar:
+            progress_bar.pulse()
+            return True
+        return False
 
     def set_progress(self, amount, total):
         if total:
