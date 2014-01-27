@@ -115,9 +115,9 @@ class CertificateFetchError(Exception):
         return msg
 
 
-def fetch_certificates(backend):
+def fetch_certificates(certlib):
     # Force fetch all certs
-    result = backend.certlib.update()
+    result = certlib.update()
     if result[1]:
         raise CertificateFetchError(result[1])
 
