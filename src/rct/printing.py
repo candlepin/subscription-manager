@@ -18,6 +18,10 @@ _ = gettext.gettext
 
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, IdentityCertificate
 
+# BZ 973938 python doesn't correctly handle SIGPIPE
+import signal
+signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+
 
 # TODO: to be extra paranoid, we could ask to print
 #       the attribute of the object, and handle it
