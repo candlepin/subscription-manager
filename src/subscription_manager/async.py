@@ -21,6 +21,7 @@ import gettext
 
 import gobject
 
+from subscription_manager.certlib import Disconnected
 from subscription_manager.managerlib import fetch_certificates
 from subscription_manager.injection import IDENTITY, \
         PLUGIN_MANAGER, CP_PROVIDER, require
@@ -71,10 +72,9 @@ class AsyncBind(object):
         self.cp_provider = require(CP_PROVIDER)
         self.identity = require(IDENTITY)
         self.plugin_manager = require(PLUGIN_MANAGER)
-        self.parent_win = None
         self.certlib = certlib
 
-    def _run_bind(self, pool, quantity, parent_win, bind_callback, cert_callback, except_callback):
+    def _run_bind(self, pool, quantity, bind_callback, cert_callback, except_callback):
         try:
             self.plugin_manager.run("pre_subscribe", consumer_uuid=self.identity.uuid,
                     pool_id=pool['id'], quantity=quantity)
@@ -88,6 +88,27 @@ class AsyncBind(object):
         except Exception, e:
             except_callback(e)
 
-    def bind(self, pool, quantity, parent_win, except_callback, bind_callback=None, cert_callback=None):
+    def _run_unbind(self, serial, selection, callback, except_callback):
+        """
+        Selection is only passed to maintain the gui error message.  This
+        can be removed, because it doesn't really give us any more information
+        """
+        try:
+            self.cp_provider.get_consumer_auth_cp().unbindBySerial(self.identity.uuid, serial)
+            try:
+                self.certlib.update()
+            except Disconnected, e:
+                pass
+
+            if callback:
+                callback()
+        except Exception, e:
+            except_callback(e, selection)
+
+    def bind(self, pool, quantity, except_callback, bind_callback=None, cert_callback=None):
         threading.Thread(target=self._run_bind,
-                args=(pool, quantity, parent_win, bind_callback, cert_callback, except_callback)).start()
+                args=(pool, quantity, bind_callback, cert_callback, except_callback)).start()
+
+    def unbind(self, serial, selection, callback, except_callback):
+        threading.Thread(target=self._run_unbind,
+                args=(serial, selection, callback, except_callback)).start()

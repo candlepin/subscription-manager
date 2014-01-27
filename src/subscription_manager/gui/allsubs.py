@@ -54,6 +54,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.identity = require(IDENTITY)
         self.facts = facts
 
+        # Progress bar
+        self.pb = None
+        self.timer = 0
+
         self.pool_stash = managerlib.PoolStash(self.facts)
 
         self.async_bind = async.AsyncBind(self.backend.certlib)
@@ -398,7 +402,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         # After it has completed the actual bind call, available
         # subs will be refreshed, but we won't re-run compliance
         # until we have serialized the certificates
-        self.async_bind.bind(pool, quantity, self.parent_win,
+        self.async_bind.bind(pool, quantity,
                 bind_callback=self._async_bind_callback,
                 cert_callback=self.backend.cs.force_cert_check,
                 except_callback=self._async_bind_exception_callback)
