@@ -348,11 +348,16 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         if not self.date_picker.date_entry_validate():
             return
         try:
-            # show pulsating progress bar while we wait for results
-            self.pb = progress.Progress(_("Searching"),
-                    _("Searching for subscriptions. Please wait."))
-            self.timer = gobject.timeout_add(100, self.pb.pulse)
-            self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
+            pb_title = _("Searching")
+            pb_label = _("Searching for subscriptions. Please wait.")
+            if self.pb:
+                self.pb.set_title(pb_title)
+                self.pb.set_label(pb_label)
+            else:
+                # show pulsating progress bar while we wait for results
+                self.pb = progress.Progress(pb_title, pb_label)
+                self.timer = gobject.timeout_add(100, self.pb.pulse)
+                self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
 
             # fire off async refresh
             async_stash = async.AsyncPool(self.pool_stash)
@@ -379,7 +384,6 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     # Called after the bind, but before certlib update
     def _async_bind_callback(self):
-        self._clear_progress_bar()
         self.search_button_clicked()
 
     def _async_bind_exception_callback(self, e):
