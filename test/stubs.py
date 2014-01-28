@@ -18,6 +18,7 @@ from rhsm import config
 import random
 import tempfile
 
+from subscription_manager.async import AsyncCP
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
         OverrideStatusCache
@@ -525,9 +526,9 @@ class StubCertSorter(CertSorter):
 
 class StubCPProvider(object):
 
-    consumer_auth_cp = StubUEP()
-    basic_auth_cp = StubUEP()
-    no_auth_cp = StubUEP()
+    consumer_auth_cp = AsyncCP(StubUEP())
+    basic_auth_cp = AsyncCP(StubUEP())
+    no_auth_cp = AsyncCP(StubUEP())
 
     def set_connection_info(self,
                 host=None,
