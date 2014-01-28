@@ -25,6 +25,9 @@ class PoolWrapper(object):
     def __init__(self, pool_json):
         self.data = pool_json
 
+    def get_id(self):
+        return self.data.get('id')
+
     def is_virt_only(self):
         attributes = self.data['attributes']
         virt_only = False

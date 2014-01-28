@@ -32,7 +32,8 @@ from subscription_manager.certlib import system_log as inner_system_log
 from subscription_manager.facts import Facts
 from subscription_manager.injection import require, CERT_SORTER, \
         PRODUCT_DATE_RANGE_CALCULATOR, IDENTITY, ENTITLEMENT_STATUS_CACHE, \
-        PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE
+        PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE, \
+        POOLTYPE_CACHE
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoLib
@@ -496,6 +497,10 @@ class PoolStash(object):
 
         self.subscribed_pool_ids = self._get_subscribed_pool_ids()
 
+        # In the gui, cache all pool types so when we attach new ones
+        # we can avoid more api calls
+        require(POOLTYPE_CACHE).update_from_pools(self.all_pools)
+
         log.debug("found %s pools:" % len(self.all_pools))
         log.debug("   %s compatible" % len(self.compatible_pools))
         log.debug("   %s incompatible" % len(self.incompatible_pools))
@@ -873,22 +878,3 @@ def allows_multi_entitlement(pool):
             is_true_value(attribute['value']):
             return True
     return False
-
-
-def get_entitlement_pooltype_map():
-    result = {}
-    identity = require(IDENTITY)
-    if identity.is_valid():
-        cp = require(CP_PROVIDER).get_consumer_auth_cp()
-        entitlement_list = []
-        try:
-            entitlement_list = cp.getEntitlementList(identity.uuid)
-        except Exception, e:
-            # In this case, return an empty map.  We just won't populate the field
-            log.debug('Problem attmepting to get entitlements from the server')
-            log.debug(e)
-
-        for ent in entitlement_list:
-            pool = PoolWrapper(ent.get('pool', {}))
-            result[ent['id']] = pool.get_pool_type()
-    return result

@@ -24,14 +24,13 @@ from rhsm.certificate import GMT
 
 from subscription_manager.async import AsyncBind
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
-from subscription_manager.injection import require, IDENTITY, DBUS_IFACE
+from subscription_manager.injection import require, IDENTITY, DBUS_IFACE, POOLTYPE_CACHE
 
 from subscription_manager.gui import messageWindow, progress
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.utils import is_true_value
-from subscription_manager.managerlib import get_entitlement_pooltype_map
 
 
 _ = gettext.gettext
@@ -59,6 +58,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.product_dir = prod_dir
         self.sub_details = widgets.ContractSubDetailsWidget(prod_dir)
         self.async_bind = AsyncBind(self.backend.certlib)
+        self.pooltype_cache = require(POOLTYPE_CACHE)
 
         # Progress bar
         self.pb = None
@@ -169,9 +169,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         Pulls the entitlement certificates and updates the subscription model.
         """
-        # Getting the pool type map hangs execution, we should move it
-        # out of the main loop
-        self.ent_pool_map = get_entitlement_pooltype_map()
+        self.pooltype_cache.update()
         sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
         self.store.clear()
         for group in sorter.groups:
@@ -276,8 +274,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             reasons.append(_("Subscription management service doesn't support Status Details."))
 
         pool_type = ''
-        if cert.subject and 'CN' in cert.subject:
-            pool_type = self.ent_pool_map.get(cert.subject['CN'], '')
+        if cert.pool and cert.pool.id:
+            pool_type = self.pooltype_cache.get(cert.pool.id)
 
         if is_true_value(order.virt_only):
             virt_only = _("Virtual")
