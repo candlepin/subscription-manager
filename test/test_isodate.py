@@ -18,7 +18,7 @@ import time
 import unittest
 
 from subscription_manager import isodate
-from subscription_manager.managerlib import LocalTz
+from dateutil.tz import tzlocal
 
 
 # two classes for this, one that sets up for dateutil, one for
@@ -26,7 +26,7 @@ from subscription_manager.managerlib import LocalTz
 class TestParseDate(unittest.TestCase):
 
     def _test_local_tz(self):
-        tz = LocalTz()
+        tz = tzlocal()
         dt_no_tz = datetime.datetime(year=2000, month=1, day=1, hour=12, minute=34)
         now_dt = datetime.datetime(year=2000, month=1, day=1, hour=12, minute=34, tzinfo=tz)
         isodate.parse_date(now_dt.isoformat())

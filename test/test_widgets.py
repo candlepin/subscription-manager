@@ -22,13 +22,13 @@ import test_po_files
 import gtk
 from datetime import datetime, timedelta
 from rhsm.certificate import GMT
-from subscription_manager.managerlib import LocalTz
 
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui.widgets import MachineTypeColumn, QuantitySelectionColumn, \
                                              SubDetailsWidget, ContractSubDetailsWidget, \
                                              DatePicker
 from fixture import Capture
+from dateutil.tz import tzlocal
 
 
 class TestSubDetailsWidget(unittest.TestCase):
@@ -88,9 +88,9 @@ class TestContractSubDetailsWidget(TestSubDetailsWidget):
     def testVirtOnly(self):
         details = self.widget(None)
         self.show(details)
-        d = datetime(2011, 4, 16, tzinfo=LocalTz())
-        start_date = datetime(d.year, d.month, d.day, tzinfo=LocalTz())
-        end_date = datetime(d.year + 1, d.month, d.day, tzinfo=LocalTz())
+        d = datetime(2011, 4, 16, tzinfo=tzlocal())
+        start_date = datetime(d.year, d.month, d.day, tzinfo=tzlocal())
+        end_date = datetime(d.year + 1, d.month, d.day, tzinfo=tzlocal())
         details.show('noname', contract='c', start=start_date, end=end_date, account='a',
                      management='m', support_level='s_l',
                      support_type='s_t', virt_only='v_o')
@@ -104,24 +104,24 @@ class TestDatePicker(unittest.TestCase):
         self._setupLang("en_US")
 
     def test_date_picker_date(self):
-        d = datetime(2033, 12, 29, tzinfo=LocalTz())
+        d = datetime(2033, 12, 29, tzinfo=tzlocal())
         date_picker = DatePicker(d)
         date_picker.date
 
     def test_date_validate_default_date_locale(self):
-        d = datetime(2000, 1, 1, tzinfo=LocalTz())
+        d = datetime(2000, 1, 1, tzinfo=tzlocal())
         date_picker = DatePicker(d)
         date_picker.date_entry_validate()
 
     def test_date_validate_supported_locales_1_1_2000(self):
-        d = datetime(2000, 1, 1, tzinfo=LocalTz())
+        d = datetime(2000, 1, 1, tzinfo=tzlocal())
         self.__date_validate_supported_locales(d)
 
     # why? because some locales fail to parse in dates with
     # double digt months
     def test_date_validate_supported_locales_12_29_2020(self):
         with Capture(silent=True):
-            d = datetime(2020, 12, 29, tzinfo=LocalTz())
+            d = datetime(2020, 12, 29, tzinfo=tzlocal())
             self.__date_validate_supported_locales(d)
 
     def __date_validate_supported_locales(self, d):
