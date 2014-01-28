@@ -59,6 +59,20 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 CFG = config.initConfig()
 
+REGISTERING = 0
+SUBSCRIBING = 1
+state = REGISTERING
+
+
+def get_state():
+    global state
+    return state
+
+
+def set_state(new_state):
+    global state
+    state = new_state
+
 DONT_CHANGE = -2
 PROGRESS_PAGE = -1
 CHOOSE_SERVER_PAGE = 0
@@ -85,7 +99,7 @@ class RegisterScreen(widgets.GladeWidget):
     """
     widget_names = ['register_dialog', 'register_notebook',
                     'register_progressbar', 'register_details_label',
-                    'cancel_button', 'register_button']
+                    'cancel_button', 'register_button', 'progress_label']
 
     def __init__(self, backend, facts=None, parent=None, callbacks=None):
         """
@@ -166,6 +180,13 @@ class RegisterScreen(widgets.GladeWidget):
         else:
             self.register_notebook.set_current_page(screen + 1)
 
+        if get_state() == REGISTERING:
+            self.register_dialog.set_title(_("System Registration"))
+            self.progress_label.set_markup(_("<b>Registering</b>"))
+        elif get_state() == SUBSCRIBING:
+            self.register_dialog.set_title(_("System Subscription"))
+            self.progress_label.set_markup(_("<b>Subscribing</b>"))
+
     def _set_register_label(self, screen):
         button_label = self._screens[screen].button_label
         self.register_button.set_label(button_label)
@@ -231,6 +252,7 @@ class RegisterScreen(widgets.GladeWidget):
             method()
 
     def close_window(self):
+        set_state(REGISTERING)
         self.register_dialog.hide()
         return True
 
@@ -254,6 +276,7 @@ class AutobindWizard(RegisterScreen):
 
     def __init__(self, backend, facts, parent):
         super(AutobindWizard, self).__init__(backend, facts, parent)
+        set_state(SUBSCRIBING)
 
     def show(self):
         super(AutobindWizard, self).show()
@@ -320,6 +343,7 @@ class PerformRegisterScreen(NoGuiScreen):
             return
 
         try:
+            set_state(SUBSCRIBING)
             managerlib.persist_consumer_cert(new_account)
             self._parent.backend.cs.force_cert_check()  # Ensure there isn't much wait time
 
