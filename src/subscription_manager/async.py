@@ -75,10 +75,10 @@ class AsyncResponse(object):
     def _execute_function(self, function, callback, *args, **kwargs):
         try:
             result = function(*args, **kwargs)
-            callback(result, None)
+            gobject.idle_add(callback, result, None)
         except Exception, e:
             result = e
-            callback(None, e)
+            gobject.idle_add(callback, None, e)
         self.result_queue.put(result)
 
 
