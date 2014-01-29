@@ -124,6 +124,9 @@ has specific options available for each command, depending on what operation is 
 .IP
 22. deprecated commands: subscribe, unsubscribe, and activate
 
+.IP
+23. repo-override
+
 
 .SS COMMON OPTIONS
 .TP
@@ -517,6 +520,40 @@ List the available plugin slots and the hooks that handle them.
 .B --verbose
 Show additional info about the plugins, such as the plugin configuration values.
 
+.SS REPO-OVERRIDE OPTIONS
+The
+.B repo-override
+command allows the user to manage custom content repository settings
+
+.TP
+.B --repo
+The repository to modify (can be specified more than once)
+
+.TP
+.B --add=NAME:VALUE
+Adds a named overide with the provided value to repos specified with the
+.B --repo
+option
+
+.TP
+.B --remove=NAME
+Removes a named overide from the repos specified with the
+.B --repo
+option
+
+.TP
+.B --remove-alll
+Removes all overrides from repos specified with the
+.B --repo
+option
+
+.TP
+.B --list
+Lists all overrides from repos specified with the
+.B --repo
+option
+
+
 .SS IDENTITY OPTIONS
 The
 .B identity
@@ -712,7 +749,6 @@ has two major tasks:
 .PP
 .B subscription-manager
 makes it easier for network administrators to maintain parity between software subscriptions and updates and their installed products by tracking and managing what subscriptions are attached to a system and when those subscriptions expire or are exceeded.
-
 
 
 .SS REGISTERING AND UNREGISTERING MACHINES
