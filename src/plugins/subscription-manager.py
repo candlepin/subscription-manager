@@ -41,9 +41,6 @@ You no longer have access to the repositories that provide these products.  It i
 not_registered_warning = \
 "This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register."
 
-registered_message = \
-"This system is receiving updates from Red Hat Subscription Management."
-
 no_subs_warning = \
 "This system is registered to Red Hat Subscription Management, but is not receiving updates. You can use subscription-manager to assign subscriptions."
 
@@ -108,12 +105,11 @@ def warnOrGiveUsageMessage(conduit):
             entdir = inj.require(inj.ENT_DIR)
             if len(entdir.list_valid()) == 0:
                 msg = no_subs_warning
-            else:
-                msg = registered_message
         except:
             msg = not_registered_warning
     finally:
-        conduit.error(2, msg)
+        if msg:
+            conduit.error(2, msg)
 
 
 def config_hook(conduit):
