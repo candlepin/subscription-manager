@@ -29,6 +29,7 @@ import gtk.glade
 
 import rhsm.config as config
 from rhsm.utils import ServerUrlParseError
+from rhsm.connection import GoneException
 
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import InstalledProductsManager, ProfileManager
@@ -502,6 +503,8 @@ class SelectSLAScreen(Screen):
             elif isinstance(error[1], AllProductsCoveredException):
                 InfoDialog(_("All installed products are covered by valid entitlements. No need to attach subscriptions at this time."),
                            parent=self._parent.parent)
+            elif isinstance(error[1], GoneException):
+                InfoDialog(_("Consumer has been deleted."), parent=self._parent.parent)
             else:
                 handle_gui_exception(error, _("Error subscribing"),
                                      self._parent.parent)
