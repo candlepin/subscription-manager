@@ -17,7 +17,11 @@
 #
 
 import gettext
+import httplib
 import logging
+import socket
+
+from M2Crypto.SSL import SSLError
 
 import rhsm.config
 
@@ -76,10 +80,7 @@ class ReleaseBackend(object):
                     continue
                 if self._is_correct_rhel(rhel_product.provided_tags,
                                          content.required_tags):
-                    content_url = content.url
-                    listing_parts = content_url.split('$releasever', 1)
-                    listing_base = listing_parts[0]
-                    listing_path = "%s/listing" % listing_base
+                    listing_path = self._build_listing_path(content.url)
                     listings.append(listing_path)
 
         # FIXME: not sure how to get the "base" content if we have multiple
@@ -93,12 +94,36 @@ class ReleaseBackend(object):
         releases = []
         listings = sorted(set(listings))
         for listing_path in listings:
-            data = self.content_connection.get_versions(listing_path)
+            try:
+                data = self.content_connection.get_versions(listing_path)
+            except (socket.error,
+                    httplib.HTTPException,
+                    SSLError) as e:
+                # content connection doesn't handle any exceptions
+                # and the code that invokes this doesn't either, so
+                # swallow them here.
+                log.exception(e)
+                continue
+
+            # any non 200 response on fetching the release version
+            # listing file returns a None here
+            if not data:
+                continue
+
             ver_listing = listing.ListingFile(data=data)
+
+            # ver_listing.releases can be empty
             releases = releases + ver_listing.get_releases()
 
         releases_set = sorted(set(releases))
         return releases_set
+
+    def _build_listing_path(self, content_url):
+        listing_parts = content_url.split('$releasever', 1)
+        listing_base = listing_parts[0]
+        listing_path = "%s/listing" % listing_base
+        # FIXME: cleanup paths ("//"'s, etc)
+        return listing_path
 
     def _is_rhel(self, product_tags):
         #easy to pass a string instead of a list

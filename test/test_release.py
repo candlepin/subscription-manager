@@ -12,9 +12,13 @@
 # in this software or its documentation.
 #
 
-import unittest
+import mock
+import httplib
+import socket
+from M2Crypto.SSL import SSLError
 
 import stubs
+import fixture
 
 from subscription_manager import release
 
@@ -27,8 +31,9 @@ versions = """
 """
 
 
-class TestReleaseBackend(unittest.TestCase):
+class TestReleaseBackend(fixture.SubManFixture):
     def setUp(self):
+        fixture.SubManFixture.setUp(self)
         stub_content = stubs.StubContent("c1", required_tags='rhel-6',
                                            gpg=None, enabled="1")
 
@@ -70,6 +75,23 @@ class TestReleaseBackend(unittest.TestCase):
     def test_get_releases(self):
         releases = self.rb.get_releases()
         self.assertNotEquals([], releases)
+
+    def test_get_releases_throws_exception(self):
+        with mock.patch.object(self.rb, 'content_connection') as mock_cc:
+            mock_cc.get_versions.side_effect = \
+                    httplib.BadStatusLine("some bogus status")
+            releases = self.rb.get_releases()
+            self.assertEquals([], releases)
+
+            mock_cc.get_versions.side_effect = \
+                    socket.error()
+            releases = self.rb.get_releases()
+            self.assertEquals([], releases)
+
+            mock_cc.get_versions.side_effect = \
+                    SSLError()
+            releases = self.rb.get_releases()
+            self.assertEquals([], releases)
 
     def test_is_rhel(self):
         ir = self.rb._is_rhel(["rhel-6-test"])
@@ -142,3 +164,16 @@ class TestReleaseBackend(unittest.TestCase):
         icr = self.rb._is_correct_rhel(["rhel-5-server"],
                                        ["awesome-os-7"])
         self.assertFalse(icr)
+
+    def test_build_listing_path(self):
+        # /content/dist/rhel/server/6/6Server/x86_64/os/
+        content_url = \
+                "/content/dist/rhel/server/6/$releasever/$basearch/os/"
+        listing_path = self.rb._build_listing_path(content_url)
+        self.assertEquals(listing_path, "/content/dist/rhel/server/6//listing")
+
+        # /content/beta/rhel/server/6/$releasever/$basearch/optional/os
+        content_url = \
+                "/content/beta/rhel/server/6/$releasever/$basearch/optional/os"
+        listing_path = self.rb._build_listing_path(content_url)
+        self.assertEquals(listing_path, "/content/beta/rhel/server/6//listing")
