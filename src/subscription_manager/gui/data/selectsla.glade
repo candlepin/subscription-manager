@@ -26,18 +26,21 @@
         <property name="can_focus">False</property>
         <property name="spacing">12</property>
         <child>
-          <widget class="GtkLabel" id="detection_label">
+          <widget class="GtkTextView" id="detection_label">
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
-            <property name="yalign">0</property>
-            <property name="xpad">10</property>
-            <property name="label" translatable="yes">Your installed products could be covered using one of multiple service levels.</property>
+            <property name="editable">False</property>
+            <property name="wrap_mode">word</property>
+            <property name="left_margin">10</property>
+            <property name="right_margin">10</property>
+            <property name="cursor_visible">False</property>
+            <property name="accepts_tab">False</property>
+            <property name="text" translatable="yes">Your installed products could be covered using one of multiple service levels.</property>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">3</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
