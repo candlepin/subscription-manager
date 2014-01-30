@@ -156,6 +156,9 @@ def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
 
+    if msg:
+        print msg
+
     exception_mapper = ExceptionMapper()
     mapped_message = exception_mapper.get_message(ex)
     if mapped_message:
@@ -326,8 +329,7 @@ class CliCommand(AbstractCLICommand):
                  self.server_port,
                  self.server_prefix) = parse_server_info(self.options.server_url)
             except ServerUrlParseError, e:
-                print _("Error parsing serverurl: %s") % e.msg
-                sys.exit(-1)
+                handle_exception("Error parsing serverurl:", e)
 
             # this trys to actually connect to the server and ping it
             try:
@@ -355,8 +357,7 @@ class CliCommand(AbstractCLICommand):
                  baseurl_server_port,
                  baseurl_server_prefix) = parse_baseurl_info(self.options.base_url)
             except ServerUrlParseError, e:
-                print _("Error parsing baseurl: %s") % e.msg
-                sys.exit(-1)
+                handle_exception("Error parsing baseurl:", e)
 
             cfg.set("rhsm", "baseurl", format_baseurl(baseurl_server_hostname,
                                                       baseurl_server_port,
