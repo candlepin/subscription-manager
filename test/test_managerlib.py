@@ -1098,9 +1098,14 @@ class TestValidQuantity(unittest.TestCase):
 
 class TestGetAvailableEntitlements(SubManFixture):
 
-    @patch('subscription_manager.cache.CacheManager.write_cache')
-    def setUp(self, write_cache_mock):
+    def setUp(self):
+        self.p1 = patch('subscription_manager.facts.Facts.write_cache')
+        self.p1.start()
         super(TestGetAvailableEntitlements, self).setUp()
+
+    def tearDown(self):
+        self.p1.stop()
+        super(TestGetAvailableEntitlements, self).tearDown()
 
     def test_no_pools(self):
         # get the injected stub uep

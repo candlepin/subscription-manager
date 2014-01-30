@@ -75,6 +75,7 @@ class TestMigration(unittest.TestCase):
 
     def setUp(self):
         migrate.initUp2dateConfig = lambda: {}
+        patch('subscription_manager.migrate.migrate.ProductDatabase').start()
         self.engine = migrate.MigrationEngine()
         self.engine.cp = stubs.StubUEP()
 
@@ -104,6 +105,7 @@ class TestMigration(unittest.TestCase):
             )
 
     def tearDown(self):
+        patch.stopall()
         sys.stderr = sys.__stderr__
 
     def test_mutually_exclusive_options(self):
