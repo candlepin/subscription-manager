@@ -3,7 +3,8 @@ import locale
 import sys
 
 from datetime import datetime
-from dateutil.tz import tzutc
+from dateutil.tz import tzutc, tzstr
+from mock import patch
 
 try:
     from freezegun import freeze_time
@@ -24,7 +25,9 @@ class TestFormatTime(unittest.TestCase):
         locale.setlocale(locale.LC_ALL, self.locale)
 
     @freeze_time("2013-9-14")  # During DST
-    def test_system_dst(self):
+    @patch('subscription_manager.managerlib.tzlocal')
+    def test_system_dst(self, mock_tz):
+        mock_tz.return_value = tzstr('EST5EDT')
         test = datetime(2014, 12, 21, 4, 59, 0, tzinfo=tzutc())
         self.assertEquals(managerlib.format_date(test), '12/20/2014')
         test = datetime(2014, 12, 21, 5, 0, 0, tzinfo=tzutc())
@@ -52,7 +55,9 @@ class TestFormatTime(unittest.TestCase):
         self.assertEquals(managerlib.format_date(test), '05/21/2014')
 
     @freeze_time("2013-12-14")  # During EST
-    def test_system_est(self):
+    @patch('subscription_manager.managerlib.tzlocal')
+    def test_system_est(self, mock_tz):
+        mock_tz.return_value = tzstr('EST5EDT')
         test = datetime(2014, 12, 21, 4, 59, 0, tzinfo=tzutc())
         self.assertEquals(managerlib.format_date(test), '12/20/2014')
         test = datetime(2014, 12, 21, 5, 0, 0, tzinfo=tzutc())
