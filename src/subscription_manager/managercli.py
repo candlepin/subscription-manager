@@ -752,7 +752,7 @@ class ServiceLevelCommand(OrgCommand):
 
         shortdesc = _("Manage service levels for this system")
         self._org_help_text = \
-            _("specify an organization when listing available service levels using the organization key")
+            _("specify an organization when listing available service levels using the organization key, only used with --list")
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
                                                   False)
 
@@ -920,7 +920,7 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
                                help=_("activation key to use for registration (can be specified more than once)"))
         self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("system preference used when subscribing automatically"))
+                               help=_("system preference used when subscribing automatically, requires --auto-attach"))
 
         self.facts = Facts(ent_dir=self.entitlement_dir,
                            prod_dir=self.product_dir)
@@ -1330,7 +1330,7 @@ class AttachCommand(CliCommand):
         self.parser.add_option("--auto", action='store_true',
             help=_("automatically attach compatible subscriptions to this system"))
         self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("service level to apply to this system"))
+                               help=_("service level to apply to this system, requires --auto"))
         # re bz #864207
         _("All installed products are covered by valid entitlements.")
         _("No need to update subscriptions at this time.")
