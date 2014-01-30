@@ -1,4 +1,4 @@
-.TH subscription-manager 8 "May 23, 2013" "version 2.7" "Subscription Management"  Deon Lackey 
+.TH subscription-manager 8 "January 29, 2014" "version 2.8" "Subscription Management"  Deon Lackey 
 .SH NAME
 subscription-manager \- Registers systems to a subscription management service and then attaches and manages subscriptions for software products.
 
@@ -71,7 +71,7 @@ has specific options available for each command, depending on what operation is 
 4. auto-attach
 
 .IP
-5.remove
+5. remove
 
 .IP
 6. release
@@ -120,6 +120,9 @@ has specific options available for each command, depending on what operation is 
 
 .IP
 21. status
+
+.IP
+22. deprecated commands: subscribe, unsubscribe, and activate
 
 
 .SS COMMON OPTIONS
@@ -672,6 +675,21 @@ Shows the system status for a specific date \fIin the future\fP. The format of t
 +-------------------------------------------+
 Overall Status: Insufficient
 .fi
+
+.SS DEPRECATED COMMANDS
+As the structures of subscription configuration have changed, some of the original management commands have become obsolete. These commands have been replaced with updated commands.
+
+.TP
+.B subscribe
+This has been replaced with attach. A similar registration option, \fB--subscribe\fP, has also be replaced with \fB--autoattach\fP.
+
+.TP
+.B unsubscribe
+This has been replaced with \fBremove\fP.
+
+.TP
+.B activate
+This has been replaced with \fBredeem\fP.
 
 .SH USAGE
 .B subscription-manager 
