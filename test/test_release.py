@@ -12,6 +12,10 @@
 # in this software or its documentation.
 #
 
+import mock
+import httplib
+import socket
+from M2Crypto.SSL import SSLError
 
 import stubs
 import fixture
@@ -71,6 +75,23 @@ class TestReleaseBackend(fixture.SubManFixture):
     def test_get_releases(self):
         releases = self.rb.get_releases()
         self.assertNotEquals([], releases)
+
+    def test_get_releases_throws_exception(self):
+        with mock.patch.object(self.rb, 'content_connection') as mock_cc:
+            mock_cc.get_versions.side_effect = \
+                    httplib.BadStatusLine("some bogus status")
+            releases = self.rb.get_releases()
+            self.assertEquals([], releases)
+
+            mock_cc.get_versions.side_effect = \
+                    socket.error()
+            releases = self.rb.get_releases()
+            self.assertEquals([], releases)
+
+            mock_cc.get_versions.side_effect = \
+                    SSLError()
+            releases = self.rb.get_releases()
+            self.assertEquals([], releases)
 
     def test_is_rhel(self):
         ir = self.rb._is_rhel(["rhel-6-test"])

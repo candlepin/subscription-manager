@@ -17,7 +17,11 @@
 #
 
 import gettext
+import httplib
 import logging
+import socket
+
+from M2Crypto.SSL import SSLError
 
 import rhsm.config
 
@@ -90,7 +94,16 @@ class ReleaseBackend(object):
         releases = []
         listings = sorted(set(listings))
         for listing_path in listings:
-            data = self.content_connection.get_versions(listing_path)
+            try:
+                data = self.content_connection.get_versions(listing_path)
+            except (socket.error,
+                    httplib.HTTPException,
+                    SSLError) as e:
+                # content connection doesn't handle any exceptions
+                # and the code that invokes this doesn't either, so
+                # swallow them here.
+                log.exception(e)
+                continue
 
             # any non 200 response on fetching the release version
             # listing file returns a None here
