@@ -21,13 +21,19 @@ class ListingFile(object):
 
         self.parse()
 
+    def get_releases(self):
+        return self.releases
+
     def parse(self):
+        if not self.data:
+            return
+
         lines = self.data.split("\n")
 
         for line in lines:
             line = line.strip()
 
-            #empty
+            # empty
             if not line:
                 continue
 
@@ -37,6 +43,4 @@ class ListingFile(object):
 
             self.releases.append(line)
 
-    def get_releases(self):
         self.releases.sort()
-        return self.releases
