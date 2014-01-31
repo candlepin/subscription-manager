@@ -38,6 +38,7 @@ from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoLib
 from subscription_manager.utils import is_true_value
+from subscription_manager.identity import ConsumerIdentity
 from dateutil.tz import tzlocal
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -794,18 +795,7 @@ def unregister(uep, consumer_uuid):
     uep.unregisterConsumer(consumer_uuid)
     log.info("Successfully un-registered.")
     system_log("Unregistered machine with identity: %s" % consumer_uuid)
-
-    # Clean up certificates, these are no longer valid:
-    shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
-    require(IDENTITY).reload()
-    shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
-    cache.ProfileManager.delete_cache()
-    Facts.delete_cache()
-    cache.InstalledProductsManager.delete_cache()
-
-    # Must also delete in-memory cache
-    require(ENTITLEMENT_STATUS_CACHE).delete_cache()
-    require(PROD_STATUS_CACHE).delete_cache()
+    clean_all_data(backup=False)
 
 
 def check_identity_cert_perms():
@@ -837,14 +827,29 @@ def clean_all_data(backup=True):
         else:
             consumer_dir_backup = consumer_dir + ".old"
 
+        # Delete backup dir if it exists:
         shutil.rmtree(consumer_dir_backup, ignore_errors=True)
-        os.rename(consumer_dir, consumer_dir_backup)
-    else:
-        shutil.rmtree(consumer_dir, ignore_errors=True)
+
+        # Copy current consumer dir:
+        log.info("Backing up %s to %s." % (consumer_dir, consumer_dir_backup))
+        shutil.copytree(consumer_dir, consumer_dir_backup)
+
+    # Delete current consumer certs:
+    for path in [ConsumerIdentity.keypath(), ConsumerIdentity.certpath()]:
+        if (os.path.exists(path)):
+            log.debug("Removing identity cert: %s" % path)
+            os.remove(path)
 
     require(IDENTITY).reload()
 
-    shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
+    # Delete all entitlement certs rather than the directory itself:
+    ent_cert_dir = cfg.get('rhsm', 'entitlementCertDir')
+    filelist = [f for f in os.listdir(ent_cert_dir)
+            if f.endswith(".pem")]
+    for f in filelist:
+        certpath = os.path.join(ent_cert_dir, f)
+        log.debug("Removing entitlement cert: %s" % certpath)
+        os.remove(certpath)
 
     cache.ProfileManager.delete_cache()
     cache.InstalledProductsManager.delete_cache()

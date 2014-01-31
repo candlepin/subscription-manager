@@ -17,6 +17,7 @@ from stubs import StubUEP
 import rhsm.connection as connection
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.cache import CacheManager
+from subscription_manager.repolib import RepoLib
 from subscription_manager import managercli
 from fixture import SubManFixture
 
@@ -26,13 +27,13 @@ class CliUnRegistrationTests(SubManFixture):
     def test_unregister_removes_consumer_cert(self):
         connection.UEPConnection = StubUEP
 
-        # When
         cmd = managercli.UnRegisterCommand()
 
         ConsumerIdentity.existsAndValid = classmethod(lambda cls: True)
         ConsumerIdentity.exists = classmethod(lambda cls: True)
 
         CacheManager.delete_cache = classmethod(lambda cls: None)
+        RepoLib.delete_repo_file = classmethod(lambda cls: None)
 
         def stub_consumer():
             return {'consumer_name': 'stub_name', 'uuid': 'stub_uuid'}
