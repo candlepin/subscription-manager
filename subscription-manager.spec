@@ -86,6 +86,7 @@ Requires: %{name} = %{version}-%{release}
 Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
 Requires: usermode-gtk
 Requires: dbus-x11
+Requires: gnome-icon-theme
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
 
