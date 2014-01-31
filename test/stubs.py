@@ -585,3 +585,9 @@ class StubOverrideStatusCache(OverrideStatusCache):
 
     def delete_cache(self):
         self.server_status = None
+
+
+class StubPool(object):
+
+    def __init__(self, poolid):
+        self.id = poolid

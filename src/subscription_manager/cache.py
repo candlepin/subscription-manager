@@ -463,8 +463,6 @@ class InstalledProductsManager(CacheManager):
 class PoolTypeCache(object):
 
     def __init__(self):
-        self.server_supports = True
-
         self.identity = inj.require(inj.IDENTITY)
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.ent_dir = inj.require(inj.ENT_DIR)
@@ -479,8 +477,6 @@ class PoolTypeCache(object):
             self._do_update()
 
     def requires_update(self):
-        if not self.server_supports:
-            return False
         attached_pool_ids = set([ent.pool.id for ent in self.ent_dir.list()])
         missing_types = attached_pool_ids - set(self.pooltype_map)
         return bool(missing_types)
@@ -497,19 +493,11 @@ class PoolTypeCache(object):
                 log.debug('Problem attmepting to get entitlements from the server')
                 log.debug(e)
 
-            # Make sure at least one has a value
-            supports = False
             for ent in entitlement_list:
                 pool = PoolWrapper(ent.get('pool', {}))
                 pool_type = pool.get_pool_type()
                 result[pool.get_id()] = pool_type
-                if pool_type:
-                    supports = True
-            if not supports:
-                # Server doesn't support this, no use
-                # attempting again
-                self.server_supports = False
-                log.debug("Server does not appear to support pool types")
+
         self.pooltype_map.update(result)
 
     def update_from_pools(self, pool_map):
