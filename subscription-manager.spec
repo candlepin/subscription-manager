@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.12
+Version: 1.10.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -412,6 +412,11 @@ fi
 %endif
 
 %changelog
+* Mon Feb 03 2014 ckozak <ckozak@redhat.com> 1.10.13-1
+- 1060917: catch exception thrown in firstboot (ckozak@redhat.com)
+- Extract the latest strings (bkearney@redhat.com)
+- 995121: require gnome-icon-theme for calendar icon (alikins@redhat.com)
+
 * Mon Feb 03 2014 ckozak <ckozak@redhat.com> 1.10.12-1
 - added testing for the pooltype cache (ckozak@redhat.com)
 - 961003: Stricter matches for rhel product tags (alikins@redhat.com)
