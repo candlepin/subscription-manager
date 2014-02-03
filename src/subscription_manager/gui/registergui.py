@@ -181,12 +181,16 @@ class RegisterScreen(widgets.GladeWidget):
         else:
             self.register_notebook.set_current_page(screen + 1)
 
-        if get_state() == REGISTERING:
-            self.register_dialog.set_title(_("System Registration"))
-            self.progress_label.set_markup(_("<b>Registering</b>"))
-        elif get_state() == SUBSCRIBING:
-            self.register_dialog.set_title(_("Subscription Attachment"))
-            self.progress_label.set_markup(_("<b>Attaching</b>"))
+        try:
+            if get_state() == REGISTERING:
+                self.register_dialog.set_title(_("System Registration"))
+                self.progress_label.set_markup(_("<b>Registering</b>"))
+            elif get_state() == SUBSCRIBING:
+                self.register_dialog.set_title(_("Subscription Attachment"))
+                self.progress_label.set_markup(_("<b>Attaching</b>"))
+        except:
+            # In firstboot setting title causes a traceback.  bz 1060917
+            pass
 
     def _set_register_label(self, screen):
         button_label = self._screens[screen].button_label
