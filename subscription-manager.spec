@@ -6,6 +6,9 @@
 
 %define rhsm_plugins_dir   /usr/share/rhsm-plugins
 
+
+%global _hardened_build 1
+
 # A couple files are for RHEL 5 only:
 %if 0%{?rhel} == 5
 %define el5 1
@@ -140,7 +143,7 @@ subscriptions
 %setup -q
 
 %build
-make -f Makefile
+make -f Makefile CFLAGS="%{optflags}"
 
 %install
 rm -rf %{buildroot}
