@@ -32,7 +32,7 @@ EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
 YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
 ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
 
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -D_FORTIFY_SOURCE=2 -O
 
 %.pyc: %.py
 	python -c "import py_compile; py_compile.compile('$<')"
