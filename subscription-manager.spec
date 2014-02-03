@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.11
+Version: 1.10.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -411,6 +411,55 @@ fi
 %endif
 
 %changelog
+* Mon Feb 03 2014 ckozak <ckozak@redhat.com> 1.10.12-1
+- added testing for the pooltype cache (ckozak@redhat.com)
+- 961003: Stricter matches for rhel product tags (alikins@redhat.com)
+- 1059809: Cache pool types to avoid unnecessary api calls (ckozak@redhat.com)
+- 1059809 Improve attach and remove performance add progress bar
+  (ckozak@redhat.com)
+- 908869: Fix the mis-transated options in pt-BR (bkearney@redhat.com)
+- 1044596: handle http,socket,ssl fetching release (alikins@redhat.com)
+- dont always print exception message (ckozak@redhat.com)
+- 1044596: Make release listing handle empty data (alikins@redhat.com)
+- 1020423: update help messages (jesusr@redhat.com)
+- Fix incorrect patching. (awood@redhat.com)
+- Mock ProductDatabase so tests can run without a productid.js file
+  (awood@redhat.com)
+- 825388: Properly wrap text when reaching dialog limit (mstead@redhat.com)
+- 1021443: display Consumer deleted message (jesusr@redhat.com)
+- Altering titles per mreid conversation. (wpoteat@redhat.com)
+- 1039736: Fix missed reference to CloudForms in tooltip. (dgoodwin@redhat.com)
+- Fix ta_IN translation problem. (dgoodwin@redhat.com)
+- Lock timezone to EST5EDT in timezone tests. (awood@redhat.com)
+- 1005329: add at-spi locator to the SLA selection table (ckozak@redhat.com)
+- 1039914: Update the rhsm-debug man page (bkearney@redhat.com)
+- 874169: Fix label alignment in progress UI (mstead@redhat.com)
+- 1020361: Replace the use of the term Valid with Current in the status command
+  (bkearney@redhat.com)
+- 1028596: Add the repo-override command to the subscription-manager man page
+  (bkearney@redhat.com)
+- 1020522: Update the man page for subscription-manager with new list options
+  (bkearney@redhat.com)
+- Pull in the latest strings from zanata. (bkearney@redhat.com)
+- 1057719: adding a small section on deprecated commands (dlackey@redhat.com)
+- 1017354: remove msg printed to stderr via yum (alikins@redhat.com)
+- 857147: Auto-subscribe window has a confusing name (wpoteat@redhat.com)
+- Use dateutil.tz instead of pytz. (awood@redhat.com)
+- 883486: The local time's start/end dates rendered in the list
+  --available/--consumed incorrect (wpoteat@redhat.com)
+- 1049037: Add conditional requires on migration data package.
+  (awood@redhat.com)
+- 973938: correctly handle SIGPIPE in rct (ckozak@redhat.com)
+- 878089: Add line wrapping when listing subscription-manager modules
+  (ckozak@redhat.com)
+- 1017354: Ensure all message go to stdout, not stderr (bkearney@redhat.com)
+- 851325: Anchor choose server "default" button beside the text box.
+  (dgoodwin@redhat.com)
+- 1039739: Add 96x96 and 256x256 icons (bkearney@redhat.com)
+- 873967: Move choose server tooltips closer to the elements they assist with.
+  (dgoodwin@redhat.com)
+- 1044686: Make serverurl parse error detailed again (alikins@redhat.com)
+
 * Wed Jan 22 2014 ckozak <ckozak@redhat.com> 1.10.11-1
 - 1018807: Ensure virt facts are a single line (bkearney@redhat.com)
 - 1007580: Print blank spaces if there is no contract number on the list
