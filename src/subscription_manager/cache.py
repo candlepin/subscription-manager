@@ -30,6 +30,7 @@ from rhsm.config import initConfig
 import rhsm.connection as connection
 from rhsm.profile import get_profile, RPMProfile
 from subscription_manager.certlib import ConsumerIdentity, DataLib
+from subscription_manager.jsonwrapper import PoolWrapper
 import subscription_manager.injection as inj
 from rhsm import ourjson as json
 
@@ -457,3 +458,52 @@ class InstalledProductsManager(CacheManager):
     def _sync_with_server(self, uep, consumer_uuid):
         uep.updateConsumer(consumer_uuid,
                 installed_products=self.format_for_server())
+
+
+class PoolTypeCache(object):
+
+    def __init__(self):
+        self.identity = inj.require(inj.IDENTITY)
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.ent_dir = inj.require(inj.ENT_DIR)
+        self.pooltype_map = {}
+        self.update()
+
+    def get(self, pool_id):
+        return self.pooltype_map.get(pool_id, '')
+
+    def update(self):
+        if self.requires_update():
+            self._do_update()
+
+    def requires_update(self):
+        attached_pool_ids = set([ent.pool.id for ent in self.ent_dir.list()])
+        missing_types = attached_pool_ids - set(self.pooltype_map)
+        return bool(missing_types)
+
+    def _do_update(self):
+        result = {}
+        if self.identity.is_valid():
+            cp = self.cp_provider.get_consumer_auth_cp()
+            entitlement_list = []
+            try:
+                entitlement_list = cp.getEntitlementList(self.identity.uuid)
+            except Exception, e:
+                # In this case, return an empty map.  We just won't populate the field
+                log.debug('Problem attmepting to get entitlements from the server')
+                log.debug(e)
+
+            for ent in entitlement_list:
+                pool = PoolWrapper(ent.get('pool', {}))
+                pool_type = pool.get_pool_type()
+                result[pool.get_id()] = pool_type
+
+        self.pooltype_map.update(result)
+
+    def update_from_pools(self, pool_map):
+        # pool_map maps pool ids to pool json
+        for pool_id in pool_map:
+            self.pooltype_map[pool_id] = PoolWrapper(pool_map[pool_id]).get_pool_type()
+
+    def clear(self):
+        self.pooltype_map = {}

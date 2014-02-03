@@ -445,6 +445,7 @@ class StubBackend:
         self.content_connection = None
         self.cs = StubCertSorter()
         self.overrides = None
+        self.certlib = None
 
     def monitor_certs(self, callback):
         pass
@@ -584,3 +585,9 @@ class StubOverrideStatusCache(OverrideStatusCache):
 
     def delete_cache(self):
         self.server_status = None
+
+
+class StubPool(object):
+
+    def __init__(self, poolid):
+        self.id = poolid

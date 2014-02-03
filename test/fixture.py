@@ -86,6 +86,9 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.PLUGIN_MANAGER, plugin_manager_mock)
         inj.provide(inj.DBUS_IFACE, Mock())
 
+        pooltype_cache = Mock()
+        inj.provide(inj.POOLTYPE_CACHE, pooltype_cache)
+
         self.dbus_patcher = patch('subscription_manager.managercli.CliCommand._request_validity_check')
         self.dbus_patcher.start()
 

@@ -2126,7 +2126,7 @@ class ListCommand(CliCommand):
             sys.exit(0)
 
         cert_reasons_map = inj.require(inj.CERT_SORTER).reasons.get_subscription_reasons_map()
-        ent_pooltype_map = managerlib.get_entitlement_pooltype_map()
+        pooltype_cache = inj.require(inj.POOLTYPE_CACHE)
 
         print("+-------------------------------------------+")
         print("   " + _("Consumed Subscriptions"))
@@ -2172,7 +2172,7 @@ class ListCommand(CliCommand):
             if cert.subject and 'CN' in cert.subject:
                 if cert.subject['CN'] in cert_reasons_map:
                     reasons = cert_reasons_map[cert.subject['CN']]
-                pool_type = ent_pooltype_map.get(cert.subject['CN'], '')
+                pool_type = pooltype_cache.get(pool_id)
 
             print columnize(CONSUMED_LIST, _none_wrap,
                     name,

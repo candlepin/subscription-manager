@@ -27,7 +27,7 @@ from subscription_manager.gui import progress
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui.utils import apply_highlight, show_error_window, handle_gui_exception, set_background_model_index
 from subscription_manager.gui import widgets
-from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require
+from subscription_manager.injection import IDENTITY, require
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import allows_multi_entitlement, valid_quantity
@@ -54,8 +54,13 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.identity = require(IDENTITY)
         self.facts = facts
 
+        # Progress bar
+        self.pb = None
+        self.timer = 0
+
         self.pool_stash = managerlib.PoolStash(self.facts)
-        self.plugin_manager = require(PLUGIN_MANAGER)
+
+        self.async_bind = async.AsyncBind(self.backend.certlib)
 
         today = datetime.date.today()
         self.date_picker = widgets.DatePicker(today)
@@ -335,7 +340,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
     def get_label(self):
         return _("All Available Subscriptions")
 
-    def search_button_clicked(self, widget):
+    def search_button_clicked(self, widget=None):
         """
         Reload the subscriptions from the server when the Search button
         is clicked.
@@ -343,29 +348,47 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         if not self.date_picker.date_entry_validate():
             return
         try:
+            pb_title = _("Searching")
+            pb_label = _("Searching for subscriptions. Please wait.")
+            if self.pb:
+                self.pb.set_title(pb_title)
+                self.pb.set_label(pb_label)
+            else:
+                # show pulsating progress bar while we wait for results
+                self.pb = progress.Progress(pb_title, pb_label)
+                self.timer = gobject.timeout_add(100, self.pb.pulse)
+                self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
+
+            # fire off async refresh
             async_stash = async.AsyncPool(self.pool_stash)
             async_stash.refresh(self.date_picker.date, self._update_display)
-            # show pulsating progress bar while we wait for results
-            self.pb = progress.Progress(_("Searching"),
-                    _("Searching for subscriptions. Please wait."))
-            self.timer = gobject.timeout_add(100, self.pb.pulse)
-            self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
         except Exception, e:
             handle_gui_exception(e, _("Error fetching subscriptions from server:  %s"),
                     self.parent_win)
 
-    def _update_display(self, data, error):
+    def _clear_progress_bar(self):
         if self.pb:
             self.pb.hide()
             gobject.source_remove(self.timer)
             self.timer = 0
             self.pb = None
 
+    def _update_display(self, data, error):
+        self._clear_progress_bar()
+
         if error:
             handle_gui_exception(error, _("Unable to search for subscriptions:  %s"),
                     self.parent_win)
         else:
             self.display_pools()
+
+    # Called after the bind, but before certlib update
+    def _async_bind_callback(self):
+        self.search_button_clicked()
+
+    def _async_bind_exception_callback(self, e):
+        self._clear_progress_bar()
+        handle_gui_exception(e, _("Error getting subscription: %s"), self.parent_win)
 
     def _contract_selected(self, pool, quantity=1):
         if not valid_quantity(quantity):
@@ -374,20 +397,21 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             return
 
         self._contract_selection_cancelled()
-        try:
-            self.plugin_manager.run("pre_subscribe", consumer_uuid=self.identity.uuid,
-                                    pool_id=pool['id'], quantity=quantity)
-            ents = self.backend.cp_provider.get_consumer_auth_cp().bindByEntitlementPool(self.identity.uuid, pool['id'], quantity)
-            self.plugin_manager.run("post_subscribe", consumer_uuid=self.identity.uuid, entitlement_data=ents)
-            managerlib.fetch_certificates(self.backend)
-            self.backend.cs.force_cert_check()
 
-        except Exception, e:
-            handle_gui_exception(e, _("Error getting subscription: %s"),
-                    self.parent_win)
+        # Start the progress bar
+        self.pb = progress.Progress(_("Attaching"),
+                _("Attaching subscription. Please wait."))
+        self.timer = gobject.timeout_add(100, self.pb.pulse)
+        self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
 
-        #Force the search results to refresh with the new info
-        self.search_button_clicked(None)
+        # Spin off a thread to handle binding the selected pool.
+        # After it has completed the actual bind call, available
+        # subs will be refreshed, but we won't re-run compliance
+        # until we have serialized the certificates
+        self.async_bind.bind(pool, quantity,
+                bind_callback=self._async_bind_callback,
+                cert_callback=self.backend.cs.force_cert_check,
+                except_callback=self._async_bind_exception_callback)
 
     def _contract_selection_cancelled(self):
         if self.contract_selection:

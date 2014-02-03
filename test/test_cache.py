@@ -21,12 +21,15 @@ import threading
 from mock import Mock
 
 # used to get a user readable cfg class for test cases
-from stubs import StubProduct, StubProductCertificate, StubCertificateDirectory
+from stubs import StubProduct, StubProductCertificate, StubCertificateDirectory, \
+        StubEntitlementCertificate, StubPool, StubEntitlementDirectory
 from fixture import SubManFixture
 
 from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \
-        InstalledProductsManager, EntitlementStatusCache
+        InstalledProductsManager, EntitlementStatusCache, \
+        PoolTypeCache
+import subscription_manager.injection as inj
 from rhsm.profile import Package, RPMProfile
 from rhsm.connection import RestlibException, UnauthorizedException
 
@@ -321,3 +324,79 @@ class TestEntitlementStatusCache(SubManFixture):
         uep = Mock()
         uep.getCompliance = Mock(side_effect=UnauthorizedException(401, "GET"))
         self.assertEquals(None, self.status_cache.load_status(uep, "aaa"))
+
+
+class TestPoolTypeCache(SubManFixture):
+
+    def setUp(self):
+        super(TestPoolTypeCache, self).setUp()
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.cp_provider.consumer_auth_cp = Mock()
+        self.cp = self.cp_provider.consumer_auth_cp
+        certs = [StubEntitlementCertificate(StubProduct('pid1'), pool=StubPool('someid'))]
+        self.ent_dir = StubEntitlementDirectory(certificates=certs)
+
+    def test_empty_cache(self):
+        pooltype_cache = PoolTypeCache()
+        result = pooltype_cache.get("some id")
+        self.assertEquals('', result)
+
+    def test_get_pooltype(self):
+        self.cp.getEntitlementList.return_value = [self._build_ent_json('poolid', 'some type')]
+        pooltype_cache = PoolTypeCache()
+        pooltype_cache._do_update()
+        result = pooltype_cache.get("poolid")
+        self.assertEquals('some type', result)
+
+    def test_requires_update(self):
+        pooltype_cache = PoolTypeCache()
+        pooltype_cache.ent_dir = self.ent_dir
+
+        # Doesn't have data for pool with id 'someid'
+        self.assertTrue(pooltype_cache.requires_update())
+
+        pooltype_cache.pooltype_map['someid'] = 'some type'
+
+        # After adding data for that entitlements pool, it shouldn't need an update
+        self.assertFalse(pooltype_cache.requires_update())
+
+    def test_update(self):
+        pooltype_cache = PoolTypeCache()
+        pooltype_cache.ent_dir = self.ent_dir
+        self.cp.getEntitlementList.return_value = [
+                self._build_ent_json('poolid', 'some type'),
+                self._build_ent_json('poolid2', 'some other type')]
+
+        # requires_update should be true, and should allow this method
+        # to generate a correct mapping
+        pooltype_cache.update()
+
+        self.assertEquals(2, len(pooltype_cache.pooltype_map))
+        self.assertEquals('some type', pooltype_cache.get('poolid'))
+        self.assertEquals('some other type', pooltype_cache.get('poolid2'))
+
+    # This is populated when available subs are refreshed
+    def test_update_from_pools(self):
+        # Input is a map of pool ids to pool json
+        pools_map = {}
+
+        for i in range(5):
+            pool_id = 'poolid' + str(i)
+            pools_map[pool_id] = self._build_pool_json(pool_id, 'some type')
+
+        pooltype_cache = PoolTypeCache()
+        pooltype_cache.update_from_pools(pools_map)
+
+        self.assertEquals(5, len(pooltype_cache.pooltype_map))
+        for i in range(5):
+            expected_id = 'poolid' + str(i)
+            self.assertEquals('some type', pooltype_cache.get(expected_id))
+
+    def _build_ent_json(self, pool_id, pool_type):
+        result = {}
+        result['id'] = "1234"
+        result['pool'] = self._build_pool_json(pool_id, pool_type)
+        return result
+
+    def _build_pool_json(self, pool_id, pool_type):
+        return {'id': pool_id, 'calculatedAttributes': {'compliance_type': pool_type}}

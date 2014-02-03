@@ -14,7 +14,8 @@
 
 import subscription_manager.injection as inj
 
-from subscription_manager.cache import ProductStatusCache, EntitlementStatusCache, OverrideStatusCache
+from subscription_manager.cache import ProductStatusCache, EntitlementStatusCache, \
+        OverrideStatusCache, PoolTypeCache
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
@@ -53,6 +54,8 @@ def init_dep_injection():
     # FIXME: should we aggressively catch exceptions here? If we can't
     # create a PluginManager we should probably raise an exception all the way up
     inj.provide(inj.PLUGIN_MANAGER, PluginManager, singleton=True)
+
+    inj.provide(inj.POOLTYPE_CACHE, PoolTypeCache, singleton=True)
 
     try:
         # This catch fixes the product-id module on anaconda

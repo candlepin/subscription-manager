@@ -1080,12 +1080,12 @@ class AsyncBackend(object):
                                         pool_id=pool_id, quantity=quantity)
                 ents = self.backend.cp_provider.get_consumer_auth_cp().bindByEntitlementPool(uuid, pool_id, quantity)
                 self.plugin_manager.run("post_subscribe", consumer_uuid=uuid, entitlement_data=ents)
-            managerlib.fetch_certificates(self.backend)
+            managerlib.fetch_certificates(self.backend.certlib)
         except Exception:
             # Going to try to update certificates just in case we errored out
             # mid-way through a bunch of binds:
             try:
-                managerlib.fetch_certificates(self.backend)
+                managerlib.fetch_certificates(self.backend.certlib)
             except Exception, cert_update_ex:
                 log.info("Error updating certificates after error:")
                 log.exception(cert_update_ex)
@@ -1148,7 +1148,7 @@ class AsyncBackend(object):
 
     def _refresh(self, callback):
         try:
-            managerlib.fetch_certificates(self.backend)
+            managerlib.fetch_certificates(self.backend.certlib)
             self.queue.put((callback, None, None))
         except Exception:
             self.queue.put((callback, None, sys.exc_info()))
