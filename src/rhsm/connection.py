@@ -1025,10 +1025,13 @@ class UEPConnection:
         results = self.conn.request_get(method)
         return results
 
-    def getEntitlementList(self, consumerId):
+    def getEntitlementList(self, consumerId, request_certs=False):
         method = "/consumers/%s/entitlements" % self.sanitize(consumerId)
-        # It is unnecessary to download the certificate and key here
-        filters = "?exclude=certificates.key&exclude=certificates.cert"
+        if not request_certs:
+            # It is unnecessary to download the certificate and key here
+            filters = "?exclude=certificates.key&exclude=certificates.cert"
+        else:
+            filters = ""
         results = self.conn.request_get(method + filters)
         return results
 
