@@ -1994,7 +1994,7 @@ class ListCommand(CliCommand):
         self.parser.add_option("--no-overlap", action='store_true',
                                help=_("shows pools which provide products that are not already covered; only used with --available"))
         self.parser.add_option("--match-installed", action="store_true",
-                               help=("shows only subscriptions matching products that are currently installed; only used with --available"))
+                               help=_("shows only subscriptions matching products that are currently installed; only used with --available"))
 
         self.facts = Facts(ent_dir=self.entitlement_dir,
                           prod_dir=self.product_dir)

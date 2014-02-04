@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-03 13:31-0500\n"
+"POT-Creation-Date: 2014-02-04 08:45-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -401,7 +401,7 @@ msgid "Error parsing serverurl:"
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:337
-#: ../src/subscription_manager/gui/registergui.py:948
+#: ../src/subscription_manager/gui/registergui.py:952
 #, python-format
 msgid "Unable to reach the server at %s:%s%s"
 msgstr ""
@@ -1218,6 +1218,12 @@ msgid ""
 "with --available"
 msgstr ""
 
+#: ../src/subscription_manager/managercli.py:1997
+msgid ""
+"shows only subscriptions matching products that are currently installed; "
+"only used with --available"
+msgstr ""
+
 #: ../src/subscription_manager/managercli.py:2004
 msgid "Error: --all is only applicable with --available"
 msgstr ""
@@ -1978,7 +1984,7 @@ msgstr ""
 
 #. Set up the quantity column.
 #: ../src/subscription_manager/gui/contract_selection.py:124
-#: ../src/subscription_manager/gui/registergui.py:423
+#: ../src/subscription_manager/gui/registergui.py:427
 #: ../src/subscription_manager/gui/mysubstab.py:105
 #: ../src/subscription_manager/gui/allsubs.py:88 ../src/rct/printing.py:75
 #: ../src/rct/manifest_commands.py:231
@@ -2156,7 +2162,7 @@ msgid "All installed products are fully subscribed."
 msgstr ""
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:77
-#: ../src/subscription_manager/gui/registergui.py:533
+#: ../src/subscription_manager/gui/registergui.py:537
 msgid "Error subscribing"
 msgstr ""
 
@@ -2265,155 +2271,155 @@ msgstr ""
 msgid "<b>Unable to register the system.</b>"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:185
+#: ../src/subscription_manager/gui/registergui.py:186
 #: ../src/subscription_manager/gui/data/registration.glade.h:1
 msgid "System Registration"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:186
+#: ../src/subscription_manager/gui/registergui.py:187
 #: ../src/subscription_manager/gui/data/registration.glade.h:6
 msgid "<b>Registering</b>"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:188
+#: ../src/subscription_manager/gui/registergui.py:189
 msgid "Subscription Attachment"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:189
+#: ../src/subscription_manager/gui/registergui.py:190
 msgid "<b>Attaching</b>"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:294
+#: ../src/subscription_manager/gui/registergui.py:298
 #: ../src/subscription_manager/gui/data/registration.glade.h:4
 #: ../src/subscription_manager/gui/data/installed.glade.h:4
 msgid "Register"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:338
+#: ../src/subscription_manager/gui/registergui.py:342
 msgid "Registering your system"
-msgstr ""
-
-#: ../src/subscription_manager/gui/registergui.py:379
-#: ../src/subscription_manager/gui/registergui.py:867
-msgid "Attaching subscriptions"
 msgstr ""
 
 #: ../src/subscription_manager/gui/registergui.py:383
 #: ../src/subscription_manager/gui/registergui.py:871
+msgid "Attaching subscriptions"
+msgstr ""
+
+#: ../src/subscription_manager/gui/registergui.py:387
+#: ../src/subscription_manager/gui/registergui.py:875
 #, python-format
 msgid "Error subscribing: %s"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:411
+#: ../src/subscription_manager/gui/registergui.py:415
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:9
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
 msgid "Attach"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:417
+#: ../src/subscription_manager/gui/registergui.py:421
 #: ../src/subscription_manager/gui/mysubstab.py:74
 #: ../src/subscription_manager/gui/allsubs.py:72
 msgid "Subscription"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:469
+#: ../src/subscription_manager/gui/registergui.py:473
 msgid "Finding suitable service levels"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:470
-#: ../src/subscription_manager/gui/registergui.py:898
-#: ../src/subscription_manager/gui/registergui.py:1230
+#: ../src/subscription_manager/gui/registergui.py:474
+#: ../src/subscription_manager/gui/registergui.py:902
+#: ../src/subscription_manager/gui/registergui.py:1234
 msgid "Next"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:522
+#: ../src/subscription_manager/gui/registergui.py:526
 msgid "Unable to auto-attach, server does not support service levels."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:525
+#: ../src/subscription_manager/gui/registergui.py:529
 msgid ""
 "No installed products on system. No need to attach subscriptions at this "
 "time."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:528
+#: ../src/subscription_manager/gui/registergui.py:532
 msgid ""
 "All installed products are covered by valid entitlements. No need to attach "
 "subscriptions at this time."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:531
+#: ../src/subscription_manager/gui/registergui.py:535
 msgid "Consumer has been deleted."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:547
+#: ../src/subscription_manager/gui/registergui.py:551
 #, python-format
 msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
 "\"All Available Subscriptions\" tab to manually attach subscriptions."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:565
+#: ../src/subscription_manager/gui/registergui.py:569
 msgid ""
 "No service level will cover all installed products. Please manually "
 "subscribe using multiple service levels via the \"All Available "
 "Susbscriptions\" tab or purchase additional subscriptions."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:597
+#: ../src/subscription_manager/gui/registergui.py:601
 msgid "Fetching list of possible environments"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:599
+#: ../src/subscription_manager/gui/registergui.py:603
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:7
 msgid "Environment"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:654
+#: ../src/subscription_manager/gui/registergui.py:658
 msgid "Fetching list of possible organizations"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:657
+#: ../src/subscription_manager/gui/registergui.py:661
 msgid "Organization"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:676
+#: ../src/subscription_manager/gui/registergui.py:680
 #, python-format
 msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:738
-#: ../src/subscription_manager/gui/registergui.py:844
+#: ../src/subscription_manager/gui/registergui.py:742
+#: ../src/subscription_manager/gui/registergui.py:848
 msgid "You must enter a system name."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:746
+#: ../src/subscription_manager/gui/registergui.py:750
 msgid "You must enter a login."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:751
+#: ../src/subscription_manager/gui/registergui.py:755
 msgid "You must enter a password."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:830
+#: ../src/subscription_manager/gui/registergui.py:834
 msgid "You must enter an organization."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:837
+#: ../src/subscription_manager/gui/registergui.py:841
 msgid "You must enter an activation key."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:953
+#: ../src/subscription_manager/gui/registergui.py:957
 msgid "CA certificate for subscription service has not been installed."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:958
+#: ../src/subscription_manager/gui/registergui.py:962
 msgid ""
 "Please provide a hostname with optional port and/or prefix: hostname[:port][/"
 "prefix]"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:1015
+#: ../src/subscription_manager/gui/registergui.py:1019
 msgid "Server supports environments, but none are available."
 msgstr ""
 
