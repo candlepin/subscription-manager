@@ -2330,8 +2330,8 @@ class VersionCommand(CliCommand):
         # but then show "unknown" here.
         print (_("server type: %s") % self.server_versions["server-type"])
         print (_("subscription management server: %s") % self.server_versions["candlepin"])
-        print (_("subscription-manager: %s") % self.client_versions["subscription-manager"])
-        print (_("python-rhsm: %s") % self.client_versions["python-rhsm"])
+        print ("subscription-manager: %s" % self.client_versions["subscription-manager"])
+        print ("python-rhsm: %s" % self.client_versions["python-rhsm"])
 
 
 class StatusCommand(CliCommand):

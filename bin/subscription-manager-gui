@@ -145,6 +145,8 @@ def already_running(bus):
 
     if bus and ((request_name_res != REQUEST_NAME_REPLY_PRIMARY_OWNER) and
        (request_name_res != REQUEST_NAME_REPLY_ALREADY_OWNER)):
+        # TODO: pull 'subscription-manager-gui' out of translated string
+        # print _("%s is already running") % "subscription-manager-gui"
         print _("subscription-manager-gui is already running")
         return True
     return False
