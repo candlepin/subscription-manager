@@ -61,6 +61,7 @@ class TestPreferencesDialog(SubManFixture):
         self.preferences_dialog.autoheal_event.emit("button-press-event", event)
         MockUep.assert_called_with(identity.uuid, autoheal=False)
 
+        self.preferences_dialog.autoheal_checkbox.set_sensitive(True)
         self.preferences_dialog.autoheal_event.emit("button-press-event", event)
         MockUep.assert_called_with(identity.uuid, autoheal=True)
 

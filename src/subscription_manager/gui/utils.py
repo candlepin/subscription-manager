@@ -21,6 +21,7 @@ import re
 import gobject
 import gtk
 import gtk.glade
+import threading
 from subscription_manager.exceptions import ExceptionMapper
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
@@ -227,3 +228,36 @@ def gather_group(store, iter, group):
 
     group.append(gtk.TreeRowReference(store, store.get_path(iter)))
     return group
+
+
+class WidgetUpdate(object):
+
+    def __init__(self, *widgets_to_disable):
+        self.widgets_to_disable = widgets_to_disable
+        self.set_sensitive(False)
+
+    def set_sensitive(self, is_sensitive):
+        for widget in self.widgets_to_disable:
+            widget.set_sensitive(is_sensitive)
+
+    def finished(self):
+        self.set_sensitive(True)
+
+
+class AsyncWidgetUpdater(object):
+
+    def __init__(self, parent):
+        self.parent_window = parent
+
+    def worker(self, widget_update, backend_method, args=[], kwargs={}, exception_msg=None):
+        try:
+            backend_method(*args, **kwargs)
+        except Exception, e:
+            message = exception_msg or str(e)
+            gobject.idle_add(handle_gui_exception, e, message, self.parent_window)
+        finally:
+            gobject.idle_add(widget_update.finished)
+
+    def update(self, widget_update, backend_method, args=[], kwargs={}, exception_msg=None):
+        threading.Thread(target=self.worker, args=(widget_update,
+            backend_method, args, kwargs, exception_msg)).start()

@@ -20,6 +20,7 @@ import gtk
 import gtk.glade
 
 from subscription_manager.gui import widgets
+from subscription_manager.gui import utils
 from subscription_manager.injection import require, IDENTITY
 from subscription_manager import release
 
@@ -46,6 +47,7 @@ class PreferencesDialog(widgets.GladeWidget):
         self.backend = backend
         self.allow_callbacks = False
         self.identity = require(IDENTITY)
+        self.async_updater = utils.AsyncWidgetUpdater(self.dialog)
         self.release_backend = release.ReleaseBackend(ent_dir=self.backend.entitlement_dir,
                                                       prod_dir=self.backend.product_dir,
                                                       content_connection=self.backend.content_connection,
@@ -63,7 +65,7 @@ class PreferencesDialog(widgets.GladeWidget):
         self.sla_combobox.set_model(self.sla_model)
 
         self.close_button.connect("clicked", self._close_button_clicked)
-        self.sla_combobox.connect("changed",  self._sla_changed)
+        self.sla_combobox.connect("changed", self._sla_changed)
         self.release_combobox.connect("changed", self._release_changed)
         self.autoheal_checkbox.connect("toggled", self._on_autoheal_checkbox_toggled)
         self.autoheal_event.connect("button_press_event", self._on_autoheal_label_press)
@@ -170,8 +172,9 @@ class PreferencesDialog(widgets.GladeWidget):
 
             new_sla = model[active][1]
             log.info("SLA changed to: %s" % new_sla)
-            self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
-                                            service_level=new_sla)
+            update = utils.WidgetUpdate(combobox)
+            method = self.backend.cp_provider.get_consumer_auth_cp().updateConsumer
+            self.async_updater.update(update, method, args=[self.identity.uuid], kwargs={'service_level': new_sla})
 
     def _release_changed(self, combobox):
         if self.allow_callbacks:
@@ -182,8 +185,9 @@ class PreferencesDialog(widgets.GladeWidget):
                 return
             new_release = model[active][1]
             log.info("release changed to: %s" % new_release)
-            self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
-                                            release=new_release)
+            update = utils.WidgetUpdate(combobox)
+            method = self.backend.cp_provider.get_consumer_auth_cp().updateConsumer
+            self.async_updater.update(update, method, args=[self.identity.uuid], kwargs={'release': new_release})
 
     def show(self):
         self.load_current_settings()
@@ -197,14 +201,17 @@ class PreferencesDialog(widgets.GladeWidget):
         return True
 
     def _on_autoheal_checkbox_toggled(self, checkbox):
-        log.info("Auto-attach preference changed to: %s" % checkbox.get_active())
-        self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
-                                autoheal=checkbox.get_active())
-        return True
+        if self.allow_callbacks:
+            log.info("Auto-attach preference changed to: %s" % checkbox.get_active())
+            update = utils.WidgetUpdate(checkbox, self.autoheal_label)
+            method = self.backend.cp_provider.get_consumer_auth_cp().updateConsumer
+            self.async_updater.update(update, method, args=[self.identity.uuid], kwargs={'autoheal': checkbox.get_active()})
+            return True
 
     def _on_autoheal_label_press(self, widget, event):
         # NOTE: We have this function/event so the textbox label
         #       next to the checkbox can be clicked, then trigger
         #       the checkbox
-        self.autoheal_checkbox.set_active(not self.autoheal_checkbox.get_active())
+        if self.autoheal_checkbox.get_sensitive():
+            self.autoheal_checkbox.set_active(not self.autoheal_checkbox.get_active())
         return True
