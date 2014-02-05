@@ -48,7 +48,6 @@
                             <accessibility>
                               <atkproperty name="AtkObject::accessible-name" translatable="yes">autoheal_checkbox</atkproperty>
                             </accessibility>
-                            <signal name="toggled" handler="on_autoheal_checkbox_toggled" />
                           </widget>
                           <packing>
                             <property name="expand">True</property>
@@ -69,7 +68,6 @@
                         <property name="can_focus">False</property>
                         <property name="visible_window">False</property>
                         <property name="above_child">True</property>
-                        <signal name="button_press_event" handler="on_autoheal_label_press_event" />
                         <child>
                           <widget class="GtkLabel" id="autoheal_label">
                             <property name="visible">True</property>
@@ -152,7 +150,6 @@
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">release_selection_combobox</atkproperty>
                 </accessibility>
-                <signal name="changed" handler="on_release_combobox_changed" />
               </widget>
               <packing>
                 <property name="expand">True</property>
@@ -183,7 +180,6 @@
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <property name="image_position">right</property>
-                <signal name="clicked" handler="on_close_button_clicked" object="&lt;Object&gt;" />
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -243,7 +239,6 @@
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">sla_selection_combobox</atkproperty>
                 </accessibility>
-                <signal name="changed" handler="on_sla_combobox_changed" />
               </widget>
               <packing>
                 <property name="expand">True</property>

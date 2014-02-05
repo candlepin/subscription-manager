@@ -62,13 +62,11 @@ class PreferencesDialog(widgets.GladeWidget):
         self.release_combobox.set_model(self.release_model)
         self.sla_combobox.set_model(self.sla_model)
 
-        self.glade.signal_autoconnect({
-            "on_close_button_clicked": self._close_button_clicked,
-            "on_sla_combobox_changed": self._sla_changed,
-            "on_release_combobox_changed": self._release_changed,
-            "on_autoheal_checkbox_toggled": self._on_autoheal_checkbox_toggled,
-            "on_autoheal_label_press_event": self._on_autoheal_label_press,
-        })
+        self.close_button.connect("clicked", self._close_button_clicked)
+        self.sla_combobox.connect("changed",  self._sla_changed)
+        self.release_combobox.connect("changed", self._release_changed)
+        self.autoheal_checkbox.connect("toggled", self._on_autoheal_checkbox_toggled)
+        self.autoheal_event.connect("button_press_event", self._on_autoheal_label_press)
 
         # Handle the dialog's delete event when ESC key is pressed.
         self.dialog.connect("delete-event", self._dialog_deleted)
@@ -86,7 +84,7 @@ class PreferencesDialog(widgets.GladeWidget):
             self.sla_combobox.set_sensitive(False)
             self.release_combobox.set_sensitive(False)
             self.autoheal_checkbox.set_sensitive(False)
-            self.autoheal_label.set_sensitive(False)
+            self.autoheal_event.set_sensitive(False)
             return
 
         self.allow_callbacks = False
@@ -151,10 +149,10 @@ class PreferencesDialog(widgets.GladeWidget):
         if 'autoheal' not in consumer_json:
             log.warn("Disabling auto-attach checkbox, server does not support autoheal/auto-attach.")
             self.autoheal_checkbox.set_sensitive(False)
-            self.autoheal_label.set_sensitive(False)
+            self.autoheal_event.set_sensitive(False)
             return
 
-        self.autoheal_label.set_sensitive(True)
+        self.autoheal_event.set_sensitive(True)
         self.autoheal_checkbox.set_sensitive(True)
         current_autoheal = consumer_json['autoheal']
         self.autoheal_checkbox.set_active(current_autoheal)
