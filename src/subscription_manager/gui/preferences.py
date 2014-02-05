@@ -15,11 +15,11 @@
 
 import gettext
 import logging
-import os
 
 import gtk
 import gtk.glade
 
+from subscription_manager.gui import widgets
 from subscription_manager.injection import require, IDENTITY
 from subscription_manager import release
 
@@ -27,11 +27,8 @@ _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-DIR = os.path.dirname(__file__)
-GLADE_XML = gtk.glade.XML(os.path.join(DIR, "data/preferences.glade"))
 
-
-class PreferencesDialog(object):
+class PreferencesDialog(widgets.GladeWidget):
     """
     Dialog for setting system preferences.
 
@@ -40,7 +37,12 @@ class PreferencesDialog(object):
     changed, the new setting will be saved.
     """
 
+    widget_names = ['dialog', 'release_combobox', 'sla_combobox',
+            'autoheal_checkbox', 'autoheal_event', 'autoheal_label',
+            'close_button']
+
     def __init__(self, backend, parent):
+        super(PreferencesDialog, self).__init__('preferences.glade')
         self.backend = backend
         self.allow_callbacks = False
         self.identity = require(IDENTITY)
@@ -49,15 +51,8 @@ class PreferencesDialog(object):
                                                       content_connection=self.backend.content_connection,
                                                       uep=self.backend.cp_provider.get_consumer_auth_cp())
 
-        self.dialog = GLADE_XML.get_widget('preferences_dialog')
         self.dialog.set_transient_for(parent)
         self.dialog.set_modal(True)
-
-        self.release_combobox = GLADE_XML.get_widget('release_combobox')
-        self.sla_combobox = GLADE_XML.get_widget('sla_combobox')
-        self.autoheal_checkbox = GLADE_XML.get_widget('autoheal_checkbox')
-        self.autoheal_event = GLADE_XML.get_widget('autoheal_event')
-        self.autoheal_label = GLADE_XML.get_widget('label_autoheal')
 
         # The first string is the displayed service level; the second is
         # the value sent to Candlepin.
@@ -67,7 +62,7 @@ class PreferencesDialog(object):
         self.release_combobox.set_model(self.release_model)
         self.sla_combobox.set_model(self.sla_model)
 
-        GLADE_XML.signal_autoconnect({
+        self.glade.signal_autoconnect({
             "on_close_button_clicked": self._close_button_clicked,
             "on_sla_combobox_changed": self._sla_changed,
             "on_release_combobox_changed": self._release_changed,
@@ -119,13 +114,11 @@ class PreferencesDialog(object):
         self.sla_model.append((_("Not Set"), ""))
         available_slas.insert(0, "")
 
-        i = 0
-        for sla in available_slas:
+        for sla, index in zip(available_slas, range(len(available_slas))):
             if sla:
                 self.sla_model.append((sla, sla))
             if sla.lower() == current_sla.lower():
-                self.sla_combobox.set_active(i)
-            i += 1
+                self.sla_combobox.set_active(index)
 
     def load_releases(self, consumer_json):
         if "releaseVer" not in consumer_json:
@@ -148,13 +141,11 @@ class PreferencesDialog(object):
         available_releases.insert(0, "")
         self.release_combobox.set_active(0)
 
-        i = 0
-        for available_release in available_releases:
+        for available_release, index in zip(available_releases, range(len(available_releases))):
             if available_release:
                 self.release_model.append((available_release, available_release))
             if available_release == current_release:
-                self.release_combobox.set_active(i)
-            i += 1
+                self.release_combobox.set_active(index)
 
     def load_autoheal(self, consumer_json):
         if 'autoheal' not in consumer_json:
@@ -208,12 +199,9 @@ class PreferencesDialog(object):
         return True
 
     def _on_autoheal_checkbox_toggled(self, checkbox):
-
         log.info("Auto-attach preference changed to: %s" % checkbox.get_active())
-
         self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(self.identity.uuid,
                                 autoheal=checkbox.get_active())
-
         return True
 
     def _on_autoheal_label_press(self, widget, event):
@@ -221,5 +209,4 @@ class PreferencesDialog(object):
         #       next to the checkbox can be clicked, then trigger
         #       the checkbox
         self.autoheal_checkbox.set_active(not self.autoheal_checkbox.get_active())
-
         return True
