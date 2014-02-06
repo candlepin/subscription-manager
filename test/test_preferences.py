@@ -61,7 +61,6 @@ class TestPreferencesDialog(SubManFixture):
         self.preferences_dialog.autoheal_event.emit("button-press-event", event)
         MockUep.assert_called_with(identity.uuid, autoheal=False)
 
-        self.preferences_dialog.autoheal_checkbox.set_sensitive(True)
         self.preferences_dialog.autoheal_event.emit("button-press-event", event)
         MockUep.assert_called_with(identity.uuid, autoheal=True)
 
@@ -82,6 +81,7 @@ class TestPreferencesDialog(SubManFixture):
                                                                 parent=None)
         self.preferences_dialog.release_backend.facts = stubs.StubFacts()
         self.preferences_dialog.release_backend.get_releases = get_releases
+        self.preferences_dialog.async_updater = stubs.StubAsyncUpdater(self.preferences_dialog)
 
     def testShowPreferencesDialog(self):
         self._getPrefDialog()

@@ -53,6 +53,9 @@ class PreferencesDialog(widgets.GladeWidget):
                                                       content_connection=self.backend.content_connection,
                                                       uep=self.backend.cp_provider.get_consumer_auth_cp())
 
+        self.inputs = [self.sla_combobox, self.release_combobox,
+                self.autoheal_checkbox, self.autoheal_event]
+
         self.dialog.set_transient_for(parent)
         self.dialog.set_modal(True)
 
@@ -73,22 +76,24 @@ class PreferencesDialog(widgets.GladeWidget):
         # Handle the dialog's delete event when ESC key is pressed.
         self.dialog.connect("delete-event", self._dialog_deleted)
 
+    def set_inputs_sensitive(self, sensitive):
+        for input_widget in self.inputs:
+            input_widget.set_sensitive(sensitive)
+
     def load_current_settings(self):
         self.sla_combobox.get_model().clear()
         self.release_combobox.get_model().clear()
 
-        self.sla_combobox.set_sensitive(True)
-        self.release_combobox.set_sensitive(True)
-
-        consumer_json = self.backend.cp_provider.get_consumer_auth_cp().getConsumer(self.identity.uuid)
-
         if self.identity.uuid is None:
-            self.sla_combobox.set_sensitive(False)
-            self.release_combobox.set_sensitive(False)
-            self.autoheal_checkbox.set_sensitive(False)
-            self.autoheal_event.set_sensitive(False)
+            self.set_inputs_sensitive(False)
             return
 
+        update = utils.WidgetUpdate(self.dialog)
+        method = self.backend.cp_provider.get_consumer_auth_cp().getConsumer
+        self.async_updater.update(update, method,
+                args=[self.identity.uuid], callback=self.load_from_consumer_json)
+
+    def load_from_consumer_json(self, consumer_json):
         self.allow_callbacks = False
         self.load_releases(consumer_json)
         self.load_servicelevel(consumer_json)
@@ -212,6 +217,6 @@ class PreferencesDialog(widgets.GladeWidget):
         # NOTE: We have this function/event so the textbox label
         #       next to the checkbox can be clicked, then trigger
         #       the checkbox
-        if self.autoheal_checkbox.get_sensitive():
+        if self.autoheal_checkbox.props.sensitive:
             self.autoheal_checkbox.set_active(not self.autoheal_checkbox.get_active())
         return True

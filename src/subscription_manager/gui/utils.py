@@ -249,15 +249,17 @@ class AsyncWidgetUpdater(object):
     def __init__(self, parent):
         self.parent_window = parent
 
-    def worker(self, widget_update, backend_method, args=[], kwargs={}, exception_msg=None):
+    def worker(self, widget_update, backend_method, args=[], kwargs={}, exception_msg=None, callback=None):
         try:
-            backend_method(*args, **kwargs)
+            result = backend_method(*args, **kwargs)
+            if callback:
+                gobject.idle_add(callback, result)
         except Exception, e:
             message = exception_msg or str(e)
             gobject.idle_add(handle_gui_exception, e, message, self.parent_window)
         finally:
             gobject.idle_add(widget_update.finished)
 
-    def update(self, widget_update, backend_method, args=[], kwargs={}, exception_msg=None):
+    def update(self, widget_update, backend_method, args=[], kwargs={}, exception_msg=None, callback=None):
         threading.Thread(target=self.worker, args=(widget_update,
-            backend_method, args, kwargs, exception_msg)).start()
+            backend_method, args, kwargs, exception_msg, callback)).start()
