@@ -392,6 +392,15 @@ class TestPoolTypeCache(SubManFixture):
             expected_id = 'poolid' + str(i)
             self.assertEquals('some type', pooltype_cache.get(expected_id))
 
+    def test_requires_update_ents_with_no_pool(self):
+        pooltype_cache = PoolTypeCache()
+        pooltype_cache.ent_dir = self.ent_dir
+        for ent in self.ent_dir.certs:
+            ent.pool = None
+
+        # No ents have pools so there is nothing we can update
+        self.assertFalse(pooltype_cache.requires_update())
+
     def _build_ent_json(self, pool_id, pool_type):
         result = {}
         result['id'] = "1234"
