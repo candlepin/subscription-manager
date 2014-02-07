@@ -20,6 +20,7 @@ import shutil
 import logging
 import tarfile
 from datetime import datetime
+from shutil import ignore_patterns
 
 import subscription_manager.injection as inj
 import subscription_manager.managercli as managercli
@@ -38,6 +39,7 @@ NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager
 
 ASSEMBLE_DIR = '/var/spool/rhsm/debug'
 ROOT_READ_ONLY = 0600
+KEY_IGNORE_PATS = ['*key.pem']
 
 
 class SystemCommand(CliCommand):
@@ -54,6 +56,9 @@ class SystemCommand(CliCommand):
         self.parser.add_option("--no-archive", action='store_false',
                                default=True, dest="archive",
                                help=_("data will be in an uncompressed directory"))
+        self.parser.add_option("--sos", action='store_true',
+                               default=False, dest="sos",
+                               help=_("only data not already included in sos report will be collected"))
 
     def _get_usage(self):
         return _("%%prog %s [OPTIONS] ") % self.name
@@ -103,12 +108,18 @@ class SystemCommand(CliCommand):
                                   self._get_version_info())
 
             # FIXME: we need to anon proxy passwords?
-            self._copy_directory('/etc/rhsm', content_path)
-            self._copy_directory('/var/log/rhsm', content_path)
-            self._copy_directory('/var/lib/rhsm', content_path)
-            self._copy_directory(cfg.get('rhsm', 'productCertDir'), content_path)
-            self._copy_directory(cfg.get('rhsm', 'entitlementCertDir'), content_path)
-            self._copy_directory(cfg.get('rhsm', 'consumerCertDir'), content_path)
+            sos = self.options.sos
+            defaults = cfg.defaults()
+            if defaults['productcertdir'] != cfg.get('rhsm', 'productCertDir') or not sos:
+                self._copy_cert_directory(cfg.get('rhsm', 'productCertDir'), content_path)
+            if defaults['entitlementcertdir'] != cfg.get('rhsm', 'entitlementCertDir') or not sos:
+                self._copy_cert_directory(cfg.get('rhsm', 'entitlementCertDir'), content_path)
+            if defaults['consumercertdir'] != cfg.get('rhsm', 'consumerCertDir') or not sos:
+                self._copy_cert_directory(cfg.get('rhsm', 'consumerCertDir'), content_path)
+            if not sos:
+                self._copy_directory('/etc/rhsm', content_path)
+                self._copy_directory('/var/log/rhsm', content_path)
+                self._copy_directory('/var/lib/rhsm', content_path)
 
             # build an archive by default
             if self.options.archive:
@@ -158,11 +169,20 @@ class SystemCommand(CliCommand):
         with open(path, "w+") as fo:
             fo.write(json.dumps(content, indent=4, sort_keys=True))
 
-    def _copy_directory(self, src_path, dest_path):
+    def _copy_directory(self, src_path, dest_path, ignore_pats=[]):
         rel_path = src_path
         if os.path.isabs(src_path):
             rel_path = src_path[1:]
-        shutil.copytree(src_path, os.path.join(dest_path, rel_path))
+        if ignore_pats is not None:
+            shutil.copytree(src_path, os.path.join(dest_path, rel_path),
+                ignore=ignore_patterns(*ignore_pats))
+        else:
+            shutil.copytree(src_path, os.path.join(dest_path, rel_path))
+
+    def _copy_cert_directory(self, src_path, dest_path):
+        self._copy_directory(src_path,
+                             dest_path,
+                             KEY_IGNORE_PATS)
 
     def _get_assemble_dir(self):
         return ASSEMBLE_DIR
