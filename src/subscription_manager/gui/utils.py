@@ -249,7 +249,9 @@ class AsyncWidgetUpdater(object):
     def __init__(self, parent):
         self.parent_window = parent
 
-    def worker(self, widget_update, backend_method, args=[], kwargs={}, exception_msg=None, callback=None):
+    def worker(self, widget_update, backend_method, args=None, kwargs=None, exception_msg=None, callback=None):
+        args = args or []
+        kwargs = kwargs or {}
         try:
             result = backend_method(*args, **kwargs)
             if callback:
@@ -260,6 +262,6 @@ class AsyncWidgetUpdater(object):
         finally:
             gobject.idle_add(widget_update.finished)
 
-    def update(self, widget_update, backend_method, args=[], kwargs={}, exception_msg=None, callback=None):
+    def update(self, widget_update, backend_method, args=None, kwargs=None, exception_msg=None, callback=None):
         threading.Thread(target=self.worker, args=(widget_update,
             backend_method, args, kwargs, exception_msg, callback)).start()
