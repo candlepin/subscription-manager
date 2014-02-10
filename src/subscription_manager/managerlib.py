@@ -844,12 +844,15 @@ def clean_all_data(backup=True):
 
     # Delete all entitlement certs rather than the directory itself:
     ent_cert_dir = cfg.get('rhsm', 'entitlementCertDir')
-    filelist = [f for f in os.listdir(ent_cert_dir)
-            if f.endswith(".pem")]
-    for f in filelist:
-        certpath = os.path.join(ent_cert_dir, f)
-        log.debug("Removing entitlement cert: %s" % certpath)
-        os.remove(certpath)
+    if os.path.exists(ent_cert_dir):
+        filelist = [f for f in os.listdir(ent_cert_dir)
+                if f.endswith(".pem")]
+        for f in filelist:
+            certpath = os.path.join(ent_cert_dir, f)
+            log.debug("Removing entitlement cert: %s" % certpath)
+            os.remove(certpath)
+    else:
+        log.warn("Entitlement cert directory does not exist: %s" % ent_cert_dir)
 
     cache.ProfileManager.delete_cache()
     cache.InstalledProductsManager.delete_cache()
