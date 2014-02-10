@@ -160,6 +160,10 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 mkdir %{buildroot}%{_sysconfdir}/yum.repos.d
 touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
 
+# fake out the certificate directories
+mkdir -p %{buildroot}%{_sysconfdir}/pki/consumer
+mkdir -p %{buildroot}%{_sysconfdir}/pki/entitlement
+
 %post -n subscription-manager-gui
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
@@ -184,6 +188,8 @@ rm -rf %{buildroot}
 %attr(755,root,root) %dir %{_var}/spool/rhsm/debug
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
+%attr(755,root,root) %dir %{_sysconfdir}/pki/consumer
+%attr(755,root,root) %dir %{_sysconfdir}/pki/entitlement
 
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
@@ -520,14 +526,14 @@ fi
 * Fri Dec 06 2013 ckozak <ckozak@redhat.com> 1.10.8-1
 - 1030604: Handle 400 code for add override (mstead@redhat.com)
 - Use backed to ensure a refreshed Overrides object (mstead@redhat.com)
-- 1034574: Alternate message based on why no repos exist in GUI 
+- 1034574: Alternate message based on why no repos exist in GUI
   (mstead@redhat.com)
 - 1034396: No longer require entitlements to run repo-override command
   (mstead@redhat.com)
 - 1033741: Refresh Overrides CP connection when dialog is shown
   (mstead@redhat.com)
 - 1033690: Updated repo-overrides not supported message (mstead@redhat.com)
-- 1034649: Only allow repolib to update override cache if supported by the 
+- 1034649: Only allow repolib to update override cache if supported by the
   server (mstead@redhat.com)
 - 1032673: Warn on add override if repo doesn't exist (mstead@redhat.com)
 - 1030996: Fixed usage text for repo-override add/remove options
