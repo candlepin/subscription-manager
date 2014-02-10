@@ -477,7 +477,8 @@ class PoolTypeCache(object):
             self._do_update()
 
     def requires_update(self):
-        attached_pool_ids = set([ent.pool.id for ent in self.ent_dir.list()])
+        attached_pool_ids = set([ent.pool.id for ent in self.ent_dir.list()
+            if ent.pool and ent.pool.id])
         missing_types = attached_pool_ids - set(self.pooltype_map)
         return bool(missing_types)
 

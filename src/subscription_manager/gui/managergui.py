@@ -297,7 +297,16 @@ class MainWindow(widgets.GladeWidget):
             self.unregister_menu_item.hide()
             self.settings_menu_item.hide()
 
-        if is_registered and self.backend.cp_provider.get_consumer_auth_cp().supports_resource('content_overrides'):
+        show_overrides = False
+        try:
+            cp = self.backend.cp_provider.get_consumer_auth_cp()
+            # This can throw an exception if we cannot connect to the server, bz 1058374
+            show_overrides = is_registered and cp.supports_resource('content_overrides')
+        except Exception, e:
+            log.debug("Failed to check if the server supports resource content_overrides")
+            log.debug(e)
+
+        if show_overrides:
             self.repos_menu_item.show()
         else:
             self.repos_menu_item.hide()

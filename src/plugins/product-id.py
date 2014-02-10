@@ -49,8 +49,12 @@ def posttrans_hook(conduit):
     if hasattr(conduit, 'registerPackageName'):
         conduit.registerPackageName("subscription-manager")
 
-    from subscription_manager.injectioninit import init_dep_injection
-    init_dep_injection()
+    try:
+        from subscription_manager.injectioninit import init_dep_injection
+        init_dep_injection()
+    except ImportError, e:
+        conduit.error(3, str(e))
+        return
 
     logutil.init_logger_for_yum()
     chroot()
