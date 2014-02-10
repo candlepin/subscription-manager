@@ -119,7 +119,7 @@ class PreferencesDialog(widgets.GladeWidget):
         self.sla_model.append((_("Not Set"), ""))
         available_slas.insert(0, "")
 
-        for sla, index in zip(available_slas, range(len(available_slas))):
+        for index, sla in enumerate(available_slas):
             if sla:
                 self.sla_model.append((sla, sla))
             if sla.lower() == current_sla.lower():
@@ -146,7 +146,7 @@ class PreferencesDialog(widgets.GladeWidget):
         available_releases.insert(0, "")
         self.release_combobox.set_active(0)
 
-        for available_release, index in zip(available_releases, range(len(available_releases))):
+        for index, available_release in enumerate(available_releases):
             if available_release:
                 self.release_model.append((available_release, available_release))
             if available_release == current_release:
