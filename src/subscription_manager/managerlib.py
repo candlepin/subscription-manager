@@ -15,6 +15,7 @@
 # in this software or its documentation.
 #
 import gettext
+import glob
 import logging
 import os
 import re
@@ -845,11 +846,10 @@ def clean_all_data(backup=True):
     # Delete all entitlement certs rather than the directory itself:
     ent_cert_dir = cfg.get('rhsm', 'entitlementCertDir')
     if os.path.exists(ent_cert_dir):
-        filelist = [f for f in os.listdir(ent_cert_dir)
-                if f.endswith(".pem")]
-        for f in filelist:
+
+        for f in glob.glob("%s/*.pem" % ent_cert_dir):
             certpath = os.path.join(ent_cert_dir, f)
-            log.debug("Removing entitlement cert: %s" % certpath)
+            log.debug("Removing entitlement cert: %s" % f)
             os.remove(certpath)
     else:
         log.warn("Entitlement cert directory does not exist: %s" % ent_cert_dir)
