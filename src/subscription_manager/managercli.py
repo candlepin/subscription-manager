@@ -687,7 +687,7 @@ class EnvironmentsCommand(OrgCommand):
                     print("+-------------------------------------------+")
                     for env in environments:
                         print columnize(ENVIRONMENT_LIST, _echo, env['name'],
-                                env['description']) + "\n"
+                                env['description'] or "") + "\n"
                 else:
                     print _("This org does not have any environments.")
             else:
