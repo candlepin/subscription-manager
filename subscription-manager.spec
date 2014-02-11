@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.14
+Version: 1.11.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
