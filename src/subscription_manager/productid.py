@@ -19,7 +19,6 @@ import gettext
 from gzip import GzipFile
 import logging
 import os
-import re
 import types
 import yum
 
@@ -27,6 +26,7 @@ from rhsm.certificate import create_from_pem
 
 from subscription_manager.certdirectory import Directory
 from subscription_manager.injection import PLUGIN_MANAGER, require
+from subscription_manager import rhelproduct
 import subscription_manager.injection as inj
 from rhsm import ourjson as json
 
@@ -99,23 +99,6 @@ class ProductDatabase:
 
     def __fn(self):
         return self.dir.abspath('productid.js')
-
-
-class RHELProductMatcher(object):
-    def __init__(self, product=None):
-        self.product = product
-        # Match "rhel-6" or "rhel-11"
-        # but not "rhel-6-server" or "rhel-6-server-highavailabilty"
-        self.pattern = "rhel-\d+$"
-
-    def is_rhel(self):
-        """return true if this is a rhel product cert"""
-
-        for tag in self.product.provided_tags:
-            if re.match(self.pattern, tag):
-                return True
-
-        return False
 
 
 class ProductManager:
@@ -395,7 +378,7 @@ class ProductManager:
             # is not 'active'. So it ends up deleting the product cert for rhel since
             # it appears it is not being used. It is kind of a strange case for the
             # base os product cert, so we hardcode a special case here.
-            rhel_matcher = RHELProductMatcher(p)
+            rhel_matcher = rhelproduct.RHELProductMatcher(p)
             if rhel_matcher.is_rhel():
                 delete_product_cert = False
 

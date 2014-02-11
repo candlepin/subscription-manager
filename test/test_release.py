@@ -56,25 +56,69 @@ class TestReleaseBackend(fixture.SubManFixture):
         stub_product = stubs.StubProduct("rhel-6")
         stub_entitlement_certs = [stubs.StubEntitlementCertificate(stub_product,
                                                                    content=stub_contents)]
-        stub_entitlement_dir = stubs.StubEntitlementDirectory(stub_entitlement_certs)
+        self.stub_entitlement_dir = stubs.StubEntitlementDirectory(stub_entitlement_certs)
 
-        stub_product_dir = stubs.StubProductDirectory(
+        self.stub_product_dir = stubs.StubProductDirectory(
             [stubs.StubProductCertificate(
                     stubs.StubProduct("rhel-6",
-                                      provided_tags="rhel-6-stub"),)])
+                                      provided_tags="rhel-6,rhel-6-stub"),)])
 
         def get_versions(dummy):
             return versions
-        stub_content_connection = stubs.StubContentConnection()
-        stub_content_connection.get_versions = get_versions
+        self.stub_content_connection = stubs.StubContentConnection()
+        self.stub_content_connection.get_versions = get_versions
 
-        self.rb = release.ReleaseBackend(ent_dir=stub_entitlement_dir,
-                                         prod_dir=stub_product_dir,
-                                         content_connection=stub_content_connection)
+        self.rb = release.ReleaseBackend(ent_dir=self.stub_entitlement_dir,
+                                         prod_dir=self.stub_product_dir,
+                                         content_connection=self.stub_content_connection)
 
     def test_get_releases(self):
         releases = self.rb.get_releases()
         self.assertNotEquals([], releases)
+
+    def test_get_releases_no_rhel(self):
+        stub_product_dir = stubs.StubProductDirectory(
+            [stubs.StubProductCertificate(
+                    stubs.StubProduct("rhel-6-something",
+                                      provided_tags="rhel-6-something,rhel-6-stub"),)])
+
+        self.rb = release.ReleaseBackend(ent_dir=self.stub_entitlement_dir,
+                                         prod_dir=stub_product_dir,
+                                         content_connection=self.stub_content_connection)
+        releases = self.rb.get_releases()
+        self.assertEquals([], releases)
+
+    def test_get_releases_rhel_no_content(self):
+
+        stub_content_5 = stubs.StubContent("c5", required_tags="AwesomeOS",
+                                           gpg=None, enabled="1")
+
+        stub_product = stubs.StubProduct("rhel-6")
+        stub_entitlement_certs = [stubs.StubEntitlementCertificate(stub_product,
+                                                                   content=[stub_content_5])]
+
+        stub_entitlement_dir = stubs.StubEntitlementDirectory(stub_entitlement_certs)
+        self.rb = release.ReleaseBackend(ent_dir=stub_entitlement_dir,
+                                         prod_dir=self.stub_product_dir,
+                                         content_connection=self.stub_content_connection)
+        releases = self.rb.get_releases()
+        self.assertEquals([], releases)
+
+    def test_get_releases_rhel_no_enabled_content(self):
+
+        stub_content_6 = stubs.StubContent("c6", required_tags="rhel-6",
+                                           gpg=None, enabled="0")
+
+        stub_product = stubs.StubProduct("rhel-6")
+        stub_entitlement_certs = [stubs.StubEntitlementCertificate(stub_product,
+                                                                   content=[stub_content_6])]
+
+        stub_entitlement_dir = stubs.StubEntitlementDirectory(stub_entitlement_certs)
+        self.rb = release.ReleaseBackend(ent_dir=stub_entitlement_dir,
+                                         prod_dir=self.stub_product_dir,
+                                         content_connection=self.stub_content_connection)
+        releases = self.rb.get_releases()
+        self.assertEquals([], releases)
 
     def test_get_releases_throws_exception(self):
         with mock.patch.object(self.rb, 'content_connection') as mock_cc:
@@ -92,14 +136,6 @@ class TestReleaseBackend(fixture.SubManFixture):
                     SSLError()
             releases = self.rb.get_releases()
             self.assertEquals([], releases)
-
-    def test_is_rhel(self):
-        ir = self.rb._is_rhel(["rhel-6-test"])
-        self.assertTrue(ir)
-
-    def test_is_not_rhel(self):
-        ir = self.rb._is_rhel(["awesome-test"])
-        self.assertFalse(ir)
 
     def test_is_correct_rhel(self):
         icr = self.rb._is_correct_rhel(["rhel-6-test"], ["rhel-6"])

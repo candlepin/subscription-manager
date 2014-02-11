@@ -27,6 +27,7 @@ import rhsm.config
 
 from subscription_manager.facts import Facts
 from subscription_manager import listing
+from subscription_manager import rhelproduct
 
 _ = gettext.gettext
 
@@ -55,21 +56,21 @@ class ReleaseBackend(object):
                                prod_dir=self.product_dir)
 
         # find the rhel product
-        rhel_product = None
+        release_product = None
         installed_products = self.product_dir.get_installed_products()
         for product_hash in installed_products:
             product_cert = installed_products[product_hash]
             products = product_cert.products
             for product in products:
-                product_tags = product.provided_tags
+                rhel_matcher = rhelproduct.RHELProductMatcher(product)
+                if rhel_matcher.is_rhel():
+                    release_product = product
 
-                if self._is_rhel(product_tags):
-                    rhel_product = product
-
-        if rhel_product is None:
+        if release_product is None:
+            log.info("No products with RHEL product tags found")
             return []
 
-        entitlements = self.entitlement_dir.list_for_product(rhel_product.id)
+        entitlements = self.entitlement_dir.list_for_product(release_product.id)
         listings = []
         for entitlement in entitlements:
             contents = entitlement.content
@@ -78,7 +79,7 @@ class ReleaseBackend(object):
                 # see bz #820639
                 if not content.enabled:
                     continue
-                if self._is_correct_rhel(rhel_product.provided_tags,
+                if self._is_correct_rhel(release_product.provided_tags,
                                          content.required_tags):
                     listing_path = self._build_listing_path(content.url)
                     listings.append(listing_path)
@@ -125,22 +126,8 @@ class ReleaseBackend(object):
         # FIXME: cleanup paths ("//"'s, etc)
         return listing_path
 
-    def _is_rhel(self, product_tags):
-        #easy to pass a string instead of a list
-        assert not isinstance(product_tags, basestring)
-
-        for product_tag in product_tags:
-            # so in theory, we should only have one rhel
-            # product. Not sure what to do if we have
-            # more than one. Probably throw an error
-            # TESTME
-            if product_tag.split('-', 1)[0] == "rhel":
-                # we only need to match the first hit
-                return True
-        log.info("No products with RHEL product tags found")
-        return False
-
     # require tags provided by installed products?
+
     def _is_correct_rhel(self, product_tags, content_tags):
         # easy to pass a string instead of a list
         assert not isinstance(product_tags, basestring)
