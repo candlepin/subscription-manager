@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.10.13
+Version: 1.10.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -418,6 +418,28 @@ fi
 %endif
 
 %changelog
+* Tue Feb 11 2014 ckozak <ckozak@redhat.com> 1.10.14-1
+- Use glob for finding entitlement certs to remove. (dgoodwin@redhat.com)
+- Make sure entitlement cert directory exists before we clean it out.
+  (dgoodwin@redhat.com)
+- safer default args in AsyncWidgetUpdater (ckozak@redhat.com)
+- use enumerate instead of confusing myself (ckozak@redhat.com)
+- Pull in latest strings from zanata (bkearney@redhat.com)
+- make sure entitlement has a pool before reading it (ckozak@redhat.com)
+- quickly load preferences (ckozak@redhat.com)
+- 1061937: preference changes occur in the background (ckozak@redhat.com)
+- use existing signals (ckozak@redhat.com)
+- simplify preferences window (ckozak@redhat.com)
+- Fix test failure if run on system that is registered. (dgoodwin@redhat.com)
+- 1061393: Don't allow subscription-manager string to be translated
+  (ckozak@redhat.com)
+- 1016427: On string was missed from the extraction (bkearney@redhat.com)
+- 1058495: productid yum errors on yum remove (alikins@redhat.com)
+- 1026501: Preserve PKI directories and have rpm own them.
+  (dgoodwin@redhat.com)
+- 1058374: Fix crash on exception in managergui._show_buttons
+  (ckozak@redhat.com)
+
 * Mon Feb 03 2014 ckozak <ckozak@redhat.com> 1.10.13-1
 - 1060917: catch exception thrown in firstboot (ckozak@redhat.com)
 - Extract the latest strings (bkearney@redhat.com)
