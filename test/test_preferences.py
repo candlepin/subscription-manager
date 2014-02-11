@@ -81,6 +81,7 @@ class TestPreferencesDialog(SubManFixture):
                                                                 parent=None)
         self.preferences_dialog.release_backend.facts = stubs.StubFacts()
         self.preferences_dialog.release_backend.get_releases = get_releases
+        self.preferences_dialog.async_updater = stubs.StubAsyncUpdater(self.preferences_dialog)
 
     def testShowPreferencesDialog(self):
         self._getPrefDialog()

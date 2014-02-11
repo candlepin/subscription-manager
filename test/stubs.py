@@ -22,6 +22,7 @@ from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
         OverrideStatusCache
 from rhsm.certificate import GMT
+from subscription_manager.gui.utils import AsyncWidgetUpdater, handle_gui_exception
 
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """
@@ -591,3 +592,17 @@ class StubPool(object):
 
     def __init__(self, poolid):
         self.id = poolid
+
+
+class StubAsyncUpdater(AsyncWidgetUpdater):
+
+    def update(self, widget_update, backend_method, args=[], kwargs={}, exception_msg=None, callback=None):
+        try:
+            result = backend_method(*args, **kwargs)
+            if callback:
+                callback(result)
+        except Exception, e:
+            message = exception_msg or str(e)
+            handle_gui_exception(e, message, self.parent_window)
+        finally:
+            widget_update.finished()
