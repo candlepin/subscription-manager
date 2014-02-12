@@ -1,14 +1,12 @@
 # Prefer systemd over sysv on Fedora 17+ and RHEL 7+
-%define use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
-%define use_dateutil (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 6)
-%define use_old_firstboot (0%{?rhel} && 0%{?rhel} <= 6)
-
-
-%define rhsm_plugins_dir   /usr/share/rhsm-plugins
+%global use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
+%global use_dateutil (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 6)
+%global use_old_firstboot (0%{?rhel} && 0%{?rhel} <= 6)
+%global rhsm_plugins_dir  /usr/share/rhsm-plugins
 
 # A couple files are for RHEL 5 only:
 %if 0%{?rhel} == 5
-%define el5 1
+%global el5 1
 %endif
 
 Name: subscription-manager
@@ -46,20 +44,19 @@ Requires: python-dateutil
 Requires: PyXML
 %endif
 
-
 # There's no dmi to read on these arches, so don't pull in this dep.
 %ifnarch ppc ppc64 s390 s390x
 Requires:  python-dmidecode
 %endif
 
+%if %use_systemd
+Requires(post): systemd
+Requires(preun): systemd
+Requires(postun): systemd
+%else
 Requires(post): chkconfig
 Requires(preun): chkconfig
 Requires(preun): initscripts
-
-%if %use_systemd
-Requires(post): systemd-units
-Requires(preun): systemd-units
-Requires(postun): systemd-units
 %endif
 
 BuildRequires: python-devel
@@ -71,6 +68,10 @@ BuildRequires: desktop-file-utils
 BuildRequires: redhat-lsb
 BuildRequires: scrollkeeper
 BuildRequires: GConf2-devel
+%if %use_systemd
+# We need the systemd RPM macros
+BuildRequires: systemd
+%endif
 
 
 %description
@@ -282,7 +283,7 @@ rm -rf %{buildroot}
 
 %if %use_systemd
     %attr(644,root,root) %{_unitdir}/rhsmcertd.service
-    %attr(644,root,root) %{_prefix}/lib/tmpfiles.d/%{name}.conf
+    %attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
 %else
     %attr(755,root,root) %{_initrddir}/rhsmcertd
 %endif
@@ -397,8 +398,7 @@ fi
 %preun
 if [ $1 -eq 0 ] ; then
     %if %use_systemd
-        /bin/systemctl --no-reload disable rhsmcertd.service > /dev/null 2>&1 || :
-        /bin/systemctl stop rhsmcertd.service > /dev/null 2>&1 || :
+        %systemd_preun rhsmcertd.service
     %else
         /sbin/service rhsmcertd stop >/dev/null 2>&1
         /sbin/chkconfig --del rhsmcertd
@@ -411,10 +411,7 @@ fi
 
 %postun
 %if %use_systemd
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-    if [ $1 -eq 1 ] ; then
-        /bin/systemctl try-restart rhsmcertd.service >/dev/null 2>&1 || :
-    fi
+    %systemd_postun_with_restart rhsmcertd.service
 %endif
 
 %changelog
