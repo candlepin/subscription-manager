@@ -194,11 +194,16 @@ def show_autosubscribe_output(uep):
     log.info("Attempted to auto-attach/heal the system.")
     print _("Installed Product Current Status:")
     subscribed = 1
+    all_subscribed = True
     for prod_status in installed_status:
         if prod_status[4] == SUBSCRIBED:
             subscribed = 0
         status = STATUS_MAP[prod_status[4]]
+        if prod_status[4] == NOT_SUBSCRIBED:
+            all_subscribed = False
         print columnize(PRODUCT_STATUS, _echo, prod_status[0], status) + "\n"
+    if not all_subscribed:
+        print _("Unable to find available subscriptions for all your installed products.")
     return subscribed
 
 
