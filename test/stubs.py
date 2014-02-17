@@ -23,6 +23,7 @@ from subscription_manager.cache import EntitlementStatusCache, ProductStatusCach
         OverrideStatusCache
 from rhsm.certificate import GMT
 from subscription_manager.gui.utils import AsyncWidgetUpdater, handle_gui_exception
+from rhsm.certificate2 import Version
 
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """
@@ -166,7 +167,9 @@ class StubProductCertificate(ProductCertificate):
             products = products + provided_products
 
         self.name = product.name
-        version = product.version
+
+        # product certs are all version 1.0
+        version = Version("1.0")
 
         # TODO: product should be a StubProduct, check for strings coming in and error out
         self.product = product

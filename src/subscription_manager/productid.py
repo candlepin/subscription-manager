@@ -101,6 +101,77 @@ class ProductDatabase:
         return self.dir.abspath('productid.js')
 
 
+class ComparableMixin(object):
+    """Needs compare_keys to be implemented."""
+    def _compare(self, keys, method):
+        return method(keys[0], keys[1]) if keys else NotImplemented
+
+    def __eq__(self, other):
+        return self._compare(self.compare_keys(other), lambda s, o: s == o)
+
+    def __ne__(self, other):
+        return self._compare(self.compare_keys(other), lambda s, o: s != o)
+
+    def __lt__(self, other):
+        return self._compare(self.compare_keys(other), lambda s, o: s < o)
+
+    def __gt__(self, other):
+        return self._compare(self.compare_keys(other), lambda s, o: s > o)
+
+    def __le__(self, other):
+        return self._compare(self.compare_keys(other), lambda s, o: s <= o)
+
+    def __ge__(self, other):
+        return self._compare(self.compare_keys(other), lambda s, o: s >= o)
+
+
+class ComparableProduct(ComparableMixin):
+    """A comparable version from a Product. For comparing and sorting Product objects.
+
+    Products are never equals if they do not have the same product id.
+    lt and gt for different products are also always false.
+
+    NOTE: This object doesn't make sense to compare Products with different
+    Product ID. The results are kind of nonsense for that case.
+
+    This could be extended to compare, either with a more complicated
+    version compare, or using other attributes.
+
+    Awesomeos-1.1 > Awesomeos-1.0
+    Awesomeos-1.1 != Awesomeos-1.0
+    Awesomeos-1.0 < Awesomeos-1.0
+    """
+    def __init__(self, product):
+        self.product = product
+
+    def compare_keys(self, other):
+        if self.product.id == other.product.id:
+            return (self.product.version, other.product.version)
+        return None
+
+    def __str__(self):
+        return "<ComparableProduct id=%s version=%s name=%s product=%s>" % \
+                (self.product.id, self.product.version, self.product.name, self.product)
+
+
+class ComparableProductCert(ComparableMixin):
+    """Compareable version of ProductCert.
+
+    Used to determine the "newer" of two ProductCerts. Initially just based
+    on a comparison of a ComparableProduct built from the Product, which compares
+    using the Product.version field."""
+
+    def __init__(self, product_cert):
+        self.product_cert = product_cert
+        self.product = self.product_cert.products[0]
+        self.comp_product = ComparableProduct(self.product)
+
+    # keys used to compare certificate. For now, just the keys for the
+    # Product.version. This could include say, certificate serial or issue date
+    def compare_keys(self, other):
+        return self.comp_product.compare_keys(other.comp_product)
+
+
 class ProductManager:
     """Manager product certs, detecting when they need to be installed, or deleted.
 
@@ -142,6 +213,11 @@ class ProductManager:
         self.plugin_manager = require(PLUGIN_MANAGER)
 
     def update(self, yb):
+        # FIXME: finding enabled and finding active should
+        #        be classes themselves that would be easier to mock
+        #        ProductManager shouldn't know anything about YumBase
+        #        ie, need a ProductCertProvider so we could mock it
+        #        without trying to mock half of yum
         if yb is None:
             yb = yum.YumBase()
         enabled = self.get_enabled(yb)
@@ -211,10 +287,14 @@ class ProductManager:
             can delete certs for some odd rhel5 scenarios, where we
             have to obsolete some deprecated certs
         """
-        log.debug("Updating installed certificates")
+        log.debug("Checking for product id certs to install or update.")
         products_to_install = []
         products_to_update_db = []
         products_installed = []
+
+        # track updated product ids seperately in case we want
+        # to run plugins
+        products_to_update = []
 
         # enabled means we have a repo, it's enabled=1, it has a productid metadata
         # for it, and we understand that metadata. The cert for that productid
@@ -264,10 +344,29 @@ class ProductManager:
             # if we dont find this product cert, install it
             if not self.pdir.find_by_product(prod_hash):
                 products_to_install.append((p, cert))
+            else:
+                installed_product_cert = self.pdir.find_by_product(prod_hash)
+                installed_product = installed_product_cert.products[0]
+                # NOTE: this compares the Product in the ProductCert, but not
+                # the ProductCert itself. We should probably compare the
+                # ProductCert itself, which would start out as just comparing
+                # it's contained Product with ComparableProduct
+                cmp_product_cert = ComparableProductCert(cert)
+                cmp_installed_product_cert = ComparableProductCert(installed_product_cert)
+                if cmp_product_cert > cmp_installed_product_cert:
+                    log.debug("Updating installed product cert for %s %s to %s %s" %
+                            (installed_product.name, installed_product.version,
+                             p.name, p.version))
+                    products_to_update.append((p, cert))
+                else:
+                    log.debug("Latest version of product cert for %s %s is already install, not updating" %
+                            (p.name, p.version))
 
-            # look up what repo's we know about for that prod has
+            # look up what repo's we know about for that prod id
             known_repos = self.db.find_repos(prod_hash)
 
+            # ??? What happens for a installed product with no repo info, that
+            # we think we should update?
             # known_repos is None means we have no repo info at all
             if known_repos is None or repo not in known_repos:
                 products_to_update_db.append((p, repo))
@@ -277,18 +376,7 @@ class ProductManager:
         # the same "transaction".
         products_to_install = self._desktop_workstation_cleanup(products_to_install)
         products_to_update_db = self._desktop_workstation_cleanup(products_to_update_db)
-
-        # collect info, then do the needful later, so we can hook
-        # up a plugin in between and let it munge these lists, so a plugin
-        # could blacklist a product cert for example.
-        self.plugin_manager.run('pre_product_id_install', product_list=products_to_install)
-        for (product, cert) in products_to_install:
-            fn = '%s.pem' % product.id
-            path = self.pdir.abspath(fn)
-            cert.write(path)
-            self.pdir.refresh()
-            log.info("Installed product cert %s: %s %s" % (product.id, product.name, cert.path))
-            products_installed.append(cert)
+        products_to_update = self._desktop_workstation_cleanup(products_to_update)
 
         db_updated = False
         for (product, repo) in products_to_update_db:
@@ -301,10 +389,46 @@ class ProductManager:
         if db_updated:
             self.db.write()
 
+        products_installed = self.install_product_certs(products_to_install)
+        products_updated = self.update_product_certs(products_to_update)
+
+        #FIXME: nothing uses the return value here
+        return (products_installed, products_updated)
+
+    def install_product_certs(self, product_certs):
+        # collect info, then do the needful later, so we can hook
+        # up a plugin in between and let it munge these lists, so a plugin
+        # could blacklist a product cert for example.
+        self.plugin_manager.run('pre_product_id_install', product_list=product_certs)
+
+        products_installed = self.write_product_certs(product_certs)
+
         # FIXME: we should include productid db with the conduit here
         log.debug("about to run post_product_id_install")
         self.plugin_manager.run('post_product_id_install', product_list=products_installed)
-        #FIXME: nothing uses the return value here
+
+        return products_installed
+
+    def update_product_certs(self, product_certs):
+        self.plugin_manager.run('pre_product_id_update', product_list=product_certs)
+
+        products_updated = self.write_product_certs(product_certs)
+
+        # FIXME: we should include productid db with the conduit here
+        log.debug("about to run post_product_id_update")
+        self.plugin_manager.run('post_product_id_update', product_list=products_updated)
+
+        return products_updated
+
+    def write_product_certs(self, product_certs):
+        products_installed = []
+        for (product, cert) in product_certs:
+            fn = '%s.pem' % product.id
+            path = self.pdir.abspath(fn)
+            cert.write(path)
+            self.pdir.refresh()
+            log.info("Installed product cert %s: %s %s" % (product.id, product.name, cert.path))
+            products_installed.append(cert)
         return products_installed
 
     def _workstation_cert_exists(self):
