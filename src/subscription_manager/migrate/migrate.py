@@ -446,8 +446,10 @@ class MigrationEngine(object):
             dic_data = self.read_channel_cert_mapping(mappingfile)
         except IOError, e:
             log.exception(e)
-            system_exit(1, _("Unable to read mapping file: %s.\n"
-            "Do you have the subscription-manager-migration-data package installed?") % mappingfile)
+            system_exit(1, _("Unable to read mapping file: %(mappingfile)s.\n"
+                "Do you have the %(package)s package installed?") % {
+                    "mappingfile": mappingfile,
+                    "package": "subscription-manager-migration-data"})
 
         applicable_certs = {}
         valid_rhsm_channels = []
@@ -724,7 +726,8 @@ class MigrationEngine(object):
             repofile.write()
         except Exception:
             print _("\nUnable to enable extra repositories.")
-            print _("Please ensure system has subscriptions attached, and see 'subscription-manager repos --help' to enable additional repositories")
+            command = "subscription-manager repos --help"
+            print _("Please ensure system has subscriptions attached, and see '%s' to enable additional repositories") % command
 
     def main(self, args=None):
         # In testing we sometimes specify args, otherwise use the default:
