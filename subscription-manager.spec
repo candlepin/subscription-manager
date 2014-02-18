@@ -16,7 +16,7 @@
 
 Name: subscription-manager
 Version: 1.10.14
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -422,6 +422,14 @@ fi
 %endif
 
 %changelog
+* Tue Feb 18 2014 ckozak <ckozak@redhat.com> 1.10.14-2
+- updated tito.props to rev release (ckozak@redhat.com)
+- 958016: use rpm %%{optflags} and _hardended_build (alikins@redhat.com)
+- 851325: Tweak activation key checkbox to left (alikins@redhat.com)
+- 1044596: Don't match beta product tags for release (alikins@redhat.com)
+- 1060727: Changes to rhsm-debug for sos report (wpoteat@redhat.com)
+- removed other releasers (ckozak@redhat.com)
+
 * Tue Feb 11 2014 ckozak <ckozak@redhat.com> 1.10.14-1
 - Use glob for finding entitlement certs to remove. (dgoodwin@redhat.com)
 - Make sure entitlement cert directory exists before we clean it out.
