@@ -191,7 +191,9 @@ class TestCompileCommand(TestCliCommand):
     # directory we can write to while not root
     def _get_assemble_dir(self):
         self.assemble_path = path_join(self.test_dir, "assemble-dir")
-        os.makedirs(path_join(self.assemble_path, "/etc/rhsm/"))
+        os.makedirs(path_join(self.assemble_path, "/etc/rhsm/ca/"))
+        os.makedirs(path_join(self.assemble_path, "/etc/rhsm/pluginconf.d/"))
+        os.makedirs(path_join(self.assemble_path, "/etc/rhsm/facts/"))
         os.makedirs(path_join(self.assemble_path, "/var/log/rhsm/"))
         os.makedirs(path_join(self.assemble_path, "/var/lib/rhsm/"))
         os.makedirs(path_join(self.assemble_path, cfg.get('rhsm', 'productCertDir')))
