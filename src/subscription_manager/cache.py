@@ -30,6 +30,7 @@ from rhsm.config import initConfig
 import rhsm.connection as connection
 from rhsm.profile import get_profile, RPMProfile
 import subscription_manager.injection as inj
+from subscription_manager.jsonwrapper import PoolWrapper
 from rhsm import ourjson as json
 
 _ = gettext.gettext

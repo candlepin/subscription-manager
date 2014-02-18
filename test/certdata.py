@@ -417,7 +417,6 @@ Order:
 	RAM Limit: 
 	Core Limit: 
 	Virt Only: False
-	Subscription: 
 	Stacking ID: 1
 	Warning Period: 30
 	Provides Management: False

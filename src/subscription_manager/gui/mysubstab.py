@@ -24,7 +24,7 @@ from rhsm.certificate import GMT
 
 from subscription_manager.async import AsyncBind
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
-from subscription_manager.injection import require, IDENTITY, DBUS_IFACE
+from subscription_manager import injection as inj
 
 from subscription_manager.gui import messageWindow, progress
 from subscription_manager.gui.storage import MappedTreeStore
@@ -52,13 +52,13 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         super(MySubscriptionsTab, self).__init__('mysubs.glade')
         self.backend = backend
-        self.identity = require(IDENTITY)
+        self.identity = inj.require(inj.IDENTITY)
         self.parent_win = parent_win
         self.entitlement_dir = ent_dir
         self.product_dir = prod_dir
         self.sub_details = widgets.ContractSubDetailsWidget(prod_dir)
         self.async_bind = AsyncBind(self.backend.certlib)
-        self.pooltype_cache = require(POOLTYPE_CACHE)
+        self.pooltype_cache = inj.require(inj.POOLTYPE_CACHE)
 
         # Progress bar
         self.pb = None
@@ -151,7 +151,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             self.backend.entcertlib.delete([serial])
             self.backend.cs.force_cert_check()
 
-
     def unsubscribe_button_clicked(self, widget):
         selection = widgets.SelectionWrapper(self.top_view.get_selection(), self.store)
 
@@ -178,7 +177,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.top_view.expand_all()
         self._stripe_rows(None, self.store)
         if update_dbus:
-            require(DBUS_IFACE).update()
+            inj.require(inj.DBUS_IFACE).update()
         self.unsubscribe_button.set_property('sensitive', False)
         # 841396: Select first item in My Subscriptions table by default
         selection = self.top_view.get_selection()
