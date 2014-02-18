@@ -36,9 +36,13 @@ class TestWrappedIndentedHelpFormatter(unittest.TestCase):
         parser.add_option("-t", "--test", dest="test",
                           default=None,
                           help="このシステム用に権利があるレポジトリのがあるレポジトリの一覧表示")
-        fh = parser.format_option_help()
         # This case, width this formatter, this string, and this width,
         # the old formatter would split in a multibyte char, creating
         # a string that doesn't decode to utf8. So verify this still
         # happens with the old string
-        self.assertRaises(UnicodeDecodeError, fh.decode, "utf8")
+        try:
+            fh = parser.format_option_help()
+            fh.decode("utf8")
+            self.fail("Should raise an exception")
+        except UnicodeDecodeError:
+            pass
