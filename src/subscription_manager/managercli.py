@@ -369,7 +369,6 @@ class CliCommand(AbstractCLICommand):
                 print _("Error parsing baseurl:")
                 handle_exception("Error parsing baseurl:", e)
 
-
             cfg.set("rhsm", "baseurl", format_baseurl(baseurl_server_hostname,
                                                       baseurl_server_port,
                                                       baseurl_server_prefix))
@@ -2413,16 +2412,5 @@ class ManagerCLI(CLI):
         return CLI.main(self)
 
 
-def check_registration():
-    # TODO: replace consumer_info and ConsumerIdentity usage with Identity
-
-    if not ConsumerIdentity.existsAndValid():
-        print(NOT_REGISTERED)
-        sys.exit(-1)
-    consumer = ConsumerIdentity.read()
-    consumer_info = {"consumer_name": consumer.getConsumerName(),
-                     "uuid": consumer.getConsumerId()}
-
-    return consumer_info
 if __name__ == "__main__":
     ManagerCLI().main()

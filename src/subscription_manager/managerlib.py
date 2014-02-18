@@ -37,13 +37,11 @@ from subscription_manager.injection import require, CERT_SORTER, \
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoLib
-from subscription_manager.utils import is_true_value
+from subscription_manager import utils
 
 # FIXME FIXME
 from subscription_manager.identity import ConsumerIdentity
 from dateutil.tz import tzlocal
-
-from subscription_manager import utils
 
 log = logging.getLogger('rhsm-app.' + __name__)
 

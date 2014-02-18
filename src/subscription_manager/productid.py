@@ -111,7 +111,6 @@ class ProductDatabase:
         return self.dir.abspath('productid.js')
 
 
-
 class ComparableMixin(object):
     """Needs compare_keys to be implemented."""
     def _compare(self, keys, method):
@@ -181,6 +180,7 @@ class ComparableProductCert(ComparableMixin):
     # Product.version. This could include say, certificate serial or issue date
     def compare_keys(self, other):
         return self.comp_product.compare_keys(other.comp_product)
+
 
 class ProductId(object):
     def __init__(self, product_cert):
@@ -403,7 +403,6 @@ class ProductManager:
 
             # look up what repo's we know about for that prod id
 
-
             # ProductCertDb.install() could do this?
             # look up what repo's we know about for that prod has
             known_repos = self.db.find_repos(prod_hash)
@@ -424,8 +423,6 @@ class ProductManager:
         products_to_install = self._desktop_workstation_cleanup(products_to_install)
         products_to_update_db = self._desktop_workstation_cleanup(products_to_update_db)
         products_to_update = self._desktop_workstation_cleanup(products_to_update)
-
-  
 
         db_updated = False
         for (product, repo) in products_to_update_db:

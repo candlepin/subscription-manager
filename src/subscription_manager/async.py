@@ -21,7 +21,7 @@ import gettext
 
 import gobject
 
-from subscription_manager.certlib import Disconnected
+from subscription_manager.entcertlib import Disconnected
 from subscription_manager.managerlib import fetch_certificates
 from subscription_manager.injection import IDENTITY, \
         PLUGIN_MANAGER, CP_PROVIDER, require

@@ -637,16 +637,11 @@ class TestReleaseCommand(TestCliProxyCommand):
 
     def _stub_connection(self):
         # er, first cc is command_class, second is ContentConnection
-        def check_registration():
-            consumer_info = {"consumer_name": "whatever",
-                     "uuid": "doesnt really matter"}
-            return consumer_info
 
         def _get_consumer_release():
             pass
 
         self.cc._get_consumer_release = _get_consumer_release
-        managercli.check_registration = check_registration
 
     def test_main_proxy_url_release(self):
         proxy_host = "example.com"
