@@ -13,6 +13,7 @@
 # in this software or its documentation.
 #
 
+import errno
 import gettext
 import os
 import sys
@@ -110,16 +111,39 @@ class SystemCommand(CliCommand):
             # FIXME: we need to anon proxy passwords?
             sos = self.options.sos
             defaults = cfg.defaults()
-            if defaults['productcertdir'] != cfg.get('rhsm', 'productCertDir') or not sos:
-                self._copy_cert_directory(cfg.get('rhsm', 'productCertDir'), content_path)
-            if defaults['entitlementcertdir'] != cfg.get('rhsm', 'entitlementCertDir') or not sos:
-                self._copy_cert_directory(cfg.get('rhsm', 'entitlementCertDir'), content_path)
-            if defaults['consumercertdir'] != cfg.get('rhsm', 'consumerCertDir') or not sos:
-                self._copy_cert_directory(cfg.get('rhsm', 'consumerCertDir'), content_path)
+            # sosreport collects /etc/rhsm/* and /var/*/rhsm/*, so these would
+            # be redundant for sos
             if not sos:
-                self._copy_directory('/etc/rhsm', content_path)
+                # copy rhsm.conf specifically
+                self._copy_cert_directory("/etc/rhsm", content_path)
                 self._copy_directory('/var/log/rhsm', content_path)
                 self._copy_directory('/var/lib/rhsm', content_path)
+
+            if defaults['productcertdir'] != cfg.get('rhsm', 'productCertDir') or not sos:
+                self._copy_cert_directory(cfg.get('rhsm', 'productCertDir'), content_path)
+
+            if defaults['entitlementcertdir'] != cfg.get('rhsm', 'entitlementCertDir') or not sos:
+                self._copy_cert_directory(cfg.get('rhsm', 'entitlementCertDir'), content_path)
+
+            if defaults['consumercertdir'] != cfg.get('rhsm', 'consumerCertDir') or not sos:
+                self._copy_cert_directory(cfg.get('rhsm', 'consumerCertDir'), content_path)
+
+            # If ca_cert_dir and pluginconfdif are configured as subdirs of /etc/rhsm
+            # (as is the default) we will have already copied there contents,
+            # so ignore directory exists errors
+            try:
+                if defaults['ca_cert_dir'] != cfg.get('server', 'ca_cert_dir') or not sos:
+                    self._copy_cert_directory(cfg.get('server', 'ca_cert_dir'), content_path)
+            except EnvironmentError, e:
+                if e.errno != errno.EEXIST:
+                    raise
+
+            try:
+                if defaults['pluginconfdir'] != cfg.get('rhsm', 'pluginconfdir') or not sos:
+                    self._copy_directory(cfg.get('rhsm', 'pluginconfdir'), content_path)
+            except EnvironmentError, e:
+                if e.errno != errno.EEXIST:
+                    raise
 
             # build an archive by default
             if self.options.archive:
