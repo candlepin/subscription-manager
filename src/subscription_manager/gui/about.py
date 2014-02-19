@@ -71,8 +71,8 @@ class AboutDialog(object):
         client_versions = get_client_versions()
 
         self.dialog.set_version(client_versions['subscription-manager'])
-        rhsm_version_label.set_markup(_("<b>python-rhsm version:</b> %s") %
-                                        client_versions['python-rhsm'])
+        rhsm_version_label.set_markup(_("<b>%s version:</b> %s") %
+                                        ("python-rhsm", client_versions['python-rhsm']))
         backend_version_label.set_markup(_("<b>subscription management service version:</b> %s") %
                                            server_versions['candlepin'])
 
