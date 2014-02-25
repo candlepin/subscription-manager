@@ -1093,6 +1093,20 @@ tool can be run as a post-install script as part of the kickstart installation p
 .fi
 .RE
 
+.SH NETWORK INFORMATION
+The
+.B subscription-manager
+tool uses outgoing HTTPS requests. In the default configuration it will use HTTPS on port 443 to the subscription servers
+.B subscription.rhn.redhat.com
+and to the content delivery service
+.B cdn.redhat.com.
+
+For information about the network addresses that
+.B subscription-manager
+and the
+.B subscription-manager yum plugin
+use see https://access.redhat.com/site/articles/414963
+
 .SH FILES
 .IP
 * /etc/pki/consumer/*.pem
