@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-04 08:45-0500\n"
-"PO-Revision-Date: 2014-02-20 10:51-0500\n"
+"PO-Revision-Date: 2014-02-26 08:40-0500\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Chinese (Simplified Han, China)\n"
 "Language: zh-Hans-CN\n"
@@ -1803,11 +1803,11 @@ msgstr "指定要迁移到的订阅管理服务器"
 
 #: ../src/subscription_manager/migrate/migrate.py:166
 msgid "specify the Red Hat user name"
-msgstr "指定红帽用户名"
+msgstr "指定 Red Hat 用户名"
 
 #: ../src/subscription_manager/migrate/migrate.py:168
 msgid "specify the Red Hat password"
-msgstr "指定红帽密码"
+msgstr "指定 Red Hat 密码"
 
 #: ../src/subscription_manager/migrate/migrate.py:170
 msgid "specify the subscription service user name"
@@ -1839,11 +1839,11 @@ msgstr "--servicelevel 和 --no-auto 选项不能一起使用。"
 
 #: ../src/subscription_manager/migrate/migrate.py:203
 msgid "Red Hat username: "
-msgstr "红帽用户名："
+msgstr "Red Hat 用户名："
 
 #: ../src/subscription_manager/migrate/migrate.py:203
 msgid "Red Hat password: "
-msgstr "红帽密码："
+msgstr "Red Hat 密码："
 
 #: ../src/subscription_manager/migrate/migrate.py:207
 msgid "Subscription Service username: "
@@ -1872,7 +1872,8 @@ msgid ""
 "Management.  Exiting."
 msgstr ""
 "\n"
-"这个系统已经使用红帽订阅管理注册。正在退出。"
+"这个系统已经在红帽订阅管理（Red Hat Subscription Management）中注册。正在退"
+"出。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:274
@@ -2030,10 +2031,11 @@ msgstr "无法取消 RHN 传统方法注册。退出。"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author leahliu
 #: ../src/subscription_manager/migrate/migrate.py:622
 msgid "Attempting to register system to Red Hat Subscription Management..."
-msgstr "尝试在红帽订阅管理中注册系统......"
+msgstr "尝试在红帽订阅管理（Red Hat Subscription Management）中注册系统......"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:635
+#, fuzzy
 msgid ""
 "\n"
 "Unable to register.\n"
@@ -2041,14 +2043,15 @@ msgid ""
 msgstr ""
 "\n"
 "无法注册。\n"
-"进一步的帮助请联络红帽全球支持服务。"
+"如需进一步的帮助，请联络红帽全球支持服务。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:638
 #, python-format
 msgid ""
 "System '%s' successfully registered to Red Hat Subscription Management.\n"
-msgstr "成功使用红帽订阅管理注册系统 '%s'。\n"
+msgstr ""
+"成功在红帽订阅管理（Red Hat Subscription Management）中注册系统 '%s'。\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author leahliu
 #. Display an actual message for the empty string level.
@@ -2235,14 +2238,15 @@ msgstr "这个系统是使用 RHN 传统方法注册。"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:13
 msgid "This system has already been registered with Red Hat using RHN Classic."
-msgstr "已经使用 RHN 传统订阅在红帽注册这个系统。"
+msgstr "已经使用 RHN 传统订阅在 Red Hat 注册这个系统。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author leahliu
 #: ../src/subscription_manager/branding/redhat_branding.py:15
+#, fuzzy
 msgid ""
 "Your system is being registered again using Red Hat Subscription Management. "
 "Red Hat recommends that customers only register once."
-msgstr "您正在使用红帽订阅管理重新注册系统。红帽建议客户只注册一次。"
+msgstr "您正在使用红帽订阅管理再次注册您的系统。红帽建议客户只注册一次。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:17
@@ -2261,24 +2265,26 @@ msgstr "RHN 传统订阅"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:19
 msgid "Red Hat Subscription Management"
-msgstr "红帽订阅管理"
+msgstr "红帽订阅管理（Red Hat Subscription Management）"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author leahliu
 #: ../src/subscription_manager/branding/redhat_branding.py:21
 msgid "Please enter your Red Hat account information:"
-msgstr "请输入您的红帽帐户信息："
+msgstr "请输入您的 Red Hat 帐户信息："
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:23
 msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
-msgstr "这个系统同时使用 RHN 传统技术和 RHN 订阅管理注册。"
+msgstr ""
+"这个系统同时使用 RHN 传统技术和红帽订阅管理（Red Hat Subscription "
+"Management）注册。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author leahliu
 #: ../src/subscription_manager/branding/redhat_branding.py:25
 msgid "Red Hat recommends that customers only register with one service."
-msgstr "红帽建议客户只使用一个服务注册。"
+msgstr "Red Hat 建议客户只使用一个服务注册。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:27
@@ -4452,8 +4458,8 @@ msgid ""
 "with Red Hat to receive software updates and other benefits. You will need "
 "the following to register:"
 msgstr ""
-"这个助手将指导您使用红帽注册系统接收软件更新和其他优惠。您需要以下信息方可注"
-"册："
+"这个助手将为您演示在 Red Hat 注册系统以便接收软件更新和其他优惠的步骤。您需要"
+"以下信息方可注册："
 
 #: ../src/subscription_manager/gui/data/registration_info.glade.h:2
 msgid "• A network connection"
@@ -4501,7 +4507,7 @@ msgstr "为什么注册？"
 msgid ""
 "Registering your system with Red Hat allows you to take full advantage of "
 "the benefits of a paid subscription, including:"
-msgstr "在红帽注册您的系统可让您充分利用付费订阅的好处，其中包括："
+msgstr "在 Red Hat 注册您的系统可让您充分享受付费订阅的好处，其中包括："
 
 #: ../src/subscription_manager/gui/data/registration_info.glade.h:15
 msgid "<b>Security &amp; Updates:</b>"
@@ -4534,7 +4540,8 @@ msgid ""
 "Access to the technical support experts at Red Hat or Red Hat's partners for "
 "help with any issues you might encounter with this system."
 msgstr ""
-"访问红帽或者红帽合作伙伴的技术支持专家以便帮助您解决这个系统遇到的问题。"
+"访问 Red Hat 或者 Red Hat 合作伙伴的技术支持专家以便帮助您解决这个系统遇到的"
+"问题。"
 
 #: ../src/subscription_manager/gui/data/registration_info.glade.h:21
 msgid "<b>Management:</b>"
@@ -4557,7 +4564,7 @@ msgid ""
 "<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
 "privacy_statement.html.</small>"
 msgstr ""
-"<small><b>窍门：</b>红帽注重您的隐私：http://www.redhat.com/legal/"
+"<small><b>窍门：</b>Red Hat 注重您的隐私：http://www.redhat.com/legal/"
 "privacy_statement.html。</small>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -4964,7 +4971,7 @@ msgid ""
 "Hat login to ensure your system is up-to-date."
 msgstr ""
 "要让 Subscription Manager 为您的系统提供更新，您就必须在客户门户网站中注册该"
-"系统。请输入您的红帽登录以便确定系统处于最新状态。"
+"系统。请输入您的 Red Hat 登录以便确定系统处于最新状态。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rhsm_icon/rhsm_icon.c:212
@@ -5100,7 +5107,7 @@ msgstr "Red Hat Subscription Manager"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../etc-conf/rhsm-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr "红帽订阅有效性程序"
+msgstr "红帽订阅有效性程序（Red Hat Subscription Validity Applet）"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../etc-conf/rhsm-icon.desktop.in.h:2
