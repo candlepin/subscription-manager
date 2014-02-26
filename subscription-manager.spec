@@ -16,7 +16,7 @@
 
 Name: subscription-manager
 Version: 1.10.14
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -422,6 +422,15 @@ fi
 %endif
 
 %changelog
+* Wed Feb 26 2014 ckozak <ckozak@redhat.com> 1.10.14-3
+- 906567: Fix translations of "Red Hat" (alikins@redhat.com)
+- 1039914: rhsm-debug updates and fixes (alikins@redhat.com)
+- 1038242: add anaconda.pid check before chroot (alikins@redhat.com)
+- 1030378,1020474: Latest translations from zanata (alikins@redhat.com)
+- 1055664: rhsm-debug now follows more config paths (alikins@redhat.com)
+- 1021069: Add reference to network usage info. (alikins@redhat.com)
+- 1035115: Update product id certs (alikins@redhat.com)
+
 * Tue Feb 18 2014 ckozak <ckozak@redhat.com> 1.10.14-2
 - updated tito.props to rev release (ckozak@redhat.com)
 - 958016: use rpm %%{optflags} and _hardended_build (alikins@redhat.com)
