@@ -419,6 +419,23 @@ fi
 %endif
 
 %changelog
+* Thu Feb 27 2014 Alex Wood <awood@redhat.com> 1.11.1-1
+- 1021069: Add reference to network usage info. (alikins@redhat.com)
+- latest strings from zanata 1.11.X branch (alikins@redhat.com)
+- 1061923: Remove trailing period from privacy URL (wpoteat@redhat.com)
+- 1039913: rhsm-debug updates and fixes (alikins@redhat.com)
+- 1061407: don't allow some translations (ckozak@redhat.com)
+- 1055664: rhsm-debug now follows more config paths (alikins@redhat.com)
+- 1038242: add anaconda.pid check before chroot (alikins@redhat.com)
+- 1035115: Update product id certs (alikins@redhat.com)
+- 864195: New output line for subscribe --auto if it can't cover all products
+  (wpoteat@redhat.com)
+- 1060727: Changes to rhsm-debug for sos report (wpoteat@redhat.com)
+- 1044596: Don't match beta product tags for release (alikins@redhat.com)
+- 851325: Tweak activation key checkbox to left (alikins@redhat.com)
+- Use systemd RPM macros to make life easier. (awood@redhat.com)
+- 958016: use rpm %%{optflags} and _hardended_build (alikins@redhat.com)
+
 * Tue Feb 11 2014 ckozak <ckozak@redhat.com> 1.10.14-1
 - Use glob for finding entitlement certs to remove. (dgoodwin@redhat.com)
 - Make sure entitlement cert directory exists before we clean it out.
