@@ -62,6 +62,10 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Feb 27 2014 Alex Wood <awood@redhat.com> 1.11.1-1
+- rev version to 1.11.1 (ckozak@redhat.com)
+- removed rhel7 releaser (ckozak@redhat.com)
+
 * Mon Feb 03 2014 ckozak <ckozak@redhat.com> 1.10.12-1
 - Add request_certs option to getEntitlementList() call (vitty@redhat.com)
 
