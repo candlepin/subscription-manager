@@ -132,8 +132,8 @@ class SystemCommand(CliCommand):
             # (as is the default) we will have already copied there contents,
             # so ignore directory exists errors
             try:
-                if defaults['ca_cert_dir'] != cfg.get('server', 'ca_cert_dir') or not sos:
-                    self._copy_cert_directory(cfg.get('server', 'ca_cert_dir'), content_path)
+                if defaults['ca_cert_dir'] != cfg.get('rhsm', 'ca_cert_dir') or not sos:
+                    self._copy_cert_directory(cfg.get('rhsm', 'ca_cert_dir'), content_path)
             except EnvironmentError, e:
                 if e.errno != errno.EEXIST:
                     raise
