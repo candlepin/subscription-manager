@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-04 08:45-0500\n"
-"PO-Revision-Date: 2014-02-26 08:40-0500\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2014-02-27 08:42-0500\n"
+"Last-Translator: leahliu <lliu@redhat.com>\n"
 "Language-Team: Chinese (Simplified Han, China)\n"
 "Language: zh-Hans-CN\n"
 "MIME-Version: 1.0\n"
@@ -204,7 +204,7 @@ msgstr "%%prog %s [选项]"
 #: ../src/subscription_manager/cli.py:93
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "用法: %s MODULE-NAME [MODULE-选项] [--help]"
+msgstr "使用: %s 模块名称 [模块选项] [--help]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/cli.py:105
@@ -2035,7 +2035,6 @@ msgstr "尝试在红帽订阅管理（Red Hat Subscription Management）中注�
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:635
-#, fuzzy
 msgid ""
 "\n"
 "Unable to register.\n"
@@ -2043,7 +2042,7 @@ msgid ""
 msgstr ""
 "\n"
 "无法注册。\n"
-"如需进一步的帮助，请联络红帽全球支持服务。"
+"如需进一步的帮助，请联络红帽全球支持服务（Red Hat Global Support Services）。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:638
@@ -2242,11 +2241,12 @@ msgstr "已经使用 RHN 传统订阅在 Red Hat 注册这个系统。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author leahliu
 #: ../src/subscription_manager/branding/redhat_branding.py:15
-#, fuzzy
 msgid ""
 "Your system is being registered again using Red Hat Subscription Management. "
 "Red Hat recommends that customers only register once."
-msgstr "您正在使用红帽订阅管理再次注册您的系统。红帽建议客户只注册一次。"
+msgstr ""
+"您正在使用红帽订阅管理（Red Hat Subscription Management）再次注册您的系统。"
+"Red Hat 建议客户只注册一次。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:17
@@ -4279,8 +4279,8 @@ msgid ""
 "You will need to use Red Hat Subscription Manager to manually attach "
 "subscriptions to this system after completing firstboot."
 msgstr ""
-"完成首次引导后，您需要使用 Red Hat Subscription Manager 手动在这个系统中附加"
-"订阅。"
+"完成 firstboot 后，您需要使用 Red Hat Subscription Manager 手动在这个系统中添"
+"加订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
