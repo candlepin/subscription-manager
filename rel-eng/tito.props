@@ -1,4 +1,5 @@
 [globalconfig]
-default_builder = tito.builder.UpstreamBuilder
+#default_builder = tito.builder.UpstreamBuilder
+default_builder = tito.distributionbuilder.DistributionBuilder
 default_tagger = tito.tagger.ReleaseTagger
 
