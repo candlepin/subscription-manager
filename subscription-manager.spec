@@ -14,7 +14,7 @@
 
 Name: subscription-manager
 Version: 1.10.14
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -419,6 +419,11 @@ fi
 %endif
 
 %changelog
+* Tue Mar 04 2014 ckozak <ckozak@redhat.com> 1.10.14-4
+- 1030378: Latest strings from zanata. (alikins@redhat.com)
+- 1070737: correct config section for ca_cert_dir (ckozak@redhat.com)
+- Use systemd RPM macros to make life easier. (awood@redhat.com)
+
 * Wed Feb 26 2014 ckozak <ckozak@redhat.com> 1.10.14-3
 - 906567: Fix translations of "Red Hat" (alikins@redhat.com)
 - 1039914: rhsm-debug updates and fixes (alikins@redhat.com)
