@@ -42,12 +42,18 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                        ['details_box', 'date_picker_hbox',
                         'month_entry', 'day_entry', 'year_entry',
                         'active_on_checkbutton', 'subscribe_button',
-                        'edit_quantity_label', 'no_subs_label',
+                        'edit_quantity_label', 'scrolledwindow',
                         'filter_options_button', 'applied_filters_label']
 
     def __init__(self, backend, facts, parent_win):
 
         super(AllSubscriptionsTab, self).__init__('allsubs.glade')
+
+        # Set up dynamic elements
+        self.no_subs_label, self.no_subs_label_viewport = widgets.get_scrollable_label()
+        self.widget_switcher = widgets.WidgetSwitcher(self.scrolledwindow,
+                self.no_subs_label_viewport, self.top_view)
+        self.widget_switcher.set_active(0)
 
         self.parent_win = parent_win
         self.backend = backend
@@ -170,9 +176,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         Show a message in situations where we have no subscriptions to show.
         """
-        self.top_view.hide()
         self.no_subs_label.set_markup("<b><big>%s</big></b>" % message)
-        self.no_subs_label.show()
+        self.widget_switcher.set_active(0)
 
     def display_pools(self):
         """
@@ -210,8 +215,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             return
 
         # Hide the no subscriptions label and show the pools list:
-        self.top_view.show()
-        self.no_subs_label.hide()
+        self.widget_switcher.set_active(1)
 
         sorter = managerlib.MergedPoolsStackingGroupSorter(merged_pools.values())
         for group in sorter.groups:

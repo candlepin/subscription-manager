@@ -139,6 +139,10 @@ class SubscriptionManagerTab(GladeWidget, HasSortableWidget):
         super(SubscriptionManagerTab, self).__init__(glade_file)
         self.content.unparent()
 
+        # In the allsubs tab, we don't show the treeview until it is populated
+        if self.top_view is None:
+            self.top_view = gtk.TreeView()
+
         # grid lines seem busted in rhel5, so we disable
         # in glade and turn on here for unbroken versions
         if gtk.check_version(self.MIN_GTK_MAJOR_GRID,
@@ -859,6 +863,22 @@ class TextTreeViewColumn(gtk.TreeViewColumn):
                                 store['background'])
 
 
+class WidgetSwitcher(object):
+
+    def __init__(self, parent, *widgets):
+        self.container = parent
+        self.widgets = widgets
+
+    def set_active(self, activate_index=0):
+        current_children = self.container.get_children()
+        to_add = self.widgets[activate_index]
+        if to_add not in current_children:
+            for widget in current_children:
+                self.container.remove(widget)
+            self.container.add(to_add)
+        self.container.show_all()
+
+
 def expand_collapse_on_row_activated_callback(treeview, path, view_column):
     """
     A gtk.TreeView callback allowing row expand/collapse on double-click or key
@@ -870,3 +890,14 @@ def expand_collapse_on_row_activated_callback(treeview, path, view_column):
         treeview.expand_row(path, True)
 
     return True
+
+
+def get_scrollable_label():
+    label = gtk.Label()
+    label.set_use_markup(True)
+    label.set_line_wrap(True)
+    label.set_line_wrap_mode(pango.WRAP_WORD)
+    viewport = gtk.Viewport()
+    viewport.add(label)
+    viewport.show_all()
+    return label, viewport
