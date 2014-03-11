@@ -27,6 +27,7 @@ http://bugs.python.org/issue4319
 import gettext
 from optparse import IndentedHelpFormatter as _IndentedHelpFormatter
 from optparse import OptionParser as _OptionParser
+from optparse import OptionContainer
 import sys
 import textwrap
 
@@ -139,7 +140,6 @@ class OptionParser(_OptionParser):
     _("Usage: %s\n")
     _("Usage")
     _("%prog [options]")
-    _("Options")
     _("options")
     _("options:")
 
@@ -157,7 +157,6 @@ class OptionParser(_OptionParser):
     _("option %s: invalid choice: %r (choose from %s)")
 
     # default options
-    _("show this help message and exit")
     _("show program's version number and exit")
 
     def print_help(self):
@@ -173,3 +172,25 @@ class OptionParser(_OptionParser):
         #translators: arg 1 is the program name, arg 2 is the error message
         print _("%s: error: %s") % (self.get_prog_name(), msg)
         self.exit(2)
+
+    def _add_help_option(self):
+        self.add_option("-h", "--help",
+                action="help",
+                help=_("show this help message and exit"))
+
+    def format_option_help(self, formatter=None):
+        if formatter is None:
+            formatter = self.formatter
+        formatter.store_option_strings(self)
+        result = []
+        result.append(formatter.format_heading(_("Options")))
+        formatter.indent()
+        if self.option_list:
+            result.append(OptionContainer.format_option_help(self, formatter))
+            result.append("\n")
+        for group in self.option_groups:
+            result.append(group.format_help(formatter))
+            result.append("\n")
+        formatter.dedent()
+        # Drop the last "\n", or the header if no options or option groups:
+        return "".join(result[:-1])
