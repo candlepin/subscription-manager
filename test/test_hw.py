@@ -506,12 +506,20 @@ class HardwareProbeTests(fixture.SubManFixture):
 #        # this is going to be empty as non root
 #        print platform_info
 
+    def _cpu_topo_check(self, cpu_topo_dir):
+        return True
+
+    def reload(self):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        hw.check_for_cpu_topo = self._cpu_topo_check
+        return hw
+
     def test_parse_s390_sysinfo_empty(self):
         cpu_count = 0
         sysinfo_lines = []
 
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = self.reload()
 
         ret = hw._parse_s390x_sysinfo_topology(cpu_count, sysinfo_lines)
         self.assertTrue(ret is None)
@@ -520,8 +528,7 @@ class HardwareProbeTests(fixture.SubManFixture):
         cpu_count = 24
         sysinfo_lines = ["CPU Topology SW:      0 0 0 4 6 4"]
 
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = self.reload()
 
         ret = hw._parse_s390x_sysinfo_topology(cpu_count, sysinfo_lines)
 
@@ -532,8 +539,7 @@ class HardwareProbeTests(fixture.SubManFixture):
 
     @patch("os.listdir")
     def test_cpu_info_s390(self, mock_list_dir):
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = self.reload()
 
         mock_list_dir.return_value = ["cpu%s" % i for i in range(0, 3)]
 
@@ -566,7 +572,6 @@ class HardwareProbeTests(fixture.SubManFixture):
     @patch("os.listdir")
     def test_cpu_info_s390_sysinfo(self, mock_list_dir,
                                    mock_read_sysinfo, mock_has_sysinfo):
-        #reload(hwprobe)
 
         mock_list_dir.return_value = ["cpu%s" % i for i in range(0, 20)]
         mock_has_sysinfo.return_value = True
@@ -574,6 +579,7 @@ class HardwareProbeTests(fixture.SubManFixture):
 
         hw = hwprobe.Hardware()
         hw.arch = "s390x"
+        hw.check_for_cpu_topo = Mock(return_value=True)
 
         def count_cpumask(cpu, field):
             return self.cpumask_vals[field]
@@ -612,8 +618,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     @patch('subscription_manager.hwprobe.Hardware.count_cpumask_entries')
     @patch("os.listdir")
     def test_cpu_info(self, mock_list_dir, mock_count):
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = self.reload()
 
         def count_cpumask(cpu, field):
             return self.cpumask_vals[field]
@@ -635,8 +640,7 @@ class HardwareProbeTests(fixture.SubManFixture):
 
     @patch("os.listdir")
     def test_cpu_info_no_topo(self, mock_list_dir):
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = self.reload()
 
         def count_cpumask(cpu, field):
             return self.cpumask_vals[field]
@@ -659,8 +663,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     @patch("os.listdir")
     def test_cpu_info_no_topo_ppc64_physical_id(self, mock_list_dir,
                                                 mock_read_physical):
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = self.reload()
         hw.arch = "ppc64"
 
         def get_physical(cpu_file):
@@ -687,10 +690,10 @@ class HardwareProbeTests(fixture.SubManFixture):
 
     @patch("os.listdir")
     def test_cpu_info_lots_cpu(self, mock_list_dir):
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = self.reload()
 
         mock_list_dir.return_value = ["cpu%s" % i for i in range(0, 2000)]
+        hw.check_for_cpu_topo = Mock(return_value=True)
 
         def count_cpumask(cpu, field):
             vals = {'thread_siblings_list': 1,
@@ -706,14 +709,13 @@ class HardwareProbeTests(fixture.SubManFixture):
                                'cpu.cpu_socket(s)': 1,
                                'cpu.topology_source':
                                     'kernel /sys cpu sibling lists'},
-                               hw.get_cpu_info(),
-)
+                               hw.get_cpu_info())
 
     @patch("os.listdir")
     def test_cpu_info_other_files(self, mock_list_dir):
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = self.reload()
 
+        hw.check_for_cpu_topo = Mock(return_value=True)
         mock_list_dir.return_value = ["cpu0", "cpu1",  # normal cpu ids (valid)
                                       "cpu123123",     # big cpu   (valid)
                                       "cpu_",          # not valid

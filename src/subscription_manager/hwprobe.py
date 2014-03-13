@@ -385,6 +385,9 @@ class Hardware:
 
         return None
 
+    def check_for_cpu_topo(self, cpu_topo_dir):
+        return os.access(cpu_topo_dir, os.R_OK)
+
     def get_cpu_info(self):
         self.cpuinfo = {}
         # we also have cpufreq, etc in this dir, so match just the numbs
@@ -394,7 +397,27 @@ class Hardware:
         sys_cpu_path = self.prefix + "/sys/devices/system/cpu/"
         for cpu in os.listdir(sys_cpu_path):
             if re.match(cpu_re, cpu):
-                cpu_files.append("%s/%s" % (sys_cpu_path, cpu))
+                cpu_topo_dir = os.path.join(sys_cpu_path, cpu, "topology")
+
+                # see rhbz#1070908
+                # ppc64 machines running on LPARs will add
+                # a sys cpu entry for every cpu thread on the
+                # physical machine, regardless of how many are
+                # allocated to the LPAR. This throws off the cpu
+                # thread count, which throws off the cpu socket count.
+                # The entries for the unallocated or offline cpus
+                # do not have topology info however.
+                # So, skip sys cpu entries without topology info.
+                #
+                # NOTE: this assumes RHEL6+, prior to rhel5, on
+                # some arches like ppc and s390, there is no topology
+                # info ever, so this will break.
+                if self.check_for_cpu_topo(cpu_topo_dir):
+                    cpu_files.append("%s/%s" % (sys_cpu_path, cpu))
+
+        # for systems with no cpus
+        if not cpu_files:
+            return self.cpuinfo
 
         cpu_count = len(cpu_files)
 
