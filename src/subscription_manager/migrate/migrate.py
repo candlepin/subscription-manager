@@ -42,6 +42,7 @@ if _LIBPATH not in sys.path:
 
 from subscription_manager.certdirectory import ProductDirectory
 from subscription_manager.certlib import ConsumerIdentity
+from subscription_manager.identity import Identity
 from subscription_manager.cli import system_exit
 from subscription_manager.i18n_optparse import OptionParser, \
         USAGE, WrappedIndentedHelpFormatter
@@ -707,7 +708,8 @@ class MigrationEngine(object):
             return
 
         # create and populate the redhat.repo file
-        repolib.RepoLib(uep=self.cp).update()
+        identity = Identity()
+        repolib.RepoLib(uep=self.cp, identity=identity).update()
 
         # read in the redhat.repo file
         repofile = repolib.RepoFile()
