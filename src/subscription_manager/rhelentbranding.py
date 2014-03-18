@@ -81,7 +81,7 @@ class RHELBrandPicker(entbranding.BrandPicker):
         branded_name_set = set([])
         for cert, product in branded_certs:
             # uniq on product id and product name
-            branded_name_set.add(product.name)
+            branded_name_set.add(product.brand_name)
 
         if len(branded_name_set) == 1:
             # all the ent certs provide the same branding info,
@@ -94,7 +94,7 @@ class RHELBrandPicker(entbranding.BrandPicker):
             for branded_cert in branded_certs:
                 log.debug("Entitlement cert %s (%s) provided branded name information for (%s, %s)" %
                             (branded_cert[0].serial, branded_cert[0].order.name,
-                            branded_cert[1].id, branded_cert[1].name))
+                            branded_cert[1].id, branded_cert[1].brand_name))
             return None
 
     def _get_branded_cert_products(self):
@@ -155,7 +155,10 @@ class RHELBrandPicker(entbranding.BrandPicker):
         elif product.brand_type != 'OS':
             return False
 
-        if not product.name:
+        if not hasattr(product, 'brand_name'):
+            return False
+
+        if not product.brand_name:
             return False
 
         return True
