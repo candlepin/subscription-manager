@@ -1057,6 +1057,7 @@ class Product:
         self.arch = self.ext.get('3')
         self.provided_tags = parse_tags(self.ext.get('4'))
         self.brand_type = self.ext.get('5')
+        self.brand_name = self.ext.get('6')
 
     def getHash(self):
         return self.hash
@@ -1076,6 +1077,9 @@ class Product:
     def getBrandType(self):
         return self.brand_type
 
+    def getBrandName(self):
+        return self.brand_name
+
     def __eq__(self, rhs):
         return (self.getHash() == rhs.getHash())
 
@@ -1088,6 +1092,7 @@ class Product:
         s.append('\tArchitecture . = %s' % self.getArch())
         s.append('\tProvided Tags  = %s' % self.getProvidedTags())
         s.append('\tBrand Type     = %s' % self.getBrandType())
+        s.append('\tBrand Name     = %s' % self.getBrandName())
         s.append('}')
         return '\n'.join(s)
 

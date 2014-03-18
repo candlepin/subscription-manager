@@ -45,6 +45,12 @@ class V1ProductCertTests(unittest.TestCase):
         self.prod_cert.products[0].brand_type = brand_type
         self.assertEquals(brand_type, self.prod_cert.products[0].brand_type)
 
+    def test_set_brand_name(self):
+        brand_name = "Awesome OS Super"
+
+        self.prod_cert.products[0].brand_name = brand_name
+        self.assertEquals(brand_name, self.prod_cert.products[0].brand_name)
+
 
 class V1EntCertTests(unittest.TestCase):
 
@@ -351,3 +357,17 @@ class ProductTests(unittest.TestCase):
         p = Product(id="pid", name="pname",
                     brand_type=None)
         self.assertTrue(p.brand_type is None)
+
+    def test_no_brand_name(self):
+        p = Product(id="pid", name="pname")
+        self.assertTrue(p.brand_name is None)
+
+    def test_brand_name(self):
+        p = Product(id="pid", name="pname",
+                    brand_name="pbrand_name")
+        self.assertTrue(p.brand_name == "pbrand_name")
+
+    def test_brand_name_none(self):
+        p = Product(id="pid", name="pname",
+                    brand_name=None)
+        self.assertTrue(p.brand_name is None)
