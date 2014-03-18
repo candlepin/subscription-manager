@@ -50,6 +50,13 @@ class ProductPrinter(object):
         if hasattr(product, 'brand_type'):
             brand_type = product.brand_type
         s.append("\t%s: %s" % (_("Brand Type"), xstr(brand_type)))
+
+        brand_name = ""
+        if hasattr(product, 'brand_name'):
+            brand_name = product.brand_name
+
+        s.append("\t%s: %s" % (_("Brand Name"), xstr(brand_name)))
+
         return "%s\n" % '\n'.join(s)
 
 

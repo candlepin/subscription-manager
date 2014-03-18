@@ -242,6 +242,7 @@ Product:
 	Arch: ALL
 	Tags: 
 	Brand Type: 
+	Brand Name: 
 
 Product:
 	ID: 37065
@@ -250,6 +251,7 @@ Product:
 	Arch: ALL
 	Tags: 
 	Brand Type: 
+	Brand Name: 
 
 Product:
 	ID: 37067
@@ -258,6 +260,7 @@ Product:
 	Arch: ALL
 	Tags: 
 	Brand Type: 
+	Brand Name: 
 
 Product:
 	ID: 37068
@@ -266,6 +269,7 @@ Product:
 	Arch: ALL
 	Tags: 
 	Brand Type: 
+	Brand Name: 
 
 Product:
 	ID: 37069
@@ -274,6 +278,7 @@ Product:
 	Arch: ALL
 	Tags: 
 	Brand Type: 
+	Brand Name: 
 
 Product:
 	ID: 37070
@@ -282,6 +287,7 @@ Product:
 	Arch: ALL
 	Tags: 
 	Brand Type: 
+	Brand Name: 
 
 Order:
 	Name: Awesome OS Server Bundled
@@ -402,6 +408,7 @@ Product:
 	Arch: x86_64
 	Tags: 
 	Brand Type: 
+	Brand Name: 
 
 Order:
 	Name: Awesome OS for x86_64
@@ -497,6 +504,7 @@ Product:
 	Arch: x86_64
 	Tags: 
 	Brand Type: 
+	Brand Name: 
 
 """
 
@@ -527,7 +535,7 @@ Product:
 	Arch: ALL
 	Tags: 
 	Brand Type: 
-
+	Brand Name: 
 """
 
 IDENTITY_CERT_OUTPUT = """
