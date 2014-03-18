@@ -1,19 +1,20 @@
 # bkearney <bkearney@fedoraproject.org>, 2013. #zanata
 # shanky <shanky@fedoraproject.org>, 2013. #zanata
+# John Sefler <jsefler@redhat.com>, 2014. #zanata
 # shanky <shanky@fedoraproject.org>, 2014. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-04 08:45-0500\n"
-"PO-Revision-Date: 2014-02-28 03:05-0500\n"
-"Last-Translator: shanky <shanky@fedoraproject.org>\n"
+"PO-Revision-Date: 2014-03-11 05:11-0400\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Kannada\n"
 "Language: kn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.2.3\n"
+"X-Generator: Zanata 3.3.2\n"
 "Plural-Forms: nplurals=2; plural=(n!=1)\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -201,7 +202,7 @@ msgstr "%%prog %s [ಆಯ್ಕೆಗಳು]"
 #: ../src/subscription_manager/cli.py:93
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "ಬಳಕೆ: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+msgstr "ಬಳಕೆ: %s ಮಾಡ್ಯೂಲ್-ಹೆಸರು [ಮಾಡ್ಯೂಲ್-ಆಯ್ಕೆಗಳು] [--help]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
 #: ../src/subscription_manager/cli.py:105
@@ -1706,7 +1707,7 @@ msgstr "ಆವೃತ್ತಿಯ ಮಾಹಿತಿಯನ್ನು ಮುದ್�
 #: ../src/subscription_manager/managercli.py:2332
 #, python-format
 msgid "subscription management server: %s"
-msgstr "subscription management ಪೂರೈಕೆಗಣಕ: %s"
+msgstr "ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾ ಪೂರೈಕೆಗಣಕ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
 #: ../src/subscription_manager/managercli.py:2333
@@ -1874,8 +1875,7 @@ msgid ""
 "don't execute the auto-attach option while registering with subscription "
 "manager"
 msgstr ""
-"subscription manager ನೊಂದಿಗೆ ನೋಂದಾಯಿಸುವಾಗ auto-attach ಆಯ್ಕೆಯನ್ನು "
-"ಕಾರ್ಯಗತಗೊಳಿಸಬೇಡ."
+"ಚಂದಾದಾರ ವ್ಯವಸ್ಥಾಪಕ ನೊಂದಿಗೆ ನೋಂದಾಯಿಸುವಾಗ auto-attach ಆಯ್ಕೆಯನ್ನು ಕಾರ್ಯಗತಗೊಳಿಸಬೇಡ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:161
@@ -1889,7 +1889,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
 #: ../src/subscription_manager/migrate/migrate.py:164
 msgid "specify the subscription management server to migrate to"
-msgstr "ಇಲ್ಲಿಗೆ ವರ್ಗಾಯಿಸಬೇಕಿರುವ subscription manager ಪೂರೈಕೆಗಣಕವನ್ನು ಸೂಚಿಸಿ."
+msgstr "ಇಲ್ಲಿಗೆ ವರ್ಗಾಯಿಸಬೇಕಿರುವ ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾ ಪೂರೈಕೆಗಣಕವನ್ನು ಸೂಚಿಸಿ."
 
 #: ../src/subscription_manager/migrate/migrate.py:166
 msgid "specify the Red Hat user name"
@@ -1962,7 +1962,7 @@ msgid ""
 "Management.  Exiting."
 msgstr ""
 "\n"
-"ಈ ವ್ಯವಸ್ಥೆಯನ್ನು ಈಗಾಗಲೆ Red Hat Subscription Managementಗೆ  ನೋಂದಾಯಿಸಲಾಗಿದೆ. "
+"ಈ ವ್ಯವಸ್ಥೆಯನ್ನು ಈಗಾಗಲೆ Red Hat ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾಗೆ  ನೋಂದಾಯಿಸಲಾಗಿದೆ. "
 "ನಿರ್ಗಮಿಸಲಾಗುತ್ತಿದೆ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -2131,7 +2131,7 @@ msgstr "RHN Classic ‌ನಿಂದ ನೋಂದಣಿಯನ್ನು ರದ್�
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
 #: ../src/subscription_manager/migrate/migrate.py:622
 msgid "Attempting to register system to Red Hat Subscription Management..."
-msgstr "Red Hat ನ subscription managementಗೆ ನೋಂದಾಯಿಸಲು ಪ್ರಯತ್ನಿಸಲಾಗುತ್ತಿದೆ..."
+msgstr "Red Hat ನ ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾಗೆ ನೋಂದಾಯಿಸಲು ಪ್ರಯತ್ನಿಸಲಾಗುತ್ತಿದೆ..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:635
@@ -2150,7 +2150,7 @@ msgstr ""
 msgid ""
 "System '%s' successfully registered to Red Hat Subscription Management.\n"
 msgstr ""
-"'%s' ವ್ಯವಸ್ಥೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ Red Hat Subscription Managementಗೆ ನೋಂದಾಯಿಸಲಾಗಿದೆ.\n"
+"'%s' ವ್ಯವಸ್ಥೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ Red Hat ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾಗೆ ನೋಂದಾಯಿಸಲಾಗಿದೆ.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
 #. Display an actual message for the empty string level.
@@ -2334,8 +2334,8 @@ msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
 msgstr ""
-"ಗ್ರಾಹಕರ ಪೋರ್ಟಲ್‌ ಅಥವ ಬೇರೊಂದು subscription management ಸೇವೆಯಿಂದ ಈ ವ್ಯವಸ್ಥೆಯ "
-"ನೋಂದಣಿಯನ್ನು ರದ್ದುಗೊಳಿಸು"
+"ಗ್ರಾಹಕರ ಪೋರ್ಟಲ್‌ ಅಥವ ಬೇರೊಂದು ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾ ಸೇವೆಯಿಂದ ಈ ವ್ಯವಸ್ಥೆಯ ನೋಂದಣಿಯನ್ನು "
+"ರದ್ದುಗೊಳಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
 #: ../src/subscription_manager/branding/redhat_branding.py:10
@@ -2390,7 +2390,7 @@ msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
 msgstr ""
-"ಈ ವ್ಯವಸ್ಥೆಯನ್ನು RHN Classic ಮತ್ತು Red Hat Subscription Management ಯನ್ನು ಬಳಸಿಕೊಂಡು "
+"ಈ ವ್ಯವಸ್ಥೆಯನ್ನು RHN Classic ಮತ್ತು Red Hat ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾವನ್ನು ಬಳಸಿಕೊಂಡು "
 "ನೋಂದಾಯಿಸಲಾಗಿದೆ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
@@ -2411,7 +2411,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
 #: ../src/subscription_manager/branding/redhat_branding.py:28
 msgid "RHN Classic and Red Hat Subscription Management"
-msgstr "RHN Classic ಮತ್ತು Red Hat Subscription Management"
+msgstr "RHN Classic ಮತ್ತು Red Hat ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
 #: ../src/subscription_manager/branding/redhat_branding.py:30
@@ -2711,7 +2711,7 @@ msgid ""
 "'Subscription Manager' to manually attach a subscription."
 msgstr ""
 "ಸ್ವಯಂ-ಲಗತ್ತಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ, ಪೂರೈಕೆಗಣಕವು ಸೇವಾ ಹಂತಗಳನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ. ಒಂದು "
-"ಚಂದಾದಾರಿಕೆಯನ್ನು ಕೈಯಾರೆ ಲಗತ್ತಿಸಲು ದಯವಿಟ್ಟು 'subscription manager' ಅನ್ನು ಚಲಾಯಿಸಿ."
+"ಚಂದಾದಾರಿಕೆಯನ್ನು ಕೈಯಾರೆ ಲಗತ್ತಿಸಲು ದಯವಿಟ್ಟು 'ಚಂದಾದಾರ ವ್ಯವಸ್ಥಾಪಕ' ಅನ್ನು ಚಲಾಯಿಸಿ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:68
@@ -2748,7 +2748,7 @@ msgid ""
 "'Subscription Manager' to manually attach subscriptions."
 msgstr ""
 "ಯಾವ ಸೇವಾ ಮಟ್ಟಗಳೂ ಸಹ ಅನುಸ್ಥಾಪಿಸಲಾದ ಎಲ್ಲಾ ಉತ್ಪನ್ನಗಳನ್ನು ಒಳಗೊಂಡಿರುವುದಿಲ್ಲ. "
-"ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಕೈಯಾರೆ ಲಗತ್ತಿಸಲು 'Subscription Manager' ಅನ್ನು ಚಲಾಯಿಸಿ."
+"ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಕೈಯಾರೆ ಲಗತ್ತಿಸಲು 'ಚಂದಾದಾರ ವ್ಯವಸ್ಥಾಪಕ' ಅನ್ನು ಚಲಾಯಿಸಿ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:126
@@ -2766,7 +2766,7 @@ msgstr "ಪೂರ್ಣಗೊಳಿಸು"
 #. firstboot modules, not just the rhsm ones. See bz #828042
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:196
 msgid "Subscription Management Registration"
-msgstr "Subscription Management ನ ನೋಂದಣಿ"
+msgstr "ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾ ನೋಂದಣಿ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:197
@@ -3273,7 +3273,7 @@ msgstr "<b>python-rhsm ಆವೃತ್ತಿ:</b> %s"
 #: ../src/subscription_manager/gui/about.py:76
 #, python-format
 msgid "<b>subscription management service version:</b> %s"
-msgstr "<b>subscription management ಸೇವೆಯ ಆವೃತ್ತಿ:</b> %s"
+msgstr "<b>ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾ ಸೇವೆಯ ಆವೃತ್ತಿ:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/about.py:100
@@ -4433,8 +4433,8 @@ msgid ""
 "You will need to use Red Hat Subscription Manager to manually attach "
 "subscriptions to this system after completing firstboot."
 msgstr ""
-"ಪ್ರಥಮಬೂಟ್‌ ಅನ್ನು ಪೂರ್ಣಗೊಳಿಸಿದ ನಂತರ ನೀವು ಈ ವ್ಯವಸ್ಥೆಗೆ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಕೈಯಾರೆ "
-"ಲಗತ್ತಿಸಲು  Red Hat ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪಕವನ್ನು ಬಳಸಬೇಕಾಗುತ್ತದೆ."
+"firstboot ಅನ್ನು ಪೂರ್ಣಗೊಳಿಸಿದ ನಂತರ ನೀವು ಈ ವ್ಯವಸ್ಥೆಗೆ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಕೈಯಾರೆ "
+"ಲಗತ್ತಿಸಲು Red Hat ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪಕವನ್ನು ಬಳಸಬೇಕಾಗುತ್ತದೆ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
 #: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
@@ -4442,8 +4442,8 @@ msgid ""
 "After opening Red Hat Subscription Manager, manually attach subscriptions "
 "via the <b>All Available Subscriptions</b> tab."
 msgstr ""
-"Red Hat Subscription Manager ಅನ್ನು ತೆರೆದ ನಂತರ, <b>ಲಭ್ಯವಿರುವ ಎಲ್ಲಾ ಚಂದಾರಿಕೆಗಳು</"
-"b> ಟ್ಯಾಬ್‌ ಮುಖಾಂತರ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಕೈಯಾರೆ ಲಗತ್ತಿಸಿ."
+"Red Hat ಚಂದಾದಾರ ವ್ಯವಸ್ಥಾಪಕ ಅನ್ನು ತೆರೆದ ನಂತರ, <b>ಲಭ್ಯವಿರುವ ಎಲ್ಲಾ ಚಂದಾರಿಕೆಗಳು</b> "
+"ಟ್ಯಾಬ್‌ ಮುಖಾಂತರ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಕೈಯಾರೆ ಲಗತ್ತಿಸಿ."
 
 #: ../src/subscription_manager/gui/data/repositories.glade.h:1
 msgid "Manage Repositories"
@@ -5141,8 +5141,8 @@ msgid ""
 "system must be registered with the Customer Portal. Please enter your Red "
 "Hat login to ensure your system is up-to-date."
 msgstr ""
-"Subscription Manager ನಿಮ್ಮ ವ್ಯವಸ್ಥೆಗಾಗಿ ಅಪ್‌ಡೇಟ್‌ಗಳನ್ನು ಒದಗಿಸಲು, ನಿಮ್ಮ ವ್ಯವಸ್ಥೆಯನ್ನು "
-"ಗ್ರಾಹಕರ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ನೋಂದಾಯಿಸಬೇಕು. ನಿಮ್ಮ ವ್ಯವಸ್ಥೆಯು ಅಪ್‌-ಟು-ಡೇಟ್ ಆಗಿದೆ ಎನ್ನುವುದನ್ನು "
+"ಚಂದಾದಾರ ವ್ಯವಸ್ಥಾಪಕ ನಿಮ್ಮ ವ್ಯವಸ್ಥೆಗಾಗಿ ಅಪ್‌ಡೇಟ್‌ಗಳನ್ನು ಒದಗಿಸಲು, ನಿಮ್ಮ ವ್ಯವಸ್ಥೆಯನ್ನು ಗ್ರಾಹಕರ "
+"ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ನೋಂದಾಯಿಸಬೇಕು. ನಿಮ್ಮ ವ್ಯವಸ್ಥೆಯು ಅಪ್‌-ಟು-ಡೇಟ್ ಆಗಿದೆ ಎನ್ನುವುದನ್ನು "
 "ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಲು ನಿಮ್ಮ Red Hat ಲಾಗಿನ್ ಅನ್ನು ದಾಖಲಿಸಿ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
