@@ -66,6 +66,12 @@ class MessageWindow(gobject.GObject):
         # escape product strings see rh bz#633438
         self.dialog.set_markup(text)
 
+        # If translations contain bad markup (perhaps from bad text encoding)
+        # that doesn't render, just show the message including the markup.
+        # See rhbz #865702
+        if self.dialog.label.get_text() == '':
+            self.dialog.label.set_use_markup(False)
+
         self.dialog.set_default_response(0)
 
         self.dialog.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
