@@ -14,7 +14,7 @@
 
 Name: subscription-manager
 Version: 1.10.14
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -419,6 +419,14 @@ fi
 %endif
 
 %changelog
+* Wed Mar 19 2014 ckozak <ckozak@redhat.com> 1.10.14-5
+- 1070908: Don't count cpus without topo for lpar (alikins@redhat.com)
+- 865702: Dont render exc messages with bogus markup (alikins@redhat.com)
+- 1074568: Use our translations in optparser (ckozak@redhat.com)
+- 1075167: Avoid using injected values in migrate-classic-to-rhsm
+  (ckozak@redhat.com)
+- 1020474: Strings are 100%% translated again. (alikins@redhat.com)
+
 * Tue Mar 04 2014 ckozak <ckozak@redhat.com> 1.10.14-4
 - 1030378: Latest strings from zanata. (alikins@redhat.com)
 - 1070737: correct config section for ca_cert_dir (ckozak@redhat.com)
