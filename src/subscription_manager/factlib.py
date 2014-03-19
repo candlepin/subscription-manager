@@ -18,41 +18,78 @@
 import gettext
 import logging
 
-from certlib import ConsumerIdentity, DataLib
-from subscription_manager.facts import Facts
+from certlib import Locker, ActionReport
+from subscription_manager import injection as inj
 
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class FactLib(DataLib):
+# Factlib has a Facts
+#   Facts is a CacheManager
+# Facts as a CacheManager seems to be doing alot
+# of stuff, split actual facts gather code out?
+class FactLib(object):
     """
     Used by CertManager to update a system's facts with the server, used
     primarily by the cron job but in a couple other places as well.
 
     Makes use of the facts module as well.
     """
-    def __init__(self, lock=None, uep=None, facts=None):
-        DataLib.__init__(self, lock, uep)
-        self.facts = facts
-        if not self.facts:
-            self.facts = Facts()
+    def __init__(self, uep=None):
+        self.locker = Locker()
+        self.uep = uep
+        self.facts = inj.require(inj.FACTS)
+
+    def update(self):
+        return self.locker.run(self._do_update)
 
     def _do_update(self):
-        updates = 0
+        action = FactAction(uep=self.uep, facts=self.facts)
+        return action.perform()
+
+
+class FactActionReport(ActionReport):
+    name = "Fact updates"
+
+    def __init__(self):
+        self.fact_updates = []
+        self._exceptions = []
+        self._updates = []
+        self._status = None
+
+    def updates(self):
+        """how many facts were updated"""
+        return len(self.fact_updates)
+
+
+class FactAction(object):
+    # FIXME: pretty sure Action doesn't need any of this
+    def __init__(self, uep=None, facts=None):
+        self.uep = uep
+        self.report = FactActionReport()
+        self.facts = facts
+
+    def perform(self):
 
         # figure out the diff between latest facts and
         # report that as updates
 
         if self.facts.has_changed():
-            updates = len(self.facts.get_facts())
-            if not ConsumerIdentity.exists():
-                return updates
-            consumer = ConsumerIdentity.read()
-            consumer_uuid = consumer.getConsumerId()
+            fact_updates = self.facts.get_facts()
+            self.report.fact_updates = fact_updates
 
-            self.facts.update_check(self.uep, consumer_uuid)
+            consumer_identity = inj.require(inj.IDENTITY)
+            if not consumer_identity.is_valid():
+                # FIXME: more info
+                return self.report
+
+            # CacheManager.update_check calls self.has_changed,
+            # is the self.facts.has_changed above redundant?
+            self.facts.update_check(self.uep, consumer_identity.uuid)
         else:
             log.info("Facts have not changed, skipping upload.")
-        return updates
+
+        # FIXME: can populate this with more info later
+        return self.report

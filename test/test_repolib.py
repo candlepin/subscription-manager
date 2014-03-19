@@ -24,8 +24,9 @@ from fixture import SubManFixture
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
         StubProductDirectory, StubUEP, StubConsumerIdentity
-import subscription_manager.injection as inj
-from subscription_manager.repolib import Repo, UpdateAction, TidyWriter
+from subscription_manager.repolib import Repo, RepoUpdateAction, TidyWriter
+from subscription_manager import injection as inj
+
 from subscription_manager import repolib
 
 
@@ -56,10 +57,10 @@ class RepoTests(unittest.TestCase):
         self.assertFalse(("proxy", "") in r.items())
 
 
-class UpdateActionTests(SubManFixture):
+class RepoUpdateActionTests(SubManFixture):
 
     def setUp(self):
-        super(UpdateActionTests, self).setUp()
+        super(RepoUpdateActionTests, self).setUp()
         stub_prod = StubProduct("fauxprod", provided_tags="TAG1,TAG2")
         stub_prod2 = StubProduct("fauxprovidedprod", provided_tags="TAG4")
         stub_prod_cert = StubProductCertificate(stub_prod, provided_products=[stub_prod2])
@@ -81,7 +82,7 @@ class UpdateActionTests(SubManFixture):
 
         repolib.ConsumerIdentity = StubConsumerIdentity
         stub_uep = StubUEP()
-        self.update_action = UpdateAction(stub_uep, prod_dir=stub_prod_dir,
+        self.update_action = RepoUpdateAction(uep=stub_uep, prod_dir=stub_prod_dir,
                 ent_dir=stub_ent_dir)
 
     def _find_content(self, content_list, name):
@@ -103,7 +104,7 @@ class UpdateActionTests(SubManFixture):
         mock_uep.getCertificateSerials = Mock(return_value=[])
         mock_uep.getRelease = Mock(return_value={'releaseVer': "dummyrelease"})
 
-        UpdateAction(mock_uep, prod_dir=StubProductDirectory(),
+        RepoUpdateAction(mock_uep, prod_dir=StubProductDirectory(),
                      ent_dir=StubCertificateDirectory())
 
         # No cache calls should be made if overrides are not supported
@@ -130,16 +131,14 @@ class UpdateActionTests(SubManFixture):
         def stub_content():
             return [Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])]
         self.update_action.get_unique_content = stub_content
-        updates = self.update_action.perform()
+        update_report = self.update_action.perform()
         written_repo = mock_file.add.call_args[0][0]
         self.assertEquals('original', written_repo['gpgcheck'])
         self.assertEquals('some_key', written_repo['gpgkey'])
-        self.assertEquals(1, updates)
+        self.assertEquals(1, update_report.updates())
 
     @patch("subscription_manager.repolib.RepoFile")
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_update_when_registered_and_existing_repo(self, mock_ident, mock_file):
-        mock_ident.existsAndValid.return_value = True
+    def test_update_when_registered_and_existing_repo(self, mock_file):
         mock_file = mock_file.return_value
         mock_file.section.return_value = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
 
@@ -147,16 +146,15 @@ class UpdateActionTests(SubManFixture):
             return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key')])]
         self.update_action.get_unique_content = stub_content
         self.update_action.override_supported = True
-        updates = self.update_action.perform()
+        update_report = self.update_action.perform()
         written_repo = mock_file.update.call_args[0][0]
         self.assertEquals('new', written_repo['gpgcheck'])
         self.assertEquals('new_key', written_repo['gpgkey'])
-        self.assertEquals(1, updates)
+        self.assertEquals(1, update_report.updates())
 
     @patch("subscription_manager.repolib.RepoFile")
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_update_when_not_registered_and_existing_repo(self, mock_ident, mock_file):
-        mock_ident.existsAndValid.return_value = False
+    def test_update_when_not_registered_and_existing_repo(self, mock_file):
+        self._inject_mock_invalid_consumer()
         mock_file = mock_file.return_value
         mock_file.section.return_value = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
 
@@ -227,36 +225,32 @@ class UpdateActionTests(SubManFixture):
         self.assertTrue(self._find_content(content, "c5") is None)
         self.assertTrue(self._find_content(content, "c6") is None)
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_mutable_property(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_mutable_property(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['metadata_expire'] = 1000
         incoming_repo = {'metadata_expire': 2000}
         self.update_action.update_repo(existing_repo, incoming_repo)
         self.assertEqual(1000, existing_repo['metadata_expire'])
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_gpgcheck_is_mutable(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_gpgcheck_is_mutable(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['gpgcheck'] = "0"
         incoming_repo = {'gpgcheck': "1"}
         self.update_action.update_repo(existing_repo, incoming_repo)
         self.assertEqual("0", existing_repo['gpgcheck'])
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_mutable_property_in_repo_but_not_in_cert(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_mutable_property_in_repo_but_not_in_cert(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['metadata_expire'] = 1000
         incoming_repo = {}
         self.update_action.update_repo(existing_repo, incoming_repo)
         self.assertEqual(1000, existing_repo['metadata_expire'])
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_immutable_property(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_immutable_property(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['name'] = "meow"
         incoming_repo = {'name': "woof"}
@@ -266,17 +260,15 @@ class UpdateActionTests(SubManFixture):
     # If the user removed a mutable property completely, or the property
     # is new in a new version of the entitlement certificate, the new value
     # should get written out.
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_unset_mutable_property(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_unset_mutable_property(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         incoming_repo = {'metadata_expire': 2000}
         self.update_action.update_repo(existing_repo, incoming_repo)
         self.assertEqual(2000, existing_repo['metadata_expire'])
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_unset_immutable_property(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_unset_immutable_property(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         incoming_repo = {'name': "woof"}
         self.update_action.update_repo(existing_repo, incoming_repo)
@@ -284,18 +276,16 @@ class UpdateActionTests(SubManFixture):
 
     # Test repo on disk has an immutable property set which has since been
     # unset in the new repo definition. This property should be removed.
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_set_immutable_property_now_empty(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_set_immutable_property_now_empty(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['proxy_username'] = "blah"
         incoming_repo = {}
         self.update_action.update_repo(existing_repo, incoming_repo)
         self.assertFalse("proxy_username" in existing_repo.keys())
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_set_mutable_property_now_empty_value(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_set_mutable_property_now_empty_value(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['metadata_expire'] = "blah"
         incoming_repo = {'metadata_expire': ''}
@@ -305,9 +295,8 @@ class UpdateActionTests(SubManFixture):
         # otherwise left alone.
         self.assertTrue("metadata_expire" in existing_repo.keys())
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_set_immutable_property_now_empty_value(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_set_immutable_property_now_empty_value(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['proxy_username'] = "blah"
         incoming_repo = {'proxy_username': ''}
@@ -316,9 +305,8 @@ class UpdateActionTests(SubManFixture):
         # and removed if undefined in the new repo definition.
         self.assertFalse("proxy_username" in existing_repo.keys())
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_set_mutable_property_now_none(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_set_mutable_property_now_none(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['metadata_expire'] = "blah"
         incoming_repo = {'metadata_expire': None}
@@ -328,9 +316,8 @@ class UpdateActionTests(SubManFixture):
         # otherwise left alone.
         self.assertTrue("metadata_expire" in existing_repo.keys())
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_set_mutable_property_now_not_in_cert(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_set_mutable_property_now_not_in_cert(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['metadata_expire'] = "blah"
         incoming_repo = {}
@@ -340,9 +327,8 @@ class UpdateActionTests(SubManFixture):
         # otherwise left alone.
         self.assertTrue("metadata_expire" in existing_repo.keys())
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_set_immutable_property_now_none(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_set_immutable_property_now_none(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['proxy_username'] = "blah"
         incoming_repo = {'proxy_username': None}
@@ -351,9 +337,8 @@ class UpdateActionTests(SubManFixture):
         # and removed if undefined in the new repo definition.
         self.assertFalse("proxy_username" in existing_repo.keys())
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_set_immutable_property_now_not_in_cert(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_set_immutable_property_now_not_in_cert(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['proxy_username'] = "blah"
         incoming_repo = {}
@@ -362,16 +347,13 @@ class UpdateActionTests(SubManFixture):
         # and removed if undefined in the new repo definition.
         self.assertFalse("proxy_username" in existing_repo.keys())
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_unknown_property_is_preserved(self, mock_ident):
-        mock_ident.existsAndValid.return_value = False
+    def test_unknown_property_is_preserved(self):
+        self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['fake_prop'] = 'fake'
         self.assertTrue(('fake_prop', 'fake') in existing_repo.items())
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_repo_update_forbidden_when_registered(self, mock_ident):
-        mock_ident.existsAndValid.return_value = True
+    def test_repo_update_forbidden_when_registered(self):
         existing_repo = Repo('testrepo')
         existing_repo['proxy_username'] = "blah"
         incoming_repo = {'proxy_username': 'foo'}

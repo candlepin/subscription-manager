@@ -28,8 +28,7 @@ from rhsm.certificate import Key, CertificateException, create_from_pem
 
 import subscription_manager.cache as cache
 from subscription_manager.cert_sorter import StackingGroupSorter, ComplianceManager
-from subscription_manager import certlib
-from subscription_manager.certlib import system_log as inner_system_log
+from subscription_manager import identity
 from subscription_manager.facts import Facts
 from subscription_manager.injection import require, CERT_SORTER, \
         PRODUCT_DATE_RANGE_CALCULATOR, IDENTITY, ENTITLEMENT_STATUS_CACHE, \
@@ -38,7 +37,9 @@ from subscription_manager.injection import require, CERT_SORTER, \
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoLib
-from subscription_manager.utils import is_true_value
+from subscription_manager import utils
+
+# FIXME FIXME
 from subscription_manager.identity import ConsumerIdentity
 from dateutil.tz import tzlocal
 
@@ -54,9 +55,10 @@ ID_CERT_PERMS = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP
 
 
 def system_log(message, priority=syslog.LOG_NOTICE):
-    inner_system_log(message, priority)
+    utils.system_log(message, priority)
 
 
+# FIXME: move me to identity.py
 def persist_consumer_cert(consumerinfo):
     """
      Calls the consumerIdentity, persists and gets consumer info
@@ -64,8 +66,9 @@ def persist_consumer_cert(consumerinfo):
     cert_dir = cfg.get('rhsm', 'consumerCertDir')
     if not os.path.isdir(cert_dir):
         os.mkdir(cert_dir)
-    consumer = certlib.ConsumerIdentity(consumerinfo['idCert']['key'],
-                                        consumerinfo['idCert']['cert'])
+    # unsure if this could be injected?
+    consumer = identity.ConsumerIdentity(consumerinfo['idCert']['key'],
+                                         consumerinfo['idCert']['cert'])
     consumer.write()
     consumer_info = {"consumer_name": consumer.getConsumerName(),
                      "uuid": consumer.getConsumerId()}
@@ -120,8 +123,9 @@ class CertificateFetchError(Exception):
 def fetch_certificates(certlib):
     # Force fetch all certs
     result = certlib.update()
-    if result[1]:
-        raise CertificateFetchError(result[1])
+    exceptions = result.exceptions()
+    if exceptions:
+        raise CertificateFetchError(exceptions)
 
     return True
 
@@ -729,6 +733,7 @@ class ImportFileExtractor(object):
             return False
         return True
 
+    # TODO: rewrite to use certlib.EntitlementCertBundleInstall?
     def write_to_disk(self):
         """
         Write/copy cert to the entitlement cert dir.
@@ -799,12 +804,13 @@ def unregister(uep, consumer_uuid):
     clean_all_data(backup=False)
 
 
+# FIXME: move me to identity.py
 def check_identity_cert_perms():
     """
     Ensure the identity certs on this system have the correct permissions, and
     fix them if not.
     """
-    certs = [certlib.ConsumerIdentity.keypath(), certlib.ConsumerIdentity.certpath()]
+    certs = [identity.ConsumerIdentity.keypath(), identity.ConsumerIdentity.certpath()]
     for cert in certs:
         if not os.path.exists(cert):
             # Only relevant if these files exist.
@@ -835,6 +841,7 @@ def clean_all_data(backup=True):
         log.info("Backing up %s to %s." % (consumer_dir, consumer_dir_backup))
         shutil.copytree(consumer_dir, consumer_dir_backup)
 
+# FIXME FIXME
     # Delete current consumer certs:
     for path in [ConsumerIdentity.keypath(), ConsumerIdentity.certpath()]:
         if (os.path.exists(path)):
@@ -883,6 +890,6 @@ def allows_multi_entitlement(pool):
     """
     for attribute in pool['productAttributes']:
         if attribute['name'] == "multi-entitlement" and \
-            is_true_value(attribute['value']):
+            utils.is_true_value(attribute['value']):
             return True
     return False

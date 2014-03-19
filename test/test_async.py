@@ -16,7 +16,7 @@
 
 import datetime
 import gobject
-import unittest
+import fixture
 
 import mock
 
@@ -40,9 +40,10 @@ class ListPoolsStubUEP(stubs.StubUEP):
         return []
 
 
-class TestAsyncPool(unittest.TestCase):
+class TestAsyncPool(fixture.SubManFixture):
     def setUp(self):
         self.callbacks = []
+        super(TestAsyncPool, self).setUp()
 
     def thread_queue_callback(self, data, error):
         self.callbacks.append((data, error))

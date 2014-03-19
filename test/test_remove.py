@@ -13,35 +13,29 @@
 # in this software or its documentation.
 #
 
-from stubs import StubUEP, StubEntitlementDirectory, StubProductDirectory
-from stubs import StubConsumerIdentity, StubCertLib, StubEntitlementCertificate
-from stubs import StubProduct
-import rhsm.connection as connection
 from subscription_manager import managercli
-import subscription_manager.injection as inj
-from fixture import SubManFixture
+from subscription_manager import injection as inj
+
+from stubs import StubEntitlementDirectory, StubProductDirectory, StubEntCertLib, \
+        StubEntitlementCertificate, StubProduct
+import fixture
 
 
 # This is a copy of CliUnSubscribeTests for the new name.
-class CliRemoveTests(SubManFixture):
+class CliRemoveTests(fixture.SubManFixture):
 
     def setUp(self):
-        SubManFixture.setUp(self)
-        self.oldCI = managercli.ConsumerIdentity
+        super(CliRemoveTests, self).setUp()
 
     def test_unsubscribe_registered(self):
-        connection.UEPConnection = StubUEP
-
         cmd = managercli.RemoveCommand()
 
-        managercli.ConsumerIdentity = StubConsumerIdentity
-        StubConsumerIdentity.existsAndValid = classmethod(lambda cls: True)
-        StubConsumerIdentity.exists = classmethod(lambda cls: True)
-        managercli.CertLib = StubCertLib
+        mock_identity = self._inject_mock_valid_consumer()
+        managercli.EntCertLib = StubEntCertLib
 
         cmd.main(['remove', '--all'])
         self.assertEquals(cmd.cp.called_unbind_uuid,
-                          StubConsumerIdentity.CONSUMER_ID)
+                          mock_identity.uuid)
 
         serial1 = '123456'
         cmd.main(['remove', '--serial=%s' % serial1])
@@ -52,8 +46,6 @@ class CliRemoveTests(SubManFixture):
         self.assertEquals(cmd.cp.called_unbind_serial, [serial1, serial2])
 
     def test_unsubscribe_unregistered(self):
-        connection.UEPConnection = StubUEP
-
         prod = StubProduct('stub_product')
         ent = StubEntitlementCertificate(prod)
 
@@ -63,9 +55,7 @@ class CliRemoveTests(SubManFixture):
                 StubProductDirectory([]))
         cmd = managercli.RemoveCommand()
 
-        managercli.ConsumerIdentity = StubConsumerIdentity
-        StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
-        StubConsumerIdentity.exists = classmethod(lambda cls: False)
+        self._inject_mock_invalid_consumer()
 
         cmd.main(['remove', '--all'])
         self.assertTrue(cmd.entitlement_dir.list_called)
@@ -81,15 +71,9 @@ class CliRemoveTests(SubManFixture):
         inj.provide(inj.PROD_DIR,
                 StubProductDirectory([]))
         cmd = managercli.RemoveCommand()
-        managercli.ConsumerIdentity = StubConsumerIdentity
-        StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
-        StubConsumerIdentity.exists = classmethod(lambda cls: False)
 
         cmd.main(['remove', '--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial])
         self.assertTrue(cmd.entitlement_dir.list_called)
         self.assertTrue(ent1.is_deleted)
         self.assertFalse(ent2.is_deleted)
         self.assertTrue(ent3.is_deleted)
-
-    def tearDown(self):
-        managercli.ConsumerIdentity = self.oldCI

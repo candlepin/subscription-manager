@@ -12,7 +12,7 @@
 # in this software or its documentation.
 #
 
-from subscription_manager.certlib import ConsumerIdentity
+from subscription_manager.identity import ConsumerIdentity
 import rhsm.connection as connection
 
 

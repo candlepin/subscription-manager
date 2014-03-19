@@ -72,29 +72,22 @@ class TestCliCommand(SubManFixture):
     command_class = managercli.CliCommand
 
     def setUp(self):
-        SubManFixture.setUp(self)
+        super(TestCliCommand, self).setUp()
         self.cc = self.command_class()
         # neuter the _do_command, since this is mostly
         # for testing arg parsing
         self._orig_do_command = self.cc._do_command
         self.cc._do_command = self._do_command
-        self.cc.assert_should_be_registered = self._asert_should_be_registered
+#        self.cc.assert_should_be_registered = self._asert_should_be_registered
 
-        # stub out uep
-        managercli.connection.UEPConnection = self._uep_connection
+        self.mock_stdout = MockStderr()
         self.mock_stderr = MockStderr()
         sys.stderr = self.mock_stderr
 
     def tearDown(self):
         sys.stderr = sys.__stderr__
 
-    def _uep_connection(self, *args, **kwargs):
-        pass
-
     def _do_command(self):
-        pass
-
-    def _asert_should_be_registered(self):
         pass
 
     def test_main_no_args(self):
@@ -212,8 +205,9 @@ class TestRegisterCommand(TestCliProxyCommand):
     command_class = managercli.RegisterCommand
 
     def setUp(self):
-        TestCliProxyCommand.setUp(self)
-        self.cc.consumerIdentity = StubConsumerIdentity
+        super(TestRegisterCommand, self).setUp()
+        self._inject_mock_invalid_consumer()
+        # TODO: two versions of this, one registered, one not registered
 
     def _test_exception(self, args):
         try:
@@ -284,12 +278,8 @@ class TestListCommand(TestCliProxyCommand):
         TestCliProxyCommand.setUp(self)
 
     @mock.patch('subscription_manager.managerlib.get_available_entitlements')
-    @mock.patch.object(managercli.ConsumerIdentity, 'existsAndValid')
-    @mock.patch.object(managercli.ConsumerIdentity, 'exists')
-    @mock.patch('subscription_manager.managercli.check_registration')
-    def test_none_wrap_available_pool_id(self, mcli, mc_exists, mc_exists_and_valid,
-            mget_ents):
-        listCommand = managercli.ListCommand()
+    def test_none_wrap_available_pool_id(self, mget_ents):
+        list_command = managercli.ListCommand()
 
         def create_pool_list(*args, **kwargs):
             return [{'productName': 'dummy-name',
@@ -308,12 +298,8 @@ class TestListCommand(TestCliProxyCommand):
                      'suggested': '2'}]
         mget_ents.return_value = create_pool_list()
 
-        mc_exists_and_valid.return_value = True
-        mc_exists.return_value = True
-
-        mcli.return_value = {'consumer_name': 'stub_name', 'uuid': 'stub_uuid'}
         with Capture() as cap:
-            listCommand.main(['list', '--available'])
+            list_command.main(['list', '--available'])
         self.assertTrue('888888888888' in cap.out)
 
     def test_print_consumed_no_ents(self):
@@ -397,13 +383,9 @@ class TestReposCommand(TestCliCommand):
         self.cc._validate_options()
 
     @mock.patch("subscription_manager.managercli.RepoLib")
-    @mock.patch("subscription_manager.managercli.check_registration")
-    @mock.patch("subscription_manager.managercli.ConsumerIdentity")
-    def test_set_repo_status(self, mock_ident, mock_registration, mock_repolib):
-        mock_ident.existsAndValid.return_value = True
+    def test_set_repo_status(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
-        mock_registration.return_value = {'uuid': 'fake_id', 'consumer_name':
-                'fake_name'}
+        self._inject_mock_valid_consumer('fake_id')
 
         repos = [Repo('x'), Repo('y'), Repo('z')]
         items = ['x', 'y']
@@ -424,13 +406,9 @@ class TestReposCommand(TestCliCommand):
         repolib_instance.update.assert_called()
 
     @mock.patch("subscription_manager.managercli.RepoLib")
-    @mock.patch("subscription_manager.managercli.check_registration")
-    @mock.patch("subscription_manager.managercli.ConsumerIdentity")
-    def test_set_repo_status_with_wildcards(self, mock_ident, mock_registration, mock_repolib):
-        mock_ident.existsAndValid.return_value = True
+    def test_set_repo_status_with_wildcards(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
-        mock_registration.return_value = {'uuid': 'fake_id', 'consumer_name':
-                'fake_name'}
+        self._inject_mock_valid_consumer('fake_id')
 
         repos = [Repo('zoo'), Repo('zebra'), Repo('zip')]
         items = ['z*']
@@ -445,9 +423,8 @@ class TestReposCommand(TestCliCommand):
         repolib_instance.update.assert_called()
 
     @mock.patch("subscription_manager.managercli.RepoFile")
-    @mock.patch("subscription_manager.managercli.ConsumerIdentity")
-    def test_set_repo_status_when_disconnected(self, mock_ident, mock_repofile):
-        mock_ident.existsAndValid.return_value = False
+    def test_set_repo_status_when_disconnected(self, mock_repofile):
+        self._inject_mock_invalid_consumer()
         mock_repofile_inst = mock_repofile.return_value
 
         enabled = {'enabled': '1'}.items()
@@ -660,16 +637,11 @@ class TestReleaseCommand(TestCliProxyCommand):
 
     def _stub_connection(self):
         # er, first cc is command_class, second is ContentConnection
-        def check_registration():
-            consumer_info = {"consumer_name": "whatever",
-                     "uuid": "doesnt really matter"}
-            return consumer_info
 
         def _get_consumer_release():
             pass
 
         self.cc._get_consumer_release = _get_consumer_release
-        managercli.check_registration = check_registration
 
     def test_main_proxy_url_release(self):
         proxy_host = "example.com"

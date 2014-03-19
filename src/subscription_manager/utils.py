@@ -13,21 +13,27 @@
 # in this software or its documentation.
 #
 
+import collections
 import gettext
 import logging
 import os
+import pprint
+
 import signal
 import socket
+import syslog
 
 from M2Crypto.SSL import SSLError
 
 from subscription_manager.branding import get_branding
-from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager import injection as inj
+
 # we moved quite a bit of code from this module to rhsm.
 # we may want to import some of the other items for
 # compatibility.
 from rhsm.utils import parse_url
+
 from rhsm.connection import UEPConnection, RestlibException, GoneException
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
@@ -38,6 +44,16 @@ log = logging.getLogger('rhsm-app.' + __name__)
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
 gettext.textdomain("rhsm")
+
+
+class DefaultDict(collections.defaultdict):
+    """defaultdict wrapper that pretty prints"""
+
+    def as_dict(self):
+        return dict(self)
+
+    def __repr__(self):
+        return pprint.pformat(self.as_dict())
 
 
 def parse_server_info(local_server_entry):
@@ -187,14 +203,16 @@ def get_server_versions(cp, exception_on_timeout=False):
     cp_version = _("Unknown")
     server_type = _("This system is currently not registered.")
 
+    identity = inj.require(inj.IDENTITY)
+
     # check for Classic before doing anything else
     if ClassicCheck().is_registered_with_classic():
-        if ConsumerIdentity.existsAndValid():
+        if identity.is_valid():
             server_type = get_branding().REGISTERED_TO_BOTH_SUMMARY
         else:
             server_type = get_branding().REGISTERED_TO_OTHER_SUMMARY
     else:
-        if ConsumerIdentity.existsAndValid():
+        if identity.is_valid():
             server_type = get_branding().REGISTERED_TO_SUBSCRIPTION_MANAGEMENT_SUMMARY
 
     if cp:
@@ -269,3 +287,8 @@ def friendly_join(items):
 def is_true_value(test_string):
     val = str(test_string).lower()
     return val == "1" or val == "true" or val == "yes"
+
+
+def system_log(message, priority=syslog.LOG_NOTICE):
+    syslog.openlog("subscription-manager")
+    syslog.syslog(priority, message.encode("utf-8"))

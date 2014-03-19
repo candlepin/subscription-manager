@@ -21,99 +21,141 @@ import logging
 
 from rhsm.connection import GoneException, ExpiredIdentityCertException
 
-from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
-from subscription_manager.certlib import CertLib, ActionLock, HealingLib, IdentityCertLib
+from subscription_manager.entcertlib import EntCertLib
+from subscription_manager.identitycertlib import IdentityCertLib
+from subscription_manager.healinglib import HealingLib
 from subscription_manager.factlib import FactLib
 from subscription_manager.repolib import RepoLib
+from subscription_manager.packageprofilelib import PackageProfileLib
+from subscription_manager.installedproductslib import InstalledProductsLib
+from subscription_manager import injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 _ = gettext.gettext
 
 
-class CertManager:
+class BaseCertManager:
     """
-    An object used to update the certficates, yum repos, and facts for
-    the system.
-
-    @ivar certlib: The RHSM I{entitlement} certificate management lib.
-    @type certlib: L{CertLib}
-    @ivar repolib: The RHSM repository management lib.
-    @type repolib: L{RepoLib}
+    An object used to update the certficates, yum repos, and facts for the system.
     """
 
-    def __init__(self, lock=ActionLock(), uep=None, product_dir=None,
-            facts=None):
-        self.lock = lock
+    # can we inject both of these?
+    def __init__(self, uep=None, facts=None):
+
+        # inject?
         self.uep = uep
-        self.certlib = CertLib(self.lock, uep=self.uep)
-        self.repolib = RepoLib(self.lock, uep=self.uep)
-        self.factlib = FactLib(self.lock, uep=self.uep, facts=facts)
-        self.profilelib = PackageProfileLib(self.lock, uep=self.uep)
-        self.installedprodlib = InstalledProductsLib(self.lock, uep=self.uep)
-        #healinglib requires a fact set in order to get socket count
-        self.healinglib = HealingLib(self.lock, self.uep, product_dir)
-        self.idcertlib = IdentityCertLib(self.lock, uep=self.uep)
+        self.facts = facts
+
+        self._libset = self._get_libset()
+        self.lock = inj.require(inj.ACTION_LOCK)
+        self.report = None
+        self.update_reports = []
+
+    def _get_libset(self):
+        return []
 
     def update(self, autoheal=False):
         """
         Update I{entitlement} certificates and corresponding
         yum repositiories.
-        @return: The number of updates required.
-        @rtype: int
+        @return: A list of update reports
+        @rtype: list
         """
-        updates = 0
         lock = self.lock
+
+        # TODO: move to using a lock context manager
         try:
             lock.acquire()
-
-            # WARNING: order is important here, we need to update a number
-            # of things before attempting to autoheal, and we need to autoheal
-            # before attempting to fetch our certificates:
-            if autoheal:
-                libset = [self.installedprodlib, self.healinglib]
-            else:
-                libset = [self.idcertlib, self.repolib, self.factlib, self.profilelib, self.installedprodlib]
-
-            # WARNING
-            # Certlib inherits DataLib as well as the above 'lib' objects,
-            # but for some reason it's update method returns a tuple instead
-            # of an int:
-            ret = []
-            try:
-                ret = self.certlib.update()
-            # see bz#852706, reraise GoneException so that
-            # consumer cert deletion works
-            except GoneException, e:
-                raise
-            # raise this so it can be exposed clearly
-            except ExpiredIdentityCertException, e:
-                raise
-            except Exception, e:
-                log.warning("Exception caught while running certlib update")
-                log.exception(e)
-
-            # run the certlib update first as it will talk to candlepin,
-            # and we can find out if we got deleted or not.
-            for lib in libset:
-                try:
-                    updates += lib.update()
-                except GoneException, e:
-                    raise
-                # raise this so it can be exposed clearly
-                except ExpiredIdentityCertException, e:
-                    raise
-                except Exception, e:
-                    log.warning("Exception caught while running %s update" % lib)
-                    log.exception(e)
-
-            # NOTE: with no consumer cert, most of these actually
-            # fail
-            if ret:
-                updates += ret[0]
-                for e in ret[1]:
-                    print ' '.join(str(e).split('-')[1:]).strip()
-
+            self.update_reports = self._run_updates(autoheal)
         finally:
             lock.release()
-        return updates
+
+    def _run_update(self, lib):
+        update_report = None
+
+        try:
+            update_report = lib.update()
+        # see bz#852706, reraise GoneException so that
+        # consumer cert deletion works
+        except GoneException, e:
+            raise
+        # raise this so it can be exposed clearly
+        except ExpiredIdentityCertException, e:
+            raise
+        except Exception, e:
+            log.warning("Exception caught while running %s update" % lib)
+            log.exception(e)
+
+        if update_report:
+            update_report.print_exceptions()
+
+        return update_report
+
+    def _run_updates(self, autoheal):
+
+        update_reports = []
+
+        for lib in self._libset:
+            update_report = self._run_update(lib)
+
+            # a map/dict may make more sense here
+            update_reports.append(update_report)
+
+        return update_reports
+
+
+class CertManager(BaseCertManager):
+
+    def _get_libset(self):
+
+        self.entcertlib = EntCertLib(uep=self.uep)
+        self.repolib = RepoLib(uep=self.uep)
+        self.factlib = FactLib(uep=self.uep)
+        self.profilelib = PackageProfileLib(uep=self.uep)
+        self.installedprodlib = InstalledProductsLib(uep=self.uep)
+        self.idcertlib = IdentityCertLib(uep=self.uep)
+
+        # WARNING: order is important here, we need to update a number
+        # of things before attempting to autoheal, and we need to autoheal
+        # before attempting to fetch our certificates:
+        lib_set = [self.entcertlib, self.idcertlib, self.repolib,
+                   self.factlib, self.profilelib,
+                   self.installedprodlib]
+
+        return lib_set
+
+
+class HealingCertManager(BaseCertManager):
+    def _get_libset(self):
+
+        self.entcertlib = EntCertLib(uep=self.uep)
+        self.installedprodlib = InstalledProductsLib(uep=self.uep)
+        self.healinglib = HealingLib(self.uep)
+
+        # FIXME: note this runs entcertlib twice, once to make sure we are
+        # setup, then again after heal to get any additional certs. We may be
+        # able to avoid that by conditionally calling entcertlib from within
+        # healinglib (as we did before)
+        lib_set = [self.entcertlib, self.installedprodlib, self.healinglib, self.entcertlib]
+
+        return lib_set
+
+
+# it may make more sense to have *Lib.cleanup actions?
+# *Lib things are weird, since some are idempotent, but
+# some arent. entcertlib/repolib .update can both install
+# certs, and/or delete all of them.
+class UnregisterCertManager(BaseCertManager):
+    """CertManager for cleaning up on unregister.
+
+    This class should not need a consumer id, or a uep connection, since it
+    is running post unregister.
+    """
+    def _get_libset(self):
+
+        self.entcertlib = EntCertLib(uep=self.uep)
+        self.repolib = RepoLib(uep=self.uep)
+
+        lib_set = [self.entcertlib, self.repolib]
+        return lib_set

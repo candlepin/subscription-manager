@@ -15,19 +15,23 @@
 # in this software or its documentation.
 #
 
+import gettext
 from iniparse import ConfigParser
 import logging
 import os
 import string
-import subscription_manager.injection as inj
 from urllib import basejoin
 
 from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
 from rhsm.utils import UnsupportedOperationException
 
-from certlib import ActionLock, DataLib
-from certdirectory import Path, ProductDirectory, EntitlementDirectory
+# FIXME: local imports
+
+from subscription_manager.certlib import ActionReport, DataLib
+from subscription_manager.certdirectory import Path, ProductDirectory, EntitlementDirectory
+
+from subscription_manager import injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -35,24 +39,28 @@ CFG = initConfig()
 
 ALLOWED_CONTENT_TYPES = ["yum"]
 
+_ = gettext.gettext
+
 
 class RepoLib(DataLib):
 
-    def __init__(self, lock=ActionLock(), uep=None, cache_only=False):
+    def __init__(self, uep=None, cache_only=False):
         self.cache_only = cache_only
-        DataLib.__init__(self, lock, uep)
+        DataLib.__init__(self, uep)
         self.identity = inj.require(inj.IDENTITY)
 
     def _do_update(self):
-        action = UpdateAction(self.uep, cache_only=self.cache_only)
+        action = RepoUpdateAction(uep=self.uep, cache_only=self.cache_only)
         return action.perform()
 
     def is_managed(self, repo):
-        action = UpdateAction(self.uep, cache_only=self.cache_only)
+        action = RepoUpdateAction(uep=self.uep, cache_only=self.cache_only)
         return repo in [c.label for c in action.matching_content()]
 
     def get_repos(self, apply_overrides=True):
-        action = UpdateAction(self.uep, cache_only=self.cache_only, apply_overrides=apply_overrides)
+        action = RepoUpdateAction(uep=self.uep,
+                                  cache_only=self.cache_only,
+                                  apply_overrides=apply_overrides)
         repos = action.get_unique_content()
         if self.identity.is_valid() and action.override_supported:
             return repos
@@ -87,7 +95,7 @@ class RepoLib(DataLib):
 # TODO: This is the third disjoint "Action" class hierarchy, this one inherits nothing
 # but exposes similar methods, all of which are already abstracted behind the
 # Datalib.update() method anyhow. Pretty sure these can go away.
-class UpdateAction:
+class RepoUpdateAction:
 
     def __init__(self, uep, ent_dir=None, prod_dir=None, cache_only=False, apply_overrides=True):
         self.identity = inj.require(inj.IDENTITY)
@@ -111,6 +119,10 @@ class UpdateAction:
         self.overrides = []
         self.override_supported = bool(self.uep and self.uep.supports_resource('content_overrides'))
 
+        # FIXME: empty report at the moment, should be changed to include
+        # info about updated repos
+        self.report = RepoActionReport()
+        self.report.name = "Repo updates"
         # If we are not registered, skip trying to refresh the
         # data from the server
         if not self.identity.is_valid():
@@ -157,7 +169,6 @@ class UpdateAction:
 
         repo_file.read()
         valid = set()
-        updates = 0
 
         # Iterate content from entitlement certs, and create/delete each section
         # in the RepoFile as appropriate:
@@ -166,26 +177,27 @@ class UpdateAction:
             existing = repo_file.section(cont.id)
             if existing is None:
                 repo_file.add(cont)
-                updates += 1
+                self.report_add(cont)
             else:
                 # In the non-disconnected case, destroy the old repo and replace it with
                 # what's in the entitlement cert plus any overrides.
                 if self.identity.is_valid() and self.override_supported:
                     repo_file.update(cont)
-                    updates += 1
                 else:
-                    updates += self.update_repo(existing, cont)
+                    self.update_repo(existing, cont)
                     repo_file.update(existing)
+                # TODO: add repoting for overrides
+                self.report_update(cont)
 
         for section in repo_file.sections():
             if section not in valid:
-                updates += 1
+                self.report_delete(section)
                 repo_file.delete(section)
 
         # Write new RepoFile to disk:
         repo_file.write()
-        log.info("repos updated: %s" % updates)
-        return updates
+        log.info("repos updated: %s" % self.report)
+        return self.report
 
     def get_unique_content(self):
         unique = set()
@@ -368,6 +380,64 @@ class UpdateAction:
 
         return changes_made
 
+    def report_update(self, repo):
+        self.report.repo_updates.append(repo)
+
+    def report_add(self, repo):
+        self.report.repo_added.append(repo)
+
+    def report_delete(self, section):
+        self.report.repo_deleted.append(section)
+
+
+class RepoActionReport(ActionReport):
+    """Report class for reporting yum repo updates"""
+    name = "Repo Updates"
+
+    def __init__(self):
+        super(RepoActionReport, self).__init__()
+        self.repo_updates = []
+        self.repo_added = []
+        self.repo_deleted = []
+
+    def updates(self):
+        """How many repos were updated"""
+        return len(self.repo_updates) + len(self.repo_added) + len(self.repo_deleted)
+
+    def format_repos_info(self, repos, formatter):
+        indent = '    '
+        if not repos:
+            return '%s<NONE>' % indent
+
+        r = []
+        for repo in repos:
+            r.append("%s%s" % (indent, formatter(repo)))
+        return '\n'.join(r)
+
+    def repo_format(self, repo):
+        return "[id:%s %s]" % (repo.id, repo['name'])
+
+    def section_format(self, section):
+        return "[%s]" % section
+
+    def format_repos(self, repos):
+        return self.format_repos_info(repos, self.repo_format)
+
+    def format_sections(self, sections):
+        return self.format_repos_info(sections, self.section_format)
+
+    def __str__(self):
+        s = ['Repo updates\n']
+        s.append(_('Total repo updates: %d') % self.updates())
+        s.append(_('Updated'))
+        s.append(self.format_repos(self.repo_updates))
+        s.append(_('Added (new)'))
+        s.append(self.format_repos(self.repo_added))
+        s.append(_('Deleted'))
+        # deleted are former repo sections, but they are the same type
+        s.append(self.format_sections(self.repo_deleted))
+        return '\n'.join(s)
+
 
 class Repo(dict):
     # (name, mutable, default) - The mutability information is only used in disconnected cases
@@ -443,6 +513,17 @@ class Repo(dict):
         if key not in self._order:
             self._order.append(key)
         dict.__setitem__(self, key, value)
+
+    def __str__(self):
+        s = []
+        s.append('[%s]' % self.id)
+        for k in self.PROPERTIES:
+            v = self.get(k)
+            if v is None:
+                continue
+            s.append('%s=%s' % (k, v))
+
+        return '\n'.join(s)
 
     def __eq__(self, other):
         return (self.id == other.id)

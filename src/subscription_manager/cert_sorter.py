@@ -17,13 +17,13 @@ from datetime import datetime, timedelta
 import logging
 
 from rhsm.certificate import GMT
+from rhsm.connection import RestlibException
 import subscription_manager.injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
-from subscription_manager.cache import InstalledProductsManager
 from subscription_manager import file_monitor
 
 import gettext
@@ -312,13 +312,14 @@ class CertSorter(ComplianceManager):
     reporting unknown.
     """
     def __init__(self):
-        # Sync installed product info with server.
-        # This will be done on register if we aren't registered
-        self.installed_mgr = InstalledProductsManager()
-        self.update_product_manager()
 
         super(CertSorter, self).__init__()
         self.callbacks = set()
+
+        # Sync installed product info with server.
+        # This will be done on register if we aren't registered
+        self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
+        self.update_product_manager()
 
         self.cert_monitor = file_monitor.Monitor()
         self.cert_monitor.connect('changed', self.on_cert_changed)
@@ -330,10 +331,10 @@ class CertSorter(ComplianceManager):
     def update_product_manager(self):
         if self.is_registered():
             try:
-                self.installed_mgr.update_check(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp(), inj.require(inj.IDENTITY).uuid)
-            except Exception, e:
-                log.debug("Failed to sync installed products with the server")
-                log.debug(e)
+                self.installed_mgr.update_check(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+            except RestlibException:
+                # Invalid consumer certificate
+                pass
 
     def force_cert_check(self):
         self.cert_monitor.run_check()

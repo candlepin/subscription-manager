@@ -41,6 +41,7 @@ class ConsumerIdentity:
 
     @classmethod
     def read(cls):
+        # TODO: replace with with
         f = open(cls.keypath())
         key = f.read()
         f.close()
@@ -129,15 +130,27 @@ class Identity(object):
         """
         log.debug("Loading consumer info from identity certificates.")
         try:
-            consumer = ConsumerIdentity.read()
-            self.name = consumer.getConsumerName()
-            self.uuid = consumer.getConsumerId()
+            # uh, weird
+            # FIXME: seems weird to wrap this stuff
+            self.consumer = self._get_consumer_identity()
+            self.name = self.consumer.getConsumerName()
+            self.uuid = self.consumer.getConsumerId()
         # XXX shouldn't catch the global exception here, but that's what
         # existsAndValid did, so this is better.
-        except Exception:
+        except Exception, e:
+            # FIXME: can probably remove this exception logging
+            log.exception(e)
+            log.info("Error reading consumer identity cert")
+            self.consumer = None
             self.name = None
             self.uuid = None
 
+    def _get_consumer_identity(self):
+        # FIXME: wrap in exceptions, catch IOErrors etc, raise anything else
+        return ConsumerIdentity.read()
+
+    # this name is weird, since Certificate.is_valid actually checks the data
+    # and this is a thin wrapper
     def is_valid(self):
         return self.uuid is not None
 
@@ -146,3 +159,13 @@ class Identity(object):
 
     def getConsumerId(self):
         return self.uuid
+
+    # getConsumer is kind of vaugue, and this is just here to
+    # the cert object
+    def getConsumerCert(self):
+        return self.consumer
+
+    def __str__(self):
+        return "<%s, name=%s, uuid=%s, consumer=%s>" % \
+                (self.__class__.__name__,
+                self.name, self.uuid, self.consumer)

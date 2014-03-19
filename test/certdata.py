@@ -38,7 +38,7 @@ SOxSnd1U0dX6pzEwMaJD9lCW8xZ2jsmdLUtLzQ==
 -----END CERTIFICATE-----
 """
 
-# A product cert from Candlepin's test data (product 37060, Awesome 
+# A product cert from Candlepin's test data (product 37060, Awesome
 # OS server bits", this one with the "os_name" oid added.
 PRODUCT_CERT_WITH_OS_NAME_V1_0 = """
 -----BEGIN CERTIFICATE-----
@@ -526,7 +526,7 @@ Product:
 	Version: 6.1
 	Arch: ALL
 	Tags: 
-	Brand Type: 
+	Brand Type: Awesome OS Server Bits
 
 """
 

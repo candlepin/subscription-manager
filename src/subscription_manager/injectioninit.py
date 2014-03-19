@@ -14,15 +14,19 @@
 
 import subscription_manager.injection as inj
 
-from subscription_manager.cache import ProductStatusCache, EntitlementStatusCache, \
-        OverrideStatusCache, PoolTypeCache
+
+from subscription_manager.cache import ProductStatusCache, EntitlementStatusCache, OverrideStatusCache, \
+    ProfileManager, InstalledProductsManager, PoolTypeCache
+
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
+from subscription_manager.facts import Facts
 from subscription_manager.identity import Identity
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.cp_provider import CPProvider
 from subscription_manager.plugins import PluginManager
+from subscription_manager.lock import ActionLock
 
 
 def init_dep_injection():
@@ -45,6 +49,8 @@ def init_dep_injection():
     inj.provide(inj.ENTITLEMENT_STATUS_CACHE, EntitlementStatusCache, singleton=True)
     inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache, singleton=True)
     inj.provide(inj.OVERRIDE_STATUS_CACHE, OverrideStatusCache, singleton=True)
+    inj.provide(inj.PROFILE_MANAGER, ProfileManager, singleton=True)
+    inj.provide(inj.INSTALLED_PRODUCTS_MANAGER, InstalledProductsManager, singleton=True)
 
     inj.provide(inj.CP_PROVIDER, CPProvider, singleton=True)
 
@@ -56,6 +62,10 @@ def init_dep_injection():
     inj.provide(inj.PLUGIN_MANAGER, PluginManager, singleton=True)
 
     inj.provide(inj.POOLTYPE_CACHE, PoolTypeCache, singleton=True)
+    inj.provide(inj.ACTION_LOCK, ActionLock)
+
+    # see what happens with non singleton, callable
+    inj.provide(inj.FACTS, Facts)
 
     try:
         # This catch fixes the product-id module on anaconda
