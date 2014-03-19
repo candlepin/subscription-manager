@@ -25,6 +25,7 @@ http://bugs.python.org/issue4319
 """
 
 import gettext
+import optparse
 from optparse import IndentedHelpFormatter as _IndentedHelpFormatter
 from optparse import OptionParser as _OptionParser
 import sys
@@ -32,6 +33,7 @@ import textwrap
 
 
 _ = gettext.gettext
+optparse._ = gettext.gettext
 
 # note default is lower caps
 USAGE = _("%prog [OPTIONS]")
@@ -128,37 +130,6 @@ class WrappedIndentedHelpFormatter(_IndentedHelpFormatter):
 
 
 class OptionParser(_OptionParser):
-
-    # These are a bunch of strings that are marked for translation in optparse,
-    # but not actually translated anywhere. Mark them for translation here,
-    # so we get it picked up. for local translation, and then optparse will
-    # use them.
-
-    #translators: this should have the same translation as "Usage: %s\n"
-    _("usage: %s\n")   # For older versions of optparse
-    _("Usage: %s\n")
-    _("Usage")
-    _("%prog [options]")
-    _("Options")
-    _("options")
-    _("options:")
-
-    # stuff for option value sanity checking
-    _("no such option: %s")
-    _("ambiguous option: %s (%s?)")
-    _("%s option requires an argument")
-    _("%s option requires %d arguments")
-    _("%s option does not take a value")
-    _("integer")
-    _("long integer")
-    _("floating-point")
-    _("complex")
-    _("option %s: invalid %s value: %r")
-    _("option %s: invalid choice: %r (choose from %s)")
-
-    # default options
-    _("show this help message and exit")
-    _("show program's version number and exit")
 
     def print_help(self):
         sys.stdout.write(self.format_help())

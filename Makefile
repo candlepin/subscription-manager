@@ -337,6 +337,7 @@ po/POTFILES.in:
 	find etc-conf/ -name "*.desktop.in" >> po/POTFILES.in
 	find $(RCT_SRC_DIR)/ -name "*.py" >> po/POTFILES.in
 	find $(RD_SRC_DIR)/ -name "*.py" >> po/POTFILES.in
+	echo $$(echo `pwd`|rev | sed -r 's|[^/]+|..|g') | sed 's|$$|$(shell find /usr/lib*/python2* -name "optparse.py")|' >> po/POTFILES.in
 
 .PHONY: po/POTFILES.in %.desktop
 
