@@ -119,7 +119,7 @@ class StubProduct(Product):
 
     def __init__(self, product_id, name=None, version=None,
                  architectures=None, provided_tags=None,
-                 os=None):
+                 os=None, brand_name=None):
 
         # Initialize some defaults:
         if not name:
@@ -138,7 +138,7 @@ class StubProduct(Product):
         super(StubProduct, self).__init__(id=product_id, name=name, version=version,
                                           architectures=architectures,
                                           provided_tags=provided_tags,
-                                          brand_type=os)
+                                          brand_type=os, brand_name=brand_name)
 
 
 class StubContent(Content):

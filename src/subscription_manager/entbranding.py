@@ -126,7 +126,7 @@ class ProductBrand(Brand):
 
     @classmethod
     def from_product(cls, product):
-        return cls(product.name)
+        return cls(product.brand_name)
 
     @staticmethod
     def format_brand(brand):
