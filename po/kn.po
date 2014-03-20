@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-25 11:34-0500\n"
+"POT-Creation-Date: 2014-03-20 16:25-0400\n"
 "PO-Revision-Date: 2014-02-05 06:44-0500\n"
 "Last-Translator: shanky <shanky@fedoraproject.org>\n"
 "Language-Team: Kannada\n"
@@ -11,7 +11,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.2.3\n"
+"X-Generator: Zanata 3.3.2\n"
 "Plural-Forms: nplurals=2; plural=(n!=1)\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -157,131 +157,20 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. note default is lower caps
-#: ../src/subscription_manager/i18n_optparse.py:37
+#: ../src/subscription_manager/i18n_optparse.py:39
 msgid "%prog [OPTIONS]"
 msgstr "%prog [ಆಯ್ಕೆಗಳು]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. For older versions of optparse
-#: ../src/subscription_manager/i18n_optparse.py:127
-#: ../src/subscription_manager/i18n_optparse.py:139
+#: ../src/subscription_manager/i18n_optparse.py:129
+#: ../../../../..//usr/lib64/python2.7/optparse.py:374
 #, python-format
 msgid "Usage: %s\n"
 msgstr "ಬಳಕೆ: %s\n"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#. These are a bunch of strings that are marked for translation in optparse,
-#. but not actually translated anywhere. Mark them for translation here,
-#. so we get it picked up. for local translation, and then optparse will
-#. use them.
-#. translators: this should have the same translation as "Usage: %s\n"
-#: ../src/subscription_manager/i18n_optparse.py:138
-#, python-format
-msgid "usage: %s\n"
-msgstr "ಬಳಕೆ: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:140
-msgid "Usage"
-msgstr "ಬಳಕೆ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:141
-msgid "%prog [options]"
-msgstr "%prog [ಆಯ್ಕೆಗಳು]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:142
-msgid "Options"
-msgstr "ಆಯ್ಕೆಗಳು"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:143
-msgid "options"
-msgstr "ಆಯ್ಕೆಗಳು"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:144
-msgid "options:"
-msgstr "ಆಯ್ಕೆಗಳು:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. stuff for option value sanity checking
-#: ../src/subscription_manager/i18n_optparse.py:147
-#, python-format
-msgid "no such option: %s"
-msgstr "ಅಂತಹ ಯಾವುದೆ ಆಯ್ಕೆಗಳಿಲ್ಲ: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:148
-#, python-format
-msgid "ambiguous option: %s (%s?)"
-msgstr "ಅಸ್ಪಷ್ಟ ಆಯ್ಕೆ: %s (%s?)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:149
-#, python-format
-msgid "%s option requires an argument"
-msgstr "%s ಆಯ್ಕೆಗಾಗಿ ಒಂದು ಆರ್ಗ್ಯುಮೆಂಟಿನ ಅಗತ್ಯವಿರುತ್ತದೆ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:150
-#, python-format
-msgid "%s option requires %d arguments"
-msgstr "%s ಆಯ್ಕೆಗಾಗಿ %d ಆರ್ಗ್ಯುಮೆಂಟ್‌ಗಳ ಅಗತ್ಯವಿರುತ್ತದೆ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:151
-#, python-format
-msgid "%s option does not take a value"
-msgstr "%s ಆಯ್ಕೆಯು ಯಾವುದೆ ಮೌಲ್ಯವನ್ನು ತೆಗೆದುಕೊಳ್ಳುವುದಿಲ್ಲ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:152
-msgid "integer"
-msgstr "ಪೂರ್ಣಾಂಕ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:153
-msgid "long integer"
-msgstr "ದೊಡ್ಡ ಪೂರ್ಣಾಂಕ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:154
-msgid "floating-point"
-msgstr "ತೇಲುವ-ಬಿಂದು"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:155
-msgid "complex"
-msgstr "ಸಂಕೀರ್ಣ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:156
-#, python-format
-msgid "option %s: invalid %s value: %r"
-msgstr "%s ಆಯ್ಕೆ: ಅಸಿಂಧುವಾದ %s ಮೌಲ್ಯ: %r"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:157
-#, python-format
-msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr "%s ಆಯ್ಕೆ: ಅಸಿಂಧುವಾದ ಆಯ್ಕೆ: %r (%s ಇಂದ ಆರಿಸಿ)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. default options
-#: ../src/subscription_manager/i18n_optparse.py:160
-msgid "show this help message and exit"
-msgstr "ಈ ನೆರವಿನ ಸಂದೇಶವನ್ನು ತೋರಿಸಿ ನಿರ್ಗಮಿಸು"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:161
-msgid "show program's version number and exit"
-msgstr "ಪ್ರೊಗ್ರಾಮ್‌ನ ಸಂಖ್ಯೆಯನ್ನು ತೋರಿಸಿ ನಿರ್ಗಮಿಸು"
-
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:174
+#: ../src/subscription_manager/i18n_optparse.py:145
 #, python-format
 msgid "%s: error: %s"
 msgstr "%s: ದೋಷ: %s"
@@ -363,7 +252,7 @@ msgstr "ಉತ್ಪನ್ನ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/installedtab.py:87
-#: ../src/rct/printing.py:45 ../src/rct/printing.py:117
+#: ../src/rct/printing.py:45 ../src/rct/printing.py:124
 msgid "Version"
 msgstr "ಆವೃತ್ತಿ"
 
@@ -375,7 +264,7 @@ msgstr "ಸ್ಥಿತಿ"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/installedtab.py:93
 #: ../src/subscription_manager/gui/contract_selection.py:113
-#: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:119
+#: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:126
 msgid "Start Date"
 msgstr "ಆರಂಭದ ದಿನ"
 
@@ -383,7 +272,7 @@ msgstr "ಆರಂಭದ ದಿನ"
 #: ../src/subscription_manager/gui/installedtab.py:96
 #: ../src/subscription_manager/gui/mysubstab.py:102
 #: ../src/subscription_manager/gui/contract_selection.py:119
-#: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:120
+#: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:127
 msgid "End Date"
 msgstr "ಮುಕ್ತಾಯದ ದಿನ"
 
@@ -537,7 +426,7 @@ msgstr "ಅನುಸ್ಥಾಪಿಸಲಾದ ಉತ್ಪನ್ನಗಳು"
 #: ../src/subscription_manager/gui/contract_selection.py:124
 #: ../src/subscription_manager/gui/allsubs.py:88
 #: ../src/subscription_manager/gui/registergui.py:427
-#: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:75
+#: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:82
 msgid "Quantity"
 msgstr "ಪ್ರಮಾಣ"
 
@@ -747,7 +636,7 @@ msgstr "ಎರಡೂ"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
 #. content-type is required, no need to xstr
 #: ../src/subscription_manager/gui/widgets.py:710
-#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:94
+#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
 msgid "Type"
 msgstr "ಬಗೆ"
 
@@ -816,7 +705,7 @@ msgstr "<b>ವ್ಯವಸ್ಥೆಯ ಮುಂದಿನ ಚೆಕ್-ಇನ್
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
 #: ../src/subscription_manager/gui/contract_selection.py:94
-#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:68
+#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:75
 msgid "Contract"
 msgstr "ಒಪ್ಪಂದ"
 
@@ -828,7 +717,7 @@ msgstr "ಬಳಸಲಾಗಿದ್ದು / ಒಟ್ಟು"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/contract_selection.py:141
 #: ../src/subscription_manager/gui/allsubs.py:225
-#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:74
+#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:81
 msgid "Unlimited"
 msgstr "ಅನಿಯಮಿತ"
 
@@ -985,7 +874,7 @@ msgstr "ಲಗತ್ತಿಸಲಾದ ಚಂದಾದಾರಿಕೆಗಳಿ�
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/reposgui.py:106
 #: ../src/subscription_manager/gui/reposgui.py:126
-#: ../src/subscription_manager/gui/reposgui.py:289 ../src/rct/printing.py:100
+#: ../src/subscription_manager/gui/reposgui.py:289 ../src/rct/printing.py:107
 msgid "Enabled"
 msgstr "ಸಕ್ರಿಯಗೊಂಡಿದೆ"
 
@@ -1247,17 +1136,17 @@ msgid "Stack "
 msgstr "ಸಂಗ್ರಹ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:62
+#: ../src/subscription_manager/migrate/migrate.py:63
 msgid "Could not find up2date_client.config module!"
 msgstr "up2date_client.config ಮಾಡ್ಯೂಲ್ ಕಂಡುಬಂದಿಲ್ಲ!"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:68
+#: ../src/subscription_manager/migrate/migrate.py:69
 msgid "Could not find up2date_client.rhnChannel module!"
 msgstr "up2date_client.rhnChannel ಮಾಡ್ಯೂಲ್ ಕಂಡುಬಂದಿಲ್ಲ!"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:72
+#: ../src/subscription_manager/migrate/migrate.py:73
 #, python-format
 msgid ""
 "Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
@@ -1267,22 +1156,22 @@ msgstr ""
 "log/rhsm/rhsm.log ಅನ್ನು ನೋಡಿ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:112
+#: ../src/subscription_manager/migrate/migrate.py:113
 msgid "You have entered an invalid choice."
 msgstr "ನೀವು ಒಂದು ಅಮಾನ್ಯವಾದ ಆಯ್ಕೆಯನ್ನು ದಾಖಲಿಸಿದ್ದೀರಿ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:155
+#: ../src/subscription_manager/migrate/migrate.py:156
 msgid "ignore channels not available on RHSM"
 msgstr "RHSM ನಲ್ಲಿ ಲಭ್ಯವಿರದೆ ಇರುವ ಚಾನಲ್‌ಗಳನ್ನು ಕಡೆಗಣಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:157
+#: ../src/subscription_manager/migrate/migrate.py:158
 msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
 msgstr "ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಲಗತ್ತಿಸಲು ಸ್ವಯಂ-ಲಗತ್ತಿಸುವ ಬದಲಿಗೆ GUI ಉಪಕರಣವನ್ನು ಆರಂಭಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:159
+#: ../src/subscription_manager/migrate/migrate.py:160
 msgid ""
 "don't execute the auto-attach option while registering with subscription "
 "manager"
@@ -1291,7 +1180,7 @@ msgstr ""
 "ಕಾರ್ಯಗತಗೊಳಿಸಬೇಡ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:161
+#: ../src/subscription_manager/migrate/migrate.py:162
 msgid ""
 "service level to follow when attaching subscriptions, for no service level "
 "use --servicelevel=\"\""
@@ -1300,75 +1189,75 @@ msgstr ""
 "ಇಲ್ಲದೆ ಇದ್ದಲ್ಲಿ --servicelevel=\"\" ಅನ್ನು ಬಳಸಿ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:164
+#: ../src/subscription_manager/migrate/migrate.py:165
 msgid "specify the subscription management server to migrate to"
 msgstr "ಇಲ್ಲಿಗೆ ವರ್ಗಾಯಿಸಬೇಕಿರುವ subscription manager ಪೂರೈಕೆಗಣಕವನ್ನು ಸೂಚಿಸಿ."
 
-#: ../src/subscription_manager/migrate/migrate.py:166
+#: ../src/subscription_manager/migrate/migrate.py:167
 msgid "specify the Red Hat user name"
 msgstr "Red Hat ಬಳಕೆದಾರ ಹೆಸರನ್ನು ಸೂಚಿಸಿ. "
 
-#: ../src/subscription_manager/migrate/migrate.py:168
+#: ../src/subscription_manager/migrate/migrate.py:169
 msgid "specify the Red Hat password"
 msgstr "Red Hat ಗುಪ್ತಪದವನ್ನು ಸೂಚಿಸಿ. "
 
-#: ../src/subscription_manager/migrate/migrate.py:170
+#: ../src/subscription_manager/migrate/migrate.py:171
 msgid "specify the subscription service user name"
 msgstr "ಚಂದಾದಾರಿಕೆ ಸೇವೆಯ ಬಳಕೆದಾರ ಹೆಸರನ್ನು ಸೂಚಿಸಿ."
 
-#: ../src/subscription_manager/migrate/migrate.py:172
+#: ../src/subscription_manager/migrate/migrate.py:173
 msgid "specify the subscription service password"
 msgstr "ಚಂದಾದಾರಿಕೆ ಸೇವೆಯ ಗುಪ್ತಪದವನ್ನು ಸೂಚಿಸಿ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:175
+#: ../src/subscription_manager/migrate/migrate.py:176
 msgid "don't use RHN proxy settings with subscription management server"
 msgstr "ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾ ಪೂರೈಕೆಗಣಕದೊಂದಿಗೆ RHN ಪ್ರಾಕ್ಸಿಯನ್ನು ಬಳಸಬೇಡ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:177
+#: ../src/subscription_manager/migrate/migrate.py:178
 msgid "organization to register to"
 msgstr "ನೋಂದಾಯಿಸಬೇಕಿರುವ ಸಂಸ್ಥೆ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:179
+#: ../src/subscription_manager/migrate/migrate.py:180
 msgid "environment to register to"
 msgstr "ನೋಂದಾಯಿಸಬೇಕಿರುವ ಪರಿಸರ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:183
+#: ../src/subscription_manager/migrate/migrate.py:184
 msgid "The --servicelevel and --no-auto options cannot be used together."
 msgstr "--servicelevel ಮತ್ತು --no-auto ಆಯ್ಕೆಗಳನ್ನು ಒಟ್ಟಿಗೆ ಬಳಸಲು ಸಾಧ್ಯವಿರುವುದಿಲ್ಲ."
 
-#: ../src/subscription_manager/migrate/migrate.py:203
+#: ../src/subscription_manager/migrate/migrate.py:204
 msgid "Red Hat username: "
 msgstr "Red Hat ಬಳಕೆದಾರ ಹೆಸರು:"
 
-#: ../src/subscription_manager/migrate/migrate.py:203
+#: ../src/subscription_manager/migrate/migrate.py:204
 msgid "Red Hat password: "
 msgstr "Red Hat ಗುಪ್ತಪದ:"
 
-#: ../src/subscription_manager/migrate/migrate.py:207
+#: ../src/subscription_manager/migrate/migrate.py:208
 msgid "Subscription Service username: "
 msgstr "ಚಂದಾದಾರಿಕೆ ಸೇವೆಯ ಹೆಸರು:"
 
-#: ../src/subscription_manager/migrate/migrate.py:207
+#: ../src/subscription_manager/migrate/migrate.py:208
 msgid "Subscription Service password: "
 msgstr "ಚಂದಾದಾರಿಕೆ ಸೇವೆಯ ಗುಪ್ತಪದ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:220
+#: ../src/subscription_manager/migrate/migrate.py:221
 msgid "Unable to read RHN proxy settings."
 msgstr "RHN ಪ್ರಾಕ್ಸಿ ಸಿದ್ಧತೆಗಳನ್ನು ಓದಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:250
+#: ../src/subscription_manager/migrate/migrate.py:251
 #, python-format
 msgid "Error parsing server URL: %s"
 msgstr "ಪೂರೈಕೆಗಣಕದ URL ಅನ್ನು ಪಾರ್ಸ್ ಮಾಡುವಲ್ಲಿ ದೋಷ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:272
+#: ../src/subscription_manager/migrate/migrate.py:273
 msgid ""
 "\n"
 "This system appears to be already registered to Red Hat Subscription "
@@ -1379,7 +1268,7 @@ msgstr ""
 "ನಿರ್ಗಮಿಸಲಾಗುತ್ತಿದೆ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:274
+#: ../src/subscription_manager/migrate/migrate.py:275
 #, python-format
 msgid ""
 "\n"
@@ -1391,13 +1280,13 @@ msgstr ""
 "consumers/%s ಗೆ ಭೇಟಿ ಕೊಡಿ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:279
+#: ../src/subscription_manager/migrate/migrate.py:280
 #: ../src/subscription_manager/managercli.py:348
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr "ದೋಷ: ಚಂದಾದಾರಿಕೆ ಸೇವೆಗಾಗಿ CA ಪ್ರಮಾಣಪತ್ರವನ್ನು ಅನುಸ್ಥಾಪಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:295
+#: ../src/subscription_manager/migrate/migrate.py:296
 #: ../src/subscription_manager/managercli.py:657
 #: ../src/subscription_manager/managercli.py:1138
 #, python-format
@@ -1405,35 +1294,35 @@ msgid "%s cannot register with any organizations."
 msgstr "%s ಯಾವುದೆ ಸಂಸ್ಥೆಯೊಂದಿಗೆ ನೋಂದಾಯಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:302
+#: ../src/subscription_manager/migrate/migrate.py:303
 msgid "Org: "
 msgstr "ಸಂಸ್ಥೆ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:310
+#: ../src/subscription_manager/migrate/migrate.py:311
 #, python-format
 msgid "No such org: %s"
 msgstr "ಈ ರೀತಿಯ ಯಾವುದೆ ಸಂಸ್ಥೆ ಇಲ್ಲ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:319
+#: ../src/subscription_manager/migrate/migrate.py:320
 msgid "Environments are not supported by this server."
 msgstr "ಈ ಪೂರೈಕೆಗಣಕದಿಂದ ಪರಿಸರಗಳಿಗೆ ಬೆಂಬಲವಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:332
+#: ../src/subscription_manager/migrate/migrate.py:333
 msgid "Environment: "
 msgstr "ಪರಿಸರ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:342
+#: ../src/subscription_manager/migrate/migrate.py:343
 #: ../src/subscription_manager/managercli.py:1123
 #, python-format
 msgid "No such environment: %s"
 msgstr "ಅಂತಹ ಯಾವುದೆ ಪರಿಸರಗಳಿಲ್ಲ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:367
+#: ../src/subscription_manager/migrate/migrate.py:368
 msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
@@ -1442,24 +1331,24 @@ msgstr ""
 "rhsm.log ಅನ್ನು ನೋಡಿ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:374
+#: ../src/subscription_manager/migrate/migrate.py:375
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
 msgstr ""
 "RHN Classicನಲ್ಲಿ ಬಳಕೆದಾರನ ಪಾತ್ರಗಳನ್ನು ನಿರ್ಧರಿಸುವಾಗ ತೊಂದರೆ ಉಂಟಾಗಿದೆ. "
 "ನಿರ್ಗಮಿಸಲಾಗುತ್ತಿದೆ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:376
+#: ../src/subscription_manager/migrate/migrate.py:377
 msgid "You must be an org admin to successfully run this script."
 msgstr "ಈ ಸ್ಕ್ರಿಪ್ಟನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಚಲಾಯಿಸಲು ನೀವು ಸಂಸ್ಥೆಯ ವ್ಯವಸ್ಥಾಪಕರಾಗಿರಬೇಕು."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:383
+#: ../src/subscription_manager/migrate/migrate.py:384
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."
 msgstr "ಚಂದಾದಾರರಾದ ಚಾನಲ್‌ಗಳ ಪಟ್ಟಿಯನ್ನು ಪಡೆಯುವಾಗ ತೊಂದರೆ ಎದುರಾಗಿದೆ. ನಿರ್ಗಮಿಸಲಾಗುತ್ತಿದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:396
+#: ../src/subscription_manager/migrate/migrate.py:397
 msgid ""
 "You are subscribed to more than one jbappplatform channel.  This script does "
 "not support that configuration.  Exiting."
@@ -1467,29 +1356,29 @@ msgstr ""
 "ನೀವು ಒಂದಕ್ಕಿಂತ ಹೆಚ್ಚಿನ jbappplatform ಚಾನಲ್‌ಗೆ ಚಂದಾದಾರವಾಗಿಸಿದ್ದೀರಿ.  ಈ ಸ್ಕ್ರಿಪ್ಟ್‍ ಆ "
 "ಸಂಸರಚನೆಯನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ.  ನಿರ್ಗಮಿಸಲಾಗುತ್ತಿದೆ."
 
-#: ../src/subscription_manager/migrate/migrate.py:428
+#: ../src/subscription_manager/migrate/migrate.py:429
 msgid "Unable to continue migration!"
 msgstr "ವರ್ಗಾವಣೆಯನ್ನು ಮುಂದುವರೆಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ!"
 
-#: ../src/subscription_manager/migrate/migrate.py:429
+#: ../src/subscription_manager/migrate/migrate.py:430
 msgid ""
 "You are subscribed to channels that have conflicting product certificates."
 msgstr ""
 "ನೀವು ಅಸಮಂಜಸವಾದ ಉತ್ಪನ್ನ ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ಹೊಂದಿರುವ ಚಾನಲ್‌ಗಳಿಗೆ ಚಂದಾದಾರರಾಗಿದ್ದೀರಿ."
 
-#: ../src/subscription_manager/migrate/migrate.py:433
+#: ../src/subscription_manager/migrate/migrate.py:434
 #, python-format
 msgid "The following channels map to product ID %s:"
 msgstr "ಈ ಕೆಳಗಿನ ಚಾನಲ್‌ಗಳು ಉತ್ಪನ್ನ ID %s ಗೆ ಮ್ಯಾಪ್ ಆಗುತ್ತವೆ:"
 
-#: ../src/subscription_manager/migrate/migrate.py:436
+#: ../src/subscription_manager/migrate/migrate.py:437
 msgid ""
 "Reduce the number of channels per product ID to 1 and run migration again."
 msgstr ""
 "ಪ್ರತಿ ಉತ್ಪನ್ನ ID ಯ ಚಾನಲ್‌ಗಳ ಸಂಖ್ಯೆಯನ್ನು 1 ಕ್ಕೆ ಕಡಿಮೆ ಮಾಡಿ ಮತ್ತು ವರ್ಗಾವಣೆಯನ್ನು ಇನ್ನೊಮ್ಮೆ "
 "ಚಲಾಯಿಸು."
 
-#: ../src/subscription_manager/migrate/migrate.py:437
+#: ../src/subscription_manager/migrate/migrate.py:438
 msgid ""
 "To remove a channel, use 'rhn-channel --remove --"
 "channel=<conflicting_channel>'."
@@ -1497,7 +1386,7 @@ msgstr ""
 "ಒಂದು ಚಾನಲ್ ಅನ್ನು ತೆಗೆದುಹಾಕಲು, 'rhn-channel --remove --"
 "channel=<conflicting_channel>' ಅನ್ನು ಬಳಸಿ."
 
-#: ../src/subscription_manager/migrate/migrate.py:449
+#: ../src/subscription_manager/migrate/migrate.py:450
 #, python-format
 msgid ""
 "Unable to read mapping file: %(mappingfile)s.\n"
@@ -1505,17 +1394,17 @@ msgid ""
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:475
+#: ../src/subscription_manager/migrate/migrate.py:476
 msgid "Channels not available on RHSM:"
 msgstr "RHSM ನಲ್ಲಿ ಲಭ್ಯವಿರದೆ ಇರುವ ಚಾನಲ್‌ಗಳು:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:480
+#: ../src/subscription_manager/migrate/migrate.py:481
 msgid "No product certificates are mapped to these RHN Classic channels:"
 msgstr "ಈ RHN ಕ್ಲಾಸಿಕ್‌ ಚಾನಲ್‌ಗಳಿಗೆ ಯಾವುದೆ ಉತ್ಪನ್ನ ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ಮ್ಯಾಪ್ ಮಾಡಲಾಗಿಲ್ಲ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:486
+#: ../src/subscription_manager/migrate/migrate.py:487
 msgid ""
 "\n"
 "Use --force to ignore these channels and continue the migration.\n"
@@ -1524,12 +1413,12 @@ msgstr ""
 "ಆ ಚಾನಲ್‌ಗಳನ್ನು ಕಡೆಗಣಿಸಲು ಹಾಗು ವರ್ಗಾವಣೆಯನ್ನು ಮುಂದುವರೆಸಲು --force ಅನ್ನು ಬಳಸಿ.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:500
+#: ../src/subscription_manager/migrate/migrate.py:501
 msgid "Installing product certificates for these RHN Classic channels:"
 msgstr "ಈ RHN ಕ್ಲಾಸಿಕ್‌ ಚಾನಲ್‌ಗಳಿಗಾಗಿ ಉತ್ಪನ್ನ ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ಅನುಸ್ಥಾಪಿಸಲಾಗುತ್ತಿದೆ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:528
+#: ../src/subscription_manager/migrate/migrate.py:529
 #, python-format
 msgid ""
 "\n"
@@ -1539,7 +1428,7 @@ msgstr ""
 "ಉತ್ಪನ್ನ ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ %s ಗೆ ಅನುಸ್ಥಾಪಿಸಲಾಗಿದೆ !!"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:608
+#: ../src/subscription_manager/migrate/migrate.py:609
 #, python-format
 msgid ""
 "Did not receive a completed unregistration message from RHN Classic for "
@@ -1550,22 +1439,22 @@ msgstr ""
 "ದಯವಿಟ್ಟು ಗ್ರಾಹಕರ ಪೋರ್ಟಲ್‌ನಲ್ಲಿನ https://access.redhat.com ನಲ್ಲಿ ಪರಿಶೀಲಿಸಿ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:616
+#: ../src/subscription_manager/migrate/migrate.py:617
 msgid "System successfully unregistered from RHN Classic."
 msgstr "RHN Classic ‌ನಿಂದ ಯಶಸ್ವಿಯಾಗಿ ನೋಂದಣಿಯನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:618
+#: ../src/subscription_manager/migrate/migrate.py:619
 msgid "Unable to unregister system from RHN Classic.  Exiting."
 msgstr "RHN Classic ‌ನಿಂದ ನೋಂದಣಿಯನ್ನು ರದ್ದುಗೊಳಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ. ನಿರ್ಗಮಿಸಲಾಗುತ್ತಿದೆ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:624
+#: ../src/subscription_manager/migrate/migrate.py:625
 msgid "Attempting to register system to Red Hat Subscription Management..."
 msgstr "Red Hat ನ subscription managementಗೆ ನೋಂದಾಯಿಸಲು ಪ್ರಯತ್ನಿಸಲಾಗುತ್ತಿದೆ..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:637
+#: ../src/subscription_manager/migrate/migrate.py:638
 msgid ""
 "\n"
 "Unable to register.\n"
@@ -1576,7 +1465,7 @@ msgstr ""
 "ಹೆಚ್ಚಿನ ಸಹಾಯಕ್ಕಾಗಿ, ದಯವಿಟ್ಟು Red Hat ಗ್ಲೋಬಲ್ ಸಪೋರ್ಟ್ ಸರ್ವಿಸಸ್ ಅನ್ನು ಸಂಪರ್ಕಸಿ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:640
+#: ../src/subscription_manager/migrate/migrate.py:641
 #, python-format
 msgid ""
 "System '%s' successfully registered to Red Hat Subscription Management.\n"
@@ -1584,7 +1473,7 @@ msgstr ""
 "'%s' ವ್ಯವಸ್ಥೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ Red Hat Subscription Managementಗೆ ನೋಂದಾಯಿಸಲಾಗಿದೆ.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:644
+#: ../src/subscription_manager/migrate/migrate.py:645
 #: ../src/subscription_manager/managercli.py:778
 #: ../src/subscription_manager/managercli.py:856
 #: ../src/subscription_manager/managercli.py:865
@@ -1593,12 +1482,12 @@ msgstr "ದೋಷ:  ಪೂರೈಕೆಗಣಕದಿಂದ ಸೇವಾ-ಮಟ�
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
 #. Display an actual message for the empty string level.
-#: ../src/subscription_manager/migrate/migrate.py:663
+#: ../src/subscription_manager/migrate/migrate.py:664
 msgid "No service level preference"
 msgstr "ಯಾವುದೆ ಸೇವಾ ಮಟ್ಟದ ಆದ್ಯತೆಯಿಲ್ಲ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:670
+#: ../src/subscription_manager/migrate/migrate.py:671
 #, python-format
 msgid ""
 "\n"
@@ -1608,24 +1497,24 @@ msgstr ""
 "\"%s\" ಎಂಬ ಸೇವಾ ಮಟ್ಟವು ಲಭ್ಯವಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:671
+#: ../src/subscription_manager/migrate/migrate.py:672
 msgid "Please select a service level agreement for this system."
 msgstr "ಈ ವ್ಯವಸ್ಥೆಗಾಗಿ ಒಂದು ಸೇವಾ ಮಟ್ಟದ ಒಪ್ಪಂದವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:678
+#: ../src/subscription_manager/migrate/migrate.py:679
 msgid ""
 "Launching the GUI tool to manually attach subscriptions to this system ..."
 msgstr ""
 "ಈ ವ್ಯವಸ್ಥೆಗೆ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಕೈಯಾರೆ ಲಗತ್ತಿಸಲು GUI ಉಪಕರಣವನ್ನು ಆರಂಭಿಸಲಾಗುತ್ತಿದೆ..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:681
+#: ../src/subscription_manager/migrate/migrate.py:682
 msgid "Attempting to auto-attach to appropriate subscriptions..."
 msgstr "ಸೂಕ್ತವಾದ ಚಂದಾದಾರಿಕೆಗಳಿಗೆ ಸ್ವಯಂ-ಲಗತ್ತಿಸಲು ಪ್ರಯತ್ನಿಸಲಾಗುತ್ತಿದೆ..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:690
+#: ../src/subscription_manager/migrate/migrate.py:691
 msgid ""
 "\n"
 "Unable to auto-attach.  Do your existing subscriptions match the products "
@@ -1636,7 +1525,7 @@ msgstr ""
 "ಅನುಸ್ಥಾಪಿಸಲಾದ ಉತ್ಪನ್ನಗಳಿಗೆ ಹೊಂದಿಕೆಯಾಗುತ್ತದೆಯೆ?"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:694
+#: ../src/subscription_manager/migrate/migrate.py:695
 #, python-format
 msgid ""
 "\n"
@@ -1648,7 +1537,7 @@ msgstr ""
 "management/consumers/%s ಗೆ ಭೇಟಿ ಕೊಡಿ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:728
+#: ../src/subscription_manager/migrate/migrate.py:730
 msgid ""
 "\n"
 "Unable to enable extra repositories."
@@ -1656,7 +1545,7 @@ msgstr ""
 "\n"
 "ಹೆಚ್ಚಿನ ರೆಪೊಸಿಟರಿಗಳನ್ನು ಶಕ್ತಗೊಳಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ."
 
-#: ../src/subscription_manager/migrate/migrate.py:730
+#: ../src/subscription_manager/migrate/migrate.py:732
 #, python-format
 msgid ""
 "Please ensure system has subscriptions attached, and see '%s' to enable "
@@ -1664,17 +1553,17 @@ msgid ""
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:754
+#: ../src/subscription_manager/migrate/migrate.py:756
 msgid "Retrieving existing RHN Classic subscription information..."
 msgstr "ಅಸ್ತಿತ್ವದಲ್ಲಿರುವ RHN ಕ್ಲಾಸಿಕ್ ಚಂದಾದಾರಿಕೆ ಮಾಹಿತಿಯನ್ನು ಪಡೆಯಲಾಗುತ್ತಿದೆ ..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:756
+#: ../src/subscription_manager/migrate/migrate.py:758
 msgid "System is currently subscribed to these RHN Classic Channels:"
 msgstr "ವ್ಯವಸ್ಥೆಯನ್ನು ಪ್ರಸಕ್ತ ಈ RHN Classic ಚಾನಲ್‌ಗಳನ್ನು ನೋಂದಾಯಿಸಲಾಗಿದೆ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/migrate/migrate.py:766
+#: ../src/subscription_manager/migrate/migrate.py:768
 msgid ""
 "\n"
 "Preparing to unregister system from RHN Classic..."
@@ -3080,7 +2969,7 @@ msgid "Consumed Subscriptions"
 msgstr "ಬಳಸಲಾದ ಚಂದಾದಾರಿಕೆಗಳು"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/managercli.py:2169 ../src/rct/printing.py:198
+#: ../src/subscription_manager/managercli.py:2169 ../src/rct/printing.py:205
 msgid "Not Available"
 msgstr "ಲಭ್ಯವಿಲ್ಲ"
 
@@ -3323,27 +3212,27 @@ msgid "Error reading system memory information:"
 msgstr "ವ್ಯವಸ್ಥೆಯ ಮೆಮೊರಿ ಮಾಹಿತಿಯನ್ನು ಓದುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/hwprobe.py:560
+#: ../src/subscription_manager/hwprobe.py:583
 msgid "Error reading system CPU information:"
 msgstr "ವ್ಯವಸ್ಥೆಯ CPU ಮಾಹಿತಿಯನ್ನು ಓದುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:585
+#: ../src/subscription_manager/hwprobe.py:608
 msgid "Error reading networking information:"
 msgstr "ವ್ಯವಸ್ಥೆಯ ಜಾಲಬಂಧ ಮಾಹಿತಿಯನ್ನು ಓದುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/hwprobe.py:684
+#: ../src/subscription_manager/hwprobe.py:707
 msgid "Error reading network interface information:"
 msgstr "ಜಾಲಬಂಧ ಸಂಪರ್ಕಸಾಧನದ ಮಾಹಿತಿಯನ್ನು ಓದುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/hwprobe.py:780
+#: ../src/subscription_manager/hwprobe.py:803
 msgid "Virtualization platform does not support UUIDs"
 msgstr "ವರ್ಚುವಲ್‌ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್ UUIDಗಳನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/subscription_manager/hwprobe.py:782
+#: ../src/subscription_manager/hwprobe.py:805
 #, python-format
 msgid "Error finding UUID: %s"
 msgstr "UUID ಅನ್ನು ಪತ್ತೆ ಮಾಡುವಲ್ಲಿ ದೋಷ: %s"
@@ -3496,8 +3385,8 @@ msgstr "ಸಾಮಾನ್ಯ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/manifest_commands.py:206 ../src/rct/manifest_commands.py:230
-#: ../src/rct/printing.py:44 ../src/rct/printing.py:65
-#: ../src/rct/printing.py:95
+#: ../src/rct/printing.py:44 ../src/rct/printing.py:72
+#: ../src/rct/printing.py:102
 msgid "Name"
 msgstr "ಹೆಸರು"
 
@@ -3522,12 +3411,12 @@ msgid "Created"
 msgstr "ರಚಿಸಿದವರು"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:235 ../src/rct/printing.py:70
+#: ../src/rct/manifest_commands.py:235 ../src/rct/printing.py:77
 msgid "Service Level"
 msgstr "ಸೇವಾ ಮಟ್ಟ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:236 ../src/rct/printing.py:71
+#: ../src/rct/manifest_commands.py:236 ../src/rct/printing.py:78
 msgid "Service Type"
 msgstr "ಸೇವೆಯ ಬಗೆ"
 
@@ -3537,17 +3426,17 @@ msgid "Architectures"
 msgstr "ಆರ್ಕಿಟಿಕ್ಚೆರ್"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:238 ../src/rct/printing.py:67
+#: ../src/rct/manifest_commands.py:238 ../src/rct/printing.py:74
 msgid "SKU"
 msgstr "SKU"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:240 ../src/rct/printing.py:64
+#: ../src/rct/manifest_commands.py:240 ../src/rct/printing.py:71
 msgid "Order"
 msgstr "ಅನುಕ್ರಮ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/rct/manifest_commands.py:241 ../src/rct/printing.py:69
+#: ../src/rct/manifest_commands.py:241 ../src/rct/printing.py:76
 msgid "Account"
 msgstr "ಖಾತೆ:"
 
@@ -3645,143 +3534,147 @@ msgstr "ಟ್ಯಾಗ್‌ಗಳು"
 msgid "Brand Type"
 msgstr "ಬ್ರಾಂಡ್ ಬಗೆ"
 
+#: ../src/rct/printing.py:58
+msgid "Brand Name"
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:66
+#: ../src/rct/printing.py:73
 msgid "Number"
 msgstr "ಸಂಖ್ಯೆ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:76
+#: ../src/rct/printing.py:83
 msgid "Quantity Used"
 msgstr "ಬಳಸಿದ ಪ್ರಮಾಣ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:77
+#: ../src/rct/printing.py:84
 msgid "Socket Limit"
 msgstr "ಸಾಕೆಟ್‌ ಮಿತಿ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:78
+#: ../src/rct/printing.py:85
 msgid "RAM Limit"
 msgstr "RAM ಮಿತಿ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/rct/printing.py:79
+#: ../src/rct/printing.py:86
 msgid "Core Limit"
 msgstr "ಕೋರ್ ಮಿತಿ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:80
+#: ../src/rct/printing.py:87
 msgid "Virt Only"
 msgstr "Virt ಮಾತ್ರ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:81
+#: ../src/rct/printing.py:88
 msgid "Stacking ID"
 msgstr "ಸ್ಟ್ಯಾಕಿಂಗ್‌ ID"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:82
+#: ../src/rct/printing.py:89
 msgid "Warning Period"
 msgstr "ಎಚ್ಚರಿಕೆ ಅವಧಿ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:83
+#: ../src/rct/printing.py:90
 msgid "Provides Management"
 msgstr "ವ್ಯವಸ್ಥಾಪನೆಯನ್ನು ಒದಗಿಸುತ್ತದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/rct/printing.py:92
+#: ../src/rct/printing.py:99
 msgid "Content"
 msgstr "ಕಂಟೆಂಟ್"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:96
+#: ../src/rct/printing.py:103
 msgid "Label"
 msgstr "ಲೇಬಲ್"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:97
+#: ../src/rct/printing.py:104
 msgid "Vendor"
 msgstr "ಮಾರಾಟಗಾರ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/rct/printing.py:98
+#: ../src/rct/printing.py:105
 msgid "URL"
 msgstr "URL"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:99
+#: ../src/rct/printing.py:106
 msgid "GPG"
 msgstr "GPG"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/rct/printing.py:101
+#: ../src/rct/printing.py:108
 msgid "Expires"
 msgstr "ವಾಯಿದೆ ತೀರಿಕೆ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:102
+#: ../src/rct/printing.py:109
 msgid "Required Tags"
 msgstr "ಅಗತ್ಯವಿರುವ ಟ್ಯಾಗ್‌ಗಳು"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/rct/printing.py:103
+#: ../src/rct/printing.py:110
 msgid "Arches"
 msgstr "ಆರ್ಕುಗಳು"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:115
+#: ../src/rct/printing.py:122
 msgid "Certificate:"
 msgstr "ಪ್ರಮಾಣಪತ್ರ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:116
+#: ../src/rct/printing.py:123
 msgid "Path"
 msgstr "ಮಾರ್ಗ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:118
+#: ../src/rct/printing.py:125
 msgid "Serial"
 msgstr "ಸರಣಿ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:131
+#: ../src/rct/printing.py:138
 msgid "Subject:"
 msgstr "ವಿಷಯ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/rct/printing.py:138
+#: ../src/rct/printing.py:145
 msgid "Issuer:"
 msgstr "ಒದಗಿಸಿದವರು:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:160
+#: ../src/rct/printing.py:167
 msgid "Alt Name"
 msgstr "ಪರ್ಯಾಯ ಹೆಸರು"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author shanky
-#: ../src/rct/printing.py:201
+#: ../src/rct/printing.py:208
 msgid "Pool ID"
 msgstr "ಪೂಲ್ ID"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:219
+#: ../src/rct/printing.py:226
 msgid "Entitlement Certificate"
 msgstr "ಎಂಟೈಟಲ್ಮೆಂಟ್ ಪ್ರಮಾಣಪತ್ರ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:221
+#: ../src/rct/printing.py:228
 msgid "Product Certificate"
 msgstr "ಉತ್ಪನ್ನ ಪ್ರಮಾಣಪತ್ರ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:223
+#: ../src/rct/printing.py:230
 msgid "Identity Certificate"
 msgstr "ಗುರುತು ಪ್ರಮಾಣಪತ್ರ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:225
+#: ../src/rct/printing.py:232
 msgid "Unknown Certificate Type"
 msgstr "ಅಜ್ಞಾತ ಪ್ರಮಾಣಪತ್ರದ ಬಗೆ"
 
@@ -5269,3 +5162,92 @@ msgstr "ಚಂದಾದಾರಿಕೆ ಸಿಂಧುತ್ವ ಆಪ್ಲೆ�
 #: ../etc-conf/subscription-manager-gui.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
 msgstr "Red Hat ಚಂದಾದಾರ ವ್ಯವಸ್ಥಾಪಕ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:140
+#, python-format
+msgid "no such option: %s"
+msgstr "ಅಂತಹ ಯಾವುದೆ ಆಯ್ಕೆಗಳಿಲ್ಲ: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:151
+#, python-format
+msgid "ambiguous option: %s (%s?)"
+msgstr "ಅಸ್ಪಷ್ಟ ಆಯ್ಕೆ: %s (%s?)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:393
+msgid "Usage"
+msgstr "ಬಳಕೆ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:418
+msgid "integer"
+msgstr "ಪೂರ್ಣಾಂಕ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:419
+msgid "long integer"
+msgstr "ದೊಡ್ಡ ಪೂರ್ಣಾಂಕ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:420
+msgid "floating-point"
+msgstr "ತೇಲುವ-ಬಿಂದು"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:421
+msgid "complex"
+msgstr "ಸಂಕೀರ್ಣ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:429
+#, python-format
+msgid "option %s: invalid %s value: %r"
+msgstr "%s ಆಯ್ಕೆ: ಅಸಿಂಧುವಾದ %s ಮೌಲ್ಯ: %r"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:437
+#, python-format
+msgid "option %s: invalid choice: %r (choose from %s)"
+msgstr "%s ಆಯ್ಕೆ: ಅಸಿಂಧುವಾದ ಆಯ್ಕೆ: %r (%s ಇಂದ ಆರಿಸಿ)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1250
+msgid "show this help message and exit"
+msgstr "ಈ ನೆರವಿನ ಸಂದೇಶವನ್ನು ತೋರಿಸಿ ನಿರ್ಗಮಿಸು"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1255
+msgid "show program's version number and exit"
+msgstr "ಪ್ರೊಗ್ರಾಮ್‌ನ ಸಂಖ್ಯೆಯನ್ನು ತೋರಿಸಿ ನಿರ್ಗಮಿಸು"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1278
+msgid "%prog [options]"
+msgstr "%prog [ಆಯ್ಕೆಗಳು]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1498
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1537
+#, python-format
+msgid "%s option requires an argument"
+msgstr "%s ಆಯ್ಕೆಗಾಗಿ ಒಂದು ಆರ್ಗ್ಯುಮೆಂಟಿನ ಅಗತ್ಯವಿರುತ್ತದೆ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1500
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1539
+#, python-format
+msgid "%s option requires %d arguments"
+msgstr "%s ಆಯ್ಕೆಗಾಗಿ %d ಆರ್ಗ್ಯುಮೆಂಟ್‌ಗಳ ಅಗತ್ಯವಿರುತ್ತದೆ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1509
+#, python-format
+msgid "%s option does not take a value"
+msgstr "%s ಆಯ್ಕೆಯು ಯಾವುದೆ ಮೌಲ್ಯವನ್ನು ತೆಗೆದುಕೊಳ್ಳುವುದಿಲ್ಲ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1626
+msgid "Options"
+msgstr "ಆಯ್ಕೆಗಳು"
