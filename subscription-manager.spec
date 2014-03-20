@@ -13,7 +13,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.11.1
+Version: 1.11.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -419,6 +419,16 @@ fi
 %endif
 
 %changelog
+* Thu Mar 20 2014 Alex Wood <awood@redhat.com> 1.11.2-1
+- Use the new Product.brand_name for brand_name (alikins@redhat.com)
+- 865702: Dont render exc messages with bogus markup (alikins@redhat.com)
+- 1070908: Don't count cpus without topo for lpar (alikins@redhat.com)
+- 1075167: Avoid using injected values in migrate-classic-to-rhsm
+  (ckozak@redhat.com)
+- 1074568: Use our translations in optparser (ckozak@redhat.com)
+- Man page spelling corrections (wpoteat@redhat.com)
+- 1070737: correct config section for ca_cert_dir (ckozak@redhat.com)
+
 * Thu Feb 27 2014 Alex Wood <awood@redhat.com> 1.11.1-1
 - 1021069: Add reference to network usage info. (alikins@redhat.com)
 - latest strings from zanata 1.11.X branch (alikins@redhat.com)
