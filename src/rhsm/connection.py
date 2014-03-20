@@ -710,7 +710,7 @@ class UEPConnection:
 
     def registerConsumer(self, name="unknown", type="system", facts={},
             owner=None, environment=None, keys=None,
-            installed_products=None, uuid=None):
+            installed_products=None, uuid=None, hypervisor_id=None):
         """
         Creates a consumer on candlepin server
         """
@@ -722,6 +722,9 @@ class UEPConnection:
 
         if uuid:
             params['uuid'] = uuid
+
+        if hypervisor_id is not None:
+            params['hypervisorId'] = {'hypervisorId': hypervisor_id}
 
         url = "/consumers"
         if environment:
@@ -762,7 +765,7 @@ class UEPConnection:
 
     def updateConsumer(self, uuid, facts=None, installed_products=None,
             guest_uuids=None, service_level=None, release=None,
-            autoheal=None):
+            autoheal=None, hypervisor_id=None):
         """
         Update a consumer on the server.
 
@@ -783,6 +786,8 @@ class UEPConnection:
             params['releaseVer'] = release
         if autoheal is not None:
             params['autoheal'] = autoheal
+        if hypervisor_id is not None:
+            params['hypervisorId'] = {'hypervisorId': hypervisor_id}
 
         # The server will reject a service level that is not available
         # in the consumer's organization, so no need to check if it's safe
@@ -794,20 +799,39 @@ class UEPConnection:
         ret = self.conn.request_put(method, params)
         return ret
 
+    def addOrUpdateGuestId(self, uuid, guestId):
+        if isinstance(guestId, basestring):
+            guest_uuid = guestId
+            guestId = {}
+        else:
+            guest_uuid = guestId['guestId']
+        method = "/consumers/%s/guestids/%s" % (self.sanitize(uuid), self.sanitize(guest_uuid))
+        return self.conn.request_put(method, guestId)
+
+    def getGuestIds(self, uuid):
+        method = "/consumers/%s/guestids" % self.sanitize(uuid)
+        return self.conn.request_get(method)
+
+    def getGuestId(self, uuid, guest_uuid):
+        method = "/consumers/%s/guestids/%s" % (self.sanitize(uuid), self.sanitize(guest_uuid))
+        return self.conn.request_get(method)
+
+    def removeGuestId(self, uuid, guest_uuid):
+        method = "/consumers/%s/guestids/%s" % (self.sanitize(uuid), self.sanitize(guest_uuid))
+        return self.conn.request_delete(method)
+
     def sanitizeGuestIds(self, guestIds):
-        result = []
-        supports_guestids = self.supports_resource('guestids')
-        for guestId in guestIds or []:
-            if isinstance(guestId, basestring):
-                result.append(guestId)
-            elif isinstance(guestId, dict) and "guestId" in guestId.keys():
-                if supports_guestids:
-                    # Upload full json
-                    result.append(guestId)
-                else:
-                    # Does not support the full guestId json, use the id string
-                    result.append(guestId["guestId"])
-        return result
+        return [self.sanitizeGuestId(guestId) for guestId in guestIds or []]
+
+    def sanitizeGuestId(self, guestId):
+        if isinstance(guestId, basestring):
+            return guestId
+        elif isinstance(guestId, dict) and "guestId" in guestId.keys():
+            if self.supports_resource('guestids'):
+                # Upload full json
+                return guestId
+            # Does not support the full guestId json, use the id string
+            return guestId["guestId"]
 
     def updatePackageProfile(self, consumer_uuid, pkg_dicts):
         """
@@ -888,6 +912,15 @@ class UEPConnection:
         Returns an owner objects with pem/key for existing consumers
         """
         method = '/users/%s/owners' % self.sanitize(username)
+        return self.conn.request_get(method)
+
+    def getOwnerHypervisors(self, owner_key, hypervisor_ids=None):
+        """
+        If hypervisor_ids is populated, only hypervisors with those ids will be returned
+        """
+        method = '/owners/%s/hypervisors?' % owner_key
+        for hypervisor_id in hypervisor_ids or []:
+            method += '&hypervisor_id=%s' % self.sanitize(hypervisor_id)
         return self.conn.request_get(method)
 
     def unregisterConsumer(self, consumerId):

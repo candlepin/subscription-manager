@@ -14,13 +14,20 @@
 #
 
 import os
+import random
+import string
 import unittest
 
 from rhsm.connection import ContentConnection, UEPConnection, drift_check, Restlib,\
     UnauthorizedException, ForbiddenException, AuthenticationException, RestlibException, \
     RemoteServerException
 from mock import patch
-import random
+
+def random_string(name, target_length=32):
+    ''' Returns a len 32 string starting with "name"'''
+    for i in range(max(target_length - len(name), 0)):
+        name += random.choice(string.ascii_lowercase)
+    return name
 
 
 class ConnectionTests(unittest.TestCase):
@@ -45,6 +52,83 @@ class ConnectionTests(unittest.TestCase):
 
     def test_update_consumer_can_update_installed_products_with_empty_list(self):
         self.cp.updateConsumer(self.consumer_uuid, installed_products=[])
+
+    def test_update_consumer_sets_hypervisor_id(self):
+        testing_hypervisor_id = random_string("testHypervisor")
+        self.cp.updateConsumer(self.consumer_uuid, hypervisor_id=testing_hypervisor_id)
+        hypervisor_id = self.cp.getConsumer(self.consumer_uuid)['hypervisorId']
+        # Hypervisor ID should be set and lower case
+        expected = testing_hypervisor_id.lower()
+        self.assertEquals(expected, hypervisor_id['hypervisorId'])
+
+    def test_create_consumer_sets_hypervisor_id(self):
+        testing_hypervisor_id = random_string("someId")
+        consumerInfo = self.cp.registerConsumer("other-test-consumer",
+                "system", owner="admin", hypervisor_id=testing_hypervisor_id)
+        # Unregister before making assertions, that way it should always happen
+        self.cp.unregisterConsumer(consumerInfo['uuid'])
+        # Hypervisor ID should be set and lower case
+        expected = testing_hypervisor_id.lower()
+        self.assertEquals(expected, consumerInfo['hypervisorId']['hypervisorId'])
+
+    def test_add_single_guest_id_string(self):
+        testing_guest_id = random_string("guestid")
+        self.cp.addOrUpdateGuestId(self.consumer_uuid, testing_guest_id)
+        guestIds = self.cp.getGuestIds(self.consumer_uuid)
+        self.assertEquals(1, len(guestIds))
+
+    def test_add_single_guest_id(self):
+        testing_guest_id = random_string("guestid")
+        guest_id_object = {"guestId": testing_guest_id, "attributes": {"some attr": "some value"}}
+        self.cp.addOrUpdateGuestId(self.consumer_uuid, guest_id_object)
+
+        guestId = self.cp.getGuestId(self.consumer_uuid, testing_guest_id)
+
+        # This check seems silly...
+        self.assertEquals(testing_guest_id, guestId['guestId'])
+        self.assertEquals('some value', guestId['attributes']['some attr'])
+
+    def test_remove_single_guest_id(self):
+        testing_guest_id = random_string("guestid")
+        self.cp.addOrUpdateGuestId(self.consumer_uuid, testing_guest_id)
+        guestIds = self.cp.getGuestIds(self.consumer_uuid)
+        self.assertEquals(1, len(guestIds))
+
+        # Delete the guestId
+        self.cp.removeGuestId(self.consumer_uuid, testing_guest_id)
+
+        # Check that no guestIds exist anymore
+        guestIds = self.cp.getGuestIds(self.consumer_uuid)
+        self.assertEquals(0, len(guestIds))
+
+    def test_update_single_guest_id(self):
+        testing_guest_id = random_string("guestid")
+        guest_id_object = {"guestId": testing_guest_id, "attributes": {"some attr": "some value"}}
+        self.cp.addOrUpdateGuestId(self.consumer_uuid, guest_id_object)
+        guestId = self.cp.getGuestId(self.consumer_uuid, testing_guest_id)
+        # check the guestId was created and has the expected attribute
+        self.assertEquals('some value', guestId['attributes']['some attr'])
+
+        guest_id_object['attributes']['some attr'] = 'crazy new value'
+        self.cp.addOrUpdateGuestId(self.consumer_uuid, guest_id_object)
+        guestId = self.cp.getGuestId(self.consumer_uuid, testing_guest_id)
+
+        # Verify there's still only one guestId
+        guestIds = self.cp.getGuestIds(self.consumer_uuid)
+        self.assertEquals(1, len(guestIds))
+
+        # Check that the attribute has changed
+        self.assertEquals('crazy new value', guestId['attributes']['some attr'])
+
+    def test_get_owner_hypervisors(self):
+        testing_hypervisor_id = random_string("testHypervisor")
+        self.cp.updateConsumer(self.consumer_uuid, hypervisor_id=testing_hypervisor_id)
+        hypervisor_id = self.cp.getConsumer(self.consumer_uuid)['hypervisorId']
+
+        hypervisors = self.cp.getOwnerHypervisors("admin", [testing_hypervisor_id])
+
+        self.assertEquals(1, len(hypervisors))
+        self.assertEquals(self.consumer_uuid, hypervisors[0]['uuid'])
 
     def tearDown(self):
         self.cp.unregisterConsumer(self.consumer_uuid)
