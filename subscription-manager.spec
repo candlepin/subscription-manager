@@ -14,7 +14,7 @@
 
 Name: subscription-manager
 Version: 1.10.14
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -419,6 +419,9 @@ fi
 %endif
 
 %changelog
+* Fri Mar 21 2014 ckozak <ckozak@redhat.com> 1.10.14-6
+- Use the new Product.brand_name for brand_name (alikins@redhat.com)
+
 * Wed Mar 19 2014 ckozak <ckozak@redhat.com> 1.10.14-5
 - 1070908: Don't count cpus without topo for lpar (alikins@redhat.com)
 - 865702: Dont render exc messages with bogus markup (alikins@redhat.com)
