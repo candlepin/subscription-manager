@@ -14,6 +14,7 @@ from logging.handlers import RotatingFileHandler
 import os
 import sys
 
+RHSM_LOG = '/var/log/rhsm/rhsm.log'
 CERT_LOG = '/var/log/rhsm/rhsmcertd.log'
 
 handler = None
@@ -29,18 +30,27 @@ DEBUG_LOG_FORMAT = u'%(asctime)s [%(name)s %(levelname)s] ' \
                     '@%(filename)s:%(funcName)s:%(lineno)d - %(message)s'
 
 
+def _get_log_file_path():
+    path = RHSM_LOG
+    try:
+        if not os.path.isdir("/var/log/rhsm"):
+            os.mkdir("/var/log/rhsm")
+    except EnvironmentError:
+        # ignore failures to create log dir
+        # /var/log may be read-only in rhel5 anaconda and
+        # we don't want to break anaconda
+        # see https://bugzilla.redhat.com/show_bug.cgi?id=670973#c54
+        pass
+    return path
+
+
 def _get_handler():
     # we only need one global handler
     global handler
     if handler is not None:
         return handler
 
-    path = '/var/log/rhsm/rhsm.log'
-    try:
-        if not os.path.isdir("/var/log/rhsm"):
-            os.mkdir("/var/log/rhsm")
-    except Exception:
-        pass
+    path = _get_log_file_path()
 
     # Try to write to /var/log, fallback on console logging:
     try:
