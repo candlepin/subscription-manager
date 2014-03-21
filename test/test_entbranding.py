@@ -4,31 +4,24 @@ import mock
 import fixture
 import stubs
 
+from rhsm import certificate2
 from subscription_manager import entbranding
 from subscription_manager import rhelentbranding
 from subscription_manager import injection as inj
 
 
-class StubProduct(object):
-    def __init__(self, id=None, name=None,
-                 brand_type=None, brand_name=None):
-        self.id = id
-        # we need to test when these dont exist
-        if name:
-            self.name = name
-        if brand_type:
-            self.brand_type = brand_type
-        if brand_name:
-            self.brand_name = brand_name
+# The certificate2.Product is basically just a data structure
+#  so we can use the real one. No methods that need mocking.
+class StubProduct(certificate2.Product):
+    pass
 
 
-class DefaultStubProduct(object):
+class DefaultStubProduct(StubProduct):
     def __init__(self, id=123, name="Awesome OS",
                  brand_type='OS', brand_name='Awesome OS super'):
-        self.id = id
-        self.name = name
-        self.brand_type = brand_type
-        self.brand_name = brand_name
+
+        super(DefaultStubProduct, self).__init__(id=id, name=name, brand_type=brand_type,
+                                                 brand_name=brand_name)
 
 
 class BaseBrandFixture(fixture.SubManFixture):
@@ -158,7 +151,9 @@ class TestRHELBrandInstaller(BaseBrandFixture):
         self.assertFalse(self.mock_install.called)
 
     def test_brand_type_no_name_no_brand_name_on_product(self):
-        stub_product = StubProduct(id=123, brand_type='OS')
+        # can't create a certificate2.Product without a name
+        # so create it with and undo it. This should never happen
+        stub_product = StubProduct(name="placeholder", id=123, brand_type='OS')
         stub_product.name = None
 
         mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
@@ -600,6 +595,9 @@ class TestProductBrand(BaseBrandFixture):
         stub_product = DefaultStubProduct()
         brand = self.brand_class.from_product(stub_product)
         self.assertEquals(stub_product.brand_name, brand.name)
+
+    #def test_from_product_brand_type_none(self):
+    #    stub_product =
 
     def test_format_brand(self):
         fb = self.brand_class.format_brand('Blip')
