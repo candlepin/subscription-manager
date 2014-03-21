@@ -551,24 +551,51 @@ class TestRHELBrandPicker(BaseBrandFixture):
         irp = brand_picker._is_installed_rhel_branded_product(stub_product)
         self.assertTrue(irp)
 
-    def test_is_rhel_branded_product(self):
-        brand_picker = rhelentbranding.RHELBrandPicker([])
+class TestRHELBrandPickerIsRHELBrandedProduct(BaseBrandFixture):
+    def setUp(self):
+        super(TestRHELBrandPickerIsRHELBrandedProduct, self).setUp()
+        self.brand_picker = rhelentbranding.RHELBrandPicker([])
 
+    def _check_branded(self, product):
+        return self.brand_picker._is_rhel_branded_product(product)
+
+    def test(self):
         stub_product = DefaultStubProduct()
-        self.assertTrue(brand_picker._is_rhel_branded_product(stub_product))
+        self.assertTrue(self._check_branded(stub_product))
 
-        # os set, but empty
-        unbranded_stub_product = StubProduct(id=123, name="Awesome OS", brand_type="")
-        self.assertFalse(brand_picker._is_rhel_branded_product(unbranded_stub_product))
+    def test_none_brand_type(self):
+        # brand_type is set to None (not specified)
+        none_brand_type_stub_product = StubProduct(name="Awesome NoOS", id=123)
+        self.assertFalse(self._check_branded(none_brand_type_stub_product))
 
-        # note no os set
-        no_os_stub_product = StubProduct(name="Awesome NoOS", id=123)
-        self.assertFalse(brand_picker._is_rhel_branded_product(no_os_stub_product))
+    def test_no_brand_type(self):
+        # a Product with no brand_type attribute, like old versions
+        # are not branded
+        no_brand_type_stub_product = DefaultStubProduct()
+        del no_brand_type_stub_product.brand_type
+        self.assertFalse(self._check_branded(no_brand_type_stub_product))
 
-        # product.name is none
-        no_name_stub_product = DefaultStubProduct()
-        no_name_stub_product.brand_name = None
-        self.assertFalse(brand_picker._is_rhel_branded_product(no_name_stub_product))
+    def test_empty_brand_type(self):
+        # At the moment, "" != "OS", so brand_type="" is not a rhel
+        empty_brand_type_stub_product = DefaultStubProduct(brand_type="")
+        self.assertFalse(self._check_branded(empty_brand_type_stub_product))
+
+    def test_none_brand_name(self):
+        # product.brand_name is none
+        none_brand_name_stub_product = DefaultStubProduct()
+        none_brand_name_stub_product.brand_name = None
+        self.assertFalse(self._check_branded(none_brand_name_stub_product))
+
+    def test_no_brand_name(self):
+        # no Product.brand_name at all, ala old Product objects
+        no_brand_name_stub_product = DefaultStubProduct()
+        del no_brand_name_stub_product.brand_name
+        self.assertFalse(self._check_branded(no_brand_name_stub_product))
+
+    def test_empty_brand_name(self):
+        # product.brand_name is ""
+        empty_brand_name_stub_product = DefaultStubProduct(brand_name="")
+        self.assertFalse(self._check_branded(empty_brand_name_stub_product))
 
 
 class TestProductBrand(BaseBrandFixture):
@@ -596,8 +623,35 @@ class TestProductBrand(BaseBrandFixture):
         brand = self.brand_class.from_product(stub_product)
         self.assertEquals(stub_product.brand_name, brand.name)
 
-    #def test_from_product_brand_type_none(self):
-    #    stub_product =
+    def test_from_product_brand_name_none(self):
+        stub_product = DefaultStubProduct(brand_name=None)
+        brand = self.brand_class.from_product(stub_product)
+        self.assertEquals(stub_product.brand_name, brand.name)
+        self.assertTrue(brand.name is None)
+
+    # ProductBrand shouldn't care about the Product.brand_type,
+    # that's BrandPicker's job
+    def test_from_product_brand_type_none(self):
+        stub_product = DefaultStubProduct(brand_type=None)
+        brand = self.brand_class.from_product(stub_product)
+        self.assertEquals(stub_product.brand_name, brand.name)
+
+    # An empty string is just a name, a poor name
+    # ie, no casting to None, etc.
+    # NOTE: we basically ignore brand_name="" in RHELBrandPicker
+    # so we can't install a branded name of "", which is okay
+    # since brandbot doesn't know what to do with that.
+    def test_from_product_brand_name_empty_string(self):
+        stub_product = DefaultStubProduct(brand_name="")
+        brand = self.brand_class.from_product(stub_product)
+        self.assertEquals(stub_product.brand_name, brand.name)
+        self.assertEquals("", brand.name)
+
+    # see comment about test_from_product_brand_type_none
+    def test_from_product_brand_type_empty_string(self):
+        stub_product = DefaultStubProduct(brand_type="")
+        brand = self.brand_class.from_product(stub_product)
+        self.assertEquals(stub_product.brand_name, brand.name)
 
     def test_format_brand(self):
         fb = self.brand_class.format_brand('Blip')
