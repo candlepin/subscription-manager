@@ -358,6 +358,11 @@ class ProductTests(unittest.TestCase):
                     brand_type=None)
         self.assertTrue(p.brand_type is None)
 
+    def test_brand_type_empty_string(self):
+        p = Product(id='pid', name='pname',
+                    brand_type="")
+        self.assertEquals(p.brand_type, "")
+
     def test_no_brand_name(self):
         p = Product(id="pid", name="pname")
         self.assertTrue(p.brand_name is None)
@@ -371,3 +376,8 @@ class ProductTests(unittest.TestCase):
         p = Product(id="pid", name="pname",
                     brand_name=None)
         self.assertTrue(p.brand_name is None)
+
+    def test_brand_name_empty_string(self):
+        p = Product(id="pid", name="pname",
+                    brand_name="")
+        self.assertEquals(p.brand_name, "")
