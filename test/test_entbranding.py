@@ -24,6 +24,16 @@ class DefaultStubProduct(StubProduct):
                                                  brand_name=brand_name)
 
 
+# The installed product ids don't have brand_type/brand_name, just the
+# Product from the ent cert
+class DefaultStubInstalledProduct(StubProduct):
+    def __init__(self, id=123, name="Awesome OS",
+                 brand_type=None, brand_name=None):
+
+        super(DefaultStubInstalledProduct, self).__init__(id=id, name=name, brand_type=brand_type,
+                                                 brand_name=brand_name)
+
+
 class BaseBrandFixture(fixture.SubManFixture):
     current_brand = "Current Awesome OS Brand"
 
@@ -93,9 +103,10 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
     def test(self):
         stub_product = DefaultStubProduct()
+        stub_installed_product = DefaultStubInstalledProduct()
 
         mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
-        mock_prod_dir.get_installed_products.return_value = [stub_product.id]
+        mock_prod_dir.get_installed_products.return_value = [stub_installed_product.id]
 
         inj.provide(inj.PROD_DIR, mock_prod_dir)
 
@@ -118,8 +129,10 @@ class TestRHELBrandInstaller(BaseBrandFixture):
                                    name="Some name",
                                    brand_name=self.current_brand)
 
+        stub_installed_product = StubProduct(id=123, name="Some name")
+
         mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
-        mock_prod_dir.get_installed_products.return_value = [stub_product.id]
+        mock_prod_dir.get_installed_products.return_value = [stub_installed_product.id]
 
         inj.provide(inj.PROD_DIR, mock_prod_dir)
 
@@ -133,11 +146,14 @@ class TestRHELBrandInstaller(BaseBrandFixture):
         self.assertFalse(self.mock_install.called)
 
     def test_no_brand_type_on_product(self):
-        # no .os
+        # no brand_type
         stub_product = StubProduct(id=123, name="Awesome OS Super")
+        stub_installed_product = StubProduct(id=123, name="Awesome OS Super")
 
+        # simulate a old style Product, shouldn't happen
+        del stub_product.brand_type
         mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
-        mock_prod_dir.get_installed_products.return_value = [stub_product.id]
+        mock_prod_dir.get_installed_products.return_value = [stub_installed_product.id]
 
         inj.provide(inj.PROD_DIR, mock_prod_dir)
 
@@ -150,14 +166,17 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
         self.assertFalse(self.mock_install.called)
 
-    def test_brand_type_no_name_no_brand_name_on_product(self):
+    def test_none_product_name_none_brand_name_on_product(self):
         # can't create a certificate2.Product without a name
         # so create it with and undo it. This should never happen
         stub_product = StubProduct(name="placeholder", id=123, brand_type='OS')
         stub_product.name = None
+        stub_product.brand_name = None
+
+        stub_installed_product = StubProduct(name="placeholder", id=123)
 
         mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
-        mock_prod_dir.get_installed_products.return_value = [stub_product.id]
+        mock_prod_dir.get_installed_products.return_value = [stub_installed_product.id]
 
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
@@ -168,12 +187,14 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
         self.assertFalse(self.mock_install.called)
 
-    def test_no_brand_name_on_product(self):
+    def test_none_brand_name_on_product(self):
         stub_product = StubProduct(id=123, name="An Awesome OS", brand_type='OS')
         stub_product.name = None
 
+        stub_installed_product = StubProduct(id=123, name="An Awesome OS")
+
         mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
-        mock_prod_dir.get_installed_products.return_value = [stub_product.id]
+        mock_prod_dir.get_installed_products.return_value = [stub_installed_product.id]
 
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
@@ -184,7 +205,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
         self.assertFalse(self.mock_install.called)
 
-    def test_no_brand_type_no_brand_name_on_product(self):
+    def test_none_brand_type_none_brand_name_on_product(self):
         stub_product = StubProduct(id=123, name="An Awesome OS")
         stub_product.name = None
 
@@ -200,13 +221,14 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
         self.assertFalse(self.mock_install.called)
 
-    def test_no_brand_type_brand_name_on_product(self):
+    def test_none_brand_type_brand_name_on_product(self):
         stub_product = StubProduct(id=123, name="An Awesome OS",
                                    brand_name="Branded Awesome OS")
         stub_product.name = None
 
+        stub_installed_product = StubProduct(id=123, name="An Awesome OS")
         mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
-        mock_prod_dir.get_installed_products.return_value = [stub_product.id]
+        mock_prod_dir.get_installed_products.return_value = [stub_installed_product.id]
 
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
@@ -221,10 +243,11 @@ class TestRHELBrandInstaller(BaseBrandFixture):
         stub_product = StubProduct(id=123, name="An Awesome OS",
                                    brand_type='Middleware',
                                    brand_name="Branded Awesome OS")
-        stub_product.name = None
+
+        stub_installed_product = StubProduct(id=123, name="An Awesome OS")
 
         mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
-        mock_prod_dir.get_installed_products.return_value = [stub_product.id]
+        mock_prod_dir.get_installed_products.return_value = [stub_installed_product.id]
 
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
@@ -235,13 +258,14 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
         self.assertFalse(self.mock_install.called)
 
-    def test_wrong_brand_type_no_brand_name_on_product(self):
+    def test_wrong_brand_type_none_brand_name_on_product(self):
         stub_product = StubProduct(id=123, name="An Awesome OS",
                                    brand_type='Middleware')
-        stub_product.name = None
+
+        stub_installed_product = StubProduct(id=123, name="An Awesome OS")
 
         mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
-        mock_prod_dir.get_installed_products.return_value = [stub_product.id]
+        mock_prod_dir.get_installed_products.return_value = [stub_installed_product.id]
 
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
@@ -254,12 +278,16 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
     def test_multiple_matching_branded_products(self):
         stub_product = DefaultStubProduct()
+        stub_installed_product = DefaultStubInstalledProduct()
 
         stub_product_2 = StubProduct(id=321, brand_type='OS', name="Awesome",
                                      brand_name="Slightly Different Awesome OS Super")
 
+        stub_installed_product_2 = StubProduct(id=321, name="Awesome")
+
         mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
-        mock_prod_dir.get_installed_products.return_value = [stub_product.id, stub_product_2.id]
+        mock_prod_dir.get_installed_products.return_value = [stub_installed_product.id,
+                                                             stub_installed_product_2.id]
 
         inj.provide(inj.PROD_DIR, mock_prod_dir)
 
@@ -274,9 +302,10 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
     def test_multiple_branded_ent_certs_for_installed_product(self):
         stub_product = DefaultStubProduct()
+        stub_installed_product = DefaultStubInstalledProduct()
 
         mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
-        mock_prod_dir.get_installed_products.return_value = [stub_product.id]
+        mock_prod_dir.get_installed_products.return_value = [stub_installed_product.id]
 
         inj.provide(inj.PROD_DIR, mock_prod_dir)
 
@@ -422,10 +451,11 @@ class TestRHELBrandPicker(BaseBrandFixture):
 
     def test_get_brand(self):
         # inj a prod dir with some installed products
+        stub_installed_product = DefaultStubInstalledProduct()
         stub_product = DefaultStubProduct()
 
         mock_product_dir = mock.NonCallableMock()
-        mock_product_dir.get_installed_products.return_value = [stub_product.id]
+        mock_product_dir.get_installed_products.return_value = [stub_installed_product.id]
         inj.provide(inj.PROD_DIR, mock_product_dir)
 
         mock_ent_cert = mock.Mock()
@@ -503,21 +533,26 @@ class TestRHELBrandPicker(BaseBrandFixture):
         brand = brand_picker.get_brand()
         self.assertTrue(brand is None)
 
-    def test_get_brand_branded(self):
+    def test_get_brand_branded_unknown_brand_type(self):
 
-        stub_product = StubProduct(id=123, brand_type='Awesome Middleware', name="Stub Product Name")
+        stub_installed_product = StubProduct(id=123, name="Stub Product Name")
 
         # note, no 'brand_type' attribute
-        other_stub_product = StubProduct(id=321, name='A Non Branded Product')
+        other_stub_installed_product = StubProduct(id=321, name='A Non Branded Product')
 
         mock_product_dir = mock.NonCallableMock()
-        mock_product_dir.get_installed_products.return_value = [stub_product.id, other_stub_product.id]
+        mock_product_dir.get_installed_products.return_value = [stub_installed_product.id,
+                                                                other_stub_installed_product.id]
         inj.provide(inj.PROD_DIR, mock_product_dir)
 
+        stub_product = StubProduct(id=123, brand_type="middleware",
+                                   name="Stub Product Name", brand_name="Awesome Middleware")
         mock_ent_cert = mock.Mock()
         mock_ent_cert.products = [stub_product]
         ent_certs = [mock_ent_cert]
 
+        # NOTE: this looks like a branded product, except the brand type is one
+        # the RHELBrandPicker doesn't know
         brand_picker = rhelentbranding.RHELBrandPicker(ent_certs)
         brand = brand_picker.get_brand()
         self.assertTrue(brand is None)
@@ -550,6 +585,7 @@ class TestRHELBrandPicker(BaseBrandFixture):
         brand_picker = rhelentbranding.RHELBrandPicker([])
         irp = brand_picker._is_installed_rhel_branded_product(stub_product)
         self.assertTrue(irp)
+
 
 class TestRHELBrandPickerIsRHELBrandedProduct(BaseBrandFixture):
     def setUp(self):
