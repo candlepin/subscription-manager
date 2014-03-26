@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-25 11:34-0500\n"
+"POT-Creation-Date: 2014-03-20 16:25-0400\n"
 "PO-Revision-Date: 2014-02-05 04:59-0500\n"
 "Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
 "Language-Team: Marathi <sshedmak@redhat.com>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Zanata 3.2.3\n"
+"X-Generator: Zanata 3.3.2\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/__init__.py:81
@@ -147,131 +147,20 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. note default is lower caps
-#: ../src/subscription_manager/i18n_optparse.py:37
+#: ../src/subscription_manager/i18n_optparse.py:39
 msgid "%prog [OPTIONS]"
 msgstr "%prog [पर्याय]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author sandeeps
-#. For older versions of optparse
-#: ../src/subscription_manager/i18n_optparse.py:127
-#: ../src/subscription_manager/i18n_optparse.py:139
+#: ../src/subscription_manager/i18n_optparse.py:129
+#: ../../../../..//usr/lib64/python2.7/optparse.py:374
 #, python-format
 msgid "Usage: %s\n"
 msgstr "वापर: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. These are a bunch of strings that are marked for translation in optparse,
-#. but not actually translated anywhere. Mark them for translation here,
-#. so we get it picked up. for local translation, and then optparse will
-#. use them.
-#. translators: this should have the same translation as "Usage: %s\n"
-#: ../src/subscription_manager/i18n_optparse.py:138
-#, python-format
-msgid "usage: %s\n"
-msgstr "वापर: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:140
-msgid "Usage"
-msgstr "वापर"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:141
-msgid "%prog [options]"
-msgstr "%prog [पर्याय]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:142
-msgid "Options"
-msgstr "पर्याय"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:143
-msgid "options"
-msgstr "पर्याय"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:144
-msgid "options:"
-msgstr "पर्याय:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. stuff for option value sanity checking
-#: ../src/subscription_manager/i18n_optparse.py:147
-#, python-format
-msgid "no such option: %s"
-msgstr "या प्रकारचे पर्याय आढळले नाही: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:148
-#, python-format
-msgid "ambiguous option: %s (%s?)"
-msgstr "संदिग्ध पर्याय: %s (%s?)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:149
-#, python-format
-msgid "%s option requires an argument"
-msgstr "%s पर्यायला घटक आवश्यक आहे"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:150
-#, python-format
-msgid "%s option requires %d arguments"
-msgstr "%s पर्यायला %d घटके आवश्यक आहे"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:151
-#, python-format
-msgid "%s option does not take a value"
-msgstr "%s पर्याय मूल्य स्वीकारत नाही"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:152
-msgid "integer"
-msgstr "इंटिजर"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:153
-msgid "long integer"
-msgstr "लाँग इंटिजर"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:154
-msgid "floating-point"
-msgstr "फ्लोटिंग-पॉईंट"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:155
-msgid "complex"
-msgstr "विकट"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:156
-#, python-format
-msgid "option %s: invalid %s value: %r"
-msgstr "पर्याय %s: अवैध %s मूल्य: %r"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:157
-#, python-format
-msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr "पर्याय %s: अवैध पसंती: %r (%s पासून नीवडा)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. default options
-#: ../src/subscription_manager/i18n_optparse.py:160
-msgid "show this help message and exit"
-msgstr "हे मदत संदेश दाखवा व बाहेर पडा"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:161
-msgid "show program's version number and exit"
-msgstr "कार्यक्रमाचे आवृत्ती क्रमांक दाखवा व बाहेर पडा"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:174
+#: ../src/subscription_manager/i18n_optparse.py:145
 #, python-format
 msgid "%s: error: %s"
 msgstr "%s: त्रुटी: %s"
@@ -352,7 +241,7 @@ msgstr "उत्पादन"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/installedtab.py:87
-#: ../src/rct/printing.py:45 ../src/rct/printing.py:117
+#: ../src/rct/printing.py:45 ../src/rct/printing.py:124
 msgid "Version"
 msgstr "आवृत्ती"
 
@@ -364,7 +253,7 @@ msgstr "स्थिती"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/installedtab.py:93
 #: ../src/subscription_manager/gui/contract_selection.py:113
-#: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:119
+#: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:126
 msgid "Start Date"
 msgstr "प्रारंभ दिनांक"
 
@@ -372,7 +261,7 @@ msgstr "प्रारंभ दिनांक"
 #: ../src/subscription_manager/gui/installedtab.py:96
 #: ../src/subscription_manager/gui/mysubstab.py:102
 #: ../src/subscription_manager/gui/contract_selection.py:119
-#: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:120
+#: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:127
 msgid "End Date"
 msgstr "समाप्ति दिनांक"
 
@@ -526,7 +415,7 @@ msgstr "इंस्टॉल झालेली उत्पादने"
 #: ../src/subscription_manager/gui/contract_selection.py:124
 #: ../src/subscription_manager/gui/allsubs.py:88
 #: ../src/subscription_manager/gui/registergui.py:427
-#: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:75
+#: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:82
 msgid "Quantity"
 msgstr "प्रमाण"
 
@@ -730,7 +619,7 @@ msgstr "दोंही"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author sandeeps
 #. content-type is required, no need to xstr
 #: ../src/subscription_manager/gui/widgets.py:710
-#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:94
+#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
 msgid "Type"
 msgstr "प्रकार"
 
@@ -799,7 +688,7 @@ msgstr "<b>पुढचे प्रणाली चेक-इन:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/contract_selection.py:94
-#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:68
+#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:75
 msgid "Contract"
 msgstr "करार"
 
@@ -811,7 +700,7 @@ msgstr "वापरलेले / एकूण"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/contract_selection.py:141
 #: ../src/subscription_manager/gui/allsubs.py:225
-#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:74
+#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:81
 msgid "Unlimited"
 msgstr "अमर्यादित"
 
@@ -965,7 +854,7 @@ msgstr "जुळलेल्या सबस्क्रिप्शन वि�
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/reposgui.py:106
 #: ../src/subscription_manager/gui/reposgui.py:126
-#: ../src/subscription_manager/gui/reposgui.py:289 ../src/rct/printing.py:100
+#: ../src/subscription_manager/gui/reposgui.py:289 ../src/rct/printing.py:107
 msgid "Enabled"
 msgstr "सुरू केले"
 
@@ -1225,17 +1114,17 @@ msgid "Stack "
 msgstr "स्टॅक "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:62
+#: ../src/subscription_manager/migrate/migrate.py:63
 msgid "Could not find up2date_client.config module!"
 msgstr "up2date_client.config मॉड्युल शोधणे अशक्य!"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:68
+#: ../src/subscription_manager/migrate/migrate.py:69
 msgid "Could not find up2date_client.rhnChannel module!"
 msgstr "up2date_client.rhnChannel मॉड्युल शोधणे अशक्य!"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:72
+#: ../src/subscription_manager/migrate/migrate.py:73
 #, python-format
 msgid ""
 "Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
@@ -1245,29 +1134,29 @@ msgstr ""
 "पहा."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author sandeeps
-#: ../src/subscription_manager/migrate/migrate.py:112
+#: ../src/subscription_manager/migrate/migrate.py:113
 msgid "You have entered an invalid choice."
 msgstr "तुम्ही अवैध पर्याय पुरवले आहे."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:155
+#: ../src/subscription_manager/migrate/migrate.py:156
 msgid "ignore channels not available on RHSM"
 msgstr "RHSM वर दुर्लक्ष करण्याजोगी वाहिनी अनुपलब्ध"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:157
+#: ../src/subscription_manager/migrate/migrate.py:158
 msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
 msgstr "सबस्क्रिप्शन्स् जोडण्याकरिता GUI साधन सुरू करा, स्वयं-जोडणी ऐवजी"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:159
+#: ../src/subscription_manager/migrate/migrate.py:160
 msgid ""
 "don't execute the auto-attach option while registering with subscription "
 "manager"
 msgstr "सबस्क्रिप्शन मॅनेजरसह नोंदणी करतेवेळी स्वयं-जोडणी पर्याय चालवू नका"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:161
+#: ../src/subscription_manager/migrate/migrate.py:162
 msgid ""
 "service level to follow when attaching subscriptions, for no service level "
 "use --servicelevel=\"\""
@@ -1276,75 +1165,75 @@ msgstr ""
 "\"\" याचा वापर करा"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:164
+#: ../src/subscription_manager/migrate/migrate.py:165
 msgid "specify the subscription management server to migrate to"
 msgstr "स्थानांतरनजोगी सबस्क्रिप्शन मॅनेजमेंट सर्व्हर निर्देशीत करा"
 
-#: ../src/subscription_manager/migrate/migrate.py:166
+#: ../src/subscription_manager/migrate/migrate.py:167
 msgid "specify the Red Hat user name"
 msgstr "Red Hat वापरकर्ता नाव निर्देशीत करा"
 
-#: ../src/subscription_manager/migrate/migrate.py:168
+#: ../src/subscription_manager/migrate/migrate.py:169
 msgid "specify the Red Hat password"
 msgstr "Red Hat पासवर्ड निर्देशीत करा"
 
-#: ../src/subscription_manager/migrate/migrate.py:170
+#: ../src/subscription_manager/migrate/migrate.py:171
 msgid "specify the subscription service user name"
 msgstr "सबस्क्रिप्शन सर्व्हिस वापरकर्तानाव निर्देशीत करा"
 
-#: ../src/subscription_manager/migrate/migrate.py:172
+#: ../src/subscription_manager/migrate/migrate.py:173
 msgid "specify the subscription service password"
 msgstr "सबस्क्रिप्शन सर्व्हिस पासवर्ड निर्देशीत करा"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:175
+#: ../src/subscription_manager/migrate/migrate.py:176
 msgid "don't use RHN proxy settings with subscription management server"
 msgstr "सबस्क्रिप्शन मॅनेजमेंट सर्व्हरसह RHN प्रॉक्सी सेटिंग्जचा वापर करू नका"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:177
+#: ../src/subscription_manager/migrate/migrate.py:178
 msgid "organization to register to"
 msgstr "नोंदणी करण्याजोगी संस्था"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:179
+#: ../src/subscription_manager/migrate/migrate.py:180
 msgid "environment to register to"
 msgstr "नोंदणी करण्याजोगी वातावरण"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:183
+#: ../src/subscription_manager/migrate/migrate.py:184
 msgid "The --servicelevel and --no-auto options cannot be used together."
 msgstr "--servicelevel व --no-auto पर्याय एकत्रपणे वापरणे अशक्य."
 
-#: ../src/subscription_manager/migrate/migrate.py:203
+#: ../src/subscription_manager/migrate/migrate.py:204
 msgid "Red Hat username: "
 msgstr "Red Hat वापरकर्तानाव: "
 
-#: ../src/subscription_manager/migrate/migrate.py:203
+#: ../src/subscription_manager/migrate/migrate.py:204
 msgid "Red Hat password: "
 msgstr "Red Hat पासवर्ड: "
 
-#: ../src/subscription_manager/migrate/migrate.py:207
+#: ../src/subscription_manager/migrate/migrate.py:208
 msgid "Subscription Service username: "
 msgstr "सबस्क्रिप्शन सर्व्हिस वापरकर्तानाव: "
 
-#: ../src/subscription_manager/migrate/migrate.py:207
+#: ../src/subscription_manager/migrate/migrate.py:208
 msgid "Subscription Service password: "
 msgstr "सबस्क्रिप्शन सर्व्हिस पासवर्ड: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:220
+#: ../src/subscription_manager/migrate/migrate.py:221
 msgid "Unable to read RHN proxy settings."
 msgstr "RHN प्रॉक्सी सेटिंग्स् वाचणे अशक्य."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:250
+#: ../src/subscription_manager/migrate/migrate.py:251
 #, python-format
 msgid "Error parsing server URL: %s"
 msgstr "URL वाचतेवेळी त्रुटी: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:272
+#: ../src/subscription_manager/migrate/migrate.py:273
 msgid ""
 "\n"
 "This system appears to be already registered to Red Hat Subscription "
@@ -1355,7 +1244,7 @@ msgstr ""
 "पडत आहे."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:274
+#: ../src/subscription_manager/migrate/migrate.py:275
 #, python-format
 msgid ""
 "\n"
@@ -1367,13 +1256,13 @@ msgstr ""
 "consumers/%s येथे भेट द्या."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:279
+#: ../src/subscription_manager/migrate/migrate.py:280
 #: ../src/subscription_manager/managercli.py:348
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr "त्रुटी: सबस्क्रिप्शन सेवाकरिता CA प्रमाणपत्र इंस्टॉल केले नाही."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:295
+#: ../src/subscription_manager/migrate/migrate.py:296
 #: ../src/subscription_manager/managercli.py:657
 #: ../src/subscription_manager/managercli.py:1138
 #, python-format
@@ -1381,35 +1270,35 @@ msgid "%s cannot register with any organizations."
 msgstr "%s कोणत्याहि संस्थाशी नोंदणी करू शकत नाही."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:302
+#: ../src/subscription_manager/migrate/migrate.py:303
 msgid "Org: "
 msgstr "संस्था: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:310
+#: ../src/subscription_manager/migrate/migrate.py:311
 #, python-format
 msgid "No such org: %s"
 msgstr "अशा प्रकारची संस्था नाही: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:319
+#: ../src/subscription_manager/migrate/migrate.py:320
 msgid "Environments are not supported by this server."
 msgstr "ह्या सर्व्हरतर्फे वातावरण समर्थीत नाही."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:332
+#: ../src/subscription_manager/migrate/migrate.py:333
 msgid "Environment: "
 msgstr "एंवार्यनमेंट: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:342
+#: ../src/subscription_manager/migrate/migrate.py:343
 #: ../src/subscription_manager/managercli.py:1123
 #, python-format
 msgid "No such environment: %s"
 msgstr "या प्रकारचे एंवार्यनमेंट आढळले नाही: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:367
+#: ../src/subscription_manager/migrate/migrate.py:368
 msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
@@ -1417,22 +1306,22 @@ msgstr ""
 "RHN Classicकरिता ओळख पटवणे अशक्य.  अधिक तपशीलकरिता /var/log/rhsm/rhsm.log पहा."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:374
+#: ../src/subscription_manager/migrate/migrate.py:375
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
 msgstr "RHN Classicमध्ये वापरकर्ता रोल्स् ओळखतेवेळी त्रुटी.  बाहेर पडत आहे."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author sandeeps
-#: ../src/subscription_manager/migrate/migrate.py:376
+#: ../src/subscription_manager/migrate/migrate.py:377
 msgid "You must be an org admin to successfully run this script."
 msgstr "हि स्क्रिप्ट यशस्वीरित्या चालवण्यासाठी तुम्ही संस्थाचे प्रशासक असायला हवे."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:383
+#: ../src/subscription_manager/migrate/migrate.py:384
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."
 msgstr "सबसक्राइब्ड् वाहिन्यांची सूची प्राप्त करतेवेळी त्रुटी.  बाहेर पडत आहे."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:396
+#: ../src/subscription_manager/migrate/migrate.py:397
 msgid ""
 "You are subscribed to more than one jbappplatform channel.  This script does "
 "not support that configuration.  Exiting."
@@ -1440,26 +1329,26 @@ msgstr ""
 "तुम्ही एकापेक्षाजास्त jbappplatform वाहिनीकरिता सबस्क्राइब्ड् आहात.  हि स्क्रिप्ट "
 "संरचनाकरिता समर्थन पुरवत नाही.  बाहेर पडत आहे."
 
-#: ../src/subscription_manager/migrate/migrate.py:428
+#: ../src/subscription_manager/migrate/migrate.py:429
 msgid "Unable to continue migration!"
 msgstr "माइग्रेशन सुरू ठेवणे अशक्य!"
 
-#: ../src/subscription_manager/migrate/migrate.py:429
+#: ../src/subscription_manager/migrate/migrate.py:430
 msgid ""
 "You are subscribed to channels that have conflicting product certificates."
 msgstr "उत्पादन प्रामणपत्रांसह मतभेद होणाऱ्या वाहिन्यांकरिता तुम्ही सबस्क्राइब झाले आहात."
 
-#: ../src/subscription_manager/migrate/migrate.py:433
+#: ../src/subscription_manager/migrate/migrate.py:434
 #, python-format
 msgid "The following channels map to product ID %s:"
 msgstr "खालील वाहिन्या उत्पादन ID %s सह मॅप होते:"
 
-#: ../src/subscription_manager/migrate/migrate.py:436
+#: ../src/subscription_manager/migrate/migrate.py:437
 msgid ""
 "Reduce the number of channels per product ID to 1 and run migration again."
 msgstr "प्रत्येक ID करिता वाहिन्यांच्या संख्या यास 1 करिता करा आणि पुन्हा माइग्रेशन चालवा."
 
-#: ../src/subscription_manager/migrate/migrate.py:437
+#: ../src/subscription_manager/migrate/migrate.py:438
 msgid ""
 "To remove a channel, use 'rhn-channel --remove --"
 "channel=<conflicting_channel>'."
@@ -1467,7 +1356,7 @@ msgstr ""
 "वाहिनी काढून टाकण्याकरिता, 'rhn-channel --remove --"
 "channel=<conflicting_channel>' याचा वापर करा."
 
-#: ../src/subscription_manager/migrate/migrate.py:449
+#: ../src/subscription_manager/migrate/migrate.py:450
 #, python-format
 msgid ""
 "Unable to read mapping file: %(mappingfile)s.\n"
@@ -1475,17 +1364,17 @@ msgid ""
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:475
+#: ../src/subscription_manager/migrate/migrate.py:476
 msgid "Channels not available on RHSM:"
 msgstr "RHSM वरील वाहिनी उपलब्ध नाही:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:480
+#: ../src/subscription_manager/migrate/migrate.py:481
 msgid "No product certificates are mapped to these RHN Classic channels:"
 msgstr "ह्या RHN क्लासिक वाहिनींकरिता उत्पादन प्रमाणपत्र मॅप केले नाही:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:486
+#: ../src/subscription_manager/migrate/migrate.py:487
 msgid ""
 "\n"
 "Use --force to ignore these channels and continue the migration.\n"
@@ -1494,12 +1383,12 @@ msgstr ""
 "या वाहिनींना वगळण्याकरिता --force याचा वापर करा व माइग्रेशन सुरू ठेवा.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:500
+#: ../src/subscription_manager/migrate/migrate.py:501
 msgid "Installing product certificates for these RHN Classic channels:"
 msgstr "ह्या RHN Classic वाहिनींकरिता उत्पादन प्रमाणपत्र इंस्टॉल करत आहे:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:528
+#: ../src/subscription_manager/migrate/migrate.py:529
 #, python-format
 msgid ""
 "\n"
@@ -1509,7 +1398,7 @@ msgstr ""
 "%s करिता यशस्वीरित्या उत्पादन प्रमाणपत्र इंस्टॉल केले."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:608
+#: ../src/subscription_manager/migrate/migrate.py:609
 #, python-format
 msgid ""
 "Did not receive a completed unregistration message from RHN Classic for "
@@ -1520,22 +1409,22 @@ msgstr ""
 "कृपया https://access.redhat.com येथील कस्टमर पोर्टलवर चौकशी करा."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:616
+#: ../src/subscription_manager/migrate/migrate.py:617
 msgid "System successfully unregistered from RHN Classic."
 msgstr "RHN Classicपासून यशस्वीरित्या प्रणालीची नोंदणी अशक्य केली."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:618
+#: ../src/subscription_manager/migrate/migrate.py:619
 msgid "Unable to unregister system from RHN Classic.  Exiting."
 msgstr "RHN Classicपासून प्रणालीची नोंदणी अशक्य करणे शक्य नाही.  बाहेर पडत आहे."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:624
+#: ../src/subscription_manager/migrate/migrate.py:625
 msgid "Attempting to register system to Red Hat Subscription Management..."
 msgstr "प्रणाली Red Hat सबस्क्रिप्शन मॅनेजमेंटसह नोंदणी करण्याचा प्रयत्न करत आहे..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:637
+#: ../src/subscription_manager/migrate/migrate.py:638
 msgid ""
 "\n"
 "Unable to register.\n"
@@ -1546,7 +1435,7 @@ msgstr ""
 "पुढील मदतकरिता, कृपया Red Hat ग्लोबल सपोर्ट सर्व्हिसेससह संपर्क करा."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:640
+#: ../src/subscription_manager/migrate/migrate.py:641
 #, python-format
 msgid ""
 "System '%s' successfully registered to Red Hat Subscription Management.\n"
@@ -1554,7 +1443,7 @@ msgstr ""
 "प्रणाली '%s' याची यशस्वीरित्या Red Hat Subscription Managementसह नोंदणी झाली.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:644
+#: ../src/subscription_manager/migrate/migrate.py:645
 #: ../src/subscription_manager/managercli.py:778
 #: ../src/subscription_manager/managercli.py:856
 #: ../src/subscription_manager/managercli.py:865
@@ -1563,12 +1452,12 @@ msgstr "त्रुटी: सेवा स्तरचे आदेश सर�
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. Display an actual message for the empty string level.
-#: ../src/subscription_manager/migrate/migrate.py:663
+#: ../src/subscription_manager/migrate/migrate.py:664
 msgid "No service level preference"
 msgstr "सेवा स्तर पसंती आढळली नाही"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:670
+#: ../src/subscription_manager/migrate/migrate.py:671
 #, python-format
 msgid ""
 "\n"
@@ -1578,23 +1467,23 @@ msgstr ""
 "सेवा स्तर \"%s\" उपलब्ध नाही."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:671
+#: ../src/subscription_manager/migrate/migrate.py:672
 msgid "Please select a service level agreement for this system."
 msgstr "या प्रणालीकरिता कृपया सेवा स्तर करार निवडा."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:678
+#: ../src/subscription_manager/migrate/migrate.py:679
 msgid ""
 "Launching the GUI tool to manually attach subscriptions to this system ..."
 msgstr "ह्या प्रणालीकरिता सबस्क्रिप्शन्स् स्वहस्ते जोडण्याकरिता GUI साधन सुरू करत आहे ..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:681
+#: ../src/subscription_manager/migrate/migrate.py:682
 msgid "Attempting to auto-attach to appropriate subscriptions..."
 msgstr "योग्य सबस्क्रिप्शन्सकरिता स्वयं-जोडणी करायचा प्रयत्न करत आहे..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:690
+#: ../src/subscription_manager/migrate/migrate.py:691
 msgid ""
 "\n"
 "Unable to auto-attach.  Do your existing subscriptions match the products "
@@ -1604,7 +1493,7 @@ msgstr ""
 "स्वयं-जोडणी अशक्य.  अस्तित्वातील सबस्क्रिप्शन्स् प्रणालीवरील इंस्टॉल झालेल्या उत्पादनांसह जुळते?"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:694
+#: ../src/subscription_manager/migrate/migrate.py:695
 #, python-format
 msgid ""
 "\n"
@@ -1616,7 +1505,7 @@ msgstr ""
 "भेट द्या, व आवश्यक असल्यास बदल लागू करा."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:728
+#: ../src/subscription_manager/migrate/migrate.py:730
 msgid ""
 "\n"
 "Unable to enable extra repositories."
@@ -1624,7 +1513,7 @@ msgstr ""
 "\n"
 "अगाऊ रेपॉजिटरिज् सुरू करणे अशक्य."
 
-#: ../src/subscription_manager/migrate/migrate.py:730
+#: ../src/subscription_manager/migrate/migrate.py:732
 #, python-format
 msgid ""
 "Please ensure system has subscriptions attached, and see '%s' to enable "
@@ -1632,17 +1521,17 @@ msgid ""
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:754
+#: ../src/subscription_manager/migrate/migrate.py:756
 msgid "Retrieving existing RHN Classic subscription information..."
 msgstr "अस्तित्वातील RHN Classic सबस्क्रिप्शन माहिती प्राप्त करत आहे..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:756
+#: ../src/subscription_manager/migrate/migrate.py:758
 msgid "System is currently subscribed to these RHN Classic Channels:"
 msgstr "प्रणाली सध्या ह्या RHN Classic वाहिनींशी सबस्क्राइब्ड् आहे:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:766
+#: ../src/subscription_manager/migrate/migrate.py:768
 msgid ""
 "\n"
 "Preparing to unregister system from RHN Classic..."
@@ -3012,7 +2901,7 @@ msgid "Consumed Subscriptions"
 msgstr "वापरलेले सबस्क्रिप्शन्स्"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/managercli.py:2169 ../src/rct/printing.py:198
+#: ../src/subscription_manager/managercli.py:2169 ../src/rct/printing.py:205
 msgid "Not Available"
 msgstr "उपलब्ध नाही"
 
@@ -3248,27 +3137,27 @@ msgid "Error reading system memory information:"
 msgstr "प्रणालीची मेमरी माहिती वाचतेवेळी त्रुटी:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:560
+#: ../src/subscription_manager/hwprobe.py:583
 msgid "Error reading system CPU information:"
 msgstr "CPU माहिती वाचतेवेळी त्रुटी:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:585
+#: ../src/subscription_manager/hwprobe.py:608
 msgid "Error reading networking information:"
 msgstr "नेटवर्किंग माहिती वाचतेवेळी त्रुटी:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author sandeeps
-#: ../src/subscription_manager/hwprobe.py:684
+#: ../src/subscription_manager/hwprobe.py:707
 msgid "Error reading network interface information:"
 msgstr "नेटवर्क इंटरफेस माहिती वाचतेवेळी त्रुटी:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:780
+#: ../src/subscription_manager/hwprobe.py:803
 msgid "Virtualization platform does not support UUIDs"
 msgstr "वर्च्युअलाइजेशन प्लॅटफॉर्म UUIDs करिता समर्थन पुरवत नाही"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:782
+#: ../src/subscription_manager/hwprobe.py:805
 #, python-format
 msgid "Error finding UUID: %s"
 msgstr "UUID शोधतेवेळी त्रुटी: %s"
@@ -3419,8 +3308,8 @@ msgstr "सर्वसाधारण:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/manifest_commands.py:206 ../src/rct/manifest_commands.py:230
-#: ../src/rct/printing.py:44 ../src/rct/printing.py:65
-#: ../src/rct/printing.py:95
+#: ../src/rct/printing.py:44 ../src/rct/printing.py:72
+#: ../src/rct/printing.py:102
 msgid "Name"
 msgstr "नाव"
 
@@ -3445,12 +3334,12 @@ msgid "Created"
 msgstr "निर्मीत"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:235 ../src/rct/printing.py:70
+#: ../src/rct/manifest_commands.py:235 ../src/rct/printing.py:77
 msgid "Service Level"
 msgstr "सेवा स्तर"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:236 ../src/rct/printing.py:71
+#: ../src/rct/manifest_commands.py:236 ../src/rct/printing.py:78
 msgid "Service Type"
 msgstr "सेवा प्रकार"
 
@@ -3460,17 +3349,17 @@ msgid "Architectures"
 msgstr "आर्किटेक्चर्स"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:238 ../src/rct/printing.py:67
+#: ../src/rct/manifest_commands.py:238 ../src/rct/printing.py:74
 msgid "SKU"
 msgstr "SKU"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:240 ../src/rct/printing.py:64
+#: ../src/rct/manifest_commands.py:240 ../src/rct/printing.py:71
 msgid "Order"
 msgstr "क्रमवारि"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:241 ../src/rct/printing.py:69
+#: ../src/rct/manifest_commands.py:241 ../src/rct/printing.py:76
 msgid "Account"
 msgstr "खाते"
 
@@ -3568,143 +3457,147 @@ msgstr "टॅग्स्"
 msgid "Brand Type"
 msgstr "ब्रँड प्रकार"
 
+#: ../src/rct/printing.py:58
+msgid "Brand Name"
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:66
+#: ../src/rct/printing.py:73
 msgid "Number"
 msgstr "क्रमांक"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:76
+#: ../src/rct/printing.py:83
 msgid "Quantity Used"
 msgstr "वापरलेले प्रमाण"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:77
+#: ../src/rct/printing.py:84
 msgid "Socket Limit"
 msgstr "सॉकेट मर्यादा"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:78
+#: ../src/rct/printing.py:85
 msgid "RAM Limit"
 msgstr "RAM मर्यादा"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:79
+#: ../src/rct/printing.py:86
 msgid "Core Limit"
 msgstr "कोर मर्यादा"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:80
+#: ../src/rct/printing.py:87
 msgid "Virt Only"
 msgstr "फक्त वर्ट"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:81
+#: ../src/rct/printing.py:88
 msgid "Stacking ID"
 msgstr "स्टॅकिंग ID"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:82
+#: ../src/rct/printing.py:89
 msgid "Warning Period"
 msgstr "सावधानता कालावधी"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:83
+#: ../src/rct/printing.py:90
 msgid "Provides Management"
 msgstr "व्यवस्थापन पुरवतो"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:92
+#: ../src/rct/printing.py:99
 msgid "Content"
 msgstr "अंतर्भुत माहिती"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:96
+#: ../src/rct/printing.py:103
 msgid "Label"
 msgstr "लेबल"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:97
+#: ../src/rct/printing.py:104
 msgid "Vendor"
 msgstr "विक्रेता"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:98
+#: ../src/rct/printing.py:105
 msgid "URL"
 msgstr "URL"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:99
+#: ../src/rct/printing.py:106
 msgid "GPG"
 msgstr "GPG"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:101
+#: ../src/rct/printing.py:108
 msgid "Expires"
 msgstr "वेळसम्पाति"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:102
+#: ../src/rct/printing.py:109
 msgid "Required Tags"
 msgstr "टॅग्स् आवश्यक"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:103
+#: ../src/rct/printing.py:110
 msgid "Arches"
 msgstr "आर्क्स"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:115
+#: ../src/rct/printing.py:122
 msgid "Certificate:"
 msgstr "प्रमाणपत्र:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:116
+#: ../src/rct/printing.py:123
 msgid "Path"
 msgstr "मार्ग"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:118
+#: ../src/rct/printing.py:125
 msgid "Serial"
 msgstr "सिरिअल"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:131
+#: ../src/rct/printing.py:138
 msgid "Subject:"
 msgstr "विषय:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:138
+#: ../src/rct/printing.py:145
 msgid "Issuer:"
 msgstr "इश्युअर:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:160
+#: ../src/rct/printing.py:167
 msgid "Alt Name"
 msgstr "Alt नाव"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:201
+#: ../src/rct/printing.py:208
 msgid "Pool ID"
 msgstr "पूल ID"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:219
+#: ../src/rct/printing.py:226
 msgid "Entitlement Certificate"
 msgstr "एंटाइटलमेंट सर्टिफिकेट"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:221
+#: ../src/rct/printing.py:228
 msgid "Product Certificate"
 msgstr "उत्पादन सर्टिफिकेट"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:223
+#: ../src/rct/printing.py:230
 msgid "Identity Certificate"
 msgstr "आइडेंटिटि सर्टिफिकेट"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:225
+#: ../src/rct/printing.py:232
 msgid "Unknown Certificate Type"
 msgstr "अपरिचीत सर्टिफिकेट प्रकार"
 
@@ -5181,3 +5074,92 @@ msgstr "सबस्क्रिप्शन वैधता ॲप्लेट"
 #: ../etc-conf/subscription-manager-gui.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
 msgstr "Red Hat सबस्क्रिप्शन व्यवस्थापक"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:140
+#, python-format
+msgid "no such option: %s"
+msgstr "या प्रकारचे पर्याय आढळले नाही: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:151
+#, python-format
+msgid "ambiguous option: %s (%s?)"
+msgstr "संदिग्ध पर्याय: %s (%s?)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:393
+msgid "Usage"
+msgstr "वापर"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:418
+msgid "integer"
+msgstr "इंटिजर"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:419
+msgid "long integer"
+msgstr "लाँग इंटिजर"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:420
+msgid "floating-point"
+msgstr "फ्लोटिंग-पॉईंट"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:421
+msgid "complex"
+msgstr "विकट"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:429
+#, python-format
+msgid "option %s: invalid %s value: %r"
+msgstr "पर्याय %s: अवैध %s मूल्य: %r"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:437
+#, python-format
+msgid "option %s: invalid choice: %r (choose from %s)"
+msgstr "पर्याय %s: अवैध पसंती: %r (%s पासून नीवडा)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1250
+msgid "show this help message and exit"
+msgstr "हे मदत संदेश दाखवा व बाहेर पडा"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1255
+msgid "show program's version number and exit"
+msgstr "कार्यक्रमाचे आवृत्ती क्रमांक दाखवा व बाहेर पडा"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1278
+msgid "%prog [options]"
+msgstr "%prog [पर्याय]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1498
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1537
+#, python-format
+msgid "%s option requires an argument"
+msgstr "%s पर्यायला घटक आवश्यक आहे"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1500
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1539
+#, python-format
+msgid "%s option requires %d arguments"
+msgstr "%s पर्यायला %d घटके आवश्यक आहे"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1509
+#, python-format
+msgid "%s option does not take a value"
+msgstr "%s पर्याय मूल्य स्वीकारत नाही"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1626
+msgid "Options"
+msgstr "पर्याय"

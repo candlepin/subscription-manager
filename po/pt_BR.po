@@ -1,17 +1,17 @@
-#
+# gcintra <gcintra@fedoraproject.org>, 2014. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-25 11:34-0500\n"
-"PO-Revision-Date: 2014-01-31 10:30-0500\n"
-"Last-Translator: bkearney <bkearney@fedoraproject.org>\n"
+"POT-Creation-Date: 2014-03-20 16:25-0400\n"
+"PO-Revision-Date: 2014-03-20 04:32-0400\n"
+"Last-Translator: gcintra <gcintra@fedoraproject.org>\n"
 "Language-Team: Portuguese (Brazil)\n"
 "Language: pt-BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.2.3\n"
+"X-Generator: Zanata 3.3.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -158,131 +158,20 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
 #. note default is lower caps
-#: ../src/subscription_manager/i18n_optparse.py:37
+#: ../src/subscription_manager/i18n_optparse.py:39
 msgid "%prog [OPTIONS]"
 msgstr "%prog [OPÇÕES]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. For older versions of optparse
-#: ../src/subscription_manager/i18n_optparse.py:127
-#: ../src/subscription_manager/i18n_optparse.py:139
+#: ../src/subscription_manager/i18n_optparse.py:129
+#: ../../../../..//usr/lib64/python2.7/optparse.py:374
 #, python-format
 msgid "Usage: %s\n"
 msgstr "Uso: %s\n"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author mospina
-#. These are a bunch of strings that are marked for translation in optparse,
-#. but not actually translated anywhere. Mark them for translation here,
-#. so we get it picked up. for local translation, and then optparse will
-#. use them.
-#. translators: this should have the same translation as "Usage: %s\n"
-#: ../src/subscription_manager/i18n_optparse.py:138
-#, python-format
-msgid "usage: %s\n"
-msgstr "uso: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:140
-msgid "Usage"
-msgstr "Uso"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/i18n_optparse.py:141
-msgid "%prog [options]"
-msgstr "%prog [OPÇÕES]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:142
-msgid "Options"
-msgstr "Opções"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:143
-msgid "options"
-msgstr "Opções"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:144
-msgid "options:"
-msgstr "opções:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. stuff for option value sanity checking
-#: ../src/subscription_manager/i18n_optparse.py:147
-#, python-format
-msgid "no such option: %s"
-msgstr "não existe esta opção: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:148
-#, python-format
-msgid "ambiguous option: %s (%s?)"
-msgstr "opção ambígua: %s (%s?)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:149
-#, python-format
-msgid "%s option requires an argument"
-msgstr "%s opção requer um argumento"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:150
-#, python-format
-msgid "%s option requires %d arguments"
-msgstr "%s opção requer %d argumentos"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:151
-#, python-format
-msgid "%s option does not take a value"
-msgstr "%s opção não leva valor"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:152
-msgid "integer"
-msgstr "número inteiro"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:153
-msgid "long integer"
-msgstr "número inteiro longo"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:154
-msgid "floating-point"
-msgstr "ponto flutuante"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:155
-msgid "complex"
-msgstr "complexo"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:156
-#, python-format
-msgid "option %s: invalid %s value: %r"
-msgstr "opção %s: inválida %s valor: %r"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:157
-#, python-format
-msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr "opção %s: escolha errada: %r (escolha a partir do %s)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. default options
-#: ../src/subscription_manager/i18n_optparse.py:160
-msgid "show this help message and exit"
-msgstr "apresenta esta mensagem de ajuda e encerramento"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:161
-msgid "show program's version number and exit"
-msgstr "o número de versão do programa apresentado e encerramento"
-
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
 #. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:174
+#: ../src/subscription_manager/i18n_optparse.py:145
 #, python-format
 msgid "%s: error: %s"
 msgstr "%s: erro: %s"
@@ -367,7 +256,7 @@ msgstr "Produto"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/installedtab.py:87
-#: ../src/rct/printing.py:45 ../src/rct/printing.py:117
+#: ../src/rct/printing.py:45 ../src/rct/printing.py:124
 msgid "Version"
 msgstr "Versão"
 
@@ -379,7 +268,7 @@ msgstr "Estado"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/installedtab.py:93
 #: ../src/subscription_manager/gui/contract_selection.py:113
-#: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:119
+#: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:126
 msgid "Start Date"
 msgstr "Data de Início"
 
@@ -387,7 +276,7 @@ msgstr "Data de Início"
 #: ../src/subscription_manager/gui/installedtab.py:96
 #: ../src/subscription_manager/gui/mysubstab.py:102
 #: ../src/subscription_manager/gui/contract_selection.py:119
-#: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:120
+#: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:127
 msgid "End Date"
 msgstr "Data Final"
 
@@ -541,7 +430,7 @@ msgstr "Produtos Instalados"
 #: ../src/subscription_manager/gui/contract_selection.py:124
 #: ../src/subscription_manager/gui/allsubs.py:88
 #: ../src/subscription_manager/gui/registergui.py:427
-#: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:75
+#: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:82
 msgid "Quantity"
 msgstr "Quantidade"
 
@@ -551,13 +440,15 @@ msgstr "Quantidade"
 msgid "There was an error removing %s with serial number %s"
 msgstr "Houve um erro ao remover o %s com o número de série %s"
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/subscription_manager/gui/mysubstab.py:144
 msgid "Removing"
-msgstr ""
+msgstr "Removendo"
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/subscription_manager/gui/mysubstab.py:145
 msgid "Removing subscription. Please wait."
-msgstr ""
+msgstr "Removendo Subscrição. Por favor aguarde."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/mysubstab.py:164
@@ -750,7 +641,7 @@ msgstr "Ambos"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
 #. content-type is required, no need to xstr
 #: ../src/subscription_manager/gui/widgets.py:710
-#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:94
+#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
 msgid "Type"
 msgstr "Tipo"
 
@@ -819,7 +710,7 @@ msgstr "<b>Próxima verificação de sistema:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/contract_selection.py:94
-#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:68
+#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:75
 msgid "Contract"
 msgstr "Contrato"
 
@@ -831,7 +722,7 @@ msgstr "Usado/Total"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
 #: ../src/subscription_manager/gui/contract_selection.py:141
 #: ../src/subscription_manager/gui/allsubs.py:225
-#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:74
+#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:81
 msgid "Unlimited"
 msgstr "Ilimitado"
 
@@ -894,14 +785,16 @@ msgstr "Erro ao obter subscrições: %s"
 msgid "Quantity must be a positive number."
 msgstr "A quantidade deve ser um número positivo."
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #. Start the progress bar
 #: ../src/subscription_manager/gui/allsubs.py:402
 msgid "Attaching"
-msgstr ""
+msgstr "Anexando"
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/subscription_manager/gui/allsubs.py:403
 msgid "Attaching subscription. Please wait."
-msgstr ""
+msgstr "Anexando subscrição. Por favor aguarde."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/allsubs.py:422
@@ -986,7 +879,7 @@ msgstr "Nenhum dos repositórios estão disponíveis sem uma subscrição anexad
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
 #: ../src/subscription_manager/gui/reposgui.py:106
 #: ../src/subscription_manager/gui/reposgui.py:126
-#: ../src/subscription_manager/gui/reposgui.py:289 ../src/rct/printing.py:100
+#: ../src/subscription_manager/gui/reposgui.py:289 ../src/rct/printing.py:107
 msgid "Enabled"
 msgstr "Habilitado"
 
@@ -1054,13 +947,15 @@ msgstr "Registro do Sistema"
 msgid "<b>Registering</b>"
 msgstr "<b>Registro</b>"
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/subscription_manager/gui/registergui.py:189
 msgid "Subscription Attachment"
-msgstr ""
+msgstr "Anexo de Subscrição"
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/subscription_manager/gui/registergui.py:190
 msgid "<b>Attaching</b>"
-msgstr ""
+msgstr "<b>Anexando</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:298
@@ -1131,9 +1026,10 @@ msgstr ""
 "Todos os produtos instalados são cobertos pelos direitos à serviços válidos. "
 "Não há a necessidade de conectar subscrições agora."
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/subscription_manager/gui/registergui.py:535
 msgid "Consumer has been deleted."
-msgstr ""
+msgstr "Cliente foi removido."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:551
@@ -1252,17 +1148,17 @@ msgid "Stack "
 msgstr "Pilha"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:62
+#: ../src/subscription_manager/migrate/migrate.py:63
 msgid "Could not find up2date_client.config module!"
 msgstr "Não foi possível encontrar o módulo up2date_client.config!"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:68
+#: ../src/subscription_manager/migrate/migrate.py:69
 msgid "Could not find up2date_client.rhnChannel module!"
 msgstr "Não foi possível encontrar o módulo up2date_client.rhnChannel!"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:72
+#: ../src/subscription_manager/migrate/migrate.py:73
 #, python-format
 msgid ""
 "Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
@@ -1272,24 +1168,24 @@ msgstr ""
 "rhsm.log para obter mais detalhes "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:112
+#: ../src/subscription_manager/migrate/migrate.py:113
 msgid "You have entered an invalid choice."
 msgstr "Você inseriu uma escolha inválida"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:155
+#: ../src/subscription_manager/migrate/migrate.py:156
 msgid "ignore channels not available on RHSM"
 msgstr "Ignore os canais indisponíveis no RHSM"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:157
+#: ../src/subscription_manager/migrate/migrate.py:158
 msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
 msgstr ""
 "lançar a ferramenta do GUI para conectar subscrições, ao invés de auto-"
 "conectar"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:159
+#: ../src/subscription_manager/migrate/migrate.py:160
 msgid ""
 "don't execute the auto-attach option while registering with subscription "
 "manager"
@@ -1298,7 +1194,7 @@ msgstr ""
 "gerenciador de subscrição."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:161
+#: ../src/subscription_manager/migrate/migrate.py:162
 msgid ""
 "service level to follow when attaching subscriptions, for no service level "
 "use --servicelevel=\"\""
@@ -1307,78 +1203,78 @@ msgstr ""
 "nenhum nível de serviço --service-level=\"\""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:164
+#: ../src/subscription_manager/migrate/migrate.py:165
 msgid "specify the subscription management server to migrate to"
 msgstr ""
 "Especificar o Servidor de Gerenciamento de Subscrição para migrar para TO."
 
-#: ../src/subscription_manager/migrate/migrate.py:166
+#: ../src/subscription_manager/migrate/migrate.py:167
 msgid "specify the Red Hat user name"
 msgstr "especificar o nome do usuário da Red Hat"
 
-#: ../src/subscription_manager/migrate/migrate.py:168
+#: ../src/subscription_manager/migrate/migrate.py:169
 msgid "specify the Red Hat password"
 msgstr "especificar a senha da Red Hat"
 
-#: ../src/subscription_manager/migrate/migrate.py:170
+#: ../src/subscription_manager/migrate/migrate.py:171
 msgid "specify the subscription service user name"
 msgstr "especificar o nome do usuário do serviço da subscrição"
 
-#: ../src/subscription_manager/migrate/migrate.py:172
+#: ../src/subscription_manager/migrate/migrate.py:173
 msgid "specify the subscription service password"
 msgstr "especificar a senha de serviço da subscrição"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:175
+#: ../src/subscription_manager/migrate/migrate.py:176
 msgid "don't use RHN proxy settings with subscription management server"
 msgstr ""
 "não use as configurações do proxy com o servidor de gerenciamento de "
 "subscrição"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:177
+#: ../src/subscription_manager/migrate/migrate.py:178
 msgid "organization to register to"
 msgstr "organização para registrar em"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:179
+#: ../src/subscription_manager/migrate/migrate.py:180
 msgid "environment to register to"
 msgstr "ambiente para registrar em"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:183
+#: ../src/subscription_manager/migrate/migrate.py:184
 msgid "The --servicelevel and --no-auto options cannot be used together."
 msgstr "As opções --servicelevel e --no-auto não podem ser utilizadas juntas"
 
-#: ../src/subscription_manager/migrate/migrate.py:203
+#: ../src/subscription_manager/migrate/migrate.py:204
 msgid "Red Hat username: "
 msgstr "Nome do usuário da Red Hat:"
 
-#: ../src/subscription_manager/migrate/migrate.py:203
+#: ../src/subscription_manager/migrate/migrate.py:204
 msgid "Red Hat password: "
 msgstr "Senha da Red Hat:"
 
-#: ../src/subscription_manager/migrate/migrate.py:207
+#: ../src/subscription_manager/migrate/migrate.py:208
 msgid "Subscription Service username: "
 msgstr "Nome do usuário do Serviço de Subscrição:"
 
-#: ../src/subscription_manager/migrate/migrate.py:207
+#: ../src/subscription_manager/migrate/migrate.py:208
 msgid "Subscription Service password: "
 msgstr "Senha do Serviço de Subscrição:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:220
+#: ../src/subscription_manager/migrate/migrate.py:221
 msgid "Unable to read RHN proxy settings."
 msgstr "Incapaz de ler as configurações do RHN proxy."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:250
+#: ../src/subscription_manager/migrate/migrate.py:251
 #, python-format
 msgid "Error parsing server URL: %s"
 msgstr "Erro ao analisar a URL do servidor: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:272
+#: ../src/subscription_manager/migrate/migrate.py:273
 msgid ""
 "\n"
 "This system appears to be already registered to Red Hat Subscription "
@@ -1389,7 +1285,7 @@ msgstr ""
 "Red Hat. Saindo."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:274
+#: ../src/subscription_manager/migrate/migrate.py:275
 #, python-format
 msgid ""
 "\n"
@@ -1401,13 +1297,13 @@ msgstr ""
 "visualizar os detalhes do perfil. "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:279
+#: ../src/subscription_manager/migrate/migrate.py:280
 #: ../src/subscription_manager/managercli.py:348
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr "Erro: Certificado CA para o serviço de subscrição não foi instalado. "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:295
+#: ../src/subscription_manager/migrate/migrate.py:296
 #: ../src/subscription_manager/managercli.py:657
 #: ../src/subscription_manager/managercli.py:1138
 #, python-format
@@ -1415,35 +1311,35 @@ msgid "%s cannot register with any organizations."
 msgstr "O %s não pode registrar em nenhuma organização."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:302
+#: ../src/subscription_manager/migrate/migrate.py:303
 msgid "Org: "
 msgstr "Org: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:310
+#: ../src/subscription_manager/migrate/migrate.py:311
 #, python-format
 msgid "No such org: %s"
 msgstr "Não existe esta empresa: %s "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:319
+#: ../src/subscription_manager/migrate/migrate.py:320
 msgid "Environments are not supported by this server."
 msgstr "Ambientes não são suportados por este servidor"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:332
+#: ../src/subscription_manager/migrate/migrate.py:333
 msgid "Environment: "
 msgstr "Ambiente:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:342
+#: ../src/subscription_manager/migrate/migrate.py:343
 #: ../src/subscription_manager/managercli.py:1123
 #, python-format
 msgid "No such environment: %s"
 msgstr "Nenhum ambiente: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:367
+#: ../src/subscription_manager/migrate/migrate.py:368
 msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
@@ -1452,25 +1348,25 @@ msgstr ""
 "mais detalhes."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:374
+#: ../src/subscription_manager/migrate/migrate.py:375
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
 msgstr ""
 "Problema encontrado ao determinar funções de usuários no RHN Clássico. "
 "Saindo."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:376
+#: ../src/subscription_manager/migrate/migrate.py:377
 msgid "You must be an org admin to successfully run this script."
 msgstr ""
 "Você deve ser um admin de empresa para executar este script com sucesso."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:383
+#: ../src/subscription_manager/migrate/migrate.py:384
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."
 msgstr "Prolema encontrado ao obter a lista de canais subscritos. Saindo."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:396
+#: ../src/subscription_manager/migrate/migrate.py:397
 msgid ""
 "You are subscribed to more than one jbappplatform channel.  This script does "
 "not support that configuration.  Exiting."
@@ -1478,30 +1374,30 @@ msgstr ""
 "Você está registrado em mais de um canal jbapplatform. Este script não "
 "suporta esta configuração. Saindo."
 
-#: ../src/subscription_manager/migrate/migrate.py:428
+#: ../src/subscription_manager/migrate/migrate.py:429
 msgid "Unable to continue migration!"
 msgstr "Não foi possível continuar com a migração!"
 
-#: ../src/subscription_manager/migrate/migrate.py:429
+#: ../src/subscription_manager/migrate/migrate.py:430
 msgid ""
 "You are subscribed to channels that have conflicting product certificates."
 msgstr ""
 "Você está subscrito aos canais que possuem certificados de produto em "
 "conflito."
 
-#: ../src/subscription_manager/migrate/migrate.py:433
+#: ../src/subscription_manager/migrate/migrate.py:434
 #, python-format
 msgid "The following channels map to product ID %s:"
 msgstr "Os seguintes canais mapeiam à ID do produto %s:"
 
-#: ../src/subscription_manager/migrate/migrate.py:436
+#: ../src/subscription_manager/migrate/migrate.py:437
 msgid ""
 "Reduce the number of channels per product ID to 1 and run migration again."
 msgstr ""
 "Reduzir o número de canais por ID de produto para 1 e execute a migração "
 "novamente."
 
-#: ../src/subscription_manager/migrate/migrate.py:437
+#: ../src/subscription_manager/migrate/migrate.py:438
 msgid ""
 "To remove a channel, use 'rhn-channel --remove --"
 "channel=<conflicting_channel>'."
@@ -1509,7 +1405,7 @@ msgstr ""
 "Para remover o canal, use 'rhn-channel --remove --"
 "channel=<conflicting_channel>'."
 
-#: ../src/subscription_manager/migrate/migrate.py:449
+#: ../src/subscription_manager/migrate/migrate.py:450
 #, python-format
 msgid ""
 "Unable to read mapping file: %(mappingfile)s.\n"
@@ -1517,17 +1413,17 @@ msgid ""
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:475
+#: ../src/subscription_manager/migrate/migrate.py:476
 msgid "Channels not available on RHSM:"
 msgstr "Canais indiponíveis no RHSM:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:480
+#: ../src/subscription_manager/migrate/migrate.py:481
 msgid "No product certificates are mapped to these RHN Classic channels:"
 msgstr "Nenhum certificado de produto mapeado nestes canais do RHN CLassic:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:486
+#: ../src/subscription_manager/migrate/migrate.py:487
 msgid ""
 "\n"
 "Use --force to ignore these channels and continue the migration.\n"
@@ -1536,13 +1432,13 @@ msgstr ""
 "Use --force para ignorar estes canais e continuar a migração. \n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:500
+#: ../src/subscription_manager/migrate/migrate.py:501
 msgid "Installing product certificates for these RHN Classic channels:"
 msgstr ""
 "Instalando os certificados do produto para estes canais do RHN Classic:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:528
+#: ../src/subscription_manager/migrate/migrate.py:529
 #, python-format
 msgid ""
 "\n"
@@ -1552,7 +1448,7 @@ msgstr ""
 "Certificados do Produto instalados com sucesso em %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:608
+#: ../src/subscription_manager/migrate/migrate.py:609
 #, python-format
 msgid ""
 "Did not receive a completed unregistration message from RHN Classic for "
@@ -1564,23 +1460,23 @@ msgstr ""
 "Por favor veja o Portal do Consumidor em https://access.redhat.com."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:616
+#: ../src/subscription_manager/migrate/migrate.py:617
 msgid "System successfully unregistered from RHN Classic."
 msgstr "Registro de sistema cancelado com sucesso a partir do RHN Clássico."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:618
+#: ../src/subscription_manager/migrate/migrate.py:619
 msgid "Unable to unregister system from RHN Classic.  Exiting."
 msgstr ""
 "Incapaz de cancelar registro de sistema a partir do RHN Clássico. Saindo."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:624
+#: ../src/subscription_manager/migrate/migrate.py:625
 msgid "Attempting to register system to Red Hat Subscription Management..."
 msgstr "Tentando registrar o sistema no Red Hat Subscription Management..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:637
+#: ../src/subscription_manager/migrate/migrate.py:638
 msgid ""
 "\n"
 "Unable to register.\n"
@@ -1592,7 +1488,7 @@ msgstr ""
 "Suporte da Red Hat Global."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:640
+#: ../src/subscription_manager/migrate/migrate.py:641
 #, python-format
 msgid ""
 "System '%s' successfully registered to Red Hat Subscription Management.\n"
@@ -1600,7 +1496,7 @@ msgstr ""
 "Sistema '%s' registrado com sucesso para o Red Hat Subscription Management.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:644
+#: ../src/subscription_manager/migrate/migrate.py:645
 #: ../src/subscription_manager/managercli.py:778
 #: ../src/subscription_manager/managercli.py:856
 #: ../src/subscription_manager/managercli.py:865
@@ -1609,12 +1505,12 @@ msgstr "ERRO: O comando do nível de serviço não é suportado pelo servidor."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
 #. Display an actual message for the empty string level.
-#: ../src/subscription_manager/migrate/migrate.py:663
+#: ../src/subscription_manager/migrate/migrate.py:664
 msgid "No service level preference"
 msgstr "Nenhuma preferência de nível de serviço."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:670
+#: ../src/subscription_manager/migrate/migrate.py:671
 #, python-format
 msgid ""
 "\n"
@@ -1624,12 +1520,12 @@ msgstr ""
 "Nível de Serviço \"%s\" não está disponível."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:671
+#: ../src/subscription_manager/migrate/migrate.py:672
 msgid "Please select a service level agreement for this system."
 msgstr "Por favor, selecione um acordo de nível de serviço para este sistema."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:678
+#: ../src/subscription_manager/migrate/migrate.py:679
 msgid ""
 "Launching the GUI tool to manually attach subscriptions to this system ..."
 msgstr ""
@@ -1637,12 +1533,12 @@ msgstr ""
 "sistema..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:681
+#: ../src/subscription_manager/migrate/migrate.py:682
 msgid "Attempting to auto-attach to appropriate subscriptions..."
 msgstr "Tentando se auto-conectar para subscrições apropriadas..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:690
+#: ../src/subscription_manager/migrate/migrate.py:691
 msgid ""
 "\n"
 "Unable to auto-attach.  Do your existing subscriptions match the products "
@@ -1653,7 +1549,7 @@ msgstr ""
 "produtos instalados neste sistema?"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:694
+#: ../src/subscription_manager/migrate/migrate.py:695
 #, python-format
 msgid ""
 "\n"
@@ -1665,7 +1561,7 @@ msgstr ""
 "visualizar e fazer mudanças se necessário."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:728
+#: ../src/subscription_manager/migrate/migrate.py:730
 msgid ""
 "\n"
 "Unable to enable extra repositories."
@@ -1673,7 +1569,7 @@ msgstr ""
 "\n"
 "Incapaz de habilitar repositórios extras"
 
-#: ../src/subscription_manager/migrate/migrate.py:730
+#: ../src/subscription_manager/migrate/migrate.py:732
 #, python-format
 msgid ""
 "Please ensure system has subscriptions attached, and see '%s' to enable "
@@ -1681,17 +1577,17 @@ msgid ""
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:754
+#: ../src/subscription_manager/migrate/migrate.py:756
 msgid "Retrieving existing RHN Classic subscription information..."
 msgstr "Recuperando informações existentes de subscrição do RHN Classic"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:756
+#: ../src/subscription_manager/migrate/migrate.py:758
 msgid "System is currently subscribed to these RHN Classic Channels:"
 msgstr "O sistema atualmente registrado nestes Canais do RHN Classic:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/migrate/migrate.py:766
+#: ../src/subscription_manager/migrate/migrate.py:768
 msgid ""
 "\n"
 "Preparing to unregister system from RHN Classic..."
@@ -2021,13 +1917,15 @@ msgstr "senha para HTTP proxy com autenticação básica"
 msgid "cannot parse argument: %s"
 msgstr "não foi possível analizar argumento: %s"
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:334
 msgid "Error parsing serverurl:"
-msgstr ""
+msgstr "Erro ao analisar o serverurl:"
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:363
 msgid "Error parsing baseurl:"
-msgstr ""
+msgstr "Erro ao analisar o baseurl:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:439
@@ -2259,11 +2157,14 @@ msgstr "Preferência de auto-attach: desabilitada"
 msgid "Manage service levels for this system"
 msgstr "Gerenciar Níveis de serviço para este sistema."
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:759
 msgid ""
 "specify an organization when listing available service levels using the "
 "organization key, only used with --list"
 msgstr ""
+"especificar empresa quando listar níveis de serviço disponível, utilizando a "
+"chave da empresa, somente usados com --list"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:765
@@ -2393,10 +2294,13 @@ msgstr ""
 "chave de ativação para uso no registro (pode ser especificada mais de uma "
 "vez)"
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:927
 msgid ""
 "system preference used when subscribing automatically, requires --auto-attach"
 msgstr ""
+"preferência do sistema usada ao se registrar automaticamente, requer --auto-"
+"attach"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:935
@@ -2596,9 +2500,10 @@ msgstr ""
 msgid "number of subscriptions to attach"
 msgstr "número de subscrições a conectar"
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:1337
 msgid "service level to apply to this system, requires --auto"
-msgstr ""
+msgstr "nível de serviço para aplicar a este sistema, requer --auto"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. re bz #864207
@@ -3037,11 +2942,14 @@ msgstr ""
 "apresenta pools que fornecem produtos que não estão cobertos; apenas usado "
 "com --available"
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:2003
 msgid ""
 "shows only subscriptions matching products that are currently installed; "
 "only used with --available"
 msgstr ""
+"exibir somente os produtos de subscrições coincidentes que estejam "
+"instaladas atualmente; somente usada com --available"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:2010
@@ -3106,7 +3014,7 @@ msgid "Consumed Subscriptions"
 msgstr "Subscrições Consumidas"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/managercli.py:2169 ../src/rct/printing.py:198
+#: ../src/subscription_manager/managercli.py:2169 ../src/rct/printing.py:205
 msgid "Not Available"
 msgstr "Não está disponível"
 
@@ -3347,27 +3255,27 @@ msgid "Error reading system memory information:"
 msgstr "Erro na leitura de informação da memória do sistema:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/subscription_manager/hwprobe.py:560
+#: ../src/subscription_manager/hwprobe.py:583
 msgid "Error reading system CPU information:"
 msgstr "Erro na leitura de informação da CPU do sistema:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:585
+#: ../src/subscription_manager/hwprobe.py:608
 msgid "Error reading networking information:"
 msgstr "Erro na leitura de informação da rede:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:684
+#: ../src/subscription_manager/hwprobe.py:707
 msgid "Error reading network interface information:"
 msgstr "Erro ao ler as informações de interface da rede:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author rgyorfy
-#: ../src/subscription_manager/hwprobe.py:780
+#: ../src/subscription_manager/hwprobe.py:803
 msgid "Virtualization platform does not support UUIDs"
 msgstr "A plataforma de Virtualização não suporta UUIDs"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author rgyorfy
-#: ../src/subscription_manager/hwprobe.py:782
+#: ../src/subscription_manager/hwprobe.py:805
 #, python-format
 msgid "Error finding UUID: %s"
 msgstr "Erro em encontrar UUID: %s"
@@ -3519,8 +3427,8 @@ msgstr "Geral:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/manifest_commands.py:206 ../src/rct/manifest_commands.py:230
-#: ../src/rct/printing.py:44 ../src/rct/printing.py:65
-#: ../src/rct/printing.py:95
+#: ../src/rct/printing.py:44 ../src/rct/printing.py:72
+#: ../src/rct/printing.py:102
 msgid "Name"
 msgstr "Nome"
 
@@ -3545,12 +3453,12 @@ msgid "Created"
 msgstr "Criado"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:235 ../src/rct/printing.py:70
+#: ../src/rct/manifest_commands.py:235 ../src/rct/printing.py:77
 msgid "Service Level"
 msgstr "Nível de Serviço"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:236 ../src/rct/printing.py:71
+#: ../src/rct/manifest_commands.py:236 ../src/rct/printing.py:78
 msgid "Service Type"
 msgstr "Tipo de Serviço"
 
@@ -3560,17 +3468,17 @@ msgid "Architectures"
 msgstr "Arquiteturas"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:238 ../src/rct/printing.py:67
+#: ../src/rct/manifest_commands.py:238 ../src/rct/printing.py:74
 msgid "SKU"
 msgstr "SKU"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:240 ../src/rct/printing.py:64
+#: ../src/rct/manifest_commands.py:240 ../src/rct/printing.py:71
 msgid "Order"
 msgstr "Ordem"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/rct/manifest_commands.py:241 ../src/rct/printing.py:69
+#: ../src/rct/manifest_commands.py:241 ../src/rct/printing.py:76
 msgid "Account"
 msgstr "Conta"
 
@@ -3667,143 +3575,147 @@ msgstr "Marcações"
 msgid "Brand Type"
 msgstr "Tipo de Marca"
 
+#: ../src/rct/printing.py:58
+msgid "Brand Name"
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:66
+#: ../src/rct/printing.py:73
 msgid "Number"
 msgstr "Número"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:76
+#: ../src/rct/printing.py:83
 msgid "Quantity Used"
 msgstr "Quantidade Utilizada"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:77
+#: ../src/rct/printing.py:84
 msgid "Socket Limit"
 msgstr "Limite de Soquete"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:78
+#: ../src/rct/printing.py:85
 msgid "RAM Limit"
 msgstr "Limite de RAM"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/rct/printing.py:79
+#: ../src/rct/printing.py:86
 msgid "Core Limit"
 msgstr "Limite de Núcleo"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:80
+#: ../src/rct/printing.py:87
 msgid "Virt Only"
 msgstr "Virt Somente"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:81
+#: ../src/rct/printing.py:88
 msgid "Stacking ID"
 msgstr "Empilhando o ID"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:82
+#: ../src/rct/printing.py:89
 msgid "Warning Period"
 msgstr "Período de Aviso"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:83
+#: ../src/rct/printing.py:90
 msgid "Provides Management"
 msgstr "Fornece Gerenciamento"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/rct/printing.py:92
+#: ../src/rct/printing.py:99
 msgid "Content"
 msgstr "Conteúdo"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/rct/printing.py:96
+#: ../src/rct/printing.py:103
 msgid "Label"
 msgstr "Rótulo"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:97
+#: ../src/rct/printing.py:104
 msgid "Vendor"
 msgstr "Fabricante"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/rct/printing.py:98
+#: ../src/rct/printing.py:105
 msgid "URL"
 msgstr "URL"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:99
+#: ../src/rct/printing.py:106
 msgid "GPG"
 msgstr "GPG"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/rct/printing.py:101
+#: ../src/rct/printing.py:108
 msgid "Expires"
 msgstr "Expira"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:102
+#: ../src/rct/printing.py:109
 msgid "Required Tags"
 msgstr "Requer Marcações"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/rct/printing.py:103
+#: ../src/rct/printing.py:110
 msgid "Arches"
 msgstr "Arcos"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:115
+#: ../src/rct/printing.py:122
 msgid "Certificate:"
 msgstr "Certificado:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:116
+#: ../src/rct/printing.py:123
 msgid "Path"
 msgstr "Caminho"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:118
+#: ../src/rct/printing.py:125
 msgid "Serial"
 msgstr "Série"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:131
+#: ../src/rct/printing.py:138
 msgid "Subject:"
 msgstr "Sujeito:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/rct/printing.py:138
+#: ../src/rct/printing.py:145
 msgid "Issuer:"
 msgstr "Remetente:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:160
+#: ../src/rct/printing.py:167
 msgid "Alt Name"
 msgstr "Alt Nome"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
-#: ../src/rct/printing.py:201
+#: ../src/rct/printing.py:208
 msgid "Pool ID"
 msgstr "Id do Pool"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:219
+#: ../src/rct/printing.py:226
 msgid "Entitlement Certificate"
 msgstr "Certificado de Direitos"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:221
+#: ../src/rct/printing.py:228
 msgid "Product Certificate"
 msgstr "Certificado de Produto"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:223
+#: ../src/rct/printing.py:230
 msgid "Identity Certificate"
 msgstr "Certificado de Identidade"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:225
+#: ../src/rct/printing.py:232
 msgid "Unknown Certificate Type"
 msgstr "Tipo de Certificado Desconhecido"
 
@@ -3811,9 +3723,10 @@ msgstr "Tipo de Certificado Desconhecido"
 msgid "Assemble system information as a tar file or directory"
 msgstr "Reúna a informação do sistema como um arquivo tar ou diretório"
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/rhsm_debug/debug_commands.py:54
 msgid "the destination location of the result; default is /tmp"
-msgstr ""
+msgstr "o local de destino do resultado; padrão é /tmp"
 
 #: ../src/rhsm_debug/debug_commands.py:59
 msgid "data will be in an uncompressed directory"
@@ -4260,9 +4173,10 @@ msgstr "<b>Total de Contratos:</b> "
 msgid "* Click to Change Quantity"
 msgstr "* Clique para Alterar a Quantidade"
 
+# translation auto-copied from project subscription-manager, version 1.10.X, document keys, author gcintra
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
 msgid "SLA Selection Table"
-msgstr ""
+msgstr "Tabela de Seleção SLA"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/registration.glade.h:2
@@ -5303,3 +5217,92 @@ msgstr "Applet de Validade de Subscrição"
 #: ../etc-conf/subscription-manager-gui.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
 msgstr "Gerenciador de Subscrição Red Hat"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:140
+#, python-format
+msgid "no such option: %s"
+msgstr "não existe esta opção: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:151
+#, python-format
+msgid "ambiguous option: %s (%s?)"
+msgstr "opção ambígua: %s (%s?)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:393
+msgid "Usage"
+msgstr "Uso"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:418
+msgid "integer"
+msgstr "número inteiro"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:419
+msgid "long integer"
+msgstr "número inteiro longo"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:420
+msgid "floating-point"
+msgstr "ponto flutuante"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:421
+msgid "complex"
+msgstr "complexo"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:429
+#, python-format
+msgid "option %s: invalid %s value: %r"
+msgstr "opção %s: inválida %s valor: %r"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:437
+#, python-format
+msgid "option %s: invalid choice: %r (choose from %s)"
+msgstr "opção %s: escolha errada: %r (escolha a partir do %s)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1250
+msgid "show this help message and exit"
+msgstr "apresenta esta mensagem de ajuda e encerramento"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1255
+msgid "show program's version number and exit"
+msgstr "o número de versão do programa apresentado e encerramento"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gcintra
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1278
+msgid "%prog [options]"
+msgstr "%prog [OPÇÕES]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1498
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1537
+#, python-format
+msgid "%s option requires an argument"
+msgstr "%s opção requer um argumento"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1500
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1539
+#, python-format
+msgid "%s option requires %d arguments"
+msgstr "%s opção requer %d argumentos"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1509
+#, python-format
+msgid "%s option does not take a value"
+msgstr "%s opção não leva valor"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1626
+msgid "Options"
+msgstr "Opções"

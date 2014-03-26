@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-25 11:34-0500\n"
+"POT-Creation-Date: 2014-03-20 16:25-0400\n"
 "PO-Revision-Date: 2014-02-06 05:15-0500\n"
 "Last-Translator: anipeter <anipeter@fedoraproject.org>\n"
 "Language-Team: Malayalam\n"
@@ -11,7 +11,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.2.3\n"
+"X-Generator: Zanata 3.3.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -155,131 +155,20 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. note default is lower caps
-#: ../src/subscription_manager/i18n_optparse.py:37
+#: ../src/subscription_manager/i18n_optparse.py:39
 msgid "%prog [OPTIONS]"
 msgstr "%prog [ഐച്ഛികങ്ങള്‍]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author mospina
-#. For older versions of optparse
-#: ../src/subscription_manager/i18n_optparse.py:127
-#: ../src/subscription_manager/i18n_optparse.py:139
+#: ../src/subscription_manager/i18n_optparse.py:129
+#: ../../../../..//usr/lib64/python2.7/optparse.py:374
 #, python-format
 msgid "Usage: %s\n"
 msgstr "ഉപയോഗിയ്ക്കേണ്ട വിധം: %s\n"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author mospina
-#. These are a bunch of strings that are marked for translation in optparse,
-#. but not actually translated anywhere. Mark them for translation here,
-#. so we get it picked up. for local translation, and then optparse will
-#. use them.
-#. translators: this should have the same translation as "Usage: %s\n"
-#: ../src/subscription_manager/i18n_optparse.py:138
-#, python-format
-msgid "usage: %s\n"
-msgstr "ഉപയോഗിയ്ക്കേണ്ട വിധം: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:140
-msgid "Usage"
-msgstr "ഉപയോഗിയ്ക്കേണ്ട വിധം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/i18n_optparse.py:141
-msgid "%prog [options]"
-msgstr "%prog [ഐച്ഛികങ്ങള്‍]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:142
-msgid "Options"
-msgstr "ഐച്ഛികങ്ങള്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:143
-msgid "options"
-msgstr "ഐച്ഛികങ്ങള്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:144
-msgid "options:"
-msgstr "ഐച്ഛികങ്ങള്‍:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. stuff for option value sanity checking
-#: ../src/subscription_manager/i18n_optparse.py:147
-#, python-format
-msgid "no such option: %s"
-msgstr "അത്തരം ഐച്ഛികം ലഭ്യമല്ല: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:148
-#, python-format
-msgid "ambiguous option: %s (%s?)"
-msgstr "അസ്ഥിരമായ ഐച്ഛികം: %s (%s?)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:149
-#, python-format
-msgid "%s option requires an argument"
-msgstr "%s ഐച്ഛികത്തിനു് ഒരു ആര്‍ഗ്യുമെന്റ് ആവശ്യമുണ്ടു്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:150
-#, python-format
-msgid "%s option requires %d arguments"
-msgstr "%s ഐച്ഛികത്തിനു് %d ആര്‍ഗ്യുമെന്റുകള്‍ ആവശ്യമുണ്ടു്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:151
-#, python-format
-msgid "%s option does not take a value"
-msgstr "%s ഐച്ഛികം മൂല്ല്യം സ്വീകരിയ്ക്കുന്നതല്ല"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:152
-msgid "integer"
-msgstr "ഇന്റിജര്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:153
-msgid "long integer"
-msgstr "ലോങ് ഇന്റിജര്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:154
-msgid "floating-point"
-msgstr "ഫ്ലോട്ടിങ്-പോയിന്റ്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:155
-msgid "complex"
-msgstr "കോംപ്ലക്സ്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:156
-#, python-format
-msgid "option %s: invalid %s value: %r"
-msgstr "ഐച്ഛികം %s: അസാധുവായ %s മൂല്ല്യം: %r"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:157
-#, python-format
-msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr "ഐച്ഛികം %s: തെരഞ്ഞെടുത്തതു് അസാധു: %r (%s-ല്‍ നിന്നും തെരഞ്ഞെടുക്കുക)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. default options
-#: ../src/subscription_manager/i18n_optparse.py:160
-msgid "show this help message and exit"
-msgstr "ഈ സഹായ സന്ദേശം കാണിച്ചു് പുറത്തു് കടക്കുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:161
-msgid "show program's version number and exit"
-msgstr "പ്രോഗ്രാമിന്റെ ലക്കം കാണിച്ചു് പുറത്തു് കടക്കുക"
-
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
 #. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:174
+#: ../src/subscription_manager/i18n_optparse.py:145
 #, python-format
 msgid "%s: error: %s"
 msgstr "%s: പിശക്: %s"
@@ -359,7 +248,7 @@ msgstr "പ്രൊഡക്ട്"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/installedtab.py:87
-#: ../src/rct/printing.py:45 ../src/rct/printing.py:117
+#: ../src/rct/printing.py:45 ../src/rct/printing.py:124
 msgid "Version"
 msgstr "ലക്കം"
 
@@ -371,7 +260,7 @@ msgstr "അവസ്ഥ"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/installedtab.py:93
 #: ../src/subscription_manager/gui/contract_selection.py:113
-#: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:119
+#: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:126
 msgid "Start Date"
 msgstr "തുടക്ക തീയതി"
 
@@ -379,7 +268,7 @@ msgstr "തുടക്ക തീയതി"
 #: ../src/subscription_manager/gui/installedtab.py:96
 #: ../src/subscription_manager/gui/mysubstab.py:102
 #: ../src/subscription_manager/gui/contract_selection.py:119
-#: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:120
+#: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:127
 msgid "End Date"
 msgstr "അവസാന തീയതി"
 
@@ -533,7 +422,7 @@ msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊഡ�
 #: ../src/subscription_manager/gui/contract_selection.py:124
 #: ../src/subscription_manager/gui/allsubs.py:88
 #: ../src/subscription_manager/gui/registergui.py:427
-#: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:75
+#: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:82
 msgid "Quantity"
 msgstr "വ്യാപ്തി"
 
@@ -739,7 +628,7 @@ msgstr "രണ്ടും"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
 #. content-type is required, no need to xstr
 #: ../src/subscription_manager/gui/widgets.py:710
-#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:94
+#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
 msgid "Type"
 msgstr "തരം"
 
@@ -806,7 +695,7 @@ msgstr "<b>അടുത്ത സിസ്റ്റം പരിശോധന:</b
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/contract_selection.py:94
-#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:68
+#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:75
 msgid "Contract"
 msgstr "കോണ്ട്രാക്റ്റ്"
 
@@ -818,7 +707,7 @@ msgstr "ഉപയോഗിച്ചവ / മൊത്തം"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/contract_selection.py:141
 #: ../src/subscription_manager/gui/allsubs.py:225
-#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:74
+#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:81
 msgid "Unlimited"
 msgstr "അനന്തം"
 
@@ -973,7 +862,7 @@ msgstr "ഘടിപ്പിച്ചിട്ടില്ലാത്ത സ�
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/reposgui.py:106
 #: ../src/subscription_manager/gui/reposgui.py:126
-#: ../src/subscription_manager/gui/reposgui.py:289 ../src/rct/printing.py:100
+#: ../src/subscription_manager/gui/reposgui.py:289 ../src/rct/printing.py:107
 msgid "Enabled"
 msgstr "പ്രവര്‍ത്തന സജ്ജം"
 
@@ -1234,17 +1123,17 @@ msgid "Stack "
 msgstr "സ്റ്റാക്ക്"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:62
+#: ../src/subscription_manager/migrate/migrate.py:63
 msgid "Could not find up2date_client.config module!"
 msgstr "up2date_client.config ഘടകം ലഭ്യമായില്ല!"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:68
+#: ../src/subscription_manager/migrate/migrate.py:69
 msgid "Could not find up2date_client.rhnChannel module!"
 msgstr "up2date_client.rhnChannel ഘടകം ലഭ്യമായില്ല!"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:72
+#: ../src/subscription_manager/migrate/migrate.py:73
 #, python-format
 msgid ""
 "Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
@@ -1254,30 +1143,30 @@ msgstr ""
 "log/rhsm/rhsm.log കാണുക."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:112
+#: ../src/subscription_manager/migrate/migrate.py:113
 msgid "You have entered an invalid choice."
 msgstr "തെറ്റായതു് നല്‍കിയിരിയ്ക്കുന്നു."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:155
+#: ../src/subscription_manager/migrate/migrate.py:156
 msgid "ignore channels not available on RHSM"
 msgstr "RHSM-ല്‍ ലഭ്യമല്ലാത്ത ചാനലുകള്‍ വേണ്ടെന്നു് വയ്ക്കുക"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:157
+#: ../src/subscription_manager/migrate/migrate.py:158
 msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
 msgstr ""
 "സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍ക്കുന്നതിനായി ജിയുഐ പ്രയോഗം ഉപയോഗിയ്ക്കുക, ഓട്ടോ-അറ്റാച്ചിങ് ആവശ്യമില്ല"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:159
+#: ../src/subscription_manager/migrate/migrate.py:160
 msgid ""
 "don't execute the auto-attach option while registering with subscription "
 "manager"
 msgstr "subscription manager-മായി രജിസ്ടര്‍ ചെയ്യുമ്പോള്‍ ഓട്ടോ-അറ്റാച്ച് ഉപയോഗിയ്ക്കരുതു്"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:161
+#: ../src/subscription_manager/migrate/migrate.py:162
 msgid ""
 "service level to follow when attaching subscriptions, for no service level "
 "use --servicelevel=\"\""
@@ -1286,75 +1175,75 @@ msgstr ""
 "\"\" ഉപയോഗിയ്ക്കുക"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:164
+#: ../src/subscription_manager/migrate/migrate.py:165
 msgid "specify the subscription management server to migrate to"
 msgstr "നീക്കുവാനുള്ള സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വര്‍ നല്‍കുക"
 
-#: ../src/subscription_manager/migrate/migrate.py:166
+#: ../src/subscription_manager/migrate/migrate.py:167
 msgid "specify the Red Hat user name"
 msgstr "Red Hat ഉപയോക്താവിന്റെ പേരു് നല്‍കുക"
 
-#: ../src/subscription_manager/migrate/migrate.py:168
+#: ../src/subscription_manager/migrate/migrate.py:169
 msgid "specify the Red Hat password"
 msgstr "Red Hat രഹസ്യവാക്ക് നല്‍കുക"
 
-#: ../src/subscription_manager/migrate/migrate.py:170
+#: ../src/subscription_manager/migrate/migrate.py:171
 msgid "specify the subscription service user name"
 msgstr "subscription സര്‍വീസ് ഉപയോക്തൃനാമം വ്യക്തമാക്കുക"
 
-#: ../src/subscription_manager/migrate/migrate.py:172
+#: ../src/subscription_manager/migrate/migrate.py:173
 msgid "specify the subscription service password"
 msgstr "subscription സര്‍വീസ് രഹസ്യവാക്ക് വ്യക്തമാക്കുക"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:175
+#: ../src/subscription_manager/migrate/migrate.py:176
 msgid "don't use RHN proxy settings with subscription management server"
 msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വറിനൊപ്പം RHN പ്രോക്സി സജ്ജീകരണങ്ങള്‍ ഉപയോഗിയ്ക്കരുതു്"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:177
+#: ../src/subscription_manager/migrate/migrate.py:178
 msgid "organization to register to"
 msgstr "രജിസ്ടര്‍ ചെയ്യുവാനുള്ള സ്ഥാപനം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:179
+#: ../src/subscription_manager/migrate/migrate.py:180
 msgid "environment to register to"
 msgstr "രജിസ്ടര്‍ ചെയ്യുവാനുള്ള സാഹചര്യം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:183
+#: ../src/subscription_manager/migrate/migrate.py:184
 msgid "The --servicelevel and --no-auto options cannot be used together."
 msgstr "--servicelevel, --no-auto ഐച്ഛികങ്ങള്‍ ഒന്നിച്ചുപയോഗിയ്ക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/subscription_manager/migrate/migrate.py:203
+#: ../src/subscription_manager/migrate/migrate.py:204
 msgid "Red Hat username: "
 msgstr "Red Hat ഉപയോക്തൃനാമം: "
 
-#: ../src/subscription_manager/migrate/migrate.py:203
+#: ../src/subscription_manager/migrate/migrate.py:204
 msgid "Red Hat password: "
 msgstr "Red Hat രഹസ്യവാക്ക്: "
 
-#: ../src/subscription_manager/migrate/migrate.py:207
+#: ../src/subscription_manager/migrate/migrate.py:208
 msgid "Subscription Service username: "
 msgstr "Subscription സര്‍വീസ് ഉപയോക്തൃനാമം: "
 
-#: ../src/subscription_manager/migrate/migrate.py:207
+#: ../src/subscription_manager/migrate/migrate.py:208
 msgid "Subscription Service password: "
 msgstr "Subscription സര്‍വീസ് രഹസ്യവാക്ക്: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:220
+#: ../src/subscription_manager/migrate/migrate.py:221
 msgid "Unable to read RHN proxy settings."
 msgstr "ആര്‍എച്എന്‍ പ്രോക്സി സജ്ജീകരണങ്ങള്‍ ലഭ്യമാക്കുവാന്‍ സാധ്യമല്ല."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:250
+#: ../src/subscription_manager/migrate/migrate.py:251
 #, python-format
 msgid "Error parsing server URL: %s"
 msgstr "സര്‍വര്‍യുആര്‍എല്‍ പാഴ്സ് ചെയ്യുന്നതില്‍ പിശക്: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:272
+#: ../src/subscription_manager/migrate/migrate.py:273
 msgid ""
 "\n"
 "This system appears to be already registered to Red Hat Subscription "
@@ -1365,7 +1254,7 @@ msgstr ""
 "കടക്കുന്നു."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:274
+#: ../src/subscription_manager/migrate/migrate.py:275
 #, python-format
 msgid ""
 "\n"
@@ -1377,13 +1266,13 @@ msgstr ""
 "consumers/%s കാണുക."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:279
+#: ../src/subscription_manager/migrate/migrate.py:280
 #: ../src/subscription_manager/managercli.py:348
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr "പിശക്: സബ്സ്ക്രിപ്ഷന്‍ സര്‍വീസിനുള്ള സിഎ സര്‍ട്ടിഫിക്കേറ്റ് ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:295
+#: ../src/subscription_manager/migrate/migrate.py:296
 #: ../src/subscription_manager/managercli.py:657
 #: ../src/subscription_manager/managercli.py:1138
 #, python-format
@@ -1391,35 +1280,35 @@ msgid "%s cannot register with any organizations."
 msgstr "ഒരു സ്ഥാപനങ്ങള്‍ക്കും %s രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:302
+#: ../src/subscription_manager/migrate/migrate.py:303
 msgid "Org: "
 msgstr "സ്ഥാപനം: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:310
+#: ../src/subscription_manager/migrate/migrate.py:311
 #, python-format
 msgid "No such org: %s"
 msgstr "ഇത്തരം ഒരു സ്ഥാപനമില്ല: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:319
+#: ../src/subscription_manager/migrate/migrate.py:320
 msgid "Environments are not supported by this server."
 msgstr "സാഹചര്യങ്ങള്‍ ഈ സര്‍വര്‍ പിന്തുണയ്ക്കുന്നില്ല."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:332
+#: ../src/subscription_manager/migrate/migrate.py:333
 msgid "Environment: "
 msgstr "എന്‍വയണ്മെന്റ്:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:342
+#: ../src/subscription_manager/migrate/migrate.py:343
 #: ../src/subscription_manager/managercli.py:1123
 #, python-format
 msgid "No such environment: %s"
 msgstr "ഇത്തരം സാഹചര്യമില്ല: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:367
+#: ../src/subscription_manager/migrate/migrate.py:368
 msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
@@ -1428,26 +1317,26 @@ msgstr ""
 "log/rhsm/rhsm.log കാണുക."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:374
+#: ../src/subscription_manager/migrate/migrate.py:375
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
 msgstr ""
 "RHN ക്ലാസ്സിക്കില്‍ ഉപയോക്താക്കളുടെ നിയമനങ്ങള്‍ കണ്ടുപിടിയ്ക്കുന്നതില്‍ പ്രശ്നങ്ങള്‍ ഉണ്ടായിരിയ്ക്കുന്നു. "
 "പുറത്തു് കടക്കുന്നു."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:376
+#: ../src/subscription_manager/migrate/migrate.py:377
 msgid "You must be an org admin to successfully run this script."
 msgstr ""
 "ഈ സ്ക്രിപ്റ്റ് ശരിയായി പ്രവര്‍ത്തിപ്പിയ്ക്കുന്നതിനു് നിങ്ങള്‍ സ്ഥാപനത്തിന്റെ അഡ്മിന്‍ ആയിരിയ്ക്കണം."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:383
+#: ../src/subscription_manager/migrate/migrate.py:384
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."
 msgstr ""
 "അംഗമായിട്ടുള്ള ചാനലുകളുടെ പട്ടിക ലഭ്യമാക്കുന്നതില്‍ പ്രശ്നം നേരിട്ടിരിയ്ക്കുന്നു. പുറത്തു് കടക്കുന്നു."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:396
+#: ../src/subscription_manager/migrate/migrate.py:397
 msgid ""
 "You are subscribed to more than one jbappplatform channel.  This script does "
 "not support that configuration.  Exiting."
@@ -1455,27 +1344,27 @@ msgstr ""
 "ഒന്നില്‍ കൂടുതല്‍ jbappplatform ചാനലിലേക്കു് നിങ്ങള്‍ അംഗമായിരിയ്ക്കുന്നു. ഈ സ്ക്രിപ്റ്റ് അത്തരം "
 "ക്രമീകരണം പിന്തുണയ്ക്കുന്നില്ല. പുറത്തു് കടക്കുന്നു."
 
-#: ../src/subscription_manager/migrate/migrate.py:428
+#: ../src/subscription_manager/migrate/migrate.py:429
 msgid "Unable to continue migration!"
 msgstr "നീക്കം ചെയ്യുന്നതു് തുടരുവാന്‍ സാധ്യമല്ല!"
 
-#: ../src/subscription_manager/migrate/migrate.py:429
+#: ../src/subscription_manager/migrate/migrate.py:430
 msgid ""
 "You are subscribed to channels that have conflicting product certificates."
 msgstr ""
 "പൊരുത്തക്കേടുള്ള പ്രൊഡക്ട് സര്‍ട്ടിഫിക്കേറ്റുകളുള്ള ചാനലുകളിലേക്കു് നിങ്ങള്‍ സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു."
 
-#: ../src/subscription_manager/migrate/migrate.py:433
+#: ../src/subscription_manager/migrate/migrate.py:434
 #, python-format
 msgid "The following channels map to product ID %s:"
 msgstr "പ്രൊഡക്ട് ഐഡി %s-ലേക്കു് ഈ ചാനലുകള്‍ മാപ്പ് ചെയ്തിരിയ്ക്കുന്നു:"
 
-#: ../src/subscription_manager/migrate/migrate.py:436
+#: ../src/subscription_manager/migrate/migrate.py:437
 msgid ""
 "Reduce the number of channels per product ID to 1 and run migration again."
 msgstr "ഓരോ പ്രൊഡക്ട് ഐഡിയ്ക്കുള്ള ചാനലുകളുടെ എണ്ണം 1 ആയി കുറച്ചു് വീണ്ടും നീക്കുവാന്‍ ശ്രമിയ്ക്കുക."
 
-#: ../src/subscription_manager/migrate/migrate.py:437
+#: ../src/subscription_manager/migrate/migrate.py:438
 msgid ""
 "To remove a channel, use 'rhn-channel --remove --"
 "channel=<conflicting_channel>'."
@@ -1483,7 +1372,7 @@ msgstr ""
 "ഒരു ചാനല്‍ നീക്കം ചെയ്യുന്നതിനായി, 'rhn-channel --remove --"
 "channel=<conflicting_channel>' ഉപയോഗിയ്ക്കുക."
 
-#: ../src/subscription_manager/migrate/migrate.py:449
+#: ../src/subscription_manager/migrate/migrate.py:450
 #, python-format
 msgid ""
 "Unable to read mapping file: %(mappingfile)s.\n"
@@ -1491,17 +1380,17 @@ msgid ""
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:475
+#: ../src/subscription_manager/migrate/migrate.py:476
 msgid "Channels not available on RHSM:"
 msgstr "RHSM-ല്‍ ചാനലുകള്‍ ലഭ്യമല്ല:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:480
+#: ../src/subscription_manager/migrate/migrate.py:481
 msgid "No product certificates are mapped to these RHN Classic channels:"
 msgstr "ഈ ആര്‍എച്എന്‍ ക്ലാസ്സിക് ചാനലുകളിലേക്കു് ഒരു പ്രൊഡക്ടിന്റെ സമ്മതപത്രവും മാപ്പ് ചെയ്തിട്ടില്ല:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author bkearney
-#: ../src/subscription_manager/migrate/migrate.py:486
+#: ../src/subscription_manager/migrate/migrate.py:487
 msgid ""
 "\n"
 "Use --force to ignore these channels and continue the migration.\n"
@@ -1510,12 +1399,12 @@ msgstr ""
 "ഈ ചാനലുകള്‍ വേണ്ടെന്നു് വയ്ക്കുന്നതിനും മൈഗ്രേഷനുമായി തുടരുന്നതിനായി --force ഉപയോഗിയ്ക്കുക.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:500
+#: ../src/subscription_manager/migrate/migrate.py:501
 msgid "Installing product certificates for these RHN Classic channels:"
 msgstr "ഈ ആര്‍എച്എന്‍ ക്ലാസ്സിക് ചാനലുകള്‍ക്കുള്ള പ്രൊഡക്ടിന്റെ സമ്മതപത്രങ്ങള്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നു:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:528
+#: ../src/subscription_manager/migrate/migrate.py:529
 #, python-format
 msgid ""
 "\n"
@@ -1525,7 +1414,7 @@ msgstr ""
 "പ്രോഡക്ടിന്റെ സമ്മതപത്രങ്ങള്‍ വിജയകരായി %s-ലേക്കു് ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്നു."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:608
+#: ../src/subscription_manager/migrate/migrate.py:609
 #, python-format
 msgid ""
 "Did not receive a completed unregistration message from RHN Classic for "
@@ -1536,22 +1425,22 @@ msgstr ""
 "https://access.redhat.com ലുള്ള കസ്റ്റമര്‍ പോര്‍ട്ടലില്‍ ദയവായി പരിശോധിയ്ക്കുക."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:616
+#: ../src/subscription_manager/migrate/migrate.py:617
 msgid "System successfully unregistered from RHN Classic."
 msgstr "ആര്‍എച്എന്‍ ക്ലാസിക്കില്‍ നിന്നും സിസ്റ്റം വിജയകരമായി അണ്‍രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:618
+#: ../src/subscription_manager/migrate/migrate.py:619
 msgid "Unable to unregister system from RHN Classic.  Exiting."
 msgstr "ആര്‍എച്എന്‍ ക്ലാസിക്കില്‍ നിന്നും സിസ്റ്റം അണ്‍രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല. പുറത്തു് കടക്കുന്നു."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:624
+#: ../src/subscription_manager/migrate/migrate.py:625
 msgid "Attempting to register system to Red Hat Subscription Management..."
 msgstr "Red Hat സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റിലേക്കു് സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുവാന്‍ ശ്രമിയ്ക്കുന്നു..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author bkearney
-#: ../src/subscription_manager/migrate/migrate.py:637
+#: ../src/subscription_manager/migrate/migrate.py:638
 msgid ""
 "\n"
 "Unable to register.\n"
@@ -1562,7 +1451,7 @@ msgstr ""
 "കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി ദയവായി Red Hat ഗ്ലോബല്‍ സപ്പോര്‍ട്ട് സര്‍വീസുകളുമായി ബന്ധപ്പെടുക."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:640
+#: ../src/subscription_manager/migrate/migrate.py:641
 #, python-format
 msgid ""
 "System '%s' successfully registered to Red Hat Subscription Management.\n"
@@ -1571,7 +1460,7 @@ msgstr ""
 "ചെയ്തിരിയ്ക്കുന്നു.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:644
+#: ../src/subscription_manager/migrate/migrate.py:645
 #: ../src/subscription_manager/managercli.py:778
 #: ../src/subscription_manager/managercli.py:856
 #: ../src/subscription_manager/managercli.py:865
@@ -1580,12 +1469,12 @@ msgstr "പിശക്: service-level കമാന്‍ഡ് സര്‍വ�
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
 #. Display an actual message for the empty string level.
-#: ../src/subscription_manager/migrate/migrate.py:663
+#: ../src/subscription_manager/migrate/migrate.py:664
 msgid "No service level preference"
 msgstr "സര്‍വീസ് ലവല്‍ മുന്‍ഗണന സജ്ജമാക്കിയിട്ടില്ല"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:670
+#: ../src/subscription_manager/migrate/migrate.py:671
 #, python-format
 msgid ""
 "\n"
@@ -1595,23 +1484,23 @@ msgstr ""
 " \"%s\" സര്‍വീസ് ലവല്‍ ലഭ്യമല്ല."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:671
+#: ../src/subscription_manager/migrate/migrate.py:672
 msgid "Please select a service level agreement for this system."
 msgstr "ഈ സിസ്റ്റത്തിനുള്ളൊരു സര്‍വീസ് ലവല്‍ എഗ്രീമെന്റ് തെരഞ്ഞെടുക്കുക."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:678
+#: ../src/subscription_manager/migrate/migrate.py:679
 msgid ""
 "Launching the GUI tool to manually attach subscriptions to this system ..."
 msgstr "ഈ സിസ്റ്റത്തിലേക്കു് സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍ക്കുന്നതിനായി ജിയുഐ പ്രയോഗം ലഭ്യമാക്കുന്നു ..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:681
+#: ../src/subscription_manager/migrate/migrate.py:682
 msgid "Attempting to auto-attach to appropriate subscriptions..."
 msgstr "ഉചിതമായ സബ്സ്ക്രിപ്ഷനുകളിലേക്കു് auto-attach ചെയ്യുവാന്‍ ശ്രമിയ്ക്കുന്നു ..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:690
+#: ../src/subscription_manager/migrate/migrate.py:691
 msgid ""
 "\n"
 "Unable to auto-attach.  Do your existing subscriptions match the products "
@@ -1622,7 +1511,7 @@ msgstr ""
 "ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടുള്ള പ്രൊഡക്ടുകളുമായി പൊരുത്തപ്പെടുന്നുണ്ടോ?"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:694
+#: ../src/subscription_manager/migrate/migrate.py:695
 #, python-format
 msgid ""
 "\n"
@@ -1634,7 +1523,7 @@ msgstr ""
 "management/consumers/%s കാണുക."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:728
+#: ../src/subscription_manager/migrate/migrate.py:730
 msgid ""
 "\n"
 "Unable to enable extra repositories."
@@ -1642,7 +1531,7 @@ msgstr ""
 "\n"
 "അധികം റിപ്പോസിറ്ററികള്‍ പ്രവര്‍ത്തന സജ്ജമാക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/subscription_manager/migrate/migrate.py:730
+#: ../src/subscription_manager/migrate/migrate.py:732
 #, python-format
 msgid ""
 "Please ensure system has subscriptions attached, and see '%s' to enable "
@@ -1650,17 +1539,17 @@ msgid ""
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:754
+#: ../src/subscription_manager/migrate/migrate.py:756
 msgid "Retrieving existing RHN Classic subscription information..."
 msgstr "നിലവിലുള്ള RHN ക്ലാസ്സിക് സബ്സ്ക്രിപ്ഷന്‍ വിവരം ലഭ്യമാക്കുന്നു..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:756
+#: ../src/subscription_manager/migrate/migrate.py:758
 msgid "System is currently subscribed to these RHN Classic Channels:"
 msgstr "ഈ ആര്‍എച്എന്‍ ക്ലാസ്സിക് ചാനലുകളിലേക്കു് സിസ്റ്റം നിലവില്‍ അംഗമായിരിയ്ക്കുന്നു:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:766
+#: ../src/subscription_manager/migrate/migrate.py:768
 msgid ""
 "\n"
 "Preparing to unregister system from RHN Classic..."
@@ -3044,7 +2933,7 @@ msgid "Consumed Subscriptions"
 msgstr "ഉപയോഗിച്ച സബ്സ്ക്രിപ്ഷനുകള്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/managercli.py:2169 ../src/rct/printing.py:198
+#: ../src/subscription_manager/managercli.py:2169 ../src/rct/printing.py:205
 msgid "Not Available"
 msgstr "ലഭ്യമല്ല"
 
@@ -3278,27 +3167,27 @@ msgid "Error reading system memory information:"
 msgstr "സിസ്റ്റത്തില്‍ മെമ്മറി വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/hwprobe.py:560
+#: ../src/subscription_manager/hwprobe.py:583
 msgid "Error reading system CPU information:"
 msgstr "സിസ്റ്റത്തിന്റെ സിപിയു വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:585
+#: ../src/subscription_manager/hwprobe.py:608
 msgid "Error reading networking information:"
 msgstr "നെറ്റ്‌വര്‍ക്കിങ് വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:684
+#: ../src/subscription_manager/hwprobe.py:707
 msgid "Error reading network interface information:"
 msgstr "നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫെയിസ് വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/hwprobe.py:780
+#: ../src/subscription_manager/hwprobe.py:803
 msgid "Virtualization platform does not support UUIDs"
 msgstr "വിര്‍ച്ച്വലൈസേഷന്‍ പ്ലാറ്റ്ഫോം യുയുഐഡികള്‍ പിന്തുണയ്ക്കുന്നില്ല"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/hwprobe.py:782
+#: ../src/subscription_manager/hwprobe.py:805
 #, python-format
 msgid "Error finding UUID: %s"
 msgstr "യുയുഐഡി കണ്ടുപിടിയ്ക്കുന്നതില്‍ പിശക്: %s"
@@ -3449,8 +3338,8 @@ msgstr "സാധാരണ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/manifest_commands.py:206 ../src/rct/manifest_commands.py:230
-#: ../src/rct/printing.py:44 ../src/rct/printing.py:65
-#: ../src/rct/printing.py:95
+#: ../src/rct/printing.py:44 ../src/rct/printing.py:72
+#: ../src/rct/printing.py:102
 msgid "Name"
 msgstr "പേരു്"
 
@@ -3475,12 +3364,12 @@ msgid "Created"
 msgstr "തയ്യാറാക്കിയതു്"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:235 ../src/rct/printing.py:70
+#: ../src/rct/manifest_commands.py:235 ../src/rct/printing.py:77
 msgid "Service Level"
 msgstr "സര്‍വീസ് ലവല്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:236 ../src/rct/printing.py:71
+#: ../src/rct/manifest_commands.py:236 ../src/rct/printing.py:78
 msgid "Service Type"
 msgstr "സര്‍വീസ് രീതി"
 
@@ -3490,17 +3379,17 @@ msgid "Architectures"
 msgstr "ആര്‍ക്കിറ്റക്ചറുകള്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:238 ../src/rct/printing.py:67
+#: ../src/rct/manifest_commands.py:238 ../src/rct/printing.py:74
 msgid "SKU"
 msgstr "എസ്‌കെയു"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:240 ../src/rct/printing.py:64
+#: ../src/rct/manifest_commands.py:240 ../src/rct/printing.py:71
 msgid "Order"
 msgstr "ക്രമം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:241 ../src/rct/printing.py:69
+#: ../src/rct/manifest_commands.py:241 ../src/rct/printing.py:76
 msgid "Account"
 msgstr "അക്കൌണ്ട്"
 
@@ -3597,143 +3486,147 @@ msgstr "റ്റാഗുകള്‍"
 msgid "Brand Type"
 msgstr "ബ്രാണ്ട് തരം"
 
+#: ../src/rct/printing.py:58
+msgid "Brand Name"
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:66
+#: ../src/rct/printing.py:73
 msgid "Number"
 msgstr "അക്കം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:76
+#: ../src/rct/printing.py:83
 msgid "Quantity Used"
 msgstr "ഉപയോഗിച്ച വ്യാപ്തി"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:77
+#: ../src/rct/printing.py:84
 msgid "Socket Limit"
 msgstr "സോക്കറ്റ് പരിധി"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:78
+#: ../src/rct/printing.py:85
 msgid "RAM Limit"
 msgstr "റാം പരിധി"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/rct/printing.py:79
+#: ../src/rct/printing.py:86
 msgid "Core Limit"
 msgstr "കോര്‍ പരിധി"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:80
+#: ../src/rct/printing.py:87
 msgid "Virt Only"
 msgstr "വേര്‍ട്ട് മാത്രം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:81
+#: ../src/rct/printing.py:88
 msgid "Stacking ID"
 msgstr "സ്റ്റാക്കിങ് ഐഡി"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:82
+#: ../src/rct/printing.py:89
 msgid "Warning Period"
 msgstr "മുന്നറിയിപ്പു് സമയം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:83
+#: ../src/rct/printing.py:90
 msgid "Provides Management"
 msgstr "മാനേജ്മെന്റ് ലഭ്യമാക്കുന്നു"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:92
+#: ../src/rct/printing.py:99
 msgid "Content"
 msgstr "ഉള്ളടക്കം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:96
+#: ../src/rct/printing.py:103
 msgid "Label"
 msgstr "ലേബല്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:97
+#: ../src/rct/printing.py:104
 msgid "Vendor"
 msgstr "കച്ചവടക്കാരന്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:98
+#: ../src/rct/printing.py:105
 msgid "URL"
 msgstr "യുആര്‍എല്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:99
+#: ../src/rct/printing.py:106
 msgid "GPG"
 msgstr "ജിപിജി"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:101
+#: ../src/rct/printing.py:108
 msgid "Expires"
 msgstr "കാലാവധി അവസാനിയ്ക്കുന്നതു്"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:102
+#: ../src/rct/printing.py:109
 msgid "Required Tags"
 msgstr "ആവശ്യമായ റ്റാഗുകള്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/rct/printing.py:103
+#: ../src/rct/printing.py:110
 msgid "Arches"
 msgstr "ആര്‍ച്ചുകള്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:115
+#: ../src/rct/printing.py:122
 msgid "Certificate:"
 msgstr "സമ്മതപത്രം:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:116
+#: ../src/rct/printing.py:123
 msgid "Path"
 msgstr "പാഥ്"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:118
+#: ../src/rct/printing.py:125
 msgid "Serial"
 msgstr "സീരിയല്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:131
+#: ../src/rct/printing.py:138
 msgid "Subject:"
 msgstr "വിഷയം:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/rct/printing.py:138
+#: ../src/rct/printing.py:145
 msgid "Issuer:"
 msgstr "ഇഷ്യൂവര്‍:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:160
+#: ../src/rct/printing.py:167
 msgid "Alt Name"
 msgstr "മറ്റൊരു നാമം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/rct/printing.py:201
+#: ../src/rct/printing.py:208
 msgid "Pool ID"
 msgstr "പൂള്‍ ഐഡി"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:219
+#: ../src/rct/printing.py:226
 msgid "Entitlement Certificate"
 msgstr "എന്റൈറ്റില്‍മെന്റ് സമ്മതപത്രം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:221
+#: ../src/rct/printing.py:228
 msgid "Product Certificate"
 msgstr "പ്രൊഡക്ടിനുള്ള സമ്മതപത്രം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:223
+#: ../src/rct/printing.py:230
 msgid "Identity Certificate"
 msgstr "തിരിച്ചറിയല്‍ സമ്മതപത്രം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:225
+#: ../src/rct/printing.py:232
 msgid "Unknown Certificate Type"
 msgstr "അപരിചിതമായ തരത്തിലുള്ള സമ്മതപത്രം"
 
@@ -5215,3 +5108,92 @@ msgstr "സബ്സ്ക്രിപ്ഷന്‍ വാലിഡിറ്�
 #: ../etc-conf/subscription-manager-gui.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
 msgstr "Red Hat സബ്സ്ക്രിപ്ഷന്‍ മാനേജര്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:140
+#, python-format
+msgid "no such option: %s"
+msgstr "അത്തരം ഐച്ഛികം ലഭ്യമല്ല: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:151
+#, python-format
+msgid "ambiguous option: %s (%s?)"
+msgstr "അസ്ഥിരമായ ഐച്ഛികം: %s (%s?)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:393
+msgid "Usage"
+msgstr "ഉപയോഗിയ്ക്കേണ്ട വിധം"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:418
+msgid "integer"
+msgstr "ഇന്റിജര്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:419
+msgid "long integer"
+msgstr "ലോങ് ഇന്റിജര്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:420
+msgid "floating-point"
+msgstr "ഫ്ലോട്ടിങ്-പോയിന്റ്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:421
+msgid "complex"
+msgstr "കോംപ്ലക്സ്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:429
+#, python-format
+msgid "option %s: invalid %s value: %r"
+msgstr "ഐച്ഛികം %s: അസാധുവായ %s മൂല്ല്യം: %r"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:437
+#, python-format
+msgid "option %s: invalid choice: %r (choose from %s)"
+msgstr "ഐച്ഛികം %s: തെരഞ്ഞെടുത്തതു് അസാധു: %r (%s-ല്‍ നിന്നും തെരഞ്ഞെടുക്കുക)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1250
+msgid "show this help message and exit"
+msgstr "ഈ സഹായ സന്ദേശം കാണിച്ചു് പുറത്തു് കടക്കുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1255
+msgid "show program's version number and exit"
+msgstr "പ്രോഗ്രാമിന്റെ ലക്കം കാണിച്ചു് പുറത്തു് കടക്കുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1278
+msgid "%prog [options]"
+msgstr "%prog [ഐച്ഛികങ്ങള്‍]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1498
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1537
+#, python-format
+msgid "%s option requires an argument"
+msgstr "%s ഐച്ഛികത്തിനു് ഒരു ആര്‍ഗ്യുമെന്റ് ആവശ്യമുണ്ടു്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1500
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1539
+#, python-format
+msgid "%s option requires %d arguments"
+msgstr "%s ഐച്ഛികത്തിനു് %d ആര്‍ഗ്യുമെന്റുകള്‍ ആവശ്യമുണ്ടു്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1509
+#, python-format
+msgid "%s option does not take a value"
+msgstr "%s ഐച്ഛികം മൂല്ല്യം സ്വീകരിയ്ക്കുന്നതല്ല"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../../../../..//usr/lib64/python2.7/optparse.py:1626
+msgid "Options"
+msgstr "ഐച്ഛികങ്ങള്‍"
