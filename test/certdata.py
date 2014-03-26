@@ -544,7 +544,7 @@ PRODUCT_CERT_WITH_OS_NAME_V1_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path:
+	Path: 
 	Version: 1.0
 	Serial: 48785926
 	Start Date: 2013-08-07 19:21:14+00:00
@@ -563,7 +563,9 @@ Product:
 	Name: Awesome OS Server Bits
 	Version: 6.1
 	Arch: ALL
-	Tags:
+	Tags: 
+	Brand Type: 
+	Brand Name: 
 
 """
 
