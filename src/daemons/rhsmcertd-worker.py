@@ -56,9 +56,7 @@ def main(options, log):
 
         for update_report in update_reports:
             print update_report
-        # move to report bits
-        #print _('%d updates required') % updates
-        #print _('done')
+
     except connection.ExpiredIdentityCertException, e:
         log.critical(_("Your identity certificate has expired"))
         raise e
