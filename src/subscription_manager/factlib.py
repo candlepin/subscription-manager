@@ -40,13 +40,12 @@ class FactLib(object):
     def __init__(self, uep=None):
         self.locker = Locker()
         self.uep = uep
-        self.facts = inj.require(inj.FACTS)
 
     def update(self):
         return self.locker.run(self._do_update)
 
     def _do_update(self):
-        action = FactAction(uep=self.uep, facts=self.facts)
+        action = FactAction(uep=self.uep)
         return action.perform()
 
 
@@ -66,10 +65,10 @@ class FactActionReport(ActionReport):
 
 class FactAction(object):
     # FIXME: pretty sure Action doesn't need any of this
-    def __init__(self, uep=None, facts=None):
+    def __init__(self, uep=None):
         self.uep = uep
         self.report = FactActionReport()
-        self.facts = facts
+        self.facts = inj.require(inj.FACTS)
 
     def perform(self):
 
