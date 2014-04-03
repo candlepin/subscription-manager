@@ -75,9 +75,9 @@ class EntCertDeleteAction(object):
 # TODO: rename to EntitlementCertUpdateAction
 class EntCertUpdateAction(object):
 
-    def __init__(self, uep=None, entdir=None, report=None):
+    def __init__(self, uep=None, report=None):
         self.uep = uep
-        self.entdir = entdir or inj.require(inj.ENT_DIR)
+        self.entdir = inj.require(inj.ENT_DIR)
         self.identity = require(IDENTITY)
         self.report = EntCertUpdateReport()
 
