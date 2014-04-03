@@ -55,7 +55,9 @@ def main(options, log):
         update_reports = mgr.update(options.autoheal)
 
         for update_report in update_reports:
-            print update_report
+            # FIXME: make sure we don't get None reports
+            if update_report:
+                print update_report
 
     except connection.ExpiredIdentityCertException, e:
         log.critical(_("Your identity certificate has expired"))
