@@ -20,7 +20,7 @@ import logging
 import socket
 
 from rhsm.config import initConfig
-from rhsm.certificate import Key, create_from_pem
+from rhsm.certificate import Key,create_from_pem
 
 from subscription_manager import certlib
 from subscription_manager.certdirectory import Writer
@@ -126,19 +126,14 @@ class EntCertUpdateAction(object):
         ent_cert_bundles_installer.install(cert_bundles)
 
     def branding_hook(self):
-        """Update branding info based on entitlement cert changes"""
+        """Update branding info based on entitlement cert changes."""
 
         # RHELBrandsInstaller will use latest ent_dir contents
         brands_installer = rhelentbranding.RHELBrandsInstaller()
         brands_installer.install()
 
     def repo_hook(self):
-        """Update yum repos
-
-        Args:
-            lock: an ActionLock, in this case certlib.UpdateAction lock, since repo_kook
-                  is called when UpdateAction has already acquired a lock.
-        """
+        """Update yum repos."""
         try:
             # repolib/RepoLib imports certlib, so import late until
             #  we factor out our circular deps
