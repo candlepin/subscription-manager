@@ -133,10 +133,6 @@ class HealingCertManager(BaseCertManager):
         self.installedprodlib = InstalledProductsLib(uep=self.uep)
         self.healinglib = HealingLib(self.uep)
 
-        # FIXME: note this runs entcertlib twice, once to make sure we are
-        # setup, then again after heal to get any additional certs. We may be
-        # able to avoid that by conditionally calling entcertlib from within
-        # healinglib (as we did before)
         lib_set = [self.installedprodlib, self.healinglib, self.entcertlib]
 
         return lib_set
