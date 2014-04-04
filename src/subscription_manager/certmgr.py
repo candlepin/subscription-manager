@@ -137,7 +137,7 @@ class HealingCertManager(BaseCertManager):
         # setup, then again after heal to get any additional certs. We may be
         # able to avoid that by conditionally calling entcertlib from within
         # healinglib (as we did before)
-        lib_set = [self.entcertlib, self.installedprodlib, self.healinglib, self.entcertlib]
+        lib_set = [self.installedprodlib, self.healinglib, self.entcertlib]
 
         return lib_set
 
