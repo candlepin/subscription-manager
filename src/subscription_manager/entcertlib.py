@@ -29,6 +29,8 @@ from subscription_manager.injection import IDENTITY, require
 from subscription_manager import rhelentbranding
 import subscription_manager.injection as inj
 
+from subscription_manager.repolib import RepoLib
+
 log = logging.getLogger('rhsm-app.' + __name__)
 
 _ = gettext.gettext
@@ -135,11 +137,7 @@ class EntCertUpdateAction(object):
     def repo_hook(self):
         """Update yum repos."""
         try:
-            # repolib/RepoLib imports certlib, so import late until
-            #  we factor out our circular deps
-            from subscription_manager.repolib import RepoLib
-            #rl = RepoLib(lock=lock, uep=self.uep)
-            # Let's try this without passing a lock...
+            # NOTE: this may need a lock
             rl = RepoLib(uep=self.uep)
             rl.update()
         except Exception, e:
