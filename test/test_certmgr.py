@@ -75,10 +75,6 @@ class CertManagerTestBase(SubManFixture):
         self.patcher6 = mock.patch('subscription_manager.managerlib.persist_consumer_cert')
         self.managerlib_persist_consumer_cert = self.patcher6.start()
 
-        # FIXME: inject Facts as well as FactsLib?
-        self.patcher8 = mock.patch.object(facts.Facts, 'get_last_update')
-        self.facts_getlastupdate = self.patcher8.start()
-
         # mock out all hardware fetching... we may need to fake socket counts
         self.hwprobe_getall_patcher = mock.patch.object(hwprobe.Hardware, 'get_all')
         self.hwprobe_getall_mock = self.hwprobe_getall_patcher.start()
@@ -123,7 +119,6 @@ class CertManagerTestBase(SubManFixture):
         self._inject_mock_valid_consumer(uuid="234234")
 
         self.repolib_updateaction_perform.return_value = 0
-        self.facts_getlastupdate.return_value = None
 
         # Setup a mock cert sorter to initiate the behaviour we want to test.
         # Must use a non-callable mock for our features dep injection
@@ -137,7 +132,7 @@ class CertManagerTestBase(SubManFixture):
     def tearDown(self):
         self.patcher3.stop()
         self.patcher6.stop()
-        self.patcher8.stop()
+        #self.patcher8.stop()
 
         self.patcher_entcertlib_writer.stop()
 
