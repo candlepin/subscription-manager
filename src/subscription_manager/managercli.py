@@ -1809,7 +1809,7 @@ class ReposCommand(CliCommand):
 
         self.use_overrides = self.cp.supports_resource('content_overrides')
 
-        rl = RepoLib(uep=self.cp)
+        rl = RepoLib()
         repos = rl.get_repos()
 
         if self.options.enable:
