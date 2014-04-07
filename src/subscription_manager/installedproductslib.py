@@ -21,14 +21,15 @@ class InstalledProductsLib(certlib.DataLib):
     products on this system periodically.
     """
     def _do_update(self):
-        action = InstalledProductsAction(uep=self.uep)
+        action = InstalledProductsAction()
         return action.perform()
 
 
 class InstalledProductsAction(object):
-    def __init__(self, uep=None):
+    def __init__(self):
         self.report = InstalledProductsActionReport()
-        self.uep = uep
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = self.cp_provider.get_consumer_auth_cp()
 
     def perform(self):
         mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
