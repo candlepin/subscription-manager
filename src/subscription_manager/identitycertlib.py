@@ -31,7 +31,19 @@ class IdentityCertLib(certlib.DataLib):
     """
 
     def _do_update(self):
-        report = certlib.ActionReport()
+        action = IdentityUpdateAction()
+        return action.perform()
+
+
+class IdentityUpdateAction(object):
+    def __init__(self):
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = self.cp_provider.get_consumer_auth_cp()
+
+        # Use the default report
+        self.report = certlib.ActionReport()
+
+    def perform(self):
         identity = inj.require(inj.IDENTITY)
 
         if not identity.is_valid():
@@ -39,16 +51,36 @@ class IdentityCertLib(certlib.DataLib):
             # case of it being bogus/corrupted, ala #844069,
             # but that seems unneeded
             # FIXME: more details
-            report._status = 0
-            return report
+            self.report._status = 0
+            return self.report
 
+        return self._update_cert(identity)
+
+    def _update_cert(self, identity):
+
+        # to avoid circular imports
+        # FIXME: move persist stuff here
         from subscription_manager import managerlib
 
         idcert = identity.getConsumerCert()
-        consumer = self.uep.getConsumer(identity.uuid)
+
+        consumer = self._get_consumer(identity)
+
         # only write the cert if the serial has changed
+        # FIXME: this would be a good place to have a Consumer/ConsumerCert
+        # model.
+        # FIXME: and this would be a ConsumerCert model '!='
         if idcert.getSerialNumber() != consumer['idCert']['serial']['serial']:
             log.debug('identity certificate changed, writing new one')
+
+            # FIXME: should be in this module? managerlib is an odd place
             managerlib.persist_consumer_cert(consumer)
-        report._status = 1
-        return report
+
+        # updated the cert, or at least checked
+        self.report._status = 1
+        return self.report
+
+    def _get_consumer(self, identity):
+        # FIXME: not much for error handling here
+        consumer = self.uep.getConsumer(identity.uuid)
+        return consumer

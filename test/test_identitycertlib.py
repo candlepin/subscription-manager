@@ -17,7 +17,6 @@ import fixture
 
 from subscription_manager import identity
 from subscription_manager import identitycertlib
-from subscription_manager import managerlib
 from subscription_manager import injection as inj
 
 CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},
@@ -58,8 +57,43 @@ class DifferentValidConsumerIdentity(StubIdentity):
     _consumer = different_mock_consumer_identity
 
 
-class TestIdentityCertLib(fixture.SubManFixture):
+class TestIdentityUpdateAction(fixture.SubManFixture):
 
+    def setUp(self):
+        super(TestIdentityUpdateAction, self).setUp()
+
+        mock_uep = mock.Mock()
+        mock_uep.getConsumer.return_value = CONSUMER_DATA
+
+        self.set_consumer_auth_cp(mock_uep)
+
+    @mock.patch("subscription_manager.managerlib.persist_consumer_cert")
+    def test_idcertlib_persists_cert(self, mock_persist):
+        id_update_action = identitycertlib.IdentityUpdateAction()
+
+        inj.provide(inj.IDENTITY, DifferentValidConsumerIdentity())
+        id_update_action.perform()
+        mock_persist.assert_called_once_with(CONSUMER_DATA)
+
+    @mock.patch("subscription_manager.managerlib.persist_consumer_cert")
+    def test_idcertlib_noops_when_serialnum_is_same(self, mock_persist):
+        id_update_action = identitycertlib.IdentityUpdateAction()
+        #certlib.ConsumerIdentity = stubs.StubConsumerIdentity
+        #certlib.ConsumerIdentity.getSerialNumber = getSerialNumber
+
+        inj.provide(inj.IDENTITY, InvalidIdentity())
+
+        id_update_action.perform()
+        self.assertFalse(mock_persist.called)
+
+    def test_idcertlib_no_id_cert(self):
+        inj.provide(inj.IDENTITY, InvalidIdentity())
+        id_update_action = identitycertlib.IdentityUpdateAction()
+        report = id_update_action.perform()
+        self.assertEquals(report._status, 0)
+
+
+class TestIdentityCertLib(fixture.SubManFixture):
     def setUp(self):
         super(TestIdentityCertLib, self).setUp()
 
@@ -68,34 +102,9 @@ class TestIdentityCertLib(fixture.SubManFixture):
 
         self.set_consumer_auth_cp(mock_uep)
 
-    def _get_idcertlib(self):
-
-        return identitycertlib.IdentityCertLib()
-
-    def test_idcertlib_persists_cert(self):
-        idcertlib = self._get_idcertlib()
-        managerlib.persist_consumer_cert = mock.Mock()
-
-        inj.provide(inj.IDENTITY, DifferentValidConsumerIdentity())
-        idcertlib.update()
-        managerlib.persist_consumer_cert.assert_called_once_with(CONSUMER_DATA)
-
-    def test_idcertlib_noops_when_serialnum_is_same(self):
-        idcertlib = self._get_idcertlib()
-        #certlib.ConsumerIdentity = stubs.StubConsumerIdentity
-        #certlib.ConsumerIdentity.getSerialNumber = getSerialNumber
-        managerlib.persist_consumer_cert = mock.Mock()
-
-        inj.provide(inj.IDENTITY, InvalidIdentity())
-
-        idcertlib.update()
-        self.assertFalse(managerlib.persist_consumer_cert.called)
-
-    def test_idcertlib_no_id_cert(self):
-        inj.provide(inj.IDENTITY, InvalidIdentity())
-        idcertlib = self._get_idcertlib()
-        report = idcertlib.update()
-        self.assertEquals(report._status, 0)
-
-    def tearDown(self):
-        super(TestIdentityCertLib, self).tearDown()
+    @mock.patch("subscription_manager.managerlib.persist_consumer_cert")
+    def test(self, mock_persist):
+        id_cert_lib = identitycertlib.IdentityCertLib()
+        report = id_cert_lib.update()
+        self.assertEquals(report._status, 1)
+        self.assertTrue(mock_persist.called)
