@@ -23,7 +23,7 @@ from rhsm.utils import UnsupportedOperationException
 from fixture import SubManFixture
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
-        StubProductDirectory, StubUEP, StubConsumerIdentity
+        StubProductDirectory, StubConsumerIdentity
 from subscription_manager.repolib import Repo, RepoUpdateAction, TidyWriter
 from subscription_manager import injection as inj
 
@@ -81,8 +81,7 @@ class RepoUpdateActionTests(SubManFixture):
         stub_ent_dir = StubCertificateDirectory([self.stub_ent_cert])
 
         repolib.ConsumerIdentity = StubConsumerIdentity
-        stub_uep = StubUEP()
-        self.update_action = RepoUpdateAction(uep=stub_uep, prod_dir=stub_prod_dir,
+        self.update_action = RepoUpdateAction(prod_dir=stub_prod_dir,
                 ent_dir=stub_ent_dir)
 
     def _find_content(self, content_list, name):
@@ -104,8 +103,9 @@ class RepoUpdateActionTests(SubManFixture):
         mock_uep.getCertificateSerials = Mock(return_value=[])
         mock_uep.getRelease = Mock(return_value={'releaseVer': "dummyrelease"})
 
-        RepoUpdateAction(mock_uep, prod_dir=StubProductDirectory(),
-                     ent_dir=StubCertificateDirectory())
+        self.set_consumer_auth_cp(mock_uep)
+        RepoUpdateAction(prod_dir=StubProductDirectory(),
+                         ent_dir=StubCertificateDirectory())
 
         # No cache calls should be made if overrides are not supported
         self.assertFalse(override_cache_mock.read_cache.called)

@@ -52,16 +52,15 @@ class RepoLib(DataLib):
         self.identity = inj.require(inj.IDENTITY)
 
     def _do_update(self):
-        action = RepoUpdateAction(uep=self.uep, cache_only=self.cache_only)
+        action = RepoUpdateAction(cache_only=self.cache_only)
         return action.perform()
 
     def is_managed(self, repo):
-        action = RepoUpdateAction(uep=self.uep, cache_only=self.cache_only)
+        action = RepoUpdateAction(cache_only=self.cache_only)
         return repo in [c.label for c in action.matching_content()]
 
     def get_repos(self, apply_overrides=True):
-        action = RepoUpdateAction(uep=self.uep,
-                                  cache_only=self.cache_only,
+        action = RepoUpdateAction(cache_only=self.cache_only,
                                   apply_overrides=apply_overrides)
         repos = action.get_unique_content()
         if self.identity.is_valid() and action.override_supported:
@@ -99,7 +98,7 @@ class RepoLib(DataLib):
 # Datalib.update() method anyhow. Pretty sure these can go away.
 class RepoUpdateAction:
 
-    def __init__(self, uep, ent_dir=None, prod_dir=None, cache_only=False, apply_overrides=True):
+    def __init__(self, ent_dir=None, prod_dir=None, cache_only=False, apply_overrides=True):
         self.identity = inj.require(inj.IDENTITY)
         if ent_dir:
             self.ent_dir = ent_dir
@@ -111,7 +110,9 @@ class RepoUpdateAction:
         else:
             self.prod_dir = ProductDirectory()
 
-        self.uep = uep
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = self.cp_provider.get_consumer_auth_cp()
+
         self.manage_repos = 1
         self.apply_overrides = apply_overrides
         if CFG.has_option('rhsm', 'manage_repos'):
