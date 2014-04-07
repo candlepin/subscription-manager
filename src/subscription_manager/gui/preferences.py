@@ -50,8 +50,7 @@ class PreferencesDialog(widgets.GladeWidget):
         self.async_updater = utils.AsyncWidgetUpdater(self.dialog)
         self.release_backend = release.ReleaseBackend(ent_dir=self.backend.entitlement_dir,
                                                       prod_dir=self.backend.product_dir,
-                                                      content_connection=self.backend.content_connection,
-                                                      uep=self.backend.cp_provider.get_consumer_auth_cp())
+                                                      content_connection=self.backend.content_connection)
 
         self.inputs = [self.sla_combobox, self.release_combobox,
                 self.autoheal_checkbox, self.autoheal_event]

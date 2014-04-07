@@ -1295,8 +1295,7 @@ class ReleaseCommand(CliCommand):
 
         self.release_backend = ReleaseBackend(ent_dir=self.entitlement_dir,
                                               prod_dir=self.product_dir,
-                                              content_connection=self.cc,
-                                              uep=self.cp)
+                                              content_connection=self.cc)
 
         self.assert_should_be_registered()
 

@@ -39,13 +39,13 @@ cfg = rhsm.config.initConfig()
 class ReleaseBackend(object):
 
     # all the proxy info too?
+    # FIXME: this stuff can be injected
     def __init__(self, ent_dir=None, prod_dir=None,
-                 content_connection=None, facts=None, uep=None):
+                 content_connection=None, facts=None):
         self.entitlement_dir = ent_dir
         self.product_dir = prod_dir
         self.content_connection = content_connection
         self.facts = facts
-        self.uep = uep
 
     def get_releases(self):
         # cdn base url
