@@ -40,7 +40,7 @@ cfg = initConfig()
 
 class EntCertLib(certlib.DataLib):
     def _do_update(self):
-        action = EntCertUpdateAction(uep=self.uep)
+        action = EntCertUpdateAction()
         return action.perform()
 
 
@@ -77,7 +77,7 @@ class EntCertDeleteAction(object):
 # TODO: rename to EntitlementCertUpdateAction
 class EntCertUpdateAction(object):
 
-    def __init__(self, uep=None, report=None):
+    def __init__(self, report=None):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
         self.entdir = inj.require(inj.ENT_DIR)

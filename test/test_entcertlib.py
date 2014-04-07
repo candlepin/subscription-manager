@@ -27,8 +27,8 @@ from subscription_manager import injection as inj
 
 class TestingUpdateAction(entcertlib.EntCertUpdateAction):
 
-    def __init__(self, mock_uep):
-        entcertlib.EntCertUpdateAction.__init__(self, uep=mock_uep)
+    def __init__(self):
+        entcertlib.EntCertUpdateAction.__init__(self)
 
 
 class UpdateActionTests(SubManFixture):
@@ -58,7 +58,7 @@ class UpdateActionTests(SubManFixture):
 
         stub_ent_dir = StubEntitlementDirectory([])
         inj.provide(inj.ENT_DIR, stub_ent_dir)
-        update_action = TestingUpdateAction(mock_uep)
+        update_action = TestingUpdateAction()
         # we skip getting the expected serials, where this is normally
         # populated
         update_action.report.expected.append(valid_ent.serial)
@@ -82,7 +82,9 @@ class UpdateActionTests(SubManFixture):
         self.set_consumer_auth_cp(mock_uep)
         stub_ent_dir = StubEntitlementDirectory([ent])
         inj.provide(inj.ENT_DIR, stub_ent_dir)
-        update_action = TestingUpdateAction(mock_uep)
+
+        # use the injected mock uep
+        update_action = TestingUpdateAction()
 
         try:
             update_report = update_action.perform()

@@ -109,7 +109,7 @@ class CertManager(BaseCertManager):
 
     def _get_libset(self):
 
-        self.entcertlib = EntCertLib(uep=self.uep)
+        self.entcertlib = EntCertLib()
         self.repolib = RepoLib(uep=self.uep)
         self.factlib = FactLib(uep=self.uep)
         self.profilelib = PackageProfileLib(uep=self.uep)
@@ -129,7 +129,7 @@ class CertManager(BaseCertManager):
 class HealingCertManager(BaseCertManager):
     def _get_libset(self):
 
-        self.entcertlib = EntCertLib(uep=self.uep)
+        self.entcertlib = EntCertLib()
         self.installedprodlib = InstalledProductsLib(uep=self.uep)
         self.healinglib = HealingLib(self.uep)
 
@@ -150,7 +150,7 @@ class UnregisterCertManager(BaseCertManager):
     """
     def _get_libset(self):
 
-        self.entcertlib = EntCertLib(uep=self.uep)
+        self.entcertlib = EntCertLib()
         self.repolib = RepoLib(uep=self.uep)
 
         lib_set = [self.entcertlib, self.repolib]
