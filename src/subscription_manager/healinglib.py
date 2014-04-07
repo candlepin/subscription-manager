@@ -37,15 +37,16 @@ class HealingLib(certlib.DataLib):
     """
 
     def _do_update(self):
-        action = HealingUpdateAction(uep=self.uep)
+        action = HealingUpdateAction()
         return action.perform()
 
 
 class HealingUpdateAction(object):
     # no real point to passing in entdir and product_dir, we
     # can inject?
-    def __init__(self, uep=None):
-        self.uep = uep
+    def __init__(self):
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = self.cp_provider.get_consumer_auth_cp()
         self.report = entcertlib.EntCertUpdateReport()
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
 

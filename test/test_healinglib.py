@@ -33,7 +33,9 @@ class TestHealingLib(fixture.SubManFixture):
         mock_uep = mock.Mock()
         consumer = {'autoheal': True}
         mock_uep.getConsumer = mock.Mock(return_value=consumer)
-        hl = healinglib.HealingLib(uep=mock_uep)
+        self.set_consumer_auth_cp(mock_uep)
+
+        hl = healinglib.HealingLib()
         report = hl.update()
         report.print_exceptions()
 
@@ -54,12 +56,16 @@ class TestHealingUpdateAction(fixture.SubManFixture):
         # nothing set on consumer
         consumer = {}
         mock_uep.getConsumer = mock.Mock(return_value=consumer)
-        hl = healinglib.HealingUpdateAction(uep=mock_uep)
+        self.set_consumer_auth_cp(mock_uep)
+
+        hl = healinglib.HealingUpdateAction()
         hl.perform()
 
     def test_autoheal_on(self):
         mock_uep = mock.Mock()
         consumer = {'autoheal': True}
         mock_uep.getConsumer = mock.Mock(return_value=consumer)
-        hl = healinglib.HealingUpdateAction(uep=mock_uep)
+        self.set_consumer_auth_cp(mock_uep)
+
+        hl = healinglib.HealingUpdateAction()
         hl.perform()
