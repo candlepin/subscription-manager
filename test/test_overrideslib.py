@@ -8,8 +8,7 @@ class OverrideTests(SubManFixture):
 
     def setUp(self):
         SubManFixture.setUp(self)
-        self.cp = require(CP_PROVIDER).consumer_auth_cp
-        self.overrides = Overrides(self.cp)
+        self.overrides = Overrides()
 
     def test_add_function(self):
         repos = ['x', 'y']

@@ -46,7 +46,7 @@ _ = gettext.gettext
 
 class RepoLib(DataLib):
 
-    def __init__(self, uep=None, cache_only=False):
+    def __init__(self, cache_only=False):
         self.cache_only = cache_only
         DataLib.__init__(self)
         self.identity = inj.require(inj.IDENTITY)

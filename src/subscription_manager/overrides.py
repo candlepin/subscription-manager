@@ -13,23 +13,25 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from subscription_manager import injection
+from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoLib
 
 
 # Module for manipulating content overrides
 
 class Overrides(object):
-    def __init__(self, cp):
-        self.cp = cp
-        self.cache = injection.require(injection.OVERRIDE_STATUS_CACHE)
-        self.repo_lib = RepoLib(uep=self.cp, cache_only=True)
+    def __init__(self):
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = self.cp_provider.get_consumer_auth_cp()
+
+        self.cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+        self.repo_lib = RepoLib(cache_only=True)
 
     def get_overrides(self, consumer_uuid):
         return self._build_from_json(self.cache.load_status(self.cp, consumer_uuid))
 
     def add_overrides(self, consumer_uuid, overrides):
-        return self._build_from_json(self.cp.setContentOverrides(consumer_uuid,
+        return self._build_from_json(self.uep.setContentOverrides(consumer_uuid,
                                                                  self._add(overrides)))
 
     def remove_overrides(self, consumer_uuid, overrides):
@@ -44,7 +46,7 @@ class Overrides(object):
         self.repo_lib.update()
 
     def _delete_overrides(self, consumer_uuid, override_data):
-        return self._build_from_json(self.cp.deleteContentOverrides(consumer_uuid, override_data))
+        return self._build_from_json(self.uep.deleteContentOverrides(consumer_uuid, override_data))
 
     def _add(self, overrides):
         return [override.to_json() for override in overrides]

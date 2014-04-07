@@ -2269,7 +2269,7 @@ class OverrideCommand(CliCommand):
         # make sure the EntitlementDirectory singleton is refreshed
         self._request_validity_check()
 
-        overrides = Overrides(self.cp)
+        overrides = Overrides()
 
         if self.options.list:
             results = overrides.get_overrides(self.identity.uuid)

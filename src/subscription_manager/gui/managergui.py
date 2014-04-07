@@ -92,8 +92,8 @@ class Backend(object):
 
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
-        self.certlib = EntCertLib(uep=self.cp_provider.get_consumer_auth_cp())
-        self.overrides = Overrides(self.cp_provider.get_consumer_auth_cp())
+        self.certlib = EntCertLib()
+        self.overrides = Overrides()
 
         self.cs = require(CERT_SORTER)
 
@@ -111,8 +111,8 @@ class Backend(object):
         # FIXME: We should find a way to update the connection so that the
         #        conncection objects are refreshed rather than recreated.
 
-        self.certlib = EntCertLib(uep=self.cp_provider.get_consumer_auth_cp())
-        self.overrides = Overrides(self.cp_provider.get_consumer_auth_cp())
+        self.certlib = EntCertLib()
+        self.overrides = Overrides()
 
     def create_content_connection(self):
         self.content_connection = self._create_content_connection()
