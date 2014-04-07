@@ -41,10 +41,8 @@ class BaseCertManager:
     """
 
     # can we inject both of these?
-    def __init__(self, uep=None, facts=None):
+    def __init__(self, facts=None):
 
-        # inject?
-        self.uep = uep
         self.facts = facts
 
         self._libset = self._get_libset()

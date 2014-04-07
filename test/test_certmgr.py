@@ -23,7 +23,6 @@ from subscription_manager import certmgr
 from subscription_manager import entcertlib
 from subscription_manager import identitycertlib
 from subscription_manager import repolib
-from subscription_manager import facts
 from subscription_manager import hwprobe
 from subscription_manager import injection
 import subscription_manager.injection as inj
@@ -157,7 +156,7 @@ class TestCertManager(CertManagerTestBase):
     @mock.patch.object(identitycertlib.IdentityCertLib, 'update')
     def test_idcertlib_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
-        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr = certmgr.CertManager()
         self.assertRaises(GoneException, mgr.update)
 
         # just verify the certlib update worked
@@ -168,7 +167,7 @@ class TestCertManager(CertManagerTestBase):
     @mock.patch('subscription_manager.certmgr.log')
     def test_entcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
-        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr = certmgr.CertManager()
         mgr.update()
 
         for call in mock_log.method_calls:
@@ -180,7 +179,7 @@ class TestCertManager(CertManagerTestBase):
     @mock.patch('subscription_manager.certmgr.log')
     def test_idcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
-        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr = certmgr.CertManager()
         mgr.update()
 
         for call in mock_log.method_calls:
@@ -211,7 +210,7 @@ class TestCertManager(CertManagerTestBase):
         self._stub_certificate_calls()
 
         cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
-        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr = certmgr.CertManager()
         mgr.update()
 
         report = mgr.entcertlib.report
@@ -221,7 +220,8 @@ class TestCertManager(CertManagerTestBase):
         # to mock "rogue" certs we need some local, that are not known to the
         # server so getCertificateSerials to return nothing
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
-        mgr = certmgr.CertManager(uep=self.mock_uep)
+        self.set_consumer_auth_cp(self.mock_uep)
+        mgr = certmgr.CertManager()
         mgr.update()
 
         report = mgr.entcertlib.report
@@ -240,7 +240,9 @@ class TestCertManager(CertManagerTestBase):
 
         # we don't want to find replacements, so this forces a delete
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
-        mgr = certmgr.CertManager(uep=self.mock_uep)
+        self.set_consumer_auth_cp(self.mock_uep)
+
+        mgr = certmgr.CertManager()
         mgr.update()
 
         report = mgr.entcertlib.report
@@ -256,7 +258,7 @@ class TestCertManager(CertManagerTestBase):
         self._stub_certificate_calls()
 
         mock_cert_build.side_effect = ExceptionalException()
-        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr = certmgr.CertManager()
         # we should fail on the certlib.update, but keep going...
         # and handle it well.
         mgr.update()
@@ -272,7 +274,7 @@ class TestHealingCertManager(TestCertManager):
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
         self.mock_cert_sorter.compliant_until = datetime.now() + \
                 timedelta(days=15)
-        mgr = certmgr.HealingCertManager(uep=self.mock_uep)
+        mgr = certmgr.HealingCertManager()
         mgr.update(autoheal=True)
         self.assertFalse(self.mock_uep.bind.called)
 

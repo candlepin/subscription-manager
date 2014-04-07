@@ -1135,7 +1135,7 @@ class AsyncBackend(object):
         suitable_slas = {}
 
         # eek, in a thread
-        certmgr = CertManager(uep=self.backend.cp_provider.get_consumer_auth_cp(), facts=facts)
+        certmgr = CertManager(facts=facts)
         certmgr.update()
 
         for sla in available_slas:

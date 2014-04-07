@@ -1176,13 +1176,16 @@ class UnRegisterCommand(CliCommand):
         except Exception, e:
             handle_exception("Unregister failed", e)
 
+        # managerlib.unregister reloads the now None provided identity
+        # so cp_provider provided auth_cp's should fail, like the below
+
         #this block is simply to ensure that the yum repos got updated. If it fails,
         #there is no issue since it will most likely be cleaned up elsewhere (most
         #likely by the yum plugin)
         try:
             # there is no consumer cert at this point, a uep object
             # is not useful
-            cleanup_certmgr = UnregisterCertManager(uep=None)
+            cleanup_certmgr = UnregisterCertManager()
             cleanup_certmgr.update()
         except Exception, e:
             pass
@@ -1388,7 +1391,7 @@ class AttachCommand(CliCommand):
         self.assert_should_be_registered()
         self._validate_options()
         try:
-            certmgr = CertManager(uep=self.cp)
+            certmgr = CertManager()
             certmgr.update()
             return_code = 0
             cert_update = True
@@ -1803,7 +1806,7 @@ class ReposCommand(CliCommand):
             return rc
 
         # Pull down any new entitlements and refresh the entitlements directory
-        certmgr = CertManager(uep=self.cp)
+        certmgr = CertManager()
         certmgr.update()
         self._request_validity_check()
 

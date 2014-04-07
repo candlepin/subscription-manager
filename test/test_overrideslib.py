@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from fixture import SubManFixture
 from subscription_manager.overrides import Overrides, Override
-from subscription_manager.injection import require, CP_PROVIDER
 
 
 class OverrideTests(SubManFixture):

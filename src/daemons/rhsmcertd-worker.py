@@ -45,12 +45,10 @@ def main(options, log):
     print _('Updating entitlement certificates & repositories')
 
     try:
-        uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
-                                       key_file=ConsumerIdentity.keypath())
         if options.autoheal:
-            mgr = certmgr.HealingCertManager(uep=uep)
+            mgr = certmgr.HealingCertManager()
         else:
-            mgr = certmgr.CertManager(uep=uep)
+            mgr = certmgr.CertManager()
 
         update_reports = mgr.update(options.autoheal)
 
