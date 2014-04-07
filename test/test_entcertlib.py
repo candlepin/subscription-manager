@@ -54,6 +54,7 @@ class UpdateActionTests(SubManFixture):
         mock_uep = Mock()
         mock_uep.getCertificateSerials.return_value = [x.serial for x in cp_certificates]
         mock_uep.getCertificates.return_value = cp_bundles  # Passed into build_cert(bundle)
+        self.set_consumer_auth_cp(mock_uep)
 
         stub_ent_dir = StubEntitlementDirectory([])
         inj.provide(inj.ENT_DIR, stub_ent_dir)
@@ -78,6 +79,7 @@ class UpdateActionTests(SubManFixture):
         mock_uep.getCertificates = Mock(return_value=[])
         mock_uep.getCertificateSerials = Mock(return_value=[])
 
+        self.set_consumer_auth_cp(mock_uep)
         stub_ent_dir = StubEntitlementDirectory([ent])
         inj.provide(inj.ENT_DIR, stub_ent_dir)
         update_action = TestingUpdateAction(mock_uep)

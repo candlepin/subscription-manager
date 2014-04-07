@@ -112,6 +112,7 @@ class CertManagerTestBase(SubManFixture):
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[{'serial': self.stub_ent1.serial},
                                                                         {'serial': self.stub_ent2.serial}])
         self.mock_uep.getConsumer = mock.Mock(return_value=CONSUMER_DATA)
+        self.set_consumer_auth_cp(self.mock_uep)
 
         stub_release = {'releaseVer': '6.4'}
         self.mock_uep.getRelease = mock.Mock(return_value=stub_release)

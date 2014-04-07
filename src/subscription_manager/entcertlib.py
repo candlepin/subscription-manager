@@ -20,10 +20,10 @@ import logging
 import socket
 
 from rhsm.config import initConfig
-from rhsm.certificate import Key,create_from_pem
+from rhsm.certificate import Key, create_from_pem
 
-from subscription_manager import certlib
 from subscription_manager.certdirectory import Writer
+from subscription_manager import certlib
 from subscription_manager import utils
 from subscription_manager.injection import IDENTITY, require
 from subscription_manager import rhelentbranding
@@ -78,7 +78,8 @@ class EntCertDeleteAction(object):
 class EntCertUpdateAction(object):
 
     def __init__(self, uep=None, report=None):
-        self.uep = uep
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = self.cp_provider.get_consumer_auth_cp()
         self.entdir = inj.require(inj.ENT_DIR)
         self.identity = require(IDENTITY)
         self.report = EntCertUpdateReport()
