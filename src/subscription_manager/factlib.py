@@ -37,15 +37,14 @@ class FactLib(object):
 
     Makes use of the facts module as well.
     """
-    def __init__(self, uep=None):
+    def __init__(self):
         self.locker = Locker()
-        self.uep = uep
 
     def update(self):
         return self.locker.run(self._do_update)
 
     def _do_update(self):
-        action = FactAction(uep=self.uep)
+        action = FactAction()
         return action.perform()
 
 
@@ -65,7 +64,7 @@ class FactActionReport(ActionReport):
 
 class FactAction(object):
     # FIXME: pretty sure Action doesn't need any of this
-    def __init__(self, uep=None):
+    def __init__(self):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
         self.report = FactActionReport()

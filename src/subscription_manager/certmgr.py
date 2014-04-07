@@ -111,7 +111,7 @@ class CertManager(BaseCertManager):
 
         self.entcertlib = EntCertLib()
         self.repolib = RepoLib(uep=self.uep)
-        self.factlib = FactLib(uep=self.uep)
+        self.factlib = FactLib()
         self.profilelib = PackageProfileLib(uep=self.uep)
         self.installedprodlib = InstalledProductsLib(uep=self.uep)
         self.idcertlib = IdentityCertLib(uep=self.uep)

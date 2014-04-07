@@ -75,6 +75,7 @@ class CertManagerTestBase(SubManFixture):
         self.patcher6 = mock.patch('subscription_manager.managerlib.persist_consumer_cert')
         self.managerlib_persist_consumer_cert = self.patcher6.start()
 
+        # FIXME: inject Facts as well as FactsLib?
         self.patcher8 = mock.patch.object(facts.Facts, 'get_last_update')
         self.facts_getlastupdate = self.patcher8.start()
 
