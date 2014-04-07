@@ -21,14 +21,15 @@ class PackageProfileLib(certlib.DataLib):
     periodically.
     """
     def _do_update(self):
-        action = PackageProfileAction(uep=self.uep)
+        action = PackageProfileAction()
         return action.perform()
 
 
 class PackageProfileAction(object):
-    def __init__(self, uep=None):
+    def __init__(self):
         self.report = PackageProfileActionReport()
-        self.uep = uep
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = self.cp_provider.get_consumer_auth_cp()
 
     def perform(self):
         profile_mgr = inj.require(inj.PROFILE_MANAGER)
