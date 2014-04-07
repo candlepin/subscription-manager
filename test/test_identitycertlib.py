@@ -18,7 +18,6 @@ import fixture
 from subscription_manager import identity
 from subscription_manager import identitycertlib
 from subscription_manager import managerlib
-from subscription_manager import cp_provider
 from subscription_manager import injection as inj
 
 CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},
@@ -58,22 +57,19 @@ different_mock_consumer_identity.getConsumerId.return_value = "AAAAAA-BBBBB-CCCC
 class DifferentValidConsumerIdentity(StubIdentity):
     _consumer = different_mock_consumer_identity
 
-mock_cp_provider = mock.Mock(spec=cp_provider.CPProvider)
-
 
 class TestIdentityCertLib(fixture.SubManFixture):
 
     def setUp(self):
         super(TestIdentityCertLib, self).setUp()
 
-    def _get_idcertlib(self):
-        inj.provide(inj.CP_PROVIDER, mock_cp_provider)
-
         mock_uep = mock.Mock()
         mock_uep.getConsumer.return_value = CONSUMER_DATA
-        #mock_cp_provider.get_consumer_auth_cp.getConsumer.return_value = CONSUMER_DATA
 
         self.set_consumer_auth_cp(mock_uep)
+
+    def _get_idcertlib(self):
+
         return identitycertlib.IdentityCertLib()
 
     def test_idcertlib_persists_cert(self):
