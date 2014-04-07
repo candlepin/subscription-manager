@@ -66,7 +66,8 @@ class FactActionReport(ActionReport):
 class FactAction(object):
     # FIXME: pretty sure Action doesn't need any of this
     def __init__(self, uep=None):
-        self.uep = uep
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = self.cp_provider.get_consumer_auth_cp()
         self.report = FactActionReport()
         self.facts = inj.require(inj.FACTS)
 

@@ -23,11 +23,11 @@ class TestFactlib(fixture.SubManFixture):
 
     def setUp(self):
         super(TestFactlib, self).setUp()
-        self.stub_uep = stubs.StubUEP()
+        #self.stub_uep = stubs.StubUEP()
         self.expected_facts = {'fact1': 'F1', 'fact2': 'F2'}
 
         inj.provide(inj.FACTS, stubs.StubFacts(self.expected_facts))
-        self.fl = factlib.FactLib(uep=self.stub_uep)
+        self.fl = factlib.FactLib()
 
     def test_factlib_updates_when_identity_does_not_exist(self):
         self._inject_mock_invalid_consumer()
@@ -45,7 +45,9 @@ class TestFactlib(fixture.SubManFixture):
             self.facts_passed_to_server = facts
             self.consumer_uuid_passed_to_server = consumer_uuid
 
-        self.stub_uep.updateConsumerFacts = track_facts_update
+        stub_uep = stubs.StubUEP()
+        stub_uep.updateConsumerFacts = track_facts_update
+        self.set_consumer_auth_cp(stub_uep)
 
         update_report = self.fl.update()
         count = update_report.updates()
