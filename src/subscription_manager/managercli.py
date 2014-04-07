@@ -425,7 +425,7 @@ class CliCommand(AbstractCLICommand):
             self.no_auth_cp = self.cp_provider.get_no_auth_cp()
             self.log_server_version()
 
-            self.entcertlib = EntCertLib(uep=self.cp)
+            self.entcertlib = EntCertLib()
 
         else:
             self.cp = None

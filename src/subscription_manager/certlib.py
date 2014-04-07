@@ -23,9 +23,8 @@ class Locker(object):
 
 
 class DataLib(object):
-    def __init__(self, uep=None):
+    def __init__(self):
         self.locker = Locker()
-        self.uep = uep
         self.report = None
 
     def update(self):

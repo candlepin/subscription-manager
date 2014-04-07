@@ -139,7 +139,7 @@ class EntCertUpdateAction(object):
         """Update yum repos."""
         try:
             # NOTE: this may need a lock
-            rl = RepoLib(uep=self.uep)
+            rl = RepoLib()
             rl.update()
         except Exception, e:
             log.debug(e)

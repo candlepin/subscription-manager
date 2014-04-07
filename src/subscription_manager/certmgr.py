@@ -110,11 +110,11 @@ class CertManager(BaseCertManager):
     def _get_libset(self):
 
         self.entcertlib = EntCertLib()
-        self.repolib = RepoLib(uep=self.uep)
+        self.repolib = RepoLib()
         self.factlib = FactLib()
-        self.profilelib = PackageProfileLib(uep=self.uep)
-        self.installedprodlib = InstalledProductsLib(uep=self.uep)
-        self.idcertlib = IdentityCertLib(uep=self.uep)
+        self.profilelib = PackageProfileLib()
+        self.installedprodlib = InstalledProductsLib()
+        self.idcertlib = IdentityCertLib()
 
         # WARNING: order is important here, we need to update a number
         # of things before attempting to autoheal, and we need to autoheal
@@ -130,8 +130,8 @@ class HealingCertManager(BaseCertManager):
     def _get_libset(self):
 
         self.entcertlib = EntCertLib()
-        self.installedprodlib = InstalledProductsLib(uep=self.uep)
-        self.healinglib = HealingLib(self.uep)
+        self.installedprodlib = InstalledProductsLib()
+        self.healinglib = HealingLib()
 
         lib_set = [self.installedprodlib, self.healinglib, self.entcertlib]
 
@@ -151,7 +151,7 @@ class UnregisterCertManager(BaseCertManager):
     def _get_libset(self):
 
         self.entcertlib = EntCertLib()
-        self.repolib = RepoLib(uep=self.uep)
+        self.repolib = RepoLib()
 
         lib_set = [self.entcertlib, self.repolib]
         return lib_set

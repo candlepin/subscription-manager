@@ -43,7 +43,6 @@ class TestLocker(fixture.SubManFixture):
 class TestDataLib(fixture.SubManFixture):
     def test(self):
         dl = certlib.DataLib()
-        self.assertTrue(dl.uep is None)
         self.assertTrue(dl.report is None)
         # we use the fixture inject RLock as the default lock
         self.assertTrue(isinstance(dl.locker, certlib.Locker))

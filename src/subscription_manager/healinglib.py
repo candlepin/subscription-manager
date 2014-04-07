@@ -72,7 +72,7 @@ class HealingUpdateAction(object):
 
             cs = inj.require(inj.CERT_SORTER)
 
-            cert_updater = entcertlib.EntCertLib(uep=self.uep)
+            cert_updater = entcertlib.EntCertLib()
             if not cs.is_valid():
                 log.warn("Found invalid entitlements for today: %s" %
                         today)

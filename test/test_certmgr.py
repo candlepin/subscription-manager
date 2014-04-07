@@ -143,14 +143,14 @@ class CertManagerTestBase(SubManFixture):
 class TestCertManager(CertManagerTestBase):
 
     def test_init(self):
-        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr = certmgr.CertManager()
         mgr.update()
 
     # see bz #852706
     @mock.patch.object(entcertlib.EntCertLib, 'update')
     def test_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
-        mgr = certmgr.CertManager(uep=self.mock_uep)
+        mgr = certmgr.CertManager()
         self.assertRaises(GoneException, mgr.update)
 
     # see bz #852706, except this time for idcertlib
@@ -280,7 +280,7 @@ class TestHealingCertManager(TestCertManager):
         # need a stub product dir with prods with no entitlements,
         # don't have to mock here since we can actually pass in a product
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=False)
-        mgr = certmgr.HealingCertManager(uep=self.mock_uep)
+        mgr = certmgr.HealingCertManager()
         mgr.update(autoheal=True)
         self.assertTrue(self.mock_uep.bind.called)
 
@@ -294,7 +294,7 @@ class TestHealingCertManager(TestCertManager):
                 self.stub_ent_expires_tomorrow)
 
         self._stub_certificate_calls([self.stub_ent_expires_tomorrow])
-        mgr = certmgr.HealingCertManager(uep=self.mock_uep)
+        mgr = certmgr.HealingCertManager()
         mgr.update(autoheal=True)
         # see if we tried to update certs
         self.assertTrue(self.mock_uep.bind.called)
@@ -306,7 +306,7 @@ class TestHealingCertManager(TestCertManager):
         # cert sorter using the product dir. Just making sure an unexpected
         # exception is logged and not bubbling up.
         self.mock_cert_sorter.is_valid = mock.Mock(side_effect=TypeError())
-        mgr = certmgr.HealingCertManager(uep=self.mock_uep)
+        mgr = certmgr.HealingCertManager()
         mgr.update(autoheal=True)
         for call in mock_log.method_calls:
             if call[0] == 'exception' and isinstance(call[1][0], TypeError):

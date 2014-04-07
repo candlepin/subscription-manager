@@ -11,7 +11,7 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
-from mock import Mock
+import mock
 
 import fixture
 
@@ -27,7 +27,7 @@ CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},
                  'idCert': {'serial': {'serial': 3787455826750723380}}}
 
 
-mock_consumer_identity = Mock(spec=identity.ConsumerIdentity)
+mock_consumer_identity = mock.Mock(spec=identity.ConsumerIdentity)
 mock_consumer_identity.getSerialNumber.return_value = 3787455826750723380
 mock_consumer_identity.getConsumerName.return_value = "Mock Consumer Identity"
 mock_consumer_identity.getConsumerId.return_value = "11111-00000-11111-0000"
@@ -49,7 +49,7 @@ class ValidIdentity(StubIdentity):
     _consumer = mock_consumer_identity
 
 
-different_mock_consumer_identity = Mock(spec=identity.ConsumerIdentity)
+different_mock_consumer_identity = mock.Mock(spec=identity.ConsumerIdentity)
 different_mock_consumer_identity.getSerialNumber.return_value = 123123123123
 different_mock_consumer_identity.getConsumerName.return_value = "A Different Mock Consumer Identity"
 different_mock_consumer_identity.getConsumerId.return_value = "AAAAAA-BBBBB-CCCCCC-DDDDD"
@@ -58,7 +58,7 @@ different_mock_consumer_identity.getConsumerId.return_value = "AAAAAA-BBBBB-CCCC
 class DifferentValidConsumerIdentity(StubIdentity):
     _consumer = different_mock_consumer_identity
 
-mock_cp_provider = Mock(spec=cp_provider.CPProvider)
+mock_cp_provider = mock.Mock(spec=cp_provider.CPProvider)
 
 
 class TestIdentityCertLib(fixture.SubManFixture):
@@ -69,13 +69,16 @@ class TestIdentityCertLib(fixture.SubManFixture):
     def _get_idcertlib(self):
         inj.provide(inj.CP_PROVIDER, mock_cp_provider)
 
-        mock_cp_provider.get_consumer_auth_cp.getConsumer.return_value = CONSUMER_DATA
+        mock_uep = mock.Mock()
+        mock_uep.getConsumer.return_value = CONSUMER_DATA
+        #mock_cp_provider.get_consumer_auth_cp.getConsumer.return_value = CONSUMER_DATA
 
-        return identitycertlib.IdentityCertLib(uep=mock_cp_provider.get_consumer_auth_cp)
+        self.set_consumer_auth_cp(mock_uep)
+        return identitycertlib.IdentityCertLib()
 
     def test_idcertlib_persists_cert(self):
         idcertlib = self._get_idcertlib()
-        managerlib.persist_consumer_cert = Mock()
+        managerlib.persist_consumer_cert = mock.Mock()
 
         inj.provide(inj.IDENTITY, DifferentValidConsumerIdentity())
         idcertlib.update()
@@ -85,7 +88,7 @@ class TestIdentityCertLib(fixture.SubManFixture):
         idcertlib = self._get_idcertlib()
         #certlib.ConsumerIdentity = stubs.StubConsumerIdentity
         #certlib.ConsumerIdentity.getSerialNumber = getSerialNumber
-        managerlib.persist_consumer_cert = Mock()
+        managerlib.persist_consumer_cert = mock.Mock()
 
         inj.provide(inj.IDENTITY, InvalidIdentity())
 
