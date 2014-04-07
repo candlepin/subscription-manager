@@ -26,7 +26,9 @@ class TestHealingLib(fixture.SubManFixture):
     def test_autoheal_off(self):
         mock_uep = mock.Mock()
         mock_uep.getConsumer = mock.Mock(return_value=self._consumer())
-        hl = healinglib.HealingLib(uep=mock_uep)
+        self.set_consumer_auth_cp(mock_uep)
+
+        hl = healinglib.HealingLib()
         hl.update()
 
     def test_autoheal_on(self):
