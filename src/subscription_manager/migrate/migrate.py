@@ -238,6 +238,7 @@ class MigrationEngine(object):
                 self.rhsmcfg.set('server', 'proxy_password', self.proxy_pass or '')
             self.rhsmcfg.save()
 
+    # FIXME: might as well split this into two methods
     def get_candlepin_connection(self, username, password, basic_auth=True):
         try:
             if self.options.serverurl is None:
@@ -250,21 +251,34 @@ class MigrationEngine(object):
             system_exit(-1, _("Error parsing server URL: %s") % e.msg)
 
         args = {'host': hostname, 'ssl_port': int(port), 'handler': prefix}
+        basic_auth_args = {}
 
         if basic_auth:
-            args['username'] = username
-            args['password'] = password
+            # FIXME: unused
+            basic_auth_args['username'] = username
+            basic_auth_args['password'] = password
         else:
             args['cert_file'] = ConsumerIdentity.certpath()
             args['key_file'] = ConsumerIdentity.keypath()
 
         if not self.options.noproxy:
-            args['proxy_hostname'] = self.proxy_host
-            args['proxy_port'] = self.proxy_port and int(self.proxy_port)
-            args['proxy_user'] = self.proxy_user
-            args['proxy_password'] = self.proxy_pass
+            args['proxy_hostname_arg'] = self.proxy_host
+            args['proxy_port_arg'] = self.proxy_port and int(self.proxy_port)
+            args['proxy_user_arg'] = self.proxy_user
+            args['proxy_password_arg'] = self.proxy_pass
 
-        self.cp = UEPConnection(**args)
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        connection_info = args
+        self.cp_provider.set_connection_info(**connection_info)
+
+        # FIXME: would be nice to know where can use basic auth or
+        #        consumer auth explicitily, so we don't reuse self.cp
+        if basic_auth:
+            self.cp_provider.set_user_pass(username, password)
+            self.cp = self.cp_provider.get_basic_auth_cp()
+        else:
+            self.cp = self.cp_provider.get_consumer_auth_cp()
+        #self.cp = UEPConnection(**args)
 
     def check_ok_to_proceed(self, username):
         # check if this machine is already registered to Certicate-based RHN
