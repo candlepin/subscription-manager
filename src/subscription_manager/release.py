@@ -37,15 +37,20 @@ log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
 
 
-class ReleaseBackend(object):
+class ContentConnectionProvider(object):
+    def __init__(self):
+        pass
 
+
+class ReleaseBackend(object):
     # all the proxy info too?
     # FIXME: this stuff can be injected
-    def __init__(self, ent_dir=None, prod_dir=None,
-                 content_connection=None, facts=None):
+    def __init__(self, facts=None):
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.product_dir = inj.require(inj.PROD_DIR)
-        self.content_connection = content_connection
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.content_connection = self.cp_provider.get_content_connection()
+
         self.facts = facts
 
     def get_releases(self):

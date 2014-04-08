@@ -471,9 +471,9 @@ class StubBackend:
         pass
 
 
-class StubContentConnection:
-    def __init__(self):
-        pass
+class StubContentConnection(object):
+    proxy_hostname = None
+    proxy_port = None
 
 
 class StubFacts(Facts):
@@ -546,6 +546,7 @@ class StubCPProvider(object):
     consumer_auth_cp = StubUEP()
     basic_auth_cp = StubUEP()
     no_auth_cp = StubUEP()
+    content_connection = StubContentConnection()
 
     def set_connection_info(self,
                 host=None,
@@ -560,6 +561,11 @@ class StubCPProvider(object):
         self.consumer_auth_cp = StubUEP()
         self.basic_auth_cp = StubUEP()
         self.no_auth_cp = StubUEP()
+
+    def set_content_connection_info(self,
+                                    cdn_hostname=None,
+                                    cdn_port=None):
+        pass
 
     def set_user_pass(self, username=None, password=None):
         pass
@@ -576,6 +582,9 @@ class StubCPProvider(object):
 
     def get_no_auth_cp(self):
         return self.no_auth_cp
+
+    def get_content_connection(self):
+        return self.content_connection
 
 
 class StubEntitlementStatusCache(EntitlementStatusCache):

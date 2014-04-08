@@ -27,11 +27,13 @@ class CPProvider(object):
     consumer_auth_cp: authenticates with consumer cert/key
     basic_auth_cp: also called admin_auth uses a username/password
     no_auth_cp: no authentication
+    content_connection: ent cert based auth connection to cdn
     """
 
     consumer_auth_cp = None
     basic_auth_cp = None
     no_auth_cp = None
+    content_connection = None
 
     # Initialize with default connection info from the config file
     def __init__(self):
@@ -71,6 +73,12 @@ class CPProvider(object):
         self.password = password
         self.basic_auth_cp = None
 
+    # set up info for the connection to the cdn for finding release versions
+    def set_content_connection_info(self, cdn_hostname=None, cdn_port=None):
+        self.cdn_hostname = cdn_hostname
+        self.cdn_port = cdn_port
+        self.content_connection = None
+
     # Force connections to be re-initialized
     def clean(self):
         self.consumer_auth_cp = None
@@ -106,3 +114,13 @@ class CPProvider(object):
                     proxy_user=self.proxy_user,
                     proxy_password=self.proxy_password)
         return self.no_auth_cp
+
+    def get_content_connection(self):
+        if not self.content_connection:
+            self.content_connection = connection.ContentConnection(host=self.cdn_hostname,
+                                                                   ssl_port=self.cdn_port,
+                                                                   proxy_hostname=self.proxy_hostname,
+                                                                   proxy_port=self.proxy_port,
+                                                                   proxy_user=self.proxy_user,
+                                                                   proxy_password=self.proxy_password)
+        return self.content_connection

@@ -87,6 +87,9 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.INSTALLED_PRODUCTS_MANAGER, stubs.StubInstalledProductsManager())
 
         self.stub_cp_provider = stubs.StubCPProvider()
+        self._release_versions = []
+        self.stub_cp_provider.content_connection.get_versions = self._get_release_versions
+
         inj.provide(inj.CP_PROVIDER, self.stub_cp_provider)
         inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
 
@@ -116,6 +119,11 @@ class SubManFixture(unittest.TestCase):
         cp_provider = inj.require(inj.CP_PROVIDER)
         consumer_cp = cp_provider.get_consumer_auth_cp()
         return consumer_cp
+
+    # The ContentConnection used for reading release versions from
+    # the cdn. The injected one uses this.
+    def _get_release_versions(self, listing_path):
+        return self._release_versions
 
     # For changing injection consumer id to one that fails "is_valid"
     def _inject_mock_valid_consumer(self, uuid=None):

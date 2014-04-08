@@ -31,7 +31,6 @@ import gtk
 import gtk.glade
 
 import rhsm.config as config
-import rhsm.connection as connection
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertLib
@@ -101,7 +100,7 @@ class Backend(object):
     # and a update() for a name
     def update(self):
         self.create_uep()
-        self.content_connection = self._create_content_connection()
+        self.create_content_connection()
 
     def create_uep(self):
         # Re-initialize our connection:
@@ -115,13 +114,12 @@ class Backend(object):
         self.overrides = Overrides()
 
     def create_content_connection(self):
-        self.content_connection = self._create_content_connection()
-
-    def _create_content_connection(self):
         (cdn_hostname, cdn_port, cdn_prefix) = parse_baseurl_info(cfg.get('rhsm', 'baseurl'))
 
+        self.cp_provider.set_content_connection_info(cdn_hostname=cdn_hostname,
+                                                     cdn_port=cdn_port)
         # ContentConnection now handles reading the proxy information
-        return connection.ContentConnection(host=cdn_hostname, ssl_port=cdn_port)
+        return self.cp_provider.get_content_connection()
 
 
 class MainWindow(widgets.GladeWidget):

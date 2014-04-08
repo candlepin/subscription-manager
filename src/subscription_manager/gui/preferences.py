@@ -48,7 +48,7 @@ class PreferencesDialog(widgets.GladeWidget):
         self.allow_callbacks = False
         self.identity = inj.require(inj.IDENTITY)
         self.async_updater = utils.AsyncWidgetUpdater(self.dialog)
-        self.release_backend = release.ReleaseBackend(content_connection=self.backend.content_connection)
+        self.release_backend = release.ReleaseBackend()
 
         self.inputs = [self.sla_combobox, self.release_combobox,
                 self.autoheal_checkbox, self.autoheal_event]

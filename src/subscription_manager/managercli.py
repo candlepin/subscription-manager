@@ -1282,19 +1282,15 @@ class ReleaseCommand(CliCommand):
             print _("Release not set")
 
     def _do_command(self):
+
         cdn_url = cfg.get('rhsm', 'baseurl')
         # note: parse_baseurl_info will populate with defaults if not found
         (cdn_hostname, cdn_port, cdn_prefix) = parse_baseurl_info(cdn_url)
 
-        # FIXME: ContentConnection needs to be injected as well
-        self.cc = connection.ContentConnection(host=cdn_hostname,
-                                               ssl_port=cdn_port,
-                                               proxy_hostname=self.proxy_hostname,
-                                               proxy_port=self.proxy_port,
-                                               proxy_user=self.proxy_user,
-                                               proxy_password=self.proxy_password)
-
-        self.release_backend = ReleaseBackend(content_connection=self.cc)
+        # Base CliCommand has already setup proxy info etc
+        self.cp_provider.set_content_connection_info(cdn_hostname=cdn_hostname,
+                                                     cdn_port=cdn_port)
+        self.release_backend = ReleaseBackend()
 
         self.assert_should_be_registered()
 

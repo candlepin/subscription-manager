@@ -67,18 +67,16 @@ class TestReleaseBackend(fixture.SubManFixture):
                     stubs.StubProduct("rhel-6",
                                       provided_tags="rhel-6,rhel-6-stub"),)])
 
+        # FIXME: should just mock this
+        # fixture knows to stub this for contentConnection
+        self._release_versions = versions
+
     def _get_rb(self):
 
         inj.provide(inj.ENT_DIR, self.ent_dir)
         inj.provide(inj.PROD_DIR, self.prod_dir)
 
-        def get_versions(dummy):
-            return versions
-
-        self.stub_content_connection = stubs.StubContentConnection()
-        self.stub_content_connection.get_versions = get_versions
-
-        rb = release.ReleaseBackend(content_connection=self.stub_content_connection)
+        rb = release.ReleaseBackend()
         return rb
 
     def test_get_releases(self):
@@ -158,14 +156,7 @@ class TestReleaseIsCorrectRhel(fixture.SubManFixture):
         inj.provide(inj.ENT_DIR, self.ent_dir)
         inj.provide(inj.PROD_DIR, self.prod_dir)
 
-        # FIXME: inject this guy and add to fixture
-        def get_versions(dummy):
-            return versions
-
-        self.stub_content_connection = stubs.StubContentConnection()
-        self.stub_content_connection.get_versions = get_versions
-
-        self.rb = release.ReleaseBackend(content_connection=self.stub_content_connection)
+        self.rb = release.ReleaseBackend()
 
     def test_is_correct_rhel(self):
         icr = self.rb._is_correct_rhel(["rhel-6-test"], ["rhel-6"])
