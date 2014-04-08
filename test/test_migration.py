@@ -327,7 +327,7 @@ class TestMigration(fixture.SubManFixture):
         self.assertEquals(None, self.engine.proxy_user)
         self.assertEquals(None, self.engine.proxy_pass)
 
-    def test_no_server_url_provided(self):
+    def _setup_rhsmcfg_mocks(self):
         self.engine.options = self.create_options(['serverurl'])
 
         self.engine.rhsmcfg = MagicMock()
@@ -342,14 +342,34 @@ class TestMigration(fixture.SubManFixture):
             ]
 
         get_int_expected = [call("server", "port")]
-        self.engine.get_candlepin_connection("some_username", "some_password")
+
+        return expected, get_int_expected
+
+    def test_no_server_url_provided_basic_auth(self):
+        expected, get_int_expected = self._setup_rhsmcfg_mocks()
+        self.engine.get_candlepin_basic_auth_connection("some_username", "some_password")
         self.assertTrue(self.engine.rhsmcfg.get.call_args_list == expected)
         self.assertTrue(self.engine.rhsmcfg.get_int.call_args_list == get_int_expected)
 
-    def test_bad_server_url(self):
+    def test_no_server_url_provided_consumer_auth(self):
+        expected, get_int_expected = self._setup_rhsmcfg_mocks()
+        self.engine.get_candlepin_consumer_connection()
+        self.assertTrue(self.engine.rhsmcfg.get.call_args_list == expected)
+        self.assertTrue(self.engine.rhsmcfg.get_int.call_args_list == get_int_expected)
+
+    def test_bad_server_url_basic_auth(self):
         try:
             self.engine.options = self.create_options({'serverurl': 'http://'})
-            self.engine.get_candlepin_connection("some_username", "some_password")
+            self.engine.get_candlepin_basic_auth_connection("some_username", "some_password")
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+        else:
+            self.fail("No exception raised")
+
+    def test_bad_server_url_consumer_auth(self):
+        try:
+            self.engine.options = self.create_options({'serverurl': 'http://'})
+            self.engine.get_candlepin_consumer_connection()
         except SystemExit, e:
             self.assertEquals(e.code, -1)
         else:

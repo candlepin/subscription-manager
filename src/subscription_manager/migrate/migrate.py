@@ -31,7 +31,7 @@ from M2Crypto.SSL import SSLError
 from rhn import rpclib
 
 import rhsm.config
-from rhsm.connection import UEPConnection, RemoteServerException, RestlibException
+from rhsm.connection import RemoteServerException, RestlibException
 from rhsm.utils import ServerUrlParseError
 
 _ = gettext.gettext
@@ -238,8 +238,7 @@ class MigrationEngine(object):
                 self.rhsmcfg.set('server', 'proxy_password', self.proxy_pass or '')
             self.rhsmcfg.save()
 
-    # FIXME: might as well split this into two methods
-    def get_candlepin_connection(self, username, password, basic_auth=True):
+    def _get_connection_info(self):
         try:
             if self.options.serverurl is None:
                 hostname = self.rhsmcfg.get('server', 'hostname')
@@ -250,35 +249,37 @@ class MigrationEngine(object):
         except ServerUrlParseError, e:
             system_exit(-1, _("Error parsing server URL: %s") % e.msg)
 
-        args = {'host': hostname, 'ssl_port': int(port), 'handler': prefix}
-        basic_auth_args = {}
-
-        if basic_auth:
-            # FIXME: unused
-            basic_auth_args['username'] = username
-            basic_auth_args['password'] = password
-        else:
-            args['cert_file'] = ConsumerIdentity.certpath()
-            args['key_file'] = ConsumerIdentity.keypath()
+        connection_info = {'host': hostname, 'ssl_port': int(port), 'handler': prefix}
 
         if not self.options.noproxy:
-            args['proxy_hostname_arg'] = self.proxy_host
-            args['proxy_port_arg'] = self.proxy_port and int(self.proxy_port)
-            args['proxy_user_arg'] = self.proxy_user
-            args['proxy_password_arg'] = self.proxy_pass
+            connection_info['proxy_hostname_arg'] = self.proxy_host
+            connection_info['proxy_port_arg'] = self.proxy_port and int(self.proxy_port)
+            connection_info['proxy_user_arg'] = self.proxy_user
+            connection_info['proxy_password_arg'] = self.proxy_pass
 
+        return connection_info
+
+    def get_candlepin_consumer_connection(self):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
-        connection_info = args
+
+        connection_info = self._get_connection_info()
+
+        connection_info['cert_file'] = ConsumerIdentity.certpath()
+        connection_info['key_file'] = ConsumerIdentity.keypath()
+
         self.cp_provider.set_connection_info(**connection_info)
 
-        # FIXME: would be nice to know where can use basic auth or
-        #        consumer auth explicitily, so we don't reuse self.cp
-        if basic_auth:
-            self.cp_provider.set_user_pass(username, password)
-            self.cp = self.cp_provider.get_basic_auth_cp()
-        else:
-            self.cp = self.cp_provider.get_consumer_auth_cp()
-        #self.cp = UEPConnection(**args)
+        return self.cp_provider.get_consumer_auth_cp()
+
+    def get_candlepin_basic_auth_connection(self, username, password):
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+
+        connection_info = self._get_connection_info()
+
+        self.cp_provider.set_user_pass(username, password)
+        self.cp_provider.set_connection_info(**connection_info)
+
+        return self.cp_provider.get_basic_auth_cp()
 
     def check_ok_to_proceed(self, username):
         # check if this machine is already registered to Certicate-based RHN
@@ -725,7 +726,8 @@ class MigrationEngine(object):
             return
 
         # create and populate the redhat.repo file
-        repolib.RepoLib(uep=self.cp).update()
+        # use the injection cp_providers consumer auth
+        repolib.RepoLib().update()
 
         # read in the redhat.repo file
         repofile = repolib.RepoFile()
@@ -755,7 +757,7 @@ class MigrationEngine(object):
 
         self.get_auth()
         self.transfer_http_proxy_settings()
-        self.get_candlepin_connection(self.secreds.username, self.secreds.password)
+        self.cp = self.get_candlepin_basic_auth_connection(self.secreds.username, self.secreds.password)
         self.check_ok_to_proceed(self.secreds.username)
 
         org = self.get_org(self.secreds.username)
@@ -786,7 +788,7 @@ class MigrationEngine(object):
         consumer = self.register(self.secreds, org, environment)
 
         # fetch new Candlepin connection using the identity cert created by register()
-        self.get_candlepin_connection(self.secreds.username, self.secreds.password, basic_auth=False)
+        self.cp = self.get_candlepin_consumer_connection()
         if not self.options.noauto:
             if self.options.servicelevel:
                 servicelevel = self.select_service_level(org, self.options.servicelevel)
