@@ -21,7 +21,7 @@ import gtk.glade
 
 from subscription_manager.gui import widgets
 from subscription_manager.gui import utils
-from subscription_manager.injection import require, IDENTITY
+from subscription_manager import injection as inj
 from subscription_manager import release
 
 _ = gettext.gettext
@@ -46,11 +46,9 @@ class PreferencesDialog(widgets.GladeWidget):
         super(PreferencesDialog, self).__init__('preferences.glade')
         self.backend = backend
         self.allow_callbacks = False
-        self.identity = require(IDENTITY)
+        self.identity = inj.require(inj.IDENTITY)
         self.async_updater = utils.AsyncWidgetUpdater(self.dialog)
-        self.release_backend = release.ReleaseBackend(ent_dir=self.backend.entitlement_dir,
-                                                      prod_dir=self.backend.product_dir,
-                                                      content_connection=self.backend.content_connection)
+        self.release_backend = release.ReleaseBackend(content_connection=self.backend.content_connection)
 
         self.inputs = [self.sla_combobox, self.release_combobox,
                 self.autoheal_checkbox, self.autoheal_event]

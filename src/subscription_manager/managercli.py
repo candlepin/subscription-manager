@@ -1286,6 +1286,7 @@ class ReleaseCommand(CliCommand):
         # note: parse_baseurl_info will populate with defaults if not found
         (cdn_hostname, cdn_port, cdn_prefix) = parse_baseurl_info(cdn_url)
 
+        # FIXME: ContentConnection needs to be injected as well
         self.cc = connection.ContentConnection(host=cdn_hostname,
                                                ssl_port=cdn_port,
                                                proxy_hostname=self.proxy_hostname,
@@ -1293,9 +1294,7 @@ class ReleaseCommand(CliCommand):
                                                proxy_user=self.proxy_user,
                                                proxy_password=self.proxy_password)
 
-        self.release_backend = ReleaseBackend(ent_dir=self.entitlement_dir,
-                                              prod_dir=self.product_dir,
-                                              content_connection=self.cc)
+        self.release_backend = ReleaseBackend(content_connection=self.cc)
 
         self.assert_should_be_registered()
 
