@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-20 16:25-0400\n"
+"POT-Creation-Date: 2014-04-09 12:49-0400\n"
 "PO-Revision-Date: 2014-02-04 08:13-0500\n"
 "Last-Translator: eukim <eukim@fedoraproject.org>\n"
 "Language-Team: Korean\n"
@@ -148,26 +148,6 @@ msgstr ""
 "에서 찾아보십시오"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#. note default is lower caps
-#: ../src/subscription_manager/i18n_optparse.py:39
-msgid "%prog [OPTIONS]"
-msgstr "%prog [옵션]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:129
-#: ../../../../..//usr/lib64/python2.7/optparse.py:374
-#, python-format
-msgid "Usage: %s\n"
-msgstr "사용법: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:145
-#, python-format
-msgid "%s: error: %s"
-msgstr "%s: 오류: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:62
 msgid ""
 "Unable to auto-attach, server does not support service levels. Please run "
@@ -308,6 +288,11 @@ msgstr "부분적으로 등록됨 "
 #: ../src/subscription_manager/gui/factsgui.py:90
 #: ../src/subscription_manager/gui/factsgui.py:117
 #: ../src/subscription_manager/reasons.py:83
+#: ../src/subscription_manager/utils.py:171
+#: ../src/subscription_manager/utils.py:172
+#: ../src/subscription_manager/utils.py:187
+#: ../src/subscription_manager/utils.py:206
+#: ../src/subscription_manager/utils.py:225
 #: ../src/subscription_manager/cert_sorter.py:47
 #: ../src/subscription_manager/managercli.py:76
 #: ../src/subscription_manager/managercli.py:284
@@ -316,11 +301,6 @@ msgstr "부분적으로 등록됨 "
 #: ../src/subscription_manager/managercli.py:289
 #: ../src/subscription_manager/managercli.py:1636
 #: ../src/subscription_manager/managercli.py:2374
-#: ../src/subscription_manager/utils.py:171
-#: ../src/subscription_manager/utils.py:172
-#: ../src/subscription_manager/utils.py:187
-#: ../src/subscription_manager/utils.py:206
-#: ../src/subscription_manager/utils.py:225
 msgid "Unknown"
 msgstr "알 수 없음 "
 
@@ -399,9 +379,149 @@ msgid "Keep your system up to date by registering."
 msgstr "등록하여 시스템을 최신 상태로 유지합니다."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:155
+msgid "There was an error saving your configuration."
+msgstr "설정 저장 도중 오류가 발생했습니다. "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:156
+#, python-format
+msgid "Make sure that you own %s."
+msgstr "%s을 소유하고 있는지 확인합니다.  "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/networkConfig.py:177
+msgid "Proxy location cannot be empty"
+msgstr "프록시 위치를 빈 칸으로 둘 수 없음 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/networkConfig.py:179
+msgid "Proxy connection succeeded"
+msgstr "프록시 연결"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/networkConfig.py:181
+msgid "Proxy connection failed"
+msgstr "프록시 연결 실패"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/redeem.py:55
+#, python-format
+msgid "Error redeeming subscription: %s"
+msgstr "서브스크립션 교환 중 오류 발생: %s "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:255
+msgid "Installed"
+msgstr "설치됨 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. An empty string entry is used for "un-setting" the system's SLA:
+#. for unsetting
+#: ../src/subscription_manager/gui/widgets.py:330
+#: ../src/subscription_manager/gui/preferences.py:119
+#: ../src/subscription_manager/gui/preferences.py:145
+msgid "Not Set"
+msgstr "설정되지 않음 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:357
+#: ../src/subscription_manager/gui/factsgui.py:141
+#: ../src/subscription_manager/printing_utils.py:136
+#: ../src/subscription_manager/managercli.py:611
+msgid "None"
+msgstr "없음 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:558
+msgid "Invalid date format. Please re-enter a valid date. Example: "
+msgstr "잘못된 날짜 형식입니다. 유효한 날짜를 다시 입력하십시오. 예: "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/widgets.py:595
+msgid "Date Selection"
+msgstr "날짜 선택"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:610
+msgid "Today"
+msgstr "오늘 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:705
+#: ../src/subscription_manager/gui/mysubstab.py:283
+#: ../src/subscription_manager/managercli.py:2084
+#: ../src/subscription_manager/managercli.py:2167
+msgid "Physical"
+msgstr "물리 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:706
+#: ../src/subscription_manager/gui/mysubstab.py:281
+#: ../src/subscription_manager/managercli.py:2082
+#: ../src/subscription_manager/managercli.py:2165
+msgid "Virtual"
+msgstr "가상 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:707
+msgid "Both"
+msgstr "모두 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#. content-type is required, no need to xstr
+#: ../src/subscription_manager/gui/widgets.py:710
+#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
+msgid "Type"
+msgstr "유형 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:782
+msgid "Click to Adjust Quantity"
+msgstr "수량 조정을 위해 클릭 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/managergui.py:337
+msgid ""
+"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr ""
+"설정 대화 상자에서 오류 발생.보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참"
+"조하십시오."
+
+#: ../src/subscription_manager/gui/managergui.py:345
+msgid ""
+"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr ""
+"리포지터리 대화에 오류가 발생했습니다. 자세한 내용은 /var/log/rhsm/rhsm.log에"
+"서 참조하십시오."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:361
+msgid "<b>Errors were encountered during unregister.</b>"
+msgstr "<b>등록 해제 도중 오류가 발생했습니다.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:363
+#: ../src/subscription_manager/gui/registergui.py:94
+msgid "Please see /var/log/rhsm/rhsm.log for more information."
+msgstr "보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조하십시오. "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:379
+msgid "<b>Are you sure you want to unregister?</b>"
+msgstr "<b>정말로 등록 취소하시겠습니까?</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:435
+msgid "System Already Registered"
+msgstr "이미 등록된 시스템 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/mysubstab.py:74
-#: ../src/subscription_manager/gui/allsubs.py:72
 #: ../src/subscription_manager/gui/registergui.py:421
+#: ../src/subscription_manager/gui/allsubs.py:72
 msgid "Subscription"
 msgstr "서브스크립션 "
 
@@ -413,9 +533,9 @@ msgstr "설치된 제품 "
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. Set up the quantity column.
 #: ../src/subscription_manager/gui/mysubstab.py:105
+#: ../src/subscription_manager/gui/registergui.py:427
 #: ../src/subscription_manager/gui/contract_selection.py:124
 #: ../src/subscription_manager/gui/allsubs.py:88
-#: ../src/subscription_manager/gui/registergui.py:427
 #: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:82
 msgid "Quantity"
 msgstr "수량 "
@@ -483,22 +603,6 @@ msgstr "서브스크립션이 시작되지 않았습니다. "
 msgid "Subscription management service doesn't support Status Details."
 msgstr "서브스크립션 관리 서비스가 상태 정보를 지원하지 않습니다."
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:281
-#: ../src/subscription_manager/gui/widgets.py:706
-#: ../src/subscription_manager/managercli.py:2082
-#: ../src/subscription_manager/managercli.py:2165
-msgid "Virtual"
-msgstr "가상 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:283
-#: ../src/subscription_manager/gui/widgets.py:705
-#: ../src/subscription_manager/managercli.py:2084
-#: ../src/subscription_manager/managercli.py:2167
-msgid "Physical"
-msgstr "물리 "
-
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
 #: ../src/subscription_manager/gui/mysubstab.py:286
 msgid "Yes"
@@ -509,129 +613,200 @@ msgstr "예 "
 msgid "No"
 msgstr "아니요 "
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:92
+msgid "<b>Unable to register the system.</b>"
+msgstr "<b>시스템을 등록할 수 없습니다.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:186
+#: ../src/subscription_manager/gui/data/registration.glade.h:1
+msgid "System Registration"
+msgstr "시스템 등록 "
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/managergui.py:337
-msgid ""
-"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr ""
-"설정 대화 상자에서 오류 발생.보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참"
-"조하십시오."
+#: ../src/subscription_manager/gui/registergui.py:187
+#: ../src/subscription_manager/gui/data/registration.glade.h:6
+msgid "<b>Registering</b>"
+msgstr "<b>등록하기</b>"
 
-#: ../src/subscription_manager/gui/managergui.py:345
-msgid ""
-"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr ""
-"리포지터리 대화에 오류가 발생했습니다. 자세한 내용은 /var/log/rhsm/rhsm.log에"
-"서 참조하십시오."
+#: ../src/subscription_manager/gui/registergui.py:189
+msgid "Subscription Attachment"
+msgstr "서브스크립션 첨부 "
+
+#: ../src/subscription_manager/gui/registergui.py:190
+msgid "<b>Attaching</b>"
+msgstr "<b>첨부 중</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:361
-msgid "<b>Errors were encountered during unregister.</b>"
-msgstr "<b>등록 해제 도중 오류가 발생했습니다.</b>"
+#: ../src/subscription_manager/gui/registergui.py:298
+#: ../src/subscription_manager/gui/data/registration.glade.h:4
+#: ../src/subscription_manager/gui/data/installed.glade.h:4
+msgid "Register"
+msgstr "시스템 등록  "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/registergui.py:342
+msgid "Registering your system"
+msgstr "시스템 등록하기 "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:363
-#: ../src/subscription_manager/gui/registergui.py:94
-msgid "Please see /var/log/rhsm/rhsm.log for more information."
-msgstr "보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조하십시오. "
+#: ../src/subscription_manager/gui/registergui.py:383
+#: ../src/subscription_manager/gui/registergui.py:871
+msgid "Attaching subscriptions"
+msgstr "서브스크립션 첨부"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:379
-msgid "<b>Are you sure you want to unregister?</b>"
-msgstr "<b>정말로 등록 취소하시겠습니까?</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:435
-msgid "System Already Registered"
-msgstr "이미 등록된 시스템 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:155
-msgid "There was an error saving your configuration."
-msgstr "설정 저장 도중 오류가 발생했습니다. "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:156
+#: ../src/subscription_manager/gui/registergui.py:387
+#: ../src/subscription_manager/gui/registergui.py:875
 #, python-format
-msgid "Make sure that you own %s."
-msgstr "%s을 소유하고 있는지 확인합니다.  "
+msgid "Error subscribing: %s"
+msgstr "등록 도중 오류 발생: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/networkConfig.py:177
-msgid "Proxy location cannot be empty"
-msgstr "프록시 위치를 빈 칸으로 둘 수 없음 "
+#: ../src/subscription_manager/gui/registergui.py:415
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:9
+msgid "Attach"
+msgstr "첨부 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:473
+msgid "Finding suitable service levels"
+msgstr "적합한 서비스 레벨 검색 중"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/networkConfig.py:179
-msgid "Proxy connection succeeded"
-msgstr "프록시 연결"
+#: ../src/subscription_manager/gui/registergui.py:474
+#: ../src/subscription_manager/gui/registergui.py:902
+#: ../src/subscription_manager/gui/registergui.py:1234
+msgid "Next"
+msgstr "다음"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/networkConfig.py:181
-msgid "Proxy connection failed"
-msgstr "프록시 연결 실패"
+#: ../src/subscription_manager/gui/registergui.py:526
+msgid "Unable to auto-attach, server does not support service levels."
+msgstr "자동 첨부할 수 없습니다. 서버는 서비스 레벨을 지원하지 않습니다. "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/redeem.py:55
+#: ../src/subscription_manager/gui/registergui.py:529
+msgid ""
+"No installed products on system. No need to attach subscriptions at this "
+"time."
+msgstr ""
+"시스템에 설치된 제품이 없습니다. 현재로서는 서브스크립션을 첨부할 필요가 없습"
+"니다."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/registergui.py:532
+msgid ""
+"All installed products are covered by valid entitlements. No need to attach "
+"subscriptions at this time."
+msgstr ""
+"설치된 모든 제품에는 유효한 인타이틀먼트가 적용됩니다. 현재로서는 서브스크립"
+"션을 첨부할 필요가 없습니다. "
+
+#: ../src/subscription_manager/gui/registergui.py:535
+msgid "Consumer has been deleted."
+msgstr "컨슈머가 삭제되었습니다."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/registergui.py:551
 #, python-format
-msgid "Error redeeming subscription: %s"
-msgstr "서브스크립션 교환 중 오류 발생: %s "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:255
-msgid "Installed"
-msgstr "설치됨 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. An empty string entry is used for "un-setting" the system's SLA:
-#. for unsetting
-#: ../src/subscription_manager/gui/widgets.py:330
-#: ../src/subscription_manager/gui/preferences.py:119
-#: ../src/subscription_manager/gui/preferences.py:145
-msgid "Not Set"
-msgstr "설정되지 않음 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:357
-#: ../src/subscription_manager/gui/factsgui.py:141
-#: ../src/subscription_manager/managercli.py:611
-#: ../src/subscription_manager/printing_utils.py:136
-msgid "None"
-msgstr "없음 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:558
-msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr "잘못된 날짜 형식입니다. 유효한 날짜를 다시 입력하십시오. 예: "
+msgid ""
+"No available subscriptions at the current service level: %s. Please use the "
+"\"All Available Subscriptions\" tab to manually attach subscriptions."
+msgstr ""
+"현재 서비스 레벨에서 사용 가능한 서브스크립션이 없습니다: %s. 수동으로 서브스"
+"크립션을 첨부하려면 \"사용 가능한 모든 서브스크립션\" 탭을 사용하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/widgets.py:595
-msgid "Date Selection"
-msgstr "날짜 선택"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:610
-msgid "Today"
-msgstr "오늘 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:707
-msgid "Both"
-msgstr "모두 "
+#: ../src/subscription_manager/gui/registergui.py:569
+msgid ""
+"No service level will cover all installed products. Please manually "
+"subscribe using multiple service levels via the \"All Available "
+"Susbscriptions\" tab or purchase additional subscriptions."
+msgstr ""
+"설치된 모든 제품에 적용되는 서비스 레벨이 없습니다. \"사용 가능한 모든 서브스"
+"크립션\" 탭에서 여러 서비스 레벨을 사용하여 수동으로 등록하거나 추가 서브스크"
+"립션을 구입하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#. content-type is required, no need to xstr
-#: ../src/subscription_manager/gui/widgets.py:710
-#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
-msgid "Type"
-msgstr "유형 "
+#: ../src/subscription_manager/gui/registergui.py:601
+msgid "Fetching list of possible environments"
+msgstr "가능한 환경 목록 가져오기"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/registergui.py:603
+#: ../src/subscription_manager/gui/data/factsdialog.glade.h:7
+msgid "Environment"
+msgstr "환경 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/registergui.py:658
+msgid "Fetching list of possible organizations"
+msgstr "가능한 조직 목록 가져오기 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/registergui.py:661
+msgid "Organization"
+msgstr "조직 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/registergui.py:680
+#, python-format
+msgid "<b>User %s is not able to register with any orgs.</b>"
+msgstr "<b>사용자 %s은(는) 어떤 조직에도 등록할 수 없습니다.</b>  "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:782
-msgid "Click to Adjust Quantity"
-msgstr "수량 조정을 위해 클릭 "
+#: ../src/subscription_manager/gui/registergui.py:742
+#: ../src/subscription_manager/gui/registergui.py:848
+msgid "You must enter a system name."
+msgstr "시스템 이름을 입력하셔야 합니다. "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:750
+msgid "You must enter a login."
+msgstr "로그인을 입력하셔야 합니다. "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:755
+msgid "You must enter a password."
+msgstr "암호를 입력하셔야 합니다. "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/registergui.py:834
+msgid "You must enter an organization."
+msgstr "조직을 입력해야 합니다."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/registergui.py:841
+msgid "You must enter an activation key."
+msgstr "활성키를 입력해야 합니다. "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/registergui.py:952
+#: ../src/subscription_manager/managercli.py:342
+#, python-format
+msgid "Unable to reach the server at %s:%s%s"
+msgstr "%s에 있는 서버에 연결할 수 없습니다:%s%s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/registergui.py:957
+msgid "CA certificate for subscription service has not been installed."
+msgstr "서브스크립션 서비스의 CA 인증서가 설치되지 않았습니다."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/registergui.py:962
+msgid ""
+"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
+"prefix]"
+msgstr ""
+"옵션 포트와 접두어로 호스트 이름을 지정하십시오: 호스트이름[:포트][/접두사]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/registergui.py:1019
+msgid "Server supports environments, but none are available."
+msgstr "서버가 환경을 지원하지만 사용 가능한 것이 없습니다. "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
 #: ../src/subscription_manager/gui/about.py:29
@@ -909,201 +1084,6 @@ msgstr "재정의 삭제 확인 "
 #: ../src/subscription_manager/gui/reposgui.py:404
 msgid "Unable to delete the gpgcheck override."
 msgstr "gpgcheck 재정의를 삭제할 수 없습니다."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:92
-msgid "<b>Unable to register the system.</b>"
-msgstr "<b>시스템을 등록할 수 없습니다.</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:186
-#: ../src/subscription_manager/gui/data/registration.glade.h:1
-msgid "System Registration"
-msgstr "시스템 등록 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:187
-#: ../src/subscription_manager/gui/data/registration.glade.h:6
-msgid "<b>Registering</b>"
-msgstr "<b>등록하기</b>"
-
-#: ../src/subscription_manager/gui/registergui.py:189
-msgid "Subscription Attachment"
-msgstr "서브스크립션 첨부 "
-
-#: ../src/subscription_manager/gui/registergui.py:190
-msgid "<b>Attaching</b>"
-msgstr "<b>첨부 중</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:298
-#: ../src/subscription_manager/gui/data/registration.glade.h:4
-#: ../src/subscription_manager/gui/data/installed.glade.h:4
-msgid "Register"
-msgstr "시스템 등록  "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:342
-msgid "Registering your system"
-msgstr "시스템 등록하기 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:383
-#: ../src/subscription_manager/gui/registergui.py:871
-msgid "Attaching subscriptions"
-msgstr "서브스크립션 첨부"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:387
-#: ../src/subscription_manager/gui/registergui.py:875
-#, python-format
-msgid "Error subscribing: %s"
-msgstr "등록 도중 오류 발생: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:415
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:9
-msgid "Attach"
-msgstr "첨부 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:473
-msgid "Finding suitable service levels"
-msgstr "적합한 서비스 레벨 검색 중"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:474
-#: ../src/subscription_manager/gui/registergui.py:902
-#: ../src/subscription_manager/gui/registergui.py:1234
-msgid "Next"
-msgstr "다음"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:526
-msgid "Unable to auto-attach, server does not support service levels."
-msgstr "자동 첨부할 수 없습니다. 서버는 서비스 레벨을 지원하지 않습니다. "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:529
-msgid ""
-"No installed products on system. No need to attach subscriptions at this "
-"time."
-msgstr ""
-"시스템에 설치된 제품이 없습니다. 현재로서는 서브스크립션을 첨부할 필요가 없습"
-"니다."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:532
-msgid ""
-"All installed products are covered by valid entitlements. No need to attach "
-"subscriptions at this time."
-msgstr ""
-"설치된 모든 제품에는 유효한 인타이틀먼트가 적용됩니다. 현재로서는 서브스크립"
-"션을 첨부할 필요가 없습니다. "
-
-#: ../src/subscription_manager/gui/registergui.py:535
-msgid "Consumer has been deleted."
-msgstr "컨슈머가 삭제되었습니다."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:551
-#, python-format
-msgid ""
-"No available subscriptions at the current service level: %s. Please use the "
-"\"All Available Subscriptions\" tab to manually attach subscriptions."
-msgstr ""
-"현재 서비스 레벨에서 사용 가능한 서브스크립션이 없습니다: %s. 수동으로 서브스"
-"크립션을 첨부하려면 \"사용 가능한 모든 서브스크립션\" 탭을 사용하십시오."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:569
-msgid ""
-"No service level will cover all installed products. Please manually "
-"subscribe using multiple service levels via the \"All Available "
-"Susbscriptions\" tab or purchase additional subscriptions."
-msgstr ""
-"설치된 모든 제품에 적용되는 서비스 레벨이 없습니다. \"사용 가능한 모든 서브스"
-"크립션\" 탭에서 여러 서비스 레벨을 사용하여 수동으로 등록하거나 추가 서브스크"
-"립션을 구입하십시오."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:601
-msgid "Fetching list of possible environments"
-msgstr "가능한 환경 목록 가져오기"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:603
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:7
-msgid "Environment"
-msgstr "환경 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:658
-msgid "Fetching list of possible organizations"
-msgstr "가능한 조직 목록 가져오기 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:661
-msgid "Organization"
-msgstr "조직 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:680
-#, python-format
-msgid "<b>User %s is not able to register with any orgs.</b>"
-msgstr "<b>사용자 %s은(는) 어떤 조직에도 등록할 수 없습니다.</b>  "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:742
-#: ../src/subscription_manager/gui/registergui.py:848
-msgid "You must enter a system name."
-msgstr "시스템 이름을 입력하셔야 합니다. "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:750
-msgid "You must enter a login."
-msgstr "로그인을 입력하셔야 합니다. "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:755
-msgid "You must enter a password."
-msgstr "암호를 입력하셔야 합니다. "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:834
-msgid "You must enter an organization."
-msgstr "조직을 입력해야 합니다."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:841
-msgid "You must enter an activation key."
-msgstr "활성키를 입력해야 합니다. "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:952
-#: ../src/subscription_manager/managercli.py:342
-#, python-format
-msgid "Unable to reach the server at %s:%s%s"
-msgstr "%s에 있는 서버에 연결할 수 없습니다:%s%s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:957
-msgid "CA certificate for subscription service has not been installed."
-msgstr "서브스크립션 서비스의 CA 인증서가 설치되지 않았습니다."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:962
-msgid ""
-"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
-"prefix]"
-msgstr ""
-"옵션 포트와 접두어로 호스트 이름을 지정하십시오: 호스트이름[:포트][/접두사]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/registergui.py:1019
-msgid "Server supports environments, but none are available."
-msgstr "서버가 환경을 지원하지만 사용 가능한 것이 없습니다. "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
 #: ../src/subscription_manager/reasons.py:75
@@ -1556,6 +1536,15 @@ msgstr ""
 "RHN Classic에서 시스템을 등록 해제 준비하고 있습니다..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cache.py:183
+msgid ""
+"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
+"서버에서 시스템 데이터를 업데이트하는 도중 오류 발생. 보다 자세한 내용은 /"
+"var/log/rhsm/rhsm.log에서 확인하십시오. "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/dmiinfo.py:56
 #: ../src/subscription_manager/dmiinfo.py:102
 #, python-format
@@ -1569,28 +1558,59 @@ msgid "Error reading system DMI information with %s: %s"
 msgstr "%s로 시스템 DMI 정보를 읽는 도중 오류 발생: %s "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cache.py:183
-msgid ""
-"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"서버에서 시스템 데이터를 업데이트하는 도중 오류 발생. 보다 자세한 내용은 /"
-"var/log/rhsm/rhsm.log에서 확인하십시오. "
+#: ../src/subscription_manager/hwprobe.py:273
+msgid "Error reading system memory information:"
+msgstr "시스템 메모리 정보를 읽는 도중 오류 발생: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/cert_sorter.py:44
-msgid "Current"
-msgstr "현재"
+#: ../src/subscription_manager/hwprobe.py:583
+msgid "Error reading system CPU information:"
+msgstr "시스템 CPU 정보를 읽는 도중 오류 발생:  "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:608
+msgid "Error reading networking information:"
+msgstr "네트워크 정보를 읽는 도중 오류 발생: "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:707
+msgid "Error reading network interface information:"
+msgstr "네트워크 인터페이스 정보를 읽는 도중 오류 발생:  "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/cert_sorter.py:45
-msgid "Insufficient"
-msgstr "충분하지 않음 "
+#: ../src/subscription_manager/hwprobe.py:803
+msgid "Virtualization platform does not support UUIDs"
+msgstr "가상화 플랫폼은 UUID를 지원하지 않습니다 "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/cert_sorter.py:46
-msgid "Invalid"
-msgstr "유효하지 않음 "
+#: ../src/subscription_manager/hwprobe.py:805
+#, python-format
+msgid "Error finding UUID: %s"
+msgstr "UUID를 찾는 도중 오류 발생: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#. usage format strips any leading 'usage' so
+#. do not iclude it
+#: ../src/subscription_manager/cli.py:62
+#, python-format
+msgid "%%prog %s [OPTIONS]"
+msgstr "%%prog %s [옵션]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cli.py:93
+#, python-format
+msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+msgstr "사용법: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/cli.py:105
+msgid "Primary Modules:"
+msgstr "주요 모듈: "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/cli.py:106
+msgid "Other Modules:"
+msgstr "기타 모듈:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
 #: ../src/subscription_manager/certlib.py:339
@@ -1644,6 +1664,127 @@ msgstr "%d 개의 업데이트 필요 "
 #: ../src/daemons/rhsmcertd-worker.py:54
 msgid "done"
 msgstr "완료 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/utils.py:188
+#: ../src/subscription_manager/managercli.py:1161
+msgid "This system is currently not registered."
+msgstr "현재 시스템은 등록되어 있지 않습니다. "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/utils.py:266
+msgid "and"
+msgstr "및 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#. note default is lower caps
+#: ../src/subscription_manager/i18n_optparse.py:39
+msgid "%prog [OPTIONS]"
+msgstr "%prog [옵션]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/i18n_optparse.py:129
+#: ../../../../..//usr/lib64/python2.7/optparse.py:374
+#, python-format
+msgid "Usage: %s\n"
+msgstr "사용법: %s\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. translators: arg 1 is the program name, arg 2 is the error message
+#: ../src/subscription_manager/i18n_optparse.py:145
+#, python-format
+msgid "%s: error: %s"
+msgstr "%s: 오류: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/cert_sorter.py:44
+msgid "Current"
+msgstr "현재"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/cert_sorter.py:45
+msgid "Insufficient"
+msgstr "충분하지 않음 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/cert_sorter.py:46
+msgid "Invalid"
+msgstr "유효하지 않음 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:27
+msgid ""
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
+msgstr ""
+"네트워크 오류, 서버에 연결할 수 없음. 보다 자세한 정보는 /var/log/rhsm/rhsm."
+"log에서 확인하십시오.  "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:28
+msgid ""
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
+msgstr "네트워크 오류. 연결 정보 또는 /var/log/rhsm/rhsm.log를 확인하십시오. "
+
+#: ../src/subscription_manager/exceptions.py:29
+msgid "Unauthorized: Invalid credentials for request."
+msgstr "승인되지 않음: 요청에 대해 잘못된 인증 정보입니다."
+
+#: ../src/subscription_manager/exceptions.py:30
+msgid "Forbidden: Invalid credentials for request."
+msgstr "금지: 요청에 대해 잘못된 인증 정보입니다."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:31
+msgid ""
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
+msgstr "원격 서버 오류. 연결 정보 또는 /var/log/rhsm/rhsm.log를 확인하십시오. "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:32
+#, python-format
+msgid "Bad CA certificate: %s"
+msgstr "잘못된 CA 인증서: %s "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/exceptions.py:33
+#: ../src/daemons/rhsmcertd-worker.py:56
+msgid "Your identity certificate has expired"
+msgstr "ID 인증서가 만료되었습니다"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:34
+#, python-format
+msgid "Unable to verify server's identity: %s"
+msgstr "서버 ID를 확인할 수 없음: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/exceptions.py:35
+msgid "Server URL can not be empty"
+msgstr "서버 URL을 빈 칸으로 둘 수 없음"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/exceptions.py:36
+msgid ""
+"Server URL is just a schema. Should include hostname, and/or port and path"
+msgstr "서버 URL은 단순한 스키마입니다. 호스트이름, 포트 및 경로를 포함해야 함"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/exceptions.py:37
+msgid "Server URL can not be None"
+msgstr "서버 URL이 없음할 수 없음"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/exceptions.py:38
+msgid "Server URL port should be numeric"
+msgstr "서버 URL 포트는 숫자이어야 함 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/exceptions.py:39
+msgid "Server URL has an invalid scheme. http:// and https:// are supported"
+msgstr "서버 URL에 잘못된 구성이 있습니다. http:// 및 https://가 지원됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:67
@@ -2317,12 +2458,6 @@ msgid ""
 msgstr ""
 "오류: --servicelevel 옵션은 서버에서 지원되지 않습니다. 요청을 완료하지 못했"
 "습니다."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/managercli.py:1161
-#: ../src/subscription_manager/utils.py:188
-msgid "This system is currently not registered."
-msgstr "현재 시스템은 등록되어 있지 않습니다. "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
 #: ../src/subscription_manager/managercli.py:1186
@@ -3046,141 +3181,6 @@ msgstr "시스템 상태 정보 "
 #, python-format
 msgid "Overall Status: %s\n"
 msgstr "전체 상태: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:27
-msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"네트워크 오류, 서버에 연결할 수 없음. 보다 자세한 정보는 /var/log/rhsm/rhsm."
-"log에서 확인하십시오.  "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:28
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr "네트워크 오류. 연결 정보 또는 /var/log/rhsm/rhsm.log를 확인하십시오. "
-
-#: ../src/subscription_manager/exceptions.py:29
-msgid "Unauthorized: Invalid credentials for request."
-msgstr "승인되지 않음: 요청에 대해 잘못된 인증 정보입니다."
-
-#: ../src/subscription_manager/exceptions.py:30
-msgid "Forbidden: Invalid credentials for request."
-msgstr "금지: 요청에 대해 잘못된 인증 정보입니다."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:31
-msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr "원격 서버 오류. 연결 정보 또는 /var/log/rhsm/rhsm.log를 확인하십시오. "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:32
-#, python-format
-msgid "Bad CA certificate: %s"
-msgstr "잘못된 CA 인증서: %s "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/exceptions.py:33
-#: ../src/daemons/rhsmcertd-worker.py:56
-msgid "Your identity certificate has expired"
-msgstr "ID 인증서가 만료되었습니다"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:34
-#, python-format
-msgid "Unable to verify server's identity: %s"
-msgstr "서버 ID를 확인할 수 없음: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/exceptions.py:35
-msgid "Server URL can not be empty"
-msgstr "서버 URL을 빈 칸으로 둘 수 없음"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/exceptions.py:36
-msgid ""
-"Server URL is just a schema. Should include hostname, and/or port and path"
-msgstr "서버 URL은 단순한 스키마입니다. 호스트이름, 포트 및 경로를 포함해야 함"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/exceptions.py:37
-msgid "Server URL can not be None"
-msgstr "서버 URL이 없음할 수 없음"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/exceptions.py:38
-msgid "Server URL port should be numeric"
-msgstr "서버 URL 포트는 숫자이어야 함 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/exceptions.py:39
-msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr "서버 URL에 잘못된 구성이 있습니다. http:// 및 https://가 지원됩니다"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#. usage format strips any leading 'usage' so
-#. do not iclude it
-#: ../src/subscription_manager/cli.py:62
-#, python-format
-msgid "%%prog %s [OPTIONS]"
-msgstr "%%prog %s [옵션]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:93
-#, python-format
-msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "사용법: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/cli.py:105
-msgid "Primary Modules:"
-msgstr "주요 모듈: "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/cli.py:106
-msgid "Other Modules:"
-msgstr "기타 모듈:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:273
-msgid "Error reading system memory information:"
-msgstr "시스템 메모리 정보를 읽는 도중 오류 발생: "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/hwprobe.py:583
-msgid "Error reading system CPU information:"
-msgstr "시스템 CPU 정보를 읽는 도중 오류 발생:  "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:608
-msgid "Error reading networking information:"
-msgstr "네트워크 정보를 읽는 도중 오류 발생: "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:707
-msgid "Error reading network interface information:"
-msgstr "네트워크 인터페이스 정보를 읽는 도중 오류 발생:  "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/hwprobe.py:803
-msgid "Virtualization platform does not support UUIDs"
-msgstr "가상화 플랫폼은 UUID를 지원하지 않습니다 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/hwprobe.py:805
-#, python-format
-msgid "Error finding UUID: %s"
-msgstr "UUID를 찾는 도중 오류 발생: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/utils.py:266
-msgid "and"
-msgstr "및 "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
 #: ../src/rct/cert_commands.py:38
@@ -4103,6 +4103,95 @@ msgstr "register_details_label"
 msgid "page 2"
 msgstr "2 페이지 "
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:1
+msgid ""
+"The subscription management service you register with will provide your "
+"system with updates and allow additional management."
+msgstr ""
+"등록에 사용한 서브스크립션 관리 서비스는 시스템에 업데이트를 제공하고 추가 관"
+"리를 가능하게 합니다."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:2
+msgid "choose_server_label"
+msgstr "choose_server_label"
+
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:3
+msgid ""
+"Registering with Customer Portal, Subscription Asset Manager, Satellite or "
+"Candlepin servers can be used to provide your system with updates and allow "
+"management through the selected server's interface."
+msgstr ""
+"고객 포털, 서브스크립션 자산 관리자, Satellite, Candlepin 서버에 등록하면 시"
+"스템에 업데이트가 제공되어 선택한 서버의 인터페이스를 통해 관리할 수 있습니"
+"다. "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:4
+msgid "I will register with:"
+msgstr "다음을 사용하여 등록합니다: "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:5
+msgid "server_label"
+msgstr "server_label"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:6
+msgid "hostname[:port][/prefix]"
+msgstr "hostname[:port][/prefix]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:7
+msgid "server_entry"
+msgstr "server_entry"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:8
+msgid "Default"
+msgstr "디폴트 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:9
+msgid "Reset to register with Customer Portal."
+msgstr "고객 포털에 등록하기 위해 리셋"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:10
+msgid "default_button"
+msgstr "default_button"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:11
+msgid ""
+"Activation Keys are alphanumeric strings that are pre-configured by your "
+"system administrators to automatically register your system and attach all "
+"necessary subscriptions."
+msgstr ""
+"활성키는 시스템 관리자에 의해 사전 설정된 영숫자 문자열로 시스템을 자동으로 "
+"등록하고 필요한 모든 서브스크립션을 첨부할 수 있습니다. "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:12
+msgid "I will use an Activation Key"
+msgstr "활성키를 사용합니다 "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:13
+msgid "If required, please configure your proxy before moving forward."
+msgstr "필요한 경우 다음 단계로 진행하기 전 proxy를 설정하십시오."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:14
+msgid "Configure Proxy"
+msgstr "Proxy 설정"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:15
+msgid "proxy_button"
+msgstr "proxy_button"
+
 #: ../src/subscription_manager/gui/data/registration_info.glade.h:1
 msgid ""
 "This assistant will guide you through the process of registering your system "
@@ -4655,95 +4744,6 @@ msgstr "gpgcheck_edit_button"
 #: ../src/subscription_manager/gui/data/repositories.glade.h:20
 msgid "gpgcheck_remove_button"
 msgstr "gpgcheck_remove_button"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:1
-msgid ""
-"The subscription management service you register with will provide your "
-"system with updates and allow additional management."
-msgstr ""
-"등록에 사용한 서브스크립션 관리 서비스는 시스템에 업데이트를 제공하고 추가 관"
-"리를 가능하게 합니다."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:2
-msgid "choose_server_label"
-msgstr "choose_server_label"
-
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:3
-msgid ""
-"Registering with Customer Portal, Subscription Asset Manager, Satellite or "
-"Candlepin servers can be used to provide your system with updates and allow "
-"management through the selected server's interface."
-msgstr ""
-"고객 포털, 서브스크립션 자산 관리자, Satellite, Candlepin 서버에 등록하면 시"
-"스템에 업데이트가 제공되어 선택한 서버의 인터페이스를 통해 관리할 수 있습니"
-"다. "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:4
-msgid "I will register with:"
-msgstr "다음을 사용하여 등록합니다: "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:5
-msgid "server_label"
-msgstr "server_label"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:6
-msgid "hostname[:port][/prefix]"
-msgstr "hostname[:port][/prefix]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:7
-msgid "server_entry"
-msgstr "server_entry"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:8
-msgid "Default"
-msgstr "디폴트 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:9
-msgid "Reset to register with Customer Portal."
-msgstr "고객 포털에 등록하기 위해 리셋"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:10
-msgid "default_button"
-msgstr "default_button"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:11
-msgid ""
-"Activation Keys are alphanumeric strings that are pre-configured by your "
-"system administrators to automatically register your system and attach all "
-"necessary subscriptions."
-msgstr ""
-"활성키는 시스템 관리자에 의해 사전 설정된 영숫자 문자열로 시스템을 자동으로 "
-"등록하고 필요한 모든 서브스크립션을 첨부할 수 있습니다. "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:12
-msgid "I will use an Activation Key"
-msgstr "활성키를 사용합니다 "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:13
-msgid "If required, please configure your proxy before moving forward."
-msgstr "필요한 경우 다음 단계로 진행하기 전 proxy를 설정하십시오."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:14
-msgid "Configure Proxy"
-msgstr "Proxy 설정"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:15
-msgid "proxy_button"
-msgstr "proxy_button"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1

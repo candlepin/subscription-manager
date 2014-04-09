@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-20 16:25-0400\n"
+"POT-Creation-Date: 2014-04-09 12:49-0400\n"
 "PO-Revision-Date: 2014-02-05 12:13-0500\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Punjabi\n"
@@ -145,26 +145,6 @@ msgstr ""
 "ਭਾਲੋ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. note default is lower caps
-#: ../src/subscription_manager/i18n_optparse.py:39
-msgid "%prog [OPTIONS]"
-msgstr "%prog [ਚੋਣਾਂ]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:129
-#: ../../../../..//usr/lib64/python2.7/optparse.py:374
-#, python-format
-msgid "Usage: %s\n"
-msgstr "ਵਰਤੋਂ: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:145
-#, python-format
-msgid "%s: error: %s"
-msgstr "%s: ਗਲਤੀ: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:62
 msgid ""
 "Unable to auto-attach, server does not support service levels. Please run "
@@ -303,6 +283,11 @@ msgstr "ਅਧੂਰਾ ਮੈਂਬਰ"
 #: ../src/subscription_manager/gui/factsgui.py:90
 #: ../src/subscription_manager/gui/factsgui.py:117
 #: ../src/subscription_manager/reasons.py:83
+#: ../src/subscription_manager/utils.py:171
+#: ../src/subscription_manager/utils.py:172
+#: ../src/subscription_manager/utils.py:187
+#: ../src/subscription_manager/utils.py:206
+#: ../src/subscription_manager/utils.py:225
 #: ../src/subscription_manager/cert_sorter.py:47
 #: ../src/subscription_manager/managercli.py:76
 #: ../src/subscription_manager/managercli.py:284
@@ -311,11 +296,6 @@ msgstr "ਅਧੂਰਾ ਮੈਂਬਰ"
 #: ../src/subscription_manager/managercli.py:289
 #: ../src/subscription_manager/managercli.py:1636
 #: ../src/subscription_manager/managercli.py:2374
-#: ../src/subscription_manager/utils.py:171
-#: ../src/subscription_manager/utils.py:172
-#: ../src/subscription_manager/utils.py:187
-#: ../src/subscription_manager/utils.py:206
-#: ../src/subscription_manager/utils.py:225
 msgid "Unknown"
 msgstr "ਅਣਪਛਾਤਾ"
 
@@ -395,9 +375,147 @@ msgid "Keep your system up to date by registering."
 msgstr "ਆਪਣੇ ਸਿਸਟਮ ਨੂੰ ਦਰਜ ਕਰਕੇ ਅੱਪ ਟੂ ਡੇਟ ਰੱਖੋ।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:155
+msgid "There was an error saving your configuration."
+msgstr "ਤੁਹਾਡੀ ਸੰਰਚਨਾ ਸੰਭਾਲਣ ਵਿੱਚ ਗਲਤੀ ਸੀ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/gui/networkConfig.py:156
+#, python-format
+msgid "Make sure that you own %s."
+msgstr "ਯਕੀਨੀ ਕਰੋ ਕਿ ਤੁਸੀਂ %s ਦੇ ਮਾਲਕ ਹੋ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/gui/networkConfig.py:177
+msgid "Proxy location cannot be empty"
+msgstr "ਪਰਾਕਸੀ ਟਿਕਾਣਾ ਖਾਲੀ ਨਹੀਂ ਹੋ ਸਕਦਾ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/networkConfig.py:179
+msgid "Proxy connection succeeded"
+msgstr "ਪਰਾਕਸੀ ਕੁਨੈਕਸ਼ਨ ਸਫਲ ਹੋਇਆ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/gui/networkConfig.py:181
+msgid "Proxy connection failed"
+msgstr "ਪਰਾਕਸੀ ਕੁਨੈਕਸ਼ਨ ਅਸਫਲ ਹੋਇਆ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/redeem.py:55
+#, python-format
+msgid "Error redeeming subscription: %s"
+msgstr "ਮੈਂਬਰੀ ਛੱਡਣ ਵੇਲੇ ਗਲਤੀ: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:255
+msgid "Installed"
+msgstr "ਇੰਸਟਾਲ ਕੀਤੇ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. An empty string entry is used for "un-setting" the system's SLA:
+#. for unsetting
+#: ../src/subscription_manager/gui/widgets.py:330
+#: ../src/subscription_manager/gui/preferences.py:119
+#: ../src/subscription_manager/gui/preferences.py:145
+msgid "Not Set"
+msgstr "ਸੈੱਟ ਨਹੀਂ ਕੀਤਾ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:357
+#: ../src/subscription_manager/gui/factsgui.py:141
+#: ../src/subscription_manager/printing_utils.py:136
+#: ../src/subscription_manager/managercli.py:611
+msgid "None"
+msgstr "ਕੋਈ ਨਹੀਂ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:558
+msgid "Invalid date format. Please re-enter a valid date. Example: "
+msgstr "ਗਲਤ ਮਿਤੀ ਫਾਰਮੈਟ। ਕਿਰਪਾ ਕਰਕੇ ਯੋਗ ਮਿਤੀ ਦੁਬਾਰਾ ਦਿਓ। ਉਦਾਹਰਣ: "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/widgets.py:595
+msgid "Date Selection"
+msgstr "ਮਿਤੀ ਖੋਜ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:610
+msgid "Today"
+msgstr "ਅੱਜ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:705
+#: ../src/subscription_manager/gui/mysubstab.py:283
+#: ../src/subscription_manager/managercli.py:2084
+#: ../src/subscription_manager/managercli.py:2167
+msgid "Physical"
+msgstr "ਭੌਤਿਕ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/gui/widgets.py:706
+#: ../src/subscription_manager/gui/mysubstab.py:281
+#: ../src/subscription_manager/managercli.py:2082
+#: ../src/subscription_manager/managercli.py:2165
+msgid "Virtual"
+msgstr "ਆਭਾਸੀ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:707
+msgid "Both"
+msgstr "ਦੋਵੇਂ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#. content-type is required, no need to xstr
+#: ../src/subscription_manager/gui/widgets.py:710
+#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
+msgid "Type"
+msgstr "ਕਿਸਮ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:782
+msgid "Click to Adjust Quantity"
+msgstr "ਮਾਤਰਾ ਸੈੱਟ ਕਰਨ ਲਈ ਕਲਿੱਕ ਕਰੋ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/gui/managergui.py:337
+msgid ""
+"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr ""
+"ਤਰਜੀਹੀ ਗੱਲਬਾਤ ਵਿੱਚ ਗਲਤੀ। ਕਿਰਪਾ ਕਰ ਕੇ ਜਿਆਦਾ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm.log ਵੇਖੋ।"
+
+#: ../src/subscription_manager/gui/managergui.py:345
+msgid ""
+"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr ""
+"repos ਵਾਰਤਾਲਾਪ ਵਿੱਚ ਗਲਤੀ। ਹੋਰ ਜਾਣਕਾਰੀ ਲਈ ਕਿਰਪਾ ਕਰ ਕੇ /var/log/rhsm/rhsm.log ਵੇਖੋ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:361
+msgid "<b>Errors were encountered during unregister.</b>"
+msgstr "<b>ਅਨ-ਰਜਿਸਟਰ ਕਰਨ ਵੇਲੇ ਗਲਤੀਆਂ ਆਈਆਂ ਹਨ।</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:363
+#: ../src/subscription_manager/gui/registergui.py:94
+msgid "Please see /var/log/rhsm/rhsm.log for more information."
+msgstr "ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm.log ਵੇਖੋ ਜੀ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:379
+msgid "<b>Are you sure you want to unregister?</b>"
+msgstr "<b>ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ ਅਨ-ਰਜਿਸਟਰ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/gui/managergui.py:435
+msgid "System Already Registered"
+msgstr "ਸਿਸਟਮ ਪਹਿਲਾਂ ਹੀ ਦਰਜ ਕੀਤਾ ਹੈ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/mysubstab.py:74
-#: ../src/subscription_manager/gui/allsubs.py:72
 #: ../src/subscription_manager/gui/registergui.py:421
+#: ../src/subscription_manager/gui/allsubs.py:72
 msgid "Subscription"
 msgstr "ਮੈਂਬਰੀ"
 
@@ -409,9 +527,9 @@ msgstr "ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. Set up the quantity column.
 #: ../src/subscription_manager/gui/mysubstab.py:105
+#: ../src/subscription_manager/gui/registergui.py:427
 #: ../src/subscription_manager/gui/contract_selection.py:124
 #: ../src/subscription_manager/gui/allsubs.py:88
-#: ../src/subscription_manager/gui/registergui.py:427
 #: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:82
 msgid "Quantity"
 msgstr "ਮਾਤਰਾ"
@@ -479,22 +597,6 @@ msgstr "ਮੈਂਬਰੀ ਅਜੇ ਸ਼ੁਰੂ ਨਹੀਂ ਹੋਈ"
 msgid "Subscription management service doesn't support Status Details."
 msgstr "ਮੈਂਬਰੀ ਪ੍ਰਬੰਧਨ ਸੇਵਾ ਹਾਲਾਤ ਵੇਰਵੇ ਦਾ ਸਮਰਥਨ ਨਹੀਂ ਕਰਦਾ"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/gui/mysubstab.py:281
-#: ../src/subscription_manager/gui/widgets.py:706
-#: ../src/subscription_manager/managercli.py:2082
-#: ../src/subscription_manager/managercli.py:2165
-msgid "Virtual"
-msgstr "ਆਭਾਸੀ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:283
-#: ../src/subscription_manager/gui/widgets.py:705
-#: ../src/subscription_manager/managercli.py:2084
-#: ../src/subscription_manager/managercli.py:2167
-msgid "Physical"
-msgstr "ਭੌਤਿਕ"
-
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
 #: ../src/subscription_manager/gui/mysubstab.py:286
 msgid "Yes"
@@ -505,127 +607,195 @@ msgstr "ਹਾਂ"
 msgid "No"
 msgstr "ਨਹੀਂ"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/gui/managergui.py:337
-msgid ""
-"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr ""
-"ਤਰਜੀਹੀ ਗੱਲਬਾਤ ਵਿੱਚ ਗਲਤੀ। ਕਿਰਪਾ ਕਰ ਕੇ ਜਿਆਦਾ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm.log ਵੇਖੋ।"
-
-#: ../src/subscription_manager/gui/managergui.py:345
-msgid ""
-"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr ""
-"repos ਵਾਰਤਾਲਾਪ ਵਿੱਚ ਗਲਤੀ। ਹੋਰ ਜਾਣਕਾਰੀ ਲਈ ਕਿਰਪਾ ਕਰ ਕੇ /var/log/rhsm/rhsm.log ਵੇਖੋ।"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:92
+msgid "<b>Unable to register the system.</b>"
+msgstr "<b>ਸਿਸਟਮ ਰਜਿਸਟਰ ਕਰਨ ਤੋਂ ਅਸਮਰੱਥ।</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:361
-msgid "<b>Errors were encountered during unregister.</b>"
-msgstr "<b>ਅਨ-ਰਜਿਸਟਰ ਕਰਨ ਵੇਲੇ ਗਲਤੀਆਂ ਆਈਆਂ ਹਨ।</b>"
+#: ../src/subscription_manager/gui/registergui.py:186
+#: ../src/subscription_manager/gui/data/registration.glade.h:1
+msgid "System Registration"
+msgstr "ਸਿਸਟਮ ਪੰਜੀਕਰਣ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/registergui.py:187
+#: ../src/subscription_manager/gui/data/registration.glade.h:6
+msgid "<b>Registering</b>"
+msgstr "<b>ਦਰਜ ਹੋ ਰਿਹਾ ਹੈ</b>"
+
+#: ../src/subscription_manager/gui/registergui.py:189
+msgid "Subscription Attachment"
+msgstr "ਮੈਂਬਰੀ ਨੱਥੀ"
+
+#: ../src/subscription_manager/gui/registergui.py:190
+msgid "<b>Attaching</b>"
+msgstr "<b>ਨੱਥੀ ਕਰ ਰਿਹਾ</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:363
-#: ../src/subscription_manager/gui/registergui.py:94
-msgid "Please see /var/log/rhsm/rhsm.log for more information."
-msgstr "ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm.log ਵੇਖੋ ਜੀ।"
+#: ../src/subscription_manager/gui/registergui.py:298
+#: ../src/subscription_manager/gui/data/registration.glade.h:4
+#: ../src/subscription_manager/gui/data/installed.glade.h:4
+msgid "Register"
+msgstr "ਦਰਜ ਕਰੋ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/registergui.py:342
+msgid "Registering your system"
+msgstr "ਤੁਹਾਡਾ ਸਿਸਟਮ ਦਰਜ ਕਰ ਰਿਹਾ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:379
-msgid "<b>Are you sure you want to unregister?</b>"
-msgstr "<b>ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ ਅਨ-ਰਜਿਸਟਰ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/gui/managergui.py:435
-msgid "System Already Registered"
-msgstr "ਸਿਸਟਮ ਪਹਿਲਾਂ ਹੀ ਦਰਜ ਕੀਤਾ ਹੈ"
+#: ../src/subscription_manager/gui/registergui.py:383
+#: ../src/subscription_manager/gui/registergui.py:871
+msgid "Attaching subscriptions"
+msgstr "ਮੈਂਬਰੀ ਨੱਥੀ ਕਰ ਰਿਹਾ ਹੈ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:155
-msgid "There was an error saving your configuration."
-msgstr "ਤੁਹਾਡੀ ਸੰਰਚਨਾ ਸੰਭਾਲਣ ਵਿੱਚ ਗਲਤੀ ਸੀ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/gui/networkConfig.py:156
+#: ../src/subscription_manager/gui/registergui.py:387
+#: ../src/subscription_manager/gui/registergui.py:875
 #, python-format
-msgid "Make sure that you own %s."
-msgstr "ਯਕੀਨੀ ਕਰੋ ਕਿ ਤੁਸੀਂ %s ਦੇ ਮਾਲਕ ਹੋ।"
+msgid "Error subscribing: %s"
+msgstr "ਮੈਂਬਰੀ ਦੌਰਾਨ ਗਲਤੀ: %s"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/gui/networkConfig.py:177
-msgid "Proxy location cannot be empty"
-msgstr "ਪਰਾਕਸੀ ਟਿਕਾਣਾ ਖਾਲੀ ਨਹੀਂ ਹੋ ਸਕਦਾ"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:415
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:9
+msgid "Attach"
+msgstr "ਨੱਥੀ"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/networkConfig.py:179
-msgid "Proxy connection succeeded"
-msgstr "ਪਰਾਕਸੀ ਕੁਨੈਕਸ਼ਨ ਸਫਲ ਹੋਇਆ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/gui/networkConfig.py:181
-msgid "Proxy connection failed"
-msgstr "ਪਰਾਕਸੀ ਕੁਨੈਕਸ਼ਨ ਅਸਫਲ ਹੋਇਆ"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:473
+msgid "Finding suitable service levels"
+msgstr "ਯੋਗ ਸੇਵਾ ਪੱਧਰ ਲੱਭ ਰਿਹਾ ਹੈ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/redeem.py:55
+#: ../src/subscription_manager/gui/registergui.py:474
+#: ../src/subscription_manager/gui/registergui.py:902
+#: ../src/subscription_manager/gui/registergui.py:1234
+msgid "Next"
+msgstr "ਅੱਗੇ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:526
+msgid "Unable to auto-attach, server does not support service levels."
+msgstr "ਸ੍ਵੈ-ਨੱਥੀ ਅਸਫਲ, ਸਰਵਰ ਸੇਵਾ ਪੱਧਰ ਦਾ ਸਮਰਥਨ ਨਹੀਂ ਕਰਦਾ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:529
+msgid ""
+"No installed products on system. No need to attach subscriptions at this "
+"time."
+msgstr "ਸਿਸਟਮ ਉੱਪਰ ਕੋਈ ਇੰਸਟਾਲ ਕੀਤਾ ਉਤਪਾਦ ਨਹੀਂ ਹੈ। ਹਾਲੇ ਮੈਂਬਰੀ ਜੋੜਨ ਦੀ ਕੋਈ ਲੋੜ ਨਹੀਂ ਹੈ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:532
+msgid ""
+"All installed products are covered by valid entitlements. No need to attach "
+"subscriptions at this time."
+msgstr "ਸਭ ਇੰਸਟਾਲ ਉਤਪਾਦ ਯੋਗ ਇੰਟਾਈਟਲਮੈਂਟ ਦੁਆਰਾ ਕਵਰ ਹਨ। ਹਾਲੇ ਮੈਂਬਰੀ ਜੋੜਨ ਦੀ ਕੋਈ ਲੋੜ ਨਹੀਂ ਹੈ।"
+
+#: ../src/subscription_manager/gui/registergui.py:535
+msgid "Consumer has been deleted."
+msgstr "ਗ੍ਰਾਹਕ ਮਿਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:551
 #, python-format
-msgid "Error redeeming subscription: %s"
-msgstr "ਮੈਂਬਰੀ ਛੱਡਣ ਵੇਲੇ ਗਲਤੀ: %s"
+msgid ""
+"No available subscriptions at the current service level: %s. Please use the "
+"\"All Available Subscriptions\" tab to manually attach subscriptions."
+msgstr ""
+"ਮੌਜੂਦਾ ਸੇਵਾ ਪੱਧਰ ਵਿੱਚ ਕੋਈ ਉਪਲੱਬਧ ਮੈਂਬਰੀ ਨਹੀਂ ਹੈ: %s। ਦਸਤੀ ਮੈਂਬਰੀ ਜੋੜਨ ਲਈ \"ਸਭ ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ"
+"\" ਟੈਬ ਵਰਤੋ।"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:255
-msgid "Installed"
-msgstr "ਇੰਸਟਾਲ ਕੀਤੇ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. An empty string entry is used for "un-setting" the system's SLA:
-#. for unsetting
-#: ../src/subscription_manager/gui/widgets.py:330
-#: ../src/subscription_manager/gui/preferences.py:119
-#: ../src/subscription_manager/gui/preferences.py:145
-msgid "Not Set"
-msgstr "ਸੈੱਟ ਨਹੀਂ ਕੀਤਾ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:357
-#: ../src/subscription_manager/gui/factsgui.py:141
-#: ../src/subscription_manager/managercli.py:611
-#: ../src/subscription_manager/printing_utils.py:136
-msgid "None"
-msgstr "ਕੋਈ ਨਹੀਂ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:558
-msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr "ਗਲਤ ਮਿਤੀ ਫਾਰਮੈਟ। ਕਿਰਪਾ ਕਰਕੇ ਯੋਗ ਮਿਤੀ ਦੁਬਾਰਾ ਦਿਓ। ਉਦਾਹਰਣ: "
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/gui/registergui.py:569
+msgid ""
+"No service level will cover all installed products. Please manually "
+"subscribe using multiple service levels via the \"All Available "
+"Susbscriptions\" tab or purchase additional subscriptions."
+msgstr ""
+"ਕੋਈ ਵੀ ਸੇਵਾ ਪੱਧਰ ਸਾਰੇ ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦਾਂ ਨੂੰ ਨਹੀਂ ਦੇਖਦਾ। ਕ੍ਰਿਪਾ ਕਰ ਕੇ \"ਸੱਭ ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ\" "
+"ਟੈਬ ਦੁਆਰਾ ਬਹੁ-ਪੱਧਰੀ ਸੇਵਾ ਵਰਤ ਕੇ ਦਸਤੀ ਹੀ ਮੈਂਬਰੀ ਬਣਾਓ ਜਾਂ ਵਾਧੂ ਮੈਂਬਰੀ ਖਰੀਦੋ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/widgets.py:595
-msgid "Date Selection"
-msgstr "ਮਿਤੀ ਖੋਜ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:610
-msgid "Today"
-msgstr "ਅੱਜ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:707
-msgid "Both"
-msgstr "ਦੋਵੇਂ"
+#: ../src/subscription_manager/gui/registergui.py:601
+msgid "Fetching list of possible environments"
+msgstr "ਸੰਭਵ ਵਾਤਾਵਰਣਾਂ ਦੀ ਸੂਚੀ ਲੈ ਰਿਹਾ ਹੈ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#. content-type is required, no need to xstr
-#: ../src/subscription_manager/gui/widgets.py:710
-#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
-msgid "Type"
-msgstr "ਕਿਸਮ"
+#: ../src/subscription_manager/gui/registergui.py:603
+#: ../src/subscription_manager/gui/data/factsdialog.glade.h:7
+msgid "Environment"
+msgstr "ਵਾਤਾਵਰਣ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/registergui.py:658
+msgid "Fetching list of possible organizations"
+msgstr "ਸੰਭਵ ਸੰਗਠਨਾਂ ਦੀ ਖੋਜ ਸੂਚੀ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/registergui.py:661
+msgid "Organization"
+msgstr "ਸੰਗਠਨ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/registergui.py:680
+#, python-format
+msgid "<b>User %s is not able to register with any orgs.</b>"
+msgstr "<b>ਯੂਜ਼ਰ %s ਕਿਸੇ ਸੰਗਠਨ ਨਾਲ ਦਰਜ ਹੋਣ ਦੇ ਸਮਰੱਥ ਨਹੀਂ ਹੈ।</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:782
-msgid "Click to Adjust Quantity"
-msgstr "ਮਾਤਰਾ ਸੈੱਟ ਕਰਨ ਲਈ ਕਲਿੱਕ ਕਰੋ"
+#: ../src/subscription_manager/gui/registergui.py:742
+#: ../src/subscription_manager/gui/registergui.py:848
+msgid "You must enter a system name."
+msgstr "ਤੁਹਾਡਾ ਇੱਕ ਸਿਸਟਮ ਨਾਂ ਭਰਨਾ ਜਰੂਰੀ ਹੈ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:750
+msgid "You must enter a login."
+msgstr "ਤੁਹਾਡਾ ਇੱਕ ਲਾਗਇਨ ਭਰਨਾ ਜਰੂਰੀ ਹੈ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:755
+msgid "You must enter a password."
+msgstr "ਤੁਹਾਡਾ ਇੱਕ ਗੁਪਤ-ਸ਼ਬਦ ਭਰਨਾ ਜਰੂਰੀ ਹੈ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:834
+msgid "You must enter an organization."
+msgstr "ਤੁਹਾਡਾ ਇੱਕ ਸੰਗਠਨ ਭਰਨਾ ਜਰੂਰੀ ਹੈ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:841
+msgid "You must enter an activation key."
+msgstr "ਤੁਹਾਡਾ ਇੱਕ ਕਿਰਿਆਸ਼ੀਲਤਾ ਚਾਬੀ ਭਰਨਾ ਜਰੂਰੀ ਹੈ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/registergui.py:952
+#: ../src/subscription_manager/managercli.py:342
+#, python-format
+msgid "Unable to reach the server at %s:%s%s"
+msgstr "%s ਤੇ ਸਰਵਰ ਤੱਕ ਨਹੀਂ ਪਹੁੰਚ ਸਕਿਆ:%s%s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/gui/registergui.py:957
+msgid "CA certificate for subscription service has not been installed."
+msgstr "ਮੈਂਬਰੀ ਸੇਵਾ ਲਈ CA ਪ੍ਰਮਾਣ-ਪੱਤਰ ਇੰਸਟਾਲ ਨਹੀਂ ਕੀਤਾ ਹੈ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/registergui.py:962
+msgid ""
+"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
+"prefix]"
+msgstr ""
+"ਕਿਰਪਾ ਕਰਕੇ ਇੱਕ ਮੇਜਬਾਨ-ਨਾਂ ਦਿਉ ਚੋਣਵੇਂ ਪੋਰਟ ਅਤੇ/ਜਾਂ ਅਗੇਤਰ ਨਾਲ: hostname[:port][/prefix]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/registergui.py:1019
+msgid "Server supports environments, but none are available."
+msgstr "ਸਰਵਰ ਵਾਤਾਵਰਣਾਂ ਨੂੰ ਸਮਰਥਨ ਦਿੰਦਾ ਹੈ, ਪਰ ਕੋਈ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
 #: ../src/subscription_manager/gui/about.py:29
@@ -899,196 +1069,6 @@ msgstr "ਮੁੜ-ਲਿਖਣ ਹਟਾਉਣ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ"
 #: ../src/subscription_manager/gui/reposgui.py:404
 msgid "Unable to delete the gpgcheck override."
 msgstr "gpgcheck ਮੁੜ-ਲਿਖਣ ਨੂੰ ਹਟਾਉਣ ਤੋਂ ਅਸਮਰੱਥ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:92
-msgid "<b>Unable to register the system.</b>"
-msgstr "<b>ਸਿਸਟਮ ਰਜਿਸਟਰ ਕਰਨ ਤੋਂ ਅਸਮਰੱਥ।</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:186
-#: ../src/subscription_manager/gui/data/registration.glade.h:1
-msgid "System Registration"
-msgstr "ਸਿਸਟਮ ਪੰਜੀਕਰਣ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/registergui.py:187
-#: ../src/subscription_manager/gui/data/registration.glade.h:6
-msgid "<b>Registering</b>"
-msgstr "<b>ਦਰਜ ਹੋ ਰਿਹਾ ਹੈ</b>"
-
-#: ../src/subscription_manager/gui/registergui.py:189
-msgid "Subscription Attachment"
-msgstr "ਮੈਂਬਰੀ ਨੱਥੀ"
-
-#: ../src/subscription_manager/gui/registergui.py:190
-msgid "<b>Attaching</b>"
-msgstr "<b>ਨੱਥੀ ਕਰ ਰਿਹਾ</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:298
-#: ../src/subscription_manager/gui/data/registration.glade.h:4
-#: ../src/subscription_manager/gui/data/installed.glade.h:4
-msgid "Register"
-msgstr "ਦਰਜ ਕਰੋ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/registergui.py:342
-msgid "Registering your system"
-msgstr "ਤੁਹਾਡਾ ਸਿਸਟਮ ਦਰਜ ਕਰ ਰਿਹਾ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:383
-#: ../src/subscription_manager/gui/registergui.py:871
-msgid "Attaching subscriptions"
-msgstr "ਮੈਂਬਰੀ ਨੱਥੀ ਕਰ ਰਿਹਾ ਹੈ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:387
-#: ../src/subscription_manager/gui/registergui.py:875
-#, python-format
-msgid "Error subscribing: %s"
-msgstr "ਮੈਂਬਰੀ ਦੌਰਾਨ ਗਲਤੀ: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:415
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:9
-msgid "Attach"
-msgstr "ਨੱਥੀ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:473
-msgid "Finding suitable service levels"
-msgstr "ਯੋਗ ਸੇਵਾ ਪੱਧਰ ਲੱਭ ਰਿਹਾ ਹੈ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/registergui.py:474
-#: ../src/subscription_manager/gui/registergui.py:902
-#: ../src/subscription_manager/gui/registergui.py:1234
-msgid "Next"
-msgstr "ਅੱਗੇ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:526
-msgid "Unable to auto-attach, server does not support service levels."
-msgstr "ਸ੍ਵੈ-ਨੱਥੀ ਅਸਫਲ, ਸਰਵਰ ਸੇਵਾ ਪੱਧਰ ਦਾ ਸਮਰਥਨ ਨਹੀਂ ਕਰਦਾ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:529
-msgid ""
-"No installed products on system. No need to attach subscriptions at this "
-"time."
-msgstr "ਸਿਸਟਮ ਉੱਪਰ ਕੋਈ ਇੰਸਟਾਲ ਕੀਤਾ ਉਤਪਾਦ ਨਹੀਂ ਹੈ। ਹਾਲੇ ਮੈਂਬਰੀ ਜੋੜਨ ਦੀ ਕੋਈ ਲੋੜ ਨਹੀਂ ਹੈ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:532
-msgid ""
-"All installed products are covered by valid entitlements. No need to attach "
-"subscriptions at this time."
-msgstr "ਸਭ ਇੰਸਟਾਲ ਉਤਪਾਦ ਯੋਗ ਇੰਟਾਈਟਲਮੈਂਟ ਦੁਆਰਾ ਕਵਰ ਹਨ। ਹਾਲੇ ਮੈਂਬਰੀ ਜੋੜਨ ਦੀ ਕੋਈ ਲੋੜ ਨਹੀਂ ਹੈ।"
-
-#: ../src/subscription_manager/gui/registergui.py:535
-msgid "Consumer has been deleted."
-msgstr "ਗ੍ਰਾਹਕ ਮਿਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:551
-#, python-format
-msgid ""
-"No available subscriptions at the current service level: %s. Please use the "
-"\"All Available Subscriptions\" tab to manually attach subscriptions."
-msgstr ""
-"ਮੌਜੂਦਾ ਸੇਵਾ ਪੱਧਰ ਵਿੱਚ ਕੋਈ ਉਪਲੱਬਧ ਮੈਂਬਰੀ ਨਹੀਂ ਹੈ: %s। ਦਸਤੀ ਮੈਂਬਰੀ ਜੋੜਨ ਲਈ \"ਸਭ ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ"
-"\" ਟੈਬ ਵਰਤੋ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/gui/registergui.py:569
-msgid ""
-"No service level will cover all installed products. Please manually "
-"subscribe using multiple service levels via the \"All Available "
-"Susbscriptions\" tab or purchase additional subscriptions."
-msgstr ""
-"ਕੋਈ ਵੀ ਸੇਵਾ ਪੱਧਰ ਸਾਰੇ ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦਾਂ ਨੂੰ ਨਹੀਂ ਦੇਖਦਾ। ਕ੍ਰਿਪਾ ਕਰ ਕੇ \"ਸੱਭ ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ\" "
-"ਟੈਬ ਦੁਆਰਾ ਬਹੁ-ਪੱਧਰੀ ਸੇਵਾ ਵਰਤ ਕੇ ਦਸਤੀ ਹੀ ਮੈਂਬਰੀ ਬਣਾਓ ਜਾਂ ਵਾਧੂ ਮੈਂਬਰੀ ਖਰੀਦੋ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/registergui.py:601
-msgid "Fetching list of possible environments"
-msgstr "ਸੰਭਵ ਵਾਤਾਵਰਣਾਂ ਦੀ ਸੂਚੀ ਲੈ ਰਿਹਾ ਹੈ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/registergui.py:603
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:7
-msgid "Environment"
-msgstr "ਵਾਤਾਵਰਣ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/registergui.py:658
-msgid "Fetching list of possible organizations"
-msgstr "ਸੰਭਵ ਸੰਗਠਨਾਂ ਦੀ ਖੋਜ ਸੂਚੀ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/registergui.py:661
-msgid "Organization"
-msgstr "ਸੰਗਠਨ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/registergui.py:680
-#, python-format
-msgid "<b>User %s is not able to register with any orgs.</b>"
-msgstr "<b>ਯੂਜ਼ਰ %s ਕਿਸੇ ਸੰਗਠਨ ਨਾਲ ਦਰਜ ਹੋਣ ਦੇ ਸਮਰੱਥ ਨਹੀਂ ਹੈ।</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:742
-#: ../src/subscription_manager/gui/registergui.py:848
-msgid "You must enter a system name."
-msgstr "ਤੁਹਾਡਾ ਇੱਕ ਸਿਸਟਮ ਨਾਂ ਭਰਨਾ ਜਰੂਰੀ ਹੈ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:750
-msgid "You must enter a login."
-msgstr "ਤੁਹਾਡਾ ਇੱਕ ਲਾਗਇਨ ਭਰਨਾ ਜਰੂਰੀ ਹੈ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:755
-msgid "You must enter a password."
-msgstr "ਤੁਹਾਡਾ ਇੱਕ ਗੁਪਤ-ਸ਼ਬਦ ਭਰਨਾ ਜਰੂਰੀ ਹੈ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:834
-msgid "You must enter an organization."
-msgstr "ਤੁਹਾਡਾ ਇੱਕ ਸੰਗਠਨ ਭਰਨਾ ਜਰੂਰੀ ਹੈ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:841
-msgid "You must enter an activation key."
-msgstr "ਤੁਹਾਡਾ ਇੱਕ ਕਿਰਿਆਸ਼ੀਲਤਾ ਚਾਬੀ ਭਰਨਾ ਜਰੂਰੀ ਹੈ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/registergui.py:952
-#: ../src/subscription_manager/managercli.py:342
-#, python-format
-msgid "Unable to reach the server at %s:%s%s"
-msgstr "%s ਤੇ ਸਰਵਰ ਤੱਕ ਨਹੀਂ ਪਹੁੰਚ ਸਕਿਆ:%s%s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/gui/registergui.py:957
-msgid "CA certificate for subscription service has not been installed."
-msgstr "ਮੈਂਬਰੀ ਸੇਵਾ ਲਈ CA ਪ੍ਰਮਾਣ-ਪੱਤਰ ਇੰਸਟਾਲ ਨਹੀਂ ਕੀਤਾ ਹੈ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/registergui.py:962
-msgid ""
-"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
-"prefix]"
-msgstr ""
-"ਕਿਰਪਾ ਕਰਕੇ ਇੱਕ ਮੇਜਬਾਨ-ਨਾਂ ਦਿਉ ਚੋਣਵੇਂ ਪੋਰਟ ਅਤੇ/ਜਾਂ ਅਗੇਤਰ ਨਾਲ: hostname[:port][/prefix]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/registergui.py:1019
-msgid "Server supports environments, but none are available."
-msgstr "ਸਰਵਰ ਵਾਤਾਵਰਣਾਂ ਨੂੰ ਸਮਰਥਨ ਦਿੰਦਾ ਹੈ, ਪਰ ਕੋਈ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
 #: ../src/subscription_manager/reasons.py:75
@@ -1528,6 +1508,13 @@ msgstr ""
 "RHN Classic ਤੋਂ ਸਿਸਟਮ ਨੂੰ ਅਨਰਜਿਸਟਰ ਕਰਨ ਦੀ ਤਿਆਰੀ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cache.py:183
+msgid ""
+"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr "ਸਰਵਰ ਤੇ ਮਿਤੀ ਅੱਪਡੇਟ ਕਰਨ ਵੇਲੇ ਗਲਤੀ, ਹੋਰ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm.log ਵੇਖੋ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/dmiinfo.py:56
 #: ../src/subscription_manager/dmiinfo.py:102
 #, python-format
@@ -1541,26 +1528,59 @@ msgid "Error reading system DMI information with %s: %s"
 msgstr "ਸਿਸਟਮ DMI ਜਾਣਕਾਰੀ %s ਨਾਲ ਪੜ੍ਹਨ ਵਿੱਚ ਗਲਤੀ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cache.py:183
-msgid ""
-"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr "ਸਰਵਰ ਤੇ ਮਿਤੀ ਅੱਪਡੇਟ ਕਰਨ ਵੇਲੇ ਗਲਤੀ, ਹੋਰ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm.log ਵੇਖੋ।"
+#: ../src/subscription_manager/hwprobe.py:273
+msgid "Error reading system memory information:"
+msgstr "ਸਿਸਟਮ ਮੈਮੋਰੀ ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/cert_sorter.py:44
-msgid "Current"
-msgstr "ਮੌਜੂਦਾ"
+#: ../src/subscription_manager/hwprobe.py:583
+msgid "Error reading system CPU information:"
+msgstr "ਸਿਸਟਮ CPU ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਵਿੱਚ ਗਲਤੀ:"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/cert_sorter.py:45
-msgid "Insufficient"
-msgstr "ਨਾਕਾਫ਼ੀ"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:608
+msgid "Error reading networking information:"
+msgstr "ਨੈੱਟਵਰਕ ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
 
-# translation auto-copied from project subscription-manager, version 1.8.X, document keys, author asaini
-#: ../src/subscription_manager/cert_sorter.py:46
-msgid "Invalid"
-msgstr "ਅਢੁਕਵਾਂ"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:707
+msgid "Error reading network interface information:"
+msgstr "ਨੈੱਟਵਰਕ ਇੰਟਰਫੇਸ ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਵਿੱਚ ਗਲਤੀ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/hwprobe.py:803
+msgid "Virtualization platform does not support UUIDs"
+msgstr "ਆਭਾਸੀਕਰਣ ਪਲੇਟਫਾਰਮ UUIDs ਨੂੰ ਸਹਿਯੋਗ ਨਹੀਂ ਦਿੰਦਾ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/hwprobe.py:805
+#, python-format
+msgid "Error finding UUID: %s"
+msgstr "UUID ਲੱਭਣ ਵਿੱਚ ਗਲਤੀ: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. usage format strips any leading 'usage' so
+#. do not iclude it
+#: ../src/subscription_manager/cli.py:62
+#, python-format
+msgid "%%prog %s [OPTIONS]"
+msgstr "%%prog %s [ਚੋਣਾਂ]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cli.py:93
+#, python-format
+msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+msgstr "ਵਰਤੋਂ: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/cli.py:105
+msgid "Primary Modules:"
+msgstr "ਪ੍ਰਮੁੱਖ ਮੌਡਿਊਲ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cli.py:106
+msgid "Other Modules:"
+msgstr "ਹੋਰ ਮੌਡਿਊਲ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
 #: ../src/subscription_manager/certlib.py:339
@@ -1615,6 +1635,131 @@ msgstr "%d ਅੱਪਡੇਟ ਲੋੜੀਂਦੇ"
 #: ../src/daemons/rhsmcertd-worker.py:54
 msgid "done"
 msgstr "ਮੁਕੰਮਲ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/utils.py:188
+#: ../src/subscription_manager/managercli.py:1161
+msgid "This system is currently not registered."
+msgstr "ਇਹ ਸਿਸਟਮ ਹੁਣ ਰਜਿਸਟਰ ਨਹੀਂ ਕੀਤਾ ਹੈ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/utils.py:266
+msgid "and"
+msgstr "ਅਤੇ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. note default is lower caps
+#: ../src/subscription_manager/i18n_optparse.py:39
+msgid "%prog [OPTIONS]"
+msgstr "%prog [ਚੋਣਾਂ]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/i18n_optparse.py:129
+#: ../../../../..//usr/lib64/python2.7/optparse.py:374
+#, python-format
+msgid "Usage: %s\n"
+msgstr "ਵਰਤੋਂ: %s\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. translators: arg 1 is the program name, arg 2 is the error message
+#: ../src/subscription_manager/i18n_optparse.py:145
+#, python-format
+msgid "%s: error: %s"
+msgstr "%s: ਗਲਤੀ: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/cert_sorter.py:44
+msgid "Current"
+msgstr "ਮੌਜੂਦਾ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/cert_sorter.py:45
+msgid "Insufficient"
+msgstr "ਨਾਕਾਫ਼ੀ"
+
+# translation auto-copied from project subscription-manager, version 1.8.X, document keys, author asaini
+#: ../src/subscription_manager/cert_sorter.py:46
+msgid "Invalid"
+msgstr "ਅਢੁਕਵਾਂ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:27
+msgid ""
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
+msgstr ""
+"ਨੈੱਟਵਰਕ ਗਲਤੀ, ਸਰਵਰ ਨਾਲ ਜੁੜ ਨਹੀਂ ਸਕਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/"
+"rhsm.log ਵੇਖੋ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:28
+msgid ""
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
+msgstr ""
+"ਨੈੱਟਵਰਕ ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ ਕੁਨੈਕਸ਼ਨ ਵੇਰਵਾ, ਜਾਂ /var/log/rhsm/rhsm.log "
+"ਵੇਖੋ।"
+
+#: ../src/subscription_manager/exceptions.py:29
+msgid "Unauthorized: Invalid credentials for request."
+msgstr "ਅਣਅਧਿਕਾਰਤ: ਬੇਨਤੀ ਲਈ ਵੇਰਵੇ ਅਢੁਕਵੇਂ।"
+
+#: ../src/subscription_manager/exceptions.py:30
+msgid "Forbidden: Invalid credentials for request."
+msgstr "ਪਾਬੰਦੀਸ਼ੁਦਾ: ਬੇਨਤੀ ਲਈ ਵੇਰਵੇ ਅਢੁਕਵੇਂ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:31
+msgid ""
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
+msgstr ""
+"ਰਿਮੋਟ ਸਰਵਰ ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ ਕੁਨੈਕਸ਼ਨ ਵੇਰਵਾ, ਜਾਂ /var/log/rhsm/rhsm."
+"log ਵੇਖੋ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/exceptions.py:32
+#, python-format
+msgid "Bad CA certificate: %s"
+msgstr "ਗਲਤ CA ਪ੍ਰਮਾਣ-ਪੱਤਰ: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/exceptions.py:33
+#: ../src/daemons/rhsmcertd-worker.py:56
+msgid "Your identity certificate has expired"
+msgstr "ਤੁਹਾਡਾ ਪਹਿਚਾਣ ਪ੍ਰਮਾਣ-ਪੱਤਰ ਖਤਮ ਹੋ ਚੁੱਕਾ ਹੈ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:34
+#, python-format
+msgid "Unable to verify server's identity: %s"
+msgstr "ਸਰਵਰ ਦਾ ਸ਼ਨਾਖਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/exceptions.py:35
+msgid "Server URL can not be empty"
+msgstr "ਸਰਵਰ URL ਖਾਲੀ ਨਹੀਂ ਹੋ ਸਕਦਾ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/exceptions.py:36
+msgid ""
+"Server URL is just a schema. Should include hostname, and/or port and path"
+msgstr "ਸਰਵਰ URL ਇੱਕ ਸਕੀਮਾ ਹੈ। ਜਿਸ ਵਿੱਚ ਮੇਜਬਾਨ-ਨਾਂ, ਅਤੇ/ਜਾਂ ਪੋਰਟ ਅਤੇ ਮਾਰਗ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/exceptions.py:37
+msgid "Server URL can not be None"
+msgstr "ਸਰਵਰ URL ਕੋਈ ਨਹੀਂ ਨਹੀਂ ਹੋ ਸਕਦਾ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
+#: ../src/subscription_manager/exceptions.py:38
+msgid "Server URL port should be numeric"
+msgstr "ਸਰਵਰ URL ਪੋਰਟ ਅੰਕਾਂ ਵਿੱਚ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/exceptions.py:39
+msgid "Server URL has an invalid scheme. http:// and https:// are supported"
+msgstr "ਸਰਵਰ URL ਵਿੱਚ ਗਲਤ ਸਕੀਮ ਹੈ। http:// ਅਤੇ https:// ਸਮਰਥਿਤ ਹੈ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:67
@@ -2284,12 +2429,6 @@ msgid ""
 "complete your request."
 msgstr ""
 "ਗਲਤੀ: --servicelevel ਚੋਣ ਨੂੰ ਸਰਵਰ ਦੁਆਰਾ ਸਮਰਥਨ ਨਹੀਂ ਹੈ। ਤੁਹਾਡੀ ਬੇਨਤੀ ਪੂਰੀ ਨਹੀਂ ਕੀਤੀ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/managercli.py:1161
-#: ../src/subscription_manager/utils.py:188
-msgid "This system is currently not registered."
-msgstr "ਇਹ ਸਿਸਟਮ ਹੁਣ ਰਜਿਸਟਰ ਨਹੀਂ ਕੀਤਾ ਹੈ।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
 #: ../src/subscription_manager/managercli.py:1186
@@ -2999,145 +3138,6 @@ msgstr "ਸਿਸਟਮ ਹਾਲਾਤ ਵੇਰਵੇ"
 #, python-format
 msgid "Overall Status: %s\n"
 msgstr "ਸਮੁੱਚੀ ਹਾਲਾਤ:%s\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:27
-msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"ਨੈੱਟਵਰਕ ਗਲਤੀ, ਸਰਵਰ ਨਾਲ ਜੁੜ ਨਹੀਂ ਸਕਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/"
-"rhsm.log ਵੇਖੋ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:28
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"ਨੈੱਟਵਰਕ ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ ਕੁਨੈਕਸ਼ਨ ਵੇਰਵਾ, ਜਾਂ /var/log/rhsm/rhsm.log "
-"ਵੇਖੋ।"
-
-#: ../src/subscription_manager/exceptions.py:29
-msgid "Unauthorized: Invalid credentials for request."
-msgstr "ਅਣਅਧਿਕਾਰਤ: ਬੇਨਤੀ ਲਈ ਵੇਰਵੇ ਅਢੁਕਵੇਂ।"
-
-#: ../src/subscription_manager/exceptions.py:30
-msgid "Forbidden: Invalid credentials for request."
-msgstr "ਪਾਬੰਦੀਸ਼ੁਦਾ: ਬੇਨਤੀ ਲਈ ਵੇਰਵੇ ਅਢੁਕਵੇਂ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:31
-msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr ""
-"ਰਿਮੋਟ ਸਰਵਰ ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ ਕੁਨੈਕਸ਼ਨ ਵੇਰਵਾ, ਜਾਂ /var/log/rhsm/rhsm."
-"log ਵੇਖੋ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/exceptions.py:32
-#, python-format
-msgid "Bad CA certificate: %s"
-msgstr "ਗਲਤ CA ਪ੍ਰਮਾਣ-ਪੱਤਰ: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/exceptions.py:33
-#: ../src/daemons/rhsmcertd-worker.py:56
-msgid "Your identity certificate has expired"
-msgstr "ਤੁਹਾਡਾ ਪਹਿਚਾਣ ਪ੍ਰਮਾਣ-ਪੱਤਰ ਖਤਮ ਹੋ ਚੁੱਕਾ ਹੈ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:34
-#, python-format
-msgid "Unable to verify server's identity: %s"
-msgstr "ਸਰਵਰ ਦਾ ਸ਼ਨਾਖਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/exceptions.py:35
-msgid "Server URL can not be empty"
-msgstr "ਸਰਵਰ URL ਖਾਲੀ ਨਹੀਂ ਹੋ ਸਕਦਾ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/exceptions.py:36
-msgid ""
-"Server URL is just a schema. Should include hostname, and/or port and path"
-msgstr "ਸਰਵਰ URL ਇੱਕ ਸਕੀਮਾ ਹੈ। ਜਿਸ ਵਿੱਚ ਮੇਜਬਾਨ-ਨਾਂ, ਅਤੇ/ਜਾਂ ਪੋਰਟ ਅਤੇ ਮਾਰਗ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/exceptions.py:37
-msgid "Server URL can not be None"
-msgstr "ਸਰਵਰ URL ਕੋਈ ਨਹੀਂ ਨਹੀਂ ਹੋ ਸਕਦਾ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/exceptions.py:38
-msgid "Server URL port should be numeric"
-msgstr "ਸਰਵਰ URL ਪੋਰਟ ਅੰਕਾਂ ਵਿੱਚ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/exceptions.py:39
-msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr "ਸਰਵਰ URL ਵਿੱਚ ਗਲਤ ਸਕੀਮ ਹੈ। http:// ਅਤੇ https:// ਸਮਰਥਿਤ ਹੈ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. usage format strips any leading 'usage' so
-#. do not iclude it
-#: ../src/subscription_manager/cli.py:62
-#, python-format
-msgid "%%prog %s [OPTIONS]"
-msgstr "%%prog %s [ਚੋਣਾਂ]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:93
-#, python-format
-msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "ਵਰਤੋਂ: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/cli.py:105
-msgid "Primary Modules:"
-msgstr "ਪ੍ਰਮੁੱਖ ਮੌਡਿਊਲ:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:106
-msgid "Other Modules:"
-msgstr "ਹੋਰ ਮੌਡਿਊਲ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:273
-msgid "Error reading system memory information:"
-msgstr "ਸਿਸਟਮ ਮੈਮੋਰੀ ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/hwprobe.py:583
-msgid "Error reading system CPU information:"
-msgstr "ਸਿਸਟਮ CPU ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਵਿੱਚ ਗਲਤੀ:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:608
-msgid "Error reading networking information:"
-msgstr "ਨੈੱਟਵਰਕ ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:707
-msgid "Error reading network interface information:"
-msgstr "ਨੈੱਟਵਰਕ ਇੰਟਰਫੇਸ ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਵਿੱਚ ਗਲਤੀ:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/hwprobe.py:803
-msgid "Virtualization platform does not support UUIDs"
-msgstr "ਆਭਾਸੀਕਰਣ ਪਲੇਟਫਾਰਮ UUIDs ਨੂੰ ਸਹਿਯੋਗ ਨਹੀਂ ਦਿੰਦਾ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/hwprobe.py:805
-#, python-format
-msgid "Error finding UUID: %s"
-msgstr "UUID ਲੱਭਣ ਵਿੱਚ ਗਲਤੀ: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author asaini
-#: ../src/subscription_manager/utils.py:266
-msgid "and"
-msgstr "ਅਤੇ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/cert_commands.py:38
@@ -4059,6 +4059,95 @@ msgstr "register_details_label"
 msgid "page 2"
 msgstr "ਸਫ਼ਾ 2"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:1
+msgid ""
+"The subscription management service you register with will provide your "
+"system with updates and allow additional management."
+msgstr ""
+"ਮੈਂਬਰੀ ਪ੍ਰਬੰਧਨ ਸੇਵਾ ਜੋ ਤੁਸੀਂ ਰਜਿਸਟਰ ਕੀਤੀ ਹੈ ਤੁਹਾਡੇ ਸਿਸਟਮ ਨੂੰ ਅੱਪਡੇਟ ਦੇਵੇਗਾ ਅਤੇ ਵਾਧੂ ਪ੍ਰਬੰਧਨ ਦੀ "
+"ਮਨਜੂਰੀ ਦੇਵੇਗਾ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:2
+msgid "choose_server_label"
+msgstr "choose_server_label"
+
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:3
+msgid ""
+"Registering with Customer Portal, Subscription Asset Manager, Satellite or "
+"Candlepin servers can be used to provide your system with updates and allow "
+"management through the selected server's interface."
+msgstr ""
+"ਗਾਹਕ ਪੋਰਟਲ, ਮੈਂਬਰੀ ਸਹਾਇਕ ਪ੍ਰਬੰਧਕ, CloudForms ਸਿਸਟਮ ਇੰਜਣ ਜਾਂ Candlepin ਸਰਵਰਾਂ ਨਾਲ "
+"ਰਜਿਸਟਰ ਕਰਨ ਨੂੰ ਤੁਹਾਡੇ ਸਿਸਟਮ ਲਈ ਅੱਪਡੇਟ ਦੇਣ ਵਾਸਤੇ ਵਰਤਿਆ ਜਾ ਸਕਦਾ ਹੈ ਅਤੇ ਚੁਣੇ ਸਰਵਰ ਦੇ ਇੰਟਰਫੇਸ "
+"ਦੁਆਰਾ ਪਰਬੰਧਨ ਦੀ ਮਨਜੂਰੀ ਦਿੱਤੀ ਜਾ ਸਕਦੀ ਹੈ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:4
+msgid "I will register with:"
+msgstr "ਮੈਂ ਇਸ ਨਾਲ ਦਰਜ ਹੋਵਾਂਗਾ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:5
+msgid "server_label"
+msgstr "server_label"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:6
+msgid "hostname[:port][/prefix]"
+msgstr "hostname[:port][/prefix]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:7
+msgid "server_entry"
+msgstr "server_entry"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:8
+msgid "Default"
+msgstr "ਮੂਲ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:9
+msgid "Reset to register with Customer Portal."
+msgstr "ਗਾਹਕ ਪੋਰਟਲ ਤੇ ਦਰਜ ਕਰਨ ਲਈ ਰੀਸੈੱਟ ਕਰੋ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:10
+msgid "default_button"
+msgstr "default_button"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:11
+msgid ""
+"Activation Keys are alphanumeric strings that are pre-configured by your "
+"system administrators to automatically register your system and attach all "
+"necessary subscriptions."
+msgstr ""
+"ਕਿਰਿਆਸ਼ੀਲਤਾ ਕੁੰਜੀਆਂ ਅਲਫਾ-ਨੁਮੈਰਿਕ ਸਤਰਾਂ ਹਨ ਜੋ ਤੁਹਾਡੇ ਸਿਸਟਮ ਪਰਬੰਧਕ ਦੁਆਰਾ ਪਹਿਲਾਂ ਹੀ ਸੰਰਚਿਤ "
+"ਕੀਤੀਆਂ ਹਨ ਤਾਂ ਜੋ ਤੁਹਾਡਾ ਸਿਸਟਮ ਸ੍ਵੈ-ਚਲਿਤ ਹੀ ਦਰਜ ਹੋ ਜਾਏ ਅਤੇ ਸਭ ਲੋੜੀਂਦੀਆਂ ਮੈਂਬਰੀਆਂ ਨਾਲ ਜੁੜ ਜਾਏ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:12
+msgid "I will use an Activation Key"
+msgstr "ਮੈਂ ਕਿਰਿਆਸ਼ੀਲਤਾ ਕੁੰਜੀ ਵਰਤਾਂਗਾ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:13
+msgid "If required, please configure your proxy before moving forward."
+msgstr "ਜੇ ਤੁਹਾਨੂੰ ਲੋੜ ਹੈ, ਅੱਗੇ ਜਾਣ ਤੋਂ ਪਹਿਲਾਂ ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ ਪਰਾਕਸੀ ਸੰਰਚਨਾ ਕਰੋ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:14
+msgid "Configure Proxy"
+msgstr "ਪਰਾਕਸੀ ਸੰਰਚਿਤ ਕਰੋ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:15
+msgid "proxy_button"
+msgstr "proxy_button"
+
 #: ../src/subscription_manager/gui/data/registration_info.glade.h:1
 msgid ""
 "This assistant will guide you through the process of registering your system "
@@ -4610,95 +4699,6 @@ msgstr "gpgcheck_edit_button"
 #: ../src/subscription_manager/gui/data/repositories.glade.h:20
 msgid "gpgcheck_remove_button"
 msgstr "gpgcheck_remove_button"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:1
-msgid ""
-"The subscription management service you register with will provide your "
-"system with updates and allow additional management."
-msgstr ""
-"ਮੈਂਬਰੀ ਪ੍ਰਬੰਧਨ ਸੇਵਾ ਜੋ ਤੁਸੀਂ ਰਜਿਸਟਰ ਕੀਤੀ ਹੈ ਤੁਹਾਡੇ ਸਿਸਟਮ ਨੂੰ ਅੱਪਡੇਟ ਦੇਵੇਗਾ ਅਤੇ ਵਾਧੂ ਪ੍ਰਬੰਧਨ ਦੀ "
-"ਮਨਜੂਰੀ ਦੇਵੇਗਾ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:2
-msgid "choose_server_label"
-msgstr "choose_server_label"
-
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:3
-msgid ""
-"Registering with Customer Portal, Subscription Asset Manager, Satellite or "
-"Candlepin servers can be used to provide your system with updates and allow "
-"management through the selected server's interface."
-msgstr ""
-"ਗਾਹਕ ਪੋਰਟਲ, ਮੈਂਬਰੀ ਸਹਾਇਕ ਪ੍ਰਬੰਧਕ, CloudForms ਸਿਸਟਮ ਇੰਜਣ ਜਾਂ Candlepin ਸਰਵਰਾਂ ਨਾਲ "
-"ਰਜਿਸਟਰ ਕਰਨ ਨੂੰ ਤੁਹਾਡੇ ਸਿਸਟਮ ਲਈ ਅੱਪਡੇਟ ਦੇਣ ਵਾਸਤੇ ਵਰਤਿਆ ਜਾ ਸਕਦਾ ਹੈ ਅਤੇ ਚੁਣੇ ਸਰਵਰ ਦੇ ਇੰਟਰਫੇਸ "
-"ਦੁਆਰਾ ਪਰਬੰਧਨ ਦੀ ਮਨਜੂਰੀ ਦਿੱਤੀ ਜਾ ਸਕਦੀ ਹੈ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:4
-msgid "I will register with:"
-msgstr "ਮੈਂ ਇਸ ਨਾਲ ਦਰਜ ਹੋਵਾਂਗਾ:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:5
-msgid "server_label"
-msgstr "server_label"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:6
-msgid "hostname[:port][/prefix]"
-msgstr "hostname[:port][/prefix]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:7
-msgid "server_entry"
-msgstr "server_entry"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:8
-msgid "Default"
-msgstr "ਮੂਲ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:9
-msgid "Reset to register with Customer Portal."
-msgstr "ਗਾਹਕ ਪੋਰਟਲ ਤੇ ਦਰਜ ਕਰਨ ਲਈ ਰੀਸੈੱਟ ਕਰੋ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:10
-msgid "default_button"
-msgstr "default_button"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:11
-msgid ""
-"Activation Keys are alphanumeric strings that are pre-configured by your "
-"system administrators to automatically register your system and attach all "
-"necessary subscriptions."
-msgstr ""
-"ਕਿਰਿਆਸ਼ੀਲਤਾ ਕੁੰਜੀਆਂ ਅਲਫਾ-ਨੁਮੈਰਿਕ ਸਤਰਾਂ ਹਨ ਜੋ ਤੁਹਾਡੇ ਸਿਸਟਮ ਪਰਬੰਧਕ ਦੁਆਰਾ ਪਹਿਲਾਂ ਹੀ ਸੰਰਚਿਤ "
-"ਕੀਤੀਆਂ ਹਨ ਤਾਂ ਜੋ ਤੁਹਾਡਾ ਸਿਸਟਮ ਸ੍ਵੈ-ਚਲਿਤ ਹੀ ਦਰਜ ਹੋ ਜਾਏ ਅਤੇ ਸਭ ਲੋੜੀਂਦੀਆਂ ਮੈਂਬਰੀਆਂ ਨਾਲ ਜੁੜ ਜਾਏ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:12
-msgid "I will use an Activation Key"
-msgstr "ਮੈਂ ਕਿਰਿਆਸ਼ੀਲਤਾ ਕੁੰਜੀ ਵਰਤਾਂਗਾ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:13
-msgid "If required, please configure your proxy before moving forward."
-msgstr "ਜੇ ਤੁਹਾਨੂੰ ਲੋੜ ਹੈ, ਅੱਗੇ ਜਾਣ ਤੋਂ ਪਹਿਲਾਂ ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ ਪਰਾਕਸੀ ਸੰਰਚਨਾ ਕਰੋ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:14
-msgid "Configure Proxy"
-msgstr "ਪਰਾਕਸੀ ਸੰਰਚਿਤ ਕਰੋ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author jassy
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:15
-msgid "proxy_button"
-msgstr "proxy_button"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
