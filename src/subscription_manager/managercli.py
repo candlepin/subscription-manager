@@ -1228,8 +1228,7 @@ class RedeemCommand(CliCommand):
         try:
             # FIXME: why just facts and package profile update here?
             # update facts first, if we need to
-            facts = Facts(ent_dir=self.entitlement_dir,
-                          prod_dir=self.product_dir)
+            facts = inj.require(inj.FACTS)
             facts.update_check(self.cp, self.identity.uuid)
 
             profile_mgr = inj.require(inj.PROFILE_MANAGER)
@@ -1636,8 +1635,7 @@ class FactsCommand(CliCommand):
 
         identity = inj.require(inj.IDENTITY)
         if self.options.list:
-            facts = Facts(ent_dir=self.entitlement_dir,
-                          prod_dir=self.product_dir)
+            facts = inj.require(inj.FACTS)
             fact_dict = facts.get_facts()
             fact_keys = fact_dict.keys()
             fact_keys.sort()
@@ -1648,8 +1646,7 @@ class FactsCommand(CliCommand):
                 print "%s: %s" % (key, value)
 
         if self.options.update:
-            facts = Facts(ent_dir=self.entitlement_dir,
-                          prod_dir=self.product_dir)
+            facts = inj.require(inj.FACTS)
             try:
                 facts.update_check(self.cp, identity.uuid, force=True)
             except connection.RestlibException, re:
