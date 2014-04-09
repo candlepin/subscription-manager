@@ -31,9 +31,7 @@ from rhsm.utils import UnsupportedOperationException
 # FIXME: local imports
 
 from subscription_manager.certlib import ActionReport, DataLib
-from subscription_manager.certdirectory import Path, ProductDirectory, EntitlementDirectory
-
-from subscription_manager import injection as inj
+from subscription_manager.certdirectory import Path
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -98,17 +96,12 @@ class RepoLib(DataLib):
 # Datalib.update() method anyhow. Pretty sure these can go away.
 class RepoUpdateAction:
 
-    def __init__(self, ent_dir=None, prod_dir=None, cache_only=False, apply_overrides=True):
+    def __init__(self, cache_only=False, apply_overrides=True):
         self.identity = inj.require(inj.IDENTITY)
-        if ent_dir:
-            self.ent_dir = ent_dir
-        else:
-            self.ent_dir = EntitlementDirectory()
 
-        if prod_dir:
-            self.prod_dir = prod_dir
-        else:
-            self.prod_dir = ProductDirectory()
+        # These should probably move closer their use
+        self.ent_dir = inj.require(inj.ENT_DIR)
+        self.prod_dir = inj.require(inj.PROD_DIR)
 
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
