@@ -1015,6 +1015,8 @@ class RegisterCommand(UserPassCommand):
                 log.error("Unable to unregister consumer: %s" % old_uuid)
                 log.exception(e)
 
+        facts = inj.require(inj.FACTS)
+
         # Proceed with new registration:
         try:
             if not self.options.activation_keys:
@@ -1023,7 +1025,7 @@ class RegisterCommand(UserPassCommand):
             else:
                 admin_cp = self.cp_provider.get_no_auth_cp()
 
-            facts_dic = self.facts.get_facts()
+            facts_dic = facts.get_facts()
 
             self.plugin_manager.run("pre_register_consumer", name=consumername,
                                     facts=facts_dic)
@@ -1070,10 +1072,12 @@ class RegisterCommand(UserPassCommand):
         # log the version of the server we registered to
         self.log_server_version()
 
+        # FIXME: can these cases be replaced with invoking
+        # FactsLib (or a FactsManager?)
         # Must update facts to clear out the old ones:
         if self.options.consumerid:
             log.info("Updating facts")
-            self.facts.update_check(self.cp, consumer['uuid'], force=True)
+            facts.update_check(self.cp, consumer['uuid'], force=True)
 
         profile_mgr = inj.require(inj.PROFILE_MANAGER)
         # 767265: always force an upload of the packages when registering
@@ -1081,7 +1085,7 @@ class RegisterCommand(UserPassCommand):
 
         # Facts and installed products went out with the registration request,
         # manually write caches to disk:
-        self.facts.write_cache()
+        facts.write_cache()
         self.installed_mgr.update_check(self.cp, consumer['uuid'])
 
         if self.options.release:
@@ -2008,8 +2012,6 @@ class ListCommand(CliCommand):
         self.parser.add_option("--match-installed", action="store_true",
                                help=_("shows only subscriptions matching products that are currently installed; only used with --available"))
 
-        self.facts = Facts(ent_dir=self.entitlement_dir,
-                          prod_dir=self.product_dir)
 
     def _validate_options(self):
         if (self.options.all and not self.options.available):
@@ -2065,7 +2067,8 @@ class ListCommand(CliCommand):
                     print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
                     sys.exit(1)
 
-            epools = managerlib.get_available_entitlements(facts=self.facts,
+            facts = inj.require(inj.FACTS)
+            epools = managerlib.get_available_entitlements(facts=facts,
                                                            get_all=self.options.all,
                                                            active_on=on_date)
 

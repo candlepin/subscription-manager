@@ -46,7 +46,7 @@ class TestFactlib(fixture.SubManFixture):
             self.consumer_uuid_passed_to_server = consumer_uuid
 
         stub_uep = stubs.StubUEP()
-        stub_uep.updateConsumerFacts = track_facts_update
+        stub_uep.updateConsumer = track_facts_update
         self.set_consumer_auth_cp(stub_uep)
 
         update_report = self.fl.update()

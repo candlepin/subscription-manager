@@ -493,7 +493,7 @@ class StubFacts(Facts):
         return self.delta_values
 
     def update_check(self, uep, consumer_uuid, force=False):
-        uep.updateConsumerFacts(consumer_uuid, self.facts)
+        uep.updateConsumer(consumer_uuid, self.facts)
 
     def get_last_update(self):
         return None
