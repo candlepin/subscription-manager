@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-20 16:25-0400\n"
+"POT-Creation-Date: 2014-04-09 12:49-0400\n"
 "PO-Revision-Date: 2014-02-05 10:41-0500\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -155,26 +155,6 @@ msgstr ""
 "forgot_password இல் பாருங்கள்"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. note default is lower caps
-#: ../src/subscription_manager/i18n_optparse.py:39
-msgid "%prog [OPTIONS]"
-msgstr "%prog [விருப்பங்கள்]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:129
-#: ../../../../..//usr/lib64/python2.7/optparse.py:374
-#, python-format
-msgid "Usage: %s\n"
-msgstr "பயன்பாடு: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:145
-#, python-format
-msgid "%s: error: %s"
-msgstr "%s: பிழை: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:62
 msgid ""
 "Unable to auto-attach, server does not support service levels. Please run "
@@ -315,6 +295,11 @@ msgstr "பகுதி சந்தாபடுத்தப்பட்டத�
 #: ../src/subscription_manager/gui/factsgui.py:90
 #: ../src/subscription_manager/gui/factsgui.py:117
 #: ../src/subscription_manager/reasons.py:83
+#: ../src/subscription_manager/utils.py:171
+#: ../src/subscription_manager/utils.py:172
+#: ../src/subscription_manager/utils.py:187
+#: ../src/subscription_manager/utils.py:206
+#: ../src/subscription_manager/utils.py:225
 #: ../src/subscription_manager/cert_sorter.py:47
 #: ../src/subscription_manager/managercli.py:76
 #: ../src/subscription_manager/managercli.py:284
@@ -323,11 +308,6 @@ msgstr "பகுதி சந்தாபடுத்தப்பட்டத�
 #: ../src/subscription_manager/managercli.py:289
 #: ../src/subscription_manager/managercli.py:1636
 #: ../src/subscription_manager/managercli.py:2374
-#: ../src/subscription_manager/utils.py:171
-#: ../src/subscription_manager/utils.py:172
-#: ../src/subscription_manager/utils.py:187
-#: ../src/subscription_manager/utils.py:206
-#: ../src/subscription_manager/utils.py:225
 msgid "Unknown"
 msgstr "தெரியாத"
 
@@ -407,9 +387,148 @@ msgid "Keep your system up to date by registering."
 msgstr "பதிவு செய்து உங்கள் கணினியை புதுப்பித்தபடி வைத்திருக்கவும்."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:155
+msgid "There was an error saving your configuration."
+msgstr "உங்கள் கட்டமைப்பை சேமிப்பதில் ஒரு பிழை."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:156
+#, python-format
+msgid "Make sure that you own %s."
+msgstr "உங்கள் சொந்த %s உடையதா என உறுதிபடுத்தவும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:177
+msgid "Proxy location cannot be empty"
+msgstr "பதிலி இருப்பிடம் காலியாக இருக்கக்கூடாது"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:179
+msgid "Proxy connection succeeded"
+msgstr "ப்ராக்ஸி இணைப்பு வெற்றி"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:181
+msgid "Proxy connection failed"
+msgstr "ப்ராக்ஸி இணைப்பு தோல்வி"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
+#: ../src/subscription_manager/gui/redeem.py:55
+#, python-format
+msgid "Error redeeming subscription: %s"
+msgstr "பிழை மீட்டமைக்கும் சந்தா: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:255
+msgid "Installed"
+msgstr "நிறுவப்பட்டது"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. An empty string entry is used for "un-setting" the system's SLA:
+#. for unsetting
+#: ../src/subscription_manager/gui/widgets.py:330
+#: ../src/subscription_manager/gui/preferences.py:119
+#: ../src/subscription_manager/gui/preferences.py:145
+msgid "Not Set"
+msgstr "அமைக்கப்படவில்லை"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:357
+#: ../src/subscription_manager/gui/factsgui.py:141
+#: ../src/subscription_manager/printing_utils.py:136
+#: ../src/subscription_manager/managercli.py:611
+msgid "None"
+msgstr "ஒன்றுமில்லாத"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:558
+msgid "Invalid date format. Please re-enter a valid date. Example: "
+msgstr "தவறான தேதி வடிவம். ஒரு சரியான தேதியை மீண்டும் உள்ளிடவும். எடுத்துக்காட்டு:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:595
+msgid "Date Selection"
+msgstr "தேதி தேர்ந்தெடுப்பு"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:610
+msgid "Today"
+msgstr "இன்று"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:705
+#: ../src/subscription_manager/gui/mysubstab.py:283
+#: ../src/subscription_manager/managercli.py:2084
+#: ../src/subscription_manager/managercli.py:2167
+msgid "Physical"
+msgstr "பருநிலை"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:706
+#: ../src/subscription_manager/gui/mysubstab.py:281
+#: ../src/subscription_manager/managercli.py:2082
+#: ../src/subscription_manager/managercli.py:2165
+msgid "Virtual"
+msgstr "மெய்நிகர்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:707
+msgid "Both"
+msgstr "இரண்டும்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
+#. content-type is required, no need to xstr
+#: ../src/subscription_manager/gui/widgets.py:710
+#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
+msgid "Type"
+msgstr "வகை"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:782
+msgid "Click to Adjust Quantity"
+msgstr "எண்ணிக்கை சரிசெய்ய கிளிக் செய்யவும்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Shantha kumar
+#: ../src/subscription_manager/gui/managergui.py:337
+msgid ""
+"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr ""
+"முன்னுரிமைகள் உரையாடலில் பிழை.மேலும் தகவலுக்கு /var/log/rhsm/rhsm.log ஐப் பார்க்கவும்."
+
+#: ../src/subscription_manager/gui/managergui.py:345
+msgid ""
+"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr ""
+"தொகுப்பதிவகங்கள் உரையாடலில் பிழை.மேலும் தகவலுக்கு /var/log/rhsm/rhsm.log ஐப் "
+"பார்க்கவும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:361
+msgid "<b>Errors were encountered during unregister.</b>"
+msgstr "<b>பதிவுநீக்கும் போது பிழைகள் கண்டறியப்பட்டன.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:363
+#: ../src/subscription_manager/gui/registergui.py:94
+msgid "Please see /var/log/rhsm/rhsm.log for more information."
+msgstr "மேலும் தகவலுக்கு /var/log/rhsm/rhsm.logஐ பார்க்கவும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
+#: ../src/subscription_manager/gui/managergui.py:379
+msgid "<b>Are you sure you want to unregister?</b>"
+msgstr "<b>நீங்கள் பதிவுநீக்க விரும்பிகிறீர்களா?</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:435
+msgid "System Already Registered"
+msgstr "கணினி ஏற்கனவே பதிவு செய்யப்பட்டது"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/mysubstab.py:74
-#: ../src/subscription_manager/gui/allsubs.py:72
 #: ../src/subscription_manager/gui/registergui.py:421
+#: ../src/subscription_manager/gui/allsubs.py:72
 msgid "Subscription"
 msgstr "சந்தாபடுத்தல்"
 
@@ -421,9 +540,9 @@ msgstr "நிறுவப்பட்ட தயாரிப்புகள்"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. Set up the quantity column.
 #: ../src/subscription_manager/gui/mysubstab.py:105
+#: ../src/subscription_manager/gui/registergui.py:427
 #: ../src/subscription_manager/gui/contract_selection.py:124
 #: ../src/subscription_manager/gui/allsubs.py:88
-#: ../src/subscription_manager/gui/registergui.py:427
 #: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:82
 msgid "Quantity"
 msgstr "அளவு"
@@ -491,22 +610,6 @@ msgstr "சந்தா இன்னும் தொடங்கவில்ல�
 msgid "Subscription management service doesn't support Status Details."
 msgstr "சந்தா நிர்வாகி சேவை நிலை விவரங்களை ஆதரிக்காது."
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:281
-#: ../src/subscription_manager/gui/widgets.py:706
-#: ../src/subscription_manager/managercli.py:2082
-#: ../src/subscription_manager/managercli.py:2165
-msgid "Virtual"
-msgstr "மெய்நிகர்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:283
-#: ../src/subscription_manager/gui/widgets.py:705
-#: ../src/subscription_manager/managercli.py:2084
-#: ../src/subscription_manager/managercli.py:2167
-msgid "Physical"
-msgstr "பருநிலை"
-
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
 #: ../src/subscription_manager/gui/mysubstab.py:286
 msgid "Yes"
@@ -517,128 +620,201 @@ msgstr "ஆம்"
 msgid "No"
 msgstr "இல்லை"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:92
+msgid "<b>Unable to register the system.</b>"
+msgstr "<b>கணினியை பதிவுசெய்ய முடியவில்லை.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:186
+#: ../src/subscription_manager/gui/data/registration.glade.h:1
+msgid "System Registration"
+msgstr "கணினி பதிவுசெய்தல்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
+#: ../src/subscription_manager/gui/registergui.py:187
+#: ../src/subscription_manager/gui/data/registration.glade.h:6
+msgid "<b>Registering</b>"
+msgstr "<b>பதிவுசெய்கிறது</b>"
+
+#: ../src/subscription_manager/gui/registergui.py:189
+msgid "Subscription Attachment"
+msgstr "சந்தா இணைப்பு"
+
+#: ../src/subscription_manager/gui/registergui.py:190
+msgid "<b>Attaching</b>"
+msgstr "<b>இணைக்கிறது</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:298
+#: ../src/subscription_manager/gui/data/registration.glade.h:4
+#: ../src/subscription_manager/gui/data/installed.glade.h:4
+msgid "Register"
+msgstr "பதிவுசெய்யவும்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
+#: ../src/subscription_manager/gui/registergui.py:342
+msgid "Registering your system"
+msgstr "உங்கள் கணினியை பதிவுசெய்கிறது"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:383
+#: ../src/subscription_manager/gui/registergui.py:871
+msgid "Attaching subscriptions"
+msgstr "சந்தாக்களை இணைத்தல்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:387
+#: ../src/subscription_manager/gui/registergui.py:875
+#, python-format
+msgid "Error subscribing: %s"
+msgstr "சந்தா பெறுவதில் பிழை: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:415
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:9
+msgid "Attach"
+msgstr "இணைக்கவும்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:473
+msgid "Finding suitable service levels"
+msgstr "பொருத்தமான சேவை நிலைகளைக் கண்டறிதல்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:474
+#: ../src/subscription_manager/gui/registergui.py:902
+#: ../src/subscription_manager/gui/registergui.py:1234
+msgid "Next"
+msgstr "அடுத்து"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:526
+msgid "Unable to auto-attach, server does not support service levels."
+msgstr ""
+"தானியக்க இணைப்பை மேற்கொள்ள முடியவில்லை, சேவையகம் சேவை நிலைகளுக்கு துணைபுரியவில்லை."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:529
+msgid ""
+"No installed products on system. No need to attach subscriptions at this "
+"time."
+msgstr ""
+"கணினியில் தயாரிப்புகள் எதுவும் நிறுவப்படவில்லை. இப்போது சந்தாக்களைஇணைக்க வேண்டியதில்லை."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:532
+msgid ""
+"All installed products are covered by valid entitlements. No need to attach "
+"subscriptions at this time."
+msgstr ""
+"அனைத்து நிறுவப்பட்ட தயாரிப்புகளுக்கும் சரியான உரிமைகள் உள்ளன. இந்த நேரத்தில் சந்தாக்களை "
+"இணைக்க வேண்டியதில்லை."
+
+#: ../src/subscription_manager/gui/registergui.py:535
+msgid "Consumer has been deleted."
+msgstr "நுகர்வோர் அழிக்கப்பட்டார்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:551
+#, python-format
+msgid ""
+"No available subscriptions at the current service level: %s. Please use the "
+"\"All Available Subscriptions\" tab to manually attach subscriptions."
+msgstr ""
+"நடப்பு சேவை நிலையில் சந்தாக்கள் எதுவும் இல்லை: %s. கைமுறையாக சந்தாக்களை இணைக்க"
+"\"கிடைக்கும் அனைத்து சந்தாக்களும்\" தாவலைப் பயன்படுத்தவும்."
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Shantha kumar
-#: ../src/subscription_manager/gui/managergui.py:337
+#: ../src/subscription_manager/gui/registergui.py:569
 msgid ""
-"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
-"information."
+"No service level will cover all installed products. Please manually "
+"subscribe using multiple service levels via the \"All Available "
+"Susbscriptions\" tab or purchase additional subscriptions."
 msgstr ""
-"முன்னுரிமைகள் உரையாடலில் பிழை.மேலும் தகவலுக்கு /var/log/rhsm/rhsm.log ஐப் பார்க்கவும்."
+"நிறுவப்பட்ட அனைத்து தயாரிப்புகளுக்கும் பொருந்தும் சேவை நிலை இல்லை. \"கிடைக்கும் அனைத்து "
+"சந்தாக்கள்\" தாவலின் மூலம் பல சேவை நிலைகளைப் பயன்படுத்தி கைமுறையாக சந்தா பெறவும் அல்லது "
+"கூடுதல் சந்தாக்களை வாங்கவும்."
 
-#: ../src/subscription_manager/gui/managergui.py:345
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:601
+msgid "Fetching list of possible environments"
+msgstr "சாத்தியமுள்ள சூழல்களின் பட்டியலைப் பெறுகிறது"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
+#: ../src/subscription_manager/gui/registergui.py:603
+#: ../src/subscription_manager/gui/data/factsdialog.glade.h:7
+msgid "Environment"
+msgstr "சூழல்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
+#: ../src/subscription_manager/gui/registergui.py:658
+msgid "Fetching list of possible organizations"
+msgstr "சாத்தியமான நிறுவனங்களை கொணரும் பட்டியல்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
+#: ../src/subscription_manager/gui/registergui.py:661
+msgid "Organization"
+msgstr "நிறுவனம்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
+#: ../src/subscription_manager/gui/registergui.py:680
+#, python-format
+msgid "<b>User %s is not able to register with any orgs.</b>"
+msgstr "<b>பயனர் %s எந்த orgs உடனும் பதிவு செய்ய முடியாது.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:742
+#: ../src/subscription_manager/gui/registergui.py:848
+msgid "You must enter a system name."
+msgstr "ஒரு கணினி பெயரை நீங்கள் உள்ளிட வேண்டும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:750
+msgid "You must enter a login."
+msgstr "ஒரு உட்புகுவை நீங்கள் உள்ளிட வேண்டும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:755
+msgid "You must enter a password."
+msgstr "ஒரு கடவுச்சொல்லை நீங்கள் உள்ளிட வேண்டும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:834
+msgid "You must enter an organization."
+msgstr "நீங்கள் ஒரு நிறுவனத்தை உள்ளிட வேண்டும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:841
+msgid "You must enter an activation key."
+msgstr "செயல்பாட்டு விசையை குறிப்பிட வேண்டும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:952
+#: ../src/subscription_manager/managercli.py:342
+#, python-format
+msgid "Unable to reach the server at %s:%s%s"
+msgstr "%s இல் சேவையகத்தை அடைய முடியவில்லை:%s%s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:957
+msgid "CA certificate for subscription service has not been installed."
+msgstr "சந்தா சேவைக்கான CA சான்றிதழ் நிறுவப்படவில்லை."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:962
 msgid ""
-"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
-"information."
+"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
+"prefix]"
 msgstr ""
-"தொகுப்பதிவகங்கள் உரையாடலில் பிழை.மேலும் தகவலுக்கு /var/log/rhsm/rhsm.log ஐப் "
-"பார்க்கவும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:361
-msgid "<b>Errors were encountered during unregister.</b>"
-msgstr "<b>பதிவுநீக்கும் போது பிழைகள் கண்டறியப்பட்டன.</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:363
-#: ../src/subscription_manager/gui/registergui.py:94
-msgid "Please see /var/log/rhsm/rhsm.log for more information."
-msgstr "மேலும் தகவலுக்கு /var/log/rhsm/rhsm.logஐ பார்க்கவும்."
+"விரும்பினால் பயன்படுத்தக்கூடிய முனையம் மற்றும்/அல்லது hostname[:port][/prefix] என்ற "
+"முன்னொட்டைக் கொன்ட ஒரு ஹோஸ்ட் பெயரை வழங்கவும்"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
-#: ../src/subscription_manager/gui/managergui.py:379
-msgid "<b>Are you sure you want to unregister?</b>"
-msgstr "<b>நீங்கள் பதிவுநீக்க விரும்பிகிறீர்களா?</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:435
-msgid "System Already Registered"
-msgstr "கணினி ஏற்கனவே பதிவு செய்யப்பட்டது"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:155
-msgid "There was an error saving your configuration."
-msgstr "உங்கள் கட்டமைப்பை சேமிப்பதில் ஒரு பிழை."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:156
-#, python-format
-msgid "Make sure that you own %s."
-msgstr "உங்கள் சொந்த %s உடையதா என உறுதிபடுத்தவும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:177
-msgid "Proxy location cannot be empty"
-msgstr "பதிலி இருப்பிடம் காலியாக இருக்கக்கூடாது"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:179
-msgid "Proxy connection succeeded"
-msgstr "ப்ராக்ஸி இணைப்பு வெற்றி"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:181
-msgid "Proxy connection failed"
-msgstr "ப்ராக்ஸி இணைப்பு தோல்வி"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
-#: ../src/subscription_manager/gui/redeem.py:55
-#, python-format
-msgid "Error redeeming subscription: %s"
-msgstr "பிழை மீட்டமைக்கும் சந்தா: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:255
-msgid "Installed"
-msgstr "நிறுவப்பட்டது"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. An empty string entry is used for "un-setting" the system's SLA:
-#. for unsetting
-#: ../src/subscription_manager/gui/widgets.py:330
-#: ../src/subscription_manager/gui/preferences.py:119
-#: ../src/subscription_manager/gui/preferences.py:145
-msgid "Not Set"
-msgstr "அமைக்கப்படவில்லை"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:357
-#: ../src/subscription_manager/gui/factsgui.py:141
-#: ../src/subscription_manager/managercli.py:611
-#: ../src/subscription_manager/printing_utils.py:136
-msgid "None"
-msgstr "ஒன்றுமில்லாத"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:558
-msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr "தவறான தேதி வடிவம். ஒரு சரியான தேதியை மீண்டும் உள்ளிடவும். எடுத்துக்காட்டு:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:595
-msgid "Date Selection"
-msgstr "தேதி தேர்ந்தெடுப்பு"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:610
-msgid "Today"
-msgstr "இன்று"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:707
-msgid "Both"
-msgstr "இரண்டும்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
-#. content-type is required, no need to xstr
-#: ../src/subscription_manager/gui/widgets.py:710
-#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
-msgid "Type"
-msgstr "வகை"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:782
-msgid "Click to Adjust Quantity"
-msgstr "எண்ணிக்கை சரிசெய்ய கிளிக் செய்யவும்"
+#: ../src/subscription_manager/gui/registergui.py:1019
+msgid "Server supports environments, but none are available."
+msgstr "சேவையகம் சூழல்களுக்கு துணைபுரிகிறது, ஆனால் எதுவும் கிடைக்க இருக்கிறது."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/about.py:29
@@ -917,202 +1093,6 @@ msgstr "ஓவர்-ரைடை அகற்ற வேண்டுமா எ�
 #: ../src/subscription_manager/gui/reposgui.py:404
 msgid "Unable to delete the gpgcheck override."
 msgstr "gpgcheck ஓவர்-ரைடை அழிக்க முடியவில்லை."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:92
-msgid "<b>Unable to register the system.</b>"
-msgstr "<b>கணினியை பதிவுசெய்ய முடியவில்லை.</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:186
-#: ../src/subscription_manager/gui/data/registration.glade.h:1
-msgid "System Registration"
-msgstr "கணினி பதிவுசெய்தல்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
-#: ../src/subscription_manager/gui/registergui.py:187
-#: ../src/subscription_manager/gui/data/registration.glade.h:6
-msgid "<b>Registering</b>"
-msgstr "<b>பதிவுசெய்கிறது</b>"
-
-#: ../src/subscription_manager/gui/registergui.py:189
-msgid "Subscription Attachment"
-msgstr "சந்தா இணைப்பு"
-
-#: ../src/subscription_manager/gui/registergui.py:190
-msgid "<b>Attaching</b>"
-msgstr "<b>இணைக்கிறது</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:298
-#: ../src/subscription_manager/gui/data/registration.glade.h:4
-#: ../src/subscription_manager/gui/data/installed.glade.h:4
-msgid "Register"
-msgstr "பதிவுசெய்யவும்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
-#: ../src/subscription_manager/gui/registergui.py:342
-msgid "Registering your system"
-msgstr "உங்கள் கணினியை பதிவுசெய்கிறது"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:383
-#: ../src/subscription_manager/gui/registergui.py:871
-msgid "Attaching subscriptions"
-msgstr "சந்தாக்களை இணைத்தல்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:387
-#: ../src/subscription_manager/gui/registergui.py:875
-#, python-format
-msgid "Error subscribing: %s"
-msgstr "சந்தா பெறுவதில் பிழை: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:415
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:9
-msgid "Attach"
-msgstr "இணைக்கவும்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:473
-msgid "Finding suitable service levels"
-msgstr "பொருத்தமான சேவை நிலைகளைக் கண்டறிதல்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:474
-#: ../src/subscription_manager/gui/registergui.py:902
-#: ../src/subscription_manager/gui/registergui.py:1234
-msgid "Next"
-msgstr "அடுத்து"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:526
-msgid "Unable to auto-attach, server does not support service levels."
-msgstr ""
-"தானியக்க இணைப்பை மேற்கொள்ள முடியவில்லை, சேவையகம் சேவை நிலைகளுக்கு துணைபுரியவில்லை."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:529
-msgid ""
-"No installed products on system. No need to attach subscriptions at this "
-"time."
-msgstr ""
-"கணினியில் தயாரிப்புகள் எதுவும் நிறுவப்படவில்லை. இப்போது சந்தாக்களைஇணைக்க வேண்டியதில்லை."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:532
-msgid ""
-"All installed products are covered by valid entitlements. No need to attach "
-"subscriptions at this time."
-msgstr ""
-"அனைத்து நிறுவப்பட்ட தயாரிப்புகளுக்கும் சரியான உரிமைகள் உள்ளன. இந்த நேரத்தில் சந்தாக்களை "
-"இணைக்க வேண்டியதில்லை."
-
-#: ../src/subscription_manager/gui/registergui.py:535
-msgid "Consumer has been deleted."
-msgstr "நுகர்வோர் அழிக்கப்பட்டார்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:551
-#, python-format
-msgid ""
-"No available subscriptions at the current service level: %s. Please use the "
-"\"All Available Subscriptions\" tab to manually attach subscriptions."
-msgstr ""
-"நடப்பு சேவை நிலையில் சந்தாக்கள் எதுவும் இல்லை: %s. கைமுறையாக சந்தாக்களை இணைக்க"
-"\"கிடைக்கும் அனைத்து சந்தாக்களும்\" தாவலைப் பயன்படுத்தவும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Shantha kumar
-#: ../src/subscription_manager/gui/registergui.py:569
-msgid ""
-"No service level will cover all installed products. Please manually "
-"subscribe using multiple service levels via the \"All Available "
-"Susbscriptions\" tab or purchase additional subscriptions."
-msgstr ""
-"நிறுவப்பட்ட அனைத்து தயாரிப்புகளுக்கும் பொருந்தும் சேவை நிலை இல்லை. \"கிடைக்கும் அனைத்து "
-"சந்தாக்கள்\" தாவலின் மூலம் பல சேவை நிலைகளைப் பயன்படுத்தி கைமுறையாக சந்தா பெறவும் அல்லது "
-"கூடுதல் சந்தாக்களை வாங்கவும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:601
-msgid "Fetching list of possible environments"
-msgstr "சாத்தியமுள்ள சூழல்களின் பட்டியலைப் பெறுகிறது"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
-#: ../src/subscription_manager/gui/registergui.py:603
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:7
-msgid "Environment"
-msgstr "சூழல்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
-#: ../src/subscription_manager/gui/registergui.py:658
-msgid "Fetching list of possible organizations"
-msgstr "சாத்தியமான நிறுவனங்களை கொணரும் பட்டியல்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
-#: ../src/subscription_manager/gui/registergui.py:661
-msgid "Organization"
-msgstr "நிறுவனம்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
-#: ../src/subscription_manager/gui/registergui.py:680
-#, python-format
-msgid "<b>User %s is not able to register with any orgs.</b>"
-msgstr "<b>பயனர் %s எந்த orgs உடனும் பதிவு செய்ய முடியாது.</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:742
-#: ../src/subscription_manager/gui/registergui.py:848
-msgid "You must enter a system name."
-msgstr "ஒரு கணினி பெயரை நீங்கள் உள்ளிட வேண்டும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:750
-msgid "You must enter a login."
-msgstr "ஒரு உட்புகுவை நீங்கள் உள்ளிட வேண்டும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:755
-msgid "You must enter a password."
-msgstr "ஒரு கடவுச்சொல்லை நீங்கள் உள்ளிட வேண்டும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:834
-msgid "You must enter an organization."
-msgstr "நீங்கள் ஒரு நிறுவனத்தை உள்ளிட வேண்டும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:841
-msgid "You must enter an activation key."
-msgstr "செயல்பாட்டு விசையை குறிப்பிட வேண்டும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:952
-#: ../src/subscription_manager/managercli.py:342
-#, python-format
-msgid "Unable to reach the server at %s:%s%s"
-msgstr "%s இல் சேவையகத்தை அடைய முடியவில்லை:%s%s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:957
-msgid "CA certificate for subscription service has not been installed."
-msgstr "சந்தா சேவைக்கான CA சான்றிதழ் நிறுவப்படவில்லை."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:962
-msgid ""
-"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
-"prefix]"
-msgstr ""
-"விரும்பினால் பயன்படுத்தக்கூடிய முனையம் மற்றும்/அல்லது hostname[:port][/prefix] என்ற "
-"முன்னொட்டைக் கொன்ட ஒரு ஹோஸ்ட் பெயரை வழங்கவும்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
-#: ../src/subscription_manager/gui/registergui.py:1019
-msgid "Server supports environments, but none are available."
-msgstr "சேவையகம் சூழல்களுக்கு துணைபுரிகிறது, ஆனால் எதுவும் கிடைக்க இருக்கிறது."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/reasons.py:75
@@ -1565,6 +1545,15 @@ msgstr ""
 "RHN Classic இலிருந்து கணினியை பதிவுநீக்க தயார்செய்கிறது..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cache.py:183
+msgid ""
+"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
+"சேவையகத்தில் கணினி தரவைப் புதுப்பிப்பதில் பிழை ஏற்பட்டது, மேலும் விவரங்களுக்கு /var/log/"
+"rhsm/rhsm.log ஐக் காணவும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/dmiinfo.py:56
 #: ../src/subscription_manager/dmiinfo.py:102
 #, python-format
@@ -1578,28 +1567,59 @@ msgid "Error reading system DMI information with %s: %s"
 msgstr "%s உடன் பிழை வாசிக்கும் கணினி DMI தகவல்: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cache.py:183
-msgid ""
-"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"சேவையகத்தில் கணினி தரவைப் புதுப்பிப்பதில் பிழை ஏற்பட்டது, மேலும் விவரங்களுக்கு /var/log/"
-"rhsm/rhsm.log ஐக் காணவும்."
+#: ../src/subscription_manager/hwprobe.py:273
+msgid "Error reading system memory information:"
+msgstr "பிழை வாசிக்கும் கணினி நினைவக தகவல்:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Shantha kumar
+#: ../src/subscription_manager/hwprobe.py:583
+msgid "Error reading system CPU information:"
+msgstr "கணினியின் CPU தகவலைப் படிப்பதில் பிழை:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cert_sorter.py:44
-msgid "Current"
-msgstr "தற்போதைய"
+#: ../src/subscription_manager/hwprobe.py:608
+msgid "Error reading networking information:"
+msgstr "பிழை வாசிக்கும் பிணையத் தகவல்:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cert_sorter.py:45
-msgid "Insufficient"
-msgstr "போதுமானதல்ல"
+#: ../src/subscription_manager/hwprobe.py:707
+msgid "Error reading network interface information:"
+msgstr "பிணைய முகப்பு தகவலை வாசிக்கும் போது பிழை"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
+#: ../src/subscription_manager/hwprobe.py:803
+msgid "Virtualization platform does not support UUIDs"
+msgstr "UUIDகளுக்கு மெய்நிகராக்க தளம் துணைபுரியவில்லை"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
+#: ../src/subscription_manager/hwprobe.py:805
+#, python-format
+msgid "Error finding UUID: %s"
+msgstr "பிழை கண்டறியும் UUID: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cert_sorter.py:46
-msgid "Invalid"
-msgstr "செல்லுபடியாகாதது"
+#. usage format strips any leading 'usage' so
+#. do not iclude it
+#: ../src/subscription_manager/cli.py:62
+#, python-format
+msgid "%%prog %s [OPTIONS]"
+msgstr "%%prog %s [விருப்பங்கள்]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cli.py:93
+#, python-format
+msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+msgstr "பயன்பாடு: %s தொகுதிக்கூறு-பெயர் [தொகுதிக்கூறு-விருப்பங்கள்] [--help]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
+#: ../src/subscription_manager/cli.py:105
+msgid "Primary Modules:"
+msgstr "முதன்மை தொகுதிகள்:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cli.py:106
+msgid "Other Modules:"
+msgstr "பிற தொகுதிக்கூறுகள்:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/certlib.py:339
@@ -1654,6 +1674,134 @@ msgstr "%d புதுப்பித்தல்கள் தேவைப்�
 #: ../src/daemons/rhsmcertd-worker.py:54
 msgid "done"
 msgstr "முடிந்தது"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/utils.py:188
+#: ../src/subscription_manager/managercli.py:1161
+msgid "This system is currently not registered."
+msgstr "இந்த கணினி தற்போது பதிவுசெய்யப்படவில்லை."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Shantha kumar
+#: ../src/subscription_manager/utils.py:266
+msgid "and"
+msgstr "மற்றும்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. note default is lower caps
+#: ../src/subscription_manager/i18n_optparse.py:39
+msgid "%prog [OPTIONS]"
+msgstr "%prog [விருப்பங்கள்]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/i18n_optparse.py:129
+#: ../../../../..//usr/lib64/python2.7/optparse.py:374
+#, python-format
+msgid "Usage: %s\n"
+msgstr "பயன்பாடு: %s\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. translators: arg 1 is the program name, arg 2 is the error message
+#: ../src/subscription_manager/i18n_optparse.py:145
+#, python-format
+msgid "%s: error: %s"
+msgstr "%s: பிழை: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cert_sorter.py:44
+msgid "Current"
+msgstr "தற்போதைய"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cert_sorter.py:45
+msgid "Insufficient"
+msgstr "போதுமானதல்ல"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cert_sorter.py:46
+msgid "Invalid"
+msgstr "செல்லுபடியாகாதது"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:27
+msgid ""
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
+msgstr ""
+"பிணைய பிழை, சேவையக்கத்துடன் இணைக்க முடியவில்லை. மேலும் தகவலுக்கு /var/log/rhsm/rhsm."
+"log ஐ பார்க்கவும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:28
+msgid ""
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
+msgstr ""
+"பிணைய பிழை. இணைப்பு விவரங்களை சரிபார்க்கவும், அல்லது மேலும் தகவலுக்கு /var/log/rhsm/"
+"rhsm.log ஐ பார்க்கவும்."
+
+#: ../src/subscription_manager/exceptions.py:29
+msgid "Unauthorized: Invalid credentials for request."
+msgstr "அங்கீகரிக்கப்படாதது: கோரிக்கைக்கு செல்லாத சான்றளிப்புகள்."
+
+#: ../src/subscription_manager/exceptions.py:30
+msgid "Forbidden: Invalid credentials for request."
+msgstr "தடைசெய்யப்பட்டது: கோரிக்கைக்கு செல்லாத சான்றளிப்புகள்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:31
+msgid ""
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
+msgstr ""
+"தொலை சேவையக பிழை. இணைப்பு விவரங்களை சரிபார்க்கவும், அல்லது மேலும் தகவலுக்கு /var/log/"
+"rhsm/rhsm.log ஐ பார்க்கவும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:32
+#, python-format
+msgid "Bad CA certificate: %s"
+msgstr "மோசமான CA சான்றிதழ்: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Shantha kumar
+#: ../src/subscription_manager/exceptions.py:33
+#: ../src/daemons/rhsmcertd-worker.py:56
+msgid "Your identity certificate has expired"
+msgstr "உங்கள் அடையாள சான்றிதழ் காலாவதியாகிவிட்டது"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:34
+#, python-format
+msgid "Unable to verify server's identity: %s"
+msgstr "சேவையகங்களின் அடையாளத்தை சரிபார்க்க முடியவில்லை: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:35
+msgid "Server URL can not be empty"
+msgstr "சேவையக URL காலியாக இருக்கக்கூடாது"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:36
+msgid ""
+"Server URL is just a schema. Should include hostname, and/or port and path"
+msgstr ""
+"சேவையக URL என்பது ஒரு வடிவம் மட்டுமே. அத்துடன் ஹோஸ்ட் பெயர் மற்றும்/அல்லது முனையம் மற்றும் "
+"பாதை ஆகியவையும் சேர்ந்திருக்க வேண்டும்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:37
+msgid "Server URL can not be None"
+msgstr "சேவையக URL எதுவும் இல்லை என அமைக்கப்பட முடியாது"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:38
+msgid "Server URL port should be numeric"
+msgstr "சேவையக URL முனையம் எண்களாக இருக்கக்கூடாது"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:39
+msgid "Server URL has an invalid scheme. http:// and https:// are supported"
+msgstr ""
+"சேவையக URL இன் வடிவம் தவறானது. http:// மற்றும் https:// ஆகியவைவே ஆதரிக்கப்படும்"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:67
@@ -2338,12 +2486,6 @@ msgid ""
 msgstr ""
 "பிழை: சேவையகம் --servicelevel விருப்பத்தை ஆதரிக்கவில்லை. உங்கள் கோரிக்கையை "
 "முடிக்கவில்லை."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/managercli.py:1161
-#: ../src/subscription_manager/utils.py:188
-msgid "This system is currently not registered."
-msgstr "இந்த கணினி தற்போது பதிவுசெய்யப்படவில்லை."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:1186
@@ -3097,148 +3239,6 @@ msgstr "கணினி நிலை விவரங்கள்"
 #, python-format
 msgid "Overall Status: %s\n"
 msgstr "ஒட்டுமொத்த நிலை: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:27
-msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"பிணைய பிழை, சேவையக்கத்துடன் இணைக்க முடியவில்லை. மேலும் தகவலுக்கு /var/log/rhsm/rhsm."
-"log ஐ பார்க்கவும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:28
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"பிணைய பிழை. இணைப்பு விவரங்களை சரிபார்க்கவும், அல்லது மேலும் தகவலுக்கு /var/log/rhsm/"
-"rhsm.log ஐ பார்க்கவும்."
-
-#: ../src/subscription_manager/exceptions.py:29
-msgid "Unauthorized: Invalid credentials for request."
-msgstr "அங்கீகரிக்கப்படாதது: கோரிக்கைக்கு செல்லாத சான்றளிப்புகள்."
-
-#: ../src/subscription_manager/exceptions.py:30
-msgid "Forbidden: Invalid credentials for request."
-msgstr "தடைசெய்யப்பட்டது: கோரிக்கைக்கு செல்லாத சான்றளிப்புகள்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:31
-msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr ""
-"தொலை சேவையக பிழை. இணைப்பு விவரங்களை சரிபார்க்கவும், அல்லது மேலும் தகவலுக்கு /var/log/"
-"rhsm/rhsm.log ஐ பார்க்கவும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:32
-#, python-format
-msgid "Bad CA certificate: %s"
-msgstr "மோசமான CA சான்றிதழ்: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Shantha kumar
-#: ../src/subscription_manager/exceptions.py:33
-#: ../src/daemons/rhsmcertd-worker.py:56
-msgid "Your identity certificate has expired"
-msgstr "உங்கள் அடையாள சான்றிதழ் காலாவதியாகிவிட்டது"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:34
-#, python-format
-msgid "Unable to verify server's identity: %s"
-msgstr "சேவையகங்களின் அடையாளத்தை சரிபார்க்க முடியவில்லை: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:35
-msgid "Server URL can not be empty"
-msgstr "சேவையக URL காலியாக இருக்கக்கூடாது"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:36
-msgid ""
-"Server URL is just a schema. Should include hostname, and/or port and path"
-msgstr ""
-"சேவையக URL என்பது ஒரு வடிவம் மட்டுமே. அத்துடன் ஹோஸ்ட் பெயர் மற்றும்/அல்லது முனையம் மற்றும் "
-"பாதை ஆகியவையும் சேர்ந்திருக்க வேண்டும்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:37
-msgid "Server URL can not be None"
-msgstr "சேவையக URL எதுவும் இல்லை என அமைக்கப்பட முடியாது"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:38
-msgid "Server URL port should be numeric"
-msgstr "சேவையக URL முனையம் எண்களாக இருக்கக்கூடாது"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:39
-msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr ""
-"சேவையக URL இன் வடிவம் தவறானது. http:// மற்றும் https:// ஆகியவைவே ஆதரிக்கப்படும்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. usage format strips any leading 'usage' so
-#. do not iclude it
-#: ../src/subscription_manager/cli.py:62
-#, python-format
-msgid "%%prog %s [OPTIONS]"
-msgstr "%%prog %s [விருப்பங்கள்]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:93
-#, python-format
-msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "பயன்பாடு: %s தொகுதிக்கூறு-பெயர் [தொகுதிக்கூறு-விருப்பங்கள்] [--help]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
-#: ../src/subscription_manager/cli.py:105
-msgid "Primary Modules:"
-msgstr "முதன்மை தொகுதிகள்:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:106
-msgid "Other Modules:"
-msgstr "பிற தொகுதிக்கூறுகள்:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:273
-msgid "Error reading system memory information:"
-msgstr "பிழை வாசிக்கும் கணினி நினைவக தகவல்:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Shantha kumar
-#: ../src/subscription_manager/hwprobe.py:583
-msgid "Error reading system CPU information:"
-msgstr "கணினியின் CPU தகவலைப் படிப்பதில் பிழை:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:608
-msgid "Error reading networking information:"
-msgstr "பிழை வாசிக்கும் பிணையத் தகவல்:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:707
-msgid "Error reading network interface information:"
-msgstr "பிணைய முகப்பு தகவலை வாசிக்கும் போது பிழை"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
-#: ../src/subscription_manager/hwprobe.py:803
-msgid "Virtualization platform does not support UUIDs"
-msgstr "UUIDகளுக்கு மெய்நிகராக்க தளம் துணைபுரியவில்லை"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ifelix
-#: ../src/subscription_manager/hwprobe.py:805
-#, python-format
-msgid "Error finding UUID: %s"
-msgstr "பிழை கண்டறியும் UUID: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Shantha kumar
-#: ../src/subscription_manager/utils.py:266
-msgid "and"
-msgstr "மற்றும்"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/cert_commands.py:38
@@ -4161,6 +4161,96 @@ msgstr "register_details_label"
 msgid "page 2"
 msgstr "பக்கம் 2"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:1
+msgid ""
+"The subscription management service you register with will provide your "
+"system with updates and allow additional management."
+msgstr ""
+"நீங்கள் பதிவு பெறும் சந்தா நிர்வாக சேவை உங்கள் கணினிக்கு புதுப்பிப்புகளையும் கூடுதல் "
+"நிர்வாக அம்சத்தையும் வழங்கும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:2
+msgid "choose_server_label"
+msgstr "choose_server_label"
+
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:3
+msgid ""
+"Registering with Customer Portal, Subscription Asset Manager, Satellite or "
+"Candlepin servers can be used to provide your system with updates and allow "
+"management through the selected server's interface."
+msgstr ""
+"வாடிக்கையாளர் வலைவாசல், சந்தா சொத்து நிர்வாகி, சேட்டல்லைட் அல்லது கேன்டில்பின் சேவையகங்கள் "
+"ஆகியவற்றுடன் பதிவுபெறுவது, உங்கள் கணினிக்கு புதுப்பிப்புகளை வழங்கவும் தேர்ந்தெடுக்கப்பட்ட "
+"சேவையக இடைமுகங்கள் வழியாக நிர்வகிக்க அனுமதிக்கவும் பயன்படும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:4
+msgid "I will register with:"
+msgstr "இம்முறையில் பதிவு செய்வேன்:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:5
+msgid "server_label"
+msgstr "server_label"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:6
+msgid "hostname[:port][/prefix]"
+msgstr "hostname[:port][/prefix]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:7
+msgid "server_entry"
+msgstr "server_entry"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:8
+msgid "Default"
+msgstr "இயல்புநிலை"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:9
+msgid "Reset to register with Customer Portal."
+msgstr "வாடிக்கையாளர் வலைவாசல் மூலமாக பதிவுபெறும்படி மீட்டமை."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:10
+msgid "default_button"
+msgstr "default_button"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:11
+msgid ""
+"Activation Keys are alphanumeric strings that are pre-configured by your "
+"system administrators to automatically register your system and attach all "
+"necessary subscriptions."
+msgstr ""
+"உங்கள் கணினியை தானாக பதிவு செய்து தேவையான அனைத்து சந்தாக்களையும் இணைப்பதற்காக உங்கள் "
+"கணினி நிர்வாகிகளால் முன்பே அமைவாக்கம் செய்யப்பட்ட எழுத்துகளும் எண்களும் கொண்ட சரங்களே "
+"செயல்படுத்தல் விசைகளாகும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:12
+msgid "I will use an Activation Key"
+msgstr "செயல்படுத்தல் விசையைப் பயன்படுத்துவேன்"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:13
+msgid "If required, please configure your proxy before moving forward."
+msgstr "தேவைப்பட்டால், தொடரும் முன்பு உங்கள் பிராக்சியை உள்ளமைக்கவும்."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:14
+msgid "Configure Proxy"
+msgstr "ப்ராக்சியை உள்ளமை"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:15
+msgid "proxy_button"
+msgstr "proxy_button"
+
 #: ../src/subscription_manager/gui/data/registration_info.glade.h:1
 msgid ""
 "This assistant will guide you through the process of registering your system "
@@ -4716,96 +4806,6 @@ msgstr "gpgcheck_edit_button"
 #: ../src/subscription_manager/gui/data/repositories.glade.h:20
 msgid "gpgcheck_remove_button"
 msgstr "gpgcheck_remove_button"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:1
-msgid ""
-"The subscription management service you register with will provide your "
-"system with updates and allow additional management."
-msgstr ""
-"நீங்கள் பதிவு பெறும் சந்தா நிர்வாக சேவை உங்கள் கணினிக்கு புதுப்பிப்புகளையும் கூடுதல் "
-"நிர்வாக அம்சத்தையும் வழங்கும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:2
-msgid "choose_server_label"
-msgstr "choose_server_label"
-
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:3
-msgid ""
-"Registering with Customer Portal, Subscription Asset Manager, Satellite or "
-"Candlepin servers can be used to provide your system with updates and allow "
-"management through the selected server's interface."
-msgstr ""
-"வாடிக்கையாளர் வலைவாசல், சந்தா சொத்து நிர்வாகி, சேட்டல்லைட் அல்லது கேன்டில்பின் சேவையகங்கள் "
-"ஆகியவற்றுடன் பதிவுபெறுவது, உங்கள் கணினிக்கு புதுப்பிப்புகளை வழங்கவும் தேர்ந்தெடுக்கப்பட்ட "
-"சேவையக இடைமுகங்கள் வழியாக நிர்வகிக்க அனுமதிக்கவும் பயன்படும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:4
-msgid "I will register with:"
-msgstr "இம்முறையில் பதிவு செய்வேன்:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:5
-msgid "server_label"
-msgstr "server_label"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:6
-msgid "hostname[:port][/prefix]"
-msgstr "hostname[:port][/prefix]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:7
-msgid "server_entry"
-msgstr "server_entry"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:8
-msgid "Default"
-msgstr "இயல்புநிலை"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:9
-msgid "Reset to register with Customer Portal."
-msgstr "வாடிக்கையாளர் வலைவாசல் மூலமாக பதிவுபெறும்படி மீட்டமை."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:10
-msgid "default_button"
-msgstr "default_button"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:11
-msgid ""
-"Activation Keys are alphanumeric strings that are pre-configured by your "
-"system administrators to automatically register your system and attach all "
-"necessary subscriptions."
-msgstr ""
-"உங்கள் கணினியை தானாக பதிவு செய்து தேவையான அனைத்து சந்தாக்களையும் இணைப்பதற்காக உங்கள் "
-"கணினி நிர்வாகிகளால் முன்பே அமைவாக்கம் செய்யப்பட்ட எழுத்துகளும் எண்களும் கொண்ட சரங்களே "
-"செயல்படுத்தல் விசைகளாகும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:12
-msgid "I will use an Activation Key"
-msgstr "செயல்படுத்தல் விசையைப் பயன்படுத்துவேன்"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:13
-msgid "If required, please configure your proxy before moving forward."
-msgstr "தேவைப்பட்டால், தொடரும் முன்பு உங்கள் பிராக்சியை உள்ளமைக்கவும்."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:14
-msgid "Configure Proxy"
-msgstr "ப்ராக்சியை உள்ளமை"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:15
-msgid "proxy_button"
-msgstr "proxy_button"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1

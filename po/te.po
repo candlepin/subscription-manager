@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-20 16:25-0400\n"
+"POT-Creation-Date: 2014-04-09 12:49-0400\n"
 "PO-Revision-Date: 2014-02-06 05:31-0500\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -141,26 +141,6 @@ msgid ""
 "Tip: Forgot your login or password? Look it up at http://redhat.com/"
 "forgot_password"
 msgstr "చిట్కా: మీ సంకేతపదం మరిచారా? దానికొరకు http://redhat.com/forgot_password చూడండి"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. note default is lower caps
-#: ../src/subscription_manager/i18n_optparse.py:39
-msgid "%prog [OPTIONS]"
-msgstr "%prog [ఐచ్చికాలు]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:129
-#: ../../../../..//usr/lib64/python2.7/optparse.py:374
-#, python-format
-msgid "Usage: %s\n"
-msgstr "వా‍డుక: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:145
-#, python-format
-msgid "%s: error: %s"
-msgstr "%s: దోషం: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:62
@@ -301,6 +281,11 @@ msgstr "పాక్షికంగా సబ్‌స్క్రైబైం�
 #: ../src/subscription_manager/gui/factsgui.py:90
 #: ../src/subscription_manager/gui/factsgui.py:117
 #: ../src/subscription_manager/reasons.py:83
+#: ../src/subscription_manager/utils.py:171
+#: ../src/subscription_manager/utils.py:172
+#: ../src/subscription_manager/utils.py:187
+#: ../src/subscription_manager/utils.py:206
+#: ../src/subscription_manager/utils.py:225
 #: ../src/subscription_manager/cert_sorter.py:47
 #: ../src/subscription_manager/managercli.py:76
 #: ../src/subscription_manager/managercli.py:284
@@ -309,11 +294,6 @@ msgstr "పాక్షికంగా సబ్‌స్క్రైబైం�
 #: ../src/subscription_manager/managercli.py:289
 #: ../src/subscription_manager/managercli.py:1636
 #: ../src/subscription_manager/managercli.py:2374
-#: ../src/subscription_manager/utils.py:171
-#: ../src/subscription_manager/utils.py:172
-#: ../src/subscription_manager/utils.py:187
-#: ../src/subscription_manager/utils.py:206
-#: ../src/subscription_manager/utils.py:225
 msgid "Unknown"
 msgstr "తెలియని"
 
@@ -393,9 +373,145 @@ msgid "Keep your system up to date by registering."
 msgstr "నమోదుచేయుట ద్వారా మీ వ్యవస్థను తాజా వుంచుము."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:155
+msgid "There was an error saving your configuration."
+msgstr "మీ ఆకృతీకరణను దాయుటలో వొక దోషం వుంది."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:156
+#, python-format
+msgid "Make sure that you own %s."
+msgstr "మీరు %s ను స్వంతగా కలిగివుండునట్లు చూడండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/networkConfig.py:177
+msgid "Proxy location cannot be empty"
+msgstr "ప్రోక్సీ స్థానము ఖాళీగా వుండలేదు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/networkConfig.py:179
+msgid "Proxy connection succeeded"
+msgstr "ప్రోక్సీ అనుసంధానం విజయవంతమైంది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/networkConfig.py:181
+msgid "Proxy connection failed"
+msgstr "ప్రోక్సీ అనుసంధానం విఫలమైంది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/redeem.py:55
+#, python-format
+msgid "Error redeeming subscription: %s"
+msgstr "సబ్‌స్క్రిప్షన్ వెచ్చించుటలో దోషం: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:255
+msgid "Installed"
+msgstr "సంస్థాపిత"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. An empty string entry is used for "un-setting" the system's SLA:
+#. for unsetting
+#: ../src/subscription_manager/gui/widgets.py:330
+#: ../src/subscription_manager/gui/preferences.py:119
+#: ../src/subscription_manager/gui/preferences.py:145
+msgid "Not Set"
+msgstr "అమర్చలేదు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:357
+#: ../src/subscription_manager/gui/factsgui.py:141
+#: ../src/subscription_manager/printing_utils.py:136
+#: ../src/subscription_manager/managercli.py:611
+msgid "None"
+msgstr "ఏదీకాదు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:558
+msgid "Invalid date format. Please re-enter a valid date. Example: "
+msgstr "చెల్లని తేది తీరు. దయచేసి చెల్లునటువంటి తేదీను తిరిగి-ప్రవేశపెట్టు. ఉదాహరణకు:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/widgets.py:595
+msgid "Date Selection"
+msgstr "తేదీ యెంపిక"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:610
+msgid "Today"
+msgstr "ఈరోజు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:705
+#: ../src/subscription_manager/gui/mysubstab.py:283
+#: ../src/subscription_manager/managercli.py:2084
+#: ../src/subscription_manager/managercli.py:2167
+msgid "Physical"
+msgstr "ఫిజికల్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:706
+#: ../src/subscription_manager/gui/mysubstab.py:281
+#: ../src/subscription_manager/managercli.py:2082
+#: ../src/subscription_manager/managercli.py:2165
+msgid "Virtual"
+msgstr "వర్చ్యువల్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:707
+msgid "Both"
+msgstr "రెండు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#. content-type is required, no need to xstr
+#: ../src/subscription_manager/gui/widgets.py:710
+#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
+msgid "Type"
+msgstr "రకం"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:782
+msgid "Click to Adjust Quantity"
+msgstr "పరిమాణం సర్దుబాటు చేయుటకు నొక్కుము"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/managergui.py:337
+msgid ""
+"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr "అభీష్టాల డైలాగ్ నందు దోషం. మరింత సమాచారం కొరకు /var/log/rhsm/rhsm.log చూడండి."
+
+#: ../src/subscription_manager/gui/managergui.py:345
+msgid ""
+"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr "రెపోస్ డైలాగ్ నందు దోషం. మరింత సమాచారం కొరకు /var/log/rhsm/rhsm.log చూడండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:361
+msgid "<b>Errors were encountered during unregister.</b>"
+msgstr "<b>దోషములు నమోదీకరణ తీసివేత నందు యెదురైనవి.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:363
+#: ../src/subscription_manager/gui/registergui.py:94
+msgid "Please see /var/log/rhsm/rhsm.log for more information."
+msgstr "అధిక సమాచారం కొరకు దయచేసి /var/log/rhsm/rhsm.log చూడండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:379
+msgid "<b>Are you sure you want to unregister?</b>"
+msgstr "<b>మీరు ఖచ్చితంగా నమోదును తీసివేయాలని అనుకొనుచున్నారా?</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:435
+msgid "System Already Registered"
+msgstr "సిస్టమ్ యిప్పటికే నమోదైంది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/mysubstab.py:74
-#: ../src/subscription_manager/gui/allsubs.py:72
 #: ../src/subscription_manager/gui/registergui.py:421
+#: ../src/subscription_manager/gui/allsubs.py:72
 msgid "Subscription"
 msgstr "సబ్‌స్క్రిప్షన్"
 
@@ -407,9 +523,9 @@ msgstr "సంస్థాపిత వుత్పత్తులు"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. Set up the quantity column.
 #: ../src/subscription_manager/gui/mysubstab.py:105
+#: ../src/subscription_manager/gui/registergui.py:427
 #: ../src/subscription_manager/gui/contract_selection.py:124
 #: ../src/subscription_manager/gui/allsubs.py:88
-#: ../src/subscription_manager/gui/registergui.py:427
 #: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:82
 msgid "Quantity"
 msgstr "పరిమాణం"
@@ -477,22 +593,6 @@ msgstr "సబ్‌స్క్రిప్షన్ ప్రారంభం �
 msgid "Subscription management service doesn't support Status Details."
 msgstr "సబ్‌స్క్రిప్షన్ నిర్వహణ సేవ అనునది స్థితి వివరాలకు తోడ్పాటు నీయదు."
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:281
-#: ../src/subscription_manager/gui/widgets.py:706
-#: ../src/subscription_manager/managercli.py:2082
-#: ../src/subscription_manager/managercli.py:2165
-msgid "Virtual"
-msgstr "వర్చ్యువల్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:283
-#: ../src/subscription_manager/gui/widgets.py:705
-#: ../src/subscription_manager/managercli.py:2084
-#: ../src/subscription_manager/managercli.py:2167
-msgid "Physical"
-msgstr "ఫిజికల్"
-
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
 #: ../src/subscription_manager/gui/mysubstab.py:286
 msgid "Yes"
@@ -503,125 +603,198 @@ msgstr "అవును"
 msgid "No"
 msgstr "కాదు"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:92
+msgid "<b>Unable to register the system.</b>"
+msgstr "<b>సిస్టమ్‌ను నమోదు చేయలేము.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:186
+#: ../src/subscription_manager/gui/data/registration.glade.h:1
+msgid "System Registration"
+msgstr "సిస్టమ్ నమోదు"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/managergui.py:337
-msgid ""
-"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr "అభీష్టాల డైలాగ్ నందు దోషం. మరింత సమాచారం కొరకు /var/log/rhsm/rhsm.log చూడండి."
+#: ../src/subscription_manager/gui/registergui.py:187
+#: ../src/subscription_manager/gui/data/registration.glade.h:6
+msgid "<b>Registering</b>"
+msgstr "<b>నమోదుచేస్తోంది</b>"
 
-#: ../src/subscription_manager/gui/managergui.py:345
-msgid ""
-"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr "రెపోస్ డైలాగ్ నందు దోషం. మరింత సమాచారం కొరకు /var/log/rhsm/rhsm.log చూడండి."
+#: ../src/subscription_manager/gui/registergui.py:189
+msgid "Subscription Attachment"
+msgstr "సబ్‌స్క్రిప్షన్ అనుబందం"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:361
-msgid "<b>Errors were encountered during unregister.</b>"
-msgstr "<b>దోషములు నమోదీకరణ తీసివేత నందు యెదురైనవి.</b>"
+#: ../src/subscription_manager/gui/registergui.py:190
+msgid "<b>Attaching</b>"
+msgstr "<b>అనుబందిస్తోంది</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:363
-#: ../src/subscription_manager/gui/registergui.py:94
-msgid "Please see /var/log/rhsm/rhsm.log for more information."
-msgstr "అధిక సమాచారం కొరకు దయచేసి /var/log/rhsm/rhsm.log చూడండి."
+#: ../src/subscription_manager/gui/registergui.py:298
+#: ../src/subscription_manager/gui/data/registration.glade.h:4
+#: ../src/subscription_manager/gui/data/installed.glade.h:4
+msgid "Register"
+msgstr "నమోదుచేయి"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/registergui.py:342
+msgid "Registering your system"
+msgstr "మీ సిస్టమ్‌ను నమోదుచేస్తోంది"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:379
-msgid "<b>Are you sure you want to unregister?</b>"
-msgstr "<b>మీరు ఖచ్చితంగా నమోదును తీసివేయాలని అనుకొనుచున్నారా?</b>"
+#: ../src/subscription_manager/gui/registergui.py:383
+#: ../src/subscription_manager/gui/registergui.py:871
+msgid "Attaching subscriptions"
+msgstr "సబ్‌స్కిప్షన్లను అనుబందిస్తోంది"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:435
-msgid "System Already Registered"
-msgstr "సిస్టమ్ యిప్పటికే నమోదైంది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:155
-msgid "There was an error saving your configuration."
-msgstr "మీ ఆకృతీకరణను దాయుటలో వొక దోషం వుంది."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:156
+#: ../src/subscription_manager/gui/registergui.py:387
+#: ../src/subscription_manager/gui/registergui.py:875
 #, python-format
-msgid "Make sure that you own %s."
-msgstr "మీరు %s ను స్వంతగా కలిగివుండునట్లు చూడండి."
+msgid "Error subscribing: %s"
+msgstr "సబ్‌స్క్రైబ్ అగుటలో దోషం: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:415
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:9
+msgid "Attach"
+msgstr "అనుబందించు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:473
+msgid "Finding suitable service levels"
+msgstr "సరిపోవు సేవా స్థాయిలను కనుగొనుచున్నది"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/networkConfig.py:177
-msgid "Proxy location cannot be empty"
-msgstr "ప్రోక్సీ స్థానము ఖాళీగా వుండలేదు"
+#: ../src/subscription_manager/gui/registergui.py:474
+#: ../src/subscription_manager/gui/registergui.py:902
+#: ../src/subscription_manager/gui/registergui.py:1234
+msgid "Next"
+msgstr "తరువాతి"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/networkConfig.py:179
-msgid "Proxy connection succeeded"
-msgstr "ప్రోక్సీ అనుసంధానం విజయవంతమైంది"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:526
+msgid "Unable to auto-attach, server does not support service levels."
+msgstr "స్వయంచాలన-అనుబందం చేయలేదు, సేవిక సేవా స్థాయిలకు తోడ్పాటునీయుటలేదు."
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/networkConfig.py:181
-msgid "Proxy connection failed"
-msgstr "ప్రోక్సీ అనుసంధానం విఫలమైంది"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:529
+msgid ""
+"No installed products on system. No need to attach subscriptions at this "
+"time."
+msgstr ""
+"వ్యవస్థపై సంస్థాపిత వుత్పత్తులు లేవు. ఈ సమయంలో సబ్‌స్క్రిప్షన్లు అనుబందించవలసిన అవసరం లేదు."
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/redeem.py:55
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:532
+msgid ""
+"All installed products are covered by valid entitlements. No need to attach "
+"subscriptions at this time."
+msgstr ""
+"అన్ని సంస్థాపిత వుత్పత్తులు చెల్లునటువంటి యెన్టైటిల్మెంట్లతో కవరైనవి. ఈ సమయంలో సబ్‌స్క్రిప్షన్లు "
+"అనుబందించవలసిన అవసరంలేదు."
+
+#: ../src/subscription_manager/gui/registergui.py:535
+msgid "Consumer has been deleted."
+msgstr "వినియోగదారి తొలగించబడెను."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:551
 #, python-format
-msgid "Error redeeming subscription: %s"
-msgstr "సబ్‌స్క్రిప్షన్ వెచ్చించుటలో దోషం: %s"
+msgid ""
+"No available subscriptions at the current service level: %s. Please use the "
+"\"All Available Subscriptions\" tab to manually attach subscriptions."
+msgstr ""
+"ప్రస్తుత సేవా స్థాయి వద్ద సబ్‌స్క్రిప్షన్లు అందుబాటులోలేవు: %s. సబ్‌స్క్రిప్షన్లను మానవీయంగా జతచేయుటకు "
+"దయచేసి \"అన్ని అందుబాటులోని సబ్‌స్క్రిప్షన్లు\" టాబ్ వుపయోగించండి."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:255
-msgid "Installed"
-msgstr "సంస్థాపిత"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. An empty string entry is used for "un-setting" the system's SLA:
-#. for unsetting
-#: ../src/subscription_manager/gui/widgets.py:330
-#: ../src/subscription_manager/gui/preferences.py:119
-#: ../src/subscription_manager/gui/preferences.py:145
-msgid "Not Set"
-msgstr "అమర్చలేదు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:357
-#: ../src/subscription_manager/gui/factsgui.py:141
-#: ../src/subscription_manager/managercli.py:611
-#: ../src/subscription_manager/printing_utils.py:136
-msgid "None"
-msgstr "ఏదీకాదు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:558
-msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr "చెల్లని తేది తీరు. దయచేసి చెల్లునటువంటి తేదీను తిరిగి-ప్రవేశపెట్టు. ఉదాహరణకు:"
+#: ../src/subscription_manager/gui/registergui.py:569
+msgid ""
+"No service level will cover all installed products. Please manually "
+"subscribe using multiple service levels via the \"All Available "
+"Susbscriptions\" tab or purchase additional subscriptions."
+msgstr ""
+"అన్ని సంస్థాపిత వుత్పత్తులను యే సేవా స్థాయి కవర్ చేయదు. బహుళ సేవా స్థాయిలకు \"అన్ని అందుబాటులోని "
+"సబ్‌స్క్రిప్షన్లు\" టాబ్ వుపయోగించి మానవీయంగా సబ్‌స్క్రైబ్ అవ్వండి లేదా అదనపు సబ్‌స్క్రిప్షన్లను కొనుగోలుచేయి."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/widgets.py:595
-msgid "Date Selection"
-msgstr "తేదీ యెంపిక"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:610
-msgid "Today"
-msgstr "ఈరోజు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:707
-msgid "Both"
-msgstr "రెండు"
+#: ../src/subscription_manager/gui/registergui.py:601
+msgid "Fetching list of possible environments"
+msgstr "సాధ్యమగు పరిసరాల జాబితాను వెతికితీస్తోంది"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#. content-type is required, no need to xstr
-#: ../src/subscription_manager/gui/widgets.py:710
-#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
-msgid "Type"
-msgstr "రకం"
+#: ../src/subscription_manager/gui/registergui.py:603
+#: ../src/subscription_manager/gui/data/factsdialog.glade.h:7
+msgid "Environment"
+msgstr "ఎన్విరాన్మెంట్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/registergui.py:658
+msgid "Fetching list of possible organizations"
+msgstr "సాధ్యమగు సంస్థలను వెతుకుతోంది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/registergui.py:661
+msgid "Organization"
+msgstr "సంస్థ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/registergui.py:680
+#, python-format
+msgid "<b>User %s is not able to register with any orgs.</b>"
+msgstr "<b>వాడుకరి %s యే సంస్థలతో నమోదు కాలేరు</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:782
-msgid "Click to Adjust Quantity"
-msgstr "పరిమాణం సర్దుబాటు చేయుటకు నొక్కుము"
+#: ../src/subscription_manager/gui/registergui.py:742
+#: ../src/subscription_manager/gui/registergui.py:848
+msgid "You must enter a system name."
+msgstr "మీరు తప్పక సిస్టమ్ పేరు ప్రవేశపెట్టవలెను."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:750
+msgid "You must enter a login."
+msgstr "మీరు తప్పక లాగిన్ ప్రవేశపెట్టవలెను."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:755
+msgid "You must enter a password."
+msgstr "మీరు తప్పక సంకేతపదము ప్రవేశపెట్టవలెను."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:834
+msgid "You must enter an organization."
+msgstr "మీరు తప్పక ఒక సంస్థని ప్రవేశపెట్టాలి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:841
+msgid "You must enter an activation key."
+msgstr "మీరు తప్పక ఒక క్రియాశీల కీ ప్రవేశపెట్టాలి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/registergui.py:952
+#: ../src/subscription_manager/managercli.py:342
+#, python-format
+msgid "Unable to reach the server at %s:%s%s"
+msgstr "%s వద్దని సర్వర్‌ను చేరలేకపోతోంది:%s%s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/registergui.py:957
+msgid "CA certificate for subscription service has not been installed."
+msgstr "సబ్‌స్క్రిప్షన్ సేవ కొరకు CA ధృవీకరణపత్రం సంస్థాపించలేదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/registergui.py:962
+msgid ""
+"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
+"prefix]"
+msgstr ""
+"దయచేసి అతిథేయి పేరును ఐచ్చిక port మరియు/లేదా prefix: hostname[:port][/prefix] తో అందించుము"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/registergui.py:1019
+msgid "Server supports environments, but none are available."
+msgstr "సేవిక యెన్విరాన్మెంట్లకు తోడ్పాటునిచ్చును, అయితే యేవి అందుబాటులోలేవు."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
 #: ../src/subscription_manager/gui/about.py:29
@@ -897,199 +1070,6 @@ msgstr "ఓవర్‌రైడ్ తీసివేత ఖాయపరచు"
 #: ../src/subscription_manager/gui/reposgui.py:404
 msgid "Unable to delete the gpgcheck override."
 msgstr "జిపిజిచెక్ ఓవర్‌రైడ్ తొలగించలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:92
-msgid "<b>Unable to register the system.</b>"
-msgstr "<b>సిస్టమ్‌ను నమోదు చేయలేము.</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:186
-#: ../src/subscription_manager/gui/data/registration.glade.h:1
-msgid "System Registration"
-msgstr "సిస్టమ్ నమోదు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/registergui.py:187
-#: ../src/subscription_manager/gui/data/registration.glade.h:6
-msgid "<b>Registering</b>"
-msgstr "<b>నమోదుచేస్తోంది</b>"
-
-#: ../src/subscription_manager/gui/registergui.py:189
-msgid "Subscription Attachment"
-msgstr "సబ్‌స్క్రిప్షన్ అనుబందం"
-
-#: ../src/subscription_manager/gui/registergui.py:190
-msgid "<b>Attaching</b>"
-msgstr "<b>అనుబందిస్తోంది</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:298
-#: ../src/subscription_manager/gui/data/registration.glade.h:4
-#: ../src/subscription_manager/gui/data/installed.glade.h:4
-msgid "Register"
-msgstr "నమోదుచేయి"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/registergui.py:342
-msgid "Registering your system"
-msgstr "మీ సిస్టమ్‌ను నమోదుచేస్తోంది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:383
-#: ../src/subscription_manager/gui/registergui.py:871
-msgid "Attaching subscriptions"
-msgstr "సబ్‌స్కిప్షన్లను అనుబందిస్తోంది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:387
-#: ../src/subscription_manager/gui/registergui.py:875
-#, python-format
-msgid "Error subscribing: %s"
-msgstr "సబ్‌స్క్రైబ్ అగుటలో దోషం: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:415
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:9
-msgid "Attach"
-msgstr "అనుబందించు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:473
-msgid "Finding suitable service levels"
-msgstr "సరిపోవు సేవా స్థాయిలను కనుగొనుచున్నది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/registergui.py:474
-#: ../src/subscription_manager/gui/registergui.py:902
-#: ../src/subscription_manager/gui/registergui.py:1234
-msgid "Next"
-msgstr "తరువాతి"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:526
-msgid "Unable to auto-attach, server does not support service levels."
-msgstr "స్వయంచాలన-అనుబందం చేయలేదు, సేవిక సేవా స్థాయిలకు తోడ్పాటునీయుటలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:529
-msgid ""
-"No installed products on system. No need to attach subscriptions at this "
-"time."
-msgstr ""
-"వ్యవస్థపై సంస్థాపిత వుత్పత్తులు లేవు. ఈ సమయంలో సబ్‌స్క్రిప్షన్లు అనుబందించవలసిన అవసరం లేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:532
-msgid ""
-"All installed products are covered by valid entitlements. No need to attach "
-"subscriptions at this time."
-msgstr ""
-"అన్ని సంస్థాపిత వుత్పత్తులు చెల్లునటువంటి యెన్టైటిల్మెంట్లతో కవరైనవి. ఈ సమయంలో సబ్‌స్క్రిప్షన్లు "
-"అనుబందించవలసిన అవసరంలేదు."
-
-#: ../src/subscription_manager/gui/registergui.py:535
-msgid "Consumer has been deleted."
-msgstr "వినియోగదారి తొలగించబడెను."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:551
-#, python-format
-msgid ""
-"No available subscriptions at the current service level: %s. Please use the "
-"\"All Available Subscriptions\" tab to manually attach subscriptions."
-msgstr ""
-"ప్రస్తుత సేవా స్థాయి వద్ద సబ్‌స్క్రిప్షన్లు అందుబాటులోలేవు: %s. సబ్‌స్క్రిప్షన్లను మానవీయంగా జతచేయుటకు "
-"దయచేసి \"అన్ని అందుబాటులోని సబ్‌స్క్రిప్షన్లు\" టాబ్ వుపయోగించండి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:569
-msgid ""
-"No service level will cover all installed products. Please manually "
-"subscribe using multiple service levels via the \"All Available "
-"Susbscriptions\" tab or purchase additional subscriptions."
-msgstr ""
-"అన్ని సంస్థాపిత వుత్పత్తులను యే సేవా స్థాయి కవర్ చేయదు. బహుళ సేవా స్థాయిలకు \"అన్ని అందుబాటులోని "
-"సబ్‌స్క్రిప్షన్లు\" టాబ్ వుపయోగించి మానవీయంగా సబ్‌స్క్రైబ్ అవ్వండి లేదా అదనపు సబ్‌స్క్రిప్షన్లను కొనుగోలుచేయి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/registergui.py:601
-msgid "Fetching list of possible environments"
-msgstr "సాధ్యమగు పరిసరాల జాబితాను వెతికితీస్తోంది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/registergui.py:603
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:7
-msgid "Environment"
-msgstr "ఎన్విరాన్మెంట్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/registergui.py:658
-msgid "Fetching list of possible organizations"
-msgstr "సాధ్యమగు సంస్థలను వెతుకుతోంది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/registergui.py:661
-msgid "Organization"
-msgstr "సంస్థ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/registergui.py:680
-#, python-format
-msgid "<b>User %s is not able to register with any orgs.</b>"
-msgstr "<b>వాడుకరి %s యే సంస్థలతో నమోదు కాలేరు</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:742
-#: ../src/subscription_manager/gui/registergui.py:848
-msgid "You must enter a system name."
-msgstr "మీరు తప్పక సిస్టమ్ పేరు ప్రవేశపెట్టవలెను."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:750
-msgid "You must enter a login."
-msgstr "మీరు తప్పక లాగిన్ ప్రవేశపెట్టవలెను."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:755
-msgid "You must enter a password."
-msgstr "మీరు తప్పక సంకేతపదము ప్రవేశపెట్టవలెను."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:834
-msgid "You must enter an organization."
-msgstr "మీరు తప్పక ఒక సంస్థని ప్రవేశపెట్టాలి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:841
-msgid "You must enter an activation key."
-msgstr "మీరు తప్పక ఒక క్రియాశీల కీ ప్రవేశపెట్టాలి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/registergui.py:952
-#: ../src/subscription_manager/managercli.py:342
-#, python-format
-msgid "Unable to reach the server at %s:%s%s"
-msgstr "%s వద్దని సర్వర్‌ను చేరలేకపోతోంది:%s%s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/registergui.py:957
-msgid "CA certificate for subscription service has not been installed."
-msgstr "సబ్‌స్క్రిప్షన్ సేవ కొరకు CA ధృవీకరణపత్రం సంస్థాపించలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/registergui.py:962
-msgid ""
-"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
-"prefix]"
-msgstr ""
-"దయచేసి అతిథేయి పేరును ఐచ్చిక port మరియు/లేదా prefix: hostname[:port][/prefix] తో అందించుము"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/registergui.py:1019
-msgid "Server supports environments, but none are available."
-msgstr "సేవిక యెన్విరాన్మెంట్లకు తోడ్పాటునిచ్చును, అయితే యేవి అందుబాటులోలేవు."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
 #: ../src/subscription_manager/reasons.py:75
@@ -1531,6 +1511,15 @@ msgstr ""
 "RHN క్లాసిక్ నుండి వ్యవస్థ నమోదీకరణ తీసివేయుటకు సిద్దమౌతోంది..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cache.py:183
+msgid ""
+"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
+"సేవిక పైన వ్యవస్థ డాటాను నవీకరించుటలో దోషం, మరిన్న వివరాల కొరకు  /var/log/rhsm/rhsm.log "
+"చూడండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/dmiinfo.py:56
 #: ../src/subscription_manager/dmiinfo.py:102
 #, python-format
@@ -1544,28 +1533,59 @@ msgid "Error reading system DMI information with %s: %s"
 msgstr "%s తో సిస్టమ్ DMI సమాచారం చదువుటలో దోషం: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cache.py:183
-msgid ""
-"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"సేవిక పైన వ్యవస్థ డాటాను నవీకరించుటలో దోషం, మరిన్న వివరాల కొరకు  /var/log/rhsm/rhsm.log "
-"చూడండి."
+#: ../src/subscription_manager/hwprobe.py:273
+msgid "Error reading system memory information:"
+msgstr "సిస్టమ్ మెమొరీ సమాచారమును చదువుటలో దోషము:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:583
+msgid "Error reading system CPU information:"
+msgstr "సిస్టమ్ CPU సమాచారమును చదువుటలో దోషము:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:608
+msgid "Error reading networking information:"
+msgstr "నెట్వర్కింగ్ సమాచారమును చదువుటలో దోషం:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:707
+msgid "Error reading network interface information:"
+msgstr "నెట్వర్కు యింటర్ఫేస్ సమాచారం చదువుటలో దోషం:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/cert_sorter.py:44
-msgid "Current"
-msgstr "ప్రస్తుత"
+#: ../src/subscription_manager/hwprobe.py:803
+msgid "Virtualization platform does not support UUIDs"
+msgstr "వర్చ్యులైజేషన్ ప్లాట్‌పాంలు UUIDలకు తోడ్పాటునీయవు"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/cert_sorter.py:45
-msgid "Insufficient"
-msgstr "సరిపోని"
+#: ../src/subscription_manager/hwprobe.py:805
+#, python-format
+msgid "Error finding UUID: %s"
+msgstr "UUID కనుగొనుటలో దోషం: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. usage format strips any leading 'usage' so
+#. do not iclude it
+#: ../src/subscription_manager/cli.py:62
+#, python-format
+msgid "%%prog %s [OPTIONS]"
+msgstr "%%prog %s [ఐచ్చికాలు]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cli.py:93
+#, python-format
+msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+msgstr "వాడుక: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/cert_sorter.py:46
-msgid "Invalid"
-msgstr "చెల్లని"
+#: ../src/subscription_manager/cli.py:105
+msgid "Primary Modules:"
+msgstr "ప్రాధమిక మాడ్యూళ్ళు:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cli.py:106
+msgid "Other Modules:"
+msgstr "ఇతర మాడ్యూళ్ళు:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/certlib.py:339
@@ -1620,6 +1640,131 @@ msgstr "%d నవీకరణలు అవసరం"
 #: ../src/daemons/rhsmcertd-worker.py:54
 msgid "done"
 msgstr "అయినది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/utils.py:188
+#: ../src/subscription_manager/managercli.py:1161
+msgid "This system is currently not registered."
+msgstr "ఈ సిస్టమ్ ప్రస్తుతం నమోదైలేదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/utils.py:266
+msgid "and"
+msgstr "మరియు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. note default is lower caps
+#: ../src/subscription_manager/i18n_optparse.py:39
+msgid "%prog [OPTIONS]"
+msgstr "%prog [ఐచ్చికాలు]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/i18n_optparse.py:129
+#: ../../../../..//usr/lib64/python2.7/optparse.py:374
+#, python-format
+msgid "Usage: %s\n"
+msgstr "వా‍డుక: %s\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. translators: arg 1 is the program name, arg 2 is the error message
+#: ../src/subscription_manager/i18n_optparse.py:145
+#, python-format
+msgid "%s: error: %s"
+msgstr "%s: దోషం: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/cert_sorter.py:44
+msgid "Current"
+msgstr "ప్రస్తుత"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/cert_sorter.py:45
+msgid "Insufficient"
+msgstr "సరిపోని"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/cert_sorter.py:46
+msgid "Invalid"
+msgstr "చెల్లని"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:27
+msgid ""
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
+msgstr ""
+"నెట్వర్కు దోషం, సేవికకు అనుసంధానం కాలేకపోయెను. అధిక సమాచారము కొరకు దయచేసి /var/log/rhsm/rhsm."
+"log చూడండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:28
+msgid ""
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
+msgstr ""
+"నెట్వర్కు దోషం. దయచేసి అనుసంధానత వివరములను పరిశీలించండి, లేదా మరింత సమాచారము కొరకు /var/log/"
+"rhsm/rhsm.log చూడండి."
+
+#: ../src/subscription_manager/exceptions.py:29
+msgid "Unauthorized: Invalid credentials for request."
+msgstr "అధికారంలేని: అభ్యర్ధనకు చెల్లని క్రెడెన్షియల్స్."
+
+#: ../src/subscription_manager/exceptions.py:30
+msgid "Forbidden: Invalid credentials for request."
+msgstr "నిషిద్ధమైన: అభ్యర్ధనకు చెల్లని క్రెడెన్షియల్స్."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:31
+msgid ""
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
+msgstr ""
+"దూరస్థ సేవిక దోషం. దయచేసి అనుసంధానత వివరములను చూడండి, లేదా మరింత సమాచారము కొరకు /var/log/"
+"rhsm/rhsm.log చూడండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:32
+#, python-format
+msgid "Bad CA certificate: %s"
+msgstr "చెడ్డ CA ధృవీకరణపత్రం: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:33
+#: ../src/daemons/rhsmcertd-worker.py:56
+msgid "Your identity certificate has expired"
+msgstr "మీ గుర్తింపు ధృవీకరణపత్రం గడువుముగిసినది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:34
+#, python-format
+msgid "Unable to verify server's identity: %s"
+msgstr "సేవిక యొక్క గుర్తింపును నిర్థారించలేక పోయెను: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/exceptions.py:35
+msgid "Server URL can not be empty"
+msgstr "సేవిక URL ఖాళీగా వుండలేదు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/exceptions.py:36
+msgid ""
+"Server URL is just a schema. Should include hostname, and/or port and path"
+msgstr "సేవిక URL వొక స్కీమా. అతిధేయిపేరు, మరియు/లేదా పోర్ట్ మరియు పాత్ చేర్చవలెను"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/exceptions.py:37
+msgid "Server URL can not be None"
+msgstr "సేవిక URL ఏమీ కాకుండా వుండలేదు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:38
+msgid "Server URL port should be numeric"
+msgstr "సేవిక URL పోర్టు సంఖ్యాత్మకంగా వుండాలి"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/exceptions.py:39
+msgid "Server URL has an invalid scheme. http:// and https:// are supported"
+msgstr "సేవిక URL చెల్లని స్కీమ్ కలిగివుంది. http:// మరియు https:// తోడ్పాటునీయబడును."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:67
@@ -2287,12 +2432,6 @@ msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
 msgstr "దోషం: --servicelevel ఐచ్చికం సేవికచే తోడ్పాటునివ్వబడదు. మీ అభ్యర్ధనను పూర్తి చేయలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/managercli.py:1161
-#: ../src/subscription_manager/utils.py:188
-msgid "This system is currently not registered."
-msgstr "ఈ సిస్టమ్ ప్రస్తుతం నమోదైలేదు."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:1186
@@ -3002,145 +3141,6 @@ msgstr "వ్యవస్థ స్థితి వివరాలు"
 #, python-format
 msgid "Overall Status: %s\n"
 msgstr "మొత్తంగా స్థితి: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:27
-msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"నెట్వర్కు దోషం, సేవికకు అనుసంధానం కాలేకపోయెను. అధిక సమాచారము కొరకు దయచేసి /var/log/rhsm/rhsm."
-"log చూడండి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:28
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"నెట్వర్కు దోషం. దయచేసి అనుసంధానత వివరములను పరిశీలించండి, లేదా మరింత సమాచారము కొరకు /var/log/"
-"rhsm/rhsm.log చూడండి."
-
-#: ../src/subscription_manager/exceptions.py:29
-msgid "Unauthorized: Invalid credentials for request."
-msgstr "అధికారంలేని: అభ్యర్ధనకు చెల్లని క్రెడెన్షియల్స్."
-
-#: ../src/subscription_manager/exceptions.py:30
-msgid "Forbidden: Invalid credentials for request."
-msgstr "నిషిద్ధమైన: అభ్యర్ధనకు చెల్లని క్రెడెన్షియల్స్."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:31
-msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr ""
-"దూరస్థ సేవిక దోషం. దయచేసి అనుసంధానత వివరములను చూడండి, లేదా మరింత సమాచారము కొరకు /var/log/"
-"rhsm/rhsm.log చూడండి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:32
-#, python-format
-msgid "Bad CA certificate: %s"
-msgstr "చెడ్డ CA ధృవీకరణపత్రం: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:33
-#: ../src/daemons/rhsmcertd-worker.py:56
-msgid "Your identity certificate has expired"
-msgstr "మీ గుర్తింపు ధృవీకరణపత్రం గడువుముగిసినది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:34
-#, python-format
-msgid "Unable to verify server's identity: %s"
-msgstr "సేవిక యొక్క గుర్తింపును నిర్థారించలేక పోయెను: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/exceptions.py:35
-msgid "Server URL can not be empty"
-msgstr "సేవిక URL ఖాళీగా వుండలేదు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/exceptions.py:36
-msgid ""
-"Server URL is just a schema. Should include hostname, and/or port and path"
-msgstr "సేవిక URL వొక స్కీమా. అతిధేయిపేరు, మరియు/లేదా పోర్ట్ మరియు పాత్ చేర్చవలెను"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/exceptions.py:37
-msgid "Server URL can not be None"
-msgstr "సేవిక URL ఏమీ కాకుండా వుండలేదు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:38
-msgid "Server URL port should be numeric"
-msgstr "సేవిక URL పోర్టు సంఖ్యాత్మకంగా వుండాలి"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/exceptions.py:39
-msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr "సేవిక URL చెల్లని స్కీమ్ కలిగివుంది. http:// మరియు https:// తోడ్పాటునీయబడును."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. usage format strips any leading 'usage' so
-#. do not iclude it
-#: ../src/subscription_manager/cli.py:62
-#, python-format
-msgid "%%prog %s [OPTIONS]"
-msgstr "%%prog %s [ఐచ్చికాలు]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:93
-#, python-format
-msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "వాడుక: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/cli.py:105
-msgid "Primary Modules:"
-msgstr "ప్రాధమిక మాడ్యూళ్ళు:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:106
-msgid "Other Modules:"
-msgstr "ఇతర మాడ్యూళ్ళు:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:273
-msgid "Error reading system memory information:"
-msgstr "సిస్టమ్ మెమొరీ సమాచారమును చదువుటలో దోషము:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:583
-msgid "Error reading system CPU information:"
-msgstr "సిస్టమ్ CPU సమాచారమును చదువుటలో దోషము:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:608
-msgid "Error reading networking information:"
-msgstr "నెట్వర్కింగ్ సమాచారమును చదువుటలో దోషం:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:707
-msgid "Error reading network interface information:"
-msgstr "నెట్వర్కు యింటర్ఫేస్ సమాచారం చదువుటలో దోషం:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/hwprobe.py:803
-msgid "Virtualization platform does not support UUIDs"
-msgstr "వర్చ్యులైజేషన్ ప్లాట్‌పాంలు UUIDలకు తోడ్పాటునీయవు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/hwprobe.py:805
-#, python-format
-msgid "Error finding UUID: %s"
-msgstr "UUID కనుగొనుటలో దోషం: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/utils.py:266
-msgid "and"
-msgstr "మరియు"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/cert_commands.py:38
@@ -4062,6 +4062,95 @@ msgstr "register_details_label"
 msgid "page 2"
 msgstr "పేజీ 2"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:1
+msgid ""
+"The subscription management service you register with will provide your "
+"system with updates and allow additional management."
+msgstr ""
+"మీరు నమోదైన సబ్‌స్క్రిప్షన్ నిర్వహణ సేవ మీ వ్యవస్థకు నవీకరణలను అందించును మరియు అదనపు నిర్వహణను "
+"అనుమతించును."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:2
+msgid "choose_server_label"
+msgstr "choose_server_label"
+
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:3
+msgid ""
+"Registering with Customer Portal, Subscription Asset Manager, Satellite or "
+"Candlepin servers can be used to provide your system with updates and allow "
+"management through the selected server's interface."
+msgstr ""
+"వినియోగదారి పోర్టల్‌తో, సబ్‌స్క్రిప్షన్ యెసెట్ నిర్వాహికతో, సాటిలైట్ లేదా కాండిల్‌పిన్ సేవికలతో నమోదగుటవలన మీ వ్యవస్థకు "
+"నవీకరణలు అందించవచ్చు మరియు యెంపికచేసిన సేవికల యింటర్ఫేస్‌తో నిర్వహణను అనుమతించును."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:4
+msgid "I will register with:"
+msgstr "నేను దీనితో నమోదవుతాను:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:5
+msgid "server_label"
+msgstr "server_label"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:6
+msgid "hostname[:port][/prefix]"
+msgstr "hostname[:port][/prefix]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:7
+msgid "server_entry"
+msgstr "server_entry"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:8
+msgid "Default"
+msgstr "అప్రమేయం"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:9
+msgid "Reset to register with Customer Portal."
+msgstr "వినియోగదారి పోర్టల్‌తో రిజిస్టర్‌ను తిప్పివుంచుము."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:10
+msgid "default_button"
+msgstr "default_button"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:11
+msgid ""
+"Activation Keys are alphanumeric strings that are pre-configured by your "
+"system administrators to automatically register your system and attach all "
+"necessary subscriptions."
+msgstr ""
+"క్రియాశీల కీలు అనునవి అక్షరసంఖ్యాత్మక స్ట్రింగ్స్ వలె వుంటాయి అవి మీ వ్యవస్థను స్వయంచాలకంగా "
+"నమోదుచేయుటకు మరియు అన్ని తప్పనిసరి సబ్‌స్క్రిప్షన్లను అనుబిందించుటకు మీ వ్యవస్థ నిర్వాహకులచే ముందుగా-"
+"ఆకృతీకరించబడును."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:12
+msgid "I will use an Activation Key"
+msgstr "నేను క్రియాశీల కీ వుపయోగిస్తాను"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:13
+msgid "If required, please configure your proxy before moving forward."
+msgstr "ఒకవేళ అవసరమైతే, కొనసాగుటకు ముందుగా ప్రోక్సీను అకృతీకరించుము."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:14
+msgid "Configure Proxy"
+msgstr "ప్రోక్సీ ఆకృతీకరించు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/choose_server.glade.h:15
+msgid "proxy_button"
+msgstr "proxy_button"
+
 #: ../src/subscription_manager/gui/data/registration_info.glade.h:1
 msgid ""
 "This assistant will guide you through the process of registering your system "
@@ -4611,95 +4700,6 @@ msgstr "జిపిజిచెక్_కూర్చు_బటన్"
 #: ../src/subscription_manager/gui/data/repositories.glade.h:20
 msgid "gpgcheck_remove_button"
 msgstr "జిపిజిచెక్_తీసివేయు_బటన్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:1
-msgid ""
-"The subscription management service you register with will provide your "
-"system with updates and allow additional management."
-msgstr ""
-"మీరు నమోదైన సబ్‌స్క్రిప్షన్ నిర్వహణ సేవ మీ వ్యవస్థకు నవీకరణలను అందించును మరియు అదనపు నిర్వహణను "
-"అనుమతించును."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:2
-msgid "choose_server_label"
-msgstr "choose_server_label"
-
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:3
-msgid ""
-"Registering with Customer Portal, Subscription Asset Manager, Satellite or "
-"Candlepin servers can be used to provide your system with updates and allow "
-"management through the selected server's interface."
-msgstr ""
-"వినియోగదారి పోర్టల్‌తో, సబ్‌స్క్రిప్షన్ యెసెట్ నిర్వాహికతో, సాటిలైట్ లేదా కాండిల్‌పిన్ సేవికలతో నమోదగుటవలన మీ వ్యవస్థకు "
-"నవీకరణలు అందించవచ్చు మరియు యెంపికచేసిన సేవికల యింటర్ఫేస్‌తో నిర్వహణను అనుమతించును."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:4
-msgid "I will register with:"
-msgstr "నేను దీనితో నమోదవుతాను:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:5
-msgid "server_label"
-msgstr "server_label"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:6
-msgid "hostname[:port][/prefix]"
-msgstr "hostname[:port][/prefix]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:7
-msgid "server_entry"
-msgstr "server_entry"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:8
-msgid "Default"
-msgstr "అప్రమేయం"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:9
-msgid "Reset to register with Customer Portal."
-msgstr "వినియోగదారి పోర్టల్‌తో రిజిస్టర్‌ను తిప్పివుంచుము."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:10
-msgid "default_button"
-msgstr "default_button"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:11
-msgid ""
-"Activation Keys are alphanumeric strings that are pre-configured by your "
-"system administrators to automatically register your system and attach all "
-"necessary subscriptions."
-msgstr ""
-"క్రియాశీల కీలు అనునవి అక్షరసంఖ్యాత్మక స్ట్రింగ్స్ వలె వుంటాయి అవి మీ వ్యవస్థను స్వయంచాలకంగా "
-"నమోదుచేయుటకు మరియు అన్ని తప్పనిసరి సబ్‌స్క్రిప్షన్లను అనుబిందించుటకు మీ వ్యవస్థ నిర్వాహకులచే ముందుగా-"
-"ఆకృతీకరించబడును."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:12
-msgid "I will use an Activation Key"
-msgstr "నేను క్రియాశీల కీ వుపయోగిస్తాను"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:13
-msgid "If required, please configure your proxy before moving forward."
-msgstr "ఒకవేళ అవసరమైతే, కొనసాగుటకు ముందుగా ప్రోక్సీను అకృతీకరించుము."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:14
-msgid "Configure Proxy"
-msgstr "ప్రోక్సీ ఆకృతీకరించు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:15
-msgid "proxy_button"
-msgstr "proxy_button"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
