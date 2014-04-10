@@ -20,7 +20,7 @@ import gtk
 
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception, linkify
-from subscription_manager.injection import IDENTITY, CP_PROVIDER, require
+from subscription_manager import injection as inj
 
 _ = gettext.gettext
 
@@ -42,8 +42,8 @@ class SystemFactsDialog(widgets.GladeWidget):
         super(SystemFactsDialog, self).__init__('factsdialog.glade')
 
         #self.consumer = consumer
-        self.identity = require(IDENTITY)
-        self.cp_provider = require(CP_PROVIDER)
+        self.identity = inj.require(inj.IDENTITY)
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.facts = facts
         self.glade.signal_autoconnect({
                 "on_system_facts_dialog_delete_event": self._hide_callback,
@@ -81,9 +81,9 @@ class SystemFactsDialog(widgets.GladeWidget):
         """Make this dialog invisible."""
         self.system_facts_dialog.hide()
 
-    def _display_system_id(self):
-        if self.identity.uuid:
-            self.system_id_label.set_text(self.identity.uuid)
+    def _display_system_id(self, identity):
+        if identity.uuid:
+            self.system_id_label.set_text(identity.uuid)
             self.system_id_title.show()
             self.system_id_label.show()
         else:
@@ -117,15 +117,20 @@ class SystemFactsDialog(widgets.GladeWidget):
                 value = _("Unknown")
             self.facts_store.append(parent, [fact, value])
 
-        self._display_system_id()
+        identity = inj.require(inj.IDENTITY)
+        self._display_system_id(identity)
 
         # TODO: could stand to check if registered before trying to do this:
+        #       all of the consumer auth cp calls should do that...
+        # TODO: This would clean if we gather the info then updated the gui.
+        #       These calls are not async atm so we block anyway
         try:
-            owner = self.cp_provider.get_consumer_auth_cp().getOwner(self.identity.uuid)
+            owner = self.cp_provider.get_consumer_auth_cp().getOwner(identity.uuid)
             self.owner_label.set_text("%s (%s)" %
                     (owner['displayName'], owner['key']))
             self.owner_label.show()
             self.owner_title.show()
+        # very broad exception
         except Exception, e:
             log.error("Could not get owner name: %s" % e)
             self.owner_label.hide()
@@ -133,7 +138,7 @@ class SystemFactsDialog(widgets.GladeWidget):
 
         try:
             if self.cp_provider.get_consumer_auth_cp().supports_resource('environments'):
-                consumer = self.cp_provider.get_consumer_auth_cp().getConsumer(self.identity.uuid)
+                consumer = self.cp_provider.get_consumer_auth_cp().getConsumer(identity.uuid)
                 environment = consumer['environment']
                 if environment:
                     environment_name = environment['name']
@@ -154,10 +159,11 @@ class SystemFactsDialog(widgets.GladeWidget):
 
     def update_facts(self):
         """Sends the current system facts to the UEP server."""
-        consumer_uuid = self.identity.uuid
+
+        identity = inj.require(inj.IDENTITY)
 
         try:
-            self.facts.update_check(self.cp_provider.get_consumer_auth_cp(), consumer_uuid, force=True)
+            self.facts.update_check(self.cp_provider.get_consumer_auth_cp(), identity.uuid, force=True)
         except Exception, e:
             log.error("Could not update system facts \nError: %s" % e)
             handle_gui_exception(e, linkify(str(e)), self.system_facts_dialog)
