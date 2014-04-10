@@ -40,7 +40,6 @@ from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBE
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
 from subscription_manager import rhelentbranding
-from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import ClassicCheck
 import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
@@ -935,11 +934,6 @@ class RegisterCommand(UserPassCommand):
                                help=_("activation key to use for registration (can be specified more than once)"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("system preference used when subscribing automatically, requires --auto-attach"))
-
-        # FIXME: we shouldn't create facts in command __init__, it's gets ran
-        # at managercli import time
-        self.facts = Facts(ent_dir=self.entitlement_dir,
-                           prod_dir=self.product_dir)
 
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
@@ -2011,7 +2005,6 @@ class ListCommand(CliCommand):
                                help=_("shows pools which provide products that are not already covered; only used with --available"))
         self.parser.add_option("--match-installed", action="store_true",
                                help=_("shows only subscriptions matching products that are currently installed; only used with --available"))
-
 
     def _validate_options(self):
         if (self.options.all and not self.options.available):

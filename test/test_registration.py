@@ -40,8 +40,6 @@ class CliRegistrationTests(SubManFixture):
         self._inject_mock_invalid_consumer()
 
         cmd._persist_identity_cert = self.stub_persist
-        cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
-        cmd.facts.write_cache = Mock()
 
         cmd.main(['register', '--username=testuser1', '--password=password'])
 
@@ -61,9 +59,6 @@ class CliRegistrationTests(SubManFixture):
         cmd = RegisterCommand()
         cmd._persist_identity_cert = self.stub_persist
         self._inject_ipm()
-        # Mock out facts and installed products:
-        cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
-        cmd.facts.write_cache = Mock()
 
         cmd.main(['register', '--username=testuser1', '--password=password'])
 
@@ -78,10 +73,6 @@ class CliRegistrationTests(SubManFixture):
         self._inject_mock_invalid_consumer()
         cmd = RegisterCommand()
         cmd._persist_identity_cert = self.stub_persist
-
-        # Mock out facts and installed products:
-        cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
-        cmd.facts.write_cache = Mock()
 
         mock_entcertlib_instance = mock_entcertlib.return_value
 
@@ -104,11 +95,6 @@ class CliRegistrationTests(SubManFixture):
         self._inject_mock_invalid_consumer()
         cmd = RegisterCommand()
         cmd._persist_identity_cert = self.stub_persist
-
-        # Mock out facts and installed products:
-        cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
-        cmd.facts.write_cache = Mock()
-        cmd.facts.update_check = Mock()
 
         mock_entcertlib_instance = mock_entcertlib.return_value
 
