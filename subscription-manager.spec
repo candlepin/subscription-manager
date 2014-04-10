@@ -13,7 +13,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.11.2
+Version: 1.11.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -419,6 +419,12 @@ fi
 %endif
 
 %changelog
+* Thu Apr 10 2014 Alex Wood <awood@redhat.com> 1.11.3-1
+- Cleanup entbranding tests names. (alikins@redhat.com)
+- Test cases for empty,none,not set brand type/name (alikins@redhat.com)
+- Use a real certificate2.Product in tests cases. (alikins@redhat.com)
+- Latest strings from zanata (alikins@redhat.com)
+
 * Thu Mar 20 2014 Alex Wood <awood@redhat.com> 1.11.2-1
 - Use the new Product.brand_name for brand_name (alikins@redhat.com)
 - 865702: Dont render exc messages with bogus markup (alikins@redhat.com)
