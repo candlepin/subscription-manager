@@ -61,8 +61,10 @@ class SubManFixture(unittest.TestCase):
     def setUp(self):
         # By default mock that we are registered. Individual test cases
         # can override if they are testing disconnected scenario.
-        id_mock = Mock(name='FixtureIdentityMock')
+        id_mock = NonCallableMock(name='FixtureIdentityMock')
         id_mock.exists_and_valid = Mock(return_value=True)
+        id_mock.uuid = 'fixture_identity_mock_uuid'
+        id_mock.name = 'fixture_identity_mock_name'
 
         # Don't really care about date ranges here:
         self.mock_calc = NonCallableMock()
