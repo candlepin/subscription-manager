@@ -37,16 +37,22 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     """
     GTK dialog for managing repositories and their overrides.
     """
-    widget_names = ['main_window', 'overrides_treeview', 'reset_button', 'close_button',
+    widget_names = ['main_window', 'reset_button', 'close_button',
                     'name_text', 'gpgcheck_text', 'gpgcheck_combo_box',
                     'gpgcheck_remove_button', 'gpgcheck_edit_button',
-                    'baseurl_text', 'no_repos_label_container', 'no_repos_label']
+                    'baseurl_text', 'scrolledwindow']
 
     ENTS_PROVIDE_NO_REPOS = _("Attached subscriptions do not provide any repositories.")
     NO_ATTACHED_SUBS = _("No repositories are available without an attached subscription.")
 
     def __init__(self, backend, parent):
         super(RepositoriesDialog, self).__init__('repositories.glade')
+
+        # Set up dynamic elements
+        self.overrides_treeview = gtk.TreeView()
+        self.no_repos_label, self.no_repos_label_viewport = widgets.get_scrollable_label()
+        self.widget_switcher = widgets.WidgetSwitcher(self.scrolledwindow,
+                self.no_repos_label_viewport, self.overrides_treeview)
 
         # We require the backend here so that we can always use its version
         # of Overrides which will guarantee that the CP UEPConnection is up
@@ -82,7 +88,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         # Change the background color of the no_repos_label_container to the same color
         # as the label's base color. The event container allows us to change the color.
         label_base_color = self.no_repos_label.style.base[gtk.STATE_NORMAL]
-        self.no_repos_label_container.modify_bg(gtk.STATE_NORMAL, label_base_color)
+        self.no_repos_label_viewport.modify_bg(gtk.STATE_NORMAL, label_base_color)
 
         # Gnome will hide all button icons by default (gnome setting),
         # so force the icons to show in this case as there is no button
@@ -161,17 +167,15 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
         current_repos = self.backend.overrides.repo_lib.get_repos(apply_overrides=False)
         if (current_repos):
-            self.overrides_treeview.show()
-            self.no_repos_label_container.hide()
+            self.widget_switcher.set_active(1)
         else:
             ent_count = len(self.ent_dir.list_valid())
             no_repos_message = self.ENTS_PROVIDE_NO_REPOS
             if ent_count == 0:
                 no_repos_message = self.NO_ATTACHED_SUBS
 
-            self.overrides_treeview.hide()
             self.no_repos_label.set_markup("<b>%s</b>" % no_repos_message)
-            self.no_repos_label_container.show()
+            self.widget_switcher.set_active(0)
 
         # Fetch the repositories from repolib without any overrides applied.
         # We do this so that we can tell if anything has been modified by
