@@ -78,9 +78,9 @@ def update(conduit, cache_only):
 
 def warnExpired(conduit):
     """ display warning for expired entitlements """
-    entdir = inj.require(inj.ENT_DIR)
+    ent_dir = inj.require(inj.ENT_DIR)
     products = set()
-    for cert in entdir.list_expired():
+    for cert in ent_dir.list_expired():
         for p in cert.products:
             m = '  - %s' % p.name
             products.add(m)
@@ -103,8 +103,8 @@ def warnOrGiveUsageMessage(conduit):
         if not identity.is_valid():
             msg = not_registered_warning
 
-        entdir = inj.require(inj.ENT_DIR)
-        if len(entdir.list_valid()) == 0:
+        ent_dir = inj.require(inj.ENT_DIR)
+        if len(ent_dir.list_valid()) == 0:
             msg = no_subs_warning
 
     finally:

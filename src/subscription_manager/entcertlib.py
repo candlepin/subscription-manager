@@ -47,27 +47,27 @@ class EntCertLib(certlib.DataLib):
 # this guy is an oddball
 class EntCertDeleteLib(object):
     def __init__(self, serial_numbers=None,
-                entdir=None):
+                ent_dir=None):
         self.locker = certlib.Locker()
-        self.entdir = entdir
+        self.ent_dir = ent_dir
 
     def delete(self):
         self.locker.run(self._do_delete)
 
     def _do_delete(self):
-        action = EntCertDeleteAction(entdir=self.entdir,
+        action = EntCertDeleteAction(ent_dir=self.ent_dir,
                                     serial_numbers=self.serial_numbers)
         return action.perform()
 
 
 # TODO: rename to EntitlementCertDeleteAction
 class EntCertDeleteAction(object):
-    def __init__(self, entdir=None):
-        self.entdir = entdir
+    def __init__(self, ent_dir=None):
+        self.ent_dir = ent_dir
 
     def perform(self, serial_numbers):
         for sn in serial_numbers:
-            cert = self.entdir.find(sn)
+            cert = self.ent_dir.find(sn)
             if cert is None:
                 continue
             cert.delete()
@@ -80,7 +80,7 @@ class EntCertUpdateAction(object):
     def __init__(self, report=None):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
-        self.entdir = inj.require(inj.ENT_DIR)
+        self.ent_dir = inj.require(inj.ENT_DIR)
         self.identity = require(IDENTITY)
         self.report = EntCertUpdateReport()
 
@@ -175,8 +175,8 @@ class EntCertUpdateAction(object):
         #this makes sure we don't try to re-write certificates in
         #grace period
         # XXX since we don't use grace period, this might not be needed
-        self.entdir.refresh()
-        for valid in self.entdir.list():
+        self.ent_dir.refresh()
+        for valid in self.ent_dir.list():
             sn = valid.serial
             self.report.valid.append(sn)
             local[sn] = valid
@@ -232,7 +232,7 @@ class EntCertUpdateAction(object):
             print gettext.ngettext("%s local certificate has been deleted.",
                                    "%s local certificates have been deleted.",
                                    rogue_count) % rogue_count
-            self.entdir.refresh()
+            self.ent_dir.refresh()
 
 
 class EntitlementCertBundlesInstaller(object):

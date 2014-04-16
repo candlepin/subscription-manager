@@ -42,7 +42,7 @@ class HealingLib(certlib.DataLib):
 
 
 class HealingUpdateAction(object):
-    # no real point to passing in entdir and product_dir, we
+    # no real point to passing in ent_dir and product_dir, we
     # can inject?
     def __init__(self):
         self.cp_provider = inj.require(inj.CP_PROVIDER)

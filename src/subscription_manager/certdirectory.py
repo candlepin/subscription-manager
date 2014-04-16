@@ -297,11 +297,11 @@ class Path:
 class Writer:
 
     def __init__(self):
-        self.entdir = require(ENT_DIR)
+        self.ent_dir = require(ENT_DIR)
 
     def write(self, key, cert):
         serial = cert.serial
-        ent_dir_path = self.entdir.productpath()
+        ent_dir_path = self.ent_dir.productpath()
 
         key_filename = '%s-key.pem' % str(serial)
         key_path = Path.join(ent_dir_path, key_filename)

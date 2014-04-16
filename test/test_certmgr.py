@@ -93,7 +93,7 @@ class CertManagerTestBase(SubManFixture):
             stubs.StubEntitlementCertificate(stub_product,
                                              end_date=datetime.now() + timedelta(days=1))
 
-        self.stub_ent_expires_tomorrow_entdir = \
+        self.stub_ent_expires_tomorrow_ent_dir = \
             stubs.StubEntitlementDirectory([self.stub_ent_expires_tomorrow])
 
         self.local_ent_certs = [self.stub_ent1, self.stub_ent2]
@@ -101,8 +101,8 @@ class CertManagerTestBase(SubManFixture):
             stubs.StubProductDirectory([stubs.StubProductCertificate(stub_product)])
 
         # local entitlement dir
-        self.stub_entdir = stubs.StubEntitlementDirectory(self.local_ent_certs)
-        inj.provide(inj.ENT_DIR, self.stub_entdir)
+        self.stub_ent_dir = stubs.StubEntitlementDirectory(self.local_ent_certs)
+        inj.provide(inj.ENT_DIR, self.stub_ent_dir)
 
         self.mock_uep = mock.Mock()
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[{'serial': self.stub_ent1.serial},
@@ -189,9 +189,9 @@ class TestCertManager(CertManagerTestBase):
 
     def _stub_certificate_calls(self, stub_ents=None):
         stub_ents = stub_ents or []
-        stub_entdir = stubs.StubEntitlementDirectory(stub_ents)
+        stub_ent_dir = stubs.StubEntitlementDirectory(stub_ents)
 
-        inj.provide(inj.ENT_DIR, stub_entdir)
+        inj.provide(inj.ENT_DIR, stub_ent_dir)
 
         # don't need to build real pem's, we mock out the writer anyway
         # so this just create a list of mock keys and stub ent certs
@@ -233,10 +233,10 @@ class TestCertManager(CertManagerTestBase):
     def test_expired(self, cert_build_mock):
         cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
 
-        # this makes the stub_entdir report all ents as being expired
+        # this makes the stub_ent_dir report all ents as being expired
         # so we fetch new ones
-        self.stub_entdir.list_expired = mock.Mock(
-                return_value=self.stub_entdir.list())
+        self.stub_ent_dir.list_expired = mock.Mock(
+                return_value=self.stub_ent_dir.list())
 
         # we don't want to find replacements, so this forces a delete
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
