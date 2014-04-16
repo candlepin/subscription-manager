@@ -12,6 +12,8 @@
 # in this software or its documentation.
 #
 
+import copy
+
 import subscription_manager.injection as inj
 
 from fixture import SubManFixture
@@ -182,7 +184,17 @@ class CertSorterTests(SubManFixture):
 
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
     def test_no_compliant_until(self, mock_update):
-        SAMPLE_COMPLIANCE_JSON['compliantUntil'] = None
+        # don't want to munge the module scope version of this because
+        # setup will load it for later tests
+        no_compliance_until = copy.deepcopy(SAMPLE_COMPLIANCE_JSON)
+        no_compliance_until['compliantUntil'] = None
+
+        # build and inject a status cache with new values
+        status_mgr = EntitlementStatusCache()
+        status_mgr.load_status = Mock(return_value=no_compliance_until)
+        status_mgr.write_cache = Mock()
+        inj.provide(inj.ENTITLEMENT_STATUS_CACHE, status_mgr)
+
         self.sorter = CertSorter()
         self.sorter.is_registered = Mock(return_value=True)
         self.assertTrue(self.sorter.compliant_until is None)
