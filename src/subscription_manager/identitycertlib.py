@@ -36,6 +36,10 @@ class IdentityCertLib(certlib.DataLib):
 
 
 class IdentityUpdateAction(object):
+    """UpdateAction for consumer identity certificates.
+
+    Returns a certlib.ActionReport. report.status of
+    1 indicates identity cert was updated."""
     def __init__(self):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()

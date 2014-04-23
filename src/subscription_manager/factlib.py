@@ -28,11 +28,8 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 # Factlib has a Facts
 #   Facts is a CacheManager
-# Facts as a CacheManager seems to be doing alot
-# of stuff, split actual facts gather code out?
 class FactLib(object):
-    """
-    Used by CertManager to update a system's facts with the server, used
+    """Used by CertManager to update a system's facts with the server, used
     primarily by the cron job but in a couple other places as well.
 
     Makes use of the facts module as well.
@@ -49,6 +46,12 @@ class FactLib(object):
 
 
 class FactActionReport(ActionReport):
+    """ActionReport for FactLib.
+
+    fact_updates: list of updated facts.
+    updates: Number of updated facts.
+    """
+
     name = "Fact updates"
 
     def __init__(self):
@@ -58,12 +61,22 @@ class FactActionReport(ActionReport):
         self._status = None
 
     def updates(self):
-        """how many facts were updated"""
+        """How many facts were updated."""
         return len(self.fact_updates)
 
 
 class FactAction(object):
-    # FIXME: pretty sure Action doesn't need any of this
+    """UpdateAction for facts.
+
+    Update facts if calculated local facts are different than
+    the cached results of RHSM API known facts.
+
+    If we know facts are now different from out last known
+    cache of RHSM API's idea of this consumers facts, update
+    the server with the latest version.
+
+    Returns a FactActionReport.
+    """
     def __init__(self):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()

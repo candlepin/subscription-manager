@@ -16,8 +16,7 @@ from subscription_manager import certlib
 
 
 class InstalledProductsLib(certlib.DataLib):
-    """
-    Another "Lib" object, used by rhsmcertd to update the installed
+    """Used by rhsmcertd to update the installed
     products on this system periodically.
     """
     def _do_update(self):
@@ -26,6 +25,10 @@ class InstalledProductsLib(certlib.DataLib):
 
 
 class InstalledProductsAction(object):
+    """Update the consumers installed product list to RHSM API.
+
+    Returns a InstalledProductsActionReport.
+    """
     def __init__(self):
         self.report = InstalledProductsActionReport()
         self.cp_provider = inj.require(inj.CP_PROVIDER)

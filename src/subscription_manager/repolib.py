@@ -43,7 +43,7 @@ _ = gettext.gettext
 
 
 class RepoLib(DataLib):
-
+    """Invoker for yum repo updating related actions."""
     def __init__(self, cache_only=False):
         self.cache_only = cache_only
         DataLib.__init__(self)
@@ -90,12 +90,19 @@ class RepoLib(DataLib):
             os.unlink(repo_file.path)
 
 
-# WARNING: exact same name as another action in factlib and certlib.
-# TODO: This is the third disjoint "Action" class hierarchy, this one inherits nothing
-# but exposes similar methods, all of which are already abstracted behind the
-# Datalib.update() method anyhow. Pretty sure these can go away.
-class RepoUpdateAction:
+class RepoUpdateAction(object):
+    """UpdateAction for yum repos.
 
+    Update yum repos when triggered. Generates yum repo config
+    based on:
+        - entitlement certs
+        - repo overrides
+        - rhsm config
+        - yum config
+        - manual changes made to "redhat.repo".
+
+    Returns an RepoActionReport.
+    """
     def __init__(self, cache_only=False, apply_overrides=True):
         self.identity = inj.require(inj.IDENTITY)
 
@@ -390,7 +397,7 @@ class RepoUpdateAction:
 
 
 class RepoActionReport(ActionReport):
-    """Report class for reporting yum repo updates"""
+    """Report class for reporting yum repo updates."""
     name = "Repo Updates"
 
     def __init__(self):

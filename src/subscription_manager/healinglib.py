@@ -42,8 +42,26 @@ class HealingLib(certlib.DataLib):
 
 
 class HealingUpdateAction(object):
-    # no real point to passing in ent_dir and product_dir, we
-    # can inject?
+    """UpdateAction for ent cert healing.
+
+    Core if entitlement certificate healing.
+
+    Asks RHSM API to calculate entitlement status today, and tomorrow.
+    If either show incomplete entitlement, ask the RHSM API to
+    auto attach pools to fix entitlement.
+
+    Attemps to avoid gaps in entitlement coverage.
+
+    Used by rhsmd and subscription-manager if the "autoheal" options
+    are enabled.
+
+    Returns an EntCertUpdateReport with information about any ent
+    certs that were changed.
+
+    Plugin hooks:
+        pre_auto_attach
+        post_auto_attach
+    """
     def __init__(self):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()

@@ -535,23 +535,6 @@ class ProductManager:
         """
         certs_to_delete = []
 
-        # ProductCertDb.load()
-        # ProductCertDb.find_deletable()
-        #    ProductCertDb.filter_installed_products()
-        #                     .filter_rhel()
-        #                     .filter_unknown_repos()
-        #                     .filter_metadata_errors()
-        #                     .filter_active()
-        #                     .filter_plugin_hook() ?
-        #                  # anything left needs to be deleted
-        #    ProductCertDb.delete_delatable()
-        #                    .delete_pluginhook
-        #                  for each deletable:
-        #                      # plugin hook?
-        #                      ProductCert.delete()
-        #                                  # delete cert,
-        #                                  # delete db entry
-        #                      # post delete plugin hook?
         for cert in self.pdir.list():
             p = cert.products[0]
             prod_hash = p.id

@@ -16,8 +16,7 @@ from subscription_manager import certlib
 
 
 class PackageProfileLib(certlib.DataLib):
-    """
-    Another "Lib" object, used by rhsmcertd to update the profile
+    """Used by rhsmcertd to update the profile
     periodically.
     """
     def _do_update(self):
@@ -26,6 +25,10 @@ class PackageProfileLib(certlib.DataLib):
 
 
 class PackageProfileAction(object):
+    """Action for updating the list of installed packages to RHSM API,
+
+    Returns a PackageProfileActionReport.
+    """
     def __init__(self):
         self.report = PackageProfileActionReport()
         self.cp_provider = inj.require(inj.CP_PROVIDER)

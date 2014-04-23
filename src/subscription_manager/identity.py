@@ -26,6 +26,10 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 
 class ConsumerIdentity:
+    """Consumer info and certificate information.
+
+    Includes helpers for reading/writing consumer identity certificates
+    from disk."""
 
     PATH = CFG.get('rhsm', 'consumerCertDir')
     KEY = 'key.pem'
@@ -41,7 +45,6 @@ class ConsumerIdentity:
 
     @classmethod
     def read(cls):
-        # TODO: replace with with
         f = open(cls.keypath())
         key = f.read()
         f.close()
@@ -118,16 +121,12 @@ class ConsumerIdentity:
 
 
 class Identity(object):
-    """
-    Wrapper for sharing consumer identity without constant reloading.
-    """
+    """Wrapper for sharing consumer identity without constant reloading."""
     def __init__(self):
         self.reload()
 
     def reload(self):
-        """
-        Check for consumer certificate on disk and update our info accordingly.
-        """
+        """Check for consumer certificate on disk and update our info accordingly."""
         log.debug("Loading consumer info from identity certificates.")
         try:
             # uh, weird
@@ -135,6 +134,7 @@ class Identity(object):
             self.consumer = self._get_consumer_identity()
             self.name = self.consumer.getConsumerName()
             self.uuid = self.consumer.getConsumerId()
+
         # XXX shouldn't catch the global exception here, but that's what
         # existsAndValid did, so this is better.
         except Exception, e:
@@ -160,7 +160,7 @@ class Identity(object):
     def getConsumerId(self):
         return self.uuid
 
-    # getConsumer is kind of vaugue, and this is just here to
+    # getConsumer is kind of vague, and this is just here to
     # the cert object
     def getConsumerCert(self):
         return self.consumer
