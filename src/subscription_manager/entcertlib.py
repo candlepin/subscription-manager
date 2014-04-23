@@ -37,13 +37,18 @@ cfg = initConfig()
 
 
 class EntCertLib(certlib.DataLib):
+    """Invoker for entitlement certificate updating actions."""
     def _do_update(self):
         action = EntCertUpdateAction()
         return action.perform()
 
 
 # this guy is an oddball
+# NOTE: this lib and EntCertDeleteAction are currently
+# unused. Intention is to replace managerlib.clean_all_data
+# with a CertManager.delete invocation
 class EntCertDeleteLib(object):
+    """Invoker for entitlement certificate delete actions."""
     def __init__(self, serial_numbers=None,
                 ent_dir=None):
         self.locker = certlib.Locker()
@@ -58,8 +63,9 @@ class EntCertDeleteLib(object):
         return action.perform()
 
 
-# TODO: rename to EntitlementCertDeleteAction
+# FIXME: currently unused
 class EntCertDeleteAction(object):
+    """Action for deleting all entitlement certs."""
     def __init__(self, ent_dir=None):
         self.ent_dir = ent_dir
 
@@ -72,9 +78,32 @@ class EntCertDeleteAction(object):
         return self
 
 
-# TODO: rename to EntitlementCertUpdateAction
 class EntCertUpdateAction(object):
+    """Action for syncing entitlement certificates.
 
+    EntCertUpdateAction is used to sync entitlement certs based on
+    currently entitlement status.
+
+    An EntCertUpdateReport is returned containing information about the changes
+    that were applied. install() and delete() methods are expected to update
+    self.report.
+
+    New and updated ent certs are installed via a EntitlementCertBundlesInstaller.
+    Expired or extraneous entitlement certs are deleted.
+
+    If there are changes applied to the EntitltementDirectory, repo_hook()
+    and branding_hook() are triggered. Certificates will have been updated,
+    and written to disk, and EntitlementDirectory refresh before these hooks
+    are called.
+
+    The injected self.uep is used to query RHSM API for a list of expected
+    entitlement certificate serial numbers. If local system is missing certs
+    matching those serial numbers, the API is queried for the list of serial
+    numbers to update.
+
+    rogue: ent certs installed on system but not known by RHSM API.
+    missing: ent certs RHSM API knows, but are not installed on system.
+    """
     def __init__(self, report=None):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
@@ -120,6 +149,7 @@ class EntCertUpdateAction(object):
         return self.report
 
     def install(self, missing_serials):
+        """Install any missing entitlement certificates."""
 
         cert_bundles = self.get_certificates_by_serial_list(missing_serials)
 
@@ -154,6 +184,7 @@ class EntCertUpdateAction(object):
         return rogue
 
     def syslog_results(self):
+        """Write generated EntCertUpdateReport info to syslog."""
         for cert in self.report.added:
             utils.system_log("Added subscription for '%s' contract '%s'" %
                              (cert.order.name, cert.order.contract))
@@ -181,6 +212,7 @@ class EntCertUpdateAction(object):
         return local
 
     def get_certificate_serials_list(self):
+        """Query RHSM API for list of expected ent cert serial numbers."""
         results = []
         # if there is no UEP object, short circuit
         if self.uep is None:
@@ -234,14 +266,14 @@ class EntCertUpdateAction(object):
 
 
 class EntitlementCertBundlesInstaller(object):
-    """Install a list of entitlement cert bundles"""
+    """Install a list of entitlement cert bundles."""
 
     def __init__(self, report):
         self.exceptions = []
         self.report = report
 
     def install(self, cert_bundles):
-        """Fetch entitliement certs, install them, and update the report"""
+        """Fetch entitliement certs, install them, and update the report."""
         bundle_installer = EntitlementCertBundleInstaller(self.report)
         for cert_bundle in cert_bundles:
             bundle_installer.install(cert_bundle)
@@ -250,7 +282,7 @@ class EntitlementCertBundlesInstaller(object):
 
     # pre and post
     def post_install(self):
-        """after all cert bundles have been installed"""
+        """Hook triggered after all cert bundles have been installed."""
         for installed in self._get_installed():
             log.debug("cert bundles post_install: %s" % installed)
 
