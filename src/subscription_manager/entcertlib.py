@@ -289,26 +289,6 @@ class EntitlementCertBundlesInstaller(object):
     def get_installed(self):
         return self._get_installed()
 
-    def old_install(self, serials, report):
-        br = Writer()
-        exceptions = []
-        for bundle in self.get_certificates_by_serial_list(serials):
-            try:
-                key, cert = self.build(bundle)
-                br.write(key, cert)
-                report.added.append(cert)
-            except Exception, e:
-                log.exception(e)
-                log.error(
-                    'Bundle not loaded:\n%s\n%s',
-                    bundle,
-                    e)
-                exceptions.append(e)
-
-        return exceptions
-        for bundle in self.get_certificates_by_serial_list(serials):
-            self.install_cert_bundle(bundle, report)
-
     # we have a UpdateReport, use it
     def _get_installed(self):
         return self.report.added
