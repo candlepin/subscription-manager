@@ -51,6 +51,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         # Set up dynamic elements
         self.no_subs_label, self.no_subs_label_viewport = widgets.get_scrollable_label()
+        # Add at-spi because we no longer create this widget from glade
+        self.scrolledwindow.get_accessible().set_name(_("All Subscriptions View"))
         self.widget_switcher = widgets.WidgetSwitcher(self.scrolledwindow,
                 self.no_subs_label_viewport, self.top_view)
         self.widget_switcher.set_active(0)
