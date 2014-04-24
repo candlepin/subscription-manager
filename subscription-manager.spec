@@ -1,6 +1,5 @@
 # Prefer systemd over sysv on Fedora 17+ and RHEL 7+
 %global use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
-%global use_dateutil (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 6)
 %global use_old_firstboot (0%{?rhel} && 0%{?rhel} <= 6)
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
 
@@ -36,16 +35,7 @@ Requires:  python-rhsm >= 1.10.9
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 Requires:  usermode
-# dateutil is better than our version
-# built using PyXML utils, but PyXML is
-# deprecated for f17+, and dateutil doesn't
-# exist on rhel5
-%if %use_dateutil
-# we are building for fedora >= 12 or rhel >= 6
 Requires: python-dateutil
-%else
-Requires: PyXML
-%endif
 
 # There's no dmi to read on these arches, so don't pull in this dep.
 %ifnarch ppc ppc64 s390 s390x
