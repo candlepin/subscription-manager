@@ -162,13 +162,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d $(PREFIX)/usr/share/icons/hicolor/256x256/apps
 	install -d $(PREFIX)/usr/share/icons/hicolor/scalable/apps
 	install -d $(PREFIX)/usr/share/rhsm/subscription_manager/gui/firstboot
-
-	# Adjust firstboot screen location for RHEL 6:
-	if [ $(OS_VERSION) -le 6 ]; then \
-		install -d $(PREFIX)/usr/share/rhn/up2date_client/firstboot; \
-	else \
-		install -d $(PREFIX)/usr/share/firstboot/modules; \
-	fi; \
+	install -d $(PREFIX)/usr/share/firstboot/modules
 
 	install -d $(PREFIX)/usr/libexec
 	install -m 755 $(DAEMONS_SRC_DIR)/rhsmcertd-worker.py \
@@ -237,13 +231,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 		fi; \
 	fi; \
 
-	# RHEL 6 Customizations:
-	if [ $(OS_VERSION) -le 6 ]; then \
-		install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/rhn/up2date_client/firstboot;\
-	else \
-		install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/firstboot/modules/;\
-	fi;\
-
+	install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/firstboot/modules/
 	install -m 644 man/rhn-migrate-classic-to-rhsm.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rhsmcertd.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rhsm-icon.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/

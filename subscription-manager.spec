@@ -353,13 +353,8 @@ rm -rf %{buildroot}
 
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
-# RHEL 6 needs a different location for firstboot modules:
-%if %use_old_firstboot
-%{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
-%else
-%{_datadir}/firstboot/modules/rhsm_login.py*
-%endif
 
+%{_datadir}/firstboot/modules/rhsm_login.py*
 
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)
