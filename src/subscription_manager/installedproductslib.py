@@ -15,16 +15,16 @@ from subscription_manager import injection as inj
 from subscription_manager import certlib
 
 
-class InstalledProductsLib(certlib.BaseActionInvoker):
+class InstalledProductsActionInvoker(certlib.BaseActionInvoker):
     """Used by rhsmcertd to update the installed
     products on this system periodically.
     """
     def _do_update(self):
-        action = InstalledProductsAction()
+        action = InstalledProductsActionCommand()
         return action.perform()
 
 
-class InstalledProductsAction(object):
+class InstalledProductsActionCommand(object):
     """Update the consumers installed product list to RHSM API.
 
     Returns a InstalledProductsActionReport.

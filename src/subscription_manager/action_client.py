@@ -27,7 +27,7 @@ from subscription_manager.healinglib import HealingActionInvoker
 from subscription_manager.factlib import FactsActionInvoker
 from subscription_manager.repolib import RepoLib
 from subscription_manager.packageprofilelib import PackageProfileLib
-from subscription_manager.installedproductslib import InstalledProductsLib
+from subscription_manager.installedproductslib import InstalledProductsActionInvoker
 from subscription_manager import injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -111,7 +111,7 @@ class ActionClient(BaseActionClient):
         self.repolib = RepoLib()
         self.factlib = FactsActionInvoker()
         self.profilelib = PackageProfileLib()
-        self.installedprodlib = InstalledProductsLib()
+        self.installedprodlib = InstalledProductsActionInvoker()
         self.idcertlib = IdentityCertActionInvoker()
 
         # WARNING: order is important here, we need to update a number
@@ -128,7 +128,7 @@ class HealingActionClient(BaseActionClient):
     def _get_libset(self):
 
         self.entcertlib = EntCertActionInvoker()
-        self.installedprodlib = InstalledProductsLib()
+        self.installedprodlib = InstalledProductsActionInvoker()
         self.healinglib = HealingActionInvoker()
 
         lib_set = [self.installedprodlib, self.healinglib, self.entcertlib]
