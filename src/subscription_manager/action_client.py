@@ -22,7 +22,7 @@ import logging
 from rhsm.connection import GoneException, ExpiredIdentityCertException
 
 from subscription_manager.entcertlib import EntCertActionInvoker
-from subscription_manager.identitycertlib import IdentityCertLib
+from subscription_manager.identitycertlib import IdentityCertActionInvoker
 from subscription_manager.healinglib import HealingActionInvoker
 from subscription_manager.factlib import FactsActionInvoker
 from subscription_manager.repolib import RepoLib
@@ -112,7 +112,7 @@ class ActionClient(BaseActionClient):
         self.factlib = FactsActionInvoker()
         self.profilelib = PackageProfileLib()
         self.installedprodlib = InstalledProductsLib()
-        self.idcertlib = IdentityCertLib()
+        self.idcertlib = IdentityCertActionInvoker()
 
         # WARNING: order is important here, we need to update a number
         # of things before attempting to autoheal, and we need to autoheal

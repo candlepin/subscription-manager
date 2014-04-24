@@ -93,9 +93,9 @@ class TestIdentityUpdateAction(fixture.SubManFixture):
         self.assertEquals(report._status, 0)
 
 
-class TestIdentityCertLib(fixture.SubManFixture):
+class TestIdentityCertActionInvoker(fixture.SubManFixture):
     def setUp(self):
-        super(TestIdentityCertLib, self).setUp()
+        super(TestIdentityCertActionInvoker, self).setUp()
 
         mock_uep = mock.Mock()
         mock_uep.getConsumer.return_value = CONSUMER_DATA
@@ -104,7 +104,7 @@ class TestIdentityCertLib(fixture.SubManFixture):
 
     @mock.patch("subscription_manager.managerlib.persist_consumer_cert")
     def test(self, mock_persist):
-        id_cert_lib = identitycertlib.IdentityCertLib()
+        id_cert_lib = identitycertlib.IdentityCertActionInvoker()
         report = id_cert_lib.update()
         self.assertEquals(report._status, 1)
         self.assertTrue(mock_persist.called)

@@ -153,7 +153,7 @@ class TestActionClient(ActionClientTestBase):
         self.assertRaises(GoneException, actionclient.update)
 
     # see bz #852706, except this time for idcertlib
-    @mock.patch.object(identitycertlib.IdentityCertLib, 'update')
+    @mock.patch.object(identitycertlib.IdentityCertActionInvoker, 'update')
     def test_idcertlib_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
         actionclient = action_client.ActionClient()
@@ -175,7 +175,7 @@ class TestActionClient(ActionClientTestBase):
                 return
         self.fail("Did not ExceptionException in the logged exceptions")
 
-    @mock.patch.object(identitycertlib.IdentityCertLib, 'update')
+    @mock.patch.object(identitycertlib.IdentityCertActionInvoker, 'update')
     @mock.patch('subscription_manager.action_client.log')
     def test_idcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
