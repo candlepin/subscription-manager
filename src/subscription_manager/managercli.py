@@ -35,7 +35,7 @@ from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertLib
-from subscription_manager.certmgr import CertManager, UnregisterCertManager
+from subscription_manager.certmgr import CertActionClient, UnregisterCertManager
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
@@ -1099,7 +1099,7 @@ class RegisterCommand(UserPassCommand):
 
             log.info("System registered, updating entitlements if needed")
             # update certs, repos, and caches.
-            # FIXME: aside from the overhead, should this be certmgr.update?
+            # FIXME: aside from the overhead, should this be cert_action_client.update?
             self.entcertlib.update()
 
             # update with latest cert info
@@ -1382,8 +1382,8 @@ class AttachCommand(CliCommand):
         self.assert_should_be_registered()
         self._validate_options()
         try:
-            certmgr = CertManager()
-            certmgr.update()
+            cert_action_client = CertActionClient()
+            cert_action_client.update()
             return_code = 0
             cert_update = True
             if self.options.pool:
@@ -1795,8 +1795,8 @@ class ReposCommand(CliCommand):
             return rc
 
         # Pull down any new entitlements and refresh the entitlements directory
-        certmgr = CertManager()
-        certmgr.update()
+        cert_action_client = CertActionClient()
+        cert_action_client.update()
         self._request_validity_check()
 
         self.use_overrides = self.cp.supports_resource('content_overrides')

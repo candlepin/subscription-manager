@@ -46,11 +46,11 @@ def main(options, log):
 
     try:
         if options.autoheal:
-            mgr = certmgr.HealingCertManager()
+            action_client = certmgr.HealingCertManager()
         else:
-            mgr = certmgr.CertManager()
+            action_client = certmgr.ActionCertClient()
 
-        update_reports = mgr.update(options.autoheal)
+        update_reports = action_client.update(options.autoheal)
 
         for update_report in update_reports:
             # FIXME: make sure we don't get None reports

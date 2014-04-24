@@ -46,7 +46,7 @@ class EntCertLib(certlib.DataLib):
 # this guy is an oddball
 # NOTE: this lib and EntCertDeleteAction are currently
 # unused. Intention is to replace managerlib.clean_all_data
-# with a CertManager.delete invocation
+# with a CertActionClient.delete invocation
 class EntCertDeleteLib(object):
     """Invoker for entitlement certificate delete actions."""
     def __init__(self, serial_numbers=None,

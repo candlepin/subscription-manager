@@ -57,7 +57,7 @@ class ExceptionalException(Exception):
     pass
 
 
-class CertManagerTestBase(SubManFixture):
+class CertActionClientTestBase(SubManFixture):
 
     # on python 2.6+ we could set class decorators, but that doesn't
     # work on python2.4, so this...
@@ -139,24 +139,24 @@ class CertManagerTestBase(SubManFixture):
         self.patcher_entcertlib_action_syslogreport.stop()
 
 
-class TestCertManager(CertManagerTestBase):
+class TestCertActionClient(CertActionClientTestBase):
 
     def test_init(self):
-        mgr = certmgr.CertManager()
+        mgr = certmgr.CertActionClient()
         mgr.update()
 
     # see bz #852706
     @mock.patch.object(entcertlib.EntCertLib, 'update')
     def test_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
-        mgr = certmgr.CertManager()
+        mgr = certmgr.CertActionClient()
         self.assertRaises(GoneException, mgr.update)
 
     # see bz #852706, except this time for idcertlib
     @mock.patch.object(identitycertlib.IdentityCertLib, 'update')
     def test_idcertlib_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
-        mgr = certmgr.CertManager()
+        mgr = certmgr.CertActionClient()
         self.assertRaises(GoneException, mgr.update)
 
         # just verify the certlib update worked
@@ -167,7 +167,7 @@ class TestCertManager(CertManagerTestBase):
     @mock.patch('subscription_manager.certmgr.log')
     def test_entcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
-        mgr = certmgr.CertManager()
+        mgr = certmgr.CertActionClient()
         mgr.update()
 
         for call in mock_log.method_calls:
@@ -179,7 +179,7 @@ class TestCertManager(CertManagerTestBase):
     @mock.patch('subscription_manager.certmgr.log')
     def test_idcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
-        mgr = certmgr.CertManager()
+        mgr = certmgr.CertActionClient()
         mgr.update()
 
         for call in mock_log.method_calls:
@@ -210,7 +210,7 @@ class TestCertManager(CertManagerTestBase):
         self._stub_certificate_calls()
 
         cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
-        mgr = certmgr.CertManager()
+        mgr = certmgr.CertActionClient()
         mgr.update()
 
         report = mgr.entcertlib.report
@@ -221,7 +221,7 @@ class TestCertManager(CertManagerTestBase):
         # server so getCertificateSerials to return nothing
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
         self.set_consumer_auth_cp(self.mock_uep)
-        mgr = certmgr.CertManager()
+        mgr = certmgr.CertActionClient()
         mgr.update()
 
         report = mgr.entcertlib.report
@@ -242,7 +242,7 @@ class TestCertManager(CertManagerTestBase):
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
         self.set_consumer_auth_cp(self.mock_uep)
 
-        mgr = certmgr.CertManager()
+        mgr = certmgr.CertActionClient()
         mgr.update()
 
         report = mgr.entcertlib.report
@@ -258,7 +258,7 @@ class TestCertManager(CertManagerTestBase):
         self._stub_certificate_calls()
 
         mock_cert_build.side_effect = ExceptionalException()
-        mgr = certmgr.CertManager()
+        mgr = certmgr.CertActionClient()
         # we should fail on the certlib.update, but keep going...
         # and handle it well.
         mgr.update()
@@ -269,7 +269,7 @@ class TestCertManager(CertManagerTestBase):
         self.fail("Did not ExceptionException in the logged exceptions")
 
 
-class TestHealingCertManager(TestCertManager):
+class TestHealingCertManager(TestCertActionClient):
     def test_healing_no_heal(self):
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
         self.mock_cert_sorter.compliant_until = datetime.now() + \

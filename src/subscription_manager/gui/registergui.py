@@ -32,7 +32,7 @@ from rhsm.utils import ServerUrlParseError
 from rhsm.connection import GoneException
 
 from subscription_manager.branding import get_branding
-from subscription_manager.certmgr import CertManager
+from subscription_manager.certmgr import CertActionClient
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require, \
@@ -1135,7 +1135,7 @@ class AsyncBackend(object):
         suitable_slas = {}
 
         # eek, in a thread
-        certmgr = CertManager(facts=facts)
+        certmgr = CertActionClient(facts=facts)
         certmgr.update()
 
         for sla in available_slas:

@@ -35,7 +35,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 _ = gettext.gettext
 
 
-class BaseCertManager:
+class ActionClient(object):
     """
     An object used to update the certficates, yum repos, and facts for the system.
     """
@@ -103,7 +103,7 @@ class BaseCertManager:
         return update_reports
 
 
-class CertManager(BaseCertManager):
+class CertActionClient(ActionClient):
 
     def _get_libset(self):
 
@@ -124,7 +124,7 @@ class CertManager(BaseCertManager):
         return lib_set
 
 
-class HealingCertManager(BaseCertManager):
+class HealingCertManager(ActionClient):
     def _get_libset(self):
 
         self.entcertlib = EntCertLib()
@@ -140,7 +140,7 @@ class HealingCertManager(BaseCertManager):
 # *Lib things are weird, since some are idempotent, but
 # some arent. entcertlib/repolib .update can both install
 # certs, and/or delete all of them.
-class UnregisterCertManager(BaseCertManager):
+class UnregisterCertManager(ActionClient):
     """CertManager for cleaning up on unregister.
 
     This class should not need a consumer id, or a uep connection, since it
