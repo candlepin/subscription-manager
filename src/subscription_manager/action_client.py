@@ -24,7 +24,7 @@ from rhsm.connection import GoneException, ExpiredIdentityCertException
 from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.identitycertlib import IdentityCertLib
 from subscription_manager.healinglib import HealingLib
-from subscription_manager.factlib import FactLib
+from subscription_manager.factlib import FactsActionInvoker
 from subscription_manager.repolib import RepoLib
 from subscription_manager.packageprofilelib import PackageProfileLib
 from subscription_manager.installedproductslib import InstalledProductsLib
@@ -109,7 +109,7 @@ class ActionClient(BaseActionClient):
 
         self.entcertlib = EntCertActionInvoker()
         self.repolib = RepoLib()
-        self.factlib = FactLib()
+        self.factlib = FactsActionInvoker()
         self.profilelib = PackageProfileLib()
         self.installedprodlib = InstalledProductsLib()
         self.idcertlib = IdentityCertLib()

@@ -27,7 +27,7 @@ class TestFactlib(fixture.SubManFixture):
         self.expected_facts = {'fact1': 'F1', 'fact2': 'F2'}
 
         inj.provide(inj.FACTS, stubs.StubFacts(self.expected_facts))
-        self.fl = factlib.FactLib()
+        self.fl = factlib.FactsActionInvoker()
 
     def test_factlib_updates_when_identity_does_not_exist(self):
         self._inject_mock_invalid_consumer()

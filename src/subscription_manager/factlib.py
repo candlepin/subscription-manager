@@ -26,9 +26,9 @@ _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-# Factlib has a Facts
+# FactsActionInvoker has a Facts
 #   Facts is a CacheManager
-class FactLib(object):
+class FactsActionInvoker(object):
     """Used by CertActionClient to update a system's facts with the server, used
     primarily by the cron job but in a couple other places as well.
 
@@ -46,7 +46,7 @@ class FactLib(object):
 
 
 class FactActionReport(ActionReport):
-    """ActionReport for FactLib.
+    """ActionReport for FactsActionInvoker.
 
     fact_updates: list of updated facts.
     updates: Number of updated facts.
