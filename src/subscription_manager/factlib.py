@@ -45,7 +45,7 @@ class FactsActionInvoker(object):
         return action.perform()
 
 
-class FactActionReport(ActionReport):
+class FactsActionReport(ActionReport):
     """ActionReport for FactsActionInvoker.
 
     fact_updates: list of updated facts.
@@ -75,12 +75,12 @@ class FactAction(object):
     cache of RHSM API's idea of this consumers facts, update
     the server with the latest version.
 
-    Returns a FactActionReport.
+    Returns a FactsActionReport.
     """
     def __init__(self):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
-        self.report = FactActionReport()
+        self.report = FactsActionReport()
         self.facts = inj.require(inj.FACTS)
 
     def perform(self):
