@@ -46,7 +46,7 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import valid_quantity
 from subscription_manager.release import ReleaseBackend
-from subscription_manager.repolib import RepoLib, RepoFile
+from subscription_manager.repolib import RepoActionInvoker, RepoFile
 from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
@@ -1801,7 +1801,7 @@ class ReposCommand(CliCommand):
 
         self.use_overrides = self.cp.supports_resource('content_overrides')
 
-        rl = RepoLib()
+        rl = RepoActionInvoker()
         repos = rl.get_repos()
 
         if self.options.enable:
@@ -2254,7 +2254,7 @@ class OverrideCommand(CliCommand):
             system_exit(-1, _("Error: The 'repo-override' command is not supported by the server."))
 
         # update entitlement certificates if necessary. If we do have new entitlements
-        # CertLib.update() will call RepoLib.update().
+        # CertLib.update() will call RepoActionInvoker.update().
         self.entcertlib.update()
         # make sure the EntitlementDirectory singleton is refreshed
         self._request_validity_check()

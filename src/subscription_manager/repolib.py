@@ -42,7 +42,7 @@ ALLOWED_CONTENT_TYPES = ["yum"]
 _ = gettext.gettext
 
 
-class RepoLib(BaseActionInvoker):
+class RepoActionInvoker(BaseActionInvoker):
     """Invoker for yum repo updating related actions."""
     def __init__(self, cache_only=False):
         self.cache_only = cache_only
@@ -170,7 +170,7 @@ class RepoUpdateAction(object):
             if repo_file.exists():
                 log.info("Removing %s due to manage_repos configuration." %
                         repo_file.path)
-                RepoLib.delete_repo_file()
+                RepoActionInvoker.delete_repo_file()
             return 0
 
         repo_file.read()

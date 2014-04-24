@@ -27,7 +27,7 @@ from subscription_manager.injection import IDENTITY, require
 from subscription_manager import rhelentbranding
 import subscription_manager.injection as inj
 
-from subscription_manager.repolib import RepoLib
+from subscription_manager.repolib import RepoActionInvoker
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -167,7 +167,7 @@ class EntCertUpdateAction(object):
         """Update yum repos."""
         try:
             # NOTE: this may need a lock
-            rl = RepoLib()
+            rl = RepoActionInvoker()
             rl.update()
         except Exception, e:
             log.debug(e)

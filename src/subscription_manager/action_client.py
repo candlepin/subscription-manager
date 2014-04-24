@@ -25,8 +25,8 @@ from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.identitycertlib import IdentityCertActionInvoker
 from subscription_manager.healinglib import HealingActionInvoker
 from subscription_manager.factlib import FactsActionInvoker
-from subscription_manager.repolib import RepoLib
-from subscription_manager.packageprofilelib import PackageProfileLib
+from subscription_manager.repolib import RepoActionInvoker
+from subscription_manager.packageprofilelib import PackageProfileActionInvoker
 from subscription_manager.installedproductslib import InstalledProductsActionInvoker
 from subscription_manager import injection as inj
 
@@ -108,9 +108,9 @@ class ActionClient(BaseActionClient):
     def _get_libset(self):
 
         self.entcertlib = EntCertActionInvoker()
-        self.repolib = RepoLib()
+        self.repolib = RepoActionInvoker()
         self.factlib = FactsActionInvoker()
-        self.profilelib = PackageProfileLib()
+        self.profilelib = PackageProfileActionInvoker()
         self.installedprodlib = InstalledProductsActionInvoker()
         self.idcertlib = IdentityCertActionInvoker()
 
@@ -149,7 +149,7 @@ class UnregisterActionClient(BaseActionClient):
     def _get_libset(self):
 
         self.entcertlib = EntCertActionInvoker()
-        self.repolib = RepoLib()
+        self.repolib = RepoActionInvoker()
 
         lib_set = [self.entcertlib, self.repolib]
         return lib_set

@@ -14,7 +14,7 @@
 # in this software or its documentation.
 #
 from subscription_manager import injection as inj
-from subscription_manager.repolib import RepoLib
+from subscription_manager.repolib import RepoActionInvoker
 
 
 # Module for manipulating content overrides
@@ -25,7 +25,7 @@ class Overrides(object):
         self.uep = self.cp_provider.get_consumer_auth_cp()
 
         self.cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-        self.repo_lib = RepoLib(cache_only=True)
+        self.repo_lib = RepoActionInvoker(cache_only=True)
 
     def get_overrides(self, consumer_uuid):
         return self._build_from_json(self.cache.load_status(self.cp, consumer_uuid))

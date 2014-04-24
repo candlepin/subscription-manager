@@ -727,7 +727,7 @@ class MigrationEngine(object):
 
         # create and populate the redhat.repo file
         # use the injection cp_providers consumer auth
-        repolib.RepoLib().update()
+        repolib.RepoActionInvoker().update()
 
         # read in the redhat.repo file
         repofile = repolib.RepoFile()

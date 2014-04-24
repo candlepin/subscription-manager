@@ -943,7 +943,7 @@ class TestMigration(fixture.SubManFixture):
             ]
         mock_subprocess.assert_called_with(arg_list)
 
-    @patch("subscription_manager.repolib.RepoLib")
+    @patch("subscription_manager.repolib.RepoActionInvoker")
     @patch("subscription_manager.repolib.RepoFile")
     def test_enable_extra_channels(self, mock_repofile, mock_repolib):
         mrf = mock_repofile.return_value

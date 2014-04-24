@@ -22,7 +22,7 @@ from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 sys.path.append('/usr/share/rhsm')
 
 from subscription_manager import injection as inj
-from subscription_manager.repolib import RepoLib
+from subscription_manager.repolib import RepoActionInvoker
 from rhsm import connection
 from rhsm import config
 
@@ -72,7 +72,7 @@ def update(conduit, cache_only):
         conduit.info(2, "Unable to connect to Subscription Management Service")
         return
 
-    rl = RepoLib(uep=uep, cache_only=cache_only)
+    rl = RepoActionInvoker(uep=uep, cache_only=cache_only)
     rl.update()
 
 

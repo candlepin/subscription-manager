@@ -15,16 +15,16 @@ from subscription_manager import injection as inj
 from subscription_manager import certlib
 
 
-class PackageProfileLib(certlib.BaseActionInvoker):
+class PackageProfileActionInvoker(certlib.BaseActionInvoker):
     """Used by rhsmcertd to update the profile
     periodically.
     """
     def _do_update(self):
-        action = PackageProfileAction()
+        action = PackageProfileActionCommand()
         return action.perform()
 
 
-class PackageProfileAction(object):
+class PackageProfileActionCommand(object):
     """Action for updating the list of installed packages to RHSM API,
 
     Returns a PackageProfileActionReport.

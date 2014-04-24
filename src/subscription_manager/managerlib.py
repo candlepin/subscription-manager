@@ -36,7 +36,7 @@ from subscription_manager.injection import require, CERT_SORTER, \
         POOLTYPE_CACHE
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
-from subscription_manager.repolib import RepoLib
+from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager import utils
 
 # FIXME FIXME
@@ -869,7 +869,7 @@ def clean_all_data(backup=True):
     require(ENTITLEMENT_STATUS_CACHE).delete_cache()
     require(PROD_STATUS_CACHE).delete_cache()
     require(OVERRIDE_STATUS_CACHE).delete_cache()
-    RepoLib.delete_repo_file()
+    RepoActionInvoker.delete_repo_file()
     log.info("Cleaned local data")
 
 

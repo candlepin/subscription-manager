@@ -382,7 +382,7 @@ class TestReposCommand(TestCliCommand):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
 
-    @mock.patch("subscription_manager.managercli.RepoLib")
+    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -405,7 +405,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         repolib_instance.update.assert_called()
 
-    @mock.patch("subscription_manager.managercli.RepoLib")
+    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status_with_wildcards(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
