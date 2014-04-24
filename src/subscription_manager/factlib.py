@@ -41,7 +41,7 @@ class FactsActionInvoker(object):
         return self.locker.run(self._do_update)
 
     def _do_update(self):
-        action = FactAction()
+        action = FactsActionCommand()
         return action.perform()
 
 
@@ -65,7 +65,7 @@ class FactsActionReport(ActionReport):
         return len(self.fact_updates)
 
 
-class FactAction(object):
+class FactsActionCommand(object):
     """UpdateAction for facts.
 
     Update facts if calculated local facts are different than
