@@ -19,16 +19,16 @@ import fixture
 from subscription_manager import healinglib
 
 
-class TestHealingLib(fixture.SubManFixture):
+class TestHealingActionInvoker(fixture.SubManFixture):
     def setUp(self):
-        super(TestHealingLib, self).setUp()
+        super(TestHealingActionInvoker, self).setUp()
 
     def test_autoheal_off(self):
         mock_uep = mock.Mock()
         mock_uep.getConsumer = mock.Mock(return_value=self._consumer())
         self.set_consumer_auth_cp(mock_uep)
 
-        hl = healinglib.HealingLib()
+        hl = healinglib.HealingActionInvoker()
         hl.update()
 
     def test_autoheal_on(self):
@@ -37,7 +37,7 @@ class TestHealingLib(fixture.SubManFixture):
         mock_uep.getConsumer = mock.Mock(return_value=consumer)
         self.set_consumer_auth_cp(mock_uep)
 
-        hl = healinglib.HealingLib()
+        hl = healinglib.HealingActionInvoker()
         report = hl.update()
         report.print_exceptions()
 

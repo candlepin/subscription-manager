@@ -23,7 +23,7 @@ from rhsm.connection import GoneException, ExpiredIdentityCertException
 
 from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.identitycertlib import IdentityCertLib
-from subscription_manager.healinglib import HealingLib
+from subscription_manager.healinglib import HealingActionInvoker
 from subscription_manager.factlib import FactsActionInvoker
 from subscription_manager.repolib import RepoLib
 from subscription_manager.packageprofilelib import PackageProfileLib
@@ -129,7 +129,7 @@ class HealingActionClient(BaseActionClient):
 
         self.entcertlib = EntCertActionInvoker()
         self.installedprodlib = InstalledProductsLib()
-        self.healinglib = HealingLib()
+        self.healinglib = HealingActionInvoker()
 
         lib_set = [self.installedprodlib, self.healinglib, self.entcertlib]
 

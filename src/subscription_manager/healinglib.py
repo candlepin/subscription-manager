@@ -25,7 +25,7 @@ from subscription_manager import injection as inj
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class HealingLib(certlib.BaseActionInvoker):
+class HealingActionInvoker(certlib.BaseActionInvoker):
     """
     An object used to run healing nightly. Checks cert validity for today, heals
     if necessary, then checks for 24 hours from now, so we theoretically will
@@ -33,7 +33,7 @@ class HealingLib(certlib.BaseActionInvoker):
 
     NOTE: We may update entitlement status in this class, but we do not
           update entitlement certs, since we are inside a lock. So a
-          EntCertActionInvoker.update() needs to follow a HealingLib.update()
+          EntCertActionInvoker.update() needs to follow a HealingActionInvoker.update()
     """
 
     def _do_update(self):
