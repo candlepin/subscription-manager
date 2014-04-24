@@ -65,7 +65,7 @@ class CliRegistrationTests(SubManFixture):
         # FIXME: test something here...
         #self.assertTrue(mock_ipm_wc.call_count > 0)
 
-    @patch('subscription_manager.managercli.EntCertLib')
+    @patch('subscription_manager.managercli.EntCertActionInvoker')
     def test_activation_keys_updates_certs_and_repos(self,
                                                      mock_entcertlib):
         connection.UEPConnection = StubUEP
@@ -83,7 +83,7 @@ class CliRegistrationTests(SubManFixture):
 
         self.assertTrue(mock_entcertlib_instance.update.called)
 
-    @patch('subscription_manager.managercli.EntCertLib')
+    @patch('subscription_manager.managercli.EntCertActionInvoker')
     def test_consumerid_updates_certs_and_repos(self, mock_entcertlib):
 
         def get_consumer(self, *args, **kwargs):

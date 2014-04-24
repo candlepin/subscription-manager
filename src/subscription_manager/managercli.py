@@ -34,7 +34,7 @@ import rhsm.connection as connection
 from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager.branding import get_branding
-from subscription_manager.entcertlib import EntCertLib
+from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.action_client import ActionClient, UnregisterActionClient
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
@@ -424,7 +424,7 @@ class CliCommand(AbstractCLICommand):
             self.no_auth_cp = self.cp_provider.get_no_auth_cp()
             self.log_server_version()
 
-            self.entcertlib = EntCertLib()
+            self.entcertlib = EntCertActionInvoker()
 
         else:
             self.cp = None

@@ -15,7 +15,7 @@
 import mock
 
 from stubs import StubEntitlementDirectory, StubProductDirectory
-from stubs import StubEntCertLib, StubEntitlementCertificate
+from stubs import StubEntActionInvoker, StubEntitlementCertificate
 from stubs import StubProduct
 from fixture import SubManFixture
 import rhsm.connection as connection
@@ -42,7 +42,7 @@ class CliUnSubscribeTests(SubManFixture):
         cmd = managercli.UnSubscribeCommand()
 
         mock_identity = self._inject_mock_valid_consumer()
-        managercli.EntCertLib = StubEntCertLib
+        managercli.EntCertActionInvoker = StubEntActionInvoker
 
         cmd.main(['unsubscribe', '--all'])
         self.assertEquals(cmd.cp.called_unbind_uuid,

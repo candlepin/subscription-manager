@@ -16,7 +16,7 @@
 from subscription_manager import managercli
 from subscription_manager import injection as inj
 
-from stubs import StubEntitlementDirectory, StubProductDirectory, StubEntCertLib, \
+from stubs import StubEntitlementDirectory, StubProductDirectory, StubEntActionInvoker, \
         StubEntitlementCertificate, StubProduct
 import fixture
 
@@ -31,7 +31,7 @@ class CliRemoveTests(fixture.SubManFixture):
         cmd = managercli.RemoveCommand()
 
         mock_identity = self._inject_mock_valid_consumer()
-        managercli.EntCertLib = StubEntCertLib
+        managercli.EntCertActionInvoker = StubEntActionInvoker
 
         cmd.main(['remove', '--all'])
         self.assertEquals(cmd.cp.called_unbind_uuid,

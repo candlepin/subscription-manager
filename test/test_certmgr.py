@@ -146,7 +146,7 @@ class TestActionClient(ActionClientTestBase):
         actionclient.update()
 
     # see bz #852706
-    @mock.patch.object(entcertlib.EntCertLib, 'update')
+    @mock.patch.object(entcertlib.EntCertActionInvoker, 'update')
     def test_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
         actionclient = action_client.ActionClient()
@@ -163,7 +163,7 @@ class TestActionClient(ActionClientTestBase):
         report = actionclient.entcertlib.report
         self.assertTrue(self.stub_ent1.serial in report.valid)
 
-    @mock.patch.object(entcertlib.EntCertLib, 'update')
+    @mock.patch.object(entcertlib.EntCertActionInvoker, 'update')
     @mock.patch('subscription_manager.action_client.log')
     def test_entcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()

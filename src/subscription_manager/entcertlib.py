@@ -36,7 +36,7 @@ _ = gettext.gettext
 cfg = initConfig()
 
 
-class EntCertLib(certlib.BaseActionInvoker):
+class EntCertActionInvoker(certlib.BaseActionInvoker):
     """Invoker for entitlement certificate updating actions."""
     def _do_update(self):
         action = EntCertUpdateAction()

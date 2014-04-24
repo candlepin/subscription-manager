@@ -33,7 +33,7 @@ class HealingLib(certlib.BaseActionInvoker):
 
     NOTE: We may update entitlement status in this class, but we do not
           update entitlement certs, since we are inside a lock. So a
-          EntCertLib.update() needs to follow a HealingLib.update()
+          EntCertActionInvoker.update() needs to follow a HealingLib.update()
     """
 
     def _do_update(self):
@@ -90,7 +90,7 @@ class HealingUpdateAction(object):
 
             cs = inj.require(inj.CERT_SORTER)
 
-            cert_updater = entcertlib.EntCertLib()
+            cert_updater = entcertlib.EntCertActionInvoker()
             if not cs.is_valid():
                 log.warn("Found invalid entitlements for today: %s" %
                         today)
@@ -99,7 +99,7 @@ class HealingUpdateAction(object):
                 self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,
                                         entitlement_data=ents)
 
-                # NOTE: we need to call EntCertLib.update after Healing.update
+                # NOTE: we need to call EntCertActionInvoker.update after Healing.update
                 # otherwise, the locking get's crazy
                 # hmm, we use RLock, maybe we could use it here
                 self.report = cert_updater.update()
