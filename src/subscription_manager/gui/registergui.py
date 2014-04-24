@@ -32,7 +32,7 @@ from rhsm.utils import ServerUrlParseError
 from rhsm.connection import GoneException
 
 from subscription_manager.branding import get_branding
-from subscription_manager.certmgr import CertActionClient
+from subscription_manager.certmgr import ActionClient
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require, \
@@ -1135,8 +1135,8 @@ class AsyncBackend(object):
         suitable_slas = {}
 
         # eek, in a thread
-        certmgr = CertActionClient(facts=facts)
-        certmgr.update()
+        action_client = ActionClient(facts=facts)
+        action_client.update()
 
         for sla in available_slas:
             dry_run_json = self.backend.cp_provider.get_consumer_auth_cp().dryRunBind(consumer.uuid, sla)

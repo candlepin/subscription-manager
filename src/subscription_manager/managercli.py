@@ -35,7 +35,7 @@ from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertLib
-from subscription_manager.certmgr import CertActionClient, UnregisterCertManager
+from subscription_manager.certmgr import ActionClient, UnregisterCertManager
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
@@ -1382,7 +1382,7 @@ class AttachCommand(CliCommand):
         self.assert_should_be_registered()
         self._validate_options()
         try:
-            cert_action_client = CertActionClient()
+            cert_action_client = ActionClient()
             cert_action_client.update()
             return_code = 0
             cert_update = True
@@ -1795,7 +1795,7 @@ class ReposCommand(CliCommand):
             return rc
 
         # Pull down any new entitlements and refresh the entitlements directory
-        cert_action_client = CertActionClient()
+        cert_action_client = ActionClient()
         cert_action_client.update()
         self._request_validity_check()
 

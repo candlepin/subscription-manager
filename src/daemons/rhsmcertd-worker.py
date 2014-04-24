@@ -46,7 +46,7 @@ def main(options, log):
 
     try:
         if options.autoheal:
-            action_client = certmgr.HealingCertManager()
+            action_client = certmgr.HealingActionClient()
         else:
             action_client = certmgr.ActionCertClient()
 
