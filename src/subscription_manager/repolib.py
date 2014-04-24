@@ -50,15 +50,15 @@ class RepoActionInvoker(BaseActionInvoker):
         self.identity = inj.require(inj.IDENTITY)
 
     def _do_update(self):
-        action = RepoUpdateAction(cache_only=self.cache_only)
+        action = RepoUpdateActionCommand(cache_only=self.cache_only)
         return action.perform()
 
     def is_managed(self, repo):
-        action = RepoUpdateAction(cache_only=self.cache_only)
+        action = RepoUpdateActionCommand(cache_only=self.cache_only)
         return repo in [c.label for c in action.matching_content()]
 
     def get_repos(self, apply_overrides=True):
-        action = RepoUpdateAction(cache_only=self.cache_only,
+        action = RepoUpdateActionCommand(cache_only=self.cache_only,
                                   apply_overrides=apply_overrides)
         repos = action.get_unique_content()
         if self.identity.is_valid() and action.override_supported:
@@ -90,7 +90,7 @@ class RepoActionInvoker(BaseActionInvoker):
             os.unlink(repo_file.path)
 
 
-class RepoUpdateAction(object):
+class RepoUpdateActionCommand(object):
     """UpdateAction for yum repos.
 
     Update yum repos when triggered. Generates yum repo config

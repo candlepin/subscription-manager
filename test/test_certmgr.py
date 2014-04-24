@@ -68,7 +68,7 @@ class ActionClientTestBase(SubManFixture):
         #self.patcher2 = mock.patch.object(entcertlib.EntCertUpdateAction, '_get_consumer_id')
         #self.entcertlib_updateaction_getconsumerid = self.patcher2.start()
 
-        self.patcher3 = mock.patch.object(repolib.RepoUpdateAction, 'perform')
+        self.patcher3 = mock.patch.object(repolib.RepoUpdateActionCommand, 'perform')
         self.repolib_updateaction_perform = self.patcher3.start()
 
         self.patcher6 = mock.patch('subscription_manager.managerlib.persist_consumer_cert')

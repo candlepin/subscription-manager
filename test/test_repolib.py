@@ -24,7 +24,7 @@ from fixture import SubManFixture
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
         StubProductDirectory, StubConsumerIdentity
-from subscription_manager.repolib import Repo, RepoUpdateAction, TidyWriter
+from subscription_manager.repolib import Repo, RepoUpdateActionCommand, TidyWriter
 from subscription_manager import injection as inj
 
 from subscription_manager import repolib
@@ -110,14 +110,14 @@ class RepoUpdateActionTests(SubManFixture):
 
         self.set_consumer_auth_cp(mock_uep)
 
-        RepoUpdateAction()
+        RepoUpdateActionCommand()
 
         # No cache calls should be made if overrides are not supported
         self.assertFalse(override_cache_mock.read_cache.called)
         self.assertFalse(override_cache_mock.load_status.called)
 
     def test_overrides_trump_ent_cert(self):
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         update_action.overrides = [{'contentLabel': 'x',
                                     'name': 'gpgcheck',
                                     'value': 'blah'}]
@@ -135,7 +135,7 @@ class RepoUpdateActionTests(SubManFixture):
         def stub_content():
             return [Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])]
 
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         update_action.get_unique_content = stub_content
         update_report = update_action.perform()
         written_repo = mock_file.add.call_args[0][0]
@@ -151,7 +151,7 @@ class RepoUpdateActionTests(SubManFixture):
         def stub_content():
             return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key')])]
 
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         update_action.get_unique_content = stub_content
         update_action.override_supported = True
         update_report = update_action.perform()
@@ -169,7 +169,7 @@ class RepoUpdateActionTests(SubManFixture):
         def stub_content():
             return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key')])]
 
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         update_action.get_unique_content = stub_content
         update_action.perform()
 
@@ -179,7 +179,7 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_no_gpg_key(self):
 
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         content = update_action.get_content(self.stub_ent_cert,
                                             "http://example.com", None)
         c1 = self._find_content(content, 'c1')
@@ -192,7 +192,7 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_gpg_key(self):
 
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         content = update_action.get_content(self.stub_ent_cert,
                                             "http://example.com", None)
         c4 = self._find_content(content, 'c4')
@@ -200,7 +200,7 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertEquals('1', c4['gpgcheck'])
 
     def test_ui_repoid_vars(self):
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         content = update_action.get_content(self.stub_ent_cert,
                                             "http://example.com", None)
         c4 = self._find_content(content, 'c4')
@@ -209,13 +209,13 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertEquals(None, c2['ui_repoid_vars'])
 
     def test_tags_found(self):
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         content = update_action.get_unique_content()
         self.assertEquals(3, len(content))
 
     def test_join(self):
         base = "http://foo/bar"
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         # File urls should be preserved
         self.assertEquals("file://this/is/a/file",
             update_action.join(base, "file://this/is/a/file"))
@@ -237,7 +237,7 @@ class RepoUpdateActionTests(SubManFixture):
             update_action.join(base, "/baz"))
 
     def test_only_allow_content_of_type_yum(self):
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         content = update_action.get_content(self.stub_ent_cert,
                                             "http://example.com", None)
         self.assertTrue(self._find_content(content, "c1") is not None)
@@ -245,7 +245,7 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertTrue(self._find_content(content, "c6") is None)
 
     def test_mutable_property(self):
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['metadata_expire'] = 1000
@@ -254,7 +254,7 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertEqual(1000, existing_repo['metadata_expire'])
 
     def test_gpgcheck_is_mutable(self):
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         self._inject_mock_invalid_consumer()
         existing_repo = Repo('testrepo')
         existing_repo['gpgcheck'] = "0"
@@ -264,7 +264,7 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_mutable_property_in_repo_but_not_in_cert(self):
         self._inject_mock_invalid_consumer()
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         existing_repo = Repo('testrepo')
         existing_repo['metadata_expire'] = 1000
         incoming_repo = {}
@@ -273,7 +273,7 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_immutable_property(self):
         self._inject_mock_invalid_consumer()
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         existing_repo = Repo('testrepo')
         existing_repo['name'] = "meow"
         incoming_repo = {'name': "woof"}
@@ -285,7 +285,7 @@ class RepoUpdateActionTests(SubManFixture):
     # should get written out.
     def test_unset_mutable_property(self):
         self._inject_mock_invalid_consumer()
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         existing_repo = Repo('testrepo')
         incoming_repo = {'metadata_expire': 2000}
         update_action.update_repo(existing_repo, incoming_repo)
@@ -293,7 +293,7 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_unset_immutable_property(self):
         self._inject_mock_invalid_consumer()
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         existing_repo = Repo('testrepo')
         incoming_repo = {'name': "woof"}
         update_action.update_repo(existing_repo, incoming_repo)
@@ -303,7 +303,7 @@ class RepoUpdateActionTests(SubManFixture):
     # unset in the new repo definition. This property should be removed.
     def test_set_immutable_property_now_empty(self):
         self._inject_mock_invalid_consumer()
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         existing_repo = Repo('testrepo')
         existing_repo['proxy_username'] = "blah"
         incoming_repo = {}
@@ -312,7 +312,7 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_set_mutable_property_now_empty_value(self):
         self._inject_mock_invalid_consumer()
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         existing_repo = Repo('testrepo')
         existing_repo['metadata_expire'] = "blah"
         incoming_repo = {'metadata_expire': ''}
@@ -324,7 +324,7 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_set_immutable_property_now_empty_value(self):
         self._inject_mock_invalid_consumer()
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         existing_repo = Repo('testrepo')
         existing_repo['proxy_username'] = "blah"
         incoming_repo = {'proxy_username': ''}
@@ -335,7 +335,7 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_set_mutable_property_now_none(self):
         self._inject_mock_invalid_consumer()
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         existing_repo = Repo('testrepo')
         existing_repo['metadata_expire'] = "blah"
         incoming_repo = {'metadata_expire': None}
@@ -347,7 +347,7 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_set_mutable_property_now_not_in_cert(self):
         self._inject_mock_invalid_consumer()
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         existing_repo = Repo('testrepo')
         existing_repo['metadata_expire'] = "blah"
         incoming_repo = {}
@@ -359,7 +359,7 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_set_immutable_property_now_none(self):
         self._inject_mock_invalid_consumer()
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         existing_repo = Repo('testrepo')
         existing_repo['proxy_username'] = "blah"
         incoming_repo = {'proxy_username': None}
@@ -370,7 +370,7 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_set_immutable_property_now_not_in_cert(self):
         self._inject_mock_invalid_consumer()
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         existing_repo = Repo('testrepo')
         existing_repo['proxy_username'] = "blah"
         incoming_repo = {}
@@ -384,7 +384,7 @@ class RepoUpdateActionTests(SubManFixture):
         existing_repo['proxy_username'] = "blah"
         incoming_repo = {'proxy_username': 'foo'}
 
-        update_action = RepoUpdateAction()
+        update_action = RepoUpdateActionCommand()
         update_action.override_supported = True
         self.assertRaises(UnsupportedOperationException, update_action.update_repo, existing_repo, incoming_repo)
 
