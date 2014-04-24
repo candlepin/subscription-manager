@@ -75,12 +75,12 @@ class TestCompileCommand(TestCliCommand):
             self.assertTrue(tar_file.getmember(path_join(self.code, "pools.json")) is not None)
             self.assertTrue(tar_file.getmember(path_join(self.code, "version.json")) is not None)
             self.assertTrue(tar_file.getmember(path_join(self.code, "subscriptions.json")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "/etc/rhsm")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "/var/log/rhsm")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "/var/lib/rhsm")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'productCertDir'))) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'entitlementCertDir'))) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'consumerCertDir'))) is not None)
+            self.assertTrue(tar_file.getmember(path_join(self.code, "/etc/rhsm/")) is not None)
+            self.assertTrue(tar_file.getmember(path_join(self.code, "/var/log/rhsm/")) is not None)
+            self.assertTrue(tar_file.getmember(path_join(self.code, "/var/lib/rhsm/")) is not None)
+            self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'productCertDir') + '/')) is not None)
+            self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'entitlementCertDir') + '/')) is not None)
+            self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'consumerCertDir') + '/')) is not None)
         finally:
             shutil.rmtree(path)
 
@@ -177,14 +177,14 @@ class TestCompileCommand(TestCliCommand):
         try:
             self.cc.main(["--destination", path])
             self.cc._validate_options()
+            self.fail("No Exception Raised")
         except InvalidCLIOptionError, e:
             self.assertEquals(e.message, "The destination directory for the archive must already exist.")
-        else:
-            self.fail("No Exception Raised")
 
     # method to capture code
     def _make_code(self):
-        self.time_code = datetime.now().strftime("%Y%m%d-%f")
+        #self.time_code = datetime.now().strftime("%Y%m%d-%f")
+        self.time_code = datetime.now().strftime("%Y%m%d-%S")
         self.code = "rhsm-debug-system-%s" % self.time_code
         return self.time_code
 
@@ -204,7 +204,10 @@ class TestCompileCommand(TestCliCommand):
     # write to my directory instead
     def _copy_directory(self, path, prefix, ignore_pats=[]):
         #print "_copy_directory: %s, %s" % (path, prefix)
-        shutil.copytree(path_join(self.assemble_path, path), path_join(prefix, path))
+        #shutil.copytree(path_join(self.assemble_path, path), path_join(prefix, path))
+        src = path_join(self.assemble_path, path)
+        dst = path_join(prefix, path)
+        self.cc._copy_tree(src, dst)
 
     # tests run as non-root
     def _makedir(self, dest_dir_name):

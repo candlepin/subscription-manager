@@ -2219,8 +2219,11 @@ class OverrideCommand(CliCommand):
         if parser.values.additions is None:
             parser.values.additions = {}
 
-        k, colon, v = value.partition(':')
-        if not v:
+        try:
+            k, v = value.split(':', 1)
+            if not v:
+                raise ValueError()
+        except ValueError:
             raise OptionValueError(_("--add arguments should be in the form of \"name:value\""))
 
         parser.values.additions[k] = v
@@ -2321,7 +2324,8 @@ class OverrideCommand(CliCommand):
             # Split the list of 2-tuples into a list of names and a list of keys
             names, values = zip(*repo_data)
             names = ["%s:" % x for x in names]
-            print columnize(names, _echo, *values, indent=2) + "\n"
+            kwargs = {'indent': 2}
+            print columnize(names, _echo, *values, **kwargs) + "\n"
 
 
 class VersionCommand(CliCommand):

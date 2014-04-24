@@ -601,11 +601,12 @@ class StubAsyncUpdater(AsyncWidgetUpdater):
 
     def update(self, widget_update, backend_method, args=[], kwargs={}, exception_msg=None, callback=None):
         try:
-            result = backend_method(*args, **kwargs)
-            if callback:
-                callback(result)
-        except Exception, e:
-            message = exception_msg or str(e)
-            handle_gui_exception(e, message, self.parent_window)
+            try:
+                result = backend_method(*args, **kwargs)
+                if callback:
+                    callback(result)
+            except Exception, e:
+                message = exception_msg or str(e)
+                handle_gui_exception(e, message, self.parent_window)
         finally:
             widget_update.finished()

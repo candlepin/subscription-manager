@@ -27,7 +27,6 @@ from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui.widgets import MachineTypeColumn, QuantitySelectionColumn, \
                                              SubDetailsWidget, ContractSubDetailsWidget, \
                                              DatePicker
-from fixture import Capture
 from dateutil.tz import tzlocal
 
 
@@ -120,9 +119,8 @@ class TestDatePicker(unittest.TestCase):
     # why? because some locales fail to parse in dates with
     # double digt months
     def test_date_validate_supported_locales_12_29_2020(self):
-        with Capture(silent=True):
-            d = datetime(2020, 12, 29, tzinfo=tzlocal())
-            self.__date_validate_supported_locales(d)
+        d = datetime(2020, 12, 29, tzinfo=tzlocal())
+        self.__date_validate_supported_locales(d)
 
     def __date_validate_supported_locales(self, d):
         test_locales = test_po_files.TestLocale.test_locales

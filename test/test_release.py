@@ -121,21 +121,23 @@ class TestReleaseBackend(fixture.SubManFixture):
         self.assertEquals([], releases)
 
     def test_get_releases_throws_exception(self):
-        with mock.patch.object(self.rb, 'content_connection') as mock_cc:
-            mock_cc.get_versions.side_effect = \
-                    httplib.BadStatusLine("some bogus status")
-            releases = self.rb.get_releases()
-            self.assertEquals([], releases)
+        pa = mock.patch.object(self.rb, 'content_connection')
+        pa.start()
+        self.stub_content_connection.get_versions.side_effect = \
+                httplib.BadStatusLine("some bogus status")
+        releases = self.rb.get_releases()
+        self.assertEquals([], releases)
 
-            mock_cc.get_versions.side_effect = \
-                    socket.error()
-            releases = self.rb.get_releases()
-            self.assertEquals([], releases)
+        self.stub_content_connection.get_versions.side_effect = \
+                socket.error()
+        releases = self.rb.get_releases()
+        self.assertEquals([], releases)
 
-            mock_cc.get_versions.side_effect = \
-                    SSLError()
-            releases = self.rb.get_releases()
-            self.assertEquals([], releases)
+        self.stub_content_connection.get_versions.side_effect = \
+                SSLError()
+        releases = self.rb.get_releases()
+        self.assertEquals([], releases)
+        pa.stop()
 
     def test_is_correct_rhel(self):
         icr = self.rb._is_correct_rhel(["rhel-6-test"], ["rhel-6"])

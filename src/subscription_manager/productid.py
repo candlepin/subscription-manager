@@ -104,7 +104,9 @@ class ProductDatabase:
 class ComparableMixin(object):
     """Needs compare_keys to be implemented."""
     def _compare(self, keys, method):
-        return method(keys[0], keys[1]) if keys else NotImplemented
+        if keys:
+            return method(keys[0], keys[1])
+        return NotImplemented
 
     def __eq__(self, other):
         return self._compare(self.compare_keys(other), lambda s, o: s == o)

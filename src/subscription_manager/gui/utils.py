@@ -253,12 +253,13 @@ class AsyncWidgetUpdater(object):
         args = args or []
         kwargs = kwargs or {}
         try:
-            result = backend_method(*args, **kwargs)
-            if callback:
-                gobject.idle_add(callback, result)
-        except Exception, e:
-            message = exception_msg or str(e)
-            gobject.idle_add(handle_gui_exception, e, message, self.parent_window)
+            try:
+                result = backend_method(*args, **kwargs)
+                if callback:
+                    gobject.idle_add(callback, result)
+            except Exception, e:
+                message = exception_msg or str(e)
+                gobject.idle_add(handle_gui_exception, e, message, self.parent_window)
         finally:
             gobject.idle_add(widget_update.finished)
 

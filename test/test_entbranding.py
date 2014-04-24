@@ -1,5 +1,7 @@
 
 import mock
+from mock import Mock
+Mock.__enter__ = Mock()
 
 import fixture
 import stubs
@@ -744,18 +746,24 @@ class TestBrandFile(fixture.SubManFixture):
 
     def test_write(self):
         brand_file = self.brandfile_class()
+        mock.__enter__ = Mock()
         mo = mock.mock_open()
-        with mock.patch('subscription_manager.entbranding.open', mo, create=True):
-            brand_file.write("Foo OS")
+        pa = mock.patch('subscription_manager.entbranding.open', mo, create=True)
+        pa.start()
+        brand_file.write("Foo OS")
         mo.assert_called_once_with('/var/lib/rhsm/branded_name', 'w')
+        pa.stop()
 
     def test_read(self):
         brand_file = self.brandfile_class()
         brand_string = "Some Branding Info"
+        mock.__enter__ = Mock()
         mo = mock.mock_open(read_data=brand_string)
-        with mock.patch('subscription_manager.entbranding.open', mo, create=True):
-            b = brand_file.read()
+        pa = mock.patch('subscription_manager.entbranding.open', mo, create=True)
+        pa.start()
+        b = brand_file.read()
         self.assert_string_equals(brand_string, b)
+        pa.stop()
 
 
 class TestRHELBrandFile(TestBrandFile):

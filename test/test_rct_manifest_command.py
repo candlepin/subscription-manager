@@ -67,8 +67,10 @@ class RCTManifestCommandTests(SubManFixture):
         catman = CatManifestCommand()
         catman.args = [_build_valid_manifest()]
 
-        with Capture() as cap:
-            catman._do_command()
+        cap = Capture()
+        cap.__enter__()
+        catman._do_command()
+        cap.__exit__(None, None, None)
 
         self.assertEquals("", cap.err)
         self.assert_string_equals(manifestdata.correct_manifest_output, cap.out)

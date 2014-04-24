@@ -27,6 +27,8 @@ from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelp
 class InvalidCLIOptionError(Exception):
     def __init__(self, message):
         Exception.__init__(self, message)
+        if not hasattr(self, 'message'):
+            self.message = message
 
 
 class AbstractCLICommand(object):

@@ -170,13 +170,19 @@ class BrandFile(object):
     path = "/var/lib/rhsm/branded_name"
 
     def write(self, brand_info):
-        with open(self.path, 'w') as brand_file:
+        try:
+            brand_file = open(self.path, 'w')
             brand_file.write(brand_info)
+        finally:
+            brand_file.close()
 
     def read(self):
         brand_info = None
-        with open(self.path, 'r') as brand_file:
+        try:
+            brand_file = open(self.path, 'r')
             brand_info = brand_file.read()
+        finally:
+            brand_file.close()
         return brand_info
 
     def __str__(self):

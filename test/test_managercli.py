@@ -117,12 +117,14 @@ class TestCliCommand(SubManFixture):
             self.assertEquals(e.code, 2)
 
     def _main_help(self, args):
-        with Capture() as cap:
-            try:
-                self.cc.main(args)
-            except SystemExit, e:
-                # --help/-h returns 0
-                self.assertEquals(e.code, 0)
+        cap = Capture()
+        cap.__enter__()
+        try:
+            self.cc.main(args)
+        except SystemExit, e:
+            # --help/-h returns 0
+            self.assertEquals(e.code, 0)
+        cap.__exit__(None, None, None)
         output = cap.out.strip()
         # I could test for strings here, but that
         # would break if we run tests in a locale/lang
@@ -312,8 +314,10 @@ class TestListCommand(TestCliProxyCommand):
         mc_exists.return_value = True
 
         mcli.return_value = {'consumer_name': 'stub_name', 'uuid': 'stub_uuid'}
-        with Capture() as cap:
-            listCommand.main(['list', '--available'])
+        cap = Capture()
+        cap.__enter__()
+        listCommand.main(['list', '--available'])
+        cap.__exit__(None, None, None)
         self.assertTrue('888888888888' in cap.out)
 
     def test_print_consumed_no_ents(self):
@@ -500,9 +504,11 @@ class TestConfigCommand(TestCliCommand):
         self.assertEquals(managercli.cfg.store['rhsm.baseurl'], baseurl)
 
     def test_remove_config_default(self):
-        with Capture() as cap:
-            self.cc._do_command = self._orig_do_command
-            self.cc.main(['--remove', 'rhsm.baseurl'])
+        cap = Capture()
+        cap.__enter__()
+        self.cc._do_command = self._orig_do_command
+        self.cc.main(['--remove', 'rhsm.baseurl'])
+        cap.__exit__(None, None, None)
         self.assertTrue('The default value for' in cap.out)
 
     def test_remove_config_section_does_not_exist(self):
@@ -770,39 +776,45 @@ class TestOverrideCommand(TestCliProxyCommand):
             Override('y', 'goodbye', 'earth'),
             Override('z', 'greetings', 'mars')
         ]
-        with Capture() as cap:
-            self.cc._list(data, None)
-            output = cap.out
-            self.assertTrue(re.search('Repository: x', output))
-            self.assertTrue(re.search('\s+hello:\s+world', output))
-            self.assertTrue(re.search('\s+blast-off:\s+space', output))
-            self.assertTrue(re.search('Repository: y', output))
-            self.assertTrue(re.search('\s+goodbye:\s+earth', output))
-            self.assertTrue(re.search('Repository: z', output))
-            self.assertTrue(re.search('\s+greetings:\s+mars', output))
+        cap = Capture()
+        cap.__enter__()
+        self.cc._list(data, None)
+        cap.__exit__(None, None, None)
+        output = cap.out
+        self.assertTrue(re.search('Repository: x', output))
+        self.assertTrue(re.search('\s+hello:\s+world', output))
+        self.assertTrue(re.search('\s+blast-off:\s+space', output))
+        self.assertTrue(re.search('Repository: y', output))
+        self.assertTrue(re.search('\s+goodbye:\s+earth', output))
+        self.assertTrue(re.search('Repository: z', output))
+        self.assertTrue(re.search('\s+greetings:\s+mars', output))
 
     def test_list_specific_repos(self):
         data = [
             Override('x', 'hello', 'world'),
             Override('z', 'greetings', 'mars')
         ]
-        with Capture() as cap:
-            self.cc._list(data, ['x'])
-            output = cap.out
-            self.assertTrue(re.search('Repository: x', output))
-            self.assertTrue(re.search('\s+hello:\s+world', output))
-            self.assertFalse(re.search('Repository: z', output))
+        cap = Capture()
+        cap.__enter__()
+        self.cc._list(data, ['x'])
+        cap.__exit__(None, None, None)
+        output = cap.out
+        self.assertTrue(re.search('Repository: x', output))
+        self.assertTrue(re.search('\s+hello:\s+world', output))
+        self.assertFalse(re.search('Repository: z', output))
 
     def test_list_nonexistant_repos(self):
         data = [
             Override('x', 'hello', 'world')
         ]
-        with Capture() as cap:
-            self.cc._list(data, ['x', 'z'])
-            output = cap.out
-            self.assertTrue(re.search("Nothing is known about 'z'", output))
-            self.assertTrue(re.search('Repository: x', output))
-            self.assertTrue(re.search('\s+hello:\s+world', output))
+        cap = Capture()
+        cap.__enter__()
+        self.cc._list(data, ['x', 'z'])
+        cap.__exit__(None, None, None)
+        output = cap.out
+        self.assertTrue(re.search("Nothing is known about 'z'", output))
+        self.assertTrue(re.search('Repository: x', output))
+        self.assertTrue(re.search('\s+hello:\s+world', output))
 
 
 class TestSystemExit(unittest.TestCase):
@@ -811,29 +823,35 @@ class TestSystemExit(unittest.TestCase):
 
     def test_a_msg(self):
         msg = "some message"
-        with Capture() as cap:
-            try:
-                managercli.system_exit(1, msg)
-            except SystemExit:
-                pass
+        cap = Capture()
+        cap.__enter__()
+        try:
+            managercli.system_exit(1, msg)
+        except SystemExit:
+            pass
+        cap.__exit__(None, None, None)
         self.assertEquals("%s\n" % msg, cap.err)
 
     def test_msgs(self):
         msgs = ["a", "b", "c"]
-        with Capture() as cap:
-            try:
-                managercli.system_exit(1, msgs)
-            except SystemExit:
-                pass
+        cap = Capture()
+        cap.__enter__()
+        try:
+            managercli.system_exit(1, msgs)
+        except SystemExit:
+            pass
+        cap.__exit__(None, None, None)
         self.assertEquals("%s\n" % ("\n".join(msgs)), cap.err)
 
     def test_msg_and_exception(self):
         msgs = ["a", ValueError()]
-        with Capture() as cap:
-            try:
-                managercli.system_exit(1, msgs)
-            except SystemExit:
-                pass
+        cap = Capture()
+        cap.__enter__()
+        try:
+            managercli.system_exit(1, msgs)
+        except SystemExit:
+            pass
+        cap.__exit__(None, None, None)
         self.assertEquals("%s\n\n" % msgs[0], cap.err)
 
     def test_msg_and_exception_no_str(self):
@@ -841,20 +859,24 @@ class TestSystemExit(unittest.TestCase):
             pass
 
         msgs = ["a", NoStrException()]
-        with Capture() as cap:
-            try:
-                managercli.system_exit(1, msgs)
-            except SystemExit:
-                pass
+        cap = Capture()
+        cap.__enter__()
+        try:
+            managercli.system_exit(1, msgs)
+        except SystemExit:
+            pass
+        cap.__exit__(None, None, None)
         self.assertEquals("%s\n\n" % msgs[0], cap.err)
 
     def test_msg_unicode(self):
         msgs = [u"\u2620 \u2603 \u203D"]
-        with Capture() as cap:
-            try:
-                managercli.system_exit(1, msgs)
-            except SystemExit:
-                pass
+        cap = Capture()
+        cap.__enter__()
+        try:
+            managercli.system_exit(1, msgs)
+        except SystemExit:
+            pass
+        cap.__exit__(None, None, None)
         self.assertEquals("%s\n" % msgs[0].encode("utf8"), cap.err)
 
     def test_msg_and_exception_str(self):
