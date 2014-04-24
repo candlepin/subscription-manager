@@ -42,20 +42,20 @@ class TestLocker(fixture.SubManFixture):
 
 class TestDataLib(fixture.SubManFixture):
     def test(self):
-        dl = certlib.DataLib()
+        dl = certlib.BaseActionInvoker()
         self.assertTrue(dl.report is None)
         # we use the fixture inject RLock as the default lock
         self.assertTrue(isinstance(dl.locker, certlib.Locker))
 
     def test_update(self):
-        dl = certlib.DataLib()
+        dl = certlib.BaseActionInvoker()
         report = dl.update()
         # default returns None instead of a report
         self.assertTrue(report is None)
 
     @patch("subscription_manager.certlib.Locker", spec=certlib.Locker)
     def test_update_locker(self, mocker_locker):
-        dl = certlib.DataLib()
+        dl = certlib.BaseActionInvoker()
         dl.update()
         mocker_locker_instance = mocker_locker.return_value
         self.assertTrue(mocker_locker_instance.run.called)

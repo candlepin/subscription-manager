@@ -25,7 +25,7 @@ from subscription_manager import injection as inj
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class HealingLib(certlib.DataLib):
+class HealingLib(certlib.BaseActionInvoker):
     """
     An object used to run healing nightly. Checks cert validity for today, heals
     if necessary, then checks for 24 hours from now, so we theoretically will

@@ -22,7 +22,7 @@ class Locker(object):
         return inj.require(inj.ACTION_LOCK)
 
 
-class DataLib(object):
+class BaseActionInvoker(object):
     def __init__(self):
         self.locker = Locker()
         self.report = None

@@ -15,7 +15,7 @@ from subscription_manager import injection as inj
 from subscription_manager import certlib
 
 
-class InstalledProductsLib(certlib.DataLib):
+class InstalledProductsLib(certlib.BaseActionInvoker):
     """Used by rhsmcertd to update the installed
     products on this system periodically.
     """

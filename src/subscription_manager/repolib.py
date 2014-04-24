@@ -30,7 +30,7 @@ from rhsm.utils import UnsupportedOperationException
 
 # FIXME: local imports
 
-from subscription_manager.certlib import ActionReport, DataLib
+from subscription_manager.certlib import ActionReport, BaseActionInvoker
 from subscription_manager.certdirectory import Path
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -42,11 +42,11 @@ ALLOWED_CONTENT_TYPES = ["yum"]
 _ = gettext.gettext
 
 
-class RepoLib(DataLib):
+class RepoLib(BaseActionInvoker):
     """Invoker for yum repo updating related actions."""
     def __init__(self, cache_only=False):
         self.cache_only = cache_only
-        DataLib.__init__(self)
+        BaseActionInvoker.__init__(self)
         self.identity = inj.require(inj.IDENTITY)
 
     def _do_update(self):

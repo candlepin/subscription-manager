@@ -22,7 +22,7 @@ from subscription_manager import injection as inj
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class IdentityCertLib(certlib.DataLib):
+class IdentityCertLib(certlib.BaseActionInvoker):
     """
     An object to update the identity certificate in the event the server
     deems it is about to expire. This is done to prevent the identity

@@ -15,7 +15,7 @@ from subscription_manager import injection as inj
 from subscription_manager import certlib
 
 
-class PackageProfileLib(certlib.DataLib):
+class PackageProfileLib(certlib.BaseActionInvoker):
     """Used by rhsmcertd to update the profile
     periodically.
     """
