@@ -35,7 +35,7 @@ from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertLib
-from subscription_manager.certmgr import ActionClient, UnregisterCertManager
+from subscription_manager.action_client import ActionClient, UnregisterActionClient
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
@@ -1183,7 +1183,7 @@ class UnRegisterCommand(CliCommand):
         try:
             # there is no consumer cert at this point, a uep object
             # is not useful
-            cleanup_certmgr = UnregisterCertManager()
+            cleanup_certmgr = UnregisterActionClient()
             cleanup_certmgr.update()
         except Exception, e:
             pass

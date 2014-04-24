@@ -19,7 +19,7 @@ import mock
 import stubs
 
 from rhsm import ourjson as json
-from subscription_manager import certmgr
+from subscription_manager import action_client
 from subscription_manager import entcertlib
 from subscription_manager import identitycertlib
 from subscription_manager import repolib
@@ -142,33 +142,33 @@ class ActionClientTestBase(SubManFixture):
 class TestActionClient(ActionClientTestBase):
 
     def test_init(self):
-        mgr = certmgr.ActionClient()
-        mgr.update()
+        actionclient = action_client.ActionClient()
+        actionclient.update()
 
     # see bz #852706
     @mock.patch.object(entcertlib.EntCertLib, 'update')
     def test_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
-        mgr = certmgr.ActionClient()
-        self.assertRaises(GoneException, mgr.update)
+        actionclient = action_client.ActionClient()
+        self.assertRaises(GoneException, actionclient.update)
 
     # see bz #852706, except this time for idcertlib
     @mock.patch.object(identitycertlib.IdentityCertLib, 'update')
     def test_idcertlib_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
-        mgr = certmgr.ActionClient()
-        self.assertRaises(GoneException, mgr.update)
+        actionclient = action_client.ActionClient()
+        self.assertRaises(GoneException, actionclient.update)
 
         # just verify the certlib update worked
-        report = mgr.entcertlib.report
+        report = actionclient.entcertlib.report
         self.assertTrue(self.stub_ent1.serial in report.valid)
 
     @mock.patch.object(entcertlib.EntCertLib, 'update')
-    @mock.patch('subscription_manager.certmgr.log')
+    @mock.patch('subscription_manager.action_client.log')
     def test_entcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
-        mgr = certmgr.ActionClient()
-        mgr.update()
+        actionclient = action_client.ActionClient()
+        actionclient.update()
 
         for call in mock_log.method_calls:
             if call[0] == 'exception' and isinstance(call[1][0], ExceptionalException):
@@ -176,11 +176,11 @@ class TestActionClient(ActionClientTestBase):
         self.fail("Did not ExceptionException in the logged exceptions")
 
     @mock.patch.object(identitycertlib.IdentityCertLib, 'update')
-    @mock.patch('subscription_manager.certmgr.log')
+    @mock.patch('subscription_manager.action_client.log')
     def test_idcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
-        mgr = certmgr.ActionClient()
-        mgr.update()
+        actionclient = action_client.ActionClient()
+        actionclient.update()
 
         for call in mock_log.method_calls:
             if call[0] == 'exception' and isinstance(call[1][0], ExceptionalException):
@@ -210,10 +210,10 @@ class TestActionClient(ActionClientTestBase):
         self._stub_certificate_calls()
 
         cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
-        mgr = certmgr.ActionClient()
-        mgr.update()
+        actionclient = action_client.ActionClient()
+        actionclient.update()
 
-        report = mgr.entcertlib.report
+        report = actionclient.entcertlib.report
         self.assertTrue(self.stub_ent1 in report.added)
 
     def test_rogue(self):
@@ -221,10 +221,10 @@ class TestActionClient(ActionClientTestBase):
         # server so getCertificateSerials to return nothing
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
         self.set_consumer_auth_cp(self.mock_uep)
-        mgr = certmgr.ActionClient()
-        mgr.update()
+        actionclient = action_client.ActionClient()
+        actionclient.update()
 
-        report = mgr.entcertlib.report
+        report = actionclient.entcertlib.report
         # our local ent certs should be showing up as rogue
         self.assertTrue(self.local_ent_certs[0] in report.rogue)
         self.assertTrue(self.local_ent_certs[1] in report.rogue)
@@ -242,10 +242,10 @@ class TestActionClient(ActionClientTestBase):
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
         self.set_consumer_auth_cp(self.mock_uep)
 
-        mgr = certmgr.ActionClient()
-        mgr.update()
+        actionclient = action_client.ActionClient()
+        actionclient.update()
 
-        report = mgr.entcertlib.report
+        report = actionclient.entcertlib.report
         # the expired certs should be delete/rogue and expired
         #report = self.update_action_syslog_mock.call_args[0][0]
         self.assertTrue(self.stub_ent1 in report.rogue)
@@ -258,10 +258,10 @@ class TestActionClient(ActionClientTestBase):
         self._stub_certificate_calls()
 
         mock_cert_build.side_effect = ExceptionalException()
-        mgr = certmgr.ActionClient()
+        actionclient = action_client.ActionClient()
         # we should fail on the certlib.update, but keep going...
         # and handle it well.
-        mgr.update()
+        actionclient.update()
 
         for call in mock_log.method_calls:
             if call[0] == 'exception' and isinstance(call[1][0], ExceptionalException):
@@ -274,16 +274,16 @@ class TestHealingActionClient(TestActionClient):
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
         self.mock_cert_sorter.compliant_until = datetime.now() + \
                 timedelta(days=15)
-        mgr = certmgr.HealingActionClient()
-        mgr.update(autoheal=True)
+        actionclient = action_client.HealingActionClient()
+        actionclient.update(autoheal=True)
         self.assertFalse(self.mock_uep.bind.called)
 
     def test_healing_needs_heal(self):
         # need a stub product dir with prods with no entitlements,
         # don't have to mock here since we can actually pass in a product
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=False)
-        mgr = certmgr.HealingActionClient()
-        mgr.update(autoheal=True)
+        actionclient = action_client.HealingActionClient()
+        actionclient.update(autoheal=True)
         self.assertTrue(self.mock_uep.bind.called)
 
     @mock.patch.object(entcertlib.EntitlementCertBundleInstaller, 'build_cert')
@@ -296,8 +296,8 @@ class TestHealingActionClient(TestActionClient):
                 self.stub_ent_expires_tomorrow)
 
         self._stub_certificate_calls([self.stub_ent_expires_tomorrow])
-        mgr = certmgr.HealingActionClient()
-        mgr.update(autoheal=True)
+        actionclient = action_client.HealingActionClient()
+        actionclient.update(autoheal=True)
         # see if we tried to update certs
         self.assertTrue(self.mock_uep.bind.called)
 
@@ -308,8 +308,8 @@ class TestHealingActionClient(TestActionClient):
         # cert sorter using the product dir. Just making sure an unexpected
         # exception is logged and not bubbling up.
         self.mock_cert_sorter.is_valid = mock.Mock(side_effect=TypeError())
-        mgr = certmgr.HealingActionClient()
-        mgr.update(autoheal=True)
+        actionclient = action_client.HealingActionClient()
+        actionclient.update(autoheal=True)
         for call in mock_log.method_calls:
             if call[0] == 'exception' and isinstance(call[1][0], TypeError):
                 return

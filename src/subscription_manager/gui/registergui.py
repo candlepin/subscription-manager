@@ -32,7 +32,7 @@ from rhsm.utils import ServerUrlParseError
 from rhsm.connection import GoneException
 
 from subscription_manager.branding import get_branding
-from subscription_manager.certmgr import ActionClient
+from subscription_manager.action_client import ActionClient
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require, \

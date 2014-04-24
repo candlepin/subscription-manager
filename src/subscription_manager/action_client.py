@@ -140,7 +140,7 @@ class HealingActionClient(BaseActionClient):
 # *Lib things are weird, since some are idempotent, but
 # some arent. entcertlib/repolib .update can both install
 # certs, and/or delete all of them.
-class UnregisterCertManager(BaseActionClient):
+class UnregisterActionClient(BaseActionClient):
     """CertManager for cleaning up on unregister.
 
     This class should not need a consumer id, or a uep connection, since it

@@ -27,7 +27,7 @@ from rhsm import connection
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
-from subscription_manager import certmgr
+from subscription_manager import action_client
 from subscription_manager import managerlib
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.i18n_optparse import OptionParser, \
@@ -46,11 +46,11 @@ def main(options, log):
 
     try:
         if options.autoheal:
-            action_client = certmgr.HealingActionClient()
+            actionclient = action_client.HealingActionClient()
         else:
-            action_client = certmgr.ActionCertClient()
+            actionclient = action_client.ActionCertClient()
 
-        update_reports = action_client.update(options.autoheal)
+        update_reports = actionclient.update(options.autoheal)
 
         for update_report in update_reports:
             # FIXME: make sure we don't get None reports
