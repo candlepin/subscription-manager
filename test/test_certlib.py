@@ -40,7 +40,7 @@ class TestLocker(fixture.SubManFixture):
         self.assertEquals(4, res)
 
 
-class TestDataLib(fixture.SubManFixture):
+class TestBaseActionInvoker(fixture.SubManFixture):
     def test(self):
         dl = certlib.BaseActionInvoker()
         self.assertTrue(dl.report is None)
