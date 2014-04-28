@@ -13,7 +13,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.11.3
+Version: 1.11.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -419,6 +419,12 @@ fi
 %endif
 
 %changelog
+* Mon Apr 28 2014 ckozak <ckozak@redhat.com> 1.11.4-1
+- Move atspi locator to correct element (ckozak@redhat.com)
+- 1090560: readd locator to the all subs view (ckozak@redhat.com)
+- test_cert_sorter could fail based on test order (alikins@redhat.com)
+- 1058383: widgets are added and removed dynamically (ckozak@redhat.com)
+
 * Thu Apr 10 2014 Alex Wood <awood@redhat.com> 1.11.3-1
 - Cleanup entbranding tests names. (alikins@redhat.com)
 - Test cases for empty,none,not set brand type/name (alikins@redhat.com)
