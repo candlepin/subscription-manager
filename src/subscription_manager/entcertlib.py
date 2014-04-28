@@ -300,9 +300,6 @@ class EntitlementCertBundleInstaller(object):
         self.exceptions = []
         self.report = report
 
-    def pre_install(self, bundle):
-        log.debug("ent cert bundle pre_install")
-
     def install(self, bundle):
         self.pre_install(bundle)
 
@@ -317,14 +314,8 @@ class EntitlementCertBundleInstaller(object):
 
         self.post_install(bundle)
 
-    def install_exception(self, bundle, exception):
-        log.exception(exception)
-        log.error('Bundle not loaded:\n%s\n%s', bundle, exception)
-
-        self.report._exceptions.append(exception)
-
-    def post_install(self, bundle):
-        log.debug("ent cert bundle post_install")
+    def pre_install(self, bundle):
+        log.debug("Ent cert bundle pre_install")
 
     # should probably be in python-rhsm/certificate
     def build_cert(self, bundle):
@@ -335,6 +326,15 @@ class EntitlementCertBundleInstaller(object):
         cert = create_from_pem(crtpem)
 
         return (key, cert)
+
+    def install_exception(self, bundle, exception):
+        log.exception(exception)
+        log.error('Bundle not loaded:\n%s\n%s', bundle, exception)
+
+        self.report._exceptions.append(exception)
+
+    def post_install(self, bundle):
+        log.debug("ent cert bundle post_install")
 
 
 class Disconnected(Exception):
