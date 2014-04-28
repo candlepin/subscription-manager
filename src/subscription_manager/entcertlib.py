@@ -179,7 +179,7 @@ class EntCertUpdateAction(object):
         return missing
 
     def _find_rogue_serials(self, local, expected):
-        """ Find serials we have locally but are not on the server. """
+        """Find serials we have locally but are not on the server."""
         rogue = [local[sn] for sn in local if not sn in expected]
         return rogue
 
@@ -229,7 +229,7 @@ class EntCertUpdateAction(object):
         return results
 
     def get_certificates_by_serial_list(self, sn_list):
-        """Fetch a list of entitlement certificates specified by a list of serial numbers"""
+        """Fetch a list of entitlement certificates specified by a list of serial numbers."""
         result = []
         if sn_list:
             sn_list = [str(sn) for sn in sn_list]
@@ -342,7 +342,7 @@ class Disconnected(Exception):
 
 
 class EntCertUpdateReport(certlib.ActionReport):
-    """Report entitlement cert update action changes"""
+    """Report entitlement cert update action changes."""
     name = "Entitlement Cert Updates"
 
     def __init__(self):
@@ -353,7 +353,7 @@ class EntCertUpdateReport(certlib.ActionReport):
         self._exceptions = []
 
     def updates(self):
-        """total number of ent certs installed and deleted"""
+        """Total number of ent certs installed and deleted."""
         return (len(self.added) + len(self.rogue))
 
     # need an ExceptionsReport?
