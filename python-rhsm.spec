@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.11.3
+Version: 1.11.4
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,8 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Mon Apr 28 2014 ckozak <ckozak@redhat.com> 1.11.4-1
+
 * Thu Apr 10 2014 Alex Wood <awood@redhat.com> 1.11.3-1
 - Specifically check for brand_name/brand_type="" (alikins@redhat.com)
 - Support new apis for guests and hypervisors (ckozak@redhat.com)
