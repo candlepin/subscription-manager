@@ -203,7 +203,7 @@ class SystemCommand(CliCommand):
                 stop = False
                 for item in blacklist or []:
                     if fname.endswith(item):
-                        stop=True
+                        stop = True
                         break
                 if not stop:
                     self._copy_tree(os.path.join(src, fname), os.path.join(dst, fname), blacklist)

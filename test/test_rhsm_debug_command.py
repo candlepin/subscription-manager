@@ -36,6 +36,13 @@ def path_join(first, second):
     return os.path.join(first, second)
 
 
+def tar_contains_path(tar_file, path):
+    try:
+        return tar_file.getmember(path) is not None
+    except:
+        return False
+
+
 class TestRhsmDebugCLI(fixture.SubManFixture):
     def test_init(self):
         cli_obj = cli.RhsmDebugCLI()
@@ -69,18 +76,15 @@ class TestCompileCommand(TestCliCommand):
         try:
             tar_path = path_join(path, "rhsm-debug-system-%s.tar.gz" % self.time_code)
             tar_file = tarfile.open(tar_path, "r")
-            self.assertTrue(tar_file.getmember(path_join(self.code, "consumer.json")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "compliance.json")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "entitlements.json")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "pools.json")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "version.json")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "subscriptions.json")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "/etc/rhsm/")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "/var/log/rhsm/")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "/var/lib/rhsm/")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'productCertDir') + '/')) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'entitlementCertDir') + '/')) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'consumerCertDir') + '/')) is not None)
+            files = ["consumer.json", "compliance.json", "entitlements.json",
+                    "pools.json", "version.json", "subscriptions.json"]
+            dirs = [path_join(self.code, p).rstrip('/') for p in ["/etc/rhsm", "/var/log/rhsm/",
+                    "/var/lib/rhsm/", cfg.get('rhsm', 'productCertDir'), cfg.get('rhsm', 'entitlementCertDir'),
+                    cfg.get('rhsm', 'consumerCertDir')]]
+            for fname in files:
+                self.assertTrue(tar_file.getmember(path_join(self.code, fname)) is not None)
+            for each in dirs:
+                self.assertTrue(tar_contains_path(tar_file, each) or tar_contains_path(tar_file, each + '/'))
         finally:
             shutil.rmtree(path)
 
@@ -156,6 +160,7 @@ class TestCompileCommand(TestCliCommand):
         path2 = "./result-dir"
         if not os.path.exists(path1):
             os.makedirs(path1)
+        self.cc._makedir = self._makedir
         try:
             open(path_join(path1, "12346.pem"), 'a').close()
             open(path_join(path1, "7890.pem"), 'a').close()

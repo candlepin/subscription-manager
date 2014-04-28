@@ -18,11 +18,13 @@
 
 import re
 
+
 def any(iterable):
     for element in iterable:
         if element:
             return True
     return False
+
 
 # NOTE: This class compares a Product that could be from a ProductCertificate
 #       or from an Entitlement. Product's from Entitlements may include a
