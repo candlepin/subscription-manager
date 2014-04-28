@@ -266,7 +266,12 @@ class EntCertUpdateAction(object):
 
 
 class EntitlementCertBundlesInstaller(object):
-    """Install a list of entitlement cert bundles."""
+    """Install a list of entitlement cert bundles.
+
+    pre_install() is triggered before any of the ent cert
+    bundles are installed. post_install() is triggered after
+    all of the ent cert bundles are installed.
+    """
 
     def __init__(self, report):
         self.exceptions = []
@@ -280,27 +285,44 @@ class EntitlementCertBundlesInstaller(object):
         self.exceptions = bundle_installer.exceptions
         self.post_install()
 
-    # pre and post
+    # TODO: add subman plugin slot,conduit,hooks
+    def pre_install(self):
+        """Hook called before any ent cert bundles are installed."""
+        log.debug("cert bundles pre_install")
+
     def post_install(self):
-        """Hook triggered after all cert bundles have been installed."""
+        """Hook called after all cert bundles have been installed."""
         for installed in self._get_installed():
             log.debug("cert bundles post_install: %s" % installed)
 
     def get_installed(self):
+        """Return a list of the ent cert bundles that were installed."""
         return self._get_installed()
 
-    # we have a UpdateReport, use it
     def _get_installed(self):
+        """Return the bundles installed based on this impl's EntCertUpdateReport."""
         return self.report.added
 
 
 class EntitlementCertBundleInstaller(object):
+    """Install an entitlement cert bundle (cert/key).
+
+    Split a bundle into an certificate.EntitlementCertificate and a
+    certificate.Key, and persist them.
+
+    pre_install() is called before the cert bundle is installed.
+    post_install() is called after the cert bundle is installed.
+    Note that EntitlementCertBundlesInstaller's pre and post install
+    hooks are before and after installing the full list of ent cert
+    bundles, while this is pre/post each ent cert bundle.
+    """
 
     def __init__(self, report):
         self.exceptions = []
         self.report = report
 
     def install(self, bundle):
+        """Persist an ent cert and it's key after splitting it from the bundle."""
         self.pre_install(bundle)
 
         cert_bundle_writer = Writer()
@@ -314,11 +336,14 @@ class EntitlementCertBundleInstaller(object):
 
         self.post_install(bundle)
 
+    # TODO: add subman plugin, slot, and conduit
     def pre_install(self, bundle):
+        """Hook called before an ent cert bundle is installed."""
         log.debug("Ent cert bundle pre_install")
 
     # should probably be in python-rhsm/certificate
     def build_cert(self, bundle):
+        """Split a cert bundle into a EntitlementCertificate and a Key."""
         keypem = bundle['key']
         crtpem = bundle['cert']
 
@@ -328,12 +353,14 @@ class EntitlementCertBundleInstaller(object):
         return (key, cert)
 
     def install_exception(self, bundle, exception):
+        """Log exceptions and add them to the EntCertUpdateReport."""
         log.exception(exception)
         log.error('Bundle not loaded:\n%s\n%s', bundle, exception)
 
         self.report._exceptions.append(exception)
 
     def post_install(self, bundle):
+        """Hook called after an ent cert bundle is installed."""
         log.debug("ent cert bundle post_install")
 
 
@@ -362,6 +389,7 @@ class EntCertUpdateReport(certlib.ActionReport):
         return self._exceptions
 
     def write(self, s, title, certificates):
+        """Generate a report stanza for a list of certs."""
         indent = '  '
         s.append(title)
         if certificates:
@@ -383,6 +411,7 @@ class EntCertUpdateReport(certlib.ActionReport):
             s.append('%s<NONE>' % indent)
 
     def __str__(self):
+        """__str__ of report. Used in rhsm and rhsmcertd logging."""
         s = []
         s.append(_('Total updates: %d') % self.updates())
         s.append(_('Found (local) serial# %s') % self.valid)
