@@ -13,7 +13,7 @@
 
 Name: subscription-manager
 Version: 1.11.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -404,6 +404,8 @@ fi
 %endif
 
 %changelog
+* Mon Apr 28 2014 ckozak <ckozak@redhat.com> 1.11.3-2
+- updated releasers and spec (ckozak@redhat.com)
 * Thu Apr 10 2014 Alex Wood <awood@redhat.com> 1.11.3-1
 - Cleanup entbranding tests names. (alikins@redhat.com)
 - Test cases for empty,none,not set brand type/name (alikins@redhat.com)
