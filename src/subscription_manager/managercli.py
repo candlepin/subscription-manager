@@ -2364,6 +2364,10 @@ class StatusCommand(CliCommand):
                     print (_("Past dates are not allowed"))
                     sys.exit(1)
                 self.sorter = ComplianceManager(on_date)
+            except SystemExit:
+                # On python 2.4, SystemExit is caught as an "Exception"
+                # 1092594: don't catch SystemExit for past dates in "status --ondate=x"
+                raise
             except Exception:
                 print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
                 sys.exit(1)
