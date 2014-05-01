@@ -13,7 +13,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.11.5
+Version: 1.11.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -425,6 +425,9 @@ fi
 %endif
 
 %changelog
+* Thu May 01 2014 Alex Wood <awood@redhat.com> 1.11.6-1
+- s/certmgr/action_client in spec (alikins@redhat.com)
+
 * Thu May 01 2014 Alex Wood <awood@redhat.com> 1.11.5-1
 - Removing CVS properties since CVS is dead. (awood@redhat.com)
 - CertSorter syncs installed prods before super init. (alikins@redhat.com)
