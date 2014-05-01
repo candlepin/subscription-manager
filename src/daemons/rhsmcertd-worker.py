@@ -27,7 +27,7 @@ from rhsm import connection
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
-from subscription_manager import certmgr
+from subscription_manager import action_client
 from subscription_manager import managerlib
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.i18n_optparse import OptionParser, \
@@ -45,13 +45,18 @@ def main(options, log):
     print _('Updating entitlement certificates & repositories')
 
     try:
-        uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
-                                       key_file=ConsumerIdentity.keypath())
-        mgr = certmgr.CertManager(uep=uep)
-        updates = mgr.update(options.autoheal)
+        if options.autoheal:
+            actionclient = action_client.HealingActionClient()
+        else:
+            actionclient = action_client.ActionCertClient()
 
-        print _('%d updates required') % updates
-        print _('done')
+        update_reports = actionclient.update(options.autoheal)
+
+        for update_report in update_reports:
+            # FIXME: make sure we don't get None reports
+            if update_report:
+                print update_report
+
     except connection.ExpiredIdentityCertException, e:
         log.critical(_("Your identity certificate has expired"))
         raise e

@@ -16,11 +16,15 @@
 import StringIO
 from rhsm import config
 import random
+import mock
+import simplejson as json
 import tempfile
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
-        OverrideStatusCache
+        OverrideStatusCache, ProfileManager, InstalledProductsManager
+from subscription_manager.facts import Facts
+from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
 from subscription_manager.gui.utils import AsyncWidgetUpdater, handle_gui_exception
 from rhsm.certificate2 import Version
@@ -93,17 +97,18 @@ config.CFG.read("test/rhsm.conf")
 from datetime import datetime, timedelta
 
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
-from subscription_manager.certlib import ActionLock
+
 from rhsm.certificate import parse_tags
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
         Product, Content, Order
+from rhsm import profile
 
 
 class MockActionLock(ActionLock):
     PATH = tempfile.mkstemp()[1]
 
 
-class MockStderr:
+class MockStdout(object):
     def __init__(self):
         self.buffer = ""
 
@@ -113,6 +118,8 @@ class MockStderr:
     @staticmethod
     def isatty(buf=None):
         return False
+
+MockStderr = MockStdout
 
 
 class StubProduct(Product):
@@ -464,12 +471,12 @@ class StubBackend:
         pass
 
 
-class StubContentConnection:
-    def __init__(self):
-        pass
+class StubContentConnection(object):
+    proxy_hostname = None
+    proxy_port = None
 
 
-class StubFacts(object):
+class StubFacts(Facts):
     def __init__(self, fact_dict=None, facts_changed=True):
         fact_dict = fact_dict or {}
         self.facts = fact_dict
@@ -486,10 +493,16 @@ class StubFacts(object):
         return self.delta_values
 
     def update_check(self, uep, consumer_uuid, force=False):
-        uep.updateConsumerFacts(consumer_uuid, self.facts)
+        uep.updateConsumer(consumer_uuid, self.facts)
 
     def get_last_update(self):
         return None
+
+    def write_cache(self):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
 
 
 class StubConsumer:
@@ -506,7 +519,7 @@ class StubConsumer:
         return "12341234234"
 
 
-class StubCertLib:
+class StubEntActionInvoker:
     def __init__(self, uep=StubUEP()):
         self.uep = uep
 
@@ -533,6 +546,7 @@ class StubCPProvider(object):
     consumer_auth_cp = StubUEP()
     basic_auth_cp = StubUEP()
     no_auth_cp = StubUEP()
+    content_connection = StubContentConnection()
 
     def set_connection_info(self,
                 host=None,
@@ -548,9 +562,15 @@ class StubCPProvider(object):
         self.basic_auth_cp = StubUEP()
         self.no_auth_cp = StubUEP()
 
+    def set_content_connection_info(self,
+                                    cdn_hostname=None,
+                                    cdn_port=None):
+        pass
+
     def set_user_pass(self, username=None, password=None):
         pass
 
+# tries to write to /var/lib and it reads the rpm db
     def clean(self):
         pass
 
@@ -562,6 +582,9 @@ class StubCPProvider(object):
 
     def get_no_auth_cp(self):
         return self.no_auth_cp
+
+    def get_content_connection(self):
+        return self.content_connection
 
 
 class StubEntitlementStatusCache(EntitlementStatusCache):
@@ -609,3 +632,63 @@ class StubAsyncUpdater(AsyncWidgetUpdater):
             handle_gui_exception(e, message, self.parent_window)
         finally:
             widget_update.finished()
+
+
+class StubInstalledProductsManager(InstalledProductsManager):
+    def write_cache(self):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+
+class StubProfileManager(ProfileManager):
+
+    def write_cache(self):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+    def _get_current_profile(self):
+        mock_packages = [
+                  profile.Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+                  profile.Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
+        self._current_profile = StubRpmProfile(mock_packages=mock_packages)
+        return self._current_profile
+
+    # NOTE: ProfileManager asks the ether for it's profile, so
+    # stub that as well
+    def _get_profile(self, profile_type):
+        return self._get_current_profile()
+
+
+# could be a Mock
+class StubRpmProfile(profile.RPMProfile):
+    def __init__(self, from_file=None, mock_packages=None):
+        self.mock_packages = mock_packages
+        mock_file = self._mock_pkg_profile_file()
+
+        # create an RPMProfile from the mock_packages list
+        super(StubRpmProfile, self).__init__(from_file=mock_file)
+
+    def _get_packages(self):
+        """return a list of profile.Package objects"""
+        if self.mock_packages:
+            return self.mock_packages
+        return []
+
+    def _mock_pkg_profile_file(self):
+        """
+        Turn a list of package objects into an RPMProfile object.
+        """
+
+        packages = self._get_packages()
+        dict_list = []
+        for pkg in packages:
+            dict_list.append(pkg.to_dict())
+
+        mock_file = mock.Mock()
+        mock_file.read = mock.Mock(return_value=json.dumps(dict_list))
+
+        return mock_file

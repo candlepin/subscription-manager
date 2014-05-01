@@ -176,3 +176,11 @@ class Lock:
             self.release()
         except Exception:
             pass
+
+
+class ActionLock(Lock):
+
+    PATH = '/var/run/rhsm/cert.pid'
+
+    def __init__(self):
+        Lock.__init__(self, self.PATH)

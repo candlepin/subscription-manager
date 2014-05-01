@@ -31,7 +31,7 @@ from M2Crypto.SSL import SSLError
 from rhn import rpclib
 
 import rhsm.config
-from rhsm.connection import UEPConnection, RemoteServerException, RestlibException
+from rhsm.connection import RemoteServerException, RestlibException
 from rhsm.utils import ServerUrlParseError
 
 _ = gettext.gettext
@@ -40,9 +40,8 @@ _LIBPATH = "/usr/share/rhsm"
 if _LIBPATH not in sys.path:
     sys.path.append(_LIBPATH)
 
-from subscription_manager.certdirectory import ProductDirectory
-from subscription_manager.certlib import ConsumerIdentity
-from subscription_manager.identity import Identity
+from subscription_manager import injection as inj
+from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.cli import system_exit
 from subscription_manager.i18n_optparse import OptionParser, \
         USAGE, WrappedIndentedHelpFormatter
@@ -239,7 +238,7 @@ class MigrationEngine(object):
                 self.rhsmcfg.set('server', 'proxy_password', self.proxy_pass or '')
             self.rhsmcfg.save()
 
-    def get_candlepin_connection(self, username, password, basic_auth=True):
+    def _get_connection_info(self):
         try:
             if self.options.serverurl is None:
                 hostname = self.rhsmcfg.get('server', 'hostname')
@@ -250,29 +249,44 @@ class MigrationEngine(object):
         except ServerUrlParseError, e:
             system_exit(-1, _("Error parsing server URL: %s") % e.msg)
 
-        args = {'host': hostname, 'ssl_port': int(port), 'handler': prefix}
-
-        if basic_auth:
-            args['username'] = username
-            args['password'] = password
-        else:
-            args['cert_file'] = ConsumerIdentity.certpath()
-            args['key_file'] = ConsumerIdentity.keypath()
+        connection_info = {'host': hostname, 'ssl_port': int(port), 'handler': prefix}
 
         if not self.options.noproxy:
-            args['proxy_hostname'] = self.proxy_host
-            args['proxy_port'] = self.proxy_port and int(self.proxy_port)
-            args['proxy_user'] = self.proxy_user
-            args['proxy_password'] = self.proxy_pass
+            connection_info['proxy_hostname_arg'] = self.proxy_host
+            connection_info['proxy_port_arg'] = self.proxy_port and int(self.proxy_port)
+            connection_info['proxy_user_arg'] = self.proxy_user
+            connection_info['proxy_password_arg'] = self.proxy_pass
 
-        self.cp = UEPConnection(**args)
+        return connection_info
+
+    def get_candlepin_consumer_connection(self):
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+
+        connection_info = self._get_connection_info()
+
+        connection_info['cert_file'] = ConsumerIdentity.certpath()
+        connection_info['key_file'] = ConsumerIdentity.keypath()
+
+        self.cp_provider.set_connection_info(**connection_info)
+
+        return self.cp_provider.get_consumer_auth_cp()
+
+    def get_candlepin_basic_auth_connection(self, username, password):
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+
+        connection_info = self._get_connection_info()
+
+        self.cp_provider.set_user_pass(username, password)
+        self.cp_provider.set_connection_info(**connection_info)
+
+        return self.cp_provider.get_basic_auth_cp()
 
     def check_ok_to_proceed(self, username):
         # check if this machine is already registered to Certicate-based RHN
-        if ConsumerIdentity.existsAndValid():
+        identity = inj.require(inj.IDENTITY)
+        if identity.is_valid():
             print _("\nThis system appears to be already registered to Red Hat Subscription Management.  Exiting.")
-            consumer = ConsumerIdentity.read()
-            system_exit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % consumer.getConsumerId())
+            system_exit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % identity.uuid)
 
         try:
             self.cp.getOwnerList(username)
@@ -505,14 +519,14 @@ class MigrationEngine(object):
         release = self.get_release()
 
         # creates the product directory if it doesn't already exist
-        product_dir = ProductDirectory()
+        product_dir = inj.require(inj.PROD_DIR)
         db_modified = False
         for cert_to_channels in applicable_certs.values():
             # At this point handle_collisions should have verified that len(cert_to_channels) == 1
             cert, channels = cert_to_channels.items()[0]
             source_path = os.path.join("/usr/share/rhsm/product", release, cert)
             truncated_cert_name = cert.split('-')[-1]
-            destination_path = os.path.join(str(product_dir), truncated_cert_name)
+            destination_path = os.path.join(product_dir.path, truncated_cert_name)
             log.info("copying %s to %s ", source_path, destination_path)
             shutil.copy2(source_path, destination_path)
 
@@ -526,15 +540,15 @@ class MigrationEngine(object):
 
         if db_modified:
             self.db.write()
-        print _("\nProduct certificates installed successfully to %s.") % str(product_dir)
+        print _("\nProduct certificates installed successfully to %s.") % product_dir.path
 
     def clean_up(self, subscribed_channels):
         #Hack to address BZ 853233
-        product_dir = ProductDirectory()
-        if os.path.isfile(os.path.join(str(product_dir), "68.pem")) and \
-            os.path.isfile(os.path.join(str(product_dir), "71.pem")):
+        product_dir = inj.require(inj.PROD_DIR)
+        if os.path.isfile(os.path.join(product_dir.path, "68.pem")) and \
+            os.path.isfile(os.path.join(product_dir.path), "71.pem"):
             try:
-                os.remove(os.path.join(str(product_dir), "68.pem"))
+                os.remove(os.path.join(product_dir.path, "68.pem"))
                 self.db.delete("68")
                 self.db.write()
                 log.info("Removed 68.pem due to existence of 71.pem")
@@ -547,7 +561,7 @@ class MigrationEngine(object):
 
         if is_double_mapped and is_single_mapped:
             try:
-                os.remove(os.path.join(str(product_dir), "180.pem"))
+                os.remove(os.path.join(product_dir.path, "180.pem"))
                 self.db.delete("180")
                 self.db.write()
                 log.info("Removed 180.pem")
@@ -634,12 +648,14 @@ class MigrationEngine(object):
 
         result = subprocess.call(cmd)
 
+        identity = inj.require(inj.IDENTITY)
+        identity.reload()
+
         if result != 0:
             system_exit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
         else:
-            consumer = ConsumerIdentity.read()
-            print _("System '%s' successfully registered to Red Hat Subscription Management.\n") % consumer.getConsumerName()
-        return consumer
+            print _("System '%s' successfully registered to Red Hat Subscription Management.\n") % identity.name
+        return identity
 
     def select_service_level(self, org, servicelevel):
         not_supported = _("Error: The service-level command is not supported by "
@@ -692,7 +708,7 @@ class MigrationEngine(object):
 
         # don't show url for katello/CFSE/SAM
         if self.is_hosted():
-            print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.getConsumerId()
+            print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.uuid
 
     def enable_extra_channels(self, subscribed_channels):
         # Check if system was subscribed to extra channels like supplementary, optional, fastrack etc.
@@ -710,8 +726,8 @@ class MigrationEngine(object):
             return
 
         # create and populate the redhat.repo file
-        identity = Identity()
-        repolib.RepoLib(uep=self.cp, identity=identity).update()
+        # use the injection cp_providers consumer auth
+        repolib.RepoActionInvoker().update()
 
         # read in the redhat.repo file
         repofile = repolib.RepoFile()
@@ -741,7 +757,7 @@ class MigrationEngine(object):
 
         self.get_auth()
         self.transfer_http_proxy_settings()
-        self.get_candlepin_connection(self.secreds.username, self.secreds.password)
+        self.cp = self.get_candlepin_basic_auth_connection(self.secreds.username, self.secreds.password)
         self.check_ok_to_proceed(self.secreds.username)
 
         org = self.get_org(self.secreds.username)
@@ -772,7 +788,7 @@ class MigrationEngine(object):
         consumer = self.register(self.secreds, org, environment)
 
         # fetch new Candlepin connection using the identity cert created by register()
-        self.get_candlepin_connection(self.secreds.username, self.secreds.password, basic_auth=False)
+        self.cp = self.get_candlepin_consumer_connection()
         if not self.options.noauto:
             if self.options.servicelevel:
                 servicelevel = self.select_service_level(org, self.options.servicelevel)

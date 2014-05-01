@@ -11,29 +11,33 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
-import unittest
 
 import stubs
+import fixture
 
 from subscription_manager import factlib
+from subscription_manager import injection as inj
 
 
-class TestFactlib(unittest.TestCase):
+class TestFactlib(fixture.SubManFixture):
 
     def setUp(self):
-        self.stub_uep = stubs.StubUEP()
+        super(TestFactlib, self).setUp()
+        #self.stub_uep = stubs.StubUEP()
         self.expected_facts = {'fact1': 'F1', 'fact2': 'F2'}
-        self.fl = factlib.FactLib(lock=stubs.MockActionLock(),
-                uep=self.stub_uep, facts=stubs.StubFacts(self.expected_facts))
+
+        inj.provide(inj.FACTS, stubs.StubFacts(self.expected_facts))
+        self.fl = factlib.FactsActionInvoker()
 
     def test_factlib_updates_when_identity_does_not_exist(self):
-        factlib.ConsumerIdentity = stubs.StubConsumerIdentity
-        count = self.fl.update()
+        self._inject_mock_invalid_consumer()
+        update_report = self.fl.update()
+        count = update_report.updates()
         self.assertEquals(len(self.expected_facts), count)
 
     def test_factlib_updates_when_identity_exists(self):
-        factlib.ConsumerIdentity = ConsumerIdentityExistsStub
 
+        invalid_consumer = self._inject_mock_valid_consumer()
         self.facts_passed_to_server = None
         self.consumer_uuid_passed_to_server = None
 
@@ -41,12 +45,15 @@ class TestFactlib(unittest.TestCase):
             self.facts_passed_to_server = facts
             self.consumer_uuid_passed_to_server = consumer_uuid
 
-        self.stub_uep.updateConsumerFacts = track_facts_update
+        stub_uep = stubs.StubUEP()
+        stub_uep.updateConsumer = track_facts_update
+        self.set_consumer_auth_cp(stub_uep)
 
-        count = self.fl.update()
+        update_report = self.fl.update()
+        count = update_report.updates()
         self.assertEquals(len(self.expected_facts), count)
         self.assertEquals(self.expected_facts, self.facts_passed_to_server)
-        self.assertEquals(stubs.StubConsumerIdentity.CONSUMER_ID, self.consumer_uuid_passed_to_server)
+        self.assertEquals(invalid_consumer.uuid, self.consumer_uuid_passed_to_server)
 
 
 class ConsumerIdentityExistsStub(stubs.StubConsumerIdentity):

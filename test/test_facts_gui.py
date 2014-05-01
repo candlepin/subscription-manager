@@ -3,7 +3,7 @@ from fixture import SubManFixture
 from subscription_manager.injection import provide, IDENTITY
 from stubs import StubUEP, StubFacts
 from subscription_manager.gui import factsgui
-from mock import Mock, NonCallableMock, patch
+from mock import NonCallableMock, patch
 
 
 class FactDialogTests(SubManFixture):
@@ -19,13 +19,6 @@ class FactDialogTests(SubManFixture):
 
         self.expected_facts = expected_facts
         self.stub_facts = StubFacts(expected_facts)
-
-        id_mock = NonCallableMock()
-        id_mock.name = 'system'
-        id_mock.uuid = 'Random UUID'
-        id_mock.exists_and_valid = Mock(return_value=True)
-        id_mock.getConsumerId.return_value = 'Random UUID'
-        provide(IDENTITY, id_mock, singleton=True)
 
     def test_facts_are_displayed(self):
         found_facts = {}

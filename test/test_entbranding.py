@@ -94,7 +94,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
         self.assertFalse(self.mock_install.called)
 
-    def _inj_mock_entdir(self, ents=None):
+    def _inj_mock_ent_dir(self, ents=None):
         ent_list = ents or []
         mock_ent_dir = mock.NonCallableMock(name='MockEntDir')
         mock_ent_dir.list_valid.return_value = ent_list
@@ -113,7 +113,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
 
-        self._inj_mock_entdir([mock_ent_cert])
+        self._inj_mock_ent_dir([mock_ent_cert])
         brand_installer = self.brand_installer_class()
         brand_installer.install()
 
@@ -139,7 +139,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
 
-        self._inj_mock_entdir([mock_ent_cert])
+        self._inj_mock_ent_dir([mock_ent_cert])
         brand_installer = self.brand_installer_class()
         brand_installer.install()
 
@@ -160,7 +160,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
 
-        self._inj_mock_entdir([mock_ent_cert])
+        self._inj_mock_ent_dir([mock_ent_cert])
         brand_installer = self.brand_installer_class()
         brand_installer.install()
 
@@ -180,7 +180,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
-        self._inj_mock_entdir([mock_ent_cert])
+        self._inj_mock_ent_dir([mock_ent_cert])
 
         brand_installer = self.brand_installer_class()
         brand_installer.install()
@@ -198,7 +198,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
-        self._inj_mock_entdir([mock_ent_cert])
+        self._inj_mock_ent_dir([mock_ent_cert])
 
         brand_installer = self.brand_installer_class()
         brand_installer.install()
@@ -214,7 +214,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
-        self._inj_mock_entdir([mock_ent_cert])
+        self._inj_mock_ent_dir([mock_ent_cert])
 
         brand_installer = self.brand_installer_class()
         brand_installer.install()
@@ -232,7 +232,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
-        self._inj_mock_entdir([mock_ent_cert])
+        self._inj_mock_ent_dir([mock_ent_cert])
 
         brand_installer = self.brand_installer_class()
         brand_installer.install()
@@ -251,7 +251,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
-        self._inj_mock_entdir([mock_ent_cert])
+        self._inj_mock_ent_dir([mock_ent_cert])
 
         brand_installer = self.brand_installer_class()
         brand_installer.install()
@@ -269,7 +269,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
 
         mock_ent_cert = mock.Mock(name='MockEntCert')
         mock_ent_cert.products = [stub_product]
-        self._inj_mock_entdir([mock_ent_cert])
+        self._inj_mock_ent_dir([mock_ent_cert])
 
         brand_installer = self.brand_installer_class()
         brand_installer.install()

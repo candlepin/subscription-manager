@@ -16,7 +16,7 @@
 
 import datetime
 import gobject
-import unittest
+import fixture
 
 import mock
 
@@ -40,9 +40,10 @@ class ListPoolsStubUEP(stubs.StubUEP):
         return []
 
 
-class TestAsyncPool(unittest.TestCase):
+class TestAsyncPool(fixture.SubManFixture):
     def setUp(self):
         self.callbacks = []
+        super(TestAsyncPool, self).setUp()
 
     def thread_queue_callback(self, data, error):
         self.callbacks.append((data, error))
@@ -63,11 +64,9 @@ class TestAsyncPool(unittest.TestCase):
         inj.provide(inj.PROD_DIR, stubs.StubProductDirectory())
         inj.provide(inj.ENT_DIR, stubs.StubEntitlementDirectory())
         inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
-        facts_mock = mock.Mock()
-        facts_mock.update_check.return_value = None
 
         self.pool_stash = \
-            managerlib.PoolStash(facts=facts_mock)
+                managerlib.PoolStash(facts=self.stub_facts)
 
         self.ap = async.AsyncPool(self.pool_stash)
 

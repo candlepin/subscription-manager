@@ -9,6 +9,9 @@ from mock import Mock, NonCallableMock, patch
 import stubs
 import subscription_manager.injection as inj
 
+# use instead of the normal pid file based ActionLock
+from threading import RLock
+
 
 class FakeLogger:
     def __init__(self):
@@ -58,8 +61,10 @@ class SubManFixture(unittest.TestCase):
     def setUp(self):
         # By default mock that we are registered. Individual test cases
         # can override if they are testing disconnected scenario.
-        id_mock = Mock()
+        id_mock = NonCallableMock(name='FixtureIdentityMock')
         id_mock.exists_and_valid = Mock(return_value=True)
+        id_mock.uuid = 'fixture_identity_mock_uuid'
+        id_mock.name = 'fixture_identity_mock_name'
 
         # Don't really care about date ranges here:
         self.mock_calc = NonCallableMock()
@@ -71,6 +76,7 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.ENTITLEMENT_STATUS_CACHE, stubs.StubEntitlementStatusCache())
         inj.provide(inj.PROD_STATUS_CACHE, stubs.StubProductStatusCache())
         inj.provide(inj.OVERRIDE_STATUS_CACHE, stubs.StubOverrideStatusCache())
+        inj.provide(inj.PROFILE_MANAGER, stubs.StubProfileManager())
         # By default set up an empty stub entitlement and product dir.
         # Tests need to modify or create their own but nothing should hit
         # the system.
@@ -78,16 +84,29 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.ENT_DIR, self.ent_dir)
         self.prod_dir = stubs.StubProductDirectory()
         inj.provide(inj.PROD_DIR, self.prod_dir)
-        inj.provide(inj.CP_PROVIDER, stubs.StubCPProvider())
+
+        # Installed products manager needs PROD_DIR injected first
+        inj.provide(inj.INSTALLED_PRODUCTS_MANAGER, stubs.StubInstalledProductsManager())
+
+        self.stub_cp_provider = stubs.StubCPProvider()
+        self._release_versions = []
+        self.stub_cp_provider.content_connection.get_versions = self._get_release_versions
+
+        inj.provide(inj.CP_PROVIDER, self.stub_cp_provider)
         inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
 
         # setup and mock the plugin_manager
-        plugin_manager_mock = Mock()
+        plugin_manager_mock = Mock(name='FixturePluginManagerMock')
         inj.provide(inj.PLUGIN_MANAGER, plugin_manager_mock)
-        inj.provide(inj.DBUS_IFACE, Mock())
+        inj.provide(inj.DBUS_IFACE, Mock(name='FixtureDbusIfaceMock'))
 
         pooltype_cache = Mock()
         inj.provide(inj.POOLTYPE_CACHE, pooltype_cache)
+        # don't use file based locks for tests
+        inj.provide(inj.ACTION_LOCK, RLock)
+
+        self.stub_facts = stubs.StubFacts()
+        inj.provide(inj.FACTS, self.stub_facts)
 
         self.dbus_patcher = patch('subscription_manager.managercli.CliCommand._request_validity_check')
         self.dbus_patcher.start()
@@ -95,20 +114,52 @@ class SubManFixture(unittest.TestCase):
     def tearDown(self):
         self.dbus_patcher.stop()
 
+    def set_consumer_auth_cp(self, consumer_auth_cp):
+        cp_provider = inj.require(inj.CP_PROVIDER)
+        cp_provider.consumer_auth_cp = consumer_auth_cp
+
     def get_consumer_cp(self):
         cp_provider = inj.require(inj.CP_PROVIDER)
         consumer_cp = cp_provider.get_consumer_auth_cp()
         return consumer_cp
 
+    # The ContentConnection used for reading release versions from
+    # the cdn. The injected one uses this.
+    def _get_release_versions(self, listing_path):
+        return self._release_versions
+
+    # For changing injection consumer id to one that fails "is_valid"
+    def _inject_mock_valid_consumer(self, uuid=None):
+        """For changing injected consumer identity to one that passes is_valid()
+
+        Returns the injected identity if it need to be examined.
+        """
+        identity = NonCallableMock(name='ValidIdentityMock')
+        identity.uuid = uuid or "VALIDCONSUMERUUID"
+        identity.is_valid = Mock(return_value=True)
+        inj.provide(inj.IDENTITY, identity)
+        return identity
+
+    def _inject_mock_invalid_consumer(self, uuid=None):
+        """For chaning injected consumer identity to one that fails is_valid()
+
+        Returns the injected identity if it need to be examined.
+        """
+        invalid_identity = NonCallableMock(name='InvalidIdentityMock')
+        invalid_identity.is_valid = Mock(return_value=False)
+        invalid_identity.uuid = uuid or "INVALIDCONSUMERUUID"
+        inj.provide(inj.IDENTITY, invalid_identity)
+        return invalid_identity
+
     # use our naming convention here to make it clear
     # this is our extension. Note that python 2.7 adds a
     # assertMultilineEquals that assertEqual of strings does
     # automatically
-    def assert_string_equals(self, first_str, second_str, msg=None):
-        if first_str != second_str:
-            first_lines = first_str.splitlines(True)
-            second_lines = second_str.splitlines(True)
-            delta = difflib.unified_diff(first_lines, second_lines)
+    def assert_string_equals(self, expected_str, actual_str, msg=None):
+        if expected_str != actual_str:
+            expected_lines = expected_str.splitlines(True)
+            actual_lines = actual_str.splitlines(True)
+            delta = difflib.unified_diff(expected_lines, actual_lines, "expected", "actual")
             message = ''.join(delta)
 
             if msg:

@@ -31,10 +31,9 @@ import gtk
 import gtk.glade
 
 import rhsm.config as config
-import rhsm.connection as connection
 
 from subscription_manager.branding import get_branding
-from subscription_manager.certlib import CertLib
+from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager import managerlib
@@ -92,8 +91,8 @@ class Backend(object):
 
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
-        self.certlib = CertLib(uep=self.cp_provider.get_consumer_auth_cp())
-        self.overrides = Overrides(self.cp_provider.get_consumer_auth_cp())
+        self.certlib = EntCertActionInvoker()
+        self.overrides = Overrides()
 
         self.cs = require(CERT_SORTER)
 
@@ -101,7 +100,7 @@ class Backend(object):
     # and a update() for a name
     def update(self):
         self.create_uep()
-        self.content_connection = self._create_content_connection()
+        self.create_content_connection()
 
     def create_uep(self):
         # Re-initialize our connection:
@@ -110,17 +109,17 @@ class Backend(object):
         # These objects hold a reference to the old uep and must be updated:
         # FIXME: We should find a way to update the connection so that the
         #        conncection objects are refreshed rather than recreated.
-        self.certlib = CertLib(uep=self.cp_provider.get_consumer_auth_cp())
-        self.overrides = Overrides(self.cp_provider.get_consumer_auth_cp())
+
+        self.certlib = EntCertActionInvoker()
+        self.overrides = Overrides()
 
     def create_content_connection(self):
-        self.content_connection = self._create_content_connection()
-
-    def _create_content_connection(self):
         (cdn_hostname, cdn_port, cdn_prefix) = parse_baseurl_info(cfg.get('rhsm', 'baseurl'))
 
+        self.cp_provider.set_content_connection_info(cdn_hostname=cdn_hostname,
+                                                     cdn_port=cdn_port)
         # ContentConnection now handles reading the proxy information
-        return connection.ContentConnection(host=cdn_hostname, ssl_port=cdn_port)
+        return self.cp_provider.get_content_connection()
 
 
 class MainWindow(widgets.GladeWidget):

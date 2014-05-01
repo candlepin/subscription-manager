@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 from fixture import SubManFixture
 from subscription_manager.overrides import Overrides, Override
-from subscription_manager.injection import require, CP_PROVIDER
 
 
 class OverrideTests(SubManFixture):
 
     def setUp(self):
         SubManFixture.setUp(self)
-        self.cp = require(CP_PROVIDER).consumer_auth_cp
-        self.overrides = Overrides(self.cp)
+        self.overrides = Overrides()
 
     def test_add_function(self):
         repos = ['x', 'y']

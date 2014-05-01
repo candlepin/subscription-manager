@@ -31,7 +31,10 @@ from subscription_manager.cache import ProfileManager, \
         PoolTypeCache
 import subscription_manager.injection as inj
 from rhsm.profile import Package, RPMProfile
+
 from rhsm.connection import RestlibException, UnauthorizedException
+
+from subscription_manager import injection as inj
 
 
 class _FACT_MATCHER(object):
@@ -163,16 +166,18 @@ class TestProfileManager(unittest.TestCase):
         return mock_profile
 
 
-class TestInstalledProductsCache(unittest.TestCase):
+class TestInstalledProductsCache(SubManFixture):
 
     def setUp(self):
+        super(TestInstalledProductsCache, self).setUp()
         self.prod_dir = StubCertificateDirectory([
             StubProductCertificate(StubProduct('a-product', name="Product A")),
             StubProductCertificate(StubProduct('b-product', name="Product B")),
             StubProductCertificate(StubProduct('c-product', name="Product C")),
         ])
 
-        self.mgr = InstalledProductsManager(self.prod_dir)
+        inj.provide(inj.PROD_DIR, self.prod_dir)
+        self.mgr = InstalledProductsManager()
 
     def test_cert_parsing(self):
         self.assertEqual(3, len(self.mgr.installed.keys()))

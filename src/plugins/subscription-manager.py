@@ -22,7 +22,7 @@ from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 sys.path.append('/usr/share/rhsm')
 
 from subscription_manager import injection as inj
-from subscription_manager.repolib import RepoLib
+from subscription_manager.repolib import RepoActionInvoker
 from rhsm import connection
 from rhsm import config
 
@@ -53,14 +53,14 @@ def update(conduit, cache_only):
     conduit.info(3, 'Updating Subscription Management repositories.')
 
     # XXX: Importing inline as you must be root to read the config file
-    from subscription_manager.certlib import ConsumerIdentity
+    from subscription_manager.identity import ConsumerIdentity
 
     cert_file = ConsumerIdentity.certpath()
     key_file = ConsumerIdentity.keypath()
 
-    try:
-        ConsumerIdentity.read().getConsumerId()
-    except Exception:
+    identity = inj.require(inj.IDENTITY)
+
+    if not identity.is_valid():
         conduit.info(3, "Unable to read consumer identity")
         return
 
@@ -72,15 +72,15 @@ def update(conduit, cache_only):
         conduit.info(2, "Unable to connect to Subscription Management Service")
         return
 
-    rl = RepoLib(uep=uep, cache_only=cache_only)
+    rl = RepoActionInvoker(uep=uep, cache_only=cache_only)
     rl.update()
 
 
 def warnExpired(conduit):
     """ display warning for expired entitlements """
-    entdir = inj.require(inj.ENT_DIR)
+    ent_dir = inj.require(inj.ENT_DIR)
     products = set()
-    for cert in entdir.list_expired():
+    for cert in ent_dir.list_expired():
         for p in cert.products:
             m = '  - %s' % p.name
             products.add(m)
@@ -92,7 +92,6 @@ def warnExpired(conduit):
 def warnOrGiveUsageMessage(conduit):
 
     # XXX: Importing inline as you must be root to read the config file
-    from subscription_manager.certlib import ConsumerIdentity
 
     """ either output a warning, or a usage message """
     msg = ""
@@ -100,13 +99,14 @@ def warnOrGiveUsageMessage(conduit):
     if os.getuid() != 0:
         return
     try:
-        try:
-            ConsumerIdentity.read().getConsumerId()
-            entdir = inj.require(inj.ENT_DIR)
-            if len(entdir.list_valid()) == 0:
-                msg = no_subs_warning
-        except:
+        identity = inj.require(inj.IDENTITY)
+        if not identity.is_valid():
             msg = not_registered_warning
+
+        ent_dir = inj.require(inj.ENT_DIR)
+        if len(ent_dir.list_valid()) == 0:
+            msg = no_subs_warning
+
     finally:
         if msg:
             conduit.info(2, msg)

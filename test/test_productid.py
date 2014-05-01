@@ -182,21 +182,21 @@ class TestProductDatabase(unittest.TestCase):
         self.assertTrue("repo" in repo)
 
     def test_find_repos_old_format(self):
-        self.pdb.content = {'product': 'repo'}
+        self.pdb.populate_content({'product': 'repo'})
         repo = self.pdb.find_repos("product")
         self.assertTrue(isinstance(repo, types.ListType))
         self.assertTrue("repo" in repo)
 
     def test_add_old_format(self):
-        self.pdb.content = {'product': 'repo'}
+        self.pdb.populate_content({'product': 'repo'})
         self.pdb.add('product', 'repo2')
         repo = self.pdb.find_repos("product")
         self.assertTrue("repo" in repo)
         self.assertTrue("repo2" in repo)
 
     def test_find_repos_mixed_old_and_new_format(self):
-        self.pdb.content = {'product1': 'repo1',
-                            'product2': ['repo2']}
+        self.pdb.populate_content({'product1': 'repo1',
+                                   'product2': ['repo2']})
         repo1 = self.pdb.find_repos("product1")
         self.assertTrue(isinstance(repo1, types.ListType))
         self.assertTrue("repo1" in repo1)
@@ -205,9 +205,9 @@ class TestProductDatabase(unittest.TestCase):
         self.assertTrue("repo2" in repo2)
 
     def test_add_mixed_old_and_new_format(self):
-        self.pdb.content = {'product1': 'product1-repo1',
-                            'product2': ['product2-repo1'],
-                            'product3': 'product3-repo1'}
+        self.pdb.populate_content({'product1': 'product1-repo1',
+                                   'product2': ['product2-repo1'],
+                                   'product3': 'product3-repo1'})
         self.pdb.add('product2', 'product2-repo2')
         self.pdb.add('product1', 'product1-repo2')
         product1_repos = self.pdb.find_repos('product1')

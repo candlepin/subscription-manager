@@ -25,7 +25,7 @@ from M2Crypto.SSL import SSLError
 
 import rhsm.config
 
-from subscription_manager.facts import Facts
+from subscription_manager import injection as inj
 from subscription_manager import listing
 from subscription_manager import rhelproduct
 
@@ -36,24 +36,22 @@ log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
 
 
-class ReleaseBackend(object):
+class ContentConnectionProvider(object):
+    def __init__(self):
+        pass
 
+
+class ReleaseBackend(object):
     # all the proxy info too?
-    def __init__(self, ent_dir=None, prod_dir=None,
-                 content_connection=None, facts=None, uep=None):
-        self.entitlement_dir = ent_dir
-        self.product_dir = prod_dir
-        self.content_connection = content_connection
-        self.facts = facts
-        self.uep = uep
+    # FIXME: this stuff can be injected
+    def __init__(self):
+        self.entitlement_dir = inj.require(inj.ENT_DIR)
+        self.product_dir = inj.require(inj.PROD_DIR)
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.content_connection = self.cp_provider.get_content_connection()
 
     def get_releases(self):
         # cdn base url
-
-        # let us pass in a facts object for testing
-        if not self.facts:
-            self.facts = Facts(ent_dir=self.entitlement_dir,
-                               prod_dir=self.product_dir)
 
         # find the rhel product
         release_product = None

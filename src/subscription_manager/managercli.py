@@ -34,21 +34,19 @@ import rhsm.connection as connection
 from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager.branding import get_branding
-from subscription_manager.cache import InstalledProductsManager, ProfileManager
-from subscription_manager.certlib import CertLib, ConsumerIdentity
-from subscription_manager.certmgr import CertManager
+from subscription_manager.entcertlib import EntCertActionInvoker
+from subscription_manager.action_client import ActionClient, UnregisterActionClient
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
 from subscription_manager import rhelentbranding
-from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import ClassicCheck
 import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import valid_quantity
 from subscription_manager.release import ReleaseBackend
-from subscription_manager.repolib import RepoLib, RepoFile
+from subscription_manager.repolib import RepoActionInvoker, RepoFile
 from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
@@ -237,6 +235,8 @@ class CliCommand(AbstractCLICommand):
 
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
 
+        self.identity = inj.require(inj.IDENTITY)
+
     def _request_validity_check(self):
         # Make sure the sorter is fresh (low footprint if it is)
         inj.require(inj.CERT_SORTER).force_cert_check()
@@ -261,13 +261,18 @@ class CliCommand(AbstractCLICommand):
     def _do_command(self):
         pass
 
+    def _sys_exit(self, exit_code):
+        sys.exit(exit_code)
+
     def assert_should_be_registered(self):
         if not self.is_registered():
             print(NOT_REGISTERED)
-            sys.exit(-1)
+            self._sys_exit(-1)
 
     def is_registered(self):
-        return ConsumerIdentity.existsAndValid()
+        self.identity = inj.require(inj.IDENTITY)
+        log.info("self.identity: %s" % self.identity)
+        return self.identity.is_valid()
 
     def persist_server_options(self):
         """
@@ -319,7 +324,7 @@ class CliCommand(AbstractCLICommand):
         if self.args:
             for arg in self.args:
                 print _("cannot parse argument: %s") % arg
-            sys.exit(-1)
+            self._sys_exit(-1)
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             cfg.set("server", "insecure", "1")
@@ -343,10 +348,10 @@ class CliCommand(AbstractCLICommand):
                             (self.server_hostname,
                              self.server_port,
                              self.server_prefix)
-                    sys.exit(-1)
+                    self._sys_exit(-1)
             except MissingCaCertException:
                 print _("Error: CA certificate for subscription service has not been installed.")
-                sys.exit(-1)
+                self._sys_exit(-1)
 
             cfg.set("server", "hostname", self.server_hostname)
             cfg.set("server", "port", self.server_port)
@@ -419,7 +424,7 @@ class CliCommand(AbstractCLICommand):
             self.no_auth_cp = self.cp_provider.get_no_auth_cp()
             self.log_server_version()
 
-            self.certlib = CertLib(uep=self.cp)
+            self.entcertlib = EntCertActionInvoker()
 
         else:
             self.cp = None
@@ -541,9 +546,9 @@ class RefreshCommand(CliCommand):
         super(RefreshCommand, self).__init__("refresh", shortdesc, True)
 
     def _do_command(self):
-        check_registration()
+        self.assert_should_be_registered()
         try:
-            self.certlib.update()
+            self.entcertlib.update()
             log.info("Refreshed local data")
             print (_("All local data refreshed"))
         except connection.RestlibException, re:
@@ -578,9 +583,12 @@ class IdentityCommand(UserPassCommand):
             sys.exit(-1)
 
     def _do_command(self):
+        # get current consumer identity
+        identity = inj.require(inj.IDENTITY)
+
         # check for Classic before doing anything else
         if ClassicCheck().is_registered_with_classic():
-            if ConsumerIdentity.existsAndValid():
+            if identity.is_valid():
                 print _("server type: %s") % get_branding().REGISTERED_TO_BOTH_SUMMARY
             else:
                 # no need to continue if user is only registered to Classic
@@ -588,10 +596,9 @@ class IdentityCommand(UserPassCommand):
                 return
 
         try:
-            consumer = check_registration()
             self._validate_options()
-            consumerid = consumer['uuid']
-            consumer_name = consumer['consumer_name']
+            consumerid = self.identity.uuid
+            consumer_name = self.identity.name
             if not self.options.regenerate:
                 owner = self.cp.getOwner(consumerid)
                 ownername = owner['displayName']
@@ -617,6 +624,11 @@ class IdentityCommand(UserPassCommand):
                     self.cp = self.cp_provider.get_basic_auth_cp()
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
+
+                # do this in persist_consumer_cert? or some other
+                # high level, "I just registered" thing
+                self.identity.reload()
+
                 print _("Identity certificate has been regenerated.")
 
                 log.info("Successfully generated a new identity from server.")
@@ -752,7 +764,6 @@ class AutohealCommand(CliCommand):
 class ServiceLevelCommand(OrgCommand):
 
     def __init__(self):
-        self.consumerIdentity = ConsumerIdentity
 
         shortdesc = _("Manage service levels for this system")
         self._org_help_text = \
@@ -771,13 +782,14 @@ class ServiceLevelCommand(OrgCommand):
                                action='store_true',
                                help=_("unset the service level for this system"))
 
+        self.identity = inj.require(inj.IDENTITY)
+
     def _set_service_level(self, service_level):
-        consumer_uuid = self.consumerIdentity.read().getConsumerId()
-        consumer = self.cp.getConsumer(consumer_uuid)
+        consumer = self.cp.getConsumer(self.identity.uuid)
         if 'serviceLevel' not in consumer:
             system_exit(-1, _("Error: The service-level command is not supported "
                              "by the server."))
-        self.cp.updateConsumer(consumer_uuid, service_level=service_level)
+        self.cp.updateConsumer(self.identity.uuid, service_level=service_level)
 
     def _validate_options(self):
 
@@ -797,7 +809,7 @@ class ServiceLevelCommand(OrgCommand):
             print(_("Error: --org is only supported with the --list option"))
             sys.exit(-1)
 
-        if not self.consumerIdentity.existsAndValid():
+        if not self.is_registered():
             if self.options.list:
                 if not (self.options.username and self.options.password):
                     print(_("Error: you must register or specify --username and --password to list service levels"))
@@ -850,8 +862,7 @@ class ServiceLevelCommand(OrgCommand):
         print _("Service level preference has been unset")
 
     def show_service_level(self):
-        consumer_uuid = self.consumerIdentity.read().getConsumerId()
-        consumer = self.cp.getConsumer(consumer_uuid)
+        consumer = self.cp.getConsumer(self.identity.uuid)
         if 'serviceLevel' not in consumer:
             system_exit(-1, _("Error: The service-level command is not supported by "
                              "the server."))
@@ -867,9 +878,8 @@ class ServiceLevelCommand(OrgCommand):
 
         org_key = self.options.org
         if not org_key:
-            if self.consumerIdentity.existsAndValid():
-                consumer_uuid = self.consumerIdentity.read().getConsumerId()
-                org_key = self.cp.getOwner(consumer_uuid)['key']
+            if self.is_registered():
+                org_key = self.cp.getOwner(self.identity.uuid)['key']
             else:
                 org_key = self.org
 
@@ -896,7 +906,6 @@ class ServiceLevelCommand(OrgCommand):
 class RegisterCommand(UserPassCommand):
     def __init__(self):
         shortdesc = get_branding().CLI_REGISTER
-        self.consumerIdentity = ConsumerIdentity
 
         super(RegisterCommand, self).__init__("register", shortdesc, True)
 
@@ -926,12 +935,9 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("system preference used when subscribing automatically, requires --auto-attach"))
 
-        self.facts = Facts(ent_dir=self.entitlement_dir,
-                           prod_dir=self.product_dir)
-
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
-        if self.consumerIdentity.exists() and not self.options.force:
+        if self.is_registered() and not self.options.force:
             print(_("This system is already registered. Use --force to override"))
             sys.exit(1)
         elif (self.options.consumername == ''):
@@ -981,28 +987,29 @@ class RegisterCommand(UserPassCommand):
         self._validate_options()
 
         # gather installed products info
-        self.installed_mgr = InstalledProductsManager()
+        self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
 
         # Set consumer's name to hostname by default:
         consumername = self.options.consumername
         if consumername is None:
             consumername = socket.gethostname()
 
-        if ConsumerIdentity.exists() and self.options.force:
+        if self.is_registered() and self.options.force:
             # First let's try to un-register previous consumer. This may fail
             # if consumer has already been deleted so we will continue even if
             # errors are encountered.
-            if ConsumerIdentity.existsAndValid():
-                old_uuid = ConsumerIdentity.read().getConsumerId()
-                try:
-                    managerlib.unregister(self.cp, old_uuid)
-                    self.entitlement_dir.__init__()
-                    self.product_dir.__init__()
-                    log.info("--force specified, unregistered old consumer: %s" % old_uuid)
-                    print(_("The system with UUID %s has been unregistered") % old_uuid)
-                except Exception, e:
-                    log.error("Unable to unregister consumer: %s" % old_uuid)
-                    log.exception(e)
+            old_uuid = self.identity.uuid
+            try:
+                managerlib.unregister(self.cp, old_uuid)
+                self.entitlement_dir.__init__()
+                self.product_dir.__init__()
+                log.info("--force specified, unregistered old consumer: %s" % old_uuid)
+                print(_("The system with UUID %s has been unregistered") % old_uuid)
+            except Exception, e:
+                log.error("Unable to unregister consumer: %s" % old_uuid)
+                log.exception(e)
+
+        facts = inj.require(inj.FACTS)
 
         # Proceed with new registration:
         try:
@@ -1012,7 +1019,7 @@ class RegisterCommand(UserPassCommand):
             else:
                 admin_cp = self.cp_provider.get_no_auth_cp()
 
-            facts_dic = self.facts.get_facts()
+            facts_dic = facts.get_facts()
 
             self.plugin_manager.run("pre_register_consumer", name=consumername,
                                     facts=facts_dic)
@@ -1054,24 +1061,25 @@ class RegisterCommand(UserPassCommand):
         self.cp = self.cp_provider.get_consumer_auth_cp()
 
         # Reload the consumer identity:
-        self.identity = inj.FEATURES.require(inj.IDENTITY)
         self.identity.reload()
 
         # log the version of the server we registered to
         self.log_server_version()
 
+        # FIXME: can these cases be replaced with invoking
+        # FactsLib (or a FactsManager?)
         # Must update facts to clear out the old ones:
         if self.options.consumerid:
             log.info("Updating facts")
-            self.facts.update_check(self.cp, consumer['uuid'], force=True)
+            facts.update_check(self.cp, consumer['uuid'], force=True)
 
-        profile_mgr = ProfileManager()
+        profile_mgr = inj.require(inj.PROFILE_MANAGER)
         # 767265: always force an upload of the packages when registering
         profile_mgr.update_check(self.cp, consumer['uuid'], True)
 
         # Facts and installed products went out with the registration request,
         # manually write caches to disk:
-        self.facts.write_cache()
+        facts.write_cache()
         self.installed_mgr.update_check(self.cp, consumer['uuid'])
 
         if self.options.release:
@@ -1091,8 +1099,8 @@ class RegisterCommand(UserPassCommand):
 
             log.info("System registered, updating entitlements if needed")
             # update certs, repos, and caches.
-            # FIXME: aside from the overhead, should this be certmgr.update?
-            self.certlib.update()
+            # FIXME: aside from the overhead, should this be cert_action_client.update?
+            self.entcertlib.update()
 
             # update with latest cert info
             self.sorter = inj.require(inj.CERT_SORTER)
@@ -1157,15 +1165,17 @@ class UnRegisterCommand(CliCommand):
         pass
 
     def _do_command(self):
-        if not ConsumerIdentity.exists():
+        if not self.is_registered():
             print(_("This system is currently not registered."))
             sys.exit(1)
 
         try:
-            consumer = check_registration()['uuid']
-            managerlib.unregister(self.cp, consumer)
+            managerlib.unregister(self.cp, self.identity.uuid)
         except Exception, e:
             handle_exception("Unregister failed", e)
+
+        # managerlib.unregister reloads the now None provided identity
+        # so cp_provider provided auth_cp's should fail, like the below
 
         #this block is simply to ensure that the yum repos got updated. If it fails,
         #there is no issue since it will most likely be cleaned up elsewhere (most
@@ -1173,8 +1183,8 @@ class UnRegisterCommand(CliCommand):
         try:
             # there is no consumer cert at this point, a uep object
             # is not useful
-            certmgr = CertManager(uep=None)
-            certmgr.update()
+            cleanup_certmgr = UnregisterActionClient()
+            cleanup_certmgr.update()
         except Exception, e:
             pass
 
@@ -1209,19 +1219,20 @@ class RedeemCommand(CliCommand):
         """
         Executes the command.
         """
-        consumer_uuid = check_registration()['uuid']
+        self.assert_should_be_registered()
+
         self._validate_options()
 
         try:
+            # FIXME: why just facts and package profile update here?
             # update facts first, if we need to
-            facts = Facts(ent_dir=self.entitlement_dir,
-                          prod_dir=self.product_dir)
-            facts.update_check(self.cp, consumer_uuid)
+            facts = inj.require(inj.FACTS)
+            facts.update_check(self.cp, self.identity.uuid)
 
-            profile_mgr = ProfileManager()
-            profile_mgr.update_check(self.cp, consumer_uuid)
+            profile_mgr = inj.require(inj.PROFILE_MANAGER)
+            profile_mgr.update_check(self.cp, self.identity.uuid)
 
-            self.cp.activateMachine(consumer_uuid, self.options.email, self.options.locale)
+            self.cp.activateMachine(self.identity.uuid, self.options.email, self.options.locale)
 
         except connection.RestlibException, e:
             #candlepin throws an exception during activateMachine, even for
@@ -1255,7 +1266,7 @@ class ReleaseCommand(CliCommand):
 
     def _get_consumer_release(self):
         err_msg = _("Error: The 'release' command is not supported by the server.")
-        consumer = self.cp.getConsumer(self.consumer['uuid'])
+        consumer = self.cp.getConsumer(self.identity.uuid)
         if 'releaseVer' not in consumer:
             system_exit(-1, err_msg)
         return consumer['releaseVer']['releaseVer']
@@ -1268,25 +1279,20 @@ class ReleaseCommand(CliCommand):
             print _("Release not set")
 
     def _do_command(self):
+
         cdn_url = cfg.get('rhsm', 'baseurl')
         # note: parse_baseurl_info will populate with defaults if not found
         (cdn_hostname, cdn_port, cdn_prefix) = parse_baseurl_info(cdn_url)
 
-        self.cc = connection.ContentConnection(host=cdn_hostname,
-                                               ssl_port=cdn_port,
-                                               proxy_hostname=self.proxy_hostname,
-                                               proxy_port=self.proxy_port,
-                                               proxy_user=self.proxy_user,
-                                               proxy_password=self.proxy_password)
+        # Base CliCommand has already setup proxy info etc
+        self.cp_provider.set_content_connection_info(cdn_hostname=cdn_hostname,
+                                                     cdn_port=cdn_port)
+        self.release_backend = ReleaseBackend()
 
-        self.release_backend = ReleaseBackend(ent_dir=self.entitlement_dir,
-                                              prod_dir=self.product_dir,
-                                              content_connection=self.cc,
-                                              uep=self.cp)
+        self.assert_should_be_registered()
 
-        self.consumer = check_registration()
         if self.options.unset:
-            self.cp.updateConsumer(self.consumer['uuid'],
+            self.cp.updateConsumer(self.identity.uuid,
                         release="")
             print _("Release preference has been unset")
         elif self.options.release is not None:
@@ -1294,7 +1300,7 @@ class ReleaseCommand(CliCommand):
             self._get_consumer_release()
             releases = self.release_backend.get_releases()
             if self.options.release in releases:
-                self.cp.updateConsumer(self.consumer['uuid'],
+                self.cp.updateConsumer(self.identity.uuid,
                         release=self.options.release)
             else:
                 system_exit(-1, _("No releases match '%s'.  "
@@ -1373,11 +1379,11 @@ class AttachCommand(CliCommand):
         """
         Executes the command.
         """
-        consumer_uuid = check_registration()['uuid']
+        self.assert_should_be_registered()
         self._validate_options()
         try:
-            certmgr = CertManager(uep=self.cp)
-            certmgr.update()
+            cert_action_client = ActionClient()
+            cert_action_client.update()
             return_code = 0
             cert_update = True
             if self.options.pool:
@@ -1390,11 +1396,11 @@ class AttachCommand(CliCommand):
                         # If quantity is None, server will assume 1. pre_subscribe will
                         # report the same.
                         self.plugin_manager.run("pre_subscribe",
-                                                consumer_uuid=consumer_uuid,
+                                                consumer_uuid=self.identity.uuid,
                                                 pool_id=pool,
                                                 quantity=self.options.quantity)
-                        ents = self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
-                        self.plugin_manager.run("post_subscribe", consumer_uuid=consumer_uuid, entitlement_data=ents)
+                        ents = self.cp.bindByEntitlementPool(self.identity.uuid, pool, self.options.quantity)
+                        self.plugin_manager.run("post_subscribe", consumer_uuid=self.identity.uuid, entitlement_data=ents)
                         # Usually just one, but may as well be safe:
                         for ent in ents:
                             pool_json = ent['pool']
@@ -1431,27 +1437,27 @@ class AttachCommand(CliCommand):
                     # If service level specified, make an additional request to
                     # verify service levels are supported on the server:
                     if self.options.service_level:
-                        consumer = self.cp.getConsumer(consumer_uuid)
+                        consumer = self.cp.getConsumer(self.identity.uuid)
                         if 'serviceLevel' not in consumer:
                             system_exit(-1, _("Error: The --servicelevel option is not "
                                              "supported by the server. Did not "
                                              "complete your request."))
-                    autosubscribe(self.cp, consumer_uuid,
+                    autosubscribe(self.cp, self.identity.uuid,
                                   service_level=self.options.service_level)
-            result = None
+            report = None
             if cert_update:
-                result = self.certlib.update()
+                report = self.entcertlib.update()
 
-            if result and result[1]:
+            if report and report.exceptions():
                 print 'Entitlement Certificate(s) update failed due to the following reasons:'
-                for e in result[1]:
+                for e in report.exceptions():
                     print '\t-', str(e)
             elif self.options.auto:
                 if not products_installed:
                     return_code = 1
                 else:
                     self.sorter.force_cert_check()
-                    # run this after certlib update, so we have the new entitlements
+                    # run this after entcertlib update, so we have the new entitlements
                     return_code = show_autosubscribe_output(self.cp)
 
         except Exception, e:
@@ -1518,11 +1524,11 @@ class RemoveCommand(CliCommand):
         """
         self._validate_options()
         return_code = 0
-        if ConsumerIdentity.exists():
-            consumer = ConsumerIdentity.read().getConsumerId()
+        if self.is_registered():
+            identity = inj.require(inj.IDENTITY)
             try:
                 if self.options.all:
-                    total = self.cp.unbindAll(consumer)
+                    total = self.cp.unbindAll(identity.uuid)
                     # total will be None on older Candlepins that don't
                     # support returning the number of subscriptions unsubscribed from
                     if total is None:
@@ -1537,7 +1543,7 @@ class RemoveCommand(CliCommand):
                     failure = []
                     for serial in self.options.serials:
                         try:
-                            self.cp.unbindBySerial(consumer, serial)
+                            self.cp.unbindBySerial(identity.consumer, serial)
                             success.append(serial)
                         except connection.RestlibException, re:
                             if re.code == 410:
@@ -1554,7 +1560,7 @@ class RemoveCommand(CliCommand):
                             print "   %s" % fail
                     if not success:
                         return_code = 1
-                self.certlib.update()
+                self.entcertlib.update()
             except connection.RestlibException, re:
                 log.error(re)
                 system_exit(-1, re.msg)
@@ -1624,9 +1630,10 @@ class FactsCommand(CliCommand):
 
     def _do_command(self):
         self._validate_options()
+
+        identity = inj.require(inj.IDENTITY)
         if self.options.list:
-            facts = Facts(ent_dir=self.entitlement_dir,
-                          prod_dir=self.product_dir)
+            facts = inj.require(inj.FACTS)
             fact_dict = facts.get_facts()
             fact_keys = fact_dict.keys()
             fact_keys.sort()
@@ -1637,11 +1644,9 @@ class FactsCommand(CliCommand):
                 print "%s: %s" % (key, value)
 
         if self.options.update:
-            facts = Facts(ent_dir=self.entitlement_dir,
-                          prod_dir=self.product_dir)
-            consumer = check_registration()['uuid']
+            facts = inj.require(inj.FACTS)
             try:
-                facts.update_check(self.cp, consumer, force=True)
+                facts.update_check(self.cp, identity.uuid, force=True)
             except connection.RestlibException, re:
                 log.exception(re)
                 system_exit(-1, re.msg)
@@ -1790,13 +1795,13 @@ class ReposCommand(CliCommand):
             return rc
 
         # Pull down any new entitlements and refresh the entitlements directory
-        certmgr = CertManager(uep=self.cp)
-        certmgr.update()
+        cert_action_client = ActionClient()
+        cert_action_client.update()
         self._request_validity_check()
 
         self.use_overrides = self.cp.supports_resource('content_overrides')
 
-        rl = RepoLib(uep=self.cp)
+        rl = RepoActionInvoker()
         repos = rl.get_repos()
 
         if self.options.enable:
@@ -1839,10 +1844,9 @@ class ReposCommand(CliCommand):
         if repos_modified:
             # The cache should be primed at this point by the repolib.get_repos()
             cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-            if ConsumerIdentity.existsAndValid() and self.use_overrides:
+            if self.is_registered() and self.use_overrides:
                 overrides = [{'contentLabel': repo.id, 'name': 'enabled', 'value': status} for repo in repos_modified]
-                consumer = check_registration()['uuid']
-                results = self.cp.setContentOverrides(consumer, overrides)
+                results = self.cp.setContentOverrides(self.identity.uuid, overrides)
 
                 cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
 
@@ -2002,9 +2006,6 @@ class ListCommand(CliCommand):
         self.parser.add_option("--match-installed", action="store_true",
                                help=_("shows only subscriptions matching products that are currently installed; only used with --available"))
 
-        self.facts = Facts(ent_dir=self.entitlement_dir,
-                          prod_dir=self.product_dir)
-
     def _validate_options(self):
         if (self.options.all and not self.options.available):
             print _("Error: --all is only applicable with --available")
@@ -2048,7 +2049,7 @@ class ListCommand(CliCommand):
                                 status, product[5], product[6], product[7]) + "\n"
 
         if self.options.available:
-            check_registration()
+            self.assert_should_be_registered()
             on_date = None
             if self.options.on_date:
                 try:
@@ -2059,11 +2060,10 @@ class ListCommand(CliCommand):
                     print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
                     sys.exit(1)
 
-            epools = managerlib.get_available_entitlements(facts=self.facts,
+            facts = inj.require(inj.FACTS)
+            epools = managerlib.get_available_entitlements(facts=facts,
                                                            get_all=self.options.all,
-                                                           active_on=on_date,
-                                                           overlapping=self.options.no_overlap,
-                                                           uninstalled=self.options.match_installed)
+                                                           active_on=on_date)
 
             # Filter certs by service level, if specified.
             # Allowing "" here.
@@ -2248,21 +2248,21 @@ class OverrideCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
         # Abort if not registered
-        consumer = check_registration()['uuid']
+        self.assert_should_be_registered()
 
         if not self.cp.supports_resource('content_overrides'):
             system_exit(-1, _("Error: The 'repo-override' command is not supported by the server."))
 
         # update entitlement certificates if necessary. If we do have new entitlements
-        # CertLib.update() will call RepoLib.update().
-        CertLib(uep=self.cp).update()
+        # CertLib.update() will call RepoActionInvoker.update().
+        self.entcertlib.update()
         # make sure the EntitlementDirectory singleton is refreshed
         self._request_validity_check()
 
-        overrides = Overrides(self.cp)
+        overrides = Overrides()
 
         if self.options.list:
-            results = overrides.get_overrides(consumer)
+            results = overrides.get_overrides(self.identity.uuid)
             if results:
                 self._list(results, self.options.repos)
             else:
@@ -2272,9 +2272,8 @@ class OverrideCommand(CliCommand):
         if self.options.additions:
             repo_ids = [repo.id for repo in overrides.repo_lib.get_repos(apply_overrides=False)]
             to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
-
             try:
-                results = overrides.add_overrides(consumer, to_add)
+                results = overrides.add_overrides(self.identity.uuid, to_add)
             except connection.RestlibException, ex:
                 if ex.code == 400:
                     # black listed overrides specified.
@@ -2291,9 +2290,9 @@ class OverrideCommand(CliCommand):
 
         if self.options.removals:
             to_remove = [Override(repo, item) for repo in self.options.repos for item in self.options.removals]
-            results = overrides.remove_overrides(consumer, to_remove)
+            results = overrides.remove_overrides(self.identity.uuid, to_remove)
         if self.options.remove_all:
-            results = overrides.remove_all_overrides(consumer, self.options.repos)
+            results = overrides.remove_all_overrides(self.identity.uuid, self.options.repos)
 
         # Update the cache and refresh the repo file.
         overrides.update(results)
@@ -2402,17 +2401,6 @@ class ManagerCLI(CLI):
         managerlib.check_identity_cert_perms()
         return CLI.main(self)
 
-
-def check_registration():
-    # TODO: replace consumer_info and ConsumerIdentity usage with Identity
-    if not ConsumerIdentity.existsAndValid():
-        print(NOT_REGISTERED)
-        sys.exit(-1)
-    consumer = ConsumerIdentity.read()
-    consumer_info = {"consumer_name": consumer.getConsumerName(),
-                     "uuid": consumer.getConsumerId()}
-
-    return consumer_info
 
 if __name__ == "__main__":
     ManagerCLI().main()

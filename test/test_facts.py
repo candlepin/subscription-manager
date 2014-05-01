@@ -126,6 +126,8 @@ def stub_get_facts():
 
 class TestFacts(fixture.SubManFixture):
     def setUp(self):
+        super(TestFacts, self).setUp()
+
         self.fact_cache_dir = tempfile.mkdtemp()
         fact_cache = self.fact_cache_dir + "/facts.json"
         fd = open(fact_cache, "w")
@@ -136,6 +138,7 @@ class TestFacts(fixture.SubManFixture):
         self.f.CACHE_FILE = fact_cache
 
     def tearDown(self):
+        super(TestFacts, self).tearDown()
         shutil.rmtree(self.fact_cache_dir)
 
     def test_facts_read(self):
