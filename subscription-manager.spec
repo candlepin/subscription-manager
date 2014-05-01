@@ -223,7 +223,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/cache.py*
 %{_datadir}/rhsm/subscription_manager/certdirectory.py*
 %{_datadir}/rhsm/subscription_manager/certlib.py*
-%{_datadir}/rhsm/subscription_manager/certmgr.py*
+%{_datadir}/rhsm/subscription_manager/action_client.py*
 %{_datadir}/rhsm/subscription_manager/cert_sorter.py*
 %{_datadir}/rhsm/subscription_manager/cli.py*
 %{_datadir}/rhsm/subscription_manager/dbus_interface.py*
