@@ -147,8 +147,8 @@ class SystemCommand(CliCommand):
 
                 # build an archive by default
                 if self.options.archive:
+                    tf = tarfile.open(tar_file_path, "w:gz")
                     try:
-                        tf = tarfile.open(tar_file_path, "w:gz")
                         tf.add(content_path, archive_name)
                     finally:
                         tf.close()
@@ -189,8 +189,8 @@ class SystemCommand(CliCommand):
 
     def _write_flat_file(self, content_path, filename, content):
         path = os.path.join(content_path, filename)
+        fo = open(path, "w+")
         try:
-            fo = open(path, "w+")
             fo.write(json.dumps(content, indent=4, sort_keys=True))
         finally:
             fo.close()
@@ -250,12 +250,12 @@ class SaferFileMove(object):
 
         If dest is /tmp, or a specific name in /tmp, we want to
         create it excl if we can."""
+        src_fo = open(src, 'r')
         try:
-            src_fo = open(src, 'r')
             # if dest doesn't exist, and we can open it excl, then open it,
             # keep the fd, create a file object for it, and write to it
+            dest_fo = self._open_excl(dest)
             try:
-                dest_fo = self._open_excl(dest)
                 self._copyfileobj(src_fo, dest_fo)
             finally:
                 dest_fo.close()
