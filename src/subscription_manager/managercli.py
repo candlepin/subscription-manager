@@ -1806,6 +1806,7 @@ class ReposCommand(CliCommand):
 
         self.use_overrides = self.cp.supports_resource('content_overrides')
 
+        # specifically, yum repos, for now.
         rl = RepoActionInvoker()
         repos = rl.get_repos()
 
@@ -1829,7 +1830,7 @@ class ReposCommand(CliCommand):
                 print _("This system has no repositories available through subscriptions.")
         return rc
 
-    def _set_repo_status(self, repos, repolib, items, enable):
+    def _set_repo_status(self, repos, repo_action_invoker, items, enable):
         repos_modified = set()
         rc = 0
         if enable:
@@ -1847,7 +1848,8 @@ class ReposCommand(CliCommand):
             repos_modified |= matches
 
         if repos_modified:
-            # The cache should be primed at this point by the repolib.get_repos()
+            # The cache should be primed at this point by the
+            # repo_action_invoker.get_repos()
             cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
             if self.is_registered() and self.use_overrides:
                 overrides = [{'contentLabel': repo.id, 'name': 'enabled', 'value': status} for repo in repos_modified]
@@ -1859,7 +1861,7 @@ class ReposCommand(CliCommand):
                 cache.server_status = results
                 cache.write_cache()
 
-                repolib.update()
+                repo_action_invoker.update()
             else:
                 # In the disconnected case we must modify the repo file directly.
                 changed_repos = [repo for repo in repos_modified if repo['enabled'] != status]
