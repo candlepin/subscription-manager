@@ -906,6 +906,14 @@ class TestFactsConduit(unittest.TestCase):
         self.assertEquals({}, conduit.facts)
 
 
+class TestContentActionPluginConduit(unittest.TestCase):
+    def test_content_plugin_condui(self):
+        content_plugins = []
+        conduit = plugins.ContentActionPluginConduit(StubPluginClass,
+                                                     content_action_class_list=content_plugins)
+        self.assertEquals([], conduit.content_action_class_list)
+
+
 class TestRegistrationConduit(unittest.TestCase):
     def test_registration_conduit(self):
         conduit = plugins.RegistrationConduit(StubPluginClass,
@@ -960,7 +968,7 @@ class TestPostAutoAttachConduit(unittest.TestCase):
 
 
 class BasePluginException(unittest.TestCase):
-    """At least create and raise all the exceptions"""
+    """At least create and raise all the exceptions."""
     e = plugins.PluginException
 
     def raise_exception(self):
