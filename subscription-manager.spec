@@ -208,11 +208,13 @@ rm -rf %{buildroot}
 %dir %{_datadir}/rhsm/subscription_manager
 
 %{_datadir}/rhsm/subscription_manager/async.py*
+%{_datadir}/rhsm/subscription_manager/base_action_client.py*
 %{_datadir}/rhsm/subscription_manager/base_plugin.py*
 %{_datadir}/rhsm/subscription_manager/branding
 %{_datadir}/rhsm/subscription_manager/cache.py*
 %{_datadir}/rhsm/subscription_manager/certdirectory.py*
 %{_datadir}/rhsm/subscription_manager/certlib.py*
+%{_datadir}/rhsm/subscription_manager/content_action_client.py*
 %{_datadir}/rhsm/subscription_manager/action_client.py*
 %{_datadir}/rhsm/subscription_manager/cert_sorter.py*
 %{_datadir}/rhsm/subscription_manager/cli.py*

@@ -164,7 +164,7 @@ class TestActionClient(ActionClientTestBase):
         self.assertTrue(self.stub_ent1.serial in report.valid)
 
     @mock.patch.object(entcertlib.EntCertActionInvoker, 'update')
-    @mock.patch('subscription_manager.action_client.log')
+    @mock.patch('subscription_manager.base_action_client.log')
     def test_entcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
         actionclient = action_client.ActionClient()
@@ -176,7 +176,7 @@ class TestActionClient(ActionClientTestBase):
         self.fail("Did not ExceptionException in the logged exceptions")
 
     @mock.patch.object(identitycertlib.IdentityCertActionInvoker, 'update')
-    @mock.patch('subscription_manager.action_client.log')
+    @mock.patch('subscription_manager.base_action_client.log')
     def test_idcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
         actionclient = action_client.ActionClient()
