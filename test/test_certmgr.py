@@ -20,6 +20,7 @@ import stubs
 
 from rhsm import ourjson as json
 from subscription_manager import action_client
+from subscription_manager import content_action_client
 from subscription_manager import entcertlib
 from subscription_manager import identitycertlib
 from subscription_manager import repolib
@@ -137,6 +138,12 @@ class ActionClientTestBase(SubManFixture):
 
         self.hwprobe_getall_patcher.stop()
         self.patcher_entcertlib_action_syslogreport.stop()
+
+
+class TestContentActionClient(ActionClientTestBase):
+    def test_init(self):
+        actionclient = content_action_client.ContentActionClient()
+        actionclient.update()
 
 
 class TestActionClient(ActionClientTestBase):
