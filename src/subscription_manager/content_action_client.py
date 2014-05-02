@@ -17,6 +17,7 @@ import logging
 
 from subscription_manager import base_action_client
 from subscription_manager import repolib
+from subscription_manager import ostree_action_invoker
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -25,6 +26,8 @@ class ContentActionClient(base_action_client.BaseActionClient):
 
     def _get_libset(self):
         self.yum_repo_action_invoker = repolib.RepoActionInvoker()
+        self.ostree_repo_action_invoker = ostree_action_invoker.OstreeRepoActionInvoker()
 
-        lib_set = [self.yum_repo_action_invoker]
+        lib_set = [self.yum_repo_action_invoker,
+                   self.ostree_repo_action_invoker]
         return lib_set

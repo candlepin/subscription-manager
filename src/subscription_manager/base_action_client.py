@@ -82,6 +82,7 @@ class BaseActionClient(object):
         update_reports = []
 
         for lib in self._libset:
+            log.debug("running lib: %s" % lib)
             update_report = self._run_update(lib)
 
             # a map/dict may make more sense here
