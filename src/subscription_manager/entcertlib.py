@@ -22,12 +22,12 @@ from rhsm.certificate import Key, create_from_pem
 
 from subscription_manager.certdirectory import Writer
 from subscription_manager import certlib
+from subscription_manager import content_action_client
 from subscription_manager import utils
 from subscription_manager.injection import IDENTITY, require
 from subscription_manager import rhelentbranding
 import subscription_manager.injection as inj
 
-from subscription_manager.repolib import RepoActionInvoker
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -165,11 +165,11 @@ class EntCertUpdateAction(object):
         brands_installer.install()
 
     def repo_hook(self):
-        """Update yum repos."""
+        """Update content repos."""
         try:
             # NOTE: this may need a lock
-            rl = RepoActionInvoker()
-            rl.update()
+            content_action = content_action_client.ContentActionClient()
+            content_action.update()
         except Exception, e:
             log.debug(e)
             log.debug("Failed to update repos")
