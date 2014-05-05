@@ -10,6 +10,7 @@
 
 # test constructing from Content models
 # ignores wrong content type
+import StringIO
 
 import fixture
 
@@ -18,7 +19,6 @@ from content_plugins.ostree import repo_file
 
 
 class StubPluginManager(object):
-    def run(self, hook, *args, **kwargs):
         pass
 
 
@@ -39,7 +39,14 @@ class TestOstreeUpdateActionCommand(fixture.SubManFixture):
         action_command = action_invoker.OstreeContentUpdateActionCommand()
         self.assertTrue(hasattr(action_command, 'report'))
 
-sample_repo_config = """
+
+class TestOstreeUpdateActionReport(fixture.SubManFixture):
+    def test_init(self):
+        action_invoker.OstreeContentUpdateActionReport()
+
+
+class TestOstreePluginRepoFileConfigParser(fixture.SubManFixture):
+    sample_repo_config = """
 [core]
 repo_version=1
 mode=bare
@@ -50,12 +57,17 @@ branches=rh-atomic-controller/el7/x86_64/buildmaster/controller/docker;
 gpg-verify=false
 """
 
+    def _get_fo(self, buf):
+        return StringIO.StringIO(buf)
 
-class TestOstreeUpdateActionReport(fixture.SubManFixture):
-    def test_init(self):
-        action_invoker.OstreeContentUpdateActionReport()
-
-
-class TestOstreePluginRepoFile(fixture.SubManFixture):
     def test_empty(self):
         repo_file.RepoFile()
+
+    def _read_sample(self):
+        rf = repo_file.RepoFileConfigParser()
+        rf.readfp(self._get_fo(self.sample_repo_config))
+        return rf
+
+    def test_sample_core(self):
+        rf = self._read_sample()
+        self.assertTrue(rf.has_section('core'))
