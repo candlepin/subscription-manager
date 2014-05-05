@@ -13,7 +13,6 @@
 
 import fixture
 
-from content_plugins import ostree
 from content_plugins.ostree import action_invoker
 from content_plugins.ostree import repo_file
 
@@ -23,10 +22,10 @@ class StubPluginManager(object):
         pass
 
 
-class TestOstreePlugin(fixture.SubManFixture):
+class TestOstreeActionInvoker(fixture.SubManFixture):
 
     def setUp(self):
-        super(TestOstreePlugin, self).setUp()
+        super(TestOstreeActionInvoker, self).setUp()
 
         # need to provide at least one the content_plugin_search
 
@@ -34,6 +33,11 @@ class TestOstreePlugin(fixture.SubManFixture):
         invoker = action_invoker.OstreeContentActionInvoker()
         invoker.update()
 
+
+class TestOstreeUpdateActionCommand(fixture.SubManFixture):
+    def test_command_init(self):
+        action_command = action_invoker.OstreeContentUpdateActionCommand()
+        self.assertTrue(hasattr(action_command, 'report'))
 
 sample_repo_config = """
 [core]
@@ -47,7 +51,11 @@ gpg-verify=false
 """
 
 
+class TestOstreeUpdateActionReport(fixture.SubManFixture):
+    def test_init(self):
+        action_invoker.OstreeContentUpdateActionReport()
+
+
 class TestOstreePluginRepoFile(fixture.SubManFixture):
     def test_empty(self):
-        rf = repo_file.RepoFile()
-
+        repo_file.RepoFile()
