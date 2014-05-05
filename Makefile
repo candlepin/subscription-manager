@@ -123,6 +123,7 @@ install-content-plugins:
 	# install to /usr/lib/python2.7/site-packages/rhsm_content_plugins/
 	install -d $(RHSM_CONTENT_PLUGINS_DIR)
 
+	# TODO: sort out install tools, and import paths
 	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/__init__.py $(RHSM_CONTENT_PLUGINS_DIR)/
 	install -d $(RHSM_CONTENT_PLUGINS_DIR)/ostree
 	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree/*.py $(RHSM_CONTENT_PLUGINS_DIR)/ostree
