@@ -65,14 +65,14 @@ def update(conduit, cache_only):
         return
 
     try:
-        uep = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
+        connection.UEPConnection(cert_file=cert_file, key_file=key_file)
     #FIXME: catchall exception
     except Exception:
         # log
         conduit.info(2, "Unable to connect to Subscription Management Service")
         return
 
-    rl = RepoActionInvoker(uep=uep, cache_only=cache_only)
+    rl = RepoActionInvoker(cache_only=cache_only)
     rl.update()
 
 
