@@ -16,19 +16,9 @@
 from subscription_manager.base_plugin import SubManPlugin
 requires_api_version = "1.1"
 
-import subprocess
-import json
-
 # install our helper modules here
 from rhsm_content_plugins import ostree
-
-
-class OstreeContentActionInvoker(object):
-    def __init__(self):
-        self.report = None
-
-    def update(self):
-        print "ostree content update"
+from rhsm_content_plugins.ostree import action_invoker
 
 
 class OstreeContentPlugin(SubManPlugin):
@@ -43,4 +33,5 @@ class OstreeContentPlugin(SubManPlugin):
         """
         conduit.log.info("ostree_content content_plugin_search called")
         conduit.log.debug("ostree module: %s" % ostree)
-        conduit.content_action_class_list.append(OstreeContentActionInvoker)
+        conduit.log.debug("dir(ostree): %s" % dir(ostree))
+        conduit.content_action_class_list.append(action_invoker.OstreeContentActionInvoker)

@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2013 Red Hat, Inc.
+# Copyright (c) 2014 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
 # version 2 (GPLv2). There is NO WARRANTY for this software, express or
@@ -13,12 +13,6 @@
 # in this software or its documentation.
 #
 
-from subscription_manager.base_plugin import SubManPlugin
-requires_api_version = "1.1"
-
-import subprocess
-import json
-
 
 class OstreeContentActionInvoker(object):
     def __init__(self):
@@ -26,17 +20,3 @@ class OstreeContentActionInvoker(object):
 
     def update(self):
         print "ostree content update"
-
-
-class OstreeContentPlugin(SubManPlugin):
-    """Plugin for adding ostree content action to subscription-manager"""
-    name = "ostree_content"
-
-    def content_plugin_search_hook(self, conduit):
-        """'content_plugin_search' hook to add ostree content action
-
-        Args:
-            conduit: A ContentActionPluginConduit
-        """
-        conduit.log.info("ostree_content content_plugin_search called")
-        conduit.content_action_class_list.append(OstreeContentActionInvoker)
