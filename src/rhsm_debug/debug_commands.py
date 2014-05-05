@@ -179,7 +179,7 @@ class SystemCommand(CliCommand):
                 shutil.rmtree(assemble_path, True)
 
     def _make_code(self):
-        return datetime.now().strftime("%Y%m%d-%S")
+        return datetime.now().strftime("%Y%m%d-%H%M%S")
 
     def _get_version_info(self):
         return {"server type": self.server_versions["server-type"],
