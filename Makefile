@@ -28,8 +28,13 @@ RD_SRC_DIR := $(BASE_SRC_DIR)/rhsm_debug
 RHSM_ICON_SRC_DIR := $(BASE_SRC_DIR)/rhsm_icon
 DAEMONS_SRC_DIR := $(BASE_SRC_DIR)/daemons
 EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
+CONTENT_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/content_plugins/
+
+# FIXME: setup.py, distutils, etc
+RHSM_CONTENT_PLUGINS_DIR := /usr/lib/python2.7/site-packages/rhsm_content_plugins/
+
 YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
-ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
+ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
 
 CFLAGS ?= -g -Wall
 
@@ -105,11 +110,32 @@ install-help-files:
 	install docs/subscription-manager-C.omf \
 		$(PREFIX)/$(INSTALL_DIR)/omf/subscription-manager
 
-install-plugins:
+
+install-content-plugins:
+	install -d $(RHSM_PLUGIN_DIR)
+	install -d $(RHSM_PLUGIN_DIR)/ostree
+	# top level plugin entry point
+	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree_content.py $(RHSM_PLUGIN_DIR)
+
+	# plugin support code could live anywhere on python path
+	# for now install it with core subman code
+	# FIXME: install to site-packages, or add setup.py's etc
+	# install to /usr/lib/python2.7/site-packages/rhsm_content_plugins/
+	install -d $(RHSM_CONTENT_PLUGINS_DIR)
+
+	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/__init__.py $(RHSM_CONTENT_PLUGINS_DIR)/
+	install -d $(RHSM_CONTENT_PLUGINS_DIR)/ostree
+	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree/*.py $(RHSM_CONTENT_PLUGINS_DIR)/ostree
+
+install-content-plugins-conf:
+	install -d $(RHSM_PLUGIN_CONF_DIR)
+	install -m 644 -p $(CONTENT_PLUGINS_SRC_DIR)/ostree_content.OstreeContentPlugin.conf $(RHSM_PLUGIN_CONF_DIR)
+
+install-plugins: install-content-plugins
 	install -d $(RHSM_PLUGIN_DIR)
 #	install -m 644 -p src/rhsm-plugins/*.py $(RHSM_PLUGIN_DIR)
 
-install-plugins-conf:
+install-plugins-conf:install-content-plugins-conf
 	install -d $(RHSM_PLUGIN_CONF_DIR)
 #	install -m 644 -p src/rhsm-plugins/*.conf $(RHSM_PLUGIN_CONF_DIR)
 
