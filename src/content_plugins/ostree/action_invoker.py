@@ -13,7 +13,7 @@
 # in this software or its documentation.
 #
 
-from subscription_manager import certlib
+from subscription_manager import api
 
 
 class OstreeContentActionInvoker(object):
@@ -35,7 +35,7 @@ class OstreeContentUpdateActionCommand(object):
         self.report = OstreeContentUpdateActionReport()
 
 
-class OstreeContentUpdateActionReport(certlib.ActionReport):
+class OstreeContentUpdateActionReport(api.ActionReport):
     """Report class for reporting ostree content repo updates."""
 
     def __init__(self):
