@@ -905,7 +905,8 @@ class PluginManager(BasePluginManager):
             finally:
                 fp.close()
         # we could catch BaseException too for system exit
-        except Exception:
+        except Exception, e:
+            log.exception(e)
             raise PluginModuleImportException(module_file, module_name)
 
         # FIXME: look up module conf, so we can enable entire plugin modules
