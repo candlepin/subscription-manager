@@ -13,6 +13,8 @@
 # in this software or its documentation.
 #
 
+from subscription_manager import certlib
+
 
 class OstreeContentActionInvoker(object):
     def __init__(self):
@@ -20,3 +22,21 @@ class OstreeContentActionInvoker(object):
 
     def update(self):
         print "ostree content update"
+
+
+class OstreeContentUpdateActionCommand(object):
+    """UpdateActionCommand for ostree repos.
+
+    Update the repo configuration for rpm-ostree when triggered.
+
+    Return a OstreeContentUpdateReport.
+    """
+    def __init__(self):
+        self.report = OstreeContentUpdateActionReport()
+
+
+class OstreeContentUpdateActionReport(certlib.ActionReport):
+    """Report class for reporting ostree content repo updates."""
+
+    def __init__(self):
+        super(OstreeContentUpdateActionReport, self).__init__()
