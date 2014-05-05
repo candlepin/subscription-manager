@@ -17,7 +17,6 @@ import logging
 
 from subscription_manager import base_action_client
 from subscription_manager import repolib
-from subscription_manager import ostree_action_invoker
 import subscription_manager.injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -27,7 +26,6 @@ class ContentActionClient(base_action_client.BaseActionClient):
 
     def _get_libset(self):
         self.yum_repo_action_invoker = repolib.RepoActionInvoker()
-        self.ostree_repo_action_invoker = ostree_action_invoker.OstreeRepoActionInvoker()
 
         plugin_manager = inj.require(inj.PLUGIN_MANAGER)
 
@@ -39,9 +37,11 @@ class ContentActionClient(base_action_client.BaseActionClient):
 
         log.debug("post cacl: %s" % content_action_class_list)
 
-        lib_set = [self.yum_repo_action_invoker,
-                   self.ostree_repo_action_invoker]
+        # TODO: replace libset/_get_libset with a ActionInvokerProvider
+        lib_set = [self.yum_repo_action_invoker]
 
+        # 'content_plugin_search' find classes that implement content_actions
+        # this adds them to the lib_set.
         for content_action_class in content_action_class_list:
             content_action = content_action_class()
             lib_set.append(content_action)
