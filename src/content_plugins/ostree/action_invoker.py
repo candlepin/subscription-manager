@@ -12,16 +12,25 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import logging
+
+# rhsm.conf->iniparse->configParser can raise ConfigParser exceptions
+import ConfigParser
+
 
 from subscription_manager import api
 
+from rhsm_content_plugins.ostree import repo_file
+from rhsm_content_plugins.ostree import model
 
-class OstreeContentActionInvoker(object):
-    def __init__(self):
-        self.report = None
+# plugins get
+log = logging.getLogger('rhsm-app.' + __name__)
 
-    def update(self):
-        print "ostree content update"
+
+class OstreeContentActionInvoker(api.BaseActionInvoker):
+    def _do_update(self):
+        action = OstreeContentUpdateActionCommand()
+        return action.perform()
 
 
 class OstreeContentUpdateActionCommand(object):
@@ -33,6 +42,49 @@ class OstreeContentUpdateActionCommand(object):
     """
     def __init__(self):
         self.report = OstreeContentUpdateActionReport()
+
+        # starting state of ostree config
+        self.ostree_config = model.OstreeConfig()
+
+    def perform(self):
+        # define... somewhere?
+        OSTREE_CONTENT_TYPE = "ostree"
+        self.load_config()
+
+        # bleah, just do it
+        ent_dir = api.inj.require(api.inj.ENT_DIR)
+
+        content_set = set()
+        # valid ent certs could be an iterator
+        for ent_cert in ent_dir.list_valid():
+            # ditto content
+            for content in ent_cert.content:
+                log.debug("content: %s" % content)
+
+                if content.content_type == OSTREE_CONTENT_TYPE:
+                    log.debug("adding %s to ostree content" % content)
+                    content_set.add(content)
+
+        # given current config, and the new contents, construct a list
+        # of remotes to apply to our local config of remotes.
+        updates_builder = model.OstreeConfigUpdatesBuilder(self.ostree_config,
+                                                           content_set=content_set,
+                                                           report=self.report)
+
+        updates = updates_builder.build()
+
+        # Get controller to update the model with the updates
+        controller = model.OstreeConfigController(self.ostree_config,
+                                                  report=self.report)
+        log.debug("Updates: %s" % updates)
+        controller.update(updates)
+        return self.report
+
+    def load_config(self):
+        try:
+            self.ostree_config.load()
+        except ConfigParser.Error:
+            log.info("No ostree content repo config file found. Not loading ostree config.")
 
 
 class OstreeContentUpdateActionReport(api.ActionReport):
