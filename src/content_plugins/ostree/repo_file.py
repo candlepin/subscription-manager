@@ -1,8 +1,34 @@
 
 from rhsm import config
 
+"""Ostree has two config files, both based on the freedesktop.org
+Desktop Entry spec. This defines a file format based on "ini" style
+config files. Ostree refers to these as "key files".
 
-class RepoFileConfigParser(config.RhsmConfigParser):
+One config file is the "repo" config, that defines some
+core config options, and the ostree "remotes".
+
+The other is an "origin" file that includes a refspec
+for a given ostree sha.
+
+We base the config parser on rhsm.config.RhsmConfigParser,
+except with "defaults" support removed.
+
+We has a KeyFileConfigParser, and two subclasses of it
+for RepoFileConfigParser and OriginFileConfigParser.
+
+There is also a OstreeConfigFile, and two subsclasses of
+it for RepoFile, and OriginFile. These add some file type
+specific helper functions.
+
+OriginFile has a OriginFileConfigParser.
+RepoFile has a RepoFileConfigParser, but adds methods for
+dealing with all of the remote sections.
+"""
+
+
+# KeyFile is the desktop.org name for ini files, more or less
+class KeyFileConfigParser(config.RhsmConfigParser):
     # neuter the rhsm.config module level DEFAULTS
     # If we don't override defaults, sections, items, and has_default
     # the class returns the module level DEFAULTS. We don't want that,
@@ -24,7 +50,7 @@ class RepoFileConfigParser(config.RhsmConfigParser):
     def items(self, section):
         result = {}
         if self.has_section(section):
-            super_result = super(RepoFileConfigParser, self).options(section)
+            super_result = super(KeyFileConfigParser, self).options(section)
             for key in super_result:
                 result[key] = self.get(section, key)
         return result.items()
@@ -33,8 +59,16 @@ class RepoFileConfigParser(config.RhsmConfigParser):
         return False
 
 
-class RepoFile(object):
-    config_parser_class = RepoFileConfigParser
+class RepoFileConfigParser(KeyFileConfigParser):
+    pass
+
+
+class OriginFileConfigParser(KeyFileConfigParser):
+    pass
+
+
+class OstreeConfigFile(object):
+    config_parser_class = KeyFileConfigParser
 
     def __init__(self, filename=None):
         self.filename = filename
@@ -43,11 +77,15 @@ class RepoFile(object):
     def _get_config_parser(self):
         return self.config_parser_class(config_file=self.filename)
 
+
+class RepoFile(OstreeConfigFile):
+    config_parser_class = RepoFileConfigParser
+
     def remote_sections(self):
+        """Return all the config sections for "remotes"."""
         # flatten to comprehension
         remotes = []
         for section in self.config_parser.sections():
-            print section
             if self.section_is_remote(section):
                 remotes.append(section)
         return remotes
@@ -57,3 +95,5 @@ class RepoFile(object):
             return True
 
 
+class OriginFile(object):
+    config_parser_class = OriginFileConfigParser
