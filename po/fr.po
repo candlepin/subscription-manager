@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-09 12:49-0400\n"
+"POT-Creation-Date: 2014-05-07 14:31-0400\n"
 "PO-Revision-Date: 2014-02-04 08:27-0500\n"
 "Last-Translator: samfreemanz <sfriedma@redhat.com>\n"
 "Language-Team: French\n"
@@ -228,413 +228,58 @@ msgid "Subscription Registration"
 msgstr "Enregistrement d'abonnements"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:76
-#: ../src/subscription_manager/gui/widgets.py:251 ../src/rct/printing.py:42
-msgid "Product"
-msgstr "Produit"
+#: ../src/subscription_manager/gui/contract_selection.py:94
+#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:75
+msgid "Contract"
+msgstr "Contrat"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:87
-#: ../src/rct/printing.py:45 ../src/rct/printing.py:124
-msgid "Version"
-msgstr "Version"
+#: ../src/subscription_manager/gui/contract_selection.py:108
+msgid "Used / Total"
+msgstr "Utilisé / Total"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:90
-msgid "Status"
-msgstr "État"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:93
 #: ../src/subscription_manager/gui/contract_selection.py:113
+#: ../src/subscription_manager/gui/installedtab.py:93
 #: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:126
 msgid "Start Date"
 msgstr "Date de début"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:96
-#: ../src/subscription_manager/gui/mysubstab.py:102
 #: ../src/subscription_manager/gui/contract_selection.py:119
+#: ../src/subscription_manager/gui/mysubstab.py:102
+#: ../src/subscription_manager/gui/installedtab.py:96
 #: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:127
 msgid "End Date"
 msgstr "Date de fin"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:179
-#: ../src/subscription_manager/managercli.py:71
-msgid "Future Subscription"
-msgstr "Futur abonnement"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:180
-msgid "Future Subscribed"
-msgstr "Futur abonné"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:183
-#: ../src/subscription_manager/managercli.py:74
-msgid "Expired"
-msgstr "Expiré"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:193
-#, python-format
-msgid "Subscription %s is expired"
-msgstr "L'abonnement %s a expiré"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/installedtab.py:196
-#: ../src/subscription_manager/gui/installedtab.py:197
-#: ../src/subscription_manager/managercli.py:75
-msgid "Partially Subscribed"
-msgstr "Partiellement abonné"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#. Shouldn't be reachable.
-#. Reason has no id attr
-#. It's possible (though unlikely, and kind of broken) to have more
-#. than one version of python-rhsm/subscription-manager installed.
-#. Versions() will only return one (and I suspect it's not predictable
-#. which it will return).
-#: ../src/subscription_manager/gui/installedtab.py:200
-#: ../src/subscription_manager/gui/factsgui.py:90
-#: ../src/subscription_manager/gui/factsgui.py:117
-#: ../src/subscription_manager/reasons.py:83
-#: ../src/subscription_manager/utils.py:171
-#: ../src/subscription_manager/utils.py:172
-#: ../src/subscription_manager/utils.py:187
-#: ../src/subscription_manager/utils.py:206
-#: ../src/subscription_manager/utils.py:225
-#: ../src/subscription_manager/cert_sorter.py:47
-#: ../src/subscription_manager/managercli.py:76
-#: ../src/subscription_manager/managercli.py:284
-#: ../src/subscription_manager/managercli.py:285
-#: ../src/subscription_manager/managercli.py:288
-#: ../src/subscription_manager/managercli.py:289
-#: ../src/subscription_manager/managercli.py:1636
-#: ../src/subscription_manager/managercli.py:2374
-msgid "Unknown"
-msgstr "Inconnu"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/installedtab.py:202
-msgid "System is not registered."
-msgstr "Le système n'est pas enregistré."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#. System must be registered but unable to reach server:
-#: ../src/subscription_manager/gui/installedtab.py:205
-msgid "Entitlement server is unreachable."
-msgstr "Le serveur des droits d'accès est injoignable."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:208
-#: ../src/subscription_manager/managercli.py:72
-msgid "Subscribed"
-msgstr "Abonné"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:210
-#, python-format
-msgid "Covered by contract %s through %s"
-msgid_plural "Covered by contracts %s through %s"
-msgstr[0] "Couvert par le contrat %s jusqu'au %s"
-msgstr[1] "Couvert par les contrats %s jusqu'au %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:217
-#: ../src/subscription_manager/gui/installedtab.py:218
-#: ../src/subscription_manager/managercli.py:73
-msgid "Not Subscribed"
-msgstr "Non abonné"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/installedtab.py:269
-msgid "My Installed Products"
-msgstr "Mes produits installés"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:302
-#, python-format
-msgid "System is properly subscribed through %s."
-msgstr "Système correctement abonné via %s."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:310
-msgid "No installed products detected."
-msgstr "Aucun produit installé détecté."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:315
-msgid "This system does not match subscription limits."
-msgstr "Ce système ne correspond pas aux limites des abonnements."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:321
-#, python-format
-msgid "%s installed products do not have valid subscriptions."
-msgstr "%s produits installés ne possèdent pas d'abonnement valide."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:326
-msgid "1 installed product does not have a valid subscription."
-msgstr "1 produit installé ne possède pas d'abonnement valide."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:331
-msgid "Keep your system up to date by registering."
-msgstr "Gardez votre système à jour en vous enregistrant."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:155
-msgid "There was an error saving your configuration."
-msgstr ""
-"Une erreur s'est produite lors de l'enregistrement de votre configuration."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:156
-#, python-format
-msgid "Make sure that you own %s."
-msgstr "Assurez-vous de bien posséder %s."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/networkConfig.py:177
-msgid "Proxy location cannot be empty"
-msgstr "L'emplacement du proxy ne peut pas être vide"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/networkConfig.py:179
-msgid "Proxy connection succeeded"
-msgstr "Connexion proxy réussie"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/networkConfig.py:181
-msgid "Proxy connection failed"
-msgstr "Connexion proxy échouée"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/redeem.py:55
-#, python-format
-msgid "Error redeeming subscription: %s"
-msgstr "Erreur lors de l'échange de l'abonnement : %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:255
-msgid "Installed"
-msgstr "Installé"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. An empty string entry is used for "un-setting" the system's SLA:
-#. for unsetting
-#: ../src/subscription_manager/gui/widgets.py:330
-#: ../src/subscription_manager/gui/preferences.py:119
-#: ../src/subscription_manager/gui/preferences.py:145
-msgid "Not Set"
-msgstr "Non défini"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:357
-#: ../src/subscription_manager/gui/factsgui.py:141
-#: ../src/subscription_manager/printing_utils.py:136
-#: ../src/subscription_manager/managercli.py:611
-msgid "None"
-msgstr "Aucun"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:558
-msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr "Format de la date invalide. Veuillez saisir une date valide. Exemple :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/widgets.py:595
-msgid "Date Selection"
-msgstr "Sélection de la date"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:610
-msgid "Today"
-msgstr "Aujourd'hui"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:705
-#: ../src/subscription_manager/gui/mysubstab.py:283
-#: ../src/subscription_manager/managercli.py:2084
-#: ../src/subscription_manager/managercli.py:2167
-msgid "Physical"
-msgstr "Physique"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:706
-#: ../src/subscription_manager/gui/mysubstab.py:281
-#: ../src/subscription_manager/managercli.py:2082
-#: ../src/subscription_manager/managercli.py:2165
-msgid "Virtual"
-msgstr "Virtuel"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:707
-msgid "Both"
-msgstr "Les deux"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#. content-type is required, no need to xstr
-#: ../src/subscription_manager/gui/widgets.py:710
-#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
-msgid "Type"
-msgstr "Type"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:782
-msgid "Click to Adjust Quantity"
-msgstr "Cliquez pour ajuster la quantité"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/managergui.py:337
-msgid ""
-"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr ""
-"Erreur dans la boîte de dialogue des préférences. Veuillez voir /var/log/"
-"rhsm/rhsm.log pour obtenir plus d'informations."
-
-#: ../src/subscription_manager/gui/managergui.py:345
-msgid ""
-"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr ""
-"Erreur dans la boîte de dialogue des référentiels. Veuillez voir /var/log/"
-"rhsm/rhsm.log pour obtenir plus d'informations."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:361
-msgid "<b>Errors were encountered during unregister.</b>"
-msgstr "<b>Des erreurs se sont produites pendant le dés-enregistrement.</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:363
-#: ../src/subscription_manager/gui/registergui.py:94
-msgid "Please see /var/log/rhsm/rhsm.log for more information."
-msgstr "Merci de voir /var/log/rhsm/rhsm.log pour obtenir plus d'informations."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:379
-msgid "<b>Are you sure you want to unregister?</b>"
-msgstr "<b>Êtes-vous certain de vouloir vous dés-enregistrer ?</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:435
-msgid "System Already Registered"
-msgstr "Système déjà enregistré"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:74
-#: ../src/subscription_manager/gui/registergui.py:421
-#: ../src/subscription_manager/gui/allsubs.py:72
-msgid "Subscription"
-msgstr "Abonnement"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:91
-msgid "Installed Products"
-msgstr "Produits installés"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. Set up the quantity column.
-#: ../src/subscription_manager/gui/mysubstab.py:105
-#: ../src/subscription_manager/gui/registergui.py:427
 #: ../src/subscription_manager/gui/contract_selection.py:124
-#: ../src/subscription_manager/gui/allsubs.py:88
+#: ../src/subscription_manager/gui/registergui.py:427
+#: ../src/subscription_manager/gui/allsubs.py:96
+#: ../src/subscription_manager/gui/mysubstab.py:105
 #: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:82
 msgid "Quantity"
 msgstr "Quantité"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:130
-#, python-format
-msgid "There was an error removing %s with serial number %s"
-msgstr ""
-"Une erreur s'est produite lors de la suppression de %s avec le numéro de "
-"série %s"
-
-#: ../src/subscription_manager/gui/mysubstab.py:144
-msgid "Removing"
-msgstr "Suppression en cours"
-
-#: ../src/subscription_manager/gui/mysubstab.py:145
-msgid "Removing subscription. Please wait."
-msgstr "Suppression de l'abonnement en cours. Veuillez patienter."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:164
-#, python-format
-msgid "Are you sure you want to remove %s?"
-msgstr "Êtez-vous certain de vouloir supprimer %s ?"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:191
-#, python-format
-msgid "Stack of %s and %s others"
-msgstr "Pile de %s et %s autres"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:194
-#, python-format
-msgid "Stack of %s and 1 other"
-msgstr "Pile de %s et 1 autre"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:196
-#, python-format
-msgid "Stack of %s"
-msgstr "Pile de %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:226
-msgid "My Subscriptions"
-msgstr "Mes abonnements"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/mysubstab.py:267
-msgid "Subscription is current."
-msgstr "L'abonnement est actuel."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/mysubstab.py:270
-msgid "Subscription is expired."
-msgstr "L'abonnement a expiré."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/mysubstab.py:272
-msgid "Subscription has not begun."
-msgstr "L'abonnement n'a pas commencé."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/mysubstab.py:274
-msgid "Subscription management service doesn't support Status Details."
-msgstr ""
-"Le service de gestion des abonnements ne prend pas en charge les « Détails "
-"du statut »."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/mysubstab.py:286
-msgid "Yes"
-msgstr "Oui"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/mysubstab.py:288
-msgid "No"
-msgstr "Non"
+#: ../src/subscription_manager/gui/contract_selection.py:141
+#: ../src/subscription_manager/gui/allsubs.py:231
+#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:81
+msgid "Unlimited"
+msgstr "Illimité"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:92
 msgid "<b>Unable to register the system.</b>"
 msgstr "<b>Incapable d'enregistrer le système.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:94
+#: ../src/subscription_manager/gui/managergui.py:363
+msgid "Please see /var/log/rhsm/rhsm.log for more information."
+msgstr "Merci de voir /var/log/rhsm/rhsm.log pour obtenir plus d'informations."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:186
@@ -658,8 +303,8 @@ msgstr "<b>Attachement en cours</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:298
-#: ../src/subscription_manager/gui/data/registration.glade.h:4
 #: ../src/subscription_manager/gui/data/installed.glade.h:4
+#: ../src/subscription_manager/gui/data/registration.glade.h:4
 msgid "Register"
 msgstr "Enregistrer"
 
@@ -684,9 +329,16 @@ msgstr "Erreur lors de l'abonnement : %s"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:415
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:9
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:7
 msgid "Attach"
 msgstr "Attacher"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:421
+#: ../src/subscription_manager/gui/allsubs.py:80
+#: ../src/subscription_manager/gui/mysubstab.py:74
+msgid "Subscription"
+msgstr "Abonnement"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:473
@@ -835,6 +487,440 @@ msgstr ""
 "Le serveur prend en charge l'environnement, mais aucun environnement n'est "
 "disponible."
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. Add at-spi because we no longer create this widget from glade
+#: ../src/subscription_manager/gui/allsubs.py:55
+msgid "All Subscriptions View"
+msgstr "Voir tous les abonnements"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/allsubs.py:92
+msgid "Available"
+msgstr "Disponible"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/allsubs.py:175
+msgid "Press Update to search for subscriptions."
+msgstr "Appuyez sur « Mettre à jour » pour rechercher des abonnements."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:210
+#, python-format
+msgid "No subscriptions are available on %s."
+msgstr "Aucun abonnement disponible sur %s."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/allsubs.py:216
+msgid "No subscriptions match current filters."
+msgstr "Aucun abonnement ne correspond aux filtres actuels."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:347
+msgid "All Available Subscriptions"
+msgstr "Tous les abonnements disponibles"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/allsubs.py:357
+msgid "Searching"
+msgstr "Recherche"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:358
+msgid "Searching for subscriptions. Please wait."
+msgstr "Recherche des abonnements en cours. Veuillez patienter."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:372
+#, python-format
+msgid "Error fetching subscriptions from server:  %s"
+msgstr "Erreur lors de la récupération des abonnements depuis le serveur : %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:386
+#, python-format
+msgid "Unable to search for subscriptions:  %s"
+msgstr "Incapable de rechercher les abonnements : %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:397
+#, python-format
+msgid "Error getting subscription: %s"
+msgstr "Erreur lors de l'obtention des abonnements : %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/allsubs.py:401
+msgid "Quantity must be a positive number."
+msgstr "La quantité doit être un chiffre positif­."
+
+#. Start the progress bar
+#: ../src/subscription_manager/gui/allsubs.py:408
+msgid "Attaching"
+msgstr "Attachement en cours"
+
+#: ../src/subscription_manager/gui/allsubs.py:409
+msgid "Attaching subscription. Please wait."
+msgstr "Attachement des abonnements en cours. Veuillez patienter."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:428
+#, python-format
+msgid "%s applied"
+msgstr "%s appliqué"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/importsub.py:40
+msgid "Import Certificates"
+msgstr "Importer les certificats"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/importsub.py:43
+msgid "Import"
+msgstr "Importer"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/importsub.py:52
+msgid "Certificates"
+msgstr "Certificats"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/importsub.py:57
+msgid "All files"
+msgstr "Tous les fichiers"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/importsub.py:123
+msgid "The following certificate files did not exist:"
+msgstr "Les fichiers certificats suivants n'existaient pas :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/importsub.py:126
+msgid "The following files are not valid certificates and were not imported:"
+msgstr ""
+"Les fichiers suivants ne sont pas des certificats valides et n'ont pas été "
+"importés :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/importsub.py:131
+msgid ""
+"An error occurred while importing the following certificates. Please check "
+"the log file for more information."
+msgstr ""
+"Une erreur s'est produite lors de l'importation des certificats suivants. "
+"Veuillez vérifier le fichier journal pour obtenir plus d'informations."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/importsub.py:135
+msgid "The following certificates were successfully imported:"
+msgstr "Les certificats suivants ont été importés avec succès :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. if we get to this point, the import was successful
+#: ../src/subscription_manager/gui/importsub.py:140
+msgid "Certificate import was successful."
+msgstr "L'importation du certificat a réussie."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:91
+msgid "Installed Products"
+msgstr "Produits installés"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:130
+#, python-format
+msgid "There was an error removing %s with serial number %s"
+msgstr ""
+"Une erreur s'est produite lors de la suppression de %s avec le numéro de "
+"série %s"
+
+#: ../src/subscription_manager/gui/mysubstab.py:144
+msgid "Removing"
+msgstr "Suppression en cours"
+
+#: ../src/subscription_manager/gui/mysubstab.py:145
+msgid "Removing subscription. Please wait."
+msgstr "Suppression de l'abonnement en cours. Veuillez patienter."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:164
+#, python-format
+msgid "Are you sure you want to remove %s?"
+msgstr "Êtez-vous certain de vouloir supprimer %s ?"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:191
+#, python-format
+msgid "Stack of %s and %s others"
+msgstr "Pile de %s et %s autres"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:194
+#, python-format
+msgid "Stack of %s and 1 other"
+msgstr "Pile de %s et 1 autre"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:196
+#, python-format
+msgid "Stack of %s"
+msgstr "Pile de %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:226
+msgid "My Subscriptions"
+msgstr "Mes abonnements"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/mysubstab.py:267
+msgid "Subscription is current."
+msgstr "L'abonnement est actuel."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/mysubstab.py:270
+msgid "Subscription is expired."
+msgstr "L'abonnement a expiré."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/mysubstab.py:272
+msgid "Subscription has not begun."
+msgstr "L'abonnement n'a pas commencé."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/mysubstab.py:274
+msgid "Subscription management service doesn't support Status Details."
+msgstr ""
+"Le service de gestion des abonnements ne prend pas en charge les « Détails "
+"du statut »."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:281
+#: ../src/subscription_manager/gui/widgets.py:710
+#: ../src/subscription_manager/managercli.py:2082
+#: ../src/subscription_manager/managercli.py:2165
+msgid "Virtual"
+msgstr "Virtuel"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:283
+#: ../src/subscription_manager/gui/widgets.py:709
+#: ../src/subscription_manager/managercli.py:2084
+#: ../src/subscription_manager/managercli.py:2167
+msgid "Physical"
+msgstr "Physique"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/mysubstab.py:286
+msgid "Yes"
+msgstr "Oui"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/mysubstab.py:288
+msgid "No"
+msgstr "Non"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:255
+#: ../src/subscription_manager/gui/installedtab.py:76
+#: ../src/rct/printing.py:42
+msgid "Product"
+msgstr "Produit"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:259
+msgid "Installed"
+msgstr "Installé"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. An empty string entry is used for "un-setting" the system's SLA:
+#. for unsetting
+#: ../src/subscription_manager/gui/widgets.py:334
+#: ../src/subscription_manager/gui/preferences.py:119
+#: ../src/subscription_manager/gui/preferences.py:145
+msgid "Not Set"
+msgstr "Non défini"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:361
+#: ../src/subscription_manager/gui/factsgui.py:141
+#: ../src/subscription_manager/printing_utils.py:136
+#: ../src/subscription_manager/managercli.py:611
+msgid "None"
+msgstr "Aucun"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:562
+msgid "Invalid date format. Please re-enter a valid date. Example: "
+msgstr "Format de la date invalide. Veuillez saisir une date valide. Exemple :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/widgets.py:599
+msgid "Date Selection"
+msgstr "Sélection de la date"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:614
+msgid "Today"
+msgstr "Aujourd'hui"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:711
+msgid "Both"
+msgstr "Les deux"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#. content-type is required, no need to xstr
+#: ../src/subscription_manager/gui/widgets.py:714
+#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
+msgid "Type"
+msgstr "Type"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:786
+msgid "Click to Adjust Quantity"
+msgstr "Cliquez pour ajuster la quantité"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:87
+#: ../src/rct/printing.py:45 ../src/rct/printing.py:124
+msgid "Version"
+msgstr "Version"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:90
+msgid "Status"
+msgstr "État"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:179
+#: ../src/subscription_manager/managercli.py:71
+msgid "Future Subscription"
+msgstr "Futur abonnement"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:180
+msgid "Future Subscribed"
+msgstr "Futur abonné"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:183
+#: ../src/subscription_manager/managercli.py:74
+msgid "Expired"
+msgstr "Expiré"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:193
+#, python-format
+msgid "Subscription %s is expired"
+msgstr "L'abonnement %s a expiré"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/installedtab.py:196
+#: ../src/subscription_manager/gui/installedtab.py:197
+#: ../src/subscription_manager/managercli.py:75
+msgid "Partially Subscribed"
+msgstr "Partiellement abonné"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#. Shouldn't be reachable.
+#. Reason has no id attr
+#. It's possible (though unlikely, and kind of broken) to have more
+#. than one version of python-rhsm/subscription-manager installed.
+#. Versions() will only return one (and I suspect it's not predictable
+#. which it will return).
+#: ../src/subscription_manager/gui/installedtab.py:200
+#: ../src/subscription_manager/gui/factsgui.py:90
+#: ../src/subscription_manager/gui/factsgui.py:117
+#: ../src/subscription_manager/cert_sorter.py:47
+#: ../src/subscription_manager/managercli.py:76
+#: ../src/subscription_manager/managercli.py:284
+#: ../src/subscription_manager/managercli.py:285
+#: ../src/subscription_manager/managercli.py:288
+#: ../src/subscription_manager/managercli.py:289
+#: ../src/subscription_manager/managercli.py:1636
+#: ../src/subscription_manager/managercli.py:2382
+#: ../src/subscription_manager/reasons.py:83
+#: ../src/subscription_manager/utils.py:171
+#: ../src/subscription_manager/utils.py:172
+#: ../src/subscription_manager/utils.py:187
+#: ../src/subscription_manager/utils.py:206
+#: ../src/subscription_manager/utils.py:225
+msgid "Unknown"
+msgstr "Inconnu"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/installedtab.py:202
+msgid "System is not registered."
+msgstr "Le système n'est pas enregistré."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#. System must be registered but unable to reach server:
+#: ../src/subscription_manager/gui/installedtab.py:205
+msgid "Entitlement server is unreachable."
+msgstr "Le serveur des droits d'accès est injoignable."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:208
+#: ../src/subscription_manager/managercli.py:72
+msgid "Subscribed"
+msgstr "Abonné"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:210
+#, python-format
+msgid "Covered by contract %s through %s"
+msgid_plural "Covered by contracts %s through %s"
+msgstr[0] "Couvert par le contrat %s jusqu'au %s"
+msgstr[1] "Couvert par les contrats %s jusqu'au %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:217
+#: ../src/subscription_manager/gui/installedtab.py:218
+#: ../src/subscription_manager/managercli.py:73
+msgid "Not Subscribed"
+msgstr "Non abonné"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/installedtab.py:269
+msgid "My Installed Products"
+msgstr "Mes produits installés"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:302
+#, python-format
+msgid "System is properly subscribed through %s."
+msgstr "Système correctement abonné via %s."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:310
+msgid "No installed products detected."
+msgstr "Aucun produit installé détecté."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:315
+msgid "This system does not match subscription limits."
+msgstr "Ce système ne correspond pas aux limites des abonnements."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:321
+#, python-format
+msgid "%s installed products do not have valid subscriptions."
+msgstr "%s produits installés ne possèdent pas d'abonnement valide."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:326
+msgid "1 installed product does not have a valid subscription."
+msgstr "1 produit installé ne possède pas d'abonnement valide."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:331
+msgid "Keep your system up to date by registering."
+msgstr "Gardez votre système à jour en vous enregistrant."
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: ../src/subscription_manager/gui/about.py:29
 msgid ""
@@ -907,98 +993,6 @@ msgid "<b>Next System Check-in:</b> %s"
 msgstr "<b>Prochaine connexion système :</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:94
-#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:75
-msgid "Contract"
-msgstr "Contrat"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:108
-msgid "Used / Total"
-msgstr "Utilisé / Total"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:141
-#: ../src/subscription_manager/gui/allsubs.py:225
-#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:81
-msgid "Unlimited"
-msgstr "Illimité"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/allsubs.py:84
-msgid "Available"
-msgstr "Disponible"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/allsubs.py:167
-msgid "Press Update to search for subscriptions."
-msgstr "Appuyez sur « Mettre à jour » pour rechercher des abonnements."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:203
-#, python-format
-msgid "No subscriptions are available on %s."
-msgstr "Aucun abonnement disponible sur %s."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/allsubs.py:209
-msgid "No subscriptions match current filters."
-msgstr "Aucun abonnement ne correspond aux filtres actuels."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:341
-msgid "All Available Subscriptions"
-msgstr "Tous les abonnements disponibles"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/allsubs.py:351
-msgid "Searching"
-msgstr "Recherche"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:352
-msgid "Searching for subscriptions. Please wait."
-msgstr "Recherche des abonnements en cours. Veuillez patienter."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:366
-#, python-format
-msgid "Error fetching subscriptions from server:  %s"
-msgstr "Erreur lors de la récupération des abonnements depuis le serveur : %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:380
-#, python-format
-msgid "Unable to search for subscriptions:  %s"
-msgstr "Incapable de rechercher les abonnements : %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:391
-#, python-format
-msgid "Error getting subscription: %s"
-msgstr "Erreur lors de l'obtention des abonnements : %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/allsubs.py:395
-msgid "Quantity must be a positive number."
-msgstr "La quantité doit être un chiffre positif­."
-
-#. Start the progress bar
-#: ../src/subscription_manager/gui/allsubs.py:402
-msgid "Attaching"
-msgstr "Attachement en cours"
-
-#: ../src/subscription_manager/gui/allsubs.py:403
-msgid "Attaching subscription. Please wait."
-msgstr "Attachement des abonnements en cours. Veuillez patienter."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:422
-#, python-format
-msgid "%s applied"
-msgstr "%s appliqué"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:59
 msgid "Fact"
@@ -1014,57 +1008,32 @@ msgstr "Valeur"
 msgid "No previous update"
 msgstr "Aucune précédente mise à jour"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/importsub.py:40
-msgid "Import Certificates"
-msgstr "Importer les certificats"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/importsub.py:43
-msgid "Import"
-msgstr "Importer"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/importsub.py:52
-msgid "Certificates"
-msgstr "Certificats"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/importsub.py:57
-msgid "All files"
-msgstr "Tous les fichiers"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:155
+msgid "There was an error saving your configuration."
+msgstr ""
+"Une erreur s'est produite lors de l'enregistrement de votre configuration."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:123
-msgid "The following certificate files did not exist:"
-msgstr "Les fichiers certificats suivants n'existaient pas :"
+#: ../src/subscription_manager/gui/networkConfig.py:156
+#, python-format
+msgid "Make sure that you own %s."
+msgstr "Assurez-vous de bien posséder %s."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/importsub.py:126
-msgid "The following files are not valid certificates and were not imported:"
-msgstr ""
-"Les fichiers suivants ne sont pas des certificats valides et n'ont pas été "
-"importés :"
+#: ../src/subscription_manager/gui/networkConfig.py:177
+msgid "Proxy location cannot be empty"
+msgstr "L'emplacement du proxy ne peut pas être vide"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/importsub.py:131
-msgid ""
-"An error occurred while importing the following certificates. Please check "
-"the log file for more information."
-msgstr ""
-"Une erreur s'est produite lors de l'importation des certificats suivants. "
-"Veuillez vérifier le fichier journal pour obtenir plus d'informations."
+#: ../src/subscription_manager/gui/networkConfig.py:179
+msgid "Proxy connection succeeded"
+msgstr "Connexion proxy réussie"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/importsub.py:135
-msgid "The following certificates were successfully imported:"
-msgstr "Les certificats suivants ont été importés avec succès :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. if we get to this point, the import was successful
-#: ../src/subscription_manager/gui/importsub.py:140
-msgid "Certificate import was successful."
-msgstr "L'importation du certificat a réussie."
+#: ../src/subscription_manager/gui/networkConfig.py:181
+msgid "Proxy connection failed"
+msgstr "Connexion proxy échouée"
 
 #: ../src/subscription_manager/gui/reposgui.py:45
 msgid "Attached subscriptions do not provide any repositories."
@@ -1075,674 +1044,136 @@ msgid "No repositories are available without an attached subscription."
 msgstr "Aucun référentiel n'est disponible sans abonnement attaché."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:106
-#: ../src/subscription_manager/gui/reposgui.py:126
-#: ../src/subscription_manager/gui/reposgui.py:289 ../src/rct/printing.py:107
+#: ../src/subscription_manager/gui/reposgui.py:112
+#: ../src/subscription_manager/gui/reposgui.py:132
+#: ../src/subscription_manager/gui/reposgui.py:293 ../src/rct/printing.py:107
 msgid "Enabled"
 msgstr "Activé"
 
-#: ../src/subscription_manager/gui/reposgui.py:110
+#: ../src/subscription_manager/gui/reposgui.py:116
 msgid "Repository ID"
 msgstr "ID du référentiel"
 
-#: ../src/subscription_manager/gui/reposgui.py:115
+#: ../src/subscription_manager/gui/reposgui.py:121
 msgid "Modified"
 msgstr "Modifié"
 
-#: ../src/subscription_manager/gui/reposgui.py:127
-#: ../src/subscription_manager/gui/reposgui.py:291
+#: ../src/subscription_manager/gui/reposgui.py:133
+#: ../src/subscription_manager/gui/reposgui.py:295
 msgid "Disabled"
 msgstr "Désactivé"
 
-#: ../src/subscription_manager/gui/reposgui.py:260
+#: ../src/subscription_manager/gui/reposgui.py:264
 #, python-format
 msgid "Are you sure you want to remove all overrides for <b>%s</b>?"
 msgstr ""
 "Êtes-vous certain de vouloir supprimer toutes les substitutions pour <b>%s</"
 "b> ?"
 
-#: ../src/subscription_manager/gui/reposgui.py:261
+#: ../src/subscription_manager/gui/reposgui.py:265
 msgid "Confirm Remove All Overrides"
 msgstr "Confirmer la suppression de toutes les substitutions"
 
-#: ../src/subscription_manager/gui/reposgui.py:279
+#: ../src/subscription_manager/gui/reposgui.py:283
 msgid "Unable to reset repository overrides."
 msgstr "Incapable de réinitialiser les substitutions de référentiel."
 
-#: ../src/subscription_manager/gui/reposgui.py:325
+#: ../src/subscription_manager/gui/reposgui.py:329
 msgid "Unable to update enabled override."
 msgstr "Incapable de mettre à jour la substitution."
 
-#: ../src/subscription_manager/gui/reposgui.py:378
+#: ../src/subscription_manager/gui/reposgui.py:382
 msgid "Unable to update the gpgcheck override."
 msgstr "Incapable de mettre à jour la substitution gpgcheck."
 
-#: ../src/subscription_manager/gui/reposgui.py:385
+#: ../src/subscription_manager/gui/reposgui.py:389
 msgid "Are you sure you want to remove this override?"
 msgstr "Êtes-vous certain de vouloir supprimer cette substitution ?"
 
-#: ../src/subscription_manager/gui/reposgui.py:386
+#: ../src/subscription_manager/gui/reposgui.py:390
 msgid "Confirm Override Removal"
 msgstr "Confirmer la suppression de la substitution"
 
-#: ../src/subscription_manager/gui/reposgui.py:404
+#: ../src/subscription_manager/gui/reposgui.py:408
 msgid "Unable to delete the gpgcheck override."
 msgstr "Incapable de supprimer la substitution gpgcheck."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/reasons.py:75
-msgid "Product "
-msgstr "Produit "
+#: ../src/subscription_manager/gui/managergui.py:337
+msgid ""
+"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr ""
+"Erreur dans la boîte de dialogue des préférences. Veuillez voir /var/log/"
+"rhsm/rhsm.log pour obtenir plus d'informations."
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/reasons.py:77
-msgid "Subscription "
-msgstr "Abonnement "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/reasons.py:79
-msgid "Stack "
-msgstr "Pile "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:63
-msgid "Could not find up2date_client.config module!"
-msgstr "Module up2date_client.config introuvable !"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:69
-msgid "Could not find up2date_client.rhnChannel module!"
-msgstr "Module up2date_client.rhnChannel introuvable !"
+#: ../src/subscription_manager/gui/managergui.py:345
+msgid ""
+"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr ""
+"Erreur dans la boîte de dialogue des référentiels. Veuillez voir /var/log/"
+"rhsm/rhsm.log pour obtenir plus d'informations."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:73
+#: ../src/subscription_manager/gui/managergui.py:361
+msgid "<b>Errors were encountered during unregister.</b>"
+msgstr "<b>Des erreurs se sont produites pendant le dés-enregistrement.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:379
+msgid "<b>Are you sure you want to unregister?</b>"
+msgstr "<b>Êtes-vous certain de vouloir vous dés-enregistrer ?</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:435
+msgid "System Already Registered"
+msgstr "Système déjà enregistré"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/redeem.py:55
 #, python-format
-msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"Connexion au serveur de certificats impossible : %s. Voir /var/log/rhsm/rhsm."
-"log pour plus de détails."
+msgid "Error redeeming subscription: %s"
+msgstr "Erreur lors de l'échange de l'abonnement : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:113
-msgid "You have entered an invalid choice."
-msgstr "Le choix saisi est invalide."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:156
-msgid "ignore channels not available on RHSM"
-msgstr "ignorer les canaux non disponibles sur RHSM"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:158
-msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
-msgstr ""
-"plutôt que d'utiliser auto-attach, lancez l'outil d'interface utilisateur "
-"graphique pour attacher les abonnements"
+#: ../src/subscription_manager/cert_sorter.py:44
+msgid "Current"
+msgstr "Actuel"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:160
-msgid ""
-"don't execute the auto-attach option while registering with subscription "
-"manager"
-msgstr ""
-"n'exécutez pas l'option auto-attach pendant l'enregistrement avec "
-"Subscription Manager"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:162
-msgid ""
-"service level to follow when attaching subscriptions, for no service level "
-"use --servicelevel=\"\""
-msgstr ""
-"niveau de service à suivre lors de l'attachement d'abonnements, pour aucun "
-"niveau de service, utilisez --servicelevel=\"\""
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:165
-msgid "specify the subscription management server to migrate to"
-msgstr ""
-"spécifiez le serveur de Subscription Management vers lequel effectuer la "
-"migration"
-
-#: ../src/subscription_manager/migrate/migrate.py:167
-msgid "specify the Red Hat user name"
-msgstr "spécifiez le nom d'utilisateur Red Hat"
-
-#: ../src/subscription_manager/migrate/migrate.py:169
-msgid "specify the Red Hat password"
-msgstr "spécifiez le mot de passe Red Hat"
-
-#: ../src/subscription_manager/migrate/migrate.py:171
-msgid "specify the subscription service user name"
-msgstr "spécifiez le nom d'utilisateur du service d'abonnement"
-
-#: ../src/subscription_manager/migrate/migrate.py:173
-msgid "specify the subscription service password"
-msgstr "spécifiez le mot de passe du service d'abonnement"
+#: ../src/subscription_manager/cert_sorter.py:45
+msgid "Insufficient"
+msgstr "Insuffisant"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:176
-msgid "don't use RHN proxy settings with subscription management server"
-msgstr ""
-"n'utilisez pas les paramètres de proxy RHN avec le serveur de gestion des "
-"abonnements"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:178
-msgid "organization to register to"
-msgstr "organisation auprès de laquelle s'enregistrer"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:180
-msgid "environment to register to"
-msgstr "environnement auprès duquel s'enregistrer"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:184
-msgid "The --servicelevel and --no-auto options cannot be used together."
-msgstr ""
-"Les options --servicelevel et --no-auto ne peuvent pas être utilisées "
-"ensemble."
-
-#: ../src/subscription_manager/migrate/migrate.py:204
-msgid "Red Hat username: "
-msgstr "Nom d'utilisateur Red Hat : "
-
-#: ../src/subscription_manager/migrate/migrate.py:204
-msgid "Red Hat password: "
-msgstr "Mot de passe Red Hat : "
-
-#: ../src/subscription_manager/migrate/migrate.py:208
-msgid "Subscription Service username: "
-msgstr "Nom d'utilisateur du service d'abonnement :"
-
-#: ../src/subscription_manager/migrate/migrate.py:208
-msgid "Subscription Service password: "
-msgstr "Mot de passe du service d'abonnement :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:221
-msgid "Unable to read RHN proxy settings."
-msgstr "Incapable de lire les paramètres du proxy RHN."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:251
-#, python-format
-msgid "Error parsing server URL: %s"
-msgstr "Erreur lors de l'analyse de L'URL du serveur : %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:273
-msgid ""
-"\n"
-"This system appears to be already registered to Red Hat Subscription "
-"Management.  Exiting."
-msgstr ""
-"\n"
-"Ce système semble déjà être enregistré sur Red Hat Subscription Management. "
-"Fermeture."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:275
-#, python-format
-msgid ""
-"\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"profile details."
-msgstr ""
-"\n"
-"Veuillez visiter https://access.redhat.com/management/consumers/%s pour voir "
-"les détails du profil."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:280
-#: ../src/subscription_manager/managercli.py:348
-msgid "Error: CA certificate for subscription service has not been installed."
-msgstr ""
-"Erreur : le certificat CA pour le service des abonnements n'a pas été "
-"installé."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:296
-#: ../src/subscription_manager/managercli.py:657
-#: ../src/subscription_manager/managercli.py:1138
-#, python-format
-msgid "%s cannot register with any organizations."
-msgstr "%s ne peut s'enregistrer sur aucune organisation."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:303
-msgid "Org: "
-msgstr "Organisation : "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:311
-#, python-format
-msgid "No such org: %s"
-msgstr "Pas de telle organisation : %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:320
-msgid "Environments are not supported by this server."
-msgstr "Les environnements ne sont pas pris en charge par ce serveur."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:333
-msgid "Environment: "
-msgstr "Environnement : "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:343
-#: ../src/subscription_manager/managercli.py:1123
-#, python-format
-msgid "No such environment: %s"
-msgstr "Pas de tel environnement : %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:368
-msgid ""
-"Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
-"details."
-msgstr ""
-"Incapable d'effectuer l'authentification sur RHN Classic. Voir /var/log/rhsm/"
-"rhsm.log pour plus de détails."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:375
-msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
-msgstr ""
-"Un problème est survenu lors de la détermination des rôles d'utilisateur "
-"dans un RHN Classic. Fermeture."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:377
-msgid "You must be an org admin to successfully run this script."
-msgstr ""
-"Vous devez être un administrateur d'organisation pour exécuter ce script "
-"avec succès."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:384
-msgid "Problem encountered getting the list of subscribed channels.  Exiting."
-msgstr ""
-"Problème rencontré lors de l'obtention de la liste des canaux abonnés. "
-"Fermeture."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:397
-msgid ""
-"You are subscribed to more than one jbappplatform channel.  This script does "
-"not support that configuration.  Exiting."
-msgstr ""
-"Vous êtes enregistré sur plus d'un canal jbappplatform. Ce script ne prend "
-"pas en charge cette configuration. Fermeture."
-
-#: ../src/subscription_manager/migrate/migrate.py:429
-msgid "Unable to continue migration!"
-msgstr "Incapable de continuer la migration !"
-
-#: ../src/subscription_manager/migrate/migrate.py:430
-msgid ""
-"You are subscribed to channels that have conflicting product certificates."
-msgstr ""
-"Vous êtes abonné à des canaux comportant des certificats produits en conflit."
-
-#: ../src/subscription_manager/migrate/migrate.py:434
-#, python-format
-msgid "The following channels map to product ID %s:"
-msgstr "Les canaux suivants mappent l'ID de produit %s :"
-
-#: ../src/subscription_manager/migrate/migrate.py:437
-msgid ""
-"Reduce the number of channels per product ID to 1 and run migration again."
-msgstr ""
-"Réduisez le nombre de canaux par ID de produit à 1 et exécutez la migration "
-"à nouveau."
-
-#: ../src/subscription_manager/migrate/migrate.py:438
-msgid ""
-"To remove a channel, use 'rhn-channel --remove --"
-"channel=<conflicting_channel>'."
-msgstr ""
-"Pour supprimer un canal, utilisez « rhn-channel --remove --"
-"channel=<conflicting_channel> »."
-
-#: ../src/subscription_manager/migrate/migrate.py:450
-#, python-format
-msgid ""
-"Unable to read mapping file: %(mappingfile)s.\n"
-"Do you have the %(package)s package installed?"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:476
-msgid "Channels not available on RHSM:"
-msgstr "Canaux non disponible sur RHSM :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:481
-msgid "No product certificates are mapped to these RHN Classic channels:"
-msgstr "Aucun certificat de produit n'est mappé à ces canaux RHN Classic :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:487
-msgid ""
-"\n"
-"Use --force to ignore these channels and continue the migration.\n"
-msgstr ""
-"\n"
-"Utilisez --force pour ignorer ces canaux et continuer la migration.\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:501
-msgid "Installing product certificates for these RHN Classic channels:"
-msgstr "Installation des certificats de produits pour ces canaux RHN Classic :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:529
-#, python-format
-msgid ""
-"\n"
-"Product certificates installed successfully to %s."
-msgstr ""
-"\n"
-"Installation des certificats de produits sur %s réussie."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:609
-#, python-format
-msgid ""
-"Did not receive a completed unregistration message from RHN Classic for "
-"system %s.\n"
-"Please investigate on the Customer Portal at https://access.redhat.com."
-msgstr ""
-"Le message de désenregistrement reçu de RHN Classic pour le système %s "
-"n'était pas complet.\n"
-"Veuillez examiner le Portail Client : https://access.redhat.com."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:617
-msgid "System successfully unregistered from RHN Classic."
-msgstr "Désenregistrement du système de RHN Classic réussi."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:619
-msgid "Unable to unregister system from RHN Classic.  Exiting."
-msgstr "Désenregistrement du système de RHN Classic impossible. Fermeture."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:625
-msgid "Attempting to register system to Red Hat Subscription Management..."
-msgstr ""
-"Tentative d'enregistrement du système sur « Red Hat Subscription "
-"Management » en cours..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:638
-msgid ""
-"\n"
-"Unable to register.\n"
-"For further assistance, please contact Red Hat Global Support Services."
-msgstr ""
-"\n"
-"Enregistrement impossible.\n"
-"Pour obtenir de l'aide, veuillez contacter le service de support technique "
-"de Red Hat (GSS)."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:641
-#, python-format
-msgid ""
-"System '%s' successfully registered to Red Hat Subscription Management.\n"
-msgstr ""
-"Enregistrement du système « %s » sur « Red Hat Subscription Management » "
-"réussi.\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:645
-#: ../src/subscription_manager/managercli.py:778
-#: ../src/subscription_manager/managercli.py:856
-#: ../src/subscription_manager/managercli.py:865
-msgid "Error: The service-level command is not supported by the server."
-msgstr ""
-"Erreur : la commande service-level n'est pas prise en charge par le serveur."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#. Display an actual message for the empty string level.
-#: ../src/subscription_manager/migrate/migrate.py:664
-msgid "No service level preference"
-msgstr "Aucune préférence de niveau de service"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:671
-#, python-format
-msgid ""
-"\n"
-"Service level \"%s\" is not available."
-msgstr ""
-"\n"
-"Le niveau de service \"%s\" est indisponible."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:672
-msgid "Please select a service level agreement for this system."
-msgstr "Veuillez sélectionner un contrat de niveau de service pour ce système."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:679
-msgid ""
-"Launching the GUI tool to manually attach subscriptions to this system ..."
-msgstr ""
-"Lancement de l'outil interface utilisateur graphique pour manuellement "
-"attacher des abonnements à ce système..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:682
-msgid "Attempting to auto-attach to appropriate subscriptions..."
-msgstr ""
-"Tentative d'utillisation d'auto-attach pour les abonnements correspondants..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:691
-msgid ""
-"\n"
-"Unable to auto-attach.  Do your existing subscriptions match the products "
-"installed on this system?"
-msgstr ""
-"\n"
-"Auto-attach impossible. Vos abonnements existants correspondent-ils aux "
-"produits installés sur ce système ?"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:695
-#, python-format
-msgid ""
-"\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"details, and to make changes if necessary."
-msgstr ""
-"\n"
-"Veuillez visiter https://access.redhat.com/management/consumers/%s pour voir "
-"les détails et effectuer des modifications si nécessaire."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:730
-msgid ""
-"\n"
-"Unable to enable extra repositories."
-msgstr ""
-"\n"
-"Activation de référentiels supplémentaires impossible."
-
-#: ../src/subscription_manager/migrate/migrate.py:732
-#, python-format
-msgid ""
-"Please ensure system has subscriptions attached, and see '%s' to enable "
-"additional repositories"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:756
-msgid "Retrieving existing RHN Classic subscription information..."
-msgstr "Récupération des informations d'abonnements à RHN Classic existants..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:758
-msgid "System is currently subscribed to these RHN Classic Channels:"
-msgstr "Le système est actuellement abonné à ces canaux RHN Classic :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/migrate/migrate.py:768
-msgid ""
-"\n"
-"Preparing to unregister system from RHN Classic..."
-msgstr ""
-"\n"
-"Préparation pour le désenregistrement du système de RHN Classic..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cache.py:183
-msgid ""
-"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"Erreur lors de la mise à jour des données système sur le serveur, voir /var/"
-"log/rhsm/rhsm.log pour obtenir plus de détails."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/dmiinfo.py:56
-#: ../src/subscription_manager/dmiinfo.py:102
-#, python-format
-msgid "Error reading system DMI information: %s"
-msgstr "Erreur lors de la lecture des informations DMI du système : %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/dmiinfo.py:77
-#, python-format
-msgid "Error reading system DMI information with %s: %s"
-msgstr "Erreur lors de la lecture des informations DMI du système avec %s : %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/hwprobe.py:273
-msgid "Error reading system memory information:"
-msgstr "Erreur lors de la lecture des informations de la mémoire du système :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/hwprobe.py:583
-msgid "Error reading system CPU information:"
-msgstr "Erreur lors de la lecture des informations CPU du système :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:608
-msgid "Error reading networking information:"
-msgstr "Erreur lors de la lecture des informations réseau du système :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:707
-msgid "Error reading network interface information:"
-msgstr "Erreur lors de la lecture des informations de l'interface réseau :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/hwprobe.py:803
-msgid "Virtualization platform does not support UUIDs"
-msgstr "La plate-forme de virtualisation ne prend pas les UUID en charge"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/hwprobe.py:805
-#, python-format
-msgid "Error finding UUID: %s"
-msgstr "Erreur lors de la recherche d'UUID : %s"
+#: ../src/subscription_manager/cert_sorter.py:46
+msgid "Invalid"
+msgstr "Invalide"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. usage format strips any leading 'usage' so
 #. do not iclude it
-#: ../src/subscription_manager/cli.py:62
+#: ../src/subscription_manager/cli.py:64
 #, python-format
 msgid "%%prog %s [OPTIONS]"
 msgstr "%%prog %s [OPTIONS]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:93
+#: ../src/subscription_manager/cli.py:95
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 msgstr "Utilisation : %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/cli.py:105
+#: ../src/subscription_manager/cli.py:107
 msgid "Primary Modules:"
 msgstr "Modules primaires :"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:106
+#: ../src/subscription_manager/cli.py:108
 msgid "Other Modules:"
 msgstr "Autres modules :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/certlib.py:339
-#, python-format
-msgid "%s local certificate has been deleted."
-msgid_plural "%s local certificates have been deleted."
-msgstr[0] "%s certificat local a été supprimé."
-msgstr[1] "%s certificats locaux ont été supprimés."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:435
-#, python-format
-msgid "Total updates: %d"
-msgstr "Total des mises à jour : %d"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:436
-#, python-format
-msgid "Found (local) serial# %s"
-msgstr "Numéro de série (local) trouvé %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:437
-#, python-format
-msgid "Expected (UEP) serial# %s"
-msgstr "Numéro de série (UEP) attendu %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:438
-msgid "Added (new)"
-msgstr "Ajouté (nouveau)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:439
-msgid "Deleted (rogue):"
-msgstr "Supprimé (non autorisé) :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/certlib.py:444
-msgid "Updating entitlement certificates"
-msgstr "Mise à jour des certificats de droits d'accès"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:447
-#: ../src/daemons/rhsmcertd-worker.py:53
-#, python-format
-msgid "%d updates required"
-msgstr "%d mises à jour requises"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:448
-#: ../src/daemons/rhsmcertd-worker.py:54
-msgid "done"
-msgstr "terminé"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/utils.py:188
-#: ../src/subscription_manager/managercli.py:1161
-msgid "This system is currently not registered."
-msgstr "Ce système n'est pas enregistré actuellement."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/utils.py:266
-msgid "and"
-msgstr "et"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. note default is lower caps
@@ -1764,108 +1195,9 @@ msgstr "Utilisation : %s\n"
 msgid "%s: error: %s"
 msgstr "%s : erreur : %s"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/cert_sorter.py:44
-msgid "Current"
-msgstr "Actuel"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/cert_sorter.py:45
-msgid "Insufficient"
-msgstr "Insuffisant"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/cert_sorter.py:46
-msgid "Invalid"
-msgstr "Invalide"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:27
-msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"Erreur réseau, impossible de se connecter au serveur. Veuillez voir /var/log/"
-"rhsm/rhsm.log pour plus d'informations."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:28
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"Erreur réseau. Veuillez vérifier les détails de la connexion, ou voir /var/"
-"log/rhsm/rhsm.log pour plus d'informations."
-
-#: ../src/subscription_manager/exceptions.py:29
-msgid "Unauthorized: Invalid credentials for request."
-msgstr ""
-"Non autorisé : informations d'identification non valides pour la requête."
-
-#: ../src/subscription_manager/exceptions.py:30
-msgid "Forbidden: Invalid credentials for request."
-msgstr "Interdit : informations d'identification non valides pour la requête."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:31
-msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr ""
-"Erreur du serveur distant. Veuillez vérifier les détails de la connexion, ou "
-"voir /var/log/rhsm/rhsm.log pour plus d'informations."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:32
-#, python-format
-msgid "Bad CA certificate: %s"
-msgstr "Mauvais certificat CA : %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/exceptions.py:33
-#: ../src/daemons/rhsmcertd-worker.py:56
-msgid "Your identity certificate has expired"
-msgstr "Votre certificat d'identité a expiré"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:34
-#, python-format
-msgid "Unable to verify server's identity: %s"
-msgstr "Incapable de vérifier l'identité du serveur : %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/exceptions.py:35
-msgid "Server URL can not be empty"
-msgstr "L'URL du serveur ne peut pas être vide"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/exceptions.py:36
-msgid ""
-"Server URL is just a schema. Should include hostname, and/or port and path"
-msgstr ""
-"L'URL du serveur est un schéma uniquement. Elle doit inclure le nom d'hôte "
-"et/ou le port et le chemin"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/exceptions.py:37
-msgid "Server URL can not be None"
-msgstr "L'URL du serveur ne peut pas être « Aucun »"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/exceptions.py:38
-msgid "Server URL port should be numeric"
-msgstr "Le port de l'URL du serveur doit être numérique"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/exceptions.py:39
-msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr ""
-"Le schéma de l'URL du serveur est invalide. http:// et https:// sont "
-"supportés"
-
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:67
-#: ../src/rhsm_debug/debug_commands.py:39
+#: ../src/rhsm_debug/debug_commands.py:38
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
@@ -2098,6 +1430,14 @@ msgstr "Impossible d'analyser l'argument : %s"
 msgid "Error parsing serverurl:"
 msgstr "Erreur lors de l'analyse de serverurl :"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/managercli.py:348
+#: ../src/subscription_manager/migrate/migrate.py:280
+msgid "Error: CA certificate for subscription service has not been installed."
+msgstr ""
+"Erreur : le certificat CA pour le service des abonnements n'a pas été "
+"installé."
+
 #: ../src/subscription_manager/managercli.py:363
 msgid "Error parsing baseurl:"
 msgstr "Erreur lors de l'analyse de baseurl :"
@@ -2201,7 +1541,7 @@ msgstr "--username et --password peuvent uniquement être utilisés avec --force
 #. but then show "unknown" here.
 #: ../src/subscription_manager/managercli.py:584
 #: ../src/subscription_manager/managercli.py:587
-#: ../src/subscription_manager/managercli.py:2337
+#: ../src/subscription_manager/managercli.py:2341
 #, python-format
 msgid "server type: %s"
 msgstr "type de serveur : %s"
@@ -2256,6 +1596,14 @@ msgstr ""
 #: ../src/subscription_manager/managercli.py:650
 msgid "Organizations"
 msgstr "Organisations"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/managercli.py:657
+#: ../src/subscription_manager/managercli.py:1138
+#: ../src/subscription_manager/migrate/migrate.py:296
+#, python-format
+msgid "%s cannot register with any organizations."
+msgstr "%s ne peut s'enregistrer sur aucune organisation."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:664
@@ -2371,6 +1719,15 @@ msgstr "niveau de service à appliquer à ce système"
 #: ../src/subscription_manager/managercli.py:772
 msgid "unset the service level for this system"
 msgstr "désélectionner le niveau de service pour ce système"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/managercli.py:778
+#: ../src/subscription_manager/managercli.py:856
+#: ../src/subscription_manager/managercli.py:865
+#: ../src/subscription_manager/migrate/migrate.py:645
+msgid "Error: The service-level command is not supported by the server."
+msgstr ""
+"Erreur : la commande service-level n'est pas prise en charge par le serveur."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: ../src/subscription_manager/managercli.py:797
@@ -2569,6 +1926,19 @@ msgid ""
 msgstr ""
 "Erreur : l'option --servicelevel n'est pas prise en charge par le serveur. "
 "Votre requête n'a pas été terminée."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/managercli.py:1123
+#: ../src/subscription_manager/migrate/migrate.py:343
+#, python-format
+msgid "No such environment: %s"
+msgstr "Pas de tel environnement : %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/managercli.py:1161
+#: ../src/subscription_manager/utils.py:188
+msgid "This system is currently not registered."
+msgstr "Ce système n'est pas enregistré actuellement."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: ../src/subscription_manager/managercli.py:1186
@@ -3173,7 +2543,7 @@ msgstr "    Statut des produits installés"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:2059
-#: ../src/subscription_manager/managercli.py:2364
+#: ../src/subscription_manager/managercli.py:2372
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr ""
 "La date saisie est invalide. La date doit être sous le format AAAA-MM-JJ "
@@ -3241,75 +2611,75 @@ msgstr ""
 "répertorie toutes les substitutions, peut être spécifique à un référentiel "
 "en fournissant l'option --repo"
 
-#: ../src/subscription_manager/managercli.py:2224
+#: ../src/subscription_manager/managercli.py:2227
 msgid "--add arguments should be in the form of \"name:value\""
 msgstr "Les arguments --add doivent être sous le format « nom:valeur »"
 
-#: ../src/subscription_manager/managercli.py:2231
+#: ../src/subscription_manager/managercli.py:2234
 msgid "Error: You must specify a repository to modify"
 msgstr "Erreur : vous devez spécifier un référentiel à modifier"
 
-#: ../src/subscription_manager/managercli.py:2234
+#: ../src/subscription_manager/managercli.py:2237
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr ""
 "Erreur : vous ne pouvez pas utiliser --add ou --remove avec --remove-all et "
 "--list"
 
-#: ../src/subscription_manager/managercli.py:2237
+#: ../src/subscription_manager/managercli.py:2240
 msgid "Error: You may not use --list with --remove-all"
 msgstr "Erreur : vous ne pouvez pas utiliser --list avec --remove-all"
 
-#: ../src/subscription_manager/managercli.py:2241
+#: ../src/subscription_manager/managercli.py:2244
 msgid "Error: The --repo option must be used with --list or --add or --remove."
 msgstr ""
 "Erreur : l'option --repo doit être utilisée avec --list, --add ou --remove."
 
-#: ../src/subscription_manager/managercli.py:2254
+#: ../src/subscription_manager/managercli.py:2257
 msgid "Error: The 'repo-override' command is not supported by the server."
 msgstr ""
 "Erreur : la commande « repo-override » n'est pas prise en charge par le "
 "serveur."
 
-#: ../src/subscription_manager/managercli.py:2269
+#: ../src/subscription_manager/managercli.py:2272
 msgid "This system does not have any content overrides applied to it."
 msgstr "Aucune substitution de contenu n'est appliquée à ce système."
 
-#: ../src/subscription_manager/managercli.py:2290
+#: ../src/subscription_manager/managercli.py:2293
 #, python-format
 msgid ""
 "Repository '%s' does not currently exist, but the override has been added."
 msgstr ""
 "Le référentiel « %s » n'existe pas, mais la substitution a été ajoutée."
 
-#: ../src/subscription_manager/managercli.py:2314
+#: ../src/subscription_manager/managercli.py:2317
 #, python-format
 msgid "Nothing is known about '%s'"
 msgstr "Rien n'est connu sur « %s »"
 
-#: ../src/subscription_manager/managercli.py:2319
+#: ../src/subscription_manager/managercli.py:2322
 #, python-format
 msgid "Repository: %s"
 msgstr "Référentiel : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:2330
+#: ../src/subscription_manager/managercli.py:2334
 msgid "Print version information"
 msgstr "Imprimer les informations de version"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/managercli.py:2338
+#: ../src/subscription_manager/managercli.py:2342
 #, python-format
 msgid "subscription management server: %s"
 msgstr "serveur de gestion des abonnements : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:2346
+#: ../src/subscription_manager/managercli.py:2350
 msgid "Show status information for this system's subscriptions and products"
 msgstr ""
 "Afficher les informations de statut des abonnements et produits de ce système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:2349
+#: ../src/subscription_manager/managercli.py:2353
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr ""
@@ -3317,21 +2687,658 @@ msgstr ""
 "d'aujourd'hui (exemple : %s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:2360
+#: ../src/subscription_manager/managercli.py:2364
 msgid "Past dates are not allowed"
 msgstr "Les dates révolues ne sont pas autorisées"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:2370
+#: ../src/subscription_manager/managercli.py:2378
 msgid "System Status Details"
 msgstr "Détails du statut du système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/managercli.py:2374
-#: ../src/subscription_manager/managercli.py:2379
+#: ../src/subscription_manager/managercli.py:2382
+#: ../src/subscription_manager/managercli.py:2387
 #, python-format
 msgid "Overall Status: %s\n"
 msgstr "Statut général : %s\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:27
+msgid ""
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
+msgstr ""
+"Erreur réseau, impossible de se connecter au serveur. Veuillez voir /var/log/"
+"rhsm/rhsm.log pour plus d'informations."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:28
+msgid ""
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
+msgstr ""
+"Erreur réseau. Veuillez vérifier les détails de la connexion, ou voir /var/"
+"log/rhsm/rhsm.log pour plus d'informations."
+
+#: ../src/subscription_manager/exceptions.py:29
+msgid "Unauthorized: Invalid credentials for request."
+msgstr ""
+"Non autorisé : informations d'identification non valides pour la requête."
+
+#: ../src/subscription_manager/exceptions.py:30
+msgid "Forbidden: Invalid credentials for request."
+msgstr "Interdit : informations d'identification non valides pour la requête."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:31
+msgid ""
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
+msgstr ""
+"Erreur du serveur distant. Veuillez vérifier les détails de la connexion, ou "
+"voir /var/log/rhsm/rhsm.log pour plus d'informations."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:32
+#, python-format
+msgid "Bad CA certificate: %s"
+msgstr "Mauvais certificat CA : %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/exceptions.py:33
+#: ../src/daemons/rhsmcertd-worker.py:56
+msgid "Your identity certificate has expired"
+msgstr "Votre certificat d'identité a expiré"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:34
+#, python-format
+msgid "Unable to verify server's identity: %s"
+msgstr "Incapable de vérifier l'identité du serveur : %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/exceptions.py:35
+msgid "Server URL can not be empty"
+msgstr "L'URL du serveur ne peut pas être vide"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/exceptions.py:36
+msgid ""
+"Server URL is just a schema. Should include hostname, and/or port and path"
+msgstr ""
+"L'URL du serveur est un schéma uniquement. Elle doit inclure le nom d'hôte "
+"et/ou le port et le chemin"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/exceptions.py:37
+msgid "Server URL can not be None"
+msgstr "L'URL du serveur ne peut pas être « Aucun »"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/exceptions.py:38
+msgid "Server URL port should be numeric"
+msgstr "Le port de l'URL du serveur doit être numérique"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/exceptions.py:39
+msgid "Server URL has an invalid scheme. http:// and https:// are supported"
+msgstr ""
+"Le schéma de l'URL du serveur est invalide. http:// et https:// sont "
+"supportés"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/dmiinfo.py:56
+#: ../src/subscription_manager/dmiinfo.py:102
+#, python-format
+msgid "Error reading system DMI information: %s"
+msgstr "Erreur lors de la lecture des informations DMI du système : %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/dmiinfo.py:77
+#, python-format
+msgid "Error reading system DMI information with %s: %s"
+msgstr "Erreur lors de la lecture des informations DMI du système avec %s : %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/hwprobe.py:273
+msgid "Error reading system memory information:"
+msgstr "Erreur lors de la lecture des informations de la mémoire du système :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/hwprobe.py:583
+msgid "Error reading system CPU information:"
+msgstr "Erreur lors de la lecture des informations CPU du système :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:608
+msgid "Error reading networking information:"
+msgstr "Erreur lors de la lecture des informations réseau du système :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:707
+msgid "Error reading network interface information:"
+msgstr "Erreur lors de la lecture des informations de l'interface réseau :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/hwprobe.py:803
+msgid "Virtualization platform does not support UUIDs"
+msgstr "La plate-forme de virtualisation ne prend pas les UUID en charge"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/hwprobe.py:805
+#, python-format
+msgid "Error finding UUID: %s"
+msgstr "Erreur lors de la recherche d'UUID : %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/reasons.py:75
+msgid "Product "
+msgstr "Produit "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/reasons.py:77
+msgid "Subscription "
+msgstr "Abonnement "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/reasons.py:79
+msgid "Stack "
+msgstr "Pile "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cache.py:183
+msgid ""
+"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
+"Erreur lors de la mise à jour des données système sur le serveur, voir /var/"
+"log/rhsm/rhsm.log pour obtenir plus de détails."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/utils.py:266
+msgid "and"
+msgstr "et"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/certlib.py:339
+#, python-format
+msgid "%s local certificate has been deleted."
+msgid_plural "%s local certificates have been deleted."
+msgstr[0] "%s certificat local a été supprimé."
+msgstr[1] "%s certificats locaux ont été supprimés."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:435
+#, python-format
+msgid "Total updates: %d"
+msgstr "Total des mises à jour : %d"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:436
+#, python-format
+msgid "Found (local) serial# %s"
+msgstr "Numéro de série (local) trouvé %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:437
+#, python-format
+msgid "Expected (UEP) serial# %s"
+msgstr "Numéro de série (UEP) attendu %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:438
+msgid "Added (new)"
+msgstr "Ajouté (nouveau)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:439
+msgid "Deleted (rogue):"
+msgstr "Supprimé (non autorisé) :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/certlib.py:444
+msgid "Updating entitlement certificates"
+msgstr "Mise à jour des certificats de droits d'accès"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:447
+#: ../src/daemons/rhsmcertd-worker.py:53
+#, python-format
+msgid "%d updates required"
+msgstr "%d mises à jour requises"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:448
+#: ../src/daemons/rhsmcertd-worker.py:54
+msgid "done"
+msgstr "terminé"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:63
+msgid "Could not find up2date_client.config module!"
+msgstr "Module up2date_client.config introuvable !"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:69
+msgid "Could not find up2date_client.rhnChannel module!"
+msgstr "Module up2date_client.rhnChannel introuvable !"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:73
+#, python-format
+msgid ""
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
+"Connexion au serveur de certificats impossible : %s. Voir /var/log/rhsm/rhsm."
+"log pour plus de détails."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:113
+msgid "You have entered an invalid choice."
+msgstr "Le choix saisi est invalide."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:156
+msgid "ignore channels not available on RHSM"
+msgstr "ignorer les canaux non disponibles sur RHSM"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:158
+msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
+msgstr ""
+"plutôt que d'utiliser auto-attach, lancez l'outil d'interface utilisateur "
+"graphique pour attacher les abonnements"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:160
+msgid ""
+"don't execute the auto-attach option while registering with subscription "
+"manager"
+msgstr ""
+"n'exécutez pas l'option auto-attach pendant l'enregistrement avec "
+"Subscription Manager"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:162
+msgid ""
+"service level to follow when attaching subscriptions, for no service level "
+"use --servicelevel=\"\""
+msgstr ""
+"niveau de service à suivre lors de l'attachement d'abonnements, pour aucun "
+"niveau de service, utilisez --servicelevel=\"\""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:165
+msgid "specify the subscription management server to migrate to"
+msgstr ""
+"spécifiez le serveur de Subscription Management vers lequel effectuer la "
+"migration"
+
+#: ../src/subscription_manager/migrate/migrate.py:167
+msgid "specify the Red Hat user name"
+msgstr "spécifiez le nom d'utilisateur Red Hat"
+
+#: ../src/subscription_manager/migrate/migrate.py:169
+msgid "specify the Red Hat password"
+msgstr "spécifiez le mot de passe Red Hat"
+
+#: ../src/subscription_manager/migrate/migrate.py:171
+msgid "specify the subscription service user name"
+msgstr "spécifiez le nom d'utilisateur du service d'abonnement"
+
+#: ../src/subscription_manager/migrate/migrate.py:173
+msgid "specify the subscription service password"
+msgstr "spécifiez le mot de passe du service d'abonnement"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:176
+msgid "don't use RHN proxy settings with subscription management server"
+msgstr ""
+"n'utilisez pas les paramètres de proxy RHN avec le serveur de gestion des "
+"abonnements"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:178
+msgid "organization to register to"
+msgstr "organisation auprès de laquelle s'enregistrer"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:180
+msgid "environment to register to"
+msgstr "environnement auprès duquel s'enregistrer"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:184
+msgid "The --servicelevel and --no-auto options cannot be used together."
+msgstr ""
+"Les options --servicelevel et --no-auto ne peuvent pas être utilisées "
+"ensemble."
+
+#: ../src/subscription_manager/migrate/migrate.py:204
+msgid "Red Hat username: "
+msgstr "Nom d'utilisateur Red Hat : "
+
+#: ../src/subscription_manager/migrate/migrate.py:204
+msgid "Red Hat password: "
+msgstr "Mot de passe Red Hat : "
+
+#: ../src/subscription_manager/migrate/migrate.py:208
+msgid "Subscription Service username: "
+msgstr "Nom d'utilisateur du service d'abonnement :"
+
+#: ../src/subscription_manager/migrate/migrate.py:208
+msgid "Subscription Service password: "
+msgstr "Mot de passe du service d'abonnement :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:221
+msgid "Unable to read RHN proxy settings."
+msgstr "Incapable de lire les paramètres du proxy RHN."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:251
+#, python-format
+msgid "Error parsing server URL: %s"
+msgstr "Erreur lors de l'analyse de L'URL du serveur : %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:273
+msgid ""
+"\n"
+"This system appears to be already registered to Red Hat Subscription "
+"Management.  Exiting."
+msgstr ""
+"\n"
+"Ce système semble déjà être enregistré sur Red Hat Subscription Management. "
+"Fermeture."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:275
+#, python-format
+msgid ""
+"\n"
+"Please visit https://access.redhat.com/management/consumers/%s to view the "
+"profile details."
+msgstr ""
+"\n"
+"Veuillez visiter https://access.redhat.com/management/consumers/%s pour voir "
+"les détails du profil."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:303
+msgid "Org: "
+msgstr "Organisation : "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:311
+#, python-format
+msgid "No such org: %s"
+msgstr "Pas de telle organisation : %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:320
+msgid "Environments are not supported by this server."
+msgstr "Les environnements ne sont pas pris en charge par ce serveur."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:333
+msgid "Environment: "
+msgstr "Environnement : "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:368
+msgid ""
+"Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
+"details."
+msgstr ""
+"Incapable d'effectuer l'authentification sur RHN Classic. Voir /var/log/rhsm/"
+"rhsm.log pour plus de détails."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:375
+msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
+msgstr ""
+"Un problème est survenu lors de la détermination des rôles d'utilisateur "
+"dans un RHN Classic. Fermeture."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:377
+msgid "You must be an org admin to successfully run this script."
+msgstr ""
+"Vous devez être un administrateur d'organisation pour exécuter ce script "
+"avec succès."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:384
+msgid "Problem encountered getting the list of subscribed channels.  Exiting."
+msgstr ""
+"Problème rencontré lors de l'obtention de la liste des canaux abonnés. "
+"Fermeture."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:397
+msgid ""
+"You are subscribed to more than one jbappplatform channel.  This script does "
+"not support that configuration.  Exiting."
+msgstr ""
+"Vous êtes enregistré sur plus d'un canal jbappplatform. Ce script ne prend "
+"pas en charge cette configuration. Fermeture."
+
+#: ../src/subscription_manager/migrate/migrate.py:429
+msgid "Unable to continue migration!"
+msgstr "Incapable de continuer la migration !"
+
+#: ../src/subscription_manager/migrate/migrate.py:430
+msgid ""
+"You are subscribed to channels that have conflicting product certificates."
+msgstr ""
+"Vous êtes abonné à des canaux comportant des certificats produits en conflit."
+
+#: ../src/subscription_manager/migrate/migrate.py:434
+#, python-format
+msgid "The following channels map to product ID %s:"
+msgstr "Les canaux suivants mappent l'ID de produit %s :"
+
+#: ../src/subscription_manager/migrate/migrate.py:437
+msgid ""
+"Reduce the number of channels per product ID to 1 and run migration again."
+msgstr ""
+"Réduisez le nombre de canaux par ID de produit à 1 et exécutez la migration "
+"à nouveau."
+
+#: ../src/subscription_manager/migrate/migrate.py:438
+msgid ""
+"To remove a channel, use 'rhn-channel --remove --"
+"channel=<conflicting_channel>'."
+msgstr ""
+"Pour supprimer un canal, utilisez « rhn-channel --remove --"
+"channel=<conflicting_channel> »."
+
+#: ../src/subscription_manager/migrate/migrate.py:450
+#, python-format
+msgid ""
+"Unable to read mapping file: %(mappingfile)s.\n"
+"Do you have the %(package)s package installed?"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:476
+msgid "Channels not available on RHSM:"
+msgstr "Canaux non disponible sur RHSM :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:481
+msgid "No product certificates are mapped to these RHN Classic channels:"
+msgstr "Aucun certificat de produit n'est mappé à ces canaux RHN Classic :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:487
+msgid ""
+"\n"
+"Use --force to ignore these channels and continue the migration.\n"
+msgstr ""
+"\n"
+"Utilisez --force pour ignorer ces canaux et continuer la migration.\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:501
+msgid "Installing product certificates for these RHN Classic channels:"
+msgstr "Installation des certificats de produits pour ces canaux RHN Classic :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:529
+#, python-format
+msgid ""
+"\n"
+"Product certificates installed successfully to %s."
+msgstr ""
+"\n"
+"Installation des certificats de produits sur %s réussie."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:609
+#, python-format
+msgid ""
+"Did not receive a completed unregistration message from RHN Classic for "
+"system %s.\n"
+"Please investigate on the Customer Portal at https://access.redhat.com."
+msgstr ""
+"Le message de désenregistrement reçu de RHN Classic pour le système %s "
+"n'était pas complet.\n"
+"Veuillez examiner le Portail Client : https://access.redhat.com."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:617
+msgid "System successfully unregistered from RHN Classic."
+msgstr "Désenregistrement du système de RHN Classic réussi."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:619
+msgid "Unable to unregister system from RHN Classic.  Exiting."
+msgstr "Désenregistrement du système de RHN Classic impossible. Fermeture."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:625
+msgid "Attempting to register system to Red Hat Subscription Management..."
+msgstr ""
+"Tentative d'enregistrement du système sur « Red Hat Subscription "
+"Management » en cours..."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:638
+msgid ""
+"\n"
+"Unable to register.\n"
+"For further assistance, please contact Red Hat Global Support Services."
+msgstr ""
+"\n"
+"Enregistrement impossible.\n"
+"Pour obtenir de l'aide, veuillez contacter le service de support technique "
+"de Red Hat (GSS)."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:641
+#, python-format
+msgid ""
+"System '%s' successfully registered to Red Hat Subscription Management.\n"
+msgstr ""
+"Enregistrement du système « %s » sur « Red Hat Subscription Management » "
+"réussi.\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#. Display an actual message for the empty string level.
+#: ../src/subscription_manager/migrate/migrate.py:664
+msgid "No service level preference"
+msgstr "Aucune préférence de niveau de service"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:671
+#, python-format
+msgid ""
+"\n"
+"Service level \"%s\" is not available."
+msgstr ""
+"\n"
+"Le niveau de service \"%s\" est indisponible."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:672
+msgid "Please select a service level agreement for this system."
+msgstr "Veuillez sélectionner un contrat de niveau de service pour ce système."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:679
+msgid ""
+"Launching the GUI tool to manually attach subscriptions to this system ..."
+msgstr ""
+"Lancement de l'outil interface utilisateur graphique pour manuellement "
+"attacher des abonnements à ce système..."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:682
+msgid "Attempting to auto-attach to appropriate subscriptions..."
+msgstr ""
+"Tentative d'utillisation d'auto-attach pour les abonnements correspondants..."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:691
+msgid ""
+"\n"
+"Unable to auto-attach.  Do your existing subscriptions match the products "
+"installed on this system?"
+msgstr ""
+"\n"
+"Auto-attach impossible. Vos abonnements existants correspondent-ils aux "
+"produits installés sur ce système ?"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:695
+#, python-format
+msgid ""
+"\n"
+"Please visit https://access.redhat.com/management/consumers/%s to view the "
+"details, and to make changes if necessary."
+msgstr ""
+"\n"
+"Veuillez visiter https://access.redhat.com/management/consumers/%s pour voir "
+"les détails et effectuer des modifications si nécessaire."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:730
+msgid ""
+"\n"
+"Unable to enable extra repositories."
+msgstr ""
+"\n"
+"Activation de référentiels supplémentaires impossible."
+
+#: ../src/subscription_manager/migrate/migrate.py:732
+#, python-format
+msgid ""
+"Please ensure system has subscriptions attached, and see '%s' to enable "
+"additional repositories"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:756
+msgid "Retrieving existing RHN Classic subscription information..."
+msgstr "Récupération des informations d'abonnements à RHN Classic existants..."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:758
+msgid "System is currently subscribed to these RHN Classic Channels:"
+msgstr "Le système est actuellement abonné à ces canaux RHN Classic :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/migrate/migrate.py:768
+msgid ""
+"\n"
+"Preparing to unregister system from RHN Classic..."
+msgstr ""
+"\n"
+"Préparation pour le désenregistrement du système de RHN Classic..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/cert_commands.py:38
@@ -3771,29 +3778,29 @@ msgstr "Certificat d'identité"
 msgid "Unknown Certificate Type"
 msgstr "Type de certificat inconnu"
 
-#: ../src/rhsm_debug/debug_commands.py:49
+#: ../src/rhsm_debug/debug_commands.py:48
 msgid "Assemble system information as a tar file or directory"
 msgstr ""
 "Assembler les informations système en tant que fichier ou répertoire tar"
 
-#: ../src/rhsm_debug/debug_commands.py:54
+#: ../src/rhsm_debug/debug_commands.py:53
 msgid "the destination location of the result; default is /tmp"
 msgstr "emplacement destinataire du résultat ; par défaut /tmp"
 
-#: ../src/rhsm_debug/debug_commands.py:59
+#: ../src/rhsm_debug/debug_commands.py:58
 msgid "data will be in an uncompressed directory"
 msgstr "Les données seront dans un répertoire non compressé"
 
-#: ../src/rhsm_debug/debug_commands.py:62
+#: ../src/rhsm_debug/debug_commands.py:61
 msgid "only data not already included in sos report will be collected"
 msgstr ""
 
-#: ../src/rhsm_debug/debug_commands.py:65
+#: ../src/rhsm_debug/debug_commands.py:64
 #, python-format
 msgid "%%prog %s [OPTIONS] "
 msgstr "%%prog %s [OPTIONS] "
 
-#: ../src/rhsm_debug/debug_commands.py:70
+#: ../src/rhsm_debug/debug_commands.py:69
 msgid "The destination directory for the archive must already exist."
 msgstr "Le répertoire destinataire de l'archive doit déjà exister."
 
@@ -4079,71 +4086,112 @@ msgid "Progress Dialog"
 msgstr "Boîte de dialogue de progression"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:1
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:1
-msgid "<b>Subscription Details</b>"
-msgstr "<b>Détails d'abonnement</b>"
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:1
+msgid "Contract Selection"
+msgstr "Sélection du contrat"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:2
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:2
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
+msgid "<b>Choose the specific contract to use:</b>"
+msgstr "<b>Choisissez le contrat à utiliser en particulier :</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:3
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:2
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:2
 msgid "<b>Subscription:</b>"
 msgstr "<b>Abonnement :</b>"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:4
+msgid "<b>Total Contracts:</b>"
+msgstr "<b>Total des contrats :</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
+msgid "* Click to Change Quantity"
+msgstr "* Cliquer pour changer la quantité"
+
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
+msgid "SLA Selection Table"
+msgstr "Tableau de sélection SLA"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:1
+msgid "<b>Status:</b>"
+msgstr "<b>Statut :</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:2
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:4
+#: ../src/subscription_manager/gui/data/selectsla.glade.h:6
+msgid "label"
+msgstr "étiquette"
+
+#: ../src/subscription_manager/gui/data/installed.glade.h:3
+msgid "Overall Status"
+msgstr "Statut général"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:5
+msgid "Register System"
+msgstr "Enregistrer le système"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:6
+msgid "Auto-attach"
+msgstr "Auto-attach"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:7
+msgid "Installed View"
+msgstr "Vue installée"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:8
+msgid "<b>Product's Subscription Details</b>"
+msgstr "<b>Détails de l'abonnement au produit</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:9
+msgid "<b>Product:</b>"
+msgstr "<b>Produit :</b>"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:3
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:5
-#: ../src/subscription_manager/gui/data/repositories.glade.h:12
-msgid "Subscription Text"
-msgstr "Texte de l'abonnement"
+#: ../src/subscription_manager/gui/data/installed.glade.h:10
+msgid "<b>Subscriptions:</b>"
+msgstr "<b>Abonnements :</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:11
+msgid "Product Text"
+msgstr "Texte du produit"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:4
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
-msgid "<b>Products:</b>"
-msgstr "<b>Produits :</b>"
+#: ../src/subscription_manager/gui/data/installed.glade.h:12
+msgid "Providing Subscriptions Text"
+msgstr "Fournir des textes d'abonnements"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:5
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:13
-msgid "Bundled Products Table"
-msgstr "Tableau des produits groupés"
+#: ../src/subscription_manager/gui/data/installed.glade.h:13
+msgid "Certificate Status Text"
+msgstr "Texte du statut du certificat"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/installed.glade.h:14
+msgid "<b>Arch:</b>"
+msgstr "<b>Architecture :</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/installed.glade.h:15
+msgid "Arch Text"
+msgstr "Texte de l'architecture"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:22
-msgid "<b>Service Level, Type:</b>"
-msgstr "<b>Niveau de service, type :</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:23
-msgid "Support Level And Type Text"
-msgstr "Texte du niveau de support et du type"
-
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:8
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
-msgid "<b>Subscription Type:</b>"
-msgstr "<b>Type d'abonnement :</b>"
-
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:9
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:7
-msgid "Subscription Type Text"
-msgstr "Texte du type d'abonnement"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:10
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:20
-msgid "<b>SKU:</b>"
-msgstr "<b>SKU :</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:11
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:21
-#: ../src/subscription_manager/gui/data/repositories.glade.h:14
-msgid "SKU Text"
-msgstr "Texte SKU"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:1
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:1
+msgid "<b>Subscription Details</b>"
+msgstr "<b>Détails d'abonnement</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:3
@@ -4154,6 +4202,23 @@ msgstr "<b>Date de début - fin :</b>"
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:4
 msgid "<b>Contract:</b>"
 msgstr "<b>Contrat :</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:5
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:3
+#: ../src/subscription_manager/gui/data/repositories.glade.h:10
+msgid "Subscription Text"
+msgstr "Texte de l'abonnement"
+
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:8
+msgid "<b>Subscription Type:</b>"
+msgstr "<b>Type d'abonnement :</b>"
+
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:7
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:9
+msgid "Subscription Type Text"
+msgstr "Texte du type d'abonnement"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:8
@@ -4174,6 +4239,18 @@ msgstr "<b>Compte :</b>"
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:11
 msgid "Account Text"
 msgstr "Texte du compte"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:4
+msgid "<b>Products:</b>"
+msgstr "<b>Produits :</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:13
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:5
+msgid "Bundled Products Table"
+msgstr "Tableau des produits groupés"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:14
@@ -4206,63 +4283,93 @@ msgid "Support Type Text"
 msgstr "Texte du type de prise en charge"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:1
-msgid "Contract Selection"
-msgstr "Sélection du contrat"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:20
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:10
+msgid "<b>SKU:</b>"
+msgstr "<b>SKU :</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
-msgid "<b>Choose the specific contract to use:</b>"
-msgstr "<b>Choisissez le contrat à utiliser en particulier :</b>"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:21
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:11
+#: ../src/subscription_manager/gui/data/repositories.glade.h:12
+msgid "SKU Text"
+msgstr "Texte SKU"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:4
-msgid "<b>Total Contracts:</b>"
-msgstr "<b>Total des contrats :</b>"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:22
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:6
+msgid "<b>Service Level, Type:</b>"
+msgstr "<b>Niveau de service, type :</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
-msgid "* Click to Change Quantity"
-msgstr "* Cliquer pour changer la quantité"
-
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
-msgid "SLA Selection Table"
-msgstr "Tableau de sélection SLA"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:23
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:7
+msgid "Support Level And Type Text"
+msgstr "Texte du niveau de support et du type"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:2
-msgid "register_dialog_main_vbox"
-msgstr "register_dialog_main_vbox"
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
+msgid "<b>Confirm Subscriptions</b>"
+msgstr "<b>Confirmer les abonnements</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:3
-msgid "registration_dialog_action_area"
-msgstr "registration_dialog_action_area"
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
+msgid "Using service level:"
+msgstr "Utiliser un niveau de service :"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:5
-msgid "register_button"
-msgstr "register_button"
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:3
+msgid "SLA"
+msgstr "SLA"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/registration.glade.h:7
-msgid "progress_label"
-msgstr "progress_label"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
+msgid "The following subscriptions will be attached:"
+msgstr "Les abonnements suivants seront attachés :"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/registration.glade.h:8
-msgid "register_progressbar"
-msgstr "register_progressbar"
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:5
+msgid "Selected Subscriptions Table"
+msgstr "Tableau des abonnements sélectionnés"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/registration.glade.h:9
-msgid "register_details_label"
-msgstr "register_details_label"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:6
+msgid "Core repositories will be enabled for each product."
+msgstr "Des référentiels principaux seront activés pour chaque produit."
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/registration.glade.h:10
-msgid "page 2"
-msgstr "page 2"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/mysubs.glade.h:1
+msgid "My Subscriptions View"
+msgstr "Vue « Mes abonnements »"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/mysubs.glade.h:2
+msgid "Remove"
+msgstr "Supprimer"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:1
+msgid "<b>Show subscriptions active on:</b>"
+msgstr "<b>Afficher les abonnements actifs sur :</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:2
+msgid "Update"
+msgstr "Mise à jour"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:3
+msgid "Search"
+msgstr "Chercher"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:5
+msgid "Filters"
+msgstr "Filtres"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:6
+msgid "* Click to Adjust Quantity"
+msgstr "* Cliquez pour ajuster la quantité"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:1
@@ -4356,206 +4463,44 @@ msgstr "Configurer le Proxy"
 msgid "proxy_button"
 msgstr "proxy_button"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:1
-msgid ""
-"This assistant will guide you through the process of registering your system "
-"with Red Hat to receive software updates and other benefits. You will need "
-"the following to register:"
-msgstr ""
-"Cet assistant vous accompagnera tout au long du processus d'enregistrement "
-"de votre système avec Red Hat afin de recevoir des mises à jour de logiciels "
-"ainsi que d'autres bénéfices. Pour vous enregistrer, vous aurez besoin de :"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:2
-msgid "• A network connection"
-msgstr "• Une connexion réseau"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:3
-msgid "• Your account login"
-msgstr "• Votre identifiant de connexion"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:4
-msgid "Your account login"
-msgstr "Votre identifiant de connexion"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:5
-msgid "• The address of a subscription management service (optional)"
-msgstr "• L'adresse d'un service de gestion des abonnements (optionnel)"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:6
-msgid "_Why Should I Register?"
-msgstr "Pour_quoi devrais-je m'enregistrer ?"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:7
-msgid "Why Should I Register?"
-msgstr "Pourquoi devrais-je m'enregistrer ?"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:8
-msgid ""
-"Would you like to register your system at this time? <b>(Strongly "
-"recommended.)</b>"
-msgstr ""
-"Souhaitez vous enregistrer votre système maintenant ? <b>(Fortement "
-"recommandé.)</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:9
-msgid "_Yes, I'd like to register now."
-msgstr "_Oui, je souhaite m'enregistrer tout de suite."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:10
-msgid "_No, I prefer to register at a later time."
-msgstr "_Non, je préfère m'enregistrer ultérieurement."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:11
-msgid "Why Register"
-msgstr "Pourquoi s'enregistrer"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:12
-msgid ""
-"Registering your system with Red Hat allows you to take full advantage of "
-"the benefits of a paid subscription, including:"
-msgstr ""
-"L'enregistrement du système avec Red Hat vous permet de tirer pleinement "
-"profit des bénéfices d'un abonnement payant et inclut :"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/redeem.glade.h:1
+msgid "Subscription Redemption"
+msgstr "Échange d'abonnements"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:14
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:12
-#: ../src/subscription_manager/gui/data/repositories.glade.h:5
-msgid "Close"
-msgstr "Fermer"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:15
-msgid "<b>Security &amp; Updates:</b>"
-msgstr "<b>Sécurité &amp; mises à jour :</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:16
-msgid ""
-"Receive the latest software updates, including security updates, keeping "
-"this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
-msgstr ""
-"Recevez les mises à jour logicielles les plus récentes, y compris les mises "
-"à jour de sécurité, permettant ainsi de conserver ce système Red Hat "
-"Enterprise Linux <b>à jour</b> et <b>sécurisé</b>."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:17
-msgid "<b>Downloads &amp; Upgrades:</b>"
-msgstr "<b>Téléchargements &amp; mises à niveau :</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:18
-msgid ""
-"Download installation images for Red Hat Enterprise Linux releases, "
-"including new releases."
-msgstr ""
-"Téléchargez les images d'installation de Red Hat Enterprise Linux, y compris "
-"les nouvelles versions."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:19
-msgid "<b>Support:</b>"
-msgstr "<b>Support technique :</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:20
-msgid ""
-"Access to the technical support experts at Red Hat or Red Hat's partners for "
-"help with any issues you might encounter with this system."
-msgstr ""
-"Accédez aux experts du support technique de Red Hat ou des partenaires de "
-"Red Hat pour obtenir de l'aide avec tout problème que vous pourriez "
-"rencontrer avec ce système."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:21
-msgid "<b>Management:</b>"
-msgstr "<b>Gestion :</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:22
-msgid "Management"
-msgstr "Gestion"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:23
-msgid ""
-"Manage subscriptions and systems registered to Customer Portal via access."
-"redhat.com or through one of our other subscription management services."
-msgstr ""
-"Gérez les abonnements et les systèmes enregistrés sur le Portail Client via "
-"access.redhat.com ou à l'aide de l'un de nos services de gestion des "
-"abonnements."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:24
-msgid ""
-"<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
-"privacy_statement.html</small>"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:1
-msgid "<b>Show subscriptions active on:</b>"
-msgstr "<b>Afficher les abonnements actifs sur :</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:2
-msgid "Update"
-msgstr "Mise à jour"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:3
-msgid "Search"
-msgstr "Chercher"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:4
-#: ../src/subscription_manager/gui/data/installed.glade.h:2
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:6
-msgid "label"
-msgstr "étiquette"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:5
-msgid "Filters"
-msgstr "Filtres"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:6
-msgid "* Click to Adjust Quantity"
-msgstr "* Cliquez pour ajuster la quantité"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:7
-msgid "All Subscriptions View"
-msgstr "Voir tous les abonnements"
+#: ../src/subscription_manager/gui/data/redeem.glade.h:2
+msgid "Cancel"
+msgstr "Annuler"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:8
-msgid "no_subs_label"
-msgstr "no_subs_label"
+#: ../src/subscription_manager/gui/data/redeem.glade.h:3
+msgid "Redeem"
+msgstr "Échanges"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/redeem.glade.h:4
+msgid "Redeeming the subscription may take a few minutes."
+msgstr "L'échange de l'abonnement peut prendre plusieurs minutes."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/redeem.glade.h:5
+msgid ""
+"Please provide an email address to receive notification\n"
+"when the redemption is complete."
+msgstr ""
+"Veuillez fournir une adresse électronique pour recevoir une notification\n"
+"lorsque l'échange est terminé."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/redeem.glade.h:7
+msgid "Email Address:"
+msgstr "Adresse électronique :"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
-msgid "<b>Confirm Subscriptions</b>"
-msgstr "<b>Confirmer les abonnements</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
-msgid "Using service level:"
-msgstr "Utiliser un niveau de service :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:3
-msgid "SLA"
-msgstr "SLA"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
-msgid "The following subscriptions will be attached:"
-msgstr "Les abonnements suivants seront attachés :"
-
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:5
-msgid "Selected Subscriptions Table"
-msgstr "Tableau des abonnements sélectionnés"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:6
-msgid "Core repositories will be enabled for each product."
-msgstr "Des référentiels principaux seront activés pour chaque produit."
+#: ../src/subscription_manager/gui/data/redeem.glade.h:8
+msgid "Email Address Text"
+msgstr "Texte de l'adresse électronique"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:1
@@ -4599,6 +4544,13 @@ msgstr "Mettre à jour l'heure"
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:11
 msgid "Update Facts"
 msgstr "Mettre à jour les faits"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/factsdialog.glade.h:12
+#: ../src/subscription_manager/gui/data/repositories.glade.h:5
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:14
+msgid "Close"
+msgstr "Fermer"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:13
@@ -4677,248 +4629,6 @@ msgid "Text in Subscription"
 msgstr "Texte dans l'abonnement"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:1
-msgid "<b>Status:</b>"
-msgstr "<b>Statut :</b>"
-
-#: ../src/subscription_manager/gui/data/installed.glade.h:3
-msgid "Overall Status"
-msgstr "Statut général"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:5
-msgid "Register System"
-msgstr "Enregistrer le système"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:6
-msgid "Auto-attach"
-msgstr "Auto-attach"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:7
-msgid "Installed View"
-msgstr "Vue installée"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:8
-msgid "<b>Product's Subscription Details</b>"
-msgstr "<b>Détails de l'abonnement au produit</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:9
-msgid "<b>Product:</b>"
-msgstr "<b>Produit :</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/installed.glade.h:10
-msgid "<b>Subscriptions:</b>"
-msgstr "<b>Abonnements :</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:11
-msgid "Product Text"
-msgstr "Texte du produit"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/installed.glade.h:12
-msgid "Providing Subscriptions Text"
-msgstr "Fournir des textes d'abonnements"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:13
-msgid "Certificate Status Text"
-msgstr "Texte du statut du certificat"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/installed.glade.h:14
-msgid "<b>Arch:</b>"
-msgstr "<b>Architecture :</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/installed.glade.h:15
-msgid "Arch Text"
-msgstr "Texte de l'architecture"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
-msgid "_System"
-msgstr "_Système"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:3
-msgid "_Register"
-msgstr "En_registrer"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:4
-msgid "_Unregister"
-msgstr "_Désenregistrer"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
-msgid "_Import Cert"
-msgstr "_Importer le certificat"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:6
-msgid "R_edeem Subscription"
-msgstr "Échang_er l'abonnement"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:7
-msgid "View System _Facts"
-msgstr "Afficher les _faits système"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
-msgid "Configure Pro_xy"
-msgstr "Configurer le Pro_xy"
-
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
-msgid "Repo_sitories"
-msgstr "Référentiel_s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
-msgid "_Preferences"
-msgstr "_Préférences"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:11
-msgid "_Help"
-msgstr "_Aide"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
-msgid "_Getting Started"
-msgstr "_Mise en route"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:13
-msgid "_Online Documentation"
-msgstr "D_ocumentation en ligne"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mysubs.glade.h:1
-msgid "My Subscriptions View"
-msgstr "Vue « Mes abonnements »"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mysubs.glade.h:2
-msgid "Remove"
-msgstr "Supprimer"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/redeem.glade.h:1
-msgid "Subscription Redemption"
-msgstr "Échange d'abonnements"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:2
-msgid "Cancel"
-msgstr "Annuler"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/redeem.glade.h:3
-msgid "Redeem"
-msgstr "Échanges"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/redeem.glade.h:4
-msgid "Redeeming the subscription may take a few minutes."
-msgstr "L'échange de l'abonnement peut prendre plusieurs minutes."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/redeem.glade.h:5
-msgid ""
-"Please provide an email address to receive notification\n"
-"when the redemption is complete."
-msgstr ""
-"Veuillez fournir une adresse électronique pour recevoir une notification\n"
-"lorsque l'échange est terminé."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: ../src/subscription_manager/gui/data/redeem.glade.h:7
-msgid "Email Address:"
-msgstr "Adresse électronique :"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:8
-msgid "Email Address Text"
-msgstr "Texte de l'adresse électronique"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:1
-msgid "Manage Repositories"
-msgstr "Gérer les référentiels"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:2
-msgid "manage_repositories_dialog"
-msgstr "manage_repositories_dialog"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:3
-msgid "Remove All Overrides"
-msgstr "Supprimer toutes les substitutions"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:4
-msgid "remove_all_overrides_button"
-msgstr "remove_all_overrides_button"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:7
-msgid ""
-"Manage the repositories your subscriptions grant you access to by enabling, "
-"disabling and overriding certain fields."
-msgstr ""
-"Gérez les référentiels auxquels vos abonnements vous offrent accès en "
-"activant, désactivant et substituant certains champs."
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:8
-msgid "repository_listview"
-msgstr "repository_listview"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:9
-msgid ""
-"<b><big>Attached subscriptions do not provide any repositories.</big></b>"
-msgstr ""
-"<b><big>Les abonnements attachés ne fournissent aucun référentiel.</big></b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:10
-msgid "<b>Repository Details</b>"
-msgstr "<b>Détails du référentiel</b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:11
-msgid "<b>Name:</b>"
-msgstr "<b>Nom :</b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:13
-msgid "<b>Base URL:</b>"
-msgstr "<b>URL de base :</b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:15
-msgid "<b>Gpgcheck:</b>"
-msgstr "<b>Gpgcheck :</b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:16
-msgid "Enabled (1)"
-msgstr "Activé (1)"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:17
-msgid "gpgcheck_readonly"
-msgstr "gpgcheck_readonly"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:18
-msgid "gpgcheck_combobox"
-msgstr "gpgcheck_combobox"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:19
-msgid "gpgcheck_edit_button"
-msgstr "gpgcheck_edit_button"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:20
-msgid "gpgcheck_remove_button"
-msgstr "gpgcheck_remove_button"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid "System Preferences"
 msgstr "Préférences système"
@@ -4981,6 +4691,160 @@ msgstr ""
 "lors d'un abonnement automatique</small>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/registration.glade.h:2
+msgid "register_dialog_main_vbox"
+msgstr "register_dialog_main_vbox"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/registration.glade.h:3
+msgid "registration_dialog_action_area"
+msgstr "registration_dialog_action_area"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/registration.glade.h:5
+msgid "register_button"
+msgstr "register_button"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/registration.glade.h:7
+msgid "progress_label"
+msgstr "progress_label"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/registration.glade.h:8
+msgid "register_progressbar"
+msgstr "register_progressbar"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/registration.glade.h:9
+msgid "register_details_label"
+msgstr "register_details_label"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/registration.glade.h:10
+msgid "page 2"
+msgstr "page 2"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:1
+msgid "Manage Repositories"
+msgstr "Gérer les référentiels"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:2
+msgid "manage_repositories_dialog"
+msgstr "manage_repositories_dialog"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:3
+msgid "Remove All Overrides"
+msgstr "Supprimer toutes les substitutions"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:4
+msgid "remove_all_overrides_button"
+msgstr "remove_all_overrides_button"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:7
+msgid ""
+"Manage the repositories your subscriptions grant you access to by enabling, "
+"disabling and overriding certain fields."
+msgstr ""
+"Gérez les référentiels auxquels vos abonnements vous offrent accès en "
+"activant, désactivant et substituant certains champs."
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:8
+msgid "<b>Repository Details</b>"
+msgstr "<b>Détails du référentiel</b>"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:9
+msgid "<b>Name:</b>"
+msgstr "<b>Nom :</b>"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:11
+msgid "<b>Base URL:</b>"
+msgstr "<b>URL de base :</b>"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:13
+msgid "<b>Gpgcheck:</b>"
+msgstr "<b>Gpgcheck :</b>"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:14
+msgid "Enabled (1)"
+msgstr "Activé (1)"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:15
+msgid "gpgcheck_readonly"
+msgstr "gpgcheck_readonly"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:16
+msgid "gpgcheck_combobox"
+msgstr "gpgcheck_combobox"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:17
+msgid "gpgcheck_edit_button"
+msgstr "gpgcheck_edit_button"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:18
+msgid "gpgcheck_remove_button"
+msgstr "gpgcheck_remove_button"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
+msgid "_System"
+msgstr "_Système"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:3
+msgid "_Register"
+msgstr "En_registrer"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:4
+msgid "_Unregister"
+msgstr "_Désenregistrer"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
+msgid "_Import Cert"
+msgstr "_Importer le certificat"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:6
+msgid "R_edeem Subscription"
+msgstr "Échang_er l'abonnement"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:7
+msgid "View System _Facts"
+msgstr "Afficher les _faits système"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
+msgid "Configure Pro_xy"
+msgstr "Configurer le Pro_xy"
+
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
+msgid "Repo_sitories"
+msgstr "Référentiel_s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
+msgid "_Preferences"
+msgstr "_Préférences"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:11
+msgid "_Help"
+msgstr "_Aide"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
+msgid "_Getting Started"
+msgstr "_Mise en route"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:13
+msgid "_Online Documentation"
+msgstr "D_ocumentation en ligne"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:1
 msgid "<b>Select Service Level</b>"
 msgstr "<b>Sélectionner le niveau de service</b>"
@@ -5010,6 +4874,129 @@ msgid "<b>Select a common service level for this system's subscriptions:</b>"
 msgstr ""
 "<b>Veuillez sélectionner un niveau de service commun pour les abonnements de "
 "ce système :</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:1
+msgid ""
+"This assistant will guide you through the process of registering your system "
+"with Red Hat to receive software updates and other benefits. You will need "
+"the following to register:"
+msgstr ""
+"Cet assistant vous accompagnera tout au long du processus d'enregistrement "
+"de votre système avec Red Hat afin de recevoir des mises à jour de logiciels "
+"ainsi que d'autres bénéfices. Pour vous enregistrer, vous aurez besoin de :"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:2
+msgid "• A network connection"
+msgstr "• Une connexion réseau"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:3
+msgid "• Your account login"
+msgstr "• Votre identifiant de connexion"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:4
+msgid "Your account login"
+msgstr "Votre identifiant de connexion"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:5
+msgid "• The address of a subscription management service (optional)"
+msgstr "• L'adresse d'un service de gestion des abonnements (optionnel)"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:6
+msgid "_Why Should I Register?"
+msgstr "Pour_quoi devrais-je m'enregistrer ?"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:7
+msgid "Why Should I Register?"
+msgstr "Pourquoi devrais-je m'enregistrer ?"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:8
+msgid ""
+"Would you like to register your system at this time? <b>(Strongly "
+"recommended.)</b>"
+msgstr ""
+"Souhaitez vous enregistrer votre système maintenant ? <b>(Fortement "
+"recommandé.)</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:9
+msgid "_Yes, I'd like to register now."
+msgstr "_Oui, je souhaite m'enregistrer tout de suite."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:10
+msgid "_No, I prefer to register at a later time."
+msgstr "_Non, je préfère m'enregistrer ultérieurement."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:11
+msgid "Why Register"
+msgstr "Pourquoi s'enregistrer"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:12
+msgid ""
+"Registering your system with Red Hat allows you to take full advantage of "
+"the benefits of a paid subscription, including:"
+msgstr ""
+"L'enregistrement du système avec Red Hat vous permet de tirer pleinement "
+"profit des bénéfices d'un abonnement payant et inclut :"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:15
+msgid "<b>Security &amp; Updates:</b>"
+msgstr "<b>Sécurité &amp; mises à jour :</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:16
+msgid ""
+"Receive the latest software updates, including security updates, keeping "
+"this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
+msgstr ""
+"Recevez les mises à jour logicielles les plus récentes, y compris les mises "
+"à jour de sécurité, permettant ainsi de conserver ce système Red Hat "
+"Enterprise Linux <b>à jour</b> et <b>sécurisé</b>."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:17
+msgid "<b>Downloads &amp; Upgrades:</b>"
+msgstr "<b>Téléchargements &amp; mises à niveau :</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:18
+msgid ""
+"Download installation images for Red Hat Enterprise Linux releases, "
+"including new releases."
+msgstr ""
+"Téléchargez les images d'installation de Red Hat Enterprise Linux, y compris "
+"les nouvelles versions."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:19
+msgid "<b>Support:</b>"
+msgstr "<b>Support technique :</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:20
+msgid ""
+"Access to the technical support experts at Red Hat or Red Hat's partners for "
+"help with any issues you might encounter with this system."
+msgstr ""
+"Accédez aux experts du support technique de Red Hat ou des partenaires de "
+"Red Hat pour obtenir de l'aide avec tout problème que vous pourriez "
+"rencontrer avec ce système."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:21
+msgid "<b>Management:</b>"
+msgstr "<b>Gestion :</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:22
+msgid "Management"
+msgstr "Gestion"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:23
+msgid ""
+"Manage subscriptions and systems registered to Customer Portal via access."
+"redhat.com or through one of our other subscription management services."
+msgstr ""
+"Gérez les abonnements et les systèmes enregistrés sur le Portail Client via "
+"access.redhat.com ou à l'aide de l'un de nos services de gestion des "
+"abonnements."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:24
+msgid ""
+"<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
+"privacy_statement.html</small>"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../bin/install-num-migrate-to-rhsm:51

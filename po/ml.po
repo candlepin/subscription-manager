@@ -3,9 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-09 12:49-0400\n"
-"PO-Revision-Date: 2014-02-06 05:15-0500\n"
-"Last-Translator: anipeter <anipeter@fedoraproject.org>\n"
+"POT-Creation-Date: 2014-05-07 14:31-0400\n"
+"PO-Revision-Date: 2014-03-06 08:51-0500\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Malayalam\n"
 "Language: ml\n"
 "MIME-Version: 1.0\n"
@@ -221,406 +221,58 @@ msgid "Subscription Registration"
 msgstr "സബ്സ്ക്രിപ്ഷന്‍ രജിസ്ട്രേഷന്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:76
-#: ../src/subscription_manager/gui/widgets.py:251 ../src/rct/printing.py:42
-msgid "Product"
-msgstr "പ്രൊഡക്ട്"
+#: ../src/subscription_manager/gui/contract_selection.py:94
+#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:75
+msgid "Contract"
+msgstr "കോണ്ട്രാക്റ്റ്"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:87
-#: ../src/rct/printing.py:45 ../src/rct/printing.py:124
-msgid "Version"
-msgstr "ലക്കം"
+#: ../src/subscription_manager/gui/contract_selection.py:108
+msgid "Used / Total"
+msgstr "ഉപയോഗിച്ചവ / മൊത്തം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:90
-msgid "Status"
-msgstr "അവസ്ഥ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:93
 #: ../src/subscription_manager/gui/contract_selection.py:113
+#: ../src/subscription_manager/gui/installedtab.py:93
 #: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:126
 msgid "Start Date"
 msgstr "തുടക്ക തീയതി"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:96
-#: ../src/subscription_manager/gui/mysubstab.py:102
 #: ../src/subscription_manager/gui/contract_selection.py:119
+#: ../src/subscription_manager/gui/mysubstab.py:102
+#: ../src/subscription_manager/gui/installedtab.py:96
 #: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:127
 msgid "End Date"
 msgstr "അവസാന തീയതി"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:179
-#: ../src/subscription_manager/managercli.py:71
-msgid "Future Subscription"
-msgstr "ഭാവി സബ്സ്ക്രിപ്ഷന്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:180
-msgid "Future Subscribed"
-msgstr "ഭാവിയില്‍ സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:183
-#: ../src/subscription_manager/managercli.py:74
-msgid "Expired"
-msgstr "കാലാവധി കഴിഞ്ഞു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:193
-#, python-format
-msgid "Subscription %s is expired"
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ %s-ന്റെ കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/installedtab.py:196
-#: ../src/subscription_manager/gui/installedtab.py:197
-#: ../src/subscription_manager/managercli.py:75
-msgid "Partially Subscribed"
-msgstr "പകുതി അംഗം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#. Shouldn't be reachable.
-#. Reason has no id attr
-#. It's possible (though unlikely, and kind of broken) to have more
-#. than one version of python-rhsm/subscription-manager installed.
-#. Versions() will only return one (and I suspect it's not predictable
-#. which it will return).
-#: ../src/subscription_manager/gui/installedtab.py:200
-#: ../src/subscription_manager/gui/factsgui.py:90
-#: ../src/subscription_manager/gui/factsgui.py:117
-#: ../src/subscription_manager/reasons.py:83
-#: ../src/subscription_manager/utils.py:171
-#: ../src/subscription_manager/utils.py:172
-#: ../src/subscription_manager/utils.py:187
-#: ../src/subscription_manager/utils.py:206
-#: ../src/subscription_manager/utils.py:225
-#: ../src/subscription_manager/cert_sorter.py:47
-#: ../src/subscription_manager/managercli.py:76
-#: ../src/subscription_manager/managercli.py:284
-#: ../src/subscription_manager/managercli.py:285
-#: ../src/subscription_manager/managercli.py:288
-#: ../src/subscription_manager/managercli.py:289
-#: ../src/subscription_manager/managercli.py:1636
-#: ../src/subscription_manager/managercli.py:2374
-msgid "Unknown"
-msgstr "അപരിചിതം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/installedtab.py:202
-msgid "System is not registered."
-msgstr "സിസ്റ്റം രജിസ്ടര്‍ ചെയ്തിട്ടില്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#. System must be registered but unable to reach server:
-#: ../src/subscription_manager/gui/installedtab.py:205
-msgid "Entitlement server is unreachable."
-msgstr "എന്റൈറ്റില്‍മെന്റ് സര്‍വര്‍ ലഭ്യമല്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:208
-#: ../src/subscription_manager/managercli.py:72
-msgid "Subscribed"
-msgstr "സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:210
-#, python-format
-msgid "Covered by contract %s through %s"
-msgid_plural "Covered by contracts %s through %s"
-msgstr[0] "%s കോണ്‍ട്രാക്റ്റില്‍ ലഭ്യം (%s മുഖേന)"
-msgstr[1] "%s കോണ്‍ട്രാക്റ്റുകള്‍ ലഭ്യം (%s മുഖേന)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:217
-#: ../src/subscription_manager/gui/installedtab.py:218
-#: ../src/subscription_manager/managercli.py:73
-msgid "Not Subscribed"
-msgstr "അംഗമായിട്ടില്ല"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/installedtab.py:269
-msgid "My Installed Products"
-msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രോഡക്ടുകള്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:302
-#, python-format
-msgid "System is properly subscribed through %s."
-msgstr "സിസ്റ്റം ശരിയായി %s-ലൂടെ സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:310
-msgid "No installed products detected."
-msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത ഒരു പ്രൊഡക്ടും ലഭ്യമല്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:315
-msgid "This system does not match subscription limits."
-msgstr "ഈ സിസ്റ്റം സബ്സ്ക്രിപ്ഷന്‍ പരധികളുമായി പൊരുത്തപ്പെടുന്നില്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:321
-#, python-format
-msgid "%s installed products do not have valid subscriptions."
-msgstr "%s ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊഡക്ടുകള്‍ക്കു് ശരിയായ സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമല്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:326
-msgid "1 installed product does not have a valid subscription."
-msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത ഒരു പ്രൊഡക്ടിനു് ശരിയായ സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമല്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:331
-msgid "Keep your system up to date by registering."
-msgstr "രജിസ്ടര്‍ ചെയ്തു് നിങ്ങളുടെ സിസ്റ്റം എന്നും പുതുക്കുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/networkConfig.py:155
-msgid "There was an error saving your configuration."
-msgstr "നിങ്ങളുടെ ക്രമീകരണം സൂക്ഷിയ്ക്കുന്നതില്‍ പിശക്."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/networkConfig.py:156
-#, python-format
-msgid "Make sure that you own %s."
-msgstr "നിങ്ങള്‍ %s-ന്റെ ഉടമയെന്നുറപ്പാക്കുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/networkConfig.py:177
-msgid "Proxy location cannot be empty"
-msgstr "പ്രോക്സി സ്ഥാനം കാലിയാകുവാന്‍ സാധ്യമല്ല"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/networkConfig.py:179
-msgid "Proxy connection succeeded"
-msgstr "പ്രോക്സി കണക്ഷന്‍ വിജയിച്ചിരിയ്ക്കുന്നു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/networkConfig.py:181
-msgid "Proxy connection failed"
-msgstr "പ്രോക്സി കണക്ഷന്‍ പരാജയപ്പെട്ടു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/redeem.py:55
-#, python-format
-msgid "Error redeeming subscription: %s"
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ നല്‍കുന്നതില്‍ പിശക്: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:255
-msgid "Installed"
-msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്നു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. An empty string entry is used for "un-setting" the system's SLA:
-#. for unsetting
-#: ../src/subscription_manager/gui/widgets.py:330
-#: ../src/subscription_manager/gui/preferences.py:119
-#: ../src/subscription_manager/gui/preferences.py:145
-msgid "Not Set"
-msgstr "സജ്ജമല്ല"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/widgets.py:357
-#: ../src/subscription_manager/gui/factsgui.py:141
-#: ../src/subscription_manager/printing_utils.py:136
-#: ../src/subscription_manager/managercli.py:611
-msgid "None"
-msgstr "ശൂന്യം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:558
-msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr "തെറ്റായ തീയതി, ശരിയായ തീയതി നല്‍കുക. ഉദാഹരണം: "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/widgets.py:595
-msgid "Date Selection"
-msgstr "തീയതി തെരഞ്ഞെടുക്കുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:610
-msgid "Today"
-msgstr "ഇന്നു്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:705
-#: ../src/subscription_manager/gui/mysubstab.py:283
-#: ../src/subscription_manager/managercli.py:2084
-#: ../src/subscription_manager/managercli.py:2167
-msgid "Physical"
-msgstr "ഫിസിക്കല്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:706
-#: ../src/subscription_manager/gui/mysubstab.py:281
-#: ../src/subscription_manager/managercli.py:2082
-#: ../src/subscription_manager/managercli.py:2165
-msgid "Virtual"
-msgstr "വിര്‍ച്ച്വല്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/widgets.py:707
-msgid "Both"
-msgstr "രണ്ടും"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#. content-type is required, no need to xstr
-#: ../src/subscription_manager/gui/widgets.py:710
-#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
-msgid "Type"
-msgstr "തരം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:782
-msgid "Click to Adjust Quantity"
-msgstr "വ്യാപ്തി ശരിയാക്കുന്നതിനായി ക്ലിക്ക് ചെയ്യുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/managergui.py:337
-msgid ""
-"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr ""
-"വിശേഷതകളുടെ ഡയലോഗില്‍ പിശക്. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/rhsm/rhsm.log കാണുക."
-
-#: ../src/subscription_manager/gui/managergui.py:345
-msgid ""
-"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr ""
-"റിപ്പോസ് ഡയലോഗില്‍ പിശക്. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി ദയവായി /var/log/rhsm/rhsm.log കാണുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/managergui.py:361
-msgid "<b>Errors were encountered during unregister.</b>"
-msgstr "<b>അണ്‍രജിസ്ടര്‍ ചെയ്യുമ്പോള്‍ പിശകുകള്‍ നേരിട്ടു.</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/managergui.py:363
-#: ../src/subscription_manager/gui/registergui.py:94
-msgid "Please see /var/log/rhsm/rhsm.log for more information."
-msgstr "കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി ദയവായി /var/log/rhsm/rhsm.log കാണുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:379
-msgid "<b>Are you sure you want to unregister?</b>"
-msgstr "<b>അണ്‍രജിസ്ടര്‍ ചെയ്യണമെന്നുറപ്പാണോ?</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:435
-msgid "System Already Registered"
-msgstr "സിസ്റ്റം നിലവില്‍ രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:74
-#: ../src/subscription_manager/gui/registergui.py:421
-#: ../src/subscription_manager/gui/allsubs.py:72
-msgid "Subscription"
-msgstr "സബ്സ്ക്രിപ്ഷന്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:91
-msgid "Installed Products"
-msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊഡക്ടുകള്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. Set up the quantity column.
-#: ../src/subscription_manager/gui/mysubstab.py:105
-#: ../src/subscription_manager/gui/registergui.py:427
 #: ../src/subscription_manager/gui/contract_selection.py:124
-#: ../src/subscription_manager/gui/allsubs.py:88
+#: ../src/subscription_manager/gui/registergui.py:427
+#: ../src/subscription_manager/gui/allsubs.py:96
+#: ../src/subscription_manager/gui/mysubstab.py:105
 #: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:82
 msgid "Quantity"
 msgstr "വ്യാപ്തി"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:130
-#, python-format
-msgid "There was an error removing %s with serial number %s"
-msgstr "%s (സീരിയല്‍ നംബര്‍ %s) നീക്കം ചെയ്യുന്നതില്‍ പിശക്"
-
-#: ../src/subscription_manager/gui/mysubstab.py:144
-msgid "Removing"
-msgstr "നീക്കം ചെയ്യുന്നു"
-
-#: ../src/subscription_manager/gui/mysubstab.py:145
-msgid "Removing subscription. Please wait."
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ വെട്ടിനീക്കുന്നു. ദയവായി കാത്തിരിയ്ക്കുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:164
-#, python-format
-msgid "Are you sure you want to remove %s?"
-msgstr "%s നീക്കം ചെയ്യണമെന്നുറപ്പാണോ?"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:191
-#, python-format
-msgid "Stack of %s and %s others"
-msgstr " %s, മറ്റു് %s-ന്റെ സ്റ്റാക്ക്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:194
-#, python-format
-msgid "Stack of %s and 1 other"
-msgstr " %s, മറ്റൊരണ്ണത്തിന്റേയും സ്റ്റാക്ക്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:196
-#, python-format
-msgid "Stack of %s"
-msgstr "%s-ന്റ സ്റ്റാക്ക്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:226
-msgid "My Subscriptions"
-msgstr "എന്റെ സബ്സ്ക്രിപ്ഷനുകള്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/mysubstab.py:267
-msgid "Subscription is current."
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ നിലവിലുള്ളതാണു്."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/mysubstab.py:270
-msgid "Subscription is expired."
-msgstr "സബ്സ്ക്രിപ്ഷന്റെ കാലാവധി കഴിഞ്ഞു."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/mysubstab.py:272
-msgid "Subscription has not begun."
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ ആരംഭിച്ചിട്ടില്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/mysubstab.py:274
-msgid "Subscription management service doesn't support Status Details."
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വീസ് അവസ്ഥ വിവരണങ്ങള്‍ പിന്തുണയ്ക്കുന്നില്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/mysubstab.py:286
-msgid "Yes"
-msgstr "ഉവ്വു്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/mysubstab.py:288
-msgid "No"
-msgstr "അല്ല"
+#: ../src/subscription_manager/gui/contract_selection.py:141
+#: ../src/subscription_manager/gui/allsubs.py:231
+#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:81
+msgid "Unlimited"
+msgstr "അനന്തം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
 #: ../src/subscription_manager/gui/registergui.py:92
 msgid "<b>Unable to register the system.</b>"
 msgstr "<b>സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/registergui.py:94
+#: ../src/subscription_manager/gui/managergui.py:363
+msgid "Please see /var/log/rhsm/rhsm.log for more information."
+msgstr "കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി ദയവായി /var/log/rhsm/rhsm.log കാണുക."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:186
@@ -644,8 +296,8 @@ msgstr "<b>ഘടിപ്പിയ്ക്കുന്നു</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:298
-#: ../src/subscription_manager/gui/data/registration.glade.h:4
 #: ../src/subscription_manager/gui/data/installed.glade.h:4
+#: ../src/subscription_manager/gui/data/registration.glade.h:4
 msgid "Register"
 msgstr "രജിസ്ടര്‍ ചെയ്യുക"
 
@@ -670,9 +322,16 @@ msgstr "അംഗമാകുന്നതില്‍ പിശക്: %s"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:415
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:9
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:7
 msgid "Attach"
 msgstr "കൂട്ടിചേര്‍ക്കുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:421
+#: ../src/subscription_manager/gui/allsubs.py:80
+#: ../src/subscription_manager/gui/mysubstab.py:74
+msgid "Subscription"
+msgstr "സബ്സ്ക്രിപ്ഷന്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:473
@@ -812,6 +471,434 @@ msgstr ""
 msgid "Server supports environments, but none are available."
 msgstr "സര്‍വര്‍ പിന്തുണയ്ക്കുന്ന സാഹചര്യങ്ങള്‍, പക്ഷേ ഒന്നും ലഭ്യമല്ല."
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. Add at-spi because we no longer create this widget from glade
+#: ../src/subscription_manager/gui/allsubs.py:55
+msgid "All Subscriptions View"
+msgstr "എല്ലാ സബ്സ്ക്രിപ്ഷനുകളും കാണുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/allsubs.py:92
+msgid "Available"
+msgstr "ലഭ്യം"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/allsubs.py:175
+msgid "Press Update to search for subscriptions."
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ തെരയുന്നതിനായി പരിഷ്കരിയ്ക്കുക ക്ലിക്ക് ചെയ്യുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:210
+#, python-format
+msgid "No subscriptions are available on %s."
+msgstr "%s-ല്‍ സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമല്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/allsubs.py:216
+msgid "No subscriptions match current filters."
+msgstr "നിലവിലുള്ള ഫില്‍റ്ററുകളുമായി പൊരുത്തപ്പെടുന്ന സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമല്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:347
+msgid "All Available Subscriptions"
+msgstr "ലഭ്യമായ എല്ലാ സബ്സ്ക്രിപ്ഷനുകള്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/allsubs.py:357
+msgid "Searching"
+msgstr "തെരയുന്നു"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:358
+msgid "Searching for subscriptions. Please wait."
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ക്കായി തെരയുന്നു. ദയവായി കാത്തിരിയ്ക്കുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:372
+#, python-format
+msgid "Error fetching subscriptions from server:  %s"
+msgstr "സര്‍വറുകളില്‍ നിന്നും സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമാക്കുന്നതില്‍ പിശക്:  %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:386
+#, python-format
+msgid "Unable to search for subscriptions:  %s"
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ തെരയുവാന്‍ സാധ്യമല്ല:  %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:397
+#, python-format
+msgid "Error getting subscription: %s"
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/allsubs.py:401
+msgid "Quantity must be a positive number."
+msgstr "വ്യാപ്തി ഒരു പൂര്‍ണ്ണ അക്കമായിരിയ്ക്കണം."
+
+#. Start the progress bar
+#: ../src/subscription_manager/gui/allsubs.py:408
+msgid "Attaching"
+msgstr "ചേര്‍ക്കുന്നു"
+
+#: ../src/subscription_manager/gui/allsubs.py:409
+msgid "Attaching subscription. Please wait."
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ ചേര്‍ക്കുന്നു. ദയവായി കാത്തിരിയ്ക്കുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:428
+#, python-format
+msgid "%s applied"
+msgstr "%s ലഭ്യമാക്കിയിരിയ്ക്കുന്നു"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/importsub.py:40
+msgid "Import Certificates"
+msgstr "സര്‍ട്ടിഫിക്കേറ്റുകള്‍ ഇംപോര്‍ട്ട് ചെയ്യുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/importsub.py:43
+msgid "Import"
+msgstr "ഇംപോര്‍ട്ട് ചെയ്യുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/importsub.py:52
+msgid "Certificates"
+msgstr "സര്‍ട്ടിഫിക്കേറ്റുകള്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/importsub.py:57
+msgid "All files"
+msgstr "എല്ലാ ഫയലുകളും"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/importsub.py:123
+msgid "The following certificate files did not exist:"
+msgstr "ഈ സര്‍ട്ടിഫിക്കേറ്റ് ഫയലുകള്‍ നിലവിലില്ല:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/importsub.py:126
+msgid "The following files are not valid certificates and were not imported:"
+msgstr "ഈ ഫയലുകള്‍ ശരിയായ സര്‍ട്ടിഫിക്കേറ്റുകളല്ല, ഇവ ഇംപോര്‍ട്ട് ചെയ്തിട്ടുമില്ല:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/importsub.py:131
+msgid ""
+"An error occurred while importing the following certificates. Please check "
+"the log file for more information."
+msgstr ""
+"ഈ സര്‍ട്ടിഫിക്കേറ്റുകള്‍ ഇംപോര്‍ട്ട് ചെയ്യുന്നതില്‍ പിശകുണ്ടായിരിയ്ക്കുന്നു. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി ലോഗ് "
+"ഫയല്‍ കാണുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/importsub.py:135
+msgid "The following certificates were successfully imported:"
+msgstr "ഈ സര്‍ട്ടിഫിക്കേറ്റുകള്‍ വിജയകരമായി ഇംപോര്‍ട്ട് ചെയ്തിരിയ്ക്കുന്നു:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. if we get to this point, the import was successful
+#: ../src/subscription_manager/gui/importsub.py:140
+msgid "Certificate import was successful."
+msgstr "സര്‍ട്ടിഫിക്കേറ്റ് ലഭ്യമാക്കല്‍ വിജയകരം."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:91
+msgid "Installed Products"
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊഡക്ടുകള്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:130
+#, python-format
+msgid "There was an error removing %s with serial number %s"
+msgstr "%s (സീരിയല്‍ നംബര്‍ %s) നീക്കം ചെയ്യുന്നതില്‍ പിശക്"
+
+#: ../src/subscription_manager/gui/mysubstab.py:144
+msgid "Removing"
+msgstr "നീക്കം ചെയ്യുന്നു"
+
+#: ../src/subscription_manager/gui/mysubstab.py:145
+msgid "Removing subscription. Please wait."
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ വെട്ടിനീക്കുന്നു. ദയവായി കാത്തിരിയ്ക്കുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:164
+#, python-format
+msgid "Are you sure you want to remove %s?"
+msgstr "%s നീക്കം ചെയ്യണമെന്നുറപ്പാണോ?"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:191
+#, python-format
+msgid "Stack of %s and %s others"
+msgstr " %s, മറ്റു് %s-ന്റെ സ്റ്റാക്ക്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:194
+#, python-format
+msgid "Stack of %s and 1 other"
+msgstr " %s, മറ്റൊരണ്ണത്തിന്റേയും സ്റ്റാക്ക്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:196
+#, python-format
+msgid "Stack of %s"
+msgstr "%s-ന്റ സ്റ്റാക്ക്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:226
+msgid "My Subscriptions"
+msgstr "എന്റെ സബ്സ്ക്രിപ്ഷനുകള്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/mysubstab.py:267
+msgid "Subscription is current."
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ നിലവിലുള്ളതാണു്."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/mysubstab.py:270
+msgid "Subscription is expired."
+msgstr "സബ്സ്ക്രിപ്ഷന്റെ കാലാവധി കഴിഞ്ഞു."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/mysubstab.py:272
+msgid "Subscription has not begun."
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ ആരംഭിച്ചിട്ടില്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/mysubstab.py:274
+msgid "Subscription management service doesn't support Status Details."
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വീസ് അവസ്ഥ വിവരണങ്ങള്‍ പിന്തുണയ്ക്കുന്നില്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:281
+#: ../src/subscription_manager/gui/widgets.py:710
+#: ../src/subscription_manager/managercli.py:2082
+#: ../src/subscription_manager/managercli.py:2165
+msgid "Virtual"
+msgstr "വിര്‍ച്ച്വല്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:283
+#: ../src/subscription_manager/gui/widgets.py:709
+#: ../src/subscription_manager/managercli.py:2084
+#: ../src/subscription_manager/managercli.py:2167
+msgid "Physical"
+msgstr "ഫിസിക്കല്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/mysubstab.py:286
+msgid "Yes"
+msgstr "ഉവ്വു്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/mysubstab.py:288
+msgid "No"
+msgstr "അല്ല"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:255
+#: ../src/subscription_manager/gui/installedtab.py:76
+#: ../src/rct/printing.py:42
+msgid "Product"
+msgstr "പ്രൊഡക്ട്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:259
+msgid "Installed"
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്നു"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. An empty string entry is used for "un-setting" the system's SLA:
+#. for unsetting
+#: ../src/subscription_manager/gui/widgets.py:334
+#: ../src/subscription_manager/gui/preferences.py:119
+#: ../src/subscription_manager/gui/preferences.py:145
+msgid "Not Set"
+msgstr "സജ്ജമല്ല"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/widgets.py:361
+#: ../src/subscription_manager/gui/factsgui.py:141
+#: ../src/subscription_manager/printing_utils.py:136
+#: ../src/subscription_manager/managercli.py:611
+msgid "None"
+msgstr "ശൂന്യം"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:562
+msgid "Invalid date format. Please re-enter a valid date. Example: "
+msgstr "തെറ്റായ തീയതി, ശരിയായ തീയതി നല്‍കുക. ഉദാഹരണം: "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/widgets.py:599
+msgid "Date Selection"
+msgstr "തീയതി തെരഞ്ഞെടുക്കുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:614
+msgid "Today"
+msgstr "ഇന്നു്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/widgets.py:711
+msgid "Both"
+msgstr "രണ്ടും"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#. content-type is required, no need to xstr
+#: ../src/subscription_manager/gui/widgets.py:714
+#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
+msgid "Type"
+msgstr "തരം"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:786
+msgid "Click to Adjust Quantity"
+msgstr "വ്യാപ്തി ശരിയാക്കുന്നതിനായി ക്ലിക്ക് ചെയ്യുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:87
+#: ../src/rct/printing.py:45 ../src/rct/printing.py:124
+msgid "Version"
+msgstr "ലക്കം"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:90
+msgid "Status"
+msgstr "അവസ്ഥ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:179
+#: ../src/subscription_manager/managercli.py:71
+msgid "Future Subscription"
+msgstr "ഭാവി സബ്സ്ക്രിപ്ഷന്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:180
+msgid "Future Subscribed"
+msgstr "ഭാവിയില്‍ സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:183
+#: ../src/subscription_manager/managercli.py:74
+msgid "Expired"
+msgstr "കാലാവധി കഴിഞ്ഞു"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:193
+#, python-format
+msgid "Subscription %s is expired"
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ %s-ന്റെ കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/installedtab.py:196
+#: ../src/subscription_manager/gui/installedtab.py:197
+#: ../src/subscription_manager/managercli.py:75
+msgid "Partially Subscribed"
+msgstr "പകുതി അംഗം"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#. Shouldn't be reachable.
+#. Reason has no id attr
+#. It's possible (though unlikely, and kind of broken) to have more
+#. than one version of python-rhsm/subscription-manager installed.
+#. Versions() will only return one (and I suspect it's not predictable
+#. which it will return).
+#: ../src/subscription_manager/gui/installedtab.py:200
+#: ../src/subscription_manager/gui/factsgui.py:90
+#: ../src/subscription_manager/gui/factsgui.py:117
+#: ../src/subscription_manager/cert_sorter.py:47
+#: ../src/subscription_manager/managercli.py:76
+#: ../src/subscription_manager/managercli.py:284
+#: ../src/subscription_manager/managercli.py:285
+#: ../src/subscription_manager/managercli.py:288
+#: ../src/subscription_manager/managercli.py:289
+#: ../src/subscription_manager/managercli.py:1636
+#: ../src/subscription_manager/managercli.py:2382
+#: ../src/subscription_manager/reasons.py:83
+#: ../src/subscription_manager/utils.py:171
+#: ../src/subscription_manager/utils.py:172
+#: ../src/subscription_manager/utils.py:187
+#: ../src/subscription_manager/utils.py:206
+#: ../src/subscription_manager/utils.py:225
+msgid "Unknown"
+msgstr "അപരിചിതം"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/installedtab.py:202
+msgid "System is not registered."
+msgstr "സിസ്റ്റം രജിസ്ടര്‍ ചെയ്തിട്ടില്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#. System must be registered but unable to reach server:
+#: ../src/subscription_manager/gui/installedtab.py:205
+msgid "Entitlement server is unreachable."
+msgstr "എന്റൈറ്റില്‍മെന്റ് സര്‍വര്‍ ലഭ്യമല്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:208
+#: ../src/subscription_manager/managercli.py:72
+msgid "Subscribed"
+msgstr "സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:210
+#, python-format
+msgid "Covered by contract %s through %s"
+msgid_plural "Covered by contracts %s through %s"
+msgstr[0] "%s കോണ്‍ട്രാക്റ്റില്‍ ലഭ്യം (%s മുഖേന)"
+msgstr[1] "%s കോണ്‍ട്രാക്റ്റുകള്‍ ലഭ്യം (%s മുഖേന)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:217
+#: ../src/subscription_manager/gui/installedtab.py:218
+#: ../src/subscription_manager/managercli.py:73
+msgid "Not Subscribed"
+msgstr "അംഗമായിട്ടില്ല"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/installedtab.py:269
+msgid "My Installed Products"
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രോഡക്ടുകള്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:302
+#, python-format
+msgid "System is properly subscribed through %s."
+msgstr "സിസ്റ്റം ശരിയായി %s-ലൂടെ സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:310
+msgid "No installed products detected."
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത ഒരു പ്രൊഡക്ടും ലഭ്യമല്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:315
+msgid "This system does not match subscription limits."
+msgstr "ഈ സിസ്റ്റം സബ്സ്ക്രിപ്ഷന്‍ പരധികളുമായി പൊരുത്തപ്പെടുന്നില്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:321
+#, python-format
+msgid "%s installed products do not have valid subscriptions."
+msgstr "%s ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊഡക്ടുകള്‍ക്കു് ശരിയായ സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമല്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:326
+msgid "1 installed product does not have a valid subscription."
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത ഒരു പ്രൊഡക്ടിനു് ശരിയായ സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമല്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:331
+msgid "Keep your system up to date by registering."
+msgstr "രജിസ്ടര്‍ ചെയ്തു് നിങ്ങളുടെ സിസ്റ്റം എന്നും പുതുക്കുക."
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
 #: ../src/subscription_manager/gui/about.py:29
 msgid ""
@@ -869,98 +956,6 @@ msgid "<b>Next System Check-in:</b> %s"
 msgstr "<b>അടുത്ത സിസ്റ്റം പരിശോധന:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:94
-#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:75
-msgid "Contract"
-msgstr "കോണ്ട്രാക്റ്റ്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:108
-msgid "Used / Total"
-msgstr "ഉപയോഗിച്ചവ / മൊത്തം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:141
-#: ../src/subscription_manager/gui/allsubs.py:225
-#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:81
-msgid "Unlimited"
-msgstr "അനന്തം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/allsubs.py:84
-msgid "Available"
-msgstr "ലഭ്യം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/allsubs.py:167
-msgid "Press Update to search for subscriptions."
-msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ തെരയുന്നതിനായി പരിഷ്കരിയ്ക്കുക ക്ലിക്ക് ചെയ്യുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:203
-#, python-format
-msgid "No subscriptions are available on %s."
-msgstr "%s-ല്‍ സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമല്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/allsubs.py:209
-msgid "No subscriptions match current filters."
-msgstr "നിലവിലുള്ള ഫില്‍റ്ററുകളുമായി പൊരുത്തപ്പെടുന്ന സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമല്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:341
-msgid "All Available Subscriptions"
-msgstr "ലഭ്യമായ എല്ലാ സബ്സ്ക്രിപ്ഷനുകള്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/allsubs.py:351
-msgid "Searching"
-msgstr "തെരയുന്നു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:352
-msgid "Searching for subscriptions. Please wait."
-msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ക്കായി തെരയുന്നു. ദയവായി കാത്തിരിയ്ക്കുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:366
-#, python-format
-msgid "Error fetching subscriptions from server:  %s"
-msgstr "സര്‍വറുകളില്‍ നിന്നും സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമാക്കുന്നതില്‍ പിശക്:  %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:380
-#, python-format
-msgid "Unable to search for subscriptions:  %s"
-msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ തെരയുവാന്‍ സാധ്യമല്ല:  %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:391
-#, python-format
-msgid "Error getting subscription: %s"
-msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/allsubs.py:395
-msgid "Quantity must be a positive number."
-msgstr "വ്യാപ്തി ഒരു പൂര്‍ണ്ണ അക്കമായിരിയ്ക്കണം."
-
-#. Start the progress bar
-#: ../src/subscription_manager/gui/allsubs.py:402
-msgid "Attaching"
-msgstr "ചേര്‍ക്കുന്നു"
-
-#: ../src/subscription_manager/gui/allsubs.py:403
-msgid "Attaching subscription. Please wait."
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ ചേര്‍ക്കുന്നു. ദയവായി കാത്തിരിയ്ക്കുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:422
-#, python-format
-msgid "%s applied"
-msgstr "%s ലഭ്യമാക്കിയിരിയ്ക്കുന്നു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:59
 msgid "Fact"
@@ -977,54 +972,30 @@ msgid "No previous update"
 msgstr "മുമ്പുള്ള പരിഷ്കരണം ലഭ്യമല്ല"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/importsub.py:40
-msgid "Import Certificates"
-msgstr "സര്‍ട്ടിഫിക്കേറ്റുകള്‍ ഇംപോര്‍ട്ട് ചെയ്യുക"
+#: ../src/subscription_manager/gui/networkConfig.py:155
+msgid "There was an error saving your configuration."
+msgstr "നിങ്ങളുടെ ക്രമീകരണം സൂക്ഷിയ്ക്കുന്നതില്‍ പിശക്."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/importsub.py:43
-msgid "Import"
-msgstr "ഇംപോര്‍ട്ട് ചെയ്യുക"
+#: ../src/subscription_manager/gui/networkConfig.py:156
+#, python-format
+msgid "Make sure that you own %s."
+msgstr "നിങ്ങള്‍ %s-ന്റെ ഉടമയെന്നുറപ്പാക്കുക."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/importsub.py:52
-msgid "Certificates"
-msgstr "സര്‍ട്ടിഫിക്കേറ്റുകള്‍"
+#: ../src/subscription_manager/gui/networkConfig.py:177
+msgid "Proxy location cannot be empty"
+msgstr "പ്രോക്സി സ്ഥാനം കാലിയാകുവാന്‍ സാധ്യമല്ല"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/importsub.py:57
-msgid "All files"
-msgstr "എല്ലാ ഫയലുകളും"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:123
-msgid "The following certificate files did not exist:"
-msgstr "ഈ സര്‍ട്ടിഫിക്കേറ്റ് ഫയലുകള്‍ നിലവിലില്ല:"
+#: ../src/subscription_manager/gui/networkConfig.py:179
+msgid "Proxy connection succeeded"
+msgstr "പ്രോക്സി കണക്ഷന്‍ വിജയിച്ചിരിയ്ക്കുന്നു"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/importsub.py:126
-msgid "The following files are not valid certificates and were not imported:"
-msgstr "ഈ ഫയലുകള്‍ ശരിയായ സര്‍ട്ടിഫിക്കേറ്റുകളല്ല, ഇവ ഇംപോര്‍ട്ട് ചെയ്തിട്ടുമില്ല:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/importsub.py:131
-msgid ""
-"An error occurred while importing the following certificates. Please check "
-"the log file for more information."
-msgstr ""
-"ഈ സര്‍ട്ടിഫിക്കേറ്റുകള്‍ ഇംപോര്‍ട്ട് ചെയ്യുന്നതില്‍ പിശകുണ്ടായിരിയ്ക്കുന്നു. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി ലോഗ് "
-"ഫയല്‍ കാണുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/importsub.py:135
-msgid "The following certificates were successfully imported:"
-msgstr "ഈ സര്‍ട്ടിഫിക്കേറ്റുകള്‍ വിജയകരമായി ഇംപോര്‍ട്ട് ചെയ്തിരിയ്ക്കുന്നു:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. if we get to this point, the import was successful
-#: ../src/subscription_manager/gui/importsub.py:140
-msgid "Certificate import was successful."
-msgstr "സര്‍ട്ടിഫിക്കേറ്റ് ലഭ്യമാക്കല്‍ വിജയകരം."
+#: ../src/subscription_manager/gui/networkConfig.py:181
+msgid "Proxy connection failed"
+msgstr "പ്രോക്സി കണക്ഷന്‍ പരാജയപ്പെട്ടു"
 
 #: ../src/subscription_manager/gui/reposgui.py:45
 msgid "Attached subscriptions do not provide any repositories."
@@ -1035,649 +1006,132 @@ msgid "No repositories are available without an attached subscription."
 msgstr "ഘടിപ്പിച്ചിട്ടില്ലാത്ത സബ്സ്ക്രിപ്ഷനില്ലാത്ത ഒരു റിപ്പോസിറ്ററികളും ലഭ്യമല്ല."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:106
-#: ../src/subscription_manager/gui/reposgui.py:126
-#: ../src/subscription_manager/gui/reposgui.py:289 ../src/rct/printing.py:107
+#: ../src/subscription_manager/gui/reposgui.py:112
+#: ../src/subscription_manager/gui/reposgui.py:132
+#: ../src/subscription_manager/gui/reposgui.py:293 ../src/rct/printing.py:107
 msgid "Enabled"
 msgstr "പ്രവര്‍ത്തന സജ്ജം"
 
-#: ../src/subscription_manager/gui/reposgui.py:110
+#: ../src/subscription_manager/gui/reposgui.py:116
 msgid "Repository ID"
 msgstr "റിപ്പോസിറ്ററി ഐഡി"
 
-#: ../src/subscription_manager/gui/reposgui.py:115
+#: ../src/subscription_manager/gui/reposgui.py:121
 msgid "Modified"
 msgstr "മാറ്റം വരുത്തിയതു്"
 
-#: ../src/subscription_manager/gui/reposgui.py:127
-#: ../src/subscription_manager/gui/reposgui.py:291
+#: ../src/subscription_manager/gui/reposgui.py:133
+#: ../src/subscription_manager/gui/reposgui.py:295
 msgid "Disabled"
 msgstr "പ്രവര്‍ത്തന രഹിതം"
 
-#: ../src/subscription_manager/gui/reposgui.py:260
+#: ../src/subscription_manager/gui/reposgui.py:264
 #, python-format
 msgid "Are you sure you want to remove all overrides for <b>%s</b>?"
 msgstr "<b>%s</b>-നുള്ള എല്ലാ ഓവര്‍റൈഡുകളും നിങ്ങള്‍ക്കു് നീക്കം ചെയ്യണമെന്നുറപ്പാണോ ?"
 
-#: ../src/subscription_manager/gui/reposgui.py:261
+#: ../src/subscription_manager/gui/reposgui.py:265
 msgid "Confirm Remove All Overrides"
 msgstr "എല്ലാ ഓവര്‍റൈഡുകളും ഉറപ്പായി നീക്കം ചെയ്യുക"
 
-#: ../src/subscription_manager/gui/reposgui.py:279
+#: ../src/subscription_manager/gui/reposgui.py:283
 msgid "Unable to reset repository overrides."
 msgstr "റിപ്പോസിറ്ററി ഓവര്‍റൈഡുകള്‍ വീണ്ടും സജ്ജമാക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/subscription_manager/gui/reposgui.py:325
+#: ../src/subscription_manager/gui/reposgui.py:329
 msgid "Unable to update enabled override."
 msgstr "പ്രവര്‍ത്തന സജ്ജമായ ഓവര്‍റൈഡ് പരിഷ്കരിയ്ക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/subscription_manager/gui/reposgui.py:378
+#: ../src/subscription_manager/gui/reposgui.py:382
 msgid "Unable to update the gpgcheck override."
 msgstr "gpgcheck ഓവര്‍റൈഡ് പരിഷ്കരിയ്ക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/subscription_manager/gui/reposgui.py:385
+#: ../src/subscription_manager/gui/reposgui.py:389
 msgid "Are you sure you want to remove this override?"
 msgstr "ഈ ഓവര്‍റൈഡ് നീക്കം ചെയ്യണമെന്നുറപ്പാണോ?"
 
-#: ../src/subscription_manager/gui/reposgui.py:386
+#: ../src/subscription_manager/gui/reposgui.py:390
 msgid "Confirm Override Removal"
 msgstr "ഓവര്‍റൈഡ് നീക്കം ചെയ്യല്‍ ഉറപ്പാക്കുക"
 
-#: ../src/subscription_manager/gui/reposgui.py:404
+#: ../src/subscription_manager/gui/reposgui.py:408
 msgid "Unable to delete the gpgcheck override."
 msgstr "gpgcheck ഓവര്‍റൈഡ് വെട്ടി നീക്കുവാന്‍ സാധ്യമല്ല."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/reasons.py:75
-msgid "Product "
-msgstr "പ്രൊഡക്ട്"
+#: ../src/subscription_manager/gui/managergui.py:337
+msgid ""
+"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr ""
+"വിശേഷതകളുടെ ഡയലോഗില്‍ പിശക്. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/rhsm/rhsm.log കാണുക."
+
+#: ../src/subscription_manager/gui/managergui.py:345
+msgid ""
+"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr ""
+"റിപ്പോസ് ഡയലോഗില്‍ പിശക്. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി ദയവായി /var/log/rhsm/rhsm.log കാണുക."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/reasons.py:77
-msgid "Subscription "
-msgstr "സബ്സ്ക്രിപ്ഷന്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/reasons.py:79
-msgid "Stack "
-msgstr "സ്റ്റാക്ക്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:63
-msgid "Could not find up2date_client.config module!"
-msgstr "up2date_client.config ഘടകം ലഭ്യമായില്ല!"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:69
-msgid "Could not find up2date_client.rhnChannel module!"
-msgstr "up2date_client.rhnChannel ഘടകം ലഭ്യമായില്ല!"
+#: ../src/subscription_manager/gui/managergui.py:361
+msgid "<b>Errors were encountered during unregister.</b>"
+msgstr "<b>അണ്‍രജിസ്ടര്‍ ചെയ്യുമ്പോള്‍ പിശകുകള്‍ നേരിട്ടു.</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:73
+#: ../src/subscription_manager/gui/managergui.py:379
+msgid "<b>Are you sure you want to unregister?</b>"
+msgstr "<b>അണ്‍രജിസ്ടര്‍ ചെയ്യണമെന്നുറപ്പാണോ?</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:435
+msgid "System Already Registered"
+msgstr "സിസ്റ്റം നിലവില്‍ രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/redeem.py:55
 #, python-format
-msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"സര്‍ട്ടിഫിക്കേറ്റിന്റെ സര്‍വറിലേക്കു് കണക്ട് ചെയ്യുവാന്‍ സാധ്യമല്ല: %s. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/"
-"log/rhsm/rhsm.log കാണുക."
+msgid "Error redeeming subscription: %s"
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ നല്‍കുന്നതില്‍ പിശക്: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:113
-msgid "You have entered an invalid choice."
-msgstr "തെറ്റായതു് നല്‍കിയിരിയ്ക്കുന്നു."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:156
-msgid "ignore channels not available on RHSM"
-msgstr "RHSM-ല്‍ ലഭ്യമല്ലാത്ത ചാനലുകള്‍ വേണ്ടെന്നു് വയ്ക്കുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:158
-msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
-msgstr ""
-"സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍ക്കുന്നതിനായി ജിയുഐ പ്രയോഗം ഉപയോഗിയ്ക്കുക, ഓട്ടോ-അറ്റാച്ചിങ് ആവശ്യമില്ല"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:160
-msgid ""
-"don't execute the auto-attach option while registering with subscription "
-"manager"
-msgstr "subscription manager-മായി രജിസ്ടര്‍ ചെയ്യുമ്പോള്‍ ഓട്ടോ-അറ്റാച്ച് ഉപയോഗിയ്ക്കരുതു്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:162
-msgid ""
-"service level to follow when attaching subscriptions, for no service level "
-"use --servicelevel=\"\""
-msgstr ""
-"സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍ക്കുമ്പോള്‍ ആവശ്യമായ സര്‍വീസ് ലവല്‍, സര്‍വീസ് ലവല്‍ ഇല്ലെങ്കില്‍ --servicelevel="
-"\"\" ഉപയോഗിയ്ക്കുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:165
-msgid "specify the subscription management server to migrate to"
-msgstr "നീക്കുവാനുള്ള സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വര്‍ നല്‍കുക"
-
-#: ../src/subscription_manager/migrate/migrate.py:167
-msgid "specify the Red Hat user name"
-msgstr "Red Hat ഉപയോക്താവിന്റെ പേരു് നല്‍കുക"
-
-#: ../src/subscription_manager/migrate/migrate.py:169
-msgid "specify the Red Hat password"
-msgstr "Red Hat രഹസ്യവാക്ക് നല്‍കുക"
-
-#: ../src/subscription_manager/migrate/migrate.py:171
-msgid "specify the subscription service user name"
-msgstr "subscription സര്‍വീസ് ഉപയോക്തൃനാമം വ്യക്തമാക്കുക"
-
-#: ../src/subscription_manager/migrate/migrate.py:173
-msgid "specify the subscription service password"
-msgstr "subscription സര്‍വീസ് രഹസ്യവാക്ക് വ്യക്തമാക്കുക"
+#: ../src/subscription_manager/cert_sorter.py:44
+msgid "Current"
+msgstr "നിലവിലുള്ളതു്"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:176
-msgid "don't use RHN proxy settings with subscription management server"
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വറിനൊപ്പം RHN പ്രോക്സി സജ്ജീകരണങ്ങള്‍ ഉപയോഗിയ്ക്കരുതു്"
+#: ../src/subscription_manager/cert_sorter.py:45
+msgid "Insufficient"
+msgstr "അപരിമിതം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:178
-msgid "organization to register to"
-msgstr "രജിസ്ടര്‍ ചെയ്യുവാനുള്ള സ്ഥാപനം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:180
-msgid "environment to register to"
-msgstr "രജിസ്ടര്‍ ചെയ്യുവാനുള്ള സാഹചര്യം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:184
-msgid "The --servicelevel and --no-auto options cannot be used together."
-msgstr "--servicelevel, --no-auto ഐച്ഛികങ്ങള്‍ ഒന്നിച്ചുപയോഗിയ്ക്കുവാന്‍ സാധ്യമല്ല."
-
-#: ../src/subscription_manager/migrate/migrate.py:204
-msgid "Red Hat username: "
-msgstr "Red Hat ഉപയോക്തൃനാമം: "
-
-#: ../src/subscription_manager/migrate/migrate.py:204
-msgid "Red Hat password: "
-msgstr "Red Hat രഹസ്യവാക്ക്: "
-
-#: ../src/subscription_manager/migrate/migrate.py:208
-msgid "Subscription Service username: "
-msgstr "Subscription സര്‍വീസ് ഉപയോക്തൃനാമം: "
-
-#: ../src/subscription_manager/migrate/migrate.py:208
-msgid "Subscription Service password: "
-msgstr "Subscription സര്‍വീസ് രഹസ്യവാക്ക്: "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:221
-msgid "Unable to read RHN proxy settings."
-msgstr "ആര്‍എച്എന്‍ പ്രോക്സി സജ്ജീകരണങ്ങള്‍ ലഭ്യമാക്കുവാന്‍ സാധ്യമല്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:251
-#, python-format
-msgid "Error parsing server URL: %s"
-msgstr "സര്‍വര്‍യുആര്‍എല്‍ പാഴ്സ് ചെയ്യുന്നതില്‍ പിശക്: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:273
-msgid ""
-"\n"
-"This system appears to be already registered to Red Hat Subscription "
-"Management.  Exiting."
-msgstr ""
-"\n"
-"Red Hat സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റിലേക്കു് സിസ്റ്റം നിലവില്‍ രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു.  പുറത്തു് "
-"കടക്കുന്നു."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:275
-#, python-format
-msgid ""
-"\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"profile details."
-msgstr ""
-"\n"
-"പ്രൊഫൈല്‍ വിവരങ്ങള്‍ കാണുന്നതിനായി, ദയവായി https://access.redhat.com/management/"
-"consumers/%s കാണുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:280
-#: ../src/subscription_manager/managercli.py:348
-msgid "Error: CA certificate for subscription service has not been installed."
-msgstr "പിശക്: സബ്സ്ക്രിപ്ഷന്‍ സര്‍വീസിനുള്ള സിഎ സര്‍ട്ടിഫിക്കേറ്റ് ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:296
-#: ../src/subscription_manager/managercli.py:657
-#: ../src/subscription_manager/managercli.py:1138
-#, python-format
-msgid "%s cannot register with any organizations."
-msgstr "ഒരു സ്ഥാപനങ്ങള്‍ക്കും %s രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:303
-msgid "Org: "
-msgstr "സ്ഥാപനം: "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:311
-#, python-format
-msgid "No such org: %s"
-msgstr "ഇത്തരം ഒരു സ്ഥാപനമില്ല: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:320
-msgid "Environments are not supported by this server."
-msgstr "സാഹചര്യങ്ങള്‍ ഈ സര്‍വര്‍ പിന്തുണയ്ക്കുന്നില്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:333
-msgid "Environment: "
-msgstr "എന്‍വയണ്മെന്റ്:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:343
-#: ../src/subscription_manager/managercli.py:1123
-#, python-format
-msgid "No such environment: %s"
-msgstr "ഇത്തരം സാഹചര്യമില്ല: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:368
-msgid ""
-"Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
-"details."
-msgstr ""
-"RHN ക്ലാസ്സിക്കിലേക്കു് ആധികാരികത ഉറപ്പാക്കുവാന്‍ സാധ്യമായില്ല. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/"
-"log/rhsm/rhsm.log കാണുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:375
-msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
-msgstr ""
-"RHN ക്ലാസ്സിക്കില്‍ ഉപയോക്താക്കളുടെ നിയമനങ്ങള്‍ കണ്ടുപിടിയ്ക്കുന്നതില്‍ പ്രശ്നങ്ങള്‍ ഉണ്ടായിരിയ്ക്കുന്നു. "
-"പുറത്തു് കടക്കുന്നു."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:377
-msgid "You must be an org admin to successfully run this script."
-msgstr ""
-"ഈ സ്ക്രിപ്റ്റ് ശരിയായി പ്രവര്‍ത്തിപ്പിയ്ക്കുന്നതിനു് നിങ്ങള്‍ സ്ഥാപനത്തിന്റെ അഡ്മിന്‍ ആയിരിയ്ക്കണം."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:384
-msgid "Problem encountered getting the list of subscribed channels.  Exiting."
-msgstr ""
-"അംഗമായിട്ടുള്ള ചാനലുകളുടെ പട്ടിക ലഭ്യമാക്കുന്നതില്‍ പ്രശ്നം നേരിട്ടിരിയ്ക്കുന്നു. പുറത്തു് കടക്കുന്നു."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:397
-msgid ""
-"You are subscribed to more than one jbappplatform channel.  This script does "
-"not support that configuration.  Exiting."
-msgstr ""
-"ഒന്നില്‍ കൂടുതല്‍ jbappplatform ചാനലിലേക്കു് നിങ്ങള്‍ അംഗമായിരിയ്ക്കുന്നു. ഈ സ്ക്രിപ്റ്റ് അത്തരം "
-"ക്രമീകരണം പിന്തുണയ്ക്കുന്നില്ല. പുറത്തു് കടക്കുന്നു."
-
-#: ../src/subscription_manager/migrate/migrate.py:429
-msgid "Unable to continue migration!"
-msgstr "നീക്കം ചെയ്യുന്നതു് തുടരുവാന്‍ സാധ്യമല്ല!"
-
-#: ../src/subscription_manager/migrate/migrate.py:430
-msgid ""
-"You are subscribed to channels that have conflicting product certificates."
-msgstr ""
-"പൊരുത്തക്കേടുള്ള പ്രൊഡക്ട് സര്‍ട്ടിഫിക്കേറ്റുകളുള്ള ചാനലുകളിലേക്കു് നിങ്ങള്‍ സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു."
-
-#: ../src/subscription_manager/migrate/migrate.py:434
-#, python-format
-msgid "The following channels map to product ID %s:"
-msgstr "പ്രൊഡക്ട് ഐഡി %s-ലേക്കു് ഈ ചാനലുകള്‍ മാപ്പ് ചെയ്തിരിയ്ക്കുന്നു:"
-
-#: ../src/subscription_manager/migrate/migrate.py:437
-msgid ""
-"Reduce the number of channels per product ID to 1 and run migration again."
-msgstr "ഓരോ പ്രൊഡക്ട് ഐഡിയ്ക്കുള്ള ചാനലുകളുടെ എണ്ണം 1 ആയി കുറച്ചു് വീണ്ടും നീക്കുവാന്‍ ശ്രമിയ്ക്കുക."
-
-#: ../src/subscription_manager/migrate/migrate.py:438
-msgid ""
-"To remove a channel, use 'rhn-channel --remove --"
-"channel=<conflicting_channel>'."
-msgstr ""
-"ഒരു ചാനല്‍ നീക്കം ചെയ്യുന്നതിനായി, 'rhn-channel --remove --"
-"channel=<conflicting_channel>' ഉപയോഗിയ്ക്കുക."
-
-#: ../src/subscription_manager/migrate/migrate.py:450
-#, python-format
-msgid ""
-"Unable to read mapping file: %(mappingfile)s.\n"
-"Do you have the %(package)s package installed?"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:476
-msgid "Channels not available on RHSM:"
-msgstr "RHSM-ല്‍ ചാനലുകള്‍ ലഭ്യമല്ല:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:481
-msgid "No product certificates are mapped to these RHN Classic channels:"
-msgstr "ഈ ആര്‍എച്എന്‍ ക്ലാസ്സിക് ചാനലുകളിലേക്കു് ഒരു പ്രൊഡക്ടിന്റെ സമ്മതപത്രവും മാപ്പ് ചെയ്തിട്ടില്ല:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author bkearney
-#: ../src/subscription_manager/migrate/migrate.py:487
-msgid ""
-"\n"
-"Use --force to ignore these channels and continue the migration.\n"
-msgstr ""
-"\n"
-"ഈ ചാനലുകള്‍ വേണ്ടെന്നു് വയ്ക്കുന്നതിനും മൈഗ്രേഷനുമായി തുടരുന്നതിനായി --force ഉപയോഗിയ്ക്കുക.\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:501
-msgid "Installing product certificates for these RHN Classic channels:"
-msgstr "ഈ ആര്‍എച്എന്‍ ക്ലാസ്സിക് ചാനലുകള്‍ക്കുള്ള പ്രൊഡക്ടിന്റെ സമ്മതപത്രങ്ങള്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നു:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:529
-#, python-format
-msgid ""
-"\n"
-"Product certificates installed successfully to %s."
-msgstr ""
-"\n"
-"പ്രോഡക്ടിന്റെ സമ്മതപത്രങ്ങള്‍ വിജയകരായി %s-ലേക്കു് ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്നു."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:609
-#, python-format
-msgid ""
-"Did not receive a completed unregistration message from RHN Classic for "
-"system %s.\n"
-"Please investigate on the Customer Portal at https://access.redhat.com."
-msgstr ""
-"%s സിസ്റ്റത്തിനുള്ള RHN ക്ലാസ്സിക്കില്‍ നിന്നും പൂര്‍ത്തിയായ അണ്‍രജിസ്ട്രേഷന്‍ സന്ദേശം ലഭ്യമായില്ല.\n"
-"https://access.redhat.com ലുള്ള കസ്റ്റമര്‍ പോര്‍ട്ടലില്‍ ദയവായി പരിശോധിയ്ക്കുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:617
-msgid "System successfully unregistered from RHN Classic."
-msgstr "ആര്‍എച്എന്‍ ക്ലാസിക്കില്‍ നിന്നും സിസ്റ്റം വിജയകരമായി അണ്‍രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:619
-msgid "Unable to unregister system from RHN Classic.  Exiting."
-msgstr "ആര്‍എച്എന്‍ ക്ലാസിക്കില്‍ നിന്നും സിസ്റ്റം അണ്‍രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല. പുറത്തു് കടക്കുന്നു."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:625
-msgid "Attempting to register system to Red Hat Subscription Management..."
-msgstr "Red Hat സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റിലേക്കു് സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുവാന്‍ ശ്രമിയ്ക്കുന്നു..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author bkearney
-#: ../src/subscription_manager/migrate/migrate.py:638
-msgid ""
-"\n"
-"Unable to register.\n"
-"For further assistance, please contact Red Hat Global Support Services."
-msgstr ""
-"\n"
-"രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല.\n"
-"കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി ദയവായി Red Hat ഗ്ലോബല്‍ സപ്പോര്‍ട്ട് സര്‍വീസുകളുമായി ബന്ധപ്പെടുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:641
-#, python-format
-msgid ""
-"System '%s' successfully registered to Red Hat Subscription Management.\n"
-msgstr ""
-"സിസ്റ്റം '%s' വിജയകരമായി Red Hat സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റിലേക്കു് രജിസ്ടര്‍ "
-"ചെയ്തിരിയ്ക്കുന്നു.\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:645
-#: ../src/subscription_manager/managercli.py:778
-#: ../src/subscription_manager/managercli.py:856
-#: ../src/subscription_manager/managercli.py:865
-msgid "Error: The service-level command is not supported by the server."
-msgstr "പിശക്: service-level കമാന്‍ഡ് സര്‍വര്‍ പിന്തുണയ്ക്കുന്നില്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#. Display an actual message for the empty string level.
-#: ../src/subscription_manager/migrate/migrate.py:664
-msgid "No service level preference"
-msgstr "സര്‍വീസ് ലവല്‍ മുന്‍ഗണന സജ്ജമാക്കിയിട്ടില്ല"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:671
-#, python-format
-msgid ""
-"\n"
-"Service level \"%s\" is not available."
-msgstr ""
-"\n"
-" \"%s\" സര്‍വീസ് ലവല്‍ ലഭ്യമല്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:672
-msgid "Please select a service level agreement for this system."
-msgstr "ഈ സിസ്റ്റത്തിനുള്ളൊരു സര്‍വീസ് ലവല്‍ എഗ്രീമെന്റ് തെരഞ്ഞെടുക്കുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:679
-msgid ""
-"Launching the GUI tool to manually attach subscriptions to this system ..."
-msgstr "ഈ സിസ്റ്റത്തിലേക്കു് സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍ക്കുന്നതിനായി ജിയുഐ പ്രയോഗം ലഭ്യമാക്കുന്നു ..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:682
-msgid "Attempting to auto-attach to appropriate subscriptions..."
-msgstr "ഉചിതമായ സബ്സ്ക്രിപ്ഷനുകളിലേക്കു് auto-attach ചെയ്യുവാന്‍ ശ്രമിയ്ക്കുന്നു ..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:691
-msgid ""
-"\n"
-"Unable to auto-attach.  Do your existing subscriptions match the products "
-"installed on this system?"
-msgstr ""
-"\n"
-"ഓട്ടോ-അറ്റാച്ച് ചെയ്യുവാന്‍ സാധ്യമല്ല.  നിങ്ങളുടെ നിലവിലുള്ള സബ്സ്ക്രിപ്ഷനുകള്‍ ഈ സിസ്റ്റത്തില്‍ "
-"ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടുള്ള പ്രൊഡക്ടുകളുമായി പൊരുത്തപ്പെടുന്നുണ്ടോ?"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:695
-#, python-format
-msgid ""
-"\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"details, and to make changes if necessary."
-msgstr ""
-"\n"
-"വിശദാംശങ്ങള്‍ കാണുന്നതിനും ആവശ്യമെങ്കില്‍ മാറ്റങ്ങള്‍ വരുത്തുന്നതിനും https://access.redhat.com/"
-"management/consumers/%s കാണുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:730
-msgid ""
-"\n"
-"Unable to enable extra repositories."
-msgstr ""
-"\n"
-"അധികം റിപ്പോസിറ്ററികള്‍ പ്രവര്‍ത്തന സജ്ജമാക്കുവാന്‍ സാധ്യമല്ല."
-
-#: ../src/subscription_manager/migrate/migrate.py:732
-#, python-format
-msgid ""
-"Please ensure system has subscriptions attached, and see '%s' to enable "
-"additional repositories"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:756
-msgid "Retrieving existing RHN Classic subscription information..."
-msgstr "നിലവിലുള്ള RHN ക്ലാസ്സിക് സബ്സ്ക്രിപ്ഷന്‍ വിവരം ലഭ്യമാക്കുന്നു..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:758
-msgid "System is currently subscribed to these RHN Classic Channels:"
-msgstr "ഈ ആര്‍എച്എന്‍ ക്ലാസ്സിക് ചാനലുകളിലേക്കു് സിസ്റ്റം നിലവില്‍ അംഗമായിരിയ്ക്കുന്നു:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/migrate/migrate.py:768
-msgid ""
-"\n"
-"Preparing to unregister system from RHN Classic..."
-msgstr ""
-"\n"
-"ആര്‍എച്എന്‍ ക്ലാസികില്‍ നിന്നും സിസ്റ്റം അണ്‍രജിസ്ടര്‍ ചെയ്യുന്നതിനായി തയ്യാറെടുക്കുന്നു ..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cache.py:183
-msgid ""
-"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"സര്‍വറിലുള്ള സിസ്റ്റം ഡേറ്റാ പരിഷ്കരിയ്ക്കുന്നതില്‍ പിശക്, കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/rhsm/"
-"rhsm.log കാണുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/dmiinfo.py:56
-#: ../src/subscription_manager/dmiinfo.py:102
-#, python-format
-msgid "Error reading system DMI information: %s"
-msgstr "സിസ്റ്റത്തിന്റെ ഡിഎംഐ വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/dmiinfo.py:77
-#, python-format
-msgid "Error reading system DMI information with %s: %s"
-msgstr "%s-നൊപ്പം സിസ്റ്റത്തിന്റെ ഡിഎംഐ വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:273
-msgid "Error reading system memory information:"
-msgstr "സിസ്റ്റത്തില്‍ മെമ്മറി വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/hwprobe.py:583
-msgid "Error reading system CPU information:"
-msgstr "സിസ്റ്റത്തിന്റെ സിപിയു വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:608
-msgid "Error reading networking information:"
-msgstr "നെറ്റ്‌വര്‍ക്കിങ് വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:707
-msgid "Error reading network interface information:"
-msgstr "നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫെയിസ് വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/hwprobe.py:803
-msgid "Virtualization platform does not support UUIDs"
-msgstr "വിര്‍ച്ച്വലൈസേഷന്‍ പ്ലാറ്റ്ഫോം യുയുഐഡികള്‍ പിന്തുണയ്ക്കുന്നില്ല"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/hwprobe.py:805
-#, python-format
-msgid "Error finding UUID: %s"
-msgstr "യുയുഐഡി കണ്ടുപിടിയ്ക്കുന്നതില്‍ പിശക്: %s"
+#: ../src/subscription_manager/cert_sorter.py:46
+msgid "Invalid"
+msgstr "അസാധു"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. usage format strips any leading 'usage' so
 #. do not iclude it
-#: ../src/subscription_manager/cli.py:62
+#: ../src/subscription_manager/cli.py:64
 #, python-format
 msgid "%%prog %s [OPTIONS]"
 msgstr "%%prog %s [ഐച്ഛികങ്ങള്‍]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:93
+#: ../src/subscription_manager/cli.py:95
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "ഉപയോഗിയ്ക്കേണ്ട വിധം: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+msgstr "ഉപയോഗിയ്ക്കേണ്ട വിധം: %s ഘടകത്തിന്റെ പേരു് [ഘടകത്തിനുള്ള ഐച്ഛികങ്ങള്‍] [--help]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/cli.py:105
+#: ../src/subscription_manager/cli.py:107
 msgid "Primary Modules:"
 msgstr "പ്രൈമറി ഘടകങ്ങള്‍:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:106
+#: ../src/subscription_manager/cli.py:108
 msgid "Other Modules:"
 msgstr "മറ്റു് ഘടകങ്ങള്‍:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/certlib.py:339
-#, python-format
-msgid "%s local certificate has been deleted."
-msgid_plural "%s local certificates have been deleted."
-msgstr[0] "%s ലോക്കല്‍ സര്‍ട്ടിഫിക്കേറ്റ് വെട്ടി നീക്കിയിരിയ്ക്കുന്നു."
-msgstr[1] "%s ലോക്കല്‍ സര്‍ട്ടിഫിക്കേറ്റുകള്‍ വെട്ടി നീക്കിയിരിയ്ക്കുന്നു."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:435
-#, python-format
-msgid "Total updates: %d"
-msgstr "മൊത്തം പരിഷ്കരണങ്ങള്‍: %d"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:436
-#, python-format
-msgid "Found (local) serial# %s"
-msgstr "(ലോക്കല്‍) serial# %s ലഭ്യമായി"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:437
-#, python-format
-msgid "Expected (UEP) serial# %s"
-msgstr "(UEP) serial# %s പ്രതീക്ഷിച്ചിരിയ്ക്കുന്നു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:438
-msgid "Added (new)"
-msgstr "ചേര്‍ത്തിരിയ്ക്കുന്നു (പുതിയതു്)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:439
-msgid "Deleted (rogue):"
-msgstr "വെട്ടിനീക്കിയിരിയ്ക്കുന്നു:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/certlib.py:444
-msgid "Updating entitlement certificates"
-msgstr "എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകള്‍ പരിഷ്കരിയ്ക്കുന്നു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:447
-#: ../src/daemons/rhsmcertd-worker.py:53
-#, python-format
-msgid "%d updates required"
-msgstr "%d പരിഷ്കരണങ്ങള്‍ ആവശ്യമുണ്ടു്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:448
-#: ../src/daemons/rhsmcertd-worker.py:54
-msgid "done"
-msgstr "കഴിഞ്ഞു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/utils.py:188
-#: ../src/subscription_manager/managercli.py:1161
-msgid "This system is currently not registered."
-msgstr "ഈ സിസ്റ്റം നിലവില്‍ രജിസ്ടര്‍ ചെയ്തിട്ടില്ല."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/utils.py:266
-msgid "and"
-msgstr ","
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. note default is lower caps
@@ -1699,103 +1153,9 @@ msgstr "ഉപയോഗിയ്ക്കേണ്ട വിധം: %s\n"
 msgid "%s: error: %s"
 msgstr "%s: പിശക്: %s"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/cert_sorter.py:44
-msgid "Current"
-msgstr "നിലവിലുള്ളതു്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/cert_sorter.py:45
-msgid "Insufficient"
-msgstr "അപരിമിതം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/cert_sorter.py:46
-msgid "Invalid"
-msgstr "അസാധു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:27
-msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"നെറ്റ്‌വര്‍ക്ക് പിശക്, സര്‍വറിലേക്കു് കണക്ട് ചെയ്യുവാന്‍ സാധ്യമല്ല. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/"
-"rhsm/rhsm.log കാണുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:28
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"നെറ്റ്‌വര്‍ക്ക് പിശക്, കണക്ഷന്‍ വിവരങ്ങള്‍ ദയവായി പരിശോധിയ്ക്കുക, അല്ലാങ്കില്‍ കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /"
-"var/log/rhsm/rhsm.log കാണുക."
-
-#: ../src/subscription_manager/exceptions.py:29
-msgid "Unauthorized: Invalid credentials for request."
-msgstr "ആധികാരികതയില്ലാത്തതു്: ആവശ്യത്തിനുള്ള തെറ്റായ അനുമതികള്‍."
-
-#: ../src/subscription_manager/exceptions.py:30
-msgid "Forbidden: Invalid credentials for request."
-msgstr "പാടില്ലാത്തതു്: ആവശ്യത്തിനുള്ള തെറ്റായ അനുമതികള്‍."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:31
-msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr ""
-"റിമോട്ട് സര്‍വര്‍ പിശക്്, കണക്ഷന്‍ വിവരങ്ങള്‍ ദയവായി പരിശോധിയ്ക്കുക, അല്ലാങ്കില്‍ കൂടുതല്‍ "
-"വിവരങ്ങള്‍ക്കായി/var/log/rhsm/rhsm.log കാണുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:32
-#, python-format
-msgid "Bad CA certificate: %s"
-msgstr "തെറ്റായ സിഎ സര്‍ട്ടിഫിക്കേറ്റ്: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/exceptions.py:33
-#: ../src/daemons/rhsmcertd-worker.py:56
-msgid "Your identity certificate has expired"
-msgstr "നിങ്ങളുടെ തിരിച്ചറിയല്‍ സര്‍ട്ടിഫിക്കേറ്റിന്റെ കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:34
-#, python-format
-msgid "Unable to verify server's identity: %s"
-msgstr "സര്‍വറിനെ തിരിച്ചറിയുവാന്‍ സാധ്യമല്ല: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/exceptions.py:35
-msgid "Server URL can not be empty"
-msgstr "സര്‍വര്‍ യുആര്‍എല്‍ കാലിയാകുവാന്‍ പാടില്ല"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/exceptions.py:36
-msgid ""
-"Server URL is just a schema. Should include hostname, and/or port and path"
-msgstr "സര്‍വര്‍ യുആര്‍എല്‍ ഒരു സ്കീമാ ആകുന്നു. ഇതില്‍ ഹോസ്റ്റ്നാമം, പോര്‍ട്ട്, പാഥ് എന്നിവ ഉള്‍പ്പെടുന്നു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/exceptions.py:37
-msgid "Server URL can not be None"
-msgstr "സര്‍വര്‍ യുആര്‍എല്‍ ശൂന്യമാകുവാന്‍ പാടില്ല"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/exceptions.py:38
-msgid "Server URL port should be numeric"
-msgstr "സര്‍വര്‍ യുആര്‍എല്‍ പോര്‍ട്ട് അക്കങ്ങളായിരിയ്ക്കണം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/exceptions.py:39
-msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr "സര്‍വര്‍ യുആര്‍എലിനു് തെറ്റായ സ്കീമുണ്ടു്. http:// and https:// പിന്തുണയ്ക്കുന്നു"
-
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:67
-#: ../src/rhsm_debug/debug_commands.py:39
+#: ../src/rhsm_debug/debug_commands.py:38
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
@@ -2027,6 +1387,12 @@ msgstr "ആര്‍ഗ്യുമെന്റ് പാഴ്സ് ചെയ�
 msgid "Error parsing serverurl:"
 msgstr "സര്‍വര്‍യുആര്‍എല്‍ പാഴ്സ് ചെയ്യുന്നതില്‍ പിശക്:"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/managercli.py:348
+#: ../src/subscription_manager/migrate/migrate.py:280
+msgid "Error: CA certificate for subscription service has not been installed."
+msgstr "പിശക്: സബ്സ്ക്രിപ്ഷന്‍ സര്‍വീസിനുള്ള സിഎ സര്‍ട്ടിഫിക്കേറ്റ് ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല."
+
 #: ../src/subscription_manager/managercli.py:363
 msgid "Error parsing baseurl:"
 msgstr "അടിസ്ഥാനയുആര്‍എല്‍ പാഴ്സ് ചെയ്യുന്നതില്‍ പിശക്: "
@@ -2126,7 +1492,7 @@ msgstr "--username, --password എന്നിവ --force-നൊപ്പം മ
 #. but then show "unknown" here.
 #: ../src/subscription_manager/managercli.py:584
 #: ../src/subscription_manager/managercli.py:587
-#: ../src/subscription_manager/managercli.py:2337
+#: ../src/subscription_manager/managercli.py:2341
 #, python-format
 msgid "server type: %s"
 msgstr "സര്‍വര്‍ തരം: %s"
@@ -2179,6 +1545,14 @@ msgstr "ഒരു ഉപയോക്താവിനു് ഒരു സിസ്
 #: ../src/subscription_manager/managercli.py:650
 msgid "Organizations"
 msgstr "സ്ഥാപനങ്ങള്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/managercli.py:657
+#: ../src/subscription_manager/managercli.py:1138
+#: ../src/subscription_manager/migrate/migrate.py:296
+#, python-format
+msgid "%s cannot register with any organizations."
+msgstr "ഒരു സ്ഥാപനങ്ങള്‍ക്കും %s രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:664
@@ -2285,6 +1659,14 @@ msgstr "ഈ സിസ്റ്റത്തിലേക്കു് അനുവ�
 #: ../src/subscription_manager/managercli.py:772
 msgid "unset the service level for this system"
 msgstr "ഈ സിസ്റ്റത്തിനുള്ള സര്‍വീസ് ലവല്‍ സജ്ജമാക്കേണ്ട"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/managercli.py:778
+#: ../src/subscription_manager/managercli.py:856
+#: ../src/subscription_manager/managercli.py:865
+#: ../src/subscription_manager/migrate/migrate.py:645
+msgid "Error: The service-level command is not supported by the server."
+msgstr "പിശക്: service-level കമാന്‍ഡ് സര്‍വര്‍ പിന്തുണയ്ക്കുന്നില്ല."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
 #: ../src/subscription_manager/managercli.py:797
@@ -2468,6 +1850,19 @@ msgid ""
 "complete your request."
 msgstr ""
 "പിശക്: സര്‍വര്‍ --servicelevel ഐച്ഛികം പിന്തുണയ്ക്കുന്നില്ല. നിങ്ങളുടെ ആവശ്യം പൂര്‍ത്തിയാക്കിയില്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/managercli.py:1123
+#: ../src/subscription_manager/migrate/migrate.py:343
+#, python-format
+msgid "No such environment: %s"
+msgstr "ഇത്തരം സാഹചര്യമില്ല: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/managercli.py:1161
+#: ../src/subscription_manager/utils.py:188
+msgid "This system is currently not registered."
+msgstr "ഈ സിസ്റ്റം നിലവില്‍ രജിസ്ടര്‍ ചെയ്തിട്ടില്ല."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
 #: ../src/subscription_manager/managercli.py:1186
@@ -3047,7 +2442,7 @@ msgstr "    ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊ
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:2059
-#: ../src/subscription_manager/managercli.py:2364
+#: ../src/subscription_manager/managercli.py:2372
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "നല്‍കിയ തീയതി തെറ്റാണു്. തീയതി YYYY-MM-DD മാതൃകയിലാവണം (ഉദാഹരണം: "
 
@@ -3109,93 +2504,705 @@ msgstr "എല്ലാ ഓവര്‍റൈഡുകളും നീക്ക�
 msgid "list all overrides; can be specific to a repository by providing --repo"
 msgstr "എല്ലാ ഓവര്‍റൈഡുകളും ലഭ്യമാക്കുന്നു; --repo നല്‍കി ഒരു റിപ്പോസിറ്ററി മാത്രമായി നല്‍കാം"
 
-#: ../src/subscription_manager/managercli.py:2224
+#: ../src/subscription_manager/managercli.py:2227
 msgid "--add arguments should be in the form of \"name:value\""
 msgstr "--add ആര്‍ഗ്യുമെന്റുകള്‍ \"name:value\" എന്ന രീതിയിലായിരിയ്ക്കണം"
 
-#: ../src/subscription_manager/managercli.py:2231
+#: ../src/subscription_manager/managercli.py:2234
 msgid "Error: You must specify a repository to modify"
 msgstr "പിശക്: മാറ്റം വരുത്തുന്നതിനുള്ളൊരു റിപ്പോസിറ്ററി നല്‍കണം"
 
-#: ../src/subscription_manager/managercli.py:2234
+#: ../src/subscription_manager/managercli.py:2237
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr ""
 "പിശക്: --remove-all, --list എന്നിവയ്ക്കൊപ്പം --add അല്ലെങ്കില്‍ --remove ഉപയോഗിയ്ക്കുവാന്‍ "
 "പാടില്ല"
 
-#: ../src/subscription_manager/managercli.py:2237
+#: ../src/subscription_manager/managercli.py:2240
 msgid "Error: You may not use --list with --remove-all"
 msgstr "പിശക്: --remove-all-നൊപ്പം --list ഉപയോഗിയ്ക്കുവാന്‍ പാടില്ല"
 
-#: ../src/subscription_manager/managercli.py:2241
+#: ../src/subscription_manager/managercli.py:2244
 msgid "Error: The --repo option must be used with --list or --add or --remove."
 msgstr ""
 "പിശക്: --repo ഐച്ഛികം --list അല്ലെങ്കില്‍ --add അല്ലെങ്കില്‍ --remove എന്നിവയ്ക്കൊപ്പം "
 "ഉപയോഗിയ്ക്കണം."
 
-#: ../src/subscription_manager/managercli.py:2254
+#: ../src/subscription_manager/managercli.py:2257
 msgid "Error: The 'repo-override' command is not supported by the server."
 msgstr "പിശക്: 'repo-override' കമാന്‍ഡ് സര്‍വര്‍ പിന്തുണയ്ക്കുന്നില്ല."
 
-#: ../src/subscription_manager/managercli.py:2269
+#: ../src/subscription_manager/managercli.py:2272
 msgid "This system does not have any content overrides applied to it."
 msgstr "തിരുത്തേണ്ട വിവരങ്ങള്‍ ഈ സിസ്റ്റത്തിനു് ലഭ്യമാക്കിയിട്ടില്ല."
 
-#: ../src/subscription_manager/managercli.py:2290
+#: ../src/subscription_manager/managercli.py:2293
 #, python-format
 msgid ""
 "Repository '%s' does not currently exist, but the override has been added."
 msgstr "'%s' റിപ്പോസിറ്ററി നിലവിലില്ല, പക്ഷേ ഓവര്‍റൈഡ് ചേര്‍ത്തിരിയ്ക്കുന്നു."
 
-#: ../src/subscription_manager/managercli.py:2314
+#: ../src/subscription_manager/managercli.py:2317
 #, python-format
 msgid "Nothing is known about '%s'"
 msgstr "'%s'-നെപ്പറ്റി ഒരു വിവരവുമില്ല"
 
-#: ../src/subscription_manager/managercli.py:2319
+#: ../src/subscription_manager/managercli.py:2322
 #, python-format
 msgid "Repository: %s"
 msgstr "റിപ്പോസിറ്ററി: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/managercli.py:2330
+#: ../src/subscription_manager/managercli.py:2334
 msgid "Print version information"
 msgstr "പ്രിന്റ് പതിപ്പിന്റെ വിവരം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/managercli.py:2338
+#: ../src/subscription_manager/managercli.py:2342
 #, python-format
 msgid "subscription management server: %s"
 msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വര്‍: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/managercli.py:2346
+#: ../src/subscription_manager/managercli.py:2350
 msgid "Show status information for this system's subscriptions and products"
 msgstr "ഈ സിസ്റ്റത്തിന്റെ സബ്സ്ക്രിപ്ഷനുകള്‍ക്കും പ്രൊഡക്ടുകള്‍ക്കുമുള്ള അവസ്ഥ വിവരം കാണിയ്ക്കുക"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/managercli.py:2349
+#: ../src/subscription_manager/managercli.py:2353
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr ""
 "അവസ്ഥ പരിശോധിയ്ക്കുവാനുള്ള ഭാവി തീയതി, സ്വതവേയായി ഇന്നത്തെ തീയതി ആകുന്നു (ഉദാഹരണം: %s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/managercli.py:2360
+#: ../src/subscription_manager/managercli.py:2364
 msgid "Past dates are not allowed"
 msgstr "കഴിഞ്ഞു പോയ തീയതികള്‍ അനുദിയ്ക്കുന്നില്ല"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/managercli.py:2370
+#: ../src/subscription_manager/managercli.py:2378
 msgid "System Status Details"
 msgstr "സിസ്റ്റത്തിന്റെ അവസ്ഥ വിവരങ്ങള്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/managercli.py:2374
-#: ../src/subscription_manager/managercli.py:2379
+#: ../src/subscription_manager/managercli.py:2382
+#: ../src/subscription_manager/managercli.py:2387
 #, python-format
 msgid "Overall Status: %s\n"
 msgstr "മൊത്തം അവസ്ഥ: %s\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:27
+msgid ""
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
+msgstr ""
+"നെറ്റ്‌വര്‍ക്ക് പിശക്, സര്‍വറിലേക്കു് കണക്ട് ചെയ്യുവാന്‍ സാധ്യമല്ല. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/"
+"rhsm/rhsm.log കാണുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:28
+msgid ""
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
+msgstr ""
+"നെറ്റ്‌വര്‍ക്ക് പിശക്, കണക്ഷന്‍ വിവരങ്ങള്‍ ദയവായി പരിശോധിയ്ക്കുക, അല്ലാങ്കില്‍ കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /"
+"var/log/rhsm/rhsm.log കാണുക."
+
+#: ../src/subscription_manager/exceptions.py:29
+msgid "Unauthorized: Invalid credentials for request."
+msgstr "ആധികാരികതയില്ലാത്തതു്: ആവശ്യത്തിനുള്ള തെറ്റായ അനുമതികള്‍."
+
+#: ../src/subscription_manager/exceptions.py:30
+msgid "Forbidden: Invalid credentials for request."
+msgstr "പാടില്ലാത്തതു്: ആവശ്യത്തിനുള്ള തെറ്റായ അനുമതികള്‍."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:31
+msgid ""
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
+msgstr ""
+"റിമോട്ട് സര്‍വര്‍ പിശക്്, കണക്ഷന്‍ വിവരങ്ങള്‍ ദയവായി പരിശോധിയ്ക്കുക, അല്ലാങ്കില്‍ കൂടുതല്‍ "
+"വിവരങ്ങള്‍ക്കായി/var/log/rhsm/rhsm.log കാണുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:32
+#, python-format
+msgid "Bad CA certificate: %s"
+msgstr "തെറ്റായ സിഎ സര്‍ട്ടിഫിക്കേറ്റ്: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/exceptions.py:33
+#: ../src/daemons/rhsmcertd-worker.py:56
+msgid "Your identity certificate has expired"
+msgstr "നിങ്ങളുടെ തിരിച്ചറിയല്‍ സര്‍ട്ടിഫിക്കേറ്റിന്റെ കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:34
+#, python-format
+msgid "Unable to verify server's identity: %s"
+msgstr "സര്‍വറിനെ തിരിച്ചറിയുവാന്‍ സാധ്യമല്ല: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/exceptions.py:35
+msgid "Server URL can not be empty"
+msgstr "സര്‍വര്‍ യുആര്‍എല്‍ കാലിയാകുവാന്‍ പാടില്ല"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/exceptions.py:36
+msgid ""
+"Server URL is just a schema. Should include hostname, and/or port and path"
+msgstr "സര്‍വര്‍ യുആര്‍എല്‍ ഒരു സ്കീമാ ആകുന്നു. ഇതില്‍ ഹോസ്റ്റ്നാമം, പോര്‍ട്ട്, പാഥ് എന്നിവ ഉള്‍പ്പെടുന്നു"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/exceptions.py:37
+msgid "Server URL can not be None"
+msgstr "സര്‍വര്‍ യുആര്‍എല്‍ ശൂന്യമാകുവാന്‍ പാടില്ല"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/exceptions.py:38
+msgid "Server URL port should be numeric"
+msgstr "സര്‍വര്‍ യുആര്‍എല്‍ പോര്‍ട്ട് അക്കങ്ങളായിരിയ്ക്കണം"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/exceptions.py:39
+msgid "Server URL has an invalid scheme. http:// and https:// are supported"
+msgstr "സര്‍വര്‍ യുആര്‍എലിനു് തെറ്റായ സ്കീമുണ്ടു്. http:// and https:// പിന്തുണയ്ക്കുന്നു"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/dmiinfo.py:56
+#: ../src/subscription_manager/dmiinfo.py:102
+#, python-format
+msgid "Error reading system DMI information: %s"
+msgstr "സിസ്റ്റത്തിന്റെ ഡിഎംഐ വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/dmiinfo.py:77
+#, python-format
+msgid "Error reading system DMI information with %s: %s"
+msgstr "%s-നൊപ്പം സിസ്റ്റത്തിന്റെ ഡിഎംഐ വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:273
+msgid "Error reading system memory information:"
+msgstr "സിസ്റ്റത്തില്‍ മെമ്മറി വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/hwprobe.py:583
+msgid "Error reading system CPU information:"
+msgstr "സിസ്റ്റത്തിന്റെ സിപിയു വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:608
+msgid "Error reading networking information:"
+msgstr "നെറ്റ്‌വര്‍ക്കിങ് വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:707
+msgid "Error reading network interface information:"
+msgstr "നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫെയിസ് വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/hwprobe.py:803
+msgid "Virtualization platform does not support UUIDs"
+msgstr "വിര്‍ച്ച്വലൈസേഷന്‍ പ്ലാറ്റ്ഫോം യുയുഐഡികള്‍ പിന്തുണയ്ക്കുന്നില്ല"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/hwprobe.py:805
+#, python-format
+msgid "Error finding UUID: %s"
+msgstr "യുയുഐഡി കണ്ടുപിടിയ്ക്കുന്നതില്‍ പിശക്: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/reasons.py:75
+msgid "Product "
+msgstr "പ്രൊഡക്ട്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/reasons.py:77
+msgid "Subscription "
+msgstr "സബ്സ്ക്രിപ്ഷന്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/reasons.py:79
+msgid "Stack "
+msgstr "സ്റ്റാക്ക്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cache.py:183
+msgid ""
+"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
+"സര്‍വറിലുള്ള സിസ്റ്റം ഡേറ്റാ പരിഷ്കരിയ്ക്കുന്നതില്‍ പിശക്, കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/rhsm/"
+"rhsm.log കാണുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/utils.py:266
+msgid "and"
+msgstr ","
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/certlib.py:339
+#, python-format
+msgid "%s local certificate has been deleted."
+msgid_plural "%s local certificates have been deleted."
+msgstr[0] "%s ലോക്കല്‍ സര്‍ട്ടിഫിക്കേറ്റ് വെട്ടി നീക്കിയിരിയ്ക്കുന്നു."
+msgstr[1] "%s ലോക്കല്‍ സര്‍ട്ടിഫിക്കേറ്റുകള്‍ വെട്ടി നീക്കിയിരിയ്ക്കുന്നു."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:435
+#, python-format
+msgid "Total updates: %d"
+msgstr "മൊത്തം പരിഷ്കരണങ്ങള്‍: %d"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:436
+#, python-format
+msgid "Found (local) serial# %s"
+msgstr "(ലോക്കല്‍) serial# %s ലഭ്യമായി"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:437
+#, python-format
+msgid "Expected (UEP) serial# %s"
+msgstr "(UEP) serial# %s പ്രതീക്ഷിച്ചിരിയ്ക്കുന്നു"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:438
+msgid "Added (new)"
+msgstr "ചേര്‍ത്തിരിയ്ക്കുന്നു (പുതിയതു്)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:439
+msgid "Deleted (rogue):"
+msgstr "വെട്ടിനീക്കിയിരിയ്ക്കുന്നു:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/certlib.py:444
+msgid "Updating entitlement certificates"
+msgstr "എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകള്‍ പരിഷ്കരിയ്ക്കുന്നു"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:447
+#: ../src/daemons/rhsmcertd-worker.py:53
+#, python-format
+msgid "%d updates required"
+msgstr "%d പരിഷ്കരണങ്ങള്‍ ആവശ്യമുണ്ടു്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:448
+#: ../src/daemons/rhsmcertd-worker.py:54
+msgid "done"
+msgstr "കഴിഞ്ഞു"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:63
+msgid "Could not find up2date_client.config module!"
+msgstr "up2date_client.config ഘടകം ലഭ്യമായില്ല!"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:69
+msgid "Could not find up2date_client.rhnChannel module!"
+msgstr "up2date_client.rhnChannel ഘടകം ലഭ്യമായില്ല!"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:73
+#, python-format
+msgid ""
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
+"സര്‍ട്ടിഫിക്കേറ്റിന്റെ സര്‍വറിലേക്കു് കണക്ട് ചെയ്യുവാന്‍ സാധ്യമല്ല: %s. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/"
+"log/rhsm/rhsm.log കാണുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:113
+msgid "You have entered an invalid choice."
+msgstr "തെറ്റായതു് നല്‍കിയിരിയ്ക്കുന്നു."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:156
+msgid "ignore channels not available on RHSM"
+msgstr "RHSM-ല്‍ ലഭ്യമല്ലാത്ത ചാനലുകള്‍ വേണ്ടെന്നു് വയ്ക്കുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:158
+msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
+msgstr ""
+"സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍ക്കുന്നതിനായി ജിയുഐ പ്രയോഗം ഉപയോഗിയ്ക്കുക, ഓട്ടോ-അറ്റാച്ചിങ് ആവശ്യമില്ല"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:160
+msgid ""
+"don't execute the auto-attach option while registering with subscription "
+"manager"
+msgstr "subscription manager-മായി രജിസ്ടര്‍ ചെയ്യുമ്പോള്‍ ഓട്ടോ-അറ്റാച്ച് ഉപയോഗിയ്ക്കരുതു്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:162
+msgid ""
+"service level to follow when attaching subscriptions, for no service level "
+"use --servicelevel=\"\""
+msgstr ""
+"സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍ക്കുമ്പോള്‍ ആവശ്യമായ സര്‍വീസ് ലവല്‍, സര്‍വീസ് ലവല്‍ ഇല്ലെങ്കില്‍ --servicelevel="
+"\"\" ഉപയോഗിയ്ക്കുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:165
+msgid "specify the subscription management server to migrate to"
+msgstr "നീക്കുവാനുള്ള സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വര്‍ നല്‍കുക"
+
+#: ../src/subscription_manager/migrate/migrate.py:167
+msgid "specify the Red Hat user name"
+msgstr "Red Hat ഉപയോക്താവിന്റെ പേരു് നല്‍കുക"
+
+#: ../src/subscription_manager/migrate/migrate.py:169
+msgid "specify the Red Hat password"
+msgstr "Red Hat രഹസ്യവാക്ക് നല്‍കുക"
+
+#: ../src/subscription_manager/migrate/migrate.py:171
+msgid "specify the subscription service user name"
+msgstr "subscription സര്‍വീസ് ഉപയോക്തൃനാമം വ്യക്തമാക്കുക"
+
+#: ../src/subscription_manager/migrate/migrate.py:173
+msgid "specify the subscription service password"
+msgstr "subscription സര്‍വീസ് രഹസ്യവാക്ക് വ്യക്തമാക്കുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:176
+msgid "don't use RHN proxy settings with subscription management server"
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വറിനൊപ്പം RHN പ്രോക്സി സജ്ജീകരണങ്ങള്‍ ഉപയോഗിയ്ക്കരുതു്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:178
+msgid "organization to register to"
+msgstr "രജിസ്ടര്‍ ചെയ്യുവാനുള്ള സ്ഥാപനം"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:180
+msgid "environment to register to"
+msgstr "രജിസ്ടര്‍ ചെയ്യുവാനുള്ള സാഹചര്യം"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:184
+msgid "The --servicelevel and --no-auto options cannot be used together."
+msgstr "--servicelevel, --no-auto ഐച്ഛികങ്ങള്‍ ഒന്നിച്ചുപയോഗിയ്ക്കുവാന്‍ സാധ്യമല്ല."
+
+#: ../src/subscription_manager/migrate/migrate.py:204
+msgid "Red Hat username: "
+msgstr "Red Hat ഉപയോക്തൃനാമം: "
+
+#: ../src/subscription_manager/migrate/migrate.py:204
+msgid "Red Hat password: "
+msgstr "Red Hat രഹസ്യവാക്ക്: "
+
+#: ../src/subscription_manager/migrate/migrate.py:208
+msgid "Subscription Service username: "
+msgstr "Subscription സര്‍വീസ് ഉപയോക്തൃനാമം: "
+
+#: ../src/subscription_manager/migrate/migrate.py:208
+msgid "Subscription Service password: "
+msgstr "Subscription സര്‍വീസ് രഹസ്യവാക്ക്: "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:221
+msgid "Unable to read RHN proxy settings."
+msgstr "ആര്‍എച്എന്‍ പ്രോക്സി സജ്ജീകരണങ്ങള്‍ ലഭ്യമാക്കുവാന്‍ സാധ്യമല്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:251
+#, python-format
+msgid "Error parsing server URL: %s"
+msgstr "സര്‍വര്‍യുആര്‍എല്‍ പാഴ്സ് ചെയ്യുന്നതില്‍ പിശക്: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:273
+msgid ""
+"\n"
+"This system appears to be already registered to Red Hat Subscription "
+"Management.  Exiting."
+msgstr ""
+"\n"
+"Red Hat സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റിലേക്കു് സിസ്റ്റം നിലവില്‍ രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു.  പുറത്തു് "
+"കടക്കുന്നു."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:275
+#, python-format
+msgid ""
+"\n"
+"Please visit https://access.redhat.com/management/consumers/%s to view the "
+"profile details."
+msgstr ""
+"\n"
+"പ്രൊഫൈല്‍ വിവരങ്ങള്‍ കാണുന്നതിനായി, ദയവായി https://access.redhat.com/management/"
+"consumers/%s കാണുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:303
+msgid "Org: "
+msgstr "സ്ഥാപനം: "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:311
+#, python-format
+msgid "No such org: %s"
+msgstr "ഇത്തരം ഒരു സ്ഥാപനമില്ല: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:320
+msgid "Environments are not supported by this server."
+msgstr "സാഹചര്യങ്ങള്‍ ഈ സര്‍വര്‍ പിന്തുണയ്ക്കുന്നില്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:333
+msgid "Environment: "
+msgstr "എന്‍വയണ്മെന്റ്:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:368
+msgid ""
+"Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
+"details."
+msgstr ""
+"RHN ക്ലാസ്സിക്കിലേക്കു് ആധികാരികത ഉറപ്പാക്കുവാന്‍ സാധ്യമായില്ല. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/"
+"log/rhsm/rhsm.log കാണുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:375
+msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
+msgstr ""
+"RHN ക്ലാസ്സിക്കില്‍ ഉപയോക്താക്കളുടെ നിയമനങ്ങള്‍ കണ്ടുപിടിയ്ക്കുന്നതില്‍ പ്രശ്നങ്ങള്‍ ഉണ്ടായിരിയ്ക്കുന്നു. "
+"പുറത്തു് കടക്കുന്നു."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:377
+msgid "You must be an org admin to successfully run this script."
+msgstr ""
+"ഈ സ്ക്രിപ്റ്റ് ശരിയായി പ്രവര്‍ത്തിപ്പിയ്ക്കുന്നതിനു് നിങ്ങള്‍ സ്ഥാപനത്തിന്റെ അഡ്മിന്‍ ആയിരിയ്ക്കണം."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:384
+msgid "Problem encountered getting the list of subscribed channels.  Exiting."
+msgstr ""
+"അംഗമായിട്ടുള്ള ചാനലുകളുടെ പട്ടിക ലഭ്യമാക്കുന്നതില്‍ പ്രശ്നം നേരിട്ടിരിയ്ക്കുന്നു. പുറത്തു് കടക്കുന്നു."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:397
+msgid ""
+"You are subscribed to more than one jbappplatform channel.  This script does "
+"not support that configuration.  Exiting."
+msgstr ""
+"ഒന്നില്‍ കൂടുതല്‍ jbappplatform ചാനലിലേക്കു് നിങ്ങള്‍ അംഗമായിരിയ്ക്കുന്നു. ഈ സ്ക്രിപ്റ്റ് അത്തരം "
+"ക്രമീകരണം പിന്തുണയ്ക്കുന്നില്ല. പുറത്തു് കടക്കുന്നു."
+
+#: ../src/subscription_manager/migrate/migrate.py:429
+msgid "Unable to continue migration!"
+msgstr "നീക്കം ചെയ്യുന്നതു് തുടരുവാന്‍ സാധ്യമല്ല!"
+
+#: ../src/subscription_manager/migrate/migrate.py:430
+msgid ""
+"You are subscribed to channels that have conflicting product certificates."
+msgstr ""
+"പൊരുത്തക്കേടുള്ള പ്രൊഡക്ട് സര്‍ട്ടിഫിക്കേറ്റുകളുള്ള ചാനലുകളിലേക്കു് നിങ്ങള്‍ സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു."
+
+#: ../src/subscription_manager/migrate/migrate.py:434
+#, python-format
+msgid "The following channels map to product ID %s:"
+msgstr "പ്രൊഡക്ട് ഐഡി %s-ലേക്കു് ഈ ചാനലുകള്‍ മാപ്പ് ചെയ്തിരിയ്ക്കുന്നു:"
+
+#: ../src/subscription_manager/migrate/migrate.py:437
+msgid ""
+"Reduce the number of channels per product ID to 1 and run migration again."
+msgstr "ഓരോ പ്രൊഡക്ട് ഐഡിയ്ക്കുള്ള ചാനലുകളുടെ എണ്ണം 1 ആയി കുറച്ചു് വീണ്ടും നീക്കുവാന്‍ ശ്രമിയ്ക്കുക."
+
+#: ../src/subscription_manager/migrate/migrate.py:438
+msgid ""
+"To remove a channel, use 'rhn-channel --remove --"
+"channel=<conflicting_channel>'."
+msgstr ""
+"ഒരു ചാനല്‍ നീക്കം ചെയ്യുന്നതിനായി, 'rhn-channel --remove --"
+"channel=<conflicting_channel>' ഉപയോഗിയ്ക്കുക."
+
+#: ../src/subscription_manager/migrate/migrate.py:450
+#, python-format
+msgid ""
+"Unable to read mapping file: %(mappingfile)s.\n"
+"Do you have the %(package)s package installed?"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:476
+msgid "Channels not available on RHSM:"
+msgstr "RHSM-ല്‍ ചാനലുകള്‍ ലഭ്യമല്ല:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:481
+msgid "No product certificates are mapped to these RHN Classic channels:"
+msgstr "ഈ ആര്‍എച്എന്‍ ക്ലാസ്സിക് ചാനലുകളിലേക്കു് ഒരു പ്രൊഡക്ടിന്റെ സമ്മതപത്രവും മാപ്പ് ചെയ്തിട്ടില്ല:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author bkearney
+#: ../src/subscription_manager/migrate/migrate.py:487
+msgid ""
+"\n"
+"Use --force to ignore these channels and continue the migration.\n"
+msgstr ""
+"\n"
+"ഈ ചാനലുകള്‍ വേണ്ടെന്നു് വയ്ക്കുന്നതിനും മൈഗ്രേഷനുമായി തുടരുന്നതിനായി --force ഉപയോഗിയ്ക്കുക.\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:501
+msgid "Installing product certificates for these RHN Classic channels:"
+msgstr "ഈ ആര്‍എച്എന്‍ ക്ലാസ്സിക് ചാനലുകള്‍ക്കുള്ള പ്രൊഡക്ടിന്റെ സമ്മതപത്രങ്ങള്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നു:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:529
+#, python-format
+msgid ""
+"\n"
+"Product certificates installed successfully to %s."
+msgstr ""
+"\n"
+"പ്രോഡക്ടിന്റെ സമ്മതപത്രങ്ങള്‍ വിജയകരായി %s-ലേക്കു് ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്നു."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:609
+#, python-format
+msgid ""
+"Did not receive a completed unregistration message from RHN Classic for "
+"system %s.\n"
+"Please investigate on the Customer Portal at https://access.redhat.com."
+msgstr ""
+"%s സിസ്റ്റത്തിനുള്ള RHN ക്ലാസ്സിക്കില്‍ നിന്നും പൂര്‍ത്തിയായ അണ്‍രജിസ്ട്രേഷന്‍ സന്ദേശം ലഭ്യമായില്ല.\n"
+"https://access.redhat.com ലുള്ള കസ്റ്റമര്‍ പോര്‍ട്ടലില്‍ ദയവായി പരിശോധിയ്ക്കുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:617
+msgid "System successfully unregistered from RHN Classic."
+msgstr "ആര്‍എച്എന്‍ ക്ലാസിക്കില്‍ നിന്നും സിസ്റ്റം വിജയകരമായി അണ്‍രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:619
+msgid "Unable to unregister system from RHN Classic.  Exiting."
+msgstr "ആര്‍എച്എന്‍ ക്ലാസിക്കില്‍ നിന്നും സിസ്റ്റം അണ്‍രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല. പുറത്തു് കടക്കുന്നു."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:625
+msgid "Attempting to register system to Red Hat Subscription Management..."
+msgstr "Red Hat സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റിലേക്കു് സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുവാന്‍ ശ്രമിയ്ക്കുന്നു..."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author bkearney
+#: ../src/subscription_manager/migrate/migrate.py:638
+msgid ""
+"\n"
+"Unable to register.\n"
+"For further assistance, please contact Red Hat Global Support Services."
+msgstr ""
+"\n"
+"രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല.\n"
+"കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി ദയവായി Red Hat ഗ്ലോബല്‍ സപ്പോര്‍ട്ട് സര്‍വീസുകളുമായി ബന്ധപ്പെടുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:641
+#, python-format
+msgid ""
+"System '%s' successfully registered to Red Hat Subscription Management.\n"
+msgstr ""
+"സിസ്റ്റം '%s' വിജയകരമായി Red Hat സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റിലേക്കു് രജിസ്ടര്‍ "
+"ചെയ്തിരിയ്ക്കുന്നു.\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#. Display an actual message for the empty string level.
+#: ../src/subscription_manager/migrate/migrate.py:664
+msgid "No service level preference"
+msgstr "സര്‍വീസ് ലവല്‍ മുന്‍ഗണന സജ്ജമാക്കിയിട്ടില്ല"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:671
+#, python-format
+msgid ""
+"\n"
+"Service level \"%s\" is not available."
+msgstr ""
+"\n"
+" \"%s\" സര്‍വീസ് ലവല്‍ ലഭ്യമല്ല."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:672
+msgid "Please select a service level agreement for this system."
+msgstr "ഈ സിസ്റ്റത്തിനുള്ളൊരു സര്‍വീസ് ലവല്‍ എഗ്രീമെന്റ് തെരഞ്ഞെടുക്കുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:679
+msgid ""
+"Launching the GUI tool to manually attach subscriptions to this system ..."
+msgstr "ഈ സിസ്റ്റത്തിലേക്കു് സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍ക്കുന്നതിനായി ജിയുഐ പ്രയോഗം ലഭ്യമാക്കുന്നു ..."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:682
+msgid "Attempting to auto-attach to appropriate subscriptions..."
+msgstr "ഉചിതമായ സബ്സ്ക്രിപ്ഷനുകളിലേക്കു് auto-attach ചെയ്യുവാന്‍ ശ്രമിയ്ക്കുന്നു ..."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:691
+msgid ""
+"\n"
+"Unable to auto-attach.  Do your existing subscriptions match the products "
+"installed on this system?"
+msgstr ""
+"\n"
+"ഓട്ടോ-അറ്റാച്ച് ചെയ്യുവാന്‍ സാധ്യമല്ല.  നിങ്ങളുടെ നിലവിലുള്ള സബ്സ്ക്രിപ്ഷനുകള്‍ ഈ സിസ്റ്റത്തില്‍ "
+"ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടുള്ള പ്രൊഡക്ടുകളുമായി പൊരുത്തപ്പെടുന്നുണ്ടോ?"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:695
+#, python-format
+msgid ""
+"\n"
+"Please visit https://access.redhat.com/management/consumers/%s to view the "
+"details, and to make changes if necessary."
+msgstr ""
+"\n"
+"വിശദാംശങ്ങള്‍ കാണുന്നതിനും ആവശ്യമെങ്കില്‍ മാറ്റങ്ങള്‍ വരുത്തുന്നതിനും https://access.redhat.com/"
+"management/consumers/%s കാണുക."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:730
+msgid ""
+"\n"
+"Unable to enable extra repositories."
+msgstr ""
+"\n"
+"അധികം റിപ്പോസിറ്ററികള്‍ പ്രവര്‍ത്തന സജ്ജമാക്കുവാന്‍ സാധ്യമല്ല."
+
+#: ../src/subscription_manager/migrate/migrate.py:732
+#, python-format
+msgid ""
+"Please ensure system has subscriptions attached, and see '%s' to enable "
+"additional repositories"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:756
+msgid "Retrieving existing RHN Classic subscription information..."
+msgstr "നിലവിലുള്ള RHN ക്ലാസ്സിക് സബ്സ്ക്രിപ്ഷന്‍ വിവരം ലഭ്യമാക്കുന്നു..."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:758
+msgid "System is currently subscribed to these RHN Classic Channels:"
+msgstr "ഈ ആര്‍എച്എന്‍ ക്ലാസ്സിക് ചാനലുകളിലേക്കു് സിസ്റ്റം നിലവില്‍ അംഗമായിരിയ്ക്കുന്നു:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/migrate/migrate.py:768
+msgid ""
+"\n"
+"Preparing to unregister system from RHN Classic..."
+msgstr ""
+"\n"
+"ആര്‍എച്എന്‍ ക്ലാസികില്‍ നിന്നും സിസ്റ്റം അണ്‍രജിസ്ടര്‍ ചെയ്യുന്നതിനായി തയ്യാറെടുക്കുന്നു ..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/cert_commands.py:38
@@ -3630,28 +3637,28 @@ msgstr "തിരിച്ചറിയല്‍ സമ്മതപത്രം"
 msgid "Unknown Certificate Type"
 msgstr "അപരിചിതമായ തരത്തിലുള്ള സമ്മതപത്രം"
 
-#: ../src/rhsm_debug/debug_commands.py:49
+#: ../src/rhsm_debug/debug_commands.py:48
 msgid "Assemble system information as a tar file or directory"
 msgstr "സിസ്റ്റത്തിന്റെ വിവരങ്ങള്‍ റ്റാര്‍ ഫയല്‍ അല്ലെങ്കില്‍ ഡയറക്ടറിയായി ഒത്തു്ചേര്‍ക്കുക"
 
-#: ../src/rhsm_debug/debug_commands.py:54
+#: ../src/rhsm_debug/debug_commands.py:53
 msgid "the destination location of the result; default is /tmp"
 msgstr "ഫലത്തിന്റെ ലക്ഷ്യസ്ഥാനം; സ്വതവേ /tmp"
 
-#: ../src/rhsm_debug/debug_commands.py:59
+#: ../src/rhsm_debug/debug_commands.py:58
 msgid "data will be in an uncompressed directory"
 msgstr "കംപ്രസ്സ് ചെയ്യാത്തൊരു ‍ഡയറക്ടറിയിലായിരിയ്ക്കും ഡേറ്റാ"
 
-#: ../src/rhsm_debug/debug_commands.py:62
+#: ../src/rhsm_debug/debug_commands.py:61
 msgid "only data not already included in sos report will be collected"
 msgstr ""
 
-#: ../src/rhsm_debug/debug_commands.py:65
+#: ../src/rhsm_debug/debug_commands.py:64
 #, python-format
 msgid "%%prog %s [OPTIONS] "
 msgstr "%%prog %s [ഐച്ഛികങ്ങള്‍]"
 
-#: ../src/rhsm_debug/debug_commands.py:70
+#: ../src/rhsm_debug/debug_commands.py:69
 msgid "The destination directory for the archive must already exist."
 msgstr "ആര്‍ക്കൈവിനുള്ള ലക്ഷ്യ ഡയറക്ടറി നിലവിലുണ്ടായിരിയ്ക്കണം."
 
@@ -3933,71 +3940,112 @@ msgid "Progress Dialog"
 msgstr "പുരോഗതി ഡയലോഗ്"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:1
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:1
-msgid "<b>Subscription Details</b>"
-msgstr "<b>സബ്സ്ക്രിപ്ഷന്‍ വിശദാംശങ്ങള്‍</b>"
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:1
+msgid "Contract Selection"
+msgstr "കോണ്ട്രാക്ട് തെരഞ്ഞെടുക്കല്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:2
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:2
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
+msgid "<b>Choose the specific contract to use:</b>"
+msgstr "<b>ഉപയോഗിയ്ക്കുന്നതിനുള്ള ഒരു പ്രത്യേക കോണ്‍ട്രാക്ട് തെരഞ്ഞെടുക്കൂ:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:3
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:2
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:2
 msgid "<b>Subscription:</b>"
 msgstr "<b>സബ്സ്ക്രിപ്ഷന്‍:</b>"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:4
+msgid "<b>Total Contracts:</b>"
+msgstr "<b>മൊത്തം കോണ്‍ട്രാക്ടുകള്‍:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
+msgid "* Click to Change Quantity"
+msgstr "* വ്യാപ്തി മാറ്റുന്നതിനായി ക്ലിക്ക് ചെയ്യുക"
+
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
+msgid "SLA Selection Table"
+msgstr "എസ്എല്‍എ തെരഞ്ഞെടുക്കുന്നതിനുള്ള പട്ടിക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:1
+msgid "<b>Status:</b>"
+msgstr "<b>അവസ്ഥ:</b>"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:3
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:5
-#: ../src/subscription_manager/gui/data/repositories.glade.h:12
-msgid "Subscription Text"
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ വാചകം"
+#: ../src/subscription_manager/gui/data/installed.glade.h:2
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:4
+#: ../src/subscription_manager/gui/data/selectsla.glade.h:6
+msgid "label"
+msgstr "ലേബല്‍"
+
+#: ../src/subscription_manager/gui/data/installed.glade.h:3
+msgid "Overall Status"
+msgstr "മൊത്തം അവസ്ഥ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:5
+msgid "Register System"
+msgstr "സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:6
+msgid "Auto-attach"
+msgstr "ഓട്ടോ-അറ്റാച്ച്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:7
+msgid "Installed View"
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത കാഴ്ച"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:8
+msgid "<b>Product's Subscription Details</b>"
+msgstr "<b>പ്രൊഡക്ടിന്റെ സബ്സ്ക്രിപ്ഷന്‍ വിശദാംശങ്ങള്‍</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:9
+msgid "<b>Product:</b>"
+msgstr "<b>പ്രൊഡക്ട്:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:4
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
-msgid "<b>Products:</b>"
-msgstr "<b>പ്രൊഡക്ടുകള്‍:</b>"
+#: ../src/subscription_manager/gui/data/installed.glade.h:10
+msgid "<b>Subscriptions:</b>"
+msgstr "<b>സബ്സ്ക്രിപ്ഷനുകള്‍:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:5
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:13
-msgid "Bundled Products Table"
-msgstr "ബന്‍ഡില്‍ഡ് പ്രൊഡക്ടുകളുടെ പട്ടിക"
+#: ../src/subscription_manager/gui/data/installed.glade.h:11
+msgid "Product Text"
+msgstr "പ്രൊഡക്ടിനുള്ള പദാവലി"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/installed.glade.h:12
+msgid "Providing Subscriptions Text"
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ക്കുള്ള വാചകം ലഭ്യമാക്കുന്നു"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:22
-msgid "<b>Service Level, Type:</b>"
-msgstr "<b>സര്‍വീസ് ലവല്‍, രീതി:</b>"
+#: ../src/subscription_manager/gui/data/installed.glade.h:13
+msgid "Certificate Status Text"
+msgstr "സര്‍ട്ടിഫിക്കേറ്റിന്റെ അവസ്ഥയ്ക്കുള്ള പദാവലി"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/installed.glade.h:14
+msgid "<b>Arch:</b>"
+msgstr "<b>ആര്‍ക്ക്:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/installed.glade.h:15
+msgid "Arch Text"
+msgstr "ആര്‍ക്ക് വാചകം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:23
-msgid "Support Level And Type Text"
-msgstr "പിന്തുണ അവസ്ഥയും വാചകരീതിയും"
-
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:8
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
-msgid "<b>Subscription Type:</b>"
-msgstr "<b>സബ്സ്ക്രിപ്ഷന്‍ തരം:‍</b>"
-
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:9
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:7
-msgid "Subscription Type Text"
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ തരത്തിലുള്ള വാചകം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:10
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:20
-msgid "<b>SKU:</b>"
-msgstr "<b>എസ്‌കെയു:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:11
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:21
-#: ../src/subscription_manager/gui/data/repositories.glade.h:14
-msgid "SKU Text"
-msgstr "എസ്‌കെയു വാചകം"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:1
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:1
+msgid "<b>Subscription Details</b>"
+msgstr "<b>സബ്സ്ക്രിപ്ഷന്‍ വിശദാംശങ്ങള്‍</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:3
@@ -4008,6 +4056,23 @@ msgstr "<b>ആരംഭം - അവസാനം തീയതി:</b>"
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:4
 msgid "<b>Contract:</b>"
 msgstr "<b>കോണ്‍ട്രാക്ട്:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:5
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:3
+#: ../src/subscription_manager/gui/data/repositories.glade.h:10
+msgid "Subscription Text"
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ വാചകം"
+
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:8
+msgid "<b>Subscription Type:</b>"
+msgstr "<b>സബ്സ്ക്രിപ്ഷന്‍ തരം:‍</b>"
+
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:7
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:9
+msgid "Subscription Type Text"
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ തരത്തിലുള്ള വാചകം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:8
@@ -4028,6 +4093,18 @@ msgstr "<b>അക്കൌണ്ട്:</b>"
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:11
 msgid "Account Text"
 msgstr "അക്കൊണ്ട് വാചകം"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:4
+msgid "<b>Products:</b>"
+msgstr "<b>പ്രൊഡക്ടുകള്‍:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:13
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:5
+msgid "Bundled Products Table"
+msgstr "ബന്‍ഡില്‍ഡ് പ്രൊഡക്ടുകളുടെ പട്ടിക"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:14
@@ -4060,63 +4137,93 @@ msgid "Support Type Text"
 msgstr "സപ്പോര്‍ട്ട് രീതിയ്ക്കുള്ള വാചകം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:1
-msgid "Contract Selection"
-msgstr "കോണ്ട്രാക്ട് തെരഞ്ഞെടുക്കല്‍"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:20
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:10
+msgid "<b>SKU:</b>"
+msgstr "<b>എസ്‌കെയു:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
-msgid "<b>Choose the specific contract to use:</b>"
-msgstr "<b>ഉപയോഗിയ്ക്കുന്നതിനുള്ള ഒരു പ്രത്യേക കോണ്‍ട്രാക്ട് തെരഞ്ഞെടുക്കൂ:</b>"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:21
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:11
+#: ../src/subscription_manager/gui/data/repositories.glade.h:12
+msgid "SKU Text"
+msgstr "എസ്‌കെയു വാചകം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:4
-msgid "<b>Total Contracts:</b>"
-msgstr "<b>മൊത്തം കോണ്‍ട്രാക്ടുകള്‍:</b>"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:22
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:6
+msgid "<b>Service Level, Type:</b>"
+msgstr "<b>സര്‍വീസ് ലവല്‍, രീതി:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
-msgid "* Click to Change Quantity"
-msgstr "* വ്യാപ്തി മാറ്റുന്നതിനായി ക്ലിക്ക് ചെയ്യുക"
-
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
-msgid "SLA Selection Table"
-msgstr "എസ്എല്‍എ തെരഞ്ഞെടുക്കുന്നതിനുള്ള പട്ടിക"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:23
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:7
+msgid "Support Level And Type Text"
+msgstr "പിന്തുണ അവസ്ഥയും വാചകരീതിയും"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:2
-msgid "register_dialog_main_vbox"
-msgstr "register_dialog_main_vbox"
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
+msgid "<b>Confirm Subscriptions</b>"
+msgstr "<b>സബ്സ്ക്രിപ്ഷനുകള്‍ ഉറപ്പാക്കുക</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:3
-msgid "registration_dialog_action_area"
-msgstr "registration_dialog_action_area"
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
+msgid "Using service level:"
+msgstr "സര്‍വീസ് ലവല്‍ ഉപയോഗിയ്ക്കുന്നു:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:5
-msgid "register_button"
-msgstr "register_button"
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:3
+msgid "SLA"
+msgstr "എസ്എല്‍എ"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/registration.glade.h:7
-msgid "progress_label"
-msgstr "progress_label"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
+msgid "The following subscriptions will be attached:"
+msgstr "ഈ സബ്സ്ക്രിപ്ഷനുകള്‍ കൂട്ടിച്ചേര്‍ക്കുന്നു:"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/registration.glade.h:8
-msgid "register_progressbar"
-msgstr "register_progressbar"
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:5
+msgid "Selected Subscriptions Table"
+msgstr "തെരഞ്ഞെടുത്ത സബ്സ്ക്രിപ്ഷന്‍ പട്ടിക"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/registration.glade.h:9
-msgid "register_details_label"
-msgstr "register_details_label"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:6
+msgid "Core repositories will be enabled for each product."
+msgstr "ഓരോ പ്രൊഡക്ടിനും കോര്‍ റിപ്പോസിറ്ററികള്‍ പ്രവര്‍ത്തന സജ്ജമാക്കുന്നു."
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/registration.glade.h:10
-msgid "page 2"
-msgstr "താള്‍ 2"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/mysubs.glade.h:1
+msgid "My Subscriptions View"
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ കാഴ്ച"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/mysubs.glade.h:2
+msgid "Remove"
+msgstr "നീക്കം ചെയ്യുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:1
+msgid "<b>Show subscriptions active on:</b>"
+msgstr "<b>ഇവിടെ സജീവമായ സബ്സ്ക്രിപ്ഷനുകള്‍ കാണിയ്ക്കുക:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:2
+msgid "Update"
+msgstr "പരിഷ്കരിയ്ക്കുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:3
+msgid "Search"
+msgstr "തെരച്ചില്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:5
+msgid "Filters"
+msgstr "ഫില്‍റ്ററുകള്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:6
+msgid "* Click to Adjust Quantity"
+msgstr "* വ്യാപ്തി ശരിയാക്കുന്നതിനായി ക്ലിക്ക് ചെയ്യുക"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:1
@@ -4208,201 +4315,44 @@ msgstr "പ്രോക്സി ക്രമീകരിയ്ക്കുക"
 msgid "proxy_button"
 msgstr "proxy_button"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:1
-msgid ""
-"This assistant will guide you through the process of registering your system "
-"with Red Hat to receive software updates and other benefits. You will need "
-"the following to register:"
-msgstr ""
-"സോഫ്റ്റ്‌വെയര്‍ പരിഷ്കരണങ്ങള്‍ക്കായി നിങ്ങളുടെ സിസ്റ്റം Red Hat നെറ്റ്‌വര്‍ക്കിലേക്ക് (RHN) കണക്ട് "
-"ചെയ്യുന്നതിനായി നിങ്ങളെ ഈ അസിസ്റ്റന്റ് സഹായിക്കുന്നതാണു്. ഉദാഹരണത്തിനു്:"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:2
-msgid "• A network connection"
-msgstr "• ഒരു നെറ്റ്‌വര്‍ക്ക് കണക്ഷന്‍"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:3
-msgid "• Your account login"
-msgstr "• നിങ്ങളുടെ അക്കൌണ്ട് പ്രവേശന വിവരം"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:4
-msgid "Your account login"
-msgstr "നിങ്ങളുടെ അക്കൌണ്ട് പ്രവേശന വിവരം"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:5
-msgid "• The address of a subscription management service (optional)"
-msgstr "• സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വീസിന്റെ വിലാസം (നിര്‍ബന്ധമല്ല)"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:6
-msgid "_Why Should I Register?"
-msgstr "_എന്തിന് രജിസ്ടര്‍ ചെയ്യണം?"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:7
-msgid "Why Should I Register?"
-msgstr "എന്തിന് രജിസ്ടറ്‍ ചെയ്യണം?"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:8
-msgid ""
-"Would you like to register your system at this time? <b>(Strongly "
-"recommended.)</b>"
-msgstr ""
-"നിങ്ങള്‍ക്ക് നിങ്ങളുടെ സിസ്റ്റം ഇപ്പോള്‍ രജിസ്ടര്‍ ചെയ്യണമോ? <b>(ഏറ്റവും ഉചിതമായ സന്ദര്‍ഭം.)</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:9
-msgid "_Yes, I'd like to register now."
-msgstr "_ഉവ്വു് എനിയ്ക്കു് ഉടന്‍ രജിസ്ടര്‍ ചെയ്യണം."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:10
-msgid "_No, I prefer to register at a later time."
-msgstr "_വേണ്ട, എനിക്ക് പിന്നീട് രജിസ്ടര്‍ ചെയ്താല്‍ മതി."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:11
-msgid "Why Register"
-msgstr "എന്തിന് രജിസ്ടറ്‍ ചെയ്യണം"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:12
-msgid ""
-"Registering your system with Red Hat allows you to take full advantage of "
-"the benefits of a paid subscription, including:"
-msgstr ""
-"നിങ്ങളുടെ സിസ്റ്റം Red Hat നെറ്റ്‌വര്‍ക്കിലേക്ക് കണക്ട് ചെയ്യുമ്പോള്‍ നിങ്ങള്‍ക്ക് ഒരു പെയിഡ് "
-"സബ്സ്ക്രിപ്ഷനു് ലഭിക്കുന്ന ആനുകൂല്ല്യങ്ങള്‍ എല്ലാം ലഭ്യമാകുന്നു, അവ:"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/redeem.glade.h:1
+msgid "Subscription Redemption"
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ ലഭ്യമാക്കല്‍"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:14
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:12
-#: ../src/subscription_manager/gui/data/repositories.glade.h:5
-msgid "Close"
-msgstr "അടയ്ക്കുക"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:15
-msgid "<b>Security &amp; Updates:</b>"
-msgstr "<b>സുരക്ഷയും പരിഷ്കരണങ്ങളും:</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:16
-msgid ""
-"Receive the latest software updates, including security updates, keeping "
-"this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
-msgstr ""
-"ഈ Red Hat Enterprise Linux സിസ്റ്റം <b>പുതുക്കുന്നതിനും</b> <b>സുരക്ഷിതമാക്കുന്നതിനും</b> "
-"സെക്യൂരിറ്റി പരിഷ്കരണങ്ങള്‍ ഉള്‍പ്പെടയുളള ഏറ്റവും പുതിയ സോഫ്റ്റ്‌വെയര്‍ പരിഷ്കരണങ്ങള്‍ ലഭ്യമാക്കുക."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:17
-msgid "<b>Downloads &amp; Upgrades:</b>"
-msgstr "<b>ഡൌണ്‍ലോഡുകളും പരിഷ്കരണങ്ങളും:</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:18
-msgid ""
-"Download installation images for Red Hat Enterprise Linux releases, "
-"including new releases."
-msgstr ""
-"പുതിയ റിലീസ് ഉള്‍പ്പെടയുളള Red Hat Enterprise Linux റിലീസുകള്‍ക്കായി ഇന്‍സ്റ്റലേഷന്‍ഇമേജുകള്‍ "
-"ഡൌണ്‍‍ലോഡ് ചെയ്യുക."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:19
-msgid "<b>Support:</b>"
-msgstr "<b>പിന്തുണ:</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:20
-msgid ""
-"Access to the technical support experts at Red Hat or Red Hat's partners for "
-"help with any issues you might encounter with this system."
-msgstr ""
-"നിങ്ങള്‍ സിസ്റ്റത്തില്‍ അഭിമുഖീകരിക്കുന്ന എല്ലാ പ്രശ്നങ്ങള്‍ക്കും പരിഹാരത്തിനായി ഉളള Red Hat "
-"അല്ലെങ്കില്‍ Red Hat പാര്‍ട്ടനറുകളിലുളള ഉളള സാങ്കേതിക പിന്തുണ എന്നിവ അടങ്ങുന്നു. "
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:21
-msgid "<b>Management:</b>"
-msgstr "<b>മാനേജ്മെന്റ്:</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:22
-msgid "Management"
-msgstr "മാനേജ്മെന്റ്"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:23
-msgid ""
-"Manage subscriptions and systems registered to Customer Portal via access."
-"redhat.com or through one of our other subscription management services."
-msgstr ""
-"access.redhat.com അല്ലെങ്കില്‍ മറ്റൊരു സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വീസുകളിലൂടെ കസ്റ്റമര്‍ "
-"പോര്‍ട്ടലില്‍ രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്ന സബ്സ്ക്രിപ്ഷനുകളും സിസ്റ്റങ്ങളും കൈകാര്യം ചെയ്യുക."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:24
-msgid ""
-"<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
-"privacy_statement.html</small>"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:1
-msgid "<b>Show subscriptions active on:</b>"
-msgstr "<b>ഇവിടെ സജീവമായ സബ്സ്ക്രിപ്ഷനുകള്‍ കാണിയ്ക്കുക:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:2
-msgid "Update"
-msgstr "പരിഷ്കരിയ്ക്കുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:3
-msgid "Search"
-msgstr "തെരച്ചില്‍"
+#: ../src/subscription_manager/gui/data/redeem.glade.h:2
+msgid "Cancel"
+msgstr "റദ്ദാക്കുക"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:4
-#: ../src/subscription_manager/gui/data/installed.glade.h:2
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:6
-msgid "label"
-msgstr "ലേബല്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:5
-msgid "Filters"
-msgstr "ഫില്‍റ്ററുകള്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:6
-msgid "* Click to Adjust Quantity"
-msgstr "* വ്യാപ്തി ശരിയാക്കുന്നതിനായി ക്ലിക്ക് ചെയ്യുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:7
-msgid "All Subscriptions View"
-msgstr "എല്ലാ സബ്സ്ക്രിപ്ഷനുകളും കാണുക"
+#: ../src/subscription_manager/gui/data/redeem.glade.h:3
+msgid "Redeem"
+msgstr "ലഭ്യമാക്കുക"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:8
-msgid "no_subs_label"
-msgstr "no_subs_label"
+#: ../src/subscription_manager/gui/data/redeem.glade.h:4
+msgid "Redeeming the subscription may take a few minutes."
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ ലഭ്യമാക്കുന്നതു് അല്‍പം സമയമെടുക്കുന്നു."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/redeem.glade.h:5
+msgid ""
+"Please provide an email address to receive notification\n"
+"when the redemption is complete."
+msgstr ""
+"ലഭ്യമാക്കിയ ശേഷം അറിയിപ്പുകള്‍ ലഭിയ്ക്കുന്നതിനു് ദയവായി\n"
+"ഒരു ഈമെയില്‍ വിലാസം നല്‍കുക."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
-msgid "<b>Confirm Subscriptions</b>"
-msgstr "<b>സബ്സ്ക്രിപ്ഷനുകള്‍ ഉറപ്പാക്കുക</b>"
+#: ../src/subscription_manager/gui/data/redeem.glade.h:7
+msgid "Email Address:"
+msgstr "ഈമെയില്‍ വിലാസം:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
-msgid "Using service level:"
-msgstr "സര്‍വീസ് ലവല്‍ ഉപയോഗിയ്ക്കുന്നു:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:3
-msgid "SLA"
-msgstr "എസ്എല്‍എ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
-msgid "The following subscriptions will be attached:"
-msgstr "ഈ സബ്സ്ക്രിപ്ഷനുകള്‍ കൂട്ടിച്ചേര്‍ക്കുന്നു:"
-
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:5
-msgid "Selected Subscriptions Table"
-msgstr "തെരഞ്ഞെടുത്ത സബ്സ്ക്രിപ്ഷന്‍ പട്ടിക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:6
-msgid "Core repositories will be enabled for each product."
-msgstr "ഓരോ പ്രൊഡക്ടിനും കോര്‍ റിപ്പോസിറ്ററികള്‍ പ്രവര്‍ത്തന സജ്ജമാക്കുന്നു."
+#: ../src/subscription_manager/gui/data/redeem.glade.h:8
+msgid "Email Address Text"
+msgstr "ഈമെയില്‍ വിലാസം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:1
@@ -4446,6 +4396,13 @@ msgstr "പരിഷ്കരണ സമയം"
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:11
 msgid "Update Facts"
 msgstr "വിവരങ്ങള്‍ പരിഷ്കരിയ്ക്കുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/factsdialog.glade.h:12
+#: ../src/subscription_manager/gui/data/repositories.glade.h:5
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:14
+msgid "Close"
+msgstr "അടയ്ക്കുക"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:13
@@ -4520,247 +4477,6 @@ msgid "Text in Subscription"
 msgstr "സബ്സ്ക്രിപ്ഷനിനുള്ള വാചകം"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:1
-msgid "<b>Status:</b>"
-msgstr "<b>അവസ്ഥ:</b>"
-
-#: ../src/subscription_manager/gui/data/installed.glade.h:3
-msgid "Overall Status"
-msgstr "മൊത്തം അവസ്ഥ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:5
-msgid "Register System"
-msgstr "സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:6
-msgid "Auto-attach"
-msgstr "ഓട്ടോ-അറ്റാച്ച്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:7
-msgid "Installed View"
-msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത കാഴ്ച"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:8
-msgid "<b>Product's Subscription Details</b>"
-msgstr "<b>പ്രൊഡക്ടിന്റെ സബ്സ്ക്രിപ്ഷന്‍ വിശദാംശങ്ങള്‍</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:9
-msgid "<b>Product:</b>"
-msgstr "<b>പ്രൊഡക്ട്:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/installed.glade.h:10
-msgid "<b>Subscriptions:</b>"
-msgstr "<b>സബ്സ്ക്രിപ്ഷനുകള്‍:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:11
-msgid "Product Text"
-msgstr "പ്രൊഡക്ടിനുള്ള പദാവലി"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/installed.glade.h:12
-msgid "Providing Subscriptions Text"
-msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ക്കുള്ള വാചകം ലഭ്യമാക്കുന്നു"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:13
-msgid "Certificate Status Text"
-msgstr "സര്‍ട്ടിഫിക്കേറ്റിന്റെ അവസ്ഥയ്ക്കുള്ള പദാവലി"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/installed.glade.h:14
-msgid "<b>Arch:</b>"
-msgstr "<b>ആര്‍ക്ക്:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/installed.glade.h:15
-msgid "Arch Text"
-msgstr "ആര്‍ക്ക് വാചകം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
-msgid "_System"
-msgstr "_സിസ്റ്റം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:3
-msgid "_Register"
-msgstr "_രജിസ്ടര്‍ ചെയ്യുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:4
-msgid "_Unregister"
-msgstr "_അണ്‍രജിസ്ടര്‍ ചെയ്യുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
-msgid "_Import Cert"
-msgstr "സെര്‍ട്ട് _ഇംപോര്‍ട്ട് ചെയ്യുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:6
-msgid "R_edeem Subscription"
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ സ്വീ_കരിയ്ക്കുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:7
-msgid "View System _Facts"
-msgstr "സിസ്റ്റം വി_വരങ്ങള്‍ കാണുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
-msgid "Configure Pro_xy"
-msgstr "പ്രോ_ക്സി ക്രമീകരിയ്ക്കുക"
-
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
-msgid "Repo_sitories"
-msgstr "റിപ്പോസിറ്ററി_കള്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
-msgid "_Preferences"
-msgstr "മുന്‍_ഗണനകള്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:11
-msgid "_Help"
-msgstr "_സഹായം"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
-msgid "_Getting Started"
-msgstr "_ആരംഭിയ്ക്കുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:13
-msgid "_Online Documentation"
-msgstr "_ഓണ്‍ലൈന്‍ വിവരണക്കുറിപ്പു്"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mysubs.glade.h:1
-msgid "My Subscriptions View"
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ കാഴ്ച"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mysubs.glade.h:2
-msgid "Remove"
-msgstr "നീക്കം ചെയ്യുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/redeem.glade.h:1
-msgid "Subscription Redemption"
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ ലഭ്യമാക്കല്‍"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:2
-msgid "Cancel"
-msgstr "റദ്ദാക്കുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/redeem.glade.h:3
-msgid "Redeem"
-msgstr "ലഭ്യമാക്കുക"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/redeem.glade.h:4
-msgid "Redeeming the subscription may take a few minutes."
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ ലഭ്യമാക്കുന്നതു് അല്‍പം സമയമെടുക്കുന്നു."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
-#: ../src/subscription_manager/gui/data/redeem.glade.h:5
-msgid ""
-"Please provide an email address to receive notification\n"
-"when the redemption is complete."
-msgstr ""
-"ലഭ്യമാക്കിയ ശേഷം അറിയിപ്പുകള്‍ ലഭിയ്ക്കുന്നതിനു് ദയവായി\n"
-"ഒരു ഈമെയില്‍ വിലാസം നല്‍കുക."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:7
-msgid "Email Address:"
-msgstr "ഈമെയില്‍ വിലാസം:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:8
-msgid "Email Address Text"
-msgstr "ഈമെയില്‍ വിലാസം"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:1
-msgid "Manage Repositories"
-msgstr "റിപ്പോസിറ്ററികള്‍ കൈകാര്യം ചെയ്യുക"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:2
-msgid "manage_repositories_dialog"
-msgstr "manage_repositories_dialog"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:3
-msgid "Remove All Overrides"
-msgstr "എല്ലാ ഓവര്‍റൈഡുകളും നീക്കം ചെയ്യുക"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:4
-msgid "remove_all_overrides_button"
-msgstr "remove_all_overrides_button"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:7
-msgid ""
-"Manage the repositories your subscriptions grant you access to by enabling, "
-"disabling and overriding certain fields."
-msgstr ""
-"ചില ഫീള്‍ഡുകള്‍  പ്രവര്‍ത്തന സജ്ജം, പ്രവര്‍ത്തന രഹിതം അല്ലെങ്കില്‍ തിരുത്തിയെഴുതി നിങ്ങള്‍ക്കു് "
-"സബ്സ്ക്രിപ്ഷന്‍ ലഭ്യമായ റിപ്പോസിറ്ററികുള്‍ കൈകാര്യം ചെയ്യുക."
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:8
-msgid "repository_listview"
-msgstr "repository_listview"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:9
-msgid ""
-"<b><big>Attached subscriptions do not provide any repositories.</big></b>"
-msgstr "<b><big>Aഘടിപ്പിച്ച സബ്സ്ക്രിപ്ഷനുകള്‍ ഒരു റിപ്പോസിറ്ററികളും നല്‍കുന്നില്ല.</big></b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:10
-msgid "<b>Repository Details</b>"
-msgstr "<b>റിപ്പോസിറ്ററി വിശദാംശങ്ങള്‍</b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:11
-msgid "<b>Name:</b>"
-msgstr "<b>പേരു്:</b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:13
-msgid "<b>Base URL:</b>"
-msgstr "<b>അടിസ്ഥാന യുആര്‍എല്‍:</b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:15
-msgid "<b>Gpgcheck:</b>"
-msgstr "<b>Gpgcheck:</b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:16
-msgid "Enabled (1)"
-msgstr "Enabled (1)"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:17
-msgid "gpgcheck_readonly"
-msgstr "gpgcheck_readonly"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:18
-msgid "gpgcheck_combobox"
-msgstr "gpgcheck_combobox"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:19
-msgid "gpgcheck_edit_button"
-msgstr "gpgcheck_edit_button"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:20
-msgid "gpgcheck_remove_button"
-msgstr "gpgcheck_remove_button"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid "System Preferences"
 msgstr "സിസ്റ്റത്തിനുള്ള മുന്‍ഗണനകള്‍"
@@ -4823,6 +4539,160 @@ msgstr ""
 "small>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/registration.glade.h:2
+msgid "register_dialog_main_vbox"
+msgstr "register_dialog_main_vbox"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/registration.glade.h:3
+msgid "registration_dialog_action_area"
+msgstr "registration_dialog_action_area"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/registration.glade.h:5
+msgid "register_button"
+msgstr "register_button"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/registration.glade.h:7
+msgid "progress_label"
+msgstr "progress_label"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/registration.glade.h:8
+msgid "register_progressbar"
+msgstr "register_progressbar"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/registration.glade.h:9
+msgid "register_details_label"
+msgstr "register_details_label"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/registration.glade.h:10
+msgid "page 2"
+msgstr "താള്‍ 2"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:1
+msgid "Manage Repositories"
+msgstr "റിപ്പോസിറ്ററികള്‍ കൈകാര്യം ചെയ്യുക"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:2
+msgid "manage_repositories_dialog"
+msgstr "manage_repositories_dialog"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:3
+msgid "Remove All Overrides"
+msgstr "എല്ലാ ഓവര്‍റൈഡുകളും നീക്കം ചെയ്യുക"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:4
+msgid "remove_all_overrides_button"
+msgstr "remove_all_overrides_button"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:7
+msgid ""
+"Manage the repositories your subscriptions grant you access to by enabling, "
+"disabling and overriding certain fields."
+msgstr ""
+"ചില ഫീള്‍ഡുകള്‍  പ്രവര്‍ത്തന സജ്ജം, പ്രവര്‍ത്തന രഹിതം അല്ലെങ്കില്‍ തിരുത്തിയെഴുതി നിങ്ങള്‍ക്കു് "
+"സബ്സ്ക്രിപ്ഷന്‍ ലഭ്യമായ റിപ്പോസിറ്ററികുള്‍ കൈകാര്യം ചെയ്യുക."
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:8
+msgid "<b>Repository Details</b>"
+msgstr "<b>റിപ്പോസിറ്ററി വിശദാംശങ്ങള്‍</b>"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:9
+msgid "<b>Name:</b>"
+msgstr "<b>പേരു്:</b>"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:11
+msgid "<b>Base URL:</b>"
+msgstr "<b>അടിസ്ഥാന യുആര്‍എല്‍:</b>"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:13
+msgid "<b>Gpgcheck:</b>"
+msgstr "<b>Gpgcheck:</b>"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:14
+msgid "Enabled (1)"
+msgstr "പ്രവര്‍ത്തനസജ്ജം (1)"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:15
+msgid "gpgcheck_readonly"
+msgstr "gpgcheck_readonly"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:16
+msgid "gpgcheck_combobox"
+msgstr "gpgcheck_combobox"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:17
+msgid "gpgcheck_edit_button"
+msgstr "gpgcheck_edit_button"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:18
+msgid "gpgcheck_remove_button"
+msgstr "gpgcheck_remove_button"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
+msgid "_System"
+msgstr "_സിസ്റ്റം"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:3
+msgid "_Register"
+msgstr "_രജിസ്ടര്‍ ചെയ്യുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:4
+msgid "_Unregister"
+msgstr "_അണ്‍രജിസ്ടര്‍ ചെയ്യുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
+msgid "_Import Cert"
+msgstr "സെര്‍ട്ട് _ഇംപോര്‍ട്ട് ചെയ്യുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:6
+msgid "R_edeem Subscription"
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ സ്വീ_കരിയ്ക്കുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:7
+msgid "View System _Facts"
+msgstr "സിസ്റ്റം വി_വരങ്ങള്‍ കാണുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
+msgid "Configure Pro_xy"
+msgstr "പ്രോ_ക്സി ക്രമീകരിയ്ക്കുക"
+
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
+msgid "Repo_sitories"
+msgstr "റിപ്പോസിറ്ററി_കള്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
+msgid "_Preferences"
+msgstr "മുന്‍_ഗണനകള്‍"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:11
+msgid "_Help"
+msgstr "_സഹായം"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
+msgid "_Getting Started"
+msgstr "_ആരംഭിയ്ക്കുക"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author anipeter
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:13
+msgid "_Online Documentation"
+msgstr "_ഓണ്‍ലൈന്‍ വിവരണക്കുറിപ്പു്"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:1
 msgid "<b>Select Service Level</b>"
 msgstr "<b>സര്‍വീസ് ലവല്‍ തെരഞ്ഞെടുക്കുക</b>"
@@ -4850,6 +4720,124 @@ msgstr "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:5
 msgid "<b>Select a common service level for this system's subscriptions:</b>"
 msgstr "<b>ഈ സിസ്റ്റത്തിന്റെ സബ്സ്ക്രിപ്ഷനുകള്‍ക്കു് ഒരു സാധാരണ സര്‍വീസ് ലവല്‍ തെരഞ്ഞെടുക്കുക:</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:1
+msgid ""
+"This assistant will guide you through the process of registering your system "
+"with Red Hat to receive software updates and other benefits. You will need "
+"the following to register:"
+msgstr ""
+"സോഫ്റ്റ്‌വെയര്‍ പരിഷ്കരണങ്ങള്‍ക്കായി നിങ്ങളുടെ സിസ്റ്റം Red Hat നെറ്റ്‌വര്‍ക്കിലേക്ക് (RHN) കണക്ട് "
+"ചെയ്യുന്നതിനായി നിങ്ങളെ ഈ അസിസ്റ്റന്റ് സഹായിക്കുന്നതാണു്. ഉദാഹരണത്തിനു്:"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:2
+msgid "• A network connection"
+msgstr "• ഒരു നെറ്റ്‌വര്‍ക്ക് കണക്ഷന്‍"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:3
+msgid "• Your account login"
+msgstr "• നിങ്ങളുടെ അക്കൌണ്ട് പ്രവേശന വിവരം"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:4
+msgid "Your account login"
+msgstr "നിങ്ങളുടെ അക്കൌണ്ട് പ്രവേശന വിവരം"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:5
+msgid "• The address of a subscription management service (optional)"
+msgstr "• സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വീസിന്റെ വിലാസം (നിര്‍ബന്ധമല്ല)"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:6
+msgid "_Why Should I Register?"
+msgstr "_എന്തിന് രജിസ്ടര്‍ ചെയ്യണം?"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:7
+msgid "Why Should I Register?"
+msgstr "എന്തിന് രജിസ്ടറ്‍ ചെയ്യണം?"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:8
+msgid ""
+"Would you like to register your system at this time? <b>(Strongly "
+"recommended.)</b>"
+msgstr ""
+"നിങ്ങള്‍ക്ക് നിങ്ങളുടെ സിസ്റ്റം ഇപ്പോള്‍ രജിസ്ടര്‍ ചെയ്യണമോ? <b>(ഏറ്റവും ഉചിതമായ സന്ദര്‍ഭം.)</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:9
+msgid "_Yes, I'd like to register now."
+msgstr "_ഉവ്വു് എനിയ്ക്കു് ഉടന്‍ രജിസ്ടര്‍ ചെയ്യണം."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:10
+msgid "_No, I prefer to register at a later time."
+msgstr "_വേണ്ട, എനിക്ക് പിന്നീട് രജിസ്ടര്‍ ചെയ്താല്‍ മതി."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:11
+msgid "Why Register"
+msgstr "എന്തിന് രജിസ്ടറ്‍ ചെയ്യണം"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:12
+msgid ""
+"Registering your system with Red Hat allows you to take full advantage of "
+"the benefits of a paid subscription, including:"
+msgstr ""
+"നിങ്ങളുടെ സിസ്റ്റം Red Hat നെറ്റ്‌വര്‍ക്കിലേക്ക് കണക്ട് ചെയ്യുമ്പോള്‍ നിങ്ങള്‍ക്ക് ഒരു പെയിഡ് "
+"സബ്സ്ക്രിപ്ഷനു് ലഭിക്കുന്ന ആനുകൂല്ല്യങ്ങള്‍ എല്ലാം ലഭ്യമാകുന്നു, അവ:"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:15
+msgid "<b>Security &amp; Updates:</b>"
+msgstr "<b>സുരക്ഷയും പരിഷ്കരണങ്ങളും:</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:16
+msgid ""
+"Receive the latest software updates, including security updates, keeping "
+"this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
+msgstr ""
+"ഈ Red Hat Enterprise Linux സിസ്റ്റം <b>പുതുക്കുന്നതിനും</b> <b>സുരക്ഷിതമാക്കുന്നതിനും</b> "
+"സെക്യൂരിറ്റി പരിഷ്കരണങ്ങള്‍ ഉള്‍പ്പെടയുളള ഏറ്റവും പുതിയ സോഫ്റ്റ്‌വെയര്‍ പരിഷ്കരണങ്ങള്‍ ലഭ്യമാക്കുക."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:17
+msgid "<b>Downloads &amp; Upgrades:</b>"
+msgstr "<b>ഡൌണ്‍ലോഡുകളും പരിഷ്കരണങ്ങളും:</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:18
+msgid ""
+"Download installation images for Red Hat Enterprise Linux releases, "
+"including new releases."
+msgstr ""
+"പുതിയ റിലീസ് ഉള്‍പ്പെടയുളള Red Hat Enterprise Linux റിലീസുകള്‍ക്കായി ഇന്‍സ്റ്റലേഷന്‍ഇമേജുകള്‍ "
+"ഡൌണ്‍‍ലോഡ് ചെയ്യുക."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:19
+msgid "<b>Support:</b>"
+msgstr "<b>പിന്തുണ:</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:20
+msgid ""
+"Access to the technical support experts at Red Hat or Red Hat's partners for "
+"help with any issues you might encounter with this system."
+msgstr ""
+"നിങ്ങള്‍ സിസ്റ്റത്തില്‍ അഭിമുഖീകരിക്കുന്ന എല്ലാ പ്രശ്നങ്ങള്‍ക്കും പരിഹാരത്തിനായി ഉളള Red Hat "
+"അല്ലെങ്കില്‍ Red Hat പാര്‍ട്ടനറുകളിലുളള ഉളള സാങ്കേതിക പിന്തുണ എന്നിവ അടങ്ങുന്നു. "
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:21
+msgid "<b>Management:</b>"
+msgstr "<b>മാനേജ്മെന്റ്:</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:22
+msgid "Management"
+msgstr "മാനേജ്മെന്റ്"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:23
+msgid ""
+"Manage subscriptions and systems registered to Customer Portal via access."
+"redhat.com or through one of our other subscription management services."
+msgstr ""
+"access.redhat.com അല്ലെങ്കില്‍ മറ്റൊരു സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വീസുകളിലൂടെ കസ്റ്റമര്‍ "
+"പോര്‍ട്ടലില്‍ രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്ന സബ്സ്ക്രിപ്ഷനുകളും സിസ്റ്റങ്ങളും കൈകാര്യം ചെയ്യുക."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:24
+msgid ""
+"<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
+"privacy_statement.html</small>"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../bin/install-num-migrate-to-rhsm:51

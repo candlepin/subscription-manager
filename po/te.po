@@ -3,9 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-09 12:49-0400\n"
-"PO-Revision-Date: 2014-02-06 05:31-0500\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"POT-Creation-Date: 2014-05-07 14:31-0400\n"
+"PO-Revision-Date: 2014-03-10 08:16-0400\n"
+"Last-Translator: kkrothap <kkrothap@fedoraproject.org>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: te\n"
 "MIME-Version: 1.0\n"
@@ -209,404 +209,58 @@ msgid "Subscription Registration"
 msgstr "సబ్‌స్క్రిప్షన్ నమోదీకరణ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:76
-#: ../src/subscription_manager/gui/widgets.py:251 ../src/rct/printing.py:42
-msgid "Product"
-msgstr "ఉత్పత్తి"
+#: ../src/subscription_manager/gui/contract_selection.py:94
+#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:75
+msgid "Contract"
+msgstr "ఒప్పందం"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:87
-#: ../src/rct/printing.py:45 ../src/rct/printing.py:124
-msgid "Version"
-msgstr "వర్షన్"
+#: ../src/subscription_manager/gui/contract_selection.py:108
+msgid "Used / Total"
+msgstr "వినియోగిత / మొత్తం"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:90
-msgid "Status"
-msgstr "స్థితి"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:93
 #: ../src/subscription_manager/gui/contract_selection.py:113
+#: ../src/subscription_manager/gui/installedtab.py:93
 #: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:126
 msgid "Start Date"
 msgstr "ప్రారంభ తేది"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:96
-#: ../src/subscription_manager/gui/mysubstab.py:102
 #: ../src/subscription_manager/gui/contract_selection.py:119
+#: ../src/subscription_manager/gui/mysubstab.py:102
+#: ../src/subscription_manager/gui/installedtab.py:96
 #: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:127
 msgid "End Date"
 msgstr "అంతిమ తేది"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:179
-#: ../src/subscription_manager/managercli.py:71
-msgid "Future Subscription"
-msgstr "భవిష్య సబ్‌స్క్రిప్షన్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:180
-msgid "Future Subscribed"
-msgstr "భవిష్యత్తులో సబ్‌స్క్రైబగు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:183
-#: ../src/subscription_manager/managercli.py:74
-msgid "Expired"
-msgstr "కాలముతీరిన"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:193
-#, python-format
-msgid "Subscription %s is expired"
-msgstr "సబ్‌స్క్రిప్షన్ %s గడవుతీరినది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/installedtab.py:196
-#: ../src/subscription_manager/gui/installedtab.py:197
-#: ../src/subscription_manager/managercli.py:75
-msgid "Partially Subscribed"
-msgstr "పాక్షికంగా సబ్‌స్క్రైబైంది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#. Shouldn't be reachable.
-#. Reason has no id attr
-#. It's possible (though unlikely, and kind of broken) to have more
-#. than one version of python-rhsm/subscription-manager installed.
-#. Versions() will only return one (and I suspect it's not predictable
-#. which it will return).
-#: ../src/subscription_manager/gui/installedtab.py:200
-#: ../src/subscription_manager/gui/factsgui.py:90
-#: ../src/subscription_manager/gui/factsgui.py:117
-#: ../src/subscription_manager/reasons.py:83
-#: ../src/subscription_manager/utils.py:171
-#: ../src/subscription_manager/utils.py:172
-#: ../src/subscription_manager/utils.py:187
-#: ../src/subscription_manager/utils.py:206
-#: ../src/subscription_manager/utils.py:225
-#: ../src/subscription_manager/cert_sorter.py:47
-#: ../src/subscription_manager/managercli.py:76
-#: ../src/subscription_manager/managercli.py:284
-#: ../src/subscription_manager/managercli.py:285
-#: ../src/subscription_manager/managercli.py:288
-#: ../src/subscription_manager/managercli.py:289
-#: ../src/subscription_manager/managercli.py:1636
-#: ../src/subscription_manager/managercli.py:2374
-msgid "Unknown"
-msgstr "తెలియని"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:202
-msgid "System is not registered."
-msgstr "వ్యవస్థ నమోదు కాలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. System must be registered but unable to reach server:
-#: ../src/subscription_manager/gui/installedtab.py:205
-msgid "Entitlement server is unreachable."
-msgstr "ఎన్విరాన్మెంట్ సేవిక అందుబాటులోలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:208
-#: ../src/subscription_manager/managercli.py:72
-msgid "Subscribed"
-msgstr "సబ్‌స్క్రైబ్‌డ్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:210
-#, python-format
-msgid "Covered by contract %s through %s"
-msgid_plural "Covered by contracts %s through %s"
-msgstr[0] "కాంట్రాక్ట్ %s %s గుండా లోబడివుంది"
-msgstr[1] "కాంట్రాక్టులు %s %s గుండా లోబడివున్నాయి"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:217
-#: ../src/subscription_manager/gui/installedtab.py:218
-#: ../src/subscription_manager/managercli.py:73
-msgid "Not Subscribed"
-msgstr "సబ్‌స్క్రైబ్ కాని"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/installedtab.py:269
-msgid "My Installed Products"
-msgstr "నా సంస్థాపిత వుత్పత్తులు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:302
-#, python-format
-msgid "System is properly subscribed through %s."
-msgstr "వ్యవస్థ %s గుండా సరిగా సబ్‌స్క్రైబ్ అయ్యెను."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:310
-msgid "No installed products detected."
-msgstr "ఏ సంస్థాపిత వుత్పత్తులు గుర్తించబడలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:315
-msgid "This system does not match subscription limits."
-msgstr "వ్యవస్థ సబ్‌స్క్రిప్షన్ పరిమితులతో సరిపోలడంలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:321
-#, python-format
-msgid "%s installed products do not have valid subscriptions."
-msgstr "%s సంస్థాపిత వుత్పత్తులు చెల్లునటువంటి సబ్‌స్క్రిప్షన్లను కలిగిలేవు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:326
-msgid "1 installed product does not have a valid subscription."
-msgstr "1 సంస్థాపిత వుత్పత్తి చెల్లునటువంటి సబ్‌స్క్రిప్షన్ కలిగిలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:331
-msgid "Keep your system up to date by registering."
-msgstr "నమోదుచేయుట ద్వారా మీ వ్యవస్థను తాజా వుంచుము."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:155
-msgid "There was an error saving your configuration."
-msgstr "మీ ఆకృతీకరణను దాయుటలో వొక దోషం వుంది."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:156
-#, python-format
-msgid "Make sure that you own %s."
-msgstr "మీరు %s ను స్వంతగా కలిగివుండునట్లు చూడండి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/networkConfig.py:177
-msgid "Proxy location cannot be empty"
-msgstr "ప్రోక్సీ స్థానము ఖాళీగా వుండలేదు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/networkConfig.py:179
-msgid "Proxy connection succeeded"
-msgstr "ప్రోక్సీ అనుసంధానం విజయవంతమైంది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/networkConfig.py:181
-msgid "Proxy connection failed"
-msgstr "ప్రోక్సీ అనుసంధానం విఫలమైంది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/redeem.py:55
-#, python-format
-msgid "Error redeeming subscription: %s"
-msgstr "సబ్‌స్క్రిప్షన్ వెచ్చించుటలో దోషం: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:255
-msgid "Installed"
-msgstr "సంస్థాపిత"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. An empty string entry is used for "un-setting" the system's SLA:
-#. for unsetting
-#: ../src/subscription_manager/gui/widgets.py:330
-#: ../src/subscription_manager/gui/preferences.py:119
-#: ../src/subscription_manager/gui/preferences.py:145
-msgid "Not Set"
-msgstr "అమర్చలేదు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:357
-#: ../src/subscription_manager/gui/factsgui.py:141
-#: ../src/subscription_manager/printing_utils.py:136
-#: ../src/subscription_manager/managercli.py:611
-msgid "None"
-msgstr "ఏదీకాదు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:558
-msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr "చెల్లని తేది తీరు. దయచేసి చెల్లునటువంటి తేదీను తిరిగి-ప్రవేశపెట్టు. ఉదాహరణకు:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/widgets.py:595
-msgid "Date Selection"
-msgstr "తేదీ యెంపిక"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:610
-msgid "Today"
-msgstr "ఈరోజు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:705
-#: ../src/subscription_manager/gui/mysubstab.py:283
-#: ../src/subscription_manager/managercli.py:2084
-#: ../src/subscription_manager/managercli.py:2167
-msgid "Physical"
-msgstr "ఫిజికల్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:706
-#: ../src/subscription_manager/gui/mysubstab.py:281
-#: ../src/subscription_manager/managercli.py:2082
-#: ../src/subscription_manager/managercli.py:2165
-msgid "Virtual"
-msgstr "వర్చ్యువల్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:707
-msgid "Both"
-msgstr "రెండు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#. content-type is required, no need to xstr
-#: ../src/subscription_manager/gui/widgets.py:710
-#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
-msgid "Type"
-msgstr "రకం"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:782
-msgid "Click to Adjust Quantity"
-msgstr "పరిమాణం సర్దుబాటు చేయుటకు నొక్కుము"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/managergui.py:337
-msgid ""
-"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr "అభీష్టాల డైలాగ్ నందు దోషం. మరింత సమాచారం కొరకు /var/log/rhsm/rhsm.log చూడండి."
-
-#: ../src/subscription_manager/gui/managergui.py:345
-msgid ""
-"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr "రెపోస్ డైలాగ్ నందు దోషం. మరింత సమాచారం కొరకు /var/log/rhsm/rhsm.log చూడండి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:361
-msgid "<b>Errors were encountered during unregister.</b>"
-msgstr "<b>దోషములు నమోదీకరణ తీసివేత నందు యెదురైనవి.</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:363
-#: ../src/subscription_manager/gui/registergui.py:94
-msgid "Please see /var/log/rhsm/rhsm.log for more information."
-msgstr "అధిక సమాచారం కొరకు దయచేసి /var/log/rhsm/rhsm.log చూడండి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:379
-msgid "<b>Are you sure you want to unregister?</b>"
-msgstr "<b>మీరు ఖచ్చితంగా నమోదును తీసివేయాలని అనుకొనుచున్నారా?</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:435
-msgid "System Already Registered"
-msgstr "సిస్టమ్ యిప్పటికే నమోదైంది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:74
-#: ../src/subscription_manager/gui/registergui.py:421
-#: ../src/subscription_manager/gui/allsubs.py:72
-msgid "Subscription"
-msgstr "సబ్‌స్క్రిప్షన్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:91
-msgid "Installed Products"
-msgstr "సంస్థాపిత వుత్పత్తులు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. Set up the quantity column.
-#: ../src/subscription_manager/gui/mysubstab.py:105
-#: ../src/subscription_manager/gui/registergui.py:427
 #: ../src/subscription_manager/gui/contract_selection.py:124
-#: ../src/subscription_manager/gui/allsubs.py:88
+#: ../src/subscription_manager/gui/registergui.py:427
+#: ../src/subscription_manager/gui/allsubs.py:96
+#: ../src/subscription_manager/gui/mysubstab.py:105
 #: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:82
 msgid "Quantity"
 msgstr "పరిమాణం"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:130
-#, python-format
-msgid "There was an error removing %s with serial number %s"
-msgstr "%s ను %s వరుస సంఖ్యతో తీసివేయుటలో వొక దోషం వుంది"
-
-#: ../src/subscription_manager/gui/mysubstab.py:144
-msgid "Removing"
-msgstr "తీసివేయుచున్నది"
-
-#: ../src/subscription_manager/gui/mysubstab.py:145
-msgid "Removing subscription. Please wait."
-msgstr "సబ్‌స్క్రిప్షన్ తీసివేస్తోంది. దయచేసి వేచివుండు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:164
-#, python-format
-msgid "Are you sure you want to remove %s?"
-msgstr "మీరు ఖచ్చితముగా %s ను తొలగించుదామని అనుకొనుచున్నారా?"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:191
-#, python-format
-msgid "Stack of %s and %s others"
-msgstr "%s మరియు %s యితరుల స్టాక్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:194
-#, python-format
-msgid "Stack of %s and 1 other"
-msgstr "%s మరియు 1 యితర స్టాక్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:196
-#, python-format
-msgid "Stack of %s"
-msgstr "%s యొక్క స్టాక్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:226
-msgid "My Subscriptions"
-msgstr "నా సబ్‌స్క్రిప్షన్లు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/mysubstab.py:267
-msgid "Subscription is current."
-msgstr "సబ్‌స్క్రిప్షన్ ప్రస్తుతం వుంది."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/mysubstab.py:270
-msgid "Subscription is expired."
-msgstr "సబ్‌స్క్రిప్షన్ గడువుతీరెను."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/mysubstab.py:272
-msgid "Subscription has not begun."
-msgstr "సబ్‌స్క్రిప్షన్ ప్రారంభం కాలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/mysubstab.py:274
-msgid "Subscription management service doesn't support Status Details."
-msgstr "సబ్‌స్క్రిప్షన్ నిర్వహణ సేవ అనునది స్థితి వివరాలకు తోడ్పాటు నీయదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/mysubstab.py:286
-msgid "Yes"
-msgstr "అవును"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/mysubstab.py:288
-msgid "No"
-msgstr "కాదు"
+#: ../src/subscription_manager/gui/contract_selection.py:141
+#: ../src/subscription_manager/gui/allsubs.py:231
+#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:81
+msgid "Unlimited"
+msgstr "అపరిమిత"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:92
 msgid "<b>Unable to register the system.</b>"
 msgstr "<b>సిస్టమ్‌ను నమోదు చేయలేము.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:94
+#: ../src/subscription_manager/gui/managergui.py:363
+msgid "Please see /var/log/rhsm/rhsm.log for more information."
+msgstr "అధిక సమాచారం కొరకు దయచేసి /var/log/rhsm/rhsm.log చూడండి."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:186
@@ -630,8 +284,8 @@ msgstr "<b>అనుబందిస్తోంది</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:298
-#: ../src/subscription_manager/gui/data/registration.glade.h:4
 #: ../src/subscription_manager/gui/data/installed.glade.h:4
+#: ../src/subscription_manager/gui/data/registration.glade.h:4
 msgid "Register"
 msgstr "నమోదుచేయి"
 
@@ -656,9 +310,16 @@ msgstr "సబ్‌స్క్రైబ్ అగుటలో దోషం: %s
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:415
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:9
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:7
 msgid "Attach"
 msgstr "అనుబందించు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:421
+#: ../src/subscription_manager/gui/allsubs.py:80
+#: ../src/subscription_manager/gui/mysubstab.py:74
+msgid "Subscription"
+msgstr "సబ్‌స్క్రిప్షన్"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:473
@@ -796,6 +457,434 @@ msgstr ""
 msgid "Server supports environments, but none are available."
 msgstr "సేవిక యెన్విరాన్మెంట్లకు తోడ్పాటునిచ్చును, అయితే యేవి అందుబాటులోలేవు."
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. Add at-spi because we no longer create this widget from glade
+#: ../src/subscription_manager/gui/allsubs.py:55
+msgid "All Subscriptions View"
+msgstr "అన్ని సబ్‌స్క్రిప్షన్ల దర్శనం"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/allsubs.py:92
+msgid "Available"
+msgstr "అందుబాటులోవున్న"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/allsubs.py:175
+msgid "Press Update to search for subscriptions."
+msgstr "సబ్‌స్క్రిప్షన్ల కొరకు వెతుకుటకు నవీకరించు నొక్కుము."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:210
+#, python-format
+msgid "No subscriptions are available on %s."
+msgstr "%s పై యెటువంటి సబ్‌స్క్రిప్షన్లు అందుబాటులోలేవు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/allsubs.py:216
+msgid "No subscriptions match current filters."
+msgstr "ప్రస్తుత వడపోతలకు యే సబ్‌స్క్రిప్షన్లు సరిపోలటంలేదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:347
+msgid "All Available Subscriptions"
+msgstr "అందుబాటులోని అన్ని సబ్‌స్క్రిప్షన్లు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/allsubs.py:357
+msgid "Searching"
+msgstr "అన్వేషించుచున్నది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:358
+msgid "Searching for subscriptions. Please wait."
+msgstr "సబ్‌స్క్రిప్షన్ల కొరకు అన్వేషించుచున్నది. దయచేసి వేచివుండు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:372
+#, python-format
+msgid "Error fetching subscriptions from server:  %s"
+msgstr "సేవికనుండి సబ్‌స్క్రిప్షన్లను తెచ్చుటలో దోషం: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:386
+#, python-format
+msgid "Unable to search for subscriptions:  %s"
+msgstr "సబ్‌స్క్రిప్షన్ల కొరకు అన్వేషించలేక పోయెను: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:397
+#, python-format
+msgid "Error getting subscription: %s"
+msgstr "సబ్‌స్క్రిప్షన్ పొందుటలో దోషం: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/allsubs.py:401
+msgid "Quantity must be a positive number."
+msgstr "పరిమాణం తప్పనిసరిగా ధన సంఖ్య కావాలి."
+
+#. Start the progress bar
+#: ../src/subscription_manager/gui/allsubs.py:408
+msgid "Attaching"
+msgstr "అనుబందిస్తోంది"
+
+#: ../src/subscription_manager/gui/allsubs.py:409
+msgid "Attaching subscription. Please wait."
+msgstr "సబ్‌స్క్రిప్షన్ అనుబందిస్తోంది. దయచేసి వేచివుండు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:428
+#, python-format
+msgid "%s applied"
+msgstr "%s వర్తించబడెను"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/importsub.py:40
+msgid "Import Certificates"
+msgstr "ధృవీకరణపత్రాలను దిగుమతిచేయి"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/importsub.py:43
+msgid "Import"
+msgstr "దిగుమతిచేయి"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/importsub.py:52
+msgid "Certificates"
+msgstr "ధృవీకరణపత్రాలు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/importsub.py:57
+msgid "All files"
+msgstr "అన్ని ఫైళ్ళు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/importsub.py:123
+msgid "The following certificate files did not exist:"
+msgstr "కింది ధృవీకరణపత్ర ఫైళ్ళు లేవు:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/importsub.py:126
+msgid "The following files are not valid certificates and were not imported:"
+msgstr "కింది ఫైళ్ళు చెల్లునటువంటి ధృవీకరణపత్రాలు కావు మరియు దిగుమతి కాలేదు:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/importsub.py:131
+msgid ""
+"An error occurred while importing the following certificates. Please check "
+"the log file for more information."
+msgstr ""
+"కింది ధృవీకరణపత్రాలను దిగుమతి చేయునప్పుడు వొక దోషం యెదురైంది. మరింత సమాచారం కొరకు లాగ్ ఫైలును "
+"పరిశీలించండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/importsub.py:135
+msgid "The following certificates were successfully imported:"
+msgstr "కింది ధృవీకరణపత్రాలు విజయవంతంగా దిగుమైతయ్యెను:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. if we get to this point, the import was successful
+#: ../src/subscription_manager/gui/importsub.py:140
+msgid "Certificate import was successful."
+msgstr "ధృవీకరణపత్రం దిగుమతి విజయవంతమైంది."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:91
+msgid "Installed Products"
+msgstr "సంస్థాపిత వుత్పత్తులు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:130
+#, python-format
+msgid "There was an error removing %s with serial number %s"
+msgstr "%s ను %s వరుస సంఖ్యతో తీసివేయుటలో వొక దోషం వుంది"
+
+#: ../src/subscription_manager/gui/mysubstab.py:144
+msgid "Removing"
+msgstr "తీసివేయుచున్నది"
+
+#: ../src/subscription_manager/gui/mysubstab.py:145
+msgid "Removing subscription. Please wait."
+msgstr "సబ్‌స్క్రిప్షన్ తీసివేస్తోంది. దయచేసి వేచివుండు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:164
+#, python-format
+msgid "Are you sure you want to remove %s?"
+msgstr "మీరు ఖచ్చితముగా %s ను తొలగించుదామని అనుకొనుచున్నారా?"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:191
+#, python-format
+msgid "Stack of %s and %s others"
+msgstr "%s మరియు %s యితరుల స్టాక్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:194
+#, python-format
+msgid "Stack of %s and 1 other"
+msgstr "%s మరియు 1 యితర స్టాక్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:196
+#, python-format
+msgid "Stack of %s"
+msgstr "%s యొక్క స్టాక్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:226
+msgid "My Subscriptions"
+msgstr "నా సబ్‌స్క్రిప్షన్లు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/mysubstab.py:267
+msgid "Subscription is current."
+msgstr "సబ్‌స్క్రిప్షన్ ప్రస్తుతం వుంది."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/mysubstab.py:270
+msgid "Subscription is expired."
+msgstr "సబ్‌స్క్రిప్షన్ గడువుతీరెను."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/mysubstab.py:272
+msgid "Subscription has not begun."
+msgstr "సబ్‌స్క్రిప్షన్ ప్రారంభం కాలేదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/mysubstab.py:274
+msgid "Subscription management service doesn't support Status Details."
+msgstr "సబ్‌స్క్రిప్షన్ నిర్వహణ సేవ అనునది స్థితి వివరాలకు తోడ్పాటు నీయదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:281
+#: ../src/subscription_manager/gui/widgets.py:710
+#: ../src/subscription_manager/managercli.py:2082
+#: ../src/subscription_manager/managercli.py:2165
+msgid "Virtual"
+msgstr "వర్చ్యువల్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:283
+#: ../src/subscription_manager/gui/widgets.py:709
+#: ../src/subscription_manager/managercli.py:2084
+#: ../src/subscription_manager/managercli.py:2167
+msgid "Physical"
+msgstr "ఫిజికల్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/mysubstab.py:286
+msgid "Yes"
+msgstr "అవును"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/mysubstab.py:288
+msgid "No"
+msgstr "కాదు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:255
+#: ../src/subscription_manager/gui/installedtab.py:76
+#: ../src/rct/printing.py:42
+msgid "Product"
+msgstr "ఉత్పత్తి"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:259
+msgid "Installed"
+msgstr "సంస్థాపిత"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. An empty string entry is used for "un-setting" the system's SLA:
+#. for unsetting
+#: ../src/subscription_manager/gui/widgets.py:334
+#: ../src/subscription_manager/gui/preferences.py:119
+#: ../src/subscription_manager/gui/preferences.py:145
+msgid "Not Set"
+msgstr "అమర్చలేదు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:361
+#: ../src/subscription_manager/gui/factsgui.py:141
+#: ../src/subscription_manager/printing_utils.py:136
+#: ../src/subscription_manager/managercli.py:611
+msgid "None"
+msgstr "ఏదీకాదు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:562
+msgid "Invalid date format. Please re-enter a valid date. Example: "
+msgstr "చెల్లని తేది తీరు. దయచేసి చెల్లునటువంటి తేదీను తిరిగి-ప్రవేశపెట్టు. ఉదాహరణకు:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/widgets.py:599
+msgid "Date Selection"
+msgstr "తేదీ యెంపిక"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:614
+msgid "Today"
+msgstr "ఈరోజు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:711
+msgid "Both"
+msgstr "రెండు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#. content-type is required, no need to xstr
+#: ../src/subscription_manager/gui/widgets.py:714
+#: ../src/rct/manifest_commands.py:208 ../src/rct/printing.py:101
+msgid "Type"
+msgstr "రకం"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:786
+msgid "Click to Adjust Quantity"
+msgstr "పరిమాణం సర్దుబాటు చేయుటకు నొక్కుము"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:87
+#: ../src/rct/printing.py:45 ../src/rct/printing.py:124
+msgid "Version"
+msgstr "వర్షన్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:90
+msgid "Status"
+msgstr "స్థితి"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:179
+#: ../src/subscription_manager/managercli.py:71
+msgid "Future Subscription"
+msgstr "భవిష్య సబ్‌స్క్రిప్షన్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:180
+msgid "Future Subscribed"
+msgstr "భవిష్యత్తులో సబ్‌స్క్రైబగు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:183
+#: ../src/subscription_manager/managercli.py:74
+msgid "Expired"
+msgstr "కాలముతీరిన"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:193
+#, python-format
+msgid "Subscription %s is expired"
+msgstr "సబ్‌స్క్రిప్షన్ %s గడవుతీరినది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/installedtab.py:196
+#: ../src/subscription_manager/gui/installedtab.py:197
+#: ../src/subscription_manager/managercli.py:75
+msgid "Partially Subscribed"
+msgstr "పాక్షికంగా సబ్‌స్క్రైబైంది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#. Shouldn't be reachable.
+#. Reason has no id attr
+#. It's possible (though unlikely, and kind of broken) to have more
+#. than one version of python-rhsm/subscription-manager installed.
+#. Versions() will only return one (and I suspect it's not predictable
+#. which it will return).
+#: ../src/subscription_manager/gui/installedtab.py:200
+#: ../src/subscription_manager/gui/factsgui.py:90
+#: ../src/subscription_manager/gui/factsgui.py:117
+#: ../src/subscription_manager/cert_sorter.py:47
+#: ../src/subscription_manager/managercli.py:76
+#: ../src/subscription_manager/managercli.py:284
+#: ../src/subscription_manager/managercli.py:285
+#: ../src/subscription_manager/managercli.py:288
+#: ../src/subscription_manager/managercli.py:289
+#: ../src/subscription_manager/managercli.py:1636
+#: ../src/subscription_manager/managercli.py:2382
+#: ../src/subscription_manager/reasons.py:83
+#: ../src/subscription_manager/utils.py:171
+#: ../src/subscription_manager/utils.py:172
+#: ../src/subscription_manager/utils.py:187
+#: ../src/subscription_manager/utils.py:206
+#: ../src/subscription_manager/utils.py:225
+msgid "Unknown"
+msgstr "తెలియని"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:202
+msgid "System is not registered."
+msgstr "వ్యవస్థ నమోదు కాలేదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. System must be registered but unable to reach server:
+#: ../src/subscription_manager/gui/installedtab.py:205
+msgid "Entitlement server is unreachable."
+msgstr "ఎన్విరాన్మెంట్ సేవిక అందుబాటులోలేదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:208
+#: ../src/subscription_manager/managercli.py:72
+msgid "Subscribed"
+msgstr "సబ్‌స్క్రైబ్‌డ్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:210
+#, python-format
+msgid "Covered by contract %s through %s"
+msgid_plural "Covered by contracts %s through %s"
+msgstr[0] "కాంట్రాక్ట్ %s %s గుండా లోబడివుంది"
+msgstr[1] "కాంట్రాక్టులు %s %s గుండా లోబడివున్నాయి"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:217
+#: ../src/subscription_manager/gui/installedtab.py:218
+#: ../src/subscription_manager/managercli.py:73
+msgid "Not Subscribed"
+msgstr "సబ్‌స్క్రైబ్ కాని"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/installedtab.py:269
+msgid "My Installed Products"
+msgstr "నా సంస్థాపిత వుత్పత్తులు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:302
+#, python-format
+msgid "System is properly subscribed through %s."
+msgstr "వ్యవస్థ %s గుండా సరిగా సబ్‌స్క్రైబ్ అయ్యెను."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:310
+msgid "No installed products detected."
+msgstr "ఏ సంస్థాపిత వుత్పత్తులు గుర్తించబడలేదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:315
+msgid "This system does not match subscription limits."
+msgstr "వ్యవస్థ సబ్‌స్క్రిప్షన్ పరిమితులతో సరిపోలడంలేదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:321
+#, python-format
+msgid "%s installed products do not have valid subscriptions."
+msgstr "%s సంస్థాపిత వుత్పత్తులు చెల్లునటువంటి సబ్‌స్క్రిప్షన్లను కలిగిలేవు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:326
+msgid "1 installed product does not have a valid subscription."
+msgstr "1 సంస్థాపిత వుత్పత్తి చెల్లునటువంటి సబ్‌స్క్రిప్షన్ కలిగిలేదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:331
+msgid "Keep your system up to date by registering."
+msgstr "నమోదుచేయుట ద్వారా మీ వ్యవస్థను తాజా వుంచుము."
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
 #: ../src/subscription_manager/gui/about.py:29
 msgid ""
@@ -853,98 +942,6 @@ msgid "<b>Next System Check-in:</b> %s"
 msgstr "<b>తరువాతి వ్యవస్థ చెక్-యిన్:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:94
-#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:75
-msgid "Contract"
-msgstr "ఒప్పందం"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:108
-msgid "Used / Total"
-msgstr "వినియోగిత / మొత్తం"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:141
-#: ../src/subscription_manager/gui/allsubs.py:225
-#: ../src/subscription_manager/managerlib.py:346 ../src/rct/printing.py:81
-msgid "Unlimited"
-msgstr "అపరిమిత"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/allsubs.py:84
-msgid "Available"
-msgstr "అందుబాటులోవున్న"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/allsubs.py:167
-msgid "Press Update to search for subscriptions."
-msgstr "సబ్‌స్క్రిప్షన్ల కొరకు వెతుకుటకు నవీకరించు నొక్కుము."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:203
-#, python-format
-msgid "No subscriptions are available on %s."
-msgstr "%s పై యెటువంటి సబ్‌స్క్రిప్షన్లు అందుబాటులోలేవు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/allsubs.py:209
-msgid "No subscriptions match current filters."
-msgstr "ప్రస్తుత వడపోతలకు యే సబ్‌స్క్రిప్షన్లు సరిపోలటంలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:341
-msgid "All Available Subscriptions"
-msgstr "అందుబాటులోని అన్ని సబ్‌స్క్రిప్షన్లు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/allsubs.py:351
-msgid "Searching"
-msgstr "అన్వేషించుచున్నది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:352
-msgid "Searching for subscriptions. Please wait."
-msgstr "సబ్‌స్క్రిప్షన్ల కొరకు అన్వేషించుచున్నది. దయచేసి వేచివుండు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:366
-#, python-format
-msgid "Error fetching subscriptions from server:  %s"
-msgstr "సేవికనుండి సబ్‌స్క్రిప్షన్లను తెచ్చుటలో దోషం: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:380
-#, python-format
-msgid "Unable to search for subscriptions:  %s"
-msgstr "సబ్‌స్క్రిప్షన్ల కొరకు అన్వేషించలేక పోయెను: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:391
-#, python-format
-msgid "Error getting subscription: %s"
-msgstr "సబ్‌స్క్రిప్షన్ పొందుటలో దోషం: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/allsubs.py:395
-msgid "Quantity must be a positive number."
-msgstr "పరిమాణం తప్పనిసరిగా ధన సంఖ్య కావాలి."
-
-#. Start the progress bar
-#: ../src/subscription_manager/gui/allsubs.py:402
-msgid "Attaching"
-msgstr "అనుబందిస్తోంది"
-
-#: ../src/subscription_manager/gui/allsubs.py:403
-msgid "Attaching subscription. Please wait."
-msgstr "సబ్‌స్క్రిప్షన్ అనుబందిస్తోంది. దయచేసి వేచివుండు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:422
-#, python-format
-msgid "%s applied"
-msgstr "%s వర్తించబడెను"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:59
 msgid "Fact"
@@ -960,55 +957,31 @@ msgstr "విలువ"
 msgid "No previous update"
 msgstr "ఏ గత నవీకరణలేదు"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/importsub.py:40
-msgid "Import Certificates"
-msgstr "ధృవీకరణపత్రాలను దిగుమతిచేయి"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/importsub.py:43
-msgid "Import"
-msgstr "దిగుమతిచేయి"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/importsub.py:52
-msgid "Certificates"
-msgstr "ధృవీకరణపత్రాలు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/importsub.py:57
-msgid "All files"
-msgstr "అన్ని ఫైళ్ళు"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:155
+msgid "There was an error saving your configuration."
+msgstr "మీ ఆకృతీకరణను దాయుటలో వొక దోషం వుంది."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:123
-msgid "The following certificate files did not exist:"
-msgstr "కింది ధృవీకరణపత్ర ఫైళ్ళు లేవు:"
+#: ../src/subscription_manager/gui/networkConfig.py:156
+#, python-format
+msgid "Make sure that you own %s."
+msgstr "మీరు %s ను స్వంతగా కలిగివుండునట్లు చూడండి."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/importsub.py:126
-msgid "The following files are not valid certificates and were not imported:"
-msgstr "కింది ఫైళ్ళు చెల్లునటువంటి ధృవీకరణపత్రాలు కావు మరియు దిగుమతి కాలేదు:"
+#: ../src/subscription_manager/gui/networkConfig.py:177
+msgid "Proxy location cannot be empty"
+msgstr "ప్రోక్సీ స్థానము ఖాళీగా వుండలేదు"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/importsub.py:131
-msgid ""
-"An error occurred while importing the following certificates. Please check "
-"the log file for more information."
-msgstr ""
-"కింది ధృవీకరణపత్రాలను దిగుమతి చేయునప్పుడు వొక దోషం యెదురైంది. మరింత సమాచారం కొరకు లాగ్ ఫైలును "
-"పరిశీలించండి."
+#: ../src/subscription_manager/gui/networkConfig.py:179
+msgid "Proxy connection succeeded"
+msgstr "ప్రోక్సీ అనుసంధానం విజయవంతమైంది"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/importsub.py:135
-msgid "The following certificates were successfully imported:"
-msgstr "కింది ధృవీకరణపత్రాలు విజయవంతంగా దిగుమైతయ్యెను:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. if we get to this point, the import was successful
-#: ../src/subscription_manager/gui/importsub.py:140
-msgid "Certificate import was successful."
-msgstr "ధృవీకరణపత్రం దిగుమతి విజయవంతమైంది."
+#: ../src/subscription_manager/gui/networkConfig.py:181
+msgid "Proxy connection failed"
+msgstr "ప్రోక్సీ అనుసంధానం విఫలమైంది"
 
 #: ../src/subscription_manager/gui/reposgui.py:45
 msgid "Attached subscriptions do not provide any repositories."
@@ -1019,638 +992,130 @@ msgid "No repositories are available without an attached subscription."
 msgstr "అనుబందించిన సబ్‌స్క్రిప్షన్లు లేకుండా ఏ రిపోజిటరీలు అందుబాటులోలేవు."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:106
-#: ../src/subscription_manager/gui/reposgui.py:126
-#: ../src/subscription_manager/gui/reposgui.py:289 ../src/rct/printing.py:107
+#: ../src/subscription_manager/gui/reposgui.py:112
+#: ../src/subscription_manager/gui/reposgui.py:132
+#: ../src/subscription_manager/gui/reposgui.py:293 ../src/rct/printing.py:107
 msgid "Enabled"
 msgstr "చేతనంచేసిన"
 
-#: ../src/subscription_manager/gui/reposgui.py:110
+#: ../src/subscription_manager/gui/reposgui.py:116
 msgid "Repository ID"
 msgstr "రిపోజిటరీ ఐడి"
 
-#: ../src/subscription_manager/gui/reposgui.py:115
+#: ../src/subscription_manager/gui/reposgui.py:121
 msgid "Modified"
 msgstr "సవరించిన"
 
-#: ../src/subscription_manager/gui/reposgui.py:127
-#: ../src/subscription_manager/gui/reposgui.py:291
+#: ../src/subscription_manager/gui/reposgui.py:133
+#: ../src/subscription_manager/gui/reposgui.py:295
 msgid "Disabled"
 msgstr "అచేతనమైన"
 
-#: ../src/subscription_manager/gui/reposgui.py:260
+#: ../src/subscription_manager/gui/reposgui.py:264
 #, python-format
 msgid "Are you sure you want to remove all overrides for <b>%s</b>?"
 msgstr "<b>%s</b> కొరకు మీరు అన్ని ఓవర్‌రైడ్లను తీసివేయాలని నిశ్చయంగా అనుకొంటున్నారా?"
 
-#: ../src/subscription_manager/gui/reposgui.py:261
+#: ../src/subscription_manager/gui/reposgui.py:265
 msgid "Confirm Remove All Overrides"
 msgstr "అన్ని ఓవర్‌రైడ్లను తీసివేయాలని ఖాయపరచు"
 
-#: ../src/subscription_manager/gui/reposgui.py:279
+#: ../src/subscription_manager/gui/reposgui.py:283
 msgid "Unable to reset repository overrides."
 msgstr "రిపోజిటరీ ఓవర్‌రైడ్లను తిరిగివుంచలేదు."
 
-#: ../src/subscription_manager/gui/reposgui.py:325
+#: ../src/subscription_manager/gui/reposgui.py:329
 msgid "Unable to update enabled override."
 msgstr "చేతనపరచిన ఓవర్‌రైడ్ నవీకరించలేదు."
 
-#: ../src/subscription_manager/gui/reposgui.py:378
+#: ../src/subscription_manager/gui/reposgui.py:382
 msgid "Unable to update the gpgcheck override."
 msgstr "జిపిజిచెక్ ఓవర్‌రైడ్ నవీకరించలేదు."
 
-#: ../src/subscription_manager/gui/reposgui.py:385
+#: ../src/subscription_manager/gui/reposgui.py:389
 msgid "Are you sure you want to remove this override?"
 msgstr "మీరు నిశ్చయంగా ఈ ఓవర్‌రైడ్ తీసవేద్దామని అనుకొనుచున్నారా?"
 
-#: ../src/subscription_manager/gui/reposgui.py:386
+#: ../src/subscription_manager/gui/reposgui.py:390
 msgid "Confirm Override Removal"
 msgstr "ఓవర్‌రైడ్ తీసివేత ఖాయపరచు"
 
-#: ../src/subscription_manager/gui/reposgui.py:404
+#: ../src/subscription_manager/gui/reposgui.py:408
 msgid "Unable to delete the gpgcheck override."
 msgstr "జిపిజిచెక్ ఓవర్‌రైడ్ తొలగించలేదు."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/reasons.py:75
-msgid "Product "
-msgstr "ఉత్పత్తి "
+#: ../src/subscription_manager/gui/managergui.py:337
+msgid ""
+"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr "అభీష్టాల డైలాగ్ నందు దోషం. మరింత సమాచారం కొరకు /var/log/rhsm/rhsm.log చూడండి."
+
+#: ../src/subscription_manager/gui/managergui.py:345
+msgid ""
+"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr "రెపోస్ డైలాగ్ నందు దోషం. మరింత సమాచారం కొరకు /var/log/rhsm/rhsm.log చూడండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:361
+msgid "<b>Errors were encountered during unregister.</b>"
+msgstr "<b>దోషములు నమోదీకరణ తీసివేత నందు యెదురైనవి.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:379
+msgid "<b>Are you sure you want to unregister?</b>"
+msgstr "<b>మీరు ఖచ్చితంగా నమోదును తీసివేయాలని అనుకొనుచున్నారా?</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:435
+msgid "System Already Registered"
+msgstr "సిస్టమ్ యిప్పటికే నమోదైంది"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/reasons.py:77
-msgid "Subscription "
-msgstr "సబ్‌స్క్రిప్షన్ "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/reasons.py:79
-msgid "Stack "
-msgstr "స్టాక్ "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:63
-msgid "Could not find up2date_client.config module!"
-msgstr "తాజా up2date_client.config మాడ్యూల్ కనుగొనలేక పోయారా!"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:69
-msgid "Could not find up2date_client.rhnChannel module!"
-msgstr "తాజా up2date_client.rhnChannel మాడ్యూల్ కనుగొనలేక పోయారా!"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:73
+#: ../src/subscription_manager/gui/redeem.py:55
 #, python-format
-msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"ధృవీకరణపత్రం సేవికకు అనుసంధానం కాలేక పోయింది: %s.  మరిన్ని వివరాల కొరకు /var/log/rhsm/rhsm."
-"log చూడండి."
+msgid "Error redeeming subscription: %s"
+msgstr "సబ్‌స్క్రిప్షన్ వెచ్చించుటలో దోషం: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:113
-msgid "You have entered an invalid choice."
-msgstr "మీరు చెల్లని యెంపికను ప్రవేశపెట్టారు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:156
-msgid "ignore channels not available on RHSM"
-msgstr "RHSM పైన అందుబాటులో లేని చానళ్ళను విస్మరించు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:158
-msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
-msgstr "సబ్‌స్క్రిప్షన్లను అనుబందించుటకు GUI సాధనం దించు, స్వయం-అనుబందనం బదులుగా"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:160
-msgid ""
-"don't execute the auto-attach option while registering with subscription "
-"manager"
-msgstr "సబ్‌స్క్రిప్షన్ నిర్వాహికతో నమోదుచేయునప్పుడ స్వయం-అనుబందం ఐచ్చికంను నిర్వర్తించవద్దు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:162
-msgid ""
-"service level to follow when attaching subscriptions, for no service level "
-"use --servicelevel=\"\""
-msgstr ""
-"సబ్‌స్క్రిప్షన్లను అనుబందించునప్పుడు అనుసరించుటకు సేవాస్థాయి, సేవా స్థాయి లేకుండా వుండుటకు --"
-"servicelevel=\"\" వుపయోగించు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:165
-msgid "specify the subscription management server to migrate to"
-msgstr "మైగ్రేట్ అగుటకు సబ్‌స్క్రిప్షన్ నిర్వహణ సేవిక తెలుపుము"
-
-#: ../src/subscription_manager/migrate/migrate.py:167
-msgid "specify the Red Hat user name"
-msgstr "Red Hat వాడుకరి పేరు తెలుపుము"
-
-#: ../src/subscription_manager/migrate/migrate.py:169
-msgid "specify the Red Hat password"
-msgstr "Red Hat సంకేతపదం తెలుపుము"
-
-#: ../src/subscription_manager/migrate/migrate.py:171
-msgid "specify the subscription service user name"
-msgstr "సబ్‌స్క్రిప్షన్ సేవ వాడుకరి పేరు తెలుపుము"
-
-#: ../src/subscription_manager/migrate/migrate.py:173
-msgid "specify the subscription service password"
-msgstr "సబ్‌స్క్రిప్షన్ సేవ సంకేతపదం తెలుపుము"
+#: ../src/subscription_manager/cert_sorter.py:44
+msgid "Current"
+msgstr "ప్రస్తుత"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:176
-msgid "don't use RHN proxy settings with subscription management server"
-msgstr "సబ్‌స్క్రిప్షన్ నిర్వహణ సేవికతో RHN ప్రోక్సీ అమరికలను వుపయోగించవద్దు"
+#: ../src/subscription_manager/cert_sorter.py:45
+msgid "Insufficient"
+msgstr "సరిపోని"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:178
-msgid "organization to register to"
-msgstr "నమోదుచేయుటకు సంస్థ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:180
-msgid "environment to register to"
-msgstr "నమోదుచేయుటకు ఎన్విరాన్మెంట్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:184
-msgid "The --servicelevel and --no-auto options cannot be used together."
-msgstr "--servicelevel మరియు --no-auto ఐచ్చికాలు కలిపి వాడలేము."
-
-#: ../src/subscription_manager/migrate/migrate.py:204
-msgid "Red Hat username: "
-msgstr "Red Hat వాడుకరిపేరు: "
-
-#: ../src/subscription_manager/migrate/migrate.py:204
-msgid "Red Hat password: "
-msgstr "Red Hat సంకేతపదం: "
-
-#: ../src/subscription_manager/migrate/migrate.py:208
-msgid "Subscription Service username: "
-msgstr "సబ్‌స్క్రిప్షన్ సేవ వాడుకరిపేరు:"
-
-#: ../src/subscription_manager/migrate/migrate.py:208
-msgid "Subscription Service password: "
-msgstr "సబ్‌స్క్రిప్షన్ సేవ సంకేతపదం:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:221
-msgid "Unable to read RHN proxy settings."
-msgstr "RHN ప్రోక్సీ అమరికలను చదువలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:251
-#, python-format
-msgid "Error parsing server URL: %s"
-msgstr "సేవిక URL పార్సింగ్ చేయుటలో దోషం: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:273
-msgid ""
-"\n"
-"This system appears to be already registered to Red Hat Subscription "
-"Management.  Exiting."
-msgstr ""
-"\n"
-"ఈ వ్యవస్థ యిప్పటికే Red Hat సబ్‌స్క్రిప్షన్ నిర్వాహికతో నమోదైనట్లు వుంది. నిష్క్రమిస్తోంది."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:275
-#, python-format
-msgid ""
-"\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"profile details."
-msgstr ""
-"\n"
-"ప్రొఫైల్ వివరాలు చూడుటకు దయచేసి https://access.redhat.com/management/consumers/%s "
-"చూడండి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:280
-#: ../src/subscription_manager/managercli.py:348
-msgid "Error: CA certificate for subscription service has not been installed."
-msgstr "దోషం: సబ్‌స్క్రిప్షన్ సేవ కొరకు CA ధృవీకరణపత్రం సంస్థాపించలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:296
-#: ../src/subscription_manager/managercli.py:657
-#: ../src/subscription_manager/managercli.py:1138
-#, python-format
-msgid "%s cannot register with any organizations."
-msgstr "%s ఏ సంస్థలతో నమోదు కాలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:303
-msgid "Org: "
-msgstr "సంస్థ: "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:311
-#, python-format
-msgid "No such org: %s"
-msgstr "అటువంటి సంస్థ లేదు: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:320
-msgid "Environments are not supported by this server."
-msgstr "ఈ సేవికచే ఎన్విరాన్మెంట్ల తోడ్పాటు లేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:333
-msgid "Environment: "
-msgstr "పరిసరం:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:343
-#: ../src/subscription_manager/managercli.py:1123
-#, python-format
-msgid "No such environment: %s"
-msgstr "అటువంటి యెన్విరాన్మెంటు లేదు: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:368
-msgid ""
-"Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
-"details."
-msgstr ""
-"RHN Classic నిర్థారించలేక పోయింది. మరిన్ని వివరాల కొరకు /var/log/rhsm/rhsm.log చూడండి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:375
-msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
-msgstr "RHN Classic నందు వాడుకరి పాత్రలను నిర్థారించుటలో సమస్య యెదురైంది."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:377
-msgid "You must be an org admin to successfully run this script."
-msgstr "ఈ స్క్రిప్టును విజయవంతంగా నడుపుటకు మీరు తప్పక org నిర్వాహకులు అయివుండాలి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:384
-msgid "Problem encountered getting the list of subscribed channels.  Exiting."
-msgstr "సబ్‌స్క్రైబ్‌డ్ చానళ్ళ జాబితాను పొందుటలో సమస్య యెదురైంది. నిష్క్రమిస్తోంది."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:397
-msgid ""
-"You are subscribed to more than one jbappplatform channel.  This script does "
-"not support that configuration.  Exiting."
-msgstr ""
-"మీరు వొకటి కన్నా యెక్కువ jbappplatform చానల్‌కు సబ్‌స్క్రైబ్ అయినారు. ఈ స్ట్రిప్టు ఆ ఆకృతీకరణకు "
-"తోడ్పాటునీయదు. నిష్క్రమిస్తోంది."
-
-#: ../src/subscription_manager/migrate/migrate.py:429
-msgid "Unable to continue migration!"
-msgstr "మైగ్రేషన్ కొనసాగించలేక పోతోంది!"
-
-#: ../src/subscription_manager/migrate/migrate.py:430
-msgid ""
-"You are subscribed to channels that have conflicting product certificates."
-msgstr "విభేదిస్తున్న ఉత్పత్తి ధృవీకరణపత్రాలు కలిగివున్న ఛానళ్ళకు మీరు సబ్‌స్క్రైబ్ అయినారు."
-
-#: ../src/subscription_manager/migrate/migrate.py:434
-#, python-format
-msgid "The following channels map to product ID %s:"
-msgstr "కింది ఛానళ్ళు ఉత్పత్తి ఐడి %s కు మాపైను:"
-
-#: ../src/subscription_manager/migrate/migrate.py:437
-msgid ""
-"Reduce the number of channels per product ID to 1 and run migration again."
-msgstr "ఛానళ్ళ సంఖ్యను ఒక్కో ఉత్పత్తి ఐడికు 1 కు తగ్గించి మరలా మైగ్రేషన్ నడుపుము."
-
-#: ../src/subscription_manager/migrate/migrate.py:438
-msgid ""
-"To remove a channel, use 'rhn-channel --remove --"
-"channel=<conflicting_channel>'."
-msgstr ""
-"ఒక ఛానల్ తీసివేయుటకు, 'rhn-channel --remove --channel=<conflicting_channel>' "
-"ఉపయోగించు."
-
-#: ../src/subscription_manager/migrate/migrate.py:450
-#, python-format
-msgid ""
-"Unable to read mapping file: %(mappingfile)s.\n"
-"Do you have the %(package)s package installed?"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:476
-msgid "Channels not available on RHSM:"
-msgstr "RHSM పైన అందుబాటులో లేని చానళ్ళు:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:481
-msgid "No product certificates are mapped to these RHN Classic channels:"
-msgstr "ఏ వుత్పత్తి ధృవీకరణపత్రాలు యీ RHN క్లాసిక్ చానళ్ళకు మాప్ కాలేదు:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:487
-msgid ""
-"\n"
-"Use --force to ignore these channels and continue the migration.\n"
-msgstr ""
-"\n"
-"ఈ చానల్స్ విస్మరించి మైగ్రేషన్ కొనసాగించుటకు --force వుపయోగించుము.\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:501
-msgid "Installing product certificates for these RHN Classic channels:"
-msgstr "ఈ RHN క్లాసిక్ చానళ్ళ కొరకు వుత్పత్తి ధృవీకరణపత్రాలను సంస్థాపించుచున్నది:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:529
-#, python-format
-msgid ""
-"\n"
-"Product certificates installed successfully to %s."
-msgstr ""
-"\n"
-"ఉత్పత్తి ధృవీకరణపత్రాలు విజయవంతంగా %s కు సంస్థాపించబడెను."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:609
-#, python-format
-msgid ""
-"Did not receive a completed unregistration message from RHN Classic for "
-"system %s.\n"
-"Please investigate on the Customer Portal at https://access.redhat.com."
-msgstr ""
-"వ్యవస్థ %s కొరకు RHN Classic నుండి పూర్తైన నమోదుతీసివేత సందేశం స్వీకరించలేదు.\n"
-"https://access.redhat.com వద్ద వినియోగదారి పోర్టల్ నందు విచారించండి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:617
-msgid "System successfully unregistered from RHN Classic."
-msgstr "సిస్టమ్ నమోదీకరణ RHN Classic‌నుండి విజయవంతంగా తీసివేయబడింది."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:619
-msgid "Unable to unregister system from RHN Classic.  Exiting."
-msgstr "సిస్టమ్‌ నమోదీకరణ RHN Classic‌నుండి తీసివేయలేకపోయింది. నిష్క్రమిస్తోంది."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:625
-msgid "Attempting to register system to Red Hat Subscription Management..."
-msgstr "వ్యవస్థను Red Hat సబ్‌స్క్రిప్షన్ నిర్వహణకు నమోదుచేయుటకు ప్రయత్నిస్తోంది..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:638
-msgid ""
-"\n"
-"Unable to register.\n"
-"For further assistance, please contact Red Hat Global Support Services."
-msgstr ""
-"\n"
-"నమోదు చేయలేదు.\n"
-"ఇతర సహాయం కొరకు, Red Hat గ్లోబల్ తోడ్పాటు సేవలను సంప్రదించండి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:641
-#, python-format
-msgid ""
-"System '%s' successfully registered to Red Hat Subscription Management.\n"
-msgstr "వ్యవస్థ '%s' విజయవంతంగా Red Hat సబ్‌స్క్రిప్షన్ నిర్వాహికకు నమోదైంది.\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:645
-#: ../src/subscription_manager/managercli.py:778
-#: ../src/subscription_manager/managercli.py:856
-#: ../src/subscription_manager/managercli.py:865
-msgid "Error: The service-level command is not supported by the server."
-msgstr "దోషం: సేవా-స్థాయి ఆదేశం సేవిక ద్వారా తోడ్పాటునీయుట లేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. Display an actual message for the empty string level.
-#: ../src/subscription_manager/migrate/migrate.py:664
-msgid "No service level preference"
-msgstr "ఏ సేవా స్థాయి అభీష్టంలేదు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:671
-#, python-format
-msgid ""
-"\n"
-"Service level \"%s\" is not available."
-msgstr ""
-"\n"
-"సేవా స్థాయి \"%s\" అందుబాటులో లేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:672
-msgid "Please select a service level agreement for this system."
-msgstr "ఈ వ్యవస్థ కొరకు దయచేసి సేవా స్థాయి వొప్పందం యెంపికచేయి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:679
-msgid ""
-"Launching the GUI tool to manually attach subscriptions to this system ..."
-msgstr "ఈ వ్యవస్థకు మానవీయంగా సబ్‌స్క్రిప్షన్లను అనుబందించుటకు GUI సాధనం ఆరంబిస్తోంది ..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:682
-msgid "Attempting to auto-attach to appropriate subscriptions..."
-msgstr "సరితూగు సబ్‌స్క్రిప్షన్లకు స్వయం-అనుబందంకు ప్రయత్నిస్తోంది..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:691
-msgid ""
-"\n"
-"Unable to auto-attach.  Do your existing subscriptions match the products "
-"installed on this system?"
-msgstr ""
-"\n"
-"స్వయం-అనుబందం చేయలేదు. ఈ వ్యవస్థపై సంస్థాపించిన వుత్పత్తులకు మీ సబ్‌స్క్రిప్షన్లు సరిపోవునా?"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:695
-#, python-format
-msgid ""
-"\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"details, and to make changes if necessary."
-msgstr ""
-"\n"
-"వివరాలు చూడుటకు దయచేసి https://access.redhat.com/management/consumers/%s చూడండి, "
-"మరియు అవసరమైతే మార్పులు చేయుటకు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:730
-msgid ""
-"\n"
-"Unable to enable extra repositories."
-msgstr ""
-"\n"
-"అదనపు రిపోజిటరీలను చేతనం చేయలేదు."
-
-#: ../src/subscription_manager/migrate/migrate.py:732
-#, python-format
-msgid ""
-"Please ensure system has subscriptions attached, and see '%s' to enable "
-"additional repositories"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:756
-msgid "Retrieving existing RHN Classic subscription information..."
-msgstr "ఇప్పటికే వున్న RHN Classic సబ్‌స్క్రిప్షన్ సమాచారం వెలికితీస్తోంది..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/migrate/migrate.py:758
-msgid "System is currently subscribed to these RHN Classic Channels:"
-msgstr "వ్యవస్థ ప్రస్తుతం యీ RHN Classic చానళ్ళకు సబ్‌స్క్రైబ్ అయివుంది:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/migrate/migrate.py:768
-msgid ""
-"\n"
-"Preparing to unregister system from RHN Classic..."
-msgstr ""
-"\n"
-"RHN క్లాసిక్ నుండి వ్యవస్థ నమోదీకరణ తీసివేయుటకు సిద్దమౌతోంది..."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cache.py:183
-msgid ""
-"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"సేవిక పైన వ్యవస్థ డాటాను నవీకరించుటలో దోషం, మరిన్న వివరాల కొరకు  /var/log/rhsm/rhsm.log "
-"చూడండి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/dmiinfo.py:56
-#: ../src/subscription_manager/dmiinfo.py:102
-#, python-format
-msgid "Error reading system DMI information: %s"
-msgstr "సిస్టమ్ DMI సమాచారము చదువుటలో దోషం: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/dmiinfo.py:77
-#, python-format
-msgid "Error reading system DMI information with %s: %s"
-msgstr "%s తో సిస్టమ్ DMI సమాచారం చదువుటలో దోషం: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:273
-msgid "Error reading system memory information:"
-msgstr "సిస్టమ్ మెమొరీ సమాచారమును చదువుటలో దోషము:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:583
-msgid "Error reading system CPU information:"
-msgstr "సిస్టమ్ CPU సమాచారమును చదువుటలో దోషము:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:608
-msgid "Error reading networking information:"
-msgstr "నెట్వర్కింగ్ సమాచారమును చదువుటలో దోషం:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:707
-msgid "Error reading network interface information:"
-msgstr "నెట్వర్కు యింటర్ఫేస్ సమాచారం చదువుటలో దోషం:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/hwprobe.py:803
-msgid "Virtualization platform does not support UUIDs"
-msgstr "వర్చ్యులైజేషన్ ప్లాట్‌పాంలు UUIDలకు తోడ్పాటునీయవు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/hwprobe.py:805
-#, python-format
-msgid "Error finding UUID: %s"
-msgstr "UUID కనుగొనుటలో దోషం: %s"
+#: ../src/subscription_manager/cert_sorter.py:46
+msgid "Invalid"
+msgstr "చెల్లని"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. usage format strips any leading 'usage' so
 #. do not iclude it
-#: ../src/subscription_manager/cli.py:62
+#: ../src/subscription_manager/cli.py:64
 #, python-format
 msgid "%%prog %s [OPTIONS]"
 msgstr "%%prog %s [ఐచ్చికాలు]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:93
+#: ../src/subscription_manager/cli.py:95
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "వాడుక: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+msgstr "వాడుక: %s మాడ్యూల్-పేరు [మాడ్యూల్-ఐచ్చికాలు] [--help]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/cli.py:105
+#: ../src/subscription_manager/cli.py:107
 msgid "Primary Modules:"
 msgstr "ప్రాధమిక మాడ్యూళ్ళు:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:106
+#: ../src/subscription_manager/cli.py:108
 msgid "Other Modules:"
 msgstr "ఇతర మాడ్యూళ్ళు:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:339
-#, python-format
-msgid "%s local certificate has been deleted."
-msgid_plural "%s local certificates have been deleted."
-msgstr[0] "%s స్థానిక ధృవీకరణపత్రం తొలగించబడింది."
-msgstr[1] "%s స్థానిక ధృవీకరణపత్రాలు తొలగించబడెను."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:435
-#, python-format
-msgid "Total updates: %d"
-msgstr "మొత్తం నవీకరణలు: %d"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:436
-#, python-format
-msgid "Found (local) serial# %s"
-msgstr "(స్థానిక) వరుస# %s కనుగొన్నది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:437
-#, python-format
-msgid "Expected (UEP) serial# %s"
-msgstr "(UEP) సీరియల్# %s ఊహించినది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:438
-msgid "Added (new)"
-msgstr "జతచేసెను (కొత్త)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:439
-msgid "Deleted (rogue):"
-msgstr "తొలగించెను (రోగ్):"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/certlib.py:444
-msgid "Updating entitlement certificates"
-msgstr "ఎన్టైటిల్మెంట్ ధృవీకరణపత్రాలను నవీకరించుచున్నది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:447
-#: ../src/daemons/rhsmcertd-worker.py:53
-#, python-format
-msgid "%d updates required"
-msgstr "%d నవీకరణలు అవసరం"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/certlib.py:448
-#: ../src/daemons/rhsmcertd-worker.py:54
-msgid "done"
-msgstr "అయినది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/utils.py:188
-#: ../src/subscription_manager/managercli.py:1161
-msgid "This system is currently not registered."
-msgstr "ఈ సిస్టమ్ ప్రస్తుతం నమోదైలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/utils.py:266
-msgid "and"
-msgstr "మరియు"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. note default is lower caps
@@ -1672,103 +1137,9 @@ msgstr "వా‍డుక: %s\n"
 msgid "%s: error: %s"
 msgstr "%s: దోషం: %s"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/cert_sorter.py:44
-msgid "Current"
-msgstr "ప్రస్తుత"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/cert_sorter.py:45
-msgid "Insufficient"
-msgstr "సరిపోని"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/cert_sorter.py:46
-msgid "Invalid"
-msgstr "చెల్లని"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:27
-msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"నెట్వర్కు దోషం, సేవికకు అనుసంధానం కాలేకపోయెను. అధిక సమాచారము కొరకు దయచేసి /var/log/rhsm/rhsm."
-"log చూడండి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:28
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"నెట్వర్కు దోషం. దయచేసి అనుసంధానత వివరములను పరిశీలించండి, లేదా మరింత సమాచారము కొరకు /var/log/"
-"rhsm/rhsm.log చూడండి."
-
-#: ../src/subscription_manager/exceptions.py:29
-msgid "Unauthorized: Invalid credentials for request."
-msgstr "అధికారంలేని: అభ్యర్ధనకు చెల్లని క్రెడెన్షియల్స్."
-
-#: ../src/subscription_manager/exceptions.py:30
-msgid "Forbidden: Invalid credentials for request."
-msgstr "నిషిద్ధమైన: అభ్యర్ధనకు చెల్లని క్రెడెన్షియల్స్."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:31
-msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr ""
-"దూరస్థ సేవిక దోషం. దయచేసి అనుసంధానత వివరములను చూడండి, లేదా మరింత సమాచారము కొరకు /var/log/"
-"rhsm/rhsm.log చూడండి."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:32
-#, python-format
-msgid "Bad CA certificate: %s"
-msgstr "చెడ్డ CA ధృవీకరణపత్రం: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:33
-#: ../src/daemons/rhsmcertd-worker.py:56
-msgid "Your identity certificate has expired"
-msgstr "మీ గుర్తింపు ధృవీకరణపత్రం గడువుముగిసినది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:34
-#, python-format
-msgid "Unable to verify server's identity: %s"
-msgstr "సేవిక యొక్క గుర్తింపును నిర్థారించలేక పోయెను: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/exceptions.py:35
-msgid "Server URL can not be empty"
-msgstr "సేవిక URL ఖాళీగా వుండలేదు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/exceptions.py:36
-msgid ""
-"Server URL is just a schema. Should include hostname, and/or port and path"
-msgstr "సేవిక URL వొక స్కీమా. అతిధేయిపేరు, మరియు/లేదా పోర్ట్ మరియు పాత్ చేర్చవలెను"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/exceptions.py:37
-msgid "Server URL can not be None"
-msgstr "సేవిక URL ఏమీ కాకుండా వుండలేదు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:38
-msgid "Server URL port should be numeric"
-msgstr "సేవిక URL పోర్టు సంఖ్యాత్మకంగా వుండాలి"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/exceptions.py:39
-msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr "సేవిక URL చెల్లని స్కీమ్ కలిగివుంది. http:// మరియు https:// తోడ్పాటునీయబడును."
-
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:67
-#: ../src/rhsm_debug/debug_commands.py:39
+#: ../src/rhsm_debug/debug_commands.py:38
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
@@ -1999,6 +1370,12 @@ msgstr "ఆర్గుమెంట్‌ను పార్స్ చేయల�
 msgid "Error parsing serverurl:"
 msgstr "సేవికయుఆర్ఎల్ పార్స్ చేయుటలో దోషం:"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/managercli.py:348
+#: ../src/subscription_manager/migrate/migrate.py:280
+msgid "Error: CA certificate for subscription service has not been installed."
+msgstr "దోషం: సబ్‌స్క్రిప్షన్ సేవ కొరకు CA ధృవీకరణపత్రం సంస్థాపించలేదు."
+
 #: ../src/subscription_manager/managercli.py:363
 msgid "Error parsing baseurl:"
 msgstr "బేస్‌యుఆర్ఎల్ పార్స్ చేయుటలో దోషం:"
@@ -2097,7 +1474,7 @@ msgstr "--username మరియు --password అనునవి --force తో 
 #. but then show "unknown" here.
 #: ../src/subscription_manager/managercli.py:584
 #: ../src/subscription_manager/managercli.py:587
-#: ../src/subscription_manager/managercli.py:2337
+#: ../src/subscription_manager/managercli.py:2341
 #, python-format
 msgid "server type: %s"
 msgstr "సేవిక రకం: %s"
@@ -2150,6 +1527,14 @@ msgstr "వాడుకరి వేటికి వ్యవస్థను న
 #: ../src/subscription_manager/managercli.py:650
 msgid "Organizations"
 msgstr "సంస్థలు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/managercli.py:657
+#: ../src/subscription_manager/managercli.py:1138
+#: ../src/subscription_manager/migrate/migrate.py:296
+#, python-format
+msgid "%s cannot register with any organizations."
+msgstr "%s ఏ సంస్థలతో నమోదు కాలేదు."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:664
@@ -2253,6 +1638,14 @@ msgstr "ఈ సిస్టమ్‌నకు వర్తింపచేయు�
 #: ../src/subscription_manager/managercli.py:772
 msgid "unset the service level for this system"
 msgstr "ఈ వ్యవస్థ కొరకు సేవా స్థాయిను తీసివేయి"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/managercli.py:778
+#: ../src/subscription_manager/managercli.py:856
+#: ../src/subscription_manager/managercli.py:865
+#: ../src/subscription_manager/migrate/migrate.py:645
+msgid "Error: The service-level command is not supported by the server."
+msgstr "దోషం: సేవా-స్థాయి ఆదేశం సేవిక ద్వారా తోడ్పాటునీయుట లేదు."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
 #: ../src/subscription_manager/managercli.py:797
@@ -2432,6 +1825,19 @@ msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
 msgstr "దోషం: --servicelevel ఐచ్చికం సేవికచే తోడ్పాటునివ్వబడదు. మీ అభ్యర్ధనను పూర్తి చేయలేదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/managercli.py:1123
+#: ../src/subscription_manager/migrate/migrate.py:343
+#, python-format
+msgid "No such environment: %s"
+msgstr "అటువంటి యెన్విరాన్మెంటు లేదు: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/managercli.py:1161
+#: ../src/subscription_manager/utils.py:188
+msgid "This system is currently not registered."
+msgstr "ఈ సిస్టమ్ ప్రస్తుతం నమోదైలేదు."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:1186
@@ -2998,7 +2404,7 @@ msgstr "    సంస్థాపిత వుత్పత్తి స్థి
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:2059
-#: ../src/subscription_manager/managercli.py:2364
+#: ../src/subscription_manager/managercli.py:2372
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "ప్రవేశపెట్టిన తేది చెల్లనిది. తేది YYYY-MM-DD రూపంలోనే వుండాలి (ఉదాహరణ: "
 
@@ -3059,88 +2465,689 @@ msgstr "అన్ని ఓవర్‌రైడ్లను తీసివే�
 msgid "list all overrides; can be specific to a repository by providing --repo"
 msgstr "అన్ని ఓవర్‌రైడ్లను జాబితాచేయి; --repo ద్వారా అందిస్తూ రిపోజిటరీకు ప్రత్యేకం కావచ్చును"
 
-#: ../src/subscription_manager/managercli.py:2224
+#: ../src/subscription_manager/managercli.py:2227
 msgid "--add arguments should be in the form of \"name:value\""
 msgstr "--add ఆర్గుమెంట్లు \"name:value\" రూపంలో ఉండాలి"
 
-#: ../src/subscription_manager/managercli.py:2231
+#: ../src/subscription_manager/managercli.py:2234
 msgid "Error: You must specify a repository to modify"
 msgstr "దోషం: సవరించుటకు మీరు తప్పకుండా ఒక రిపోజిటరీ తెలుపాలి"
 
-#: ../src/subscription_manager/managercli.py:2234
+#: ../src/subscription_manager/managercli.py:2237
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr "దోషం: --remove-all మరియు --list తో మీరు --add లేదా --remove ఉపయోగించకూడదు"
 
-#: ../src/subscription_manager/managercli.py:2237
+#: ../src/subscription_manager/managercli.py:2240
 msgid "Error: You may not use --list with --remove-all"
 msgstr "దోషం: --remove-all తో మీరు --list ఉపయోగించకపోవచ్చు"
 
-#: ../src/subscription_manager/managercli.py:2241
+#: ../src/subscription_manager/managercli.py:2244
 msgid "Error: The --repo option must be used with --list or --add or --remove."
 msgstr "దోషం: --repo ఐచ్చికం తప్పకుండా --list లేదా --add లేదా --remove తో ఉపయోగించాలి."
 
-#: ../src/subscription_manager/managercli.py:2254
+#: ../src/subscription_manager/managercli.py:2257
 msgid "Error: The 'repo-override' command is not supported by the server."
 msgstr "దోషం: 'repo-override' ఆదేశం అనునది సేవికచేత తోడ్పాటునీయబడదు."
 
-#: ../src/subscription_manager/managercli.py:2269
+#: ../src/subscription_manager/managercli.py:2272
 msgid "This system does not have any content overrides applied to it."
 msgstr "ఈ వ్యవస్థ దానికి వర్తించబడినటువంటి విషయం కలిగిలేదు."
 
-#: ../src/subscription_manager/managercli.py:2290
+#: ../src/subscription_manager/managercli.py:2293
 #, python-format
 msgid ""
 "Repository '%s' does not currently exist, but the override has been added."
 msgstr "రిపోజిటరీ '%s' ప్రస్తుతం లేదు, అయితే ఓవర్‌రైడ్ జతచేయబడెను."
 
-#: ../src/subscription_manager/managercli.py:2314
+#: ../src/subscription_manager/managercli.py:2317
 #, python-format
 msgid "Nothing is known about '%s'"
 msgstr "'%s' గురించి ఏమీ తెలియదు"
 
-#: ../src/subscription_manager/managercli.py:2319
+#: ../src/subscription_manager/managercli.py:2322
 #, python-format
 msgid "Repository: %s"
 msgstr "రిపోజిటరీ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/managercli.py:2330
+#: ../src/subscription_manager/managercli.py:2334
 msgid "Print version information"
 msgstr "వర్షన్ సమాచారం ముద్రించు"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/managercli.py:2338
+#: ../src/subscription_manager/managercli.py:2342
 #, python-format
 msgid "subscription management server: %s"
 msgstr "సబ్‌స్క్రిప్షన్ నిర్వహణ సేవిక: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/managercli.py:2346
+#: ../src/subscription_manager/managercli.py:2350
 msgid "Show status information for this system's subscriptions and products"
 msgstr "ఈ వ్యవస్థ యొక్క సబ్‌స్క్రిప్షన్లు మరియు వుత్పత్తుల కొరకు స్థితి సమాచారం చూపము"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/managercli.py:2349
+#: ../src/subscription_manager/managercli.py:2353
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr "స్థితిని పరిశీలించుటకు భవిష్య తేది, అప్రమేయంగా ఇవాల్టి తేది వుండును (ఉదాహరణకు: %s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/managercli.py:2360
+#: ../src/subscription_manager/managercli.py:2364
 msgid "Past dates are not allowed"
 msgstr "గత తేదీలు అనుమతించబడవు"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/managercli.py:2370
+#: ../src/subscription_manager/managercli.py:2378
 msgid "System Status Details"
 msgstr "వ్యవస్థ స్థితి వివరాలు"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/managercli.py:2374
-#: ../src/subscription_manager/managercli.py:2379
+#: ../src/subscription_manager/managercli.py:2382
+#: ../src/subscription_manager/managercli.py:2387
 #, python-format
 msgid "Overall Status: %s\n"
 msgstr "మొత్తంగా స్థితి: %s\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:27
+msgid ""
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
+msgstr ""
+"నెట్వర్కు దోషం, సేవికకు అనుసంధానం కాలేకపోయెను. అధిక సమాచారము కొరకు దయచేసి /var/log/rhsm/rhsm."
+"log చూడండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:28
+msgid ""
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
+msgstr ""
+"నెట్వర్కు దోషం. దయచేసి అనుసంధానత వివరములను పరిశీలించండి, లేదా మరింత సమాచారము కొరకు /var/log/"
+"rhsm/rhsm.log చూడండి."
+
+#: ../src/subscription_manager/exceptions.py:29
+msgid "Unauthorized: Invalid credentials for request."
+msgstr "అధికారంలేని: అభ్యర్ధనకు చెల్లని క్రెడెన్షియల్స్."
+
+#: ../src/subscription_manager/exceptions.py:30
+msgid "Forbidden: Invalid credentials for request."
+msgstr "నిషిద్ధమైన: అభ్యర్ధనకు చెల్లని క్రెడెన్షియల్స్."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:31
+msgid ""
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
+msgstr ""
+"దూరస్థ సేవిక దోషం. దయచేసి అనుసంధానత వివరములను చూడండి, లేదా మరింత సమాచారము కొరకు /var/log/"
+"rhsm/rhsm.log చూడండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:32
+#, python-format
+msgid "Bad CA certificate: %s"
+msgstr "చెడ్డ CA ధృవీకరణపత్రం: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:33
+#: ../src/daemons/rhsmcertd-worker.py:56
+msgid "Your identity certificate has expired"
+msgstr "మీ గుర్తింపు ధృవీకరణపత్రం గడువుముగిసినది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:34
+#, python-format
+msgid "Unable to verify server's identity: %s"
+msgstr "సేవిక యొక్క గుర్తింపును నిర్థారించలేక పోయెను: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/exceptions.py:35
+msgid "Server URL can not be empty"
+msgstr "సేవిక URL ఖాళీగా వుండలేదు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/exceptions.py:36
+msgid ""
+"Server URL is just a schema. Should include hostname, and/or port and path"
+msgstr "సేవిక URL వొక స్కీమా. అతిధేయిపేరు, మరియు/లేదా పోర్ట్ మరియు పాత్ చేర్చవలెను"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/exceptions.py:37
+msgid "Server URL can not be None"
+msgstr "సేవిక URL ఏమీ కాకుండా వుండలేదు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:38
+msgid "Server URL port should be numeric"
+msgstr "సేవిక URL పోర్టు సంఖ్యాత్మకంగా వుండాలి"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/exceptions.py:39
+msgid "Server URL has an invalid scheme. http:// and https:// are supported"
+msgstr "సేవిక URL చెల్లని స్కీమ్ కలిగివుంది. http:// మరియు https:// తోడ్పాటునీయబడును."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/dmiinfo.py:56
+#: ../src/subscription_manager/dmiinfo.py:102
+#, python-format
+msgid "Error reading system DMI information: %s"
+msgstr "సిస్టమ్ DMI సమాచారము చదువుటలో దోషం: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/dmiinfo.py:77
+#, python-format
+msgid "Error reading system DMI information with %s: %s"
+msgstr "%s తో సిస్టమ్ DMI సమాచారం చదువుటలో దోషం: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:273
+msgid "Error reading system memory information:"
+msgstr "సిస్టమ్ మెమొరీ సమాచారమును చదువుటలో దోషము:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:583
+msgid "Error reading system CPU information:"
+msgstr "సిస్టమ్ CPU సమాచారమును చదువుటలో దోషము:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:608
+msgid "Error reading networking information:"
+msgstr "నెట్వర్కింగ్ సమాచారమును చదువుటలో దోషం:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:707
+msgid "Error reading network interface information:"
+msgstr "నెట్వర్కు యింటర్ఫేస్ సమాచారం చదువుటలో దోషం:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/hwprobe.py:803
+msgid "Virtualization platform does not support UUIDs"
+msgstr "వర్చ్యులైజేషన్ ప్లాట్‌పాంలు UUIDలకు తోడ్పాటునీయవు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/hwprobe.py:805
+#, python-format
+msgid "Error finding UUID: %s"
+msgstr "UUID కనుగొనుటలో దోషం: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/reasons.py:75
+msgid "Product "
+msgstr "ఉత్పత్తి "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/reasons.py:77
+msgid "Subscription "
+msgstr "సబ్‌స్క్రిప్షన్ "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/reasons.py:79
+msgid "Stack "
+msgstr "స్టాక్ "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cache.py:183
+msgid ""
+"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
+"సేవిక పైన వ్యవస్థ డాటాను నవీకరించుటలో దోషం, మరిన్న వివరాల కొరకు  /var/log/rhsm/rhsm.log "
+"చూడండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/utils.py:266
+msgid "and"
+msgstr "మరియు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:339
+#, python-format
+msgid "%s local certificate has been deleted."
+msgid_plural "%s local certificates have been deleted."
+msgstr[0] "%s స్థానిక ధృవీకరణపత్రం తొలగించబడింది."
+msgstr[1] "%s స్థానిక ధృవీకరణపత్రాలు తొలగించబడెను."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:435
+#, python-format
+msgid "Total updates: %d"
+msgstr "మొత్తం నవీకరణలు: %d"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:436
+#, python-format
+msgid "Found (local) serial# %s"
+msgstr "(స్థానిక) వరుస# %s కనుగొన్నది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:437
+#, python-format
+msgid "Expected (UEP) serial# %s"
+msgstr "(UEP) సీరియల్# %s ఊహించినది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:438
+msgid "Added (new)"
+msgstr "జతచేసెను (కొత్త)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:439
+msgid "Deleted (rogue):"
+msgstr "తొలగించెను (రోగ్):"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/certlib.py:444
+msgid "Updating entitlement certificates"
+msgstr "ఎన్టైటిల్మెంట్ ధృవీకరణపత్రాలను నవీకరించుచున్నది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:447
+#: ../src/daemons/rhsmcertd-worker.py:53
+#, python-format
+msgid "%d updates required"
+msgstr "%d నవీకరణలు అవసరం"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/certlib.py:448
+#: ../src/daemons/rhsmcertd-worker.py:54
+msgid "done"
+msgstr "అయినది"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:63
+msgid "Could not find up2date_client.config module!"
+msgstr "తాజా up2date_client.config మాడ్యూల్ కనుగొనలేక పోయారా!"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:69
+msgid "Could not find up2date_client.rhnChannel module!"
+msgstr "తాజా up2date_client.rhnChannel మాడ్యూల్ కనుగొనలేక పోయారా!"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:73
+#, python-format
+msgid ""
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
+"ధృవీకరణపత్రం సేవికకు అనుసంధానం కాలేక పోయింది: %s.  మరిన్ని వివరాల కొరకు /var/log/rhsm/rhsm."
+"log చూడండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:113
+msgid "You have entered an invalid choice."
+msgstr "మీరు చెల్లని యెంపికను ప్రవేశపెట్టారు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:156
+msgid "ignore channels not available on RHSM"
+msgstr "RHSM పైన అందుబాటులో లేని చానళ్ళను విస్మరించు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:158
+msgid "launch the GUI tool to attach subscriptions, instead of auto-attaching"
+msgstr "సబ్‌స్క్రిప్షన్లను అనుబందించుటకు GUI సాధనం దించు, స్వయం-అనుబందనం బదులుగా"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:160
+msgid ""
+"don't execute the auto-attach option while registering with subscription "
+"manager"
+msgstr "సబ్‌స్క్రిప్షన్ నిర్వాహికతో నమోదుచేయునప్పుడ స్వయం-అనుబందం ఐచ్చికంను నిర్వర్తించవద్దు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:162
+msgid ""
+"service level to follow when attaching subscriptions, for no service level "
+"use --servicelevel=\"\""
+msgstr ""
+"సబ్‌స్క్రిప్షన్లను అనుబందించునప్పుడు అనుసరించుటకు సేవాస్థాయి, సేవా స్థాయి లేకుండా వుండుటకు --"
+"servicelevel=\"\" వుపయోగించు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:165
+msgid "specify the subscription management server to migrate to"
+msgstr "మైగ్రేట్ అగుటకు సబ్‌స్క్రిప్షన్ నిర్వహణ సేవిక తెలుపుము"
+
+#: ../src/subscription_manager/migrate/migrate.py:167
+msgid "specify the Red Hat user name"
+msgstr "Red Hat వాడుకరి పేరు తెలుపుము"
+
+#: ../src/subscription_manager/migrate/migrate.py:169
+msgid "specify the Red Hat password"
+msgstr "Red Hat సంకేతపదం తెలుపుము"
+
+#: ../src/subscription_manager/migrate/migrate.py:171
+msgid "specify the subscription service user name"
+msgstr "సబ్‌స్క్రిప్షన్ సేవ వాడుకరి పేరు తెలుపుము"
+
+#: ../src/subscription_manager/migrate/migrate.py:173
+msgid "specify the subscription service password"
+msgstr "సబ్‌స్క్రిప్షన్ సేవ సంకేతపదం తెలుపుము"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:176
+msgid "don't use RHN proxy settings with subscription management server"
+msgstr "సబ్‌స్క్రిప్షన్ నిర్వహణ సేవికతో RHN ప్రోక్సీ అమరికలను వుపయోగించవద్దు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:178
+msgid "organization to register to"
+msgstr "నమోదుచేయుటకు సంస్థ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:180
+msgid "environment to register to"
+msgstr "నమోదుచేయుటకు ఎన్విరాన్మెంట్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:184
+msgid "The --servicelevel and --no-auto options cannot be used together."
+msgstr "--servicelevel మరియు --no-auto ఐచ్చికాలు కలిపి వాడలేము."
+
+#: ../src/subscription_manager/migrate/migrate.py:204
+msgid "Red Hat username: "
+msgstr "Red Hat వాడుకరిపేరు: "
+
+#: ../src/subscription_manager/migrate/migrate.py:204
+msgid "Red Hat password: "
+msgstr "Red Hat సంకేతపదం: "
+
+#: ../src/subscription_manager/migrate/migrate.py:208
+msgid "Subscription Service username: "
+msgstr "సబ్‌స్క్రిప్షన్ సేవ వాడుకరిపేరు:"
+
+#: ../src/subscription_manager/migrate/migrate.py:208
+msgid "Subscription Service password: "
+msgstr "సబ్‌స్క్రిప్షన్ సేవ సంకేతపదం:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:221
+msgid "Unable to read RHN proxy settings."
+msgstr "RHN ప్రోక్సీ అమరికలను చదువలేదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:251
+#, python-format
+msgid "Error parsing server URL: %s"
+msgstr "సేవిక URL పార్సింగ్ చేయుటలో దోషం: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:273
+msgid ""
+"\n"
+"This system appears to be already registered to Red Hat Subscription "
+"Management.  Exiting."
+msgstr ""
+"\n"
+"ఈ వ్యవస్థ యిప్పటికే Red Hat సబ్‌స్క్రిప్షన్ నిర్వాహికతో నమోదైనట్లు వుంది. నిష్క్రమిస్తోంది."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:275
+#, python-format
+msgid ""
+"\n"
+"Please visit https://access.redhat.com/management/consumers/%s to view the "
+"profile details."
+msgstr ""
+"\n"
+"ప్రొఫైల్ వివరాలు చూడుటకు దయచేసి https://access.redhat.com/management/consumers/%s "
+"చూడండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:303
+msgid "Org: "
+msgstr "సంస్థ: "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:311
+#, python-format
+msgid "No such org: %s"
+msgstr "అటువంటి సంస్థ లేదు: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:320
+msgid "Environments are not supported by this server."
+msgstr "ఈ సేవికచే ఎన్విరాన్మెంట్ల తోడ్పాటు లేదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:333
+msgid "Environment: "
+msgstr "పరిసరం:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:368
+msgid ""
+"Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
+"details."
+msgstr ""
+"RHN Classic నిర్థారించలేక పోయింది. మరిన్ని వివరాల కొరకు /var/log/rhsm/rhsm.log చూడండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:375
+msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
+msgstr "RHN Classic నందు వాడుకరి పాత్రలను నిర్థారించుటలో సమస్య యెదురైంది."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:377
+msgid "You must be an org admin to successfully run this script."
+msgstr "ఈ స్క్రిప్టును విజయవంతంగా నడుపుటకు మీరు తప్పక org నిర్వాహకులు అయివుండాలి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:384
+msgid "Problem encountered getting the list of subscribed channels.  Exiting."
+msgstr "సబ్‌స్క్రైబ్‌డ్ చానళ్ళ జాబితాను పొందుటలో సమస్య యెదురైంది. నిష్క్రమిస్తోంది."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:397
+msgid ""
+"You are subscribed to more than one jbappplatform channel.  This script does "
+"not support that configuration.  Exiting."
+msgstr ""
+"మీరు వొకటి కన్నా యెక్కువ jbappplatform చానల్‌కు సబ్‌స్క్రైబ్ అయినారు. ఈ స్ట్రిప్టు ఆ ఆకృతీకరణకు "
+"తోడ్పాటునీయదు. నిష్క్రమిస్తోంది."
+
+#: ../src/subscription_manager/migrate/migrate.py:429
+msgid "Unable to continue migration!"
+msgstr "మైగ్రేషన్ కొనసాగించలేక పోతోంది!"
+
+#: ../src/subscription_manager/migrate/migrate.py:430
+msgid ""
+"You are subscribed to channels that have conflicting product certificates."
+msgstr "విభేదిస్తున్న ఉత్పత్తి ధృవీకరణపత్రాలు కలిగివున్న ఛానళ్ళకు మీరు సబ్‌స్క్రైబ్ అయినారు."
+
+#: ../src/subscription_manager/migrate/migrate.py:434
+#, python-format
+msgid "The following channels map to product ID %s:"
+msgstr "కింది ఛానళ్ళు ఉత్పత్తి ఐడి %s కు మాపైను:"
+
+#: ../src/subscription_manager/migrate/migrate.py:437
+msgid ""
+"Reduce the number of channels per product ID to 1 and run migration again."
+msgstr "ఛానళ్ళ సంఖ్యను ఒక్కో ఉత్పత్తి ఐడికు 1 కు తగ్గించి మరలా మైగ్రేషన్ నడుపుము."
+
+#: ../src/subscription_manager/migrate/migrate.py:438
+msgid ""
+"To remove a channel, use 'rhn-channel --remove --"
+"channel=<conflicting_channel>'."
+msgstr ""
+"ఒక ఛానల్ తీసివేయుటకు, 'rhn-channel --remove --channel=<conflicting_channel>' "
+"ఉపయోగించు."
+
+#: ../src/subscription_manager/migrate/migrate.py:450
+#, python-format
+msgid ""
+"Unable to read mapping file: %(mappingfile)s.\n"
+"Do you have the %(package)s package installed?"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:476
+msgid "Channels not available on RHSM:"
+msgstr "RHSM పైన అందుబాటులో లేని చానళ్ళు:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:481
+msgid "No product certificates are mapped to these RHN Classic channels:"
+msgstr "ఏ వుత్పత్తి ధృవీకరణపత్రాలు యీ RHN క్లాసిక్ చానళ్ళకు మాప్ కాలేదు:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:487
+msgid ""
+"\n"
+"Use --force to ignore these channels and continue the migration.\n"
+msgstr ""
+"\n"
+"ఈ చానల్స్ విస్మరించి మైగ్రేషన్ కొనసాగించుటకు --force వుపయోగించుము.\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:501
+msgid "Installing product certificates for these RHN Classic channels:"
+msgstr "ఈ RHN క్లాసిక్ చానళ్ళ కొరకు వుత్పత్తి ధృవీకరణపత్రాలను సంస్థాపించుచున్నది:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:529
+#, python-format
+msgid ""
+"\n"
+"Product certificates installed successfully to %s."
+msgstr ""
+"\n"
+"ఉత్పత్తి ధృవీకరణపత్రాలు విజయవంతంగా %s కు సంస్థాపించబడెను."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:609
+#, python-format
+msgid ""
+"Did not receive a completed unregistration message from RHN Classic for "
+"system %s.\n"
+"Please investigate on the Customer Portal at https://access.redhat.com."
+msgstr ""
+"వ్యవస్థ %s కొరకు RHN Classic నుండి పూర్తైన నమోదుతీసివేత సందేశం స్వీకరించలేదు.\n"
+"https://access.redhat.com వద్ద వినియోగదారి పోర్టల్ నందు విచారించండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:617
+msgid "System successfully unregistered from RHN Classic."
+msgstr "సిస్టమ్ నమోదీకరణ RHN Classic‌నుండి విజయవంతంగా తీసివేయబడింది."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:619
+msgid "Unable to unregister system from RHN Classic.  Exiting."
+msgstr "సిస్టమ్‌ నమోదీకరణ RHN Classic‌నుండి తీసివేయలేకపోయింది. నిష్క్రమిస్తోంది."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:625
+msgid "Attempting to register system to Red Hat Subscription Management..."
+msgstr "వ్యవస్థను Red Hat సబ్‌స్క్రిప్షన్ నిర్వహణకు నమోదుచేయుటకు ప్రయత్నిస్తోంది..."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:638
+msgid ""
+"\n"
+"Unable to register.\n"
+"For further assistance, please contact Red Hat Global Support Services."
+msgstr ""
+"\n"
+"నమోదు చేయలేదు.\n"
+"ఇతర సహాయం కొరకు, Red Hat గ్లోబల్ తోడ్పాటు సేవలను సంప్రదించండి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:641
+#, python-format
+msgid ""
+"System '%s' successfully registered to Red Hat Subscription Management.\n"
+msgstr "వ్యవస్థ '%s' విజయవంతంగా Red Hat సబ్‌స్క్రిప్షన్ నిర్వాహికకు నమోదైంది.\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. Display an actual message for the empty string level.
+#: ../src/subscription_manager/migrate/migrate.py:664
+msgid "No service level preference"
+msgstr "ఏ సేవా స్థాయి అభీష్టంలేదు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:671
+#, python-format
+msgid ""
+"\n"
+"Service level \"%s\" is not available."
+msgstr ""
+"\n"
+"సేవా స్థాయి \"%s\" అందుబాటులో లేదు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:672
+msgid "Please select a service level agreement for this system."
+msgstr "ఈ వ్యవస్థ కొరకు దయచేసి సేవా స్థాయి వొప్పందం యెంపికచేయి."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:679
+msgid ""
+"Launching the GUI tool to manually attach subscriptions to this system ..."
+msgstr "ఈ వ్యవస్థకు మానవీయంగా సబ్‌స్క్రిప్షన్లను అనుబందించుటకు GUI సాధనం ఆరంబిస్తోంది ..."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:682
+msgid "Attempting to auto-attach to appropriate subscriptions..."
+msgstr "సరితూగు సబ్‌స్క్రిప్షన్లకు స్వయం-అనుబందంకు ప్రయత్నిస్తోంది..."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:691
+msgid ""
+"\n"
+"Unable to auto-attach.  Do your existing subscriptions match the products "
+"installed on this system?"
+msgstr ""
+"\n"
+"స్వయం-అనుబందం చేయలేదు. ఈ వ్యవస్థపై సంస్థాపించిన వుత్పత్తులకు మీ సబ్‌స్క్రిప్షన్లు సరిపోవునా?"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:695
+#, python-format
+msgid ""
+"\n"
+"Please visit https://access.redhat.com/management/consumers/%s to view the "
+"details, and to make changes if necessary."
+msgstr ""
+"\n"
+"వివరాలు చూడుటకు దయచేసి https://access.redhat.com/management/consumers/%s చూడండి, "
+"మరియు అవసరమైతే మార్పులు చేయుటకు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:730
+msgid ""
+"\n"
+"Unable to enable extra repositories."
+msgstr ""
+"\n"
+"అదనపు రిపోజిటరీలను చేతనం చేయలేదు."
+
+#: ../src/subscription_manager/migrate/migrate.py:732
+#, python-format
+msgid ""
+"Please ensure system has subscriptions attached, and see '%s' to enable "
+"additional repositories"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:756
+msgid "Retrieving existing RHN Classic subscription information..."
+msgstr "ఇప్పటికే వున్న RHN Classic సబ్‌స్క్రిప్షన్ సమాచారం వెలికితీస్తోంది..."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/migrate/migrate.py:758
+msgid "System is currently subscribed to these RHN Classic Channels:"
+msgstr "వ్యవస్థ ప్రస్తుతం యీ RHN Classic చానళ్ళకు సబ్‌స్క్రైబ్ అయివుంది:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/migrate/migrate.py:768
+msgid ""
+"\n"
+"Preparing to unregister system from RHN Classic..."
+msgstr ""
+"\n"
+"RHN క్లాసిక్ నుండి వ్యవస్థ నమోదీకరణ తీసివేయుటకు సిద్దమౌతోంది..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/cert_commands.py:38
@@ -3575,28 +3582,28 @@ msgstr "గుర్తింపు దృవీకరణపత్రం"
 msgid "Unknown Certificate Type"
 msgstr "తెలియని దృవీకరణపత్రం రకం"
 
-#: ../src/rhsm_debug/debug_commands.py:49
+#: ../src/rhsm_debug/debug_commands.py:48
 msgid "Assemble system information as a tar file or directory"
 msgstr "టార్ ఫైలు లేదా డైరెక్టరీ వలె సమీకృత వ్యవస్థ సమాచారం"
 
-#: ../src/rhsm_debug/debug_commands.py:54
+#: ../src/rhsm_debug/debug_commands.py:53
 msgid "the destination location of the result; default is /tmp"
 msgstr "ఫలితం యొక్క గమ్య స్థానం; అప్రమేయ /tmp"
 
-#: ../src/rhsm_debug/debug_commands.py:59
+#: ../src/rhsm_debug/debug_commands.py:58
 msgid "data will be in an uncompressed directory"
 msgstr "దత్తాంశము అనునది కుదించని డైరెక్టరీ నందు ఉండును"
 
-#: ../src/rhsm_debug/debug_commands.py:62
+#: ../src/rhsm_debug/debug_commands.py:61
 msgid "only data not already included in sos report will be collected"
 msgstr ""
 
-#: ../src/rhsm_debug/debug_commands.py:65
+#: ../src/rhsm_debug/debug_commands.py:64
 #, python-format
 msgid "%%prog %s [OPTIONS] "
 msgstr "%%prog %s [ఐచ్చికాలు] "
 
-#: ../src/rhsm_debug/debug_commands.py:70
+#: ../src/rhsm_debug/debug_commands.py:69
 msgid "The destination directory for the archive must already exist."
 msgstr "ఆర్గైక్ కొరకు గమ్యపు డైరెక్టరీ తప్పకుండా ఇప్పటికే వుండాలి."
 
@@ -3877,71 +3884,112 @@ msgid "Progress Dialog"
 msgstr "పురోగతి డైలాగ్"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:1
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:1
-msgid "<b>Subscription Details</b>"
-msgstr "<b>సబ్‌స్క్రిప్షన్ వివరములు</b>"
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:1
+msgid "Contract Selection"
+msgstr "ఒడంబడిక యెంపిక"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:2
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:2
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
+msgid "<b>Choose the specific contract to use:</b>"
+msgstr "<b>ఉపయోగించుటకు ఫలానా వొడంబడికను యెంచుకొనుము:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:3
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:2
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:2
 msgid "<b>Subscription:</b>"
 msgstr "<b>సబ్‌స్క్రిప్షన్:</b>"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:4
+msgid "<b>Total Contracts:</b>"
+msgstr "<b>మొత్తం వొడంబడికలు:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
+msgid "* Click to Change Quantity"
+msgstr "* పరిమాణం మార్చుటకు నొక్కుము"
+
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
+msgid "SLA Selection Table"
+msgstr "SLA ఎంపిక పట్టిక"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:1
+msgid "<b>Status:</b>"
+msgstr "<b>స్థితి:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:2
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:4
+#: ../src/subscription_manager/gui/data/selectsla.glade.h:6
+msgid "label"
+msgstr "లెబుల్"
+
+#: ../src/subscription_manager/gui/data/installed.glade.h:3
+msgid "Overall Status"
+msgstr "మొత్తంగా స్థితి"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:5
+msgid "Register System"
+msgstr "సిస్టమ్ నమోదుచేయి"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:6
+msgid "Auto-attach"
+msgstr "స్వయంచాలక-అనుబందం"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:7
+msgid "Installed View"
+msgstr "సంస్థాపిత దర్శనం"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:8
+msgid "<b>Product's Subscription Details</b>"
+msgstr "<b>ఉత్పత్తి సబ్‌స్క్రిప్షన్ వివరములు</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:9
+msgid "<b>Product:</b>"
+msgstr "<b>ఉత్పత్తి:</b>"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:3
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:5
-#: ../src/subscription_manager/gui/data/repositories.glade.h:12
-msgid "Subscription Text"
-msgstr "సబ్‌స్క్రిప్షన్ పాఠం"
+#: ../src/subscription_manager/gui/data/installed.glade.h:10
+msgid "<b>Subscriptions:</b>"
+msgstr "<b>సబ్‌స్క్రిప్షన్లు:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/installed.glade.h:11
+msgid "Product Text"
+msgstr "ఉత్పత్తి పాఠము"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:4
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
-msgid "<b>Products:</b>"
-msgstr "<b>ఉత్పత్తులు:</b>"
+#: ../src/subscription_manager/gui/data/installed.glade.h:12
+msgid "Providing Subscriptions Text"
+msgstr "సబ్‌స్క్రిప్షన్స్ పాఠం అందించుతోంది"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:5
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:13
-msgid "Bundled Products Table"
-msgstr "బండిల్ చేసిన వుత్పత్తుల పట్టిక"
+#: ../src/subscription_manager/gui/data/installed.glade.h:13
+msgid "Certificate Status Text"
+msgstr "ధృవీకరణపత్ర స్థితి పాఠము"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/installed.glade.h:14
+msgid "<b>Arch:</b>"
+msgstr "<b>ఆకృతి:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/installed.glade.h:15
+msgid "Arch Text"
+msgstr "ఆకృతి పాఠం"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:22
-msgid "<b>Service Level, Type:</b>"
-msgstr "<b>సేవా స్థాయి, రకం:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:23
-msgid "Support Level And Type Text"
-msgstr "సేవా స్థాయి మరియు టైప్ పాఠం"
-
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:8
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
-msgid "<b>Subscription Type:</b>"
-msgstr "<b>సబ్‌స్క్రిప్షన్ రకం:</b>"
-
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:9
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:7
-msgid "Subscription Type Text"
-msgstr "సబ్‌స్క్రిప్షన్ రకం పాఠం"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:10
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:20
-msgid "<b>SKU:</b>"
-msgstr "<b>SKU:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:11
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:21
-#: ../src/subscription_manager/gui/data/repositories.glade.h:14
-msgid "SKU Text"
-msgstr "SKU పాఠం"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:1
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:1
+msgid "<b>Subscription Details</b>"
+msgstr "<b>సబ్‌స్క్రిప్షన్ వివరములు</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:3
@@ -3952,6 +4000,23 @@ msgstr "<b>ప్రారంభం - ముగింపు తేది:</b>"
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:4
 msgid "<b>Contract:</b>"
 msgstr "<b>కాంట్రాక్ట్:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:5
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:3
+#: ../src/subscription_manager/gui/data/repositories.glade.h:10
+msgid "Subscription Text"
+msgstr "సబ్‌స్క్రిప్షన్ పాఠం"
+
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:8
+msgid "<b>Subscription Type:</b>"
+msgstr "<b>సబ్‌స్క్రిప్షన్ రకం:</b>"
+
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:7
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:9
+msgid "Subscription Type Text"
+msgstr "సబ్‌స్క్రిప్షన్ రకం పాఠం"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:8
@@ -3972,6 +4037,18 @@ msgstr "<b>ఖాతా:</b>"
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:11
 msgid "Account Text"
 msgstr "ఖాతా పాఠం"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:4
+msgid "<b>Products:</b>"
+msgstr "<b>ఉత్పత్తులు:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:13
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:5
+msgid "Bundled Products Table"
+msgstr "బండిల్ చేసిన వుత్పత్తుల పట్టిక"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:14
@@ -4004,63 +4081,93 @@ msgid "Support Type Text"
 msgstr "తోడ్పాటు రకం పాఠం"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:1
-msgid "Contract Selection"
-msgstr "ఒడంబడిక యెంపిక"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:20
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:10
+msgid "<b>SKU:</b>"
+msgstr "<b>SKU:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
-msgid "<b>Choose the specific contract to use:</b>"
-msgstr "<b>ఉపయోగించుటకు ఫలానా వొడంబడికను యెంచుకొనుము:</b>"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:21
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:11
+#: ../src/subscription_manager/gui/data/repositories.glade.h:12
+msgid "SKU Text"
+msgstr "SKU పాఠం"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:4
-msgid "<b>Total Contracts:</b>"
-msgstr "<b>మొత్తం వొడంబడికలు:</b>"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:22
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:6
+msgid "<b>Service Level, Type:</b>"
+msgstr "<b>సేవా స్థాయి, రకం:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
-msgid "* Click to Change Quantity"
-msgstr "* పరిమాణం మార్చుటకు నొక్కుము"
-
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
-msgid "SLA Selection Table"
-msgstr "SLA ఎంపిక పట్టిక"
+#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:23
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:7
+msgid "Support Level And Type Text"
+msgstr "సేవా స్థాయి మరియు టైప్ పాఠం"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:2
-msgid "register_dialog_main_vbox"
-msgstr "register_dialog_main_vbox"
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
+msgid "<b>Confirm Subscriptions</b>"
+msgstr "<b>సబ్‌స్క్రిప్షన్లను నిర్థారించు</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:3
-msgid "registration_dialog_action_area"
-msgstr "registration_dialog_action_area"
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
+msgid "Using service level:"
+msgstr "సేవా స్థాయిను వుపయోగించుట:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:5
-msgid "register_button"
-msgstr "నమోదు బటన్ (_b)"
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:3
+msgid "SLA"
+msgstr "SLA"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/registration.glade.h:7
-msgid "progress_label"
-msgstr "progress_label"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
+msgid "The following subscriptions will be attached:"
+msgstr "కింది సబ్‌స్క్రిప్షన్లు అనుబందించబడును:"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/registration.glade.h:8
-msgid "register_progressbar"
-msgstr "register_progressbar"
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:5
+msgid "Selected Subscriptions Table"
+msgstr "ఎంపికైన సబ్‌స్క్రిప్షన్ల పట్టిక"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/registration.glade.h:9
-msgid "register_details_label"
-msgstr "register_details_label"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:6
+msgid "Core repositories will be enabled for each product."
+msgstr "ప్రతి వుత్పత్తి కొరకు కోర్ రిపోజిటరీలు చేతనం చేయబడును."
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/registration.glade.h:10
-msgid "page 2"
-msgstr "పేజీ 2"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/mysubs.glade.h:1
+msgid "My Subscriptions View"
+msgstr "నా సబ్‌స్క్రిప్షన్ల దర్శనం"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/mysubs.glade.h:2
+msgid "Remove"
+msgstr "తీసివేయి"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:1
+msgid "<b>Show subscriptions active on:</b>"
+msgstr "<b>దీనివద్ద క్రియాశీలమైన సబ్‌స్క్రిప్షన్లను చూపుము:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:2
+msgid "Update"
+msgstr "నవీకరణ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:3
+msgid "Search"
+msgstr "అన్వేషించు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:5
+msgid "Filters"
+msgstr "వడపోతలు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:6
+msgid "* Click to Adjust Quantity"
+msgstr "* పరిమాణం సర్దుబాటు చేయుటకు నొక్కుము"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:1
@@ -4151,199 +4258,44 @@ msgstr "ప్రోక్సీ ఆకృతీకరించు"
 msgid "proxy_button"
 msgstr "proxy_button"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:1
-msgid ""
-"This assistant will guide you through the process of registering your system "
-"with Red Hat to receive software updates and other benefits. You will need "
-"the following to register:"
-msgstr ""
-"ఈ సహాయకి మీకు వ్యవస్థను Red Hat తో సాఫ్టువేరు నవీకరణలు మరియు యితర లాభాలు పొందుటకు "
-"అనుసంధించటానికి సహకరిస్తుంది. నమోదుచేయుటకు మీకు కిందివి కావాలి:"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:2
-msgid "• A network connection"
-msgstr "• నెట్వర్కు అనుసంధానం"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:3
-msgid "• Your account login"
-msgstr "• మీ ఖాతా లాగిన్"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:4
-msgid "Your account login"
-msgstr "మీ ఖాతా లాగిన్"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:5
-msgid "• The address of a subscription management service (optional)"
-msgstr "• సబ్‌స్క్రిప్షన్ నిర్వహణ సేవ చిరునామా (ఐచ్చికం)"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:6
-msgid "_Why Should I Register?"
-msgstr "నేను ఎందుకు నమోదుకావాలి? (_W)"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:7
-msgid "Why Should I Register?"
-msgstr "నేను ఎందుకు నమోదు కావాలి?"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:8
-msgid ""
-"Would you like to register your system at this time? <b>(Strongly "
-"recommended.)</b>"
-msgstr "మీరు మీ వ్యవస్థను ఇప్పుడు నమోదు చేయాలనుకుంటున్నారా? <b>(బలంగా ధృఢపరచడమైంది.)</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:9
-msgid "_Yes, I'd like to register now."
-msgstr "అవును, నేను ఇప్పుడు నమోదగుటకు యిష్టపడతాను. (_Y)"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:10
-msgid "_No, I prefer to register at a later time."
-msgstr "వద్దు, నేను తరువాత నమోదు చేయటానికి ఇష్టపడతాను. (_N)"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:11
-msgid "Why Register"
-msgstr "నమోదు ఎందుకు"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:12
-msgid ""
-"Registering your system with Red Hat allows you to take full advantage of "
-"the benefits of a paid subscription, including:"
-msgstr ""
-"మీ కంప్యూటరును Red Hat Networkకి అనుసంధించటం మిమ్మల్ని paid subscription లాభాల వినియోగానికి "
-"అనుమతిస్తుంది, వీటితోపా:"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/redeem.glade.h:1
+msgid "Subscription Redemption"
+msgstr "సబ్‌స్క్రిప్షన్ వెచ్చింపు"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:14
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:12
-#: ../src/subscription_manager/gui/data/repositories.glade.h:5
-msgid "Close"
-msgstr "మూయి"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:15
-msgid "<b>Security &amp; Updates:</b>"
-msgstr "<b>రక్షణ &amp; నవీకరణలు:</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:16
-msgid ""
-"Receive the latest software updates, including security updates, keeping "
-"this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
-msgstr ""
-"కొత్త సాఫ్టువేర్ నవీకరణలను తీసుకో, రక్షణ నవీకరణలుతోసహా, ఈ Red Hat Enterprise Linux "
-"వ్యవస్థను <b>నవీకరణతో</b> మరియూ <b>రక్షణతో</b> వుంచుము."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:17
-msgid "<b>Downloads &amp; Upgrades:</b>"
-msgstr "<b>దిగుమతులు &amp; నవీకరణలు:</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:18
-msgid ""
-"Download installation images for Red Hat Enterprise Linux releases, "
-"including new releases."
-msgstr ""
-"Red Hat Enterprise Linux విడుదల సంస్థాపక CD చిత్రాలను దిగుమతిచేయి, కొత్త విడుదలలతో సహా."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:19
-msgid "<b>Support:</b>"
-msgstr "<b>తోడ్పాటు:</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:20
-msgid ""
-"Access to the technical support experts at Red Hat or Red Hat's partners for "
-"help with any issues you might encounter with this system."
-msgstr ""
-"ఈ విధానంతో మీరు ఎదుర్కొంటున్న ఏసమస్యకైనా సహాయంకోసం Red Hat లేదా Red Hat యొక్క భాగస్వామ్య సాంకేతిక "
-"మద్దతునిచ్చే నిపుణులకు అందుబాటులో ఉండండి."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:21
-msgid "<b>Management:</b>"
-msgstr "<b>నిర్వహణ:</b>"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:22
-msgid "Management"
-msgstr "నిర్వహణ"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:23
-msgid ""
-"Manage subscriptions and systems registered to Customer Portal via access."
-"redhat.com or through one of our other subscription management services."
-msgstr ""
-"access.redhat.com లేదా మా ఇతర సబ్‌స్క్రిప్షన్ నిర్వహణ సేవలలో వొకటి ద్వారా వినియోగదారి పోర్టల్‌కు నమోదైన "
-"సబ్‌స్క్రిప్షన్లను మరియు వ్యవస్థలను నిర్వహించు."
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:24
-msgid ""
-"<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
-"privacy_statement.html</small>"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:1
-msgid "<b>Show subscriptions active on:</b>"
-msgstr "<b>దీనివద్ద క్రియాశీలమైన సబ్‌స్క్రిప్షన్లను చూపుము:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:2
-msgid "Update"
-msgstr "నవీకరణ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:3
-msgid "Search"
-msgstr "అన్వేషించు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:4
-#: ../src/subscription_manager/gui/data/installed.glade.h:2
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:6
-msgid "label"
-msgstr "లెబుల్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:5
-msgid "Filters"
-msgstr "వడపోతలు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:6
-msgid "* Click to Adjust Quantity"
-msgstr "* పరిమాణం సర్దుబాటు చేయుటకు నొక్కుము"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:7
-msgid "All Subscriptions View"
-msgstr "అన్ని సబ్‌స్క్రిప్షన్ల దర్శనం"
+#: ../src/subscription_manager/gui/data/redeem.glade.h:2
+msgid "Cancel"
+msgstr "రద్దు"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:8
-msgid "no_subs_label"
-msgstr "no_subs_label"
+#: ../src/subscription_manager/gui/data/redeem.glade.h:3
+msgid "Redeem"
+msgstr "వెచ్చింపు"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/redeem.glade.h:4
+msgid "Redeeming the subscription may take a few minutes."
+msgstr "సబ్‌స్క్రిప్షన్ రిడీమ్ చేయుటకు కొన్ని నిమిషాలు పట్టవచ్చు."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/redeem.glade.h:5
+msgid ""
+"Please provide an email address to receive notification\n"
+"when the redemption is complete."
+msgstr ""
+"ప్రకటనను స్వీకరించుటకు దయచేసి వొక ఈమెయిల్ చిరునామా అందించండి\n"
+"రిడెమ్షన్ పూర్తవగానే."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
-msgid "<b>Confirm Subscriptions</b>"
-msgstr "<b>సబ్‌స్క్రిప్షన్లను నిర్థారించు</b>"
+#: ../src/subscription_manager/gui/data/redeem.glade.h:7
+msgid "Email Address:"
+msgstr "ఈమెయిల్ చిరునామా:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
-msgid "Using service level:"
-msgstr "సేవా స్థాయిను వుపయోగించుట:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:3
-msgid "SLA"
-msgstr "SLA"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
-msgid "The following subscriptions will be attached:"
-msgstr "కింది సబ్‌స్క్రిప్షన్లు అనుబందించబడును:"
-
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:5
-msgid "Selected Subscriptions Table"
-msgstr "ఎంపికైన సబ్‌స్క్రిప్షన్ల పట్టిక"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:6
-msgid "Core repositories will be enabled for each product."
-msgstr "ప్రతి వుత్పత్తి కొరకు కోర్ రిపోజిటరీలు చేతనం చేయబడును."
+#: ../src/subscription_manager/gui/data/redeem.glade.h:8
+msgid "Email Address Text"
+msgstr "ఈమెయిల్ చిరునామా పాఠం"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:1
@@ -4387,6 +4339,13 @@ msgstr "నవీకరణ సమయం"
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:11
 msgid "Update Facts"
 msgstr "నవీకరణ ఫాక్ట్స్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/factsdialog.glade.h:12
+#: ../src/subscription_manager/gui/data/repositories.glade.h:5
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:14
+msgid "Close"
+msgstr "మూయి"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:13
@@ -4461,247 +4420,6 @@ msgid "Text in Subscription"
 msgstr "సబ్‌స్క్రిప్షన్ నందలి పాఠము"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:1
-msgid "<b>Status:</b>"
-msgstr "<b>స్థితి:</b>"
-
-#: ../src/subscription_manager/gui/data/installed.glade.h:3
-msgid "Overall Status"
-msgstr "మొత్తంగా స్థితి"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:5
-msgid "Register System"
-msgstr "సిస్టమ్ నమోదుచేయి"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:6
-msgid "Auto-attach"
-msgstr "స్వయంచాలక-అనుబందం"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:7
-msgid "Installed View"
-msgstr "సంస్థాపిత దర్శనం"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:8
-msgid "<b>Product's Subscription Details</b>"
-msgstr "<b>ఉత్పత్తి సబ్‌స్క్రిప్షన్ వివరములు</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:9
-msgid "<b>Product:</b>"
-msgstr "<b>ఉత్పత్తి:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/installed.glade.h:10
-msgid "<b>Subscriptions:</b>"
-msgstr "<b>సబ్‌స్క్రిప్షన్లు:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:11
-msgid "Product Text"
-msgstr "ఉత్పత్తి పాఠము"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/installed.glade.h:12
-msgid "Providing Subscriptions Text"
-msgstr "సబ్‌స్క్రిప్షన్స్ పాఠం అందించుతోంది"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:13
-msgid "Certificate Status Text"
-msgstr "ధృవీకరణపత్ర స్థితి పాఠము"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/installed.glade.h:14
-msgid "<b>Arch:</b>"
-msgstr "<b>ఆకృతి:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/installed.glade.h:15
-msgid "Arch Text"
-msgstr "ఆకృతి పాఠం"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
-msgid "_System"
-msgstr "వ్యవస్థ (_S)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:3
-msgid "_Register"
-msgstr "నమోదు (_R)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:4
-msgid "_Unregister"
-msgstr "నమోదుతీయి (_U)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
-msgid "_Import Cert"
-msgstr "ధృవీకరణపత్రం దిగుమతి (_I)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:6
-msgid "R_edeem Subscription"
-msgstr "సబ్‌స్క్రిప్షన్ రీడీమ్ (_e)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:7
-msgid "View System _Facts"
-msgstr "వ్యవస్థ యథార్ధాలను దర్శించు (_F)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
-msgid "Configure Pro_xy"
-msgstr "ప్రోక్సీ ఆకృతీకరించుము (_x)"
-
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
-msgid "Repo_sitories"
-msgstr "రిపోజిటరీలు (_s)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
-msgid "_Preferences"
-msgstr "అభీష్టాలు (_P)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:11
-msgid "_Help"
-msgstr "సహాయం (_H)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
-msgid "_Getting Started"
-msgstr "ప్రారంభించుట (_G)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:13
-msgid "_Online Documentation"
-msgstr "ఆన్‌లైన్ పత్రకీకరణ (_O)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mysubs.glade.h:1
-msgid "My Subscriptions View"
-msgstr "నా సబ్‌స్క్రిప్షన్ల దర్శనం"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mysubs.glade.h:2
-msgid "Remove"
-msgstr "తీసివేయి"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/redeem.glade.h:1
-msgid "Subscription Redemption"
-msgstr "సబ్‌స్క్రిప్షన్ వెచ్చింపు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:2
-msgid "Cancel"
-msgstr "రద్దు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/redeem.glade.h:3
-msgid "Redeem"
-msgstr "వెచ్చింపు"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/redeem.glade.h:4
-msgid "Redeeming the subscription may take a few minutes."
-msgstr "సబ్‌స్క్రిప్షన్ రిడీమ్ చేయుటకు కొన్ని నిమిషాలు పట్టవచ్చు."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
-#: ../src/subscription_manager/gui/data/redeem.glade.h:5
-msgid ""
-"Please provide an email address to receive notification\n"
-"when the redemption is complete."
-msgstr ""
-"ప్రకటనను స్వీకరించుటకు దయచేసి వొక ఈమెయిల్ చిరునామా అందించండి\n"
-"రిడెమ్షన్ పూర్తవగానే."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:7
-msgid "Email Address:"
-msgstr "ఈమెయిల్ చిరునామా:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:8
-msgid "Email Address Text"
-msgstr "ఈమెయిల్ చిరునామా పాఠం"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:1
-msgid "Manage Repositories"
-msgstr "రిపోజిటరీలు నిర్వహించు"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:2
-msgid "manage_repositories_dialog"
-msgstr "రిపోజిటరీలు_నిర్వహించు_డైలాగ్"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:3
-msgid "Remove All Overrides"
-msgstr "అన్ని ఓవర్‌రైడ్లు తొలగించు"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:4
-msgid "remove_all_overrides_button"
-msgstr "అన్ని_ఓవర్‌రైడ్లు_తొలగించు_బటన్"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:7
-msgid ""
-"Manage the repositories your subscriptions grant you access to by enabling, "
-"disabling and overriding certain fields."
-msgstr ""
-"కొన్ని క్షేత్రాలను చేతనపరస్తూ, అచేతనపరస్తూ మరియు ఓవర్‌రైడ్ చేస్తూ మీ సబ్‌స్క్రిప్షన్లు మీకు ప్రాప్తింపచేసిన "
-"రిపోజిటరీలను నిర్వహించు."
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:8
-msgid "repository_listview"
-msgstr "రిపోజిటరీ_జాబితాదర్శనం"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:9
-msgid ""
-"<b><big>Attached subscriptions do not provide any repositories.</big></b>"
-msgstr "<b><big>అనుబందించిన సబ్‌స్క్రిప్షన్లు ఏ రిపోజిటరీలను అందించవు.</big></b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:10
-msgid "<b>Repository Details</b>"
-msgstr "<b>రిపోజిటరీ వివరాలు</b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:11
-msgid "<b>Name:</b>"
-msgstr "<b>పేరు:</b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:13
-msgid "<b>Base URL:</b>"
-msgstr "<b>ఆధార URL:</b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:15
-msgid "<b>Gpgcheck:</b>"
-msgstr "<b>జిపిజిచెక్:</b>"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:16
-msgid "Enabled (1)"
-msgstr "చేతనమైన (1)"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:17
-msgid "gpgcheck_readonly"
-msgstr "జిపిజిచెక్_చదువుటకుమాత్రమే"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:18
-msgid "gpgcheck_combobox"
-msgstr "జిపిజిచెక్_కాంబోబాక్స్"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:19
-msgid "gpgcheck_edit_button"
-msgstr "జిపిజిచెక్_కూర్చు_బటన్"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:20
-msgid "gpgcheck_remove_button"
-msgstr "జిపిజిచెక్_తీసివేయు_బటన్"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid "System Preferences"
 msgstr "వ్యవస్థ అభీష్టాలు"
@@ -4764,6 +4482,160 @@ msgstr ""
 "small>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/registration.glade.h:2
+msgid "register_dialog_main_vbox"
+msgstr "register_dialog_main_vbox"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/registration.glade.h:3
+msgid "registration_dialog_action_area"
+msgstr "registration_dialog_action_area"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/registration.glade.h:5
+msgid "register_button"
+msgstr "నమోదు బటన్ (_b)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/registration.glade.h:7
+msgid "progress_label"
+msgstr "progress_label"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/registration.glade.h:8
+msgid "register_progressbar"
+msgstr "register_progressbar"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/registration.glade.h:9
+msgid "register_details_label"
+msgstr "register_details_label"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/registration.glade.h:10
+msgid "page 2"
+msgstr "పేజీ 2"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:1
+msgid "Manage Repositories"
+msgstr "రిపోజిటరీలు నిర్వహించు"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:2
+msgid "manage_repositories_dialog"
+msgstr "రిపోజిటరీలు_నిర్వహించు_డైలాగ్"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:3
+msgid "Remove All Overrides"
+msgstr "అన్ని ఓవర్‌రైడ్లు తొలగించు"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:4
+msgid "remove_all_overrides_button"
+msgstr "అన్ని_ఓవర్‌రైడ్లు_తొలగించు_బటన్"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:7
+msgid ""
+"Manage the repositories your subscriptions grant you access to by enabling, "
+"disabling and overriding certain fields."
+msgstr ""
+"కొన్ని క్షేత్రాలను చేతనపరస్తూ, అచేతనపరస్తూ మరియు ఓవర్‌రైడ్ చేస్తూ మీ సబ్‌స్క్రిప్షన్లు మీకు ప్రాప్తింపచేసిన "
+"రిపోజిటరీలను నిర్వహించు."
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:8
+msgid "<b>Repository Details</b>"
+msgstr "<b>రిపోజిటరీ వివరాలు</b>"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:9
+msgid "<b>Name:</b>"
+msgstr "<b>పేరు:</b>"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:11
+msgid "<b>Base URL:</b>"
+msgstr "<b>ఆధార URL:</b>"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:13
+msgid "<b>Gpgcheck:</b>"
+msgstr "<b>జిపిజిచెక్:</b>"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:14
+msgid "Enabled (1)"
+msgstr "చేతనమైన (1)"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:15
+msgid "gpgcheck_readonly"
+msgstr "జిపిజిచెక్_చదువుటకుమాత్రమే"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:16
+msgid "gpgcheck_combobox"
+msgstr "జిపిజిచెక్_కాంబోబాక్స్"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:17
+msgid "gpgcheck_edit_button"
+msgstr "జిపిజిచెక్_కూర్చు_బటన్"
+
+#: ../src/subscription_manager/gui/data/repositories.glade.h:18
+msgid "gpgcheck_remove_button"
+msgstr "జిపిజిచెక్_తీసివేయు_బటన్"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
+msgid "_System"
+msgstr "వ్యవస్థ (_S)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:3
+msgid "_Register"
+msgstr "నమోదు (_R)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:4
+msgid "_Unregister"
+msgstr "నమోదుతీయి (_U)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
+msgid "_Import Cert"
+msgstr "ధృవీకరణపత్రం దిగుమతి (_I)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:6
+msgid "R_edeem Subscription"
+msgstr "సబ్‌స్క్రిప్షన్ రీడీమ్ (_e)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:7
+msgid "View System _Facts"
+msgstr "వ్యవస్థ యథార్ధాలను దర్శించు (_F)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
+msgid "Configure Pro_xy"
+msgstr "ప్రోక్సీ ఆకృతీకరించుము (_x)"
+
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
+msgid "Repo_sitories"
+msgstr "రిపోజిటరీలు (_s)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
+msgid "_Preferences"
+msgstr "అభీష్టాలు (_P)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:11
+msgid "_Help"
+msgstr "సహాయం (_H)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
+msgid "_Getting Started"
+msgstr "ప్రారంభించుట (_G)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author kkrothap
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:13
+msgid "_Online Documentation"
+msgstr "ఆన్‌లైన్ పత్రకీకరణ (_O)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:1
 msgid "<b>Select Service Level</b>"
 msgstr "<b>సేవా స్థాయి యెంపికచేయి</b>"
@@ -4789,6 +4661,122 @@ msgstr "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:5
 msgid "<b>Select a common service level for this system's subscriptions:</b>"
 msgstr "<b>ఈ వ్యవస్థ యొక్క సబ్‌స్క్రిప్షన్లకు ఉమ్మడి సేవా స్థాయిని యెంపికచేయి:</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:1
+msgid ""
+"This assistant will guide you through the process of registering your system "
+"with Red Hat to receive software updates and other benefits. You will need "
+"the following to register:"
+msgstr ""
+"ఈ సహాయకి మీకు వ్యవస్థను Red Hat తో సాఫ్టువేరు నవీకరణలు మరియు యితర లాభాలు పొందుటకు "
+"అనుసంధించటానికి సహకరిస్తుంది. నమోదుచేయుటకు మీకు కిందివి కావాలి:"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:2
+msgid "• A network connection"
+msgstr "• నెట్వర్కు అనుసంధానం"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:3
+msgid "• Your account login"
+msgstr "• మీ ఖాతా లాగిన్"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:4
+msgid "Your account login"
+msgstr "మీ ఖాతా లాగిన్"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:5
+msgid "• The address of a subscription management service (optional)"
+msgstr "• సబ్‌స్క్రిప్షన్ నిర్వహణ సేవ చిరునామా (ఐచ్చికం)"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:6
+msgid "_Why Should I Register?"
+msgstr "నేను ఎందుకు నమోదుకావాలి? (_W)"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:7
+msgid "Why Should I Register?"
+msgstr "నేను ఎందుకు నమోదు కావాలి?"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:8
+msgid ""
+"Would you like to register your system at this time? <b>(Strongly "
+"recommended.)</b>"
+msgstr "మీరు మీ వ్యవస్థను ఇప్పుడు నమోదు చేయాలనుకుంటున్నారా? <b>(బలంగా ధృఢపరచడమైంది.)</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:9
+msgid "_Yes, I'd like to register now."
+msgstr "అవును, నేను ఇప్పుడు నమోదగుటకు యిష్టపడతాను. (_Y)"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:10
+msgid "_No, I prefer to register at a later time."
+msgstr "వద్దు, నేను తరువాత నమోదు చేయటానికి ఇష్టపడతాను. (_N)"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:11
+msgid "Why Register"
+msgstr "నమోదు ఎందుకు"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:12
+msgid ""
+"Registering your system with Red Hat allows you to take full advantage of "
+"the benefits of a paid subscription, including:"
+msgstr ""
+"మీ కంప్యూటరును Red Hat Networkకి అనుసంధించటం మిమ్మల్ని paid subscription లాభాల వినియోగానికి "
+"అనుమతిస్తుంది, వీటితోపా:"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:15
+msgid "<b>Security &amp; Updates:</b>"
+msgstr "<b>రక్షణ &amp; నవీకరణలు:</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:16
+msgid ""
+"Receive the latest software updates, including security updates, keeping "
+"this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
+msgstr ""
+"కొత్త సాఫ్టువేర్ నవీకరణలను తీసుకో, రక్షణ నవీకరణలుతోసహా, ఈ Red Hat Enterprise Linux "
+"వ్యవస్థను <b>నవీకరణతో</b> మరియూ <b>రక్షణతో</b> వుంచుము."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:17
+msgid "<b>Downloads &amp; Upgrades:</b>"
+msgstr "<b>దిగుమతులు &amp; నవీకరణలు:</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:18
+msgid ""
+"Download installation images for Red Hat Enterprise Linux releases, "
+"including new releases."
+msgstr ""
+"Red Hat Enterprise Linux విడుదల సంస్థాపక CD చిత్రాలను దిగుమతిచేయి, కొత్త విడుదలలతో సహా."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:19
+msgid "<b>Support:</b>"
+msgstr "<b>తోడ్పాటు:</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:20
+msgid ""
+"Access to the technical support experts at Red Hat or Red Hat's partners for "
+"help with any issues you might encounter with this system."
+msgstr ""
+"ఈ విధానంతో మీరు ఎదుర్కొంటున్న ఏసమస్యకైనా సహాయంకోసం Red Hat లేదా Red Hat యొక్క భాగస్వామ్య సాంకేతిక "
+"మద్దతునిచ్చే నిపుణులకు అందుబాటులో ఉండండి."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:21
+msgid "<b>Management:</b>"
+msgstr "<b>నిర్వహణ:</b>"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:22
+msgid "Management"
+msgstr "నిర్వహణ"
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:23
+msgid ""
+"Manage subscriptions and systems registered to Customer Portal via access."
+"redhat.com or through one of our other subscription management services."
+msgstr ""
+"access.redhat.com లేదా మా ఇతర సబ్‌స్క్రిప్షన్ నిర్వహణ సేవలలో వొకటి ద్వారా వినియోగదారి పోర్టల్‌కు నమోదైన "
+"సబ్‌స్క్రిప్షన్లను మరియు వ్యవస్థలను నిర్వహించు."
+
+#: ../src/subscription_manager/gui/data/registration_info.glade.h:24
+msgid ""
+"<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
+"privacy_statement.html</small>"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../bin/install-num-migrate-to-rhsm:51
