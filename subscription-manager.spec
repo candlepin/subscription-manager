@@ -13,7 +13,7 @@
 
 Name: subscription-manager
 Version: 1.11.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -404,6 +404,14 @@ fi
 %endif
 
 %changelog
+* Wed May 07 2014 ckozak <ckozak@redhat.com> 1.11.3-3
+- Latest strings from zanata. (alikins@redhat.com)
+- Make debug tarballs less likely to collide (ckozak@redhat.com)
+- 1093382: fix file io problems created when replacing with() blocks
+  (ckozak@redhat.com)
+- 1092594: don't catch SystemExit for past dates in "status --ondate=x"
+  (ckozak@redhat.com)
+
 * Mon Apr 28 2014 ckozak <ckozak@redhat.com> 1.11.3-2
 - updated releasers and spec (ckozak@redhat.com)
 * Thu Apr 10 2014 Alex Wood <awood@redhat.com> 1.11.3-1
