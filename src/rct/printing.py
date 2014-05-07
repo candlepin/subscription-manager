@@ -164,6 +164,7 @@ class IdentityCertPrinter(CertificatePrinter):
         return CertificatePrinter.cert_to_str(self, cert)
 
     def _append_to_cert_section(self, cert, str_parts_list):
+        # must account for old format and new
         str_parts_list.append("\t%s: %s" % (_("Alt Name"), cert.alt_name))
 
 
