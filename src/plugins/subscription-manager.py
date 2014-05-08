@@ -52,27 +52,13 @@ def update(conduit, cache_only):
         return
     conduit.info(3, 'Updating Subscription Management repositories.')
 
-    # XXX: Importing inline as you must be root to read the config file
-    from subscription_manager.identity import ConsumerIdentity
-
-    cert_file = ConsumerIdentity.certpath()
-    key_file = ConsumerIdentity.keypath()
-
     identity = inj.require(inj.IDENTITY)
 
     if not identity.is_valid():
         conduit.info(3, "Unable to read consumer identity")
         return
 
-    try:
-        uep = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
-    #FIXME: catchall exception
-    except Exception:
-        # log
-        conduit.info(2, "Unable to connect to Subscription Management Service")
-        return
-
-    rl = RepoActionInvoker(uep=uep, cache_only=cache_only)
+    rl = RepoActionInvoker(cache_only=cache_only)
     rl.update()
 
 
