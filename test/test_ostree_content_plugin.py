@@ -18,8 +18,8 @@ import mock
 
 import fixture
 
-from content_plugins.ostree import action_invoker
-from content_plugins.ostree import repo_file
+from subscription_manager.plugin.ostree import action_invoker
+from subscription_manager.plugin.ostree import repo_file
 
 
 class StubPluginManager(object):
@@ -224,7 +224,7 @@ branches=awesome-ostree-controller/awesome7/x86_64/controller/docker;
 gpg-verify=false
 """
 
-    @mock.patch('content_plugins.ostree.repo_file.RepoFile._get_config_parser')
+    @mock.patch('subscription_manager.plugin.ostree.repo_file.RepoFile._get_config_parser')
     def test_remote_sections(self, mock_get_config_parser):
         mock_get_config_parser.return_value = self._rf_cfg()
         rf = repo_file.RepoFile(self.fid.name)
@@ -233,7 +233,7 @@ gpg-verify=false
         self.assertFalse('core' in remotes)
         self.assertFalse('rhsm' in remotes)
 
-    @mock.patch('content_plugins.ostree.repo_file.RepoFile._get_config_parser')
+    @mock.patch('subscription_manager.plugin.ostree.repo_file.RepoFile._get_config_parser')
     def test_section_is_remote(self, mock_get_config_parser):
         mock_get_config_parser.return_value = self._rf_cfg()
         rf = repo_file.RepoFile(self.fid.name)
@@ -252,7 +252,7 @@ repo_version=1
 mode=bare
 """
 
-    @mock.patch('content_plugins.ostree.repo_file.RepoFile._get_config_parser')
+    @mock.patch('subscription_manager.plugin.ostree.repo_file.RepoFile._get_config_parser')
     def test_remote_sections(self, mock_get_config_parser):
         mock_get_config_parser.return_value = self._rf_cfg()
         rf = repo_file.RepoFile(self.fid.name)
@@ -282,7 +282,7 @@ branches=awesomeos-6-controller/awesomeos6/x86_64/controller/docker;
 gpg-verify=false
 """
 
-    @mock.patch('content_plugins.ostree.repo_file.RepoFile._get_config_parser')
+    @mock.patch('subscription_manager.plugin.ostree.repo_file.RepoFile._get_config_parser')
     def test_remote_sections(self, mock_get_config_parser):
         mock_get_config_parser.return_value = self._rf_cfg()
         rf = repo_file.RepoFile(self.fid.name)
@@ -317,7 +317,7 @@ gpg-verify=false
 
 """
 
-    @mock.patch('content_plugins.ostree.repo_file.RepoFile._get_config_parser')
+    @mock.patch('subscription_manager.plugin.ostree.repo_file.RepoFile._get_config_parser')
     def test_remote_sections(self, mock_get_config_parser):
         mock_get_config_parser.return_value = self._rf_cfg()
         rf = repo_file.RepoFile(self.fid.name)

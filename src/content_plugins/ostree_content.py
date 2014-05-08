@@ -17,8 +17,8 @@ from subscription_manager import api
 requires_api_version = "1.1"
 
 # install our helper modules here
-from rhsm_content_plugins import ostree
-from rhsm_content_plugins.ostree import action_invoker
+from subscription_manager.plugin import ostree
+from subscription_manager.plugin.ostree import action_invoker
 
 
 class OstreeContentPlugin(api.base_plugin.SubManPlugin):

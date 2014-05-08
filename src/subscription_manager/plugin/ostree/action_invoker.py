@@ -20,8 +20,8 @@ import ConfigParser
 
 from subscription_manager import api
 
-from rhsm_content_plugins.ostree import repo_file
-from rhsm_content_plugins.ostree import model
+from subscription_manager.plugin.ostree import repo_file
+from subscription_manager.plugin.ostree import model
 
 # plugins get
 log = logging.getLogger('rhsm-app.' + __name__)

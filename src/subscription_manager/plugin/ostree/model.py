@@ -1,7 +1,7 @@
 
 import re
 
-from rhsm_content_plugins.ostree import repo_file
+from subscription_manager.plugin.ostree import repo_file
 
 OSTREE_REPO_CONFIG = "/ostree/repo/config"
 
