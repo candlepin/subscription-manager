@@ -41,8 +41,6 @@ class OstreeContentUpdateActionCommand(object):
     Return a OstreeContentUpdateReport.
     """
     def __init__(self):
-        self.report = OstreeContentUpdateActionReport()
-
         # starting state of ostree config
         self.ostree_config = model.OstreeConfig()
 
@@ -68,17 +66,14 @@ class OstreeContentUpdateActionCommand(object):
         # given current config, and the new contents, construct a list
         # of remotes to apply to our local config of remotes.
         updates_builder = model.OstreeConfigUpdatesBuilder(self.ostree_config,
-                                                           content_set=content_set,
-                                                           report=self.report)
+            content_set=content_set)
 
         updates = updates_builder.build()
 
         # Get controller to update the model with the updates
-        controller = model.OstreeConfigController(self.ostree_config,
-                                                  report=self.report)
+        controller = model.OstreeConfigController(self.ostree_config)
         log.debug("Updates: %s" % updates)
         controller.update(updates)
-        return self.report
 
     def load_config(self):
         try:
@@ -87,8 +82,3 @@ class OstreeContentUpdateActionCommand(object):
             log.info("No ostree content repo config file found. Not loading ostree config.")
 
 
-class OstreeContentUpdateActionReport(api.ActionReport):
-    """Report class for reporting ostree content repo updates."""
-
-    def __init__(self):
-        super(OstreeContentUpdateActionReport, self).__init__()

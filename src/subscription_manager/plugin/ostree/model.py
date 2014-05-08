@@ -58,10 +58,11 @@ class OstreeRemotes(object):
         return cls
 
 
+# TODO: is this used?
 class OstreeRemoteUpdater(object):
     """Update the config for a ostree repo remote."""
-    def __init__(self, report):
-        self.report = report
+    def __init__(self):
+        pass
 
     def update(self, remote):
         # replace old one with new one
@@ -70,8 +71,7 @@ class OstreeRemoteUpdater(object):
 
 class OstreeRemotesUpdater(object):
     """Update ostree_remotes with new remotes."""
-    def __init__(self, ostree_remotes, report=None):
-        self.report = report
+    def __init__(self, ostree_remotes):
         self.ostree_remotes = ostree_remotes
 
     def update(self, remotes_set):
@@ -139,10 +139,9 @@ class OstreeConfigUpdates(object):
 
 
 class OstreeConfigUpdatesBuilder(object):
-    def __init__(self, ostree_config, content_set, report=None):
+    def __init__(self, ostree_config, content_set):
         self.ostree_config = ostree_config
         self.content_set = content_set
-        self.report = report
 
     def build(self):
         """Figure out what the new config should be, and return a OstreeConfigUpdates."""
@@ -174,13 +173,12 @@ class OstreeConfig(object):
 
 # still needs origin, etc
 class OstreeConfigController(object):
-    def __init__(self, ostree_config=None, report=None):
+    def __init__(self, ostree_config=None):
         self.ostree_config = ostree_config
-        self.report = report
 
     def update(self, updates):
-        remotes_updater = OstreeRemotesUpdater(ostree_remotes=self.ostree_config.remotes,
-                                              report=self.report)
+        remotes_updater = OstreeRemotesUpdater(
+            ostree_remotes=self.ostree_config.remotes)
         remotes_updater.update(updates.remote_set)
 
         # update core

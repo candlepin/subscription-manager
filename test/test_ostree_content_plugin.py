@@ -38,17 +38,6 @@ class TestOstreeActionInvoker(fixture.SubManFixture):
         invoker.update()
 
 
-class TestOstreeUpdateActionCommand(fixture.SubManFixture):
-    def test_command_init(self):
-        action_command = action_invoker.OstreeContentUpdateActionCommand()
-        self.assertTrue(hasattr(action_command, 'report'))
-
-
-class TestOstreeUpdateActionReport(fixture.SubManFixture):
-    def test_init(self):
-        action_invoker.OstreeContentUpdateActionReport()
-
-
 class BaseOstreeKeyFileTest(fixture.SubManFixture):
     """Setup env for testing ostree keyfiles ('config' and '.origin')."""
     cfgfile_data = ""

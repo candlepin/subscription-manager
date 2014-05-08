@@ -29,21 +29,16 @@ class ContentActionClient(base_action_client.BaseActionClient):
 
         plugin_manager = inj.require(inj.PLUGIN_MANAGER)
 
-        content_action_class_list = []
-
-        log.debug("cacl: %s" % content_action_class_list)
-        plugin_manager.run('content_plugin_search',
-                            content_action_class_list=content_action_class_list)
-
-        log.debug("post cacl: %s" % content_action_class_list)
+        # TODO: extract info for the "report"
+        plugin_manager.run('update_content')
 
         # TODO: replace libset/_get_libset with a ActionInvokerProvider
         lib_set = [self.yum_repo_action_invoker]
 
-        # 'content_plugin_search' find classes that implement content_actions
+        # 'update_content' find classes that implement content_actions
         # this adds them to the lib_set.
-        for content_action_class in content_action_class_list:
-            content_action = content_action_class()
-            lib_set.append(content_action)
+        #for content_action_class in content_action_class_list:
+        #    content_action = content_action_class()
+        #    lib_set.append(content_action)
 
         return lib_set

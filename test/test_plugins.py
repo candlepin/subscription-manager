@@ -906,12 +906,9 @@ class TestFactsConduit(unittest.TestCase):
         self.assertEquals({}, conduit.facts)
 
 
-class TestContentActionPluginConduit(unittest.TestCase):
+class TestUpdateContentConduit(unittest.TestCase):
     def test_content_plugin_condui(self):
-        content_plugins = []
-        conduit = plugins.ContentActionPluginConduit(StubPluginClass,
-                                                     content_action_class_list=content_plugins)
-        self.assertEquals([], conduit.content_action_class_list)
+        conduit = plugins.UpdateContentConduit(StubPluginClass)
 
 
 class TestRegistrationConduit(unittest.TestCase):

@@ -331,14 +331,12 @@ class FactsConduit(BaseConduit):
         self.facts = facts
 
 
-class ContentActionPluginConduit(BaseConduit):
-    """Conduit for finding content-type plugins."""
-    slots = ['content_plugin_search']
+class UpdateContentConduit(BaseConduit):
+    """Conduit for updating content."""
+    slots = ['update_content']
 
-    def __init__(self, clazz, content_action_class_list):
-        super(ContentActionPluginConduit, self).__init__(clazz)
-
-        self.content_action_class_list = content_action_class_list
+    def __init__(self, clazz):
+        super(UpdateContentConduit, self).__init__(clazz)
 
 
 class SubscriptionConduit(BaseConduit):
@@ -845,7 +843,7 @@ class PluginManager(BasePluginManager):
         return [BaseConduit, ProductConduit, ProductUpdateConduit,
                 RegistrationConduit, PostRegistrationConduit,
                 FactsConduit, SubscriptionConduit,
-                ContentActionPluginConduit,
+                UpdateContentConduit,
                 PostSubscriptionConduit,
                 AutoAttachConduit, PostAutoAttachConduit]
 

@@ -25,13 +25,14 @@ class OstreeContentPlugin(api.base_plugin.SubManPlugin):
     """Plugin for adding ostree content action to subscription-manager"""
     name = "ostree_content"
 
-    def content_plugin_search_hook(self, conduit):
-        """'content_plugin_search' hook to add ostree content action
+    def update_content_hook(self, conduit):
+        """
+        Hook to update for any OSTree content we have.
 
         Args:
-            conduit: A ContentActionPluginConduit
+            conduit: A UpdateContentConduit
         """
-        conduit.log.info("ostree_content content_plugin_search called")
+        conduit.log.info("Updating OSTree content.")
         conduit.log.debug("ostree module: %s" % ostree)
         conduit.log.debug("dir(ostree): %s" % dir(ostree))
-        conduit.content_action_class_list.append(action_invoker.OstreeContentActionInvoker)
+        action_invoker.OstreeContentUpdateActionCommand().perform()
