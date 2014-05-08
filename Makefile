@@ -30,9 +30,6 @@ DAEMONS_SRC_DIR := $(BASE_SRC_DIR)/daemons
 EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
 CONTENT_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/content_plugins/
 
-# FIXME: setup.py, distutils, etc
-RHSM_CONTENT_PLUGINS_DIR := /usr/lib/python2.7/site-packages/rhsm_content_plugins/
-
 YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
 ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
 
@@ -113,20 +110,8 @@ install-help-files:
 
 install-content-plugins:
 	install -d $(RHSM_PLUGIN_DIR)
-	install -d $(RHSM_PLUGIN_DIR)/ostree
 	# top level plugin entry point
 	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree_content.py $(RHSM_PLUGIN_DIR)
-
-	# plugin support code could live anywhere on python path
-	# for now install it with core subman code
-	# FIXME: install to site-packages, or add setup.py's etc
-	# install to /usr/lib/python2.7/site-packages/rhsm_content_plugins/
-	install -d $(RHSM_CONTENT_PLUGINS_DIR)
-
-	# TODO: sort out install tools, and import paths
-	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/__init__.py $(RHSM_CONTENT_PLUGINS_DIR)/
-	install -d $(RHSM_CONTENT_PLUGINS_DIR)/ostree
-	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree/*.py $(RHSM_CONTENT_PLUGINS_DIR)/ostree
 
 install-content-plugins-conf:
 	install -d $(RHSM_PLUGIN_CONF_DIR)
@@ -158,6 +143,8 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d $(CODE_DIR)/gui/data/icons
 	install -d $(CODE_DIR)/branding
 	install -d $(CODE_DIR)/migrate
+	install -d $(CODE_DIR)/plugin
+	install -d $(CODE_DIR)/plugin/ostree
 	install -d $(PREFIX)/$(INSTALL_DIR)/locale/
 	install -d $(PREFIX)/usr/lib/yum-plugins/
 	install -d $(PREFIX)/usr/sbin
@@ -206,6 +193,8 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -m 644 -p $(SRC_DIR)/gui/*.py $(CODE_DIR)/gui
 	install -m 644 -p $(SRC_DIR)/migrate/*.py $(CODE_DIR)/migrate
 	install -m 644 -p $(SRC_DIR)/branding/*.py $(CODE_DIR)/branding
+	install -m 644 -p $(SRC_DIR)/plugin/*.py $(CODE_DIR)/plugin
+	install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(CODE_DIR)/plugin/ostree
 	install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/
 	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager-gui
 

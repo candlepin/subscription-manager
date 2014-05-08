@@ -207,6 +207,7 @@ rm -rf %{buildroot}
 %dir %{_datadir}/rhsm
 %dir %{_datadir}/rhsm/subscription_manager
 
+%{_datadir}/rhsm/subscription_manager/api.py*
 %{_datadir}/rhsm/subscription_manager/async.py*
 %{_datadir}/rhsm/subscription_manager/base_action_client.py*
 %{_datadir}/rhsm/subscription_manager/base_plugin.py*
@@ -257,11 +258,18 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/file_monitor.py*
 %{_datadir}/rhsm/subscription_manager/overrides.py*
 %{_datadir}/rhsm/subscription_manager/exceptions.py*
+%{_datadir}/rhsm/subscription_manager/plugin/*.py*
 
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
 %dir %{_sysconfdir}/rhsm/pluginconf.d
 # add default plugins here when we have some
+
+# OSTree plugin:
+# TODO: Move to a sub-package.
+%{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
+%{rhsm_plugins_dir}/ostree_content.py*
+%{_datadir}/rhsm/subscription_manager/plugin/ostree/*.py*
 
 # yum plugins
 # Using _prefix + lib here instead of libdir as that evaluates to /usr/lib64 on x86_64,
