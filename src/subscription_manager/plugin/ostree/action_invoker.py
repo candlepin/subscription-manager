@@ -27,12 +27,6 @@ from subscription_manager.plugin.ostree import model
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class OstreeContentActionInvoker(api.BaseActionInvoker):
-    def _do_update(self):
-        action = OstreeContentUpdateActionCommand()
-        return action.perform()
-
-
 class OstreeContentUpdateActionCommand(object):
     """UpdateActionCommand for ostree repos.
 

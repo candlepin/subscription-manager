@@ -26,18 +26,6 @@ class StubPluginManager(object):
         pass
 
 
-class TestOstreeActionInvoker(fixture.SubManFixture):
-
-    def setUp(self):
-        super(TestOstreeActionInvoker, self).setUp()
-
-        # need to provide at least one the content_plugin_search
-
-    def test_invoker(self):
-        invoker = action_invoker.OstreeContentActionInvoker()
-        invoker.update()
-
-
 class BaseOstreeKeyFileTest(fixture.SubManFixture):
     """Setup env for testing ostree keyfiles ('config' and '.origin')."""
     cfgfile_data = ""

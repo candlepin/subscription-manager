@@ -9,4 +9,3 @@ from subscription_manager import api
 class TestApi(fixture.SubManFixture):
     def test(self):
         self.assertTrue(hasattr(api, 'base_plugin'))
-        self.assertTrue(hasattr(api, 'ActionReport'))
