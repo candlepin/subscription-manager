@@ -22,16 +22,15 @@ from subscription_manager.repolib import RepoActionInvoker
 class Overrides(object):
     def __init__(self):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
 
         self.cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
         self.repo_lib = RepoActionInvoker(cache_only=True)
 
     def get_overrides(self, consumer_uuid):
-        return self._build_from_json(self.cache.load_status(self.cp, consumer_uuid))
+        return self._build_from_json(self.cache.load_status(self._getuep(), consumer_uuid))
 
     def add_overrides(self, consumer_uuid, overrides):
-        return self._build_from_json(self.uep.setContentOverrides(consumer_uuid,
+        return self._build_from_json(self._getuep().setContentOverrides(consumer_uuid,
                                                                  self._add(overrides)))
 
     def remove_overrides(self, consumer_uuid, overrides):
@@ -46,7 +45,7 @@ class Overrides(object):
         self.repo_lib.update()
 
     def _delete_overrides(self, consumer_uuid, override_data):
-        return self._build_from_json(self.uep.deleteContentOverrides(consumer_uuid, override_data))
+        return self._build_from_json(self._getuep().deleteContentOverrides(consumer_uuid, override_data))
 
     def _add(self, overrides):
         return [override.to_json() for override in overrides]
@@ -62,6 +61,9 @@ class Overrides(object):
 
     def _build_from_json(self, override_json):
         return [Override.from_json(override_dict) for override_dict in override_json]
+
+    def _getuep(self):
+        return self.cp_provider.get_consumer_auth_cp()
 
 
 class Override(object):
