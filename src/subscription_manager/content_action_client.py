@@ -41,6 +41,15 @@ class ContentPluginActionReport(certlib.ActionReport):
 
 
 class ContentPluginActionCommand(object):
+    """An ActionCommand used to wrap 'content_update' plugin invocations.
+
+    args:
+        content_plugin_runner: a PluginHookRunner created with
+              PluginManager.runiter('content_update').runiter()
+
+    perform() runs the PluginHookRunner and returns the ContentActionReport
+      that PluginHookRunner.run() adds to the content plugin conduit.
+    """
     def __init__(self, content_plugin_runner):
         self.runner = content_plugin_runner
 
@@ -51,7 +60,17 @@ class ContentPluginActionCommand(object):
 
 
 class ContentPluginActionInvoker(certlib.BaseActionInvoker):
+    """ActionInvoker for ContentPluginActionCommands."""
     def __init__(self, content_plugin_runner):
+        """Create a ContentPluginActionInvoker to wrap content plugin PluginHookRunner.
+
+        Pass a PluginHookRunner to ContentPluginActionCommand. Do the
+        normal ActionInvoker tasks and collect ActionReports.
+
+        args:
+            content_plugin_runner: a PluginHookRunner created with
+              PluginManager.runiter('content_update').runiter()
+        """
         super(ContentPluginActionInvoker, self).__init__()
         self.runner = content_plugin_runner
 
@@ -63,7 +82,12 @@ class ContentPluginActionInvoker(certlib.BaseActionInvoker):
 class ContentActionClient(base_action_client.BaseActionClient):
 
     def _get_libset(self):
-        """return a generate that creates a ContentPluginAction* for each update_content plugin."""
+        """Return a generator that creates a ContentPluginAction* for each update_content plugin.
+
+        The iterable return includes the yum repo action invoker, and a ContentPluginActionInvoker
+        for each plugin hook mapped to the 'content_update_hook' slot.
+        """
+
         yield repolib.RepoActionInvoker()
 
         plugin_manager = inj.require(inj.PLUGIN_MANAGER)
@@ -72,4 +96,3 @@ class ContentActionClient(base_action_client.BaseActionClient):
         for runner in plugin_manager.runiter('update_content', reports=content_plugins_reports):
             invoker = ContentPluginActionInvoker(runner)
             yield invoker
-

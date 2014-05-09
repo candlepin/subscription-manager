@@ -465,7 +465,12 @@ class PluginConfig(object):
         return buf
 
 
-class PluginManagerRunner(object):
+class PluginHookRunner(object):
+    """Encapsulates a Conduit() instance and a bound plugin method.
+
+    PluginManager.runiter() returns an iterable that will yield
+    a PluginHookRunner for each plugin hook to be triggered.
+    """
     def __init__(self, conduit, func):
         self.conduit = conduit
         self.func = func
@@ -476,6 +481,7 @@ class PluginManagerRunner(object):
         except Exception, e:
             log.exception(e)
             raise
+
 
 #NOTE: need to be super paranoid here about existing of cfg variables
 # BasePluginManager with our default config info
@@ -737,14 +743,14 @@ class BasePluginManager(object):
             runner.run()
 
     def runiter(self, slot_name, **kwargs):
-        """Return an iterable of PluginManagerRunner objects.
+        """Return an iterable of PluginHookRunner objects.
 
-        The iterable will return a PluginManagerRunner object
+        The iterable will return a PluginHookRunner object
         for each plugin hook mapped to slot_name. Multiple plugins
         with hooks for the same slot will result in multiple
-        PluginManagerRunners in the iterable.
+        PluginHookRunners in the iterable.
 
-        See run() docs for what to expect from PluginManagerRunner.run().
+        See run() docs for what to expect from PluginHookRunner.run().
         """
         # slot's called should always exist here, if not
         if slot_name not in self._slot_to_funcs:
@@ -772,7 +778,7 @@ class BasePluginManager(object):
                 log.exception(e)
                 raise
 
-            runner = PluginManagerRunner(conduit_instance, func)
+            runner = PluginHookRunner(conduit_instance, func)
             yield runner
 
 
