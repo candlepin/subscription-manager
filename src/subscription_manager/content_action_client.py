@@ -41,30 +41,35 @@ class ContentPluginActionReport(certlib.ActionReport):
 
 
 class ContentPluginActionCommand(object):
+    def __init__(self, content_plugin_runner):
+        self.runner = content_plugin_runner
+
     def perform(self):
-        plugin_manager = inj.require(inj.PLUGIN_MANAGER)
-
-        content_plugins_reports = ContentPluginActionReport()
-        plugin_manager.run('update_content', reports=content_plugins_reports)
-
+        self.runner.run()
         # Actually a set of reports...
-        return content_plugins_reports
+        return self.runner.conduit.reports
 
 
 class ContentPluginActionInvoker(certlib.BaseActionInvoker):
+    def __init__(self, content_plugin_runner):
+        super(ContentPluginActionInvoker, self).__init__()
+        self.runner = content_plugin_runner
+
     def _do_update(self):
-        action = ContentPluginActionCommand()
+        action = ContentPluginActionCommand(self.runner)
         return action.perform()
 
 
 class ContentActionClient(base_action_client.BaseActionClient):
 
     def _get_libset(self):
-        self.yum_repo_action_invoker = repolib.RepoActionInvoker()
-        self.content_plugin_action_invoker = ContentPluginActionInvoker()
+        """return a generate that creates a ContentPluginAction* for each update_content plugin."""
+        yield repolib.RepoActionInvoker()
 
-        # TODO: replace libset/_get_libset with a ActionInvokerProvider
-        lib_set = [self.yum_repo_action_invoker,
-                   self.content_plugin_action_invoker]
+        plugin_manager = inj.require(inj.PLUGIN_MANAGER)
 
-        return lib_set
+        content_plugins_reports = ContentPluginActionReport()
+        for runner in plugin_manager.runiter('update_content', reports=content_plugins_reports):
+            invoker = ContentPluginActionInvoker(runner)
+            yield invoker
+
