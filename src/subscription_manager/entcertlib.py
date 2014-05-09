@@ -132,8 +132,12 @@ class EntCertUpdateAction(object):
         self.syslog_results()
 
         if missing_serials or rogue_serials:
+
+            # We call EntCertlibActionInvoker.update() solo from
+            # the 'attach' cli instead of an ActionClient. So
+            # we need to refresh the ent_dir object before calling
+            # content updating actions.
             self.ent_dir.refresh()
-            # refresh yum repo's now
             self.repo_hook()
 
             # NOTE: Since we have the yum repos defined here now
@@ -166,6 +170,7 @@ class EntCertUpdateAction(object):
 
     def repo_hook(self):
         """Update content repos."""
+        log.debug("entcerlibaction.repo_hook")
         try:
             # NOTE: this may need a lock
             content_action = content_action_client.ContentActionClient()
