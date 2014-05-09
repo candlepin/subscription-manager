@@ -32,6 +32,15 @@ dealing with all of the remote sections.
 
 # KeyFile is the desktop.org name for ini files, more or less
 class KeyFileConfigParser(config.RhsmConfigParser):
+    """A ini/ConfigParser subclass based on RhsmConfigParser.
+
+    This impl removes the RhsmConfigParser support for rhsm.config.DEFAULTS.
+    We don't neeed them.
+    """
+
+    # TODO: split RhsmConfigParser into a base version with useful stuff
+    #       like save(), but without the rhsm specific DEFAULTS
+
     # neuter the rhsm.config module level DEFAULTS
     # If we don't override defaults, sections, items, and has_default
     # the class returns the module level DEFAULTS. We don't want that,
@@ -97,10 +106,19 @@ class OstreeConfigFile(object):
 
 
 class RepoFile(OstreeConfigFile):
+    """Ostree repo config file specific OstreeConfigFile implementation.
+
+    Knows how to get the list of 'remote' sections, and how to determine
+    if a config parser section is a remote.
+    """
     config_parser_class = RepoFileConfigParser
 
     def remote_sections(self):
-        """Return all the config sections for "remotes"."""
+        """Return all the config sections for "remotes".
+
+        Note: this returns a list of section name strings, not
+              OstreeRemotes
+        """
         # flatten to comprehension
         remotes = []
         for section in self.config_parser.sections():
@@ -109,10 +127,18 @@ class RepoFile(OstreeConfigFile):
         return remotes
 
     def section_is_remote(self, section):
+        """Determine if a config section represents a ostree remote.
+
+        For example, the section named 'remote "awesomeos-ostree-1"' is a remote.
+        """
         if section.startswith("remote"):
             return True
 
     def clear_remotes(self):
+        """Remove all the config sections for remotes."""
+
+        # Not sure why, but saving config files we munge introduces
+        # unneeded whitespace changes, I suspect it's related to this.
         for remote in self.remote_sections():
             # do we need to delete options and section or just section?
             for key, value in self.config_parser.items(remote):
@@ -124,6 +150,7 @@ class RepoFile(OstreeConfigFile):
 
     # TODO: this is really just serializing OstreeRemote
     def set_remote(self, ostree_remote):
+        """Add a remote section to config file based on a OstreeRemote."""
         # format section name
         # remote attribut -> section key
         section_name = 'remote ' + '"%s"' % ostree_remote.name

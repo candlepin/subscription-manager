@@ -21,7 +21,6 @@ import ConfigParser
 from subscription_manager import api
 from subscription_manager import certlib
 
-from subscription_manager.plugin.ostree import repo_file
 from subscription_manager.plugin.ostree import model
 
 # plugins get
@@ -67,6 +66,8 @@ class OstreeContentUpdateActionCommand(object):
             content_set=content_set)
         updates = updates_builder.build()
 
+        # TODO: these are based on the new remote info from the
+        # content ent certs _before_ it's actually applied.
         report.origin = "FIXME"
         report.refspec = "FIXME"
         report.remote_updates = list(updates.remote_set)
@@ -78,8 +79,6 @@ class OstreeContentUpdateActionCommand(object):
         controller.update(updates)
         controller.save()
 
-        import pprint
-        log.debug(pprint.pformat(report))
         log.debug("Ostree update report: %s" % report)
         return report
 
@@ -91,6 +90,9 @@ class OstreeContentUpdateActionCommand(object):
 
 
 class OstreeContentUpdateActionReport(certlib.ActionReport):
+    """Track ostree repo config changes."""
+    name = "Ostree repo updates report"
+
     def __init__(self):
         super(OstreeContentUpdateActionReport, self).__init__()
         self.remote_updates = []
@@ -104,6 +106,7 @@ class OstreeContentUpdateActionReport(certlib.ActionReport):
         return len(self.remote_updates)
 
     def __str__(self):
+        # FIXME: Super ugly at the moment
         s = ["Ostree repo updates\n"]
         s.append("%s: %s" % (_("Origin:"), self.origin))
         s.append("%s: %s" % (_("Refspec:"), self.refspec))
