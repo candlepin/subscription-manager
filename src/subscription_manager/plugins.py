@@ -465,6 +465,18 @@ class PluginConfig(object):
         return buf
 
 
+class PluginManagerRunner(object):
+    def __init__(self, conduit, func):
+        self.conduit = conduit
+        self.func = func
+
+    def run(self):
+        try:
+            self.func(self.conduit)
+        except Exception, e:
+            log.exception(e)
+            raise
+
 #NOTE: need to be super paranoid here about existing of cfg variables
 # BasePluginManager with our default config info
 class BasePluginManager(object):
@@ -721,6 +733,19 @@ class BasePluginManager(object):
             SlotNameException: slot_name isn't found
             (Anything else is plugin and conduit specific)
         """
+        for runner in self.runiter(slot_name, **kwargs):
+            runner.run()
+
+    def runiter(self, slot_name, **kwargs):
+        """Return an iterable of PluginManagerRunner objects.
+
+        The iterable will return a PluginManagerRunner object
+        for each plugin hook mapped to slot_name. Multiple plugins
+        with hooks for the same slot will result in multiple
+        PluginManagerRunners in the iterable.
+
+        See run() docs for what to expect from PluginManagerRunner.run().
+        """
         # slot's called should always exist here, if not
         if slot_name not in self._slot_to_funcs:
             raise SlotNameException(slot_name)
@@ -747,16 +772,9 @@ class BasePluginManager(object):
                 log.exception(e)
                 raise
 
-            # If we wanted to allow a plugin or conduit to provide
-            # exception handlers, this is probably where we would go.
-            try:
-                # invoke the method with the conduit
-                func(conduit_instance)
-            except Exception, e:
-                log.exception(e)
-                raise
-        # FIXME: need to note if a slot is not found?
-        # debug logging maybe
+            runner = PluginManagerRunner(conduit_instance, func)
+            yield runner
+
 
     def _get_plugin_config(self, plugin_clazz, plugin_to_config_map=None):
         """Get a PluginConfig for plugin_class, creating it if need be.
