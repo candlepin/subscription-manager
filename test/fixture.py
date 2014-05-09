@@ -4,7 +4,7 @@ import unittest
 import sys
 import StringIO
 
-from mock import Mock, NonCallableMock, patch
+from mock import Mock, MagicMock, NonCallableMock, patch
 
 import stubs
 import subscription_manager.injection as inj
@@ -96,7 +96,8 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
 
         # setup and mock the plugin_manager
-        plugin_manager_mock = Mock(name='FixturePluginManagerMock')
+        plugin_manager_mock = MagicMock(name='FixturePluginManagerMock')
+        plugin_manager_mock.runiter.return_value = iter([])
         inj.provide(inj.PLUGIN_MANAGER, plugin_manager_mock)
         inj.provide(inj.DBUS_IFACE, Mock(name='FixtureDbusIfaceMock'))
 
