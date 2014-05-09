@@ -156,7 +156,7 @@ class RepoFile(OstreeConfigFile):
         section_name = 'remote ' + '"%s"' % ostree_remote.name
         self.set(section_name, 'url', ostree_remote.url)
         if ostree_remote.branches:
-            self.set(section_name, 'branches', office_remote.branches)
+            self.set(section_name, 'branches', ostree_remote.branches)
 
     # TODO: make a serializer of OstreeCore
     def set_core(self, ostree_core):

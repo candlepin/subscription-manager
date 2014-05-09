@@ -18,7 +18,6 @@ import mock
 
 import fixture
 
-from subscription_manager.plugin.ostree import action_invoker
 from subscription_manager.plugin.ostree import repo_file
 
 
