@@ -50,6 +50,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
         # Set up dynamic elements
         self.overrides_treeview = gtk.TreeView()
+        # Add at-spi because we no longer create this widget from glade
+        self.overrides_treeview.get_accessible().set_name("Repository View")
         self.no_repos_label, self.no_repos_label_viewport = widgets.get_scrollable_label()
         self.widget_switcher = widgets.WidgetSwitcher(self.scrolledwindow,
                 self.no_repos_label_viewport, self.overrides_treeview)
