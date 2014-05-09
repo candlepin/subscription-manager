@@ -78,6 +78,37 @@ determine which conduit is available for a given slot.  All conduits are
 subclassed from the `BaseConduit` class and have, at a minimum, handles
 to the subscription manager log and to the plugin configuration.
 
+
+## How a plugin is invoked
+Before plugin slots are reached, subscription-manager instantiates
+a `plugins.PluginManager` object. It will search plugin configuration
+and find and load enabled plugin modules and classes. It also maps
+plugin  hooks to PluginManager slots.
+
+In subscription-manager code, a "slot" is invoked by calling
+
+    PluginManager().run('a\_plugin\_slot\_name',
+                        plugin\_arg,
+                        other\_plugin\_arg)
+
+PluginManager() looks up the slot name, and finds all the plugin
+hooks mapped to it. It also finds the corresponding Conduit()
+class.
+
+run() then iterates over the set of plugin hook methods. For
+each method, it creates a new Conduit() class, passing it's constructor
+any of the method args passed to run(). Note the args to run() are
+passed to the Conduit.\_\_init\_\_, not to the plugin method hook directly.
+
+The new Conduit() is passed to the plugin's hook method. Nothing
+is returned from pluginManager.run(). Objects passed to
+PluginManager.run() are passed by reference, so a plugin can
+modify them. If you need to return data from a plugin, the
+plugin Conduit() needs to know to add it to the conduit object
+passed to the plugin method. Only the Conduit() is passed to
+the plugin method, so anything that needs to be passed needs
+to be added to the Conduit object.
+
 ## Plugin Configuration
 Every plugin has its own configuration file located in 
 `/etc/rhsm/pluginconf.d`.  These configuration files follow the standard INI
