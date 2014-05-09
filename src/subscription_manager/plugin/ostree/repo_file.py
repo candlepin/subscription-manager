@@ -1,5 +1,8 @@
+import logging
 
 from rhsm import config
+
+log = logging.getLogger("rhsm-app." + __name__)
 
 """Ostree has two config files, both based on the freedesktop.org
 Desktop Entry spec. This defines a file format based on "ini" style
@@ -58,6 +61,17 @@ class KeyFileConfigParser(config.RhsmConfigParser):
     def has_default(self, section, prop):
         return False
 
+    def save(self, config_file=None):
+        self.log_contents()
+        log.debug("KeyFile.save %s" % self.config_file)
+        super(KeyFileConfigParser, self).save()
+
+    def log_contents(self):
+        for section in self.sections():
+            log.debug("section: %s" % section)
+            for key, value in self.items(section):
+                log.debug("     %s: %s" % (key, value))
+
 
 class RepoFileConfigParser(KeyFileConfigParser):
     pass
@@ -77,6 +91,10 @@ class OstreeConfigFile(object):
     def _get_config_parser(self):
         return self.config_parser_class(config_file=self.filename)
 
+    def save(self):
+        log.debug("OstreeConfigFile.save")
+        self.config_parser.save()
+
 
 class RepoFile(OstreeConfigFile):
     config_parser_class = RepoFileConfigParser
@@ -93,6 +111,32 @@ class RepoFile(OstreeConfigFile):
     def section_is_remote(self, section):
         if section.startswith("remote"):
             return True
+
+    def clear_remotes(self):
+        for remote in self.remote_sections():
+            # do we need to delete options and section or just section?
+            for key, value in self.config_parser.items(remote):
+                self.config_parser.remove_option(remote, key)
+            self.config_parser.remove_section(remote)
+
+    def set(self, section, key, value):
+        return self.config_parser.set(section, key, value)
+
+    # TODO: this is really just serializing OstreeRemote
+    def set_remote(self, ostree_remote):
+        # format section name
+        # remote attribut -> section key
+        section_name = 'remote ' + '"%s"' % ostree_remote.name
+        self.set(section_name, 'url', ostree_remote.url)
+        if ostree_remote.branches:
+            self.set(section_name, 'branches', office_remote.branches)
+
+    # TODO: make a serializer of OstreeCore
+    def set_core(self, ostree_core):
+        # FIXME: shouldn't care about particular values unless we
+        # know we have to munge them
+        self.set('core', 'repo_version', ostree_core.repo_version)
+        self.set('core', 'mode', ostree_core.mode)
 
 
 class OriginFile(object):

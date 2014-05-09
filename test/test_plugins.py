@@ -906,9 +906,13 @@ class TestFactsConduit(unittest.TestCase):
         self.assertEquals({}, conduit.facts)
 
 
+
+
 class TestUpdateContentConduit(unittest.TestCase):
-    def test_content_plugin_condui(self):
-        conduit = plugins.UpdateContentConduit(StubPluginClass)
+    def test_content_plugin_conduit(self):
+        mock_report = mock.Mock()
+        conduit = plugins.UpdateContentConduit(StubPluginClass, mock_report)
+        self.assertEquals(mock_report, conduit.reports)
 
 
 class TestRegistrationConduit(unittest.TestCase):

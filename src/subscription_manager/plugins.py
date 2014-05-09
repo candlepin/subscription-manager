@@ -335,8 +335,9 @@ class UpdateContentConduit(BaseConduit):
     """Conduit for updating content."""
     slots = ['update_content']
 
-    def __init__(self, clazz):
+    def __init__(self, clazz, reports):
         super(UpdateContentConduit, self).__init__(clazz)
+        self.reports = reports
 
 
 class SubscriptionConduit(BaseConduit):
