@@ -264,8 +264,8 @@ class IdentityCertTests(unittest.TestCase):
     def test_creation(self):
         id_cert = create_from_pem(certdata.IDENTITY_CERT)
         self.assertTrue(isinstance(id_cert, IdentityCertificate))
-        self.assertEquals("DirName:/CN=redhat.local.rm-rf.ca", id_cert.alt_name)
-        self.assertEquals("eaadd6ea-852d-4430-94a7-73d5887d48e8", id_cert.subject['CN'])
+        self.assertEquals("URI:CN=redhat.local.rm-rf.ca", id_cert.alt_name)
+        self.assertEquals("0f5d4617-d913-4a0f-be61-d8a9c88e1476", id_cert.subject['CN'])
         self.assertFalse(hasattr(id_cert, 'products'))
 
     def test_default_version(self):
