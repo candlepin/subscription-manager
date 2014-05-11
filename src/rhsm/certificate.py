@@ -131,17 +131,18 @@ def deprecated(func):
 class Certificate(object):
     """
     Represents and x.509 certificate.
-    @ivar x509: The M2Crypto.X509 backing object.
-    @type x509: L{X509}
-    @ivar __ext: A dictionary of extensions L{OID}:value
-    @type __ext: L{Extensions}
+
+    :ivar x509: The :obj:`M2Crypto.X509` backing object.
+    :type x509: :class:`X509`
+    :ivar __ext: A dictionary of extensions `OID`:value
+    :type __ext: dict of :obj:`Extensions`
     """
 
     @deprecated
     def __init__(self, content=None):
         """
-        @param pem: The (optional) PEM encoded content.
-        @type pem: str
+        :param content: The (optional) PEM encoded content.
+        :type content: str
         """
         self._update(content)
 
@@ -180,33 +181,38 @@ class Certificate(object):
     def serialNumber(self):
         """
         Get the serial number
-        @return: The x.509 serial number
-        @rtype: str
+
+        :return: The x.509 serial number
+        :rtype:  str
         """
         return self.serial
 
     def subject(self):
         """
         Get the certificate subject.
+
         note: Missing NID mapping for UID added to patch openssl.
-        @return: A dictionary of subject fields.
-        @rtype: dict
+
+        :return: A dictionary of subject fields.
+        :rtype: dict
         """
         return self.subj
 
     def alternateName(self):
         """
-        Return the altername name of the certificate.
-        @return: A string representation of hte alternate name
-        @rtype: str
+        Return the alternate name of the certificate.
+
+        :return: A string representation of the alternate name
+        :rtype: str
         """
         return self.altName
 
     def validRange(self):
         """
-        Get the I{valid} date range.
-        @return: The valid date range.
-        @rtype: L{DateRange}
+        Get the valid date range.
+
+        :return: The valid date range.
+        :rtype: :class:`DateRange`
         """
         return DateRange(get_datetime_from_x509(self.x509.get_not_before()),
                 get_datetime_from_x509(self.x509.get_not_after()))
@@ -214,8 +220,9 @@ class Certificate(object):
     def valid(self, on_date=None):
         """
         Get whether the certificate is valid based on date.
-        @return: True if valid.
-        @rtype: boolean
+
+        :return: True if valid.
+        :rtype: boolean
         """
         valid_range = self.validRange()
         gmt = dt.utcnow()
@@ -227,8 +234,9 @@ class Certificate(object):
     def expired(self, on_date=None):
         """
         Get whether the certificate is expired based on date.
-        @return: True if valid.
-        @rtype: boolean
+
+        :return: True if valid.
+        :rtype: boolean
         """
         valid_range = self.validRange()
         gmt = dt.utcnow()
@@ -239,19 +247,21 @@ class Certificate(object):
 
     def bogus(self):
         """
-        Get whether the certificate contains bogus
-        data or is otherwise unsuitable.  The certificate
-        may be valid but still be considered bogus.
-        @return: List of reasons if bogus
-        @rtype: list
+        Get whether the certificate contains bogus data or is otherwise unsuitable.
+
+        The certificate may be valid but still be considered bogus.
+
+        :return: List of reasons if bogus
+        :rtype: list
         """
         return []
 
     def extensions(self):
         """
         Get custom extensions.
-        @return: An extensions object.
-        @rtype: L{Extensions}
+
+        :return: An extensions object.
+        :rtype: :class:`Extensions`
         """
         return self.__ext
 
@@ -259,10 +269,11 @@ class Certificate(object):
     def read(self, pem_path):
         """
         Read a certificate file.
-        @param pem_path: The path to a .pem file.
-        @type pem_path: str
-        @return: A certificate
-        @rtype: L{Certificate}
+
+        :param pem_path: The path to a .pem file.
+        :type pem_path: str
+        :return: A certificate
+        :rtype: :class:`Certificate`
         """
         f = open(pem_path)
         content = f.read()
@@ -275,9 +286,11 @@ class Certificate(object):
     def write(self, pem_path):
         """
         Write the certificate.
-        @param pem_path: The path to the .pem file.
-        @type pem_path: str
-        @return: self
+
+        :param pem_path: The path to the .pem file.
+        :type pem_path: str
+        :return: self
+        :rtype :class:`Certificate`
         """
         f = open(pem_path, 'w')
         f.write(self.toPEM())
@@ -297,8 +310,9 @@ class Certificate(object):
     def toPEM(self):
         """
         Get PEM representation of the certificate.
-        @return: A PEM string
-        @rtype: str
+
+        :return: A PEM string
+        :rtype: str
         """
         return self.x509.as_pem()
 
@@ -327,8 +341,9 @@ class Certificate(object):
 class RedhatCertificate(Certificate):
     """
     Represents a Red Hat certificate.
-    @cvar REDHAT: The Red Hat base OID.
-    @type REDHAT: str
+
+    :cvar REDHAT: The Red Hat base OID.
+    :type REDHAT: str
     """
 
     REDHAT = '1.3.6.1.4.1.2312.9'
@@ -341,9 +356,10 @@ class RedhatCertificate(Certificate):
 
     def redhat(self):
         """
-        Get the extension subtree for the B{redhat} namespace.
-        @return: The extensions with the RH namespace trimmed.
-        @rtype: L{Extension}
+        Get the extension subtree for the `redhat` namespace.
+
+        :return: The extensions with the Red Hat namespace trimmed.
+        :rtype: :class:`Extensions`
         """
         try:
             return self.__redhat
@@ -363,6 +379,7 @@ class RedhatCertificate(Certificate):
 class ProductCertificate(RedhatCertificate):
     """
     Represents a Red Hat product/entitlement certificate.
+
     It is OID schema aware and provides methods to
     get product information.
     """
@@ -370,8 +387,9 @@ class ProductCertificate(RedhatCertificate):
     def getProduct(self):
         """
         Get the product defined in the certificate.
-        @return: A product object.
-        @rtype: L{Product}
+
+        :return: A product object.
+        :rtype: :class:`Product`
         """
         rhns = self.redhat()
         products = rhns.find('1.*.1', 1)
@@ -386,8 +404,9 @@ class ProductCertificate(RedhatCertificate):
     def getProducts(self):
         """
         Get a list products defined in the certificate.
-        @return: A list of product objects.
-        @rtype: [L{Product},..]
+
+        :return: A list of product objects.
+        :rtype: list of :class:`Product`
         """
         lst = []
         rhns = self.redhat()
@@ -451,17 +470,19 @@ class EntitlementCertificate(ProductCertificate):
 
     def getOrder(self):
         """
-        Get the B{order} object defined in the certificate.
-        @return: An order object.
-        @rtype: L{Order}
+        Get the :obj:`order` object defined in the certificate.
+
+        :return: An order object.
+        :rtype: :class:`Order`
         """
         return self.order
 
     def getEntitlements(self):
         """
-        Get B{all} entitlements defined in the certificate.
-        @return: A list of entitlement object.
-        @rtype: [L{Entitlement},..]
+        Get all entitlements defined in the certificate.
+
+        :return: A list of entitlement object.
+        :rtype: List of :class:`Entitlement`
         """
         return self.getContentEntitlements() \
              + self.getRoleEntitlements()
@@ -471,8 +492,9 @@ class EntitlementCertificate(ProductCertificate):
     def getContentEntitlements(self):
         """
         Get the B{content} entitlements defined in the certificate.
-        @return: A list of entitlement object.
-        @rtype: [L{Content},..]
+
+        :return: A list of entitlement object.
+        :rtype: [:obj:`Content`,..]
         """
         lst = []
         rhns = self.redhat()
@@ -486,9 +508,10 @@ class EntitlementCertificate(ProductCertificate):
 
     def getRoleEntitlements(self):
         """
-        Get the B{role} entitlements defined in the certificate.
-        @return: A list of entitlement object.
-        @rtype: [L{Role},..]
+        Get the *role* entitlements defined in the certificate.
+
+        :return: A list of entitlement object.
+        :rtype: [:obj:`Role`,..]
         """
         lst = []
         rhns = self.redhat()
@@ -527,16 +550,18 @@ class EntitlementCertificate(ProductCertificate):
 class Key(object):
     """
     The (private|public) key.
-    @ivar content: The PEM encoded key.
-    @type content: str
+
+    :ivar content: The PEM encoded key.
+    :type content: str
     """
 
     @classmethod
     def read(cls, pem_path):
         """
         Read the key.
-        @param pem_path: The path to the .pem file.
-        @type path: str
+
+        :param pem_path: The path to the .pem file.
+        :type path: str
         """
         f = open(pem_path)
         content = f.read()
@@ -547,8 +572,8 @@ class Key(object):
 
     def __init__(self, content):
         """
-        @param content: The PEM encoded key.
-        @type content: str
+        :param content: The PEM encoded key.
+        :type content: str
         """
         self.content = content
 
@@ -567,9 +592,10 @@ class Key(object):
     def write(self, pem_path):
         """
         Write the key.
-        @param path: The path to the .pem file.
-        @type path: str
-        @return: self
+
+        :param path: The path to the .pem file.
+        :type path: str
+        :return: self
         """
         f = open(pem_path, 'w')
         f.write(self.content)
@@ -595,10 +621,10 @@ class DateRange:
     """
     Date range object.
 
-    @ivar begin_date: The begining date
-    @type begin_date: datetime
-    @ivar end_date: The ending date
-    @type end_date: datetime
+    :ivar begin_date: The begining date
+    :type begin_date: :class:`datetime`
+    :ivar end_date: The ending date
+    :type end_date: :class:`datetime`
     """
 
     def __init__(self, begin_date, end_date):
@@ -614,24 +640,27 @@ class DateRange:
     def begin(self):
         """
         Get range beginning.
-        @return: The beginning date in UTC.
-        @rtype: L{datetime.datetime}
+
+        :return: The beginning date in UTC.
+        :rtype: :class:`datatime.datetime`
         """
         return self._begin
 
     def end(self):
         """
         Get range end.
-        @return: The end date in UTC.
-        @rtype: L{datetime.datetime}
+
+        :return: The end date in UTC.
+        :rtype: :class:`datetime.datetime`
         """
         return self._end
 
     def has_now(self):
         """
         Get whether the certificate is valid based on the date now.
-        @return: True if valid.
-        @rtype: boolean
+
+        :return: True if valid.
+        :rtype: boolean
         """
         gmt = dt.utcnow()
         gmt = gmt.replace(tzinfo=GMT())
@@ -640,10 +669,11 @@ class DateRange:
     def has_date(self, date):
         """
         Get whether the certificate is valid based on the date.
-        @param: date
-        @type: datetime.datetime
-        @return: True if valid.
-        @rtype: boolean
+
+        :param: date
+        :type: :class:`datetime.datetime`
+        :return: True if valid.
+        :rtype: boolean
         """
         return (date >= self.begin() and date <= self.end())
 
@@ -674,13 +704,13 @@ class GMT(tzinfo):
 
 class Extensions(dict):
     """
-    Represents x.509 (v3) I{custom} extensions.
+    Represents x.509 (v3) custom extensions.
     """
 
     def __init__(self, x509):
         """
-        @param x509: An m2crypto X509 object or dict.
-        @type x509: L{X509}
+        :param x509: An :module:`m2crypto` :class:`X509` object or dict.
+        :type x509: :obj:`X509`
         """
         if isinstance(x509, dict):
             self.update(x509)
@@ -689,11 +719,12 @@ class Extensions(dict):
 
     def ltrim(self, n):
         """
-        Left trim I{n} parts.
-        @param n: The number of parts to trim.
-        @type n: int
-        @return: The trimmed OID
-        @rtype: L{Extensions}
+        Left trim *n* parts.
+
+        :param n: The number of parts to trim.
+        :type n: int
+        :return: The trimmed OID
+        :rtype: :class:`Extensions`
         """
         d = {}
         for oid, v in self.items():
@@ -702,12 +733,14 @@ class Extensions(dict):
 
     def get(self, oid, default=None):
         """
-        Get the value of an extension by I{oid}.
-        Note: The I{oid} may contain (*) wildcards.
-        @param oid: An OID that may contain (*) wildcards.
-        @type oid: str|L{OID}
-        @return: The value of the first extension matched.
-        @rtype: str
+        Get the value of an extension by *oid*.
+
+        Note: The *oid* may contain (*) wildcards.
+
+        :param oid: An `OID` that may contain (*) wildcards.
+        :type oid: str|`OID`
+        :return: The value of the first extension matched.
+        :rtype: str
         """
         ext = self.find(oid, 1, True)
         if ext:
@@ -717,16 +750,19 @@ class Extensions(dict):
 
     def find(self, oid, limit=0, ignoreOrder=False):
         """
-        Find all extensions matching the I{oid}.
-        Note: The I{oid} may contain (*) wildcards.
-        @param oid: An OID that may contain (*) wildcards.
-        @type oid: str|L{OID}
-        @param limit: Limit the number returned, 0=unlimited
-        @type limit: int
-        @type ignoreOrder: bool
-        @return: A list of matching items.
-        @rtype: (OID, value)
-        @see: OID.match()
+        Find all extensions matching the oid.
+
+        Note: The oid may contain (*) wildcards.
+
+        :param oid: An OID that may contain (*) wildcards.
+        :type oid: str|`OID`
+        :param limit: Limit the number returned, 0=unlimited
+        :type limit: int
+        :param ignoreOrder Should oids be ordered
+        :type ignoreOrder: bool
+        :return: A list of matching items.
+        :rtype: (`OID`, value)
+        :see: OID.match()
         """
         ext = []
         found = 0
@@ -751,10 +787,11 @@ class Extensions(dict):
     def branch(self, root):
         """
         Find a subtree by matching the oid.
-        @param root: An OID that may contain (*) wildcards.
-        @type root: str|L{OID}
-        @return: A subtree.
-        @rtype: L{Extensions}
+
+        :param root: An `OID` that may contain (*) wildcards.
+        :type root: str|`OID`
+        :return: A subtree.
+        :rtype: :class:`Extensions`
         """
         d = {}
         if isinstance(root, str):
@@ -781,7 +818,7 @@ class Extensions(dict):
 
     def _parse(self, x509):
         """
-        Parse the extensions section. Expects an m2crypto X509 object.
+        Parse the extensions section. Expects an :module:`m2crypto` :class:`X509` object.
         """
         oid = None
         for entry in self._get_extensions_block(x509):
@@ -805,10 +842,11 @@ class Extensions(dict):
 class OID(object):
     """
     The Object Identifier object.
-    @ivar part: The oid parts.
-    @type part: [str,]
-    @cvar WILDCARD: The wildcard character.
-    @type WILDCARD: str
+
+    :ivar part: The oid parts.
+    :type part: [str,]
+    :cvar WILDCARD: The wildcard character.
+    :type WILDCARD: str
     """
 
     WILDCARD = '*'
@@ -821,17 +859,18 @@ class OID(object):
     def split(cls, s):
         """
         Split an OID string.
-        @param s: An OID string Eg: (1.2.3)
-        @type s: str
-        @return: A list of OID parts.
-        @rtype: [str,]
+
+        :param s: An OID string Eg: (1.2.3)
+        :type s: str
+        :return: A list of OID parts.
+        :rtype: [str,]
         """
         return s.split('.')
 
     def __init__(self, oid):
         """
-        @param oid: The OID value.
-        @type oid: str|[str,]
+        :param oid: The OID value.
+        :type oid: str|[str,]
         """
         if isinstance(oid, str):
             self.part = self.split(oid)
@@ -845,8 +884,9 @@ class OID(object):
     def parent(self):
         """
         Get the parent OID.
-        @return: The parent OID.
-        @rtype: L{OID}
+
+        :return: The parent OID.
+        :rtype: L{OID}
         """
         p = self.part[:-1]
         if p:
@@ -855,30 +895,33 @@ class OID(object):
     def ltrim(self, n):
         """
         Left trim I{n} parts.
-        @param n: The number of parts to trim.
-        @type n: int
-        @return: The trimmed OID
-        @rtype: L{OID}
+
+        :param n: The number of parts to trim.
+        :type n: int
+        :return: The trimmed OID
+        :rtype: :class:`OID`
         """
         return OID(self.part[n:])
 
     def rtrim(self, n):
         """
         Right trim I{n} parts.
-        @param n: The number of parts to trim.
-        @type n: int
-        @return: The trimmed OID
-        @rtype: L{OID}
+
+        :param n: The number of parts to trim.
+        :type n: int
+        :return: The trimmed OID
+        :rtype: :class:`OID`
         """
         return OID(self.part[:-n])
 
     def append(self, oid):
         """
         Append the specified OID fragment.
-        @param oid: An OID fragment.
-        @type oid: str|L{OID}
-        @return: The concatenated OID.
-        @rtype: L{OID}
+
+        :param oid: An OID fragment.
+        :type oid: str|`OID`
+        :return: The concatenated OID.
+        "rtype: :class:`OID`
         """
         if isinstance(oid, str):
             oid = OID(oid)
@@ -888,14 +931,17 @@ class OID(object):
     def match(self, oid):
         """
         Match the specified OID considering wildcards.
+
         Patterns:
           - 1.4.5.6.74 (not wildcarded)
           -    .5.6.74 (match on only last 4)
           -    5.6.74. (match only first 4)
           - 1.4.*.6.*  (wildcard pattern)
-        @param oid: An OID string or object.
-        @type oid: L{OID}
-        @return: True if matched
+
+        :param oid: An OID string or object.
+        :type oid: `OID`
+        :return: True if matched
+        :rtype: boolean
         """
         i = 0
 
@@ -992,8 +1038,7 @@ class Order:
 
     def getQuantityUsed(self):
         """
-        Returns the quantity of the subscription that *this* entitlement is
-        using.
+        Returns the quantity of the subscription that *this* entitlement is using.
 
         WARNING: a little misleading as it (a) is part of the order namespace
         and (b) sounds suspiciously like the total consumed quantity of the
