@@ -29,6 +29,9 @@ log = logging.getLogger('rhsm-app.' + __name__)
 _ = gettext.gettext
 
 
+OSTREE_CONTENT_TYPE = "ostree"
+
+
 class OstreeContentUpdateActionCommand(object):
     """UpdateActionCommand for ostree repos.
 
@@ -36,57 +39,65 @@ class OstreeContentUpdateActionCommand(object):
 
     Return a OstreeContentUpdateReport.
     """
-    def __init__(self):
-        # starting state of ostree config
-        self.ostree_config = model.OstreeConfig()
-
     def perform(self):
-        # define... somewhere?
-        OSTREE_CONTENT_TYPE = "ostree"
-        self.load_config()
+        # starting state of ostree config
+        ostree_config = model.OstreeConfig()
+
+        # populate config, handle exceptions
+        self.load_config(ostree_config)
 
         report = OstreeContentUpdateActionReport()
-        # bleah, just do it
-        ent_dir = api.inj.require(api.inj.ENT_DIR)
 
-        content_set = set()
-        # valid ent certs could be an iterator
-        for ent_cert in ent_dir.list_valid():
-            # ditto content
-            for content in ent_cert.content:
-                log.debug("content: %s" % content)
+        entitlement_content = OstreeContent()
+        entitlement_content.load()
 
-                if content.content_type == OSTREE_CONTENT_TYPE:
-                    log.debug("adding %s to ostree content" % content)
-                    content_set.add(content)
-
+        # CALCULATE UPDATES
         # given current config, and the new contents, construct a list
         # of remotes to apply to our local config of remotes.
-        updates_builder = model.OstreeConfigUpdatesBuilder(self.ostree_config,
-            content_set=content_set)
+        updates_builder = model.OstreeConfigUpdatesBuilder(ostree_config,
+                                                           content_set=entitlement_content.content_set)
         updates = updates_builder.build()
 
         # TODO: these are based on the new remote info from the
         # content ent certs _before_ it's actually applied.
         report.origin = "FIXME"
         report.refspec = "FIXME"
-        report.remote_updates = list(updates.remote_set)
+        report.remote_updates = list(updates.new.remotes)
 
-        # Get controller to update the model with the updates
-        controller = model.OstreeConfigController(self.ostree_config)
-        log.debug("Updates-: %s" % updates)
-        log.debug("Updates.remote_set: %s" % updates.remote_set)
-        controller.update(updates)
-        controller.save()
+        log.debug("Updates orig: %s" % updates.orig)
+        log.debug("Updates new: %s" % updates.new)
+        log.debug("Updates.new.remote_set: %s" % updates.new.remotes)
+        updates.apply()
+        updates.save()
 
         log.debug("Ostree update report: %s" % report)
         return report
 
-    def load_config(self):
+    def load_config(self, ostree_config):
         try:
-            self.ostree_config.load()
+            ostree_config.load()
         except ConfigParser.Error:
             log.info("No ostree content repo config file found. Not loading ostree config.")
+
+
+class OstreeContent(object):
+    content_type = OSTREE_CONTENT_TYPE
+
+    def __init__(self):
+        self.content_set = set()
+
+    def load(self):
+        ent_dir = api.inj.require(api.inj.ENT_DIR)
+
+        # valid ent certs could be an iterator
+        for ent_cert in ent_dir.list_valid():
+            # ditto content
+            for content in ent_cert.content:
+                log.debug("content: %s" % content)
+
+                if content.content_type == self.content_type:
+                    log.debug("adding %s to ostree content" % content)
+                    self.content_set.add(content)
 
 
 class OstreeContentUpdateActionReport(certlib.ActionReport):

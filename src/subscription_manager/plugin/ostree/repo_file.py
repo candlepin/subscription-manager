@@ -162,8 +162,8 @@ class RepoFile(OstreeConfigFile):
     def set_core(self, ostree_core):
         # FIXME: shouldn't care about particular values unless we
         # know we have to munge them
-        self.set('core', 'repo_version', ostree_core.repo_version)
-        self.set('core', 'mode', ostree_core.mode)
+        self.set('core', 'repo_version', ostree_core.get('repo_version'))
+        self.set('core', 'mode', ostree_core.get('mode'))
 
 
 class OriginFile(object):
