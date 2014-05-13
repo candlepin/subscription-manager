@@ -11,12 +11,45 @@ REMOTE_SECTION_MATCH = r"remote\s+\"(?P<remote_name>.+)\""
 log = logging.getLogger("rhsm-app." + __name__)
 
 
-class OstreeRemote(object):
+class OstreeContentError(Exception):
+    pass
+
+
+class RemoteSectionNameParseError(OstreeContentError):
+    pass
+
+
+class OstreeRemote(dict):
     """Represent a ostree repo remote.
 
     A repo remote is one of the the '[remote "ostree-awesomeos-8"]' section in
     ostree repo config (/ostree/repo/config by default).
     """
+
+    @property
+    def url(self):
+        return self.get('url')
+
+    @url.setter
+    def url(self, value):
+        self['url'] = value
+
+    @property
+    def gpg_verify(self):
+        return self.get('gpg_verify')
+
+    @gpg_verify.setter
+    def gpg_verify(self, value):
+        self['gpg_verify'] = value
+
+    @property
+    def name(self):
+        return self.get('name')
+
+    @name.setter
+    def name(self, value):
+        self['name'] = value
+
     @classmethod
     def from_config_section(cls, section, items):
         """Create a OstreeRemote object from a repo config section name and map of items.
@@ -25,16 +58,22 @@ class OstreeRemote(object):
           ex: 'remote "ostree-awesomeos-8"'
         'items' is a map of items corresponding to config items for 'section'. Extra
           items we don't understand are ignored. Expect at least 'url'.
+
+        Note: 'gpg-verify' is one of the default items, but 'gpg-verify' is not
+              a valid python attribute name, so a key of 'gpg-verify' is used to
+              update the OstreeRemote.gpg_verify property.
         """
         remote = cls()
         remote.url = items.get('url')
-        remote.branches = items.get('branches')
-        # note.. gpg-verify->gpg_verify
-        remote.gpg_verify = items.get('gpg-verify')
-        # we could add the rest of items here if we had just
-        # a dict or a set of tuples instead of class...
-        name = OstreeRemote.name_from_section(section)
-        remote.name = name
+
+        # Note.. gpg-verify->gpg_verify
+        remote.gpg_verify = items.pop('gpg-verify', None)
+
+        # any other unknown properties
+        remote.update(items)
+
+        # the section name takes precendence over a 'name' in the items
+        remote.name = OstreeRemote.name_from_section(section)
         return remote
 
     @staticmethod
@@ -45,11 +84,12 @@ class OstreeRemote(object):
         """
         matcher = re.compile(REMOTE_SECTION_MATCH)
         result = matcher.match(section)
+        log.debug("result %s" % result)
         if result:
             return result.groupdict()['remote_name']
 
         # FIXME
-        raise Exception
+        raise RemoteSectionNameParseError
 
     @classmethod
     def from_content(cls, content):
@@ -71,9 +111,9 @@ class OstreeRemote(object):
         remote.branches = None
         return remote
 
-    def __repr__(self):
-        r = super(OstreeRemote, self).__repr__()
-        return "%s name=%s url=%s branches=%s" % (r, self.name, self.url, self.branches)
+    #def __repr__(self):
+    #    r = super(OstreeRemote, self).__repr__()
+    #    return "%s name=%s url=%s gpg_verify=%s" % (r, self.name, self.url, self.gpg_verify)
 
     # def to_config
 

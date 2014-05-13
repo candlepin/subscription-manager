@@ -19,10 +19,106 @@ import mock
 import fixture
 
 from subscription_manager.plugin.ostree import repo_file
+from subscription_manager.plugin.ostree import model
 
 
 class StubPluginManager(object):
         pass
+
+
+class TestOstreeRemoteNameFromSection(fixture.SubManFixture):
+    def test_normal(self):
+        sn = r'remote "awesomeos-foo-container"'
+        name = model.OstreeRemote.name_from_section(sn)
+        self.assertTrue(name is not None)
+        self.assertEquals(name, "awesomeos-foo-container")
+        # no quotes in the name
+        self.assertFalse('"' in name)
+
+    def test_spaces(self):
+        # We consider remote names to be content labels, so
+        # shouldn't have space, but afaik ostree doesn't care
+        sn = r'remote "awesome os container"'
+        name = model.OstreeRemote.name_from_section(sn)
+        self.assertTrue(name is not None)
+        self.assertEquals(name, "awesome os container")
+        self.assertFalse('"' in name)
+
+    def test_no_remote_keyword(self):
+        sn = r'"some-string-that-is-wrong"'
+        self.assert_name_error(sn)
+
+    def test_no_quoted(self):
+        sn = r'remote not-a-real-name'
+        self.assert_name_error(sn)
+
+    def test_open_quote(self):
+        sn = r'remote "strine-with-open-quote'
+        self.assert_name_error(sn)
+
+    def test_empty_quote(self):
+        sn = r'remote ""'
+        self.assert_name_error(sn)
+
+    def assert_name_error(self, sn):
+        self.assertRaises(model.RemoteSectionNameParseError,
+                          model.OstreeRemote.name_from_section,
+                          sn)
+
+
+class TestOstreeRemote(fixture.SubManFixture):
+    section_name = r'remote "awesomeos-content"'
+    example_url = 'http://example.com.not.real/content'
+
+    def assert_remote(self, remote):
+        self.assertTrue(isinstance(remote, model.OstreeRemote))
+
+    def test(self):
+        items = {'url': self.example_url,
+                 'gpg-verify': 'true'}
+        ostree_remote = \
+            model.OstreeRemote.from_config_section(self.section_name,
+                                                   items)
+        self.assert_remote(ostree_remote)
+        self.assertEquals('true', ostree_remote.gpg_verify)
+        self.assertEquals(self.example_url, ostree_remote.url)
+
+    def test_other_items(self):
+        items = {'url': self.example_url,
+                 'a_new_key': 'a_new_value',
+                 'gpg-verify': 'true',
+                 'blip': 'baz'}
+        ostree_remote = \
+            model.OstreeRemote.from_config_section(self.section_name,
+                                                   items)
+        self.assert_remote(ostree_remote)
+        # .url and ['url'] work
+        self.assertEquals(self.example_url, ostree_remote.url)
+        self.assertEquals(self.example_url, ostree_remote['url'])
+
+        self.assertTrue('a_new_key' in ostree_remote)
+        self.assertEquals('a_new_value', ostree_remote['a_new_key'])
+
+        self.assertTrue('gpg_verify' in ostree_remote)
+        self.assertTrue(hasattr(ostree_remote, 'gpg_verify'))
+        self.assertEquals('true', ostree_remote.gpg_verify)
+        self.assertFalse('gpg-verify' in ostree_remote)
+        self.assertFalse(hasattr(ostree_remote, 'gpg-verify'))
+
+    def test_repr(self):
+        # we use the dict repr now though
+        items = {'url': self.example_url,
+                 'a_new_key': 'a_new_value',
+                 'gpg-verify': 'true',
+                 'blip': 'baz'}
+        ostree_remote = \
+            model.OstreeRemote.from_config_section(self.section_name,
+                                                   items)
+        repr_str = repr(ostree_remote)
+        self.assertTrue(isinstance(repr_str, basestring))
+        self.assertTrue('name' in repr_str)
+        self.assertTrue('gpg_verify' in repr_str)
+        self.assertTrue(self.example_url in repr_str)
 
 
 class BaseOstreeKeyFileTest(fixture.SubManFixture):
