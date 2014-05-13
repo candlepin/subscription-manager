@@ -3,6 +3,11 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
 
+# Use python-simplejson on RHEL 5 as there is no json module in Python 2.4.
+# On RHEL 6, we'll use it if it's installed (see ourjson.py).
+# simplejson is not available in RHEL 7 at all.
+%global use_simplejson (0%{?rhel} && 0%{?rhel} == 5)
+
 
 Name: python-rhsm
 Version: 1.11.4
@@ -23,6 +28,9 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: m2crypto
 Requires: python-iniparse
 Requires: rpm-python
+%if %use_simplejson
+Requires: python-simplejson
+%endif
 
 BuildRequires: python2-devel
 BuildRequires: python-setuptools
