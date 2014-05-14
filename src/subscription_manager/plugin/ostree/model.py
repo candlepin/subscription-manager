@@ -4,7 +4,7 @@ import re
 
 from subscription_manager.plugin.ostree import repo_file
 
-OSTREE_REPO_CONFIG = "/ostree/repo/config"
+OSTREE_REPO_CONFIG_PATH = "/ostree/repo/config"
 
 REMOTE_SECTION_MATCH = r"remote\s+\"(?P<remote_name>.+)\""
 
@@ -201,11 +201,9 @@ class OstreeConfigRepoConfigFileLoader(object):
         the specific config file(s) that it was read from
         (/ostree/repo/config).
     """
-    repo_config_file = OSTREE_REPO_CONFIG
 
-    def __init__(self, repo_config_file=None):
-        if repo_config_file:
-            self.repo_config_file = repo_config_file
+    def __init__(self, repo_config_path):
+        self.repo_config_path = repo_config_path
         self.remotes = None
         self.core = None
 
@@ -218,7 +216,7 @@ class OstreeConfigRepoConfigFileLoader(object):
         errors reading it.
         """
         # TODO: when/where do we create it the first time?
-        self.repo_config = repo_file.RepoFile(self.repo_config_file)
+        self.repo_config = repo_file.RepoFile(self.repo_config_path)
         self.load_remotes()
         self.load_core()
 
@@ -303,6 +301,7 @@ class OstreeOriginUpdater(object):
 
         # TODO: If our repo config has multiple remotes in it, which should we use?
         # For now we are just using the first one.
+        print self.repo_config.remotes
         #new_remote = self.repo_config
         #new_refspec = replace_refspec_remote(previous_refspec, new_remote)
 
@@ -354,17 +353,21 @@ class OstreeConfig(object):
     OstreeConfig saving serializes OstreeConfig state to the
     configuration files.
     """
-    def __init__(self, core=None, remotes=None, repo_config_file=None):
+    repo_config_path = OSTREE_REPO_CONFIG_PATH
+
+    def __init__(self, core=None, remotes=None, repo_config_path=None):
         self.remotes = remotes
         self.core = core
-        self.repo_config_file = repo_config_file
+        if repo_config_path:
+            self.repo_config_path = repo_config_path
 
     # Unsure where the code to (de)serialize, and then persist these should
     # live. Here? OstreeConfigController? The Config file classes?
     def load(self):
         """Load a ostree config files and populate OstreeConfig."""
 
-        self.repo_config_loader = OstreeConfigRepoConfigFileLoader()
+        self.repo_config_loader = OstreeConfigRepoConfigFileLoader(
+            self.repo_config_path)
         self.repo_config_loader.load()
 
         self.remotes = self.repo_config_loader.remotes
@@ -374,8 +377,11 @@ class OstreeConfig(object):
         """Persist OstreeConfig state to ostree config files."""
         log.debug("OstreeConfig.save")
 
+        # Careful, we're calling this a file, it's a RepoFile, just above
+        # this variable name is actually a filepath.
         repo_config_file = self.repo_config_loader.repo_config
-        repo_config_file_saver = OstreeConfigRepoConfigFileSave(repo_config_file=repo_config_file)
+        repo_config_file_saver = OstreeConfigRepoConfigFileSave(
+            repo_config_path=repo_config_file)
         repo_config_file_saver.save(self)
 
     def copy(self):
@@ -384,7 +390,7 @@ class OstreeConfig(object):
 
     def __repr__(self):
         s = []
-        s.append("<OsTreeConfig file=%s>" % self.repo_config_file)
+        s.append("<OsTreeConfig file=%s>" % self.repo_config_path)
         s.append("Core: %s" % self.core)
         s.append("Remotes: %s" % self.remotes)
         return '\n'.join(s)

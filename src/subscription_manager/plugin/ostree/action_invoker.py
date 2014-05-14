@@ -40,6 +40,7 @@ class OstreeContentUpdateActionCommand(object):
     Return a OstreeContentUpdateReport.
     """
     def perform(self):
+
         # starting state of ostree config
         ostree_config = model.OstreeConfig()
 

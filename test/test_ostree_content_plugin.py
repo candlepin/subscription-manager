@@ -241,8 +241,9 @@ refspec=awesomeos-controller:awesomeos-controller/awesomeos8/x86_64/controller/d
 
         fixture.SubManFixture.setUp(self)
         self.repo_cfg_file = self.write_tempfile(self.repo_cfg)
-        self.repo_config = repo_file.RepoFileConfigParser(
-            self.repo_cfg_file.name)
+        self.repo_config = model.OstreeConfig(
+            repo_config_path=self.repo_cfg_file.name)
+        self.repo_config.load()
         self.updater = model.OstreeOriginUpdater(self.repo_config)
         self.updater._get_deployed_origin = mock.MagicMock(
             return_value=self.origin_cfg_file.name)
