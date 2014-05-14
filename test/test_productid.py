@@ -21,23 +21,29 @@ class StubDirectory(certdirectory.Directory):
         self.path = path
 
 
-class TestComparableProduct(unittest.TestCase):
+class TestComparableProductEquality(unittest.TestCase):
+    product_info = {'id': 70, 'name': "Awesome OS", 'arch': ["ALL"],
+             'tags': "awesomeos-1, awesomeos-1-server"}
+
+    older = "1.0"
+    newer = "1.1"
+
     def setUp(self):
-        self.older_product = Product(id=70, name="Awesome OS", version="1.0",
-                                     architectures=["ALL"],
-                                     provided_tags="awesomeos-1, awesomeos-1-server")
 
-        self.newer_product = Product(id=70, name="Awesome OS", version="2.0",
-                                     architectures=["ALL"],
-                                     provided_tags="awesomeos-1, awesomeos-1-server")
-
-        self.same_as_older = Product(id=70, name="Awesome OS", version="1.0",
-                                     architectures=["ALL"],
-                                     provided_tags="awesomeos-1, awesomeos-1-server")
+        self.older_product = self.product(self.older)
+        self.newer_product = self.product(self.newer)
+        self.same_as_older = self.product(self.older)
 
         self.older = productid.ComparableProduct(self.older_product)
         self.newer = productid.ComparableProduct(self.newer_product)
         self.same_as_older = productid.ComparableProduct(self.same_as_older)
+
+    def product(self, version):
+        return Product(id=self.product_info['id'],
+                       name=self.product_info['name'],
+                       version=version,
+                       architectures=self.product_info['arch'],
+                       provided_tags=self.product_info['tags'])
 
     def test_equal(self):
         self.assertTrue(self.older == self.same_as_older)
@@ -48,14 +54,8 @@ class TestComparableProduct(unittest.TestCase):
 
         self.assertTrue(self.older == self.older)
 
-    def test_not_equal(self):
-        self.assertTrue(self.older != self.newer)
-        self.assertTrue(self.newer != self.older)
 
-        self.assertFalse(self.older != self.same_as_older)
-        self.assertFalse(self.same_as_older != self.older)
-        self.assertFalse(self.older != self.older)
-
+class TestComparableProduct(TestComparableProductEquality):
     def test_lt(self):
         self.assertTrue(self.older < self.newer)
         self.assertFalse(self.newer < self.older)
@@ -75,6 +75,89 @@ class TestComparableProduct(unittest.TestCase):
         self.assertTrue(self.older <= self.newer)
         self.assertFalse(self.newer <= self.older)
         self.assertTrue(self.older <= self.older)
+
+    def test_not_equal(self):
+        self.assertTrue(self.older != self.newer)
+        self.assertTrue(self.newer != self.older)
+
+        self.assertFalse(self.older != self.same_as_older)
+        self.assertFalse(self.same_as_older != self.older)
+        self.assertFalse(self.older != self.older)
+
+
+class TestComparableNowWithMoreDecimalPlaces(TestComparableProduct):
+    older = "1"
+    newer = "1.0"
+
+
+class TestComparableProduct9To10(TestComparableProduct):
+    older = "5.9"
+    newer = "5.10"
+
+
+class TestComparableToMicro(TestComparableProduct):
+    older = "5.9"
+    newer = "5.9.1"
+
+
+class TestComparableJustMajorToMinorMicro(TestComparableProduct):
+    older = "5"
+    newer = "5.0.1"
+
+
+class TestComparableJustMajorToManySubVersions(TestComparableProduct):
+    older = "5"
+    newer = "5.0.0.0.0.0.0.0.0.0.100"
+
+
+class TestComparableJustMajorToMinor(TestComparableProduct):
+    older = "5"
+    newer = "5.11"
+
+
+class TestComparableZero(TestComparableProduct):
+    older = "0"
+    newer = "0.0001"
+
+
+class TestComparableProductMajorMinorMicro(TestComparableProduct):
+    older = "10.11.3"
+    newer = "10.11.20"
+
+
+class TestComparableProductMajorMinorMicroMajorMinor(TestComparableProduct):
+    older = "10.11.3"
+    newer = "10.20"
+
+
+class TestComparableProductMajor(TestComparableProduct):
+    older = "10.11.3"
+    newer = "31"
+
+
+class TestComparableProductAlpha(TestComparableProduct):
+    older = "5.11.a"
+    newer = "5.11.b"
+
+
+class TestComparableProductNumberToAlpha(TestComparableProduct):
+    older = "5.11.10"
+    newer = "5.11.10b"
+
+
+class TestComparableProductJustAlpha(TestComparableProduct):
+    older = "D"
+    newer = "E"
+
+
+class TestComparableProductMutliAlpha(TestComparableProduct):
+    older = "a.b.b"
+    newer = "a.b.c"
+
+
+class TestComparableProductShortAlpha(TestComparableProduct):
+    older = "a.b.c"
+    newer = "a.c"
 
 
 class TestComparableProductCert(TestComparableProduct):

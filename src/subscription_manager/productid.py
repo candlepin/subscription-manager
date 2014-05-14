@@ -21,6 +21,8 @@ import logging
 import os
 import types
 import yum
+# for labelCompare
+import rpm
 
 from rhsm.certificate import create_from_pem
 
@@ -135,6 +137,46 @@ class ComparableMixin(object):
         return self._compare(self.compare_keys(other), lambda s, o: s >= o)
 
 
+class RpmVersion(object):
+    """Represent the epoch, version, release of a rpm style version.
+
+    This includes the rich comparison methods to support >,<,==,!-
+    using rpm's labelCompare.
+
+    See http://fedoraproject.org/wiki/Archive:Tools/RPM/VersionComparison
+    for more details of the actual comparison rules.
+    """
+    def __init__(self, epoch="0", version="0", release="1"):
+        self.epoch = epoch
+        self.version = version
+        self.release = release
+        self.evr = (self.epoch, self.version, self.release)
+
+    def __lt__(self, other):
+        lc = rpm.labelCompare(self.evr, other.evr)
+        if lc == -1:
+            return True
+        return False
+
+    def __le__(self, other):
+        lc = rpm.labelCompare(self.evr, other.evr)
+        if lc > 0:
+            return False
+        return True
+
+    def __eq__(self, other):
+        lc = rpm.labelCompare(self.evr, other.evr)
+        if lc == 0:
+            return True
+        return False
+
+    def __ne__(self, other):
+        lc = rpm.labelCompare(self.evr, other.evr)
+        if lc != 0:
+            return True
+        return False
+
+
 class ComparableProduct(ComparableMixin):
     """A comparable version from a Product. For comparing and sorting Product objects.
 
@@ -150,13 +192,27 @@ class ComparableProduct(ComparableMixin):
     Awesomeos-1.1 > Awesomeos-1.0
     Awesomeos-1.1 != Awesomeos-1.0
     Awesomeos-1.0 < Awesomeos-1.0
+
+    The algorithm used for comparisions is the rpm version compare, as used
+    by rpm, yum, etc. Also known as "rpmvercmp" or "labelCompare".
+
+    There aren't any standard product version comparison rules, but the
+    rpm rules are pretty flexible, documented, and well understood.
     """
     def __init__(self, product):
         self.product = product
 
     def compare_keys(self, other):
+        """Create a a tuple of RpmVersion objects.
+
+        Create a RpmVersion using the product's version attribute
+        as the 'version' attribute for a rpm label tuple. We let the
+        epoch default to 0, and the release to 1 for each, so we are
+        only comparing the difference in the version attribute.
+        """
         if self.product.id == other.product.id:
-            return (self.product.version, other.product.version)
+            return (RpmVersion(version=self.product.version),
+                    RpmVersion(version=other.product.version))
         return None
 
     def __str__(self):
