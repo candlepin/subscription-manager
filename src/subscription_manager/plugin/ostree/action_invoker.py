@@ -48,27 +48,29 @@ class OstreeContentUpdateActionCommand(object):
 
         report = OstreeContentUpdateActionReport()
 
-        entitlement_content = OstreeContent()
-        entitlement_content.load()
+        entitled_content = OstreeContents()
+        entitled_content.load()
 
         # CALCULATE UPDATES
         # given current config, and the new contents, construct a list
         # of remotes to apply to our local config of remotes.
-        updates_builder = model.OstreeConfigUpdatesBuilder(ostree_config,
-                                                           content_set=entitlement_content.content_set)
+        updates_builder = \
+            model.OstreeConfigUpdatesBuilder(ostree_config,
+                                             content_set=entitled_content.content_set)
         updates = updates_builder.build()
+
+        log.debug("Updates orig: %s" % updates.orig)
+        log.debug("Updates new: %s" % updates.new)
+        log.debug("Updates.new.remote_set: %s" % updates.new.remotes)
+
+        # persist the new stuff
+        updates.apply()
+        updates.save()
 
         # TODO: Populate with origin info
         report.origin = "FIXME"
         report.refspec = "FIXME"
         report.orig_remotes = list(updates.orig.remotes)
-
-        log.debug("Updates orig: %s" % updates.orig)
-        log.debug("Updates new: %s" % updates.new)
-        log.debug("Updates.new.remote_set: %s" % updates.new.remotes)
-        updates.apply()
-        updates.save()
-
         report.remote_updates = list(updates.new.remotes)
 
         log.debug("Ostree update report: %s" % report)
@@ -81,7 +83,8 @@ class OstreeContentUpdateActionCommand(object):
             log.info("No ostree content repo config file found. Not loading ostree config.")
 
 
-class OstreeContent(object):
+class OstreeContents(object):
+    """Find the ostree content provided by our current entitlements."""
     content_type = OSTREE_CONTENT_TYPE
 
     def __init__(self):
