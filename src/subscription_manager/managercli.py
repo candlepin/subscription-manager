@@ -1543,7 +1543,7 @@ class RemoveCommand(CliCommand):
                     failure = []
                     for serial in self.options.serials:
                         try:
-                            self.cp.unbindBySerial(identity.consumer, serial)
+                            self.cp.unbindBySerial(identity.uuid, serial)
                             success.append(serial)
                         except connection.RestlibException, re:
                             if re.code == 410:
