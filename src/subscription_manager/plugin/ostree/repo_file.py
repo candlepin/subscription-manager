@@ -1,4 +1,5 @@
 import logging
+import re
 
 from rhsm import config
 
@@ -84,6 +85,17 @@ class KeyFileConfigParser(config.RhsmConfigParser):
 
 class RepoFileConfigParser(KeyFileConfigParser):
     pass
+
+
+def replace_refspec_remote(refspec, new_remote):
+    """
+    Replaces the 'remote' portion of an ostree origin file refspec.
+    """
+    refspec_regex = "(.*):(.*)"
+    m = re.search(refspec_regex, refspec)
+    if not m:
+        raise Exception("Unable to parse refspec: %s" % refspec)
+    return "%s:%s" % (new_remote, m.group(2))
 
 
 class OriginFileConfigParser(KeyFileConfigParser):

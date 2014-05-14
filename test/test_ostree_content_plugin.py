@@ -160,17 +160,6 @@ class BaseOstreeKeyFileTest(fixture.SubManFixture):
         self.fid.seek(0)
 
 
-class BaseOstreeOriginFileTest(BaseOstreeKeyFileTest):
-    """Base of tests for ostree *.origin config files."""
-    def _of_cfg(self):
-        self._of_cfg_instance = repo_file.OriginFileConfigParser(self.fid.name)
-        return self._of_cfg_instance
-
-    def test_init(self):
-        of_cfg = self._of_cfg()
-        self.assertTrue(isinstance(of_cfg, repo_file.OriginFileConfigParser))
-
-
 class TestKeyFileConfigParser(BaseOstreeKeyFileTest):
     def test_defaults(self):
         kf_cfg = repo_file.KeyFileConfigParser(self.fid.name)
@@ -204,7 +193,35 @@ last_key = blippy
         self.assertEquals(len(section_one_items), 2)
 
 
-class TestOstreeOriginFileConfigParserEmpty(BaseOstreeOriginFileTest):
+class TestReplaceRefspecRemote(fixture.SubManFixture):
+
+    def test_successful_replace(self):
+        refspec = 'awesomeos-controller:awesomeos-controller/awesomeos8/x86_64/controller/docker'
+        expected = 'newremote:awesomeos-controller/awesomeos8/x86_64/controller/docker'
+        self.assertEquals(expected, repo_file.replace_refspec_remote(
+            refspec, 'newremote'))
+
+    def test_empty_remote(self):
+        refspec = ':awesomeos-controller/awesomeos8/x86_64/controller/docker'
+        expected = 'newremote:awesomeos-controller/awesomeos8/x86_64/controller/docker'
+        self.assertEquals(expected, repo_file.replace_refspec_remote(
+            refspec, 'newremote'))
+
+    def test_bad_refspec(self):
+        refspec = 'ImNotARefSpec'
+        self.assertRaises(Exception, repo_file.replace_refspec_remote,
+            refspec, 'newremote')
+
+
+class BaseOstreeOriginFileTest(BaseOstreeKeyFileTest):
+    """Base of tests for ostree *.origin config files."""
+    def _of_cfg(self):
+        self._of_cfg_instance = repo_file.OriginFileConfigParser(
+            self.fid.name)
+        return self._of_cfg_instance
+
+
+class TestOriginFileConfigParserEmpty(BaseOstreeOriginFileTest):
     """Test if a .origin file is empty."""
     cfgfile_data = ""
 
@@ -214,7 +231,7 @@ class TestOstreeOriginFileConfigParserEmpty(BaseOstreeOriginFileTest):
         self.assertEquals(of_cfg.sections(), [])
 
 
-class TestOstreeOriginFileConfigParser(BaseOstreeOriginFileTest):
+class TestOriginFileConfigParser(BaseOstreeOriginFileTest):
     """Test a normalish .origin file."""
     cfgfile_data = """
 [origin]
