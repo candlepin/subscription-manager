@@ -19,12 +19,25 @@ class RemoteSectionNameParseError(OstreeContentError):
     pass
 
 
+# FIXME: remove property stuff, dont inherit from dict, remove hash stuff
+#        it's clever but weird and unneeded, but commit so tests work
 class OstreeRemote(dict):
     """Represent a ostree repo remote.
 
     A repo remote is one of the the '[remote "ostree-awesomeos-8"]' section in
     ostree repo config (/ostree/repo/config by default).
     """
+    def __hash__(self):
+        return hash(self.hash_info)
+
+    def __eq__(self, other):
+        if other and hasattr(other, 'hash_info'):
+            return self.hash_info == other.hash_info
+        return NotImplemented
+
+    @property
+    def hash_info(self):
+        return (self.name, self.url, self.gpg_verify)
 
     @property
     def url(self):
@@ -110,12 +123,6 @@ class OstreeRemote(dict):
         remote.url = content.url
         remote.branches = None
         return remote
-
-    #def __repr__(self):
-    #    r = super(OstreeRemote, self).__repr__()
-    #    return "%s name=%s url=%s gpg_verify=%s" % (r, self.name, self.url, self.gpg_verify)
-
-    # def to_config
 
 
 class OstreeRemotes(object):

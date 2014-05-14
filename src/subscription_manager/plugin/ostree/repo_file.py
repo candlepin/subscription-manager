@@ -152,11 +152,11 @@ class RepoFile(OstreeConfigFile):
     def set_remote(self, ostree_remote):
         """Add a remote section to config file based on a OstreeRemote."""
         # format section name
-        # remote attribut -> section key
+        # remote attribute -> section key
         section_name = 'remote ' + '"%s"' % ostree_remote.name
         self.set(section_name, 'url', ostree_remote.url)
-        if ostree_remote.branches:
-            self.set(section_name, 'branches', ostree_remote.branches)
+        #self.set(section_name, 'gpg_verify', ostree_remote.gpg_verify)
+        # add gpg_verify and other things
 
     # TODO: make a serializer of OstreeCore
     def set_core(self, ostree_core):

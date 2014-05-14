@@ -83,6 +83,12 @@ class TestOstreeRemote(fixture.SubManFixture):
         self.assertEquals('true', ostree_remote.gpg_verify)
         self.assertEquals(self.example_url, ostree_remote.url)
 
+        # FIXME: remove this and go back to having a map
+        # verify our hash/equal are okay for non like compares
+        ostree_remote == None
+        ostree_remote == 1
+        ostree_remote == 'sdfsdf'
+
     def test_other_items(self):
         items = {'url': self.example_url,
                  'a_new_key': 'a_new_value',
@@ -119,6 +125,30 @@ class TestOstreeRemote(fixture.SubManFixture):
         self.assertTrue('name' in repr_str)
         self.assertTrue('gpg_verify' in repr_str)
         self.assertTrue(self.example_url in repr_str)
+
+
+class TestOstreeRemotes(fixture.SubManFixture):
+    def test(self):
+        osr = model.OstreeRemotes()
+        self.assertTrue(hasattr(osr, 'data'))
+
+    def test_add_emtpty_ostree_remote(self):
+        remote = model.OstreeRemote()
+        remotes = model.OstreeRemotes()
+        remotes.add(remote)
+
+        self.assertTrue(remote in remotes)
+
+    def test_add_ostree_remote(self):
+        remote = model.OstreeRemote()
+        remote.url = 'http://example.com/test'
+        remote.name = 'awesomeos-remote'
+        remote.gpg_verify = 'true'
+
+        remotes = model.OstreeRemotes()
+        remotes.add(remote)
+
+        self.assertTrue(remote in remotes)
 
 
 class BaseOstreeKeyFileTest(fixture.SubManFixture):
