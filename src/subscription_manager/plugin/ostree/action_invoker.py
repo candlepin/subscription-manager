@@ -72,6 +72,10 @@ class OstreeContentUpdateActionCommand(object):
         report.refspec = "FIXME"
         report.orig_remotes = list(updates.orig.remotes)
         report.remote_updates = list(updates.new.remotes)
+        # Now that we've updated the ostree repo config, we need to
+        # update the currently deployed osname tree .origin file:
+        # TODO: Does this need to be in the report? Is logging enough?
+        self.update_origin_file(ostree_config)
 
         log.debug("Ostree update report: %s" % report)
         return report
@@ -81,6 +85,10 @@ class OstreeContentUpdateActionCommand(object):
             ostree_config.load()
         except ConfigParser.Error:
             log.info("No ostree content repo config file found. Not loading ostree config.")
+
+    def update_origin_file(self, ostree_config):
+        updater = model.OstreeOriginUpdater(ostree_config)
+        updater.run()
 
 
 class OstreeContents(object):

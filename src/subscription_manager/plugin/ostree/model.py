@@ -265,6 +265,50 @@ class OstreeConfigRepoConfigFileSave(object):
         self.repo_config_file.set_core(ostree_config.core)
 
 
+class OstreeOriginUpdater(object):
+    """
+    Determines the currently deployed osname and SHA256.origin file,
+    and update the remote name to point to what is subscribed.
+
+    In the event that our repo config carries multiple remote names,
+    we currently select the first.
+    """
+    # TODO: solidify what should happen if there are multiple repos in config.
+    def __init__(self, repo_config):
+        # Already updated repo_config:
+        self.repo_config = repo_config
+
+    def _get_deployed_origin(self):
+        """
+        Get path to the currently deployed origin file.
+        """
+        # This is a tricky dep to satisfy. Isolated in this method so we can
+        # mock it out easily in tests, which will probably never have
+        # this available.
+        from gi.repository import OSTree
+        sysroot = OSTree.Sysroot.new_default()
+        sysroot.load(None)
+        booted = sysroot.get_booted_deployment()
+        #booted.get_osname()
+        deploydir = sysroot.get_deployment_directory(booted)
+        return sysroot.get_deployment_origin_path(deploydir)
+
+    def run(self):
+        """
+        Locate and update the currently deployed origin file.
+        """
+        self.originfile = self._get_deployed_origin()
+        origin_cfg = repo_file.OriginFileConfigParser(self.originfile)
+        previous_refspec = origin_cfg.get('origin', 'refspec')
+
+        # TODO: If our repo config has multiple remotes in it, which should we use?
+        # For now we are just using the first one.
+        #new_remote = self.repo_config
+        #new_refspec = replace_refspec_remote(previous_refspec, new_remote)
+
+
+
+
 class OstreeConfigUpdatesBuilder(object):
     def __init__(self, ostree_config, content_set):
         self.orig_ostree_config = ostree_config
