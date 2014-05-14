@@ -83,12 +83,6 @@ class TestOstreeRemote(fixture.SubManFixture):
         self.assertEquals('true', ostree_remote.gpg_verify)
         self.assertEquals(self.example_url, ostree_remote.url)
 
-        # FIXME: remove this and go back to having a map
-        # verify our hash/equal are okay for non like compares
-        ostree_remote == None
-        ostree_remote == 1
-        ostree_remote == 'sdfsdf'
-
     def test_other_items(self):
         items = {'url': self.example_url,
                  'a_new_key': 'a_new_value',
@@ -98,12 +92,12 @@ class TestOstreeRemote(fixture.SubManFixture):
             model.OstreeRemote.from_config_section(self.section_name,
                                                    items)
         self.assert_remote(ostree_remote)
-        # .url and ['url'] work
+        # .url and data['url'] work
         self.assertEquals(self.example_url, ostree_remote.url)
-        self.assertEquals(self.example_url, ostree_remote['url'])
+        self.assertEquals(self.example_url, ostree_remote.data['url'])
 
         self.assertTrue('a_new_key' in ostree_remote)
-        self.assertEquals('a_new_value', ostree_remote['a_new_key'])
+        self.assertEquals('a_new_value', ostree_remote.data['a_new_key'])
 
         self.assertTrue('gpg_verify' in ostree_remote)
         self.assertTrue(hasattr(ostree_remote, 'gpg_verify'))

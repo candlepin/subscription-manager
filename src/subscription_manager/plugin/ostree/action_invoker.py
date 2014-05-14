@@ -58,17 +58,18 @@ class OstreeContentUpdateActionCommand(object):
                                                            content_set=entitlement_content.content_set)
         updates = updates_builder.build()
 
-        # TODO: these are based on the new remote info from the
-        # content ent certs _before_ it's actually applied.
+        # TODO: Populate with origin info
         report.origin = "FIXME"
         report.refspec = "FIXME"
-        report.remote_updates = list(updates.new.remotes)
+        report.orig_remotes = list(updates.orig.remotes)
 
         log.debug("Updates orig: %s" % updates.orig)
         log.debug("Updates new: %s" % updates.new)
         log.debug("Updates.new.remote_set: %s" % updates.new.remotes)
         updates.apply()
         updates.save()
+
+        report.remote_updates = list(updates.new.remotes)
 
         log.debug("Ostree update report: %s" % report)
         return report
@@ -106,9 +107,11 @@ class OstreeContentUpdateActionReport(certlib.ActionReport):
 
     def __init__(self):
         super(OstreeContentUpdateActionReport, self).__init__()
+        self.orig_remotes = []
         self.remote_updates = []
         self.remote_added = []
         self.remote_deleted = []
+        self.content_to_remote = {}
         self.origin = None
         self.refspec = None
 
@@ -116,13 +119,21 @@ class OstreeContentUpdateActionReport(certlib.ActionReport):
         """number of updates. Approximately."""
         return len(self.remote_updates)
 
+    def _format_remotes(self, remotes):
+        s = []
+        for remote in remotes:
+            s.append(remote.report())
+        return '\n'.join(s)
+
     def __str__(self):
         # FIXME: Super ugly at the moment
         s = ["Ostree repo updates\n"]
         s.append("%s: %s" % (_("Origin:"), self.origin))
         s.append("%s: %s" % (_("Refspec:"), self.refspec))
-        s.append(_("Updated"))
-        s.append("%s" % self.remote_updates)
-        s.append(_("Added"))
-        s.append("%s" % self.remote_added)
+        s.append(_("Updates:"))
+        s.append(self._format_remotes(self.remote_updates))
+        s.append(_("Added:"))
+        s.append(self._format_remotes(self.remote_updates))
+        s.append(_("Deleted:"))
+        s.append(self._format_remotes(self.orig_remotes))
         return '\n'.join(s)

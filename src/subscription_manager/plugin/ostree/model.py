@@ -21,47 +21,45 @@ class RemoteSectionNameParseError(OstreeContentError):
 
 # FIXME: remove property stuff, dont inherit from dict, remove hash stuff
 #        it's clever but weird and unneeded, but commit so tests work
-class OstreeRemote(dict):
+class OstreeRemote(object):
     """Represent a ostree repo remote.
 
     A repo remote is one of the the '[remote "ostree-awesomeos-8"]' section in
     ostree repo config (/ostree/repo/config by default).
     """
-    def __hash__(self):
-        return hash(self.hash_info)
 
-    def __eq__(self, other):
-        if other and hasattr(other, 'hash_info'):
-            return self.hash_info == other.hash_info
-        return NotImplemented
+    items_to_data = {'gpg-verify': 'gpg_verify'}
 
-    @property
-    def hash_info(self):
-        return (self.name, self.url, self.gpg_verify)
+    def __init__(self):
+        self.data = {}
+
+    # for remote_key in remote iterates over the config items
+    def __iter__(self):
+        return iter(self.data)
 
     @property
     def url(self):
-        return self.get('url')
+        return self.data.get('url')
 
     @url.setter
     def url(self, value):
-        self['url'] = value
+        self.data['url'] = value
 
     @property
     def gpg_verify(self):
-        return self.get('gpg_verify')
+        return self.data.get('gpg_verify')
 
     @gpg_verify.setter
     def gpg_verify(self, value):
-        self['gpg_verify'] = value
+        self.data['gpg_verify'] = value
 
     @property
     def name(self):
-        return self.get('name')
+        return self.data.get('name')
 
     @name.setter
     def name(self, value):
-        self['name'] = value
+        self.data['name'] = value
 
     @classmethod
     def from_config_section(cls, section, items):
@@ -77,13 +75,12 @@ class OstreeRemote(dict):
               update the OstreeRemote.gpg_verify property.
         """
         remote = cls()
-        remote.url = items.get('url')
 
-        # Note.. gpg-verify->gpg_verify
-        remote.gpg_verify = items.pop('gpg-verify', None)
-
-        # any other unknown properties
-        remote.update(items)
+        # transmogrify names
+        log.debug("ITEMS: %s" % items)
+        for key in items:
+            # replace key name with mapping name, defaulting to key name
+            remote.data[cls.items_to_data.get(key, key)] = items[key]
 
         # the section name takes precendence over a 'name' in the items
         remote.name = OstreeRemote.name_from_section(section)
@@ -121,8 +118,20 @@ class OstreeRemote(dict):
         remote = cls()
         remote.name = content.label
         remote.url = content.url
-        remote.branches = None
+
+        # TODO: logic for mapping content gpgkey settings to gpg_verify
+
         return remote
+
+    def __repr__(self):
+        r = super(OstreeRemote, self).__repr__()
+        return '<%s name=%s url=%s gpg_verify=%s>' % (r, self.name, self.url, self.gpg_verify)
+
+    def report(self):
+        self.report_template = """remote \"{self.name}\"
+    url: {self.url}
+    gpg-verify: {self.gpg_verify}"""
+        return self.report_template.format(self=self)
 
 
 class OstreeRemotes(object):
@@ -349,8 +358,8 @@ class OstreeConfigUpdates(object):
         self.new = new
         self.content_to_remote = {}
 
+        # TODO: provide Ent -> Ent Cert -> Content -> Remotes  in report?
         self.updater = OstreeConfigUpdater()
-
 
     def apply(self):
         self.updater.apply(self.orig, self.new)
