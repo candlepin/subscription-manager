@@ -17,12 +17,12 @@
 import base64
 import certificate
 import datetime
+import dateutil.parser
 import locale
 import logging
 import os
 import socket
 import sys
-import time
 import urllib
 
 from M2Crypto import SSL, httpslib
@@ -41,12 +41,6 @@ from rhsm.utils import get_env_proxy_info
 # problems the default timeout might cause.
 if sys.version_info[0] == 2 and sys.version_info[0] <= 4:
     socket.setdefaulttimeout(60)
-
-# The module name changes between el5 and el6
-try:
-    import email.utils as eut
-except ImportError:
-    import email.Utils as eut
 
 
 class NullHandler(logging.Handler):
@@ -69,7 +63,7 @@ log = logging.getLogger(__name__)
 config = initConfig()
 
 
-def drift_check(utc_time_string, hours=6):
+def drift_check(utc_time_string, hours=1):
     """
     Takes in a RFC 1123 date and returns True if the currnet time
     is greater then the supplied number of hours
@@ -77,15 +71,17 @@ def drift_check(utc_time_string, hours=6):
     drift = False
     if utc_time_string:
         try:
-            utc_timestamp = time.mktime(eut.parsedate(utc_time_string))
-            utc_datetime = datetime.datetime.fromtimestamp(utc_timestamp)
-            local_datetime = datetime.datetime.utcnow()
-            delta = datetime.timedelta(hours=1)
+            # This may have a timezone (utc)
+            utc_datetime = dateutil.parser.parse(utc_time_string)
+            # This should not have a timezone, but we know it will be utc.
+            # We need our timezones to match in order to compare
+            local_datetime = datetime.datetime.utcnow().replace(tzinfo=utc_datetime.tzinfo)
+            delta = datetime.timedelta(hours=hours)
             drift = abs((utc_datetime - local_datetime)) > delta
         except Exception, e:
             log.error(e)
 
-        return drift
+    return drift
 
 
 class ConnectionException(Exception):

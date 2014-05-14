@@ -28,6 +28,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: m2crypto
 Requires: python-iniparse
 Requires: rpm-python
+Requires: python-dateutil
 %if %use_simplejson
 Requires: python-simplejson
 %endif
