@@ -12,8 +12,6 @@
 # test constructing from Content models
 # ignores wrong content type
 import ConfigParser
-import tempfile
-import os
 
 import mock
 
@@ -232,24 +230,36 @@ gpg-verify=false
 
     origin_cfg = """
 [origin]
-refspec=awesomeos-controller:awesomeos-controller/awesomeos8/x86_64/controller/docker
+refspec=origremote:awesome-ostree-controller/awesomeos8/x86_64/controller/docker
 """
 
     def setUp(self):
         super(TestOstreeOriginUpdater, self).setUp()
-        self.origin_cfg_file = self.write_tempfile(self.origin_cfg)
-
         fixture.SubManFixture.setUp(self)
-        self.repo_cfg_file = self.write_tempfile(self.repo_cfg)
+
+        self.origin_cfg_path = self.write_tempfile(self.origin_cfg)
+        self.repo_cfg_path = self.write_tempfile(self.repo_cfg)
         self.repo_config = model.OstreeConfig(
-            repo_config_path=self.repo_cfg_file.name)
+            repo_config_path=self.repo_cfg_path.name)
         self.repo_config.load()
         self.updater = model.OstreeOriginUpdater(self.repo_config)
         self.updater._get_deployed_origin = mock.MagicMock(
-            return_value=self.origin_cfg_file.name)
+            return_value=self.origin_cfg_path.name)
 
-    def test_happy_path(self):
+    def test_simple_update(self):
         self.updater.run()
+        #self.assertEquals(1, 2)
+        # Reload the origin file and make sure it looks right:
+        new_origin = repo_file.OriginFileConfigParser(
+            self.origin_cfg_path.name)
+        print dir(new_origin)
+        print new_origin.sections()
+        self.assertTrue(new_origin.has_section('origin'))
+        self.assertTrue('refspec' in new_origin.options('origin'))
+        self.assertTrue("awesome-ostree-controller" in
+            new_origin.get('origin', 'refspec'))
+        self.assertFalse('origremote' in
+            new_origin.get('origin', 'refspec'))
 
 
 class BaseOstreeOriginFileTest(BaseOstreeKeyFileTest):

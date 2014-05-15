@@ -141,15 +141,20 @@ class OstreeRemotes(object):
     as created from ent cert Content objects.
     """
     def __init__(self):
-        # TODO: are remotes a set or a list? other?
-        self.data = set()
+        self.data = []
 
     def add(self, ostree_remote):
-        self.data.add(ostree_remote)
+        self.data.append(ostree_remote)
 
     # we can iterate over OstreeRemotes
     def __iter__(self):
         return iter(self.data)
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, key):
+        return self.data[key]
 
     @classmethod
     def from_config(cls, repo_config):
@@ -296,16 +301,27 @@ class OstreeOriginUpdater(object):
         Locate and update the currently deployed origin file.
         """
         self.originfile = self._get_deployed_origin()
+        log.debug("Loading ostree origin file: %s" % self.originfile)
         origin_cfg = repo_file.OriginFileConfigParser(self.originfile)
-        previous_refspec = origin_cfg.get('origin', 'refspec')
+        old_refspec = origin_cfg.get('origin', 'refspec')
 
         # TODO: If our repo config has multiple remotes in it, which should we use?
-        # For now we are just using the first one.
-        print self.repo_config.remotes
-        #new_remote = self.repo_config
-        #new_refspec = replace_refspec_remote(previous_refspec, new_remote)
+        # For now we are just using a random one from the set:
+        if len(self.repo_config.remotes):
+            log.warn("Multiple remotes configured in %s." % self.repo_config)
 
+        new_remote = self.repo_config.remotes[0].name
+        new_refspec = repo_file.replace_refspec_remote(old_refspec,
+            new_remote)
 
+        if new_refspec != old_refspec:
+            log.info("Updating refspec in: %s" % self.originfile)
+            log.info("    old = %s" % old_refspec)
+            log.info("    new = %s" % new_refspec)
+            origin_cfg.set('origin', 'refspec', new_refspec)
+            origin_cfg.save()
+        else:
+            log.debug("No change to refspec in %s" % self.originfile)
 
 
 class OstreeConfigUpdatesBuilder(object):
@@ -363,6 +379,7 @@ class OstreeConfig(object):
 
     # Unsure where the code to (de)serialize, and then persist these should
     # live. Here? OstreeConfigController? The Config file classes?
+    # TODO: Should this be a part of the constructor?
     def load(self):
         """Load a ostree config files and populate OstreeConfig."""
 
