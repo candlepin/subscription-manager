@@ -29,7 +29,7 @@ init_dep_injection()
 
 from subscription_manager import action_client
 from subscription_manager import managerlib
-from subscription_manager.certlib import ConsumerIdentity
+from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
 
@@ -48,11 +48,11 @@ def main(options, log):
         if options.autoheal:
             actionclient = action_client.HealingActionClient()
         else:
-            actionclient = action_client.ActionCertClient()
+            actionclient = action_client.ActionClient()
 
-        update_reports = actionclient.update(options.autoheal)
+        actionclient.update(options.autoheal)
 
-        for update_report in update_reports:
+        for update_report in actionclient.update_reports:
             # FIXME: make sure we don't get None reports
             if update_report:
                 print update_report
