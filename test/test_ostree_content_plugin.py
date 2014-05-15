@@ -154,6 +154,50 @@ class BaseOstreeKeyFileTest(fixture.SubManFixture):
         super(BaseOstreeKeyFileTest, self).setUp()
 
 
+class TestOstreeConfig(BaseOstreeKeyFileTest):
+    repo_cfg = """
+[remote "test-remote"]
+url=http://blip.example.com
+"""
+
+    def setUp(self):
+        super(TestOstreeConfig, self).setUp()
+
+        self.repo_cfg_path = self.write_tempfile(self.repo_cfg)
+        self.repo_config = model.OstreeConfig(
+            repo_file_path=self.repo_cfg_path.name)
+
+    def test_save(self):
+        self.repo_config.load()
+        self.repo_config.save()
+
+    def test_save_no_store(self):
+        self.repo_config.save()
+
+
+class TestOstreeConfigRepoFileWriter(BaseOstreeKeyFileTest):
+    repo_cfg = """
+[remote "test-remote"]
+url=http://blip.example.com
+"""
+
+    def setUp(self):
+        super(TestOstreeConfigRepoFileWriter, self).setUp()
+
+        self.repo_cfg_path = self.write_tempfile(self.repo_cfg)
+        self.repo_config = model.OstreeConfig(
+            repo_file_path=self.repo_cfg_path.name)
+        self.repo_config.load()
+
+    def test_save(self):
+        mock_repo_file = mock.Mock()
+        rfw = model.OstreeConfigRepoFileWriter(mock_repo_file)
+
+        rfw.save(self.repo_config)
+
+        self.assertTrue(mock_repo_file.save.called)
+
+
 class TestKeyFileConfigParser(BaseOstreeKeyFileTest):
     def test_defaults(self):
         fid = self.write_tempfile(self.cfgfile_data)
