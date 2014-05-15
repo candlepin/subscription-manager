@@ -240,7 +240,7 @@ refspec=origremote:awesome-ostree-controller/awesomeos8/x86_64/controller/docker
         self.origin_cfg_path = self.write_tempfile(self.origin_cfg)
         self.repo_cfg_path = self.write_tempfile(self.repo_cfg)
         self.repo_config = model.OstreeConfig(
-            repo_config_path=self.repo_cfg_path.name)
+            repo_file_path=self.repo_cfg_path.name)
         self.repo_config.load()
         self.updater = model.OstreeOriginUpdater(self.repo_config)
         self.updater._get_deployed_origin = mock.MagicMock(

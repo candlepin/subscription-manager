@@ -83,10 +83,6 @@ class KeyFileConfigParser(config.RhsmConfigParser):
                 log.debug("     %s: %s" % (key, value))
 
 
-class RepoFileConfigParser(KeyFileConfigParser):
-    pass
-
-
 def replace_refspec_remote(refspec, new_remote):
     """
     Replaces the 'remote' portion of an ostree origin file refspec.
@@ -98,11 +94,7 @@ def replace_refspec_remote(refspec, new_remote):
     return "%s:%s" % (new_remote, m.group(2))
 
 
-class OriginFileConfigParser(KeyFileConfigParser):
-    pass
-
-
-class OstreeConfigFile(object):
+class BaseOstreeConfigFile(object):
     config_parser_class = KeyFileConfigParser
 
     def __init__(self, filename=None):
@@ -117,13 +109,13 @@ class OstreeConfigFile(object):
         self.config_parser.save()
 
 
-class RepoFile(OstreeConfigFile):
+class RepoFile(BaseOstreeConfigFile):
     """Ostree repo config file specific OstreeConfigFile implementation.
 
     Knows how to get the list of 'remote' sections, and how to determine
     if a config parser section is a remote.
     """
-    config_parser_class = RepoFileConfigParser
+    config_parser_class = KeyFileConfigParser
 
     def remote_sections(self):
         """Return all the config sections for "remotes".
@@ -177,6 +169,9 @@ class RepoFile(OstreeConfigFile):
         self.set('core', 'repo_version', ostree_core.get('repo_version'))
         self.set('core', 'mode', ostree_core.get('mode'))
 
+    def get_core(self):
+        return self.config_parser.items('core')
+
 
 class OriginFile(object):
-    config_parser_class = OriginFileConfigParser
+    config_parser_class = KeyFileConfigParser
