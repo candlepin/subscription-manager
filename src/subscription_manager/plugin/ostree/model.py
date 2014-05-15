@@ -1,6 +1,7 @@
 import copy
 import logging
 import re
+import sys
 
 from subscription_manager.plugin.ostree import repo_file
 
@@ -288,6 +289,7 @@ class OstreeOriginUpdater(object):
         # This is a tricky dep to satisfy. Isolated in this method so we can
         # mock it out easily in tests, which will probably never have
         # this available.
+        log.debug("sys.path: %s" % sys.path)
         from gi.repository import OSTree
         sysroot = OSTree.Sysroot.new_default()
         sysroot.load(None)
@@ -300,6 +302,12 @@ class OstreeOriginUpdater(object):
         """
         Locate and update the currently deployed origin file.
         """
+
+
+        # FIXME: return early till we figure out gi/gobject conflicts
+        return
+
+
         self.originfile = self._get_deployed_origin()
         log.debug("Loading ostree origin file: %s" % self.originfile)
         origin_cfg = repo_file.OriginFileConfigParser(self.originfile)
@@ -398,7 +406,7 @@ class OstreeConfig(object):
         # this variable name is actually a filepath.
         repo_config_file = self.repo_config_loader.repo_config
         repo_config_file_saver = OstreeConfigRepoConfigFileSave(
-            repo_config_path=repo_config_file)
+            repo_config_file=repo_config_file)
         repo_config_file_saver.save(self)
 
     def copy(self):
@@ -425,35 +433,11 @@ class OstreeConfigUpdates(object):
         self.new = new
         self.content_to_remote = {}
 
-        # TODO: provide Ent -> Ent Cert -> Content -> Remotes  in report?
-        self.updater = OstreeConfigUpdater()
-
     def apply(self):
-        self.updater.apply(self.orig, self.new)
+        self.orig = self.new
 
     def save(self):
         """Persist self.ostree_config to disk."""
         log.debug("OstreeConfigUpdates.save")
         self.orig.save()
 
-
-# still needs origin, etc
-class OstreeConfigUpdater(object):
-    """Make changes to a OstreeConfig.
-
-    args: 'ostree_config' is a OstreeConfig object
-    """
-
-    def apply(self, old_ostree_config, new_ostree_config):
-        """Replace the old OstreeConfig with the new OstreeConfig new_ostree_config.
-
-        Note: This replaces the whole set. It does not currently
-        update remotes one by one. It will not preserve remotes in
-        the config file that are not in the content.
-
-        This also currently doesn't update 'core', and likely
-        wont.
-        """
-
-        # update in place
-        old_ostree_config = new_ostree_config
