@@ -296,11 +296,11 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         if self.backend.cs.system_status == 'valid':
             self._set_status_icons(VALID_STATUS)
-            if self.backend.cs.first_invalid_date:
+            if self.backend.cs.compliant_until:
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
                         _("System is properly subscribed through %s.") %
-                        managerlib.format_date(self.backend.cs.first_invalid_date))
+                        managerlib.format_date(self.backend.cs.compliant_until))
             else:
                 # No product certs installed, no first invalid date, and
                 # the subscription assistant can't do anything, so we'll disable

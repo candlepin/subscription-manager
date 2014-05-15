@@ -13,7 +13,7 @@
 #
 
 from copy import copy
-from datetime import datetime, timedelta
+from datetime import datetime
 import logging
 
 from rhsm.certificate import GMT
@@ -100,10 +100,6 @@ class ComplianceManager(object):
         # Maps product ID to future entitlements.
         self.future_products = {}
 
-        # The first date we're completely invalid from midnight to midnight:
-        # Will be None if we're not currently valid for the date requested.
-        self.first_invalid_date = None
-
         # Reasons that products aren't fully compliant
         self.reasons = Reasons([], self)
         self.supports_reasons = False
@@ -168,8 +164,6 @@ class ComplianceManager(object):
 
         if status['compliantUntil'] is not None:
             self.compliant_until = parse_date(status['compliantUntil'])
-            self.first_invalid_date = self.compliant_until + \
-                    timedelta(seconds=60 * 60 * 24 - 1)
 
         # Lookup product certs for each unentitled product returned by
         # the server:
