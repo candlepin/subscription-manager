@@ -166,8 +166,11 @@ class RepoFile(BaseOstreeConfigFile):
     def set_core(self, ostree_core):
         # FIXME: shouldn't care about particular values unless we
         # know we have to munge them
-        self.set('core', 'repo_version', ostree_core.get('repo_version'))
-        self.set('core', 'mode', ostree_core.get('mode'))
+
+        # Assuming we don't need to check validy of any [core] values
+        # update the core section with the current values
+        for key in ostree_core:
+            self.set('core', key, ostree_core.get(key))
 
     def get_core(self):
         return self.config_parser.items('core')
