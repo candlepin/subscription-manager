@@ -17,7 +17,7 @@ import mock
 
 import fixture
 
-from subscription_manager.plugin.ostree import repo_file
+from subscription_manager.plugin.ostree import config
 from subscription_manager.plugin.ostree import model
 
 
@@ -157,14 +157,14 @@ class BaseOstreeKeyFileTest(fixture.SubManFixture):
 class TestKeyFileConfigParser(BaseOstreeKeyFileTest):
     def test_defaults(self):
         fid = self.write_tempfile(self.cfgfile_data)
-        kf_cfg = repo_file.KeyFileConfigParser(fid.name)
+        kf_cfg = config.KeyFileConfigParser(fid.name)
         # There are no defaults, make sure the rhsm ones are skipped
         self.assertFalse(kf_cfg.has_default('section', 'prop'))
         self.assertEquals(kf_cfg.defaults(), {})
 
     def test_items(self):
         fid = self.write_tempfile(self.cfgfile_data)
-        kf_cfg = repo_file.KeyFileConfigParser(fid.name)
+        kf_cfg = config.KeyFileConfigParser(fid.name)
         self.assertEquals(kf_cfg.items('section'), [])
 
 
@@ -180,13 +180,13 @@ last_key = blippy
 
     def test_sections(self):
         fid = self.write_tempfile(self.cfgfile_data)
-        kf_cfg = repo_file.KeyFileConfigParser(fid.name)
+        kf_cfg = config.KeyFileConfigParser(fid.name)
         self.assert_items_equals(kf_cfg.sections(), ['section_one', 'section_two'])
         self.assertEquals(len(kf_cfg.sections()), 2)
 
     def test_items(self):
         fid = self.write_tempfile(self.cfgfile_data)
-        kf_cfg = repo_file.KeyFileConfigParser(fid.name)
+        kf_cfg = config.KeyFileConfigParser(fid.name)
         section_one_items = kf_cfg.items('section_one')
         self.assertEquals(len(section_one_items), 2)
 
@@ -196,18 +196,18 @@ class TestReplaceRefspecRemote(fixture.SubManFixture):
     def test_successful_replace(self):
         refspec = 'awesomeos-controller:awesomeos-controller/awesomeos8/x86_64/controller/docker'
         expected = 'newremote:awesomeos-controller/awesomeos8/x86_64/controller/docker'
-        self.assertEquals(expected, repo_file.replace_refspec_remote(
+        self.assertEquals(expected, config.replace_refspec_remote(
             refspec, 'newremote'))
 
     def test_empty_remote(self):
         refspec = ':awesomeos-controller/awesomeos8/x86_64/controller/docker'
         expected = 'newremote:awesomeos-controller/awesomeos8/x86_64/controller/docker'
-        self.assertEquals(expected, repo_file.replace_refspec_remote(
+        self.assertEquals(expected, config.replace_refspec_remote(
             refspec, 'newremote'))
 
     def test_bad_refspec(self):
         refspec = 'ImNotARefSpec'
-        self.assertRaises(Exception, repo_file.replace_refspec_remote,
+        self.assertRaises(Exception, config.replace_refspec_remote,
             refspec, 'newremote')
 
 
@@ -250,7 +250,7 @@ refspec=origremote:awesome-ostree-controller/awesomeos8/x86_64/controller/docker
         self.updater.run()
         #self.assertEquals(1, 2)
         # Reload the origin file and make sure it looks right:
-        new_origin = repo_file.OriginFileConfigParser(
+        new_origin = config.KeyFileConfigParser(
             self.origin_cfg_path.name)
         print dir(new_origin)
         print new_origin.sections()
@@ -266,7 +266,7 @@ class BaseOstreeOriginFileTest(BaseOstreeKeyFileTest):
     """Base of tests for ostree *.origin config files."""
     def _of_cfg(self):
         fid = self.write_tempfile(self.cfgfile_data)
-        self._of_cfg_instance = repo_file.OriginFileConfigParser(
+        self._of_cfg_instance = config.KeyFileConfigParser(
             fid.name)
         return self._of_cfg_instance
 
@@ -307,19 +307,19 @@ refspec=awesomeos-controller:awesomeos-controller/awesomeos8/x86_64/controller/d
 
     def test_init(self):
         fid = self.write_tempfile(self.cfgfile_data)
-        o_cfg = repo_file.OstreeConfigFile(fid.name)
-        self.assertTrue(isinstance(o_cfg, repo_file.OstreeConfigFile))
+        o_cfg = config.BaseOstreeConfigFile(fid.name)
+        self.assertTrue(isinstance(o_cfg, config.BaseOstreeConfigFile))
 
 
 class BaseOstreeRepoFileTest(BaseOstreeKeyFileTest):
     def _rf_cfg(self):
         self.fid = self.write_tempfile(self.cfgfile_data)
-        self._rf_cfg_instance = repo_file.RepoFileConfigParser(self.fid.name)
+        self._rf_cfg_instance = config.KeyFileConfigParser(self.fid.name)
         return self._rf_cfg_instance
 
     def test_init(self):
         rf_cfg = self._rf_cfg()
-        self.assertTrue(isinstance(rf_cfg, repo_file.RepoFileConfigParser))
+        self.assertTrue(isinstance(rf_cfg, config.KeyFileConfigParser))
 
     def _verify_core(self, rf_cfg):
         self.assertTrue(rf_cfg.has_section('core'))
@@ -389,19 +389,19 @@ branches=awesome-ostree-controller/awesome7/x86_64/controller/docker;
 gpg-verify=false
 """
 
-    @mock.patch('subscription_manager.plugin.ostree.repo_file.RepoFile._get_config_parser')
+    @mock.patch('subscription_manager.plugin.ostree.config.RepoFile._get_config_parser')
     def test_remote_sections(self, mock_get_config_parser):
         mock_get_config_parser.return_value = self._rf_cfg()
-        rf = repo_file.RepoFile('')
+        rf = config.RepoFile('')
         remotes = rf.remote_sections()
         self.assertTrue('remote "awesome-ostree-controller"' in remotes)
         self.assertFalse('core' in remotes)
         self.assertFalse('rhsm' in remotes)
 
-    @mock.patch('subscription_manager.plugin.ostree.repo_file.RepoFile._get_config_parser')
+    @mock.patch('subscription_manager.plugin.ostree.config.RepoFile._get_config_parser')
     def test_section_is_remote(self, mock_get_config_parser):
         mock_get_config_parser.return_value = self._rf_cfg()
-        rf = repo_file.RepoFile('')
+        rf = config.RepoFile('')
         self.assertTrue(rf.section_is_remote('remote "awesome-ostree-controller"'))
         self.assertTrue(rf.section_is_remote('remote "rhsm-ostree"'))
         self.assertTrue(rf.section_is_remote('remote "localinstall"'))
@@ -417,10 +417,10 @@ repo_version=1
 mode=bare
 """
 
-    @mock.patch('subscription_manager.plugin.ostree.repo_file.RepoFile._get_config_parser')
+    @mock.patch('subscription_manager.plugin.ostree.config.RepoFile._get_config_parser')
     def test_remote_sections(self, mock_get_config_parser):
         mock_get_config_parser.return_value = self._rf_cfg()
-        rf = repo_file.RepoFile()
+        rf = config.RepoFile()
         remotes = rf.remote_sections()
 
         self.assertFalse('remote "awesmome-ostree-controller"' in remotes)
@@ -447,10 +447,10 @@ branches=awesomeos-6-controller/awesomeos6/x86_64/controller/docker;
 gpg-verify=false
 """
 
-    @mock.patch('subscription_manager.plugin.ostree.repo_file.RepoFile._get_config_parser')
+    @mock.patch('subscription_manager.plugin.ostree.config.RepoFile._get_config_parser')
     def test_remote_sections(self, mock_get_config_parser):
         mock_get_config_parser.return_value = self._rf_cfg()
-        rf = repo_file.RepoFile('')
+        rf = config.RepoFile('')
         remotes = rf.remote_sections()
         self.assertTrue('remote "awesomeos-7-controller"' in remotes)
         self.assertTrue('remote "awesomeos-6-controller"' in remotes)
@@ -482,10 +482,10 @@ gpg-verify=false
 
 """
 
-    @mock.patch('subscription_manager.plugin.ostree.repo_file.RepoFile._get_config_parser')
+    @mock.patch('subscription_manager.plugin.ostree.config.RepoFile._get_config_parser')
     def test_remote_sections(self, mock_get_config_parser):
         mock_get_config_parser.return_value = self._rf_cfg()
-        rf = repo_file.RepoFile('')
+        rf = config.RepoFile('')
         remotes = rf.remote_sections()
         self.assertTrue('remote "awesomeos-7-controller"' in remotes)
         self.assertFalse('core' in remotes)
@@ -497,7 +497,7 @@ class TestOstreeRepofileAddSectionWrite(BaseOstreeRepoFileTest):
 
     def test_add_remote(self):
         fid = self.write_tempfile(self.cfgfile_data)
-        rf_cfg = repo_file.RepoFileConfigParser(fid.name)
+        rf_cfg = config.KeyFileConfigParser(fid.name)
 
         remote_name = 'remote "awesomeos-8-container"'
         url = "http://example.com.not.real/repo"
@@ -530,7 +530,7 @@ class TestOstreeRepofileAddSectionWrite(BaseOstreeRepoFileTest):
         self.assertTrue('gpg-verify' in new_contents)
         self.assertTrue(gpg_verify in new_contents)
 
-        new_rf_cfg = repo_file.RepoFileConfigParser(fid.name)
+        new_rf_cfg = config.KeyFileConfigParser(fid.name)
         self.assertTrue(new_rf_cfg.has_section(remote_name))
         self.assertEquals(new_rf_cfg.get(remote_name, 'url'), url)
 
@@ -554,7 +554,7 @@ gpg-verify=false
 
     def test_remove_section(self):
         fid = self.write_tempfile(self.cfgfile_data)
-        rf_cfg = repo_file.RepoFileConfigParser(fid.name)
+        rf_cfg = config.KeyFileConfigParser(fid.name)
         remote_to_remove = 'remote "awesomeos-7-controller"'
         self.assertTrue(rf_cfg.has_section(remote_to_remove))
 
@@ -566,5 +566,5 @@ gpg-verify=false
         new_contents = open(fid.name, 'r').read()
         self.assertFalse(remote_to_remove in new_contents)
 
-        new_rf_cfg = repo_file.RepoFileConfigParser(fid.name)
+        new_rf_cfg = config.KeyFileConfigParser(fid.name)
         self.assertFalse(new_rf_cfg.has_section(remote_to_remove))
