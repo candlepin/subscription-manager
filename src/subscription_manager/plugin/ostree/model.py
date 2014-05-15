@@ -356,8 +356,8 @@ class OstreeConfig(object):
     repo_store_class = OstreeConfigRepoFileStore
 
     def __init__(self, core=None, remotes=None, repo_file_path=None):
-        self.remotes = remotes
-        self.core = core
+        self.remotes = remotes or OstreeRemotes()
+        self.core = core or OstreeCore()
         self.repo_file_path = repo_file_path
 
         # Wait for load() to load repo file since we
