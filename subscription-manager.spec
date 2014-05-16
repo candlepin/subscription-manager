@@ -73,6 +73,22 @@ to manage subscriptions and yum repositories from the Red Hat entitlement
 platform.
 
 
+%package -n subscription-manager-plugin-ostree
+Summary: A plugin for handling OSTree content.
+Group: System Environment/Base
+
+%description -n subscription-manager-plugin-ostree
+Enables handling of content of type 'ostree' in any certificates
+from the server. Populates /ostree/repo/config as well as updates
+the remote in the currently deployed .origin file.
+
+%files -n subscription-manager-plugin-ostree
+%defattr(-,root,root,-)
+%{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
+%{rhsm_plugins_dir}/ostree_content.py*
+%{_datadir}/rhsm/subscription_manager/plugin/ostree/*.py*
+
+
 %package -n subscription-manager-gui
 Summary: A GUI interface to manage Red Hat product subscriptions
 Group: System Environment/Base
@@ -264,12 +280,6 @@ rm -rf %{buildroot}
 %dir %{rhsm_plugins_dir}
 %dir %{_sysconfdir}/rhsm/pluginconf.d
 # add default plugins here when we have some
-
-# OSTree plugin:
-# TODO: Move to a sub-package.
-%{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
-%{rhsm_plugins_dir}/ostree_content.py*
-%{_datadir}/rhsm/subscription_manager/plugin/ostree/*.py*
 
 # yum plugins
 # Using _prefix + lib here instead of libdir as that evaluates to /usr/lib64 on x86_64,
