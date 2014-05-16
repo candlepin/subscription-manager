@@ -1054,6 +1054,18 @@ class UEPConnection:
         results = self.conn.request_get(method)
         return results
 
+    def getAvailableReleases(self, consumerId):
+        """
+        Gets the available content releases for a consumer.
+
+        NOTE: Used for getting the available release versions
+              from katello. In hosted candlepin scenario, the
+              release versions will come from the CDN directly
+              (API not implemented in candlepin).
+        """
+        method = "/consumers/%s/available_releases" % self.sanitize(consumerId)
+        return self.conn.request_get(method)
+
     def getEntitlementList(self, consumerId, request_certs=False):
         method = "/consumers/%s/entitlements" % self.sanitize(consumerId)
         if not request_certs:
