@@ -33,6 +33,39 @@ versions = """
 
 
 class TestReleaseBackend(fixture.SubManFixture):
+
+    def test_get_cdn_release_version_provider(self):
+        backend = release.ReleaseBackend()
+        # Release versions will come from the CDN if the API is
+        # not supported.
+        provider = backend._get_release_version_provider()
+        self.assertEqual(release.CdnReleaseVersionProvider, provider.__class__)
+
+    def test_get_api_release_version_provider(self):
+
+        mock_uep = mock.Mock()
+        mock_uep.supports_resource = mock.Mock(return_value=True)
+        self.set_consumer_auth_cp(mock_uep)
+
+        backend = release.ReleaseBackend()
+        provider = backend._get_release_version_provider()
+        self.assertEqual(release.ApiReleaseVersionProvider, provider.__class__)
+
+
+class TestApiReleaseVersionProvider(fixture.SubManFixture):
+
+    def test_api_called_to_get_releases(self):
+        releases = ["release1"]
+        mock_uep = mock.Mock()
+        mock_uep.getAvailableReleases = mock.Mock(return_value=releases)
+        self.set_consumer_auth_cp(mock_uep)
+
+        api_rv_provider = release.ApiReleaseVersionProvider()
+        retrieved_releases = api_rv_provider.get_releases()
+        self.assertTrue(self.assert_items_equals(releases, retrieved_releases))
+
+
+class TestCdnReleaseVerionProvider(fixture.SubManFixture):
     def setUp(self):
         fixture.SubManFixture.setUp(self)
         stub_content = stubs.StubContent("c1", required_tags='rhel-6',
@@ -71,18 +104,17 @@ class TestReleaseBackend(fixture.SubManFixture):
         # fixture knows to stub this for contentConnection
         self._release_versions = versions
 
-    def _get_rb(self):
+    def _get_cdn_rv_provider(self):
 
         inj.provide(inj.ENT_DIR, self.ent_dir)
         inj.provide(inj.PROD_DIR, self.prod_dir)
 
-        rb = release.ReleaseBackend()
-        return rb
+        return release.CdnReleaseVersionProvider()
 
     def test_get_releases(self):
 
-        rb = self._get_rb()
-        releases = rb.get_releases()
+        cdn_rv_provider = self._get_cdn_rv_provider()
+        releases = cdn_rv_provider.get_releases()
         self.assertNotEquals([], releases)
 
     def test_get_releases_no_rhel(self):
@@ -91,8 +123,8 @@ class TestReleaseBackend(fixture.SubManFixture):
                     stubs.StubProduct("rhel-6-something",
                                       provided_tags="rhel-6-something,rhel-6-stub"),)])
 
-        rb = self._get_rb()
-        releases = rb.get_releases()
+        cdn_rv_provider = self._get_cdn_rv_provider()
+        releases = cdn_rv_provider.get_releases()
         self.assertEquals([], releases)
 
     def test_get_releases_rhel_no_content(self):
@@ -106,9 +138,9 @@ class TestReleaseBackend(fixture.SubManFixture):
 
         self.ent_dir = stubs.StubEntitlementDirectory(stub_entitlement_certs)
 
-        rb = self._get_rb()
+        cdn_rv_provider = self._get_cdn_rv_provider()
 
-        releases = rb.get_releases()
+        releases = cdn_rv_provider.get_releases()
         self.assertEquals([], releases)
 
     def test_get_releases_rhel_no_enabled_content(self):
@@ -122,29 +154,29 @@ class TestReleaseBackend(fixture.SubManFixture):
 
         self.ent_dir = stubs.StubEntitlementDirectory(stub_entitlement_certs)
 
-        rb = self._get_rb()
+        cdn_rv_provider = self._get_cdn_rv_provider()
 
-        releases = rb.get_releases()
+        releases = cdn_rv_provider.get_releases()
         self.assertEquals([], releases)
 
     def test_get_releases_throws_exception(self):
-        rb = self._get_rb()
+        cdn_rv_provider = self._get_cdn_rv_provider()
 
         # mock content_connection so we can verify it's calls
-        with mock.patch.object(rb, 'content_connection') as mock_cc:
+        with mock.patch.object(cdn_rv_provider, 'content_connection') as mock_cc:
             mock_cc.get_versions.side_effect = \
                     httplib.BadStatusLine("some bogus status")
-            releases = rb.get_releases()
+            releases = cdn_rv_provider.get_releases()
             self.assertEquals([], releases)
 
             mock_cc.get_versions.side_effect = \
                     socket.error()
-            releases = rb.get_releases()
+            releases = cdn_rv_provider.get_releases()
             self.assertEquals([], releases)
 
             mock_cc.get_versions.side_effect = \
                     SSLError()
-            releases = rb.get_releases()
+            releases = cdn_rv_provider.get_releases()
             self.assertEquals([], releases)
 
 
@@ -156,81 +188,81 @@ class TestReleaseIsCorrectRhel(fixture.SubManFixture):
         inj.provide(inj.ENT_DIR, self.ent_dir)
         inj.provide(inj.PROD_DIR, self.prod_dir)
 
-        self.rb = release.ReleaseBackend()
+        self.cdn_rv_provider = release.CdnReleaseVersionProvider()
 
     def test_is_correct_rhel(self):
-        icr = self.rb._is_correct_rhel(["rhel-6-test"], ["rhel-6"])
+        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-6-test"], ["rhel-6"])
         self.assertTrue(icr)
 
     def test_is_incorrect_rhel_version(self):
-        icr = self.rb._is_correct_rhel(["rhel-6-test"], ["rhel-5"])
+        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-6-test"], ["rhel-5"])
         self.assertFalse(icr)
 
     def test_is_incorrect_rhel(self):
-        icr = self.rb._is_correct_rhel(["rhel-6-test"], ["awesomeos"])
+        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-6-test"], ["awesomeos"])
         self.assertFalse(icr)
 
     def test_is_correct_rhel_wacky_tags_match(self):
-        icr = self.rb._is_correct_rhel(["rhel-6-test"], ["rhel6"])
+        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-6-test"], ["rhel6"])
         self.assertFalse(icr)
 
     def test_is_correct_rhel_multiple_content(self):
-        icr = self.rb._is_correct_rhel(["rhel-6-test"],
-                                       ["awesomeos-", "thisthingimadeup",
-                                        "rhel-6", "notasawesome"])
+        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-6-test"],
+                                                    ["awesomeos-", "thisthingimadeup",
+                                                     "rhel-6", "notasawesome"])
         self.assertTrue(icr)
 
     def test_is_correct_rhel_mutliple_multiple(self):
-        icr = self.rb._is_correct_rhel(["awesomeos", "rhel-6-test"],
-                                       ["awesomeos", "thisthingimadeup",
-                                        "rhel-6", "notasawesome"])
+        icr = self.cdn_rv_provider._is_correct_rhel(["awesomeos", "rhel-6-test"],
+                                                    ["awesomeos", "thisthingimadeup",
+                                                     "rhel-6", "notasawesome"])
         self.assertTrue(icr)
 
     def test_is_correct_rhel_mutliple_matches_but_not_rhel(self):
-        icr = self.rb._is_correct_rhel(["awesomeos", "rhel-6-test"],
-                                       ["awesomeos", "thisthingimadeup",
-                                        "candy", "notasawesome"])
+        icr = self.cdn_rv_provider._is_correct_rhel(["awesomeos", "rhel-6-test"],
+                                                    ["awesomeos", "thisthingimadeup",
+                                                     "candy", "notasawesome"])
         self.assertFalse(icr)
 
     def test_is_correct_rhel_content_variant_861151(self):
-        icr = self.rb._is_correct_rhel(["rhel-5", "rhel-5-server"],
-                                       ["rhel-5-workstation"])
+        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-5", "rhel-5-server"],
+                                                    ["rhel-5-workstation"])
         self.assertFalse(icr)
 
     def test_is_correct_rhel_content_variant_match(self):
-        icr = self.rb._is_correct_rhel(["rhel-5"],
-                                       ["rhel-5-workstation"])
+        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-5"],
+                                                    ["rhel-5-workstation"])
         self.assertFalse(icr)
 
     def test_is_correct_rhel_content_variant_no_match(self):
-        icr = self.rb._is_correct_rhel(["rhel-5-server"],
-                                       ["rhel-5-workstation"])
+        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-5-server"],
+                                                    ["rhel-5-workstation"])
         self.assertFalse(icr)
 
     def test_is_correct_rhel_content_variant_exact_match(self):
-        icr = self.rb._is_correct_rhel(["rhel-5-server"],
-                                       ["rhel-5-server"])
+        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-5-server"],
+                                                    ["rhel-5-server"])
         self.assertTrue(icr)
 
     def test_is_correct_rhel_content_sub_variant_of_product(self):
-        icr = self.rb._is_correct_rhel(["rhel-5-server"],
-                                       ["rhel-5"])
+        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-5-server"],
+                                                    ["rhel-5"])
         self.assertTrue(icr)
 
     def test_is_correct_rhel_rhel_product_no_rhel_content(self):
-        icr = self.rb._is_correct_rhel(["rhel-5-server"],
-                                       ["awesome-os-7"])
+        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-5-server"],
+                                                    ["awesome-os-7"])
         self.assertFalse(icr)
 
     def test_build_listing_path(self):
         # /content/dist/rhel/server/6/6Server/x86_64/os/
         content_url = \
                 "/content/dist/rhel/server/6/$releasever/$basearch/os/"
-        listing_path = self.rb._build_listing_path(content_url)
+        listing_path = self.cdn_rv_provider._build_listing_path(content_url)
         self.assertEquals(listing_path, "/content/dist/rhel/server/6//listing")
 
         # /content/beta/rhel/server/6/$releasever/$basearch/optional/os
         content_url = \
                 "/content/beta/rhel/server/6/$releasever/$basearch/optional/os"
-        listing_path = self.rb._build_listing_path(content_url)
+        listing_path = self.cdn_rv_provider._build_listing_path(content_url)
         self.assertEquals(listing_path, "/content/beta/rhel/server/6//listing")
