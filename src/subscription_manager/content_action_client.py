@@ -79,6 +79,35 @@ class ContentPluginActionInvoker(certlib.BaseActionInvoker):
         return action.perform()
 
 
+class EntitlementSource(object):
+    """Populate with info needed for plugins to find content.
+
+    Acts as a iterable over entitlements.
+    """
+    def __init__(self):
+        self.entitlements = []
+
+    def __iter__(self):
+        return iter(self.entitlements)
+
+    def __len__(self):
+        return len(self.entitlements)
+
+    def __getitem__(self, key):
+        return self.entitlements[key]
+
+
+class EntitlementDirEntitlementSource(EntitlementSource):
+    """Populate with entitlement info from ent dir of ent certs."""
+
+    def __init__(self):
+        ent_dir = inj.require(inj.ENT_DIR)
+
+        # populate from ent certs
+        self.entitlement_certs = ent_dir.list_valid()
+        self.entitlements = self.entitlement_certs
+
+
 class ContentActionClient(base_action_client.BaseActionClient):
 
     def _get_libset(self):
@@ -93,6 +122,15 @@ class ContentActionClient(base_action_client.BaseActionClient):
         plugin_manager = inj.require(inj.PLUGIN_MANAGER)
 
         content_plugins_reports = ContentPluginActionReport()
-        for runner in plugin_manager.runiter('update_content', reports=content_plugins_reports):
+
+        # Ent dir is our only source of entitlement/content info atm
+        # NOTE: this is created and populated with the content of
+        # the ent dir before the plugins are ran and it doesn't
+        # update.
+        ent_dir_ent_source = EntitlementDirEntitlementSource()
+
+        for runner in plugin_manager.runiter('update_content',
+                                             reports=content_plugins_reports,
+                                             ent_source=ent_dir_ent_source):
             invoker = ContentPluginActionInvoker(runner)
             yield invoker

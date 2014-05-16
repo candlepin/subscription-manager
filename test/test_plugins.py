@@ -753,7 +753,11 @@ class TestPluginManagerRunIter(TestPluginManagerRun):
         reports = set()
         reports.add("Started with this")
 
-        for runner in self.manager.runiter("update_content", reports=reports):
+        ent_source = []
+
+        for runner in self.manager.runiter("update_content",
+                                           reports=reports,
+                                           ent_source=ent_source):
             runner.run()
 
 
@@ -950,9 +954,14 @@ class TestFactsConduit(unittest.TestCase):
 
 class TestUpdateContentConduit(unittest.TestCase):
     def test_content_plugin_conduit(self):
-        mock_report = mock.Mock()
-        conduit = plugins.UpdateContentConduit(StubPluginClass, mock_report)
-        self.assertEquals(mock_report, conduit.reports)
+        mock_reports = mock.Mock()
+
+        # out ent source is a empty list (of mock entitlements)
+        mock_ent_source = []
+        conduit = plugins.UpdateContentConduit(StubPluginClass,
+                                               reports=mock_reports,
+                                               ent_source=mock_ent_source)
+        self.assertEquals(mock_reports, conduit.reports)
 
 
 class TestRegistrationConduit(unittest.TestCase):

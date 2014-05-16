@@ -35,6 +35,9 @@ class OstreeContentPlugin(api.base_plugin.SubManPlugin):
         conduit.log.info("Updating OSTree content.")
         conduit.log.debug("ostree module: %s" % ostree)
         conduit.log.debug("dir(ostree): %s" % dir(ostree))
+        conduit.log.debug("conduit.ent_source: %s" % conduit.ent_source)
+        for ent in conduit.ent_source:
+            conduit.log.debug("ent_source ent: %s" % ent)
 
-        report = action_invoker.OstreeContentUpdateActionCommand().perform()
+        report = action_invoker.OstreeContentUpdateActionCommand(ent_source=conduit.ent_source).perform()
         conduit.reports.add(report)

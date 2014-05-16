@@ -18,7 +18,6 @@ import logging
 # rhsm.conf->iniparse->configParser can raise ConfigParser exceptions
 import ConfigParser
 
-from subscription_manager import api
 from subscription_manager import certlib
 
 from subscription_manager.plugin.ostree import model
@@ -39,6 +38,9 @@ class OstreeContentUpdateActionCommand(object):
 
     Return a OstreeContentUpdateReport.
     """
+    def __init__(self, ent_source=None):
+        self.ent_source = ent_source or []
+
     def perform(self):
 
         # starting state of ostree config
@@ -49,7 +51,7 @@ class OstreeContentUpdateActionCommand(object):
 
         report = OstreeContentUpdateActionReport()
 
-        entitled_content = OstreeContents()
+        entitled_content = OstreeContents(ent_source=self.ent_source)
         entitled_content.load()
 
         # CALCULATE UPDATES
@@ -96,16 +98,13 @@ class OstreeContents(object):
     """Find the ostree content provided by our current entitlements."""
     content_type = OSTREE_CONTENT_TYPE
 
-    def __init__(self):
+    def __init__(self, ent_source=None):
         self.content_set = set()
+        self.ent_source = ent_source or []
 
     def load(self):
-        ent_dir = api.inj.require(api.inj.ENT_DIR)
-
-        # valid ent certs could be an iterator
-        for ent_cert in ent_dir.list_valid():
-            # ditto content
-            for content in ent_cert.content:
+        for entitlement in self.ent_source:
+            for content in entitlement.content:
                 log.debug("content: %s" % content)
 
                 if content.content_type == self.content_type:
