@@ -198,7 +198,6 @@ class CertSorterTests(SubManFixture):
         self.sorter = CertSorter()
         self.sorter.is_registered = Mock(return_value=True)
         self.assertTrue(self.sorter.compliant_until is None)
-        self.assertTrue(self.sorter.first_invalid_date is None)
 
     def test_compliant_until(self):
         compliant_until = self.sorter.compliant_until
@@ -208,12 +207,6 @@ class CertSorterTests(SubManFixture):
         self.assertEquals(13, compliant_until.hour)
         self.assertEquals(43, compliant_until.minute)
         self.assertEquals(12, compliant_until.second)
-
-    def test_first_invalid_date(self):
-        first_invalid = self.sorter.first_invalid_date
-        self.assertEquals(2013, first_invalid.year)
-        self.assertEquals(4, first_invalid.month)
-        self.assertEquals(27, first_invalid.day)
 
     def test_scan_for_expired_or_future_products(self):
         prod_dir = StubProductDirectory(pids=["a", "b", "c", "d", "e"])
