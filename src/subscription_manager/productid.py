@@ -150,28 +150,48 @@ class RpmVersion(object):
         self.epoch = epoch
         self.version = version
         self.release = release
-        self.evr = (self.epoch, self.version, self.release)
+
+    @property
+    def evr(self):
+        return (self.epoch, self.version, self.release)
+
+    @property
+    def evr_nobeta(self):
+        def no_beta(s):
+            if s and s.lower().endswith('beta'):
+                return s[:-4].strip('- ')
+            return s
+        return (self.epoch, no_beta(self.version), self.release)
+
+    def compare(self, other):
+        raw_compare = rpm.labelCompare(self.evr, other.evr)
+        non_beta_compare = rpm.labelCompare(self.evr_nobeta, other.evr_nobeta)
+        if non_beta_compare != raw_compare:
+            if self.version.lower().endswith('beta'):
+                return -1
+            return 1
+        return raw_compare
 
     def __lt__(self, other):
-        lc = rpm.labelCompare(self.evr, other.evr)
+        lc = self.compare(other)
         if lc == -1:
             return True
         return False
 
     def __le__(self, other):
-        lc = rpm.labelCompare(self.evr, other.evr)
+        lc = self.compare(other)
         if lc > 0:
             return False
         return True
 
     def __eq__(self, other):
-        lc = rpm.labelCompare(self.evr, other.evr)
+        lc = self.compare(other)
         if lc == 0:
             return True
         return False
 
     def __ne__(self, other):
-        lc = rpm.labelCompare(self.evr, other.evr)
+        lc = self.compare(other)
         if lc != 0:
             return True
         return False
