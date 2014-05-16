@@ -146,6 +146,10 @@ class RpmVersion(object):
     See http://fedoraproject.org/wiki/Archive:Tools/RPM/VersionComparison
     for more details of the actual comparison rules.
     """
+
+    # Ordered list of suffixes
+    suffixes = ['alpha', 'beta']
+
     def __init__(self, epoch="0", version="0", release="1"):
         self.epoch = epoch
         self.version = version
@@ -156,18 +160,26 @@ class RpmVersion(object):
         return (self.epoch, self.version, self.release)
 
     @property
-    def evr_nobeta(self):
-        def no_beta(s):
-            if s and s.lower().endswith('beta'):
-                return s[:-4].strip('- ')
+    def evr_nosuff(self):
+        def no_suff(s):
+            for suff in self.suffixes:
+                if s and s.lower().endswith(suff):
+                    return s[:-len(suff)].strip('- ')
             return s
-        return (self.epoch, no_beta(self.version), self.release)
+        return (self.epoch, no_suff(self.version), self.release)
 
     def compare(self, other):
+        def ends_with_which(s):
+            for idx, suff in enumerate(self.suffixes):
+                if s.lower().endswith(suff):
+                    return idx
+            # Easier compare
+            return len(self.suffixes)
+
         raw_compare = rpm.labelCompare(self.evr, other.evr)
-        non_beta_compare = rpm.labelCompare(self.evr_nobeta, other.evr_nobeta)
+        non_beta_compare = rpm.labelCompare(self.evr_nosuff, other.evr_nosuff)
         if non_beta_compare != raw_compare:
-            if self.version.lower().endswith('beta'):
+            if ends_with_which(self.version) < ends_with_which(other.version):
                 return -1
             return 1
         return raw_compare
