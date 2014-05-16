@@ -19,6 +19,7 @@ import fixture
 
 from subscription_manager.plugin.ostree import config
 from subscription_manager.plugin.ostree import model
+from subscription_manager.plugin.ostree import action_invoker
 
 
 class StubPluginManager(object):
@@ -210,6 +211,62 @@ class TestKeyFileConfigParser(BaseOstreeKeyFileTest):
         fid = self.write_tempfile(self.cfgfile_data)
         kf_cfg = config.KeyFileConfigParser(fid.name)
         self.assertEquals(kf_cfg.items('section'), [])
+
+
+class TestOstreeConfigUpdates(BaseOstreeKeyFileTest):
+    cfgfile_data = """
+[section_one]
+akey = 1
+foo = bar
+
+[section_two]
+last_key = blippy
+"""
+
+    def test_init(self):
+        fid = self.write_tempfile(self.cfgfile_data)
+        ostree_config = model.OstreeConfig(repo_file_path=fid.name)
+        new_ostree_config = model.OstreeConfig(repo_file_path=fid.name)
+
+        updates = model.OstreeConfigUpdates(ostree_config, new_ostree_config)
+        updates.apply()
+        self.assertEquals(updates.orig, updates.new)
+
+        updates.save()
+        print fid
+
+
+class TestOstreeConfigUpdatesBuilder(BaseOstreeKeyFileTest):
+    cfgfile_data = """
+[section_one]
+akey = 1
+foo = bar
+
+[section_two]
+last_key = blippy
+"""
+
+    def test_init(self):
+        fid = self.write_tempfile(self.cfgfile_data)
+        content_set = set()
+
+        ostree_config = model.OstreeConfig(repo_file_path=fid.name)
+
+        mock_content = mock.Mock()
+        mock_content.url = "http://example.com"
+        mock_content.name = "mock-content-example"
+
+        content_set.add(mock_content)
+
+        updates_builder = model.OstreeConfigUpdatesBuilder(ostree_config, content_set)
+        updates = updates_builder.build()
+
+        print updates
+        self.assertTrue(len(updates.new.remotes))
+        print updates.new.remotes[0]
+        self.assertTrue(isinstance(updates.new.remotes[0], model.OstreeRemote))
+        self.assertEquals(updates.new.remotes[0].url, mock_content.url)
+        #self.assertEquals(updates.new.remotes[0].name, mock_content.name)
 
 
 class TestKeyFileConfigParserSample(BaseOstreeKeyFileTest):
@@ -612,3 +669,72 @@ gpg-verify=false
 
         new_rf_cfg = config.KeyFileConfigParser(fid.name)
         self.assertFalse(new_rf_cfg.has_section(remote_to_remove))
+
+
+class TestOsTreeContents(fixture.SubManFixture):
+    def test_empty(self):
+        contents = action_invoker.OstreeContents()
+        self.assertTrue(hasattr(contents, 'content_set'))
+
+        contents.load()
+
+
+class TestContentUpdateActionReport(fixture.SubManFixture):
+    def test_empty(self):
+        report = action_invoker.OstreeContentUpdateActionReport()
+        self.assertTrue(report.origin is None)
+        self.assertTrue(report.refspec is None)
+        self.assertEquals(report.remote_updates, [])
+
+    def test_print_empty(self):
+        report = action_invoker.OstreeContentUpdateActionReport()
+        text = "%s" % report
+        self.assertTrue(text != "")
+
+    def test_updates_empty(self):
+        report = action_invoker.OstreeContentUpdateActionReport()
+        self.assertEquals(report.updates(), 0)
+
+    def test_report(self):
+        report = action_invoker.OstreeContentUpdateActionReport()
+        remotes = model.OstreeRemotes()
+        remote = model.OstreeRemote()
+        remote.url = "http://example.com"
+        remote.name = "example-remote"
+        remote.gpg_verify = "true"
+
+        remotes.add(remote)
+        report.remote_updates = remotes
+
+        text = "%s" % report
+        # FIXME: validate format
+        self.assertTrue(text != "")
+
+
+class TestOstreeContentUpdateActionCommand(fixture.SubManFixture):
+    repo_cfg = """
+[core]
+repo_version=1
+mode=bare
+
+[remote "awesome-ostree-controller"]
+url=http://awesome.example.com.not.real/
+branches=awesome-ostree-controller/awesome7/x86_64/controller/docker;
+gpg-verify=false
+
+[remote "another-awesome-ostree-controller"]
+url=http://another-awesome.example.com.not.real/
+branches=another-awesome-ostree-controller/awesome7/x86_64/controller/docker;
+gpg-verify=false
+"""
+
+    @mock.patch("subscription_manager.plugin.ostree.model.OstreeConfigRepoFileStore")
+    def test_empty(self, mock_file_store):
+        # FIXME: This does no validation
+        mock_repo_file = mock.Mock()
+        mock_repo_file.get_core.return_value = {}
+
+        mock_file_store.load.return_value = mock_repo_file
+
+        action = action_invoker.OstreeContentUpdateActionCommand()
+        action.perform()
