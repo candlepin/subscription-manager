@@ -159,6 +159,13 @@ class TestComparableProductShortAlpha(TestComparableProduct):
     older = "a.b.c"
     newer = "a.c"
 
+class TestCompareBetaProduct(TestComparableProduct):
+    older = "5.10 Beta"
+    newer = "5.10 GA"
+
+class TestCompareBetaProductNoGa(TestComparableProduct):
+    older = "5.10 Beta"
+    newer = "5.10"
 
 class TestComparableProductCert(TestComparableProduct):
     def setUp(self):
