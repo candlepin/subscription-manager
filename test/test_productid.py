@@ -160,6 +160,41 @@ class TestComparableProductShortAlpha(TestComparableProduct):
     newer = "a.c"
 
 
+class TestCompareBetaGA(TestComparableProduct):
+    older = "5.10 Beta"
+    newer = "5.10 GA"
+
+
+class TestCompareBetaProductNoGa(TestComparableProduct):
+    older = "5.10 Beta"
+    newer = "5.10"
+
+
+class TestCompareBetaProductHyphen(TestComparableProduct):
+    older = "5.10-Beta"
+    newer = "5.10"
+
+
+class TestCompareELSProduct(TestComparableProduct):
+    older = "4 ELS"
+    newer = "4.2.0 ELS"
+
+
+class TestCompareAlphaBetaProduct(TestComparableProduct):
+    older = "5.10 Alpha"
+    newer = "5.10 Beta"
+
+
+class TestCompareAlphaBetaProductHyphen(TestComparableProduct):
+    older = "5.10-Alpha"
+    newer = "5.10 Beta"
+
+
+class TestCompareAlphaProductHyphen(TestComparableProduct):
+    older = "5.10-Alpha"
+    newer = "5.10"
+
+
 class TestComparableProductCert(TestComparableProduct):
     def setUp(self):
         self.older_product_cert = self._create_older_cert()

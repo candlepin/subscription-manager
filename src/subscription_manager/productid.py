@@ -146,32 +146,64 @@ class RpmVersion(object):
     See http://fedoraproject.org/wiki/Archive:Tools/RPM/VersionComparison
     for more details of the actual comparison rules.
     """
+
+    # Ordered list of suffixes
+    suffixes = ['alpha', 'beta']
+
     def __init__(self, epoch="0", version="0", release="1"):
         self.epoch = epoch
         self.version = version
         self.release = release
-        self.evr = (self.epoch, self.version, self.release)
+
+    @property
+    def evr(self):
+        return (self.epoch, self.version, self.release)
+
+    @property
+    def evr_nosuff(self):
+        def no_suff(s):
+            for suff in self.suffixes:
+                if s and s.lower().endswith(suff):
+                    return s[:-len(suff)].strip('- ')
+            return s
+        return (self.epoch, no_suff(self.version), self.release)
+
+    def compare(self, other):
+        def ends_with_which(s):
+            for idx, suff in enumerate(self.suffixes):
+                if s.lower().endswith(suff):
+                    return idx
+            # Easier compare
+            return len(self.suffixes)
+
+        raw_compare = rpm.labelCompare(self.evr, other.evr)
+        non_beta_compare = rpm.labelCompare(self.evr_nosuff, other.evr_nosuff)
+        if non_beta_compare != raw_compare:
+            if ends_with_which(self.version) < ends_with_which(other.version):
+                return -1
+            return 1
+        return raw_compare
 
     def __lt__(self, other):
-        lc = rpm.labelCompare(self.evr, other.evr)
+        lc = self.compare(other)
         if lc == -1:
             return True
         return False
 
     def __le__(self, other):
-        lc = rpm.labelCompare(self.evr, other.evr)
+        lc = self.compare(other)
         if lc > 0:
             return False
         return True
 
     def __eq__(self, other):
-        lc = rpm.labelCompare(self.evr, other.evr)
+        lc = self.compare(other)
         if lc == 0:
             return True
         return False
 
     def __ne__(self, other):
-        lc = rpm.labelCompare(self.evr, other.evr)
+        lc = self.compare(other)
         if lc != 0:
             return True
         return False
