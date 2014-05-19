@@ -18,6 +18,8 @@ import logging
 from subscription_manager import base_action_client
 from subscription_manager import certlib
 from subscription_manager import repolib
+from subscription_manager import models
+
 import subscription_manager.injection as inj
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -79,33 +81,16 @@ class ContentPluginActionInvoker(certlib.BaseActionInvoker):
         return action.perform()
 
 
-class EntitlementSource(object):
-    """Populate with info needed for plugins to find content.
-
-    Acts as a iterable over entitlements.
-    """
-    def __init__(self):
-        self.entitlements = []
-
-    def __iter__(self):
-        return iter(self.entitlements)
-
-    def __len__(self):
-        return len(self.entitlements)
-
-    def __getitem__(self, key):
-        return self.entitlements[key]
-
-
-class EntitlementDirEntitlementSource(EntitlementSource):
+class EntitlementDirEntitlementSource(models.EntitlementSource):
     """Populate with entitlement info from ent dir of ent certs."""
 
     def __init__(self):
         ent_dir = inj.require(inj.ENT_DIR)
 
         # populate from ent certs
-        self.entitlement_certs = ent_dir.list_valid()
-        self.entitlements = self.entitlement_certs
+        self.entitlements = []
+        for ent_cert in ent_dir.list_valid():
+            self.entitlements.append(models.EntitlementCertEntitlement.from_ent_cert(ent_cert))
 
 
 class ContentActionClient(base_action_client.BaseActionClient):
