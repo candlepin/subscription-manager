@@ -260,6 +260,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/logutil.py*
 %{_datadir}/rhsm/subscription_manager/managercli.py*
 %{_datadir}/rhsm/subscription_manager/managerlib.py*
+%{_datadir}/rhsm/subscription_manager/models.py*
 %{_datadir}/rhsm/subscription_manager/packageprofilelib.py*
 %{_datadir}/rhsm/subscription_manager/plugins.py*
 %{_datadir}/rhsm/subscription_manager/productid.py*
