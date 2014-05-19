@@ -77,6 +77,8 @@ platform.
 Summary: A plugin for handling OSTree content.
 Group: System Environment/Base
 
+Requires: pygobject3-base
+
 %description -n subscription-manager-plugin-ostree
 Enables handling of content of type 'ostree' in any certificates
 from the server. Populates /ostree/repo/config as well as updates
