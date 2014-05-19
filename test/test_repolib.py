@@ -18,8 +18,6 @@ import unittest
 from mock import Mock, patch
 from StringIO import StringIO
 
-from rhsm.utils import UnsupportedOperationException
-
 from fixture import SubManFixture
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
@@ -144,30 +142,13 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertEquals(1, update_report.updates())
 
     @patch("subscription_manager.repolib.RepoFile")
-    def test_update_when_registered_and_existing_repo(self, mock_file):
-        mock_file = mock_file.return_value
-        mock_file.section.return_value = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
-
-        def stub_content():
-            return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key')])]
-
-        update_action = RepoUpdateActionCommand()
-        update_action.get_unique_content = stub_content
-        update_action.override_supported = True
-        update_report = update_action.perform()
-        written_repo = mock_file.update.call_args[0][0]
-        self.assertEquals('new', written_repo['gpgcheck'])
-        self.assertEquals('new_key', written_repo['gpgkey'])
-        self.assertEquals(1, update_report.updates())
-
-    @patch("subscription_manager.repolib.RepoFile")
     def test_update_when_not_registered_and_existing_repo(self, mock_file):
         self._inject_mock_invalid_consumer()
         mock_file = mock_file.return_value
         mock_file.section.return_value = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
 
         def stub_content():
-            return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key')])]
+            return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key'), ('name', 'test')])]
 
         update_action = RepoUpdateActionCommand()
         update_action.get_unique_content = stub_content
@@ -378,15 +359,6 @@ class RepoUpdateActionTests(SubManFixture):
         # Immutable properties should be always be added/updated,
         # and removed if undefined in the new repo definition.
         self.assertFalse("proxy_username" in existing_repo.keys())
-
-    def test_repo_update_forbidden_when_registered(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {'proxy_username': 'foo'}
-
-        update_action = RepoUpdateActionCommand()
-        update_action.override_supported = True
-        self.assertRaises(UnsupportedOperationException, update_action.update_repo, existing_repo, incoming_repo)
 
 
 class TidyWriterTests(unittest.TestCase):

@@ -26,7 +26,6 @@ from urllib import basejoin
 
 from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
-from rhsm.utils import UnsupportedOperationException
 
 # FIXME: local imports
 
@@ -185,15 +184,11 @@ class RepoUpdateActionCommand(object):
                 repo_file.add(cont)
                 self.report_add(cont)
             else:
-                # In the non-disconnected case, destroy the old repo and replace it with
-                # what's in the entitlement cert plus any overrides.
-                if self.identity.is_valid() and self.override_supported:
-                    repo_file.update(cont)
-                else:
-                    self.update_repo(existing, cont)
-                    repo_file.update(existing)
+                # Updates the existing repo with new content
+                self.update_repo(existing, cont)
+                repo_file.update(existing)
                 # TODO: add repoting for overrides
-                self.report_update(cont)
+                self.report_update(existing)
 
         for section in repo_file.sections():
             if section not in valid:
@@ -349,10 +344,6 @@ class RepoUpdateActionCommand(object):
 
         This method should only be used in disconnected cases!
         """
-        if self.identity.is_valid() and self.override_supported:
-            log.error("Can not update repos when registered!")
-            raise UnsupportedOperationException()
-
         changes_made = 0
 
         for key, mutable, default in Repo.PROPERTIES:
