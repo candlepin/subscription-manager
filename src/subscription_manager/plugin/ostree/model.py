@@ -15,6 +15,8 @@
 
 import logging
 import re
+import os
+import subprocess
 import sys
 
 from subscription_manager.plugin.ostree import config
@@ -263,9 +265,18 @@ class OstreeOriginUpdater(object):
         """
         Get path to the currently deployed origin file.
         """
-        # This is a tricky dep to satisfy. Isolated in this method so we can
-        # mock it out easily in tests, which will probably never have
-        # this available.
+        # Can't load gobject3 introspection code as we use gobject2 in a couple
+        # places. Shell out to a separate script, assumed to be in same location
+        # as this module. Let the CalledProcessError bubble up.
+        try:
+            output = subprocess.check_output([os.path.join(__file__, "gi.py"),
+                '--deployed-origin'])
+            output = output.strip()
+        except subprocess.CalledProcessError, e:
+            # Is this an OSTree system? Does it have pygobject3?
+            log.error("Error looking up OSTree origin file.")
+            log.error(e.output)
+            raise e
 
     def run(self):
         """

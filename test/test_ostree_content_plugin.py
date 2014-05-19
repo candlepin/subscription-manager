@@ -353,8 +353,6 @@ refspec=origremote:awesome-ostree-controller/awesomeos8/x86_64/controller/docker
         # Reload the origin file and make sure it looks right:
         new_origin = config.KeyFileConfigParser(
             self.origin_cfg_path.name)
-        print dir(new_origin)
-        print new_origin.sections()
         self.assertTrue(new_origin.has_section('origin'))
         self.assertTrue('refspec' in new_origin.options('origin'))
         self.assertTrue("awesome-ostree-controller" in
