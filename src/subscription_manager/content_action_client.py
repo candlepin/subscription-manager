@@ -88,9 +88,9 @@ class EntitlementDirEntitlementSource(models.EntitlementSource):
         ent_dir = inj.require(inj.ENT_DIR)
 
         # populate from ent certs
-        self.entitlements = []
+        self._entitlements = []
         for ent_cert in ent_dir.list_valid():
-            self.entitlements.append(models.EntitlementCertEntitlement.from_ent_cert(ent_cert))
+            self._entitlements.append(models.EntitlementCertEntitlement.from_ent_cert(ent_cert))
 
 
 class ContentActionClient(base_action_client.BaseActionClient):

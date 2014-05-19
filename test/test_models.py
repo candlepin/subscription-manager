@@ -9,23 +9,23 @@ from subscription_manager import models
 class TestEntitledContents(fixture.SubManFixture):
     def test_empty_init(self):
         ec = models.EntitledContents()
-        self.assertTrue(hasattr(ec, 'contents'))
+        self.assertTrue(hasattr(ec, '_contents'))
 
     def test_init_empty_contents(self):
         ec = models.EntitledContents(contents=[])
-        self.assertTrue(hasattr(ec, 'contents'))
-        self.assertEquals(ec.contents, [])
+        self.assertTrue(hasattr(ec, '_contents'))
+        self.assertEquals(ec._contents, [])
 
     def test_contents(self):
         contents = [mock.Mock(), mock.Mock(), mock.Mock()]
         ec = models.EntitledContents(contents=contents)
-        self.assertTrue(hasattr(ec, 'contents'))
-        self.assertEquals(len(ec.contents), 3)
+        self.assertTrue(hasattr(ec, '_contents'))
+        self.assertEquals(len(ec), 3)
 
-        for content in ec.contents:
+        for content in ec:
             self.assertTrue(isinstance(content, mock.Mock))
 
-        self.assertTrue(isinstance(ec.contents[0], mock.Mock))
+        self.assertTrue(isinstance(ec[0], mock.Mock))
 
 
 class TestEntitlement(fixture.SubManFixture):
@@ -66,7 +66,7 @@ class TestEntitlementCertEntitlement(TestEntitlement):
 
         ece = models.EntitlementCertEntitlement.from_ent_cert(mock_ent_cert)
 
-        self.assertEquals(ece.content.contents, content)
+        self.assertEquals(ece.content._contents, content)
         self.assertEquals(len(ece.content), 1)
         self.assertTrue(isinstance(ece.content, models.EntitledContents))
 

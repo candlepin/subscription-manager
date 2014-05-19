@@ -23,16 +23,16 @@
 class EntitledContents(object):
     """Represent a container of entitled Content."""
     def __init__(self, contents=None):
-        self.contents = contents or []
+        self._contents = contents or []
 
     def __iter__(self):
-        return iter(self.contents)
+        return iter(self._contents)
 
     def __len__(self):
-        return len(self.contents)
+        return len(self._contents)
 
     def __getitem__(self, key):
-        return self.contents[key]
+        return self._contents[key]
 
 
 class Entitlement(object):

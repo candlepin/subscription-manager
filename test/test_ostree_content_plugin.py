@@ -120,6 +120,15 @@ class TestOstreeRemote(fixture.SubManFixture):
         self.assertTrue('gpg_verify' in repr_str)
         self.assertTrue(self.example_url in repr_str)
 
+    def test_map_gpg(self):
+        content = mock.Mock()
+        content.gpg = None
+
+        self.assertFalse(model.OstreeRemote.map_gpg(content))
+
+        content.gpg = "file:///path/to/key"
+        self.assertTrue(model.OstreeRemote.map_gpg(content))
+
 
 class TestOstreeRemotes(fixture.SubManFixture):
     def test(self):
@@ -255,18 +264,18 @@ last_key = blippy
         mock_content = mock.Mock()
         mock_content.url = "http://example.com"
         mock_content.name = "mock-content-example"
+        mock_content.gpg = None
 
         content_set.add(mock_content)
 
         updates_builder = model.OstreeConfigUpdatesBuilder(ostree_config, content_set)
         updates = updates_builder.build()
 
-        print updates
         self.assertTrue(len(updates.new.remotes))
-        print updates.new.remotes[0]
         self.assertTrue(isinstance(updates.new.remotes[0], model.OstreeRemote))
         self.assertEquals(updates.new.remotes[0].url, mock_content.url)
         #self.assertEquals(updates.new.remotes[0].name, mock_content.name)
+        self.assertEquals(updates.new.remotes[0].gpg_verify, False)
 
 
 class TestKeyFileConfigParserSample(BaseOstreeKeyFileTest):
