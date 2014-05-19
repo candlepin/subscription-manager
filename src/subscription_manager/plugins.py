@@ -74,7 +74,7 @@ class PluginImportException(PluginException):
 
 
 class PluginModuleImportException(PluginImportException):
-    """Raise when a plugin module can not be imported"""
+    """Raise when a plugin module can not be imported."""
 
 
 class PluginModuleImportApiVersionMissingException(PluginImportException):
@@ -726,7 +726,7 @@ class BasePluginManager(object):
             plugin_clazz.found_slots_for_hooks = True
 
     def _track_plugin_class_to_modules(self, plugin_clazz):
-        """Keep a map of plugin classes loaded from each plugin module"""
+        """Keep a map of plugin classes loaded from each plugin module."""
         if plugin_clazz.__module__ not in self._modules:
             self._modules[plugin_clazz.__module__] = []
         self._modules[plugin_clazz.__module__].append(plugin_clazz)
@@ -788,7 +788,6 @@ class BasePluginManager(object):
             runner = PluginHookRunner(conduit_instance, func)
             yield runner
 
-
     def _get_plugin_config(self, plugin_clazz, plugin_to_config_map=None):
         """Get a PluginConfig for plugin_class, creating it if need be.
 
@@ -811,7 +810,7 @@ class BasePluginManager(object):
         return PluginConfig(plugin_clazz.get_plugin_key(), self.plugin_conf_path)
 
     def get_plugins(self):
-        """list of plugins"""
+        """list of plugins."""
         return self._plugin_classes
 
     def get_slots(self):
@@ -840,7 +839,8 @@ class BasePluginManager(object):
 class PluginManager(BasePluginManager):
     """Finds, load, and provides acccess to subscription-manager plugins
     using subscription-manager default plugin search path and plugin
-    conf path."""
+    conf path.
+    """
     default_search_path = DEFAULT_SEARCH_PATH
     default_conf_path = DEFAULT_CONF_PATH
 

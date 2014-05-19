@@ -438,4 +438,3 @@ class OstreeConfigUpdates(object):
         """Persist self.ostree_config to disk."""
         log.debug("OstreeConfigUpdates.save")
         self.orig.save()
-
