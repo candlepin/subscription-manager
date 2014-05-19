@@ -508,3 +508,30 @@ class PoolTypeCache(object):
 
     def clear(self):
         self.pooltype_map = {}
+
+
+class WrittenOverrideCache(CacheManager):
+    '''
+    Cache to keep track of the overrides used last time the a redhat.repo
+    was written.  Doesn't track server status, we've got another cache for
+    that.
+    '''
+
+    CACHE_FILE = "/var/lib/rhsm/cache/written_overrides.json"
+
+    def __init__(self, overrides=None):
+        self.overrides = overrides or {}
+
+    def to_dict(self):
+        return self.overrides
+
+    def _load_data(self, open_file):
+        try:
+            self.overrides = json.loads(open_file.read()) or {}
+            return self.overrides
+        except IOError:
+            log.error("Unable to read cache: %s" % self.CACHE_FILE)
+        except ValueError:
+            # ignore json file parse errors, we are going to generate
+            # a new as if it didn't exist
+            pass

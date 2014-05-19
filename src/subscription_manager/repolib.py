@@ -20,12 +20,11 @@ import logging
 import os
 import string
 import subscription_manager.injection as inj
-from subscription_manager.cache import OverrideStatusCache
+from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from urllib import basejoin
 
 from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
-from rhsm.utils import UnsupportedOperationException
 
 from certlib import ActionLock, DataLib
 from certdirectory import Path, ProductDirectory, EntitlementDirectory
@@ -56,10 +55,7 @@ class RepoLib(DataLib):
         action = UpdateAction(self.uep, cache_only=self.cache_only,
                 apply_overrides=apply_overrides, identity=self.identity)
         repos = action.get_unique_content()
-        if self.identity.is_valid() and action.override_supported:
-            return repos
 
-        # Otherwise we are in a disconnected case or dealing with an old server
         current = set()
         # Add the current repo data
         repo_file = RepoFile()
@@ -83,6 +79,8 @@ class RepoLib(DataLib):
         repo_file = RepoFile()
         if os.path.exists(repo_file.path):
             os.unlink(repo_file.path)
+        # When the repo is removed, also remove the override tracker
+        WrittenOverrideCache.delete_cache()
 
 
 # WARNING: exact same name as another action in factlib and certlib.
@@ -111,8 +109,9 @@ class UpdateAction:
             self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
 
         self.release = None
-        self.overrides = []
+        self.overrides = {}
         self.override_supported = bool(self.uep and self.uep.supports_resource('content_overrides'))
+        self.written_overrides = WrittenOverrideCache()
 
         # If we are not registered, skip trying to refresh the
         # data from the server
@@ -122,6 +121,7 @@ class UpdateAction:
         # Only attempt to update the overrides if they are supported
         # by the server.
         if self.override_supported:
+            self.written_overrides._read_cache()
             try:
                 override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
             except KeyError:
@@ -131,8 +131,11 @@ class UpdateAction:
             else:
                 status = override_cache.load_status(self.uep, self.identity.uuid)
 
-            if status is not None:
-                self.overrides = status
+            for item in status or []:
+                # Don't iterate through the list
+                if item['contentLabel'] not in self.overrides:
+                    self.overrides[item['contentLabel']] = {}
+                self.overrides[item['contentLabel']][item['name']] = item['value']
 
         message = "Release API is not supported by the server. Using default."
         try:
@@ -174,14 +177,9 @@ class UpdateAction:
                 repo_file.add(cont)
                 updates += 1
             else:
-                # In the non-disconnected case, destroy the old repo and replace it with
-                # what's in the entitlement cert plus any overrides.
-                if self.identity.is_valid() and self.override_supported:
-                    repo_file.update(cont)
-                    updates += 1
-                else:
-                    updates += self.update_repo(existing, cont)
-                    repo_file.update(existing)
+                # Updates the existing repo with new content
+                updates += self.update_repo(existing, cont)
+                repo_file.update(existing)
 
         for section in repo_file.sections():
             if section not in valid:
@@ -190,6 +188,12 @@ class UpdateAction:
 
         # Write new RepoFile to disk:
         repo_file.write()
+
+        if self.override_supported:
+            # Update with the values we just wrote
+            self.written_overrides.overrides = self.overrides
+            self.written_overrides.write_cache()
+
         log.info("repos updated: %s" % updates)
         return updates
 
@@ -295,9 +299,16 @@ class UpdateAction:
 
     def _set_override_info(self, repo):
         # In the disconnected case, self.overrides will be an empty list
-        for entry in self.overrides:
-            if entry['contentLabel'] == repo.id:
-                repo[entry['name']] = entry['value']
+        for name, value in self.overrides.get(repo.id, {}).items():
+            repo[name] = value
+
+    def _is_overridden(self, repo, key):
+        return key in self.overrides.get(repo.id, {})
+
+    def _was_overridden(self, repo, key, value):
+        written_value = self.written_overrides.overrides.get(repo.id, {}).get(key)
+        # Compare values as strings to avoid casting problems from io
+        return written_value is not None and value is not None and str(written_value) == str(value)
 
     def _set_proxy_info(self, repo):
         proxy = ""
@@ -328,29 +339,33 @@ class UpdateAction:
                 url = url.lstrip('/')
             return basejoin(base, url)
 
+    def _build_props(self, old_repo, new_repo):
+        result = {}
+        all_keys = old_repo.keys() + new_repo.keys()
+        for key in all_keys:
+            result[key] = Repo.PROPERTIES.get(key, (1, None))
+        return result
+
     def update_repo(self, old_repo, new_repo):
         """
         Checks an existing repo definition against a potentially updated
         version created from most recent entitlement certificates and
         configuration. Creates, updates, and removes properties as
         appropriate and returns the number of changes made. (if any)
-
-        This method should only be used in disconnected cases!
         """
-        if self.identity.is_valid() and self.override_supported:
-            log.error("Can not update repos when registered!")
-            raise UnsupportedOperationException()
-
         changes_made = 0
 
-        for key, mutable, default in Repo.PROPERTIES:
+        for key, (mutable, default) in self._build_props(old_repo, new_repo).items():
             new_val = new_repo.get(key)
 
             # Mutable properties should be added if not currently defined,
-            # otherwise left alone.
-            if mutable:
-                if (new_val is not None) and (not old_repo[key]):
-                    if old_repo[key] == new_val:
+            # otherwise left alone. However if we see that the property was overridden
+            # but that override has since been removed, we need to revert to the default
+            # value.
+            if mutable and not self._is_overridden(old_repo, key) \
+                    and not self._was_overridden(old_repo, key, old_repo.get(key)):
+                if (new_val is not None) and (not old_repo.get(key)):
+                    if old_repo.get(key) == new_val:
                         continue
                     old_repo[key] = new_val
                     changes_made += 1
@@ -358,7 +373,7 @@ class UpdateAction:
             # Immutable properties should be always be added/updated,
             # and removed if undefined in the new repo definition.
             else:
-                if new_val is None or (new_val.strip() == ""):
+                if new_val is None or (str(new_val).strip() == ""):
                     # Immutable property should be removed:
                     if key in old_repo.keys():
                         del old_repo[key]
@@ -366,7 +381,7 @@ class UpdateAction:
                     continue
 
                 # Unchanged:
-                if old_repo[key] == new_val:
+                if old_repo.get(key) == new_val:
                     continue
 
                 old_repo[key] = new_val
@@ -377,22 +392,21 @@ class UpdateAction:
 
 class Repo(dict):
     # (name, mutable, default) - The mutability information is only used in disconnected cases
-    PROPERTIES = (
-        ('name', 0, None),
-        ('baseurl', 0, None),
-        ('enabled', 1, '1'),
-        ('gpgcheck', 1, '1'),
-        ('gpgkey', 0, None),
-        ('sslverify', 1, '1'),
-        ('sslcacert', 0, None),
-        ('sslclientkey', 0, None),
-        ('sslclientcert', 0, None),
-        ('metadata_expire', 1, None),
-        ('proxy', 0, None),
-        ('proxy_username', 0, None),
-        ('proxy_password', 0, None),
-        ('ui_repoid_vars', 0, None),
-    )
+    PROPERTIES = {
+            'name': (0, None),
+            'baseurl': (0, None),
+            'enabled': (1, '1'),
+            'gpgcheck': (1, '1'),
+            'gpgkey': (0, None),
+            'sslverify': (1, '1'),
+            'sslcacert': (0, None),
+            'sslclientkey': (0, None),
+            'sslclientcert': (0, None),
+            'metadata_expire': (1, None),
+            'proxy': (0, None),
+            'proxy_username': (0, None),
+            'proxy_password': (0, None),
+            'ui_repoid_vars': (0, None)}
 
     def __init__(self, repo_id, existing_values=None):
         # existing_values is a list of 2-tuples
@@ -412,7 +426,7 @@ class Repo(dict):
         # NOTE: This sets the above properties to the default values even if
         # they are not defined on disk. i.e. these properties will always
         # appear in this dict, but their values may be None.
-        for k, m, d in self.PROPERTIES:
+        for k, (m, d) in self.PROPERTIES.items():
             if k not in self.keys():
                 self[k] = d
 

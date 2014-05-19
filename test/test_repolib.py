@@ -18,8 +18,6 @@ import unittest
 from mock import Mock, patch
 from StringIO import StringIO
 
-from rhsm.utils import UnsupportedOperationException
-
 from fixture import SubManFixture
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
@@ -111,16 +109,23 @@ class UpdateActionTests(SubManFixture):
         self.assertFalse(override_cache_mock.load_status.called)
 
     def test_overrides_trump_ent_cert(self):
-        self.update_action.overrides = [{
-            'contentLabel': 'x',
-            'name': 'gpgcheck',
-            'value': 'blah'
-        }]
+        self.update_action.overrides = {'x': {'gpgcheck': 'blah'}}
         r = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
         self.assertEquals('original', r['gpgcheck'])
         self.update_action._set_override_info(r)
         self.assertEquals('blah', r['gpgcheck'])
         self.assertEquals('some_key', r['gpgkey'])
+
+    def test_overrides_trump_existing(self):
+        self.update_action.overrides = {'x': {'gpgcheck': 'blah'}}
+        values = [('gpgcheck', 'original'), ('gpgkey', 'some_key')]
+        old_repo = Repo('x', values)
+        new_repo = Repo(old_repo.id, values)
+        self.update_action._set_override_info(new_repo)
+        self.assertEquals('original', old_repo['gpgcheck'])
+        self.update_action.update_repo(old_repo, new_repo)
+        self.assertEquals('blah', old_repo['gpgcheck'])
+        self.assertEquals('some_key', old_repo['gpgkey'])
 
     @patch("subscription_manager.repolib.RepoFile")
     def test_update_when_new_repo(self, mock_file):
@@ -128,7 +133,8 @@ class UpdateActionTests(SubManFixture):
         mock_file.section.return_value = None
 
         def stub_content():
-            return [Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])]
+            return [Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key'), ('name', 'some name')])]
+
         self.update_action.get_unique_content = stub_content
         updates = self.update_action.perform()
         written_repo = mock_file.add.call_args[0][0]
@@ -137,31 +143,13 @@ class UpdateActionTests(SubManFixture):
         self.assertEquals(1, updates)
 
     @patch("subscription_manager.repolib.RepoFile")
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_update_when_registered_and_existing_repo(self, mock_ident, mock_file):
-        mock_ident.existsAndValid.return_value = True
+    def test_update_when_not_registered_and_existing_repo(self, mock_file):
         mock_file = mock_file.return_value
         mock_file.section.return_value = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
 
         def stub_content():
-            return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key')])]
-        self.update_action.get_unique_content = stub_content
-        self.update_action.override_supported = True
-        updates = self.update_action.perform()
-        written_repo = mock_file.update.call_args[0][0]
-        self.assertEquals('new', written_repo['gpgcheck'])
-        self.assertEquals('new_key', written_repo['gpgkey'])
-        self.assertEquals(1, updates)
+            return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key'), ('name', 'test')])]
 
-    @patch("subscription_manager.repolib.RepoFile")
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_update_when_not_registered_and_existing_repo(self, mock_ident, mock_file):
-        mock_ident.existsAndValid.return_value = False
-        mock_file = mock_file.return_value
-        mock_file.section.return_value = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
-
-        def stub_content():
-            return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key')])]
         self.update_action.get_unique_content = stub_content
         self.update_action.perform()
         written_repo = mock_file.update.call_args[0][0]
@@ -369,14 +357,57 @@ class UpdateActionTests(SubManFixture):
         existing_repo['fake_prop'] = 'fake'
         self.assertTrue(('fake_prop', 'fake') in existing_repo.items())
 
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_repo_update_forbidden_when_registered(self, mock_ident):
-        mock_ident.existsAndValid.return_value = True
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {'proxy_username': 'foo'}
-        self.update_action.override_supported = True
-        self.assertRaises(UnsupportedOperationException, self.update_action.update_repo, existing_repo, incoming_repo)
+    def test_overrides_removed_revert_to_default(self):
+        self.update_action.written_overrides.overrides = {'x': {'gpgcheck': 'blah'}}
+        self.update_action.overrides = {}
+        old_repo = Repo('x', [('gpgcheck', 'blah'), ('gpgkey', 'some_key')])
+        new_repo = Repo(old_repo.id, [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
+        self.update_action._set_override_info(new_repo)
+        # The value from the current repo file (with the old override) should exist pre-update
+        self.assertEquals('blah', old_repo['gpgcheck'])
+        self.update_action.update_repo(old_repo, new_repo)
+        # Because the override has been removed, the value is reset to the default
+        self.assertEquals('original', old_repo['gpgcheck'])
+        self.assertEquals('some_key', old_repo['gpgkey'])
+
+    def test_overrides_removed_and_edited(self):
+        self.update_action.written_overrides.overrides = {'x': {'gpgcheck': 'override_value'}}
+        self.update_action.overrides = {}
+        old_repo = Repo('x', [('gpgcheck', 'hand_edit'), ('gpgkey', 'some_key')])
+        new_repo = Repo(old_repo.id, [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
+        self.update_action._set_override_info(new_repo)
+        # The value from the current repo file (with the old hand edit) should exist pre-update
+        self.assertEquals('hand_edit', old_repo['gpgcheck'])
+        self.update_action.update_repo(old_repo, new_repo)
+        # Because the current value doesn't match the override, we don't modify it
+        self.assertEquals('hand_edit', old_repo['gpgcheck'])
+        self.assertEquals('some_key', old_repo['gpgkey'])
+
+    def test_non_default_overrides_added_to_existing(self):
+        '''
+        Test that overrides for values that aren't found in Repo.PROPERTIES are written
+        to existing repos
+        '''
+        self.update_action.written_overrides.overrides = {}
+        self.update_action.overrides = {'x': {'somekey': 'someval'}}
+        old_repo = Repo('x', [])
+        new_repo = Repo(old_repo.id, [])
+        self.update_action._set_override_info(new_repo)
+        self.update_action.update_repo(old_repo, new_repo)
+        self.assertEquals('someval', old_repo['somekey'])
+
+    def test_non_default_override_removed_deleted(self):
+        '''
+        Test that overrides for values that aren't found in Repo.PROPERTIES are
+        removed from redhat.repo once the override is removed
+        '''
+        self.update_action.written_overrides.overrides = {'x': {'somekey': 'someval'}}
+        self.update_action.overrides = {}
+        old_repo = Repo('x', [('somekey', 'someval')])
+        new_repo = Repo(old_repo.id, [])
+        self.update_action._set_override_info(new_repo)
+        self.update_action.update_repo(old_repo, new_repo)
+        self.assertFalse('somekey' in old_repo)
 
 
 class TidyWriterTests(unittest.TestCase):
