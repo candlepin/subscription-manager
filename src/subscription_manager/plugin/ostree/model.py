@@ -138,7 +138,17 @@ class OstreeRemote(object):
 
         # TODO: logic for mapping content gpgkey settings to gpg_verify
 
+        remote.gpg_verify = remote.map_gpg(content)
+
         return remote
+
+    @staticmethod
+    def map_gpg(content):
+        gpg_verify = False
+        if content.gpg:
+            gpg_verify = True
+
+        return gpg_verify
 
     def __repr__(self):
         r = super(OstreeRemote, self).__repr__()
