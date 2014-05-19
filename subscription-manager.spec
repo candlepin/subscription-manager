@@ -225,7 +225,6 @@ rm -rf %{buildroot}
 %dir %{_datadir}/rhsm
 %dir %{_datadir}/rhsm/subscription_manager
 
-%{_datadir}/rhsm/subscription_manager/api.py*
 %{_datadir}/rhsm/subscription_manager/async.py*
 %{_datadir}/rhsm/subscription_manager/base_action_client.py*
 %{_datadir}/rhsm/subscription_manager/base_plugin.py*

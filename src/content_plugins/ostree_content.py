@@ -13,7 +13,7 @@
 # in this software or its documentation.
 #
 
-from subscription_manager import api
+from subscription_manager import base_plugin
 requires_api_version = "1.1"
 
 # install our helper modules here
@@ -21,7 +21,7 @@ from subscription_manager.plugin import ostree
 from subscription_manager.plugin.ostree import action_invoker
 
 
-class OstreeContentPlugin(api.base_plugin.SubManPlugin):
+class OstreeContentPlugin(base_plugin.SubManPlugin):
     """Plugin for adding ostree content action to subscription-manager"""
     name = "ostree_content"
 
