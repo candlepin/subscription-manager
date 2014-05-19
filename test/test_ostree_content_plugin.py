@@ -681,9 +681,9 @@ gpg-verify=false
 class TestOsTreeContents(fixture.SubManFixture):
     def test_empty(self):
         contents = action_invoker.OstreeContents()
-        self.assertTrue(hasattr(contents, 'content_set'))
+        self.assertTrue(hasattr(contents, '_contents'))
 
-        contents.load()
+        #contents.load()
 
 
 class TestContentUpdateActionReport(fixture.SubManFixture):

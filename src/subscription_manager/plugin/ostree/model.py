@@ -323,23 +323,23 @@ class OstreeOriginUpdater(object):
 
 
 class OstreeConfigUpdatesBuilder(object):
-    def __init__(self, ostree_config, content_set):
+    def __init__(self, ostree_config, contents):
         self.orig_ostree_config = ostree_config
-        self.content_set = content_set
+        self.contents = contents
 
     def build(self):
         """Figure out what the new config should be and return a OstreeConfigUpdates.
 
         Currently, this just creates a new OstreeRemotes containing all the remotes
-        in self.content_set. It does no filter or mapping.
+        in self.contents. It does no filter or mapping.
         """
         # NOTE: Assume 1 content == 1 remote.
         # If that's not valid, this has to do more.
         new_remotes = OstreeRemotes()
 
         content_to_remote = {}
-        log.debug("builder.build %s" % self.content_set)
-        for content in self.content_set:
+        log.debug("builder.build %s" % self.contents)
+        for content in self.contents:
             # TODO: we may need to keep a map of original config
             #       remotes -> old Content, old Content -> new Content,
             #       and new Content -> new Remotes.

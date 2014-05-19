@@ -15,13 +15,16 @@
 
 
 #      Would be a nice use of collections.abc.Iterable
+class EntitledContent(object):
+    def __init__(self):
+        pass
 
 
 # These containerish iterables could share a
 # base class, though, it should probably just
 # be based on containers.abc.Iterable
-class EntitledContents(object):
-    """Represent a container of entitled Content."""
+class Contents(object):
+    """Represent a container of Content objects."""
     def __init__(self, contents=None):
         self._contents = contents or []
 
@@ -33,6 +36,20 @@ class EntitledContents(object):
 
     def __getitem__(self, key):
         return self._contents[key]
+
+    def add(self, content):
+        """Add content.
+
+        Note add here does not neccasarily mean the same as
+        add() on a set(). Subclasses are welcome to enforce
+        uniqiness, etc. This base version appends to self._contents.
+        """
+        self._contents.append(content)
+
+
+class EntitledContents(Contents):
+    """Represent a container of entitled Content."""
+    pass
 
 
 class Entitlement(object):
