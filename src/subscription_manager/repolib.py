@@ -25,7 +25,6 @@ from urllib import basejoin
 
 from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
-from rhsm.utils import UnsupportedOperationException
 
 from certlib import ActionLock, DataLib
 from certdirectory import Path, ProductDirectory, EntitlementDirectory
@@ -174,14 +173,9 @@ class UpdateAction:
                 repo_file.add(cont)
                 updates += 1
             else:
-                # In the non-disconnected case, destroy the old repo and replace it with
-                # what's in the entitlement cert plus any overrides.
-                if self.identity.is_valid() and self.override_supported:
-                    repo_file.update(cont)
-                    updates += 1
-                else:
-                    updates += self.update_repo(existing, cont)
-                    repo_file.update(existing)
+                # Updates the existing repo with new content
+                updates += self.update_repo(existing, cont)
+                repo_file.update(existing)
 
         for section in repo_file.sections():
             if section not in valid:
@@ -337,10 +331,6 @@ class UpdateAction:
 
         This method should only be used in disconnected cases!
         """
-        if self.identity.is_valid() and self.override_supported:
-            log.error("Can not update repos when registered!")
-            raise UnsupportedOperationException()
-
         changes_made = 0
 
         for key, mutable, default in Repo.PROPERTIES:

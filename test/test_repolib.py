@@ -18,8 +18,6 @@ import unittest
 from mock import Mock, patch
 from StringIO import StringIO
 
-from rhsm.utils import UnsupportedOperationException
-
 from fixture import SubManFixture
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
@@ -128,7 +126,8 @@ class UpdateActionTests(SubManFixture):
         mock_file.section.return_value = None
 
         def stub_content():
-            return [Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])]
+            return [Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key'), ('name', 'some name')])]
+
         self.update_action.get_unique_content = stub_content
         updates = self.update_action.perform()
         written_repo = mock_file.add.call_args[0][0]
@@ -137,31 +136,13 @@ class UpdateActionTests(SubManFixture):
         self.assertEquals(1, updates)
 
     @patch("subscription_manager.repolib.RepoFile")
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_update_when_registered_and_existing_repo(self, mock_ident, mock_file):
-        mock_ident.existsAndValid.return_value = True
+    def test_update_when_not_registered_and_existing_repo(self, mock_file):
         mock_file = mock_file.return_value
         mock_file.section.return_value = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
 
         def stub_content():
-            return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key')])]
-        self.update_action.get_unique_content = stub_content
-        self.update_action.override_supported = True
-        updates = self.update_action.perform()
-        written_repo = mock_file.update.call_args[0][0]
-        self.assertEquals('new', written_repo['gpgcheck'])
-        self.assertEquals('new_key', written_repo['gpgkey'])
-        self.assertEquals(1, updates)
+            return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key'), ('name', 'test')])]
 
-    @patch("subscription_manager.repolib.RepoFile")
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_update_when_not_registered_and_existing_repo(self, mock_ident, mock_file):
-        mock_ident.existsAndValid.return_value = False
-        mock_file = mock_file.return_value
-        mock_file.section.return_value = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
-
-        def stub_content():
-            return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key')])]
         self.update_action.get_unique_content = stub_content
         self.update_action.perform()
         written_repo = mock_file.update.call_args[0][0]
@@ -368,15 +349,6 @@ class UpdateActionTests(SubManFixture):
         existing_repo = Repo('testrepo')
         existing_repo['fake_prop'] = 'fake'
         self.assertTrue(('fake_prop', 'fake') in existing_repo.items())
-
-    @patch("subscription_manager.repolib.ConsumerIdentity")
-    def test_repo_update_forbidden_when_registered(self, mock_ident):
-        mock_ident.existsAndValid.return_value = True
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {'proxy_username': 'foo'}
-        self.update_action.override_supported = True
-        self.assertRaises(UnsupportedOperationException, self.update_action.update_repo, existing_repo, incoming_repo)
 
 
 class TidyWriterTests(unittest.TestCase):
