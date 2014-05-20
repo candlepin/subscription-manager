@@ -280,7 +280,7 @@ class OstreeOriginUpdater(object):
         # as this module. Let the CalledProcessError bubble up.
         try:
             output = subprocess.check_output(["python",
-                os.path.join(os.path.dirname(__file__), "gi.py"),
+                os.path.join(os.path.dirname(__file__), "gi_wrapper.py"),
                 '--deployed-origin'], stderr=subprocess.STDOUT)
             output = output.strip()
         except subprocess.CalledProcessError, e:
