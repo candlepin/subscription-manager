@@ -282,7 +282,7 @@ class OstreeOriginUpdater(object):
             output = subprocess.check_output(["python",
                 os.path.join(os.path.dirname(__file__), "gi_wrapper.py"),
                 '--deployed-origin'], stderr=subprocess.STDOUT)
-            output = output.strip()
+            return output.strip()
         except subprocess.CalledProcessError, e:
             # Is this an OSTree system? Does it have pygobject3?
             log.error("Error looking up OSTree origin file.")
