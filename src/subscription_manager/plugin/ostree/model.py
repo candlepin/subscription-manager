@@ -289,6 +289,22 @@ class OstreeOriginUpdater(object):
             log.error(e.output)
             raise e
 
+    def _get_new_refspec(self, old_refspec):
+        """
+        Attempt to figure out what new refspec to use. Compare the remote names
+        we know about to the first portion of the ref. If a match is found, we
+        know to update that remote. If no match is found, we just leave the
+        origin as it is and log the situation.
+        """
+        # i.e. 'b' in 'a:b/c/d/e'
+        ref_matcher = old_refspec.split(':')[1].split('/')[0]
+        log.debug("First portion of previous ref: %s" % ref_matcher)
+        for r in self.repo_config.remotes:
+            # TODO: Should this be startswith instead of == ?
+            if r.name == ref_matcher:
+                return r.name
+        return None
+
     def run(self):
         """
         Locate and update the currently deployed origin file.
@@ -298,12 +314,15 @@ class OstreeOriginUpdater(object):
         origin_cfg = config.KeyFileConfigParser(self.originfile)
         old_refspec = origin_cfg.get('origin', 'refspec')
 
-        # TODO: If our repo config has multiple remotes in it, which should we use?
-        # For now we are just using a random one from the set:
         if len(self.repo_config.remotes):
             log.warn("Multiple remotes configured in %s." % self.repo_config)
 
-        new_remote = self.repo_config.remotes[0].name
+        new_remote = self._get_new_refspec(old_refspec)
+        if new_remote is None:
+            log.warn("Unable to find matching remote for origin: %s" % old_refspec)
+            log.warn("Leaving refspec in %s" % self.originfile)
+            return
+
         new_refspec = config.replace_refspec_remote(old_refspec,
             new_remote)
 

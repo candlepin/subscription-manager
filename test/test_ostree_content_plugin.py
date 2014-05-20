@@ -323,53 +323,188 @@ class TestReplaceRefspecRemote(fixture.SubManFixture):
 
 
 class TestOstreeOriginUpdater(BaseOstreeKeyFileTest):
-    repo_cfg = """
+    # Multiple remotes, one matches ref:
+    multi_repo_cfg = """
 [core]
 repo_version=1
 mode=bare
 
-[remote "awesome-ostree-controller"]
+[remote "lame-ostree"]
+url=http://lame.example.com.not.real/
+branches=lame-ostree/hyperlame/x86_64/controller/docker;
+gpg-verify=false
+
+[remote "awesome-ostree"]
 url=http://awesome.example.com.not.real/
-branches=awesome-ostree-controller/awesome7/x86_64/controller/docker;
+branches=awesome-ostree/awesome7/x86_64/controller/docker;
 gpg-verify=false
 
-[remote "another-awesome-ostree-controller"]
-url=http://another-awesome.example.com.not.real/
-branches=another-awesome-ostree-controller/awesome7/x86_64/controller/docker;
+"""
+
+    # Multiple remotes, none match ref:
+    mismatched_multi_repo_cfg = """
+[core]
+repo_version=1
+mode=bare
+
+[remote "lame-ostree"]
+url=http://lame.example.com.not.real/
+branches=lame-ostree/hyperlame/x86_64/controller/docker;
 gpg-verify=false
+
+[remote "awesome-ostree"]
+url=http://awesome.example.com.not.real/
+branches=awesome-ostree/awesome7/x86_64/controller/docker;
+gpg-verify=false
+
 """
 
-    origin_cfg = """
-[origin]
-refspec=origremote:awesome-ostree-controller/awesomeos8/x86_64/controller/docker
-"""
-
-    def setUp(self):
-        super(TestOstreeOriginUpdater, self).setUp()
-        fixture.SubManFixture.setUp(self)
-
-        self.origin_cfg_path = self.write_tempfile(self.origin_cfg)
-        self.repo_cfg_path = self.write_tempfile(self.repo_cfg)
+    def _setup_config(self, repo_cfg, origin_cfg):
+        self.repo_cfg_path = self.write_tempfile(repo_cfg)
         self.repo_config = model.OstreeConfig(
             repo_file_path=self.repo_cfg_path.name)
         self.repo_config.load()
+
         self.updater = model.OstreeOriginUpdater(self.repo_config)
+
+        self.origin_cfg_path = self.write_tempfile(origin_cfg)
         self.updater._get_deployed_origin = mock.Mock(
             return_value=self.origin_cfg_path.name)
 
-    def test_simple_update(self):
+    def _assert_origin(self, origin_parser, expected_remote):
+        self.assertTrue(origin_parser.has_section('origin'))
+        self.assertTrue('refspec' in origin_parser.options('origin'))
+        self.assertTrue(origin_parser.get('origin', 'refspec').
+            startswith(expected_remote + ":"))
+
+
+    def test_one_remote_matching_ref(self):
+        repo_cfg = """
+[core]
+repo_version=1
+mode=bare
+
+[remote "awesome-ostree"]
+url=http://awesome.example.com.not.real/
+branches=awesome-ostree/awesome7/x86_64/controller/docker;
+gpg-verify=false
+
+"""
+
+        origin_cfg = """
+[origin]
+refspec=origremote:awesome-ostree/awesomeos8/x86_64/controller/docker
+"""
+
+        self._setup_config(repo_cfg, origin_cfg)
         self.updater.run()
         # Reload the origin file and make sure it looks right:
         new_origin = config.KeyFileConfigParser(
             self.origin_cfg_path.name)
-        self.assertTrue(new_origin.has_section('origin'))
-        self.assertTrue('refspec' in new_origin.options('origin'))
-        self.assertTrue("awesome-ostree-controller" in
-            new_origin.get('origin', 'refspec'))
-        self.assertFalse('origremote' in
-            new_origin.get('origin', 'refspec'))
+        self._assert_origin(new_origin, 'awesome-ostree')
+
+    # If the ref is mismatched, but we only have one:
+    def test_one_remote_mismatched_ref(self):
+        repo_cfg = """
+[core]
+repo_version=1
+mode=bare
+
+[remote "awesome-ostree"]
+url=http://awesome.example.com.not.real/
+branches=awesome-ostree/awesome7/x86_64/controller/docker;
+gpg-verify=false
+
+"""
+
+        origin_cfg = """
+[origin]
+refspec=origremote:thisisnotthesamewords/awesomeos8/x86_64/controller/docker
+"""
+
+        self._setup_config(repo_cfg, origin_cfg)
+        self.updater.run()
+        new_origin = config.KeyFileConfigParser(
+            self.origin_cfg_path.name)
+        self._assert_origin(new_origin, 'origremote')
+
+    def test_multi_remote_matching_ref(self):
+        repo_cfg = """
+[core]
+repo_version=1
+mode=bare
+
+[remote "lame-ostree"]
+url=http://lame.example.com.not.real/
+branches=lame-ostree/hyperlame/x86_64/controller/docker;
+gpg-verify=false
+
+[remote "awesome-ostree"]
+url=http://awesome.example.com.not.real/
+branches=awesome-ostree/awesome7/x86_64/controller/docker;
+gpg-verify=false
+"""
+
+        origin_cfg = """
+[origin]
+refspec=origremote:awesome-ostree/awesomeos8/x86_64/controller/docker
+"""
+
+        self._setup_config(repo_cfg, origin_cfg)
+        self.updater.run()
+        # Reload the origin file and make sure it looks right:
+        new_origin = config.KeyFileConfigParser(
+            self.origin_cfg_path.name)
+        self._assert_origin(new_origin, 'awesome-ostree')
+
+    def test_multi_remote_mismatched_ref(self):
+        repo_cfg = """
+[core]
+repo_version=1
+mode=bare
+
+[remote "lame-ostree"]
+url=http://lame.example.com.not.real/
+branches=lame-ostree/hyperlame/x86_64/controller/docker;
+gpg-verify=false
+
+[remote "awesome-ostree"]
+url=http://awesome.example.com.not.real/
+branches=awesome-ostree/awesome7/x86_64/controller/docker;
+gpg-verify=false
+"""
+
+        origin_cfg = """
+[origin]
+refspec=origremote:thisisnoteitherofthose/awesomeos8/x86_64/controller/docker
+"""
+
+        self._setup_config(repo_cfg, origin_cfg)
+        self.updater.run()
+        new_origin = config.KeyFileConfigParser(
+            self.origin_cfg_path.name)
+        # Remote should have been left alone
+        self._assert_origin(new_origin, 'origremote')
 
     def test_gi_wrapper_script_error(self):
+        repo_cfg = """
+[core]
+repo_version=1
+mode=bare
+
+[remote "awesome-ostree"]
+url=http://awesome.example.com.not.real/
+branches=awesome-ostree/awesome7/x86_64/controller/docker;
+gpg-verify=false
+
+"""
+
+        origin_cfg = """
+[origin]
+refspec=origremote:awesome-ostree/awesomeos8/x86_64/controller/docker
+"""
+
+        self._setup_config(repo_cfg, origin_cfg)
         self.updater._get_deployed_origin = mock.Mock(
             side_effect=subprocess.CalledProcessError(1, ''))
         # For now, just assert the error bubbles up:
