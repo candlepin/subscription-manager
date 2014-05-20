@@ -279,8 +279,9 @@ class OstreeOriginUpdater(object):
         # places. Shell out to a separate script, assumed to be in same location
         # as this module. Let the CalledProcessError bubble up.
         try:
-            output = subprocess.check_output([os.path.join(__file__, "gi.py"),
-                '--deployed-origin'])
+            output = subprocess.check_output(["python",
+                os.path.join(os.path.dirname(__file__), "gi.py"),
+                '--deployed-origin'], stderr=subprocess.STDOUT)
             output = output.strip()
         except subprocess.CalledProcessError, e:
             # Is this an OSTree system? Does it have pygobject3?
@@ -292,15 +293,9 @@ class OstreeOriginUpdater(object):
         """
         Locate and update the currently deployed origin file.
         """
-
-
-        # FIXME: return early till we figure out gi/gobject conflicts
-        return
-
-
         self.originfile = self._get_deployed_origin()
         log.debug("Loading ostree origin file: %s" % self.originfile)
-        origin_cfg = config.OriginFileConfigParser(self.originfile)
+        origin_cfg = config.KeyFileConfigParser(self.originfile)
         old_refspec = origin_cfg.get('origin', 'refspec')
 
         # TODO: If our repo config has multiple remotes in it, which should we use?

@@ -16,6 +16,7 @@ import ConfigParser
 import mock
 
 import fixture
+import subprocess
 
 from subscription_manager.plugin.ostree import config
 from subscription_manager.plugin.ostree import model
@@ -353,12 +354,11 @@ refspec=origremote:awesome-ostree-controller/awesomeos8/x86_64/controller/docker
             repo_file_path=self.repo_cfg_path.name)
         self.repo_config.load()
         self.updater = model.OstreeOriginUpdater(self.repo_config)
-        self.updater._get_deployed_origin = mock.MagicMock(
+        self.updater._get_deployed_origin = mock.Mock(
             return_value=self.origin_cfg_path.name)
 
     def test_simple_update(self):
         self.updater.run()
-        #self.assertEquals(1, 2)
         # Reload the origin file and make sure it looks right:
         new_origin = config.KeyFileConfigParser(
             self.origin_cfg_path.name)
@@ -368,6 +368,12 @@ refspec=origremote:awesome-ostree-controller/awesomeos8/x86_64/controller/docker
             new_origin.get('origin', 'refspec'))
         self.assertFalse('origremote' in
             new_origin.get('origin', 'refspec'))
+
+    def test_gi_wrapper_script_error(self):
+        self.updater._get_deployed_origin = mock.Mock(
+            side_effect=subprocess.CalledProcessError(1, ''))
+        # For now, just assert the error bubbles up:
+        self.assertRaises(subprocess.CalledProcessError, self.updater.run)
 
 
 class BaseOstreeOriginFileTest(BaseOstreeKeyFileTest):
@@ -744,4 +750,5 @@ gpg-verify=false
         mock_file_store.load.return_value = mock_repo_file
 
         action = action_invoker.OstreeContentUpdateActionCommand()
+        action.update_origin_file = mock.Mock()
         action.perform()
