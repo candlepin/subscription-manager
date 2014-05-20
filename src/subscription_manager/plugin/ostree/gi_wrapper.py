@@ -37,6 +37,7 @@ if options.deployed_origin:
     sysroot.load(None)
     booted = sysroot.get_booted_deployment()
     #booted.get_osname()
-    deploydir = sysroot.get_deployment_directory(booted)
-    print(sysroot.get_deployment_origin_path(deploydir))
+    if booted:
+        deploydir = sysroot.get_deployment_directory(booted)
+        print(sysroot.get_deployment_origin_path(deploydir))
 
