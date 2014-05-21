@@ -15,7 +15,7 @@
 # in this software or its documentation.
 #
 
-from iniparse import ConfigParser
+from iniparse import RawConfigParser as ConfigParser
 import logging
 import os
 import string
@@ -542,16 +542,36 @@ class RepoFile(ConfigParser):
     def read(self):
         ConfigParser.read(self, self.path)
 
+    def _configparsers_equal(self, otherparser):
+        if set(otherparser.sections()) != set(self.sections()):
+            return False
+
+        for section in self.sections():
+            # Sometimes we end up with ints, but values must be strings to compare
+            current_items = dict([(str(k), str(v)) for (k, v) in self.items(section)])
+            if current_items != dict(otherparser.items(section)):
+                return False
+        return True
+
+    def _has_changed(self):
+        '''
+        Check if the version on disk is different from what we have loaded
+        '''
+        on_disk = ConfigParser()
+        on_disk.read(self.path)
+        return not self._configparsers_equal(on_disk)
+
     def write(self):
         if not self.manage_repos:
             log.debug("Skipping write due to manage_repos setting: %s" %
                     self.path)
             return
-        f = open(self.path, 'w')
-        tidy_writer = TidyWriter(f)
-        ConfigParser.write(self, tidy_writer)
-        tidy_writer.close()
-        f.close()
+        if self._has_changed():
+            f = open(self.path, 'w')
+            tidy_writer = TidyWriter(f)
+            ConfigParser.write(self, tidy_writer)
+            tidy_writer.close()
+            f.close()
 
     def add(self, repo):
         self.add_section(repo.id)
