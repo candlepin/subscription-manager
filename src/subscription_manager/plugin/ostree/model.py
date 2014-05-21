@@ -136,8 +136,6 @@ class OstreeRemote(object):
         remote.name = content.label
         remote.url = content.url
 
-        # TODO: logic for mapping content gpgkey settings to gpg_verify
-
         remote.gpg_verify = remote.map_gpg(content)
 
         return remote
