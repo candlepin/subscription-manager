@@ -118,7 +118,7 @@ class RepoUpdateActionCommand(object):
             self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
 
         self.release = None
-        self.overrides = []
+        self.overrides = {}
         self.override_supported = bool(self.uep and self.uep.supports_resource('content_overrides'))
 
         # FIXME: empty report at the moment, should be changed to include
@@ -142,8 +142,11 @@ class RepoUpdateActionCommand(object):
             else:
                 status = override_cache.load_status(self.uep, self.identity.uuid)
 
-            if status is not None:
-                self.overrides = status
+            for item in status or []:
+                # Don't iterate through the list
+                if item['contentLabel'] not in self.overrides:
+                    self.overrides[item['contentLabel']] = {}
+                self.overrides[item['contentLabel']][item['name']] = item['value']
 
         message = "Release API is not supported by the server. Using default."
         try:
@@ -302,9 +305,11 @@ class RepoUpdateActionCommand(object):
 
     def _set_override_info(self, repo):
         # In the disconnected case, self.overrides will be an empty list
-        for entry in self.overrides:
-            if entry['contentLabel'] == repo.id:
-                repo[entry['name']] = entry['value']
+        for name, value in self.overrides.get(repo.id, {}).items():
+            repo[name] = value
+
+    def _is_overridden(self, repo, key):
+        return key in self.overrides.get(repo.id, {})
 
     def _set_proxy_info(self, repo):
         proxy = ""
@@ -351,7 +356,7 @@ class RepoUpdateActionCommand(object):
 
             # Mutable properties should be added if not currently defined,
             # otherwise left alone.
-            if mutable:
+            if mutable and not self._is_overridden(old_repo, key):
                 if (new_val is not None) and (not old_repo[key]):
                     if old_repo[key] == new_val:
                         continue
