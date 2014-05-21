@@ -109,16 +109,23 @@ class UpdateActionTests(SubManFixture):
         self.assertFalse(override_cache_mock.load_status.called)
 
     def test_overrides_trump_ent_cert(self):
-        self.update_action.overrides = [{
-            'contentLabel': 'x',
-            'name': 'gpgcheck',
-            'value': 'blah'
-        }]
+        self.update_action.overrides = {'x': {'gpgcheck': 'blah'}}
         r = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
         self.assertEquals('original', r['gpgcheck'])
         self.update_action._set_override_info(r)
         self.assertEquals('blah', r['gpgcheck'])
         self.assertEquals('some_key', r['gpgkey'])
+
+    def test_overrides_trump_existing(self):
+        self.update_action.overrides = {'x': {'gpgcheck': 'blah'}}
+        values = [('gpgcheck', 'original'), ('gpgkey', 'some_key')]
+        old_repo = Repo('x', values)
+        new_repo = Repo(old_repo.id, values)
+        self.update_action._set_override_info(new_repo)
+        self.assertEquals('original', old_repo['gpgcheck'])
+        self.update_action.update_repo(old_repo, new_repo)
+        self.assertEquals('blah', old_repo['gpgcheck'])
+        self.assertEquals('some_key', old_repo['gpgkey'])
 
     @patch("subscription_manager.repolib.RepoFile")
     def test_update_when_new_repo(self, mock_file):
