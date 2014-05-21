@@ -15,6 +15,7 @@
 
 import unittest
 
+from iniparse import RawConfigParser
 from mock import Mock, patch
 from StringIO import StringIO
 
@@ -22,7 +23,8 @@ from fixture import SubManFixture
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
         StubProductDirectory, StubConsumerIdentity
-from subscription_manager.repolib import Repo, RepoUpdateActionCommand, TidyWriter
+from subscription_manager.repolib import Repo, RepoUpdateActionCommand, \
+        TidyWriter, RepoFile
 from subscription_manager import injection as inj
 
 from subscription_manager import repolib
@@ -495,3 +497,61 @@ class TidyWriterTests(unittest.TestCase):
         tidy_writer.close()
 
         self.assertEquals("test stuff\n\ntest\n", output.getvalue())
+
+
+class RepoFileTest(unittest.TestCase):
+
+    @patch("subscription_manager.repolib.RepoFile.create")
+    @patch("subscription_manager.repolib.TidyWriter")
+    def test_configparsers_equal(self, tidy_writer, stub_create):
+        rf = RepoFile()
+        other = RawConfigParser()
+        for parser in [rf, other]:
+            parser.add_section('test')
+            parser.set('test', 'key', 'val')
+        self.assertTrue(rf._configparsers_equal(other))
+
+    @patch("subscription_manager.repolib.RepoFile.create")
+    @patch("subscription_manager.repolib.TidyWriter")
+    def test_configparsers_diff_sections(self, tidy_writer, stub_create):
+        rf = RepoFile()
+        rf.add_section('new_section')
+        other = RawConfigParser()
+        for parser in [rf, other]:
+            parser.add_section('test')
+            parser.set('test', 'key', 'val')
+        self.assertFalse(rf._configparsers_equal(other))
+
+    @patch("subscription_manager.repolib.RepoFile.create")
+    @patch("subscription_manager.repolib.TidyWriter")
+    def test_configparsers_diff_item_val(self, tidy_writer, stub_create):
+        rf = RepoFile()
+        other = RawConfigParser()
+        for parser in [rf, other]:
+            parser.add_section('test')
+            parser.set('test', 'key', 'val')
+        rf.set('test', 'key', 'val2')
+        self.assertFalse(rf._configparsers_equal(other))
+
+    @patch("subscription_manager.repolib.RepoFile.create")
+    @patch("subscription_manager.repolib.TidyWriter")
+    def test_configparsers_diff_items(self, tidy_writer, stub_create):
+        rf = RepoFile()
+        other = RawConfigParser()
+        for parser in [rf, other]:
+            parser.add_section('test')
+            parser.set('test', 'key', 'val')
+        rf.set('test', 'somekey', 'val')
+        self.assertFalse(rf._configparsers_equal(other))
+
+    @patch("subscription_manager.repolib.RepoFile.create")
+    @patch("subscription_manager.repolib.TidyWriter")
+    def test_configparsers_equal_int(self, tidy_writer, stub_create):
+        rf = RepoFile()
+        other = RawConfigParser()
+        for parser in [rf, other]:
+            parser.add_section('test')
+            parser.set('test', 'key', 'val')
+        rf.set('test', 'k', 1)
+        other.set('test', 'k', '1')
+        self.assertTrue(rf._configparsers_equal(other))
