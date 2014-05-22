@@ -13,7 +13,7 @@
 
 Name: subscription-manager
 Version: 1.11.3
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -404,6 +404,14 @@ fi
 %endif
 
 %changelog
+* Thu May 22 2014 ckozak <ckozak@redhat.com> 1.11.3-4
+- broader compare (ckozak@redhat.com)
+- special case beta (ckozak@redhat.com)
+- 1086301: Fix product id product version compare (alikins@redhat.com)
+- 1095938: re-add at-spi locator in repos window (ckozak@redhat.com)
+- Latest translations from zanata. (alikins@redhat.com)
+- Update string catalog again (po/keys.pot) (ckozak@redhat.com)
+
 * Wed May 07 2014 ckozak <ckozak@redhat.com> 1.11.3-3
 - Latest strings from zanata. (alikins@redhat.com)
 - Make debug tarballs less likely to collide (ckozak@redhat.com)
