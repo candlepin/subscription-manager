@@ -12,7 +12,6 @@ OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1
 BIN_DIR := bin/
 BIN_FILES := $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui \
 			 $(BIN_DIR)/rhn-migrate-classic-to-rhsm \
-			 $(BIN_DIR)/install-num-migrate-to-rhsm \
 			 $(BIN_DIR)/rct \
 			 $(BIN_DIR)/rhsm-debug
 SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
@@ -201,7 +200,6 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 
 	install bin/subscription-manager $(PREFIX)/usr/sbin
 	install bin/rhn-migrate-classic-to-rhsm  $(PREFIX)/usr/sbin
-	if [ $(OS_VERSION) = 5 ]; then install bin/install-num-migrate-to-rhsm $(PREFIX)/usr/sbin; fi
 	install bin/subscription-manager-gui $(PREFIX)/usr/sbin
 	install bin/rhsmcertd $(PREFIX)/usr/bin
 
@@ -239,7 +237,6 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -m 644 man/subscription-manager-gui.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rct.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rhsm-debug.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
-	if [ $(OS_VERSION) = 5 ]; then install -m 644 man/install-num-migrate-to-rhsm.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/; fi
 
 	install -m 644 etc-conf/rhsm-icon.desktop \
 		$(PREFIX)/etc/xdg/autostart;\
@@ -447,11 +444,10 @@ fix-glade:
 #                                 _("a" + \
 #                                   "b")
 #  also look for _(a) usages
-#   (though install-num-migrate-to-rhsm has a legit use, so ignore it)
 gettext_lint:
 	@TMPFILE=`mktemp` || exit 1; \
 	pcregrep -n --color=auto -M "_\(.*[\'|\"].*?[\'|\"]\s*\+.*?(?s)\s*[\"|\'].*?(?-s)[\"|\'].*?\)"  $(STYLEFILES) | tee $$TMPFILE; \
-	pcregrep -n --color=auto -M "[^_]_\([^\'\"].*?[\'\"]?\)" $(STYLEFILES) | grep -v "installation number"  | tee $$TMPFILE; \
+	pcregrep -n --color=auto -M "[^_]_\([^\'\"].*?[\'\"]?\)" $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 #see bz #826874, causes issues on older libglade
