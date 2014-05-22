@@ -363,13 +363,9 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/migrate/__init__.py*
 %{_datadir}/rhsm/subscription_manager/migrate/migrate.py*
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
-# Install num migration is only for RHEL 5:
-%{?el5:%attr(755,root,root) %{_sbindir}/install-num-migrate-to-rhsm}
 
 %doc
 %{_mandir}/man8/rhn-migrate-classic-to-rhsm.8*
-# Install num migration is only for RHEL 5:
-%{?el5:%{_mandir}/man8/install-num-migrate-to-rhsm.8*}
 %doc LICENSE
 #only install this file on Fedora
 %if 0%{?fedora} > 14
