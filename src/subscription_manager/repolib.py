@@ -60,10 +60,7 @@ class RepoActionInvoker(BaseActionInvoker):
         action = RepoUpdateActionCommand(cache_only=self.cache_only,
                                   apply_overrides=apply_overrides)
         repos = action.get_unique_content()
-        if self.identity.is_valid() and action.override_supported:
-            return repos
 
-        # Otherwise we are in a disconnected case or dealing with an old server
         current = set()
         # Add the current repo data
         repo_file = RepoFile()
@@ -194,7 +191,6 @@ class RepoUpdateActionCommand(object):
                 # Updates the existing repo with new content
                 self.update_repo(existing, cont)
                 repo_file.update(existing)
-                # TODO: add repoting for overrides
                 self.report_update(existing)
 
         for section in repo_file.sections():
