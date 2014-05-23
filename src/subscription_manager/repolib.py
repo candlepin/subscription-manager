@@ -21,7 +21,7 @@ import logging
 import os
 import string
 import subscription_manager.injection as inj
-from subscription_manager.cache import OverrideStatusCache
+from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from urllib import basejoin
 
 from rhsm.config import initConfig
@@ -87,6 +87,8 @@ class RepoActionInvoker(BaseActionInvoker):
         repo_file = RepoFile()
         if os.path.exists(repo_file.path):
             os.unlink(repo_file.path)
+        # When the repo is removed, also remove the override tracker
+        WrittenOverrideCache.delete_cache()
 
 
 class RepoUpdateActionCommand(object):
@@ -120,6 +122,7 @@ class RepoUpdateActionCommand(object):
         self.release = None
         self.overrides = {}
         self.override_supported = bool(self.uep and self.uep.supports_resource('content_overrides'))
+        self.written_overrides = WrittenOverrideCache()
 
         # FIXME: empty report at the moment, should be changed to include
         # info about updated repos
@@ -133,6 +136,7 @@ class RepoUpdateActionCommand(object):
         # Only attempt to update the overrides if they are supported
         # by the server.
         if self.override_supported:
+            self.written_overrides._read_cache()
             try:
                 override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
             except KeyError:
@@ -200,6 +204,10 @@ class RepoUpdateActionCommand(object):
 
         # Write new RepoFile to disk:
         repo_file.write()
+        if self.override_supported:
+            # Update with the values we just wrote
+            self.written_overrides.overrides = self.overrides
+            self.written_overrides.write_cache()
         log.info("repos updated: %s" % self.report)
         return self.report
 
@@ -311,6 +319,11 @@ class RepoUpdateActionCommand(object):
     def _is_overridden(self, repo, key):
         return key in self.overrides.get(repo.id, {})
 
+    def _was_overridden(self, repo, key, value):
+        written_value = self.written_overrides.overrides.get(repo.id, {}).get(key)
+        # Compare values as strings to avoid casting problems from io
+        return written_value is not None and str(written_value) == str(value)
+
     def _set_proxy_info(self, repo):
         proxy = ""
 
@@ -356,7 +369,8 @@ class RepoUpdateActionCommand(object):
 
             # Mutable properties should be added if not currently defined,
             # otherwise left alone.
-            if mutable and not self._is_overridden(old_repo, key):
+            if mutable and not self._is_overridden(old_repo, key) \
+                    and not self._was_overridden(old_repo, key, old_repo[key]):
                 if (new_val is not None) and (not old_repo[key]):
                     if old_repo[key] == new_val:
                         continue
@@ -366,7 +380,7 @@ class RepoUpdateActionCommand(object):
             # Immutable properties should be always be added/updated,
             # and removed if undefined in the new repo definition.
             else:
-                if new_val is None or (new_val.strip() == ""):
+                if new_val is None or (str(new_val).strip() == ""):
                     # Immutable property should be removed:
                     if key in old_repo.keys():
                         del old_repo[key]
