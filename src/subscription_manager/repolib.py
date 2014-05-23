@@ -318,7 +318,7 @@ class RepoUpdateActionCommand(object):
     def _was_overridden(self, repo, key, value):
         written_value = self.written_overrides.overrides.get(repo.id, {}).get(key)
         # Compare values as strings to avoid casting problems from io
-        return written_value is not None and str(written_value) == str(value)
+        return written_value is not None and value is not None and str(written_value) == str(value)
 
     def _set_proxy_info(self, repo):
         proxy = ""
@@ -349,6 +349,13 @@ class RepoUpdateActionCommand(object):
                 url = url.lstrip('/')
             return basejoin(base, url)
 
+    def _build_props(self, old_repo, new_repo):
+        result = {}
+        all_keys = old_repo.keys() + new_repo.keys()
+        for key in all_keys:
+            result[key] = Repo.PROPERTIES.get(key, (1, None))
+        return result
+
     def update_repo(self, old_repo, new_repo):
         """
         Checks an existing repo definition against a potentially updated
@@ -360,15 +367,15 @@ class RepoUpdateActionCommand(object):
         """
         changes_made = 0
 
-        for key, mutable, default in Repo.PROPERTIES:
+        for key, (mutable, default) in self._build_props(old_repo, new_repo).items():
             new_val = new_repo.get(key)
 
             # Mutable properties should be added if not currently defined,
             # otherwise left alone.
             if mutable and not self._is_overridden(old_repo, key) \
-                    and not self._was_overridden(old_repo, key, old_repo[key]):
-                if (new_val is not None) and (not old_repo[key]):
-                    if old_repo[key] == new_val:
+                    and not self._was_overridden(old_repo, key, old_repo.get(key)):
+                if (new_val is not None) and (not old_repo.get(key)):
+                    if old_repo.get(key) == new_val:
                         continue
                     old_repo[key] = new_val
                     changes_made += 1
@@ -384,7 +391,7 @@ class RepoUpdateActionCommand(object):
                     continue
 
                 # Unchanged:
-                if old_repo[key] == new_val:
+                if old_repo.get(key) == new_val:
                     continue
 
                 old_repo[key] = new_val
@@ -453,22 +460,21 @@ class RepoActionReport(ActionReport):
 
 class Repo(dict):
     # (name, mutable, default) - The mutability information is only used in disconnected cases
-    PROPERTIES = (
-        ('name', 0, None),
-        ('baseurl', 0, None),
-        ('enabled', 1, '1'),
-        ('gpgcheck', 1, '1'),
-        ('gpgkey', 0, None),
-        ('sslverify', 1, '1'),
-        ('sslcacert', 0, None),
-        ('sslclientkey', 0, None),
-        ('sslclientcert', 0, None),
-        ('metadata_expire', 1, None),
-        ('proxy', 0, None),
-        ('proxy_username', 0, None),
-        ('proxy_password', 0, None),
-        ('ui_repoid_vars', 0, None),
-    )
+    PROPERTIES = {
+            'name': (0, None),
+            'baseurl': (0, None),
+            'enabled': (1, '1'),
+            'gpgcheck': (1, '1'),
+            'gpgkey': (0, None),
+            'sslverify': (1, '1'),
+            'sslcacert': (0, None),
+            'sslclientkey': (0, None),
+            'sslclientcert': (0, None),
+            'metadata_expire': (1, None),
+            'proxy': (0, None),
+            'proxy_username': (0, None),
+            'proxy_password': (0, None),
+            'ui_repoid_vars': (0, None)}
 
     def __init__(self, repo_id, existing_values=None):
         # existing_values is a list of 2-tuples
@@ -488,7 +494,7 @@ class Repo(dict):
         # NOTE: This sets the above properties to the default values even if
         # they are not defined on disk. i.e. these properties will always
         # appear in this dict, but their values may be None.
-        for k, m, d in self.PROPERTIES:
+        for k, (m, d) in self.PROPERTIES.items():
             if k not in self.keys():
                 self[k] = d
 
