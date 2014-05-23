@@ -388,13 +388,12 @@ class UpdateActionTests(SubManFixture):
         Test that overrides for values that aren't found in Repo.PROPERTIES are written
         to existing repos
         '''
-        update_action = RepoUpdateActionCommand()
-        update_action.written_overrides.overrides = {}
-        update_action.overrides = {'x': {'somekey': 'someval'}}
+        self.update_action.written_overrides.overrides = {}
+        self.update_action.overrides = {'x': {'somekey': 'someval'}}
         old_repo = Repo('x', [])
         new_repo = Repo(old_repo.id, [])
-        update_action._set_override_info(new_repo)
-        update_action.update_repo(old_repo, new_repo)
+        self.update_action._set_override_info(new_repo)
+        self.update_action.update_repo(old_repo, new_repo)
         self.assertEquals('someval', old_repo['somekey'])
 
     def test_non_default_override_removed_deleted(self):
@@ -402,13 +401,12 @@ class UpdateActionTests(SubManFixture):
         Test that overrides for values that aren't found in Repo.PROPERTIES are
         removed from redhat.repo once the override is removed
         '''
-        update_action = RepoUpdateActionCommand()
-        update_action.written_overrides.overrides = {'x': {'somekey': 'someval'}}
-        update_action.overrides = {}
+        self.update_action.written_overrides.overrides = {'x': {'somekey': 'someval'}}
+        self.update_action.overrides = {}
         old_repo = Repo('x', [('somekey', 'someval')])
         new_repo = Repo(old_repo.id, [])
-        update_action._set_override_info(new_repo)
-        update_action.update_repo(old_repo, new_repo)
+        self.update_action._set_override_info(new_repo)
+        self.update_action.update_repo(old_repo, new_repo)
         self.assertFalse('somekey' in old_repo)
 
 
