@@ -357,6 +357,32 @@ class UpdateActionTests(SubManFixture):
         existing_repo['fake_prop'] = 'fake'
         self.assertTrue(('fake_prop', 'fake') in existing_repo.items())
 
+    def test_overrides_removed_revert_to_default(self):
+        self.update_action.written_overrides.overrides = {'x': {'gpgcheck': 'blah'}}
+        self.update_action.overrides = {}
+        old_repo = Repo('x', [('gpgcheck', 'blah'), ('gpgkey', 'some_key')])
+        new_repo = Repo(old_repo.id, [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
+        self.update_action._set_override_info(new_repo)
+        # The value from the current repo file (with the old override) should exist pre-update
+        self.assertEquals('blah', old_repo['gpgcheck'])
+        self.update_action.update_repo(old_repo, new_repo)
+        # Because the override has been removed, the value is reset to the default
+        self.assertEquals('original', old_repo['gpgcheck'])
+        self.assertEquals('some_key', old_repo['gpgkey'])
+
+    def test_overrides_removed_and_edited(self):
+        self.update_action.written_overrides.overrides = {'x': {'gpgcheck': 'override_value'}}
+        self.update_action.overrides = {}
+        old_repo = Repo('x', [('gpgcheck', 'hand_edit'), ('gpgkey', 'some_key')])
+        new_repo = Repo(old_repo.id, [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
+        self.update_action._set_override_info(new_repo)
+        # The value from the current repo file (with the old hand edit) should exist pre-update
+        self.assertEquals('hand_edit', old_repo['gpgcheck'])
+        self.update_action.update_repo(old_repo, new_repo)
+        # Because the current value doesn't match the override, we don't modify it
+        self.assertEquals('hand_edit', old_repo['gpgcheck'])
+        self.assertEquals('some_key', old_repo['gpgkey'])
+
 
 class TidyWriterTests(unittest.TestCase):
 
