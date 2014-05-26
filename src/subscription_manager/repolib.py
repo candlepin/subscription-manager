@@ -362,8 +362,6 @@ class RepoUpdateActionCommand(object):
         version created from most recent entitlement certificates and
         configuration. Creates, updates, and removes properties as
         appropriate and returns the number of changes made. (if any)
-
-        This method should only be used in disconnected cases!
         """
         changes_made = 0
 
@@ -371,7 +369,9 @@ class RepoUpdateActionCommand(object):
             new_val = new_repo.get(key)
 
             # Mutable properties should be added if not currently defined,
-            # otherwise left alone.
+            # otherwise left alone. However if we see that the property was overridden
+            # but that override has since been removed, we need to revert to the default
+            # value.
             if mutable and not self._is_overridden(old_repo, key) \
                     and not self._was_overridden(old_repo, key, old_repo.get(key)):
                 if (new_val is not None) and (not old_repo.get(key)):
