@@ -10,7 +10,7 @@
 
 
 Name: python-rhsm
-Version: 1.11.4
+Version: 1.11.5
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -71,6 +71,12 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Mon May 26 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.11.5-1
+- 1090350: fix time drift detection (ckozak@redhat.com)
+- 1096676: Use simplejson on RHEL 5. (dgoodwin@redhat.com)
+- 1094492: Alternate Subject needs different type that allows more characters.
+  (wpoteat@redhat.com)
+
 * Mon Apr 28 2014 ckozak <ckozak@redhat.com> 1.11.4-1
 
 * Thu Apr 10 2014 Alex Wood <awood@redhat.com> 1.11.3-1
