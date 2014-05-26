@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.11.6
+Version: 1.11.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -415,6 +415,24 @@ fi
 %endif
 
 %changelog
+* Mon May 26 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.11.7-1
+- update existing repos with non-default overrides (ckozak@redhat.com)
+- correct repos --list behavior (ckozak@redhat.com)
+- Cache overrides when RepoFile is written (ckozak@redhat.com)
+- 1098891: Apply overrides to mutable properties (ckozak@redhat.com)
+- 1076359; Removes the extra l from --remove all (csnyder@redhat.com)
+- 1098891: Update repos, persisting local settings when possible
+  (ckozak@redhat.com)
+- 1094617: Status line reporting for installed products uses incorrect date
+  (wpoteat@redhat.com)
+- 1097208: 1097703: Fix rhsmcertd-worker daemon (ckozak@redhat.com)
+- 1086301: Fix product id product version compare (alikins@redhat.com)
+- 1096777: Bad URI for remove by serial (wpoteat@redhat.com)
+- 1095938: re-add at-spi locator in repos window (ckozak@redhat.com)
+- 1094492: Consumer name length issues in certificate (wpoteat@redhat.com)
+- Fix yum subman plugin RepoActionInvoker error. (alikins@redhat.com)
+- Overrides had no "cp", the connection was named uep (ckozak@redhat.com)
+
 * Thu May 01 2014 Alex Wood <awood@redhat.com> 1.11.6-1
 - s/certmgr/action_client in spec (alikins@redhat.com)
 
