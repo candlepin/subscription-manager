@@ -14,7 +14,7 @@
 
 Name: subscription-manager
 Version: 1.10.14
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -419,6 +419,10 @@ fi
 %endif
 
 %changelog
+* Tue May 27 2014 ckozak <ckozak@redhat.com> 1.10.14-8
+- 1098891: Update repos, persisting local settings when possible
+  (ckozak@redhat.com)
+
 * Tue Mar 25 2014 ckozak <ckozak@redhat.com> 1.10.14-7
 - 1080531: Require newer python-rhsm to support branding (ckozak@redhat.com)
 
