@@ -2063,7 +2063,9 @@ class ListCommand(CliCommand):
             facts = inj.require(inj.FACTS)
             epools = managerlib.get_available_entitlements(facts=facts,
                                                            get_all=self.options.all,
-                                                           active_on=on_date)
+                                                           active_on=on_date,
+                                                           overlapping=self.options.no_overlap,
+                                                           uninstalled=self.options.match_installed)
 
             # Filter certs by service level, if specified.
             # Allowing "" here.
