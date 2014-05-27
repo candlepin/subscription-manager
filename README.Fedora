@@ -1,10 +1,10 @@
-The subscription-manager-migration package contains two scripts:
-rhn-migrate-classic-to-rhsm and install-num-migrate-to-rhsm. These are
-migration scripts; the first is intended to move people from Classic RHN Hosted
-to Hosted Candlepin and the second is intended for people with installation
-numbers on their machines to obtain the proper product certificates for the
-data encoded in their instnum. While unsupported, these scripts could also be
-used to migrate machines from Spacewalk to Candlepin.
+The subscription-manager-migration package contains the script:
+
+    rhn-migrate-classic-to-rhsm.
+
+This is a migration script intended to move people from Classic
+RHN Hosted to Hosted Candlepin. While unsupported, this
+script could also be used to migrate machines from Spacewalk to Candlepin.
 
 If a user wanted to do this, they would need to perform a few steps. First, the
 user would have to register their machine with a Spacewalk[1] instance. Then,
