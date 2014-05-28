@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-05-08 09:29-0400\n"
-"PO-Revision-Date: 2014-03-20 04:34-0400\n"
+"PO-Revision-Date: 2014-05-19 08:06-0400\n"
 "Last-Translator: tchuang <tchuang@redhat.com>\n"
 "Language-Team: Chinese (Traditional Han, Taiwan)\n"
 "Language: zh-Hant-TW\n"
@@ -457,6 +457,8 @@ msgid ""
 "Unable to read mapping file: %(mappingfile)s.\n"
 "Do you have the %(package)s package installed?"
 msgstr ""
+"無法讀取對應檔案：%(mappingfile)s。\n"
+"您是否安裝了 %(package)s 套件？"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:476
@@ -612,7 +614,7 @@ msgstr ""
 msgid ""
 "Please ensure system has subscriptions attached, and see '%s' to enable "
 "additional repositories"
-msgstr ""
+msgstr "請確認系統已連上了訂閱服務，並查看 '%s' 以啟用額外軟體庫"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Chester Cheng
 #: ../src/subscription_manager/migrate/migrate.py:756
@@ -847,7 +849,7 @@ msgstr "Copyright (c) 2012 Red Hat, Inc."
 #: ../src/subscription_manager/gui/about.py:74
 #, python-format
 msgid "<b>%s version:</b> %s"
-msgstr ""
+msgstr "<b>%s 版本</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author tchuang
 #: ../src/subscription_manager/gui/about.py:76
@@ -1902,7 +1904,7 @@ msgstr "已安裝產品目前的狀態："
 
 #: ../src/subscription_manager/managercli.py:206
 msgid "Unable to find available subscriptions for all your installed products."
-msgstr ""
+msgstr "找不到您所有已安裝產品的可用訂閱服務。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author tchuang
 #: ../src/subscription_manager/managercli.py:248
@@ -2691,17 +2693,17 @@ msgstr "檢視與配置 subscription-manager 外掛"
 #: ../src/subscription_manager/managercli.py:1721
 #, python-format
 msgid "list %s plugins"
-msgstr ""
+msgstr "列出 %s 個外掛"
 
 #: ../src/subscription_manager/managercli.py:1723
 #, python-format
 msgid "list %s plugin slots"
-msgstr ""
+msgstr "列出 %s 個外掛插槽"
 
 #: ../src/subscription_manager/managercli.py:1725
 #, python-format
 msgid "list %s plugin hooks"
-msgstr ""
+msgstr "列出 %s 個外掛勾點"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author tchuang
 #: ../src/subscription_manager/managercli.py:1728
@@ -3339,7 +3341,7 @@ msgstr "品牌類型"
 
 #: ../src/rct/printing.py:58
 msgid "Brand Name"
-msgstr ""
+msgstr "品牌名稱"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/printing.py:73
@@ -3561,7 +3563,7 @@ msgstr "資料會位於無壓縮的目錄中"
 
 #: ../src/rhsm_debug/debug_commands.py:61
 msgid "only data not already included in sos report will be collected"
-msgstr ""
+msgstr "只有未包含在 sos 報告中的資料會被蒐集"
 
 #: ../src/rhsm_debug/debug_commands.py:64
 #, python-format
@@ -4334,6 +4336,8 @@ msgid ""
 "<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
 "privacy_statement.html</small>"
 msgstr ""
+"<small><b>提示：</b>Red Hat 重視您的隱私權：http://www.redhat.com/legal/"
+"privacy_statement.html</small>"
 
 #: ../src/subscription_manager/gui/data/registration_info.glade.h:6
 msgid ""
@@ -4795,7 +4799,7 @@ msgstr "無法開啟顯示"
 #: ../bin/subscription-manager-gui:148
 #, c-format
 msgid "%s is already running"
-msgstr ""
+msgstr "%s 已在執行中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author tchuang
 #: ../bin/subscription-manager-gui:156

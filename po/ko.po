@@ -1,10 +1,10 @@
-#
+# eukim <eukim@fedoraproject.org>, 2014. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-05-08 09:29-0400\n"
-"PO-Revision-Date: 2014-03-13 07:22-0400\n"
+"PO-Revision-Date: 2014-05-27 10:51-0400\n"
 "Last-Translator: eukim <eukim@fedoraproject.org>\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
@@ -476,6 +476,8 @@ msgid ""
 "Unable to read mapping file: %(mappingfile)s.\n"
 "Do you have the %(package)s package installed?"
 msgstr ""
+"매핑 파일을 읽을 수 없음: %(mappingfile)s.\n"
+"%(package)s 패키지가 설치되어 있습니까?"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:476
@@ -636,6 +638,8 @@ msgid ""
 "Please ensure system has subscriptions attached, and see '%s' to enable "
 "additional repositories"
 msgstr ""
+"시스템에 서브스크립션이 첨부되어 있느지 확인하십시오. 추가 리포지터리를 활성"
+"화하려면 '%s'에서 참조하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
 #: ../src/subscription_manager/migrate/migrate.py:756
@@ -868,7 +872,7 @@ msgstr "Copyright (c) 2012 Red Hat, Inc."
 #: ../src/subscription_manager/gui/about.py:74
 #, python-format
 msgid "<b>%s version:</b> %s"
-msgstr ""
+msgstr "<b>%s 버전:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
 #: ../src/subscription_manager/gui/about.py:76
@@ -1936,7 +1940,7 @@ msgstr "설치된 제품의 현재 상태: "
 
 #: ../src/subscription_manager/managercli.py:206
 msgid "Unable to find available subscriptions for all your installed products."
-msgstr ""
+msgstr "설치된 모든 제품에 대한 유효한 서브스크립션을 찾을 수 없습니다. "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
 #: ../src/subscription_manager/managercli.py:248
@@ -2743,17 +2747,17 @@ msgstr "subscription-manager 플러그인 보기 및 설정 "
 #: ../src/subscription_manager/managercli.py:1721
 #, python-format
 msgid "list %s plugins"
-msgstr ""
+msgstr "%s 플러그인 나열 "
 
 #: ../src/subscription_manager/managercli.py:1723
 #, python-format
 msgid "list %s plugin slots"
-msgstr ""
+msgstr "%s 플러그인 슬롯 나열 "
 
 #: ../src/subscription_manager/managercli.py:1725
 #, python-format
 msgid "list %s plugin hooks"
-msgstr ""
+msgstr "%s 플러그인 후크 나열 "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
 #: ../src/subscription_manager/managercli.py:1728
@@ -3414,7 +3418,7 @@ msgstr "브랜드 유형 "
 
 #: ../src/rct/printing.py:58
 msgid "Brand Name"
-msgstr ""
+msgstr "브랜드 이름 "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/printing.py:73
@@ -3636,7 +3640,7 @@ msgstr "데이터는 압축되지 않은 디렉토리에 있습니다 "
 
 #: ../src/rhsm_debug/debug_commands.py:61
 msgid "only data not already included in sos report will be collected"
-msgstr ""
+msgstr "SOS 보고서에 아직 포함되지 않은 데이터만 수집합니다 "
 
 #: ../src/rhsm_debug/debug_commands.py:64
 #, python-format
@@ -4420,6 +4424,8 @@ msgid ""
 "<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
 "privacy_statement.html</small>"
 msgstr ""
+"<small><b>도움말:</b> Red Hat은 사용자 개인 정보를 보호합니다: http://www."
+"redhat.com/legal/privacy_statement.html</small>  "
 
 #: ../src/subscription_manager/gui/data/registration_info.glade.h:6
 msgid ""
@@ -4890,7 +4896,7 @@ msgstr "디스플레이를 열 수 없음 "
 #: ../bin/subscription-manager-gui:148
 #, c-format
 msgid "%s is already running"
-msgstr ""
+msgstr "%s가 이미 실행되고 있습니다 "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author eukim
 #: ../bin/subscription-manager-gui:156

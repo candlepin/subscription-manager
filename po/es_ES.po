@@ -1,11 +1,11 @@
-#
+# Gladys Guerrero <gguerrer@redhat.com>, 2014. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-05-08 09:29-0400\n"
-"PO-Revision-Date: 2014-03-04 05:31-0500\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2014-05-21 12:00-0400\n"
+"Last-Translator: Gladys Guerrero <gguerrer@redhat.com>\n"
 "Language-Team: Spanish (Spain)\n"
 "Language: es-ES\n"
 "MIME-Version: 1.0\n"
@@ -103,8 +103,8 @@ msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
 msgstr ""
-"Anular el registro de este sistema del portal del cliente  u otro servicio "
-"de gestión de suscripciones"
+"Anular el registro de este sistema del portal del cliente u otro servicio de "
+"administración de suscripciones"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:10
@@ -128,7 +128,7 @@ msgid ""
 "Your system is being registered again using Red Hat Subscription Management. "
 "Red Hat recommends that customers only register once."
 msgstr ""
-"Su sistema está siendo registrado de nuevo mediante Administración  de "
+"Su sistema está siendo registrado de nuevo mediante Administración de "
 "suscripciones. Red Hat recomienda a los usuarios registrarse solo una vez."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -138,7 +138,7 @@ msgid ""
 "Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
 "Para saber más sobre cómo cancelar el registro de alguno de los servicios, "
-"consulte el artículo de la  base de conocimientos: https://access.redhat.com/"
+"consulte el artículo de la base de conocimiento: https://access.redhat.com/"
 "kb/docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
@@ -168,7 +168,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: ../src/subscription_manager/branding/redhat_branding.py:25
 msgid "Red Hat recommends that customers only register with one service."
-msgstr "Red Hat recomienda registrarse solamente a un servicio."
+msgstr "Red Hat recomienda registrarse únicamente a un servicio."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:27
@@ -177,8 +177,8 @@ msgid ""
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
 "Para saber más sobre el registro de RHN y las tecnologías por favor consulte "
-"este artículo de la  base de conocimientos: https://access.redhat.com/kb/"
-"docs/DOC-45563"
+"este artículo de la base de conocimiento: https://access.redhat.com/kb/docs/"
+"DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:28
@@ -191,7 +191,7 @@ msgid ""
 "Tip: Forgot your login or password? Look it up at http://redhat.com/"
 "forgot_password"
 msgstr ""
-"Consejo: ¿Olvidó su nombre de usuario o contraseña? Búsquela en http://"
+"Consejo: ¿Olvidó su nombre de usuario o contraseña? Búsquelos en http://"
 "redhat.com/forgot_password"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -245,13 +245,13 @@ msgid ""
 "Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
-"No se puede conectar al servidor de certificados: %s. Consulte /var/log/rhsm/"
-"rhsm.log para obtener mayor información. "
+"No se puede conectar al servidor de certificados: %s.  Si desea obtener más "
+"información, consulte /var/log/rhsm/rhsm.log. "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: ../src/subscription_manager/migrate/migrate.py:113
 msgid "You have entered an invalid choice."
-msgstr "Ha ingresado una elección inválida."
+msgstr "Ha ingresado una elección no válida."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:156
@@ -316,7 +316,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: ../src/subscription_manager/migrate/migrate.py:178
 msgid "organization to register to"
-msgstr "Organización a registrar a"
+msgstr "Organización para registrar a"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: ../src/subscription_manager/migrate/migrate.py:180
@@ -338,7 +338,7 @@ msgstr "Contraseña de Red Hat:"
 
 #: ../src/subscription_manager/migrate/migrate.py:208
 msgid "Subscription Service username: "
-msgstr "Nombre de usuario del servicio de suscripción"
+msgstr "Nombre de usuario del servicio de suscripción:"
 
 #: ../src/subscription_manager/migrate/migrate.py:208
 msgid "Subscription Service password: "
@@ -495,6 +495,8 @@ msgid ""
 "Unable to read mapping file: %(mappingfile)s.\n"
 "Do you have the %(package)s package installed?"
 msgstr ""
+"No se pudo leer el archivo de mapas: %(mappingfile)s.\n"
+"¿Tiene el paquete %(package)s instalado?"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:476
@@ -541,12 +543,13 @@ msgid ""
 msgstr ""
 "No se recibió un mensaje completo para cancelar el registro de RHN Classic "
 "para el sistema %s.\n"
-"Por favor investigue en el portal del cliente en https://access.redhat.com."
+"Por favor, investigue a través del portal del cliente en https://access."
+"redhat.com."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:617
 msgid "System successfully unregistered from RHN Classic."
-msgstr "Se canceló con éxito el registro del sistema desde  RHN Classic."
+msgstr "Se canceló con éxito el registro del sistema desde RHN Classic."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:619
@@ -558,7 +561,7 @@ msgstr ""
 #: ../src/subscription_manager/migrate/migrate.py:625
 msgid "Attempting to register system to Red Hat Subscription Management..."
 msgstr ""
-"Intentando registrar sistema a Administración de suscripción de Red Hat..."
+"Intentando registrar el sistema a Administración de suscripción de Red Hat..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:638
@@ -609,7 +612,7 @@ msgstr ""
 #: ../src/subscription_manager/migrate/migrate.py:672
 msgid "Please select a service level agreement for this system."
 msgstr ""
-"Por favor seleccione el acuerdo del nivel de servicio para este sistema.  "
+"Por favor seleccione el acuerdo del nivel de servicio para este sistema. "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:679
@@ -622,7 +625,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: ../src/subscription_manager/migrate/migrate.py:682
 msgid "Attempting to auto-attach to appropriate subscriptions..."
-msgstr "Intentando  autovincular a suscripciones apropiadas..."
+msgstr "Intentando autovincular a suscripciones apropiadas..."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: ../src/subscription_manager/migrate/migrate.py:691
@@ -632,7 +635,7 @@ msgid ""
 "installed on this system?"
 msgstr ""
 "\n"
-"No se logró  autovincular.  ¿Sus suscripciones existentes coinciden con los "
+"No se logró autovincular. ¿Sus suscripciones existentes coinciden con los "
 "productos instalados en este sistema?"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -662,6 +665,8 @@ msgid ""
 "Please ensure system has subscriptions attached, and see '%s' to enable "
 "additional repositories"
 msgstr ""
+"Por favor verifique si el sistema tiene vinculadas las suscripciones y "
+"consulte '%s' para habilitar los repositorios adicionales"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: ../src/subscription_manager/migrate/migrate.py:756
@@ -725,7 +730,7 @@ msgstr "Se encontró serial (local)# %s"
 #: ../src/subscription_manager/certlib.py:437
 #, python-format
 msgid "Expected (UEP) serial# %s"
-msgstr "Se espera (UEP) serial# %s"
+msgstr "Se esperaba (UEP) serial# %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/certlib.py:438
@@ -903,7 +908,7 @@ msgstr "Copyright (c) 2012 Red Hat, Inc."
 #: ../src/subscription_manager/gui/about.py:74
 #, python-format
 msgid "<b>%s version:</b> %s"
-msgstr ""
+msgstr "<b>%s versión:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: ../src/subscription_manager/gui/about.py:76
@@ -1198,7 +1203,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:126
 msgid "You have opted to skip auto-attach."
-msgstr "Ha optado por saltarse ' autovincular'."
+msgstr "Ha optado por saltarse 'autovincular'."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:175
@@ -1557,7 +1562,7 @@ msgstr "No"
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:59
 msgid "Fact"
-msgstr "Evento"
+msgstr "Hecho"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/factsgui.py:60
@@ -1984,6 +1989,7 @@ msgstr "Estatus de productos instalados:"
 #: ../src/subscription_manager/managercli.py:206
 msgid "Unable to find available subscriptions for all your installed products."
 msgstr ""
+"No se encontraron suscripciones disponibles para sus productos instalados."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: ../src/subscription_manager/managercli.py:248
@@ -2829,17 +2835,17 @@ msgstr "Ver y configurar los complementos subscription-manager"
 #: ../src/subscription_manager/managercli.py:1721
 #, python-format
 msgid "list %s plugins"
-msgstr ""
+msgstr "Lista %s conectores"
 
 #: ../src/subscription_manager/managercli.py:1723
 #, python-format
 msgid "list %s plugin slots"
-msgstr ""
+msgstr "Lista %s ranuras de conectores"
 
 #: ../src/subscription_manager/managercli.py:1725
 #, python-format
 msgid "list %s plugin hooks"
-msgstr ""
+msgstr "Lista %s ganchos de conectores"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: ../src/subscription_manager/managercli.py:1728
@@ -3518,7 +3524,7 @@ msgstr "Tipo de marca"
 
 #: ../src/rct/printing.py:58
 msgid "Brand Name"
-msgstr ""
+msgstr "Nombre de marca"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/printing.py:73
@@ -3741,6 +3747,7 @@ msgstr "Los datos estarán en un directorio no comprimido"
 #: ../src/rhsm_debug/debug_commands.py:61
 msgid "only data not already included in sos report will be collected"
 msgstr ""
+"Solo se recolectarán los datos que no se han incluidos aún en el reporte SOS"
 
 #: ../src/rhsm_debug/debug_commands.py:64
 #, python-format
@@ -4534,6 +4541,8 @@ msgid ""
 "<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
 "privacy_statement.html</small>"
 msgstr ""
+"<small><b>Consejo:</b> Red Hat valora su privacidad: http://www.redhat.com/"
+"legal/privacy_statement.html</small>"
 
 #: ../src/subscription_manager/gui/data/registration_info.glade.h:6
 msgid ""
@@ -5015,7 +5024,7 @@ msgstr "No es posible abrir un visor"
 #: ../bin/subscription-manager-gui:148
 #, c-format
 msgid "%s is already running"
-msgstr ""
+msgstr "%s ya se está ejecutando"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: ../bin/subscription-manager-gui:156

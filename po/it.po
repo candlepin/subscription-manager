@@ -1,11 +1,11 @@
-#
+# fvalen <fvalen@fedoraproject.org>, 2014. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-05-08 09:29-0400\n"
-"PO-Revision-Date: 2014-02-21 08:17-0500\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2014-05-19 01:07-0400\n"
+"Last-Translator: fvalen <fvalen@fedoraproject.org>\n"
 "Language-Team: Italian\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -498,6 +498,8 @@ msgid ""
 "Unable to read mapping file: %(mappingfile)s.\n"
 "Do you have the %(package)s package installed?"
 msgstr ""
+"Impossibile consultare il file di mappatura: %(mappingfile)s.\n"
+"Hai installato il pacchetto %(package)s?"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:476
@@ -670,6 +672,8 @@ msgid ""
 "Please ensure system has subscriptions attached, and see '%s' to enable "
 "additional repositories"
 msgstr ""
+"Assicurarsi che il sistema presenti le sottoscrizioni necessarie e "
+"consultare '%s' per abilitare i repositori aggiuntivi"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/migrate/migrate.py:756
@@ -913,7 +917,7 @@ msgstr "Copyright (c) 2012 Red Hat, Inc."
 #: ../src/subscription_manager/gui/about.py:74
 #, python-format
 msgid "<b>%s version:</b> %s"
-msgstr ""
+msgstr "<b>%s version:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/gui/about.py:76
@@ -2001,6 +2005,8 @@ msgstr "Stato corrente del prodotto installato"
 #: ../src/subscription_manager/managercli.py:206
 msgid "Unable to find available subscriptions for all your installed products."
 msgstr ""
+"Impossibile trovare le sottoscrizioni disponibili per tutti i prodotti "
+"installati."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:248
@@ -2853,17 +2859,17 @@ msgstr "Visualizza e configura i plugin del subscription-manager"
 #: ../src/subscription_manager/managercli.py:1721
 #, python-format
 msgid "list %s plugins"
-msgstr ""
+msgstr "elenca i plugin %s "
 
 #: ../src/subscription_manager/managercli.py:1723
 #, python-format
 msgid "list %s plugin slots"
-msgstr ""
+msgstr "elenca gli slot per il plugin %s "
 
 #: ../src/subscription_manager/managercli.py:1725
 #, python-format
 msgid "list %s plugin hooks"
-msgstr ""
+msgstr "elenca gli hook per il plugin %s "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:1728
@@ -3550,7 +3556,7 @@ msgstr "Tipo di marca"
 
 #: ../src/rct/printing.py:58
 msgid "Brand Name"
-msgstr ""
+msgstr "Nome prodotto"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/printing.py:73
@@ -3772,7 +3778,7 @@ msgstr "i dati saranno disponibili in una directory non compressa"
 
 #: ../src/rhsm_debug/debug_commands.py:61
 msgid "only data not already included in sos report will be collected"
-msgstr ""
+msgstr "verranno raccolti solo i dati non inclusi nel riporto sos"
 
 #: ../src/rhsm_debug/debug_commands.py:64
 #, python-format
@@ -4565,6 +4571,8 @@ msgid ""
 "<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
 "privacy_statement.html</small>"
 msgstr ""
+"<small><b>Suggerimento:</b> Red Hat rispetta la tua privacy: http://www."
+"redhat.com/legal/privacy_statement.html</small>"
 
 #: ../src/subscription_manager/gui/data/registration_info.glade.h:6
 msgid ""
@@ -5046,7 +5054,7 @@ msgstr "Impossibile aprire un display"
 #: ../bin/subscription-manager-gui:148
 #, c-format
 msgid "%s is already running"
-msgstr ""
+msgstr "%s è già in esecuzione"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../bin/subscription-manager-gui:156

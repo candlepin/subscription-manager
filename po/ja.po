@@ -1,11 +1,11 @@
-#
+# noriko <noriko@fedoraproject.org>, 2014. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-05-08 09:29-0400\n"
-"PO-Revision-Date: 2014-02-05 10:49-0500\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2014-05-21 12:38-0400\n"
+"Last-Translator: noriko <noriko@fedoraproject.org>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -488,6 +488,8 @@ msgid ""
 "Unable to read mapping file: %(mappingfile)s.\n"
 "Do you have the %(package)s package installed?"
 msgstr ""
+"マッピングファイルを読み込めません: %(mappingfile)s\n"
+"%(package)s パッケージをインストールしていますか?"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:476
@@ -642,7 +644,7 @@ msgid ""
 "Unable to enable extra repositories."
 msgstr ""
 "\n"
-"余分なリポジトリを有効にできません"
+"追加リポジトリを有効にできません"
 
 #: ../src/subscription_manager/migrate/migrate.py:732
 #, python-format
@@ -650,6 +652,8 @@ msgid ""
 "Please ensure system has subscriptions attached, and see '%s' to enable "
 "additional repositories"
 msgstr ""
+"システムにサブスクリプションが割り当てられていることを確認してください。追加"
+"リポジトリを有効にする方法は '%s' をご覧ください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: ../src/subscription_manager/migrate/migrate.py:756
@@ -891,7 +895,7 @@ msgstr "Copyright (c) 2012 Red Hat, Inc."
 #: ../src/subscription_manager/gui/about.py:74
 #, python-format
 msgid "<b>%s version:</b> %s"
-msgstr ""
+msgstr "<b>%s バージョン:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: ../src/subscription_manager/gui/about.py:76
@@ -1967,6 +1971,8 @@ msgstr "インストール済み製品の現在の状態:"
 #: ../src/subscription_manager/managercli.py:206
 msgid "Unable to find available subscriptions for all your installed products."
 msgstr ""
+"インストールされている製品すべてに利用できるサブスクリプションが見つかりませ"
+"ん。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: ../src/subscription_manager/managercli.py:248
@@ -2795,17 +2801,17 @@ msgstr "サブスクリプションマネージャーのプラグインの表示
 #: ../src/subscription_manager/managercli.py:1721
 #, python-format
 msgid "list %s plugins"
-msgstr ""
+msgstr "%s のプラグインを表示"
 
 #: ../src/subscription_manager/managercli.py:1723
 #, python-format
 msgid "list %s plugin slots"
-msgstr ""
+msgstr "%s のプラグインスロットを表示"
 
 #: ../src/subscription_manager/managercli.py:1725
 #, python-format
 msgid "list %s plugin hooks"
-msgstr ""
+msgstr "%s のプラグインフックを表示"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: ../src/subscription_manager/managercli.py:1728
@@ -3471,7 +3477,7 @@ msgstr "ブランドタイプ"
 
 #: ../src/rct/printing.py:58
 msgid "Brand Name"
-msgstr ""
+msgstr "ブランド名"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/printing.py:73
@@ -3693,7 +3699,7 @@ msgstr "データは圧縮されていないディレクトリにあります"
 
 #: ../src/rhsm_debug/debug_commands.py:61
 msgid "only data not already included in sos report will be collected"
-msgstr ""
+msgstr "SOS レポートにまだ含まれていないデータのみを収集します"
 
 #: ../src/rhsm_debug/debug_commands.py:64
 #, python-format
@@ -4483,6 +4489,8 @@ msgid ""
 "<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
 "privacy_statement.html</small>"
 msgstr ""
+"<small><b>ヒント:</b> Red Hat はプライバシーを尊重しています: http://www."
+"redhat.com/legal/privacy_statement.html</small>"
 
 #: ../src/subscription_manager/gui/data/registration_info.glade.h:6
 msgid ""
@@ -4956,7 +4964,7 @@ msgstr "ディスプレイを開けません"
 #: ../bin/subscription-manager-gui:148
 #, c-format
 msgid "%s is already running"
-msgstr ""
+msgstr "%s はすでに実行しています"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: ../bin/subscription-manager-gui:156
