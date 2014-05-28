@@ -132,6 +132,7 @@ class EntCertUpdateAction(object):
         self.syslog_results()
 
         if missing_serials or rogue_serials:
+            self.ent_dir.refresh()
             # refresh yum repo's now
             self.repo_hook()
 
