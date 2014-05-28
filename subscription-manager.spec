@@ -13,7 +13,7 @@
 
 Name: subscription-manager
 Version: 1.11.3
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -400,6 +400,14 @@ fi
 %endif
 
 %changelog
+* Wed May 28 2014 ckozak <ckozak@redhat.com> 1.11.3-5
+- Latest strings from zanata. (alikins@redhat.com)
+- 1035440: Don't rewrite redhat.repo unless it has changed (ckozak@redhat.com)
+- 1092754: 1094879: Remove install-num-migrate-to-rhsm tool (ckozak@redhat.com)
+- 1101584: Update repos, persisting local settings when possible
+  (ckozak@redhat.com)
+- 1094492: Consumer name length issues in certificate (wpoteat@redhat.com)
+
 * Thu May 22 2014 ckozak <ckozak@redhat.com> 1.11.3-4
 - broader compare (ckozak@redhat.com)
 - special case beta (ckozak@redhat.com)
