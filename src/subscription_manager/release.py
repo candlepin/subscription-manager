@@ -42,8 +42,36 @@ class ContentConnectionProvider(object):
 
 
 class ReleaseBackend(object):
-    # all the proxy info too?
-    # FIXME: this stuff can be injected
+
+    def get_releases(self):
+        provider = self._get_release_version_provider()
+        return provider.get_releases()
+
+    def _get_release_version_provider(self):
+        release_provider = ApiReleaseVersionProvider()
+        if release_provider.api_supported():
+            return release_provider
+        return CdnReleaseVersionProvider()
+
+
+class ApiReleaseVersionProvider(object):
+
+    def __init__(self):
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.identity = inj.require(inj.IDENTITY)
+
+    def api_supported(self):
+        return self._conn().supports_resource("available_releases")
+
+    def get_releases(self):
+        return self._conn().getAvailableReleases(self.identity.uuid)
+
+    def _conn(self):
+        return self.cp_provider.get_consumer_auth_cp()
+
+
+class CdnReleaseVersionProvider(object):
+
     def __init__(self):
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.product_dir = inj.require(inj.PROD_DIR)
