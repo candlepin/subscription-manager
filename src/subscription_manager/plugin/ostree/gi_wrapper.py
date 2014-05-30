@@ -36,8 +36,6 @@ if options.deployed_origin:
     sysroot = OSTree.Sysroot.new_default()
     sysroot.load(None)
     booted = sysroot.get_booted_deployment()
-    #booted.get_osname()
     if booted:
         deploydir = sysroot.get_deployment_directory(booted)
-        print(sysroot.get_deployment_origin_path(deploydir))
-
+        print(sysroot.get_deployment_origin_path(deploydir).get_path())
