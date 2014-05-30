@@ -62,6 +62,7 @@ _ = gettext.gettext
 gettext.textdomain("rhsm")
 
 gtk.glade.bindtextdomain("rhsm")
+gtk.window_set_default_icon_name("subscription-manager")
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
