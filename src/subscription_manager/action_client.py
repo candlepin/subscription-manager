@@ -106,22 +106,24 @@ class BaseActionClient(object):
 class ActionClient(BaseActionClient):
 
     def _get_libset(self):
+        identity = inj.require(inj.IDENTITY)
+        if identity.is_valid():
+            self.entcertlib = EntCertActionInvoker()
+            self.factlib = FactsActionInvoker()
+            self.profilelib = PackageProfileActionInvoker()
+            self.installedprodlib = InstalledProductsActionInvoker()
+            self.idcertlib = IdentityCertActionInvoker()
 
-        self.entcertlib = EntCertActionInvoker()
+            # WARNING: order is important here, we need to update a number
+            # of things before attempting to autoheal, and we need to autoheal
+            # before attempting to fetch our certificates:
+            return [self.entcertlib, self.idcertlib,
+                       self.factlib, self.profilelib,
+                       self.installedprodlib]
+
+        # In the disconnected case, we only need to run repolib
         self.repolib = RepoActionInvoker()
-        self.factlib = FactsActionInvoker()
-        self.profilelib = PackageProfileActionInvoker()
-        self.installedprodlib = InstalledProductsActionInvoker()
-        self.idcertlib = IdentityCertActionInvoker()
-
-        # WARNING: order is important here, we need to update a number
-        # of things before attempting to autoheal, and we need to autoheal
-        # before attempting to fetch our certificates:
-        lib_set = [self.entcertlib, self.idcertlib, self.repolib,
-                   self.factlib, self.profilelib,
-                   self.installedprodlib]
-
-        return lib_set
+        return [self.repolib]
 
 
 class HealingActionClient(BaseActionClient):
