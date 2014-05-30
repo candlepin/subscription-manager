@@ -60,7 +60,7 @@ class OstreeContentUpdateActionCommand(object):
         # of remotes to apply to our local config of remotes.
         updates_builder = \
             model.OstreeConfigUpdatesBuilder(ostree_config,
-                                             content_set=entitled_content.content_set)
+                                             contents=entitled_contents)
         updates = updates_builder.build()
 
         log.debug("Updates orig: %s" % updates.orig)
