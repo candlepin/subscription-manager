@@ -117,8 +117,8 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertFalse(override_cache_mock.load_status.called)
 
     def test_overrides_trump_ent_cert(self):
-        update_action = RepoUpdateActionCommand()
-        update_action.overrides = {'x': {'gpgcheck': 'blah'}}
+        update_action = RepoUpdateActionCommand(
+            overrides={'x': {'gpgcheck': 'blah'}})
         r = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
         self.assertEquals('original', r['gpgcheck'])
         update_action._set_override_info(r)
@@ -126,8 +126,8 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertEquals('some_key', r['gpgkey'])
 
     def test_overrides_trump_existing(self):
-        update_action = RepoUpdateActionCommand()
-        update_action.overrides = {'x': {'gpgcheck': 'blah'}}
+        update_action = RepoUpdateActionCommand(
+            overrides={'x': {'gpgcheck': 'blah'}})
         values = [('gpgcheck', 'original'), ('gpgkey', 'some_key')]
         old_repo = Repo('x', values)
         new_repo = Repo(old_repo.id, values)
@@ -373,9 +373,8 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertFalse("proxy_username" in existing_repo.keys())
 
     def test_overrides_removed_revert_to_default(self):
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(overrides={})
         update_action.written_overrides.overrides = {'x': {'gpgcheck': 'blah'}}
-        update_action.overrides = {}
         old_repo = Repo('x', [('gpgcheck', 'blah'), ('gpgkey', 'some_key')])
         new_repo = Repo(old_repo.id, [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
         update_action._set_override_info(new_repo)
@@ -387,9 +386,8 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertEquals('some_key', old_repo['gpgkey'])
 
     def test_overrides_removed_and_edited(self):
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(overrides={})
         update_action.written_overrides.overrides = {'x': {'gpgcheck': 'override_value'}}
-        update_action.overrides = {}
         old_repo = Repo('x', [('gpgcheck', 'hand_edit'), ('gpgkey', 'some_key')])
         new_repo = Repo(old_repo.id, [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
         update_action._set_override_info(new_repo)
@@ -405,9 +403,9 @@ class RepoUpdateActionTests(SubManFixture):
         Test that overrides for values that aren't found in Repo.PROPERTIES are written
         to existing repos
         '''
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(
+            overrides = {'x': {'somekey': 'someval'}})
         update_action.written_overrides.overrides = {}
-        update_action.overrides = {'x': {'somekey': 'someval'}}
         old_repo = Repo('x', [])
         new_repo = Repo(old_repo.id, [])
         update_action._set_override_info(new_repo)
@@ -419,9 +417,8 @@ class RepoUpdateActionTests(SubManFixture):
         Test that overrides for values that aren't found in Repo.PROPERTIES are
         removed from redhat.repo once the override is removed
         '''
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(overrides={})
         update_action.written_overrides.overrides = {'x': {'somekey': 'someval'}}
-        update_action.overrides = {}
         old_repo = Repo('x', [('somekey', 'someval')])
         new_repo = Repo(old_repo.id, [])
         update_action._set_override_info(new_repo)
