@@ -18,8 +18,6 @@ import os
 import mock
 import unittest
 
-
-from iniparse import SafeConfigParser
 from StringIO import StringIO
 
 
@@ -716,14 +714,32 @@ class TestPluginManagerRun(unittest.TestCase):
                           'post_product_id_install', product_list=[])
 
 
-class TestBaseConduit(unittest.TestCase):
-    def setUp(self):
-        conf_string = StringIO("")
-        self.conf = SafeConfigParser()
-        self.conf.readfp(conf_string)
-        self.conduit = plugins.BaseConduit(plugins.BaseConduit,
-                                           self.conf)
+class BaseConduitTest(unittest.TestCase):
+    conf_buf = ""
 
+    def setUp(self):
+        self.conf_io = StringIO(self.conf_buf)
+        self.conduit = self._conduit()
+
+    def _conduit(self):
+        mock_module = mock.Mock()
+        mock_module.__name__ = 'mock_module'
+
+        # we check that the plugin's thinks it is from the same
+        # module as the module we pass
+        class PluginClass(base_plugin.SubManPlugin):
+            __module__ = "mock_module"
+
+        plugin_config = plugins.PluginConfig(PluginClass.get_plugin_key)
+        plugin_config.parser.readfp(self.conf_io)
+
+        #
+        conduit = plugins.BaseConduit(PluginClass,
+                                      plugin_config)
+        return conduit
+
+
+class TestBaseConduitEmptyUsesDefaults(BaseConduitTest):
     def test_default_boolean_false(self):
         val = self.conduit.conf_bool("main", "enabled", False)
         self.assertEquals(False, val)
@@ -763,6 +779,86 @@ class TestBaseConduit(unittest.TestCase):
     def test_default_string(self):
         val = self.conduit.conf_string("main", "enabled", "a string")
         self.assertEquals("a string", val)
+
+    def test_string_no_section(self):
+        val = self.conduit.conf_string('this_section_is_not_real', 'enabled')
+        self.assertTrue(val is None)
+
+
+class TestBaseConduitDefaultConfig(BaseConduitTest):
+    conf_buf = """
+[main]
+enabled=False
+"""
+
+
+class TestBaseConduitConfig(BaseConduitTest):
+    conf_buf = """
+[main]
+enabled=True
+street=place
+notabool=0.7
+
+[section1]
+string_value=Foo
+int_value=37
+not_an_int=justastring
+not_a_float=sdfadf
+float_value=1.0
+bool_value=True
+"""
+
+    def test_enabled(self):
+        val = self.conduit.conf_bool("main", "enabled")
+        self.assertTrue(val)
+
+    def test_enabled_default(self):
+        val = self.conduit.conf_bool("main", "enabled", False)
+        self.assertTrue(val)
+
+    def test_default_boolean_true(self):
+        val = self.conduit.conf_bool("main", "enabled", True)
+        self.assertTrue(val)
+
+    def test_bad_default_boolean(self):
+        self.assertRaises(ValueError,
+                          self.conduit.conf_bool,
+                           "main", "notabool", "not a bool")
+
+    def test_boolean_no_section(self):
+        self.assertRaises(ValueError,
+                          self.conduit.conf_bool,
+                          'this_section_is_not_real', 'enabled')
+
+    def test_int(self):
+        val = self.conduit.conf_int("section1", "int_value")
+        self.assertEquals(37, val)
+
+    def test_int_default(self):
+        val = self.conduit.conf_int("section1", "int_value", 37)
+        self.assertEquals(37, val)
+
+    def test_bad_default_int(self):
+        self.assertRaises(ValueError,
+                          self.conduit.conf_int,
+                          "section1", "not_an_int", "not an int")
+
+    def test_default_float(self):
+        val = self.conduit.conf_float("section1", "float_value", 1.0)
+        self.assertEquals(1.0, val)
+
+    def test_bad_default_float(self):
+        self.assertRaises(ValueError,
+                          self.conduit.conf_float,
+                          "section1", "not_a_float", "not a float")
+
+    def test_string(self):
+        val = self.conduit.conf_string("section1", "string_value")
+        self.assertEquals("Foo", val)
+
+    def test_default_string(self):
+        val = self.conduit.conf_string("section1", "string_value", "bar")
+        self.assertEquals("Foo", val)
 
     def test_string_no_section(self):
         val = self.conduit.conf_string('this_section_is_not_real', 'enabled')
