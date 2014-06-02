@@ -25,6 +25,12 @@ OSTREE_REPO_CONFIG_PATH = "/ostree/repo/config"
 
 REMOTE_SECTION_MATCH = r"remote\s+\"(?P<remote_name>.+)\""
 
+OSTREE_REPORT_TEMPLATE = """remote \"{self.name}\"
+\turl: {self.url}
+\tgpg-verify: {self.gpg_verify}
+\ttls-client-ca-cert: {self.tls_client_cert_path}
+\t{self.tls_client_key_path}"""
+
 log = logging.getLogger("rhsm-app." + __name__)
 
 
@@ -46,6 +52,8 @@ class OstreeRemote(object):
     items_to_data = {'gpg-verify': 'gpg_verify',
                      'tls-client-cert-path': 'tls_client_cert_path',
                      'tls-client-key-path': 'tls_client_key_path'}
+
+    report_template = OSTREE_REPORT_TEMPLATE
 
     def __init__(self):
         self.data = {}
@@ -172,12 +180,11 @@ class OstreeRemote(object):
 
     def __repr__(self):
         r = super(OstreeRemote, self).__repr__()
-        return '<%s name=%s url=%s gpg_verify=%s>' % (r, self.name, self.url, self.gpg_verify)
+        return '%s\n (name=%s\n url=%s\n gpg_verify=%s\n tls_client_cert_path=%s\n tls_client_key_path=%s)' \
+            % (r, self.name, self.url, self.gpg_verify,
+               self.tls_client_cert_path, self.tls_client_key_path)
 
     def report(self):
-        self.report_template = """remote \"{self.name}\"
-    url: {self.url}
-    gpg-verify: {self.gpg_verify}"""
         return self.report_template.format(self=self)
 
 
