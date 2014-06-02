@@ -81,9 +81,7 @@ class RepoActionInvoker(BaseActionInvoker):
         self.uep = cp_provider.get_consumer_auth_cp()
         self.release = self._load_release()
 
-        self.manage_repos = 1
-        if CFG.has_option('rhsm', 'manage_repos'):
-            self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
+        self.manage_repos = manage_repos()
 
     def _load_release(self):
         # If we are not registered, skip trying to refresh the
@@ -635,16 +633,6 @@ class RepoFile(ConfigParser):
         # note PATH get's expanded with chroot info, etc
         self.path = Path.join(self.PATH, name)
         self.repos_dir = Path.abs(self.PATH)
-        self.manage_repos = 1
-        if CFG.has_option('rhsm', 'manage_repos'):
-            self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
-        # Simulate manage repos turned off if no yum.repos.d directory exists.
-        # This indicates yum is not installed so clearly no need for us to
-        # manage repos.
-        if not os.path.exists(self.repos_dir):
-            log.warn("%s does not exist, turning manage_repos off." %
-                    self.repos_dir)
-            self.manage_repos = 0
         self.create()
 
     def exists(self):
@@ -673,10 +661,6 @@ class RepoFile(ConfigParser):
         return not self._configparsers_equal(on_disk)
 
     def write(self):
-        if not self.manage_repos:
-            log.debug("Skipping write due to manage_repos setting: %s" %
-                    self.path)
-            return
         if self._has_changed():
             f = open(self.path, 'w')
             tidy_writer = TidyWriter(f)
@@ -707,7 +691,7 @@ class RepoFile(ConfigParser):
             return Repo(section, self.items(section))
 
     def create(self):
-        if os.path.exists(self.path) or not self.manage_repos:
+        if os.path.exists(self.path):
             return
         f = open(self.path, 'w')
         s = []
@@ -723,3 +707,27 @@ class RepoFile(ConfigParser):
         s.append('#')
         f.write('\n'.join(s))
         f.close()
+
+def manage_repos():
+    """
+    Return True if we should manage yum repositories on this
+    system or not.
+
+    By default we assume we will be managing redhat.repo. A config
+    option exists to disable this. We also assume not to if
+    /etc/yum.repos.d does not exist, which is an indication that
+    yum is not installed and thus does not need repos.
+    """
+    manage_repos = 1
+
+    if CFG.has_option('rhsm', 'manage_repos'):
+        manage_repos = int(CFG.get('rhsm', 'manage_repos'))
+
+    repos_dir = Path.abs(RepoFile().PATH)
+    if not os.path.exists(repos_dir):
+        log.warn("%s does not exist, turning manage_repos off." %
+                repos_dir)
+        manage_repos = 0
+
+    return manage_repos
+

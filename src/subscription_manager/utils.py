@@ -39,6 +39,9 @@ from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 from rhsm.version import Versions
 
+import rhsm.config
+CFG = rhsm.config.initConfig()
+
 log = logging.getLogger('rhsm-app.' + __name__)
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
@@ -293,3 +296,4 @@ def is_true_value(test_string):
 def system_log(message, priority=syslog.LOG_NOTICE):
     syslog.openlog("subscription-manager")
     syslog.syslog(priority, message.encode("utf-8"))
+
