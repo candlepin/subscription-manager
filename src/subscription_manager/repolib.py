@@ -110,11 +110,6 @@ class RepoActionInvoker(BaseActionInvoker):
         report = action.perform()
         return report
 
-    # TODO: Unused
-    def is_managed(self, repo):
-        action = RepoUpdateActionCommand()
-        return repo in [c.label for c in action.matching_content()]
-
     def get_repos(self, apply_overrides=True):
         # If we're told to apply overrides, make sure the server supports
         # it first:
