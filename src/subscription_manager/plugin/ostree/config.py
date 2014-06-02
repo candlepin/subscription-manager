@@ -167,16 +167,20 @@ class RepoFile(BaseOstreeConfigFile):
     def set(self, section, key, value):
         return self.config_parser.set(section, key, value)
 
-    # TODO: add tls/ssl
     # TODO: this is really just serializing OstreeRemote
     def set_remote(self, ostree_remote):
         """Add a remote section to config file based on a OstreeRemote."""
         # format section name
-        # remote attribute -> section key
         section_name = 'remote ' + '"%s"' % ostree_remote.name
+
         self.set(section_name, 'url', ostree_remote.url)
-        #self.set(section_name, 'gpg_verify', ostree_remote.gpg_verify)
-        # add gpg_verify and other things
+
+        if ostree_remote.gpg_verify:
+            self.set(section_name, 'gpg-verify', ostree_remote.gpg_verify)
+        if ostree_remote.tls_client_cert_path:
+            self.set(section_name, 'tls-client-cert-path', ostree_remote.tls_client_cert_path)
+        if ostree_remote.tls_client_key_path:
+            self.set(section_name, 'tls-client-key-path', ostree_remote.tls_client_key_path)
 
     # TODO: make a serializer of OstreeCore
     def set_core(self, ostree_core):
