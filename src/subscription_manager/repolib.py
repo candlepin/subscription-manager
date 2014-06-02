@@ -41,24 +41,70 @@ ALLOWED_CONTENT_TYPES = ["yum"]
 _ = gettext.gettext
 
 
+def load_overrides(uep, identity, cache_only=False):
+    """
+    Loads content overrides from server if cache_only is False, otherwise
+    use the latest cache written to disk.
+
+    Formats the result into a more usable dict mapping repo ID to a dict of
+    key value pairs representing our overrides.
+    """
+    overrides = {}
+    override_supported = bool(uep and uep.supports_resource('content_overrides'))
+    if override_supported:
+        try:
+            override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+        except KeyError:
+            override_cache = OverrideStatusCache()
+        if cache_only:
+            status = override_cache._read_cache()
+        else:
+            status = override_cache.load_status(uep, identity.uuid)
+
+        for item in status or []:
+            # Don't iterate through the list
+            if item['contentLabel'] not in overrides:
+                overrides[item['contentLabel']] = {}
+            overrides[item['contentLabel']][item['name']] = item['value']
+        return overrides
+    else:
+        return None
+
+
+
 class RepoActionInvoker(BaseActionInvoker):
     """Invoker for yum repo updating related actions."""
     def __init__(self, cache_only=False):
         self.cache_only = cache_only
         BaseActionInvoker.__init__(self)
         self.identity = inj.require(inj.IDENTITY)
+        cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = cp_provider.get_consumer_auth_cp()
 
     def _do_update(self):
-        action = RepoUpdateActionCommand(cache_only=self.cache_only)
-        return action.perform()
 
+        overrides = load_overrides(self.uep, self.identity,
+            cache_only=self.cache_only)
+
+        action = RepoUpdateActionCommand(overrides=overrides)
+        report = action.perform()
+        return report
+
+    # TODO: Unused
     def is_managed(self, repo):
-        action = RepoUpdateActionCommand(cache_only=self.cache_only)
+        action = RepoUpdateActionCommand()
         return repo in [c.label for c in action.matching_content()]
 
     def get_repos(self, apply_overrides=True):
-        action = RepoUpdateActionCommand(cache_only=self.cache_only,
-                                  apply_overrides=apply_overrides)
+        # If we're told to apply overrides, make sure the server supports
+        # it first:
+        overrides = None
+        if apply_overrides:
+            # Will still come back None if server does not support:
+            overrides = load_overrides(self.uep, self.identity,
+                cache_only=self.cache_only)
+
+        action = RepoUpdateActionCommand(overrides=overrides)
         repos = action.get_unique_content()
 
         current = set()
@@ -89,37 +135,48 @@ class RepoActionInvoker(BaseActionInvoker):
 
 
 class RepoUpdateActionCommand(object):
-    """UpdateAction for yum repos.
+    """
+    Action to refresh/generate a yum repofile.
 
-    Update yum repos when triggered. Generates yum repo config
-    based on:
+    Generates yum repo config based on:
         - entitlement certs
         - repo overrides
         - rhsm config
         - yum config
-        - manual changes made to "redhat.repo".
+        - manual changes made to "redhat.repo"
+
+    Can be used to generate a repo file for another OS besides the current
+    one. In this case we do not consider any content overrides as the repo
+    is not for the current system. In this case the cache of server overrides
+    as well as the cache of the last overrides we used should be left alone
+    completely.
 
     Returns an RepoActionReport.
     """
-    def __init__(self, cache_only=False, apply_overrides=True):
+    def __init__(self, overrides=None):
+        """
+        overrides = Content overrides to apply, or None if we are not
+        considering overrides.
+        """
         self.identity = inj.require(inj.IDENTITY)
+
+        # TODO: remove these
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = self.cp_provider.get_consumer_auth_cp()
 
         # These should probably move closer their use
         self.ent_dir = inj.require(inj.ENT_DIR)
         self.prod_dir = inj.require(inj.PROD_DIR)
 
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
-
         self.manage_repos = 1
-        self.apply_overrides = apply_overrides
         if CFG.has_option('rhsm', 'manage_repos'):
             self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
 
         self.release = None
-        self.overrides = {}
-        self.override_supported = bool(self.uep and self.uep.supports_resource('content_overrides'))
-        self.written_overrides = WrittenOverrideCache()
+        self.overrides = overrides
+        if self.overrides is not None:
+            self.written_overrides = WrittenOverrideCache()
+            self.written_overrides._read_cache()
 
         # FIXME: empty report at the moment, should be changed to include
         # info about updated repos
@@ -129,25 +186,6 @@ class RepoUpdateActionCommand(object):
         # data from the server
         if not self.identity.is_valid():
             return
-
-        # Only attempt to update the overrides if they are supported
-        # by the server.
-        if self.override_supported:
-            self.written_overrides._read_cache()
-            try:
-                override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-            except KeyError:
-                override_cache = OverrideStatusCache()
-            if cache_only:
-                status = override_cache._read_cache()
-            else:
-                status = override_cache.load_status(self.uep, self.identity.uuid)
-
-            for item in status or []:
-                # Don't iterate through the list
-                if item['contentLabel'] not in self.overrides:
-                    self.overrides[item['contentLabel']] = {}
-                self.overrides[item['contentLabel']][item['name']] = item['value']
 
         message = "Release API is not supported by the server. Using default."
         try:
@@ -200,8 +238,9 @@ class RepoUpdateActionCommand(object):
 
         # Write new RepoFile to disk:
         repo_file.write()
-        if self.override_supported:
-            # Update with the values we just wrote
+
+        # Write the last overrides we wrote to disk:
+        if self.overrides is not None:
             self.written_overrides.overrides = self.overrides
             self.written_overrides.write_cache()
         log.info("repos updated: %s" % self.report)
@@ -294,7 +333,7 @@ class RepoUpdateActionCommand(object):
 
             self._set_proxy_info(repo)
 
-            if self.override_supported and self.apply_overrides:
+            if self.overrides is not None:
                 self._set_override_info(repo)
 
             lst.append(repo)
@@ -313,9 +352,16 @@ class RepoUpdateActionCommand(object):
             repo[name] = value
 
     def _is_overridden(self, repo, key):
+        if self.overrides is None:
+            return False
         return key in self.overrides.get(repo.id, {})
 
     def _was_overridden(self, repo, key, value):
+        # We're not considering overrides, so the value could not have been
+        # overridden.
+        if self.overrides is None:
+            return False
+
         written_value = self.written_overrides.overrides.get(repo.id, {}).get(key)
         # Compare values as strings to avoid casting problems from io
         return written_value is not None and value is not None and str(written_value) == str(value)
