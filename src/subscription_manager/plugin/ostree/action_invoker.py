@@ -112,7 +112,7 @@ class OstreeContents(object):
     content_type = OSTREE_CONTENT_TYPE
 
     def __init__(self, ent_source=None):
-        self._contents = models.EntitledContents()
+        self._contents = models.EntCertEntitledContentSet()
         self.ent_source = ent_source or []
 
         self._load()
@@ -120,7 +120,7 @@ class OstreeContents(object):
     def _load(self):
         """Populate self._contents with data from ostree contents."""
         for entitlement in self.ent_source:
-            for content in entitlement.content:
+            for content in entitlement.contents:
                 log.debug("content: %s" % content)
 
                 if self.content_type_match(content):
@@ -132,7 +132,7 @@ class OstreeContents(object):
         return content.content_type == self.content_type
 
     # We could subclass models.Contents. We would be
-    # a models.Contents and have-a models.EntitledContents
+    # a models.Contents and have-a models.EntCertEntitledContentSet
     def __iter__(self):
         return iter(self._contents)
 

@@ -167,6 +167,7 @@ class RepoFile(BaseOstreeConfigFile):
     def set(self, section, key, value):
         return self.config_parser.set(section, key, value)
 
+    # TODO: add tls/ssl
     # TODO: this is really just serializing OstreeRemote
     def set_remote(self, ostree_remote):
         """Add a remote section to config file based on a OstreeRemote."""

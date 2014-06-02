@@ -14,16 +14,12 @@
 #
 
 
-#      Would be a nice use of collections.abc.Iterable
-class EntitledContent(object):
-    def __init__(self):
-        pass
 
 
 # These containerish iterables could share a
 # base class, though, it should probably just
 # be based on containers.abc.Iterable
-class Contents(object):
+class ContentSet(object):
     """Represent a container of Content objects."""
     def __init__(self, contents=None):
         self._contents = contents or []
@@ -47,7 +43,16 @@ class Contents(object):
         self._contents.append(content)
 
 
-class EntitledContents(Contents):
+class EntCertEntitledContent(object):
+    """Associate a Content with it's entitlement cert."""
+    def __init__(self, content=None, cert=None):
+        self.content = content
+        self.cert = cert
+        if self.content:
+            self.content_type = self.content.content_type
+
+
+class EntCertEntitledContentSet(ContentSet):
     """Represent a container of entitled Content."""
     pass
 
@@ -55,30 +60,33 @@ class EntitledContents(Contents):
 class Entitlement(object):
     """Represent an entitlement.
 
-    Has a 'content' attribute that is an
+    Has a 'contents' attribute that is an
     iterable of EntitledContent objects.
 
-    Note 'content' not 'contents' even though
-    it is a container. That's the naming the
+    Note 'contents' that differs from the 'content'naming the
     rhsm EntitlementCertificate object uses.
     """
 
-    def __init__(self, content=None):
-        self.content = content
+    def __init__(self, contents=None):
+        self.contents = contents
 
 
 class EntitlementCertEntitlement(Entitlement):
     """A Entitlement created from an EntitlementCertificate."""
     @classmethod
     def from_ent_cert(cls, ent_cert):
-        contents = EntitledContents(ent_cert.content)
+        content_set = EntCertEntitledContentSet()
+        for ent_cert_content in ent_cert.content:
+            ent_cert_ent_content = EntCertEntitledContent(content=ent_cert_content,
+                                                          cert=ent_cert)
+            content_set.add(ent_cert_ent_content)
 
-        # create a EntitlementCertEntitlement with a EntitledContents
+        # create a :EntitlementCertEntitlement with a EntitledContents
         # as the content Iterables
-        ent_cert_ent = cls(contents)
+        ent_cert_ent = cls(content_set)
 
         # could populate more info here, but
-        # we don't actually see to use it anywhere
+        # we don't actually seem to use it anywhere
         # here or in repolib
         return ent_cert_ent
 

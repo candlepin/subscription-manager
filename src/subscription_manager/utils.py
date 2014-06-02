@@ -292,3 +292,13 @@ def is_true_value(test_string):
 def system_log(message, priority=syslog.LOG_NOTICE):
     syslog.openlog("subscription-manager")
     syslog.syslog(priority, message.encode("utf-8"))
+
+
+def get_cert_key_path(ent_cert):
+    """
+    Returns the full path to the cert's key.pem.
+    """
+    dir_path, cert_filename = os.path.split(ent_cert.path)
+    key_filename = "%s-key.%s" % tuple(cert_filename.split("."))
+    key_path = os.path.join(dir_path, key_filename)
+    return key_path

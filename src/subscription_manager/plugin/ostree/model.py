@@ -17,9 +17,9 @@ import logging
 import re
 import os
 import subprocess
-import sys
 
 from subscription_manager.plugin.ostree import config
+from subscription_manager import utils
 
 OSTREE_REPO_CONFIG_PATH = "/ostree/repo/config"
 
@@ -36,8 +36,6 @@ class RemoteSectionNameParseError(OstreeContentError):
     pass
 
 
-# FIXME: remove property stuff, dont inherit from dict, remove hash stuff
-#        it's clever but weird and unneeded, but commit so tests work
 class OstreeRemote(object):
     """Represent a ostree repo remote.
 
@@ -45,7 +43,9 @@ class OstreeRemote(object):
     ostree repo config (/ostree/repo/config by default).
     """
 
-    items_to_data = {'gpg-verify': 'gpg_verify'}
+    items_to_data = {'gpg-verify': 'gpg_verify',
+                     'tls-client-cert-path': 'tls_client_cert_path',
+                     'tls-client-key-path': 'tls_client_key_path'}
 
     def __init__(self):
         self.data = {}
@@ -77,6 +77,23 @@ class OstreeRemote(object):
     @name.setter
     def name(self, value):
         self.data['name'] = value
+
+    @property
+    def tls_client_cert_path(self):
+        return self.data.get('tls_client_cert_path')
+
+    @tls_client_cert_path.setter
+    def tls_client_cert_path(self, value):
+        self.data['tls_client_cert_path'] = value
+
+    @property
+    def tls_client_key_path(self):
+        return self.data.get('tls_client_key_path')
+
+    @tls_client_key_path.setter
+    def tls_client_key_path(self, value):
+        self.data['tls_client_key_path'] = value
+#        it's clever but weird and unneeded, but commit so tests work
 
     @classmethod
     def from_config_section(cls, section, items):
@@ -119,10 +136,10 @@ class OstreeRemote(object):
         raise RemoteSectionNameParseError
 
     @classmethod
-    def from_content(cls, content):
-        """Create a OstreeRemote object based on a rhsm.certificate.Content object.
+    def from_ent_cert_content(cls, ent_cert_content, cert_path, key_path):
+        """Create a OstreeRemote object based on a models.EntCertEntitledContent object.
 
-        'content' is a rhsm.certificate.Content, as found in a
+        'content' is a models.EntCertEntitledContent, as found in a
           EntitlementCertificate.contents
 
         This maps:
@@ -133,10 +150,15 @@ class OstreeRemote(object):
         """
 
         remote = cls()
+        content = ent_cert_content.content
         remote.name = content.label
         remote.url = content.url
 
         remote.gpg_verify = remote.map_gpg(content)
+
+        cert = ent_cert_content.cert
+        remote.tls_client_cert_path = cert.path
+        remote.tls_client_key_path = utils.get_cert_key_path(cert)
 
         return remote
 
@@ -356,7 +378,7 @@ class OstreeConfigUpdatesBuilder(object):
             #       remotes -> old Content, old Content -> new Content,
             #       and new Content -> new Remotes.
             #       This does not create that map yet.
-            remote = OstreeRemote.from_content(content)
+            remote = OstreeRemote.from_ent_cert_content(content)
             new_remotes.add(remote)
 
             # track for reports
