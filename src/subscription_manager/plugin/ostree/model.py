@@ -136,7 +136,7 @@ class OstreeRemote(object):
         raise RemoteSectionNameParseError
 
     @classmethod
-    def from_ent_cert_content(cls, ent_cert_content, cert_path, key_path):
+    def from_ent_cert_content(cls, ent_cert_content):
         """Create a OstreeRemote object based on a models.EntCertEntitledContent object.
 
         'content' is a models.EntCertEntitledContent, as found in a

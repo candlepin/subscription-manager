@@ -267,7 +267,15 @@ last_key = blippy
         mock_content.name = "mock-content-example"
         mock_content.gpg = None
 
-        content_set.add(mock_content)
+        mock_ent_cert = mock.Mock()
+        mock_ent_cert.path = "/somewhere/etc/pki/entitlement/123123.pem"
+
+
+        mock_ent_content = mock.Mock()
+        mock_ent_content.content = mock_content
+        mock_ent_content.cert = mock_ent_cert
+
+        content_set.add(mock_ent_content)
 
         updates_builder = model.OstreeConfigUpdatesBuilder(ostree_config, content_set)
         updates = updates_builder.build()
