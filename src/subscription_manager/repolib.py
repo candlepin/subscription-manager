@@ -71,7 +71,6 @@ def load_overrides(uep, identity, cache_only=False):
         return None
 
 
-
 class RepoActionInvoker(BaseActionInvoker):
     """Invoker for yum repo updating related actions."""
     def __init__(self, cache_only=False):
@@ -81,6 +80,10 @@ class RepoActionInvoker(BaseActionInvoker):
         cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = cp_provider.get_consumer_auth_cp()
         self.release = self._load_release()
+
+        self.manage_repos = 1
+        if CFG.has_option('rhsm', 'manage_repos'):
+            self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
 
     def _load_release(self):
         # If we are not registered, skip trying to refresh the
@@ -107,6 +110,19 @@ class RepoActionInvoker(BaseActionInvoker):
 
         action = RepoUpdateActionCommand(overrides=overrides,
             release=self.release)
+
+        # the [rhsm] manage_repos can be overridden to disable generation of the
+        # redhat.repo file:
+        repo_file = RepoFile()
+        if not self.manage_repos:
+            log.debug("manage_repos is 0, skipping generation of: %s" %
+                    repo_file.path)
+            if repo_file.exists():
+                log.info("Removing %s due to manage_repos configuration." %
+                        repo_file.path)
+                RepoActionInvoker.delete_repo_file()
+            return 0
+
         report = action.perform()
         return report
 
@@ -120,7 +136,9 @@ class RepoActionInvoker(BaseActionInvoker):
                 cache_only=self.cache_only)
 
         action = RepoUpdateActionCommand(overrides=overrides)
-        repos = action.get_unique_content()
+        repos = set()
+        if self.manage_repos:
+            repos = action.get_unique_content()
 
         current = set()
         # Add the current repo data
@@ -178,10 +196,6 @@ class RepoUpdateActionCommand(object):
         self.ent_dir = inj.require(inj.ENT_DIR)
         self.prod_dir = inj.require(inj.PROD_DIR)
 
-        self.manage_repos = 1
-        if CFG.has_option('rhsm', 'manage_repos'):
-            self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
-
         self.release = release
         self.overrides = overrides
         if self.overrides is not None:
@@ -194,20 +208,9 @@ class RepoUpdateActionCommand(object):
         self.report.name = "Repo updates"
 
     def perform(self):
-        # Load the RepoFile from disk, this contains all our managed yum repo sections:
+        # Load the RepoFile from disk, this contains all our managed yum
+        # repo sections:
         repo_file = RepoFile()
-
-        # the [rhsm] manage_repos can be overridden to disable generation of the
-        # redhat.repo file:
-        if not self.manage_repos:
-            log.debug("manage_repos is 0, skipping generation of: %s" %
-                    repo_file.path)
-            if repo_file.exists():
-                log.info("Removing %s due to manage_repos configuration." %
-                        repo_file.path)
-                RepoActionInvoker.delete_repo_file()
-            return 0
-
         repo_file.read()
         valid = set()
 
@@ -242,8 +245,6 @@ class RepoUpdateActionCommand(object):
 
     def get_unique_content(self):
         unique = set()
-        if not self.manage_repos:
-            return unique
         ent_certs = self.ent_dir.list_valid()
         baseurl = CFG.get('rhsm', 'baseurl')
         ca_cert = CFG.get('rhsm', 'repo_ca_cert')
