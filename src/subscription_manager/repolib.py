@@ -80,13 +80,33 @@ class RepoActionInvoker(BaseActionInvoker):
         self.identity = inj.require(inj.IDENTITY)
         cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = cp_provider.get_consumer_auth_cp()
+        self.release = self._load_release()
+
+    def _load_release(self):
+        # If we are not registered, skip trying to refresh the
+        # data from the server
+        if not self.identity.is_valid():
+            return
+
+        message = "Release API is not supported by the server. Using default."
+        try:
+            result = self.uep.getRelease(self.identity.uuid)
+            self.release = result['releaseVer']
+        except RemoteServerException, e:
+            log.debug(message)
+        except RestlibException, e:
+            if e.code == 404:
+                log.debug(message)
+            else:
+                raise
 
     def _do_update(self):
 
         overrides = load_overrides(self.uep, self.identity,
             cache_only=self.cache_only)
 
-        action = RepoUpdateActionCommand(overrides=overrides)
+        action = RepoUpdateActionCommand(overrides=overrides,
+            release=self.release)
         report = action.perform()
         return report
 
@@ -153,16 +173,11 @@ class RepoUpdateActionCommand(object):
 
     Returns an RepoActionReport.
     """
-    def __init__(self, overrides=None):
+    def __init__(self, overrides=None, release=None):
         """
         overrides = Content overrides to apply, or None if we are not
         considering overrides.
         """
-        self.identity = inj.require(inj.IDENTITY)
-
-        # TODO: remove these
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
 
         # These should probably move closer their use
         self.ent_dir = inj.require(inj.ENT_DIR)
@@ -172,7 +187,7 @@ class RepoUpdateActionCommand(object):
         if CFG.has_option('rhsm', 'manage_repos'):
             self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
 
-        self.release = None
+        self.release = release
         self.overrides = overrides
         if self.overrides is not None:
             self.written_overrides = WrittenOverrideCache()
@@ -182,22 +197,6 @@ class RepoUpdateActionCommand(object):
         # info about updated repos
         self.report = RepoActionReport()
         self.report.name = "Repo updates"
-        # If we are not registered, skip trying to refresh the
-        # data from the server
-        if not self.identity.is_valid():
-            return
-
-        message = "Release API is not supported by the server. Using default."
-        try:
-            result = self.uep.getRelease(self.identity.uuid)
-            self.release = result['releaseVer']
-        except RemoteServerException, e:
-            log.debug(message)
-        except RestlibException, e:
-            if e.code == 404:
-                log.debug(message)
-            else:
-                raise
 
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
