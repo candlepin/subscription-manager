@@ -80,6 +80,7 @@ class RepoActionInvoker(BaseActionInvoker):
         cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = cp_provider.get_consumer_auth_cp()
         self.release = self._load_release()
+        self.prod_dir = inj.require(inj.PROD_DIR)
 
         self.manage_repos = manage_repos()
 
@@ -107,7 +108,8 @@ class RepoActionInvoker(BaseActionInvoker):
             cache_only=self.cache_only)
 
         action = RepoUpdateActionCommand(overrides=overrides,
-            release=self.release)
+            release=self.release,
+            provided_tags=self.prod_dir.get_provided_tags())
 
         # the [rhsm] manage_repos can be overridden to disable generation of the
         # redhat.repo file:
@@ -133,7 +135,8 @@ class RepoActionInvoker(BaseActionInvoker):
             overrides = load_overrides(self.uep, self.identity,
                 cache_only=self.cache_only)
 
-        action = RepoUpdateActionCommand(overrides=overrides)
+        action = RepoUpdateActionCommand(overrides=overrides,
+            provided_tags=self.prod_dir.get_provided_tags())
         repos = set()
         if self.manage_repos:
             repos = action.get_unique_content()
@@ -184,7 +187,7 @@ class RepoUpdateActionCommand(object):
 
     Returns an RepoActionReport.
     """
-    def __init__(self, overrides=None, release=None):
+    def __init__(self, overrides=None, release=None, provided_tags=None):
         """
         overrides = Content overrides to apply, or None if we are not
         considering overrides.
@@ -192,7 +195,8 @@ class RepoUpdateActionCommand(object):
 
         # These should probably move closer their use
         self.ent_dir = inj.require(inj.ENT_DIR)
-        self.prod_dir = inj.require(inj.PROD_DIR)
+
+        self.provided_tags = provided_tags or []
 
         self.release = release
         self.overrides = overrides
@@ -263,8 +267,6 @@ class RepoUpdateActionCommand(object):
             if not cert.content:
                 continue
 
-            tags_we_have = self.prod_dir.get_provided_tags()
-
             for content in cert.content:
                 if not content.content_type in ALLOWED_CONTENT_TYPES:
                     log.debug("Content type %s not allowed, skipping content: %s" % (
@@ -273,7 +275,7 @@ class RepoUpdateActionCommand(object):
 
                 all_tags_found = True
                 for tag in content.required_tags:
-                    if not tag in tags_we_have:
+                    if not tag in self.provided_tags:
                         log.debug("Missing required tag '%s', skipping content: %s" % (
                             tag, content.label))
                         all_tags_found = False
