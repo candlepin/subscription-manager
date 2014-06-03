@@ -71,8 +71,8 @@ class RepoUpdateActionTests(SubManFixture):
         stub_prod_cert = StubProductCertificate(stub_prod, provided_products=[stub_prod2])
         stub_prod2 = StubProduct("fauxprod2", provided_tags="TAG5,TAG6")
         stub_prod2_cert = StubProductCertificate(stub_prod2)
-        prod_dir = StubProductDirectory([stub_prod_cert, stub_prod2_cert])
-        inj.provide(inj.PROD_DIR, prod_dir)
+        self.prod_dir = StubProductDirectory([stub_prod_cert, stub_prod2_cert])
+        inj.provide(inj.PROD_DIR, self.prod_dir)
 
         stub_content = [
                 StubContent("c1", required_tags="", gpg=None),   # no required tags
@@ -172,7 +172,8 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_no_gpg_key(self):
 
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(
+            provided_tags=self.prod_dir.get_provided_tags())
         content = update_action.get_content(self.stub_ent_cert,
                                             "http://example.com", None)
         c1 = self._find_content(content, 'c1')
@@ -185,7 +186,8 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_gpg_key(self):
 
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(
+            provided_tags=self.prod_dir.get_provided_tags())
         content = update_action.get_content(self.stub_ent_cert,
                                             "http://example.com", None)
         c4 = self._find_content(content, 'c4')
@@ -193,7 +195,8 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertEquals('1', c4['gpgcheck'])
 
     def test_ui_repoid_vars(self):
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(
+            provided_tags=self.prod_dir.get_provided_tags())
         content = update_action.get_content(self.stub_ent_cert,
                                             "http://example.com", None)
         c4 = self._find_content(content, 'c4')
@@ -202,7 +205,8 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertEquals(None, c2['ui_repoid_vars'])
 
     def test_tags_found(self):
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(
+            provided_tags=self.prod_dir.get_provided_tags())
         content = update_action.get_unique_content()
         self.assertEquals(3, len(content))
 
