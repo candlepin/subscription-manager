@@ -36,10 +36,7 @@ def chroot():
     within an Anaconda installation.
     """
     sysimage = '/mnt/sysimage'
-    # See rhbz#1038242, try to be more sure we are running in anaconda
-    # before we chroot
-    anaconda_pid = '/var/run/anaconda.pid'
-    if os.path.exists(sysimage) and os.path.exists(anaconda_pid):
+    if os.path.exists(sysimage):
         Path.ROOT = sysimage
 
 
