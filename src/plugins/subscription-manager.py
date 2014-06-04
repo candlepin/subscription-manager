@@ -61,17 +61,18 @@ def update(conduit, cache_only):
 
     identity = inj.require(inj.IDENTITY)
 
-    if not identity.is_valid():
+    # In containers we have no identity, but we may have entitlements inherited
+    # from the host, which need to generate a redhat.repo.
+    if identity.is_valid():
+        try:
+            connection.UEPConnection(cert_file=cert_file, key_file=key_file)
+        #FIXME: catchall exception
+        except Exception:
+            # log
+            conduit.info(2, "Unable to connect to Subscription Management Service")
+            return
+    else:
         conduit.info(3, "Unable to read consumer identity")
-        return
-
-    try:
-        connection.UEPConnection(cert_file=cert_file, key_file=key_file)
-    #FIXME: catchall exception
-    except Exception:
-        # log
-        conduit.info(2, "Unable to connect to Subscription Management Service")
-        return
 
     rl = RepoActionInvoker(cache_only=cache_only)
     rl.update()
