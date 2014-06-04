@@ -104,12 +104,12 @@ def warnOrGiveUsageMessage(conduit):
         return
     try:
         identity = inj.require(inj.IDENTITY)
-        if not identity.is_valid():
+        ent_dir = inj.require(inj.ENT_DIR)
+        # Don't warn people to register if we see entitelements, but no identity:
+        if not identity.is_valid() and len(ent_dir.list_valid()) == 0:
             msg = not_registered_warning
-        else:
-            ent_dir = inj.require(inj.ENT_DIR)
-            if len(ent_dir.list_valid()) == 0:
-                msg = no_subs_warning
+        elif len(ent_dir.list_valid()) == 0:
+            msg = no_subs_warning
 
     finally:
         if msg:
