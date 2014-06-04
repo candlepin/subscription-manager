@@ -17,16 +17,23 @@
 import gettext
 import logging
 import os
+import threading
+import gobject
+import socket
 
 import gtk
 import gtk.glade
 
 import rhsm.config
 import rhsm.connection as connection
+import rhsm.utils
 from rhsm.utils import remove_scheme
+from rhsm.utils import parse_url
 
 from subscription_manager.gui.utils import show_error_window
 import subscription_manager.injection as inj
+
+from subscription_manager.gui import progress
 
 _ = gettext.gettext
 
@@ -55,6 +62,9 @@ class NetworkConfigDialog:
         self.proxyUserEntry = self.xml.get_widget("proxyUserEntry")
         self.proxyPasswordEntry = self.xml.get_widget("proxyPasswordEntry")
 
+        self.org_timeout = socket.getdefaulttimeout()
+        self.progress_bar = None
+
         self.cfg = rhsm.config.initConfig()
         self.cp_provider = inj.require(inj.CP_PROVIDER)
 
@@ -65,25 +75,22 @@ class NetworkConfigDialog:
         self.enableProxyButton.connect("toggled", self.enable_action)
         self.enableProxyAuthButton.connect("toggled", self.enable_action)
 
-        self.enableProxyButton.connect("toggled", self.write_values)
-        self.enableProxyAuthButton.connect("toggled", self.write_values)
-
         self.enableProxyButton.connect("toggled", self.clear_connection_label)
         self.enableProxyAuthButton.connect("toggled", self.clear_connection_label)
 
         self.enableProxyButton.connect("toggled", self.enable_test_button)
 
-        self.proxyEntry.connect("focus-out-event", self.write_values)
-        self.proxyUserEntry.connect("focus-out-event", self.write_values)
-        self.proxyPasswordEntry.connect("focus-out-event", self.write_values)
-
         self.proxyEntry.connect("changed", self.clear_connection_label)
         self.proxyUserEntry.connect("changed", self.clear_connection_label)
         self.proxyPasswordEntry.connect("changed", self.clear_connection_label)
 
-        self.xml.get_widget("closeButton").connect("clicked", self.close)
+        self.proxyEntry.connect("focus-out-event", self.clean_proxy_entry)
+
+        self.xml.get_widget("cancelButton").connect("clicked", self.on_cancel_clicked)
+        self.xml.get_widget("okButton").connect("clicked", self.on_ok_clicked)
         self.xml.get_widget("testConnectionButton").connect("clicked",
-                                                            self.display_connection_status)
+                                                            self.on_test_connection_clicked)
+
         self.dlg.connect("delete-event", self.deleted)
 
     def set_initial_values(self):
@@ -160,8 +167,11 @@ class NetworkConfigDialog:
         self.set_initial_values()
         self.dlg.present()
 
-    def close(self, button):
+    def on_ok_clicked(self, button):
         self.write_values()
+        self.dlg.hide()
+
+    def on_cancel_clicked(self, button):
         self.dlg.hide()
 
     def enable_test_button(self, button):
@@ -171,46 +181,120 @@ class NetworkConfigDialog:
     def clear_connection_label(self, entry):
         self.xml.get_widget("connectionStatusLabel").set_label("")
 
-    def display_connection_status(self, button):
+        # only used as callback from test_connection thread
+    def on_test_connection_finish(self, result):
         connection_label = self.xml.get_widget("connectionStatusLabel")
-        if not len(remove_scheme(self.cfg.get("server", "proxy_hostname"))):
-            connection_label.set_label(_("Proxy location cannot be empty"))
-        elif self.test_connection():
+        if result:
             connection_label.set_label(_("Proxy connection succeeded"))
         else:
             connection_label.set_label(_("Proxy connection failed"))
+        self._clear_progress_bar()
 
-    def test_connection(self):
-        proxy_host = remove_scheme(self.cfg.get("server", "proxy_hostname"))
-        proxy_port = self.cfg.get_int("server", "proxy_port")
+    def _reset_socket_timeout(self):
+        socket.setdefaulttimeout(self.org_timeout)
 
-        cp = self.cp_provider.get_no_auth_cp()
+    def test_connection_wrapper(self, proxy_host, proxy_port, proxy_user, proxy_password):
+        connection_status = self.test_connection(proxy_host, proxy_port, proxy_user, proxy_password)
+        gobject.idle_add(self.on_test_connection_finish, connection_status)
 
+    def test_connection(self, proxy_host, proxy_port, proxy_user, proxy_password):
+        cp = connection.UEPConnection(
+                    proxy_hostname=proxy_host,
+                    proxy_port=proxy_port,
+                    proxy_user=proxy_user,
+                    proxy_password=proxy_password)
         try:
+            socket.setdefaulttimeout(10)
             cp.getStatus()
-        except connection.RemoteServerException, e:
-            log.debug("Reporting proxy connection as good despite %s" %
-                      e.code)
-            return True
-        except connection.RestlibException, e:
-            log.debug("Reporting proxy connection as good despite %s" %
-                      e.code)
+
+        # Either connection.RemoteServerException or connection.RestLibExecption are considered
+        # acceptable exceptions because they are only thrown as a response from the server. Meaning the
+        # connection through the proxy was successful.
+        except (connection.RemoteServerException,
+                connection.RestlibException) as e:
+            log.info("Reporting proxy connection as good despite %s" %
+             e)
             return True
         except connection.NetworkException, e:
-            log.debug("%s when attempting to connect through %s:%s" %
-                      (e.code, proxy_host, proxy_port))
+            log.warn("%s when attempting to connect through %s:%s" %
+             (e.code, proxy_host, proxy_port))
             return False
         except Exception, e:
-            log.debug("'%s' when attempting to connect through %s:%s" %
+            log.exception("'%s' when attempting to connect through %s:%s" %
                       (e, proxy_host, proxy_port))
             return False
         else:
             return True
+        finally:
+            self._reset_socket_timeout()
+
+    # Pass through of the return values of parse_proxy_entry
+    # This was done to simplify on_test_connection_clicked
+    def clean_proxy_entry(self, widget=None, dummy=None):
+        proxy_url = self.proxyEntry.get_text()
+        proxy_host, proxy_port = self.parse_proxy_entry(proxy_url)
+        cleaned_proxy_url = "%s:%s" % (proxy_host, proxy_port)
+        self.proxyEntry.set_text(cleaned_proxy_url)
+        return (proxy_host, proxy_port)
+
+    def parse_proxy_entry(self, proxy_url):
+        proxy_url = remove_scheme(proxy_url)
+        proxy_host = None
+        proxy_port = None
+        try:
+            proxy_info = parse_url(proxy_url, default_port=rhsm.config.DEFAULT_PROXY_PORT)
+            proxy_host = proxy_info[2]
+            proxy_port = proxy_info[3]
+
+        except rhsm.utils.ServerUrlParseErrorPort, e:
+            proxy_host = proxy_url.split(':')[0]
+            proxy_port = rhsm.config.DEFAULT_PROXY_PORT
+        except rhsm.utils.ServerUrlParseError, e:
+            log.error(e)
+        return (proxy_host, proxy_port)
+
+    def on_test_connection_clicked(self, button):
+        proxy_host, proxy_port = self.clean_proxy_entry()
+
+        # ensure that we only use those values for testing if required
+        # this catches the case where there was previously a user and pass in the config
+        # and the user unchecks the box, leaving behind the values for the time being.
+        # Alternatively we could clear those boxes when the box is unchecked
+        if self.enableProxyAuthButton.get_active():
+            proxy_user = self.proxyUserEntry.get_text()
+            proxy_password = self.proxyPasswordEntry.get_text()
+        else:
+            proxy_user = None
+            proxy_password = None
+
+        self._display_progress_bar()
+        threading.Thread(target=self.test_connection_wrapper,
+                         args=(proxy_host, proxy_port, proxy_user, proxy_password),
+                         name='test_connection_thread').start()
 
     def deleted(self, event, data):
         self.write_values()
         self.dlg.hide()
+        self._clear_progress_bar()
         return True
+
+    def _display_progress_bar(self):
+        if self.progress_bar:
+            self.progress_bar.set_title(_("Testing Connection"))
+            self.progress_bar.set_label(_("Please wait"))
+        else:
+            self.progress_bar = progress.Progress(_("Testing Connection"), _("Please wait"))
+            self.timer = gobject.timeout_add(100, self.progress_bar.pulse)
+            self.progress_bar.set_parent_window(self.dlg)
+
+    def _clear_progress_bar(self):
+        if not self.progress_bar:  # progress bar could be none iff self.test_connection is called directly
+            return
+
+        self.progress_bar.hide()
+        gobject.source_remove(self.timer)
+        self.timer = 0
+        self.progress_bar = None
 
     def enable_action(self, button):
         if button.get_name() == "enableProxyButton":
