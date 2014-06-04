@@ -14,7 +14,7 @@
 
 Name: subscription-manager
 Version: 1.10.14
-Release: 8%{?dist}
+Release: 9%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -419,6 +419,9 @@ fi
 %endif
 
 %changelog
+* Wed Jun 04 2014 ckozak <ckozak@redhat.com> 1.10.14-9
+- 1104777: Don't rewrite redhat.repo unless it has changed (ckozak@redhat.com)
+
 * Tue May 27 2014 ckozak <ckozak@redhat.com> 1.10.14-8
 - 1098891: Update repos, persisting local settings when possible
   (ckozak@redhat.com)
