@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.0
+Version: 1.12.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -411,6 +411,15 @@ fi
 %endif
 
 %changelog
+* Thu Jun 05 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.1-1
+- bump version to 1.12 (jesusr@redhat.com)
+- Support getting release versions via API call (mstead@redhat.com)
+- 855050: set default fallback window icon (ckozak@redhat.com)
+- refresh ent_dir after adding/deleting certs (ckozak@redhat.com)
+- 1035440: Don't rewrite redhat.repo unless it has changed (ckozak@redhat.com)
+- 1097536: match-installed filter was incorrectly removed. (wpoteat@redhat.com)
+- 1092754: 1094879: Remove install-num-migrate-to-rhsm tool (ckozak@redhat.com)
+
 * Mon May 26 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.11.7-1
 - update existing repos with non-default overrides (ckozak@redhat.com)
 - correct repos --list behavior (ckozak@redhat.com)
