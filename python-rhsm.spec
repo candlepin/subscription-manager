@@ -10,7 +10,7 @@
 
 
 Name: python-rhsm
-Version: 1.12.0
+Version: 1.12.1
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -71,6 +71,10 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Jun 05 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.1-1
+- bump version to 1.12 (jesusr@redhat.com)
+- Add connection method to get available releases (mstead@redhat.com)
+
 * Mon May 26 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.11.5-1
 - 1090350: fix time drift detection (ckozak@redhat.com)
 - 1096676: Use simplejson on RHEL 5. (dgoodwin@redhat.com)
