@@ -310,6 +310,11 @@ class CliCommand(AbstractCLICommand):
 
     def main(self, args=None):
 
+        # TODO: For now, we disable the CLI entirely. We may want to allow some commands in the future.
+        if rhsm.config.in_container():
+            print _("subscription-manager is disabled when running inside a container. Please refer to your host system for subscription management.")
+            self._sys_exit(-1)
+
         config_changed = False
 
         # In testing we sometimes specify args, otherwise use the default:
