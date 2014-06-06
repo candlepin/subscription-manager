@@ -39,7 +39,9 @@ class OstreeContentError(Exception):
 
 
 class RemoteSectionNameParseError(OstreeContentError):
-    pass
+    def __init__(self, msg=None, section=None):
+        self.msg = msg
+        self.section = section
 
 
 class OstreeRemote(object):
@@ -140,8 +142,8 @@ class OstreeRemote(object):
         if result:
             return result.groupdict()['remote_name']
 
-        # FIXME
-        raise RemoteSectionNameParseError
+        raise RemoteSectionNameParseError("Unable to find a name in section %s" % section,
+                                          section=section)
 
     @classmethod
     def from_ent_cert_content(cls, ent_cert_content):
