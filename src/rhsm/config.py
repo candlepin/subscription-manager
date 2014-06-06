@@ -16,13 +16,17 @@
 # in this software or its documentation.
 #
 
+import os
 from iniparse import SafeConfigParser
 from iniparse.compat import NoOptionError, InterpolationMissingOptionError, \
         NoSectionError
 import re
 
-DEFAULT_CONFIG_DIR = "/etc/rhsm"
-DEFAULT_CONFIG_PATH = "%s/rhsm.conf" % DEFAULT_CONFIG_DIR
+CONFIG_ENV_VAR = "RHSM_CONFIG"
+
+DEFAULT_CONFIG_DIR = "/etc/rhsm/"
+HOST_CONFIG_DIR = "/etc/rhsm-host/"  # symlink inside docker containers
+DEFAULT_CONFIG_PATH = "%srhsm.conf" % DEFAULT_CONFIG_DIR
 DEFAULT_PROXY_PORT = "3128"
 
 # Defaults for connecting to RHN, used to "reset" the configuration file
@@ -36,6 +40,9 @@ DEFAULT_CDN_PORT = "443"
 DEFAULT_CDN_PREFIX = "/"
 
 DEFAULT_CA_CERT_DIR = '/etc/rhsm/ca/'
+
+DEFAULT_ENT_CERT_DIR = '/etc/pki/entitlement'
+HOST_ENT_CERT_DIR = '/etc/pki/entitlement-host'
 
 SERVER_DEFAULTS = {
         'hostname': DEFAULT_HOSTNAME,
@@ -53,7 +60,7 @@ RHSM_DEFAULTS = {
         'ca_cert_dir': DEFAULT_CA_CERT_DIR,
         'repo_ca_cert': DEFAULT_CA_CERT_DIR + 'redhat-uep.pem',
         'productcertdir': '/etc/pki/product',
-        'entitlementcertdir': '/etc/pki/entitlement',
+        'entitlementcertdir': DEFAULT_ENT_CERT_DIR,
         'consumercertdir': '/etc/pki/consumer',
         'manage_repos': '1',
         'full_refresh_on_yum': '0',
@@ -73,6 +80,18 @@ DEFAULTS = {
         'rhsm': RHSM_DEFAULTS,
         'rhsmcertd': RHSMCERTD_DEFAULTS
         }
+
+
+def in_container():
+    """
+    Are we running in a docker container or not?
+
+    Assumes that if we see host rhsm configuration shared with us, we must
+    be running in a container.
+    """
+    if os.path.exists(HOST_CONFIG_DIR):
+        return True
+    return False
 
 
 class RhsmConfigParser(SafeConfigParser):
@@ -209,8 +228,55 @@ class RhsmConfigParser(SafeConfigParser):
         return None
 
 
+class RhsmHostConfigParser(RhsmConfigParser):
+    """
+    Sub-class of config parser automatically loaded when we detect that
+    we're running in a container environment.
+
+    Host config is shared with containers as /etc/rhsm-host. However the
+    rhsm.conf within will still be referencing /etc/rhsm for a couple
+    properties. (ca_cert_dir, repo_ca_cert)
+
+    Instead we load config file normally, and assume to replace occurrences
+    of /etc/rhsm with /etc/rhsm-host in these properties.
+
+    A similar adjustment is necessary for /etc/pki/entitlement-host if
+    present.
+    """
+    def __init__(self, config_file=None, defaults=None):
+        RhsmConfigParser.__init__(self, config_file, defaults)
+
+        # Override the ca_cert_dir and repo_ca_cert if necessary:
+        ca_cert_dir = self.get('rhsm', 'ca_cert_dir')
+        repo_ca_cert = self.get('rhsm', 'repo_ca_cert')
+
+        ca_cert_dir = ca_cert_dir.replace(DEFAULT_CONFIG_DIR, HOST_CONFIG_DIR)
+        repo_ca_cert = repo_ca_cert.replace(DEFAULT_CONFIG_DIR, HOST_CONFIG_DIR)
+        self.set('rhsm', 'ca_cert_dir', ca_cert_dir)
+        self.set('rhsm', 'repo_ca_cert', repo_ca_cert)
+
+        # Similarly if /etc/pki/entitlement-host exists, override this too.
+        # If for some reason the host config is pointing to another directory
+        # we leave the config setting alone, our tooling isn't going to be
+        # able to handle it anyhow.
+        if os.path.exists(HOST_ENT_CERT_DIR):
+            ent_cert_dir = self.get('rhsm', 'entitlementcertdir')
+            if ent_cert_dir == DEFAULT_ENT_CERT_DIR or \
+                    ent_cert_dir == DEFAULT_ENT_CERT_DIR + "/":
+                ent_cert_dir = HOST_ENT_CERT_DIR
+            self.set('rhsm', 'entitlementcertdir', ent_cert_dir)
+
+
 def initConfig(config_file=None):
-    """Get an :class:`RhsmConfig` instance"""
+    """
+    Get an :class:`RhsmConfig` instance
+
+    Will use the first config file defined in the following list:
+
+    - argument to this method if provided (only for tests)
+    - /etc/rhsm-host/rhsm.conf if it exists (only in containers)
+    - /etc/rhsm/rhsm.conf
+    """
     global CFG
     # If a config file was specified, assume we should overwrite the global config
     # to use it. This should only be used in testing. Could be switch to env var?
@@ -218,12 +284,18 @@ def initConfig(config_file=None):
         CFG = RhsmConfigParser(config_file=config_file)
         return CFG
 
-    # Normal application behavior, just read the default file if we haven't
-    # already:
     try:
         CFG = CFG
     except NameError:
         CFG = None
     if CFG is None:
-        CFG = RhsmConfigParser(config_file=DEFAULT_CONFIG_PATH)
+
+        # Load alternate config file implementation if we detect that we're
+        # running in a container.
+        if in_container():
+            CFG = RhsmHostConfigParser(
+                config_file=os.path.join(HOST_CONFIG_DIR, 'rhsm.conf'))
+        else:
+            CFG = RhsmConfigParser(config_file=DEFAULT_CONFIG_PATH)
+
     return CFG
