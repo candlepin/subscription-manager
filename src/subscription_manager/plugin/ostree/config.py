@@ -184,9 +184,6 @@ class RepoFile(BaseOstreeConfigFile):
 
     # TODO: make a serializer of OstreeCore
     def set_core(self, ostree_core):
-        # FIXME: shouldn't care about particular values unless we
-        # know we have to munge them
-
         # Assuming we don't need to check validy of any [core] values
         # update the core section with the current values
         for key in ostree_core:
