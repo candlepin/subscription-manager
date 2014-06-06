@@ -138,6 +138,9 @@ class BaseConduit(object):
 
     Conduit() subclasses can provide additional methods.
 
+    Note the conf instance is expected to be a PluginConfig, and/or
+    have a 'parser' attribute that looks like a ConfigParser.SafeConfigParser.
+
     Args:
         clazz: A SubManPlugin subclass that will use this Conduit()
         conf: A PluginConf for the class passed as clazz
@@ -172,7 +175,7 @@ class BaseConduit(object):
             None is returned.
         """
         try:
-            self._conf.get(section, option)
+            return self._conf.parser.get(section, option)
         except (NoSectionError, NoOptionError):
             if default is None:
                 return None
@@ -194,7 +197,7 @@ class BaseConduit(object):
             there is an error, a ValueError is raised.
         """
         try:
-            self._conf.getboolean(section, option)
+            return self._conf.parser.getboolean(section, option)
         except (NoSectionError, NoOptionError):
             if default is True:
                 return True
@@ -219,7 +222,7 @@ class BaseConduit(object):
             ValueError is raised.
         """
         try:
-            self._conf.getint(section, option)
+            return self._conf.parser.getint(section, option)
         except (NoSectionError, NoOptionError):
             try:
                 val = int(default)
@@ -244,7 +247,7 @@ class BaseConduit(object):
             ValueError is raised.
         """
         try:
-            self._conf.getfloat(section, option)
+            return self._conf.parser.getfloat(section, option)
         except (NoSectionError, NoOptionError):
             try:
                 val = float(default)
@@ -270,7 +273,7 @@ class RegistrationConduit(BaseConduit):
 
 
 class PostRegistrationConduit(BaseConduit):
-    """Conduit for use with post registration"""
+    """Conduit for use with post registration."""
     slots = ['post_register_consumer']
 
     def __init__(self, clazz, consumer, facts):
@@ -329,7 +332,7 @@ class FactsConduit(BaseConduit):
 
 
 class SubscriptionConduit(BaseConduit):
-    """Conduit for subscription info"""
+    """Conduit for subscription info."""
     slots = ['pre_subscribe']
 
     def __init__(self, clazz, consumer_uuid, pool_id, quantity):
@@ -456,8 +459,7 @@ class PluginConfig(object):
 #NOTE: need to be super paranoid here about existing of cfg variables
 # BasePluginManager with our default config info
 class BasePluginManager(object):
-
-    """Finds, load, and provides acccess to subscription-manager plugins"""
+    """Finds, load, and provides acccess to subscription-manager plugins."""
     def __init__(self, search_path=None, plugin_conf_path=None):
         """init for BasePluginManager().
 
@@ -632,6 +634,7 @@ class BasePluginManager(object):
                                               plugin_to_config_map=plugin_to_config_map)
 
         # associate config with plugin class
+        # NOTE: the plugin_class has a PluginConfig instance for it's conf
         plugin_clazz.conf = plugin_conf
 
         plugin_key = plugin_clazz.conf.plugin_key
