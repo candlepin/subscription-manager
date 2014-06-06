@@ -18,6 +18,7 @@ import mock
 import fixture
 import subprocess
 
+from subscription_manager import models
 from subscription_manager.plugin.ostree import config
 from subscription_manager.plugin.ostree import model
 from subscription_manager.plugin.ostree import action_invoker
@@ -833,6 +834,43 @@ class TestOsTreeContents(fixture.SubManFixture):
         self.assertTrue(hasattr(contents, '_contents'))
 
         #contents.load()
+
+    def mock_content_yum(self, name):
+        """name also has to work as a label."""
+        mock_content = mock.Mock()
+        mock_content.name = "mock_content_%s" % name
+        mock_content.url = "http://mock.example.com/%s/" % name
+        mock_content.gpg = "path/to/gpg"
+        mock_content.enabled = True
+        mock_content.label = name
+        mock_content.content_type = "yum"
+        return mock_content
+
+    def mock_content_ostree(self, name):
+        mock_content = mock.Mock()
+        mock_content.name = "mock_content_%s" % name
+        mock_content.url = "http://mock.example.com/%s/" % name
+        mock_content.gpg = "path/to/gpg"
+        mock_content.enabled = True
+        mock_content.label = name
+        mock_content.content_type = "ostree"
+        return mock_content
+
+    def test_ent_source(self):
+        yc = self.mock_content_yum("yum_content")
+        oc = self.mock_content_ostree("ostree_content")
+
+        ent1 = models.Entitlement(contents=[yc])
+        ent2 = models.Entitlement(contents=[oc])
+
+        ent_src = models.EntitlementSource()
+        ent_src._entitlements = [ent1, ent2]
+
+        contents = action_invoker.OstreeContents(ent_source=ent_src)
+        self.assertEquals(len(contents), 1)
+
+        for content in contents:
+            self.assertEquals(content.content_type, "ostree")
 
 
 class TestContentUpdateActionReport(fixture.SubManFixture):
