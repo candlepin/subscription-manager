@@ -838,8 +838,6 @@ class TestOsTreeContents(fixture.SubManFixture):
 class TestContentUpdateActionReport(fixture.SubManFixture):
     def test_empty(self):
         report = action_invoker.OstreeContentUpdateActionReport()
-        self.assertTrue(report.origin is None)
-        self.assertTrue(report.refspec is None)
         self.assertEquals(report.remote_updates, [])
 
     def test_print_empty(self):

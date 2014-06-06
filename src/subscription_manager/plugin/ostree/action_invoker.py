@@ -71,14 +71,11 @@ class OstreeContentUpdateActionCommand(object):
         updates.apply()
         updates.save()
 
-        # TODO: Populate with origin info
-        report.origin = "FIXME"
-        report.refspec = "FIXME"
         report.orig_remotes = list(updates.orig.remotes)
         report.remote_updates = list(updates.new.remotes)
+
         # Now that we've updated the ostree repo config, we need to
         # update the currently deployed osname tree .origin file:
-        # TODO: Does this need to be in the report? Is logging enough?
         self.update_origin_file(ostree_config)
 
         log.debug("Ostree update report: %s" % report)
@@ -154,8 +151,6 @@ class OstreeContentUpdateActionReport(certlib.ActionReport):
         self.remote_added = []
         self.remote_deleted = []
         self.content_to_remote = {}
-        self.origin = None
-        self.refspec = None
 
     def updates(self):
         """number of updates. Approximately."""
@@ -170,8 +165,6 @@ class OstreeContentUpdateActionReport(certlib.ActionReport):
     def __str__(self):
         # FIXME: Super ugly at the moment
         s = ["Ostree repo updates\n"]
-        s.append("%s: %s" % (_("Origin:"), self.origin))
-        s.append("%s: %s" % (_("Refspec:"), self.refspec))
         s.append(_("Updates:"))
         s.append(self._format_remotes(self.remote_updates))
         s.append(_("Added:"))
