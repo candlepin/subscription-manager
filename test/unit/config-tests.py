@@ -18,8 +18,8 @@ from tempfile import NamedTemporaryFile
 import types
 import unittest
 
-
-from rhsm.config import RhsmConfigParser
+from mock import patch
+from rhsm.config import RhsmConfigParser, RhsmHostConfigParser
 
 TEST_CONFIG = """
 [foo]
@@ -50,6 +50,35 @@ some_option = %(repo_ca_cert)stest
 
 [rhsmcertd]
 certCheckInterval = 245
+"""
+
+# Only properties we're interested in testing in a host config:
+HOST_CONFIG = """
+[rhsm]
+ca_cert_dir = /etc/rhsm/ca
+repo_ca_cert = /etc/rhsm/redhat-uep-non-default.pem
+entitlementCertDir = /etc/pki/entitlement
+"""
+
+HOST_CONFIG_MACRO = """
+[rhsm]
+ca_cert_dir = /etc/rhsm/ca/
+repo_ca_cert = %(ca_cert_dir)sredhat-uep.pem
+entitlementCertDir = /etc/pki/entitlement
+"""
+
+HOST_CONFIG_NOREPLACE = """
+[rhsm]
+ca_cert_dir = /etc/rhsm-other/ca
+repo_ca_cert = /etc/pki/ca/redhat-uep.pem
+entitlementCertDir = /etc/pki/entitlement-other
+"""
+
+HOST_CONFIG_ENTDIR_TRAILING_SLASH = """
+[rhsm]
+ca_cert_dir = /etc/rhsm-other/ca
+repo_ca_cert = /etc/pki/ca/redhat-uep.pem
+entitlementCertDir = /etc/pki/entitlement/
 """
 
 OLD_CONFIG = """
@@ -138,16 +167,82 @@ repo_ca_cert = %(ca_cert_dir)snon_default.pem
 """
 
 
+def write_temp_file(data):
+    # create a temp file for use as a config file. This should get cleaned
+    # up magically at the end of the run.
+    fid = NamedTemporaryFile(mode='w+b', suffix='.tmp')
+    fid.write(data)
+    fid.seek(0)
+    return fid
+
 class BaseConfigTests(unittest.TestCase):
+
     def setUp(self):
-
-        # create a temp file for use as a config file. This should get cleaned
-        # up magically at the end of the run.
-        self.fid = NamedTemporaryFile(mode='w+b', suffix='.tmp')
-        self.fid.write(self.cfgfile_data)
-        self.fid.seek(0)
-
+        self.fid = write_temp_file(self.cfgfile_data)
         self.cfgParser = RhsmConfigParser(self.fid.name)
+
+
+class HostConfigTests(unittest.TestCase):
+
+    @patch('os.path.exists')
+    def test_normal_case(self, exists_mock):
+        # Mock that /etc/pki/entitlement-host exists:
+        exists_mock.return_value = True
+        temp_file = write_temp_file(HOST_CONFIG)
+        config = RhsmHostConfigParser(temp_file.name)
+        self.assertEquals('/etc/rhsm-host/ca',
+            config.get('rhsm', 'ca_cert_dir'))
+        self.assertEquals('/etc/rhsm-host/redhat-uep-non-default.pem',
+            config.get('rhsm', 'repo_ca_cert'))
+        self.assertEquals('/etc/pki/entitlement-host',
+            config.get('rhsm', 'entitlementCertDir'))
+
+    @patch('os.path.exists')
+    def test_host_config_regular_entcertdir(self, exists_mock):
+        # Mock that /etc/pki/entitlement-host does not exist,
+        # our setting should be left alone.
+        exists_mock.return_value = False
+        temp_file = write_temp_file(HOST_CONFIG)
+        config = RhsmHostConfigParser(temp_file.name)
+        self.assertEquals('/etc/rhsm-host/ca',
+            config.get('rhsm', 'ca_cert_dir'))
+        self.assertEquals('/etc/rhsm-host/redhat-uep-non-default.pem',
+            config.get('rhsm', 'repo_ca_cert'))
+        self.assertEquals('/etc/pki/entitlement',
+            config.get('rhsm', 'entitlementCertDir'))
+
+    @patch('os.path.exists')
+    def test_repo_ca_cert_macro(self, exists_mock):
+        # Mock that /etc/pki/entitlement-host exists:
+        exists_mock.return_value = True
+        temp_file = write_temp_file(HOST_CONFIG_MACRO)
+        config = RhsmHostConfigParser(temp_file.name)
+        self.assertEquals('/etc/rhsm-host/ca/',
+            config.get('rhsm', 'ca_cert_dir'))
+        self.assertEquals('/etc/rhsm-host/ca/redhat-uep.pem',
+            config.get('rhsm', 'repo_ca_cert'))
+
+    @patch('os.path.exists')
+    def test_no_replacements(self, exists_mock):
+        # Mock that /etc/pki/entitlement-host exists:
+        exists_mock.return_value = True
+        temp_file = write_temp_file(HOST_CONFIG_NOREPLACE)
+        config = RhsmHostConfigParser(temp_file.name)
+        self.assertEquals('/etc/rhsm-other/ca',
+            config.get('rhsm', 'ca_cert_dir'))
+        self.assertEquals('/etc/pki/ca/redhat-uep.pem',
+            config.get('rhsm', 'repo_ca_cert'))
+        self.assertEquals('/etc/pki/entitlement-other',
+            config.get('rhsm', 'entitlementCertDir'))
+
+    @patch('os.path.exists')
+    def test_ent_dir_trailing_slash(self, exists_mock):
+        # Mock that /etc/pki/entitlement-host exists:
+        exists_mock.return_value = True
+        temp_file = write_temp_file(HOST_CONFIG_ENTDIR_TRAILING_SLASH)
+        config = RhsmHostConfigParser(temp_file.name)
+        self.assertEquals('/etc/pki/entitlement-host',
+            config.get('rhsm', 'entitlementCertDir'))
 
 
 class ConfigTests(BaseConfigTests):
