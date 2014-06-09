@@ -23,6 +23,7 @@ sys.path.append('/usr/share/rhsm')
 
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
+from subscription_manager.hwprobe import ClassicCheck
 from rhsm import connection
 from rhsm import config
 
@@ -98,14 +99,16 @@ def warnOrGiveUsageMessage(conduit):
     # TODO: refactor so there are not two checks for this
     if os.getuid() != 0:
         return
+    if not ClassicCheck().is_registered_with_classic():
+        return
     try:
         identity = inj.require(inj.IDENTITY)
         if not identity.is_valid():
             msg = not_registered_warning
-
-        ent_dir = inj.require(inj.ENT_DIR)
-        if len(ent_dir.list_valid()) == 0:
-            msg = no_subs_warning
+        else:
+            ent_dir = inj.require(inj.ENT_DIR)
+            if len(ent_dir.list_valid()) == 0:
+                msg = no_subs_warning
 
     finally:
         if msg:
