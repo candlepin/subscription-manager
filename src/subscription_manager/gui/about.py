@@ -104,9 +104,12 @@ class AboutDialog(object):
             next_update_label.hide()
 
     def _rhsmcertd_on(self):
+        fnull = open(os.devnull, "w")
         try:
-            # if exists [method call returns pid] then true
-            return bool(subprocess.check_output(['pidof', 'rhsmcertd']))
-        except subprocess.CalledProcessError:
-            # if does not exist, returns CalledProcessError
-            return False
+            # if status == 0 then true
+
+            return not subprocess.call(['pidof', 'rhsmcertd'],
+                                       stdout=fnull,
+                                       stderr=fnull)
+        finally:
+            fnull.close()
