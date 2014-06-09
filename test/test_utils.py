@@ -283,10 +283,11 @@ class TestGetServerVersions(fixture.SubManFixture):
         instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
-        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
+        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c', 'rulesVersion': '6.1'}
         sv = get_server_versions(MockUep)
         self.assertEquals(sv['server-type'], 'Red Hat Subscription Management')
         self.assertEquals(sv['candlepin'], '101-23423c')
+        self.assertEquals(sv['rules-version'], '6.1')
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
@@ -295,10 +296,11 @@ class TestGetServerVersions(fixture.SubManFixture):
         instance.is_registered_with_classic.return_value = True
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
-        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
+        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c', 'rulesVersion': '6.1'}
         sv = get_server_versions(MockUep)
         self.assertEquals(sv['server-type'], 'RHN Classic and Red Hat Subscription Management')
         self.assertEquals(sv['candlepin'], '101-23423c')
+        self.assertEquals(sv['rules-version'], '6.1')
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
