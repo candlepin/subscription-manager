@@ -220,7 +220,6 @@ class RepoUpdateActionCommand(object):
                 unique.add(r)
         return unique
 
-
     def matching_content(self, ent_cert=None):
         if ent_cert:
             certs = [ent_cert]

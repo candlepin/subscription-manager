@@ -271,7 +271,6 @@ last_key = blippy
         mock_ent_cert = mock.Mock()
         mock_ent_cert.path = "/somewhere/etc/pki/entitlement/123123.pem"
 
-
         mock_ent_content = mock.Mock()
         mock_ent_content.content = mock_content
         mock_ent_content.cert = mock_ent_cert
@@ -385,7 +384,6 @@ gpg-verify=false
         self.assertTrue('refspec' in origin_parser.options('origin'))
         self.assertTrue(origin_parser.get('origin', 'refspec').
             startswith(expected_remote + ":"))
-
 
     def test_one_remote_matching_ref(self):
         repo_cfg = """

@@ -14,8 +14,6 @@
 #
 
 
-
-
 # These containerish iterables could share a
 # base class, though, it should probably just
 # be based on containers.abc.Iterable

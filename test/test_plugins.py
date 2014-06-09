@@ -763,6 +763,7 @@ class TestPluginManagerRunIter(TestPluginManagerRun):
 
 class BaseConduitTest(unittest.TestCase):
     conf_buf = ""
+
     def setUp(self):
         self.conf_io = StringIO(self.conf_buf)
         self.conduit = self._conduit()
