@@ -66,7 +66,15 @@ class UnsupportedOperationException(Exception):
 
 
 def has_bad_scheme(url):
-    # Don't allow urls to start with :/ http/ https/ non http/httpsm or http(s) with single /
+    """Check a url for an invalid or unuseful schema.
+
+    Don't allow urls to start with :/ http/ https/ non http/httpsm or http(s) with single /
+
+    :params url: URL string to check
+    :type url: str
+    :returns: True if the url schme is "bad"
+    :rtype: boolean
+    """
     match_bad = '(https?[:/])|(:/)|(\S+://)'
     match_good = 'https?://'
     # Testing good first allows us to exclude some regex for bad
@@ -100,8 +108,11 @@ def parse_url(local_server_entry,
 
     Username, password, port and prefix are optional.
 
-    Returns:
-        a tuple of (username, password, hostname, port, path)
+    :param local_server_entry: URL of a candlepin server
+    :type: str
+    :param default_hostname: default_hostname
+    :param default_port: default_port
+    :return: a tuple of (username, password, hostname, port, path)
     """
     # Adding http:// onto the front of the hostname
 
