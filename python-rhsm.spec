@@ -10,7 +10,7 @@
 
 
 Name: python-rhsm
-Version: 1.12.1
+Version: 1.12.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -71,6 +71,12 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Tue Jun 10 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.12.2-1
+- Detect when operating in container mode and load host system's config.
+  (dgoodwin@redhat.com)
+- Convert doc strings to sphinx/restructuredtext (alikins@redhat.com)
+- Add setup for using sphinx for docs. (alikins@redhat.com)
+
 * Thu Jun 05 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.1-1
 - bump version to 1.12 (jesusr@redhat.com)
 - Add connection method to get available releases (mstead@redhat.com)
