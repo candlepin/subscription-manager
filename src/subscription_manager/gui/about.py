@@ -57,11 +57,13 @@ class AboutDialog(object):
         self.dialog.set_icon_name("subscription-manager")
 
         next_update_label = Label()
-        rhsm_version_label = Label()
+        python_rhsm_version_label = Label()
+        sub_man_version_label = Label()
         backend_version_label = Label()
         context_box = self.dialog.vbox.get_children()[0]
         context_box.pack_end(next_update_label)
-        context_box.pack_end(rhsm_version_label)
+        context_box.pack_end(python_rhsm_version_label)
+        context_box.pack_end(sub_man_version_label)
         context_box.pack_end(backend_version_label)
 
         self._set_next_update(next_update_label)
@@ -70,9 +72,10 @@ class AboutDialog(object):
         server_versions = get_server_versions(self.backend.cp_provider.get_consumer_auth_cp())
         client_versions = get_client_versions()
 
-        self.dialog.set_version(client_versions['subscription-manager'])
-        rhsm_version_label.set_markup(_("<b>%s version:</b> %s") %
+        python_rhsm_version_label.set_markup(_("<b>%s version:</b> %s") %
                                         ("python-rhsm", client_versions['python-rhsm']))
+        sub_man_version_label.set_markup(_("<b>%s version:</b> %s") %
+                                        ("subscription manager", client_versions['subscription-manager']))
         backend_version_label.set_markup(_("<b>subscription management service version:</b> %s") %
                                            server_versions['candlepin'])
 
