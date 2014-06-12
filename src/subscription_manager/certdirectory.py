@@ -205,7 +205,6 @@ class ProductDirectory(CertificateDirectory):
         return installed_products
 
 
-
 class EntitlementDirectory(CertificateDirectory):
 
     PATH = cfg.get('rhsm', 'entitlementCertDir')

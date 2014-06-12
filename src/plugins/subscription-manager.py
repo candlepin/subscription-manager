@@ -74,6 +74,9 @@ def update(conduit, cache_only):
     else:
         conduit.info(3, "Unable to read consumer identity")
 
+    if config.in_container():
+        conduit.info("Subscription Manager is operating in container mode.")
+
     rl = RepoActionInvoker(cache_only=cache_only)
     rl.update()
 
