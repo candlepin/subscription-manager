@@ -61,17 +61,21 @@ def update(conduit, cache_only):
 
     identity = inj.require(inj.IDENTITY)
 
-    if not identity.is_valid():
+    # In containers we have no identity, but we may have entitlements inherited
+    # from the host, which need to generate a redhat.repo.
+    if identity.is_valid():
+        try:
+            connection.UEPConnection(cert_file=cert_file, key_file=key_file)
+        #FIXME: catchall exception
+        except Exception:
+            # log
+            conduit.info(2, "Unable to connect to Subscription Management Service")
+            return
+    else:
         conduit.info(3, "Unable to read consumer identity")
-        return
 
-    try:
-        connection.UEPConnection(cert_file=cert_file, key_file=key_file)
-    #FIXME: catchall exception
-    except Exception:
-        # log
-        conduit.info(2, "Unable to connect to Subscription Management Service")
-        return
+    if config.in_container():
+        conduit.info("Subscription Manager is operating in container mode.")
 
     rl = RepoActionInvoker(cache_only=cache_only)
     rl.update()
@@ -103,12 +107,12 @@ def warnOrGiveUsageMessage(conduit):
         return
     try:
         identity = inj.require(inj.IDENTITY)
-        if not identity.is_valid():
+        ent_dir = inj.require(inj.ENT_DIR)
+        # Don't warn people to register if we see entitelements, but no identity:
+        if not identity.is_valid() and len(ent_dir.list_valid()) == 0:
             msg = not_registered_warning
-        else:
-            ent_dir = inj.require(inj.ENT_DIR)
-            if len(ent_dir.list_valid()) == 0:
-                msg = no_subs_warning
+        elif len(ent_dir.list_valid()) == 0:
+            msg = no_subs_warning
 
     finally:
         if msg:
