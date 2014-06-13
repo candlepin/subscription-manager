@@ -405,10 +405,6 @@ class OstreeConfigUpdatesBuilder(object):
 # Classes represent ostree configuration objects
 
 
-class OstreeRepo(object):
-    pass
-
-
 class OstreeCore(dict):
     """Represents the info from the ostree repo config [core] section."""
     pass
