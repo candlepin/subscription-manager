@@ -156,14 +156,10 @@ class TestOstreeRemotes(fixture.SubManFixture):
         self.assertTrue(remote in remotes)
 
 
-# TODO: This class may not be needed, technically not doing anything
-# since write_tempfile moved to subman fixture.
 class BaseOstreeKeyFileTest(fixture.SubManFixture):
+    repo_cfg = ""
     """Setup env for testing ostree keyfiles ('config' and '.origin')."""
-    cfgfile_data = ""
-
-    def setUp(self):
-        super(BaseOstreeKeyFileTest, self).setUp()
+    pass
 
 
 class TestOstreeConfig(BaseOstreeKeyFileTest):
@@ -211,21 +207,23 @@ url=http://blip.example.com
 
 
 class TestKeyFileConfigParser(BaseOstreeKeyFileTest):
+    repo_cfg = ""
+
     def test_defaults(self):
-        fid = self.write_tempfile(self.cfgfile_data)
+        fid = self.write_tempfile(self.repo_cfg)
         kf_cfg = config.KeyFileConfigParser(fid.name)
         # There are no defaults, make sure the rhsm ones are skipped
         self.assertFalse(kf_cfg.has_default('section', 'prop'))
         self.assertEquals(kf_cfg.defaults(), {})
 
     def test_items(self):
-        fid = self.write_tempfile(self.cfgfile_data)
+        fid = self.write_tempfile(self.repo_cfg)
         kf_cfg = config.KeyFileConfigParser(fid.name)
         self.assertEquals(kf_cfg.items('section'), [])
 
 
 class TestOstreeConfigUpdates(BaseOstreeKeyFileTest):
-    cfgfile_data = """
+    repo_cfg = """
 [section_one]
 akey = 1
 foo = bar
@@ -235,7 +233,7 @@ last_key = blippy
 """
 
     def test_init(self):
-        fid = self.write_tempfile(self.cfgfile_data)
+        fid = self.write_tempfile(self.repo_cfg)
         ostree_config = model.OstreeConfig(repo_file_path=fid.name)
         new_ostree_config = model.OstreeConfig(repo_file_path=fid.name)
 
@@ -248,7 +246,7 @@ last_key = blippy
 
 
 class TestOstreeConfigUpdatesBuilder(BaseOstreeKeyFileTest):
-    cfgfile_data = """
+    repo_cfg = """
 [section_one]
 akey = 1
 foo = bar
@@ -258,7 +256,7 @@ last_key = blippy
 """
 
     def test_init(self):
-        fid = self.write_tempfile(self.cfgfile_data)
+        fid = self.write_tempfile(self.repo_cfg)
         content_set = set()
 
         ostree_config = model.OstreeConfig(repo_file_path=fid.name)
@@ -288,7 +286,7 @@ last_key = blippy
 
 
 class TestKeyFileConfigParserSample(BaseOstreeKeyFileTest):
-    cfgfile_data = """
+    repo_cfg = """
 [section_one]
 akey = 1
 foo = bar
@@ -298,13 +296,13 @@ last_key = blippy
 """
 
     def test_sections(self):
-        fid = self.write_tempfile(self.cfgfile_data)
+        fid = self.write_tempfile(self.repo_cfg)
         kf_cfg = config.KeyFileConfigParser(fid.name)
         self.assert_items_equals(kf_cfg.sections(), ['section_one', 'section_two'])
         self.assertEquals(len(kf_cfg.sections()), 2)
 
     def test_items(self):
-        fid = self.write_tempfile(self.cfgfile_data)
+        fid = self.write_tempfile(self.repo_cfg)
         kf_cfg = config.KeyFileConfigParser(fid.name)
         section_one_items = kf_cfg.items('section_one')
         self.assertEquals(len(section_one_items), 2)
@@ -522,7 +520,7 @@ refspec=origremote:awesome-ostree/awesomeos8/x86_64/controller/docker
 class BaseOstreeOriginFileTest(BaseOstreeKeyFileTest):
     """Base of tests for ostree *.origin config files."""
     def _of_cfg(self):
-        fid = self.write_tempfile(self.cfgfile_data)
+        fid = self.write_tempfile(self.repo_cfg)
         self._of_cfg_instance = config.KeyFileConfigParser(
             fid.name)
         return self._of_cfg_instance
@@ -530,7 +528,7 @@ class BaseOstreeOriginFileTest(BaseOstreeKeyFileTest):
 
 class TestOriginFileConfigParserEmpty(BaseOstreeOriginFileTest):
     """Test if a .origin file is empty."""
-    cfgfile_data = ""
+    repo_cfg = ""
 
     def test_has_origin(self):
         of_cfg = self._of_cfg()
@@ -540,7 +538,7 @@ class TestOriginFileConfigParserEmpty(BaseOstreeOriginFileTest):
 
 class TestOriginFileConfigParser(BaseOstreeOriginFileTest):
     """Test a normalish .origin file."""
-    cfgfile_data = """
+    repo_cfg = """
 [origin]
 refspec=awesomeos-controller:awesomeos-controller/awesomeos8/x86_64/controller/docker
 """
@@ -557,20 +555,22 @@ refspec=awesomeos-controller:awesomeos-controller/awesomeos8/x86_64/controller/d
 
 
 class TestOstreeConfigFile(BaseOstreeOriginFileTest):
-    cfgfile_data = """
+    repo_cfg = """
 [origin]
 refspec=awesomeos-controller:awesomeos-controller/awesomeos8/x86_64/controller/docker
 """
 
     def test_init(self):
-        fid = self.write_tempfile(self.cfgfile_data)
+        fid = self.write_tempfile(self.repo_cfg)
         o_cfg = config.BaseOstreeConfigFile(fid.name)
         self.assertTrue(isinstance(o_cfg, config.BaseOstreeConfigFile))
 
 
 class BaseOstreeRepoFileTest(BaseOstreeKeyFileTest):
+    repo_cfg = ""
+
     def _rf_cfg(self):
-        self.fid = self.write_tempfile(self.cfgfile_data)
+        self.fid = self.write_tempfile(self.repo_cfg)
         self._rf_cfg_instance = config.KeyFileConfigParser(self.fid.name)
         return self._rf_cfg_instance
 
@@ -593,7 +593,7 @@ class BaseOstreeRepoFileTest(BaseOstreeKeyFileTest):
 
 
 class TestSampleOstreeRepofileConfigParser(BaseOstreeRepoFileTest):
-    cfgfile_data = """
+    repo_cfg = """
 [core]
 repo_version=1
 mode=bare
@@ -620,7 +620,7 @@ gpg-verify=false
 
 
 class TestOstreeRepofileConfigParserNotAValidFile(BaseOstreeRepoFileTest):
-    cfgfile_data = """
+    repo_cfg = """
 id=inrozxa width=100% height=100%>
   <param name=movie value="welcom
 ಇದು ಮಾನ್ಯ ಸಂರಚನಾ ಕಡತದ ಅಲ್ಲ. ನಾನು ಮಾಡಲು ಪ್ರಯತ್ನಿಸುತ್ತಿರುವ ಖಚಿತವಿಲ್ಲ, ಆದರೆ ನಾವು ಈ
@@ -635,7 +635,7 @@ id=inrozxa width=100% height=100%>
 
 
 class TestOstreeRepoFileOneRemote(BaseOstreeRepoFileTest):
-    cfgfile_data = """
+    repo_cfg = """
 [core]
 repo_version=1
 mode=bare
@@ -668,7 +668,7 @@ gpg-verify=false
 
 
 class TestOstreeRepoFileNoRemote(BaseOstreeRepoFileTest):
-    cfgfile_data = """
+    repo_cfg = """
 [core]
 repo_version=1
 mode=bare
@@ -687,7 +687,7 @@ mode=bare
 
 
 class TestOstreeRepoFileMultipleRemotes(BaseOstreeRepoFileTest):
-    cfgfile_data = """
+    repo_cfg = """
 [core]
 repo_version=1
 mode=bare
@@ -722,7 +722,7 @@ gpg-verify=false
 # an error on read, we will likely squash the dupes to one
 # remote on write. Which is ok?
 class TestOstreeRepoFileNonUniqueRemotes(BaseOstreeRepoFileTest):
-    cfgfile_data = """
+    repo_cfg = """
 [core]
 repo_version=1
 mode=bare
@@ -750,10 +750,10 @@ gpg-verify=false
 
 
 class TestOstreeRepofileAddSectionWrite(BaseOstreeRepoFileTest):
-    cfgfile_data = ""
+    repo_cfg = ""
 
     def test_add_remote(self):
-        fid = self.write_tempfile(self.cfgfile_data)
+        fid = self.write_tempfile(self.repo_cfg)
         rf_cfg = config.KeyFileConfigParser(fid.name)
 
         remote_name = 'remote "awesomeos-8-container"'
@@ -793,7 +793,7 @@ class TestOstreeRepofileAddSectionWrite(BaseOstreeRepoFileTest):
 
 
 class TestOstreeRepoFileRemoveSectionSave(BaseOstreeRepoFileTest):
-    cfgfile_data = """
+    repo_cfg = """
 [core]
 repo_version=1
 mode=bare
@@ -810,7 +810,7 @@ gpg-verify=false
 """
 
     def test_remove_section(self):
-        fid = self.write_tempfile(self.cfgfile_data)
+        fid = self.write_tempfile(self.repo_cfg)
         rf_cfg = config.KeyFileConfigParser(fid.name)
         remote_to_remove = 'remote "awesomeos-7-controller"'
         self.assertTrue(rf_cfg.has_section(remote_to_remove))
