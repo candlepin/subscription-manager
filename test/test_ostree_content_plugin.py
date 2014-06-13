@@ -326,8 +326,9 @@ class TestReplaceRefspecRemote(fixture.SubManFixture):
 
     def test_bad_refspec(self):
         refspec = 'ImNotARefSpec'
-        self.assertRaises(Exception, config.replace_refspec_remote,
-            refspec, 'newremote')
+
+        self.assertRaises(config.RefspecFormatException, config.replace_refspec_remote,
+                          refspec, 'newremote')
 
 
 class TestOstreeOriginUpdater(BaseOstreeKeyFileTest):

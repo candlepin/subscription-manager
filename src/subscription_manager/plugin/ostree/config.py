@@ -46,6 +46,11 @@ dealing with all of the remote sections.
 """
 
 
+class RefspecFormatException(Exception):
+    """A ostree refspec value was not in the expected format."""
+    pass
+
+
 # KeyFile is the desktop.org name for ini files, more or less
 class KeyFileConfigParser(config.RhsmConfigParser):
     """A ini/ConfigParser subclass based on RhsmConfigParser.
@@ -105,7 +110,7 @@ def replace_refspec_remote(refspec, new_remote):
     refspec_regex = "(.*):(.*)"
     m = re.search(refspec_regex, refspec)
     if not m:
-        raise Exception("Unable to parse refspec: %s" % refspec)
+        raise RefspecFormatException("Unable to parse refspec: %s" % refspec)
     return "%s:%s" % (new_remote, m.group(2))
 
 
