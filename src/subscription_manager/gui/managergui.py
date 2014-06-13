@@ -166,7 +166,7 @@ class MainWindow(widgets.GladeWidget):
         self.import_sub_dialog = ImportSubDialog()
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
-        self.network_config_dialog.xml.get_widget("closeButton").connect("clicked", self._config_changed)
+        self.network_config_dialog.xml.get_widget("okButton").connect("clicked", self._config_changed)
 
         self.redeem_dialog = redeem.RedeemDialog(self.backend)
 
