@@ -610,8 +610,23 @@ class EntitlementCertificate(ProductCertificate):
 
         # Can assume we have a path here, super method would have thrown
         # Exception if we didn't:
-        key_path = self.path.replace(".pem", "-key.pem")
+        key_path = self.key_path()
         os.unlink(key_path)
+
+    def key_path(self):
+        """
+        Returns the full path to the cert key's pem.
+        """
+        dir_path, cert_filename = os.path.split(self.path)
+        try:
+            key_filename = "%s-key.%s" % tuple(cert_filename.rsplit(".", 1))
+        except TypeError, e:
+            log.exception(e)
+            raise CertificateException("Entitlement certificate path \"%s\" is not in "
+                                       "in the expected format so the key file path "
+                                       "could not be based on it." % self.path)
+        key_path = os.path.join(dir_path, key_filename)
+        return key_path
 
 
 class Product(object):
