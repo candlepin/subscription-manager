@@ -19,7 +19,6 @@ import os
 import subprocess
 
 from subscription_manager.plugin.ostree import config
-from subscription_manager import utils
 
 OSTREE_REPO_CONFIG_PATH = "/ostree/repo/config"
 
@@ -168,7 +167,7 @@ class OstreeRemote(object):
 
         cert = ent_cert_content.cert
         remote.tls_client_cert_path = cert.path
-        remote.tls_client_key_path = utils.get_cert_key_path(cert)
+        remote.tls_client_key_path = cert.key_path()
 
         return remote
 

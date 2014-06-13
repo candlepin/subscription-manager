@@ -31,7 +31,6 @@ from rhsm.connection import RemoteServerException, RestlibException
 
 from subscription_manager.certlib import ActionReport, BaseActionInvoker
 from subscription_manager.certdirectory import Path
-from subscription_manager import utils
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -279,7 +278,7 @@ class RepoUpdateActionCommand(object):
                 repo['gpgkey'] = self.join(baseurl, gpg_url)
                 # Leave gpgcheck as the default of 1
 
-            repo['sslclientkey'] = utils.get_cert_key_path(ent_cert)
+            repo['sslclientkey'] = ent_cert.key_path()
             repo['sslclientcert'] = ent_cert.path
             repo['sslcacert'] = ca_cert
             repo['metadata_expire'] = content.metadata_expire
