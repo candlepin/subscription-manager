@@ -153,7 +153,7 @@ class OstreeContentUpdateActionReport(certlib.ActionReport):
         self.content_to_remote = {}
 
     def updates(self):
-        """number of updates. Approximately."""
+        """Number of updates. Approximately."""
         return len(self.remote_updates)
 
     def _format_remotes(self, remotes):
@@ -163,7 +163,6 @@ class OstreeContentUpdateActionReport(certlib.ActionReport):
         return '\n'.join(s)
 
     def __str__(self):
-        # FIXME: Super ugly at the moment
         s = ["Ostree repo updates\n"]
         s.append(_("Updates:"))
         s.append(self._format_remotes(self.remote_updates))

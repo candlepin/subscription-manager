@@ -382,10 +382,6 @@ class OstreeConfigUpdatesBuilder(object):
         content_to_remote = {}
         log.debug("builder.build %s" % self.contents)
         for content in self.contents:
-            # TODO: we may need to keep a map of original config
-            #       remotes -> old Content, old Content -> new Content,
-            #       and new Content -> new Remotes.
-            #       This does not create that map yet.
             remote = OstreeRemote.from_ent_cert_content(content)
             new_remotes.add(remote)
 
@@ -432,7 +428,6 @@ class OstreeConfig(object):
     def _init_store(self):
         return OstreeConfigRepoFileStore(self.repo_file_path)
 
-    # TODO: Should this be a part of the constructor?
     def load(self):
         """Load a ostree config files and populate OstreeConfig."""
         self.repo_file_store = self._init_store()

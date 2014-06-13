@@ -59,9 +59,6 @@ class KeyFileConfigParser(config.RhsmConfigParser):
     We don't neeed them.
     """
 
-    # TODO: split RhsmConfigParser into a base version with useful stuff
-    #       like save(), but without the rhsm specific DEFAULTS
-
     # neuter the rhsm.config module level DEFAULTS
     # If we don't override defaults, sections, items, and has_default
     # the class returns the module level DEFAULTS. We don't want that,
@@ -172,7 +169,6 @@ class RepoFile(BaseOstreeConfigFile):
     def set(self, section, key, value):
         return self.config_parser.set(section, key, value)
 
-    # TODO: this is really just serializing OstreeRemote
     def set_remote(self, ostree_remote):
         """Add a remote section to config file based on a OstreeRemote."""
         # format section name
@@ -187,7 +183,6 @@ class RepoFile(BaseOstreeConfigFile):
         if ostree_remote.tls_client_key_path:
             self.set(section_name, 'tls-client-key-path', ostree_remote.tls_client_key_path)
 
-    # TODO: make a serializer of OstreeCore
     def set_core(self, ostree_core):
         # Assuming we don't need to check validy of any [core] values
         # update the core section with the current values
