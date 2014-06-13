@@ -72,7 +72,7 @@ class StubConfig(config.RhsmConfigParser):
         self.readfp(test_config, "foo.conf")
 
     def set(self, section, key, value):
-#        print self.sections()
+        # print self.sections()
         self.store['%s.%s' % (section, key)] = value
 
     def save(self, config_file=None):
