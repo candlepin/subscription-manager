@@ -292,5 +292,3 @@ def is_true_value(test_string):
 def system_log(message, priority=syslog.LOG_NOTICE):
     syslog.openlog("subscription-manager")
     syslog.syslog(priority, message.encode("utf-8"))
-
-
