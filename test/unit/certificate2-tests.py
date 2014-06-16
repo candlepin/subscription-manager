@@ -243,6 +243,46 @@ class V3_2CertTests(unittest.TestCase):
                 self.ent_cert.pool.id)
 
 
+class TestEntCertV1KeyPath(unittest.TestCase):
+    cert_data = certdata.ENTITLEMENT_CERT_V1_0
+
+    def setUp(self):
+        self.ent_cert = create_from_pem(self.cert_data)
+
+    def test_key_path(self):
+        self.ent_cert.path = "/etc/pki/entitlement/12345.pem"
+        expected_key_path = "/etc/pki/entitlement/12345-key.pem"
+
+        actual_key_path = self.ent_cert.key_path()
+        self.assertEquals(actual_key_path, expected_key_path)
+
+    def test_key_path_extra_pem(self):
+        self.ent_cert.path = "/etc/pki/entitlement/12345-with-a.pem-in-the-name.pem"
+        expected_key_path = "/etc/pki/entitlement/12345-with-a.pem-in-the-name-key.pem"
+
+        actual_key_path = self.ent_cert.key_path()
+        self.assertEquals(actual_key_path, expected_key_path)
+
+    def test_key_path_no_pem(self):
+        self.ent_cert.path = "/etc/pki/entitlement/12345"
+        self.assertRaises(CertificateException, self.ent_cert.key_path)
+
+    def test_key_path_no_slash(self):
+        self.ent_cert.path = "12345.pem"
+        expected_key_path = "12345-key.pem"
+
+        actual_key_path = self.ent_cert.key_path()
+        self.assertEquals(actual_key_path, expected_key_path)
+
+
+class TestEntCertV3_0KeyPath(TestEntCertV1KeyPath):
+    cert_data = certdata.ENTITLEMENT_CERT_V3_0
+
+
+class TestEntCertV3_2KeyPath(TestEntCertV1KeyPath):
+    cert_data = certdata.ENTITLEMENT_CERT_V3_2
+
+
 class V3_2ContentArchCertTests(unittest.TestCase):
 
     def setUp(self):
