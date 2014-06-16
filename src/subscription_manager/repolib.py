@@ -219,15 +219,6 @@ class RepoUpdateActionCommand(object):
                 unique.add(r)
         return unique
 
-    def get_key_path(self, ent_cert):
-        """
-        Returns the full path to the cert's key.pem.
-        """
-        dir_path, cert_filename = os.path.split(ent_cert.path)
-        key_filename = "%s-key.%s" % tuple(cert_filename.split("."))
-        key_path = os.path.join(dir_path, key_filename)
-        return key_path
-
     def matching_content(self, ent_cert=None):
         if ent_cert:
             certs = [ent_cert]
@@ -287,7 +278,7 @@ class RepoUpdateActionCommand(object):
                 repo['gpgkey'] = self.join(baseurl, gpg_url)
                 # Leave gpgcheck as the default of 1
 
-            repo['sslclientkey'] = self.get_key_path(ent_cert)
+            repo['sslclientkey'] = ent_cert.key_path()
             repo['sslclientcert'] = ent_cert.path
             repo['sslcacert'] = ca_cert
             repo['metadata_expire'] = content.metadata_expire

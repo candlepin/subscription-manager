@@ -714,6 +714,53 @@ class TestPluginManagerRun(unittest.TestCase):
                           'post_product_id_install', product_list=[])
 
 
+class TestPluginManagerRunIter(TestPluginManagerRun):
+    def setUp(self):
+        super(TestPluginManagerRunIter, self).setUp()
+
+        # add dummy 2 and 3, so we have multiple hooks registered for the same
+        # slot
+        module = os.path.join(self.module_dir, "dummy_plugin_2.py")
+        plugin_module = self.manager._load_plugin_module_file(module)
+        self.manager.add_plugins_from_module(plugin_module)
+
+        module = os.path.join(self.module_dir, "dummy_plugin_3.py")
+        plugin_module = self.manager._load_plugin_module_file(module)
+        self.manager.add_plugins_from_module(plugin_module)
+        # add
+
+    def test_dummy_runiter(self):
+        for runner in self.manager.runiter("post_product_id_install", product_list=[]):
+            runner.run()
+
+    def test_iter_wrapper(self):
+        class Wrapper(object):
+            def __init__(self, runner):
+                self.runner = runner
+                self.runner_func = self.runner.func
+                self.runner_conduit = self.runner.conduit
+                self.status = 0
+
+            def update(self):
+                self.runner.run()
+                self.status = 1
+
+        for runner in self.manager.runiter("post_product_id_install", product_list=[]):
+            wrapper = Wrapper(runner)
+            wrapper.update()
+
+    def test_update_content_iter(self):
+        reports = set()
+        reports.add("Started with this")
+
+        ent_source = []
+
+        for runner in self.manager.runiter("update_content",
+                                           reports=reports,
+                                           ent_source=ent_source):
+            runner.run()
+
+
 class BaseConduitTest(unittest.TestCase):
     conf_buf = ""
 
@@ -906,6 +953,18 @@ class TestFactsConduit(unittest.TestCase):
         self.assertEquals({}, conduit.facts)
 
 
+class TestUpdateContentConduit(unittest.TestCase):
+    def test_content_plugin_conduit(self):
+        mock_reports = mock.Mock()
+
+        # out ent source is a empty list (of mock entitlements)
+        mock_ent_source = []
+        conduit = plugins.UpdateContentConduit(StubPluginClass,
+                                               reports=mock_reports,
+                                               ent_source=mock_ent_source)
+        self.assertEquals(mock_reports, conduit.reports)
+
+
 class TestRegistrationConduit(unittest.TestCase):
     def test_registration_conduit(self):
         conduit = plugins.RegistrationConduit(StubPluginClass,
@@ -960,7 +1019,7 @@ class TestPostAutoAttachConduit(unittest.TestCase):
 
 
 class BasePluginException(unittest.TestCase):
-    """At least create and raise all the exceptions"""
+    """At least create and raise all the exceptions."""
     e = plugins.PluginException
 
     def raise_exception(self):

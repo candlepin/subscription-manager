@@ -31,7 +31,7 @@ Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  pygobject2
 Requires:  virt-what
-Requires:  python-rhsm >= 1.12.2
+Requires:  python-rhsm >= 1.12.3
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 Requires:  usermode
@@ -71,6 +71,24 @@ BuildRequires: systemd
 The Subscription Manager package provides programs and libraries to allow users
 to manage subscriptions and yum repositories from the Red Hat entitlement
 platform.
+
+
+%package -n subscription-manager-plugin-ostree
+Summary: A plugin for handling OSTree content.
+Group: System Environment/Base
+
+Requires: pygobject3-base
+
+%description -n subscription-manager-plugin-ostree
+Enables handling of content of type 'ostree' in any certificates
+from the server. Populates /ostree/repo/config as well as updates
+the remote in the currently deployed .origin file.
+
+%files -n subscription-manager-plugin-ostree
+%defattr(-,root,root,-)
+%{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
+%{rhsm_plugins_dir}/ostree_content.py*
+%{_datadir}/rhsm/subscription_manager/plugin/ostree/*.py*
 
 
 %package -n subscription-manager-gui
@@ -208,11 +226,13 @@ rm -rf %{buildroot}
 %dir %{_datadir}/rhsm/subscription_manager
 
 %{_datadir}/rhsm/subscription_manager/async.py*
+%{_datadir}/rhsm/subscription_manager/base_action_client.py*
 %{_datadir}/rhsm/subscription_manager/base_plugin.py*
 %{_datadir}/rhsm/subscription_manager/branding
 %{_datadir}/rhsm/subscription_manager/cache.py*
 %{_datadir}/rhsm/subscription_manager/certdirectory.py*
 %{_datadir}/rhsm/subscription_manager/certlib.py*
+%{_datadir}/rhsm/subscription_manager/content_action_client.py*
 %{_datadir}/rhsm/subscription_manager/action_client.py*
 %{_datadir}/rhsm/subscription_manager/cert_sorter.py*
 %{_datadir}/rhsm/subscription_manager/cli.py*
@@ -240,6 +260,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/logutil.py*
 %{_datadir}/rhsm/subscription_manager/managercli.py*
 %{_datadir}/rhsm/subscription_manager/managerlib.py*
+%{_datadir}/rhsm/subscription_manager/models.py*
 %{_datadir}/rhsm/subscription_manager/packageprofilelib.py*
 %{_datadir}/rhsm/subscription_manager/plugins.py*
 %{_datadir}/rhsm/subscription_manager/productid.py*
@@ -255,6 +276,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/file_monitor.py*
 %{_datadir}/rhsm/subscription_manager/overrides.py*
 %{_datadir}/rhsm/subscription_manager/exceptions.py*
+%{_datadir}/rhsm/subscription_manager/plugin/*.py*
 
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}

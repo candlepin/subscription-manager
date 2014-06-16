@@ -3,8 +3,9 @@ import pprint
 import unittest
 import sys
 import StringIO
+import tempfile
 
-from mock import Mock, NonCallableMock, patch
+from mock import Mock, MagicMock, NonCallableMock, patch
 
 import stubs
 import subscription_manager.injection as inj
@@ -96,7 +97,8 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
 
         # setup and mock the plugin_manager
-        plugin_manager_mock = Mock(name='FixturePluginManagerMock')
+        plugin_manager_mock = MagicMock(name='FixturePluginManagerMock')
+        plugin_manager_mock.runiter.return_value = iter([])
         inj.provide(inj.PLUGIN_MANAGER, plugin_manager_mock)
         inj.provide(inj.DBUS_IFACE, Mock(name='FixtureDbusIfaceMock'))
 
@@ -110,7 +112,6 @@ class SubManFixture(unittest.TestCase):
 
         self.dbus_patcher = patch('subscription_manager.managercli.CliCommand._request_validity_check')
         self.dbus_patcher.start()
-
         # No tests should be trying to connect to any configure or test server
         # so really, everything needs this mock. May need to be in __init__, or
         # better, all test classes need to use SubManFixture
@@ -118,9 +119,27 @@ class SubManFixture(unittest.TestCase):
         is_valid_server_mock = self.is_valid_server_patcher.start()
         is_valid_server_mock.return_value = True
 
+        self.files_to_cleanup = []
+
     def tearDown(self):
         self.dbus_patcher.stop()
         self.is_valid_server_patcher.stop()
+
+        for f in self.files_to_cleanup:
+            # Assuming these are tempfile.NamedTemporaryFile, created with
+            # the write_tempfile() method in this class.
+            f.close()
+
+    def write_tempfile(self, contents):
+        """
+        Write out a tempfile and append it to the list of those to be
+        cleaned up in tearDown.
+        """
+        fid = tempfile.NamedTemporaryFile(mode='w+b', suffix='.tmp')
+        fid.write(contents)
+        fid.seek(0)
+        self.files_to_cleanup.append(fid)
+        return fid
 
     def set_consumer_auth_cp(self, consumer_auth_cp):
         cp_provider = inj.require(inj.CP_PROVIDER)

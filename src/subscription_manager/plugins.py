@@ -46,7 +46,7 @@ from subscription_manager.base_plugin import SubManPlugin
 # API, the major version number must be incremented and the minor version number
 # reset to 0. If a change is made that doesn't break backwards compatibility,
 # then the minor number must be incremented.
-API_VERSION = "1.0"
+API_VERSION = "1.1"
 
 DEFAULT_SEARCH_PATH = "/usr/share/rhsm-plugins/"
 DEFAULT_CONF_PATH = "/etc/rhsm/pluginconf.d/"
@@ -74,7 +74,7 @@ class PluginImportException(PluginException):
 
 
 class PluginModuleImportException(PluginImportException):
-    """Raise when a plugin module can not be imported"""
+    """Raise when a plugin module can not be imported."""
 
 
 class PluginModuleImportApiVersionMissingException(PluginImportException):
@@ -331,6 +331,22 @@ class FactsConduit(BaseConduit):
         self.facts = facts
 
 
+class UpdateContentConduit(BaseConduit):
+    """Conduit for updating content."""
+    slots = ['update_content']
+
+    def __init__(self, clazz, reports, ent_source):
+        """init for UpdateContentConduit.
+
+        Args:
+            reports: a list of reports
+            ent_source: a EntitlementSource instance
+        """
+        super(UpdateContentConduit, self).__init__(clazz)
+        self.reports = reports
+        self.ent_source = ent_source
+
+
 class SubscriptionConduit(BaseConduit):
     """Conduit for subscription info."""
     slots = ['pre_subscribe']
@@ -454,6 +470,24 @@ class PluginConfig(object):
         # config file entries
         buf = buf + str(self.parser.data)
         return buf
+
+
+class PluginHookRunner(object):
+    """Encapsulates a Conduit() instance and a bound plugin method.
+
+    PluginManager.runiter() returns an iterable that will yield
+    a PluginHookRunner for each plugin hook to be triggered.
+    """
+    def __init__(self, conduit, func):
+        self.conduit = conduit
+        self.func = func
+
+    def run(self):
+        try:
+            self.func(self.conduit)
+        except Exception, e:
+            log.exception(e)
+            raise
 
 
 #NOTE: need to be super paranoid here about existing of cfg variables
@@ -692,7 +726,7 @@ class BasePluginManager(object):
             plugin_clazz.found_slots_for_hooks = True
 
     def _track_plugin_class_to_modules(self, plugin_clazz):
-        """Keep a map of plugin classes loaded from each plugin module"""
+        """Keep a map of plugin classes loaded from each plugin module."""
         if plugin_clazz.__module__ not in self._modules:
             self._modules[plugin_clazz.__module__] = []
         self._modules[plugin_clazz.__module__].append(plugin_clazz)
@@ -711,6 +745,19 @@ class BasePluginManager(object):
         Raises:
             SlotNameException: slot_name isn't found
             (Anything else is plugin and conduit specific)
+        """
+        for runner in self.runiter(slot_name, **kwargs):
+            runner.run()
+
+    def runiter(self, slot_name, **kwargs):
+        """Return an iterable of PluginHookRunner objects.
+
+        The iterable will return a PluginHookRunner object
+        for each plugin hook mapped to slot_name. Multiple plugins
+        with hooks for the same slot will result in multiple
+        PluginHookRunners in the iterable.
+
+        See run() docs for what to expect from PluginHookRunner.run().
         """
         # slot's called should always exist here, if not
         if slot_name not in self._slot_to_funcs:
@@ -738,16 +785,8 @@ class BasePluginManager(object):
                 log.exception(e)
                 raise
 
-            # If we wanted to allow a plugin or conduit to provide
-            # exception handlers, this is probably where we would go.
-            try:
-                # invoke the method with the conduit
-                func(conduit_instance)
-            except Exception, e:
-                log.exception(e)
-                raise
-        # FIXME: need to note if a slot is not found?
-        # debug logging maybe
+            runner = PluginHookRunner(conduit_instance, func)
+            yield runner
 
     def _get_plugin_config(self, plugin_clazz, plugin_to_config_map=None):
         """Get a PluginConfig for plugin_class, creating it if need be.
@@ -771,7 +810,7 @@ class BasePluginManager(object):
         return PluginConfig(plugin_clazz.get_plugin_key(), self.plugin_conf_path)
 
     def get_plugins(self):
-        """list of plugins"""
+        """list of plugins."""
         return self._plugin_classes
 
     def get_slots(self):
@@ -800,7 +839,8 @@ class BasePluginManager(object):
 class PluginManager(BasePluginManager):
     """Finds, load, and provides acccess to subscription-manager plugins
     using subscription-manager default plugin search path and plugin
-    conf path."""
+    conf path.
+    """
     default_search_path = DEFAULT_SEARCH_PATH
     default_conf_path = DEFAULT_CONF_PATH
 
@@ -835,6 +875,7 @@ class PluginManager(BasePluginManager):
         return [BaseConduit, ProductConduit, ProductUpdateConduit,
                 RegistrationConduit, PostRegistrationConduit,
                 FactsConduit, SubscriptionConduit,
+                UpdateContentConduit,
                 PostSubscriptionConduit,
                 AutoAttachConduit, PostAutoAttachConduit]
 
@@ -894,7 +935,8 @@ class PluginManager(BasePluginManager):
             finally:
                 fp.close()
         # we could catch BaseException too for system exit
-        except Exception:
+        except Exception, e:
+            log.exception(e)
             raise PluginModuleImportException(module_file, module_name)
 
         # FIXME: look up module conf, so we can enable entire plugin modules

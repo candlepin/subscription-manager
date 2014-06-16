@@ -227,7 +227,7 @@ class EntitlementDirectory(CertificateDirectory):
 
         See bz #711133.
         """
-        key_path = "%s/%s-key.pem" % (self.path, cert.serial)
+        key_path = cert.key_path()
         if not os.access(key_path, os.R_OK):
             # read key from old key path
             old_key_path = "%s/key.pem" % self.path
