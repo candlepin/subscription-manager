@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.2
+Version: 1.12.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -433,6 +433,113 @@ fi
 %endif
 
 %changelog
+* Mon Jun 16 2014 Alex Wood <awood@redhat.com> 1.12.3-1
+- Bumping required python-rhsm version (mstead@redhat.com)
+- Fixing checkstyle. (mstead@redhat.com)
+- TODO/FIXME cleanup. (alikins@redhat.com)
+- Cleanup BaseOstreeKeyFileTest.cfgfile_data (alikins@redhat.com)
+- Remove unused model.OstreeRepo (alikins@redhat.com)
+- Use python-rhsm's new EntCert.key_path() (alikins@redhat.com)
+- Add specific exception for refspec parse error (alikins@redhat.com)
+- stylish cleanups (alikins@redhat.com)
+- Add test cases for OstreeContents (alikins@redhat.com)
+- Remove fixed FIXME. (alikins@redhat.com)
+- Add section name to exception reading remote name. (alikins@redhat.com)
+- Remove unused origin/refspec from report. (alikins@redhat.com)
+- repr and report format cleanups. (alikins@redhat.com)
+- Save needed ostree remote info to config file. (alikins@redhat.com)
+- Mock an ent cert associated with a content. (alikins@redhat.com)
+- Start passing along ent cert ssl info to ostree (alikins@redhat.com)
+- Fix mismerge for OstreeContents usage (alikins@redhat.com)
+- call get_path() to get path string on deploy (alikins@redhat.com)
+- Remove done TODO (map gpgkey->gpg-verify) (alikins@redhat.com)
+- _get_deployed_origin returns None if not a ostree install
+  (alikins@redhat.com)
+- Fix missed return in gi_wrapper. (dgoodwin@redhat.com)
+- Rename poor choice of gi.py script. (dgoodwin@redhat.com)
+- Only replace origin remote if it matches first portion of ref.
+  (dgoodwin@redhat.com)
+- Test subprocess error calling pygobject3 script, log output.
+  (dgoodwin@redhat.com)
+- Start making OstreeContent resp for finding contents. (alikins@redhat.com)
+- Add models.py to spec (alikins@redhat.com)
+- Make models internal data attrs '_' (alikins@redhat.com)
+- Add a static map_gpg to OstreeRemote (alikins@redhat.com)
+- stylish cleanups (alikins@redhat.com)
+- Remove 'api' module. (alikins@redhat.com)
+- Add models module, for objects we pass to plugins (alikins@redhat.com)
+- OSTree package depends on pygobject3-base. (dgoodwin@redhat.com)
+- Move gi introspection code to separate script. (dgoodwin@redhat.com)
+- Add some missing copyright notices. (dgoodwin@redhat.com)
+- Remove inj from 'api' module. (alikins@redhat.com)
+- Add more tests. (alikins@redhat.com)
+- Remove per class repo_file_store_class (alikins@redhat.com)
+- Package ostree plugin as a sub-package. (dgoodwin@redhat.com)
+- Test cases for OstreeConfig and ..RepoFileWriter (alikins@redhat.com)
+- When persisting a OstreeCore copy all items. (alikins@redhat.com)
+- Default empty OstreeRemotes or OstreeCore (alikins@redhat.com)
+- Fix test cases to look for ostree.config (alikins@redhat.com)
+- Make OstreeConfig use OstreeConfigFileStore (alikins@redhat.com)
+- Remove OstreeConfigUpdater (alikins@redhat.com)
+- Complete happy path test for origin remote updating. (dgoodwin@redhat.com)
+- Attempt to disambiguate use of repo_config_file variables.
+  (dgoodwin@redhat.com)
+- Beginning tests for ostree origin updating, refactor tempfiles in tests.
+  (dgoodwin@redhat.com)
+- Name changes (alikins@redhat.com)
+- Add method to replace ostree remote in a refspec. (dgoodwin@redhat.com)
+- Get some better reporting, albeit klugey. (alikins@redhat.com)
+- Add some temp kluge, OstreeRemote's not immutable (alikins@redhat.com)
+- Make OstreeRemote a dict (alikins@redhat.com)
+- Simplify the config model a little. (alikins@redhat.com)
+- s/PluginManagerRunner/PluginHookRunner (alikins@redhat.com)
+- Stylish cleanups. (alikins@redhat.com)
+- Add a runiter to the fixtures mock PluginManager (alikins@redhat.com)
+- We still need the entdir refresh for 'attach'. (alikins@redhat.com)
+- Use PluginManager.runiter for content actions. (alikins@redhat.com)
+- Add a PluginManager.runiter() method. (alikins@redhat.com)
+- Update plugin docs. (alikins@redhat.com)
+- Add notes, comments, docstrings. (alikins@redhat.com)
+- Get ostree repo config saving working-ish (alikins@redhat.com)
+- Update some missed tests. (dgoodwin@redhat.com)
+- Refactor to an update content plugin. (dgoodwin@redhat.com)
+- Update makefile and spec for ostree plugin. (dgoodwin@redhat.com)
+- Move ostree plugin support code to subscription-manager namespace.
+  (dgoodwin@redhat.com)
+- Add ostree/model.py for ostree related models. (alikins@redhat.com)
+- More tests for ostree/repo_file (alikins@redhat.com)
+- Add src/content_plugins to coverage (alikins@redhat.com)
+- Use RhsmConfigParser to read repo config (alikins@redhat.com)
+- More ostree impl tests. (alikins@redhat.com)
+- Use the 'api' module when importing from plugins. (alikins@redhat.com)
+- Start of test for 'api' module. (alikins@redhat.com)
+- Add an api module with our "exported" symbols (alikins@redhat.com)
+- Use regular config parser instead of pyxdg (alikins@redhat.com)
+- Add start of tests for ostree repo action (alikins@redhat.com)
+- Start ostree repo action class stubs (alikins@redhat.com)
+- Start ostree implementation tests (alikins@redhat.com)
+- Start adding ostree implementation (alikins@redhat.com)
+- Add TODO about content_plugin installs (alikins@redhat.com)
+- Move OstreeContentActionInvoker to it's own module (alikins@redhat.com)
+- Remove unneeded #!/usr/bin/python (alikins@redhat.com)
+- Make ostree content action loaded from plugins. (alikins@redhat.com)
+- Log exceptions from trying to load plugins. (alikins@redhat.com)
+- Add ostree_content plugin entry point (alikins@redhat.com)
+- HACK: install ostree content plugin in site-packages (alikins@redhat.com)
+- Add content_plugins dir,and ostree content plugins (alikins@redhat.com)
+- Remove sample yum_content plugin (alikins@redhat.com)
+- Hit ContentActionClient for some test coverage. (alikins@redhat.com)
+- Add test for ContentActionPluginConduit (alikins@redhat.com)
+- entcertlib.repo_hook can be content type agnostic (alikins@redhat.com)
+- Replace odd usage of 'repolib' name. (alikins@redhat.com)
+- Load content actions from plugin class search (alikins@redhat.com)
+- Add a dummy yum_content plugin for testing (alikins@redhat.com)
+- Add ContentActionPluginConduit plugin. (alikins@redhat.com)
+- Add ostree_action_invoker (ostree repo action) (alikins@redhat.com)
+- Add ContentActionClient (alikins@redhat.com)
+- 1104158: Version command needs better explanation for content
+  (wpoteat@redhat.com)
+
 * Mon Jun 16 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.12.2-1
 - 1070585: GUI no longer locks on connection test. Adds cancel button.
   (csnyder@redhat.com)
