@@ -10,7 +10,7 @@
 
 
 Name: python-rhsm
-Version: 1.12.2
+Version: 1.12.3
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -71,6 +71,10 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Mon Jun 16 2014 Michael Stead <mstead@redhat.com> 1.12.3-1
+- Add 6.6/7.1 release targets. (dgoodwin@redhat.com)
+- Add a key_path() to EntitlementCertificate (alikins@redhat.com)
+
 * Tue Jun 10 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.12.2-1
 - Detect when operating in container mode and load host system's config.
   (dgoodwin@redhat.com)
