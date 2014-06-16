@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.1
+Version: 1.12.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -411,6 +411,24 @@ fi
 %endif
 
 %changelog
+* Mon Jun 16 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.12.2-1
+- 1070585: GUI no longer locks on connection test. Adds cancel button.
+  (csnyder@redhat.com)
+- Disable CLI if we are running inside a container. (dgoodwin@redhat.com)
+- Don't encourage registration in yum plugin if we have ents but no identity.
+  (dgoodwin@redhat.com)
+- Allow yum plugin to generate redhat.repo when unregistered.
+  (dgoodwin@redhat.com)
+- Rev zanata branch to 1.12.X (alikins@redhat.com)
+- 1030638: Changes default resolution values in mainwindow.glade to 800x600.
+  (csnyder@redhat.com)
+- 1086377: Next system check-in not displaying in RHEL 5.11
+  (wpoteat@redhat.com)
+- Fix plugin config so conduit conf methods work. (alikins@redhat.com)
+- 1058380: Subscripton Manager plugin reporting Subscription Management when
+  RHN is in use (wpoteat@redhat.com)
+- Add support for sphinx doc generation. (alikins@redhat.com)
+
 * Thu Jun 05 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.1-1
 - bump version to 1.12 (jesusr@redhat.com)
 - Support getting release versions via API call (mstead@redhat.com)
