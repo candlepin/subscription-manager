@@ -202,6 +202,7 @@ def get_client_versions():
 def get_server_versions(cp, exception_on_timeout=False):
     cp_version = _("Unknown")
     server_type = _("This system is currently not registered.")
+    rules_version = _("Unknown")
 
     identity = inj.require(inj.IDENTITY)
 
@@ -220,8 +221,7 @@ def get_server_versions(cp, exception_on_timeout=False):
             if cp.supports_resource("status"):
                 status = cp.getStatus()
                 cp_version = '-'.join([status['version'], status['release']])
-            else:
-                cp_version = _("Unknown")
+                rules_version = status['rulesVersion']
         except socket.timeout, e:
             log.error("Timeout error while checking server version")
             log.exception(e)
@@ -243,7 +243,8 @@ def get_server_versions(cp, exception_on_timeout=False):
             cp_version = _("Unknown")
 
     return {"candlepin": cp_version,
-            "server-type": server_type}
+            "server-type": server_type,
+            "rules-version": rules_version}
 
 
 def restart_virt_who():

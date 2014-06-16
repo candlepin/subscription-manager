@@ -682,13 +682,14 @@ Sets a parameter to a new, specified value. This is commonly used for connection
 .SS VERSION OPTIONS
 The
 .B version
-command displays information about the current Subscription Manager packages and whatever subscription service the system is registered with. For example:
+command displays information about the current Subscription Manager package, the subscription service the system is registered to (if it is currently registered), and the subscription management server this the system is configured to use. For example:
 .nf
 [root@server ~]# subscription-manager version
-registered to: subscription.rhn.redhat.com
-server type: subscription management service
-subscription-manager: 1.1.2-1.el6
-python-rhsm: 1.1.3-1.el6
+server type: Red Hat Subscription Management
+subscription management server: 0.9.18-1
+subscription management rules: 5.9
+subscription-manager: 1.12.1-1.git.28.5cd97a5.fc20
+python-rhsm: 1.11.4-1.git.1.2f38ded.fc20
 .fi
 
 .PP
