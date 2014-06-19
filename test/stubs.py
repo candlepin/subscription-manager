@@ -229,7 +229,7 @@ class StubEntitlementCertificate(EntitlementCertificate):
             products = products + provided_products
 
         if not start_date:
-            start_date = datetime.now()
+            start_date = datetime.utcnow()
         if not end_date:
             end_date = start_date + timedelta(days=365)
 
