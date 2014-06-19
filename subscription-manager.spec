@@ -12,7 +12,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.3
+Version: 1.12.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -433,6 +433,11 @@ fi
 %endif
 
 %changelog
+* Thu Jun 19 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.12.4-1
+- Fix broken logging statement in container mode. (dgoodwin@redhat.com)
+- 1067035: Move Subscription Manager version for better layout
+  (wpoteat@redhat.com)
+
 * Mon Jun 16 2014 Alex Wood <awood@redhat.com> 1.12.3-1
 - Bumping required python-rhsm version (mstead@redhat.com)
 - Fixing checkstyle. (mstead@redhat.com)
