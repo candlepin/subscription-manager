@@ -481,7 +481,7 @@ rpmlint:
 
 versionlint:
 	@TMPFILE=`mktemp` || exit 1; \
-	pyqver2.py -m 2.7 -v  $(STYLEFILES) | grep -v hashlib | tee $$TMPFILE; \
+	pyqver2.py -m 2.7 -l $(STYLEFILES) | grep -v hashlib | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 .PHONY: stylish
