@@ -84,7 +84,7 @@ rpmlint:
 
 versionlint:
 	@TMPFILE=`mktemp` || exit 1; \
-	pyqver2.py -m 2.7 -v -l $(STYLEFILES) | tee $$TMPFILE; \
+	pyqver2.py -m 2.7 -l $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 
