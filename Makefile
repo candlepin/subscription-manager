@@ -485,10 +485,9 @@ gladelint:
     grep -nP "property name=\"orientation\"" $(GLADEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-INDENT_IGNORE = "E121,E122,E123,E124,E125,E126,E127,E128"
 pep8:
 	@TMPFILE=`mktemp` || exit 1; \
-	pep8 --ignore E501,$(INDENT_IGNORE) --exclude ".#*" --repeat src $(STYLEFILES) | tee $$TMPFILE; \
+	pep8  --exclude ".#*" --repeat src $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 rpmlint:
@@ -498,7 +497,7 @@ rpmlint:
 
 versionlint:
 	@TMPFILE=`mktemp` || exit 1; \
-	pyqver2.py -m 2.7 -v  $(STYLEFILES) | grep -v hashlib | tee $$TMPFILE; \
+	pyqver2.py -m 2.7 -l $(STYLEFILES) | grep -v hashlib | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 .PHONY: stylish
