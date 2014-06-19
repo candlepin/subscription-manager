@@ -495,9 +495,12 @@ rpmlint:
 	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
+# We target python 2.6, hence -m 2.7 is the earliest python features to warn about use of.
+# See https://github.com/alikins/pyqver for pyqver.
+# Since plugin/ostree is for python 2.7+ systems only, we can ignore the warning there.
 versionlint:
 	@TMPFILE=`mktemp` || exit 1; \
-	pyqver2.py -m 2.7 -l $(STYLEFILES) | grep -v hashlib | tee $$TMPFILE; \
+	pyqver2.py -m 2.7 -l $(STYLEFILES) | grep -v hashlib | grep -v plugin/ostree.*check_output | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 .PHONY: stylish
