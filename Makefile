@@ -72,10 +72,9 @@ gettext_lint:
 	pcregrep -n --color=auto -M  "_\(.*[\'|\"].*[\'|\"]\s*\+\s*[\"|\'].*[\"|\'].*\)" $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-INDENT_IGNORE="E121,E122,E123,E124,E125,E126,E127,E128"
 pep8:
 	@TMPFILE=`mktemp` || exit 1; \
-	pep8 --ignore E501,$(INDENT_IGNORE) --exclude ".#*" --repeat src $(STYLEFILES) | tee $$TMPFILE; \
+	pep8 --exclude ".#*" --repeat src $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 rpmlint:
@@ -85,7 +84,7 @@ rpmlint:
 
 versionlint:
 	@TMPFILE=`mktemp` || exit 1; \
-	pyqver2.py -m 2.5 -v  $(STYLEFILES) | tee $$TMPFILE; \
+	pyqver2.py -m 2.7 -v -l $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 
