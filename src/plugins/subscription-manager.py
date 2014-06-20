@@ -24,6 +24,7 @@ sys.path.append('/usr/share/rhsm')
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager.utils import chroot
 from rhsm import connection
 from rhsm import config
 
@@ -119,7 +120,7 @@ def warnOrGiveUsageMessage(conduit):
             conduit.info(2, msg)
 
 
-def config_hook(conduit):
+def postconfig_hook(conduit):
     """ update """
     # register rpm name for yum history recording"
     # yum on 5.7 doesn't have this method, so check for it
@@ -129,6 +130,10 @@ def config_hook(conduit):
 
     from subscription_manager.injectioninit import init_dep_injection
     init_dep_injection()
+
+    # If a tool (it's, e.g., Mock) manages a chroot via 'yum --installroot',
+    # we must update entitlements in that directory.
+    chroot(conduit.getConf().installroot)
 
     cfg = config.initConfig()
     cache_only = not bool(cfg.get_int('rhsm', 'full_refresh_on_yum'))
