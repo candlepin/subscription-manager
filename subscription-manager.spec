@@ -1,5 +1,8 @@
 # Prefer systemd over sysv on Fedora 17+ and RHEL 7+
 %global use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
+# For optional building of ostree-plugin sub package. Unrelated to systemd
+# but the same versions apply at the moment.
+%global has_ostree use_systemd
 %global use_old_firstboot (0%{?rhel} && 0%{?rhel} <= 6)
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
 
@@ -9,6 +12,12 @@
 # A couple files are for RHEL 5 only:
 %if 0%{?rhel} == 5
 %global el5 1
+%endif
+
+%if %{has_ostree}
+%define install_ostree INSTALL_OSTREE_PLUGIN=true
+%else
+%define install_ostree INSTALL_OSTREE_PLUGIN=false
 %endif
 
 Name: subscription-manager
@@ -73,6 +82,7 @@ to manage subscriptions and yum repositories from the Red Hat entitlement
 platform.
 
 
+%if %has_ostree
 %package -n subscription-manager-plugin-ostree
 Summary: A plugin for handling OSTree content.
 Group: System Environment/Base
@@ -89,7 +99,7 @@ the remote in the currently deployed .origin file.
 %{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
 %{rhsm_plugins_dir}/ostree_content.py*
 %{_datadir}/rhsm/subscription_manager/plugin/ostree/*.py*
-
+%endif
 
 %package -n subscription-manager-gui
 Summary: A GUI interface to manage Red Hat product subscriptions
@@ -156,7 +166,8 @@ make -f Makefile CFLAGS="%{optflags}"
 
 %install
 rm -rf %{buildroot}
-make -f Makefile install VERSION=%{version}-%{release} PREFIX=%{buildroot} MANPATH=%{_mandir}
+make -f Makefile install VERSION=%{version}-%{release} PREFIX=%{buildroot} MANPATH=%{_mandir} %{?install_ostree}
+
 
 desktop-file-validate \
         %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
