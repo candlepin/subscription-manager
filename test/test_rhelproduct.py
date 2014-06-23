@@ -27,7 +27,15 @@ class TestRHELProductMatcher(SubManFixture):
                "rhel-6,rhel-6-workstation",
                "rhel-11",
                "rhel-6,rhel-6-someotherthing",
-               "rhel-11,rhel-11-something"]
+               "rhel-11,rhel-11-something",
+               # See bz1108257 rhel-5-workstation is a RHEL variant, but doesn't have
+               # a rhel-5 product tag.
+               "rhel-5-client-workstation,rhel-5-workstation",
+               "rhel-5-workstation",
+               # RHEL5 Client variant, 68.pem, aka Desktop
+               # "rhel-5-client" should never appear as the only tag, it's a
+               # rhel-5 variant
+               "rhel-5,rhel-5-client"]
 
     not_matches = ["rhel-5-server-scalablefilesystem,rhel-5-scalablefilesystem",
                    "rhel-5-server-clusterstorage,rhel-5-clusterstorage",
@@ -49,7 +57,17 @@ class TestRHELProductMatcher(SubManFixture):
                    "rhel-11.11",
                    "fedora-20",
                    "awsomeos-11",
-                   "6"]
+                   "6",
+                   # See bz #1108257. rhel-5-client is a variant tag
+                   "rhel-5-client",
+                   # rhel-5-client-workstation alone is an addon tag
+                   "rhel-5-client-workstation",
+                   # See bz #1108257. We dont want to match
+                   # rhel-6-client-workstation
+                   "rhel-6-workstation",
+                   "rhel-6-workstation-scalablefilesystem,rhel-6-scalablefilesystem",
+                   "rhel-6-client-oraclejava,rhel-6-oraclejava"
+                   ]
 
     def test_matches(self):
         for tag in self.matches:
