@@ -179,17 +179,17 @@ class TestReleaseBackend(fixture.SubManFixture):
         self.assertFalse(icr)
 
     def test_is_correct_rhel_content_rhel_5_workstation_1108257(self):
-        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-5-client-workstation", "rhel-5-workstation"],
+        icr = self.rb._is_correct_rhel(["rhel-5-client-workstation", "rhel-5-workstation"],
                                                     ["rhel-5-workstation"])
         self.assertTrue(icr)
 
     def test_is_correct_rhel_content_rhel_5_workstation_1108257_just_workstation(self):
-        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-5-workstation"],
+        icr = self.rb._is_correct_rhel(["rhel-5-workstation"],
                                                     ["rhel-5-workstation"])
         self.assertTrue(icr)
 
     def test_is_correct_rhel_content_rhel_5_workstation_1108257_just_client_workstation(self):
-        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-5-client-workstation"],
+        icr = self.rb._is_correct_rhel(["rhel-5-client-workstation"],
                                                     ["rhel-5-workstation"])
         self.assertFalse(icr)
 
@@ -199,7 +199,7 @@ class TestReleaseBackend(fixture.SubManFixture):
         self.assertFalse(icr)
 
     def test_is_correct_rhel_content_variant_client_workstation(self):
-        icr = self.cdn_rv_provider._is_correct_rhel(["rhel-5"],
+        icr = self.rb._is_correct_rhel(["rhel-5"],
                                                     ["rhel-5-client-workstation"])
         self.assertFalse(icr)
 
