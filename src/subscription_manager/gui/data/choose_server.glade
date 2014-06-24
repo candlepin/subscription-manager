@@ -113,16 +113,23 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="default_button">
-                <property name="label" translatable="yes">Default</property>
+              <widget class="GtkAlignment" id="alignment4">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip" translatable="yes">Reset to register with Customer Portal.</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">default_button</atkproperty>
-                </accessibility>
-                <signal name="clicked" handler="on_default_button_clicked"/>
+                <property name="can_focus">False</property>
+                <property name="right_padding">5</property>
+                <child>
+                  <widget class="GtkButton" id="default_button">
+                    <property name="label" translatable="yes">Default</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip" translatable="yes">Reset to register with Customer Portal.</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">default_button</atkproperty>
+                    </accessibility>
+                    <signal name="clicked" handler="on_default_button_clicked"/>
+                  </widget>
+                </child>
               </widget>
               <packing>
                 <property name="left_attach">2</property>
@@ -173,7 +180,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <!--<property name="left_padding">5</property>-->
                     <property name="left_padding">5</property>
                     <child>
                       <widget class="GtkImage" id="image3">
