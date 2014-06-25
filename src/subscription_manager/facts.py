@@ -132,7 +132,8 @@ class Facts(CacheManager):
         """
         Load custom facts from .facts files in /etc/rhsm/facts.
         """
-        facts_file_glob = "%s/facts/*.facts" % rhsm.config.DEFAULT_CONFIG_DIR
+        # BZ 1112326 don't double the '/'
+        facts_file_glob = "%s/facts/*.facts" % rhsm.config.DEFAULT_CONFIG_DIR.rstrip('/')
         file_facts = {}
         for file_path in glob.glob(facts_file_glob):
             log.info("Loading custom facts from: %s" % file_path)
