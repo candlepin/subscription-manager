@@ -101,10 +101,10 @@ class OstreeContents(object):
 
     Potentially filtering on product tags.
 
-    Note: this is building the list of Contents, not neccasarily
+    Note: this is building the list of Contents, not necessarily
     the list of ostree remotes or repos.
 
-    This could disambiquate content dupes as well.
+    This could disambiguate content dupes as well.
     """
     content_type = OSTREE_CONTENT_TYPE
 
