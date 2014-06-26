@@ -23,6 +23,8 @@ from subscription_manager.plugin.ostree import config
 from subscription_manager.plugin.ostree import model
 from subscription_manager.plugin.ostree import action_invoker
 
+from rhsm import certificate2
+
 
 class StubPluginManager(object):
         pass
@@ -124,12 +126,76 @@ class TestOstreeRemote(fixture.SubManFixture):
 
     def test_map_gpg(self):
         content = mock.Mock()
+
         content.gpg = None
+        self.assertTrue(model.OstreeRemote.map_gpg(content))
 
-        self.assertFalse(model.OstreeRemote.map_gpg(content))
-
+        # any file url is considered enabled
         content.gpg = "file:///path/to/key"
         self.assertTrue(model.OstreeRemote.map_gpg(content))
+
+        # special case the null url of "http://"
+        content.gpg = "http://"
+        self.assertFalse(model.OstreeRemote.map_gpg(content))
+
+        # regular urls are "enabled"
+        content.gpg = "http://some.example.com/not/blip"
+        self.assertTrue(model.OstreeRemote.map_gpg(content))
+
+
+class TestOstreeRemoteFromEntCertContent(fixture.SubManFixture):
+    def _content(self):
+        content = certificate2.Content(content_type="ostree",
+                                       name="content-name",
+                                       label="content-test-label",
+                                       vendor="Test Vendor",
+                                       url="http://test.url/test",
+                                       gpg="file:///file/gpg/key")
+        return content
+
+    def _cert(self):
+        cert = mock.Mock()
+        cert.path = "/path"
+        cert.key_path.return_value = "/key/path"
+        return cert
+
+    def test(self):
+        remote = self._ent_content_remote('file://path/to/key')
+        self.assertTrue(remote.gpg_verify)
+
+    def test_gpg_http(self):
+        remote = self._ent_content_remote('http://')
+        self.assertFalse(remote.gpg_verify)
+
+    def test_gpg_anything(self):
+        remote = self._ent_content_remote('anything')
+        self.assertTrue(remote.gpg_verify)
+
+    def test_gpg_none(self):
+        remote = self._ent_content_remote(None)
+        self.assertTrue(remote.gpg_verify)
+
+    def test_gpg_empty_string(self):
+        remote = self._ent_content_remote("")
+        self.assertTrue(remote.gpg_verify)
+
+    def test_gpg_no_attr(self):
+        content = self._content()
+        del content.gpg
+        cert = self._cert()
+        ent_cert_content = models.EntCertEntitledContent(content=content,
+                                                         cert=cert)
+        remote = model.OstreeRemote.from_ent_cert_content(ent_cert_content)
+        self.assertTrue(remote.gpg_verify)
+
+    def _ent_content_remote(self, gpg):
+        content = self._content()
+        content.gpg = gpg
+        cert = self._cert()
+        ent_cert_content = models.EntCertEntitledContent(content=content,
+                                                         cert=cert)
+        remote = model.OstreeRemote.from_ent_cert_content(ent_cert_content)
+        return remote
 
 
 class TestOstreeRemotes(fixture.SubManFixture):
@@ -282,7 +348,7 @@ last_key = blippy
         self.assertTrue(isinstance(updates.new.remotes[0], model.OstreeRemote))
         self.assertEquals(updates.new.remotes[0].url, mock_content.url)
         #self.assertEquals(updates.new.remotes[0].name, mock_content.name)
-        self.assertEquals(updates.new.remotes[0].gpg_verify, False)
+        self.assertEquals(updates.new.remotes[0].gpg_verify, True)
 
 
 class TestKeyFileConfigParserSample(BaseOstreeKeyFileTest):
@@ -362,7 +428,7 @@ gpg-verify=false
 [remote "awesome-ostree"]
 url=http://awesome.example.com.not.real/
 branches=awesome-ostree/awesome7/x86_64/controller/docker;
-gpg-verify=false
+gpg-verify=true
 
 """
 
@@ -601,7 +667,7 @@ mode=bare
 [remote "awesome-ostree-controller"]
 url=http://awesome.example.com.not.real/
 branches=awesome-ostree-controller/awesome7/x86_64/controller/docker;
-gpg-verify=false
+gpg-verify=true
 """
 
     def test_for_no_rhsm_defaults(self):
@@ -617,6 +683,11 @@ gpg-verify=false
     def test_core(self):
         rf_cfg = self._rf_cfg()
         self._verify_core(rf_cfg)
+
+    def test_remote(self):
+        rf_cfg = self._rf_cfg()
+        self.assertEqual('true', rf_cfg.get('remote "awesome-ostree-controller"',
+                                            'gpg-verify'))
 
 
 class TestOstreeRepofileConfigParserNotAValidFile(BaseOstreeRepoFileTest):
@@ -665,6 +736,9 @@ gpg-verify=false
 
         self.assertFalse(rf.section_is_remote('rhsm'))
         self.assertFalse(rf.section_is_remote('core'))
+        # string from config file is "false", not boolean False yet
+        self.assertEquals('false',
+                          rf.config_parser.get('remote "awesome-ostree-controller"', 'gpg-verify'))
 
 
 class TestOstreeRepoFileNoRemote(BaseOstreeRepoFileTest):
@@ -786,6 +860,7 @@ class TestOstreeRepofileAddSectionWrite(BaseOstreeRepoFileTest):
         new_contents = open(fid.name, 'r').read()
         self.assertTrue('gpg-verify' in new_contents)
         self.assertTrue(gpg_verify in new_contents)
+        self.assertTrue('gpg-verify = true' in new_contents)
 
         new_rf_cfg = config.KeyFileConfigParser(fid.name)
         self.assertTrue(new_rf_cfg.has_section(remote_name))
@@ -801,12 +876,12 @@ mode=bare
 [remote "awesomeos-7-controller"]
 url=http://awesome.example.com.not.real/repo/awesomeos7/
 branches=awesomeos-7-controller/awesomeos7/x86_64/controller/docker;
-gpg-verify=false
+gpg-verify = false
 
 [remote "awesomeos-6-controller"]
 url=http://awesome.example.com.not.real/repo/awesomeos6/
 branches=awesomeos-6-controller/awesomeos6/x86_64/controller/docker;
-gpg-verify=false
+gpg-verify=true
 """
 
     def test_remove_section(self):
@@ -822,6 +897,7 @@ gpg-verify=false
 
         new_contents = open(fid.name, 'r').read()
         self.assertFalse(remote_to_remove in new_contents)
+        self.assertFalse('gpg-verify = false' in new_contents)
 
         new_rf_cfg = config.KeyFileConfigParser(fid.name)
         self.assertFalse(new_rf_cfg.has_section(remote_to_remove))
@@ -911,12 +987,12 @@ mode=bare
 [remote "awesome-ostree-controller"]
 url=http://awesome.example.com.not.real/
 branches=awesome-ostree-controller/awesome7/x86_64/controller/docker;
-gpg-verify=false
+gpg-verify=true
 
 [remote "another-awesome-ostree-controller"]
 url=http://another-awesome.example.com.not.real/
 branches=another-awesome-ostree-controller/awesome7/x86_64/controller/docker;
-gpg-verify=false
+gpg-verify=true
 """
 
     @mock.patch("subscription_manager.plugin.ostree.model.OstreeConfigRepoFileStore")

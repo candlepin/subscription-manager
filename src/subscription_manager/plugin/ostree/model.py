@@ -73,7 +73,7 @@ class OstreeRemote(object):
 
     @property
     def gpg_verify(self):
-        return self.data.get('gpg_verify')
+        return self.data.get('gpg_verify', True)
 
     @gpg_verify.setter
     def gpg_verify(self, value):
@@ -173,9 +173,32 @@ class OstreeRemote(object):
 
     @staticmethod
     def map_gpg(content):
-        gpg_verify = False
-        if content.gpg:
-            gpg_verify = True
+        """Map the content.gpg attribute value to True/False/
+
+        Content.gpg is meant for a URL, and is being overloaded
+        here for enabled/disabled. Content's representing content
+        that is not associated with a gpg key have their 'gpg'
+        attribute ('gpg_url' in the json in an ent cert)
+        set to "http://". So consider that value also equilivent
+        to gpg-verify=false. That is the only value that will
+        disable gpg-verify.
+
+        If there are any errors reading/understand the
+        Content.gpg, assume gpg_verify = True
+        """
+        gpg_verify = True
+
+        # No content.gpg means gpg-verify=true as well.
+        # This reinforces "no explicit Content.gpg"
+        # means to default to gpg_verify=True
+        if not hasattr(content, 'gpg'):
+            return gpg_verify
+
+        if content.gpg == "http://":
+            gpg_verify = False
+
+        # If we need some other sentinal to indicate gpg-verify=false,
+        # look for it here.
 
         return gpg_verify
 
