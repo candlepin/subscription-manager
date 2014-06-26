@@ -575,7 +575,7 @@ class IdentityCommand(UserPassCommand):
         self.parser.add_option("--regenerate", action='store_true',
                                help=_("request a new certificate be generated"))
         self.parser.add_option("--force", action='store_true',
-                               help=_("force certificate regeneration (requires username and password)"))
+                               help=_("force certificate regeneration (requires username and password); Only used with --regenerate"))
 
     def _validate_options(self):
         self.assert_should_be_registered()
