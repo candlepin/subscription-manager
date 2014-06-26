@@ -16,7 +16,14 @@
 import logging
 import re
 
-import iniparse
+# iniparse.utils isn't in old versions
+# but it's always there if ostree is
+iniparse_tidy = None
+try:
+    import iniparse.utils.tidy as iniparse_tidy
+except ImportError:
+    pass
+
 
 from rhsm import config
 from subscription_manager import utils
@@ -93,9 +100,13 @@ class KeyFileConfigParser(config.RhsmConfigParser):
     def has_default(self, section, prop):
         return False
 
-    def save(self, config_file=None):
+    def tidy(self):
         # tidy up config file, rm empty lines, insure newline at eof, etc
-        iniparse.utils.tidy(self)
+        if iniparse_tidy:
+            iniparse_tidy(self)
+
+    def save(self, config_file=None):
+        self.tidy()
 
         self.log_contents()
         log.debug("KeyFile.save %s" % self.config_file)
