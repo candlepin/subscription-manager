@@ -16,6 +16,8 @@
 import logging
 import re
 
+import iniparse
+
 from rhsm import config
 from subscription_manager import utils
 
@@ -92,6 +94,9 @@ class KeyFileConfigParser(config.RhsmConfigParser):
         return False
 
     def save(self, config_file=None):
+        # tidy up config file, rm empty lines, insure newline at eof, etc
+        iniparse.utils.tidy(self)
+
         self.log_contents()
         log.debug("KeyFile.save %s" % self.config_file)
         super(KeyFileConfigParser, self).save()
@@ -161,8 +166,6 @@ class RepoFile(BaseOstreeConfigFile):
     def clear_remotes(self):
         """Remove all the config sections for remotes."""
 
-        # Not sure why, but saving config files we munge introduces
-        # unneeded whitespace changes, I suspect it's related to this.
         for remote in self.remote_sections():
             # do we need to delete options and section or just section?
             for key, value in self.config_parser.items(remote):
