@@ -46,7 +46,7 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import valid_quantity
 from subscription_manager.release import ReleaseBackend
-from subscription_manager.repolib import RepoActionInvoker, RepoFile
+from subscription_manager.repolib import RepoActionInvoker, RepoFile, manage_repos
 from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
@@ -1794,8 +1794,7 @@ class ReposCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
         rc = 0
-        if cfg.has_option('rhsm', 'manage_repos') and \
-                not int(cfg.get('rhsm', 'manage_repos')):
+        if not manage_repos():
             print _("Repositories disabled by configuration.")
             return rc
 
@@ -1862,7 +1861,7 @@ class ReposCommand(CliCommand):
                 cache.write_cache()
 
                 repo_action_invoker.update()
-            else:
+            elif manage_repos():
                 # In the disconnected case we must modify the repo file directly.
                 changed_repos = [repo for repo in repos_modified if repo['enabled'] != status]
                 for repo in changed_repos:

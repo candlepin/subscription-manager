@@ -41,25 +41,105 @@ ALLOWED_CONTENT_TYPES = ["yum"]
 _ = gettext.gettext
 
 
+def load_overrides(uep, identity, cache_only=False):
+    """
+    Loads content overrides from server if cache_only is False, otherwise
+    use the latest cache written to disk.
+
+    Formats the result into a more usable dict mapping repo ID to a dict of
+    key value pairs representing our overrides.
+    """
+    overrides = {}
+    override_supported = bool(uep and uep.supports_resource('content_overrides'))
+    if override_supported:
+        try:
+            override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+        except KeyError:
+            override_cache = OverrideStatusCache()
+        if cache_only:
+            status = override_cache._read_cache()
+        else:
+            status = override_cache.load_status(uep, identity.uuid)
+
+        for item in status or []:
+            # Don't iterate through the list
+            if item['contentLabel'] not in overrides:
+                overrides[item['contentLabel']] = {}
+            overrides[item['contentLabel']][item['name']] = item['value']
+        return overrides
+    else:
+        return None
+
+
 class RepoActionInvoker(BaseActionInvoker):
     """Invoker for yum repo updating related actions."""
     def __init__(self, cache_only=False):
         self.cache_only = cache_only
         BaseActionInvoker.__init__(self)
         self.identity = inj.require(inj.IDENTITY)
+        cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = cp_provider.get_consumer_auth_cp()
+        self.release = self._load_release()
+        self.prod_dir = inj.require(inj.PROD_DIR)
+
+        self.manage_repos = manage_repos()
+
+    def _load_release(self):
+        # If we are not registered, skip trying to refresh the
+        # data from the server
+        if not self.identity.is_valid():
+            return
+
+        message = "Release API is not supported by the server. Using default."
+        try:
+            result = self.uep.getRelease(self.identity.uuid)
+            self.release = result['releaseVer']
+        except RemoteServerException, e:
+            log.debug(message)
+        except RestlibException, e:
+            if e.code == 404:
+                log.debug(message)
+            else:
+                raise
 
     def _do_update(self):
-        action = RepoUpdateActionCommand(cache_only=self.cache_only)
-        return action.perform()
 
-    def is_managed(self, repo):
-        action = RepoUpdateActionCommand(cache_only=self.cache_only)
-        return repo in [c.label for c in action.matching_content()]
+        overrides = load_overrides(self.uep, self.identity,
+            cache_only=self.cache_only)
+
+        action = RepoUpdateActionCommand(overrides=overrides,
+            release=self.release,
+            provided_tags=self.prod_dir.get_provided_tags())
+
+        # the [rhsm] manage_repos can be overridden to disable generation of the
+        # redhat.repo file:
+        repo_file = RepoFile()
+        if not self.manage_repos:
+            log.debug("manage_repos is 0, skipping generation of: %s" %
+                    repo_file.path)
+            if repo_file.exists():
+                log.info("Removing %s due to manage_repos configuration." %
+                        repo_file.path)
+                RepoActionInvoker.delete_repo_file()
+            return 0
+
+        report = action.perform()
+        return report
 
     def get_repos(self, apply_overrides=True):
-        action = RepoUpdateActionCommand(cache_only=self.cache_only,
-                                  apply_overrides=apply_overrides)
-        repos = action.get_unique_content()
+        # If we're told to apply overrides, make sure the server supports
+        # it first:
+        overrides = None
+        if apply_overrides:
+            # Will still come back None if server does not support:
+            overrides = load_overrides(self.uep, self.identity,
+                cache_only=self.cache_only)
+
+        action = RepoUpdateActionCommand(overrides=overrides,
+            provided_tags=self.prod_dir.get_provided_tags())
+        repos = set()
+        if self.manage_repos:
+            repos = action.get_unique_content()
 
         current = set()
         # Add the current repo data
@@ -89,93 +169,50 @@ class RepoActionInvoker(BaseActionInvoker):
 
 
 class RepoUpdateActionCommand(object):
-    """UpdateAction for yum repos.
+    """
+    Action to refresh/generate a yum repofile.
 
-    Update yum repos when triggered. Generates yum repo config
-    based on:
+    Generates yum repo config based on:
         - entitlement certs
         - repo overrides
         - rhsm config
         - yum config
-        - manual changes made to "redhat.repo".
+        - manual changes made to "redhat.repo"
+
+    Can be used to generate a repo file for another OS besides the current
+    one. In this case we do not consider any content overrides as the repo
+    is not for the current system. In this case the cache of server overrides
+    as well as the cache of the last overrides we used should be left alone
+    completely.
 
     Returns an RepoActionReport.
     """
-    def __init__(self, cache_only=False, apply_overrides=True):
-        self.identity = inj.require(inj.IDENTITY)
+    def __init__(self, overrides=None, release=None, provided_tags=None):
+        """
+        overrides = Content overrides to apply, or None if we are not
+        considering overrides.
+        """
 
         # These should probably move closer their use
         self.ent_dir = inj.require(inj.ENT_DIR)
-        self.prod_dir = inj.require(inj.PROD_DIR)
 
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
+        self.provided_tags = provided_tags or []
 
-        self.manage_repos = 1
-        self.apply_overrides = apply_overrides
-        if CFG.has_option('rhsm', 'manage_repos'):
-            self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
-
-        self.release = None
-        self.overrides = {}
-        self.override_supported = bool(self.uep and self.uep.supports_resource('content_overrides'))
-        self.written_overrides = WrittenOverrideCache()
+        self.release = release
+        self.overrides = overrides
+        if self.overrides is not None:
+            self.written_overrides = WrittenOverrideCache()
+            self.written_overrides._read_cache()
 
         # FIXME: empty report at the moment, should be changed to include
         # info about updated repos
         self.report = RepoActionReport()
         self.report.name = "Repo updates"
-        # If we are not registered, skip trying to refresh the
-        # data from the server
-        if not self.identity.is_valid():
-            return
-
-        # Only attempt to update the overrides if they are supported
-        # by the server.
-        if self.override_supported:
-            self.written_overrides._read_cache()
-            try:
-                override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-            except KeyError:
-                override_cache = OverrideStatusCache()
-            if cache_only:
-                status = override_cache._read_cache()
-            else:
-                status = override_cache.load_status(self.uep, self.identity.uuid)
-
-            for item in status or []:
-                # Don't iterate through the list
-                if item['contentLabel'] not in self.overrides:
-                    self.overrides[item['contentLabel']] = {}
-                self.overrides[item['contentLabel']][item['name']] = item['value']
-
-        message = "Release API is not supported by the server. Using default."
-        try:
-            result = self.uep.getRelease(self.identity.uuid)
-            self.release = result['releaseVer']
-        except RemoteServerException, e:
-            log.debug(message)
-        except RestlibException, e:
-            if e.code == 404:
-                log.debug(message)
-            else:
-                raise
 
     def perform(self):
-        # Load the RepoFile from disk, this contains all our managed yum repo sections:
+        # Load the RepoFile from disk, this contains all our managed yum
+        # repo sections:
         repo_file = RepoFile()
-
-        # the [rhsm] manage_repos can be overridden to disable generation of the
-        # redhat.repo file:
-        if not self.manage_repos:
-            log.debug("manage_repos is 0, skipping generation of: %s" %
-                    repo_file.path)
-            if repo_file.exists():
-                log.info("Removing %s due to manage_repos configuration." %
-                        repo_file.path)
-                RepoActionInvoker.delete_repo_file()
-            return 0
-
         repo_file.read()
         valid = set()
 
@@ -200,8 +237,9 @@ class RepoUpdateActionCommand(object):
 
         # Write new RepoFile to disk:
         repo_file.write()
-        if self.override_supported:
-            # Update with the values we just wrote
+
+        # Write the last overrides we wrote to disk:
+        if self.overrides is not None:
             self.written_overrides.overrides = self.overrides
             self.written_overrides.write_cache()
         log.info("repos updated: %s" % self.report)
@@ -209,8 +247,6 @@ class RepoUpdateActionCommand(object):
 
     def get_unique_content(self):
         unique = set()
-        if not self.manage_repos:
-            return unique
         ent_certs = self.ent_dir.list_valid()
         baseurl = CFG.get('rhsm', 'baseurl')
         ca_cert = CFG.get('rhsm', 'repo_ca_cert')
@@ -231,8 +267,6 @@ class RepoUpdateActionCommand(object):
             if not cert.content:
                 continue
 
-            tags_we_have = self.prod_dir.get_provided_tags()
-
             for content in cert.content:
                 if not content.content_type in ALLOWED_CONTENT_TYPES:
                     log.debug("Content type %s not allowed, skipping content: %s" % (
@@ -241,7 +275,7 @@ class RepoUpdateActionCommand(object):
 
                 all_tags_found = True
                 for tag in content.required_tags:
-                    if not tag in tags_we_have:
+                    if not tag in self.provided_tags:
                         log.debug("Missing required tag '%s', skipping content: %s" % (
                             tag, content.label))
                         all_tags_found = False
@@ -286,7 +320,7 @@ class RepoUpdateActionCommand(object):
 
             self._set_proxy_info(repo)
 
-            if self.override_supported and self.apply_overrides:
+            if self.overrides is not None:
                 self._set_override_info(repo)
 
             lst.append(repo)
@@ -305,9 +339,16 @@ class RepoUpdateActionCommand(object):
             repo[name] = value
 
     def _is_overridden(self, repo, key):
+        if self.overrides is None:
+            return False
         return key in self.overrides.get(repo.id, {})
 
     def _was_overridden(self, repo, key, value):
+        # We're not considering overrides, so the value could not have been
+        # overridden.
+        if self.overrides is None:
+            return False
+
         written_value = self.written_overrides.overrides.get(repo.id, {}).get(key)
         # Compare values as strings to avoid casting problems from io
         return written_value is not None and value is not None and str(written_value) == str(value)
@@ -583,16 +624,6 @@ class RepoFile(ConfigParser):
         # note PATH get's expanded with chroot info, etc
         self.path = Path.join(self.PATH, name)
         self.repos_dir = Path.abs(self.PATH)
-        self.manage_repos = 1
-        if CFG.has_option('rhsm', 'manage_repos'):
-            self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
-        # Simulate manage repos turned off if no yum.repos.d directory exists.
-        # This indicates yum is not installed so clearly no need for us to
-        # manage repos.
-        if not os.path.exists(self.repos_dir):
-            log.warn("%s does not exist, turning manage_repos off." %
-                    self.repos_dir)
-            self.manage_repos = 0
         self.create()
 
     def exists(self):
@@ -621,10 +652,6 @@ class RepoFile(ConfigParser):
         return not self._configparsers_equal(on_disk)
 
     def write(self):
-        if not self.manage_repos:
-            log.debug("Skipping write due to manage_repos setting: %s" %
-                    self.path)
-            return
         if self._has_changed():
             f = open(self.path, 'w')
             tidy_writer = TidyWriter(f)
@@ -655,7 +682,7 @@ class RepoFile(ConfigParser):
             return Repo(section, self.items(section))
 
     def create(self):
-        if os.path.exists(self.path) or not self.manage_repos:
+        if os.path.exists(self.path):
             return
         f = open(self.path, 'w')
         s = []
@@ -671,3 +698,27 @@ class RepoFile(ConfigParser):
         s.append('#')
         f.write('\n'.join(s))
         f.close()
+
+
+def manage_repos():
+    """
+    Return True if we should manage yum repositories on this
+    system or not.
+
+    By default we assume we will be managing redhat.repo. A config
+    option exists to disable this. We also assume not to if
+    /etc/yum.repos.d does not exist, which is an indication that
+    yum is not installed and thus does not need repos.
+    """
+    manage_repos = 1
+
+    if CFG.has_option('rhsm', 'manage_repos'):
+        manage_repos = int(CFG.get('rhsm', 'manage_repos'))
+
+    repos_dir = Path.abs(RepoFile().PATH)
+    if not os.path.exists(repos_dir):
+        log.warn("%s does not exist, turning manage_repos off." %
+                repos_dir)
+        manage_repos = 0
+
+    return manage_repos

@@ -71,8 +71,8 @@ class RepoUpdateActionTests(SubManFixture):
         stub_prod_cert = StubProductCertificate(stub_prod, provided_products=[stub_prod2])
         stub_prod2 = StubProduct("fauxprod2", provided_tags="TAG5,TAG6")
         stub_prod2_cert = StubProductCertificate(stub_prod2)
-        prod_dir = StubProductDirectory([stub_prod_cert, stub_prod2_cert])
-        inj.provide(inj.PROD_DIR, prod_dir)
+        self.prod_dir = StubProductDirectory([stub_prod_cert, stub_prod2_cert])
+        inj.provide(inj.PROD_DIR, self.prod_dir)
 
         stub_content = [
                 StubContent("c1", required_tags="", gpg=None),   # no required tags
@@ -117,8 +117,8 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertFalse(override_cache_mock.load_status.called)
 
     def test_overrides_trump_ent_cert(self):
-        update_action = RepoUpdateActionCommand()
-        update_action.overrides = {'x': {'gpgcheck': 'blah'}}
+        update_action = RepoUpdateActionCommand(
+            overrides={'x': {'gpgcheck': 'blah'}})
         r = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
         self.assertEquals('original', r['gpgcheck'])
         update_action._set_override_info(r)
@@ -126,8 +126,8 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertEquals('some_key', r['gpgkey'])
 
     def test_overrides_trump_existing(self):
-        update_action = RepoUpdateActionCommand()
-        update_action.overrides = {'x': {'gpgcheck': 'blah'}}
+        update_action = RepoUpdateActionCommand(
+            overrides={'x': {'gpgcheck': 'blah'}})
         values = [('gpgcheck', 'original'), ('gpgkey', 'some_key')]
         old_repo = Repo('x', values)
         new_repo = Repo(old_repo.id, values)
@@ -172,7 +172,8 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_no_gpg_key(self):
 
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(
+            provided_tags=self.prod_dir.get_provided_tags())
         content = update_action.get_content(self.stub_ent_cert,
                                             "http://example.com", None)
         c1 = self._find_content(content, 'c1')
@@ -185,7 +186,8 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_gpg_key(self):
 
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(
+            provided_tags=self.prod_dir.get_provided_tags())
         content = update_action.get_content(self.stub_ent_cert,
                                             "http://example.com", None)
         c4 = self._find_content(content, 'c4')
@@ -193,7 +195,8 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertEquals('1', c4['gpgcheck'])
 
     def test_ui_repoid_vars(self):
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(
+            provided_tags=self.prod_dir.get_provided_tags())
         content = update_action.get_content(self.stub_ent_cert,
                                             "http://example.com", None)
         c4 = self._find_content(content, 'c4')
@@ -202,7 +205,8 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertEquals(None, c2['ui_repoid_vars'])
 
     def test_tags_found(self):
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(
+            provided_tags=self.prod_dir.get_provided_tags())
         content = update_action.get_unique_content()
         self.assertEquals(3, len(content))
 
@@ -350,9 +354,8 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertFalse("proxy_username" in existing_repo.keys())
 
     def test_overrides_removed_revert_to_default(self):
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(overrides={})
         update_action.written_overrides.overrides = {'x': {'gpgcheck': 'blah'}}
-        update_action.overrides = {}
         old_repo = Repo('x', [('gpgcheck', 'blah'), ('gpgkey', 'some_key')])
         new_repo = Repo(old_repo.id, [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
         update_action._set_override_info(new_repo)
@@ -364,9 +367,8 @@ class RepoUpdateActionTests(SubManFixture):
         self.assertEquals('some_key', old_repo['gpgkey'])
 
     def test_overrides_removed_and_edited(self):
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(overrides={})
         update_action.written_overrides.overrides = {'x': {'gpgcheck': 'override_value'}}
-        update_action.overrides = {}
         old_repo = Repo('x', [('gpgcheck', 'hand_edit'), ('gpgkey', 'some_key')])
         new_repo = Repo(old_repo.id, [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
         update_action._set_override_info(new_repo)
@@ -382,9 +384,8 @@ class RepoUpdateActionTests(SubManFixture):
         Test that overrides for values that aren't found in Repo.PROPERTIES are written
         to existing repos
         '''
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(overrides={'x': {'somekey': 'someval'}})
         update_action.written_overrides.overrides = {}
-        update_action.overrides = {'x': {'somekey': 'someval'}}
         old_repo = Repo('x', [])
         new_repo = Repo(old_repo.id, [])
         update_action._set_override_info(new_repo)
@@ -396,9 +397,8 @@ class RepoUpdateActionTests(SubManFixture):
         Test that overrides for values that aren't found in Repo.PROPERTIES are
         removed from redhat.repo once the override is removed
         '''
-        update_action = RepoUpdateActionCommand()
+        update_action = RepoUpdateActionCommand(overrides={})
         update_action.written_overrides.overrides = {'x': {'somekey': 'someval'}}
-        update_action.overrides = {}
         old_repo = Repo('x', [('somekey', 'someval')])
         new_repo = Repo(old_repo.id, [])
         update_action._set_override_info(new_repo)
