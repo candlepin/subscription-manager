@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.4
+Version: 1.12.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -444,6 +444,43 @@ fi
 %endif
 
 %changelog
+* Thu Jun 26 2014 Adrian Likins <alikins@redhat.com> 1.12.5-1
+- Merge pull request #978 from candlepin/alikins/ostree_gpg_http
+  (alikins@redhat.com)
+- Merge pull request #979 from candlepin/csnyder/help_message_identity_force
+  (jmrodri@nc.rr.com)
+- Use rhsm.baseurl for ostree urls as well. (alikins@redhat.com)
+- Handle Content.gpg="http://" as gpg-verify=false (alikins@redhat.com)
+- 1107810: Updates help message for identity --force. (csnyder@redhat.com)
+- Merge pull request #977 from candlepin/alikins/handle_no_origin (dgoodwin@rm-
+  rf.ca)
+- Merge pull request #974 from cgwalters/doc-typos (jmrodri@nc.rr.com)
+- Merge pull request #973 from candlepin/alikins/1112282_cond_ostree_rpm
+  (jmrodri@nc.rr.com)
+- make has_ostree use macro value NOT hardcoded value. (jesusr@redhat.com)
+- Handle missing or empty ostree origin file. (alikins@redhat.com)
+- Fix saving ostree remote configs with gpg set. (alikins@redhat.com)
+- plugin/ostree: Fix doc typos (walters@verbum.org)
+- Merge pull request #972 from candlepin/ckozak/fix_custom_fact_log
+  (jmrodri@nc.rr.com)
+- Merge pull request #968 from candlepin/alikins/setup_py (jmrodri@nc.rr.com)
+- 1112282: Dont build ostree plugin subpackage < 7 (alikins@redhat.com)
+- Merge pull request #966 from
+  candlepin/alikins/1108257_rhel_5_workstation_special (c4kofony@gmail.com)
+- Add required bz flags to tito releaser definition. (dgoodwin@redhat.com)
+- 1112326: remove extra '/' from custom fact loading error logging
+  (ckozak@redhat.com)
+- Allow tests to run in any TZ (mstead@redhat.com)
+-  Temp ignore use of subprocess.check_output (alikins@redhat.com)
+- Add test cases for 'rhel-5-workstation' tags. (alikins@redhat.com)
+- 1108257: special case prod tag rhel-5-workstation (alikins@redhat.com)
+- Add a simple setup.py. (alikins@redhat.com)
+- Merge pull request #965 from candlepin/alikins/good_enthusiasm_pep8 (dgoodwin
+  @rm-rf.ca)
+- Turn off verbose mode of pyqver. (alikins@redhat.com)
+- make stylish cleanups for new pep8 (alikins@redhat.com)
+- Add tox.ini with ignores for pep8 indention (alikins@redhat.com)
+
 * Thu Jun 19 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.12.4-1
 - Fix broken logging statement in container mode. (dgoodwin@redhat.com)
 - 1067035: Move Subscription Manager version for better layout
