@@ -88,6 +88,8 @@ Summary: A plugin for handling OSTree content.
 Group: System Environment/Base
 
 Requires: pygobject3-base
+# plugin needs a slightly newer version of python-iniparse for 'tidy'
+Requires:  python-iniparse >= 0.4
 
 %description -n subscription-manager-plugin-ostree
 Enables handling of content of type 'ostree' in any certificates
