@@ -30,6 +30,10 @@ DAEMONS_SRC_DIR := $(BASE_SRC_DIR)/daemons
 EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
 CONTENT_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/content_plugins/
 
+# If we skip install ostree plugin, unset by default
+# override from spec file for rhel6
+INSTALL_OSTREE_PLUGIN ?= true
+
 YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
 ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
 
@@ -107,23 +111,39 @@ install-help-files:
 	install docs/subscription-manager-C.omf \
 		$(PREFIX)/$(INSTALL_DIR)/omf/subscription-manager
 
+install-content-plugin-ostree:
+	if [ "$(INSTALL_OSTREE_PLUGIN)" = "true" ] ; then \
+		install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree_content.py $(RHSM_PLUGIN_DIR) ; \
+	fi;
 
-install-content-plugins:
+install-content-plugins-conf-ostree:
+	if [ "$(INSTALL_OSTREE_PLUGIN)" = "true" ] ; then \
+		install -m 644 -p \
+		$(CONTENT_PLUGINS_SRC_DIR)/ostree_content.OstreeContentPlugin.conf \
+		$(RHSM_PLUGIN_CONF_DIR) ; \
+	fi;
+
+install-content-plugins-dir:
 	install -d $(RHSM_PLUGIN_DIR)
-	# top level plugin entry point
-	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree_content.py $(RHSM_PLUGIN_DIR)
 
-install-content-plugins-conf:
+install-content-plugins-conf-dir:
 	install -d $(RHSM_PLUGIN_CONF_DIR)
-	install -m 644 -p $(CONTENT_PLUGINS_SRC_DIR)/ostree_content.OstreeContentPlugin.conf $(RHSM_PLUGIN_CONF_DIR)
 
-install-plugins: install-content-plugins
+install-content-plugins-conf: install-content-plugins-conf-dir install-content-plugins-conf-ostree
+
+install-content-plugins: install-content-plugins-dir install-content-plugin-ostree
+
+
+install-plugins-conf-dir:
+	install -d $(RHSM_PLUGIN_CONF_DIR)
+
+install-plugins-conf: install-plugins-conf-dir install-content-plugins-conf
+
+install-plugins-dir:
 	install -d $(RHSM_PLUGIN_DIR)
-#	install -m 644 -p src/rhsm-plugins/*.py $(RHSM_PLUGIN_DIR)
 
-install-plugins-conf:install-content-plugins-conf
-	install -d $(RHSM_PLUGIN_CONF_DIR)
-#	install -m 644 -p src/rhsm-plugins/*.conf $(RHSM_PLUGIN_CONF_DIR)
+install-plugins: install-plugins-dir install-content-plugins
+
 
 .PHONY: install-example-plugins
 install-example-plugins: install-example-plugins-files install-example-plugins-conf
@@ -194,11 +214,14 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -m 644 -p $(SRC_DIR)/migrate/*.py $(CODE_DIR)/migrate
 	install -m 644 -p $(SRC_DIR)/branding/*.py $(CODE_DIR)/branding
 	install -m 644 -p $(SRC_DIR)/plugin/*.py $(CODE_DIR)/plugin
-	install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(CODE_DIR)/plugin/ostree
 	install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/
 	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager-gui
 
 	install -m 644 $(SRC_DIR)/gui/data/*.glade $(CODE_DIR)/gui/data/
+
+	if [ "$(INSTALL_OSTREE_PLUGIN)" = "true" ] ; then \
+		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(CODE_DIR)/plugin/ostree ; \
+	fi
 
 	#icons
 	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/16x16/apps/*.png \
