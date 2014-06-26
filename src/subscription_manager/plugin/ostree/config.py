@@ -176,9 +176,10 @@ class RepoFile(BaseOstreeConfigFile):
 
         self.set(section_name, 'url', ostree_remote.url)
 
-        if ostree_remote.gpg_verify:
-            gpg_verify_string = 'true' if ostree_remote.gpg_verify else 'false'
-            self.set(section_name, 'gpg-verify', gpg_verify_string)
+        # gpg_verify not set
+        gpg_verify_string = 'true' if ostree_remote.gpg_verify else 'false'
+        self.set(section_name, 'gpg-verify', gpg_verify_string)
+
         if ostree_remote.tls_client_cert_path:
             self.set(section_name, 'tls-client-cert-path', ostree_remote.tls_client_cert_path)
         if ostree_remote.tls_client_key_path:
