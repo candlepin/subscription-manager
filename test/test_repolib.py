@@ -206,29 +206,6 @@ class RepoUpdateActionTests(SubManFixture):
         content = update_action.get_unique_content()
         self.assertEquals(3, len(content))
 
-    def test_join(self):
-        base = "http://foo/bar"
-        update_action = RepoUpdateActionCommand()
-        # File urls should be preserved
-        self.assertEquals("file://this/is/a/file",
-            update_action.join(base, "file://this/is/a/file"))
-        # Http locations should be preserved
-        self.assertEquals("http://this/is/a/url",
-            update_action.join(base, "http://this/is/a/url"))
-        # Blank should remain blank
-        self.assertEquals("",
-            update_action.join(base, ""))
-        # Url Fragments should work
-        self.assertEquals("http://foo/bar/baz",
-            update_action.join(base, "baz"))
-        self.assertEquals("http://foo/bar/baz",
-            update_action.join(base, "/baz"))
-        base = base + "/"
-        self.assertEquals("http://foo/bar/baz",
-            update_action.join(base, "baz"))
-        self.assertEquals("http://foo/bar/baz",
-            update_action.join(base, "/baz"))
-
     def test_only_allow_content_of_type_yum(self):
         update_action = RepoUpdateActionCommand()
         content = update_action.get_content(self.stub_ent_cert,

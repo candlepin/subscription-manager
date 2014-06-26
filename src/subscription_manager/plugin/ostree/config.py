@@ -17,8 +17,11 @@ import logging
 import re
 
 from rhsm import config
+from subscription_manager import utils
 
 log = logging.getLogger("rhsm-app." + __name__)
+
+CFG = config.initConfig()
 
 """Ostree has two config files, both based on the freedesktop.org
 Desktop Entry spec. This defines a file format based on "ini" style
@@ -174,7 +177,13 @@ class RepoFile(BaseOstreeConfigFile):
         # format section name
         section_name = 'remote ' + '"%s"' % ostree_remote.name
 
-        self.set(section_name, 'url', ostree_remote.url)
+        # Assume all remotes will share the same baseurl
+        baseurl = CFG.get('rhsm', 'baseurl')
+
+        full_url = utils.url_base_join(baseurl, ostree_remote.url)
+        log.debug("full_url: %s" % full_url)
+
+        self.set(section_name, 'url', full_url)
 
         if ostree_remote.gpg_verify:
             gpg_verify_string = 'true' if ostree_remote.gpg_verify else 'false'
