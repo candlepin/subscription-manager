@@ -407,8 +407,7 @@ class RepoUpdateActionTests(SubManFixture):
         Test that overrides for values that aren't found in Repo.PROPERTIES are written
         to existing repos
         '''
-        update_action = RepoUpdateActionCommand(
-            overrides = {'x': {'somekey': 'someval'}})
+        update_action = RepoUpdateActionCommand(overrides={'x': {'somekey': 'someval'}})
         update_action.written_overrides.overrides = {}
         old_repo = Repo('x', [])
         new_repo = Repo(old_repo.id, [])

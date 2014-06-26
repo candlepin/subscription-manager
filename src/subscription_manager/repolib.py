@@ -710,6 +710,7 @@ class RepoFile(ConfigParser):
         f.write('\n'.join(s))
         f.close()
 
+
 def manage_repos():
     """
     Return True if we should manage yum repositories on this
@@ -732,4 +733,3 @@ def manage_repos():
         manage_repos = 0
 
     return manage_repos
-

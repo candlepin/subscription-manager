@@ -15,7 +15,6 @@
 # in this software or its documentation.
 #
 
-import os
 import sys
 from yum.plugins import TYPE_CORE
 
