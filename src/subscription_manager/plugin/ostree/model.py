@@ -339,8 +339,18 @@ class OstreeOriginUpdater(object):
         """
         self.originfile = self._get_deployed_origin()
         log.debug("Loading ostree origin file: %s" % self.originfile)
+
+        # No results
+        if not self.originfile:
+            return
+
         origin_cfg = config.KeyFileConfigParser(self.originfile)
-        old_refspec = origin_cfg.get('origin', 'refspec')
+
+        try:
+            old_refspec = origin_cfg.get('origin', 'refspec')
+        except config.NoSectionError:
+            log.warn("No 'origin' section found in origin file: %s" % self.originfile)
+            return
 
         if len(self.repo_config.remotes):
             log.warn("Multiple remotes configured in %s." % self.repo_config)
