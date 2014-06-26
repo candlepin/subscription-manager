@@ -7,7 +7,7 @@ from rhsm.utils import ServerUrlParseErrorEmpty, \
 from subscription_manager.utils import parse_server_info, \
     parse_baseurl_info, format_baseurl, \
     get_version, get_client_versions, \
-    get_server_versions, Versions, friendly_join, is_true_value
+    get_server_versions, Versions, friendly_join, is_true_value, url_base_join
 
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
@@ -248,6 +248,81 @@ class TestParseBaseUrlInfo(fixture.SubManFixture):
         self.assertEquals(prefix, DEFAULT_CDN_PREFIX)
         self.assertEquals("https://foo-bar:8088", format_baseurl(hostname, port, prefix))
 
+
+class TestUrlBaseJoinEmptyBase(fixture.SubManFixture):
+
+    def test_blank_base_blank_url(self):
+        self.assertEquals("",
+                          url_base_join("", ""))
+
+    def test_blank_base_url(self):
+        url = "http://foo.notreal/"
+        self.assertEquals(url,
+                          url_base_join("", url))
+
+    def test_blank_base_url_fragment(self):
+        url = "baz"
+        self.assertEquals(url,
+                          url_base_join("", url))
+
+# Not sure this makes sense.
+#    def test_blank_base_url_fragment_slash(self):
+#        url = "/baz"
+#        self.assertEquals(url,
+#                          url_base_join("", url))
+
+
+class TestUrlBaseJoin(fixture.SubManFixture):
+    base = "http://foo/bar"
+
+    def test_file_url(self):
+        # File urls should be preserved
+        self.assertEquals("file://this/is/a/file",
+            url_base_join(self.base, "file://this/is/a/file"))
+
+    def test_http_url(self):
+        # Http locations should be preserved
+        self.assertEquals("http://this/is/a/url",
+            url_base_join(self.base, "http://this/is/a/url"))
+
+    def test_blank_url(self):
+        # Blank should remain blank
+        self.assertEquals("",
+            url_base_join(self.base, ""))
+
+    def test_url_fragments(self):
+        # Url Fragments should work
+        self.assertEquals(self.base + "/baz",
+            url_base_join(self.base, "baz"))
+        self.assertEquals(self.base + "/baz",
+            url_base_join(self.base, "/baz"))
+
+    def test_base_slash(self):
+        base = self.base + '/'
+        self.assertEquals(self.base + "/baz",
+            url_base_join(base, "baz"))
+        self.assertEquals(self.base + "/baz",
+            url_base_join(base, "/baz"))
+
+
+class TestUrlBaseJoinFileUrl(TestUrlBaseJoin):
+    base = "file:///etc"
+
+
+class TestUrlBaseJoinJustHttpScheme(TestUrlBaseJoin):
+    base = "http://"
+
+
+class TestUrlBaseJoinHttps(TestUrlBaseJoin):
+    base = "https://somesecure.cdn.example.notreal"
+
+
+class TestUrlBaseJoinHostname(TestUrlBaseJoin):
+    base = "cdn.redhat.com"
+
+
+class TestUrlBaseJoinDefaultCdn(TestUrlBaseJoin):
+    base = "https://cdn.redhat.com"
 
 NOT_COLLECTED = "non-collected-package"
 

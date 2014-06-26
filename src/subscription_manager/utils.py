@@ -22,6 +22,7 @@ import pprint
 import signal
 import socket
 import syslog
+import urllib
 
 from M2Crypto.SSL import SSLError
 
@@ -89,6 +90,26 @@ def format_baseurl(hostname, port, prefix):
     return "https://%s:%s%s" % (hostname,
                                  port,
                                  prefix)
+
+
+def url_base_join(base, url):
+    """Join a baseurl (hostname) and url (full or relpath).
+
+    If url is a full url, just return it. Otherwise combine
+    it with base, skipping redundant seperators if needed."""
+
+    # I don't really understand this. Why does joining something
+    # potentially non-empty and "" return ""? -akl
+    if len(url) == 0:
+        return url
+    elif '://' in url:
+        return url
+    else:
+        if (base and (not base.endswith('/'))):
+            base = base + '/'
+        if (url and (url.startswith('/'))):
+            url = url.lstrip('/')
+        return urllib.basejoin(base, url)
 
 
 class MissingCaCertException(Exception):

@@ -22,7 +22,7 @@ import os
 import string
 import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
-from urllib import basejoin
+from subscription_manager import utils
 
 from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
@@ -261,7 +261,8 @@ class RepoUpdateActionCommand(object):
                 repo['enabled'] = "1"
             else:
                 repo['enabled'] = "0"
-            repo['baseurl'] = self.join(baseurl, self._use_release_for_releasever(content.url))
+            repo['baseurl'] = utils.url_base_join(baseurl,
+                                                  self._use_release_for_releasever(content.url))
 
             # Extract the variables from thr url
             repo_parts = repo['baseurl'].split("/")
@@ -275,7 +276,7 @@ class RepoUpdateActionCommand(object):
                 repo['gpgkey'] = ""
                 repo['gpgcheck'] = '0'
             else:
-                repo['gpgkey'] = self.join(baseurl, gpg_url)
+                repo['gpgkey'] = utils.url_base_join(baseurl, gpg_url)
                 # Leave gpgcheck as the default of 1
 
             repo['sslclientkey'] = ent_cert.key_path()
@@ -327,18 +328,6 @@ class RepoUpdateActionCommand(object):
         repo['proxy'] = proxy
         repo['proxy_username'] = CFG.get('server', 'proxy_user')
         repo['proxy_password'] = CFG.get('server', 'proxy_password')
-
-    def join(self, base, url):
-        if len(url) == 0:
-            return url
-        elif '://' in url:
-            return url
-        else:
-            if (base and (not base.endswith('/'))):
-                base = base + '/'
-            if (url and (url.startswith('/'))):
-                url = url.lstrip('/')
-            return basejoin(base, url)
 
     def _build_props(self, old_repo, new_repo):
         result = {}
