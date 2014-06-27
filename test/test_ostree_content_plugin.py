@@ -90,6 +90,9 @@ class TestOstreeRemote(fixture.SubManFixture):
     def test_other_items(self):
         items = {'url': self.example_url,
                  'a_new_key': 'a_new_value',
+                 'tls-client-cert-path': '/etc/some/path',
+                 'tls-client-key-path': '/etc/some/path-key',
+                 'tls-ca-path': '/etc/rhsm/ca/redhat-uep.pem',
                  'gpg-verify': 'true',
                  'blip': 'baz'}
         ostree_remote = \
@@ -108,6 +111,9 @@ class TestOstreeRemote(fixture.SubManFixture):
         self.assertEquals('true', ostree_remote.gpg_verify)
         self.assertFalse('gpg-verify' in ostree_remote)
         self.assertFalse(hasattr(ostree_remote, 'gpg-verify'))
+
+        self.assertTrue(hasattr(ostree_remote, 'tls_ca_path'))
+        self.assertEquals('/etc/rhsm/ca/redhat-uep.pem', ostree_remote.tls_ca_path)
 
     def test_repr(self):
         # we use the dict repr now though
@@ -149,7 +155,7 @@ class TestOstreeRemoteFromEntCertContent(fixture.SubManFixture):
                                        name="content-name",
                                        label="content-test-label",
                                        vendor="Test Vendor",
-                                       url="http://test.url/test",
+                                       url="/test.url/test",
                                        gpg="file:///file/gpg/key")
         return content
 

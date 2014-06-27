@@ -27,8 +27,9 @@ REMOTE_SECTION_MATCH = r"remote\s+\"(?P<remote_name>.+)\""
 OSTREE_REPORT_TEMPLATE = """remote \"{self.name}\"
 \turl: {self.url}
 \tgpg-verify: {self.gpg_verify}
-\ttls-client-ca-cert: {self.tls_client_cert_path}
-\t{self.tls_client_key_path}"""
+\ttls-client-cert-path: {self.tls_client_cert_path}
+\ttls-client-key-path: {self.tls_client_key_path}
+\ttls-ca-path: {self.tls_ca_path}"""
 
 log = logging.getLogger("rhsm-app." + __name__)
 
@@ -52,7 +53,8 @@ class OstreeRemote(object):
 
     items_to_data = {'gpg-verify': 'gpg_verify',
                      'tls-client-cert-path': 'tls_client_cert_path',
-                     'tls-client-key-path': 'tls_client_key_path'}
+                     'tls-client-key-path': 'tls_client_key_path',
+                     'tls-ca-path': 'tls_ca_path'}
 
     report_template = OSTREE_REPORT_TEMPLATE
 
@@ -102,7 +104,14 @@ class OstreeRemote(object):
     @tls_client_key_path.setter
     def tls_client_key_path(self, value):
         self.data['tls_client_key_path'] = value
-#        it's clever but weird and unneeded, but commit so tests work
+
+    @property
+    def tls_ca_path(self):
+        return self.data.get('tls_ca_path')
+
+    @tls_ca_path.setter
+    def tls_ca_path(self, value):
+        self.data['tls_ca_path'] = value
 
     @classmethod
     def from_config_section(cls, section, items):
@@ -169,6 +178,9 @@ class OstreeRemote(object):
         remote.tls_client_cert_path = cert.path
         remote.tls_client_key_path = cert.key_path()
 
+        # NOTE: The tls-ca-path info is not in the Content,
+        #       but local system configuration.
+
         return remote
 
     @staticmethod
@@ -204,8 +216,8 @@ class OstreeRemote(object):
 
     def __repr__(self):
         r = super(OstreeRemote, self).__repr__()
-        return '%s\n (name=%s\n url=%s\n gpg_verify=%s\n tls_client_cert_path=%s\n tls_client_key_path=%s)' \
-            % (r, self.name, self.url, self.gpg_verify,
+        template = "%s\n (name=%s\n url=%s\n gpg_verify=%s\n tls_client_cert_path=%s\n tls_client_key_path=%s)"
+        return template % (r, self.name, self.url, self.gpg_verify,
                self.tls_client_cert_path, self.tls_client_key_path)
 
     def report(self):

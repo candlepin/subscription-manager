@@ -191,8 +191,11 @@ class RepoFile(BaseOstreeConfigFile):
         # format section name
         section_name = 'remote ' + '"%s"' % ostree_remote.name
 
-        # Assume all remotes will share the same baseurl
+        # Assume all remotes will share the same cdn
+        # This is really info about a particular CDN, we just happen
+        # to only support one at the moment.
         baseurl = CFG.get('rhsm', 'baseurl')
+        ca_cert = CFG.get('rhsm', 'repo_ca_cert')
 
         full_url = utils.url_base_join(baseurl, ostree_remote.url)
         log.debug("full_url: %s" % full_url)
@@ -207,6 +210,13 @@ class RepoFile(BaseOstreeConfigFile):
             self.set(section_name, 'tls-client-cert-path', ostree_remote.tls_client_cert_path)
         if ostree_remote.tls_client_key_path:
             self.set(section_name, 'tls-client-key-path', ostree_remote.tls_client_key_path)
+
+        # Ideally, setting the tls-ca-path would be depending on the
+        # baseurl and/or the CDN and if the content uses https. We always
+        # use https though, and the content does not know the CDN it comes
+        # from. Need a way to map a Content to a particular CDNInfo, and to
+        # support multiple CDNInfos setup.
+        self.set(section_name, 'tls-ca-path', ca_cert)
 
     def set_core(self, ostree_core):
         # Assuming we don't need to check validy of any [core] values
