@@ -250,17 +250,24 @@ class PoolFilter(object):
         entitled_product_ids_to_certs = self._get_entitled_product_to_cert_map()
         filtered_pools = []
         for pool in pools:
-            provided_ids = [p['productId'] for p in pool['providedProducts']]
-            overlap = False
-            for productid in entitled_product_ids_to_certs.keys():
-                if str(productid) in provided_ids or str(productid) == pool['productId']:
-                    if self._dates_overlap(pool, entitled_product_ids_to_certs[productid]) \
-                            and ((self.sorter and productid in self.sorter.valid_products) or
-                            not self.sorter):
-                        overlap = True
-                        break
-            if not overlap:
+            provided_ids = set([p['productId'] for p in pool['providedProducts']])
+            wrapped_pool = PoolWrapper(pool)
+            # NOTE: We may have to check for other types or handle the case of a product with no type in the future
+            if wrapped_pool.get_product_attributes('type')['type'] == 'SVC':
+                provided_ids.add(pool['productId'])
+            overlap = 0
+            print provided_ids
+            possible_overlap_pids = provided_ids.intersection(entitled_product_ids_to_certs.keys())
+            for productid in possible_overlap_pids:
+                if self._dates_overlap(pool, entitled_product_ids_to_certs[productid]) \
+                        and productid not in self.sorter.partially_valid_products:
+                    overlap += 1
+                else:
+                    break
+            if overlap != len(provided_ids) or \
+            wrapped_pool.get_stacking_id() in self.sorter.partial_stacks:
                 filtered_pools.append(pool)
+
         return filtered_pools
 
     def filter_out_non_overlapping(self, pools):
