@@ -68,8 +68,8 @@
                 </child>
                 <child>
                   <widget class="GtkCheckButton" id="no_overlapping_checkbutton">
-                    <property name="label" translatable="yes">have no overlap with existing subscriptions</property>
-                    <property name="tooltip" translatable="yes">Hide subscriptions which are active for dates currently covered</property>
+                    <property name="label" translatable="yes">Only show subscriptions that: provide products that are not already covered</property>
+                    <property name="tooltip" translatable="yes">Hide subscriptions whose provided products have a Subscribed status</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
