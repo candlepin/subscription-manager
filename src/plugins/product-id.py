@@ -23,17 +23,10 @@ sys.path.append('/usr/share/rhsm')
 
 from subscription_manager import logutil
 from subscription_manager.productid import ProductManager
-from subscription_manager.certdirectory import Path
+from subscription_manager.utils import chroot
 
 requires_api_version = '2.6'
 plugin_type = (TYPE_CORE,)
-
-
-def chroot(dirname):
-    """
-    Change root of all paths.
-    """
-    Path.ROOT = dirname
 
 
 def posttrans_hook(conduit):
