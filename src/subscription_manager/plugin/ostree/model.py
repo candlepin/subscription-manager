@@ -378,15 +378,38 @@ class OstreeOriginUpdater(object):
         if len(self.repo_config.remotes):
             log.warn("Multiple remotes configured in %s." % self.repo_config)
 
+        log.debug("old_refspec: %s" % old_refspec)
         new_remote = self._get_new_refspec(old_refspec)
+        log.debug("new_remote: %s" % new_remote)
         if new_remote is None:
             log.warn("Unable to find matching remote for origin: %s" % old_refspec)
             log.warn("Leaving refspec in %s" % self.originfile)
-            return
+
+            # TODO: We don't have all the data and namespaces setup yet to insure
+            #       we never get this scenario. A fresh installed system with a
+            #       respect of
+            #       "atomic-host-install:atomic-host/10.0/x86_64/standard" with
+            #       remotes "atomic-host-blah-beta" and
+            #       "atomic-host-super-preview". Have to update respec with a name
+            #       matching at least one of the remotes, so we pick the first one.
+            #       This will need to be replaced with a more precise method.
+            #       Note this also applies for the case of no matching remote names
+            #       and only one remote, which will be the common case for a fresh
+            #       install.
+            if len(self.repo_config.remotes):
+                new_remote = sorted([x.name for x in self.repo_config.remotes])[0]
+                log.warn("No remotes that match refspec for deployed origin found, so "
+                        "choosing the first remote names sorted: %s" % new_remote)
+            else:
+                # No remotes,
+                log.debug("No ostree remote urls found in content.")
+                return
 
         new_refspec = config.replace_refspec_remote(old_refspec,
             new_remote)
 
+        log.debug("old_refspec: %s" % old_refspec)
+        log.debug("new_refspec: %s" % new_refspec)
         if new_refspec != old_refspec:
             log.info("Updating refspec in: %s" % self.originfile)
             log.info("    old = %s" % old_refspec)
