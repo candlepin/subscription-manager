@@ -146,7 +146,6 @@ class OstreeRemote(object):
         """
         matcher = re.compile(REMOTE_SECTION_MATCH)
         result = matcher.match(section)
-        log.debug("result %s" % result)
         if result:
             return result.groupdict()['remote_name']
 

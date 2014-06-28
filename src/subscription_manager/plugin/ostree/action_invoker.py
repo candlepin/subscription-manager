@@ -118,10 +118,10 @@ class OstreeContents(object):
         """Populate self._contents with data from ostree contents."""
         for entitlement in self.ent_source:
             for content in entitlement.contents:
-                log.debug("content: %s" % content)
+                #log.debug("content: %s" % content)
 
                 if self.content_type_match(content):
-                    log.debug("adding %s to ostree content" % content)
+                    log.debug("adding %s to ostree content" % content.content.label)
                     # no uniq constraint atm
                     self._contents.add(content)
 
