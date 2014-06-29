@@ -20,7 +20,7 @@ import re
 # but it's always there if ostree is
 iniparse_tidy = None
 try:
-    import iniparse.utils.tidy as iniparse_tidy
+    from iniparse.utils import tidy as iniparse_tidy
 except ImportError:
     pass
 
