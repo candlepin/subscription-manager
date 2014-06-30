@@ -74,6 +74,9 @@ class OstreeContentUpdateActionCommand(object):
         report.orig_remotes = list(updates.orig.remotes)
         report.remote_updates = list(updates.new.remotes)
 
+        # reload the new config, so we have fresh remotes, etc
+        self.load_config(ostree_config)
+
         # Now that we've updated the ostree repo config, we need to
         # update the currently deployed osname tree .origin file:
         self.update_origin_file(ostree_config)
