@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.5
+Version: 1.12.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -446,6 +446,16 @@ fi
 %endif
 
 %changelog
+* Mon Jun 30 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.6-1
+- 1022622: Modifies --no-overlap to show pools which provide products not already covered. (csnyder@redhat.com)
+- Reload ostree_config after updating remotes. (alikins@redhat.com)
+- Fix iniparse tidy import. (alikins@redhat.com)
+- Remove noise debug logging. (alikins@redhat.com)
+- Include 'tls-ca-path' for ostree remote configs. (alikins@redhat.com)
+- Use iniparse.util.tidy if installed. (alikins@redhat.com)
+- Fix odd ostree repo config whitespace issues. (alikins@redhat.com)
+- Always update ostree refspec when adding remotes. (alikins@redhat.com)
+
 * Thu Jun 26 2014 Adrian Likins <alikins@redhat.com> 1.12.5-1
 - Merge pull request #978 from candlepin/alikins/ostree_gpg_http
   (alikins@redhat.com)
