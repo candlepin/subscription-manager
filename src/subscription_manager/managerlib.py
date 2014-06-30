@@ -256,7 +256,6 @@ class PoolFilter(object):
             if wrapped_pool.get_product_attributes('type')['type'] == 'SVC':
                 provided_ids.add(pool['productId'])
             overlap = 0
-            print provided_ids
             possible_overlap_pids = provided_ids.intersection(entitled_product_ids_to_certs.keys())
             for productid in possible_overlap_pids:
                 if self._dates_overlap(pool, entitled_product_ids_to_certs[productid]) \
@@ -264,8 +263,7 @@ class PoolFilter(object):
                     overlap += 1
                 else:
                     break
-            if overlap != len(provided_ids) or \
-            wrapped_pool.get_stacking_id() in self.sorter.partial_stacks:
+            if overlap != len(provided_ids) or wrapped_pool.get_stacking_id() in self.sorter.partial_stacks:
                 filtered_pools.append(pool)
 
         return filtered_pools
