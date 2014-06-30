@@ -16,6 +16,15 @@
 import logging
 import re
 
+# iniparse.utils isn't in old versions
+# but it's always there if ostree is
+iniparse_tidy = None
+try:
+    from iniparse.utils import tidy as iniparse_tidy
+except ImportError:
+    pass
+
+
 from rhsm import config
 from subscription_manager import utils
 
@@ -91,7 +100,14 @@ class KeyFileConfigParser(config.RhsmConfigParser):
     def has_default(self, section, prop):
         return False
 
+    def tidy(self):
+        # tidy up config file, rm empty lines, insure newline at eof, etc
+        if iniparse_tidy:
+            iniparse_tidy(self)
+
     def save(self, config_file=None):
+        self.tidy()
+
         self.log_contents()
         log.debug("KeyFile.save %s" % self.config_file)
         super(KeyFileConfigParser, self).save()
@@ -161,8 +177,6 @@ class RepoFile(BaseOstreeConfigFile):
     def clear_remotes(self):
         """Remove all the config sections for remotes."""
 
-        # Not sure why, but saving config files we munge introduces
-        # unneeded whitespace changes, I suspect it's related to this.
         for remote in self.remote_sections():
             # do we need to delete options and section or just section?
             for key, value in self.config_parser.items(remote):
@@ -177,8 +191,11 @@ class RepoFile(BaseOstreeConfigFile):
         # format section name
         section_name = 'remote ' + '"%s"' % ostree_remote.name
 
-        # Assume all remotes will share the same baseurl
+        # Assume all remotes will share the same cdn
+        # This is really info about a particular CDN, we just happen
+        # to only support one at the moment.
         baseurl = CFG.get('rhsm', 'baseurl')
+        ca_cert = CFG.get('rhsm', 'repo_ca_cert')
 
         full_url = utils.url_base_join(baseurl, ostree_remote.url)
         log.debug("full_url: %s" % full_url)
@@ -193,6 +210,13 @@ class RepoFile(BaseOstreeConfigFile):
             self.set(section_name, 'tls-client-cert-path', ostree_remote.tls_client_cert_path)
         if ostree_remote.tls_client_key_path:
             self.set(section_name, 'tls-client-key-path', ostree_remote.tls_client_key_path)
+
+        # Ideally, setting the tls-ca-path would be depending on the
+        # baseurl and/or the CDN and if the content uses https. We always
+        # use https though, and the content does not know the CDN it comes
+        # from. Need a way to map a Content to a particular CDNInfo, and to
+        # support multiple CDNInfos setup.
+        self.set(section_name, 'tls-ca-path', ca_cert)
 
     def set_core(self, ostree_core):
         # Assuming we don't need to check validy of any [core] values

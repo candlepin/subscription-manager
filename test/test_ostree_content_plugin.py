@@ -90,6 +90,9 @@ class TestOstreeRemote(fixture.SubManFixture):
     def test_other_items(self):
         items = {'url': self.example_url,
                  'a_new_key': 'a_new_value',
+                 'tls-client-cert-path': '/etc/some/path',
+                 'tls-client-key-path': '/etc/some/path-key',
+                 'tls-ca-path': '/etc/rhsm/ca/redhat-uep.pem',
                  'gpg-verify': 'true',
                  'blip': 'baz'}
         ostree_remote = \
@@ -108,6 +111,9 @@ class TestOstreeRemote(fixture.SubManFixture):
         self.assertEquals('true', ostree_remote.gpg_verify)
         self.assertFalse('gpg-verify' in ostree_remote)
         self.assertFalse(hasattr(ostree_remote, 'gpg-verify'))
+
+        self.assertTrue(hasattr(ostree_remote, 'tls_ca_path'))
+        self.assertEquals('/etc/rhsm/ca/redhat-uep.pem', ostree_remote.tls_ca_path)
 
     def test_repr(self):
         # we use the dict repr now though
@@ -149,7 +155,7 @@ class TestOstreeRemoteFromEntCertContent(fixture.SubManFixture):
                                        name="content-name",
                                        label="content-test-label",
                                        vendor="Test Vendor",
-                                       url="http://test.url/test",
+                                       url="/test.url/test",
                                        gpg="file:///file/gpg/key")
         return content
 
@@ -231,7 +237,7 @@ class BaseOstreeKeyFileTest(fixture.SubManFixture):
 class TestOstreeConfig(BaseOstreeKeyFileTest):
     repo_cfg = """
 [remote "test-remote"]
-url=http://blip.example.com
+url = https://blip.example.com
 """
 
     def setUp(self):
@@ -252,7 +258,7 @@ url=http://blip.example.com
 class TestOstreeConfigRepoFileWriter(BaseOstreeKeyFileTest):
     repo_cfg = """
 [remote "test-remote"]
-url=http://blip.example.com
+url = https://blip.example.com
 """
 
     def setUp(self):
@@ -308,7 +314,6 @@ last_key = blippy
         self.assertEquals(updates.orig, updates.new)
 
         updates.save()
-        print fid
 
 
 class TestOstreeConfigUpdatesBuilder(BaseOstreeKeyFileTest):
@@ -328,7 +333,7 @@ last_key = blippy
         ostree_config = model.OstreeConfig(repo_file_path=fid.name)
 
         mock_content = mock.Mock()
-        mock_content.url = "http://example.com"
+        mock_content.url = "/path/from/base/url"
         mock_content.name = "mock-content-example"
         mock_content.gpg = None
 
@@ -456,16 +461,16 @@ gpg-verify=true
 repo_version=1
 mode=bare
 
-[remote "awesome-ostree"]
-url=http://awesome.example.com.not.real/
-branches=awesome-ostree/awesome7/x86_64/controller/docker;
-gpg-verify=false
+[remote "awesomeos-ostree-next-ostree"]
+url = https://awesome.cdn/content/awesomeos/next/10/ostree/repo
+gpg-verify = false
+tls-client-cert-path = /etc/pki/entitlement/12345.pem
+tls-client-key-path = /etc/pki/entitlement/12345-key.pem
 
 """
-
         origin_cfg = """
 [origin]
-refspec=origremote:awesome-ostree/awesomeos8/x86_64/controller/docker
+refspec=awesomeos-ostree-next-ostree:awesomeos-atomic/10.0-buildmaster/x86_64/standard
 """
 
         self._setup_config(repo_cfg, origin_cfg)
@@ -473,7 +478,7 @@ refspec=origremote:awesome-ostree/awesomeos8/x86_64/controller/docker
         # Reload the origin file and make sure it looks right:
         new_origin = config.KeyFileConfigParser(
             self.origin_cfg_path.name)
-        self._assert_origin(new_origin, 'awesome-ostree')
+        self._assert_origin(new_origin, 'awesomeos-ostree-next-ostree')
 
     # If the ref is mismatched, but we only have one:
     def test_one_remote_mismatched_ref(self):
@@ -482,9 +487,8 @@ refspec=origremote:awesome-ostree/awesomeos8/x86_64/controller/docker
 repo_version=1
 mode=bare
 
-[remote "awesome-ostree"]
+[remote "awesomeos-atomic-ostree"]
 url=http://awesome.example.com.not.real/
-branches=awesome-ostree/awesome7/x86_64/controller/docker;
 gpg-verify=false
 
 """
@@ -498,6 +502,29 @@ refspec=origremote:thisisnotthesamewords/awesomeos8/x86_64/controller/docker
         self.updater.run()
         new_origin = config.KeyFileConfigParser(
             self.origin_cfg_path.name)
+        # FIXME: For now, we pick the first one.
+        self._assert_origin(new_origin, 'awesomeos-atomic-ostree')
+
+    # If the ref is mismatched, but we only have one:
+    def test_no_remotes(self):
+        repo_cfg = """
+[core]
+repo_version=1
+mode=bare
+
+"""
+
+        origin_cfg = """
+[origin]
+refspec=origremote:thisisnotthesamewords/awesomeos8/x86_64/controller/docker
+"""
+
+        self._setup_config(repo_cfg, origin_cfg)
+        self.updater.run()
+        new_origin = config.KeyFileConfigParser(
+            self.origin_cfg_path.name)
+
+        # No remotes, we don't change the origin at all
         self._assert_origin(new_origin, 'origremote')
 
     def test_multi_remote_matching_ref(self):
@@ -507,13 +534,11 @@ repo_version=1
 mode=bare
 
 [remote "lame-ostree"]
-url=http://lame.example.com.not.real/
-branches=lame-ostree/hyperlame/x86_64/controller/docker;
+url=https://lame.example.com.not.real/
 gpg-verify=false
 
 [remote "awesome-ostree"]
-url=http://awesome.example.com.not.real/
-branches=awesome-ostree/awesome7/x86_64/controller/docker;
+url=https://awesome.example.com.not.real:9999/foo/repo
 gpg-verify=false
 """
 
@@ -537,12 +562,10 @@ mode=bare
 
 [remote "lame-ostree"]
 url=http://lame.example.com.not.real/
-branches=lame-ostree/hyperlame/x86_64/controller/docker;
 gpg-verify=false
 
 [remote "awesome-ostree"]
 url=http://awesome.example.com.not.real/
-branches=awesome-ostree/awesome7/x86_64/controller/docker;
 gpg-verify=false
 """
 
@@ -556,7 +579,7 @@ refspec=origremote:thisisnoteitherofthose/awesomeos8/x86_64/controller/docker
         new_origin = config.KeyFileConfigParser(
             self.origin_cfg_path.name)
         # Remote should have been left alone
-        self._assert_origin(new_origin, 'origremote')
+        self._assert_origin(new_origin, 'awesome-ostree')
 
     def test_gi_wrapper_script_error(self):
         repo_cfg = """
@@ -653,9 +676,28 @@ class BaseOstreeRepoFileTest(BaseOstreeKeyFileTest):
         self.assertTrue(remote_section in rf_cfg.sections())
         options = rf_cfg.options(remote_section)
         self.assertFalse(options == [])
+
         self.assertTrue(rf_cfg.has_option(remote_section, 'url'))
-        self.assertTrue(rf_cfg.has_option(remote_section, 'branches'))
+        url = rf_cfg.get(remote_section, 'url')
+        self.assertTrue(url is not None)
+        self.assertTrue(isinstance(url, basestring))
+        self.assertTrue(' ' not in url)
+
         self.assertTrue(rf_cfg.has_option(remote_section, 'gpg-verify'))
+        gpg_verify = rf_cfg.get(remote_section, 'gpg-verify')
+        self.assertTrue(gpg_verify is not None)
+        self.assertTrue(gpg_verify in ('true', 'false'))
+
+        self.assertTrue(rf_cfg.has_option(remote_section, 'tls-client-cert-path'))
+        self.assertTrue(rf_cfg.has_option(remote_section, 'tls-client-key-path'))
+        cert_path = rf_cfg.get(remote_section, 'tls-client-cert-path')
+        key_path = rf_cfg.get(remote_section, 'tls-client-key-path')
+        self.assertTrue(cert_path is not None)
+        self.assertTrue(key_path is not None)
+        # Could be, but not for now
+        self.assertTrue(cert_path != key_path)
+        self.assertTrue('/etc/pki/entitlement' in cert_path)
+        self.assertTrue('/etc/pki/entitlement' in key_path)
 
 
 class TestSampleOstreeRepofileConfigParser(BaseOstreeRepoFileTest):
@@ -665,9 +707,10 @@ repo_version=1
 mode=bare
 
 [remote "awesome-ostree-controller"]
-url=http://awesome.example.com.not.real/
-branches=awesome-ostree-controller/awesome7/x86_64/controller/docker;
-gpg-verify=true
+url = https://awesome.example.com.not.real/
+tls-client-cert-path = /etc/pki/entitlement/12345.pem
+tls-client-key-path = /etc/pki/entitlement/12345-key.pem
+gpg-verify = true
 """
 
     def test_for_no_rhsm_defaults(self):
@@ -712,9 +755,10 @@ repo_version=1
 mode=bare
 
 [remote "awesome-ostree-controller"]
-url=http://awesome.example.com.not.real/
-branches=awesome-ostree-controller/awesome7/x86_64/controller/docker;
-gpg-verify=false
+url = http://awesome.example.com.not.real/
+gpg-verify = false
+tls-client-cert-path = /etc/pki/entitlement/12345.pem
+tls-client-key-path = /etc/pki/entitlement/12345-key.pem
 """
 
     @mock.patch('subscription_manager.plugin.ostree.config.RepoFile._get_config_parser')
@@ -739,6 +783,20 @@ gpg-verify=false
         # string from config file is "false", not boolean False yet
         self.assertEquals('false',
                           rf.config_parser.get('remote "awesome-ostree-controller"', 'gpg-verify'))
+
+    @mock.patch('subscription_manager.plugin.ostree.config.RepoFile._get_config_parser')
+    def test_section_set_remote(self, mock_get_config_parser):
+        mock_get_config_parser.return_value = self._rf_cfg()
+        rf = config.RepoFile('')
+
+        remote = model.OstreeRemote()
+        remote.url = "/some/path"
+        remote.name = "awesomeos-remote"
+        remote.gpg_verify = 'true'
+        remote.tls_client_cert_path = "/etc/pki/entitlement/54321.pem"
+        remote.tls_client_key_path = "/etc/pki/entitlement/54321-key.pem"
+
+        rf.set_remote(remote)
 
 
 class TestOstreeRepoFileNoRemote(BaseOstreeRepoFileTest):
@@ -767,15 +825,16 @@ repo_version=1
 mode=bare
 
 [remote "awesomeos-7-controller"]
-url=http://awesome.example.com.not.real/repo/awesomeos7/
-branches=awesomeos-7-controller/awesomeos7/x86_64/controller/docker;
-gpg-verify=false
-
+url = https://awesome.example.com.not.real/repo/awesomeos7/
+gpg-verify = false
+tls-client-cert-path = /etc/pki/entitlement/12345.pem
+tls-client-key-path = /etc/pki/entitlement/12345-key.pem
 
 [remote "awesomeos-6-controller"]
-url=http://awesome.example.com.not.real/repo/awesomeos6/
-branches=awesomeos-6-controller/awesomeos6/x86_64/controller/docker;
-gpg-verify=false
+url = https://awesome.example.com.not.real/repo/awesomeos6/
+gpg-verify = false
+tls-client-cert-path = /etc/pki/entitlement/12345.pem
+tls-client-key-path = /etc/pki/entitlement/12345-key.pem
 """
 
     @mock.patch('subscription_manager.plugin.ostree.config.RepoFile._get_config_parser')
@@ -803,13 +862,15 @@ mode=bare
 
 [remote "awesomeos-7-controller"]
 url=http://awesome.example.com.not.real/repo/awesomeos7/
-branches=awesomeos-7-controller/awesomeos7/x86_64/controller/docker;
 gpg-verify=false
+tls-client-cert-path = /etc/pki/entitlement/12345.pem
+tls-client-key-path = /etc/pki/entitlement/12345-key.pem
 
 [remote "awesomeos-7-controller"]
 url=http://awesome.example.com.not.real/repo/awesomeos7/
-branches=awesomeos-7-controller/awesomeos7/x86_64/controller/docker;
 gpg-verify=false
+tls-client-cert-path = /etc/pki/entitlement/12345.pem
+tls-client-key-path = /etc/pki/entitlement/12345-key.pem
 
 """
 
@@ -822,6 +883,9 @@ gpg-verify=false
         self.assertFalse('core' in remotes)
         self.assertFalse('rhsm' in remotes)
 
+        for remote in remotes:
+            self._verify_remote(self._rf_cfg_instance, remote)
+
 
 class TestOstreeRepofileAddSectionWrite(BaseOstreeRepoFileTest):
     repo_cfg = ""
@@ -831,8 +895,7 @@ class TestOstreeRepofileAddSectionWrite(BaseOstreeRepoFileTest):
         rf_cfg = config.KeyFileConfigParser(fid.name)
 
         remote_name = 'remote "awesomeos-8-container"'
-        url = "http://example.com.not.real/repo"
-        branches = "branches;foo;bar"
+        url = "https://example.com.not.real/repo"
         gpg_verify = "true"
 
         rf_cfg.add_section(remote_name)
@@ -847,12 +910,6 @@ class TestOstreeRepofileAddSectionWrite(BaseOstreeRepoFileTest):
 
         new_contents = open(fid.name, 'r').read()
         self.assertTrue(url in new_contents)
-
-        rf_cfg.set(remote_name, 'branches', branches)
-        rf_cfg.save()
-
-        new_contents = open(fid.name, 'r').read()
-        self.assertTrue(branches in new_contents)
 
         rf_cfg.set(remote_name, 'gpg-verify', gpg_verify)
         rf_cfg.save()
@@ -874,14 +931,12 @@ repo_version=1
 mode=bare
 
 [remote "awesomeos-7-controller"]
-url=http://awesome.example.com.not.real/repo/awesomeos7/
-branches=awesomeos-7-controller/awesomeos7/x86_64/controller/docker;
+url = https://awesome.example.com.not.real/repo/awesomeos7/
 gpg-verify = false
 
 [remote "awesomeos-6-controller"]
-url=http://awesome.example.com.not.real/repo/awesomeos6/
-branches=awesomeos-6-controller/awesomeos6/x86_64/controller/docker;
-gpg-verify=true
+url = https://awesome.example.com.not.real/repo/awesomeos6/
+gpg-verify = true
 """
 
     def test_remove_section(self):
