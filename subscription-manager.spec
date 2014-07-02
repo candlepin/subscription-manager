@@ -13,7 +13,7 @@
 
 Name: subscription-manager
 Version: 1.11.3
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -400,6 +400,15 @@ fi
 %endif
 
 %changelog
+* Wed Jul 02 2014 ckozak <ckozak@redhat.com> 1.11.3-7
+- 1104506: in firstboot, default server button is no longer cut off
+  (ckozak@redhat.com)
+- require newest python-rhsm (ckozak@redhat.com)
+- Add test cases for 'rhel-5-workstation' tags. (alikins@redhat.com)
+- 1108257: special case prod tag rhel-5-workstation (alikins@redhat.com)
+- 1086377: Next system check-in not displaying in RHEL 5.11
+  (wpoteat@redhat.com)
+
 * Thu Jun 05 2014 ckozak <ckozak@redhat.com> 1.11.3-6
 - 1104498: Fix productid install in anaconda (alikins@redhat.com)
 - 1094869: fix rhsmcertd completion (ckozak@redhat.com)
