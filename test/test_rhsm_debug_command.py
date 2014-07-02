@@ -150,6 +150,39 @@ class TestCompileCommand(TestCliCommand):
         finally:
             shutil.rmtree(path)
 
+    # Runs the non-tar tree creation.
+    # no-subscriptions flag limits included data
+    def test_command_no_subs(self):
+        try:
+            self.cc._do_command = self._orig_do_command
+            self.cc._make_code = self._make_code
+            self.cc._get_assemble_dir = self._get_assemble_dir
+            self.cc._copy_directory = self._copy_directory
+            self.cc._makedir = self._makedir
+            self.test_dir = os.getcwd()
+            path = path_join(self.test_dir, "testing-dir")
+            self.cc.main(["--destination", path, "--no-archive", "--no-subscriptions"])
+        except SystemExit:
+            self.fail("Exception Raised")
+
+        try:
+            tree_path = path_join(path, self.code)
+            self.assertTrue(os.path.exists(path_join(tree_path, "consumer.json")))
+            self.assertTrue(os.path.exists(path_join(tree_path, "compliance.json")))
+            self.assertTrue(os.path.exists(path_join(tree_path, "entitlements.json")))
+            self.assertTrue(os.path.exists(path_join(tree_path, "pools.json")))
+            self.assertTrue(os.path.exists(path_join(tree_path, "version.json")))
+            self.assertFalse(os.path.exists(path_join(tree_path, "subscriptions.json")))
+            self.assertTrue(os.path.exists(path_join(tree_path, "/etc/rhsm")))
+            self.assertTrue(os.path.exists(path_join(tree_path, "/var/log/rhsm")))
+            self.assertTrue(os.path.exists(path_join(tree_path, "/var/lib/rhsm")))
+            # if cert directories are default, these should not be included
+            self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'productCertDir'))))
+            self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'entitlementCertDir'))))
+            self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'consumerCertDir'))))
+        finally:
+            shutil.rmtree(path)
+
     # Test to see that the filter on copy directory properly skips any -key.pem files
     def test_copy_private_key_filter(self):
         path1 = "./test-key-filter"
