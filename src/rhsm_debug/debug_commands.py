@@ -60,6 +60,9 @@ class SystemCommand(CliCommand):
         self.parser.add_option("--sos", action='store_true',
                                default=False, dest="sos",
                                help=_("only data not already included in sos report will be collected"))
+        self.parser.add_option("--no-subscriptions", action='store_true',
+                               default=False, dest="nosubs",
+                               help=_("exclude subscription data"))
 
     def _get_usage(self):
         return _("%%prog %s [OPTIONS] ") % self.name
@@ -90,12 +93,12 @@ class SystemCommand(CliCommand):
             self._makedir(content_path)
 
             owner = self.cp.getOwner(consumer.uuid)
-
-            try:
-                self._write_flat_file(content_path, "subscriptions.json",
+            if not self.options.nosubs:
+                try:
+                    self._write_flat_file(content_path, "subscriptions.json",
                                       self.cp.getSubscriptionList(owner['key']))
-            except Exception, e:
-                log.warning("Server does not allow retrieval of subscriptions by owner.")
+                except Exception, e:
+                    log.warning("Server does not allow retrieval of subscriptions by owner.")
 
             self._write_flat_file(content_path, "consumer.json",
                                   self.cp.getConsumer(consumer.uuid))
