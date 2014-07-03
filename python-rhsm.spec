@@ -10,7 +10,7 @@
 
 
 Name: python-rhsm
-Version: 1.12.3
+Version: 1.12.4
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -71,6 +71,13 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Jul 03 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.4-1
+- Add required bz flags to tito releasers. (dgoodwin@redhat.com)
+- Remove pyqver verbose flag. (alikins@redhat.com)
+- Use tox.ini to setup pep8 for 'make stylish' (alikins@redhat.com)
+- Update pyqver setup. Set min version of 2.7. (alikins@redhat.com)
+- Add libcrypto to list of libs to link to. (bcourt@redhat.com)
+
 * Mon Jun 16 2014 Michael Stead <mstead@redhat.com> 1.12.3-1
 - Add 6.6/7.1 release targets. (dgoodwin@redhat.com)
 - Add a key_path() to EntitlementCertificate (alikins@redhat.com)
