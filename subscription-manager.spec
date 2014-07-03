@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.6
+Version: 1.12.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -446,6 +446,10 @@ fi
 %endif
 
 %changelog
+* Thu Jul 03 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.7-1
+- 1114117: Allow subscriptions to be excluded from rhsm-debug data collection (wpoteat@redhat.com)
+- Remove debugging print line from managerlib (ckozak@redhat.com)
+
 * Mon Jun 30 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.6-1
 - 1022622: Modifies --no-overlap to show pools which provide products not already covered. (csnyder@redhat.com)
 - Reload ostree_config after updating remotes. (alikins@redhat.com)
