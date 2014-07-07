@@ -13,7 +13,7 @@
 
 Name: subscription-manager
 Version: 1.11.3
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -400,6 +400,9 @@ fi
 %endif
 
 %changelog
+* Mon Jul 07 2014 ckozak <ckozak@redhat.com> 1.11.3-8
+- Pull in latest strings from zanata (bkearney@redhat.com)
+
 * Wed Jul 02 2014 ckozak <ckozak@redhat.com> 1.11.3-7
 - 1104506: in firstboot, default server button is no longer cut off
   (ckozak@redhat.com)
