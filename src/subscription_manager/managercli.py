@@ -472,13 +472,10 @@ class UserPassCommand(CliCommand):
         if either username or password are provided as arguments, they will
         not be prompted for.
         """
-
-        if not username:
-            while not username:
-                username = raw_input(_("Username: "))
-        if not password:
-            while not password:
-                password = getpass.getpass(_("Password: "))
+        while not username:
+            username = raw_input(_("Username: "))
+        while not password:
+            password = getpass.getpass(_("Password: "))
         return (username.strip(), password.strip())
 
     # lazy load the username and password, prompting for them if they weren't
@@ -513,9 +510,8 @@ class OrgCommand(UserPassCommand):
 
     @staticmethod
     def _get_org(org):
-        if not org:
-            while not org:
-                org = raw_input(_("Organization: "))
+        while not org:
+            org = raw_input(_("Organization: "))
         return org
 
     @property
@@ -1122,13 +1118,41 @@ class RegisterCommand(UserPassCommand):
         """
         return managerlib.persist_consumer_cert(consumer)
 
+    def _prompt_for_environment(self):
+        """
+        By breaking this code out, we can write cleaner tests
+        """
+        return raw_input(_("Environment: ")).strip() or self._prompt_for_environment()
+
     def _get_environment_id(self, cp, owner_key, environment_name):
-        # If none specified on CLI, return None, the registration method
-        # will skip environment specification.
+        # If none specified on CLI and the server doesn't support environments,
+        # return None, the registration method will skip environment specification.
+        supports_environments = cp.supports_resource('environments')
         if not environment_name:
+            if supports_environments:
+                env_list = cp.getEnvironmentList(owner_key)
+
+                # If there aren't any environments, don't prompt for one
+                if not env_list:
+                    return environment_name
+
+                # If the envronment list is len 1, pick that environment
+                if len(env_list) == 1:
+                    log.debug('Using the only available environment: "%s"' % env_list[0]['name'])
+                    return env_list[0]['id']
+
+                environment_name = self._prompt_for_environment()
+
+                # Should only ever be len 0 or 1
+                env_matches = [env['id'] for env in env_list if env['name'] == environment_name]
+                if env_matches:
+                    return env_matches[0]
+                system_exit(-1, _("No such environment: %s") % environment_name)
+
+            # Server doesn't support environments
             return environment_name
 
-        if not cp.supports_resource('environments'):
+        if not supports_environments:
             system_exit(-1, _("Error: Server does not support environments."))
 
         env = cp.getEnvironment(owner_key=owner_key, name=environment_name)

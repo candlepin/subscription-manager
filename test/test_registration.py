@@ -116,3 +116,67 @@ class CliRegistrationTests(SubManFixture):
         username, password = RegisterCommand._get_username_and_password(" Jar Jar ", " Binks ")
         self.assertTrue(username == "Jar Jar")
         self.assertTrue(password == "Binks")
+
+    def test_get_environment_id_none_available(self):
+        def env_list(*args, **kwargs):
+            return []
+
+        StubUEP.getEnvironmentList = env_list
+        cp = StubUEP()
+        cp.supports_resource = Mock(return_value=True)
+
+        rc = RegisterCommand()
+        env_id = rc._get_environment_id(cp, 'owner', None)
+
+        expected = None
+        self.assertEquals(expected, env_id)
+
+    def test_get_environment_id_one_available(self):
+        def env_list(*args, **kwargs):
+            return [{"id": "1234", "name": "somename"}]
+
+        StubUEP.getEnvironmentList = env_list
+        cp = StubUEP()
+        cp.supports_resource = Mock(return_value=True)
+
+        rc = RegisterCommand()
+        env_id = rc._get_environment_id(cp, 'owner', None)
+
+        expected = "1234"
+        self.assertEquals(expected, env_id)
+
+    def test_get_environment_id_multi_available(self):
+        def env_list(*args, **kwargs):
+            return [{"id": "1234", "name": "somename"},
+                    {"id": "5678", "name": "othername"}]
+
+        StubUEP.getEnvironmentList = env_list
+        cp = StubUEP()
+        cp.supports_resource = Mock(return_value=True)
+
+        rc = RegisterCommand()
+        rc._prompt_for_environment = Mock(return_value="othername")
+        env_id = rc._get_environment_id(cp, 'owner', None)
+
+        expected = "5678"
+        self.assertEquals(expected, env_id)
+
+    @patch('subscription_manager.managercli.system_exit')
+    def test_get_environment_id_multi_available_bad_name(self, mock_sys_exit):
+        def env_list(*args, **kwargs):
+            return [{"id": "1234", "name": "somename"},
+                    {"id": "5678", "name": "othername"}]
+
+        # Avoid writing to stderr
+        mock_sys_exit.side_effect = SystemExit(-1)
+        StubUEP.getEnvironmentList = env_list
+        cp = StubUEP()
+        cp.supports_resource = Mock(return_value=True)
+
+        rc = RegisterCommand()
+        rc._prompt_for_environment = Mock(return_value="not_an_env")
+        try:
+            rc._get_environment_id(cp, 'owner', None)
+            self.fail("No Exception Raised")
+        except SystemExit:
+            pass
