@@ -120,6 +120,19 @@ class TestCliCommand(SubManFixture):
     def test_main_long_help(self):
         self._main_help(["--help"])
 
+    # docker error message should output to stderr
+    @patch('subscription_manager.managercli.rhsm.config.in_container')
+    def test_cli_in_container_error_message(self, mock_in_container):
+        sys.argv = ["subscription-manager", "version"]
+        mock_in_container.return_value = True
+        err_msg = 'subscription-manager is disabled when running inside a container.'\
+                  ' Please refer to your host system for subscription management.\n'
+        try:
+            self.cc.main()
+        except SystemExit, e:
+            self.assertEquals(-1, e.code)
+        self.assertEquals(err_msg, sys.stderr.buffer)
+
 
 # for command classes that expect proxy related cli args
 class TestCliProxyCommand(TestCliCommand):
