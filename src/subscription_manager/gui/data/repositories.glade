@@ -34,7 +34,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="xalign">0.44999998807907104</property>
+                <property name="xalign">0.45</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">remove_all_overrides_button</atkproperty>
                 </accessibility>
@@ -149,10 +149,10 @@
                                 <property name="vadjustment">0 0 1 0.10000000000000001 0.90000000000000002 1</property>
                                 <property name="shadow_type">none</property>
                                 <child>
-                                  <widget class="GtkTable" id="table2">
+                                  <widget class="GtkTable" id="repo_data_table">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="n_rows">3</property>
+                                    <property name="n_rows">2</property>
                                     <property name="n_columns">2</property>
                                     <property name="column_spacing">3</property>
                                     <child>
@@ -214,7 +214,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="pixels_above_lines">5</property>
                                         <property name="editable">False</property>
-                                        <property name="wrap_mode">word-char</property>
+                                        <property name="wrap_mode">none</property>
                                         <property name="left_margin">10</property>
                                         <property name="cursor_visible">False</property>
                                         <accessibility>
@@ -228,105 +228,6 @@
                                         <property name="bottom_attach">2</property>
                                         <property name="x_options">GTK_FILL</property>
                                         <property name="y_options">GTK_FILL</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkLabel" id="gpgcheck_label">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="yalign">0</property>
-                                        <property name="label" translatable="yes">&lt;b&gt;Gpgcheck:&lt;/b&gt;</property>
-                                        <property name="use_markup">True</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="top_attach">2</property>
-                                        <property name="bottom_attach">3</property>
-                                        <property name="x_options">GTK_FILL</property>
-                                        <property name="y_options">GTK_FILL</property>
-                                        <property name="x_padding">4</property>
-                                        <property name="y_padding">4</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkHBox" id="hbox3">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <child>
-                                          <widget class="GtkTextView" id="gpgcheck_text">
-                                            <property name="visible">True</property>
-                                            <property name="sensitive">False</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="pixels_above_lines">5</property>
-                                            <property name="justification">center</property>
-                                            <property name="text" translatable="yes">Enabled (1)</property>
-                                            <accessibility>
-                                              <atkproperty name="AtkObject::accessible-name" translatable="yes">gpgcheck_readonly</atkproperty>
-                                            </accessibility>
-                                          </widget>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="padding">10</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <widget class="GtkComboBox" id="gpgcheck_combo_box">
-                                            <property name="height_request">10</property>
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <accessibility>
-                                              <atkproperty name="AtkObject::accessible-name" translatable="yes">gpgcheck_combobox</atkproperty>
-                                            </accessibility>
-                                            <signal name="changed" handler="on_gpgcheck_combo_box_changed" />
-                                          </widget>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="padding">10</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <widget class="GtkButton" id="gpgcheck_edit_button">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">True</property>
-                                            <accessibility>
-                                              <atkproperty name="AtkObject::accessible-name" translatable="yes">gpgcheck_edit_button</atkproperty>
-                                            </accessibility>
-                                            <signal name="clicked" handler="on_gpgcheck_edit_button_clicked" />
-                                          </widget>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="padding">6</property>
-                                            <property name="position">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <widget class="GtkButton" id="gpgcheck_remove_button">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">True</property>
-                                            <accessibility>
-                                              <atkproperty name="AtkObject::accessible-name" translatable="yes">gpgcheck_remove_button</atkproperty>
-                                            </accessibility>
-                                            <signal name="clicked" handler="on_gpgcheck_remove_button_clicked" />
-                                          </widget>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">3</property>
-                                          </packing>
-                                        </child>
-                                      </widget>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="right_attach">2</property>
-                                        <property name="top_attach">2</property>
-                                        <property name="bottom_attach">3</property>
                                       </packing>
                                     </child>
                                   </widget>
