@@ -233,6 +233,24 @@ class SelectionWrapper(object):
         return self.model.get_value(self.tree_iter, self.store[key])
 
 
+class OverridesTable(object):
+    def __init__(self, table_widget):
+        table_widget.get_selection().set_mode(gtk.SELECTION_NONE)
+        self.override_store = gtk.ListStore(str, str)
+        table_widget.set_model(self.override_store)
+
+        for idx, colname in enumerate([_("Name"), _("Value")]):
+            column = gtk.TreeViewColumn(colname, gtk.CellRendererText(), markup=0, text=idx)
+            column.set_expand(True)
+            table_widget.append_column(column)
+
+    def clear(self):
+        self.override_store.clear()
+
+    def add_override(self, key, value):
+        self.override_store.append((key, value))
+
+
 class ProductsTable(object):
     def __init__(self, table_widget, product_dir, yes_id=gtk.STOCK_APPLY,
                  no_id=gtk.STOCK_REMOVE):

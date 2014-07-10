@@ -24,7 +24,7 @@ from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, ENT_DIR, require
 from subscription_manager.gui.storage import MappedListStore
 from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\
-    SelectionWrapper, HasSortableWidget
+    SelectionWrapper, HasSortableWidget, OverridesTable
 from subscription_manager.gui.messageWindow import YesNoDialog
 from subscription_manager.overrides import Override
 
@@ -38,7 +38,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     GTK dialog for managing repositories and their overrides.
     """
     widget_names = ['main_window', 'reset_button', 'close_button',
-                    'name_text', 'baseurl_text', 'scrolledwindow']
+                    'name_text', 'baseurl_text', 'scrolledwindow',
+                    'other_overrides_view']
 
     ENTS_PROVIDE_NO_REPOS = _("Attached subscriptions do not provide any repositories.")
     NO_ATTACHED_SUBS = _("No repositories are available without an attached subscription.")
@@ -81,6 +82,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             "repo_data": object,
             "override_data": object
         })
+
+        self.other_overrides = OverridesTable(self.other_overrides_view)
 
         # Change the background color of the no_repos_label_container to the same color
         # as the label's base color. The event container allows us to change the color.
@@ -141,6 +144,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             overrides_per_repo[repo_id][override.name] = override.value
 
         self.overrides_store.clear()
+        self.other_overrides.clear()
 
         current_repos = self.backend.overrides.repo_lib.get_repos(apply_overrides=False)
         if (current_repos):
@@ -262,10 +266,15 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     def _on_selection(self, tree_selection):
         selection = SelectionWrapper(tree_selection, self.overrides_store)
 
+        self.other_overrides.clear()
         self.reset_button.set_sensitive(selection.is_valid() and selection['modified'])
         if selection.is_valid():
             self.name_text.get_buffer().set_text(selection['name'])
             self.baseurl_text.get_buffer().set_text(selection['baseurl'])
+
+            for key, value in (selection['override_data'] or {}).items():
+                if key not in ['gpgcheck', 'enabled']:
+                    self.other_overrides.add_override(key, value)
 
     def _on_close(self, button, event=None):
         self.hide()
