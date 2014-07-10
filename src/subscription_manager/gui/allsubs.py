@@ -283,18 +283,18 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self._stripe_rows(None, self.store)
 
         # set the selection/details back to what they were, if possible
-        found = False
+        def select_row(model, path, itr, data):
+            if model.get_value(itr, model['pool_id']) == data[0]:
+                data[1].set_cursor(path)
+                return True
+
+        # Attempt to re-select if there was a selection
         if selected_pool_id:
-            itr = self.store.get_iter_first()
-            while itr is not None:
-                if self.store.get_value(itr,
-                        self.store['pool_id']) == selected_pool_id:
-                    self.top_view.set_cursor(self.store.get_path(itr))
-                    found = True
-                    break
-                else:
-                    itr = self.store.iter_next(itr)
-        if not found:
+            self.store.foreach(select_row, (selected_pool_id, self.top_view))
+
+        # If we don't have a selection, clear the sub_details view
+        # TODO: is this conditional necessary?  If so, when?
+        if not self.top_view.get_selection().get_selected()[1]:
             self.sub_details.clear()
 
     def _product_attrs_to_dict(self, product_attributes_list):
@@ -302,10 +302,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         Convert the JSON list of product attributes into a dict we can
         work with more easily.
         """
-        final_attrs = {}
-        for pa in product_attributes_list:
-            final_attrs[pa['name']] = pa['value']
-        return final_attrs
+        return dict((pa['name'], pa['value']) for pa in product_attributes_list)
 
     # need to determine what type of machine the product is for
     #  based on the pools accumulated.
