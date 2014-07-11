@@ -394,12 +394,12 @@ class TestReposCommand(TestCliCommand):
         self._inject_mock_valid_consumer('fake_id')
 
         repos = [Repo('x'), Repo('y'), Repo('z')]
-        items = ['x', 'y']
+        items = [('0', 'x'), ('0', 'y')]
         self.cc.use_overrides = True
-        self.cc._set_repo_status(repos, repolib_instance, items, False)
+        self.cc._set_repo_status(repos, repolib_instance, items)
 
         expected_overrides = [{'contentLabel': i, 'name': 'enabled', 'value':
-            '0'} for i in items]
+            '0'} for (action, i) in items]
 
         # The list of overrides sent to setContentOverrides is really a set of
         # dictionaries (since we don't know the order of the overrides).
@@ -417,12 +417,74 @@ class TestReposCommand(TestCliCommand):
         self._inject_mock_valid_consumer('fake_id')
 
         repos = [Repo('zoo'), Repo('zebra'), Repo('zip')]
-        items = ['z*']
+        items = [('0', 'z*')]
         self.cc.use_overrides = True
-        self.cc._set_repo_status(repos, repolib_instance, items, False)
+        self.cc._set_repo_status(repos, repolib_instance, items)
 
         expected_overrides = [{'contentLabel': i.id, 'name': 'enabled', 'value':
             '0'} for i in repos]
+        match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
+        self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
+                match_dict_list)
+        repolib_instance.update.assert_called()
+
+    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    def test_set_repo_status_disable_all_enable_some(self, mock_repolib):
+        repolib_instance = mock_repolib.return_value
+        self._inject_mock_valid_consumer('fake_id')
+
+        repos = [Repo('zoo'), Repo('zebra'), Repo('zip')]
+        items = [('0', '*'), ('1', 'zoo'),
+            ('1', 'zip')]
+        self.cc.use_overrides = True
+        self.cc._set_repo_status(repos, repolib_instance, items)
+
+        expected_overrides = [
+            {'contentLabel': 'zebra', 'name': 'enabled', 'value': '0'},
+            {'contentLabel': 'zoo', 'name': 'enabled', 'value': '1'},
+            {'contentLabel': 'zip', 'name': 'enabled', 'value': '1'}
+        ]
+        match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
+        self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
+                match_dict_list)
+        repolib_instance.update.assert_called()
+
+    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    def test_set_repo_status_enable_all_disable_some(self, mock_repolib):
+        repolib_instance = mock_repolib.return_value
+        self._inject_mock_valid_consumer('fake_id')
+
+        repos = [Repo('zoo'), Repo('zebra'), Repo('zip')]
+        items = [('1', '*'), ('0', 'zoo'),
+            ('0', 'zip')]
+        self.cc.use_overrides = True
+        self.cc._set_repo_status(repos, repolib_instance, items)
+
+        expected_overrides = [
+            {'contentLabel': 'zebra', 'name': 'enabled', 'value': '1'},
+            {'contentLabel': 'zoo', 'name': 'enabled', 'value': '0'},
+            {'contentLabel': 'zip', 'name': 'enabled', 'value': '0'}
+        ]
+        match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
+        self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
+                match_dict_list)
+        repolib_instance.update.assert_called()
+
+    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    def test_set_repo_status_enable_all_disable_all(self, mock_repolib):
+        repolib_instance = mock_repolib.return_value
+        self._inject_mock_valid_consumer('fake_id')
+
+        repos = [Repo('zoo'), Repo('zebra'), Repo('zip')]
+        items = [('1', '*'), ('0', '*')]
+        self.cc.use_overrides = True
+        self.cc._set_repo_status(repos, repolib_instance, items)
+
+        expected_overrides = [
+            {'contentLabel': 'zebra', 'name': 'enabled', 'value': '0'},
+            {'contentLabel': 'zoo', 'name': 'enabled', 'value': '0'},
+            {'contentLabel': 'zip', 'name': 'enabled', 'value': '0'}
+        ]
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
                 match_dict_list)
@@ -441,9 +503,9 @@ class TestReposCommand(TestCliCommand):
         zippy = Repo('zippy', enabled)
         zero = Repo('zero', disabled)
         repos = [zoo, zebra, zippy, zero]
-        items = ['z*']
+        items = [('0', 'z*')]
 
-        self.cc._set_repo_status(repos, None, items, False)
+        self.cc._set_repo_status(repos, None, items)
         calls = [mock.call(r) for r in repos if r['enabled'] == 1]
         mock_repofile_inst.update.assert_has_calls(calls)
         for r in repos:

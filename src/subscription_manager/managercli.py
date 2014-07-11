@@ -1804,15 +1804,31 @@ class ReposCommand(CliCommand):
         shortdesc = _("List the repositories which this system is entitled to use")
         super(ReposCommand, self).__init__("repos", shortdesc, False)
 
+        def repo_callback(option, opt, repoid, parser):
+            """
+            Store our repos to enable and disable in a combined, ordered list of
+            tuples. (enabled, repoid)
+
+            This allows us to have our expected behaviour when we do things like
+            --disable="*" --enable="1" --enable="2".
+            """
+            status = '0'
+            if opt == '--enabled':
+                status = '1'
+            vars(parser.values).setdefault('repo_actions',
+                []).append((status, repoid))
+
         self.parser.add_option("--list", action="store_true",
                                help=_("list known repos for this system"))
-        self.parser.add_option("--enable", dest="enable", metavar="REPOID",
-                               action='append', help=_("repo to enable (can be specified more than once). Wildcards (* and ?) are supported."))
-        self.parser.add_option("--disable", dest="disable", metavar="REPOID",
-                               action='append', help=_("repo to disable (can be specified more than once). Wildcards (* and ?) are supported."))
+        self.parser.add_option("--enable", dest="enable", type="str",
+                               action='callback', callback=repo_callback, metavar="REPOID",
+                               help=_("repo to enable (can be specified more than once). Wildcards (* and ?) are supported."))
+        self.parser.add_option("--disable", dest="disable", type="str",
+                               action='callback', callback=repo_callback, metavar="REPOID",
+                               help=_("repo to disable (can be specified more than once). Wildcards (* and ?) are supported."))
 
     def _validate_options(self):
-        if not (self.options.list or self.options.enable or self.options.disable):
+        if not (self.options.list or hasattr(self.options, 'repo_actions')):
             self.options.list = True
 
     def _do_command(self):
@@ -1834,10 +1850,8 @@ class ReposCommand(CliCommand):
         rl = RepoActionInvoker()
         repos = rl.get_repos()
 
-        if self.options.enable:
-            rc = rc or self._set_repo_status(repos, rl, self.options.enable, True)
-        if self.options.disable:
-            rc = self._set_repo_status(repos, rl, self.options.disable, False) or rc
+        if hasattr(self.options, 'repo_actions'):
+            rc = self._set_repo_status(repos, rl, self.options.repo_actions)
 
         if self.options.list:
             if len(repos) > 0:
@@ -1854,29 +1868,39 @@ class ReposCommand(CliCommand):
                 print _("This system has no repositories available through subscriptions.")
         return rc
 
-    def _set_repo_status(self, repos, repo_action_invoker, items, enable):
-        repos_modified = set()
+    def _set_repo_status(self, repos, repo_action_invoker, repo_actions):
+        """
+        Given a list of repo actions (tuple of enable/disable and
+        repo ID), build the master list (without duplicates) to send to the
+        server.
+        """
         rc = 0
-        if enable:
-            status = '1'
-        else:
-            status = '0'
 
-        for item in items:
-            matches = set([repo for repo in repos if fnmatch.fnmatch(repo.id, item)])
+        # Maintain a dict of repo to enabled/disabled status. This allows us
+        # to remove dupes and send only the last action specified by the user
+        # on the command line. Items will be overwritten as we process the CLI
+        # arguments in order.
+        repos_to_modify = {}
+
+        for (status, repoid) in repo_actions:
+            matches = set([repo for repo in repos if fnmatch.fnmatch(repo.id, repoid)])
             if not matches:
                 rc = 1
                 print _("Error: %s is not a valid repo ID. "
-                        "Use --list option to see valid repos.") % item
-            # Take the union
-            repos_modified |= matches
+                        "Use --list option to see valid repos.") % repoid
 
-        if repos_modified:
+            # Overwrite repo if it's already in the dict, we want the last
+            # match to be the one sent to server.
+            for repo in matches:
+                repos_to_modify[repo] = status
+
+        if repos_to_modify:
             # The cache should be primed at this point by the
             # repo_action_invoker.get_repos()
             cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+
             if self.is_registered() and self.use_overrides:
-                overrides = [{'contentLabel': repo.id, 'name': 'enabled', 'value': status} for repo in repos_modified]
+                overrides = [{'contentLabel': repo.id, 'name': 'enabled', 'value': repos_to_modify[repo]} for repo in repos_to_modify]
                 results = self.cp.setContentOverrides(self.identity.uuid, overrides)
 
                 cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
@@ -1888,7 +1912,7 @@ class ReposCommand(CliCommand):
                 repo_action_invoker.update()
             else:
                 # In the disconnected case we must modify the repo file directly.
-                changed_repos = [repo for repo in repos_modified if repo['enabled'] != status]
+                changed_repos = [repo for repo in matches if repo['enabled'] != status]
                 for repo in changed_repos:
                     repo['enabled'] = status
                 if changed_repos:
@@ -1898,8 +1922,9 @@ class ReposCommand(CliCommand):
                         repo_file.update(repo)
                     repo_file.write()
 
-        for repo in repos_modified:
-            if enable:
+        for repo in repos_to_modify:
+            # Watchout for string comparison here:
+            if repos_to_modify[repo] == "1":
                 print _("Repo '%s' is enabled for this system.") % repo.id
             else:
                 print _("Repo '%s' is disabled for this system.") % repo.id
