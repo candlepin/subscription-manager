@@ -13,7 +13,7 @@
 
 Name: subscription-manager
 Version: 1.11.3
-Release: 8%{?dist}
+Release: 9%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -400,6 +400,10 @@ fi
 %endif
 
 %changelog
+* Mon Jul 14 2014 ckozak <ckozak@redhat.com> 1.11.3-9
+- 1118012: Fixes several typos in man page. (csnyder@redhat.com)
+- 1117374: add optparse options strings, zanata pull (alikins@redhat.com)
+
 * Mon Jul 07 2014 ckozak <ckozak@redhat.com> 1.11.3-8
 - Pull in latest strings from zanata (bkearney@redhat.com)
 
