@@ -31,7 +31,7 @@ Subscription Manager performs several key operations:
 .IP
 * It allows administrators to both attach specific subscriptions to a system and remove those subscriptions.
 .PP
-Subscription Manager can be used to autoattach subscriptions to a system, as well. The
+Subscription Manager can be used to auto-attach subscriptions to a system, as well. The
 .B subscription-manager
 command can even be invoked as part of a kickstart process.
 
@@ -160,7 +160,7 @@ Gives the username for the account which is registering the system; this user ac
 
 .TP
 .B --password=PASSWORD
-Gives the user account password. This is required.
+Gives the user account password.
 
 .TP
 .B --serverurl=SERVER_HOSTNAME
@@ -190,7 +190,7 @@ References an existing system inventory ID to reregister a system. The ID is use
 
 .TP
 .B --activationkey=KEYS
-Gives a comma-separated list of product keys to use to redeem or apply specific subscriptions to the system. This is used for preconfigured systems, which may already have products installed and subscriptions attached to that system. Activation keys are issued by an on-premise subscription management service, such as Subscription Asset Manager.
+Gives a comma-separated list of product keys to use to redeem or apply specific subscriptions to the system. This is used for preconfigured systems which may already have products installed. Activation keys are issued by an on-premise subscription management service, such as Subscription Asset Manager.
 .IP
 When the
 .B --activationkey
@@ -209,7 +209,7 @@ subscription-manager register --org="IT Dept" --activationkey=1234abcd
 
 .TP
 .B --auto-attach
-Automatically attaches the best-matched, compatible subscriptions to this system.
+Automatically attaches compatible subscriptions to this system.
 
 
 .TP
@@ -297,7 +297,7 @@ Disables the auto-attach option for the system. If auto-attach is disabled, then
 
 .TP
 .B --show
-Shows whetehr auto-attach is enabled on the systems.
+Shows whether auto-attach is enabled on the systems.
 
 .SS REMOVE OPTIONS
 The
@@ -342,7 +342,7 @@ The
 .B service-level
 command displays the current configured service level
 .I preference
-for products installed on the system. For example, if the service level preference is standard, then a subscription with a standard service level is selected when autoattaching subscriptions to the system.
+for products installed on the system. For example, if the service level preference is standard, then a subscription with a standard service level is selected when auto-attaching subscriptions to the system.
 
 .IP
 The
@@ -365,7 +365,7 @@ Removes any previously set service level preference.
 .SS IMPORT OPTIONS
 The
 .B import
-command imports and applies a subscription certificate for the system which was generated externally, such as in the Customer Portal, and then copied over to the system. Importing can be necessary if a system is pre-configured in the subscription management service or if it is offline or unable to access the subscription management service but it have the proper, relevant subscriptions attached to the system.
+command imports and applies a subscription certificate for the system which was generated externally, such as in the Customer Portal, and then copied over to the system. Importing can be necessary if a system is preconfigured in the subscription management service or if it is offline or unable to access the subscription management service but it has the proper, relevant subscriptions attached to the system.
 
 .TP
 .B --certificate=CERTIFICATE_FILE
@@ -374,7 +374,7 @@ Points to a certificate PEM file which contains the subscription certificate. Th
 .SS REDEEM OPTIONS
 The
 .B redeem
-command is used for systems that are purchased from third-party vendors that include a subscription. The redemption process essentially autoattaches the pre-selected subscription that the vendor supplied to the system.
+command is used for systems that are purchased from third-party vendors that include a subscription. The redemption process essentially auto-attaches the preselected subscription that the vendor supplied to the system.
 
 .TP
 .B --email=EMAIL
@@ -420,7 +420,7 @@ option.
 
 .TP
 .B --no-overlap
-Shows pools which provide products that are notalready covered; only used with
+Shows pools which provide products that are not already covered; only used with
 .B --available
 option.
 
@@ -452,7 +452,7 @@ Gives the username for the account to use to connect to the organization account
 
 .TP
 .B --password=PASSWORD
-Gives the user account password. This is required.
+Gives the user account password.
 
 .TP
 .B --org=ORG
@@ -488,7 +488,7 @@ Gives the username for the account to use to connect to the organization account
 
 .TP
 .B --password=PASSWORD
-Gives the user account password. This is required.
+Gives the user account password.
 
 .TP
 .B --serverurl=SERVER_HOSTNAME
@@ -502,7 +502,7 @@ parameter is for the on-premise Subscription Asset Manager server.
 .SS PLUGIN OPTIONS
 The
 .B plugins
-command list the available subscription-manager plugins.
+command lists the available subscription-manager plugins.
 
 .TP
 .B --list
@@ -682,7 +682,7 @@ Sets a parameter to a new, specified value. This is commonly used for connection
 .SS VERSION OPTIONS
 The
 .B version
-command displays information about the current Subscription Manager package, the subscription service the system is registered to (if it is currently registered), and the subscription management server this the system is configured to use. For example:
+command displays information about the current Subscription Manager package, the subscription service the system is registered to (if it is currently registered), and the subscription management server that the system is configured to use. For example:
 .nf
 [root@server ~]# subscription-manager version
 server type: Red Hat Subscription Management
@@ -727,7 +727,7 @@ As the structures of subscription configuration have changed, some of the origin
 
 .TP
 .B subscribe
-This has been replaced with attach. A similar registration option, \fB--subscribe\fP, has also be replaced with \fB--autoattach\fP.
+This has been replaced with attach. A similar registration option, \fB--subscribe\fP, has also be replaced with \fB--auto-attach\fP.
 
 .TP
 .B unsubscribe
@@ -861,11 +861,11 @@ subscription-manager register --username=admin --password=secret
 .RE
 
 .PP
-Autoattach also supports an option to set a preferred service level with the selected subscriptions, the
+Auto-attach also supports an option to set a preferred service level with the selected subscriptions, the
 .B --servicelevel
 option. In this case, the
 .B --servicelevel
-option sets a preference that helps the autoattach process select appropriate subscriptions. For example, if the preferred service level for a production server is premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the autoattach process selects the subscription which offers a premium service level.
+option sets a preference that helps the auto-attach process select appropriate subscriptions. For example, if the preferred service level for a production server is premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the auto-attach process selects the subscription which offers a premium service level.
 
 .RS
 .nf
@@ -885,7 +885,7 @@ that subscription (meaning, it removes that subscription so that another system 
 
 .PP The
 .B list
-command shows you what subscriptions are available specifically to the system (meaning subscriptions which are active, have available quantities, and match the hardware and architecture) or all  subscriptions for the organization. Using the
+command shows you what subscriptions are available specifically to the system (meaning subscriptions which are active, have available quantities, and match the hardware and architecture) or all subscriptions for the organization. Using the
 .B --ondate
 option shows subscriptions that are or will be active at a specific time (otherwise, it shows subscriptions which are active today).
 
@@ -943,7 +943,7 @@ subscription-manager attach
 .pp
 As with the
 .B register
-command, the system can be autoattached to the best-fitting subscriptions using the
+command, the system can be auto-attached to the best-fitting subscriptions using the
 .B --auto
 option:
 .RS
@@ -954,11 +954,11 @@ subscription-manager attach --auto
 
 
 .PP
-Autoattach also supports an option to set a preferred service level with the selected subscriptions, the
+Auto-attach also supports an option to set a preferred service level with the selected subscriptions, the
 .B --servicelevel
 option. In this case, the
 .B --servicelevel
-option sets a preference that helps the autoattach process select appropriate subscriptions. For example, if the preferred service level for a production server is premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the autoattach process selects the subscription which offers a premium subscription.
+option sets a preference that helps the auto-attach process select appropriate subscriptions. For example, if the preferred service level for a production server is premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the auto-attach process selects the subscription which offers a premium subscription.
 
 .RS
 .nf
@@ -996,14 +996,14 @@ option removes every subscription the system has used.
 
 
 .SS REDEEMING EXISTING SUBSCRIPTIONS
-Sometimes, a system may come pre-configured with products and subscriptions. Rather than attaching a pool and claiming a subscription, this system simply needs to
+Sometimes, a system may come preconfigured with products and subscriptions. Rather than attaching a pool and claiming a subscription, this system simply needs to
 .I redeem
 its existing subscriptions.
 
 .PP
-After registration, subscriptions on pre-configured systems can be claimed using the
+After registration, subscriptions on preconfigured systems can be claimed using the
 .B redeem
-command, which essentially autoattaches the system to its pre-existing subscriptions.
+command, which essentially auto-attaches the system to its preexisting subscriptions.
 .RS
 .nf
 subscription-manager redeem --email=admin@example.com --org="IT Dept"
@@ -1011,7 +1011,7 @@ subscription-manager redeem --email=admin@example.com --org="IT Dept"
 .RE
 
 .SS VIEWING LOCAL SUBSCRIPTION & CONTENT PROVIDER INFORMATION
-Red Hat has a hosted environment, through the Customer Portal, that provides centralized access to subscription management and content repositories. However, organizations can use other tools -- like Subscription Manager -- for content hosting  and subscription management. With a local content provider, the organization, environments, repositories, and other structural configuration is performed in the content provider. Red Hat Subscription Manager can be used to display this information, using the
+Red Hat has a hosted environment, through the Customer Portal, that provides centralized access to subscription management and content repositories. However, organizations can use other tools -- like Subscription Manager -- for content hosting and subscription management. With a local content provider, the organization, environments, repositories, and other structural configuration is performed in the content provider. Red Hat Subscription Manager can be used to display this information, using the
 .B environments, orgs,
 and
 .B repos
@@ -1086,7 +1086,7 @@ command will update the collected facts with the new, manual facts or values.
 .SS SUBSCRIPTIONS AND KICKSTART
 The
 .B subscription-manager
-tool can be run as a post-install script as part of the kickstart installation process. This allows subscription management (registing and applying subscriptions) to be automated along with installation. For example:
+tool can be run as a post-install script as part of the kickstart installation process. This allows subscription management (registering and applying subscriptions) to be automated along with installation. For example:
 .RS
 .nf
 %post --log=/root/ks-post.log
