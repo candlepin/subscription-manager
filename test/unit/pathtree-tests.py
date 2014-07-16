@@ -99,3 +99,44 @@ class TestPathTree(unittest.TestCase):
         pt.path_tree = tree
         self.assertTrue(pt.match_path('/foo/path/bar'))
         self.assertFalse(pt.match_path('/foo/path/abc'))
+
+    def test_match_first_variable(self):
+        tree = {'$anything': [{'$releasever': [{'bar':[{PATH_END: None}]}]}]}
+        data = open(DATA).read()
+        pt = PathTree(data)
+        # just swap out the pre-cooked data with out with
+        pt.path_tree = tree
+        self.assertTrue(pt.match_path('/foo/path/bar'))
+        self.assertFalse(pt.match_path('/foo/path/abc'))
+
+    def test_match_last_variable(self):
+        tree = {'foo': [{'$releasever': [{'$bar':[{PATH_END: None}]}]}]}
+        data = open(DATA).read()
+        pt = PathTree(data)
+        # just swap out the pre-cooked data with out with
+        pt.path_tree = tree
+        self.assertTrue(pt.match_path('/foo/path/bar'))
+        self.assertTrue(pt.match_path('/foo/path/abc'))
+        self.assertFalse(pt.match_path('/boo/path/abc'))
+
+    def test_match_different_variables(self):
+        tree1 = {'foo': [{'$releasever': [{'bar':[{PATH_END: None}]}],
+                         'jarjar': [{'binks':[{PATH_END: None}]}]}]}
+        tree2 = {'foo': [{'jarjar': [{'binks':[{PATH_END: None}]}],
+                         '$releasever': [{'bar':[{PATH_END: None}]}]}]}
+        tree3 = {'foo': [{'$releasever': [{'bar':[{PATH_END: None}]}]},
+                         {'jarjar': [{'binks':[{PATH_END: None}]}]}]}
+        tree4 = {'foo': [{'jarjar': [{'binks':[{PATH_END: None}]}]},
+                         {'$releasever': [{'bar':[{PATH_END: None}]}]}]}
+        trees = [tree1, tree2, tree3, tree4]
+        data = open(DATA).read()
+        pt = PathTree(data)
+        #just swap out the pre-cooked data with out with
+        for tree in trees:
+            pt.path_tree = tree
+            self.assertTrue(pt.match_path('/foo/path/bar'))
+            self.assertFalse(pt.match_path('/foo/path/abc'))
+            self.assertFalse(pt.match_path('/foo/path/abc'))
+            self.assertTrue(pt.match_path('/foo/jarjar/binks'))
+            self.assertTrue(pt.match_path('/foo/jarjar/bar'))
+            self.assertFalse(pt.match_path('/foo/jarjar/notbinks'))

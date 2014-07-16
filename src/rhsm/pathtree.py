@@ -96,12 +96,17 @@ class PathTree(object):
             # we hit the end of a path in the tree, so the match was successful
             return True
         if words:
+            words_to_try = []
+            # Look fo an exact match
             if words[0] in tree:
-                words_to_try = [words[0]]
-            else:
-                # we allow any word to match against entitlement variables
-                # such as "$releasever".
-                words_to_try = [word for word in tree.keys() if word.startswith('$')]
+                words_to_try.append(words[0])
+
+            # we allow any word to match against entitlement variables
+            # such as "$releasever".
+            for word in tree.keys():
+                if word.startswith('$'):
+                    words_to_try.append(word)
+
             for word in words_to_try:
                 # keep trying for each child
                 for child in tree[word]:
