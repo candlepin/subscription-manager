@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <locale.h>
-
+#include <time.h>
 #include <glib.h>
 #include <gconf/gconf-client.h>
 #include <gtk/gtk.h>
@@ -103,6 +103,8 @@ typedef enum _StatusType {
 	RHSM_REGISTRATION_REQUIRED
 } StatusType;
 
+static StatusType last_status;  // the last status reported through any means
+static time_t last_checked;  // the time the last check was made
 /* prototypes */
 
 static void hide_icon (Context *);
@@ -285,9 +287,19 @@ static void
 alter_icon (Context * context, StatusType status_type)
 {
 	context->show_registration = status_type == RHSM_REGISTRATION_REQUIRED;
-	if ((status_type != RHN_CLASSIC) && (status_type != RHSM_VALID)) {
-		display_icon (context, status_type);
-	} else {
+	long time_since_last_check = difftime(time(0), last_checked);
+	// _hide_icon should be true if the status is one we would like to hide the icon for
+	bool _hide_icon = ((status_type == RHN_CLASSIC) || (status_type == RHSM_VALID));
+	// update_icon should be true if the new status differs from the old or its been at least as long as the check_period
+	bool update_icon = time_since_last_check >= check_period || status_type != last_status;
+
+	// since we have used the old values already above, we can update them
+	last_checked = time(0);
+	last_status = status_type;
+	if (update_icon && !_hide_icon) {
+		display_icon (context, last_status);
+	} else if (_hide_icon){
+		// hides icon only if the status is one listed in _hide_icon above
 		hide_icon (context);
 	}
 }
