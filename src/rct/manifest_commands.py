@@ -174,11 +174,9 @@ class CatManifestCommand(RCTManifestCommand):
 
     def _print_section(self, title, items, indent=1, whitespace=True):
         # Allow a bit of customization of the tabbing
-        pad = ""
-        for x in range(0, indent - 1):
-            pad = pad + "\t"
+        pad = "\t" * (indent - 1)
         print(pad + title)
-        pad = pad + "\t"
+        pad += "\t"
         for item in items:
             if len(item) == 2:
                 print("%s%s: %s" % (pad, item[0], xstr(item[1])))

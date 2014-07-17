@@ -30,14 +30,14 @@ class MappedStore(object):
         specify all keys, and a 'None' value is inserted by default into
         positions that are omitted
         """
-        entry = [None for i in range(self.get_n_columns())]
+        entry = [None] * self.get_n_columns()
 
         for key, value in item_map.iteritems():
             entry[self[key]] = value
         return entry
 
     def __contains__(self, item):
-        return item in self.type_index.keys()
+        return item in self.type_index
 
 
 class MappedListStore(MappedStore, gtk.ListStore):
