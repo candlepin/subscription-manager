@@ -40,7 +40,6 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoLib
 from subscription_manager.utils import is_true_value
 from subscription_manager.identity import ConsumerIdentity
-from dateutil.tz import tzlocal
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -781,6 +780,10 @@ def _sub_dict(datadict, subkeys, default=None):
 def format_date(dt):
     if dt:
         try:
+            try:
+                from dateutil.tz import tzlocal
+            except:
+                return ""
             return dt.astimezone(tzlocal()).strftime("%x")
         except ValueError:
             log.warn("Datetime does not contain timezone information")
