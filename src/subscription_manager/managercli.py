@@ -1813,7 +1813,7 @@ class ReposCommand(CliCommand):
             --disable="*" --enable="1" --enable="2".
             """
             status = '0'
-            if opt == '--enabled':
+            if opt == '--enable':
                 status = '1'
             vars(parser.values).setdefault('repo_actions',
                 []).append((status, repoid))
