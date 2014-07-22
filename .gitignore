@@ -3,11 +3,15 @@
 *.sw?
 *.coverage
 *.cov2emacs.log
+.noseids
+nosetests.xml
+coverage.xml
 cover/
 #*.ropemacs
 *.ropeproject
 .\#*
 *.eml
+*.egginfo
 po/build
 po/POTFILES.in
 po/.zanata-cache
