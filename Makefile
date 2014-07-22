@@ -321,36 +321,24 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install bin/rhsm-debug $(PREFIX)/usr/bin
 
 
-
 check:
-	nosetests
+	python setup.py -q nosetests -c playpen/noserc.dev
 
 smoke:
 	test/smoke.sh
 
-coverage:
-	nosetests --with-cover --cover-package subscription_manager --cover-erase
+coverage: coverage-jenkins
 
-coverage-xunit:
-	nosetests --with-xunit --with-cover --cover-package subscription_manager --cover-erase
+coverage-html: coverage-jenkins
 
-coverage-html: coverage
-	coverage html
-
-coverage-html-old:
-	nosetests --with-cover --cover-package subscription_manager --cover-html --cover-html-dir test/html --cover-erase
-
-coverage-xml: coverage
-	coverage xml
-
-coverage-jenkins: coverage-xunit
-	coverage html
-	coverage xml
+coverage-jenkins:
+	python setup.py -q nosetests -c playpen/noserc.ci
 
 clean:
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
 	rm -f bin/rhsmcertd
 	rm -f bin/rhsm-icon
+	python setup.py clean
 
 checkcommits:
 	scripts/checkcommits.sh
