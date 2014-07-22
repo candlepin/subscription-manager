@@ -422,15 +422,6 @@ zanata: gettext zanata-push zanata-pull update-po
 gen-test-long-po:
 	-@ scripts/gen_test_en_po.py --long po/en_US.po
 
-pyflakes:
-# pyflakes doesn't have a config file, cli options, or a ignore tag
-# and the variants of "redefination" we get now aren't really valid
-# and other tools detect the valid cases, so ignore these
-#
-	@TMPFILE=`mktemp` || exit 1; \
-	pyflakes $(STYLEFILES) |  grep -v "redefinition of unused.*from line.*" |  grep -v "'site' imported but unused" |  tee $$TMPFILE; \
-	! test -s $$TMPFILE
-
 pylint:
 	@PYTHONPATH="src/:/usr/share/rhn:../python-rhsm/src/:/usr/share/rhsm" pylint --rcfile=pylintrc $(STYLEFILES)
 
@@ -516,7 +507,7 @@ versionlint:
 	! test -s $$TMPFILE
 
 .PHONY: stylish
-stylish: flake8 versionlint gladelint find-missing-widgets find-missing-signals pyflakes whitespacelint gettext_lint rpmlint debuglint
+stylish: flake8 versionlint gladelint find-missing-widgets find-missing-signals whitespacelint gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins
 
