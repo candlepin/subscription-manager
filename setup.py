@@ -27,5 +27,9 @@ setup(name="subscription-manager",
                 'src/subscription_manager/plugin',
                 'src/subscription_manager/plugin/ostree',
                 'src/rhsm_debug',
-                'src/rct'],
+                'src/rct',
+                # There isn't a good way to run flake8 command
+                # on tests as well. Note this is wrong for
+                # our unused "install" case
+                'test/'],
       test_suite='nose.collector')
