@@ -423,7 +423,7 @@ gen-test-long-po:
 	-@ scripts/gen_test_en_po.py --long po/en_US.po
 
 pylint:
-	@PYTHONPATH="src/:/usr/share/rhn:../python-rhsm/src/:/usr/share/rhsm" pylint --rcfile=pylintrc $(STYLEFILES)
+	@PYTHONPATH="src/:/usr/share/rhn:../python-rhsm/src/:/usr/share/rhsm" python setup.py lint
 
 tablint:
 	@! GREP_COLOR='7;31' grep --color -nP "^\W*\t" $(STYLEFILES)
