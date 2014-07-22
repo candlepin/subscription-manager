@@ -497,9 +497,9 @@ gladelint:
     grep -nP "property name=\"orientation\"" $(GLADEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-pep8:
+flake8:
 	@TMPFILE=`mktemp` || exit 1; \
-	pep8  --exclude ".#*" --repeat src $(STYLEFILES) | tee $$TMPFILE; \
+	python setup.py -q flake8 -q | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 rpmlint:
@@ -516,7 +516,7 @@ versionlint:
 	! test -s $$TMPFILE
 
 .PHONY: stylish
-stylish: versionlint gladelint find-missing-widgets find-missing-signals pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
+stylish: flake8 versionlint gladelint find-missing-widgets find-missing-signals pyflakes whitespacelint gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins
 
