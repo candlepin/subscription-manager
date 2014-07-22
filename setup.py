@@ -28,5 +28,4 @@ setup(name="subscription-manager",
                 'src/subscription_manager/plugin/ostree',
                 'src/rhsm_debug',
                 'src/rct'],
-      test_suite='nose.collector',
-      tests_require=['mock', 'nose', 'coverage', 'freezegun', 'polib', 'pep8', 'pyflakes'])
+      test_suite='nose.collector')
