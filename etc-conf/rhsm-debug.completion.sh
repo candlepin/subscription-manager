@@ -17,7 +17,7 @@ _rhsm-debug()
     system)
         case "${cur}" in
             -*)
-                local opts="--destination --no-archive --sos ${_rhsm_debug_common_opts}"
+                local opts="--destination --no-archive --no-subscriptions --sos ${_rhsm_debug_common_opts}"
                 COMPREPLY=( $( compgen -W "${opts}" -- "$cur" ) )
                 return 0
                 ;;
