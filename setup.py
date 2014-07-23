@@ -28,20 +28,18 @@ setup(
     package_dir={
         'rhsm': 'src/rhsm',
     },
-    packages = find_packages('src'),
-    include_package_data = True,
+    packages=find_packages('src'),
+    include_package_data=True,
 
     ext_modules=[Extension('rhsm._certificate', ['src/certificate.c'],
                            libraries=['ssl', 'crypto'])],
 
-    test_suite = 'nose.collector',
+    test_suite='nose.collector',
 
-    classifiers = [
+    classifiers=[
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
         'Programming Language :: Python'
     ],
 )
-
-

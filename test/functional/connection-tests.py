@@ -18,10 +18,13 @@ import random
 import string
 import unittest
 
+from nose.plugins.attrib import attr
+
 from rhsm.connection import ContentConnection, UEPConnection, drift_check, Restlib,\
     UnauthorizedException, ForbiddenException, AuthenticationException, RestlibException, \
     RemoteServerException
 from mock import patch
+
 
 def random_string(name, target_length=32):
     ''' Returns a len 32 string starting with "name"'''
@@ -30,6 +33,7 @@ def random_string(name, target_length=32):
     return name
 
 
+@attr('functional')
 class ConnectionTests(unittest.TestCase):
 
     def setUp(self):
