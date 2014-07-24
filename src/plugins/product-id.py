@@ -15,7 +15,6 @@
 # in this software or its documentation.
 #
 
-import os
 import sys
 from yum.plugins import TYPE_CORE
 
@@ -24,23 +23,10 @@ sys.path.append('/usr/share/rhsm')
 
 from subscription_manager import logutil
 from subscription_manager.productid import ProductManager
-from subscription_manager.certdirectory import Path
+from subscription_manager.utils import chroot
 
 requires_api_version = '2.6'
 plugin_type = (TYPE_CORE,)
-
-
-def chroot():
-    """
-    Use /mnt/sysimage when it exists to support operating
-    within an Anaconda installation.
-    """
-    sysimage = '/mnt/sysimage'
-    # See rhbz#1038242, try to be more sure we are running in anaconda
-    # before we chroot
-    anaconda_pid = '/var/run/anaconda.pid'
-    if os.path.exists(sysimage) and os.path.exists(anaconda_pid):
-        Path.ROOT = sysimage
 
 
 def posttrans_hook(conduit):
@@ -60,7 +46,9 @@ def posttrans_hook(conduit):
         return
 
     logutil.init_logger_for_yum()
-    chroot()
+    # If a tool (it's, e.g., Anaconda and Mock) manages a chroot via
+    # 'yum --installroot', we must update certificates in that directory.
+    chroot(conduit.getConf().installroot)
     try:
         pm = ProductManager()
         pm.update(conduit._base)

@@ -27,6 +27,7 @@ import urllib
 from M2Crypto.SSL import SSLError
 
 from subscription_manager.branding import get_branding
+from subscription_manager.certdirectory import Path
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager import injection as inj
 
@@ -314,3 +315,10 @@ def is_true_value(test_string):
 def system_log(message, priority=syslog.LOG_NOTICE):
     syslog.openlog("subscription-manager")
     syslog.syslog(priority, message.encode("utf-8"))
+
+
+def chroot(dirname):
+    """
+    Change root of all paths.
+    """
+    Path.ROOT = dirname
