@@ -24,7 +24,7 @@ from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, ENT_DIR, require
 from subscription_manager.gui.storage import MappedListStore
 from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\
-    SelectionWrapper, HasSortableWidget
+    SelectionWrapper, HasSortableWidget, OverridesTable
 from subscription_manager.gui.messageWindow import YesNoDialog
 from subscription_manager.overrides import Override
 
@@ -38,9 +38,8 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     GTK dialog for managing repositories and their overrides.
     """
     widget_names = ['main_window', 'reset_button', 'close_button',
-                    'name_text', 'gpgcheck_text', 'gpgcheck_combo_box',
-                    'gpgcheck_remove_button', 'gpgcheck_edit_button',
-                    'baseurl_text', 'scrolledwindow']
+                    'name_text', 'baseurl_text', 'scrolledwindow',
+                    'other_overrides_view']
 
     ENTS_PROVIDE_NO_REPOS = _("Attached subscriptions do not provide any repositories.")
     NO_ATTACHED_SUBS = _("No repositories are available without an attached subscription.")
@@ -69,9 +68,6 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
                 "on_dialog_delete_event": self._on_close,
                 "on_close_button_clicked": self._on_close,
                 "on_reset_button_clicked": self._on_reset_repo,
-                "on_gpgcheck_edit_button_clicked": self._on_gpgcheck_edit_button_clicked,
-                "on_gpgcheck_remove_button_clicked": self._on_gpgcheck_remove_button_clicked,
-                "on_gpgcheck_combo_box_changed": self._on_gpgcheck_combo_box_changed,
         })
 
         self.overrides_store = MappedListStore({
@@ -87,23 +83,12 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             "override_data": object
         })
 
+        self.other_overrides = OverridesTable(self.other_overrides_view)
+
         # Change the background color of the no_repos_label_container to the same color
         # as the label's base color. The event container allows us to change the color.
         label_base_color = self.no_repos_label.style.base[gtk.STATE_NORMAL]
         self.no_repos_label_viewport.modify_bg(gtk.STATE_NORMAL, label_base_color)
-
-        # Gnome will hide all button icons by default (gnome setting),
-        # so force the icons to show in this case as there is no button
-        # text, just the icon.
-        gpgcheck_edit_image = gtk.Image()
-        gpgcheck_edit_image.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_BUTTON)
-        self.gpgcheck_edit_button.set_image(gpgcheck_edit_image)
-        self.gpgcheck_edit_button.get_image().show()
-
-        gpgcheck_reset_image = gtk.Image()
-        gpgcheck_reset_image.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_BUTTON)
-        self.gpgcheck_remove_button.set_image(gpgcheck_reset_image)
-        self.gpgcheck_remove_button.get_image().show()
 
         self.overrides_treeview.set_model(self.overrides_store)
 
@@ -114,6 +99,10 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         enabled_col = CheckBoxColumn(_("Enabled"), self.overrides_store, 'enabled',
             self._on_enable_repo_toggle)
         self.overrides_treeview.append_column(enabled_col)
+
+        gpgcheck_col = CheckBoxColumn(_("Gpgcheck"), self.overrides_store, 'gpgcheck',
+            self._on_gpgcheck_toggle_changed)
+        self.overrides_treeview.append_column(gpgcheck_col)
 
         repo_id_col = TextTreeViewColumn(self.overrides_store, _("Repository ID"), 'repo_id',
                                          expand=True)
@@ -129,16 +118,6 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
         self.overrides_treeview.get_selection().connect('changed', self._on_selection)
         self.overrides_treeview.set_rules_hint(True)
-
-        self.gpgcheck_cb_model = gtk.ListStore(str, bool)
-        self.gpgcheck_cb_model.append((_("Enabled"), True))
-        self.gpgcheck_cb_model.append((_("Disabled"), False))
-
-        gpgcheck_cell_renderer = gtk.CellRendererText()
-        self.gpgcheck_combo_box.pack_start(gpgcheck_cell_renderer, True)
-        self.gpgcheck_combo_box.add_attribute(gpgcheck_cell_renderer, "text", 0)
-        self.gpgcheck_combo_box.set_model(self.gpgcheck_cb_model)
-        self.gpgcheck_combo_box.set_active(0)
 
         self.main_window.set_transient_for(parent)
 
@@ -157,7 +136,6 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         self.overrides_store.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
     def _refresh(self, current_overrides, repo_id_to_select=None):
-
         overrides_per_repo = {}
 
         for override in current_overrides:
@@ -166,6 +144,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             overrides_per_repo[repo_id][override.name] = override.value
 
         self.overrides_store.clear()
+        self.other_overrides.clear()
 
         current_repos = self.backend.overrides.repo_lib.get_repos(apply_overrides=False)
         if (current_repos):
@@ -203,7 +182,6 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
         first_row_iter = self.overrides_store.get_iter_first()
         if not first_row_iter:
-            self._set_details_visible(False)
             self.reset_button.set_sensitive(False)
         elif repo_id_to_select:
             self._select_by_repo_id(repo_id_to_select)
@@ -288,145 +266,49 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     def _on_selection(self, tree_selection):
         selection = SelectionWrapper(tree_selection, self.overrides_store)
 
-        self._set_details_visible(selection.is_valid())
+        self.other_overrides.clear()
         self.reset_button.set_sensitive(selection.is_valid() and selection['modified'])
         if selection.is_valid():
-            gpgcheck_enabled = selection['gpgcheck']
-            gpgcheck_str = _("Enabled")
-            if not gpgcheck_enabled:
-                gpgcheck_str = _("Disabled")
-
             self.name_text.get_buffer().set_text(selection['name'])
             self.baseurl_text.get_buffer().set_text(selection['baseurl'])
-            self.gpgcheck_text.get_buffer().set_text(gpgcheck_str)
-            # Used 'not' here because we enabled is index 0 in the model.
-            self.gpgcheck_combo_box.set_active(int(not gpgcheck_enabled))
-            self._set_gpg_lock_state(not selection['gpgcheck_modified'])
+
+            for key, value in (selection['override_data'] or {}).items():
+                if key not in ['gpgcheck', 'enabled']:
+                    self.other_overrides.add_override(key, value)
 
     def _on_close(self, button, event=None):
         self.hide()
         return True
 
-    def _on_enable_repo_toggle(self, override_model_iter, enabled):
+    def _on_toggle_changed(self, override_model_iter, enabled, key):
         repo = self.overrides_store.get_value(override_model_iter,
                                               self.overrides_store['repo_data'])
         overrides = self.overrides_store.get_value(override_model_iter,
                                               self.overrides_store['override_data'])
 
-        repo_enabled = repo['enabled']
-        has_enabled_override = overrides and 'enabled' in overrides
+        value = repo[key]
+        has_active_override = overrides and key in overrides
 
         try:
-            if not has_enabled_override and enabled != int(repo_enabled):
+            if not has_active_override and enabled != int(value):
                 # We get True/False from the model, convert to int so that
                 # the override gets the correct value.
-                self._add_override(repo.id, "enabled", int(enabled))
+                self._add_override(repo.id, key, int(enabled))
 
-            elif has_enabled_override and overrides['enabled'] != repo_enabled:
-                self._delete_override(repo.id, 'enabled')
+            elif has_active_override and overrides[key] != value:
+                self._delete_override(repo.id, key)
             else:
                 # Should only ever be one path here, else we have a UI logic error.
-                self._add_override(repo.id, "enabled", int(enabled))
+                self._add_override(repo.id, key, int(enabled))
         except Exception, e:
-            handle_gui_exception(e, _("Unable to update enabled override."),
+            handle_gui_exception(e, _("Unable to update %s override.") % key,
                                  self._get_dialog_widget())
 
-    def _on_gpgcheck_combo_box_changed(self, combo_box):
-        override_selection = SelectionWrapper(self.overrides_treeview.get_selection(),
-                                              self.overrides_store)
+    def _on_enable_repo_toggle(self, override_model_iter, enabled):
+        return self._on_toggle_changed(override_model_iter, enabled, 'enabled')
 
-        # Ignore combo box changes when the dialog is first loadded.
-        if not override_selection.is_valid():
-            return
-
-        column = self.gpgcheck_combo_box.get_active()
-        if column < 0:
-            return
-
-        current_cb_value = self.gpgcheck_cb_model[column][1]
-        override_value = override_selection['gpgcheck']
-
-        # Ignore combo box changes that are identical to the current model value.
-        # This can happen on initial data load.
-        if current_cb_value == override_value:
-            return
-
-        self._add_override(override_selection['repo_id'], "gpgcheck", int(current_cb_value))
-
-    def _set_gpg_lock_state(self, locked):
-        if locked:
-            self.gpgcheck_text.show()
-            self.gpgcheck_edit_button.show()
-            self.gpgcheck_remove_button.hide()
-            self.gpgcheck_combo_box.hide()
-        else:
-            self.gpgcheck_text.hide()
-            self.gpgcheck_edit_button.hide()
-            self.gpgcheck_remove_button.show()
-            self.gpgcheck_combo_box.show()
-
-    def _on_gpgcheck_edit_button_clicked(self, button):
-        override_selection = SelectionWrapper(self.overrides_treeview.get_selection(),
-                                              self.overrides_store)
-        if not override_selection.is_valid():
-            # TODO Should never happen, but we should update the UI somewho
-            # to make sure that nothing bad can happen.
-            return
-
-        current_value = override_selection['gpgcheck']
-        self.gpgcheck_combo_box.set_active(not current_value)
-
-        # Create an override despite the fact that the values are likely the same.
-        try:
-            self._add_override(override_selection['repo_id'], "gpgcheck",
-                               int(current_value))
-        except Exception, e:
-            handle_gui_exception(e, _("Unable to update the gpgcheck override."),
-                                 self._get_dialog_widget())
-            return
-
-        self._set_gpg_lock_state(False)
-
-    def _on_gpgcheck_remove_button_clicked(self, button):
-        confirm = YesNoDialog(_("Are you sure you want to remove this override?"),
-                                 self._get_dialog_widget(), _("Confirm Override Removal"))
-        confirm.connect("response", self._on_remove_gpgcheck_confirmation)
-
-    def _on_remove_gpgcheck_confirmation(self, dialog, response):
-        if not response:
-            return
-
-        override_selection = SelectionWrapper(self.overrides_treeview.get_selection(),
-                                              self.overrides_store)
-        if not override_selection.is_valid():
-            # TODO Should never happen, but we should update the UI somehow
-            # to make sure that nothing bad can happen.
-            return
-
-        # Delete the override
-        try:
-            self._delete_override(override_selection['repo_id'], 'gpgcheck')
-        except Exception, e:
-            handle_gui_exception(e, _("Unable to delete the gpgcheck override."),
-                                 self._get_dialog_widget())
-            return
-        self._set_gpg_lock_state(True)
-
-    def _set_details_visible(self, visible):
-        if visible:
-            self.gpgcheck_text.show()
-            self.gpgcheck_edit_button.show()
-            self.gpgcheck_remove_button.show()
-            self.gpgcheck_combo_box.show()
-            self.name_text.show()
-            self.baseurl_text.show()
-        else:
-            self.gpgcheck_text.hide()
-            self.gpgcheck_edit_button.hide()
-            self.gpgcheck_remove_button.hide()
-            self.gpgcheck_combo_box.hide()
-            self.name_text.hide()
-            self.baseurl_text.hide()
+    def _on_gpgcheck_toggle_changed(self, override_model_iter, enabled):
+        return self._on_toggle_changed(override_model_iter, enabled, 'gpgcheck')
 
     def _add_override(self, repo, name, value):
         to_add = Override(repo, name, value)

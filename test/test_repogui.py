@@ -51,6 +51,7 @@ class TestReposGui(SubManFixture):
 
         self.assertEquals("my_repo", store.get_value(tree_iter, store['repo_id']))
         self.assertFalse(store.get_value(tree_iter, store['enabled']))
+        self.assertFalse(store.get_value(tree_iter, store['gpgcheck']))
         # has no overrides so make sure that we are not modified
         self.assertFalse(store.get_value(tree_iter, store['modified']))
         self.assertEquals("MY_REPO", store.get_value(tree_iter, store['name']))
@@ -73,16 +74,6 @@ class TestReposGui(SubManFixture):
         baseurl = self._get_text(self.dialog.baseurl_text)
         self.assertEquals("http://foo.bar", baseurl)
 
-        # Gpgcheck was not overridden so the edit button should be enabled
-        # and the label should be 'Enabled'
-        self.assertFalse(self.dialog.gpgcheck_remove_button.props.visible)
-        self.assertFalse(self.dialog.gpgcheck_combo_box.props.visible)
-
-        gpgcheck_text = self._get_text(self.dialog.gpgcheck_text)
-        self.assertEquals("Disabled", gpgcheck_text)
-        self.assertTrue(self.dialog.gpgcheck_edit_button.props.visible)
-        self.assertTrue(self.dialog.gpgcheck_edit_button.props.sensitive)
-
     def test_show_dialog_with_overrides(self):
         repo = self._create_repo("my_repo", [('enabled', '0')])
         self.repo_lib.get_repos.return_value = [repo]
@@ -100,6 +91,7 @@ class TestReposGui(SubManFixture):
 
         self.assertEquals("my_repo", store.get_value(tree_iter, store['repo_id']))
         self.assertTrue(store.get_value(tree_iter, store['enabled']))
+        self.assertFalse(store.get_value(tree_iter, store['gpgcheck']))
         # has overrides so make sure that we are modified
         self.assertTrue(store.get_value(tree_iter, store['modified']))
         # make sure that there is an icon since we are modified
@@ -127,16 +119,6 @@ class TestReposGui(SubManFixture):
 
         baseurl = self._get_text(self.dialog.baseurl_text)
         self.assertEquals("http://foo.bar", baseurl)
-
-        # Check the state of the gpgcheck editing widgets
-        self.assertFalse(self.dialog.gpgcheck_text.props.visible)
-        self.assertFalse(self.dialog.gpgcheck_edit_button.props.visible)
-
-        self.assertTrue(self.dialog.gpgcheck_combo_box.props.visible)
-        self.assertTrue(self.dialog.gpgcheck_combo_box.props.sensitive)
-        self.assertFalse(self._get_combo_box_value(self.dialog.gpgcheck_combo_box))
-        self.assertTrue(self.dialog.gpgcheck_remove_button.props.visible)
-        self.assertTrue(self.dialog.gpgcheck_remove_button.props.sensitive)
 
     def test_remove_all_button_disabled_when_repo_has_no_modifications(self):
         self.repo_lib.get_repos.return_value = [self._create_repo("my_repo", [('enabled', '0')])]
