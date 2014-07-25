@@ -103,7 +103,7 @@ def warnOrGiveUsageMessage(conduit):
     # TODO: refactor so there are not two checks for this
     if os.getuid() != 0:
         return
-    if not ClassicCheck().is_registered_with_classic():
+    if ClassicCheck().is_registered_with_classic():
         return
     try:
         identity = inj.require(inj.IDENTITY)
