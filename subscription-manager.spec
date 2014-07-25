@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.7
+Version: 1.12.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -446,6 +446,22 @@ fi
 %endif
 
 %changelog
+* Fri Jul 25 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.8-1
+- 1039577: simplify reposgui gpgcheck control (ckozak@redhat.com)
+- 1046132: Makes rhsm-icon slightly less annoying. (csnyder@redhat.com)
+- 1054632: Adds '7.x' to how to launch section of manual. (csnyder@redhat.com)
+- 1065158: Prompt for environment on registration when necessary (ckozak@redhat.com)
+- 1114126: Container mode message is written to stderr (csnyder@redhat.com)
+- 1114132: subman-gui and other tools are disabled in container mode.  (csnyder@redhat.com)
+- 1115499: Allow enable/disable repos in same command. (dgoodwin@redhat.com)
+- 1118012: Fixes several typos in man page. (csnyder@redhat.com)
+- 1121251: rhsm-debug system does not bash-complete for "--no-subscriptions" (wpoteat@redhat.com)
+- 1121272: fix typo that blocked enabling repos via CLI (ckozak@redhat.com)
+- cleanup and fix gui pool reselection on refresh (ckozak@redhat.com)
+- Force subscription-manager yum plugin to respect the managed root (rholy@redhat.com)
+- Force product-id yum plugin to respect the managed root (rholy@redhat.com)
+- Display other overrides in the gui (ckozak@redhat.com)
+
 * Thu Jul 03 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.7-1
 - 1114117: Allow subscriptions to be excluded from rhsm-debug data collection (wpoteat@redhat.com)
 - Remove debugging print line from managerlib (ckozak@redhat.com)
