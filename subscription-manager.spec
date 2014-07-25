@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.9
+Version: 1.12.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -446,6 +446,10 @@ fi
 %endif
 
 %changelog
+* Fri Jul 25 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.10-1
+- Revert "1114132: subman-gui and other tools are disabled in container mode." (jesusr@redhat.com)
+- Revert "include dirent.h" (jesusr@redhat.com)
+
 * Fri Jul 25 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.9-1
 - include dirent.h (jesusr@redhat.com)
 
