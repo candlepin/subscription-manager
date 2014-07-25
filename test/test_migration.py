@@ -114,19 +114,6 @@ class TestMigration(fixture.SubManFixture):
         patch.stopall()
         sys.stderr = sys.__stderr__
 
-    @patch('subscription_manager.migrate.migrate.rhsm.config.in_container')
-    def test_migrate_in_container_error_message(self, mock_in_container):
-        sys.stderr = stubs.MockStderr()
-        mock_in_container.return_value = True
-        err_msg = 'rhn-migrate-classic-to-rhsm is disabled when running inside a container.' \
-        ' Please refer to your host system for subscription management.\n'
-        try:
-            migrate.MigrationEngine().main()
-        except SystemExit, e:
-            self.assertEquals(-1, e.code)
-        self.assertEquals(err_msg, sys.stderr.buffer)
-        sys.stderr = sys.__stderr__
-
     def test_mutually_exclusive_options(self):
         try:
             self.engine.main(["--no-auto", "--servicelevel", "foo"])

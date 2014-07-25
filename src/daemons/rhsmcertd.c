@@ -30,7 +30,6 @@
 #include <libintl.h>
 #include <locale.h>
 
-#define RHSM_HOST_CONFIG_DIR "/etc/rhsm-host"
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
 #define UPDATEFILE "/var/run/rhsm/update"
@@ -151,20 +150,6 @@ log_update (int delay)
 		fclose (updatefile);
 	}
 	return TRUE;
-}
-
-/* Checks if this is being run in a container by checking for dir '/etc/rhsm-host'
-   Essentially the same as in_container() from rhsm.config */
-bool
-in_container()
-{
-	DIR* dir = opendir(RHSM_HOST_CONFIG_DIR);
-	if (dir) {
-		closedir(dir);
-		return true;
-	}
-	return false;
-
 }
 
 /* Handle program signals */
@@ -425,10 +410,6 @@ parse_cli_args (int *argc, char *argv[])
 int
 main (int argc, char *argv[])
 {
-	if (in_container()) {
-		fprintf(stderr, "rhsmcertd is disabled when running inside a container. Please refer to your host system for subscription management.\n");
-		return EXIT_FAILURE;
-	}
 	if (signal(SIGTERM, signal_handler) == SIG_ERR) {
 		warn ("Unable to catch SIGTERM\n");
 	}

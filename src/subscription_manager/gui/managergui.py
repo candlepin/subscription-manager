@@ -29,7 +29,6 @@ import webbrowser
 
 import gtk
 import gtk.glade
-import sys
 
 import rhsm.config as config
 
@@ -136,11 +135,6 @@ class MainWindow(widgets.GladeWidget):
                  ent_dir=None, prod_dir=None,
                  auto_launch_registration=False):
         super(MainWindow, self).__init__('mainwindow.glade')
-
-        # Essentially same solution as in the managercli.
-        if config.in_container():
-            sys.stderr.write(_("subscription-manager is disabled when running inside a container. Please refer to your host system for subscription management.\n"))
-            sys.exit(-1)
 
         self.backend = backend or Backend()
         self.identity = require(IDENTITY)
