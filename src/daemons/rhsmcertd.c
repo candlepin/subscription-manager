@@ -29,7 +29,6 @@
 #include <errno.h>
 #include <libintl.h>
 #include <locale.h>
-#include <dirent.h>
 
 #define RHSM_HOST_CONFIG_DIR "/etc/rhsm-host"
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
