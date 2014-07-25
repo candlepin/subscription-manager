@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.8
+Version: 1.12.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -446,6 +446,9 @@ fi
 %endif
 
 %changelog
+* Fri Jul 25 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.9-1
+- include dirent.h (jesusr@redhat.com)
+
 * Fri Jul 25 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.8-1
 - 1039577: simplify reposgui gpgcheck control (ckozak@redhat.com)
 - 1046132: Makes rhsm-icon slightly less annoying. (csnyder@redhat.com)
