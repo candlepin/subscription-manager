@@ -2,6 +2,8 @@ import unittest
 
 from fixture import SubManFixture
 import mock
+from mock import patch
+import sys
 
 import stubs
 from subscription_manager.gui import managergui, registergui
@@ -29,6 +31,19 @@ class TestManagerGuiMainWindow(SubManFixture):
         managergui.MainWindow(backend=stubs.StubBackend(), facts=stubs.StubFacts(),
                               ent_dir=stubs.StubCertificateDirectory([]),
                               prod_dir=stubs.StubProductDirectory([]))
+
+    @patch('subscription_manager.gui.managergui.config.in_container')
+    def test_gui_in_container_error_message(self, mock_in_container):
+        sys.stderr = stubs.MockStderr()
+        mock_in_container.return_value = True
+        err_msg = 'subscription-manager is disabled when running inside a container.'\
+                  ' Please refer to your host system for subscription management.\n'
+        try:
+            managergui.MainWindow()
+        except SystemExit, e:
+            self.assertEquals(-1, e.code)
+        self.assertEquals(err_msg, sys.stderr.buffer)
+        sys.stderr = sys.__stderr__
 
 
 class TestRegisterScreen(unittest.TestCase):

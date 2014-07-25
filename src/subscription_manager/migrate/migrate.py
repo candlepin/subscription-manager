@@ -136,6 +136,11 @@ class UserCredentials(object):
 
 class MigrationEngine(object):
     def __init__(self):
+
+        # Essentially same solution as in the managercli.
+        if rhsm.config.in_container():
+            sys.stderr.write(_("rhn-migrate-classic-to-rhsm is disabled when running inside a container. Please refer to your host system for subscription management.\n"))
+            sys.exit(-1)
         self.rhncfg = initUp2dateConfig()
         self.rhsmcfg = rhsm.config.initConfig()
 
