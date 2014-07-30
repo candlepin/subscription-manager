@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.10
+Version: 1.12.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -446,6 +446,11 @@ fi
 %endif
 
 %changelog
+* Wed Jul 30 2014 Alex Wood <awood@redhat.com> 1.12.11-1
+- 1124726: Man page entry for '--no-subscriptions' option (wpoteat@redhat.com)
+- 1122772: yum repolist now displays warning when appropriate.
+  (csnyder@redhat.com)
+
 * Fri Jul 25 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.10-1
 - Revert "1114132: subman-gui and other tools are disabled in container mode." (jesusr@redhat.com)
 - Revert "include dirent.h" (jesusr@redhat.com)
