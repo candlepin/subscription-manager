@@ -245,7 +245,7 @@ class CliCommand(AbstractCLICommand):
     def _add_url_options(self):
         """ Add options that allow the setting of the server URL."""
         self.parser.add_option("--serverurl", dest="server_url",
-                               default=None, help=_("server URL in the form of https://hostname:443/prefix"))
+                               default=None, help=_("server URL in the form of https://hostname:port/prefix"))
         self.parser.add_option("--insecure", action="store_true",
                                 default=False, help=_("do not check the server SSL certificate against available certificate authorities"))
 
@@ -912,7 +912,7 @@ class RegisterCommand(UserPassCommand):
 
         self._add_url_options()
         self.parser.add_option("--baseurl", dest="base_url",
-                              default=None, help=_("base URL for content in form of https://hostname:443/prefix"))
+                              default=None, help=_("base URL for content in form of https://hostname:port/prefix"))
         self.parser.add_option("--type", dest="consumertype", default="system", metavar="UNITTYPE",
                                help=_("the type of unit to register, defaults to system"))
         self.parser.add_option("--name", dest="consumername", metavar="SYSTEMNAME",
