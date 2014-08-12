@@ -1127,6 +1127,12 @@ class RegisterCommand(UserPassCommand):
     def _get_environment_id(self, cp, owner_key, environment_name):
         # If none specified on CLI and the server doesn't support environments,
         # return None, the registration method will skip environment specification.
+
+        # Activation keys may not be used with environment for registration.
+        # We use a no-auth cp, so we cannot look up environment ids by name
+        if self.options.activation_keys:
+            return None
+
         supports_environments = cp.supports_resource('environments')
         if not environment_name:
             if supports_environments:

@@ -126,6 +126,8 @@ class CliRegistrationTests(SubManFixture):
         cp.supports_resource = Mock(return_value=True)
 
         rc = RegisterCommand()
+        rc.options = Mock()
+        rc.options.activation_keys = None
         env_id = rc._get_environment_id(cp, 'owner', None)
 
         expected = None
@@ -140,6 +142,8 @@ class CliRegistrationTests(SubManFixture):
         cp.supports_resource = Mock(return_value=True)
 
         rc = RegisterCommand()
+        rc.options = Mock()
+        rc.options.activation_keys = None
         env_id = rc._get_environment_id(cp, 'owner', None)
 
         expected = "1234"
@@ -155,6 +159,8 @@ class CliRegistrationTests(SubManFixture):
         cp.supports_resource = Mock(return_value=True)
 
         rc = RegisterCommand()
+        rc.options = Mock()
+        rc.options.activation_keys = None
         rc._prompt_for_environment = Mock(return_value="othername")
         env_id = rc._get_environment_id(cp, 'owner', None)
 
@@ -174,6 +180,8 @@ class CliRegistrationTests(SubManFixture):
         cp.supports_resource = Mock(return_value=True)
 
         rc = RegisterCommand()
+        rc.options = Mock()
+        rc.options.activation_keys = None
         rc._prompt_for_environment = Mock(return_value="not_an_env")
         try:
             rc._get_environment_id(cp, 'owner', None)
