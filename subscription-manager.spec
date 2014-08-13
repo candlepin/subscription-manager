@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.11
+Version: 1.12.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -446,6 +446,10 @@ fi
 %endif
 
 %changelog
+* Wed Aug 13 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.12-1
+- Extract the latest strings from the code (bkearney@redhat.com)
+- 1126724: Use port instead of 443 for the url help text (bkearney@redhat.com)
+
 * Wed Jul 30 2014 Alex Wood <awood@redhat.com> 1.12.11-1
 - 1124726: Man page entry for '--no-subscriptions' option (wpoteat@redhat.com)
 - 1122772: yum repolist now displays warning when appropriate.
