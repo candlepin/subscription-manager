@@ -25,6 +25,14 @@ from subscription_manager import entcertlib
 from subscription_manager import injection as inj
 
 
+class TestDisconnected(SubManFixture):
+    def test_repr(self):
+        # no err_msg, so empty repr
+        discon = entcertlib.Disconnected()
+        err_msg = "%s" % discon
+        self.assertEquals("", err_msg)
+
+
 class TestingUpdateAction(entcertlib.EntCertUpdateAction):
 
     def __init__(self):
