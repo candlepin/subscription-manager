@@ -139,9 +139,8 @@ class Identity(object):
         # XXX shouldn't catch the global exception here, but that's what
         # existsAndValid did, so this is better.
         except Exception, e:
-            # FIXME: can probably remove this exception logging
-            log.exception(e)
-            log.info("Error reading consumer identity cert")
+            log.debug("Reload of consumer identity cert %s raised an exception with msg: %s",
+                      ConsumerIdentity.certpath(), e)
             self.consumer = None
             self.name = None
             self.uuid = None
