@@ -366,6 +366,32 @@ class TestGetServerVersions(fixture.SubManFixture):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
+    def test_get_server_versions_cp_with_status_no_rules_version(self, mock_classic, MockUep):
+        instance = mock_classic.return_value
+        instance.is_registered_with_classic.return_value = False
+        self._inject_mock_valid_consumer()
+        MockUep.supports_resource.return_value = True
+        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
+        sv = get_server_versions(MockUep)
+        self.assertEquals(sv['server-type'], 'Red Hat Subscription Management')
+        self.assertEquals(sv['candlepin'], '101-23423c')
+        self.assertEquals(sv['rules-version'], 'Unknown')
+
+    @patch('rhsm.connection.UEPConnection')
+    @patch('subscription_manager.utils.ClassicCheck')
+    def test_get_server_versions_cp_with_status_no_keys(self, mock_classic, MockUep):
+        instance = mock_classic.return_value
+        instance.is_registered_with_classic.return_value = False
+        self._inject_mock_valid_consumer()
+        MockUep.supports_resource.return_value = True
+        MockUep.getStatus.return_value = {}
+        sv = get_server_versions(MockUep)
+        self.assertEquals(sv['server-type'], 'Red Hat Subscription Management')
+        self.assertEquals(sv['candlepin'], 'Unknown-Unknown')
+        self.assertEquals(sv['rules-version'], 'Unknown')
+
+    @patch('rhsm.connection.UEPConnection')
+    @patch('subscription_manager.utils.ClassicCheck')
     def test_get_server_versions_cp_with_status_and_classic(self, mock_classic, MockUep):
         instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = True

@@ -242,8 +242,9 @@ def get_server_versions(cp, exception_on_timeout=False):
         try:
             if cp.supports_resource("status"):
                 status = cp.getStatus()
-                cp_version = '-'.join([status['version'], status['release']])
-                rules_version = status['rulesVersion']
+                cp_version = '-'.join([status.get('version', _("Unknown")),
+                                       status.get('release', _("Unknown"))])
+                rules_version = status.get('rulesVersion', _("Unknown"))
         except socket.timeout, e:
             log.error("Timeout error while checking server version")
             log.exception(e)
