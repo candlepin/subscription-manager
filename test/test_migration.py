@@ -903,9 +903,9 @@ class TestMigration(SubManFixture):
 
         arg_list = ['subscription-manager',
             'register',
-            '--serverurl=foobar',
             '--username=foo',
             '--password=bar',
+            '--serverurl=foobar',
             '--org=org',
             '--environment=env',
             ]

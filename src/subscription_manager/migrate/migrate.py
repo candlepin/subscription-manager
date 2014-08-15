@@ -177,6 +177,9 @@ class MigrationEngine(object):
             help=_("organization to register to"))
         self.parser.add_option("--environment", dest='environment',
             help=_("environment to register to"))
+        self.parser.add_option("--consumerid", help=_("register with the ID of an existing consumer"))
+        self.parser.add_option("--activationkey", action="append", default=[], help=_("activation key to use "
+            "for registration (can be provided more than once)"))
 
     def validate_options(self):
         if self.options.servicelevel and self.options.noauto:
@@ -193,10 +196,7 @@ class MigrationEngine(object):
 
     def is_hosted(self):
         hostname = self.rhsmcfg.get('server', 'hostname')
-        if re.search('subscription\.rhn\.(.*\.)*redhat\.com', hostname):
-            return True  # re.search doesn't return a boolean
-        else:
-            return False
+        return bool(re.search('subscription\.rhn\.(.*\.)*redhat\.com', hostname))
 
     def get_auth(self):
         self.rhncreds = self.authenticate(self.options.redhatuser, self.options.redhatpassword,
@@ -639,12 +639,15 @@ class MigrationEngine(object):
         print _("Attempting to register system to Red Hat Subscription Management...")
         cmd = ['subscription-manager', 'register', '--username=' + credentials.username, '--password=' + credentials.password]
         if self.options.serverurl:
-            cmd.insert(2, '--serverurl=' + self.options.serverurl)
+            cmd.append('--serverurl=' + self.options.serverurl)
 
         if org:
             cmd.append('--org=' + org)
         if environment:
             cmd.append('--environment=' + environment)
+
+        if self.options.consumerid:
+            cmd.append('--consumerid=' + self.options.consumerid)
 
         result = subprocess.call(cmd)
 
