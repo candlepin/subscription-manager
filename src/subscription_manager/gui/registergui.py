@@ -181,16 +181,14 @@ class RegisterScreen(widgets.GladeWidget):
         else:
             self.register_notebook.set_current_page(screen + 1)
 
-        try:
-            if get_state() == REGISTERING:
+        if get_state() == REGISTERING:
+            if not isinstance(self.register_dialog, gtk.VBox):
                 self.register_dialog.set_title(_("System Registration"))
-                self.progress_label.set_markup(_("<b>Registering</b>"))
-            elif get_state() == SUBSCRIBING:
+            self.progress_label.set_markup(_("<b>Registering</b>"))
+        elif get_state() == SUBSCRIBING:
+            if not isinstance(self.register_dialog, gtk.VBox):
                 self.register_dialog.set_title(_("Subscription Attachment"))
-                self.progress_label.set_markup(_("<b>Attaching</b>"))
-        except:
-            # In firstboot setting title causes a traceback.  bz 1060917
-            pass
+            self.progress_label.set_markup(_("<b>Attaching</b>"))
 
     def _set_register_label(self, screen):
         button_label = self._screens[screen].button_label
@@ -281,7 +279,6 @@ class AutobindWizard(RegisterScreen):
 
     def __init__(self, backend, facts, parent):
         super(AutobindWizard, self).__init__(backend, facts, parent)
-        set_state(SUBSCRIBING)
 
     def show(self):
         super(AutobindWizard, self).show()
@@ -348,7 +345,6 @@ class PerformRegisterScreen(NoGuiScreen):
             return
 
         try:
-            set_state(SUBSCRIBING)
             managerlib.persist_consumer_cert(new_account)
             self._parent.backend.cs.force_cert_check()  # Ensure there isn't much wait time
 
@@ -576,6 +572,7 @@ class SelectSLAScreen(Screen):
             self._parent.finish_registration(failed=True)
 
     def pre(self):
+        set_state(SUBSCRIBING)
         self._parent.async.find_service_levels(self._parent.identity,
                                                self._parent.facts,
                                                self._on_get_service_levels_cb)
