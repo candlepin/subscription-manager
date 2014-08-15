@@ -11,7 +11,6 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-#
 
 import re
 import rhsm.config
@@ -20,9 +19,10 @@ import stubs
 import sys
 import unittest
 
-from mock import patch, NonCallableMock, MagicMock, call
+from mock import patch, NonCallableMock, MagicMock, Mock, call
 from M2Crypto import SSL
 from fixture import Capture, SubManFixture
+from optparse import OptionParser
 
 from subscription_manager import injection as inj
 from subscription_manager.migrate import migrate
@@ -61,18 +61,29 @@ class TestMenu(unittest.TestCase):
 
 
 class TestMigration(SubManFixture):
-    def create_options(self, *options):
+    def create_options(self, options=None):
         """
-        Create a mock options object.  Send in a dictionary with the option names and values
-        and they will be set.  For options that should be None, just send in a list of the
-        option names.
+        Create a mock options object.  Send in a dictionary with the option destination and values
+        and they will be set.  Note that you must use the destination and not just the option name.
+        For example, if the option is --my-option, the destination (unless customized) will be
+        my_option.
         """
-        mock_opts = MagicMock()
-        for entry in options:
-            if isinstance(entry, dict):
-                [setattr(mock_opts, k, v) for k, v in entry.items()]
-            else:
-                [setattr(mock_opts, x, None) for x in entry]
+        # Send in a fresh OptionParser because if we try to add the same option twice, we get
+        # an error.
+        with patch.object(self.engine, 'parser', new_callable=OptionParser) as p:
+            self.engine.add_parser_options()
+            # OptionParser throws in a None as one of the destinations for some reason
+            valid_options = filter(None, [o.dest for o in p.option_list])
+
+        # Set the list of acceptable attributes for this Mock.
+        mock_opts = Mock(spec=valid_options)
+        # Set everything to None by default since that's what OptionParser does
+        map(lambda x: setattr(mock_opts, x, None), valid_options)
+
+        if not options:
+            options = {}
+        map(lambda (k, v): setattr(mock_opts, k, v), options.items())
+
         return mock_opts
 
     def setUp(self):
@@ -146,8 +157,7 @@ class TestMigration(SubManFixture):
     @patch("__builtin__.raw_input", autospec=True)
     @patch("getpass.getpass", autospec=True)
     def test_get_auth_with_serverurl(self, mock_getpass, mock_input):
-        self.engine.options = self.create_options({'serverurl': 'foobar'},
-            ["redhatuser", "redhatpassword", "subserviceuser", "subservicepassword"])
+        self.engine.options = self.create_options({'serverurl': 'foobar'})
 
         mock_input.side_effect = iter(["rhn_username", "se_username"])
         mock_getpass.side_effect = iter(["rhn_password", "se_password"])
@@ -161,8 +171,7 @@ class TestMigration(SubManFixture):
     @patch("__builtin__.raw_input", autospec=True)
     @patch("getpass.getpass", autospec=True)
     def test_get_auth_without_serverurl_and_not_hosted(self, mock_getpass, mock_input):
-        self.engine.options = self.create_options(["serverurl", "redhatuser",
-            "redhatpassword", "subserviceuser", "subservicepassword"])
+        self.engine.options = self.create_options()
 
         mock_input.side_effect = iter(["rhn_username", "se_username"])
         mock_getpass.side_effect = iter(["rhn_password", "se_password"])
@@ -177,8 +186,7 @@ class TestMigration(SubManFixture):
     @patch("__builtin__.raw_input", autospec=True)
     @patch("getpass.getpass", autospec=True)
     def test_get_auth_without_serverurl_and_is_hosted(self, mock_getpass, mock_input):
-        self.engine.options = self.create_options(["serverurl", "redhatuser",
-            "redhatpassword", "subserviceuser", "subservicepassword"])
+        self.engine.options = self.create_options()
 
         mock_input.return_value = "rhn_username"
         mock_getpass.return_value = "rhn_password"
@@ -192,8 +200,7 @@ class TestMigration(SubManFixture):
 
     def test_get_auth_with_provided_rhn_creds(self):
         self.engine.options = self.create_options(
-            {'redhatuser': 'rhn_username', 'redhatpassword': 'rhn_password'},
-            ["serverurl", "subserviceuser", "subservicepassword"])
+            {'redhatuser': 'rhn_username', 'redhatpassword': 'rhn_password'})
         self.engine.is_hosted = lambda: True
         self.engine.get_auth()
         self.assertEquals(self.engine.rhncreds.username, "rhn_username")
@@ -204,8 +211,7 @@ class TestMigration(SubManFixture):
     @patch("getpass.getpass", autospec=True)
     def test_gets_password_when_only_username_give(self, mock_getpass):
         self.engine.options = self.create_options(
-            {'redhatuser': 'rhn_username'},
-            ["serverurl", "redhatpassword", "subserviceuser", "subservicepassword"])
+            {'redhatuser': 'rhn_username'})
 
         mock_getpass.return_value = "rhn_password"
         self.engine.is_hosted = lambda: True
@@ -219,8 +225,7 @@ class TestMigration(SubManFixture):
     def test_gets_se_password_when_only_se_username_give(self, mock_getpass):
         self.engine.options = self.create_options(
             {'redhatuser': 'rhn_username', 'redhatpassword': 'rhn_password',
-                'subserviceuser': 'se_username'},
-            ["serverurl", "subservicepassword"])
+                'subserviceuser': 'se_username'})
 
         mock_getpass.return_value = "se_password"
         self.engine.is_hosted = lambda: False
@@ -233,8 +238,7 @@ class TestMigration(SubManFixture):
     def test_all_auth_provided(self):
         self.engine.options = self.create_options(
             {'redhatuser': 'rhn_username', 'redhatpassword': 'rhn_password',
-                'subserviceuser': 'se_username', 'subservicepassword': 'se_password'},
-            ["serverurl"])
+                'subserviceuser': 'se_username', 'subservicepassword': 'se_password'})
 
         self.engine.is_hosted = lambda: False
         self.engine.get_auth()
@@ -325,7 +329,7 @@ class TestMigration(SubManFixture):
         self.assertEquals(None, self.engine.proxy_pass)
 
     def _setup_rhsmcfg_mocks(self):
-        self.engine.options = self.create_options(['serverurl'])
+        self.engine.options = self.create_options()
 
         self.engine.rhsmcfg = MagicMock()
         self.engine.rhsmcfg.get = MagicMock(side_effect=[
@@ -402,7 +406,7 @@ class TestMigration(SubManFixture):
             self.fail("No exception raised")
 
     def test_one_org(self):
-        self.engine.options = self.create_options(['org'])
+        self.engine.options = self.create_options()
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [{"key": "my_org", "displayName": "My Org"}]
         org = self.engine.get_org("some_username")
@@ -410,7 +414,7 @@ class TestMigration(SubManFixture):
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_org_key(self, mock_input):
-        self.engine.options = self.create_options(['org'])
+        self.engine.options = self.create_options()
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
@@ -422,7 +426,7 @@ class TestMigration(SubManFixture):
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_org_name(self, mock_input):
-        self.engine.options = self.create_options(['org'])
+        self.engine.options = self.create_options()
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
@@ -434,7 +438,7 @@ class TestMigration(SubManFixture):
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_bad_org(self, mock_input):
-        self.engine.options = self.create_options(['org'])
+        self.engine.options = self.create_options()
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
@@ -482,14 +486,14 @@ class TestMigration(SubManFixture):
             self.fail("No exception raised")
 
     def test_environment_with_no_resource(self):
-        self.engine.options = self.create_options(['environment'])
+        self.engine.options = self.create_options()
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = False
         env = self.engine.get_environment("some_org")
         self.assertEquals(env, None)
 
     def test_single_environment_requires_no_input(self):
-        self.engine.options = self.create_options(['environment'])
+        self.engine.options = self.create_options()
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
 
@@ -503,7 +507,7 @@ class TestMigration(SubManFixture):
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_environment_name(self, mock_input):
-        self.engine.options = self.create_options(['environment'])
+        self.engine.options = self.create_options()
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
 
@@ -519,7 +523,7 @@ class TestMigration(SubManFixture):
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_environment_label(self, mock_input):
-        self.engine.options = self.create_options(['environment'])
+        self.engine.options = self.create_options()
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
 
@@ -535,7 +539,7 @@ class TestMigration(SubManFixture):
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_environment_displayName(self, mock_input):
-        self.engine.options = self.create_options(['environment'])
+        self.engine.options = self.create_options()
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
 
@@ -551,7 +555,7 @@ class TestMigration(SubManFixture):
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_bad_environment(self, mock_input):
-        self.engine.options = self.create_options(['environment'])
+        self.engine.options = self.create_options()
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
         self.engine.cp.getEnvironmentList = MagicMock()
@@ -734,7 +738,7 @@ class TestMigration(SubManFixture):
         subscribed_channels = ["a", "b", "c", "d"]
         self.engine.read_channel_cert_mapping = stub_read_channel_cert_mapping
         self.engine.get_release = stub_get_release
-        self.engine.options = self.create_options(['force'])
+        self.engine.options = self.create_options()
 
         try:
             self.engine.deploy_prod_certificates(subscribed_channels)
