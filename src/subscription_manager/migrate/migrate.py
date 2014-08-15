@@ -546,7 +546,7 @@ class MigrationEngine(object):
         #Hack to address BZ 853233
         product_dir = inj.require(inj.PROD_DIR)
         if os.path.isfile(os.path.join(product_dir.path, "68.pem")) and \
-            os.path.isfile(os.path.join(product_dir.path), "71.pem"):
+            os.path.isfile(os.path.join(product_dir.path, "71.pem")):
             try:
                 os.remove(os.path.join(product_dir.path, "68.pem"))
                 self.db.delete("68")
