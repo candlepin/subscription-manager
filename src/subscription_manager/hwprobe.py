@@ -111,7 +111,7 @@ class Hardware:
         self.prefix = prefix or ''
         self.testing = testing or False
 
-        self.no_dmi_arches = ['s390x', 'ppc64', 'ppc']
+        self.no_dmi_arches = ['s390x', 'ppc64', 'ppc64le', 'ppc']
         # we need this so we can decide which of the
         # arch specific code bases to follow
         self.arch = self.get_arch()
