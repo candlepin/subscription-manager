@@ -13,20 +13,17 @@
 # in this software or its documentation.
 #
 
-from mock import patch, NonCallableMock, MagicMock, call
-from M2Crypto import SSL
 import re
-import sys
+import rhsm.config
 import StringIO
+import stubs
+import sys
 import unittest
 
-import stubs
+from mock import patch, NonCallableMock, MagicMock, call
+from M2Crypto import SSL
+from fixture import Capture, SubManFixture
 
-from fixture import Capture
-import fixture
-
-
-import rhsm.config
 from subscription_manager import injection as inj
 from subscription_manager.migrate import migrate
 from subscription_manager import identity
@@ -53,7 +50,7 @@ class TestMenu(unittest.TestCase):
     def test_get_item(self):
         self.assertEqual("Hello", self.menu._get_item(1))
 
-    @patch("__builtin__.raw_input")
+    @patch("__builtin__.raw_input", autospec=True)
     @patch.object(migrate.Menu, "display_invalid")
     def test_choose(self, mock_display_invalid, mock_input):
         mock_input.side_effect = ["9000", "1"]
@@ -63,7 +60,7 @@ class TestMenu(unittest.TestCase):
         self.assertEqual(choice, "Hello")
 
 
-class TestMigration(fixture.SubManFixture):
+class TestMigration(SubManFixture):
     def create_options(self, *options):
         """
         Create a mock options object.  Send in a dictionary with the option names and values
@@ -122,18 +119,18 @@ class TestMigration(fixture.SubManFixture):
         else:
             self.fail("No exception raised")
 
-    @patch.object(rhsm.config.RhsmConfigParser, "get")
+    @patch.object(rhsm.config.RhsmConfigParser, "get", autospec=True)
     def test_is_hosted(self, mock_get):
         mock_get.return_value = "subscription.rhn.redhat.com"
         self.assertTrue(self.engine.is_hosted())
 
-    @patch.object(rhsm.config.RhsmConfigParser, "get")
+    @patch.object(rhsm.config.RhsmConfigParser, "get", autospec=True)
     def test_is_not_hosted(self, mock_get):
         mock_get.return_value = "subscription.example.com"
         self.assertFalse(self.engine.is_hosted())
 
-    @patch("__builtin__.raw_input")
-    @patch("getpass.getpass")
+    @patch("__builtin__.raw_input", autospec=True)
+    @patch("getpass.getpass", autospec=True)
     def test_authenticate(self, mock_getpass, mock_input):
         mock_input.return_value = "username"
         mock_getpass.return_value = "password"
@@ -146,14 +143,14 @@ class TestMigration(fixture.SubManFixture):
         self.assertEquals(creds.username, "username")
         self.assertEquals(creds.password, "password")
 
-    @patch("__builtin__.raw_input")
-    @patch("getpass.getpass")
+    @patch("__builtin__.raw_input", autospec=True)
+    @patch("getpass.getpass", autospec=True)
     def test_get_auth_with_serverurl(self, mock_getpass, mock_input):
         self.engine.options = self.create_options({'serverurl': 'foobar'},
             ["redhatuser", "redhatpassword", "subserviceuser", "subservicepassword"])
 
-        mock_input.side_effect = ["rhn_username", "se_username"]
-        mock_getpass.side_effect = ["rhn_password", "se_password"]
+        mock_input.side_effect = iter(["rhn_username", "se_username"])
+        mock_getpass.side_effect = iter(["rhn_password", "se_password"])
 
         self.engine.get_auth()
         self.assertEquals(self.engine.rhncreds.username, "rhn_username")
@@ -161,14 +158,14 @@ class TestMigration(fixture.SubManFixture):
         self.assertEquals(self.engine.secreds.username, "se_username")
         self.assertEquals(self.engine.secreds.password, "se_password")
 
-    @patch("__builtin__.raw_input")
-    @patch("getpass.getpass")
+    @patch("__builtin__.raw_input", autospec=True)
+    @patch("getpass.getpass", autospec=True)
     def test_get_auth_without_serverurl_and_not_hosted(self, mock_getpass, mock_input):
         self.engine.options = self.create_options(["serverurl", "redhatuser",
             "redhatpassword", "subserviceuser", "subservicepassword"])
 
-        mock_input.side_effect = ["rhn_username", "se_username"]
-        mock_getpass.side_effect = ["rhn_password", "se_password"]
+        mock_input.side_effect = iter(["rhn_username", "se_username"])
+        mock_getpass.side_effect = iter(["rhn_password", "se_password"])
 
         self.engine.is_hosted = lambda: False
         self.engine.get_auth()
@@ -177,8 +174,8 @@ class TestMigration(fixture.SubManFixture):
         self.assertEquals(self.engine.secreds.username, "se_username")
         self.assertEquals(self.engine.secreds.password, "se_password")
 
-    @patch("__builtin__.raw_input")
-    @patch("getpass.getpass")
+    @patch("__builtin__.raw_input", autospec=True)
+    @patch("getpass.getpass", autospec=True)
     def test_get_auth_without_serverurl_and_is_hosted(self, mock_getpass, mock_input):
         self.engine.options = self.create_options(["serverurl", "redhatuser",
             "redhatpassword", "subserviceuser", "subservicepassword"])
@@ -204,7 +201,7 @@ class TestMigration(fixture.SubManFixture):
         self.assertEquals(self.engine.secreds.username, "rhn_username")
         self.assertEquals(self.engine.secreds.password, "rhn_password")
 
-    @patch("getpass.getpass")
+    @patch("getpass.getpass", autospec=True)
     def test_gets_password_when_only_username_give(self, mock_getpass):
         self.engine.options = self.create_options(
             {'redhatuser': 'rhn_username'},
@@ -218,7 +215,7 @@ class TestMigration(fixture.SubManFixture):
         self.assertEquals(self.engine.secreds.username, "rhn_username")
         self.assertEquals(self.engine.secreds.password, "rhn_password")
 
-    @patch("getpass.getpass")
+    @patch("getpass.getpass", autospec=True)
     def test_gets_se_password_when_only_se_username_give(self, mock_getpass):
         self.engine.options = self.create_options(
             {'redhatuser': 'rhn_username', 'redhatpassword': 'rhn_password',
@@ -411,7 +408,7 @@ class TestMigration(fixture.SubManFixture):
         org = self.engine.get_org("some_username")
         self.assertEquals(org, "my_org")
 
-    @patch("__builtin__.raw_input")
+    @patch("__builtin__.raw_input", autospec=True)
     def test_enter_org_key(self, mock_input):
         self.engine.options = self.create_options(['org'])
         self.engine.cp.getOwnerList = MagicMock()
@@ -423,7 +420,7 @@ class TestMigration(fixture.SubManFixture):
         org = self.engine.get_org("some_username")
         self.assertEquals(org, "my_org")
 
-    @patch("__builtin__.raw_input")
+    @patch("__builtin__.raw_input", autospec=True)
     def test_enter_org_name(self, mock_input):
         self.engine.options = self.create_options(['org'])
         self.engine.cp.getOwnerList = MagicMock()
@@ -435,7 +432,7 @@ class TestMigration(fixture.SubManFixture):
         org = self.engine.get_org("some_username")
         self.assertEquals(org, "my_org")
 
-    @patch("__builtin__.raw_input")
+    @patch("__builtin__.raw_input", autospec=True)
     def test_enter_bad_org(self, mock_input):
         self.engine.options = self.create_options(['org'])
         self.engine.cp.getOwnerList = MagicMock()
@@ -504,7 +501,7 @@ class TestMigration(fixture.SubManFixture):
         env = self.engine.get_environment("some_org")
         self.assertEquals(env, "My Environment")
 
-    @patch("__builtin__.raw_input")
+    @patch("__builtin__.raw_input", autospec=True)
     def test_enter_environment_name(self, mock_input):
         self.engine.options = self.create_options(['environment'])
         self.engine.cp.supports_resource = MagicMock()
@@ -520,7 +517,7 @@ class TestMigration(fixture.SubManFixture):
         env = self.engine.get_environment("some_org")
         self.assertEquals(env, "My Environment")
 
-    @patch("__builtin__.raw_input")
+    @patch("__builtin__.raw_input", autospec=True)
     def test_enter_environment_label(self, mock_input):
         self.engine.options = self.create_options(['environment'])
         self.engine.cp.supports_resource = MagicMock()
@@ -536,7 +533,7 @@ class TestMigration(fixture.SubManFixture):
         env = self.engine.get_environment("some_org")
         self.assertEquals(env, "My Environment")
 
-    @patch("__builtin__.raw_input")
+    @patch("__builtin__.raw_input", autospec=True)
     def test_enter_environment_displayName(self, mock_input):
         self.engine.options = self.create_options(['environment'])
         self.engine.cp.supports_resource = MagicMock()
@@ -552,7 +549,7 @@ class TestMigration(fixture.SubManFixture):
         env = self.engine.get_environment("some_org")
         self.assertEquals(env, "My Environment")
 
-    @patch("__builtin__.raw_input")
+    @patch("__builtin__.raw_input", autospec=True)
     def test_enter_bad_environment(self, mock_input):
         self.engine.options = self.create_options(['environment'])
         self.engine.cp.supports_resource = MagicMock()
@@ -666,13 +663,13 @@ class TestMigration(fixture.SubManFixture):
             ]
         self.engine.check_for_conflicting_channels(channels)
 
-    @patch("__builtin__.open")
+    @patch("__builtin__.open", autospec=True)
     def test_get_release(self, mock_open):
         mock_open.return_value = StringIO.StringIO("Red Hat Enterprise Linux Server release 6.3 (Santiago)")
         release = self.engine.get_release()
         self.assertEquals(release, "RHEL-6")
 
-    @patch("__builtin__.open")
+    @patch("__builtin__.open", autospec=True)
     def test_read_channel_cert_mapping(self, mock_open):
         mock_open.return_value.readlines.return_value = [
             "xyz: abc\n",
@@ -746,7 +743,7 @@ class TestMigration(fixture.SubManFixture):
         else:
             self.fail("No exception raised")
 
-    @patch("shutil.copy2")
+    @patch("shutil.copy2", autospec=True)
     def test_deploy_prod_certificates(self, mock_shutil):
         mock_product_directory = NonCallableMock(spec=ProductDirectory, path="/some/path")
         inj.provide(inj.PROD_DIR, mock_product_directory)
@@ -769,28 +766,28 @@ class TestMigration(fixture.SubManFixture):
         self.engine.db.add.assert_called_with("1", "a")
         self.engine.db.write.assert_called_with()
 
-    @patch("os.path.isfile")
-    @patch("os.remove")
+    @patch("os.path.isfile", autospec=True)
+    @patch("os.remove", autospec=True)
     def test_clean_up_remove_68_pem(self, mock_remove, mock_isfile):
         mock_product_directory = NonCallableMock(spec=ProductDirectory)
         mock_product_directory.path = "/some/path"
         inj.provide(inj.PROD_DIR, mock_product_directory)
         self.engine.db = MagicMock()
-        mock_isfile.side_effect = [True, True]
+        mock_isfile.side_effect = iter([True, True])
         self.engine.clean_up([])
         mock_remove.assert_called_with("/some/path/68.pem")
         self.engine.db.delete.assert_called_with("68")
         self.engine.db.write.assert_called_with()
 
-    @patch("os.path.isfile")
-    @patch("os.remove")
+    @patch("os.path.isfile", autospec=True)
+    @patch("os.remove", autospec=True)
     def test_clean_up_remove_180_pem(self, mock_remove, mock_isfile):
         mock_product_directory = NonCallableMock(spec=ProductDirectory)
         mock_product_directory.path = "/some/path"
         inj.provide(inj.PROD_DIR, mock_product_directory)
 
         self.engine.db = MagicMock()
-        mock_isfile.side_effect = [False, False]
+        mock_isfile.side_effect = iter([False, False])
         self.engine.clean_up([
             "rhel-i386-client-dts-5-beta",
             "rhel-i386-client-dts-5",
@@ -815,7 +812,7 @@ class TestMigration(fixture.SubManFixture):
         for channel in self.single_mapped_channels:
             self.assertTrue(re.match(regex, channel))
 
-    @patch("shutil.move")
+    @patch("shutil.move", autospec=True)
     def test_unregister_from_rhn_exception(self, mock_shutil):
         rhn_config = {"systemIdPath": "/some/path"}
         self.engine.rhncfg = rhn_config
@@ -834,7 +831,7 @@ class TestMigration(fixture.SubManFixture):
         self.engine.unregister_system_from_rhn_classic(sc, None)
         mock_shutil.assert_called_with("/some/path", "/some/path.save")
 
-    @patch("__builtin__.open")
+    @patch("__builtin__.open", autospec=True)
     def test_disable_yum_rhn_plugin(self, mock_open):
         mo = mock_open.return_value
         mo.readlines.return_value = [
@@ -852,7 +849,7 @@ class TestMigration(fixture.SubManFixture):
             ]
         self.assertTrue(mo.write.call_args_list == expected)
 
-    @patch("os.remove")
+    @patch("os.remove", autospec=True)
     def test_unregister_from_rhn(self, mock_remove):
         rhn_config = {"systemIdPath": "/some/path"}
         self.engine.rhncfg = rhn_config
@@ -871,7 +868,7 @@ class TestMigration(fixture.SubManFixture):
         self.engine.unregister_system_from_rhn_classic(sc, None)
         mock_remove.assert_called_with("/some/path")
 
-    @patch("subprocess.call")
+    @patch("subprocess.call", autospec=True)
     def test_register_failure(self, mock_subprocess):
         self.engine.options = self.create_options({'serverurl': 'foobar'})
 
@@ -887,7 +884,7 @@ class TestMigration(fixture.SubManFixture):
         else:
             self.fail("No exception raised")
 
-    @patch("subprocess.call")
+    @patch("subprocess.call", autospec=True)
     @patch.object(identity.ConsumerIdentity, "read")
     def test_register(self, mock_read, mock_subprocess):
         self.engine.options = self.create_options({'serverurl': 'foobar'})
@@ -925,9 +922,9 @@ class TestMigration(fixture.SubManFixture):
         service_level = self.engine.select_service_level("my_org", "Something Else")
         self.assertEquals(service_level, "Premium")
 
-    @patch("subprocess.call")
-    @patch("os.getenv")
-    @patch("os.path.exists")
+    @patch("subprocess.call", autospec=True)
+    @patch("os.getenv", autospec=True)
+    @patch("os.path.exists", autospec=True)
     def test_subscribe(self, mock_exists, mock_getenv, mock_subprocess):
         self.engine.options = self.create_options({'gui': False})
         mock_getenv.return_value = True
@@ -964,7 +961,7 @@ class TestMigration(fixture.SubManFixture):
         self.assertTrue(mrf.set.call_args_list == expected)
         mrf.write.assert_called_with()
 
-    @patch("__builtin__.file")
+    @patch("__builtin__.file", autospec=True)
     def test_get_system_id(self, mock_file):
         rhn_config = {
             "systemIdPath": "/tmp/foo",
