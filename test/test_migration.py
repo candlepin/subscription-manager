@@ -68,12 +68,9 @@ class TestMigration(SubManFixture):
         For example, if the option is --my-option, the destination (unless customized) will be
         my_option.
         """
-        # Send in a fresh OptionParser because if we try to add the same option twice, we get
-        # an error.
-        with patch.object(self.engine, 'parser', new_callable=OptionParser) as p:
-            self.engine.add_parser_options()
-            # OptionParser throws in a None as one of the destinations for some reason
-            valid_options = filter(None, [o.dest for o in p.option_list])
+        p = OptionParser()
+        migrate.add_parser_options(p)
+        valid_options = filter(None, [o.dest for o in p.option_list])
 
         # Set the list of acceptable attributes for this Mock.
         mock_opts = Mock(spec=valid_options)
@@ -90,7 +87,7 @@ class TestMigration(SubManFixture):
         super(TestMigration, self).setUp()
         migrate.initUp2dateConfig = lambda: {}
         patch('subscription_manager.migrate.migrate.ProductDatabase').start()
-        self.engine = migrate.MigrationEngine()
+        self.engine = migrate.MigrationEngine(self.create_options())
         self.engine.cp = stubs.StubUEP()
 
         # These tests print a lot to stdout and stderr
@@ -124,7 +121,10 @@ class TestMigration(SubManFixture):
 
     def test_mutually_exclusive_options(self):
         try:
-            self.engine.main(["--no-auto", "--servicelevel", "foo"])
+            parser = OptionParser()
+            migrate.add_parser_options(parser)
+            (options, args) = parser.parse_args(["--no-auto", "--servicelevel", "foo"])
+            migrate.validate_options(options)
         except SystemExit, e:
             self.assertEquals(e.code, 1)
         else:
@@ -133,12 +133,12 @@ class TestMigration(SubManFixture):
     @patch.object(rhsm.config.RhsmConfigParser, "get", autospec=True)
     def test_is_hosted(self, mock_get):
         mock_get.return_value = "subscription.rhn.redhat.com"
-        self.assertTrue(self.engine.is_hosted())
+        self.assertTrue(migrate.is_hosted())
 
     @patch.object(rhsm.config.RhsmConfigParser, "get", autospec=True)
     def test_is_not_hosted(self, mock_get):
         mock_get.return_value = "subscription.example.com"
-        self.assertFalse(self.engine.is_hosted())
+        self.assertFalse(migrate.is_hosted())
 
     @patch("__builtin__.raw_input", autospec=True)
     @patch("getpass.getpass", autospec=True)
@@ -157,95 +157,95 @@ class TestMigration(SubManFixture):
     @patch("__builtin__.raw_input", autospec=True)
     @patch("getpass.getpass", autospec=True)
     def test_get_auth_with_serverurl(self, mock_getpass, mock_input):
-        self.engine.options = self.create_options({'serverurl': 'foobar'})
+        self.engine.options = self.create_options({'destination_url': 'foobar'})
 
-        mock_input.side_effect = iter(["rhn_username", "se_username"])
-        mock_getpass.side_effect = iter(["rhn_password", "se_password"])
+        mock_input.side_effect = iter(["legacy_username", "destination_username"])
+        mock_getpass.side_effect = iter(["legacy_password", "destination_password"])
 
         self.engine.get_auth()
-        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
-        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
-        self.assertEquals(self.engine.secreds.username, "se_username")
-        self.assertEquals(self.engine.secreds.password, "se_password")
+        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEquals(self.engine.destination_creds.username, "destination_username")
+        self.assertEquals(self.engine.destination_creds.password, "destination_password")
 
     @patch("__builtin__.raw_input", autospec=True)
     @patch("getpass.getpass", autospec=True)
     def test_get_auth_without_serverurl_and_not_hosted(self, mock_getpass, mock_input):
         self.engine.options = self.create_options()
 
-        mock_input.side_effect = iter(["rhn_username", "se_username"])
-        mock_getpass.side_effect = iter(["rhn_password", "se_password"])
+        mock_input.side_effect = iter(["legacy_username", "destination_username"])
+        mock_getpass.side_effect = iter(["legacy_password", "destination_password"])
 
-        self.engine.is_hosted = lambda: False
+        self.engine.is_hosted = False
         self.engine.get_auth()
-        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
-        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
-        self.assertEquals(self.engine.secreds.username, "se_username")
-        self.assertEquals(self.engine.secreds.password, "se_password")
+        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEquals(self.engine.destination_creds.username, "destination_username")
+        self.assertEquals(self.engine.destination_creds.password, "destination_password")
 
     @patch("__builtin__.raw_input", autospec=True)
     @patch("getpass.getpass", autospec=True)
     def test_get_auth_without_serverurl_and_is_hosted(self, mock_getpass, mock_input):
         self.engine.options = self.create_options()
 
-        mock_input.return_value = "rhn_username"
-        mock_getpass.return_value = "rhn_password"
+        mock_input.return_value = "legacy_username"
+        mock_getpass.return_value = "legacy_password"
 
-        self.engine.is_hosted = lambda: True
+        self.engine.is_hosted = True
         self.engine.get_auth()
-        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
-        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
-        self.assertEquals(self.engine.secreds.username, "rhn_username")
-        self.assertEquals(self.engine.secreds.password, "rhn_password")
+        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEquals(self.engine.destination_creds.username, "legacy_username")
+        self.assertEquals(self.engine.destination_creds.password, "legacy_password")
 
     def test_get_auth_with_provided_rhn_creds(self):
         self.engine.options = self.create_options(
-            {'redhatuser': 'rhn_username', 'redhatpassword': 'rhn_password'})
-        self.engine.is_hosted = lambda: True
+            {'legacy_user': 'legacy_username', 'legacy_password': 'legacy_password'})
+        self.engine.is_hosted = True
         self.engine.get_auth()
-        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
-        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
-        self.assertEquals(self.engine.secreds.username, "rhn_username")
-        self.assertEquals(self.engine.secreds.password, "rhn_password")
+        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEquals(self.engine.destination_creds.username, "legacy_username")
+        self.assertEquals(self.engine.destination_creds.password, "legacy_password")
 
     @patch("getpass.getpass", autospec=True)
     def test_gets_password_when_only_username_give(self, mock_getpass):
         self.engine.options = self.create_options(
-            {'redhatuser': 'rhn_username'})
+            {'legacy_user': 'legacy_username'})
 
-        mock_getpass.return_value = "rhn_password"
-        self.engine.is_hosted = lambda: True
+        mock_getpass.return_value = "legacy_password"
+        self.engine.is_hosted = True
         self.engine.get_auth()
-        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
-        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
-        self.assertEquals(self.engine.secreds.username, "rhn_username")
-        self.assertEquals(self.engine.secreds.password, "rhn_password")
+        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEquals(self.engine.destination_creds.username, "legacy_username")
+        self.assertEquals(self.engine.destination_creds.password, "legacy_password")
 
     @patch("getpass.getpass", autospec=True)
-    def test_gets_se_password_when_only_se_username_give(self, mock_getpass):
+    def test_gets_destination_password_when_only_destination_username_given(self, mock_getpass):
         self.engine.options = self.create_options(
-            {'redhatuser': 'rhn_username', 'redhatpassword': 'rhn_password',
-                'subserviceuser': 'se_username'})
+            {'legacy_user': 'legacy_username', 'legacy_password': 'legacy_password',
+                'destination_user': 'destination_username'})
 
-        mock_getpass.return_value = "se_password"
-        self.engine.is_hosted = lambda: False
+        mock_getpass.return_value = "destination_password"
+        self.engine.is_hosted = False
         self.engine.get_auth()
-        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
-        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
-        self.assertEquals(self.engine.secreds.username, "se_username")
-        self.assertEquals(self.engine.secreds.password, "se_password")
+        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEquals(self.engine.destination_creds.username, "destination_username")
+        self.assertEquals(self.engine.destination_creds.password, "destination_password")
 
     def test_all_auth_provided(self):
         self.engine.options = self.create_options(
-            {'redhatuser': 'rhn_username', 'redhatpassword': 'rhn_password',
-                'subserviceuser': 'se_username', 'subservicepassword': 'se_password'})
+            {'legacy_user': 'legacy_username', 'legacy_password': 'legacy_password',
+                'destination_user': 'destination_username', 'destination_password': 'destination_password'})
 
-        self.engine.is_hosted = lambda: False
+        self.engine.is_hosted = False
         self.engine.get_auth()
-        self.assertEquals(self.engine.rhncreds.username, "rhn_username")
-        self.assertEquals(self.engine.rhncreds.password, "rhn_password")
-        self.assertEquals(self.engine.secreds.username, "se_username")
-        self.assertEquals(self.engine.secreds.password, "se_password")
+        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEquals(self.engine.destination_creds.username, "destination_username")
+        self.assertEquals(self.engine.destination_creds.password, "destination_password")
 
     def test_setting_unauthenticated_proxy(self):
         self.engine.rhsmcfg = MagicMock()
@@ -360,7 +360,7 @@ class TestMigration(SubManFixture):
 
     def test_bad_server_url_basic_auth(self):
         try:
-            self.engine.options = self.create_options({'serverurl': 'http://'})
+            self.engine.options = self.create_options({'destination_url': 'http://'})
             self.engine.get_candlepin_basic_auth_connection("some_username", "some_password")
         except SystemExit, e:
             self.assertEquals(e.code, -1)
@@ -369,7 +369,7 @@ class TestMigration(SubManFixture):
 
     def test_bad_server_url_consumer_auth(self):
         try:
-            self.engine.options = self.create_options({'serverurl': 'http://'})
+            self.engine.options = self.create_options({'destination_url': 'http://'})
             self.engine.get_candlepin_consumer_connection()
         except SystemExit, e:
             self.assertEquals(e.code, -1)
@@ -874,7 +874,7 @@ class TestMigration(SubManFixture):
 
     @patch("subprocess.call", autospec=True)
     def test_register_failure(self, mock_subprocess):
-        self.engine.options = self.create_options({'serverurl': 'foobar'})
+        self.engine.options = self.create_options({'destination_url': 'foobar'})
 
         credentials = MagicMock()
         credentials.username = "foo"
@@ -891,7 +891,7 @@ class TestMigration(SubManFixture):
     @patch("subprocess.call", autospec=True)
     @patch.object(identity.ConsumerIdentity, "read")
     def test_register(self, mock_read, mock_subprocess):
-        self.engine.options = self.create_options({'serverurl': 'foobar'})
+        self.engine.options = self.create_options({'destination_url': 'foobar'})
 
         credentials = MagicMock()
         credentials.username = "foo"

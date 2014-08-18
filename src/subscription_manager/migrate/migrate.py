@@ -14,9 +14,9 @@
 # in this software or its documentation.
 #
 
-from datetime import datetime
 import getpass
 import gettext
+import libxml2
 import logging
 import os
 import re
@@ -25,12 +25,13 @@ import subprocess
 import sys
 import traceback
 
-import libxml2
+import rhsm.config
+
+from datetime import datetime
 from M2Crypto.SSL import SSLError
 
 from rhn import rpclib
 
-import rhsm.config
 from rhsm.connection import RemoteServerException, RestlibException
 from rhsm.utils import ServerUrlParseError
 
@@ -78,8 +79,8 @@ FACT_FILE = "/etc/rhsm/facts/migration.facts"
 YUM_PLUGIN_CONF = '/etc/yum/pluginconf.d/rhnplugin.conf'
 
 DOUBLE_MAPPED = "rhel-.*?-(client|server)-dts-(5|6)-beta(-debuginfo)?"
-#The (?!-beta) bit is a negative lookahead assertion.  So we won't match
-#if the 5 or 6 is followed by the word "-beta"
+# The (?!-beta) bit is a negative lookahead assertion.  So we won't match
+# if the 5 or 6 is followed by the word "-beta"
 SINGLE_MAPPED = "rhel-.*?-(client|server)-dts-(5|6)(?!-beta)(-debuginfo)?"
 
 
@@ -135,7 +136,7 @@ class UserCredentials(object):
 
 
 class MigrationEngine(object):
-    def __init__(self):
+    def __init__(self, options):
         self.rhncfg = initUp2dateConfig()
         self.rhsmcfg = rhsm.config.initConfig()
 
@@ -147,43 +148,10 @@ class MigrationEngine(object):
         self.cp = None
         self.db = ProductDatabase()
 
-        self.parser = OptionParser(usage=USAGE, formatter=WrappedIndentedHelpFormatter())
-        self.add_parser_options()
+        self.consumer_id = None
 
-    def add_parser_options(self):
-        self.parser.add_option("-f", "--force", action="store_true", default=False,
-            help=_("ignore channels not available on RHSM"))
-        self.parser.add_option("-g", "--gui", action="store_true", default=False, dest='gui',
-            help=_("launch the GUI tool to attach subscriptions, instead of auto-attaching"))
-        self.parser.add_option("-n", "--no-auto", action="store_true", default=False, dest='noauto',
-            help=_("don't execute the auto-attach option while registering with subscription manager"))
-        self.parser.add_option("-s", "--servicelevel", dest="servicelevel",
-            help=_("service level to follow when attaching subscriptions, for no service "
-                "level use --servicelevel=\"\""))
-        self.parser.add_option("--serverurl", dest='serverurl',
-            help=_("specify the subscription management server to migrate to"))
-        self.parser.add_option("--redhat-user", dest="redhatuser",
-            help=_("specify the Red Hat user name"))
-        self.parser.add_option("--redhat-password", dest="redhatpassword",
-            help=_("specify the Red Hat password"))
-        self.parser.add_option("--subscription-service-user", dest="subserviceuser",
-            help=_("specify the subscription service user name"))
-        self.parser.add_option("--subscription-service-password", dest="subservicepassword",
-            help=_("specify the subscription service password"))
-        # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
-        self.parser.add_option("--no-proxy", action="store_true", dest='noproxy',
-            help=_("don't use RHN proxy settings with subscription management server"))
-        self.parser.add_option("--org", dest='org',
-            help=_("organization to register to"))
-        self.parser.add_option("--environment", dest='environment',
-            help=_("environment to register to"))
-        self.parser.add_option("--consumerid", help=_("register with the ID of an existing consumer"))
-        self.parser.add_option("--activationkey", action="append", default=[], help=_("activation key to use "
-            "for registration (can be provided more than once)"))
-
-    def validate_options(self):
-        if self.options.servicelevel and self.options.noauto:
-            system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))
+        self.options = options
+        self.is_hosted = is_hosted()
 
     def authenticate(self, username, password, user_prompt, pw_prompt):
         if not username:
@@ -194,19 +162,16 @@ class MigrationEngine(object):
 
         return UserCredentials(username, password)
 
-    def is_hosted(self):
-        hostname = self.rhsmcfg.get('server', 'hostname')
-        return bool(re.search('subscription\.rhn\.(.*\.)*redhat\.com', hostname))
-
     def get_auth(self):
-        self.rhncreds = self.authenticate(self.options.redhatuser, self.options.redhatpassword,
-                _("Red Hat username: "), _("Red Hat password: "))
+        print "At top"
+        self.legacy_creds = self.authenticate(self.options.legacy_user, self.options.legacy_password,
+                _("Legacy username: "), _("Legacy password: "))
 
-        if not self.is_hosted() or self.options.serverurl:
-            self.secreds = self.authenticate(self.options.subserviceuser, self.options.subservicepassword,
-                    _("Subscription Service username: "), _("Subscription Service password: "))
+        if not self.is_hosted or self.options.destination_url:
+            self.destination_creds = self.authenticate(self.options.destination_user, self.options.destination_password,
+                    _("Destination username: "), _("Destination password: "))
         else:
-            self.secreds = self.rhncreds   # make them the same
+            self.destination_creds = self.legacy_creds   # make them the same
 
     def transfer_http_proxy_settings(self):
         if self.rhncfg['enableProxy']:
@@ -240,12 +205,12 @@ class MigrationEngine(object):
 
     def _get_connection_info(self):
         try:
-            if self.options.serverurl is None:
+            if self.options.destination_url is None:
                 hostname = self.rhsmcfg.get('server', 'hostname')
                 port = self.rhsmcfg.get_int('server', 'port')
                 prefix = self.rhsmcfg.get('server', 'prefix')
             else:
-                (hostname, port, prefix) = parse_server_info(self.options.serverurl)
+                (hostname, port, prefix) = parse_server_info(self.options.destination_url)
         except ServerUrlParseError, e:
             system_exit(-1, _("Error parsing server URL: %s") % e.msg)
 
@@ -349,8 +314,8 @@ class MigrationEngine(object):
             for env_data in environment_list:
                 # See BZ #978001
                 if (env_data['name'] == env_input or
-                    ('label' in env_data and env_data['label'] == env_input) or
-                    ('displayName' in env_data and env_data['displayName'] == env_input)):
+                   ('label' in env_data and env_data['label'] == env_input) or
+                   ('displayName' in env_data and env_data['displayName'] == env_input)):
                     environment = env_data['name']
                     break
             if not environment:
@@ -487,12 +452,12 @@ class MigrationEngine(object):
                 unrecognized_channels.append(channel)
 
         if invalid_rhsm_channels:
-            self.print_banner(_("Channels not available on RHSM:"))
+            self.print_banner(_("Channels not available on %s:") % self.options.destination_url)
             for i in invalid_rhsm_channels:
                 print i
 
         if unrecognized_channels:
-            self.print_banner(_("No product certificates are mapped to these RHN Classic channels:"))
+            self.print_banner(_("No product certificates are mapped to these legacy channels:"))
             for i in unrecognized_channels:
                 print i
 
@@ -512,7 +477,7 @@ class MigrationEngine(object):
 
         log.info("certs to be installed: %s", applicable_certs)
 
-        self.print_banner(_("Installing product certificates for these RHN Classic channels:"))
+        self.print_banner(_("Installing product certificates for these legacy channels:"))
         for i in valid_rhsm_channels:
             print i
 
@@ -543,7 +508,7 @@ class MigrationEngine(object):
         print _("\nProduct certificates installed successfully to %s.") % product_dir.path
 
     def clean_up(self, subscribed_channels):
-        #Hack to address BZ 853233
+        # Hack to address BZ 853233
         product_dir = inj.require(inj.PROD_DIR)
         if os.path.isfile(os.path.join(product_dir.path, "68.pem")) and \
             os.path.isfile(os.path.join(product_dir.path, "71.pem")):
@@ -555,7 +520,7 @@ class MigrationEngine(object):
             except OSError, e:
                 log.info(e)
 
-        #Hack to address double mapping for 180.pem and 17{6|8}.pem
+        # Hack to address double mapping for 180.pem and 17{6|8}.pem
         is_double_mapped = [x for x in subscribed_channels if re.match(DOUBLE_MAPPED, x)]
         is_single_mapped = [x for x in subscribed_channels if re.match(SINGLE_MAPPED, x)]
 
@@ -580,7 +545,7 @@ class MigrationEngine(object):
         if not os.path.exists(FACT_FILE):
             f = open(FACT_FILE, 'w')
             json.dump({"migration.classic_system_id": self.get_system_id(),
-                       "migration.migrated_from": "rhn_hosted_classic",
+                       "migration.migrated_from": self.rhncfg['serverURL'],
                        "migration.migration_date": migration_date}, f)
             f.close()
 
@@ -612,42 +577,44 @@ class MigrationEngine(object):
         system_id_path = self.rhncfg["systemIdPath"]
         system_id = self.get_system_id()
 
-        log.info("Deleting system %s from RHN Classic...", system_id)
+        log.info("Deleting system %s from legacy server...", system_id)
         try:
             result = sc.system.deleteSystems(sk, system_id)
         except Exception:
-            log.error("Could not delete system %s from RHN Classic" % system_id)
+            log.error("Could not delete system %s from legacy server" % system_id)
             log.error(traceback.format_exc())
             shutil.move(system_id_path, system_id_path + ".save")
             self.disable_yum_rhn_plugin()
-            print _("Did not receive a completed unregistration message from RHN Classic for system %s.\n"
-                    "Please investigate on the Customer Portal at https://access.redhat.com.") % system_id
+            print _("Did not receive a completed unregistration message from legacy server for system %s.") % system_id
+
+            if self.is_hosted:
+                print _("Please investigate on the Customer Portal at https://access.redhat.com.")
             return
 
         if result:
             log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", system_id)
             os.remove(system_id_path)
             self.disable_yum_rhn_plugin()
-            print _("System successfully unregistered from RHN Classic.")
+            print _("System successfully unregistered from legacy server.")
         else:
-            system_exit(1, _("Unable to unregister system from RHN Classic.  Exiting."))
+            system_exit(1, _("Unable to unregister system from legacy server.  Exiting."))
 
     def register(self, credentials, org, environment):
         # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
         # Prepended a \n so translation can proceed without hitch
         print ("")
-        print _("Attempting to register system to Red Hat Subscription Management...")
+        print _("Attempting to register system to destination server...")
         cmd = ['subscription-manager', 'register', '--username=' + credentials.username, '--password=' + credentials.password]
-        if self.options.serverurl:
-            cmd.append('--serverurl=' + self.options.serverurl)
+        if self.options.destination_url:
+            cmd.append('--serverurl=' + self.options.destination_url)
 
         if org:
             cmd.append('--org=' + org)
         if environment:
             cmd.append('--environment=' + environment)
 
-        if self.options.consumerid:
-            cmd.append('--consumerid=' + self.options.consumerid)
+        if self.consumer_id:
+            cmd.append('--consumerid=' + self.consumer_id)
 
         result = subprocess.call(cmd)
 
@@ -657,12 +624,11 @@ class MigrationEngine(object):
         if result != 0:
             system_exit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
         else:
-            print _("System '%s' successfully registered to Red Hat Subscription Management.\n") % identity.name
+            print _("System '%s' successfully registered to %s.\n") % (identity.name, self.options.destination_url)
         return identity
 
     def select_service_level(self, org, servicelevel):
-        not_supported = _("Error: The service-level command is not supported by "
-                          "the server.")
+        not_supported = _("Error: The service-level command is not supported by the server.")
         try:
             levels = self.cp.getServiceLevelList(org)
         except RemoteServerException, e:
@@ -710,7 +676,7 @@ class MigrationEngine(object):
                 print _("\nUnable to auto-attach.  Do your existing subscriptions match the products installed on this system?")
 
         # don't show url for katello/CFSE/SAM
-        if self.is_hosted():
+        if self.is_hosted:
             print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.uuid
 
     def enable_extra_channels(self, subscribed_channels):
@@ -751,30 +717,21 @@ class MigrationEngine(object):
             print _("Please ensure system has subscriptions attached, and see '%s' to enable additional repositories") % command
 
     def main(self, args=None):
-        # In testing we sometimes specify args, otherwise use the default:
-        if not args:
-            args = sys.argv[1:]
-
-        (self.options, self.args) = self.parser.parse_args(args)
-        self.validate_options()
-
         self.get_auth()
         self.transfer_http_proxy_settings()
-        self.cp = self.get_candlepin_basic_auth_connection(self.secreds.username, self.secreds.password)
-        self.check_ok_to_proceed(self.secreds.username)
+        self.cp = self.get_candlepin_basic_auth_connection(self.destination_creds.username, self.destination_creds.password)
+        self.check_ok_to_proceed(self.destination_creds.username)
 
-        org = self.get_org(self.secreds.username)
+        org = self.get_org(self.destination_creds.username)
         environment = self.get_environment(org)
 
-        (sc, sk) = self.connect_to_rhn(self.rhncreds)
-        self.check_is_org_admin(sc, sk, self.rhncreds.username)
+        (sc, sk) = self.connect_to_rhn(self.legacy_creds)
+        self.check_is_org_admin(sc, sk, self.legacy_creds.username)
 
-        # get a list of RHN classic channels this machine is subscribed to
-        # prepending a \n so translation can proceed without hitch
-        print ("")
-        print _("Retrieving existing RHN Classic subscription information...")
+        print
+        print _("Retrieving existing legacy subscription information...")
         subscribed_channels = self.get_subscribed_channels_list()
-        self.print_banner(_("System is currently subscribed to these RHN Classic Channels:"))
+        self.print_banner(_("System is currently subscribed to these legacy Channels:"))
         for channel in subscribed_channels:
             print channel
 
@@ -784,11 +741,10 @@ class MigrationEngine(object):
 
         self.write_migration_facts()
 
-        print _("\nPreparing to unregister system from RHN Classic...")
+        print _("\nPreparing to unregister system from legacy server...")
         self.unregister_system_from_rhn_classic(sc, sk)
 
-        # register the system to Certificate-based RHN and consume a subscription
-        consumer = self.register(self.secreds, org, environment)
+        consumer = self.register(self.destination_creds, org, environment)
 
         # fetch new Candlepin connection using the identity cert created by register()
         self.cp = self.get_candlepin_consumer_connection()
@@ -801,5 +757,61 @@ class MigrationEngine(object):
 
         self.enable_extra_channels(subscribed_channels)
 
+
+def add_parser_options(parser):
+    parser.add_option("-f", "--force", action="store_true", default=False,
+        help=_("ignore channels not available on destination server"))
+    parser.add_option("-g", "--gui", action="store_true", default=False, dest='gui',
+        help=_("launch the GUI tool to attach subscriptions, instead of auto-attaching"))
+    parser.add_option("-n", "--no-auto", action="store_true", default=False, dest='noauto',
+        help=_("don't execute the auto-attach option while registering with subscription manager"))
+    parser.add_option("-s", "--servicelevel", dest="servicelevel",
+        help=_("service level to follow when attaching subscriptions, for no service "
+            "level use --servicelevel=\"\""))
+    # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
+    parser.add_option("--no-proxy", action="store_true", dest='noproxy',
+        help=_("don't use legacy proxy settings with destination server"))
+    parser.add_option("--org", dest='org',
+        help=_("organization to register to"))
+    parser.add_option("--environment", dest='environment',
+        help=_("environment to register to"))
+
+    parser.add_option("--destination-url",
+        help=_("specify the subscription management server to migrate to"))
+    parser.add_option("--legacy-user",
+        help=_("specify the user name on the legacy server"))
+    parser.add_option("--legacy-password",
+        help=_("specify the password on the legacy server"))
+    parser.add_option("--destination-user",
+        help=_("specify the user name on the destination server"))
+    parser.add_option("--destination-password",
+        help=_("specify the password on the destination server"))
+
+
+def validate_options(options):
+    if options.servicelevel and options.noauto:
+        system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))
+
+
+def is_hosted():
+    rhsmcfg = rhsm.config.initConfig()
+    hostname = rhsmcfg.get('server', 'hostname')
+    return bool(re.search('subscription\.rhn\.(.*\.)*redhat\.com', hostname))
+
+
+def main(args=None):
+    parser = OptionParser(usage=USAGE, formatter=WrappedIndentedHelpFormatter())
+    add_parser_options(parser)
+
+    # In testing we sometimes specify args, otherwise use the default:
+    if not args:
+        args = sys.argv[1:]
+
+    (options, args) = parser.parse_args(args)
+    validate_options(options)
+
+    MigrationEngine(options).main()
+
+
 if __name__ == '__main__':
-    engine = MigrationEngine().main()
+    main()
