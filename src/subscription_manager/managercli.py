@@ -1034,8 +1034,16 @@ class RegisterCommand(UserPassCommand):
             else:
                 owner_key = self._determine_owner_key(admin_cp)
 
-                environment_id = self._get_environment_id(admin_cp, owner_key,
+                environment_id = None
+                try:
+                    # This try/catch will postpone the failure until we attempt to
+                    # call registerConsumer, providing more coninuity between servers
+                    # with and without environments
+                    environment_id = self._get_environment_id(admin_cp, owner_key,
                         self.options.environment)
+                except connection.RestlibException, cre:
+                    log.error("failed to get an environment_id")
+                    log.exception(cre)
 
                 consumer = admin_cp.registerConsumer(name=consumername,
                      type=self.options.consumertype, facts=facts_dic,
