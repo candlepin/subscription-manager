@@ -119,16 +119,26 @@ class TestMigration(SubManFixture):
         patch.stopall()
         sys.stderr = sys.__stderr__
 
-    def test_mutually_exclusive_options(self):
-        try:
-            parser = OptionParser()
-            migrate.add_parser_options(parser)
-            (options, args) = parser.parse_args(["--no-auto", "--servicelevel", "foo"])
-            migrate.validate_options(options)
-        except SystemExit, e:
-            self.assertEquals(e.code, 1)
-        else:
-            self.fail("No exception raised")
+    def test_mutually_exclusive_auto_service_level_options(self):
+        parser = OptionParser()
+        migrate.add_parser_options(parser)
+        (options, args) = parser.parse_args(["--no-auto", "--servicelevel", "foo"])
+        self.assertRaises(SystemExit, migrate.validate_options, (options))
+
+    def test_mutually_exclusive_registration_state_and_is_hosted(self):
+        parser = OptionParser()
+        migrate.add_parser_options(parser)
+        (options, args) = parser.parse_args(["--registration-state", "purge"])
+        migrate.is_hosted = lambda: True
+        self.assertRaises(SystemExit, migrate.validate_options, options)
+
+    def test_choices_for_registration_state(self):
+        parser = OptionParser()
+        migrate.add_parser_options(parser)
+        valid = ["keep", "unentitle", "purge"]
+        for opt in valid:
+            (options, args) = parser.parse_args(["--registration-state", opt])
+        self.assertRaises(SystemExit, parser.parse_args, ["--registration-state", "blah"])
 
     @patch.object(rhsm.config.RhsmConfigParser, "get", autospec=True)
     def test_is_hosted(self, mock_get):

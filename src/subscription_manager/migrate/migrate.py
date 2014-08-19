@@ -776,6 +776,11 @@ def add_parser_options(parser):
     parser.add_option("--environment", dest='environment',
         help=_("environment to register to"))
 
+    valid_states = ["keep", "unentitle", "purge"]
+    parser.add_option("--registration-state", type="choice",
+        choices=valid_states, metavar=",".join(valid_states),
+        help=_("state to leave system in on legacy server (not available in hosted environments)"))
+
     parser.add_option("--destination-url",
         help=_("specify the subscription management server to migrate to"))
     parser.add_option("--legacy-user",
@@ -791,6 +796,8 @@ def add_parser_options(parser):
 def validate_options(options):
     if options.servicelevel and options.noauto:
         system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))
+    if options.registration_state and is_hosted():
+        system_exit(1, _("The --registration-state option is not available in hosted environments."))
 
 
 def is_hosted():
