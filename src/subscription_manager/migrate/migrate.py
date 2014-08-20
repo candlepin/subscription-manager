@@ -573,7 +573,10 @@ class MigrationEngine(object):
             f.write(line)
         f.close()
 
-    def unregister_system_from_rhn_classic(self, sc, sk):
+    def legacy_unentitle(self):
+        pass
+
+    def legacy_purge(self, sc, sk):
         system_id_path = self.rhncfg["systemIdPath"]
         system_id = self.get_system_id()
 
@@ -742,7 +745,7 @@ class MigrationEngine(object):
         self.write_migration_facts()
 
         print _("\nPreparing to unregister system from legacy server...")
-        self.unregister_system_from_rhn_classic(sc, sk)
+        self.legacy_purge(sc, sk)
 
         consumer = self.register(self.destination_creds, org, environment)
 
@@ -778,8 +781,8 @@ def add_parser_options(parser):
 
     valid_states = ["keep", "unentitle", "purge"]
     parser.add_option("--registration-state", type="choice",
-        choices=valid_states, metavar=",".join(valid_states),
-        help=_("state to leave system in on legacy server (not available in hosted environments)"))
+        choices=valid_states, metavar=",".join(valid_states), default="purge",
+        help=_("state to leave system in on legacy server (not available in hosted environments; default is 'purge')"))
 
     parser.add_option("--destination-url",
         help=_("specify the subscription management server to migrate to"))

@@ -140,6 +140,12 @@ class TestMigration(SubManFixture):
             (options, args) = parser.parse_args(["--registration-state", opt])
         self.assertRaises(SystemExit, parser.parse_args, ["--registration-state", "blah"])
 
+    def test_registration_state_default(self):
+        parser = OptionParser()
+        migrate.add_parser_options(parser)
+        (options, args) = parser.parse_args([])
+        self.assertEquals("purge", options.registration_state)
+
     @patch.object(rhsm.config.RhsmConfigParser, "get", autospec=True)
     def test_is_hosted(self, mock_get):
         mock_get.return_value = "subscription.rhn.redhat.com"
@@ -842,7 +848,7 @@ class TestMigration(SubManFixture):
         self.engine.get_system_id = stub_get_system_id
         self.engine.disable_yum_rhn_plugin = stub_disable_yum_rhn_plugin
 
-        self.engine.unregister_system_from_rhn_classic(sc, None)
+        self.engine.legacy_purge(sc, None)
         mock_shutil.assert_called_with("/some/path", "/some/path.save")
 
     @patch("__builtin__.open", autospec=True)
@@ -879,7 +885,7 @@ class TestMigration(SubManFixture):
         self.engine.get_system_id = stub_get_system_id
         self.engine.disable_yum_rhn_plugin = stub_disable_yum_rhn_plugin
 
-        self.engine.unregister_system_from_rhn_classic(sc, None)
+        self.engine.legacy_purge(sc, None)
         mock_remove.assert_called_with("/some/path")
 
     @patch("subprocess.call", autospec=True)
