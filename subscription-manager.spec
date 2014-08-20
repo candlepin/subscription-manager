@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.12
+Version: 1.12.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -446,6 +446,13 @@ fi
 %endif
 
 %changelog
+* Wed Aug 20 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.13-1
+- 1124685: Handle /status without rules-version (alikins@redhat.com)
+- 1125132: Label does not change to Attaching on Fristboot progress bar (wpoteat@redhat.com)
+- 1128061: Stop logging expected exceptions on unreg (alikins@redhat.com)
+- 1129480: don't query envs when actkey is given (ckozak@redhat.com)
+- 1130637: Correct call to os.path.isfile (awood@redhat.com)
+
 * Wed Aug 13 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.12-1
 - Extract the latest strings from the code (bkearney@redhat.com)
 - 1126724: Use port instead of 443 for the url help text (bkearney@redhat.com)
