@@ -70,9 +70,9 @@ except ImportError:
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-CONNECTION_FAILURE = _(u"Unable to connect to certificate server: %s.  "
-                        "See /var/log/rhsm/rhsm.log for more details.")
+SEE_LOG_FILE = _(u"See /var/log/rhsm/rhsm.log for more details.")
 
+CONNECTION_FAILURE = _(u"Unable to connect to certificate server: %s.  " + SEE_LOG_FILE)
 
 FACT_FILE = "/etc/rhsm/facts/migration.facts"
 
@@ -110,7 +110,7 @@ class Menu(object):
             print "%s. %s" % (index + 1, entry[0])
 
     def display_invalid(self):
-        print _("You have entered an invalid choice.")
+        print _("You have entered an invalid choice.  Enter a choice from the menu above.")
 
     def _get_item(self, selection):
         try:
@@ -182,7 +182,7 @@ class MigrationEngine(object):
                 self.proxy_host, self.proxy_port = http_proxy.split(':')
             except ValueError, e:
                 log.exception(e)
-                system_exit(1, _("Unable to read RHN proxy settings."))
+                system_exit(1, _("Could not read RHN proxy settings.  " + SEE_LOG_FILE))
 
             if self.rhncfg['enableProxyAuth']:
                 self.proxy_user = self.rhncfg['proxyUser']
@@ -250,13 +250,13 @@ class MigrationEngine(object):
         # check if this machine is already registered to Certicate-based RHN
         identity = inj.require(inj.IDENTITY)
         if identity.is_valid():
-            print _("\nThis system appears to be already registered to Red Hat Subscription Management.  Exiting.")
+            print _("\nThis system appears to be already registered to Red Hat Subscription Management.")
             system_exit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % identity.uuid)
 
         try:
             self.cp.getOwnerList(username)
         except SSLError, e:
-            print _("Error: CA certificate for subscription service has not been installed.")
+            print _("The CA certificate for the destination server has not been installed.")
             system_exit(1, CONNECTION_FAILURE % e)
         except Exception, e:
             log.error(e)
@@ -287,7 +287,7 @@ class MigrationEngine(object):
                     org = owner_data['key']
                     break
             if not org:
-                system_exit(1, _("No such org: %s") % org_input)
+                system_exit(1, _("Couldn't find organization '%s'.") % org_input)
         return org
 
     def get_environment(self, owner_key):
@@ -319,7 +319,7 @@ class MigrationEngine(object):
                     environment = env_data['name']
                     break
             if not environment:
-                system_exit(1, _("No such environment: %s") % env_input)
+                system_exit(1, _("Couldn't find environment '%s'.") % env_input)
 
         return environment
 
@@ -344,14 +344,14 @@ class MigrationEngine(object):
             return (sc, sk)
         except Exception:
             log.error(traceback.format_exc())
-            system_exit(1, _("Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more details."))
+            system_exit(1, _("Unable to authenticate to RHN Classic.  " + SEE_LOG_FILE))
 
     def check_is_org_admin(self, sc, sk, username):
         try:
             roles = sc.user.listRoles(sk, username)
         except Exception:
             log.error(traceback.format_exc())
-            system_exit(1, _("Problem encountered determining user roles in RHN Classic.  Exiting."))
+            system_exit(1, _("Problem encountered determining user roles in RHN Classic.  " + SEE_LOG_FILE))
         if "org_admin" not in roles:
             system_exit(1, _("You must be an org admin to successfully run this script."))
 
@@ -360,7 +360,7 @@ class MigrationEngine(object):
             subscribed_channels = map(lambda x: x['label'], getChannels().channels())
         except Exception:
             log.error(traceback.format_exc())
-            system_exit(1, _("Problem encountered getting the list of subscribed channels.  Exiting."))
+            system_exit(1, _("Problem encountered getting the list of subscribed channels.  " + SEE_LOG_FILE))
         return subscribed_channels
 
     def print_banner(self, msg):
@@ -374,7 +374,7 @@ class MigrationEngine(object):
             if channel.startswith("jbappplatform"):
                 if jboss_channel:
                     system_exit(1, _("You are subscribed to more than one jbappplatform channel."
-                                    "  This script does not support that configuration.  Exiting."))
+                                    "  This script does not support that configuration."))
                 jboss_channel = True
 
     def get_release(self):
@@ -427,7 +427,7 @@ class MigrationEngine(object):
         except IOError, e:
             log.exception(e)
             system_exit(1, _("Unable to read mapping file: %(mappingfile)s.\n"
-                "Do you have the %(package)s package installed?") % {
+                "Please check that you have the %(package)s package installed.") % {
                     "mappingfile": mappingfile,
                     "package": "subscription-manager-migration-data"})
 
@@ -600,7 +600,7 @@ class MigrationEngine(object):
             self.disable_yum_rhn_plugin()
             print _("System successfully unregistered from legacy server.")
         else:
-            system_exit(1, _("Unable to unregister system from legacy server.  Exiting."))
+            system_exit(1, _("Unable to unregister system from legacy server.  " + SEE_LOG_FILE))
 
     def register(self, credentials, org, environment):
         # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
@@ -715,7 +715,7 @@ class MigrationEngine(object):
                     repofile.set(rhsmChannel, 'enabled', '1')
             repofile.write()
         except Exception:
-            print _("\nUnable to enable extra repositories.")
+            print _("\nCouldn't enable extra repositories.")
             command = "subscription-manager repos --help"
             print _("Please ensure system has subscriptions attached, and see '%s' to enable additional repositories") % command
 
@@ -751,9 +751,9 @@ class MigrationEngine(object):
 
         # fetch new Candlepin connection using the identity cert created by register()
         self.cp = self.get_candlepin_consumer_connection()
-        if not self.options.noauto:
-            if self.options.servicelevel:
-                servicelevel = self.select_service_level(org, self.options.servicelevel)
+        if not self.options.no_auto:
+            if self.options.service_level:
+                servicelevel = self.select_service_level(org, self.options.service_level)
                 self.subscribe(consumer, servicelevel)
             else:
                 self.subscribe(consumer, None)
@@ -764,11 +764,11 @@ class MigrationEngine(object):
 def add_parser_options(parser):
     parser.add_option("-f", "--force", action="store_true", default=False,
         help=_("ignore channels not available on destination server"))
-    parser.add_option("-g", "--gui", action="store_true", default=False, dest='gui',
+    parser.add_option("-g", "--gui", action="store_true", default=False,
         help=_("launch the GUI tool to attach subscriptions, instead of auto-attaching"))
-    parser.add_option("-n", "--no-auto", action="store_true", default=False, dest='noauto',
+    parser.add_option("-n", "--no-auto", action="store_true", default=False,
         help=_("don't execute the auto-attach option while registering with subscription manager"))
-    parser.add_option("-s", "--servicelevel", dest="servicelevel",
+    parser.add_option("-s", "--service-level",
         help=_("service level to follow when attaching subscriptions, for no service "
             "level use --servicelevel=\"\""))
     # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
@@ -797,7 +797,8 @@ def add_parser_options(parser):
 
 
 def validate_options(options):
-    if options.servicelevel and options.noauto:
+    if options.service_level and options.no_auto:
+        # TODO Need to explain why this restriction exists.
         system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))
     if options.registration_state and is_hosted():
         system_exit(1, _("The --registration-state option is not available in hosted environments."))
