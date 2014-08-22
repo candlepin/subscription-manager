@@ -21,7 +21,7 @@ import unittest
 
 from mock import patch, NonCallableMock, MagicMock, Mock, call
 from M2Crypto import SSL
-from fixture import Capture, SubManFixture
+from fixture import Capture, SubManFixture, open_mock
 from optparse import OptionParser
 
 from subscription_manager import injection as inj
@@ -128,7 +128,7 @@ class TestMigration(SubManFixture):
     def test_mutually_exclusive_registration_state_and_is_hosted(self):
         parser = OptionParser()
         migrate.add_parser_options(parser)
-        (options, args) = parser.parse_args(["--registration-state", "purge"])
+        (options, args) = parser.parse_args(["--registration-state", "keep"])
         migrate.is_hosted = lambda: True
         self.assertRaises(SystemExit, migrate.validate_options, options)
 
@@ -839,17 +839,14 @@ class TestMigration(SubManFixture):
         sc = MagicMock()
         sc.system.deleteSystems.side_effect = Exception
 
-        def stub_get_system_id():
-            pass
-
         def stub_disable_yum_rhn_plugin():
             pass
 
-        self.engine.get_system_id = stub_get_system_id
         self.engine.disable_yum_rhn_plugin = stub_disable_yum_rhn_plugin
 
-        self.engine.legacy_purge(sc, None)
-        mock_shutil.assert_called_with("/some/path", "/some/path.save")
+        with patch.object(self.engine, 'get_system_id', autospec=True):
+            self.engine.legacy_purge(sc, None)
+            mock_shutil.assert_called_with("/some/path", "/some/path.save")
 
     @patch("__builtin__.open", autospec=True)
     def test_disable_yum_rhn_plugin(self, mock_open):
@@ -876,17 +873,14 @@ class TestMigration(SubManFixture):
         sc = MagicMock()
         sc.system.deleteSystems.return_value = True
 
-        def stub_get_system_id():
-            pass
-
         def stub_disable_yum_rhn_plugin():
             pass
 
-        self.engine.get_system_id = stub_get_system_id
         self.engine.disable_yum_rhn_plugin = stub_disable_yum_rhn_plugin
 
-        self.engine.legacy_purge(sc, None)
-        mock_remove.assert_called_with("/some/path")
+        with patch.object(self.engine, 'get_system_id', autospec=True):
+            self.engine.legacy_purge(sc, None)
+            mock_remove.assert_called_with("/some/path")
 
     @patch("subprocess.call", autospec=True)
     def test_register_failure(self, mock_subprocess):
@@ -981,12 +975,11 @@ class TestMigration(SubManFixture):
         self.assertTrue(mrf.set.call_args_list == expected)
         mrf.write.assert_called_with()
 
-    @patch("__builtin__.file", autospec=True)
-    def test_get_system_id(self, mock_file):
+    def test_get_system_id(self):
         rhn_config = {
             "systemIdPath": "/tmp/foo",
-            }
-        mock_file.return_value.read.return_value = """
+        }
+        mock_file = """
         <params>
           <param>
             <value>
@@ -1003,5 +996,6 @@ class TestMigration(SubManFixture):
         </params>
         """
         self.engine.rhncfg = rhn_config
-        system_id = self.engine.get_system_id()
-        self.assertEquals(123, system_id)
+        with open_mock(mock_file) as m:
+            system_id = self.engine.get_system_id(m)
+            self.assertEquals(123, system_id)

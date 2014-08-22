@@ -163,7 +163,6 @@ class MigrationEngine(object):
         return UserCredentials(username, password)
 
     def get_auth(self):
-        print "At top"
         self.legacy_creds = self.authenticate(self.options.legacy_user, self.options.legacy_password,
                 _("Legacy username: "), _("Legacy password: "))
 
@@ -533,9 +532,8 @@ class MigrationEngine(object):
             except OSError, e:
                 log.info(e)
 
-    def get_system_id(self):
-        system_id_path = self.rhncfg["systemIdPath"]
-        p = libxml2.parseDoc(file(system_id_path).read())
+    def get_system_id(self, system_id_path):
+        p = libxml2.parseDoc(open(system_id_path, 'r').read())
         system_id = int(p.xpathEval('string(//member[* = "system_id"]/value/string)').split('-')[1])
         return system_id
 
@@ -578,7 +576,7 @@ class MigrationEngine(object):
 
     def legacy_purge(self, sc, sk):
         system_id_path = self.rhncfg["systemIdPath"]
-        system_id = self.get_system_id()
+        system_id = self.get_system_id(system_id_path)
 
         log.info("Deleting system %s from legacy server...", system_id)
         try:
@@ -744,8 +742,14 @@ class MigrationEngine(object):
 
         self.write_migration_facts()
 
-        print _("\nPreparing to unregister system from legacy server...")
-        self.legacy_purge(sc, sk)
+        if self.options.registration_state == "purge":
+            print _("\nPreparing to unregister system from legacy server...")
+            self.legacy_purge(sc, sk)
+        elif self.options.registration_state == "unentitle":
+            self.legacy_unentitle(sc, sk)
+        else:
+            # For the "keep" case, we just leave everything alone.
+            pass
 
         consumer = self.register(self.destination_creds, org, environment)
 
@@ -800,7 +804,7 @@ def validate_options(options):
     if options.service_level and options.no_auto:
         # TODO Need to explain why this restriction exists.
         system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))
-    if options.registration_state and is_hosted():
+    if options.registration_state != "purge" and is_hosted():
         system_exit(1, _("The --registration-state option is not available in hosted environments."))
 
 
