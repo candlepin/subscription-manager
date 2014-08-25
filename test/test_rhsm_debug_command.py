@@ -81,6 +81,7 @@ class TestCompileCommand(TestCliCommand):
             self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'productCertDir'))) is not None)
             self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'entitlementCertDir'))) is not None)
             self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'consumerCertDir'))) is not None)
+            self.assertTrue(tar_file.getmember(path_join(self.code, "etc/pki/product-default")) is not None)
         finally:
             shutil.rmtree(path)
 
@@ -114,6 +115,7 @@ class TestCompileCommand(TestCliCommand):
             self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'productCertDir'))))
             self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'entitlementCertDir'))))
             self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'consumerCertDir'))))
+            self.assertTrue(os.path.exists(path_join(tree_path, "/etc/pki/product-default")))
         finally:
             shutil.rmtree(path)
 
@@ -147,6 +149,7 @@ class TestCompileCommand(TestCliCommand):
             self.assertFalse(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'productCertDir'))))
             self.assertFalse(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'entitlementCertDir'))))
             self.assertFalse(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'consumerCertDir'))))
+            self.assertFalse(os.path.exists(path_join(tree_path, "/etc/pki/product-default")))
         finally:
             shutil.rmtree(path)
 
@@ -180,6 +183,7 @@ class TestCompileCommand(TestCliCommand):
             self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'productCertDir'))))
             self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'entitlementCertDir'))))
             self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'consumerCertDir'))))
+            self.assertTrue(os.path.exists(path_join(tree_path, "/etc/pki/product-default")))
         finally:
             shutil.rmtree(path)
 
@@ -232,6 +236,7 @@ class TestCompileCommand(TestCliCommand):
         os.makedirs(path_join(self.assemble_path, cfg.get('rhsm', 'productCertDir')))
         os.makedirs(path_join(self.assemble_path, cfg.get('rhsm', 'entitlementCertDir')))
         os.makedirs(path_join(self.assemble_path, cfg.get('rhsm', 'consumerCertDir')))
+        os.makedirs(path_join(self.assemble_path, "/etc/pki/product-default"))
         return self.assemble_path
 
     # write to my directory instead
