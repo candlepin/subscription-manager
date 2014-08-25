@@ -325,6 +325,11 @@ class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
                 certificates.append(StubProductCertificate(StubProduct(pid)))
         super(StubProductDirectory, self).__init__(certificates)
 
+    # real version just calls refresh on it's set of ProductDirs, that don't
+    # exist here, so this needs to be stubbed.
+    def refresh(self):
+        pass
+
 
 class StubConsumerIdentity(object):
     CONSUMER_NAME = "John Q Consumer"

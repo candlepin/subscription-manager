@@ -29,6 +29,8 @@ _ = gettext.gettext
 
 cfg = initConfig()
 
+DEFAULT_PRODUCT_CERT_DIR = "/etc/pki/product-default"
+
 
 class Directory(object):
 
@@ -145,6 +147,9 @@ class CertificateDirectory(Directory):
         certs = set()
         providing_stack_ids = set()
         stack_id_map = {}
+
+        # Note this will override a product cert for id '71' with
+        # a different product cert for id '71' if it is later in self.list
         for c in self.list():
             for p in c.products:
                 if p.id == p_hash:
@@ -176,12 +181,7 @@ class CertificateDirectory(Directory):
     findByProduct = find_by_product
 
 
-class ProductDirectory(CertificateDirectory):
-
-    PATH = cfg.get('rhsm', 'productCertDir')
-
-    def __init__(self):
-        super(ProductDirectory, self).__init__(self.PATH)
+class ProductCertificateDirectory(CertificateDirectory):
 
     def get_provided_tags(self):
         """
@@ -195,6 +195,18 @@ class ProductDirectory(CertificateDirectory):
                     tags.add(tag)
         return tags
 
+    # This method will lose multiple product certs for
+    # the same product, with the last read winning.
+
+    # This needs to pick the correct cert if multiple
+    # product certs provide the same product id.
+    #
+    # If we put the defaults at the begining of .list()
+    # results, we will override them with the instaled products
+    # certs.
+    #
+    # Instead of always overriding, something like
+    # productid.ComparableProductCert may be useful
     def get_installed_products(self):
         prod_certs = self.list()
         installed_products = {}
@@ -203,6 +215,36 @@ class ProductDirectory(CertificateDirectory):
             installed_products[product.id] = product_cert
         log.debug("Installed product IDs: %s" % installed_products.keys())
         return installed_products
+
+
+class ProductDirectory(ProductCertificateDirectory):
+    def __init__(self, path=None, default_path=None):
+        installed_prod_path = path or cfg.get('rhsm', 'productCertDir')
+        default_prod_path = default_path or DEFAULT_PRODUCT_CERT_DIR
+        self.installed_prod_dir = ProductCertificateDirectory(path=installed_prod_path)
+        self.default_prod_dir = ProductCertificateDirectory(path=default_prod_path)
+
+    def list(self):
+        default_prod_list = self.default_prod_dir.list()
+        installed_prod_list = self.installed_prod_dir.list()
+
+        return default_prod_list + installed_prod_list
+
+    def refresh(self):
+        self.installed_prod_dir.refresh()
+        self.default_prod_dir.refresh()
+
+    # In productid.py, ProductDirectory.path is used as path to write new certs
+    # to. Souse  the installed_prod_dir (/etc/pki/product) as that is
+    # meant to be writable
+    #
+    # FIXME: a ProductDirectory should probably be responsible for deciding
+    # where to write out the certs. For container cases, this could be passing
+    # the product cert back to the host in some manner. Or better, let a plugin
+    # decide.
+    @property
+    def path(self):
+        return self.installed_prod_dir.path
 
 
 class EntitlementDirectory(CertificateDirectory):

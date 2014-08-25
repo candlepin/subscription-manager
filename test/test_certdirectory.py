@@ -13,15 +13,16 @@
 # in this software or its documentation.
 #
 
+import tempfile
 import unittest
 import os
 
-from mock import patch
+from mock import patch, MagicMock
 
 from stubs import StubProduct, StubEntitlementCertificate, \
     StubProductCertificate
 from subscription_manager.certdirectory import Path, EntitlementDirectory, \
-    ProductDirectory
+    ProductDirectory, ProductCertificateDirectory, Directory
 from subscription_manager.repolib import RepoFile
 from subscription_manager.productid import ProductDatabase
 
@@ -116,7 +117,249 @@ class TestEntitlementDirectoryCheckKey(unittest.TestCase):
         self.assertFalse(ret)
 
 
-class ProductDirectoryTest(unittest.TestCase):
+class StubPath(Path):
+
+    @staticmethod
+    def join(a, b):
+        return os.path.join(a, b)
+
+    @staticmethod
+    def abs(path):
+        return path
+
+    @classmethod
+    def isdir(cls, path):
+        if path.endswith('.pem'):
+            return False
+        if path.endswith('doesnt/exist/'):
+            return False
+        return True
+
+
+@patch('subscription_manager.certdirectory.Path', new_callable=StubPath)
+class DirectoryTest(unittest.TestCase):
+    klass = Directory
+
+    def setUp(self):
+        self.d = self._get_directory()
+
+    def _get_directory(self):
+        temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self.list_len = 0
+        return self.klass(path=temp_dir)
+
+    def _get_missing_directory(self):
+        temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        return self.klass(path=os.path.join(temp_dir, '/doesnt/exist/'))
+
+    def test(self, mockPath):
+        self.assertEquals(len(self.d.list()), self.list_len)
+
+    def test_listall(self, mockPath):
+        self.d.list_all()
+
+    def test_listdirs(self, mockPath):
+        self.d.listdirs()
+
+    @patch('os.path.exists')
+    @patch('os.makedirs')
+    def test_missing_dir(self, mockPath, mockMakedirs, mockExists):
+        mockExists.return_value = False
+        self.d = self._get_missing_directory()
+
+
+class DirectoryWithCertsTest(DirectoryTest):
+    def _get_directory(self):
+        temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self._populate_directory(temp_dir)
+        return self.klass(path=temp_dir)
+
+    def _populate_directory(self, path):
+        for i in range(1, 5):
+            file_path = os.path.join(path, '%s.pem' % i)
+            f = open(file_path, 'w')
+            f.close()
+
+        f = open(os.path.join(path, 'blip.blorp'), 'w')
+        f.close()
+        self.list_len = 4
+
+
+class EntitlementDirectoryWithCertsTest(DirectoryWithCertsTest):
+    klass = EntitlementDirectory
+
+    def setUp(self):
+        self.patcher = patch('subscription_manager.certdirectory.create_from_file')
+        self.mock_cff = self.patcher.start()
+
+        # sub in tmp path
+        self.path_patcher = patch("subscription_manager.certdirectory.EntitlementDirectory.productpath")
+        self.mock_productpath = self.path_patcher.start()
+
+        mock_product = MagicMock()
+        mock_product.id = '123456789'
+
+        self.mock_cert = MagicMock()
+        self.mock_cert.serial = '37'
+        self.mock_cert.is_expired.return_value = False
+        self.mock_cert.products = [mock_product]
+
+        self.mock_cff.return_value = self.mock_cert
+        super(EntitlementDirectoryWithCertsTest, self).setUp()
+
+        self.mock_cert.key_path.return_value = self.temp_dir
+
+    def _get_directory(self):
+        self.temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self._populate_directory(self.temp_dir)
+        self.mock_productpath.return_value = self.temp_dir
+        return self.klass()
+
+    def _populate_directory(self, path):
+        for i in range(1, 5):
+            file_path = os.path.join(path, '%s.pem' % i)
+            key_path = os.path.join(path, "%s-key.pem" % i)
+            f = open(file_path, 'w')
+            k = open(key_path, 'w')
+            f.close()
+            k.close()
+
+        f = open(os.path.join(path, 'blip.blorp'), 'w')
+        f.close()
+        self.list_len = 4
+
+    def _get_missing_directory(self):
+        temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self.mock_productpath.return_value = os.path.join(temp_dir, '/doesnt/exist/')
+        return self.klass()
+
+    def tearDown(self):
+        self.patcher.stop()
+        self.path_patcher.stop()
+
+    def test_list_valid(self):
+        res = self.d.list_valid()
+        self.assertEquals(len(res), self.list_len)
+
+    def test_list_for_product(self):
+        res = self.d.list_for_product('123')
+        self.assertTrue(isinstance(res, list))
+
+    def test_list_for_product_match(self):
+        res = self.d.list_for_product('123456789')
+        self.assertTrue(isinstance(res, list))
+
+
+class ProductCertificateDirectoryTest(DirectoryTest):
+    klass = ProductCertificateDirectory
+
+
+class ProductCertificateDirectoryWithCertsTest(DirectoryWithCertsTest):
+    klass = ProductCertificateDirectory
+
+    def setUp(self):
+        self.patcher = patch('subscription_manager.certdirectory.create_from_file')
+        self.mock_cff = self.patcher.start()
+
+        mock_product = MagicMock()
+        mock_product.id = '123456789'
+        mock_product.provided_tags = ['mock-tag-1']
+
+        self.mock_cert = MagicMock()
+        self.mock_cert.products = [mock_product]
+        self.mock_cert.serial = '37'
+        self.mock_cert.is_expired.return_value = False
+
+        self.mock_cff.return_value = self.mock_cert
+        self.d = self._get_directory()
+
+    def tearDown(self):
+        self.patcher.stop()
+
+    def test_list_valid(self):
+        res = self.d.list_valid()
+        self.assertEquals(len(res), self.list_len)
+
+    def test_list_expired_no_expired(self):
+        res = self.d.list_expired()
+        self.assertTrue(isinstance(res, list))
+
+    def test_list_expired_some_expired(self):
+        self.mock_cert.is_expired.return_value = True
+        res = self.d.list_expired()
+        self.assertTrue(isinstance(res, list))
+        self.assertEquals(len(res), self.list_len)
+
+    def test_find(self):
+        res = self.d.find('1')
+        self.assertEquals(res, None)
+
+    def test_find_matches(self):
+        res = self.d.find('37')
+        self.assertEquals(res.serial, '37')
+
+    def test_find_by_product(self):
+        res = self.d.find_by_product('123')
+        self.assertEquals(res, None)
+
+    def test_find_by_product_match(self):
+        res = self.d.find_by_product('123456789')
+        self.assertEquals(res, self.mock_cert)
+
+    def test_find_all_by_product_no_match(self):
+        res = self.d.find_all_by_product('123')
+        self.assertTrue(isinstance(res, list))
+        self.assertEquals(len(res), 0)
+
+    def test_find_all_by_product_match(self):
+        res = self.d.find_all_by_product('123456789')
+        self.assertTrue(isinstance(res, list))
+        self.assertEquals(len(res), 1)
+
+    def test_get_provided_tags(self):
+        res = self.d.get_provided_tags()
+        self.assertTrue(isinstance(res, set))
+        self.assertEquals(set(['mock-tag-1']), res)
+
+    def test_get_installed_products(self):
+        res = self.d.get_installed_products()
+        self.assertTrue(isinstance(res, dict))
+        self.assertEquals(len(res), 1)
+
+    def test_refresh(self):
+        # load, and "cache", load again to hit cache,
+        # refresh to clear cache, load again
+        self.d.list()
+        self.d.list()
+        self.d.refresh()
+        self.d.list()
+
+    def test_clean(self):
+        self.d.clean()
+
+    def test_delete(self):
+        self.d.delete()
+
+    def test_str(self):
+        res = "%s" % self.d
+        self.assertEquals(res, self.d.path)
+
+
+class ProductDirectoryTest(ProductCertificateDirectoryWithCertsTest):
+    klass = ProductDirectory
+
+    def _get_directory(self):
+        int_temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self._populate_directory(int_temp_dir)
+        default_temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self.list_len = 4
+        return self.klass(path=int_temp_dir, default_path=default_temp_dir)
+
+    def _get_missing_directory(self):
+        return self.klass()
+
+
+class AlsoProductDirectoryTest(unittest.TestCase):
     @patch('os.path.exists')
     def test_get_installed_products(self, MockExists):
         MockExists.return_value = True
