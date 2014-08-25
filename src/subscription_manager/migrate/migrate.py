@@ -765,7 +765,7 @@ class MigrationEngine(object):
         self.enable_extra_channels(subscribed_channels)
 
 
-def add_parser_options(parser):
+def add_parser_options(parser, five_to_six_script=False):
     parser.add_option("-f", "--force", action="store_true", default=False,
         help=_("ignore channels not available on destination server"))
     parser.add_option("-g", "--gui", action="store_true", default=False,
@@ -783,10 +783,11 @@ def add_parser_options(parser):
     parser.add_option("--environment", dest='environment',
         help=_("environment to register to"))
 
-    valid_states = ["keep", "unentitle", "purge"]
-    parser.add_option("--registration-state", type="choice",
-        choices=valid_states, metavar=",".join(valid_states), default="purge",
-        help=_("state to leave system in on legacy server (not available in hosted environments; default is 'purge')"))
+    if five_to_six_script:
+        valid_states = ["keep", "unentitle", "purge"]
+        parser.add_option("--registration-state", type="choice",
+            choices=valid_states, metavar=",".join(valid_states), default="purge",
+            help=_("state to leave system in on legacy server (not available in hosted environments; default is 'purge')"))
 
     parser.add_option("--destination-url",
         help=_("specify the subscription management server to migrate to"))
@@ -804,8 +805,6 @@ def validate_options(options):
     if options.service_level and options.no_auto:
         # TODO Need to explain why this restriction exists.
         system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))
-    if options.registration_state != "purge" and is_hosted():
-        system_exit(1, _("The --registration-state option is not available in hosted environments."))
 
 
 def is_hosted():
@@ -814,7 +813,13 @@ def is_hosted():
     return bool(re.search('subscription\.rhn\.(.*\.)*redhat\.com', hostname))
 
 
-def main(args=None):
+def set_defaults(options, five_to_six_script):
+    options.five_to_six = five_to_six_script
+    if not five_to_six_script:
+        options.registration_state = "purge"
+
+
+def main(args=None, five_to_six_script=False):
     parser = OptionParser(usage=USAGE, formatter=WrappedIndentedHelpFormatter())
     add_parser_options(parser)
 
@@ -823,8 +828,8 @@ def main(args=None):
         args = sys.argv[1:]
 
     (options, args) = parser.parse_args(args)
+    set_defaults(options, five_to_six_script)
     validate_options(options)
-
     MigrationEngine(options).main()
 
 

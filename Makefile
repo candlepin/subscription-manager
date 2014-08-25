@@ -245,6 +245,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 
 	install bin/subscription-manager $(PREFIX)/usr/sbin
 	install bin/rhn-migrate-classic-to-rhsm  $(PREFIX)/usr/sbin
+	install bin/sat5to6 $(PREFIX)/usr/sbin
 	install bin/subscription-manager-gui $(PREFIX)/usr/sbin
 	install bin/rhsmcertd $(PREFIX)/usr/bin
 

@@ -119,22 +119,27 @@ class TestMigration(SubManFixture):
         patch.stopall()
         sys.stderr = sys.__stderr__
 
-    def test_mutually_exclusive_auto_service_level_options(self):
+    def test_5to6_options(self):
+        five_to_six = True
         parser = OptionParser()
-        migrate.add_parser_options(parser)
-        (options, args) = parser.parse_args(["--no-auto", "--service-level", "foo"])
-        self.assertRaises(SystemExit, migrate.validate_options, (options))
+        migrate.add_parser_options(parser, five_to_six)
+        self.assertTrue(parser.has_option("--registration-state"))
+        (opts, args) = parser.parse_args([])
+        migrate.set_defaults(opts, five_to_six)
+        self.assertTrue(opts.five_to_six)
 
-    def test_mutually_exclusive_registration_state_and_is_hosted(self):
+    def test_classic_migration_options(self):
         parser = OptionParser()
         migrate.add_parser_options(parser)
-        (options, args) = parser.parse_args(["--registration-state", "keep"])
-        migrate.is_hosted = lambda: True
-        self.assertRaises(SystemExit, migrate.validate_options, options)
+        self.assertFalse(parser.has_option("--registration-state"))
+        (opts, args) = parser.parse_args([])
+        migrate.set_defaults(opts, five_to_six_script=False)
+        self.assertFalse(opts.five_to_six)
+        self.assertEquals("purge", opts.registration_state)
 
     def test_choices_for_registration_state(self):
         parser = OptionParser()
-        migrate.add_parser_options(parser)
+        migrate.add_parser_options(parser, five_to_six_script=True)
         valid = ["keep", "unentitle", "purge"]
         for opt in valid:
             (options, args) = parser.parse_args(["--registration-state", opt])
@@ -142,7 +147,7 @@ class TestMigration(SubManFixture):
 
     def test_registration_state_default(self):
         parser = OptionParser()
-        migrate.add_parser_options(parser)
+        migrate.add_parser_options(parser, five_to_six_script=True)
         (options, args) = parser.parse_args([])
         self.assertEquals("purge", options.registration_state)
 
