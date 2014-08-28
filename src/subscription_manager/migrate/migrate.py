@@ -23,7 +23,6 @@ import re
 import shutil
 import subprocess
 import sys
-import traceback
 
 import rhsm.config
 
@@ -42,7 +41,6 @@ if _LIBPATH not in sys.path:
     sys.path.append(_LIBPATH)
 
 from subscription_manager import injection as inj
-from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.cli import system_exit
 from subscription_manager.i18n_optparse import OptionParser, \
         USAGE, WrappedIndentedHelpFormatter
@@ -223,18 +221,6 @@ class MigrationEngine(object):
 
         return connection_info
 
-    def get_candlepin_consumer_connection(self):
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-
-        connection_info = self._get_connection_info()
-
-        connection_info['cert_file'] = ConsumerIdentity.certpath()
-        connection_info['key_file'] = ConsumerIdentity.keypath()
-
-        self.cp_provider.set_connection_info(**connection_info)
-
-        return self.cp_provider.get_consumer_auth_cp()
-
     def get_candlepin_basic_auth_connection(self, username, password):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
 
@@ -249,7 +235,7 @@ class MigrationEngine(object):
         # check if this machine is already registered to Certicate-based RHN
         identity = inj.require(inj.IDENTITY)
         if identity.is_valid():
-            print _("\nThis system appears to be already registered to Red Hat Subscription Management.")
+            print _("This system appears to be already registered to Red Hat Subscription Management.")
             system_exit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % identity.uuid)
 
         try:
@@ -258,16 +244,14 @@ class MigrationEngine(object):
             print _("The CA certificate for the destination server has not been installed.")
             system_exit(1, CONNECTION_FAILURE % e)
         except Exception, e:
-            log.error(e)
-            log.error(traceback.format_exc())
+            log.exception(e)
             system_exit(1, CONNECTION_FAILURE % e)
 
     def get_org(self, username):
         try:
             owner_list = self.cp.getOwnerList(username)
         except Exception, e:
-            log.error(e)
-            log.error(traceback.format_exc())
+            log.exception(e)
             system_exit(1, CONNECTION_FAILURE % e)
 
         if len(owner_list) == 0:
@@ -297,8 +281,7 @@ class MigrationEngine(object):
             elif self.options.environment:
                 system_exit(1, _("Environments are not supported by this server."))
         except Exception, e:
-            log.error(e)
-            log.error(traceback.format_exc())
+            log.exception(e)
             system_exit(1, CONNECTION_FAILURE % e)
 
         environment = None
@@ -341,26 +324,38 @@ class MigrationEngine(object):
 
             sk = sc.auth.login(credentials.username, credentials.password)
             return (sc, sk)
-        except Exception:
-            log.error(traceback.format_exc())
+        except Exception, e:
+            log.exception(e)
             system_exit(1, _("Unable to authenticate to RHN Classic.  " + SEE_LOG_FILE))
 
     def check_is_org_admin(self, sc, sk, username):
         try:
             roles = sc.user.listRoles(sk, username)
-        except Exception:
-            log.error(traceback.format_exc())
+        except Exception, e:
+            log.exception(e)
             system_exit(1, _("Problem encountered determining user roles in RHN Classic.  " + SEE_LOG_FILE))
         if "org_admin" not in roles:
             system_exit(1, _("You must be an org admin to successfully run this script."))
 
-    def get_subscribed_channels_list(self):
+    def resolve_base_channel(self, label, sc, sk):
         try:
-            subscribed_channels = map(lambda x: x['label'], getChannels().channels())
-        except Exception:
-            log.error(traceback.format_exc())
+            details = sc.channel.software.getDetails(sk, label)
+        except Exception, e:
+            log.exception(e)
             system_exit(1, _("Problem encountered getting the list of subscribed channels.  " + SEE_LOG_FILE))
-        return subscribed_channels
+        if details['clone_original']:
+            return self.resolve_base_channel(details['clone_original'], sc, sk)
+        return details
+
+    def get_subscribed_channels_list(self, sc, sk):
+        try:
+            channels = getChannels().channels()
+        except Exception, e:
+            log.exception(e)
+            system_exit(1, _("Problem encountered getting the list of subscribed channels.  " + SEE_LOG_FILE))
+        if self.options.five_to_six:
+            channels = [self.resolve_base_channel(c['label'], sc, sk) for c in channels]
+        return [x['label'] for x in channels]
 
     def print_banner(self, msg):
         print "\n+-----------------------------------------------------+"
@@ -542,7 +537,7 @@ class MigrationEngine(object):
 
         if not os.path.exists(FACT_FILE):
             f = open(FACT_FILE, 'w')
-            json.dump({"migration.classic_system_id": self.get_system_id(),
+            json.dump({"migration.classic_system_id": self.get_system_id(self.rhncfg["systemIdPath"]),
                        "migration.migrated_from": self.rhncfg['serverURL'],
                        "migration.migration_date": migration_date}, f)
             f.close()
@@ -571,8 +566,13 @@ class MigrationEngine(object):
             f.write(line)
         f.close()
 
-    def legacy_unentitle(self):
-        pass
+    def legacy_unentitle(self, sc):
+        system_id = open(self.rhncfg["systemIdPath"], 'r').read()
+        try:
+            sc.system.unentitle(system_id)
+        except Exception, e:
+            log.exception("Could not unentitle system on Satellite 5.", e)
+            system_exit(1, _("Could not unentitle system on legacy server.  " + SEE_LOG_FILE))
 
     def legacy_purge(self, sc, sk):
         system_id_path = self.rhncfg["systemIdPath"]
@@ -582,8 +582,7 @@ class MigrationEngine(object):
         try:
             result = sc.system.deleteSystems(sk, system_id)
         except Exception:
-            log.error("Could not delete system %s from legacy server" % system_id)
-            log.error(traceback.format_exc())
+            log.exception("Could not delete system %s from legacy server" % system_id)
             shutil.move(system_id_path, system_id_path + ".save")
             self.disable_yum_rhn_plugin()
             print _("Did not receive a completed unregistration message from legacy server for system %s.") % system_id
@@ -600,6 +599,26 @@ class MigrationEngine(object):
         else:
             system_exit(1, _("Unable to unregister system from legacy server.  " + SEE_LOG_FILE))
 
+    def get_transition_data(self, sc):
+        # We need to send up the entire contents of the systemid file which is referred to in
+        # Satellite 5 nomenclature as a "certificate" although it is not an X509 certificate.
+        system_id = open(self.rhncfg["systemIdPath"], 'r').read()
+        try:
+            self.transition_data = sc.system.transitionDataForSystem(system_id)
+            self.consumer_id = self.transition_data['uuid']
+        except Exception, e:
+            log.exception(e)
+            system_exit(1, _("Could not retrieve system migration data from legacy server.  " + SEE_LOG_FILE))
+
+    def consumer_exists(self, consumer_id):
+        try:
+            self.cp.getConsumer(consumer_id)
+            return True
+        except Exception, e:
+            log.exception(e)
+            print _("Consumer %s doesn't exist.  Creating new consumer.") % consumer_id
+            return False
+
     def register(self, credentials, org, environment):
         # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
         # Prepended a \n so translation can proceed without hitch
@@ -614,18 +633,26 @@ class MigrationEngine(object):
         if environment:
             cmd.append('--environment=' + environment)
 
-        if self.consumer_id:
-            cmd.append('--consumerid=' + self.consumer_id)
+        if self.options.five_to_six:
+            if self.consumer_exists(self.consumer_id):
+                cmd.append('--consumerid=' + self.consumer_id)
 
-        result = subprocess.call(cmd)
+        if self.options.auto:
+            cmd.append('--auto-attach')
+
+        if self.options.service_level:
+            servicelevel = self.select_service_level(org, self.options.service_level)
+            cmd.append('--service-level=' + servicelevel)
+
+        subprocess.call(cmd)
 
         identity = inj.require(inj.IDENTITY)
         identity.reload()
 
-        if result != 0:
+        if not identity.is_valid():
             system_exit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
-        else:
-            print _("System '%s' successfully registered to %s.\n") % (identity.name, self.options.destination_url)
+
+        print _("System '%s' successfully registered.\n") % identity.name
         return identity
 
     def select_service_level(self, org, servicelevel):
@@ -658,27 +685,6 @@ class MigrationEngine(object):
             menu = Menu(slas, _("Please select a service level agreement for this system."))
             servicelevel = menu.choose()
         return servicelevel
-
-    def subscribe(self, consumer, servicelevel):
-        # For subscribing, use the GUI tool if the DISPLAY environment variable is set and the gui tool exists
-        if os.getenv('DISPLAY') and os.path.exists('/usr/bin/subscription-manager-gui') and self.options.gui:
-            print _("Launching the GUI tool to manually attach subscriptions to this system ...")
-            result = subprocess.call(['subscription-manager-gui'], stderr=open(os.devnull, 'w'))
-        else:
-            print _("Attempting to auto-attach to appropriate subscriptions...")
-            cmd = ['subscription-manager', 'subscribe', '--auto']
-
-            # only add servicelevel if one was passed in
-            if servicelevel:
-                cmd.append('--servicelevel=' + servicelevel)
-
-            result = subprocess.call(cmd)
-            if result != 0:
-                print _("\nUnable to auto-attach.  Do your existing subscriptions match the products installed on this system?")
-
-        # don't show url for katello/CFSE/SAM
-        if self.is_hosted:
-            print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.uuid
 
     def enable_extra_channels(self, subscribed_channels):
         # Check if system was subscribed to extra channels like supplementary, optional, fastrack etc.
@@ -727,12 +733,16 @@ class MigrationEngine(object):
         environment = self.get_environment(org)
 
         (sc, sk) = self.connect_to_rhn(self.legacy_creds)
+        if self.options.five_to_six:
+            self.get_transition_data(sc)
+
+        # TODO Not sure this is necessary.  See BZ 1086367
         self.check_is_org_admin(sc, sk, self.legacy_creds.username)
 
         print
         print _("Retrieving existing legacy subscription information...")
-        subscribed_channels = self.get_subscribed_channels_list()
-        self.print_banner(_("System is currently subscribed to these legacy Channels:"))
+        subscribed_channels = self.get_subscribed_channels_list(sc, sk)
+        self.print_banner(_("System is currently subscribed to these legacy channels:"))
         for channel in subscribed_channels:
             print channel
 
@@ -743,34 +753,25 @@ class MigrationEngine(object):
         self.write_migration_facts()
 
         if self.options.registration_state == "purge":
-            print _("\nPreparing to unregister system from legacy server...")
+            print
+            print _("Preparing to unregister system from legacy server...")
             self.legacy_purge(sc, sk)
         elif self.options.registration_state == "unentitle":
-            self.legacy_unentitle(sc, sk)
+            self.legacy_unentitle(sc)
         else:
             # For the "keep" case, we just leave everything alone.
             pass
 
-        consumer = self.register(self.destination_creds, org, environment)
-
-        # fetch new Candlepin connection using the identity cert created by register()
-        self.cp = self.get_candlepin_consumer_connection()
-        if not self.options.no_auto:
-            if self.options.service_level:
-                servicelevel = self.select_service_level(org, self.options.service_level)
-                self.subscribe(consumer, servicelevel)
-            else:
-                self.subscribe(consumer, None)
-
-        self.enable_extra_channels(subscribed_channels)
+        identity = self.register(self.destination_creds, org, environment)
+        if identity:
+            self.enable_extra_channels(subscribed_channels)
 
 
 def add_parser_options(parser, five_to_six_script=False):
     parser.add_option("-f", "--force", action="store_true", default=False,
         help=_("ignore channels not available on destination server"))
-    parser.add_option("-g", "--gui", action="store_true", default=False,
-        help=_("launch the GUI tool to attach subscriptions, instead of auto-attaching"))
-    parser.add_option("-n", "--no-auto", action="store_true", default=False,
+    # Careful, the option is --no-auto but we are storing the opposite of its value.
+    parser.add_option("-n", "--no-auto", action="store_false", default=True, dest="auto",
         help=_("don't execute the auto-attach option while registering with subscription manager"))
     parser.add_option("-s", "--service-level",
         help=_("service level to follow when attaching subscriptions, for no service "
@@ -802,7 +803,7 @@ def add_parser_options(parser, five_to_six_script=False):
 
 
 def validate_options(options):
-    if options.service_level and options.no_auto:
+    if options.service_level and not options.auto:
         # TODO Need to explain why this restriction exists.
         system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))
 
@@ -821,7 +822,7 @@ def set_defaults(options, five_to_six_script):
 
 def main(args=None, five_to_six_script=False):
     parser = OptionParser(usage=USAGE, formatter=WrappedIndentedHelpFormatter())
-    add_parser_options(parser)
+    add_parser_options(parser, five_to_six_script)
 
     # In testing we sometimes specify args, otherwise use the default:
     if not args:

@@ -26,7 +26,6 @@ from optparse import OptionParser
 
 from subscription_manager import injection as inj
 from subscription_manager.migrate import migrate
-from subscription_manager import identity
 from subscription_manager.certdirectory import ProductDirectory
 
 
@@ -61,7 +60,7 @@ class TestMenu(unittest.TestCase):
 
 
 class TestMigration(SubManFixture):
-    def create_options(self, options=None):
+    def create_options(self, **kwargs):
         """
         Create a mock options object.  Send in a dictionary with the option destination and values
         and they will be set.  Note that you must use the destination and not just the option name.
@@ -70,16 +69,30 @@ class TestMigration(SubManFixture):
         """
         p = OptionParser()
         migrate.add_parser_options(p)
-        valid_options = filter(None, [o.dest for o in p.option_list])
 
         # Set the list of acceptable attributes for this Mock.
-        mock_opts = Mock(spec=valid_options)
-        # Set everything to None by default since that's what OptionParser does
-        map(lambda x: setattr(mock_opts, x, None), valid_options)
+        valid_options = filter(lambda x: x.dest is not None, p.option_list)
+        mock_opts = Mock(spec=[o.dest for o in valid_options])
 
-        if not options:
-            options = {}
-        map(lambda (k, v): setattr(mock_opts, k, v), options.items())
+        # Set everything to the default
+        def set_default(opt):
+            # Optparse uses a tuple to indicate if no default has been set.
+            if opt.default != ("NO", "DEFAULT"):
+                val = opt.default
+            else:
+                val = None
+            setattr(mock_opts, opt.dest, val)
+
+        map(lambda x: set_default(x), valid_options)
+
+        if not kwargs:
+            kwargs = {}
+        map(lambda (k, v): setattr(mock_opts, k, v), kwargs.items())
+
+        # The five_to_six option is set after argument parsing in the module so we set it
+        # for convenience.
+        if 'five_to_six' not in kwargs:
+            mock_opts.five_to_six = False
 
         return mock_opts
 
@@ -151,6 +164,12 @@ class TestMigration(SubManFixture):
         (options, args) = parser.parse_args([])
         self.assertEquals("purge", options.registration_state)
 
+    def test_mutually_exclusive_auto_service_level_options(self):
+        parser = OptionParser()
+        migrate.add_parser_options(parser)
+        (options, args) = parser.parse_args(["--no-auto", "--service-level", "foo"])
+        self.assertRaises(SystemExit, migrate.validate_options, (options))
+
     @patch.object(rhsm.config.RhsmConfigParser, "get", autospec=True)
     def test_is_hosted(self, mock_get):
         mock_get.return_value = "subscription.rhn.redhat.com"
@@ -178,7 +197,7 @@ class TestMigration(SubManFixture):
     @patch("__builtin__.raw_input", autospec=True)
     @patch("getpass.getpass", autospec=True)
     def test_get_auth_with_serverurl(self, mock_getpass, mock_input):
-        self.engine.options = self.create_options({'destination_url': 'foobar'})
+        self.engine.options = self.create_options(destination_url='foobar')
 
         mock_input.side_effect = iter(["legacy_username", "destination_username"])
         mock_getpass.side_effect = iter(["legacy_password", "destination_password"])
@@ -220,8 +239,7 @@ class TestMigration(SubManFixture):
         self.assertEquals(self.engine.destination_creds.password, "legacy_password")
 
     def test_get_auth_with_provided_rhn_creds(self):
-        self.engine.options = self.create_options(
-            {'legacy_user': 'legacy_username', 'legacy_password': 'legacy_password'})
+        self.engine.options = self.create_options(legacy_user='legacy_username', legacy_password='legacy_password')
         self.engine.is_hosted = True
         self.engine.get_auth()
         self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
@@ -231,8 +249,7 @@ class TestMigration(SubManFixture):
 
     @patch("getpass.getpass", autospec=True)
     def test_gets_password_when_only_username_give(self, mock_getpass):
-        self.engine.options = self.create_options(
-            {'legacy_user': 'legacy_username'})
+        self.engine.options = self.create_options(legacy_user='legacy_username')
 
         mock_getpass.return_value = "legacy_password"
         self.engine.is_hosted = True
@@ -245,8 +262,9 @@ class TestMigration(SubManFixture):
     @patch("getpass.getpass", autospec=True)
     def test_gets_destination_password_when_only_destination_username_given(self, mock_getpass):
         self.engine.options = self.create_options(
-            {'legacy_user': 'legacy_username', 'legacy_password': 'legacy_password',
-                'destination_user': 'destination_username'})
+            legacy_user='legacy_username',
+            legacy_password='legacy_password',
+            destination_user='destination_username')
 
         mock_getpass.return_value = "destination_password"
         self.engine.is_hosted = False
@@ -258,8 +276,10 @@ class TestMigration(SubManFixture):
 
     def test_all_auth_provided(self):
         self.engine.options = self.create_options(
-            {'legacy_user': 'legacy_username', 'legacy_password': 'legacy_password',
-                'destination_user': 'destination_username', 'destination_password': 'destination_password'})
+            legacy_user='legacy_username',
+            legacy_password='legacy_password',
+            destination_user='destination_username',
+            destination_password='destination_password')
 
         self.engine.is_hosted = False
         self.engine.get_auth()
@@ -270,7 +290,7 @@ class TestMigration(SubManFixture):
 
     def test_setting_unauthenticated_proxy(self):
         self.engine.rhsmcfg = MagicMock()
-        self.engine.options = self.create_options({'noproxy': False})
+        self.engine.options = self.create_options(noproxy=False)
 
         rhn_config = {
             "enableProxy": True,
@@ -289,7 +309,7 @@ class TestMigration(SubManFixture):
 
     def test_setting_authenticated_proxy(self):
         self.engine.rhsmcfg = MagicMock()
-        self.engine.options = self.create_options({'noproxy': False})
+        self.engine.options = self.create_options(noproxy=False)
 
         rhn_config = {
             "enableProxy": True,
@@ -310,7 +330,7 @@ class TestMigration(SubManFixture):
 
     def test_setting_prefixed_proxy(self):
         self.engine.rhsmcfg = MagicMock()
-        self.engine.options = self.create_options({'noproxy': False})
+        self.engine.options = self.create_options(noproxy=False)
 
         rhn_config = {
             "enableProxy": True,
@@ -329,7 +349,7 @@ class TestMigration(SubManFixture):
 
     def test_noproxy_option(self):
         self.engine.rhsmcfg = MagicMock()
-        self.engine.options = self.create_options({'noproxy': True})
+        self.engine.options = self.create_options(noproxy=True)
 
         rhn_config = {
             "enableProxy": True,
@@ -373,25 +393,10 @@ class TestMigration(SubManFixture):
         self.assertTrue(self.engine.rhsmcfg.get.call_args_list == expected)
         self.assertTrue(self.engine.rhsmcfg.get_int.call_args_list == get_int_expected)
 
-    def test_no_server_url_provided_consumer_auth(self):
-        expected, get_int_expected = self._setup_rhsmcfg_mocks()
-        self.engine.get_candlepin_consumer_connection()
-        self.assertTrue(self.engine.rhsmcfg.get.call_args_list == expected)
-        self.assertTrue(self.engine.rhsmcfg.get_int.call_args_list == get_int_expected)
-
     def test_bad_server_url_basic_auth(self):
         try:
-            self.engine.options = self.create_options({'destination_url': 'http://'})
+            self.engine.options = self.create_options(destination_url='http://')
             self.engine.get_candlepin_basic_auth_connection("some_username", "some_password")
-        except SystemExit, e:
-            self.assertEquals(e.code, -1)
-        else:
-            self.fail("No exception raised")
-
-    def test_bad_server_url_consumer_auth(self):
-        try:
-            self.engine.options = self.create_options({'destination_url': 'http://'})
-            self.engine.get_candlepin_consumer_connection()
         except SystemExit, e:
             self.assertEquals(e.code, -1)
         else:
@@ -474,7 +479,7 @@ class TestMigration(SubManFixture):
             self.fail("No exception raised")
 
     def test_org_option(self):
-        self.engine.options = self.create_options({'org': 'my_org'})
+        self.engine.options = self.create_options(org='my_org')
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
@@ -484,7 +489,7 @@ class TestMigration(SubManFixture):
         self.assertEquals(org, "my_org")
 
     def test_bad_org_option(self):
-        self.engine.options = self.create_options({'org': 'nonsense'})
+        self.engine.options = self.create_options(org='nonsense')
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
@@ -594,7 +599,7 @@ class TestMigration(SubManFixture):
             self.fail("No exception raised")
 
     def test_environment_option(self):
-        self.engine.options = self.create_options({'environment': 'My Environment'})
+        self.engine.options = self.create_options(environment='My Environment')
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
         self.engine.cp.getEnvironmentList = MagicMock()
@@ -607,7 +612,7 @@ class TestMigration(SubManFixture):
         self.assertEquals(env, "My Environment")
 
     def test_bad_environment_option(self):
-        self.engine.options = self.create_options({'environment': 'nonsense'})
+        self.engine.options = self.create_options(environment='nonsense')
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = True
         self.engine.cp.getEnvironmentList = MagicMock()
@@ -623,7 +628,7 @@ class TestMigration(SubManFixture):
             self.fail("No exception raised")
 
     def test_environment_option_with_no_resource(self):
-        self.engine.options = self.create_options({'environment': 'My Environment'})
+        self.engine.options = self.create_options(environment='My Environment')
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = False
         try:
@@ -681,6 +686,18 @@ class TestMigration(SubManFixture):
             self.assertEquals(e.code, 1)
         else:
             self.fail("No exception raised")
+
+    def test_base_channel_resolution(self):
+        channel_chain = [
+                {'clone_original': 'c', 'label': 'd'},
+                {'clone_original': 'b', 'label': 'c'},
+                {'clone_original': 'a', 'label': 'b'},
+                {'clone_original': '', 'label': 'a'}
+        ]
+        mock_sc = Mock().return_value
+        mock_sc.channel.software.getDetails.side_effect = channel_chain
+        chan = self.engine.resolve_base_channel('d', mock_sc, 'sk')
+        self.assertEquals('a', chan['label'])
 
     def test_no_conflicting_channels(self):
         channels = ["some-other-channel-i386-server-5-rpm",
@@ -849,7 +866,8 @@ class TestMigration(SubManFixture):
 
         self.engine.disable_yum_rhn_plugin = stub_disable_yum_rhn_plugin
 
-        with patch.object(self.engine, 'get_system_id', autospec=True):
+        with patch.object(self.engine, 'get_system_id', autospec=True) as sid:
+            sid.return_value = "foo"
             self.engine.legacy_purge(sc, None)
             mock_shutil.assert_called_with("/some/path", "/some/path.save")
 
@@ -887,15 +905,14 @@ class TestMigration(SubManFixture):
             self.engine.legacy_purge(sc, None)
             mock_remove.assert_called_with("/some/path")
 
-    @patch("subprocess.call", autospec=True)
-    def test_register_failure(self, mock_subprocess):
-        self.engine.options = self.create_options({'destination_url': 'foobar'})
+    def test_register_failure(self):
+        self.engine.options = self.create_options(destination_url='foobar')
 
         credentials = MagicMock()
         credentials.username = "foo"
         credentials.password = "bar"
 
-        mock_subprocess.return_value = 1
+        self._inject_mock_invalid_consumer()
         try:
             self.engine.register(credentials, "", "")
         except SystemExit, e:
@@ -904,16 +921,15 @@ class TestMigration(SubManFixture):
             self.fail("No exception raised")
 
     @patch("subprocess.call", autospec=True)
-    @patch.object(identity.ConsumerIdentity, "read")
-    def test_register(self, mock_read, mock_subprocess):
-        self.engine.options = self.create_options({'destination_url': 'foobar'})
+    def test_register(self, mock_subprocess):
+        self.engine.options = self.create_options(destination_url='foobar')
 
         credentials = MagicMock()
         credentials.username = "foo"
         credentials.password = "bar"
 
         mock_subprocess.return_value = 0
-        mock_read.return_value = MagicMock()
+        self._inject_mock_valid_consumer()
         self.engine.register(credentials, "org", "env")
 
         arg_list = ['subscription-manager',
@@ -923,6 +939,7 @@ class TestMigration(SubManFixture):
             '--serverurl=foobar',
             '--org=org',
             '--environment=env',
+            '--auto-attach',
             ]
 
         mock_subprocess.assert_called_with(arg_list)
@@ -940,24 +957,6 @@ class TestMigration(SubManFixture):
         mock_menu.return_value.choose.return_value = "Premium"
         service_level = self.engine.select_service_level("my_org", "Something Else")
         self.assertEquals(service_level, "Premium")
-
-    @patch("subprocess.call", autospec=True)
-    @patch("os.getenv", autospec=True)
-    @patch("os.path.exists", autospec=True)
-    def test_subscribe(self, mock_exists, mock_getenv, mock_subprocess):
-        self.engine.options = self.create_options({'gui': False})
-        mock_getenv.return_value = True
-        mock_exists.return_value = True
-
-        mock_consumer = MagicMock()
-        self.engine.subscribe(mock_consumer, "foobar")
-        arg_list = [
-            'subscription-manager',
-            'subscribe',
-            '--auto',
-            '--servicelevel=foobar',
-            ]
-        mock_subprocess.assert_called_with(arg_list)
 
     @patch("subscription_manager.repolib.RepoActionInvoker")
     @patch("subscription_manager.repolib.RepoFile")
