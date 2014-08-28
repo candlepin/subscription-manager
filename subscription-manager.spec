@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.12.13
+Version: 1.12.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -446,6 +446,11 @@ fi
 %endif
 
 %changelog
+* Thu Aug 28 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.14-1
+- 1132071: Update rhsm-debug to collect product-default directory (wpoteat@redhat.com)
+- 1123029: Use default product certs if present. (alikins@redhat.com)
+- Latest strings from zanata. (alikins@redhat.com)
+
 * Wed Aug 20 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.13-1
 - 1124685: Handle /status without rules-version (alikins@redhat.com)
 - 1125132: Label does not change to Attaching on Fristboot progress bar (wpoteat@redhat.com)
