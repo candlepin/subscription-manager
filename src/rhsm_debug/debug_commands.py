@@ -122,6 +122,9 @@ class SystemCommand(CliCommand):
                 self._copy_directory('/var/log/rhsm', content_path)
                 self._copy_directory('/var/lib/rhsm', content_path)
 
+            if not sos:
+                self._copy_cert_directory('/etc/pki/product-default', content_path)
+
             if defaults['productcertdir'] != cfg.get('rhsm', 'productCertDir') or not sos:
                 self._copy_cert_directory(cfg.get('rhsm', 'productCertDir'), content_path)
 
