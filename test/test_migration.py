@@ -288,6 +288,19 @@ class TestMigration(SubManFixture):
         self.assertEquals(self.engine.destination_creds.username, "destination_username")
         self.assertEquals(self.engine.destination_creds.password, "destination_password")
 
+    def test_broken_proxy(self):
+        rhn_config = {
+            "enableProxy": True,
+            "httpProxy": "bad_proxy",
+        }
+        self.engine.rhncfg = rhn_config
+        try:
+            self.engine.transfer_http_proxy_settings()
+        except SystemExit, e:
+            self.assertEquals(e.code, 1)
+        else:
+            self.fail("No exception raised")
+
     def test_setting_unauthenticated_proxy(self):
         self.engine.rhsmcfg = MagicMock()
         self.engine.options = self.create_options(noproxy=False)
@@ -386,6 +399,71 @@ class TestMigration(SubManFixture):
         get_int_expected = [call("server", "port")]
 
         return expected, get_int_expected
+
+    @patch("rhn.rpclib.Server")
+    def test_get_transition_data(self, mock_server):
+        rhn_config = {
+            "systemIdPath": "/some/path",
+            }
+        self.engine.rhncfg = rhn_config
+        mock_server.system.transitionDataForSystem.return_value = {"uuid": "1"}
+        with open_mock("contents") as f:
+            self.engine.get_transition_data(mock_server)
+            f.assert_called_once_with("/some/path", "r")
+            mock_server.system.transitionDataForSystem.assert_called_once_with("contents")
+            self.assertEquals("1", self.engine.consumer_id)
+
+    @patch("rhn.rpclib.Server")
+    def test_legacy_unentitle(self, mock_server):
+        rhn_config = {
+            "systemIdPath": "/some/path",
+            }
+        self.engine.rhncfg = rhn_config
+        with open_mock("contents") as f:
+            self.engine.legacy_unentitle(mock_server)
+            f.assert_called_once_with("/some/path", "r")
+            mock_server.system.unentitle.assert_called_once_with("contents")
+
+    @patch("rhn.rpclib.Server")
+    @patch("subscription_manager.migrate.migrate.getChannels")
+    def test_get_subscribed_channels_list(self, mock_channels, mock_server):
+        self.engine.options = self.create_options()
+        key = "key"
+        mock_channels.return_value.channels.return_value = [
+            {"label": "foo"},
+            {"label": "bar"},
+            ]
+        results = self.engine.get_subscribed_channels_list(mock_server, key)
+        self.assertEquals(["foo", "bar"], results)
+
+    @patch("subscription_manager.migrate.migrate.getChannels")
+    def test_get_subscribed_channels_list_5to6(self, mock_channels):
+        self.engine.options = self.create_options(five_to_six=True)
+        server = "server"
+        key = "key"
+        channel_list = [
+            {"label": "foo"},
+            {"label": "bar"},
+            ]
+        mock_channels.return_value.channels.return_value = channel_list
+        self.engine.resolve_base_channel = Mock(side_effect=channel_list)
+
+        results = self.engine.get_subscribed_channels_list(server, key)
+        self.assertEquals(["foo", "bar"], results)
+        calls = [call.resolve_base_channel("foo", server, key), call.resolve_base_channel("bar", server, key)]
+        self.engine.resolve_base_channel.assert_has_calls(calls, any_order=True)
+
+    def test_consumer_exists(self):
+        self.engine.cp.getConsumer = MagicMock(return_value=1)
+        exists = self.engine.consumer_exists("123")
+        self.assertTrue(exists)
+        self.engine.cp.getConsumer.assert_called_once_with("123")
+
+    def test_consumer_does_not_exist(self):
+        self.engine.cp.getConsumer = MagicMock(side_effect=ValueError)
+        exists = self.engine.consumer_exists("123")
+        self.assertFalse(exists)
+        self.engine.cp.getConsumer.assert_called_once_with("123")
 
     def test_no_server_url_provided_basic_auth(self):
         expected, get_int_expected = self._setup_rhsmcfg_mocks()
@@ -666,11 +744,11 @@ class TestMigration(SubManFixture):
         sc.user.listRoles.return_value = ["org_admin"]
         self.engine.check_is_org_admin(sc, None, "some_username")
 
-    def test_check_is_org_admin_failure(self):
-        sc = MagicMock()
-        sc.user.listRoles.return_value = ["bogus_role"]
+    @patch("rhn.rpclib.Server")
+    def test_check_is_org_admin_failure(self, mock_server):
+        mock_server.user.listRoles.return_value = ["bogus_role"]
         try:
-            self.engine.check_is_org_admin(sc, None, "some_username")
+            self.engine.check_is_org_admin(mock_server, None, "some_username")
         except SystemExit, e:
             self.assertEquals(e.code, 1)
         else:
@@ -694,7 +772,7 @@ class TestMigration(SubManFixture):
                 {'clone_original': 'a', 'label': 'b'},
                 {'clone_original': '', 'label': 'a'}
         ]
-        mock_sc = Mock().return_value
+        mock_sc = Mock()
         mock_sc.channel.software.getDetails.side_effect = channel_chain
         chan = self.engine.resolve_base_channel('d', mock_sc, 'sk')
         self.assertEquals('a', chan['label'])
@@ -919,6 +997,62 @@ class TestMigration(SubManFixture):
             self.assertEquals(e.code, 2)
         else:
             self.fail("No exception raised")
+
+    @patch("subprocess.call", autospec=True)
+    def test_register_5to6(self, mock_subprocess):
+        self.engine.options = self.create_options(
+            five_to_six=True,
+            destination_url="http://example.com",
+            service_level="x")
+        credentials = MagicMock()
+        credentials.username = "foo"
+        credentials.password = "bar"
+        self.engine.consumer_id = "id"
+
+        self.engine.consumer_exists = MagicMock(return_value=True)
+        self.engine.select_service_level = MagicMock(return_value="y")
+
+        mock_subprocess.return_value = 0
+        self._inject_mock_valid_consumer()
+        self.engine.register(credentials, "org", "env")
+
+        arg_list = ['subscription-manager',
+            'register',
+            '--username=foo',
+            '--password=bar',
+            '--serverurl=http://example.com',
+            '--org=org',
+            '--environment=env',
+            '--consumerid=id',
+            '--auto-attach',
+            '--service-level=y',
+            ]
+
+        self.engine.consumer_exists.assert_called_once_with(self.engine.consumer_id)
+        self.engine.select_service_level.assert_called_once_with("org", "x")
+        mock_subprocess.assert_called_once_with(arg_list)
+
+    @patch("subprocess.call", autospec=True)
+    def test_register_no_auto(self, mock_subprocess):
+        self.engine.options = self.create_options(auto=False)
+        credentials = MagicMock()
+        credentials.username = "foo"
+        credentials.password = "bar"
+        self.engine.consumer_id = "id"
+
+        mock_subprocess.return_value = 0
+        self._inject_mock_valid_consumer()
+        self.engine.register(credentials, "org", "env")
+
+        arg_list = ['subscription-manager',
+            'register',
+            '--username=foo',
+            '--password=bar',
+            '--org=org',
+            '--environment=env',
+            ]
+
+        mock_subprocess.assert_called_once_with(arg_list)
 
     @patch("subprocess.call", autospec=True)
     def test_register(self, mock_subprocess):

@@ -435,7 +435,7 @@ class MigrationEngine(object):
                 if dic_data[channel] != 'none':
                     valid_rhsm_channels.append(channel)
                     cert = dic_data[channel]
-                    log.info("mapping found for: %s = %s", channel, cert)
+                    log.info("Mapping found for: %s = %s", channel, cert)
                     prod_id = cert.split('-')[-1].split('.pem')[0]
                     cert_to_channels = applicable_certs.setdefault(prod_id, {})
                     cert_to_channels.setdefault(cert, []).append(channel)
@@ -469,7 +469,7 @@ class MigrationEngine(object):
         # collision and must abort.
         self.handle_collisions(applicable_certs)
 
-        log.info("certs to be installed: %s", applicable_certs)
+        log.info("Certs to be installed: %s", applicable_certs)
 
         self.print_banner(_("Installing product certificates for these legacy channels:"))
         for i in valid_rhsm_channels:
@@ -486,7 +486,7 @@ class MigrationEngine(object):
             source_path = os.path.join("/usr/share/rhsm/product", release, cert)
             truncated_cert_name = cert.split('-')[-1]
             destination_path = os.path.join(product_dir.path, truncated_cert_name)
-            log.info("copying %s to %s ", source_path, destination_path)
+            log.info("Copying %s to %s ", source_path, destination_path)
             shutil.copy2(source_path, destination_path)
 
             # See BZ #972883. Add an entry to the repo db telling subscription-manager
@@ -583,6 +583,7 @@ class MigrationEngine(object):
             result = sc.system.deleteSystems(sk, system_id)
         except Exception:
             log.exception("Could not delete system %s from legacy server" % system_id)
+            # If we time out or get a network error, log it and keep going.
             shutil.move(system_id_path, system_id_path + ".save")
             self.disable_yum_rhn_plugin()
             print _("Did not receive a completed unregistration message from legacy server for system %s.") % system_id
@@ -597,6 +598,7 @@ class MigrationEngine(object):
             self.disable_yum_rhn_plugin()
             print _("System successfully unregistered from legacy server.")
         else:
+            # If the legacy server reports that deletion just failed, then quit.
             system_exit(1, _("Unable to unregister system from legacy server.  " + SEE_LOG_FILE))
 
     def get_transition_data(self, sc):
