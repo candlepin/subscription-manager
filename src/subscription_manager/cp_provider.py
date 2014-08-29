@@ -88,6 +88,9 @@ class CPProvider(object):
     def get_consumer_auth_cp(self):
         if not self.consumer_auth_cp:
             self.consumer_auth_cp = connection.UEPConnection(
+                    host=self.server_hostname,
+                    ssl_port=self.server_port,
+                    handler=self.server_prefix,
                     proxy_hostname=self.proxy_hostname,
                     proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user,
@@ -98,6 +101,9 @@ class CPProvider(object):
     def get_basic_auth_cp(self):
         if not self.basic_auth_cp:
             self.basic_auth_cp = connection.UEPConnection(
+                    host=self.server_hostname,
+                    ssl_port=self.server_port,
+                    handler=self.server_prefix,
                     proxy_hostname=self.proxy_hostname,
                     proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user,
@@ -109,6 +115,9 @@ class CPProvider(object):
     def get_no_auth_cp(self):
         if not self.no_auth_cp:
             self.no_auth_cp = connection.UEPConnection(
+                    host=self.server_hostname,
+                    ssl_port=self.server_port,
+                    handler=self.server_prefix,
                     proxy_hostname=self.proxy_hostname,
                     proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user,

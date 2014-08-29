@@ -343,7 +343,6 @@ class CliCommand(AbstractCLICommand):
             except ServerUrlParseError, e:
                 print _("Error parsing serverurl:")
                 handle_exception("Error parsing serverurl:", e)
-
             # this trys to actually connect to the server and ping it
             try:
                 if not is_valid_server_info(self.server_hostname,
@@ -361,7 +360,8 @@ class CliCommand(AbstractCLICommand):
             cfg.set("server", "hostname", self.server_hostname)
             cfg.set("server", "port", self.server_port)
             cfg.set("server", "prefix", self.server_prefix)
-
+            if self.server_port:
+                self.server_port = int(self.server_port)
             config_changed = True
 
         if hasattr(self.options, "base_url") and self.options.base_url:
