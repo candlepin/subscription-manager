@@ -162,7 +162,7 @@ class TestMigration(SubManFixture):
         parser = OptionParser()
         migrate.add_parser_options(parser, five_to_six_script=True)
         (options, args) = parser.parse_args([])
-        self.assertEquals("purge", options.registration_state)
+        self.assertEquals("unentitle", options.registration_state)
 
     def test_mutually_exclusive_auto_service_level_options(self):
         parser = OptionParser()

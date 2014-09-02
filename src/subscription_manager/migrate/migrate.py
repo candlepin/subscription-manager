@@ -789,8 +789,8 @@ def add_parser_options(parser, five_to_six_script=False):
     if five_to_six_script:
         valid_states = ["keep", "unentitle", "purge"]
         parser.add_option("--registration-state", type="choice",
-            choices=valid_states, metavar=",".join(valid_states), default="purge",
-            help=_("state to leave system in on legacy server (not available in hosted environments; default is 'purge')"))
+            choices=valid_states, metavar=",".join(valid_states), default="unentitle",
+            help=_("state to leave system in on legacy server (not available in hosted environments; default is 'unentitle')"))
 
     parser.add_option("--destination-url",
         help=_("specify the subscription management server to migrate to"))
