@@ -179,7 +179,7 @@ class MigrationEngine(object):
                 self.proxy_host, self.proxy_port = http_proxy.split(':')
             except ValueError, e:
                 log.exception(e)
-                system_exit(1, _("Could not read RHN proxy settings.  " + SEE_LOG_FILE))
+                system_exit(1, _("Could not read legacy proxy settings.  " + SEE_LOG_FILE))
 
             if self.rhncfg['enableProxyAuth']:
                 self.proxy_user = self.rhncfg['proxyUser']
@@ -311,7 +311,7 @@ class MigrationEngine(object):
         try:
             if self.rhncfg['enableProxy']:
                 proxy = "%s:%s" % (self.proxy_host, self.proxy_port)
-                log.info("Using proxy %s for RHN API methods" % (proxy))
+                log.info("Using proxy %s for legacy API methods" % (proxy))
                 if self.rhncfg['enableProxyAuth']:
                     proxy = "@".join(["%s:%s" % (self.proxy_user, self.proxy_pass), proxy])
             else:
@@ -326,14 +326,14 @@ class MigrationEngine(object):
             return (sc, sk)
         except Exception, e:
             log.exception(e)
-            system_exit(1, _("Unable to authenticate to RHN Classic.  " + SEE_LOG_FILE))
+            system_exit(1, _("Unable to authenticate to legacy server.  " + SEE_LOG_FILE))
 
     def check_is_org_admin(self, sc, sk, username):
         try:
             roles = sc.user.listRoles(sk, username)
         except Exception, e:
             log.exception(e)
-            system_exit(1, _("Problem encountered determining user roles in RHN Classic.  " + SEE_LOG_FILE))
+            system_exit(1, _("Problem encountered determining user roles on legacy server.  " + SEE_LOG_FILE))
         if "org_admin" not in roles:
             system_exit(1, _("You must be an org admin to successfully run this script."))
 
