@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.0
+Version: 1.13.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -447,6 +447,9 @@ fi
 %endif
 
 %changelog
+* Thu Sep 04 2014 Alex Wood <awood@redhat.com> 1.13.1-1
+- Make 'gettext_lint' target grok _(u"foo") strings. (alikins@redhat.com)
+- Add a sat5to6 migration script.
 * Thu Aug 28 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.14-1
 - 1132071: Update rhsm-debug to collect product-default directory (wpoteat@redhat.com)
 - 1123029: Use default product certs if present. (alikins@redhat.com)
