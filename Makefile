@@ -498,7 +498,7 @@ fix-glade:
 gettext_lint:
 	@TMPFILE=`mktemp` || exit 1; \
 	pcregrep -n --color=auto -M "_\(.*[\'|\"].*?[\'|\"]\s*\+.*?(?s)\s*[\"|\'].*?(?-s)[\"|\'].*?\)"  $(STYLEFILES) | tee $$TMPFILE; \
-	pcregrep -n --color=auto -M "[^_]_\([^\'\"].*?[\'\"]?\)" $(STYLEFILES) | tee $$TMPFILE; \
+	pcregrep -n --color=auto -M "[^_]_\([^ru\'\"].*?[\'\"]?\)" $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 #see bz #826874, causes issues on older libglade
