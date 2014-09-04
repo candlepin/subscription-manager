@@ -29,7 +29,7 @@ from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \
         InstalledProductsManager, EntitlementStatusCache, \
         PoolTypeCache
-import subscription_manager.injection as inj
+
 from rhsm.profile import Package, RPMProfile
 
 from rhsm.connection import RestlibException, UnauthorizedException

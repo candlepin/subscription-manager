@@ -217,266 +217,266 @@ xZsoPA4OgfEcTad/5CorTswNTqpmwlkQ6Yp61h8L7BDWJ6ywovqXJQqo6lYK3149
 
 ENTITLEMENT_CERT_V1_0_OUTPUT = """
 +-------------------------------------------+
-	Entitlement Certificate
+\tEntitlement Certificate
 +-------------------------------------------+
 
 Certificate:
-	Path: 
-	Version: 1.0
-	Serial: 60063758564076674
-	Start Date: 2012-09-07 00:00:00+00:00
-	End Date: 2013-09-07 00:00:00+00:00
-	Pool ID: Not Available
+\tPath:%(space)s
+\tVersion: 1.0
+\tSerial: 60063758564076674
+\tStart Date: 2012-09-07 00:00:00+00:00
+\tEnd Date: 2013-09-07 00:00:00+00:00
+\tPool ID: Not Available
 
 Subject:
-	CN: ff80808139affbb50139b5841809706e
+\tCN: ff80808139affbb50139b5841809706e
 
 Issuer:
-	C: US
-	CN: boogady
-	L: Raleigh
+\tC: US
+\tCN: boogady
+\tL: Raleigh
 
 Product:
-	ID: 37060
-	Name: Awesome OS Server Bits
-	Version: 6.1
-	Arch: ALL
-	Tags: 
-	Brand Type: 
-	Brand Name: 
+\tID: 37060
+\tName: Awesome OS Server Bits
+\tVersion: 6.1
+\tArch: ALL
+\tTags:%(space)s
+\tBrand Type:%(space)s
+\tBrand Name:%(space)s
 
 Product:
-	ID: 37065
-	Name: Clustering Bits
-	Version: 1.0
-	Arch: ALL
-	Tags: 
-	Brand Type: 
-	Brand Name: 
+\tID: 37065
+\tName: Clustering Bits
+\tVersion: 1.0
+\tArch: ALL
+\tTags:%(space)s
+\tBrand Type:%(space)s
+\tBrand Name:%(space)s
 
 Product:
-	ID: 37067
-	Name: Shared Storage Bits
-	Version: 1.0
-	Arch: ALL
-	Tags: 
-	Brand Type: 
-	Brand Name: 
+\tID: 37067
+\tName: Shared Storage Bits
+\tVersion: 1.0
+\tArch: ALL
+\tTags:%(space)s
+\tBrand Type:%(space)s
+\tBrand Name:%(space)s
 
 Product:
-	ID: 37068
-	Name: Large File Support Bits
-	Version: 1.0
-	Arch: ALL
-	Tags: 
-	Brand Type: 
-	Brand Name: 
+\tID: 37068
+\tName: Large File Support Bits
+\tVersion: 1.0
+\tArch: ALL
+\tTags:%(space)s
+\tBrand Type:%(space)s
+\tBrand Name:%(space)s
 
 Product:
-	ID: 37069
-	Name: Management Bits
-	Version: 1.0
-	Arch: ALL
-	Tags: 
-	Brand Type: 
-	Brand Name: 
+\tID: 37069
+\tName: Management Bits
+\tVersion: 1.0
+\tArch: ALL
+\tTags:%(space)s
+\tBrand Type:%(space)s
+\tBrand Name:%(space)s
 
 Product:
-	ID: 37070
-	Name: Load Balancing Bits
-	Version: 1.0
-	Arch: ALL
-	Tags: 
-	Brand Type: 
-	Brand Name: 
+\tID: 37070
+\tName: Load Balancing Bits
+\tVersion: 1.0
+\tArch: ALL
+\tTags:%(space)s
+\tBrand Type:%(space)s
+\tBrand Name:%(space)s
 
 Order:
-	Name: Awesome OS Server Bundled
-	Number: ff80808139a0a7160139a0a8501d0295
-	SKU: awesomeos-server
-	Contract: 359
-	Account: 12331131231
-	Service Level: Premium
-	Service Type: Level 3
-	Quantity: 10
-	Quantity Used: 1
-	Socket Limit: 2
-	RAM Limit: 
-	Core Limit: 
-	Virt Only: False
-	Stacking ID: 
-	Warning Period: 30
-	Provides Management: 1
+\tName: Awesome OS Server Bundled
+\tNumber: ff80808139a0a7160139a0a8501d0295
+\tSKU: awesomeos-server
+\tContract: 359
+\tAccount: 12331131231
+\tService Level: Premium
+\tService Type: Level 3
+\tQuantity: 10
+\tQuantity Used: 1
+\tSocket Limit: 2
+\tRAM Limit:%(space)s
+\tCore Limit:%(space)s
+\tVirt Only: False
+\tStacking ID:%(space)s
+\tWarning Period: 30
+\tProvides Management: 1
 
 Content:
-	Type: yum
-	Name: always-enabled-content
-	Label: always-enabled-content
-	Vendor: test-vendor
-	URL: /foo/path/always/$releasever
-	GPG: /foo/path/always/gpg
-	Enabled: True
-	Expires: 200
-	Required Tags: 
-	Arches: 
+\tType: yum
+\tName: always-enabled-content
+\tLabel: always-enabled-content
+\tVendor: test-vendor
+\tURL: /foo/path/always/$releasever
+\tGPG: /foo/path/always/gpg
+\tEnabled: True
+\tExpires: 200
+\tRequired Tags:%(space)s
+\tArches:%(space)s
 
 Content:
-	Type: yum
-	Name: content
-	Label: content-label
-	Vendor: test-vendor
-	URL: /foo/path
-	GPG: /foo/path/gpg/
-	Enabled: True
-	Expires: 0
-	Required Tags: 
-	Arches: 
+\tType: yum
+\tName: content
+\tLabel: content-label
+\tVendor: test-vendor
+\tURL: /foo/path
+\tGPG: /foo/path/gpg/
+\tEnabled: True
+\tExpires: 0
+\tRequired Tags:%(space)s
+\tArches:%(space)s
 
 Content:
-	Type: yum
-	Name: content-emptygpg
-	Label: content-label-empty-gpg
-	Vendor: test-vendor
-	URL: /foo/path
-	GPG: 
-	Enabled: True
-	Expires: 0
-	Required Tags: 
-	Arches: 
+\tType: yum
+\tName: content-emptygpg
+\tLabel: content-label-empty-gpg
+\tVendor: test-vendor
+\tURL: /foo/path
+\tGPG:%(space)s
+\tEnabled: True
+\tExpires: 0
+\tRequired Tags:%(space)s
+\tArches:%(space)s
 
 Content:
-	Type: yum
-	Name: content-nogpg
-	Label: content-label-no-gpg
-	Vendor: test-vendor
-	URL: /foo/path
-	GPG: 
-	Enabled: True
-	Expires: 0
-	Required Tags: 
-	Arches: 
+\tType: yum
+\tName: content-nogpg
+\tLabel: content-label-no-gpg
+\tVendor: test-vendor
+\tURL: /foo/path
+\tGPG:%(space)s
+\tEnabled: True
+\tExpires: 0
+\tRequired Tags:%(space)s
+\tArches:%(space)s
 
 Content:
-	Type: yum
-	Name: never-enabled-content
-	Label: never-enabled-content
-	Vendor: test-vendor
-	URL: /foo/path/never
-	GPG: /foo/path/never/gpg
-	Enabled: False
-	Expires: 600
-	Required Tags: 
-	Arches: 
+\tType: yum
+\tName: never-enabled-content
+\tLabel: never-enabled-content
+\tVendor: test-vendor
+\tURL: /foo/path/never
+\tGPG: /foo/path/never/gpg
+\tEnabled: False
+\tExpires: 600
+\tRequired Tags:%(space)s
+\tArches:%(space)s
 
 Content:
-	Type: yum
-	Name: tagged-content
-	Label: tagged-content
-	Vendor: test-vendor
-	URL: /foo/path/always
-	GPG: /foo/path/always/gpg
-	Enabled: True
-	Expires: 
-	Required Tags: TAG1, TAG2
-	Arches: 
-"""
+\tType: yum
+\tName: tagged-content
+\tLabel: tagged-content
+\tVendor: test-vendor
+\tURL: /foo/path/always
+\tGPG: /foo/path/always/gpg
+\tEnabled: True
+\tExpires:%(space)s
+\tRequired Tags: TAG1, TAG2
+\tArches:%(space)s
+""" % ({'space': ' '})
 
 ENTITLEMENT_CERT_V3_0_OUTPUT = """
 +-------------------------------------------+
-	Entitlement Certificate
+\tEntitlement Certificate
 +-------------------------------------------+
 
 Certificate:
-	Path: 
-	Version: 3.0
-	Serial: 1306183239866671852
-	Start Date: 2012-09-18 00:00:00+00:00
-	End Date: 2013-09-18 00:00:00+00:00
-	Pool ID: Not Available
+\tPath:%(space)s
+\tVersion: 3.0
+\tSerial: 1306183239866671852
+\tStart Date: 2012-09-18 00:00:00+00:00
+\tEnd Date: 2013-09-18 00:00:00+00:00
+\tPool ID: Not Available
 
 Subject:
-	CN: ff80808139d9e26c0139da23489a0066
+\tCN: ff80808139d9e26c0139da23489a0066
 
 Issuer:
-	C: US
-	CN: pipboy
-	L: Raleigh
+\tC: US
+\tCN: pipboy
+\tL: Raleigh
 
 Product:
-	ID: 100000000000002
-	Name: Awesome OS for x86_64 Bits
-	Version: 3.11
-	Arch: x86_64
-	Tags: 
-	Brand Type: 
-	Brand Name: 
+\tID: 100000000000002
+\tName: Awesome OS for x86_64 Bits
+\tVersion: 3.11
+\tArch: x86_64
+\tTags:%(space)s
+\tBrand Type:%(space)s
+\tBrand Name:%(space)s
 
 Order:
-	Name: Awesome OS for x86_64
-	Number: ff80808139d94b400139d94c018c0164
-	SKU: awesomeos-x86_64
-	Contract: 67
-	Account: 12331131231
-	Service Level: 
-	Service Type: 
-	Quantity: 10
-	Quantity Used: 2
-	Socket Limit: 1
-	RAM Limit: 
-	Core Limit: 
-	Virt Only: False
-	Stacking ID: 1
-	Warning Period: 30
-	Provides Management: False
+\tName: Awesome OS for x86_64
+\tNumber: ff80808139d94b400139d94c018c0164
+\tSKU: awesomeos-x86_64
+\tContract: 67
+\tAccount: 12331131231
+\tService Level:%(space)s
+\tService Type:%(space)s
+\tQuantity: 10
+\tQuantity Used: 2
+\tSocket Limit: 1
+\tRAM Limit:%(space)s
+\tCore Limit:%(space)s
+\tVirt Only: False
+\tStacking ID: 1
+\tWarning Period: 30
+\tProvides Management: False
 
 Content:
-	Type: yum
-	Name: always-enabled-content
-	Label: always-enabled-content
-	Vendor: test-vendor
-	URL: /foo/path/always/$releasever
-	GPG: /foo/path/always/gpg
-	Enabled: True
-	Expires: 200
-	Required Tags: 
-	Arches: 
+\tType: yum
+\tName: always-enabled-content
+\tLabel: always-enabled-content
+\tVendor: test-vendor
+\tURL: /foo/path/always/$releasever
+\tGPG: /foo/path/always/gpg
+\tEnabled: True
+\tExpires: 200
+\tRequired Tags:%(space)s
+\tArches:%(space)s
 
 Content:
-	Type: yum
-	Name: awesomeos
-	Label: awesomeos
-	Vendor: Red Hat
-	URL: /path/to/$basearch/$releasever/awesomeos
-	GPG: /path/to/awesomeos/gpg/
-	Enabled: True
-	Expires: 3600
-	Required Tags: 
-	Arches: 
+\tType: yum
+\tName: awesomeos
+\tLabel: awesomeos
+\tVendor: Red Hat
+\tURL: /path/to/$basearch/$releasever/awesomeos
+\tGPG: /path/to/awesomeos/gpg/
+\tEnabled: True
+\tExpires: 3600
+\tRequired Tags:%(space)s
+\tArches:%(space)s
 
 Content:
-	Type: yum
-	Name: awesomeos-x86_64
-	Label: awesomeos-x86_64
-	Vendor: Red Hat
-	URL: /path/to/awesomeos/x86_64
-	GPG: /path/to/awesomeos/gpg/
-	Enabled: False
-	Expires: 3600
-	Required Tags: 
-	Arches: 
+\tType: yum
+\tName: awesomeos-x86_64
+\tLabel: awesomeos-x86_64
+\tVendor: Red Hat
+\tURL: /path/to/awesomeos/x86_64
+\tGPG: /path/to/awesomeos/gpg/
+\tEnabled: False
+\tExpires: 3600
+\tRequired Tags:%(space)s
+\tArches:%(space)s
 
 Content:
-	Type: yum
-	Name: never-enabled-content
-	Label: never-enabled-content
-	Vendor: test-vendor
-	URL: /foo/path/never
-	GPG: /foo/path/never/gpg
-	Enabled: False
-	Expires: 600
-	Required Tags: 
-	Arches: 
-"""
+\tType: yum
+\tName: never-enabled-content
+\tLabel: never-enabled-content
+\tVendor: test-vendor
+\tURL: /foo/path/never
+\tGPG: /foo/path/never/gpg
+\tEnabled: False
+\tExpires: 600
+\tRequired Tags:%(space)s
+\tArches:%(space)s
+""" % ({'space': ' '})
 
 PRODUCT_CERT_V1_0_OUTPUT = """
 +-------------------------------------------+
@@ -484,62 +484,62 @@ PRODUCT_CERT_V1_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path: 
-	Version: 1.0
-	Serial: 168296333
-	Start Date: 2011-08-23 17:41:39+00:00
-	End Date: 2021-08-23 17:41:39+00:00
+\tPath:%(space)s
+\tVersion: 1.0
+\tSerial: 168296333
+\tStart Date: 2011-08-23 17:41:39+00:00
+\tEnd Date: 2021-08-23 17:41:39+00:00
 
 Subject:
-	CN: 100000000000002
+\tCN: 100000000000002
 
 Issuer:
-	C: US
-	CN: localhost
-	L: Raleigh
+\tC: US
+\tCN: localhost
+\tL: Raleigh
 
 Product:
-	ID: 100000000000002
-	Name: Awesome OS for x86_64 Bits
-	Version: 3.11
-	Arch: x86_64
-	Tags: 
-	Brand Type: 
-	Brand Name: 
+\tID: 100000000000002
+\tName: Awesome OS for x86_64 Bits
+\tVersion: 3.11
+\tArch: x86_64
+\tTags:%(space)s
+\tBrand Type:%(space)s
+\tBrand Name:%(space)s
 
-"""
+""" % ({'space': ' '})
 
 
 PRODUCT_CERT_WITH_OS_NAME_V1_0_OUTPUT = """
 +-------------------------------------------+
-	Product Certificate
+\tProduct Certificate
 +-------------------------------------------+
 
 Certificate:
-	Path: 
-	Version: 1.0
-	Serial: 48785926
-	Start Date: 2012-04-02 18:49:59+00:00
-	End Date: 2022-04-02 18:49:59+00:00
+\tPath:%(space)s
+\tVersion: 1.0
+\tSerial: 48785926
+\tStart Date: 2012-04-02 18:49:59+00:00
+\tEnd Date: 2022-04-02 18:49:59+00:00
 
 Subject:
-	CN: 37060
+\tCN: 37060
 
 Issuer:
-	C: US
-	CN: dhcp231-28.rdu.redhat.com
-	L: Raleigh
+\tC: US
+\tCN: dhcp231-28.rdu.redhat.com
+\tL: Raleigh
 
 Product:
-	ID: 37060
-	Name: Awesome OS Server Bits
-	Version: 6.1
-	Arch: ALL
-	Tags: 
-	Brand Type: 
-	Brand Name: 
+\tID: 37060
+\tName: Awesome OS Server Bits
+\tVersion: 6.1
+\tArch: ALL
+\tTags:%(space)s
+\tBrand Type:%(space)s
+\tBrand Name:%(space)s
 
-"""
+""" % ({'space': ' '})
 
 IDENTITY_CERT_OUTPUT = """
 +-------------------------------------------+
@@ -547,22 +547,22 @@ IDENTITY_CERT_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path: 
-	Version: 1.0
-	Serial: 421616185990326931
-	Start Date: 2014-05-08 13:04:04+00:00
-	End Date: 2030-05-08 13:04:04+00:00
-	Alt Name: URI:CN=redhat.local.rm-rf.ca
+\tPath:%(space)s
+\tVersion: 1.0
+\tSerial: 421616185990326931
+\tStart Date: 2014-05-08 13:04:04+00:00
+\tEnd Date: 2030-05-08 13:04:04+00:00
+\tAlt Name: URI:CN=redhat.local.rm-rf.ca
 
 Subject:
-	CN: 0f5d4617-d913-4a0f-be61-d8a9c88e1476
+\tCN: 0f5d4617-d913-4a0f-be61-d8a9c88e1476
 
 Issuer:
-	C: US
-	CN: wpoteat-desktop.usersys.redhat.com
-	L: Raleigh
+\tC: US
+\tCN: wpoteat-desktop.usersys.redhat.com
+\tL: Raleigh
 
-"""
+""" % ({'space': ' '})
 
 PRODUCT_CERT_V1_0_STAT_OUTPUT = \
 """Type: Product Certificate
