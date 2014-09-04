@@ -1,56 +1,56 @@
 correct_manifest_output = """
 +-------------------------------------------+
-	Manifest
+\tManifest
 +-------------------------------------------+
 
 General:
-	Server: access.stage.redhat.com/management/distributors/
-	Server Version: 0.7.13.13-1
-	Date Created: 2013-02-21T15:31:44.058+0000
-	Creator: stage_test_6
+\tServer: access.stage.redhat.com/management/distributors/
+\tServer Version: 0.7.13.13-1
+\tDate Created: 2013-02-21T15:31:44.058+0000
+\tCreator: stage_test_6
 
 Consumer:
-	Name: sam_org
-	UUID: ba5ac769-207e-421c-bfd2-a23c767114af
-	Type: sam
+\tName: sam_org
+\tUUID: ba5ac769-207e-421c-bfd2-a23c767114af
+\tType: sam
 
 Subscription:
-	Name: RHN Monitoring (Up to 1 guest)
-	Quantity: 1
-	Created: 2013-02-21T15:31:13.000+0000
-	Start Date: 2012-12-31T05:00:00.000+0000
-	End Date: 2013-12-31T04:59:59.000+0000
-	Service Level: Layered
-	Service Type: L1-L3
-	Architectures: 
-	SKU: RH1569626
-	Contract: 
-	Order: 
-	Account: 5206743
-	Entitlement File: export/entitlements/8a99f9833cf86efc013cfd613be066cb.json
-	Certificate File: export/entitlement_certificates/2414805806930829936.pem
-	Certificate Version: 1.0
-	Provided Products:
-	Content Sets:
+\tName: RHN Monitoring (Up to 1 guest)
+\tQuantity: 1
+\tCreated: 2013-02-21T15:31:13.000+0000
+\tStart Date: 2012-12-31T05:00:00.000+0000
+\tEnd Date: 2013-12-31T04:59:59.000+0000
+\tService Level: Layered
+\tService Type: L1-L3
+\tArchitectures:%(space)s
+\tSKU: RH1569626
+\tContract:%(space)s
+\tOrder:%(space)s
+\tAccount: 5206743
+\tEntitlement File: export/entitlements/8a99f9833cf86efc013cfd613be066cb.json
+\tCertificate File: export/entitlement_certificates/2414805806930829936.pem
+\tCertificate Version: 1.0
+\tProvided Products:
+\tContent Sets:
 
-"""
+""" % ({'space': ' '})
 
 consumer_json = """
 {
-    "name": "sam_org", 
+    "name": "sam_org",
     "type": {
-        "id": "5", 
-        "label": "sam", 
+        "id": "5",
+        "label": "sam",
         "manifest": true
-    }, 
+    },
     "uuid": "ba5ac769-207e-421c-bfd2-a23c767114af"
 }"""
 
 meta_json = """
 {
-    "created": "2013-02-21T15:31:44.058+0000", 
-    "principalName": "stage_test_6", 
-    "version": "0.7.13.13-1", 
+    "created": "2013-02-21T15:31:44.058+0000",
+    "principalName": "stage_test_6",
+    "version": "0.7.13.13-1",
     "webAppPrefix": "access.stage.redhat.com/management/distributors/"
 }"""
 
@@ -126,148 +126,148 @@ PNe6469nI+tuqa+9+Vbe6eUsvAePcb7Mbc3JCzzzHJLvJsMEcJgo
 
 entitlement_json = """
 {
-    "accountNumber": "5206743", 
+    "accountNumber": "5206743",
     "certificates": [
         {
-            "cert":"""+' "'+ent_cert.replace("\n", "")+'",'+"""
-            "created": "2013-02-21T15:31:14.000+0000", 
-            "id": "8a99f9833cf86efc013cfd613f2266cc", 
-            "key":"""+' "'+ent_cert_private.replace("\n", "")+'",'+"""
+            "cert":""" + ' "' + ent_cert.replace("\n", "") + '",' + """
+            "created": "2013-02-21T15:31:14.000+0000",
+            "id": "8a99f9833cf86efc013cfd613f2266cc",
+            "key":""" + ' "' + ent_cert_private.replace("\n", "") + '",' + """
             "serial": {
-                "collected": false, 
-                "created": "2013-02-21T15:31:14.000+0000", 
-                "expiration": "2013-12-31T04:59:59.000+0000", 
-                "id": 2414805806930829936, 
-                "revoked": false, 
-                "serial": 2414805806930829936, 
+                "collected": false,
+                "created": "2013-02-21T15:31:14.000+0000",
+                "expiration": "2013-12-31T04:59:59.000+0000",
+                "id": 2414805806930829936,
+                "revoked": false,
+                "serial": 2414805806930829936,
                 "updated": "2013-02-21T15:31:14.000+0000"
-            }, 
+            },
             "updated": "2013-02-21T15:31:14.000+0000"
         }
-    ], 
-    "contractNumber": null, 
-    "created": "2013-02-21T15:31:13.000+0000", 
-    "endDate": "2013-12-31T04:59:59.000+0000", 
-    "href": "/entitlements/8a99f9833cf86efc013cfd613be066cb", 
-    "id": "8a99f9833cf86efc013cfd613be066cb", 
+    ],
+    "contractNumber": null,
+    "created": "2013-02-21T15:31:13.000+0000",
+    "endDate": "2013-12-31T04:59:59.000+0000",
+    "href": "/entitlements/8a99f9833cf86efc013cfd613be066cb",
+    "id": "8a99f9833cf86efc013cfd613be066cb",
     "pool": {
-        "accountNumber": "5206743", 
-        "activeSubscription": true, 
-        "attributes": [], 
-        "consumed": 1, 
-        "contractNumber": null, 
-        "created": "2013-01-04T02:54:05.000+0000", 
-        "endDate": "2013-12-31T04:59:59.000+0000", 
-        "exported": 1, 
-        "href": "/pools/8a99f9833c01cc09013c037ace480344", 
-        "id": "8a99f9833c01cc09013c037ace480344", 
+        "accountNumber": "5206743",
+        "activeSubscription": true,
+        "attributes": [],
+        "consumed": 1,
+        "contractNumber": null,
+        "created": "2013-01-04T02:54:05.000+0000",
+        "endDate": "2013-12-31T04:59:59.000+0000",
+        "exported": 1,
+        "href": "/pools/8a99f9833c01cc09013c037ace480344",
+        "id": "8a99f9833c01cc09013c037ace480344",
         "owner": {
-            "contentPrefix": null, 
-            "created": "2012-10-23T05:05:02.000+0000", 
-            "defaultServiceLevel": null, 
-            "displayName": "6752568", 
-            "href": "/owners/6752568", 
-            "id": "8a99f9833a7a39f2013a8c0277dd7242", 
-            "key": "6752568", 
-            "parentOwner": null, 
-            "updated": "2012-10-23T05:05:02.000+0000", 
+            "contentPrefix": null,
+            "created": "2012-10-23T05:05:02.000+0000",
+            "defaultServiceLevel": null,
+            "displayName": "6752568",
+            "href": "/owners/6752568",
+            "id": "8a99f9833a7a39f2013a8c0277dd7242",
+            "key": "6752568",
+            "parentOwner": null,
+            "updated": "2012-10-23T05:05:02.000+0000",
             "upstreamUuid": null
-        }, 
+        },
         "productAttributes": [
             {
-                "created": "2013-01-04T02:54:05.000+0000", 
-                "id": "8a99f9833c01cc09013c037ace480345", 
-                "name": "support_type", 
-                "productId": "RH1569626", 
-                "updated": "2013-01-04T02:54:05.000+0000", 
+                "created": "2013-01-04T02:54:05.000+0000",
+                "id": "8a99f9833c01cc09013c037ace480345",
+                "name": "support_type",
+                "productId": "RH1569626",
+                "updated": "2013-01-04T02:54:05.000+0000",
                 "value": "L1-L3"
-            }, 
+            },
             {
-                "created": "2013-01-04T02:54:05.000+0000", 
-                "id": "8a99f9833c01cc09013c037ace490346", 
-                "name": "name", 
-                "productId": "RH1569626", 
-                "updated": "2013-01-04T02:54:05.000+0000", 
+                "created": "2013-01-04T02:54:05.000+0000",
+                "id": "8a99f9833c01cc09013c037ace490346",
+                "name": "name",
+                "productId": "RH1569626",
+                "updated": "2013-01-04T02:54:05.000+0000",
                 "value": "RHN Monitoring (Up to 1 guest)"
-            }, 
+            },
             {
-                "created": "2013-01-04T02:54:05.000+0000", 
-                "id": "8a99f9833c01cc09013c037ace490347", 
-                "name": "variant", 
-                "productId": "RH1569626", 
-                "updated": "2013-01-04T02:54:05.000+0000", 
+                "created": "2013-01-04T02:54:05.000+0000",
+                "id": "8a99f9833c01cc09013c037ace490347",
+                "name": "variant",
+                "productId": "RH1569626",
+                "updated": "2013-01-04T02:54:05.000+0000",
                 "value": "Smart Management"
-            }, 
+            },
             {
-                "created": "2013-01-04T02:54:05.000+0000", 
-                "id": "8a99f9833c01cc09013c037ace490348", 
-                "name": "type", 
-                "productId": "RH1569626", 
-                "updated": "2013-01-04T02:54:05.000+0000", 
+                "created": "2013-01-04T02:54:05.000+0000",
+                "id": "8a99f9833c01cc09013c037ace490348",
+                "name": "type",
+                "productId": "RH1569626",
+                "updated": "2013-01-04T02:54:05.000+0000",
                 "value": "MKT"
-            }, 
+            },
             {
-                "created": "2013-01-04T02:54:05.000+0000", 
-                "id": "8a99f9833c01cc09013c037ace490349", 
-                "name": "support_level", 
-                "productId": "RH1569626", 
-                "updated": "2013-01-04T02:54:05.000+0000", 
+                "created": "2013-01-04T02:54:05.000+0000",
+                "id": "8a99f9833c01cc09013c037ace490349",
+                "name": "support_level",
+                "productId": "RH1569626",
+                "updated": "2013-01-04T02:54:05.000+0000",
                 "value": "Layered"
-            }, 
+            },
             {
-                "created": "2013-01-04T02:54:05.000+0000", 
-                "id": "8a99f9833c01cc09013c037ace49034a", 
-                "name": "product_family", 
-                "productId": "RH1569626", 
-                "updated": "2013-01-04T02:54:05.000+0000", 
+                "created": "2013-01-04T02:54:05.000+0000",
+                "id": "8a99f9833c01cc09013c037ace49034a",
+                "name": "product_family",
+                "productId": "RH1569626",
+                "updated": "2013-01-04T02:54:05.000+0000",
                 "value": "Red Hat Applications"
-            }, 
+            },
             {
-                "created": "2013-01-04T02:54:05.000+0000", 
-                "id": "8a99f9833c01cc09013c037ace49034b", 
-                "name": "support_level_exempt", 
-                "productId": "RH1569626", 
-                "updated": "2013-01-04T02:54:05.000+0000", 
+                "created": "2013-01-04T02:54:05.000+0000",
+                "id": "8a99f9833c01cc09013c037ace49034b",
+                "name": "support_level_exempt",
+                "productId": "RH1569626",
+                "updated": "2013-01-04T02:54:05.000+0000",
                 "value": "true"
-            }, 
+            },
             {
-                "created": "2013-01-04T02:54:05.000+0000", 
-                "id": "8a99f9833c01cc09013c037ace49034c", 
-                "name": "description", 
-                "productId": "RH1569626", 
-                "updated": "2013-01-04T02:54:05.000+0000", 
+                "created": "2013-01-04T02:54:05.000+0000",
+                "id": "8a99f9833c01cc09013c037ace49034c",
+                "name": "description",
+                "productId": "RH1569626",
+                "updated": "2013-01-04T02:54:05.000+0000",
                 "value": "Red Hat Applications"
-            }, 
+            },
             {
-                "created": "2013-01-04T02:54:05.000+0000", 
-                "id": "8a99f9833c01cc09013c037ace49034e", 
-                "name": "option_code", 
-                "productId": "RH1569626", 
-                "updated": "2013-01-04T02:54:05.000+0000", 
+                "created": "2013-01-04T02:54:05.000+0000",
+                "id": "8a99f9833c01cc09013c037ace49034e",
+                "name": "option_code",
+                "productId": "RH1569626",
+                "updated": "2013-01-04T02:54:05.000+0000",
                 "value": "0"
-            }, 
+            },
             {
-                "created": "2013-01-04T02:54:05.000+0000", 
-                "id": "8a99f9833c01cc09013c037ace49034d", 
-                "name": "subtype", 
-                "productId": "RH1569626", 
-                "updated": "2013-01-04T02:54:05.000+0000", 
+                "created": "2013-01-04T02:54:05.000+0000",
+                "id": "8a99f9833c01cc09013c037ace49034d",
+                "name": "subtype",
+                "productId": "RH1569626",
+                "updated": "2013-01-04T02:54:05.000+0000",
                 "value": "Layered"
             }
-        ], 
-        "productId": "RH1569626", 
-        "productName": "RHN Monitoring (Up to 1 guest)", 
-        "providedProducts": [], 
-        "quantity": 100, 
-        "restrictedToUsername": null, 
-        "sourceEntitlement": null, 
-        "startDate": "2012-12-31T05:00:00.000+0000", 
-        "subscriptionId": "2677371", 
-        "subscriptionSubKey": "master", 
+        ],
+        "productId": "RH1569626",
+        "productName": "RHN Monitoring (Up to 1 guest)",
+        "providedProducts": [],
+        "quantity": 100,
+        "restrictedToUsername": null,
+        "sourceEntitlement": null,
+        "startDate": "2012-12-31T05:00:00.000+0000",
+        "subscriptionId": "2677371",
+        "subscriptionSubKey": "master",
         "updated": "2013-02-21T15:31:13.000+0000"
-    }, 
-    "quantity": 1, 
-    "startDate": "2012-12-31T05:00:00.000+0000", 
+    },
+    "quantity": 1,
+    "startDate": "2012-12-31T05:00:00.000+0000",
     "updated": "2013-02-21T15:31:13.000+0000"
 }
 """

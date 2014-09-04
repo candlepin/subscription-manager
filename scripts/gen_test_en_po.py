@@ -33,10 +33,11 @@ def gen_msg(msgid, tall=False, longstring=False, wrap=False):
     if longstring:
         msg = "%s________________" % msg
     if tall:
-        msg = msg + "\n"*40
+        msg = msg + "\n" * 40
     if wrap:
         msg = "xx{%s}" % msg
     return msg
+
 
 def main():
     args = sys.argv[1:]
