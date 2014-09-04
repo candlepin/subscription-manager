@@ -5,13 +5,21 @@ import sys
 import StringIO
 import tempfile
 
-from mock import Mock, MagicMock, NonCallableMock, patch
+from mock import Mock, MagicMock, NonCallableMock, patch, mock_open
+from contextlib import contextmanager
 
 import stubs
 import subscription_manager.injection as inj
 
 # use instead of the normal pid file based ActionLock
 from threading import RLock
+
+
+@contextmanager
+def open_mock(content, **kwargs):
+    m = mock_open(read_data=content)
+    with patch('__builtin__.open', m, create=True, **kwargs) as m:
+        yield m
 
 
 class FakeLogger:

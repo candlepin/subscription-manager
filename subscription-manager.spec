@@ -398,6 +398,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/migrate/__init__.py*
 %{_datadir}/rhsm/subscription_manager/migrate/migrate.py*
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
+%attr(755,root,root) %{_sbindir}/sat5to6
 
 %doc
 %{_mandir}/man8/rhn-migrate-classic-to-rhsm.8*

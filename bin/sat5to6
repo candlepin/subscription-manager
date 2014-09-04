@@ -66,7 +66,7 @@ except ImportError, e:
 def main():
     # execute
     try:
-        return migrate.main()
+        return migrate.main(five_to_six_script=True)
     except KeyboardInterrupt:
         system_exit(0, "\nUser interrupted process.")
 
