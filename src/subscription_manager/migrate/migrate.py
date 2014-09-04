@@ -46,7 +46,7 @@ from subscription_manager.i18n_optparse import OptionParser, \
         USAGE, WrappedIndentedHelpFormatter
 from subscription_manager.productid import ProductDatabase
 from subscription_manager import repolib
-from subscription_manager.utils import parse_server_info
+from rhsm.utils import parse_url
 from rhsm import ourjson as json
 
 _RHNLIBPATH = "/usr/share/rhn"
@@ -207,7 +207,7 @@ class MigrationEngine(object):
                 port = self.rhsmcfg.get_int('server', 'port')
                 prefix = self.rhsmcfg.get('server', 'prefix')
             else:
-                (hostname, port, prefix) = parse_server_info(self.options.destination_url)
+                (_user, _password, hostname, port, prefix) = parse_url(self.options.destination_url, default_port=443)
         except ServerUrlParseError, e:
             system_exit(-1, _("Error parsing server URL: %s") % e.msg)
 
