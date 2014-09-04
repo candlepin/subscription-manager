@@ -401,14 +401,14 @@ class TestMigration(SubManFixture):
         return expected, get_int_expected
 
     @patch("rhn.rpclib.Server")
-    def test_get_transition_data(self, mock_server):
+    def test_load_transition_data(self, mock_server):
         rhn_config = {
             "systemIdPath": "/some/path",
             }
         self.engine.rhncfg = rhn_config
         mock_server.system.transitionDataForSystem.return_value = {"uuid": "1"}
         with open_mock("contents") as f:
-            self.engine.get_transition_data(mock_server)
+            self.engine.load_transition_data(mock_server)
             f.assert_called_once_with("/some/path", "r")
             mock_server.system.transitionDataForSystem.assert_called_once_with("contents")
             self.assertEquals("1", self.engine.consumer_id)
@@ -983,7 +983,8 @@ class TestMigration(SubManFixture):
             self.engine.legacy_purge(sc, None)
             mock_remove.assert_called_with("/some/path")
 
-    def test_register_failure(self):
+    @patch("subprocess.call", autospec=True)
+    def test_register_failure(self, mock_subprocess):
         self.engine.options = self.create_options(destination_url='foobar')
 
         credentials = MagicMock()

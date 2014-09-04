@@ -70,7 +70,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 SEE_LOG_FILE = _(u"See /var/log/rhsm/rhsm.log for more details.")
 
-CONNECTION_FAILURE = _(u"Unable to connect to certificate server: %s.  " + SEE_LOG_FILE)
+CONNECTION_FAILURE = _(u"Unable to connect to certificate server: %s.  ") + SEE_LOG_FILE
 
 FACT_FILE = "/etc/rhsm/facts/migration.facts"
 
@@ -179,7 +179,7 @@ class MigrationEngine(object):
                 self.proxy_host, self.proxy_port = http_proxy.split(':')
             except ValueError, e:
                 log.exception(e)
-                system_exit(1, _("Could not read legacy proxy settings.  " + SEE_LOG_FILE))
+                system_exit(1, _("Could not read legacy proxy settings.  ") + SEE_LOG_FILE)
 
             if self.rhncfg['enableProxyAuth']:
                 self.proxy_user = self.rhncfg['proxyUser']
@@ -317,44 +317,44 @@ class MigrationEngine(object):
             else:
                 proxy = None
 
-            sc = rpclib.Server(server_url, proxy=proxy)
+            rpc_session = rpclib.Server(server_url, proxy=proxy)
 
             ca = self.rhncfg["sslCACert"]
-            sc.add_trusted_cert(ca)
+            rpc_session.add_trusted_cert(ca)
 
-            sk = sc.auth.login(credentials.username, credentials.password)
-            return (sc, sk)
+            session_key = rpc_session.auth.login(credentials.username, credentials.password)
+            return (rpc_session, session_key)
         except Exception, e:
             log.exception(e)
-            system_exit(1, _("Unable to authenticate to legacy server.  " + SEE_LOG_FILE))
+            system_exit(1, _("Unable to authenticate to legacy server.  ") + SEE_LOG_FILE)
 
-    def check_is_org_admin(self, sc, sk, username):
+    def check_is_org_admin(self, rpc_session, session_key, username):
         try:
-            roles = sc.user.listRoles(sk, username)
+            roles = rpc_session.user.listRoles(session_key, username)
         except Exception, e:
             log.exception(e)
-            system_exit(1, _("Problem encountered determining user roles on legacy server.  " + SEE_LOG_FILE))
+            system_exit(1, _("Problem encountered determining user roles on legacy server.  ") + SEE_LOG_FILE)
         if "org_admin" not in roles:
             system_exit(1, _("You must be an org admin to successfully run this script."))
 
-    def resolve_base_channel(self, label, sc, sk):
+    def resolve_base_channel(self, label, rpc_session, session_key):
         try:
-            details = sc.channel.software.getDetails(sk, label)
+            details = rpc_session.channel.software.getDetails(session_key, label)
         except Exception, e:
             log.exception(e)
-            system_exit(1, _("Problem encountered getting the list of subscribed channels.  " + SEE_LOG_FILE))
+            system_exit(1, _("Problem encountered getting the list of subscribed channels.  ") + SEE_LOG_FILE)
         if details['clone_original']:
-            return self.resolve_base_channel(details['clone_original'], sc, sk)
+            return self.resolve_base_channel(details['clone_original'], rpc_session, session_key)
         return details
 
-    def get_subscribed_channels_list(self, sc, sk):
+    def get_subscribed_channels_list(self, rpc_session, session_key):
         try:
             channels = getChannels().channels()
         except Exception, e:
             log.exception(e)
-            system_exit(1, _("Problem encountered getting the list of subscribed channels.  " + SEE_LOG_FILE))
+            system_exit(1, _("Problem encountered getting the list of subscribed channels.  ") + SEE_LOG_FILE)
         if self.options.five_to_six:
-            channels = [self.resolve_base_channel(c['label'], sc, sk) for c in channels]
+            channels = [self.resolve_base_channel(c['label'], rpc_session, session_key) for c in channels]
         return [x['label'] for x in channels]
 
     def print_banner(self, msg):
@@ -566,21 +566,21 @@ class MigrationEngine(object):
             f.write(line)
         f.close()
 
-    def legacy_unentitle(self, sc):
+    def legacy_unentitle(self, rpc_session):
         system_id = open(self.rhncfg["systemIdPath"], 'r').read()
         try:
-            sc.system.unentitle(system_id)
+            rpc_session.system.unentitle(system_id)
         except Exception, e:
             log.exception("Could not unentitle system on Satellite 5.", e)
-            system_exit(1, _("Could not unentitle system on legacy server.  " + SEE_LOG_FILE))
+            system_exit(1, _("Could not unentitle system on legacy server.  ") + SEE_LOG_FILE)
 
-    def legacy_purge(self, sc, sk):
+    def legacy_purge(self, rpc_session, session_key):
         system_id_path = self.rhncfg["systemIdPath"]
         system_id = self.get_system_id(system_id_path)
 
         log.info("Deleting system %s from legacy server...", system_id)
         try:
-            result = sc.system.deleteSystems(sk, system_id)
+            result = rpc_session.system.deleteSystems(session_key, system_id)
         except Exception:
             log.exception("Could not delete system %s from legacy server" % system_id)
             # If we time out or get a network error, log it and keep going.
@@ -599,18 +599,18 @@ class MigrationEngine(object):
             print _("System successfully unregistered from legacy server.")
         else:
             # If the legacy server reports that deletion just failed, then quit.
-            system_exit(1, _("Unable to unregister system from legacy server.  " + SEE_LOG_FILE))
+            system_exit(1, _("Unable to unregister system from legacy server.  ") + SEE_LOG_FILE)
 
-    def get_transition_data(self, sc):
+    def load_transition_data(self, rpc_session):
         # We need to send up the entire contents of the systemid file which is referred to in
         # Satellite 5 nomenclature as a "certificate" although it is not an X509 certificate.
         system_id = open(self.rhncfg["systemIdPath"], 'r').read()
         try:
-            self.transition_data = sc.system.transitionDataForSystem(system_id)
-            self.consumer_id = self.transition_data['uuid']
+            transition_data = rpc_session.system.transitionDataForSystem(system_id)
+            self.consumer_id = transition_data['uuid']
         except Exception, e:
             log.exception(e)
-            system_exit(1, _("Could not retrieve system migration data from legacy server.  " + SEE_LOG_FILE))
+            system_exit(1, _("Could not retrieve system migration data from legacy server.  ") + SEE_LOG_FILE)
 
     def consumer_exists(self, consumer_id):
         try:
@@ -734,16 +734,16 @@ class MigrationEngine(object):
         org = self.get_org(self.destination_creds.username)
         environment = self.get_environment(org)
 
-        (sc, sk) = self.connect_to_rhn(self.legacy_creds)
+        (rpc_session, session_key) = self.connect_to_rhn(self.legacy_creds)
         if self.options.five_to_six:
-            self.get_transition_data(sc)
+            self.load_transition_data(rpc_session)
 
         # TODO Not sure this is necessary.  See BZ 1086367
-        self.check_is_org_admin(sc, sk, self.legacy_creds.username)
+        self.check_is_org_admin(rpc_session, session_key, self.legacy_creds.username)
 
         print
         print _("Retrieving existing legacy subscription information...")
-        subscribed_channels = self.get_subscribed_channels_list(sc, sk)
+        subscribed_channels = self.get_subscribed_channels_list(rpc_session, session_key)
         self.print_banner(_("System is currently subscribed to these legacy channels:"))
         for channel in subscribed_channels:
             print channel
@@ -757,9 +757,9 @@ class MigrationEngine(object):
         if self.options.registration_state == "purge":
             print
             print _("Preparing to unregister system from legacy server...")
-            self.legacy_purge(sc, sk)
+            self.legacy_purge(rpc_session, session_key)
         elif self.options.registration_state == "unentitle":
-            self.legacy_unentitle(sc)
+            self.legacy_unentitle(rpc_session)
         else:
             # For the "keep" case, we just leave everything alone.
             pass
