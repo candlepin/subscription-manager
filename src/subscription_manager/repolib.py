@@ -118,7 +118,7 @@ class RepoUpdateActionCommand(object):
 
         self.release = None
         self.overrides = {}
-        self.override_supported = bool(self.uep and self.uep.supports_resource('content_overrides'))
+        self.override_supported = bool(self.identity.is_valid() and self.uep and self.uep.supports_resource('content_overrides'))
         self.written_overrides = WrittenOverrideCache()
 
         # FIXME: empty report at the moment, should be changed to include
