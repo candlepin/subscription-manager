@@ -22,7 +22,7 @@
 
 Name: subscription-manager
 Version: 1.12.14
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -446,6 +446,9 @@ fi
 %endif
 
 %changelog
+* Fri Sep 05 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.14-4
+- 1128061: Don't raise logged Disconnected on unreg (alikins@redhat.com)
+
 * Fri Sep 05 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.14-3
 - 1128658: do not contact RHN if unregistered (jesusr@redhat.com)
 
