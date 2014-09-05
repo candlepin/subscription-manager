@@ -22,7 +22,7 @@
 
 Name: subscription-manager
 Version: 1.12.14
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -446,6 +446,9 @@ fi
 %endif
 
 %changelog
+* Fri Sep 05 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.14-3
+- 1128658: do not contact RHN if unregistered (jesusr@redhat.com)
+
 * Thu Aug 28 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.14-2
 - Setup 6.6 build and use distributionbuilder (jesusr@redhat.com)
 
