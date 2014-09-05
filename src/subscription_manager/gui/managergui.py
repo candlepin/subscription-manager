@@ -221,6 +221,8 @@ class MainWindow(widgets.GladeWidget):
             self.my_subs_tab.update_subscriptions()
             # Update main window
             self.refresh()
+            # Reset repos dialog, see bz 1132919
+            self.repos_dialog = RepositoriesDialog(self.backend, self._get_window())
 
         self.backend.cs.add_callback(on_cert_change)
 
