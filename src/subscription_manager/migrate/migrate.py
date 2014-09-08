@@ -731,12 +731,14 @@ class MigrationEngine(object):
         self.cp = self.get_candlepin_basic_auth_connection(self.destination_creds.username, self.destination_creds.password)
         self.check_ok_to_proceed(self.destination_creds.username)
 
-        org = self.get_org(self.destination_creds.username)
-        environment = self.get_environment(org)
-
         (rpc_session, session_key) = self.connect_to_rhn(self.legacy_creds)
         if self.options.five_to_six:
             self.load_transition_data(rpc_session)
+            org = None
+            environment = None
+        else:
+            org = self.get_org(self.destination_creds.username)
+            environment = self.get_environment(org)
 
         # TODO Not sure this is necessary.  See BZ 1086367
         self.check_is_org_admin(rpc_session, session_key, self.legacy_creds.username)
@@ -781,16 +783,17 @@ def add_parser_options(parser, five_to_six_script=False):
     # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
     parser.add_option("--no-proxy", action="store_true", dest='noproxy',
         help=_("don't use legacy proxy settings with destination server"))
-    parser.add_option("--org", dest='org',
-        help=_("organization to register to"))
-    parser.add_option("--environment", dest='environment',
-        help=_("environment to register to"))
-
     if five_to_six_script:
         valid_states = ["keep", "unentitle", "purge"]
         parser.add_option("--registration-state", type="choice",
             choices=valid_states, metavar=",".join(valid_states), default="unentitle",
             help=_("state to leave system in on legacy server (not available in hosted environments; default is 'unentitle')"))
+    else:
+        # The consumerid provides these
+        parser.add_option("--org", dest='org',
+            help=_("organization to register to"))
+        parser.add_option("--environment", dest='environment',
+            help=_("environment to register to"))
 
     parser.add_option("--destination-url",
         help=_("specify the subscription management server to migrate to"))
@@ -818,7 +821,10 @@ def is_hosted():
 
 def set_defaults(options, five_to_six_script):
     options.five_to_six = five_to_six_script
-    if not five_to_six_script:
+    if five_to_six_script:
+        options.org = None
+        options.environment = None
+    else:
         options.registration_state = "purge"
 
 
