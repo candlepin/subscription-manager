@@ -22,7 +22,7 @@
 
 Name: subscription-manager
 Version: 1.12.14
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -446,6 +446,10 @@ fi
 %endif
 
 %changelog
+* Mon Sep 08 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.14-5
+- 1131213: rhn-migrate-classic-to-rhsm now prefers --serverurl over config. (csnyder@redhat.com)
+- 1118020: Latest strings from zanata (alikins@redhat.com)
+
 * Fri Sep 05 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.14-4
 - 1128061: Don't raise logged Disconnected on unreg (alikins@redhat.com)
 
