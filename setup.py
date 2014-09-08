@@ -32,4 +32,5 @@ setup(name="subscription-manager",
                 # on tests as well. Note this is wrong for
                 # our unused "install" case
                 'test/'],
+      setup_requires=['flake8'],
       test_suite='nose.collector')
