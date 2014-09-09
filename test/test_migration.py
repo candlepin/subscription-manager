@@ -137,6 +137,8 @@ class TestMigration(SubManFixture):
         parser = OptionParser()
         migrate.add_parser_options(parser, five_to_six)
         self.assertTrue(parser.has_option("--registration-state"))
+        self.assertFalse(parser.has_option("--org"))
+        self.assertFalse(parser.has_option("--environment"))
         (opts, args) = parser.parse_args([])
         migrate.set_defaults(opts, five_to_six)
         self.assertTrue(opts.five_to_six)
@@ -145,6 +147,8 @@ class TestMigration(SubManFixture):
         parser = OptionParser()
         migrate.add_parser_options(parser)
         self.assertFalse(parser.has_option("--registration-state"))
+        self.assertTrue(parser.has_option("--org"))
+        self.assertTrue(parser.has_option("--environment"))
         (opts, args) = parser.parse_args([])
         migrate.set_defaults(opts, five_to_six_script=False)
         self.assertFalse(opts.five_to_six)
@@ -419,6 +423,19 @@ class TestMigration(SubManFixture):
             "systemIdPath": "/some/path",
             }
         self.engine.rhncfg = rhn_config
+        self.engine.disable_yum_rhn_plugin = MagicMock(return_value=True)
+        with open_mock("contents") as f:
+            self.engine.legacy_unentitle(mock_server)
+            f.assert_called_once_with("/some/path", "r")
+            mock_server.system.unentitle.assert_called_once_with("contents")
+
+    @patch("rhn.rpclib.Server")
+    def test_legacy_unentitle_fails_gracefully(self, mock_server):
+        rhn_config = {
+            "systemIdPath": "/some/path",
+            }
+        self.engine.rhncfg = rhn_config
+        self.engine.disable_yum_rhn_plugin = MagicMock(side_effect=IOError)
         with open_mock("contents") as f:
             self.engine.legacy_unentitle(mock_server)
             f.assert_called_once_with("/some/path", "r")
@@ -482,12 +499,23 @@ class TestMigration(SubManFixture):
 
     # default injected identity is "valid"
     def test_already_registered_to_rhsm(self):
-        try:
-            self.engine.check_ok_to_proceed("some_username")
-        except SystemExit, e:
-            self.assertEquals(e.code, 1)
-        else:
-            self.fail("No exception raised")
+        self._inject_mock_valid_consumer()
+        self.engine.options = self.create_options(
+            five_to_six=False
+        )
+        with Capture() as c:
+            self.assertRaises(SystemExit, self.engine.check_ok_to_proceed, "some_name")
+            self.assertTrue("Red Hat Subscription Management" in c.err)
+            self.assertTrue("access.redhat.com" in c.err)
+
+    def test_already_registered_to_sat_6(self):
+        self._inject_mock_valid_consumer()
+        self.engine.options = self.create_options(
+            five_to_six=True
+        )
+        with Capture() as c:
+            self.assertRaises(SystemExit, self.engine.check_ok_to_proceed, "some_name")
+            self.assertTrue("Satellite 6" in c.err)
 
     def test_ssl_error(self):
         self._inject_mock_invalid_consumer()

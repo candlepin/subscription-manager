@@ -235,8 +235,12 @@ class MigrationEngine(object):
         # check if this machine is already registered to Certicate-based RHN
         identity = inj.require(inj.IDENTITY)
         if identity.is_valid():
-            print _("This system appears to be already registered to Red Hat Subscription Management.")
-            system_exit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % identity.uuid)
+            if self.options.five_to_six:
+                msgs = [_("This system appears to already be registered to Satellite 6.")]
+            else:
+                msgs = [_("This system appears to already be registered to Red Hat Subscription Management.")]
+                msgs.append(_("Please visit https://access.redhat.com/management/consumers/%s to view the profile details.") % identity.uuid)
+            system_exit(1, msgs)
 
         try:
             self.cp.getOwnerList(username)
@@ -573,6 +577,10 @@ class MigrationEngine(object):
         except Exception, e:
             log.exception("Could not unentitle system on Satellite 5.", e)
             system_exit(1, _("Could not unentitle system on legacy server.  ") + SEE_LOG_FILE)
+        try:
+            self.disable_yum_rhn_plugin()
+        except Exception:
+            pass
 
     def legacy_purge(self, rpc_session, session_key):
         system_id_path = self.rhncfg["systemIdPath"]
@@ -585,7 +593,6 @@ class MigrationEngine(object):
             log.exception("Could not delete system %s from legacy server" % system_id)
             # If we time out or get a network error, log it and keep going.
             shutil.move(system_id_path, system_id_path + ".save")
-            self.disable_yum_rhn_plugin()
             print _("Did not receive a completed unregistration message from legacy server for system %s.") % system_id
 
             if self.is_hosted:
@@ -595,7 +602,10 @@ class MigrationEngine(object):
         if result:
             log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", system_id)
             os.remove(system_id_path)
-            self.disable_yum_rhn_plugin()
+            try:
+                self.disable_yum_rhn_plugin()
+            except Exception:
+                pass
             print _("System successfully unregistered from legacy server.")
         else:
             # If the legacy server reports that deletion just failed, then quit.
