@@ -782,8 +782,6 @@ class MigrationEngine(object):
 
 
 def add_parser_options(parser, five_to_six_script=False):
-    parser.add_option("-f", "--force", action="store_true", default=False,
-        help=_("ignore channels not available on destination server"))
     # Careful, the option is --no-auto but we are storing the opposite of its value.
     parser.add_option("-n", "--no-auto", action="store_false", default=True, dest="auto",
         help=_("don't execute the auto-attach option while registering with subscription manager"))
@@ -804,13 +802,15 @@ def add_parser_options(parser, five_to_six_script=False):
             help=_("organization to register to"))
         parser.add_option("--environment", dest='environment',
             help=_("environment to register to"))
+        parser.add_option("-f", "--force", action="store_true", default=False,
+            help=_("ignore channels not available on destination server"))
 
-    parser.add_option("--destination-url",
-        help=_("specify the subscription management server to migrate to"))
     parser.add_option("--legacy-user",
         help=_("specify the user name on the legacy server"))
     parser.add_option("--legacy-password",
         help=_("specify the password on the legacy server"))
+    parser.add_option("--destination-url",
+        help=_("specify the subscription management server to migrate to"))
     parser.add_option("--destination-user",
         help=_("specify the user name on the destination server"))
     parser.add_option("--destination-password",
@@ -834,6 +834,7 @@ def set_defaults(options, five_to_six_script):
     if five_to_six_script:
         options.org = None
         options.environment = None
+        options.force = True
     else:
         options.registration_state = "purge"
 

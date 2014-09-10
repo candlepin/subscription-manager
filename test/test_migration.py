@@ -139,9 +139,13 @@ class TestMigration(SubManFixture):
         self.assertTrue(parser.has_option("--registration-state"))
         self.assertFalse(parser.has_option("--org"))
         self.assertFalse(parser.has_option("--environment"))
+        self.assertFalse(parser.has_option("--force"))
         (opts, args) = parser.parse_args([])
         migrate.set_defaults(opts, five_to_six)
         self.assertTrue(opts.five_to_six)
+        self.assertEquals(None, opts.org)
+        self.assertEquals(None, opts.environment)
+        self.assertTrue(opts.force)
 
     def test_classic_migration_options(self):
         parser = OptionParser()
@@ -149,6 +153,7 @@ class TestMigration(SubManFixture):
         self.assertFalse(parser.has_option("--registration-state"))
         self.assertTrue(parser.has_option("--org"))
         self.assertTrue(parser.has_option("--environment"))
+        self.assertTrue(parser.has_option("--force"))
         (opts, args) = parser.parse_args([])
         migrate.set_defaults(opts, five_to_six_script=False)
         self.assertFalse(opts.five_to_six)
