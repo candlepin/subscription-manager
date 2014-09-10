@@ -347,6 +347,8 @@ class CliCommand(AbstractCLICommand):
             cfg.set("server", "port", self.server_port)
             cfg.set("server", "prefix", self.server_prefix)
 
+            if self.server_port:
+                self.server_port = int(self.server_port)
             config_changed = True
 
         if hasattr(self.options, "base_url") and self.options.base_url:
