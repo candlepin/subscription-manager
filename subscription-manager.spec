@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.22
+Version: 1.8.24
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -383,6 +383,10 @@ fi
 %endif
 
 %changelog
+* Thu Sep 11 2014 Alex Wood <awood@redhat.com> 1.8.24-1
+- 1131213: Do not ignore server info passed in to cp_provider.
+  (awood@redhat.com)
+
 * Tue Sep 10 2013 jesus m. rodriguez <jesusr@redhat.com> 1.8.22-1
 - 1004908: Remove unneeded rhn-setup-gnome Requires (alikins@redhat.com)
 
