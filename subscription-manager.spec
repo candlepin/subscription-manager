@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.9.11
+Version: 1.9.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -385,6 +385,10 @@ fi
 %endif
 
 %changelog
+* Thu Sep 11 2014 Alex Wood <awood@redhat.com> 1.9.12-1
+- 1131213: Do not ignore server info passed in to cp_provider.
+  (awood@redhat.com)
+
 * Wed Oct 16 2013 jesus m. rodriguez <jesusr@redhat.com> 1.9.11-1
 - 1005420: adding --ondate to manpage (dlackey@redhat.com.com)
 
