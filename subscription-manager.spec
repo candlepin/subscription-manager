@@ -14,7 +14,7 @@
 
 Name: subscription-manager
 Version: 1.10.14
-Release: 9%{?dist}
+Release: 10%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -419,6 +419,10 @@ fi
 %endif
 
 %changelog
+* Thu Sep 11 2014 Alex Wood <awood@redhat.com> 1.10.14-10
+- 1131213: Do not ignore server info passed in to cp_provider.
+  (awood@redhat.com)
+
 * Wed Jun 04 2014 ckozak <ckozak@redhat.com> 1.10.14-9
 - 1104777: Don't rewrite redhat.repo unless it has changed (ckozak@redhat.com)
 
