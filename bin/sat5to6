@@ -19,7 +19,7 @@ if __name__ != '__main__':
 
 import sys
 sys.setdefaultencoding('utf-8')
-import site
+import site  # NOQA - Ignore this flake8 violation
 import os
 
 
@@ -54,7 +54,12 @@ try:
     from subscription_manager.injectioninit import init_dep_injection
     init_dep_injection()
 
-    from subscription_manager.migrate import migrate
+    try:
+        from sat5to6 import migrate
+    except ImportError:
+        # Allow us to run from the sub-man repo
+        from subscription_manager.migrate import migrate
+
     from subscription_manager.managercli import handle_exception
 except KeyboardInterrupt:
     system_exit(0, "\nUser interrupted process.")
@@ -83,4 +88,4 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         system_exit(0, "\nUser interrupted process.")
     except Exception, e:
-        handle_exception("Exception caught in rhm-migrate-classic-to-rhsm", e)
+        handle_exception("Exception caught in sat5to6", e)

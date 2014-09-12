@@ -235,8 +235,12 @@ class MigrationEngine(object):
         # check if this machine is already registered to Certicate-based RHN
         identity = inj.require(inj.IDENTITY)
         if identity.is_valid():
-            print _("This system appears to be already registered to Red Hat Subscription Management.")
-            system_exit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % identity.uuid)
+            if self.options.five_to_six:
+                msgs = [_("This system appears to already be registered to Satellite 6.")]
+            else:
+                msgs = [_("This system appears to already be registered to Red Hat Subscription Management.")]
+                msgs.append(_("Please visit https://access.redhat.com/management/consumers/%s to view the profile details.") % identity.uuid)
+            system_exit(1, msgs)
 
         try:
             self.cp.getOwnerList(username)
@@ -573,6 +577,10 @@ class MigrationEngine(object):
         except Exception, e:
             log.exception("Could not unentitle system on Satellite 5.", e)
             system_exit(1, _("Could not unentitle system on legacy server.  ") + SEE_LOG_FILE)
+        try:
+            self.disable_yum_rhn_plugin()
+        except Exception:
+            pass
 
     def legacy_purge(self, rpc_session, session_key):
         system_id_path = self.rhncfg["systemIdPath"]
@@ -585,7 +593,6 @@ class MigrationEngine(object):
             log.exception("Could not delete system %s from legacy server" % system_id)
             # If we time out or get a network error, log it and keep going.
             shutil.move(system_id_path, system_id_path + ".save")
-            self.disable_yum_rhn_plugin()
             print _("Did not receive a completed unregistration message from legacy server for system %s.") % system_id
 
             if self.is_hosted:
@@ -595,7 +602,10 @@ class MigrationEngine(object):
         if result:
             log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", system_id)
             os.remove(system_id_path)
-            self.disable_yum_rhn_plugin()
+            try:
+                self.disable_yum_rhn_plugin()
+            except Exception:
+                pass
             print _("System successfully unregistered from legacy server.")
         else:
             # If the legacy server reports that deletion just failed, then quit.
@@ -731,12 +741,14 @@ class MigrationEngine(object):
         self.cp = self.get_candlepin_basic_auth_connection(self.destination_creds.username, self.destination_creds.password)
         self.check_ok_to_proceed(self.destination_creds.username)
 
-        org = self.get_org(self.destination_creds.username)
-        environment = self.get_environment(org)
-
         (rpc_session, session_key) = self.connect_to_rhn(self.legacy_creds)
         if self.options.five_to_six:
             self.load_transition_data(rpc_session)
+            org = None
+            environment = None
+        else:
+            org = self.get_org(self.destination_creds.username)
+            environment = self.get_environment(org)
 
         # TODO Not sure this is necessary.  See BZ 1086367
         self.check_is_org_admin(rpc_session, session_key, self.legacy_creds.username)
@@ -770,8 +782,6 @@ class MigrationEngine(object):
 
 
 def add_parser_options(parser, five_to_six_script=False):
-    parser.add_option("-f", "--force", action="store_true", default=False,
-        help=_("ignore channels not available on destination server"))
     # Careful, the option is --no-auto but we are storing the opposite of its value.
     parser.add_option("-n", "--no-auto", action="store_false", default=True, dest="auto",
         help=_("don't execute the auto-attach option while registering with subscription manager"))
@@ -781,23 +791,26 @@ def add_parser_options(parser, five_to_six_script=False):
     # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
     parser.add_option("--no-proxy", action="store_true", dest='noproxy',
         help=_("don't use legacy proxy settings with destination server"))
-    parser.add_option("--org", dest='org',
-        help=_("organization to register to"))
-    parser.add_option("--environment", dest='environment',
-        help=_("environment to register to"))
-
     if five_to_six_script:
         valid_states = ["keep", "unentitle", "purge"]
         parser.add_option("--registration-state", type="choice",
             choices=valid_states, metavar=",".join(valid_states), default="unentitle",
             help=_("state to leave system in on legacy server (not available in hosted environments; default is 'unentitle')"))
+    else:
+        # The consumerid provides these
+        parser.add_option("--org", dest='org',
+            help=_("organization to register to"))
+        parser.add_option("--environment", dest='environment',
+            help=_("environment to register to"))
+        parser.add_option("-f", "--force", action="store_true", default=False,
+            help=_("ignore channels not available on destination server"))
 
-    parser.add_option("--destination-url",
-        help=_("specify the subscription management server to migrate to"))
     parser.add_option("--legacy-user",
         help=_("specify the user name on the legacy server"))
     parser.add_option("--legacy-password",
         help=_("specify the password on the legacy server"))
+    parser.add_option("--destination-url",
+        help=_("specify the subscription management server to migrate to"))
     parser.add_option("--destination-user",
         help=_("specify the user name on the destination server"))
     parser.add_option("--destination-password",
@@ -818,7 +831,11 @@ def is_hosted():
 
 def set_defaults(options, five_to_six_script):
     options.five_to_six = five_to_six_script
-    if not five_to_six_script:
+    if five_to_six_script:
+        options.org = None
+        options.environment = None
+        options.force = True
+    else:
         options.registration_state = "purge"
 
 
