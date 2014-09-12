@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.1
+Version: 1.13.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -447,6 +447,17 @@ fi
 %endif
 
 %changelog
+* Fri Sep 12 2014 Alex Wood <awood@redhat.com> 1.13.2-1
+- Added non-overriding default prod dir tests (ckozak@redhat.com)
+- 1135621: fix duplicate product ids from default dir (ckozak@redhat.com)
+- Remove --force option for sat5to6. (awood@redhat.com)
+- Disable RHN yum plugin for unentitled Satellite 5 systems. (awood@redhat.com)
+- Don't ask for org and environment with consumerid. (awood@redhat.com)
+- 1128061: Don't raise logged Disconnected on unreg (alikins@redhat.com)
+- 1128658: do not contact RHN if unregistered (jesusr@redhat.com)
+- 1132919: Repo dialog information is updated without the need for a gui
+  restart. (csnyder@csnyder.usersys.redhat.com)
+
 * Thu Sep 04 2014 Alex Wood <awood@redhat.com> 1.13.1-1
 - Make 'gettext_lint' target grok _(u"foo") strings. (alikins@redhat.com)
 - Add a sat5to6 migration script.
