@@ -1,12 +1,13 @@
 # Gladys Guerrero <gguerrer@redhat.com>, 2014. #zanata
 # John Sefler <jsefler@redhat.com>, 2014. #zanata
+# jmrodri <jmrodri@gmail.com>, 2014. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 14:21-0400\n"
-"PO-Revision-Date: 2014-08-26 08:16-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2014-09-12 10:49-0400\n"
+"Last-Translator: jmrodri <jmrodri@gmail.com>\n"
 "Language-Team: Spanish (Spain)\n"
 "Language: es-ES\n"
 "MIME-Version: 1.0\n"
@@ -208,15 +209,15 @@ msgstr "Error al leer información DMI de sistema con %s: %s"
 #: ../src/subscription_manager/repolib.py:430
 #, python-format
 msgid "Total repo updates: %d"
-msgstr ""
+msgstr "Total de actualizaciones de repositorio: %d"
 
 #: ../src/subscription_manager/repolib.py:431
 msgid "Updated"
-msgstr ""
+msgstr "Actualizado"
 
 #: ../src/subscription_manager/repolib.py:435
 msgid "Deleted"
-msgstr ""
+msgstr "Borrado"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:65
@@ -480,7 +481,7 @@ msgstr ""
 
 #: ../src/subscription_manager/managercli.py:248
 msgid "server URL in the form of https://hostname:port/prefix"
-msgstr ""
+msgstr "URL de servidor en forma de  https://hostname:port/prefix"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: ../src/subscription_manager/managercli.py:250
@@ -511,6 +512,9 @@ msgid ""
 "subscription-manager is disabled when running inside a container. Please "
 "refer to your host system for subscription management.\n"
 msgstr ""
+"subscription-manager se desactiva cuando se ejecuta dentro de un contenedor. "
+"Por favor, consulte a su sistema host para la administración de "
+"suscripciones.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: ../src/subscription_manager/managercli.py:331
@@ -621,6 +625,8 @@ msgid ""
 "force certificate regeneration (requires username and password); Only used "
 "with --regenerate"
 msgstr ""
+"Fuerce la expedición de certificado (se requiere nombre de usuario y "
+"contraseña); Solo usado con --regenerate"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:579
@@ -876,7 +882,7 @@ msgstr "Esta organización no tiene suscripciones con niveles de servicio"
 
 #: ../src/subscription_manager/managercli.py:915
 msgid "base URL for content in form of https://hostname:port/prefix"
-msgstr ""
+msgstr "URL de base para contenido en forma de https://hostname:port/prefix"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:917
@@ -1783,7 +1789,7 @@ msgstr "Servidor de administración de suscripción: %s"
 #: ../src/subscription_manager/managercli.py:2402
 #, python-format
 msgid "subscription management rules: %s"
-msgstr ""
+msgstr "reglas de administración de suscripciones: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: ../src/subscription_manager/managercli.py:2410
@@ -2081,12 +2087,12 @@ msgstr "Falló conexión de Proxy "
 #: ../src/subscription_manager/gui/networkConfig.py:283
 #: ../src/subscription_manager/gui/networkConfig.py:286
 msgid "Testing Connection"
-msgstr ""
+msgstr "Probando la conexión"
 
 #: ../src/subscription_manager/gui/networkConfig.py:284
 #: ../src/subscription_manager/gui/networkConfig.py:286
 msgid "Please wait"
-msgstr ""
+msgstr "Por favor, espere"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: ../src/subscription_manager/gui/managergui.py:337
@@ -2606,7 +2612,7 @@ msgstr "Habilitada"
 
 #: ../src/subscription_manager/gui/reposgui.py:103
 msgid "Gpgcheck"
-msgstr ""
+msgstr "Gpgcheck"
 
 #: ../src/subscription_manager/gui/reposgui.py:107
 msgid "Repository ID"
@@ -2633,7 +2639,7 @@ msgstr "No se pudieron establecer los sobrescritos del repositorio."
 #: ../src/subscription_manager/gui/reposgui.py:304
 #, python-format
 msgid "Unable to update %s override."
-msgstr ""
+msgstr "no se puede actualizar %s anulación"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/widgets.py:242
@@ -3164,15 +3170,15 @@ msgstr "Error al buscar UUID: %s"
 
 #: ../src/subscription_manager/plugin/ostree/action_invoker.py:170
 msgid "Updates:"
-msgstr ""
+msgstr "Actualizaciones:"
 
 #: ../src/subscription_manager/plugin/ostree/action_invoker.py:172
 msgid "Added:"
-msgstr ""
+msgstr "Añadido:"
 
 #: ../src/subscription_manager/plugin/ostree/action_invoker.py:174
 msgid "Deleted:"
-msgstr ""
+msgstr "Borrado:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: ../src/subscription_manager/cache.py:152
@@ -3771,7 +3777,7 @@ msgstr ""
 
 #: ../src/rhsm_debug/debug_commands.py:65
 msgid "exclude subscription data"
-msgstr ""
+msgstr "excluir los datos de suscripción"
 
 #: ../src/rhsm_debug/debug_commands.py:68
 #, python-format
@@ -4436,7 +4442,7 @@ msgstr "connectionStatusLabel"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:16
 msgid "_Cancel"
-msgstr ""
+msgstr "_Cancelar"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:17
@@ -4445,11 +4451,11 @@ msgstr "Botón de conexión de prueba"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:18
 msgid "_Ok"
-msgstr ""
+msgstr "_Aceptar"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:19
 msgid "Ok Button"
-msgstr ""
+msgstr "Botón de aceptar"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:20
@@ -4668,11 +4674,11 @@ msgstr "<b>URL de base:</b>"
 
 #: ../src/subscription_manager/gui/data/repositories.glade.h:13
 msgid "<b>Other Overrides:</b>"
-msgstr ""
+msgstr "<b>Otras anulaciones:</b>"
 
 #: ../src/subscription_manager/gui/data/repositories.glade.h:14
 msgid "Other Overrides Table"
-msgstr ""
+msgstr "Otra tabla de anulaciones"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:1
@@ -4947,10 +4953,13 @@ msgstr "Coincide con instalado"
 msgid ""
 "Only show subscriptions that: provide products that are not already covered"
 msgstr ""
+"Solo muestra las suscripciones que: proporcionar productos que no estén "
+"cubiertos"
 
 #: ../src/subscription_manager/gui/data/filters.glade.h:10
 msgid "Hide subscriptions whose provided products have a Subscribed status"
 msgstr ""
+"Esconder suscripciones cuyos productos siempre tienen un estado Suscrito"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/filters.glade.h:11
