@@ -369,3 +369,30 @@ class AlsoProductDirectoryTest(unittest.TestCase):
         pd.list = lambda: [StubProductCertificate(top_product, provided_products)]
         installed_products = pd.get_installed_products()
         self.assertTrue("top" in installed_products)
+
+    @patch('os.path.exists')
+    def test_default_products(self, MockExists):
+        MockExists.return_value = True
+        pd = ProductDirectory()
+        top_product = StubProduct("top")
+        default_product = StubProduct("default")
+        pd.installed_prod_dir.list = lambda: [StubProductCertificate(top_product, [])]
+        pd.default_prod_dir.list = lambda: [StubProductCertificate(default_product, [])]
+        results = pd.list()
+        self.assertEquals(2, len(results))
+        resulting_ids = [cert.products[0].id for cert in results]
+        self.assertTrue("top" in resulting_ids)
+        self.assertTrue("default" in resulting_ids)
+
+    @patch('os.path.exists')
+    def test_default_products_matching_ids(self, MockExists):
+        MockExists.return_value = True
+        pd = ProductDirectory()
+        top_product = StubProduct("top")
+        default_product = StubProduct("top")
+        pd.installed_prod_dir.list = lambda: [StubProductCertificate(top_product, [])]
+        pd.default_prod_dir.list = lambda: [StubProductCertificate(default_product, [])]
+        results = pd.list()
+        self.assertEquals(1, len(results))
+        resulting_ids = [cert.products[0].id for cert in results]
+        self.assertTrue("top" in resulting_ids)
