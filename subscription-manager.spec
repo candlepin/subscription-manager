@@ -22,7 +22,7 @@
 
 Name: subscription-manager
 Version: 1.12.14
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -446,6 +446,11 @@ fi
 %endif
 
 %changelog
+* Mon Sep 15 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.14-6
+- Added non-overriding default prod dir tests (ckozak@redhat.com)
+- 1135621: fix duplicate product ids from default dir (ckozak@redhat.com)
+- 1118020: Latest strings (es_ES and ta_IN updates) (alikins@redhat.com)
+
 * Mon Sep 08 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.14-5
 - 1131213: rhn-migrate-classic-to-rhsm now prefers --serverurl over config. (csnyder@redhat.com)
 - 1118020: Latest strings from zanata (alikins@redhat.com)
