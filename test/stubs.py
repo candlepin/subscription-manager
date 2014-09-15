@@ -17,7 +17,6 @@ import StringIO
 from rhsm import config
 import random
 import mock
-import simplejson as json
 import tempfile
 
 from subscription_manager.cert_sorter import CertSorter
@@ -28,6 +27,8 @@ from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
 from subscription_manager.gui.utils import AsyncWidgetUpdater, handle_gui_exception
 from rhsm.certificate2 import Version
+
+from rhsm import ourjson as json
 
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """
