@@ -22,7 +22,7 @@
 
 Name: subscription-manager
 Version: 1.12.14
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -446,6 +446,9 @@ fi
 %endif
 
 %changelog
+* Mon Sep 15 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.14-7
+- 1134963: Fix 'release --list' on some systems. (alikins@redhat.com)
+
 * Mon Sep 15 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.14-6
 - Added non-overriding default prod dir tests (ckozak@redhat.com)
 - 1135621: fix duplicate product ids from default dir (ckozak@redhat.com)
