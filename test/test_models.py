@@ -6,28 +6,6 @@ import fixture
 from subscription_manager import models
 
 
-class TestEntitledContents(fixture.SubManFixture):
-    def test_empty_init(self):
-        ec = models.EntCertEntitledContentSet()
-        self.assertTrue(hasattr(ec, '_contents'))
-
-    def test_init_empty_contents(self):
-        ec = models.EntCertEntitledContentSet(contents=[])
-        self.assertTrue(hasattr(ec, '_contents'))
-        self.assertEquals(ec._contents, [])
-
-    def test_contents(self):
-        contents = [mock.Mock(), mock.Mock(), mock.Mock()]
-        ec = models.EntCertEntitledContentSet(contents=contents)
-        self.assertTrue(hasattr(ec, '_contents'))
-        self.assertEquals(len(ec), 3)
-
-        for content in ec:
-            self.assertTrue(isinstance(content, mock.Mock))
-
-        self.assertTrue(isinstance(ec[0], mock.Mock))
-
-
 class TestEntitlement(fixture.SubManFixture):
     def test_empty_init(self):
         e = models.Entitlement()
@@ -66,9 +44,8 @@ class TestEntitlementCertEntitlement(TestEntitlement):
 
         ece = models.EntitlementCertEntitlement.from_ent_cert(mock_ent_cert)
 
-        self.assertEquals(ece.contents._contents[0].content, contents[0])
+        self.assertEquals(ece.contents[0].content, contents[0])
         self.assertEquals(len(ece.contents), 1)
-        self.assertTrue(isinstance(ece.contents, models.EntCertEntitledContentSet))
 
         self.assertEquals(ece.contents[0].content.name, "mock_content")
 

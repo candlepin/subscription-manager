@@ -112,7 +112,7 @@ class OstreeContents(object):
     content_type = OSTREE_CONTENT_TYPE
 
     def __init__(self, ent_source=None):
-        self._contents = models.EntCertEntitledContentSet()
+        self._contents = []
         self.ent_source = ent_source or []
 
         self._load()
@@ -126,7 +126,7 @@ class OstreeContents(object):
                 if self.content_type_match(content):
                     log.debug("adding %s to ostree content" % content.content.label)
                     # no uniq constraint atm
-                    self._contents.add(content)
+                    self._contents.append(content)
 
     def content_type_match(self, content):
         return content.content_type == self.content_type

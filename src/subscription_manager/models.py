@@ -18,37 +18,12 @@ import subscription_manager.injection as inj
 # These containerish iterables could share a
 # base class, though, it should probably just
 # be based on containers.abc.Iterable
-class ContentSet(object):
-    """Represent a container of Content objects."""
-    def __init__(self, contents=None):
-        self._contents = contents or []
-
-    def __iter__(self):
-        return iter(self._contents)
-
-    def __len__(self):
-        return len(self._contents)
-
-    def __getitem__(self, key):
-        return self._contents[key]
-
-    def add(self, content):
-        """Add content.
-
-        Note add here does not neccasarily mean the same as
-        add() on a set(). Subclasses are welcome to enforce
-        uniqiness, etc. This base version appends to self._contents.
-        """
-        self._contents.append(content)
-
-
-class EntCertEntitledContentSet(ContentSet):
-    """Represent a container of entitled Content."""
-    pass
-
 
 class EntCertEntitledContent(object):
-    """Associate a Content with it's entitlement cert."""
+    """
+    Associate a rhsm.certificate2.Content object with the entitlement
+    cert it originated from.
+    """
     def __init__(self, content=None, cert=None):
         self.content = content
         self.cert = cert
@@ -74,11 +49,11 @@ class EntitlementCertEntitlement(Entitlement):
     """A Entitlement created from an EntitlementCertificate."""
     @classmethod
     def from_ent_cert(cls, ent_cert):
-        content_set = EntCertEntitledContentSet()
+        content_set = []
         for ent_cert_content in ent_cert.content:
             ent_cert_ent_content = EntCertEntitledContent(content=ent_cert_content,
                                                           cert=ent_cert)
-            content_set.add(ent_cert_ent_content)
+            content_set.append(ent_cert_ent_content)
 
         # create a :EntitlementCertEntitlement with a EntitledContents
         # as the content Iterables
