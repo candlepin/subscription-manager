@@ -959,11 +959,6 @@ gpg-verify = true
 
 
 class TestOsTreeContents(fixture.SubManFixture):
-    def test_empty(self):
-        contents = action_invoker.OstreeContents()
-        self.assertTrue(hasattr(contents, '_contents'))
-
-        #contents.load()
 
     def mock_content_yum(self, name):
         """name also has to work as a label."""
@@ -996,11 +991,13 @@ class TestOsTreeContents(fixture.SubManFixture):
         ent_src = models.EntitlementSource()
         ent_src._entitlements = [ent1, ent2]
 
-        contents = action_invoker.OstreeContents(ent_source=ent_src)
+        contents = ent_src.find_content_of_type(
+            action_invoker.OSTREE_CONTENT_TYPE)
         self.assertEquals(len(contents), 1)
 
         for content in contents:
-            self.assertEquals(content.content_type, "ostree")
+            self.assertEquals(content.content_type,
+                action_invoker.OSTREE_CONTENT_TYPE)
 
 
 class TestContentUpdateActionReport(fixture.SubManFixture):
@@ -1058,6 +1055,8 @@ gpg-verify=true
 
         mock_file_store.load.return_value = mock_repo_file
 
-        action = action_invoker.OstreeContentUpdateActionCommand()
+        ent_src = models.EntitlementSource()
+        action = action_invoker.OstreeContentUpdateActionCommand(
+            ent_source=ent_src)
         action.update_origin_file = mock.Mock()
         action.perform()

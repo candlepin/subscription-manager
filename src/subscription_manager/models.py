@@ -13,11 +13,16 @@
 # in this software or its documentation.
 #
 
+import logging
+
 import subscription_manager.injection as inj
+
+log = logging.getLogger('rhsm-app.' + __name__)
 
 # These containerish iterables could share a
 # base class, though, it should probably just
 # be based on containers.abc.Iterable
+
 
 class EntCertEntitledContent(object):
     """
@@ -35,7 +40,7 @@ class Entitlement(object):
     """Represent an entitlement.
 
     Has a 'contents' attribute that is an
-    iterable of EntitledContent objects.
+    iterable of EntitledContent objects. (currently EntCertEntitledContent)
 
     Note 'contents' that differs from the 'content'naming the
     rhsm EntitlementCertificate object uses.
@@ -82,6 +87,22 @@ class EntitlementSource(object):
     def __getitem__(self, key):
         return self._entitlements[key]
 
+    def find_content_of_type(self, find_type):
+        """
+        Scan all entitlements looking for content of the given type. (string)
+
+        Returns a list of EntCertEntitledContent.
+        """
+        entitled_content = []
+        log.debug("Searching for content of type: %s" % find_type)
+        for entitlement in self._entitlements:
+            for content in entitlement.contents:
+                if content.content_type == find_type:
+                    log.debug("found content: %s" % content.content.label)
+                    # no unique constraint atm
+                    entitled_content.append(content)
+        return entitled_content
+
 
 class EntitlementDirEntitlementSource(EntitlementSource):
     """Populate with entitlement info from ent dir of ent certs."""
@@ -94,5 +115,3 @@ class EntitlementDirEntitlementSource(EntitlementSource):
         for ent_cert in ent_dir.list_valid():
             self._entitlements.append(
                 EntitlementCertEntitlement.from_ent_cert(ent_cert))
-
-
