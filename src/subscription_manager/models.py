@@ -13,6 +13,7 @@
 # in this software or its documentation.
 #
 
+import subscription_manager.injection as inj
 
 # These containerish iterables could share a
 # base class, though, it should probably just
@@ -41,6 +42,11 @@ class ContentSet(object):
         self._contents.append(content)
 
 
+class EntCertEntitledContentSet(ContentSet):
+    """Represent a container of entitled Content."""
+    pass
+
+
 class EntCertEntitledContent(object):
     """Associate a Content with it's entitlement cert."""
     def __init__(self, content=None, cert=None):
@@ -48,11 +54,6 @@ class EntCertEntitledContent(object):
         self.cert = cert
         if self.content:
             self.content_type = self.content.content_type
-
-
-class EntCertEntitledContentSet(ContentSet):
-    """Represent a container of entitled Content."""
-    pass
 
 
 class Entitlement(object):
@@ -105,3 +106,18 @@ class EntitlementSource(object):
 
     def __getitem__(self, key):
         return self._entitlements[key]
+
+
+class EntitlementDirEntitlementSource(EntitlementSource):
+    """Populate with entitlement info from ent dir of ent certs."""
+
+    def __init__(self):
+        ent_dir = inj.require(inj.ENT_DIR)
+
+        # populate from ent certs
+        self._entitlements = []
+        for ent_cert in ent_dir.list_valid():
+            self._entitlements.append(
+                EntitlementCertEntitlement.from_ent_cert(ent_cert))
+
+

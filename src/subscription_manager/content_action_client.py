@@ -81,18 +81,6 @@ class ContentPluginActionInvoker(certlib.BaseActionInvoker):
         return action.perform()
 
 
-class EntitlementDirEntitlementSource(models.EntitlementSource):
-    """Populate with entitlement info from ent dir of ent certs."""
-
-    def __init__(self):
-        ent_dir = inj.require(inj.ENT_DIR)
-
-        # populate from ent certs
-        self._entitlements = []
-        for ent_cert in ent_dir.list_valid():
-            self._entitlements.append(models.EntitlementCertEntitlement.from_ent_cert(ent_cert))
-
-
 class ContentActionClient(base_action_client.BaseActionClient):
 
     def _get_libset(self):
@@ -112,7 +100,7 @@ class ContentActionClient(base_action_client.BaseActionClient):
         # NOTE: this is created and populated with the content of
         # the ent dir before the plugins are ran and it doesn't
         # update.
-        ent_dir_ent_source = EntitlementDirEntitlementSource()
+        ent_dir_ent_source = models.EntitlementDirEntitlementSource()
 
         for runner in plugin_manager.runiter('update_content',
                                              reports=content_plugins_reports,
