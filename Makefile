@@ -48,6 +48,12 @@ build:	rhsmcertd rhsm-icon
 # we stop searching for implicit rules on how to remake it
 Makefile: ;
 
+clean:
+	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
+	rm -f bin/rhsmcertd
+	rm -f bin/rhsm-icon
+	python setup.py clean
+
 bin:
 	mkdir bin
 
@@ -321,6 +327,12 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install bin/rhsm-debug $(PREFIX)/usr/bin
 
 
+desktop-files: etc-conf/rhsm-icon.desktop \
+				etc-conf/subscription-manager-gui.desktop
+
+%.desktop: %.desktop.in po
+	intltool-merge -d po $< $@
+
 check:
 	python setup.py -q nosetests -c playpen/noserc.dev
 
@@ -331,23 +343,13 @@ coverage: coverage-jenkins
 
 coverage-html: coverage-jenkins
 
+.PHONY: coverage-jenkins
 coverage-jenkins:
 	python setup.py -q nosetests -c playpen/noserc.ci
 
-clean:
-	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
-	rm -f bin/rhsmcertd
-	rm -f bin/rhsm-icon
-	python setup.py clean
-
-checkcommits:
-	scripts/checkcommits.sh
-
-desktop-files: etc-conf/rhsm-icon.desktop \
-				etc-conf/subscription-manager-gui.desktop
-
-%.desktop: %.desktop.in po
-	intltool-merge -d po $< $@
+#
+# gettext, po files, etc
+#
 
 po/POTFILES.in:
 	# generate the POTFILES.in file expected by intltool. it wants one
@@ -422,12 +424,19 @@ zanata: gettext zanata-push zanata-pull update-po
 gen-test-long-po:
 	-@ scripts/gen_test_en_po.py --long po/en_US.po
 
+#
+# checkers, linters, etc
+#
+
+.PHONY: pylint
 pylint:
 	@PYTHONPATH="src/:/usr/share/rhn:../python-rhsm/src/:/usr/share/rhsm" python setup.py lint
 
+.PHONY: tablint
 tablint:
 	@! GREP_COLOR='7;31' grep --color -nP "^\W*\t" $(STYLEFILES)
 
+.PHONY: trailinglint
 trailinglint:
 	@! GREP_COLOR='7;31'  grep --color -nP "[ \t]$$" $(STYLEFILES)
 
@@ -435,6 +444,7 @@ trailinglint:
 whitespacelint: tablint trailinglint
 
 # look for things that are likely debugging code left in by accident
+.PHONY: debuglint
 debuglint:
 	@! GREP_COLOR='7;31' grep --color -nP "pdb.set_trace|pydevd.settrace|import ipdb|import pdb|import pydevd" $(STYLEFILES)
 
@@ -442,6 +452,7 @@ debuglint:
 # find widgets used as passed to init of SubscriptionManagerTab,
 # find the widgets we actually find in the glade files
 # see if any used ones are not defined
+.PHONY: find-missing-signals
 find-missing-widgets:
 	@TMPFILE=`mktemp` || exit 1; \
 	USED_WIDGETS=`mktemp` ||exit 1; \
@@ -455,6 +466,7 @@ find-missing-widgets:
 # find any signals defined in glade and make sure we use them somewhere
 # this would be better if we could statically extract the used signals from
 # the code.
+.PHONY: find-missing-signals
 find-missing-signals:
 	@TMPFILE=`mktemp` || exit 1; \
 	DEFINED_SIGNALS=`mktemp` ||exit 1; \
@@ -475,6 +487,7 @@ fix-glade:
 #                                 _("a" + \
 #                                   "b")
 #  also look for _(a) usages
+.PHONY: gettext_lint
 gettext_lint:
 	@TMPFILE=`mktemp` || exit 1; \
 	pcregrep -n --color=auto -M "_\(.*[\'|\"].*?[\'|\"]\s*\+.*?(?s)\s*[\"|\'].*?(?-s)[\"|\'].*?\)"  $(STYLEFILES) | tee $$TMPFILE; \
@@ -482,17 +495,19 @@ gettext_lint:
 	! test -s $$TMPFILE
 
 #see bz #826874, causes issues on older libglade
+.PHONY: gladelint
 gladelint:
 	@TMPFILE=`mktemp` || exit 1; \
 	grep -nP  "swapped=\"no\"" $(GLADEFILES) | tee $$TMPFILE; \
     grep -nP "property name=\"orientation\"" $(GLADEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
+.PHONY: flake8
 flake8:
-	@TMPFILE=`mktemp` || exit 1; \
-	python setup.py -q flake8 -q | tee $$TMPFILE; \
-	! test -s $$TMPFILE
+	@python setup.py -q flake8 -q
 
+
+.PHONY: rpmlint
 rpmlint:
 	@TMPFILE=`mktemp` || exit 1; \
 	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
@@ -501,14 +516,21 @@ rpmlint:
 # We target python 2.6, hence -m 2.7 is the earliest python features to warn about use of.
 # See https://github.com/alikins/pyqver for pyqver.
 # Since plugin/ostree is for python 2.7+ systems only, we can ignore the warning there.
+.PHONY: versionlint
 versionlint:
 	@TMPFILE=`mktemp` || exit 1; \
 	pyqver2.py -m 2.7 -l $(STYLEFILES) | grep -v hashlib | grep -v plugin/ostree.*check_output | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 .PHONY: stylish
-stylish: flake8 versionlint gladelint find-missing-widgets find-missing-signals whitespacelint gettext_lint rpmlint debuglint
+stylish: whitespacelint flake8 versionlint rpmlint debuglint gettext_lint
 
-jenkins: stylish coverage-jenkins
+# uncommon, so move to just letting jenkins run these by default
+.PHONY: stylish-harder
+stylish-harder: gladelint find-missing-widgets find-missing-signals
 
+.PHONY: jenkins
+jenkins: stylish stylish-harder coverage-jenkins
 
+stylefiles:
+	@echo $(STYLEFILES)
