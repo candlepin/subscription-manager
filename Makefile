@@ -529,8 +529,14 @@ stylish: whitespacelint flake8 versionlint rpmlint debuglint gettext_lint
 .PHONY: stylish-harder
 stylish-harder: gladelint find-missing-widgets find-missing-signals
 
+.PHONY: install-pip-requirements
+install-pip-requirements:
+	@pip install -r test-requirements.txt
+
 .PHONY: jenkins
-jenkins: stylish stylish-harder coverage-jenkins
+jenkins: install-pip-requirements stylish stylish-harder coverage-jenkins
+
+
 
 stylefiles:
 	@echo $(STYLEFILES)
