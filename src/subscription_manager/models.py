@@ -24,16 +24,22 @@ log = logging.getLogger('rhsm-app.' + __name__)
 # be based on containers.abc.Iterable
 
 
+# TODO: rename to Content?
 class EntCertEntitledContent(object):
     """
-    Associate a rhsm.certificate2.Content object with the entitlement
-    cert it originated from.
+    A representation of entitled content.
+
+    Very similar to an rhsm.certificate2.Content object and exposes some
+    of the same information, but may expose additional things in the future.
     """
     def __init__(self, content=None, cert=None):
-        self.content = content
         self.cert = cert
-        if self.content:
-            self.content_type = self.content.content_type
+        if content:
+            self.content_type = content.content_type
+            self.label = content.label
+            self.name = content.name
+            self.url = content.url
+            self.gpg = content.gpg
 
 
 class Entitlement(object):
@@ -98,7 +104,7 @@ class EntitlementSource(object):
         for entitlement in self._entitlements:
             for content in entitlement.contents:
                 if content.content_type == find_type:
-                    log.debug("found content: %s" % content.content.label)
+                    log.debug("found content: %s" % content.label)
                     # no unique constraint atm
                     entitled_content.append(content)
         return entitled_content

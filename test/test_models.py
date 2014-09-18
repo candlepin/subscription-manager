@@ -44,13 +44,15 @@ class TestEntitlementCertEntitlement(TestEntitlement):
 
         ece = models.EntitlementCertEntitlement.from_ent_cert(mock_ent_cert)
 
-        self.assertEquals(ece.contents[0].content, contents[0])
+        self.assertEquals(ece.contents[0].name, contents[0].name)
+        self.assertEquals(ece.contents[0].label, contents[0].label)
+        self.assertEquals(ece.contents[0].gpg, contents[0].gpg)
+        self.assertEquals(ece.contents[0].content_type,
+            contents[0].content_type)
         self.assertEquals(len(ece.contents), 1)
 
-        self.assertEquals(ece.contents[0].content.name, "mock_content")
-
         # for ostree content, gpg is likely to change
-        self.assertEquals(ece.contents[0].content.gpg, "path/to/gpg")
+        self.assertEquals(ece.contents[0].gpg, mock_content.gpg)
 
 
 class TestEntitlementSource(fixture.SubManFixture):

@@ -153,7 +153,7 @@ class OstreeRemote(object):
                                           section=section)
 
     @classmethod
-    def from_ent_cert_content(cls, ent_cert_content):
+    def from_ent_cert_content(cls, content):
         """Create a OstreeRemote object based on a models.EntCertEntitledContent object.
 
         'content' is a models.EntCertEntitledContent, as found in a
@@ -167,13 +167,12 @@ class OstreeRemote(object):
         """
 
         remote = cls()
-        content = ent_cert_content.content
         remote.name = content.label
         remote.url = content.url
 
         remote.gpg_verify = remote.map_gpg(content)
 
-        cert = ent_cert_content.cert
+        cert = content.cert
         remote.tls_client_cert_path = cert.path
         remote.tls_client_key_path = cert.key_path()
 

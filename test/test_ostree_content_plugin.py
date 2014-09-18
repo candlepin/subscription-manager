@@ -187,10 +187,10 @@ class TestOstreeRemoteFromEntCertContent(fixture.SubManFixture):
 
     def test_gpg_no_attr(self):
         content = self._content()
-        del content.gpg
         cert = self._cert()
         ent_cert_content = models.EntCertEntitledContent(content=content,
                                                          cert=cert)
+        del ent_cert_content.gpg
         remote = model.OstreeRemote.from_ent_cert_content(ent_cert_content)
         self.assertTrue(remote.gpg_verify)
 
@@ -340,11 +340,9 @@ last_key = blippy
         mock_ent_cert = mock.Mock()
         mock_ent_cert.path = "/somewhere/etc/pki/entitlement/123123.pem"
 
-        mock_ent_content = mock.Mock()
-        mock_ent_content.content = mock_content
-        mock_ent_content.cert = mock_ent_cert
+        mock_content.cert = mock_ent_cert
 
-        content_set.add(mock_ent_content)
+        content_set.add(mock_content)
 
         updates_builder = model.OstreeConfigUpdatesBuilder(ostree_config, content_set)
         updates = updates_builder.build()
