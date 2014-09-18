@@ -960,30 +960,20 @@ gpg-verify = true
 
 class TestOsTreeContents(fixture.SubManFixture):
 
-    def mock_content_yum(self, name):
-        """name also has to work as a label."""
-        mock_content = mock.Mock()
-        mock_content.name = "mock_content_%s" % name
-        mock_content.url = "http://mock.example.com/%s/" % name
-        mock_content.gpg = "path/to/gpg"
-        mock_content.enabled = True
-        mock_content.label = name
-        mock_content.content_type = "yum"
-        return mock_content
-
-    def mock_content_ostree(self, name):
-        mock_content = mock.Mock()
-        mock_content.name = "mock_content_%s" % name
-        mock_content.url = "http://mock.example.com/%s/" % name
-        mock_content.gpg = "path/to/gpg"
-        mock_content.enabled = True
-        mock_content.label = name
-        mock_content.content_type = "ostree"
-        return mock_content
+    def create_content(self, content_type, name):
+        """ Create dummy entitled content object. """
+        content = certificate2.Content(
+            content_type=content_type,
+            name="mock_content_%s" % name,
+            label=name,
+            enabled=True,
+            gpg="path/to/gpg",
+            url="http://mock.example.com/%s/" % name)
+        return models.EntCertEntitledContent(content=content)
 
     def test_ent_source(self):
-        yc = self.mock_content_yum("yum_content")
-        oc = self.mock_content_ostree("ostree_content")
+        yc = self.create_content("yum", "yum_content")
+        oc = self.create_content("ostree", "ostree_content")
 
         ent1 = models.Entitlement(contents=[yc])
         ent2 = models.Entitlement(contents=[oc])
