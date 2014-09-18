@@ -73,7 +73,7 @@ Disable/ignore any previous RHN proxy settings when migrating to the new subscri
 .B --registration-state={keep|unentitle|purge}
 Defines the state the tool should leave the legacy profile in.
 Options are \fBkeep\fP (make no changes on the legacy system), \fBunentitle\fP (leave the legacy profile but remove any entitlements or subscriptions it is consuming), and \fBpurge\fP (delete the legacy profile).
-The default is \fBpurge\fP.
+The default is \fBunentitle\fP.
 
 .TP
 .B --legacy-user=LEGACY_USER
@@ -188,13 +188,39 @@ Legacy username: admin
 Legacy password:
 Destination username: admin
 Destination password:
-[[NEED WORKING OUTPUT HERE]]
+Retrieving existing legacy subscription information...
+
++-----------------------------------------------------+
+System is currently subscribed to these legacy channels:
++-----------------------------------------------------+
+rhel-x86_64-server-6
+rhn-tools-rhel-x86_64-server-6
+
++-----------------------------------------------------+
+No product certificates are mapped to these legacy channels:
++-----------------------------------------------------+
+rhn-tools-rhel-x86_64-server-6
+
++-----------------------------------------------------+
+Installing product certificates for these legacy channels:
++-----------------------------------------------------+
+rhel-x86_64-server-6
+
+Product certificates installed successfully to /etc/pki/product.
+
+Attempting to register system to destination server...
+WARNING
+
+This system has already been registered with Red Hat using RHN Classic.
+
+Your system is being registered again using Red Hat Subscription Management. Red Hat recommends that customers only register once.
+
+To learn how to unregister from either service please consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563
+an integer is required
+
+Unable to register.
+For further assistance, please contact Red Hat Global Support Services.
 .fi
-
-.SH WARNING
-.PP
-.B TODO - DRAFT - FILL IN THE ABOVE
-
 
 .PP
 \fBsat5to6\fP prompts for usernames and passwords if not provided on the command-line.
