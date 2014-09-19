@@ -52,8 +52,8 @@ class OstreeContentUpdateActionCommand(object):
         report = OstreeContentUpdateActionReport()
 
         # return the composed set oEntitledContents
-        entitled_contents = self.ent_source.find_content_of_type(
-            OSTREE_CONTENT_TYPE)
+        entitled_contents = self.ent_source.find_content(
+            content_type=OSTREE_CONTENT_TYPE)
 
         # CALCULATE UPDATES
         # given current config, and the new contents, construct a list

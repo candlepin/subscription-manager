@@ -980,8 +980,8 @@ class TestOsTreeContents(fixture.SubManFixture):
         ent_src = EntitlementSource()
         ent_src._entitlements = [ent1, ent2]
 
-        contents = ent_src.find_content_of_type(
-            action_invoker.OSTREE_CONTENT_TYPE)
+        contents = ent_src.find_content(
+            content_type=action_invoker.OSTREE_CONTENT_TYPE)
         self.assertEquals(len(contents), 1)
 
         for content in contents:
