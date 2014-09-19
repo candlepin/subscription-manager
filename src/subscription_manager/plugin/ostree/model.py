@@ -154,10 +154,7 @@ class OstreeRemote(object):
 
     @classmethod
     def from_ent_cert_content(cls, content):
-        """Create a OstreeRemote object based on a models.EntCertEntitledContent object.
-
-        'content' is a models.EntCertEntitledContent, as found in a
-          EntitlementCertificate.contents
+        """Create a OstreeRemote object based on a model.Content object.
 
         This maps:
             Content.label -> OstreeRemote.name

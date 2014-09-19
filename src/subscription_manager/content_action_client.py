@@ -18,7 +18,7 @@ import logging
 from subscription_manager import base_action_client
 from subscription_manager import certlib
 from subscription_manager import repolib
-from subscription_manager import models
+from subscription_manager.model.ent_cert import EntitlementDirEntitlementSource
 
 import subscription_manager.injection as inj
 
@@ -100,7 +100,7 @@ class ContentActionClient(base_action_client.BaseActionClient):
         # NOTE: this is created and populated with the content of
         # the ent dir before the plugins are ran and it doesn't
         # update.
-        ent_dir_ent_source = models.EntitlementDirEntitlementSource()
+        ent_dir_ent_source = EntitlementDirEntitlementSource()
 
         for runner in plugin_manager.runiter('update_content',
                                              reports=content_plugins_reports,

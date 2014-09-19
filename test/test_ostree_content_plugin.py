@@ -18,7 +18,8 @@ import mock
 import fixture
 import subprocess
 
-from subscription_manager import models
+from subscription_manager.model import EntitlementSource, Entitlement
+from subscription_manager.model.ent_cert import EntitlementCertContent
 from subscription_manager.plugin.ostree import config
 from subscription_manager.plugin.ostree import model
 from subscription_manager.plugin.ostree import action_invoker
@@ -188,8 +189,8 @@ class TestOstreeRemoteFromEntCertContent(fixture.SubManFixture):
     def test_gpg_no_attr(self):
         content = self._content()
         cert = self._cert()
-        ent_cert_content = models.EntCertEntitledContent(content=content,
-                                                         cert=cert)
+        ent_cert_content = EntitlementCertContent.from_cert_content(
+            content, cert)
         del ent_cert_content.gpg
         remote = model.OstreeRemote.from_ent_cert_content(ent_cert_content)
         self.assertTrue(remote.gpg_verify)
@@ -198,8 +199,8 @@ class TestOstreeRemoteFromEntCertContent(fixture.SubManFixture):
         content = self._content()
         content.gpg = gpg
         cert = self._cert()
-        ent_cert_content = models.EntCertEntitledContent(content=content,
-                                                         cert=cert)
+        ent_cert_content = EntitlementCertContent.from_cert_content(
+            content, cert)
         remote = model.OstreeRemote.from_ent_cert_content(ent_cert_content)
         return remote
 
@@ -967,16 +968,16 @@ class TestOsTreeContents(fixture.SubManFixture):
             enabled=True,
             gpg="path/to/gpg",
             url="http://mock.example.com/%s/" % name)
-        return models.EntCertEntitledContent(content=content)
+        return EntitlementCertContent.from_cert_content(content)
 
     def test_ent_source(self):
         yc = self.create_content("yum", "yum_content")
         oc = self.create_content("ostree", "ostree_content")
 
-        ent1 = models.Entitlement(contents=[yc])
-        ent2 = models.Entitlement(contents=[oc])
+        ent1 = Entitlement(contents=[yc])
+        ent2 = Entitlement(contents=[oc])
 
-        ent_src = models.EntitlementSource()
+        ent_src = EntitlementSource()
         ent_src._entitlements = [ent1, ent2]
 
         contents = ent_src.find_content_of_type(
@@ -1043,7 +1044,7 @@ gpg-verify=true
 
         mock_file_store.load.return_value = mock_repo_file
 
-        ent_src = models.EntitlementSource()
+        ent_src = EntitlementSource()
         action = action_invoker.OstreeContentUpdateActionCommand(
             ent_source=ent_src)
         action.update_origin_file = mock.Mock()

@@ -15,8 +15,6 @@
 
 import logging
 
-import subscription_manager.injection as inj
-
 log = logging.getLogger('rhsm-app.' + __name__)
 
 # These containerish iterables could share a
@@ -24,22 +22,18 @@ log = logging.getLogger('rhsm-app.' + __name__)
 # be based on containers.abc.Iterable
 
 
-# TODO: rename to Content?
-class EntCertEntitledContent(object):
+class Content(object):
     """
-    A representation of entitled content.
-
-    Very similar to an rhsm.certificate2.Content object and exposes some
-    of the same information, but may expose additional things in the future.
+    A generic representation of entitled content.
     """
-    def __init__(self, content=None, cert=None):
+    def __init__(self, content_type, name, label, url=None,
+        gpg=None, cert=None):
+        self.content_type = content_type
+        self.name = name
+        self.label = label
+        self.url = url
+        self.gpg = gpg
         self.cert = cert
-        if content:
-            self.content_type = content.content_type
-            self.label = content.label
-            self.name = content.name
-            self.url = content.url
-            self.gpg = content.gpg
 
 
 class Entitlement(object):
@@ -54,26 +48,6 @@ class Entitlement(object):
 
     def __init__(self, contents=None):
         self.contents = contents
-
-
-class EntitlementCertEntitlement(Entitlement):
-    """A Entitlement created from an EntitlementCertificate."""
-    @classmethod
-    def from_ent_cert(cls, ent_cert):
-        content_set = []
-        for ent_cert_content in ent_cert.content:
-            ent_cert_ent_content = EntCertEntitledContent(content=ent_cert_content,
-                                                          cert=ent_cert)
-            content_set.append(ent_cert_ent_content)
-
-        # create a :EntitlementCertEntitlement with a EntitledContents
-        # as the content Iterables
-        ent_cert_ent = cls(content_set)
-
-        # could populate more info here, but
-        # we don't actually seem to use it anywhere
-        # here or in repolib
-        return ent_cert_ent
 
 
 class EntitlementSource(object):
@@ -108,16 +82,3 @@ class EntitlementSource(object):
                     # no unique constraint atm
                     entitled_content.append(content)
         return entitled_content
-
-
-class EntitlementDirEntitlementSource(EntitlementSource):
-    """Populate with entitlement info from ent dir of ent certs."""
-
-    def __init__(self):
-        ent_dir = inj.require(inj.ENT_DIR)
-
-        # populate from ent certs
-        self._entitlements = []
-        for ent_cert in ent_dir.list_valid():
-            self._entitlements.append(
-                EntitlementCertEntitlement.from_ent_cert(ent_cert))
