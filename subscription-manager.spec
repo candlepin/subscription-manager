@@ -11,7 +11,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.8.24
+Version: 1.8.25
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -383,6 +383,9 @@ fi
 %endif
 
 %changelog
+* Fri Sep 19 2014 Alex Wood <awood@redhat.com> 1.8.25-1
+- Get server port as an int. (awood@redhat.com)
+
 * Thu Sep 11 2014 Alex Wood <awood@redhat.com> 1.8.24-1
 - 1131213: Do not ignore server info passed in to cp_provider.
   (awood@redhat.com)
