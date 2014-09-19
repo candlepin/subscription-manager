@@ -330,7 +330,7 @@ class CliCommand(AbstractCLICommand):
         self.proxy_password = cfg.get('server', 'proxy_password')
 
         self.server_hostname = cfg.get("server", "hostname")
-        self.server_port = cfg.get("server", "port")
+        self.server_port = cfg.get_int("server", "port")
         self.server_prefix = cfg.get("server", "prefix")
 
         if hasattr(self.options, "insecure") and self.options.insecure:
