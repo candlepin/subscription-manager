@@ -18,6 +18,7 @@ import unittest
 import os
 
 from mock import patch, MagicMock
+from shutil import rmtree
 
 from stubs import StubProduct, StubEntitlementCertificate, \
     StubProductCertificate
@@ -141,15 +142,22 @@ class DirectoryTest(unittest.TestCase):
     klass = Directory
 
     def setUp(self):
+        self.cleanup_paths = []
         self.d = self._get_directory()
+
+    def tearDown(self):
+        for path in self.cleanup_paths:
+            rmtree(path)
 
     def _get_directory(self):
         temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self.cleanup_paths.append(temp_dir)
         self.list_len = 0
         return self.klass(path=temp_dir)
 
     def _get_missing_directory(self):
         temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self.cleanup_paths.append(temp_dir)
         return self.klass(path=os.path.join(temp_dir, '/doesnt/exist/'))
 
     def test(self, mockPath):
@@ -171,6 +179,7 @@ class DirectoryTest(unittest.TestCase):
 class DirectoryWithCertsTest(DirectoryTest):
     def _get_directory(self):
         temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self.cleanup_paths.append(temp_dir)
         self._populate_directory(temp_dir)
         return self.klass(path=temp_dir)
 
@@ -211,6 +220,7 @@ class EntitlementDirectoryWithCertsTest(DirectoryWithCertsTest):
 
     def _get_directory(self):
         self.temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self.cleanup_paths.append(self.temp_dir)
         self._populate_directory(self.temp_dir)
         self.mock_productpath.return_value = self.temp_dir
         return self.klass()
@@ -230,12 +240,14 @@ class EntitlementDirectoryWithCertsTest(DirectoryWithCertsTest):
 
     def _get_missing_directory(self):
         temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self.cleanup_paths.append(temp_dir)
         self.mock_productpath.return_value = os.path.join(temp_dir, '/doesnt/exist/')
         return self.klass()
 
     def tearDown(self):
         self.patcher.stop()
         self.path_patcher.stop()
+        super(EntitlementDirectoryWithCertsTest, self).tearDown()
 
     def test_list_valid(self):
         res = self.d.list_valid()
@@ -258,6 +270,7 @@ class ProductCertificateDirectoryWithCertsTest(DirectoryWithCertsTest):
     klass = ProductCertificateDirectory
 
     def setUp(self):
+        self.cleanup_paths = []
         self.patcher = patch('subscription_manager.certdirectory.create_from_file')
         self.mock_cff = self.patcher.start()
 
@@ -275,6 +288,9 @@ class ProductCertificateDirectoryWithCertsTest(DirectoryWithCertsTest):
 
     def tearDown(self):
         self.patcher.stop()
+        for path in self.cleanup_paths:
+            if os.path.exists(path):
+                rmtree(path)
 
     def test_list_valid(self):
         res = self.d.list_valid()
@@ -350,13 +366,12 @@ class ProductDirectoryTest(ProductCertificateDirectoryWithCertsTest):
 
     def _get_directory(self):
         int_temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self.cleanup_paths.append(int_temp_dir)
         self._populate_directory(int_temp_dir)
         default_temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self.cleanup_paths.append(default_temp_dir)
         self.list_len = 4
         return self.klass(path=int_temp_dir, default_path=default_temp_dir)
-
-    def _get_missing_directory(self):
-        return self.klass()
 
 
 class AlsoProductDirectoryTest(unittest.TestCase):
