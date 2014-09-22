@@ -14,16 +14,30 @@
 import mock
 
 import fixture
+import tempfile
+import shutil
+import os.path
 
 from subscription_manager.model import Content, Entitlement, EntitlementSource
 from subscription_manager.model.ent_cert import EntitlementCertContent
-from subscription_manager.plugin.docker import action_invoker
+from subscription_manager.plugin.docker.action_invoker import \
+    DockerContentUpdateActionCommand, KeyPair, DockerCertDir
 
 from rhsm import certificate2
 
 DUMMY_CERT_LOCATION = "/dummy/certs"
 
 class TestDockerContentUpdateActionCommand(fixture.SubManFixture):
+
+    def _create_content(self, label, cert):
+        return Content("docker", label, label, cert=cert)
+
+    def _mock_cert(self, base_filename):
+        cert = mock.Mock()
+        cert.path = "%s/%s.pem" % (DUMMY_CERT_LOCATION, base_filename)
+        cert.key_path.return_value = "%s/%s-key.pem" %  \
+            (DUMMY_CERT_LOCATION, base_filename)
+        return cert
 
     def test_unique_paths_with_dupes(self):
         cert1 = self._mock_cert('5001')
@@ -40,21 +54,13 @@ class TestDockerContentUpdateActionCommand(fixture.SubManFixture):
 
         contents = [content1, content2, content3, content1_dupe,
             content1_dupe2]
-        cmd = action_invoker.DockerContentUpdateActionCommand(None)
+        cmd = DockerContentUpdateActionCommand(None)
         cert_paths = cmd._get_unique_paths(contents)
-        self.assertEquals(6, len(cert_paths))
-        self.assertTrue(cert1.path in cert_paths)
-        self.assertTrue(cert1.key_path() in cert_paths)
-
-    def _create_content(self, label, cert):
-        return Content("docker", label, label, cert=cert)
-
-    def _mock_cert(self, base_filename):
-        cert = mock.Mock()
-        cert.path = "%s/%s.pem" % (DUMMY_CERT_LOCATION, base_filename)
-        cert.key_path.return_value = "%s/%s-key.pem" %  \
-            (DUMMY_CERT_LOCATION, base_filename)
-        return cert
+        print cert_paths
+        self.assertEquals(3, len(cert_paths))
+        self.assertTrue(KeyPair(cert1.path, cert1.key_path()) in cert_paths)
+        self.assertTrue(KeyPair(cert2.path, cert2.key_path()) in cert_paths)
+        self.assertTrue(KeyPair(cert3.path, cert3.key_path()) in cert_paths)
 
 
 class TestDockerContents(fixture.SubManFixture):
@@ -78,3 +84,80 @@ class TestDockerContents(fixture.SubManFixture):
 
         ent_src = EntitlementSource()
         ent_src._entitlements = [ent1, ent2]
+
+
+class TestKeyPair(fixture.SubManFixture):
+
+    def test_expected_filenames(self):
+        kp = KeyPair("/etc/pki/entitlement/9000.pem",
+            "/etc/pki/entitlement/9000-key.pem")
+        self.assertEquals("9000.cert", kp.dest_cert_filename)
+        self.assertEquals("9000-key.key", kp.dest_key_filename)
+
+    def test_expected_filenames_weird_extensions(self):
+        kp = KeyPair("/etc/pki/entitlement/9000.crt",
+            "/etc/pki/entitlement/9000-key.crt")
+        self.assertEquals("9000.cert", kp.dest_cert_filename)
+        self.assertEquals("9000-key.key", kp.dest_key_filename)
+
+    def test_expected_filenames_weird_filenames(self):
+        kp = KeyPair("/etc/pki/entitlement/9000.1.2014-a.pem",
+            "/etc/pki/entitlement/9000.1.2014-a-key.pem")
+        self.assertEquals("9000.1.2014-a.cert", kp.dest_cert_filename)
+        self.assertEquals("9000.1.2014-a-key.key", kp.dest_key_filename)
+
+
+class TestDockerCertDir(fixture.SubManFixture):
+
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp(prefix='subman-docker-plugin-tests')
+        self.src_certs_dir = os.path.join(self.temp_dir, "etc/pki/entitlement")
+        os.makedirs(self.src_certs_dir)
+
+        # This is where we'll setup for docker certs:
+        self.dest_dir = os.path.join(self.temp_dir,
+            "etc/docker/certs.d/cdn.example.org/")
+        self.docker_dir = DockerCertDir(path=self.dest_dir)
+
+    def tearDown(self):
+        shutil.rmtree(self.temp_dir)
+
+    def _touch(self, dir_path, filename):
+        """
+        Create an empty file in the given directory with the given filename.
+        """
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+        open(os.path.join(dir_path, filename), 'a').close()
+
+    def test_created_if_missing(self):
+        # Doesn't exist yet:
+        self.assertFalse(os.path.exists(self.dest_dir))
+        self.docker_dir.sync([])
+        self.assertTrue(os.path.exists(self.dest_dir))
+
+    def test_first_install(self):
+        cert1 = '1234.pem'
+        key1 = '1234-key.pem'
+        self._touch(self.src_certs_dir, cert1)
+        self._touch(self.src_certs_dir, key1)
+        kp = KeyPair(os.path.join(self.src_certs_dir, cert1),
+            os.path.join(self.src_certs_dir, key1))
+        self.docker_dir.sync([kp])
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
+
+    def test_old_certs_cleaned_out(self):
+        cert1 = '1234.cert'
+        key1 = '1234-key.key'
+        ca = 'myca.crt' # This file extension should be left alone:
+        self._touch(self.dest_dir, cert1)
+        self._touch(self.dest_dir, key1)
+        self._touch(self.dest_dir, ca)
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, ca)))
+        self.docker_dir.sync([])
+        self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
+        self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, ca)))
