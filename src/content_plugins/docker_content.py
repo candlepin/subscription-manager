@@ -36,5 +36,8 @@ class DockerContentPlugin(base_plugin.SubManPlugin):
             conduit: An UpdateContentConduit
         """
         conduit.log.info("Updating Docker content.")
-        report = action_invoker.DockerContentUpdateActionCommand(ent_source=conduit.ent_source).perform()
+        registry_hostname = conduit.conf_string('main', 'registry_hostname')
+        conduit.log.info("docker registry = %s" % registry_hostname)
+        report = action_invoker.DockerContentUpdateActionCommand(
+            ent_source=conduit.ent_source, registry=registry_hostname).perform()
         conduit.reports.add(report)

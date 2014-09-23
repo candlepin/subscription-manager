@@ -27,6 +27,7 @@ from rhsm import certificate2
 
 DUMMY_CERT_LOCATION = "/dummy/certs"
 
+
 class TestDockerContentUpdateActionCommand(fixture.SubManFixture):
 
     def _create_content(self, label, cert):
@@ -54,9 +55,8 @@ class TestDockerContentUpdateActionCommand(fixture.SubManFixture):
 
         contents = [content1, content2, content3, content1_dupe,
             content1_dupe2]
-        cmd = DockerContentUpdateActionCommand(None)
+        cmd = DockerContentUpdateActionCommand(None, 'cdn.example.org')
         cert_paths = cmd._get_unique_paths(contents)
-        print cert_paths
         self.assertEquals(3, len(cert_paths))
         self.assertTrue(KeyPair(cert1.path, cert1.key_path()) in cert_paths)
         self.assertTrue(KeyPair(cert2.path, cert2.key_path()) in cert_paths)
@@ -115,9 +115,12 @@ class TestDockerCertDir(fixture.SubManFixture):
         os.makedirs(self.src_certs_dir)
 
         # This is where we'll setup for docker certs:
-        self.dest_dir = os.path.join(self.temp_dir,
-            "etc/docker/certs.d/cdn.example.org/")
-        self.docker_dir = DockerCertDir(path=self.dest_dir)
+        docker_dir = os.path.join(self.temp_dir,
+            "etc/docker/certs.d/")
+
+        # Where we expect our certs to actually land:
+        self.dest_dir = os.path.join(docker_dir, 'cdn.example.org')
+        self.docker_dir = DockerCertDir('cdn.example.org', path=docker_dir)
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
@@ -150,7 +153,7 @@ class TestDockerCertDir(fixture.SubManFixture):
     def test_old_certs_cleaned_out(self):
         cert1 = '1234.cert'
         key1 = '1234-key.key'
-        ca = 'myca.crt' # This file extension should be left alone:
+        ca = 'myca.crt'  # This file extension should be left alone:
         self._touch(self.dest_dir, cert1)
         self._touch(self.dest_dir, key1)
         self._touch(self.dest_dir, ca)

@@ -36,8 +36,9 @@ class DockerContentUpdateActionCommand(object):
 
     Return a DockerContentUpdateReport.
     """
-    def __init__(self, ent_source):
+    def __init__(self, ent_source, registry):
         self.ent_source = ent_source
+        self.registry = registry
 
     def perform(self):
 
@@ -47,8 +48,7 @@ class DockerContentUpdateActionCommand(object):
             content_type=DOCKER_CONTENT_TYPE)
         unique_cert_paths = self._get_unique_paths(content_sets)
 
-        # TODO: clean out certs that should no longer be there
-        cert_dir = DockerCertDir()
+        cert_dir = DockerCertDir(registry=self.registry)
         cert_dir.sync(unique_cert_paths)
 
         return report
@@ -102,17 +102,21 @@ class KeyPair(object):
 class DockerCertDir(object):
     """
     An object to manage the docker certificate directory at
-    /etc/docker/certs.d.
+    /etc/docker/certs.d/.
     """
 
     DEFAULT_PATH = "/etc/docker/certs.d/"
     MANAGED_EXTENSIONS = [".cert", ".key"]
 
-    def __init__(self, path=None):
+    def __init__(self, registry, path=None):
+        self.registry = registry
         self.path = path or self.DEFAULT_PATH
+        self.path = os.path.join(self.path, registry)
 
     def sync(self, expected_keypairs):
+        log.debug("Syncing docker certificates to %s" % self.path)
         if not os.path.exists(self.path):
+            log.info("Docker cert directory does not exist, creating it.")
             os.makedirs(self.path)
 
         # Build up the list of certificates that should be in the
@@ -128,8 +132,12 @@ class DockerCertDir(object):
             expected_files.append(keypair.dest_cert_filename)
             expected_files.append(keypair.dest_key_filename)
             if not os.path.exists(full_cert_path):
+                log.info("Copying: %s -> %s" %
+                    (keypair.cert_path, full_cert_path))
                 shutil.copyfile(keypair.cert_path, full_cert_path)
             if not os.path.exists(full_key_path):
+                log.info("Copying: %s -> %s" %
+                    (keypair.key_path, full_key_path))
                 shutil.copyfile(keypair.key_path, full_key_path)
 
         self._prune_old_certs(expected_files)
@@ -143,7 +151,7 @@ class DockerCertDir(object):
             if os.path.isfile(fullpath) and \
                 os.path.splitext(f)[1] in self.MANAGED_EXTENSIONS and \
                 not f in expected_files:
-                    log.info("Cleaning up docker certificate: %s" % f)
+                    log.info("Cleaning up old certificate: %s" % f)
                     os.remove(fullpath)
 
 
