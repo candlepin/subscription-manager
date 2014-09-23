@@ -130,7 +130,6 @@ class DockerCertDir(object):
             if not os.path.exists(full_key_path):
                 shutil.copyfile(keypair.key_path, full_key_path)
 
-
         self._prune_old_certs(expected_files)
 
     def _prune_old_certs(self, expected_files):
