@@ -46,7 +46,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
     ENTS_PROVIDE_NO_REPOS = _("Attached subscriptions do not provide any repositories.")
     NO_ATTACHED_SUBS = _("No repositories are available without an attached subscription.")
-    REPOS_DISABLED_BY_CFG = _("Repositories disabled by configuration")
+    REPOS_DISABLED_BY_CFG = _("Repositories disabled by configuration.")
 
     def __init__(self, backend, parent):
         super(RepositoriesDialog, self).__init__('repositories.glade')
