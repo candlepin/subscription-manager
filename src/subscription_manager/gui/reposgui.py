@@ -18,6 +18,7 @@ import logging
 
 import gtk
 
+import rhsm.config
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.gui import widgets
 
@@ -32,6 +33,8 @@ _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
+cfg = rhsm.config.initConfig()
+
 
 class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
     """
@@ -43,6 +46,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
     ENTS_PROVIDE_NO_REPOS = _("Attached subscriptions do not provide any repositories.")
     NO_ATTACHED_SUBS = _("No repositories are available without an attached subscription.")
+    REPOS_DISABLED_BY_CFG = _("Repositories disabled by configuration.")
 
     def __init__(self, backend, parent):
         super(RepositoriesDialog, self).__init__('repositories.glade')
@@ -154,6 +158,10 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             no_repos_message = self.ENTS_PROVIDE_NO_REPOS
             if ent_count == 0:
                 no_repos_message = self.NO_ATTACHED_SUBS
+            # Checks config for manage_repos. Output updated according to bz 1139174.
+            if cfg.has_option('rhsm', 'manage_repos') and \
+                    not int(cfg.get('rhsm', 'manage_repos')):
+                no_repos_message = self.REPOS_DISABLED_BY_CFG
 
             self.no_repos_label.set_markup("<b>%s</b>" % no_repos_message)
             self.widget_switcher.set_active(0)
