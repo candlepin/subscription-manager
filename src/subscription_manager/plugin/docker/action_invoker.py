@@ -48,6 +48,8 @@ class DockerContentUpdateActionCommand(object):
         unique_cert_paths = self._get_unique_paths(content_sets)
 
         # TODO: clean out certs that should no longer be there
+        cert_dir = DockerCertDir()
+        cert_dir.sync(unique_cert_paths)
 
         return report
 
