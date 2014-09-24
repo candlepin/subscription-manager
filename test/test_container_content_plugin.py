@@ -170,3 +170,33 @@ class TestContainerCertDir(fixture.SubManFixture):
         self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, ca)))
         self.assertEquals(2, len(self.report.removed))
+
+    def test_all_together_now(self):
+        cert1 = '1234.pem'
+        key1 = '1234-key.pem'
+        cert2 = '12345.pem'
+        key2 = '12345-key.pem'
+        old_cert = '444.cert'
+        old_key = '444-key.key'
+        old_key2 = 'another-key.key'
+        self._touch(self.src_certs_dir, cert1)
+        self._touch(self.src_certs_dir, key1)
+        self._touch(self.src_certs_dir, cert2)
+        self._touch(self.src_certs_dir, key2)
+        self._touch(self.dest_dir, old_cert)
+        self._touch(self.dest_dir, old_key)
+        self._touch(self.dest_dir, old_key2)
+        kp = KeyPair(os.path.join(self.src_certs_dir, cert1),
+            os.path.join(self.src_certs_dir, key1))
+        kp2 = KeyPair(os.path.join(self.src_certs_dir, cert2),
+            os.path.join(self.src_certs_dir, key2))
+        self.container_dir.sync([kp, kp2])
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '12345.cert')))
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '12345-key.key')))
+
+        self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '444.cert')))
+        self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '444-key.key')))
+        self.assertEquals(4, len(self.report.added))
+        self.assertEquals(3, len(self.report.removed))
