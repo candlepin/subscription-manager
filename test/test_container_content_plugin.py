@@ -20,18 +20,18 @@ import os.path
 
 from subscription_manager.model import Content, Entitlement, EntitlementSource
 from subscription_manager.model.ent_cert import EntitlementCertContent
-from subscription_manager.plugin.docker.action_invoker import \
-    DockerContentUpdateActionCommand, KeyPair, DockerCertDir
+from subscription_manager.plugin.container.action_invoker import \
+    ContainerContentUpdateActionCommand, KeyPair, ContainerCertDir
 
 from rhsm import certificate2
 
 DUMMY_CERT_LOCATION = "/dummy/certs"
 
 
-class TestDockerContentUpdateActionCommand(fixture.SubManFixture):
+class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
 
     def _create_content(self, label, cert):
-        return Content("docker", label, label, cert=cert)
+        return Content("containerImage", label, label, cert=cert)
 
     def _mock_cert(self, base_filename):
         cert = mock.Mock()
@@ -55,7 +55,7 @@ class TestDockerContentUpdateActionCommand(fixture.SubManFixture):
 
         contents = [content1, content2, content3, content1_dupe,
             content1_dupe2]
-        cmd = DockerContentUpdateActionCommand(None, 'cdn.example.org')
+        cmd = ContainerContentUpdateActionCommand(None, 'cdn.example.org')
         cert_paths = cmd._get_unique_paths(contents)
         self.assertEquals(3, len(cert_paths))
         self.assertTrue(KeyPair(cert1.path, cert1.key_path()) in cert_paths)
@@ -63,7 +63,7 @@ class TestDockerContentUpdateActionCommand(fixture.SubManFixture):
         self.assertTrue(KeyPair(cert3.path, cert3.key_path()) in cert_paths)
 
 
-class TestDockerContents(fixture.SubManFixture):
+class TestContainerContents(fixture.SubManFixture):
 
     def create_content(self, content_type, name):
         content = certificate2.Content(
@@ -75,12 +75,13 @@ class TestDockerContents(fixture.SubManFixture):
             url="http://mock.example.com/%s/" % name)
         return EntitlementCertContent.from_cert_content(content)
 
-    def test_find_docker_content(self):
+    def test_find_container_content(self):
         yum_content = self.create_content("yum", "yum_content")
-        docker_content = self.create_content("docker", "docker-content")
+        container_content = self.create_content("containerImage",
+            "container-content")
 
         ent1 = Entitlement(contents=[yum_content])
-        ent2 = Entitlement(contents=[docker_content])
+        ent2 = Entitlement(contents=[container_content])
 
         ent_src = EntitlementSource()
         ent_src._entitlements = [ent1, ent2]
@@ -107,20 +108,21 @@ class TestKeyPair(fixture.SubManFixture):
         self.assertEquals("9000.1.2014-a-key.key", kp.dest_key_filename)
 
 
-class TestDockerCertDir(fixture.SubManFixture):
+class TestContainerCertDir(fixture.SubManFixture):
 
     def setUp(self):
-        self.temp_dir = tempfile.mkdtemp(prefix='subman-docker-plugin-tests')
+        self.temp_dir = tempfile.mkdtemp(prefix='subman-container-plugin-tests')
         self.src_certs_dir = os.path.join(self.temp_dir, "etc/pki/entitlement")
         os.makedirs(self.src_certs_dir)
 
-        # This is where we'll setup for docker certs:
-        docker_dir = os.path.join(self.temp_dir,
+        # This is where we'll setup for container certs:
+        container_dir = os.path.join(self.temp_dir,
             "etc/docker/certs.d/")
 
         # Where we expect our certs to actually land:
-        self.dest_dir = os.path.join(docker_dir, 'cdn.example.org')
-        self.docker_dir = DockerCertDir('cdn.example.org', path=docker_dir)
+        self.dest_dir = os.path.join(container_dir, 'cdn.example.org')
+        self.container_dir = ContainerCertDir('cdn.example.org',
+            path=container_dir)
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
@@ -136,7 +138,7 @@ class TestDockerCertDir(fixture.SubManFixture):
     def test_created_if_missing(self):
         # Doesn't exist yet:
         self.assertFalse(os.path.exists(self.dest_dir))
-        self.docker_dir.sync([])
+        self.container_dir.sync([])
         self.assertTrue(os.path.exists(self.dest_dir))
 
     def test_first_install(self):
@@ -146,7 +148,7 @@ class TestDockerCertDir(fixture.SubManFixture):
         self._touch(self.src_certs_dir, key1)
         kp = KeyPair(os.path.join(self.src_certs_dir, cert1),
             os.path.join(self.src_certs_dir, key1))
-        self.docker_dir.sync([kp])
+        self.container_dir.sync([kp])
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
 
@@ -160,7 +162,7 @@ class TestDockerCertDir(fixture.SubManFixture):
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, ca)))
-        self.docker_dir.sync([])
+        self.container_dir.sync([])
         self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
         self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, ca)))

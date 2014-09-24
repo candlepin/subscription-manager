@@ -13,7 +13,7 @@
 # in this software or its documentation.
 #
 
-""" Core code for the docker content plugin. """
+""" Core code for the container content plugin. """
 
 import gettext
 import logging
@@ -27,14 +27,14 @@ log = logging.getLogger('rhsm-app.' + __name__)
 _ = gettext.gettext
 
 
-DOCKER_CONTENT_TYPE = "docker"
+CONTAINER_CONTENT_TYPE = "containerImage"
 
 
-class DockerContentUpdateActionCommand(object):
+class ContainerContentUpdateActionCommand(object):
     """
-    UpdateActionCommand for docker configuration.
+    UpdateActionCommand for Docker configuration.
 
-    Return a DockerContentUpdateReport.
+    Return a ContainerContentUpdateReport.
     """
     def __init__(self, ent_source, registry):
         self.ent_source = ent_source
@@ -42,13 +42,13 @@ class DockerContentUpdateActionCommand(object):
 
     def perform(self):
 
-        report = DockerContentUpdateActionReport()
+        report = ContainerContentUpdateActionReport()
 
         content_sets = self.ent_source.find_content(
-            content_type=DOCKER_CONTENT_TYPE)
+            content_type=CONTAINER_CONTENT_TYPE)
         unique_cert_paths = self._get_unique_paths(content_sets)
 
-        cert_dir = DockerCertDir(registry=self.registry)
+        cert_dir = ContainerCertDir(registry=self.registry)
         cert_dir.sync(unique_cert_paths)
 
         return report
@@ -58,11 +58,9 @@ class DockerContentUpdateActionCommand(object):
         Return a list of unique keypairs to be copied into the
         docker certificates directory.
         """
-        # Identify all the unique certificates we need to copy for docker:
+        # Identify all the unique certificates we need to copy:
         unique_cert_paths = set()
         for content in content_sets:
-            print content.cert.path
-            print content.cert.key_path()
             unique_cert_paths.add(
                 KeyPair(content.cert.path, content.cert.key_path()))
         return unique_cert_paths
@@ -99,13 +97,18 @@ class KeyPair(object):
         return hash(self.__repr__())
 
 
-class DockerCertDir(object):
+class ContainerCertDir(object):
     """
     An object to manage the docker certificate directory at
     /etc/docker/certs.d/.
     """
 
     DEFAULT_PATH = "/etc/docker/certs.d/"
+
+    # We will presume to manage files with these extensions in the
+    # hostname directory we're dealing with. Any unexpected files with
+    # these extensions will be removed. Any other files will be left
+    # alone.
     MANAGED_EXTENSIONS = [".cert", ".key"]
 
     def __init__(self, registry, path=None):
@@ -114,9 +117,9 @@ class DockerCertDir(object):
         self.path = os.path.join(self.path, registry)
 
     def sync(self, expected_keypairs):
-        log.debug("Syncing docker certificates to %s" % self.path)
+        log.debug("Syncing container certificates to %s" % self.path)
         if not os.path.exists(self.path):
-            log.info("Docker cert directory does not exist, creating it.")
+            log.info("Container cert directory does not exist, creating it.")
             os.makedirs(self.path)
 
         # Build up the list of certificates that should be in the
@@ -155,12 +158,12 @@ class DockerCertDir(object):
                     os.remove(fullpath)
 
 
-class DockerContentUpdateActionReport(certlib.ActionReport):
+class ContainerContentUpdateActionReport(certlib.ActionReport):
     """Track ostree repo config changes."""
     name = "Ostree repo updates report"
 
     def __init__(self):
-        super(DockerContentUpdateActionReport, self).__init__()
+        super(ContainerContentUpdateActionReport, self).__init__()
         self.orig_remotes = []
         self.remote_updates = []
         self.remote_added = []
@@ -178,7 +181,7 @@ class DockerContentUpdateActionReport(certlib.ActionReport):
         return '\n'.join(s)
 
     def __str__(self):
-        s = ["Docker repo updates\n"]
+        s = ["Container repo updates\n"]
         s.append(_("Updates:"))
         s.append(self._format_remotes(self.remote_updates))
         s.append(_("Added:"))
