@@ -21,7 +21,8 @@ import os.path
 from subscription_manager.model import Content, Entitlement, EntitlementSource
 from subscription_manager.model.ent_cert import EntitlementCertContent
 from subscription_manager.plugin.container.action_invoker import \
-    ContainerContentUpdateActionCommand, KeyPair, ContainerCertDir
+    ContainerContentUpdateActionCommand, KeyPair, ContainerCertDir, \
+    ContainerUpdateReport
 
 from rhsm import certificate2
 
@@ -121,7 +122,8 @@ class TestContainerCertDir(fixture.SubManFixture):
 
         # Where we expect our certs to actually land:
         self.dest_dir = os.path.join(container_dir, 'cdn.example.org')
-        self.container_dir = ContainerCertDir('cdn.example.org',
+        self.report = ContainerUpdateReport()
+        self.container_dir = ContainerCertDir(self.report, 'cdn.example.org',
             path=container_dir)
 
     def tearDown(self):
@@ -151,6 +153,7 @@ class TestContainerCertDir(fixture.SubManFixture):
         self.container_dir.sync([kp])
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
+        self.assertEquals(2, len(self.report.added))
 
     def test_old_certs_cleaned_out(self):
         cert1 = '1234.cert'
@@ -166,3 +169,4 @@ class TestContainerCertDir(fixture.SubManFixture):
         self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
         self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, ca)))
+        self.assertEquals(2, len(self.report.removed))

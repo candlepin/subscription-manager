@@ -87,7 +87,7 @@ class ContentActionClient(base_action_client.BaseActionClient):
         """Return a generator that creates a ContentPluginAction* for each update_content plugin.
 
         The iterable return includes the yum repo action invoker, and a ContentPluginActionInvoker
-        for each plugin hook mapped to the 'content_update_hook' slot.
+        for each plugin hook mapped to the 'update_content_hook' slot.
         """
 
         yield repolib.RepoActionInvoker()
@@ -98,7 +98,7 @@ class ContentActionClient(base_action_client.BaseActionClient):
 
         # Ent dir is our only source of entitlement/content info atm
         # NOTE: this is created and populated with the content of
-        # the ent dir before the plugins are ran and it doesn't
+        # the ent dir before the plugins are run and it doesn't
         # update.
         ent_dir_ent_source = EntitlementDirEntitlementSource()
 

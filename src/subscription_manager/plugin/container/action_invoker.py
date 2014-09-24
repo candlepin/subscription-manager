@@ -42,13 +42,13 @@ class ContainerContentUpdateActionCommand(object):
 
     def perform(self):
 
-        report = ContainerContentUpdateActionReport()
+        report = ContainerUpdateReport()
 
         content_sets = self.ent_source.find_content(
             content_type=CONTAINER_CONTENT_TYPE)
         unique_cert_paths = self._get_unique_paths(content_sets)
 
-        cert_dir = ContainerCertDir(registry=self.registry)
+        cert_dir = ContainerCertDir(report=report, registry=self.registry)
         cert_dir.sync(unique_cert_paths)
 
         return report
@@ -111,7 +111,8 @@ class ContainerCertDir(object):
     # alone.
     MANAGED_EXTENSIONS = [".cert", ".key"]
 
-    def __init__(self, registry, path=None):
+    def __init__(self, report, registry, path=None):
+        self.report = report
         self.registry = registry
         self.path = path or self.DEFAULT_PATH
         self.path = os.path.join(self.path, registry)
@@ -138,10 +139,12 @@ class ContainerCertDir(object):
                 log.info("Copying: %s -> %s" %
                     (keypair.cert_path, full_cert_path))
                 shutil.copyfile(keypair.cert_path, full_cert_path)
+                self.report.added.append(full_cert_path)
             if not os.path.exists(full_key_path):
                 log.info("Copying: %s -> %s" %
                     (keypair.key_path, full_key_path))
                 shutil.copyfile(keypair.key_path, full_key_path)
+                self.report.added.append(full_key_path)
 
         self._prune_old_certs(expected_files)
 
@@ -156,36 +159,35 @@ class ContainerCertDir(object):
                 not f in expected_files:
                     log.info("Cleaning up old certificate: %s" % f)
                     os.remove(fullpath)
+                    self.report.removed.append(fullpath)
 
 
-class ContainerContentUpdateActionReport(certlib.ActionReport):
-    """Track ostree repo config changes."""
-    name = "Ostree repo updates report"
+class ContainerUpdateReport(certlib.ActionReport):
+    """Track container cert changes."""
+    name = "Container certificate updates report"
 
     def __init__(self):
-        super(ContainerContentUpdateActionReport, self).__init__()
-        self.orig_remotes = []
-        self.remote_updates = []
-        self.remote_added = []
-        self.remote_deleted = []
-        self.content_to_remote = {}
+        super(ContainerUpdateReport, self).__init__()
+        # Full path to certs/keys we added:
+        self.added = []
+
+        # Full path to cert/keys we cleaned up:
+        self.removed = []
 
     def updates(self):
-        """Number of updates. Approximately."""
-        return len(self.remote_updates)
+        """ Number of updates. """
+        return len(self.added) + len(self.removed)
 
-    def _format_remotes(self, remotes):
+    def _format_file_list(self, file_list):
         s = []
-        for remote in remotes:
-            s.append(remote.report())
+        for filename in file_list:
+            s.append(file_list)
         return '\n'.join(s)
 
     def __str__(self):
-        s = ["Container repo updates\n"]
-        s.append(_("Updates:"))
-        s.append(self._format_remotes(self.remote_updates))
+        s = ["Container content cert updates\n"]
         s.append(_("Added:"))
-        s.append(self._format_remotes(self.remote_updates))
-        s.append(_("Deleted:"))
-        s.append(self._format_remotes(self.orig_remotes))
+        s.append(self._format_file_list(self.added))
+        s.append(_("Removed:"))
+        s.append(self._format_file_list(self.removed))
         return '\n'.join(s)
