@@ -20,7 +20,7 @@ import os.path
 
 from subscription_manager.model import Content, Entitlement, EntitlementSource
 from subscription_manager.model.ent_cert import EntitlementCertContent
-from subscription_manager.plugin.container.action_invoker import \
+from subscription_manager.plugin.container import \
     ContainerContentUpdateActionCommand, KeyPair, ContainerCertDir, \
     ContainerUpdateReport
 

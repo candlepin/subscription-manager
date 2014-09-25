@@ -14,14 +14,15 @@
 #
 
 """
-A subscription-manager plugin to watch for container content in
+A subscription-manager plugin to watch for docker content in
 entitlement certificates, and correctly configure to use them.
 """
 
 from subscription_manager import base_plugin
 requires_api_version = "1.1"
 
-from subscription_manager.plugin.docker import action_invoker
+from subscription_manager.plugin.container import \
+    ContainerContentUpdateActionCommand
 
 
 class ContainerContentPlugin(base_plugin.SubManPlugin):
@@ -38,6 +39,6 @@ class ContainerContentPlugin(base_plugin.SubManPlugin):
         conduit.log.info("Updating container content.")
         registry_hostname = conduit.conf_string('main', 'registry_hostname')
         conduit.log.info("registry = %s" % registry_hostname)
-        report = action_invoker.ContainerContentUpdateActionCommand(
+        report = ContainerContentUpdateActionCommand(
             ent_source=conduit.ent_source, registry=registry_hostname).perform()
         conduit.reports.add(report)
