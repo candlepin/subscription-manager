@@ -6,6 +6,18 @@ import fixture
 from subscription_manager import model
 
 
+def mock_content(name, content_type="yum"):
+    """name also has to work as a label."""
+    mock_content = mock.Mock()
+    mock_content.name = name
+    mock_content.url = "http://mock.example.com/%s/" % name
+    mock_content.gpg = "path/to/gpg"
+    mock_content.enabled = True
+    mock_content.label = name
+    mock_content.content_type = content_type
+    return mock_content
+
+
 class TestEntitlement(fixture.SubManFixture):
     def test_empty_init(self):
         e = model.Entitlement()
@@ -28,16 +40,10 @@ class TestEntitlement(fixture.SubManFixture):
         self.assertTrue(isinstance(e.contents[0], mock.Mock))
 
 
-class TestEntitlementCertEntitlement(TestEntitlement):
+class TestEntitlementCertEntitlement(fixture.SubManFixture):
     def test_from_ent_cert(self):
-        mock_content = mock.Mock()
-        mock_content.name = "mock_content"
-        mock_content.url = "http://mock.example.com"
-        mock_content.gpg = "path/to/gpg"
-        mock_content.enabled = True
-        mock_content.content_type = "yum"
-
-        contents = [mock_content]
+        c = mock_content('mock_content')
+        contents = [c]
 
         mock_ent_cert = mock.Mock()
         mock_ent_cert.content = contents
@@ -52,29 +58,13 @@ class TestEntitlementCertEntitlement(TestEntitlement):
         self.assertEquals(len(ece.contents), 1)
 
         # for ostree content, gpg is likely to change
-        self.assertEquals(ece.contents[0].gpg, mock_content.gpg)
+        self.assertEquals(ece.contents[0].gpg, c.gpg)
 
 
 class TestEntitlementSource(fixture.SubManFixture):
+
     def contents_list(self, name):
-        return [self.mock_content(name), self.mock_content(name)]
-
-    def mock_content(self, name):
-        """name also has to work as a label."""
-        mock_content = mock.Mock()
-        mock_content.name = "mock_content_%s" % name
-        mock_content.url = "http://mock.example.com/%s/" % name
-        mock_content.gpg = "path/to/gpg"
-        mock_content.enabled = True
-        mock_content.label = name
-        mock_content.content_type = "yum"
-        return mock_content
-
-    def test_empty_init(self):
-        es = model.EntitlementSource()
-        # NOTE: this is just for testing this impl, the api
-        # itself should never reference self.entitlements
-        self.assertTrue(hasattr(es, '_entitlements'))
+        return [mock_content(name), mock_content(name)]
 
     def test(self):
         cl1 = self.contents_list('content1')
@@ -92,3 +82,20 @@ class TestEntitlementSource(fixture.SubManFixture):
             self.assertTrue(len(ent.contents), 2)
 
         self.assertTrue(isinstance(es[0], model.Entitlement))
+
+    def test_find_container_content(self):
+        yum_content = mock_content("yum_content", content_type="yum")
+        container_content = mock_content("container_content",
+            content_type="containerImage")
+
+        ent1 = model.Entitlement(contents=[yum_content])
+        ent2 = model.Entitlement(contents=[container_content])
+
+        ent_src = model.EntitlementSource()
+        ent_src._entitlements = [ent1, ent2]
+        yum_list = ent_src.find_content(content_type='yum')
+        self.assertEquals(1, len(yum_list))
+        self.assertEquals('yum_content', yum_list[0].name)
+        cont_list = ent_src.find_content(content_type='containerImage')
+        self.assertEquals(1, len(cont_list))
+        self.assertEquals('container_content', cont_list[0].name)

@@ -64,30 +64,6 @@ class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
         self.assertTrue(KeyPair(cert3.path, cert3.key_path()) in cert_paths)
 
 
-class TestContainerContents(fixture.SubManFixture):
-
-    def create_content(self, content_type, name):
-        content = certificate2.Content(
-            content_type=content_type,
-            name="mock_content_%s" % name,
-            label=name,
-            enabled=True,
-            gpg="path/to/gpg",
-            url="http://mock.example.com/%s/" % name)
-        return EntitlementCertContent.from_cert_content(content)
-
-    def test_find_container_content(self):
-        yum_content = self.create_content("yum", "yum_content")
-        container_content = self.create_content("containerImage",
-            "container-content")
-
-        ent1 = Entitlement(contents=[yum_content])
-        ent2 = Entitlement(contents=[container_content])
-
-        ent_src = EntitlementSource()
-        ent_src._entitlements = [ent1, ent2]
-
-
 class TestKeyPair(fixture.SubManFixture):
 
     def test_expected_filenames(self):
