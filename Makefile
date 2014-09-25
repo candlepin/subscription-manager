@@ -130,12 +130,12 @@ install-content-plugins-conf-ostree:
 		$(RHSM_PLUGIN_CONF_DIR) ; \
 	fi;
 
-install-content-plugin-docker:
-	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/docker_content.py $(RHSM_PLUGIN_DIR)
+install-content-plugin-container:
+	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/container_content.py $(RHSM_PLUGIN_DIR)
 
-install-content-plugins-conf-docker:
+install-content-plugins-conf-container:
 	install -m 644 -p \
-		$(CONTENT_PLUGINS_SRC_DIR)/docker_content.DockerContentPlugin.conf \
+		$(CONTENT_PLUGINS_SRC_DIR)/container_content.ContainerContentPlugin.conf \
 		$(RHSM_PLUGIN_CONF_DIR)
 
 install-content-plugins-dir:
@@ -144,9 +144,9 @@ install-content-plugins-dir:
 install-content-plugins-conf-dir:
 	install -d $(RHSM_PLUGIN_CONF_DIR)
 
-install-content-plugins-conf: install-content-plugins-conf-dir install-content-plugins-conf-ostree install-content-plugins-conf-docker
+install-content-plugins-conf: install-content-plugins-conf-dir install-content-plugins-conf-ostree install-content-plugins-conf-container
 
-install-content-plugins: install-content-plugins-dir install-content-plugin-ostree install-content-plugin-docker
+install-content-plugins: install-content-plugins-dir install-content-plugin-ostree install-content-plugin-container
 
 
 install-plugins-conf-dir:
@@ -181,7 +181,6 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d $(CODE_DIR)/migrate
 	install -d $(CODE_DIR)/plugin
 	install -d $(CODE_DIR)/plugin/ostree
-	install -d $(CODE_DIR)/plugin/docker
 	install -d $(PREFIX)/$(INSTALL_DIR)/locale/
 	install -d $(PREFIX)/usr/lib/yum-plugins/
 	install -d $(PREFIX)/usr/sbin
@@ -242,8 +241,6 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	if [ "$(INSTALL_OSTREE_PLUGIN)" = "true" ] ; then \
 		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(CODE_DIR)/plugin/ostree ; \
 	fi
-
-	install -m 644 -p $(SRC_DIR)/plugin/docker/*.py $(CODE_DIR)/plugin/docker
 
 	#icons
 	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/16x16/apps/*.png \

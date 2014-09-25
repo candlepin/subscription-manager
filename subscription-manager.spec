@@ -103,19 +103,19 @@ the remote in the currently deployed .origin file.
 %{_datadir}/rhsm/subscription_manager/plugin/ostree/*.py*
 %endif
 
-%package -n subscription-manager-plugin-docker
-Summary: A plugin for handling docker content.
+%package -n subscription-manager-plugin-container
+Summary: A plugin for handling container content.
 Group: System Environment/Base
 
-%description -n subscription-manager-plugin-docker
-Enables handling of content of type 'docker' in any certificates
+%description -n subscription-manager-plugin-container
+Enables handling of content of type 'containerImage' in any certificates
 from the server. Populates /etc/docker/certs.d appropriately.
 
-%files -n subscription-manager-plugin-docker
+%files -n subscription-manager-plugin-container
 %defattr(-,root,root,-)
-%{_sysconfdir}/rhsm/pluginconf.d/docker_content.DockerContentPlugin.conf
-%{rhsm_plugins_dir}/docker_content.py*
-%{_datadir}/rhsm/subscription_manager/plugin/docker/*.py*
+%{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
+%{rhsm_plugins_dir}/container_content.py*
+%{_datadir}/rhsm/subscription_manager/plugin/container.py*
 
 %package -n subscription-manager-gui
 Summary: A GUI interface to manage Red Hat product subscriptions
@@ -309,7 +309,6 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/file_monitor.py*
 %{_datadir}/rhsm/subscription_manager/overrides.py*
 %{_datadir}/rhsm/subscription_manager/exceptions.py*
->>>>>>> 9b4a8e6... Update spec and makefile for docker plugin.
 %{_datadir}/rhsm/subscription_manager/plugin/*.py*
 
 # subscription-manager plugins
