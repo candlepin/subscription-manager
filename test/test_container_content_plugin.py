@@ -18,13 +18,10 @@ import tempfile
 import shutil
 import os.path
 
-from subscription_manager.model import Content, Entitlement, EntitlementSource
-from subscription_manager.model.ent_cert import EntitlementCertContent
+from subscription_manager.model import Content
 from subscription_manager.plugin.container import \
     ContainerContentUpdateActionCommand, KeyPair, ContainerCertDir, \
     ContainerUpdateReport
-
-from rhsm import certificate2
 
 DUMMY_CERT_LOCATION = "/dummy/certs"
 
