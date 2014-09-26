@@ -164,7 +164,7 @@ _subscription_manager_release()
 
 _subscription_manager_repos()
 {
-  local opts="--disable --enable --list
+  local opts="--disable --enable --list --list-enabled --list-disabled
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }

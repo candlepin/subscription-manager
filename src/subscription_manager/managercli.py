@@ -1824,8 +1824,30 @@ class ReposCommand(CliCommand):
             vars(parser.values).setdefault('repo_actions',
                 []).append((status, repoid))
 
-        self.parser.add_option("--list", action="store_true",
-                               help=_("list known repos for this system"))
+        def list_callback(option, opt, repoid, parser):
+            """
+            Handles setting both enabled/disabled filter options when the --list argument is
+            provided.
+
+            Allows for --list to perform identically to --list-enabled --list-disabled
+            """
+            parser.values.list = True
+
+            if opt in ("--list", "--list-enabled"):
+                parser.values.list_enabled = True
+
+            if opt in ("--list", "--list-disabled"):
+                parser.values.list_disabled = True
+
+        self.parser.add_option("--list",
+                               action="callback", callback=list_callback, dest="list", default=False,
+                               help=_("list all known repos for this system"))
+        self.parser.add_option("--list-enabled",
+                               action="callback", callback=list_callback, dest="list_enabled", default=False,
+                               help=_("list known, enabled repos for this system"))
+        self.parser.add_option("--list-disabled",
+                               action="callback", callback=list_callback, dest="list_disabled", default=False,
+                               help=_("list known, disabled repos for this system"))
         self.parser.add_option("--enable", dest="enable", type="str",
                                action='callback', callback=repo_callback, metavar="REPOID",
                                help=_("repo to enable (can be specified more than once). Wildcards (* and ?) are supported."))
@@ -1836,6 +1858,8 @@ class ReposCommand(CliCommand):
     def _validate_options(self):
         if not (self.options.list or hasattr(self.options, 'repo_actions')):
             self.options.list = True
+            self.options.list_enabled = True
+            self.options.list_disabled = True
 
     def _do_command(self):
         self._validate_options()
@@ -1865,11 +1889,15 @@ class ReposCommand(CliCommand):
                 print _("    Available Repositories in %s") % rl.get_repo_file()
                 print("+----------------------------------------------------------+")
                 for repo in repos:
-                    print columnize(REPOS_LIST, _echo,
-                        repo.id,
-                        repo["name"],
-                        repo["baseurl"],
-                        repo["enabled"]) + "\n"
+                    show_enabled = repo["enabled"] != '0' and self.options.list_enabled
+                    show_disabled = repo["enabled"] == '0' and self.options.list_disabled
+
+                    if show_enabled or show_disabled:
+                        print columnize(REPOS_LIST, _echo,
+                            repo.id,
+                            repo["name"],
+                            repo["baseurl"],
+                            repo["enabled"]) + "\n"
             else:
                 print _("This system has no repositories available through subscriptions.")
         return rc
