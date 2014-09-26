@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.2
+Version: 1.13.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -447,6 +447,22 @@ fi
 %endif
 
 %changelog
+* Fri Sep 26 2014 Bryan Kearney <bkearney@redhat.com> 1.13.3-1
+- Merge pull request #1023 from candlepin/alikins/ppc64le (wpoteat@redhat.com)
+- Merge pull request #1026 from
+  candlepin/csnyder/update_repo_dialog_config_msg_1139174 (wpoteat@redhat.com)
+- Message needed a period (wpoteat@redhat.com)
+- Fix certdirectory tests leaking temp directories. (dgoodwin@redhat.com)
+- 1142436 - Final fix pre-QE (ggainey@redhat.com)
+- Repo dialog displays appropriate message when repos are disabled by config.
+  (root@csnyder.usersys.redhat.com)
+- 1142436 - unentitle is default, update output, still DRAFT
+  (ggainey@redhat.com)
+- 1142436 - Give sat5to6 a man-page - DRAFT (ggainey@redhat.com)
+- Include ppc64le in list of archs to skip dmi (alikins@redhat.com)
+- 1134963: Fix 'release --list' on some systems. (alikins@redhat.com)
+- Add Fedora 21 branch to releaser. (awood@redhat.com)
+
 * Fri Sep 12 2014 Alex Wood <awood@redhat.com> 1.13.2-1
 - Added non-overriding default prod dir tests (ckozak@redhat.com)
 - 1135621: fix duplicate product ids from default dir (ckozak@redhat.com)
