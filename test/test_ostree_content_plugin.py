@@ -18,7 +18,8 @@ import mock
 import fixture
 import subprocess
 
-from subscription_manager.model import EntitlementSource, Entitlement
+from subscription_manager.model import EntitlementSource, Entitlement, \
+    find_content
 from subscription_manager.model.ent_cert import EntitlementCertContent
 from subscription_manager.plugin.ostree import config
 from subscription_manager.plugin.ostree import model
@@ -980,7 +981,7 @@ class TestOsTreeContents(fixture.SubManFixture):
         ent_src = EntitlementSource()
         ent_src._entitlements = [ent1, ent2]
 
-        contents = ent_src.find_content(
+        contents = find_content(ent_src,
             content_type=action_invoker.OSTREE_CONTENT_TYPE)
         self.assertEquals(len(contents), 1)
 

@@ -67,18 +67,19 @@ class EntitlementSource(object):
     def __getitem__(self, key):
         return self._entitlements[key]
 
-    def find_content(self, content_type=None):
-        """
-        Scan all entitlements looking for content of the given type. (string)
 
-        Returns a list of EntCertEntitledContent.
-        """
-        entitled_content = []
-        log.debug("Searching for content of type: %s" % content_type)
-        for entitlement in self._entitlements:
-            for content in entitlement.contents:
-                if content.content_type == content_type:
-                    log.debug("found content: %s" % content.label)
-                    # no unique constraint atm
-                    entitled_content.append(content)
-        return entitled_content
+def find_content(ent_source, content_type=None):
+    """
+    Scan all entitlements looking for content of the given type. (string)
+
+    Returns a list of model.Content.
+    """
+    entitled_content = []
+    log.debug("Searching for content of type: %s" % content_type)
+    for entitlement in ent_source:
+        for content in entitlement.contents:
+            if content.content_type == content_type:
+                log.debug("found content: %s" % content.label)
+                # no unique constraint atm
+                entitled_content.append(content)
+    return entitled_content

@@ -19,6 +19,7 @@ import logging
 import ConfigParser
 
 from subscription_manager import certlib
+from subscription_manager.model import find_content
 
 from subscription_manager.plugin.ostree import model
 
@@ -52,7 +53,7 @@ class OstreeContentUpdateActionCommand(object):
         report = OstreeContentUpdateActionReport()
 
         # return the composed set oEntitledContents
-        entitled_contents = self.ent_source.find_content(
+        entitled_contents = find_content(self.ent_source,
             content_type=OSTREE_CONTENT_TYPE)
 
         # CALCULATE UPDATES
