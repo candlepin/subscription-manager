@@ -1094,15 +1094,14 @@ class RegisterCommand(UserPassCommand):
             autosubscribe(self.cp, consumer['uuid'],
                     service_level=self.options.service_level)
 
-        subscribed = 0
-        if (self.options.consumerid or self.options.activation_keys or
-                self.autoattach):
-
+        if (self.options.consumerid or self.options.activation_keys or self.autoattach):
             log.info("System registered, updating entitlements if needed")
             # update certs, repos, and caches.
             # FIXME: aside from the overhead, should this be cert_action_client.update?
             self.entcertlib.update()
 
+        subscribed = 0
+        if (self.options.activation_keys or self.autoattach):
             # update with latest cert info
             self.sorter = inj.require(inj.CERT_SORTER)
             self.sorter.force_cert_check()
