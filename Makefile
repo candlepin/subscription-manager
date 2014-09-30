@@ -289,6 +289,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -m 644 man/subscription-manager-gui.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rct.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rhsm-debug.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
+	install -m 644 man/rhsm.conf.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 
 	install -m 644 etc-conf/rhsm-icon.desktop \
 		$(PREFIX)/etc/xdg/autostart;\

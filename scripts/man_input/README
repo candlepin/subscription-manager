@@ -1,0 +1,4 @@
+To build a manpage, do the following:
+
+1) yum install asciidoc
+2) a2x -d manpage -f manpage FOO.asciidoc

@@ -1,0 +1,176 @@
+'\" t
+.\"     Title: rhsm.conf
+.\"    Author: [see the "AUTHOR" section]
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 09/30/2014
+.\"    Manual: \ \&
+.\"    Source: rhsm.conf
+.\"  Language: English
+.\"
+.TH "RHSM\&.CONF" "8" "09/30/2014" "rhsm\&.conf" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+rhsm.conf \- Configuration file for the subscription\-mananager tooling
+.SH "DESCRIPTION"
+.sp
+The rhsm\&.conf file is the configuration file for various subscription manager tooling\&. This includes \fBsubscription\-manager\fR, \fBsubscription\-manager\-gui\fR, \fBrhsmcertd\fR, and and \fBvirt\-who\fR\&.
+.SH "[SERVER] OPTIONS"
+.PP
+hostname
+.RS 4
+The hostname of the subscription service being used\&. The default is the Red Hat Customer Portal which is subscription\&.rhn\&.redhat\&.com\&.
+.RE
+.PP
+prefix
+.RS 4
+Server perfix where the subscription service is registered\&.
+.RE
+.PP
+port
+.RS 4
+The port which the susbcription service is listening on\&.
+.RE
+.PP
+insecure
+.RS 4
+This flag enables or disables certification verification using the certificate authorities which are installed in /etc/rhsm/ca\&.
+.RE
+.PP
+ssl_verify_depth
+.RS 4
+Sets the number of certificates whcih should be used to verify the servers identity\&. This is an advanced control which can be used to secure on premise installations\&.
+.RE
+.PP
+proxy_hostname
+.RS 4
+Set this to a non\-blank value if
+\fBsubscription\-manager\fR
+should use a reverse proxy to access the subscription service\&. This sets the host for the reverse proxy\&.
+.RE
+.PP
+proxy_port
+.RS 4
+Set this to a non\-blank value if
+\fBsubscription\-manager\fR
+should use a reverse proxy to access the subscription service\&. This sets the port for the reverse proxy\&.
+.RE
+.PP
+proxy_username
+.RS 4
+Set this to a non\-blank value if
+\fBsubscription\-manager\fR
+should use an authenticated reverse proxy to access the subscription service\&. This sets the username for the reverse proxy\&.
+.RE
+.PP
+proxy_password
+.RS 4
+Set this to a non\-blank value if
+\fBsubscription\-manager\fR
+should use an authenticated reverse proxy to access the subscription service\&. This sets the password for the reverse proxy\&.
+.RE
+.SH "[RHSM] OPTIONS"
+.PP
+baseurl
+.RS 4
+This setting is the prefix for all content which is managed by the subscription service\&. This should be the hostname for the Red Hat CDN, the local Satellite or Capsule depending on your deployment\&.
+.RE
+.PP
+ca_cert_dir
+.RS 4
+The location for the certificates which are used communicate with the server and to pulldown content\&.
+.RE
+.PP
+repo_ca_cert
+.RS 4
+The certificate to use for server side authentication during content downloads\&.
+.RE
+.PP
+productCertDirectory
+.RS 4
+The directory where product certificates should be stored\&.
+.RE
+.PP
+entitlementCertDirectory
+.RS 4
+The directory where entitlement certificates should be stored\&.
+.RE
+.PP
+consumerCertDirectory
+.RS 4
+The directory where the consumers identity certificate is stored\&.
+.RE
+.PP
+manage_repos
+.RS 4
+Set this to
+\fI1\fR
+if subscription manager should manage a yum repos file\&. If set, it will manage the file /etc/yum\&.repos\&.d/redhat\&.repo\&. If set to
+\fI0\fR
+then the subscription is only used for tracking purposes, not content\&.
+.RE
+.PP
+full_refresh_on_yum
+.RS 4
+Set to
+\fI1\fR
+if the /etc/yum\&.repos\&.d/redhat\&.repo should be updated with every server command\&. This will make yum less efficient, but can ensure that the most recent data is brought down from the susbcription service\&.
+.RE
+.PP
+report_package_profile
+.RS 4
+Set to
+\fI1\fR
+if
+\fBrhsmcertd\fR
+should report up the current package profile\&. This reporting helps the subscription service to provide better errata notifications\&.
+.RE
+.PP
+pluginDir
+.RS 4
+The directory to search for subscription manager plugins
+.RE
+.sp
+pluginConfDir: The directory to search for plugin configuration files
+.SH "[RHSMCERTD] OPTIONS"
+.PP
+certCheckInterval
+.RS 4
+The number of minutes between runs of the
+\fBrhsmcertd\fR
+daemon
+.RE
+.PP
+autoAttachInterval
+.RS 4
+The number of minutes between attempts to run auto\-attach on this consumer\&.
+.RE
+.SH "AUTHOR"
+.sp
+Bryan Kearney <bkearney@redhat\&.com>
+.SH "SEE ALSO"
+.sp
+\fBsubscription\-manager\fR(8), \fBsubscription\-manager\-gui\fR(8),\fBrhsmcertd\fR(8)
+.SH "RESOURCES"
+.sp
+Main web site: http://www\&.candlepinproject\&.org/
+.SH "COPYING"
+.sp
+Copyright (c) 2010\-2012 Red Hat, Inc\&. This is licensed under the GNU General Public License, version 2 (GPLv2)\&. A copy of this license is available at http://www\&.gnu\&.org/licenses/old\- licenses/gpl\-2\&.0\&.txt\&.
