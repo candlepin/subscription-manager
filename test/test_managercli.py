@@ -64,14 +64,14 @@ class TestCli(SubManFixture):
 class TestCliCommand(SubManFixture):
     command_class = managercli.CliCommand
 
-    def setUp(self):
+    def setUp(self, hide_do=True):
         super(TestCliCommand, self).setUp()
         self.cc = self.command_class()
         # neuter the _do_command, since this is mostly
         # for testing arg parsing
-        self._orig_do_command = self.cc._do_command
-        self.cc._do_command = self._do_command
-#        self.cc.assert_should_be_registered = self._asert_should_be_registered
+        if hide_do:
+            self._orig_do_command = self.cc._do_command
+            self.cc._do_command = self._do_command
 
         self.mock_stdout = MockStderr()
         self.mock_stderr = MockStderr()
@@ -373,12 +373,150 @@ class TestReposCommand(TestCliCommand):
     command_class = managercli.ReposCommand
 
     def setUp(self):
-        super(TestReposCommand, self).setUp()
+        super(TestReposCommand, self).setUp(False)
         self.cc.cp = Mock()
 
-    def test_list(self):
+    def check_output_for_repos(self, output, repos):
+        """
+        Checks the given output string for the specified repos' ids.
+
+        Returns a tuple of booleans specifying whether or not the repo in the corresponding position
+        was found in the output.
+        """
+        searches = []
+        for repo in repos:
+            # Impl note: This may break if a repo's ID contains special regex characters.
+            searches.append(re.search("^Repo ID:\\s+%s$" % repo.id, output, re.MULTILINE) is not None)
+
+        return tuple(searches)
+
+    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    def test_default(self, mock_invoker):
+        self.cc.main()
+        self.cc._validate_options()
+
+        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
+        mock_invoker.return_value.get_repos.return_value = repos
+
+        # Execute command with our mock stdout capturing the output
+        sys.stdout = self.mock_stdout
+        self.cc._do_command()
+        sys.stdout = sys.__stdout__
+
+        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        self.assertEquals((True, True, True), result)
+
+    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    def test_list(self, mock_invoker):
         self.cc.main(["--list"])
         self.cc._validate_options()
+
+        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
+        mock_invoker.return_value.get_repos.return_value = repos
+
+        # Execute command with our mock stdout capturing the output
+        sys.stdout = self.mock_stdout
+        self.cc._do_command()
+        sys.stdout = sys.__stdout__
+
+        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        self.assertEquals((True, True, True), result)
+
+    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    def test_list_with_enabled(self, mock_invoker):
+        self.cc.main(["--list", "--list-enabled"])
+        self.cc._validate_options()
+
+        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
+        mock_invoker.return_value.get_repos.return_value = repos
+
+        # Execute command with our mock stdout capturing the output
+        sys.stdout = self.mock_stdout
+        self.cc._do_command()
+        sys.stdout = sys.__stdout__
+
+        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        self.assertEquals((True, True, True), result)
+
+    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    def test_list_with_disabled(self, mock_invoker):
+        self.cc.main(["--list", "--list-disabled"])
+        self.cc._validate_options()
+
+        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
+        mock_invoker.return_value.get_repos.return_value = repos
+
+        # Execute command with our mock stdout capturing the output
+        sys.stdout = self.mock_stdout
+        self.cc._do_command()
+        sys.stdout = sys.__stdout__
+
+        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        self.assertEquals((True, True, True), result)
+
+    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    def test_list_with_enabled_and_disabled(self, mock_invoker):
+        self.cc.main(["--list", "--list-disabled", "--list-disabled"])
+        self.cc._validate_options()
+
+        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
+        mock_invoker.return_value.get_repos.return_value = repos
+
+        # Execute command with our mock stdout capturing the output
+        sys.stdout = self.mock_stdout
+        self.cc._do_command()
+        sys.stdout = sys.__stdout__
+
+        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        self.assertEquals((True, True, True), result)
+
+    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    def test_list_enabled(self, mock_invoker):
+        self.cc.main(["--list-enabled"])
+        self.cc._validate_options()
+
+        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
+        mock_invoker.return_value.get_repos.return_value = repos
+
+        # Execute command with our mock stdout capturing the output
+        sys.stdout = self.mock_stdout
+        self.cc._do_command()
+        sys.stdout = sys.__stdout__
+
+        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        self.assertEquals((True, False, False), result)
+
+    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    def test_list_disabled(self, mock_invoker):
+        self.cc.main(["--list-disabled"])
+        self.cc._validate_options()
+
+        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
+        mock_invoker.return_value.get_repos.return_value = repos
+
+        # Execute command with our mock stdout capturing the output
+        sys.stdout = self.mock_stdout
+        self.cc._do_command()
+        sys.stdout = sys.__stdout__
+
+        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        self.assertEquals((False, True, True), result)
+
+    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    def test_list_enabled_and_disabled(self, mock_invoker):
+        self.cc.main(["--list-enabled", "--list-disabled"])
+        self.cc._validate_options()
+
+        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
+        mock_invoker.return_value.get_repos.return_value = repos
+
+        # Execute command with our mock stdout capturing the output
+        sys.stdout = self.mock_stdout
+        self.cc._do_command()
+        sys.stdout = sys.__stdout__
+
+        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        self.assertEquals((True, True, True), result)
 
     def test_enable(self):
         self.cc.main(["--enable", "one", "--enable", "two"])
@@ -403,7 +541,7 @@ class TestReposCommand(TestCliCommand):
 
         # The list of overrides sent to setContentOverrides is really a set of
         # dictionaries (since we don't know the order of the overrides).
-        # However, since the dict class is not hashable, we cssert_items_equalsan't actually use
+        # However, since the dict class is not hashable, we can't actually use
         # a set.  So we need a custom matcher to make sure that the
         # JSON passed in to setContentOverrides is what we expect.
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
