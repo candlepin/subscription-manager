@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.3
+Version: 1.13.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -447,6 +447,18 @@ fi
 %endif
 
 %changelog
+* Thu Oct 02 2014 Alex Wood <awood@redhat.com> 1.13.4-1
+- Latest strings from zanata. (alikins@redhat.com)
+- 1122001: Reg with --consumerid no longer checks subs (crog@redhat.com)
+- 1119648: Added additional functionality to repo listing. (crog@redhat.com)
+- Move find content method off entitlement source. (dgoodwin@redhat.com)
+- More generic search for content method on entitlment source.
+  (dgoodwin@redhat.com)
+- Refactor generic model into it's own namespace. (dgoodwin@redhat.com)
+- Refactor EntCertEntitledContent. (dgoodwin@redhat.com)
+- Add a 'install-pip-requirements' target (alikins@redhat.com)
+- Drop models ContentSet and EntCertEntitledContentSet. (dgoodwin@redhat.com)
+
 * Fri Sep 26 2014 Bryan Kearney <bkearney@redhat.com> 1.13.3-1
 - Merge pull request #1023 from candlepin/alikins/ppc64le (wpoteat@redhat.com)
 - Merge pull request #1026 from
