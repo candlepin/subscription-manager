@@ -18,7 +18,7 @@ import logging
 from subscription_manager import base_action_client
 from subscription_manager import certlib
 from subscription_manager import repolib
-from subscription_manager import models
+from subscription_manager.model.ent_cert import EntitlementDirEntitlementSource
 
 import subscription_manager.injection as inj
 
@@ -79,18 +79,6 @@ class ContentPluginActionInvoker(certlib.BaseActionInvoker):
     def _do_update(self):
         action = ContentPluginActionCommand(self.runner)
         return action.perform()
-
-
-class EntitlementDirEntitlementSource(models.EntitlementSource):
-    """Populate with entitlement info from ent dir of ent certs."""
-
-    def __init__(self):
-        ent_dir = inj.require(inj.ENT_DIR)
-
-        # populate from ent certs
-        self._entitlements = []
-        for ent_cert in ent_dir.list_valid():
-            self._entitlements.append(models.EntitlementCertEntitlement.from_ent_cert(ent_cert))
 
 
 class ContentActionClient(base_action_client.BaseActionClient):

@@ -3,44 +3,22 @@ import mock
 
 import fixture
 
-from subscription_manager import models
-
-
-class TestEntitledContents(fixture.SubManFixture):
-    def test_empty_init(self):
-        ec = models.EntCertEntitledContentSet()
-        self.assertTrue(hasattr(ec, '_contents'))
-
-    def test_init_empty_contents(self):
-        ec = models.EntCertEntitledContentSet(contents=[])
-        self.assertTrue(hasattr(ec, '_contents'))
-        self.assertEquals(ec._contents, [])
-
-    def test_contents(self):
-        contents = [mock.Mock(), mock.Mock(), mock.Mock()]
-        ec = models.EntCertEntitledContentSet(contents=contents)
-        self.assertTrue(hasattr(ec, '_contents'))
-        self.assertEquals(len(ec), 3)
-
-        for content in ec:
-            self.assertTrue(isinstance(content, mock.Mock))
-
-        self.assertTrue(isinstance(ec[0], mock.Mock))
+from subscription_manager import model
 
 
 class TestEntitlement(fixture.SubManFixture):
     def test_empty_init(self):
-        e = models.Entitlement()
+        e = model.Entitlement()
         self.assertTrue(hasattr(e, 'contents'))
 
     def test_init_empty_contents(self):
-        e = models.Entitlement(contents=[])
+        e = model.Entitlement(contents=[])
         self.assertTrue(hasattr(e, 'contents'))
         self.assertEquals(e.contents, [])
 
     def test_contents(self):
         contents = [mock.Mock(), mock.Mock()]
-        e = models.Entitlement(contents=contents)
+        e = model.Entitlement(contents=contents)
         self.assertTrue(hasattr(e, 'contents'))
         self.assertEquals(len(e.contents), 2)
 
@@ -64,16 +42,17 @@ class TestEntitlementCertEntitlement(TestEntitlement):
         mock_ent_cert = mock.Mock()
         mock_ent_cert.content = contents
 
-        ece = models.EntitlementCertEntitlement.from_ent_cert(mock_ent_cert)
+        ece = model.ent_cert.EntitlementCertEntitlement.from_ent_cert(mock_ent_cert)
 
-        self.assertEquals(ece.contents._contents[0].content, contents[0])
+        self.assertEquals(ece.contents[0].name, contents[0].name)
+        self.assertEquals(ece.contents[0].label, contents[0].label)
+        self.assertEquals(ece.contents[0].gpg, contents[0].gpg)
+        self.assertEquals(ece.contents[0].content_type,
+            contents[0].content_type)
         self.assertEquals(len(ece.contents), 1)
-        self.assertTrue(isinstance(ece.contents, models.EntCertEntitledContentSet))
-
-        self.assertEquals(ece.contents[0].content.name, "mock_content")
 
         # for ostree content, gpg is likely to change
-        self.assertEquals(ece.contents[0].content.gpg, "path/to/gpg")
+        self.assertEquals(ece.contents[0].gpg, mock_content.gpg)
 
 
 class TestEntitlementSource(fixture.SubManFixture):
@@ -92,7 +71,7 @@ class TestEntitlementSource(fixture.SubManFixture):
         return mock_content
 
     def test_empty_init(self):
-        es = models.EntitlementSource()
+        es = model.EntitlementSource()
         # NOTE: this is just for testing this impl, the api
         # itself should never reference self.entitlements
         self.assertTrue(hasattr(es, '_entitlements'))
@@ -100,16 +79,16 @@ class TestEntitlementSource(fixture.SubManFixture):
     def test(self):
         cl1 = self.contents_list('content1')
         cl2 = self.contents_list('content2')
-        ent1 = models.Entitlement(contents=cl1)
-        ent2 = models.Entitlement(contents=cl2)
+        ent1 = model.Entitlement(contents=cl1)
+        ent2 = model.Entitlement(contents=cl2)
 
-        es = models.EntitlementSource()
+        es = model.EntitlementSource()
         es._entitlements = [ent1, ent2]
 
         self.assertEquals(len(es), 2)
 
         for ent in es:
-            self.assertTrue(isinstance(ent, models.Entitlement))
+            self.assertTrue(isinstance(ent, model.Entitlement))
             self.assertTrue(len(ent.contents), 2)
 
-        self.assertTrue(isinstance(es[0], models.Entitlement))
+        self.assertTrue(isinstance(es[0], model.Entitlement))

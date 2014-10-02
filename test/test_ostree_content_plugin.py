@@ -18,7 +18,9 @@ import mock
 import fixture
 import subprocess
 
-from subscription_manager import models
+from subscription_manager.model import EntitlementSource, Entitlement, \
+    find_content
+from subscription_manager.model.ent_cert import EntitlementCertContent
 from subscription_manager.plugin.ostree import config
 from subscription_manager.plugin.ostree import model
 from subscription_manager.plugin.ostree import action_invoker
@@ -187,10 +189,10 @@ class TestOstreeRemoteFromEntCertContent(fixture.SubManFixture):
 
     def test_gpg_no_attr(self):
         content = self._content()
-        del content.gpg
         cert = self._cert()
-        ent_cert_content = models.EntCertEntitledContent(content=content,
-                                                         cert=cert)
+        ent_cert_content = EntitlementCertContent.from_cert_content(
+            content, cert)
+        del ent_cert_content.gpg
         remote = model.OstreeRemote.from_ent_cert_content(ent_cert_content)
         self.assertTrue(remote.gpg_verify)
 
@@ -198,8 +200,8 @@ class TestOstreeRemoteFromEntCertContent(fixture.SubManFixture):
         content = self._content()
         content.gpg = gpg
         cert = self._cert()
-        ent_cert_content = models.EntCertEntitledContent(content=content,
-                                                         cert=cert)
+        ent_cert_content = EntitlementCertContent.from_cert_content(
+            content, cert)
         remote = model.OstreeRemote.from_ent_cert_content(ent_cert_content)
         return remote
 
@@ -340,11 +342,9 @@ last_key = blippy
         mock_ent_cert = mock.Mock()
         mock_ent_cert.path = "/somewhere/etc/pki/entitlement/123123.pem"
 
-        mock_ent_content = mock.Mock()
-        mock_ent_content.content = mock_content
-        mock_ent_content.cert = mock_ent_cert
+        mock_content.cert = mock_ent_cert
 
-        content_set.add(mock_ent_content)
+        content_set.add(mock_content)
 
         updates_builder = model.OstreeConfigUpdatesBuilder(ostree_config, content_set)
         updates = updates_builder.build()
@@ -959,48 +959,35 @@ gpg-verify = true
 
 
 class TestOsTreeContents(fixture.SubManFixture):
-    def test_empty(self):
-        contents = action_invoker.OstreeContents()
-        self.assertTrue(hasattr(contents, '_contents'))
 
-        #contents.load()
-
-    def mock_content_yum(self, name):
-        """name also has to work as a label."""
-        mock_content = mock.Mock()
-        mock_content.name = "mock_content_%s" % name
-        mock_content.url = "http://mock.example.com/%s/" % name
-        mock_content.gpg = "path/to/gpg"
-        mock_content.enabled = True
-        mock_content.label = name
-        mock_content.content_type = "yum"
-        return mock_content
-
-    def mock_content_ostree(self, name):
-        mock_content = mock.Mock()
-        mock_content.name = "mock_content_%s" % name
-        mock_content.url = "http://mock.example.com/%s/" % name
-        mock_content.gpg = "path/to/gpg"
-        mock_content.enabled = True
-        mock_content.label = name
-        mock_content.content_type = "ostree"
-        return mock_content
+    def create_content(self, content_type, name):
+        """ Create dummy entitled content object. """
+        content = certificate2.Content(
+            content_type=content_type,
+            name="mock_content_%s" % name,
+            label=name,
+            enabled=True,
+            gpg="path/to/gpg",
+            url="http://mock.example.com/%s/" % name)
+        return EntitlementCertContent.from_cert_content(content)
 
     def test_ent_source(self):
-        yc = self.mock_content_yum("yum_content")
-        oc = self.mock_content_ostree("ostree_content")
+        yc = self.create_content("yum", "yum_content")
+        oc = self.create_content("ostree", "ostree_content")
 
-        ent1 = models.Entitlement(contents=[yc])
-        ent2 = models.Entitlement(contents=[oc])
+        ent1 = Entitlement(contents=[yc])
+        ent2 = Entitlement(contents=[oc])
 
-        ent_src = models.EntitlementSource()
+        ent_src = EntitlementSource()
         ent_src._entitlements = [ent1, ent2]
 
-        contents = action_invoker.OstreeContents(ent_source=ent_src)
+        contents = find_content(ent_src,
+            content_type=action_invoker.OSTREE_CONTENT_TYPE)
         self.assertEquals(len(contents), 1)
 
         for content in contents:
-            self.assertEquals(content.content_type, "ostree")
+            self.assertEquals(content.content_type,
+                action_invoker.OSTREE_CONTENT_TYPE)
 
 
 class TestContentUpdateActionReport(fixture.SubManFixture):
@@ -1058,6 +1045,8 @@ gpg-verify=true
 
         mock_file_store.load.return_value = mock_repo_file
 
-        action = action_invoker.OstreeContentUpdateActionCommand()
+        ent_src = EntitlementSource()
+        action = action_invoker.OstreeContentUpdateActionCommand(
+            ent_source=ent_src)
         action.update_origin_file = mock.Mock()
         action.perform()

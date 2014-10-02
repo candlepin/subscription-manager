@@ -19,7 +19,7 @@ import logging
 import ConfigParser
 
 from subscription_manager import certlib
-from subscription_manager import models
+from subscription_manager.model import find_content
 
 from subscription_manager.plugin.ostree import model
 
@@ -39,8 +39,8 @@ class OstreeContentUpdateActionCommand(object):
 
     Return a OstreeContentUpdateReport.
     """
-    def __init__(self, ent_source=None):
-        self.ent_source = ent_source or []
+    def __init__(self, ent_source):
+        self.ent_source = ent_source
 
     def perform(self):
 
@@ -53,7 +53,8 @@ class OstreeContentUpdateActionCommand(object):
         report = OstreeContentUpdateActionReport()
 
         # return the composed set oEntitledContents
-        entitled_contents = OstreeContents(ent_source=self.ent_source)
+        entitled_contents = find_content(self.ent_source,
+            content_type=OSTREE_CONTENT_TYPE)
 
         # CALCULATE UPDATES
         # given current config, and the new contents, construct a list
@@ -93,54 +94,6 @@ class OstreeContentUpdateActionCommand(object):
     def update_origin_file(self, ostree_config):
         updater = model.OstreeOriginUpdater(ostree_config)
         updater.run()
-
-
-class OstreeContents(object):
-    """Find the ostree content provided by our current entitlements.
-
-    Find the ostree content, meaning having a content type of
-    'ostree', but also meeting any other requirements ostree has
-    of it's content types (like, having a url and a name).
-
-    Potentially filtering on product tags.
-
-    Note: this is building the list of Contents, not necessarily
-    the list of ostree remotes or repos.
-
-    This could disambiguate content dupes as well.
-    """
-    content_type = OSTREE_CONTENT_TYPE
-
-    def __init__(self, ent_source=None):
-        self._contents = models.EntCertEntitledContentSet()
-        self.ent_source = ent_source or []
-
-        self._load()
-
-    def _load(self):
-        """Populate self._contents with data from ostree contents."""
-        for entitlement in self.ent_source:
-            for content in entitlement.contents:
-                #log.debug("content: %s" % content)
-
-                if self.content_type_match(content):
-                    log.debug("adding %s to ostree content" % content.content.label)
-                    # no uniq constraint atm
-                    self._contents.add(content)
-
-    def content_type_match(self, content):
-        return content.content_type == self.content_type
-
-    # We could subclass models.Contents. We would be
-    # a models.Contents and have-a models.EntCertEntitledContentSet
-    def __iter__(self):
-        return iter(self._contents)
-
-    def __len__(self):
-        return len(self._contents)
-
-    def __getitem__(self, key):
-        return self._contents[key]
 
 
 class OstreeContentUpdateActionReport(certlib.ActionReport):
