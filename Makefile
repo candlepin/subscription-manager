@@ -168,6 +168,7 @@ install: install-files install-conf install-help-files install-plugins-conf
 install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d $(CODE_DIR)/gui/data/icons
 	install -d $(CODE_DIR)/branding
+	install -d $(CODE_DIR)/model
 	install -d $(CODE_DIR)/migrate
 	install -d $(CODE_DIR)/plugin
 	install -d $(CODE_DIR)/plugin/ostree
@@ -219,6 +220,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -m 644 -p $(SRC_DIR)/gui/*.py $(CODE_DIR)/gui
 	install -m 644 -p $(SRC_DIR)/migrate/*.py $(CODE_DIR)/migrate
 	install -m 644 -p $(SRC_DIR)/branding/*.py $(CODE_DIR)/branding
+	install -m 644 -p $(SRC_DIR)/model/*.py $(CODE_DIR)/model
 	install -m 644 -p $(SRC_DIR)/plugin/*.py $(CODE_DIR)/plugin
 	install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/
 	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager-gui
