@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.4
+Version: 1.13.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -400,6 +400,9 @@ fi
 %endif
 
 %changelog
+* Fri Oct 03 2014 Alex Wood <awood@redhat.com> 1.13.5-1
+- Use wildcards in the spec file. (awood@redhat.com)
+
 * Thu Oct 02 2014 Alex Wood <awood@redhat.com> 1.13.4-1
 - Latest strings from zanata. (alikins@redhat.com)
 - 1122001: Reg with --consumerid no longer checks subs (crog@redhat.com)
