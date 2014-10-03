@@ -28,7 +28,7 @@ coverage-jenkins:
 clean:
 	rm -f *~ *.bak *.tar.gz
 	find . -name "*.py[com]" | xargs rm -f
-	python setup.py clean
+	python setup.py clean --all
 	rm -rf cover/ htmlcov/ docs/sphinx/_build/ build/ dist/
 
 version_check:
