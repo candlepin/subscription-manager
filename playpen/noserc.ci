@@ -1,5 +1,5 @@
 [nosetests]
-where=test/unit
+attr=!functional
 with-id=True
 with-coverage=True
 cover-html=True
