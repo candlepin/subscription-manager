@@ -21,11 +21,11 @@
 sat5to6 \- Migrates a system profile from Red Hat Satellite v.5 to Red Hat Satellite v.6 as part of the Satellite Transition process.
 
 .SH SYNOPSIS
-sat5to6 [--destination-user=DESTINATION_USER] | [--destination-password=DESTINATION_PASSWORD] | [--destination-url=URL] | [--legacy-user=LEGACY_USER] | [--legacy-password=LEGACY_PASSWORD] | [--no-auto] | [--no-proxy] | [--registration-state=STATE] | [--servicelevel=SERVICE_LEVEL] | [--help]
+sat5to6 [--destination-user=DESTINATION_USER] | [--destination-password=DESTINATION_PASSWORD] | [--destination-url=URL] | [--legacy-user=LEGACY_USER] | [--legacy-password=LEGACY_PASSWORD] | [--no-auto] | [--no-proxy] | [--registration-state=STATE] | [--service-level=SERVICE_LEVEL] | [--help]
 
 .SH DESCRIPTION
 \fBsat5to6\fP migrates a system profile which is registered to a Red Hat Satellite v.5 instance to a Red Hat Satellite v.6 instance.
-The tool assumes that the command \fBhammer import content-host\fP has run successfully on the Satellite v.6 installation, that a content-host for the client where \fBsat5to6\fP is to be executed has been created, and that the resulting RPM has been built and installed on the Satellite v.5 host that the client is subscribed to.
+The tool assumes that the command \fBhammer import content-host\fP has run successfully on the Satellite v.6 installation, that a content-host for the client where \fBsat5to6\fP is to be executed has been created, and that the resulting RPM has been built and installed on the Satellite v.5 host to which the client is subscribed.
 
 .PP
 This script queries the Satellite v.5 instance to which it is registered for information about the channels to which it is subscribed, and the content-host UUID to which it should re-attach in Satellite v.6.
@@ -61,7 +61,7 @@ Print the specific help information for the command.
 Do not attempt to automatically attach subscriptions to the associated content-host in the Satellite v.6 instance.
 
 .TP
-.B -s SERVICE_LEVEL, --servicelevel=SERVICE_LEVEL
+.B -s SERVICE_LEVEL, --service-level=SERVICE_LEVEL
 Set a preferred service level for the system, such as premium or standard.
 This service level preference is then used as one of the criteria for autoattaching subscriptions to the system.
 
@@ -230,7 +230,7 @@ System 'URI:CN=system-fqdn' successfully registered.
 \fBsat5to6\fP prompts for usernames and passwords if not provided on the command-line.
 
 .PP
-Optionally, the \fB--servicelevel\fP argument sets an SLA preference to use with the system.
+Optionally, the \fB--service-level\fP argument sets an SLA preference to use with the system.
 The SLA associated with a subscription is then evaluated when determining what subscriptions to autoattach to the system, along with other factors like installed products, existing channel assignments, and architecture.
 
 .SH FILES
