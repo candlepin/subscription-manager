@@ -237,58 +237,13 @@ rm -rf %{buildroot}
 
 %dir %{_datadir}/rhsm
 %dir %{_datadir}/rhsm/subscription_manager
+%dir %{_datadir}/rhsm/subscription_manager/branding
+%dir %{_datadir}/rhsm/subscription_manager/model
+%dir %{_datadir}/rhsm/subscription_manager/plugin
 
-%{_datadir}/rhsm/subscription_manager/async.py*
-%{_datadir}/rhsm/subscription_manager/base_action_client.py*
-%{_datadir}/rhsm/subscription_manager/base_plugin.py*
-%{_datadir}/rhsm/subscription_manager/branding
-%{_datadir}/rhsm/subscription_manager/cache.py*
-%{_datadir}/rhsm/subscription_manager/certdirectory.py*
-%{_datadir}/rhsm/subscription_manager/certlib.py*
-%{_datadir}/rhsm/subscription_manager/content_action_client.py*
-%{_datadir}/rhsm/subscription_manager/action_client.py*
-%{_datadir}/rhsm/subscription_manager/cert_sorter.py*
-%{_datadir}/rhsm/subscription_manager/cli.py*
-%{_datadir}/rhsm/subscription_manager/dbus_interface.py*
-
-%{_datadir}/rhsm/subscription_manager/dmiinfo.py*
-%{_datadir}/rhsm/subscription_manager/entcertlib.py*
-%{_datadir}/rhsm/subscription_manager/entbranding.py*
-%{_datadir}/rhsm/subscription_manager/factlib.py*
-%{_datadir}/rhsm/subscription_manager/facts.py*
-%{_datadir}/rhsm/subscription_manager/healinglib.py*
-%{_datadir}/rhsm/subscription_manager/hwprobe.py*
-%{_datadir}/rhsm/subscription_manager/isodate.py*
-%{_datadir}/rhsm/subscription_manager/i18n_optparse.py*
-%{_datadir}/rhsm/subscription_manager/i18n.py*
-%{_datadir}/rhsm/subscription_manager/identity.py*
-%{_datadir}/rhsm/subscription_manager/identitycertlib.py*
-%{_datadir}/rhsm/subscription_manager/injection.py*
-%{_datadir}/rhsm/subscription_manager/injectioninit.py*
-%{_datadir}/rhsm/subscription_manager/__init__.py*
-%{_datadir}/rhsm/subscription_manager/installedproductslib.py*
-%{_datadir}/rhsm/subscription_manager/jsonwrapper.py*
-%{_datadir}/rhsm/subscription_manager/listing.py*
-%{_datadir}/rhsm/subscription_manager/lock.py*
-%{_datadir}/rhsm/subscription_manager/logutil.py*
-%{_datadir}/rhsm/subscription_manager/managercli.py*
-%{_datadir}/rhsm/subscription_manager/managerlib.py*
-%{_datadir}/rhsm/subscription_manager/models.py*
-%{_datadir}/rhsm/subscription_manager/packageprofilelib.py*
-%{_datadir}/rhsm/subscription_manager/plugins.py*
-%{_datadir}/rhsm/subscription_manager/productid.py*
-%{_datadir}/rhsm/subscription_manager/release.py*
-%{_datadir}/rhsm/subscription_manager/repolib.py*
-%{_datadir}/rhsm/subscription_manager/rhelentbranding.py*
-%{_datadir}/rhsm/subscription_manager/rhelproduct.py*
-%{_datadir}/rhsm/subscription_manager/utils.py*
-%{_datadir}/rhsm/subscription_manager/printing_utils.py*
-%{_datadir}/rhsm/subscription_manager/validity.py*
-%{_datadir}/rhsm/subscription_manager/reasons.py*
-%{_datadir}/rhsm/subscription_manager/cp_provider.py*
-%{_datadir}/rhsm/subscription_manager/file_monitor.py*
-%{_datadir}/rhsm/subscription_manager/overrides.py*
-%{_datadir}/rhsm/subscription_manager/exceptions.py*
+%{_datadir}/rhsm/subscription_manager/*.py*
+%{_datadir}/rhsm/subscription_manager/branding/*.py*
+%{_datadir}/rhsm/subscription_manager/model/*.py*
 %{_datadir}/rhsm/subscription_manager/plugin/*.py*
 
 # subscription-manager plugins
@@ -301,7 +256,6 @@ rm -rf %{buildroot}
 # but yum plugins seem to normally be sent to /usr/lib/:
 %{_prefix}/lib/yum-plugins/subscription-manager.py*
 %{_prefix}/lib/yum-plugins/product-id.py*
-
 
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/subscription-manager
@@ -395,8 +349,7 @@ rm -rf %{buildroot}
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)
 %dir %{_datadir}/rhsm/subscription_manager/migrate
-%{_datadir}/rhsm/subscription_manager/migrate/__init__.py*
-%{_datadir}/rhsm/subscription_manager/migrate/migrate.py*
+%{_datadir}/rhsm/subscription_manager/migrate/*.py*
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
 %attr(755,root,root) %{_sbindir}/sat5to6
 
