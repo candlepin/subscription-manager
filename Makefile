@@ -1,7 +1,7 @@
 SRC_DIR = src/rhsm
 
 STYLETESTS ?=
-PYFILES=`find  src/ -name "*.py"`
+PYFILES=`find  ${SRC_DIR} -name "*.py"`
 TESTFILES=`find test/ -name "*.py"`
 STYLEFILES=$(PYFILES)
 # note, set STYLETEST to something if you want
@@ -12,29 +12,24 @@ ifdef STYLETESTS
 STYLEFILES+=$(TESTFILES)
 endif
 
-
+docs:
+	python setup.py build_sphinx
 
 check:
-	nosetests
+	python setup.py -q nosetests -c playpen/noserc.dev
 
-coverage:
-	nosetests --with-cover --cover-package rhsm --cover-erase
+coverage: coverage-jenkins
 
-coverage-xunit:
-	nosetests --with-xunit --with-cover --cover-package rhsm --cover-erase
+coverage-html: coverage-jenkins
 
-coverage-html: coverage
-	coverage html --include "${SRC_DIR}/*"
+coverage-jenkins:
+	python setup.py -q nosetests -c playpen/noserc.ci
 
-coverage-html-old:
-	nosetests --with-cover --cover-package rhsm --cover-html --cover-html-dir test/html --cover-erase
-
-coverage-xml: coverage
-	coverage xml --include "${SRC_DIR}/*"
-
-coverage-jenkins: coverage-xunit
-	coverage html --include "${SRC_DIR}/*"
-	coverage xml --include "${SRC_DIR}/*"
+clean:
+	rm -f *~ *.bak *.tar.gz
+	find . -name "*.py[com]" | xargs rm -f
+	python setup.py clean --all
+	rm -rf cover/ htmlcov/ docs/sphinx/_build/ build/ dist/
 
 version_check:
 # needs https://github.com/alikins/pyqver
@@ -42,14 +37,9 @@ version_check:
 	pyqver2.py -v -m 2.5  $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-pyflakes:
-# pyflakes doesn't have a config file, cli options, or a ignore tag
-# and the variants of "redefination" we get now aren't really valid
-# and other tools detect the valid cases, so ignore these
-#
-	-@TMPFILE=`mktemp` || exit 1; \
-	pyflakes $(STYLEFILES) |  grep -v "redefinition of unused.*from line.*" \
-	| grep -v ".*ourjson.*unable to detect undefined names" | tee $$TMPFILE; \
+flake8:
+	@TMPFILE=`mktemp` || exit 1; \
+	python setup.py -q flake8 -q | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 pylint:
@@ -72,11 +62,6 @@ gettext_lint:
 	pcregrep -n --color=auto -M  "_\(.*[\'|\"].*[\'|\"]\s*\+\s*[\"|\'].*[\"|\'].*\)" $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-pep8:
-	@TMPFILE=`mktemp` || exit 1; \
-	pep8 --exclude ".#*" --repeat src $(STYLEFILES) | tee $$TMPFILE; \
-	! test -s $$TMPFILE
-
 rpmlint:
 	@TMPFILE=`mktemp` || exit 1; \
 	rpmlint -f rpmlint.config python-rhsm.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
@@ -87,7 +72,7 @@ versionlint:
 	pyqver2.py -m 2.7 -l $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-
-stylish: versionlint pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
+.PHONY: stylish
+stylish: flake8 versionlint whitespacelint gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins

@@ -17,7 +17,10 @@ from rhsm.profile import Package, RPMProfile, get_profile, InvalidProfileType
 from rhsm import ourjson as json
 from mock import Mock
 
+from nose.plugins.attrib import attr
 
+
+@attr('functional')
 class ProfileTests(unittest.TestCase):
 
     def test_get_rpm_profile(self):

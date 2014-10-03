@@ -18,10 +18,13 @@ import random
 import string
 import unittest
 
+from nose.plugins.attrib import attr
+
 from rhsm.connection import ContentConnection, UEPConnection, drift_check, Restlib,\
     UnauthorizedException, ForbiddenException, AuthenticationException, RestlibException, \
     RemoteServerException
 from mock import patch
+
 
 def random_string(name, target_length=32):
     ''' Returns a len 32 string starting with "name"'''
@@ -30,6 +33,7 @@ def random_string(name, target_length=32):
     return name
 
 
+@attr('functional')
 class ConnectionTests(unittest.TestCase):
 
     def setUp(self):
@@ -134,6 +138,7 @@ class ConnectionTests(unittest.TestCase):
         self.cp.unregisterConsumer(self.consumer_uuid)
 
 
+@attr('functional')
 class BindRequestTests(unittest.TestCase):
     def setUp(self):
         self.cp = UEPConnection(username="admin", password="admin",
@@ -169,6 +174,7 @@ class BindRequestTests(unittest.TestCase):
                 self.assertEquals(None, kwargs['body'])
 
 
+@attr('functional')
 class ContentConnectionTests(unittest.TestCase):
 
 #    def setUp(self):
@@ -206,6 +212,7 @@ class ContentConnectionTests(unittest.TestCase):
         assert 'https_proxy' not in os.environ
 
 
+@attr('functional')
 class HypervisorCheckinTests(unittest.TestCase):
 
     def setUp(self):
@@ -220,6 +227,7 @@ class HypervisorCheckinTests(unittest.TestCase):
         self.assertEqual(len(response['created']), 0)
 
 
+@attr('functional')
 class RestlibTests(unittest.TestCase):
 
     def setUp(self):
@@ -288,6 +296,7 @@ class RestlibTests(unittest.TestCase):
             self.assertEquals(expected_error_code, ex.code)
 
 
+@attr('functional')
 class OwnerInfoTests(unittest.TestCase):
     def setUp(self):
         self.cp = UEPConnection(username="admin", password="admin",
