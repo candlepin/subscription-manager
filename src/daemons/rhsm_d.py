@@ -90,6 +90,19 @@ def check_status(force_signal):
     return sorter.get_status_for_icon()
 
 
+def get_compliance_status():
+    sorter = require(CERT_SORTER)
+    status = sorter.get_compliance_status()
+    result = dbus.Dictionary({})
+    result.update({"system_status": (status['status'], "")})
+
+    for reason in status['reasons']:
+        label = reason['attributes']['product_id']
+        name = reason['attributes']['name']
+        message = reason['message']
+        result.update({label:(name, message)})
+    return result
+
 def check_if_ran_once(checker, loop):
     if checker.has_run:
         msg = "D-Bus com.redhat.SubscriptionManager.EntitlementStatus.check_status called once, exiting"
@@ -117,6 +130,13 @@ class StatusChecker(dbus.service.Object):
         log.info("D-Bus signal com.redhat.SubscriptionManager.EntitlementStatus.entitlement_status_changed emitted")
         debug("signal fired! code is " + str(status_code))
 
+    @dbus.service.signal(
+        dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus',
+        signature='a{s(ss)}')
+    def entitlement_status_changed_reason(self, reason):
+        log.info("D-Bus signal com.redhat.SubscriptionManager.EntitlementStatus.entitlement_status_changed_reason emitted")
+        debug("signal fired! reason is status: %s" % (reason['system_status'],))
+
     #this is so we can guarantee exit after the dbus stuff is done, since
     #certain parts of that are async
     def watchdog(self):
@@ -137,6 +157,7 @@ class StatusChecker(dbus.service.Object):
             debug("Validity status changed, fire signal")
             #we send the code out, but no one uses it at this time
             self.entitlement_status_changed(ret)
+            self.entitlement_status_changed_reason(get_compliance_status())
         self.last_status = ret
         self.has_run = True
         self.watchdog()
@@ -153,6 +174,7 @@ class StatusChecker(dbus.service.Object):
         if status != self.last_status:
             debug("Validity status changed, fire signal")
             self.entitlement_status_changed(status)
+            self.entitlement_status_changed_reason(get_compliance_status())
         self.last_status = status
         self.has_run = True
         self.watchdog()
