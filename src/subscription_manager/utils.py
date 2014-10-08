@@ -18,6 +18,7 @@ import gettext
 import logging
 import os
 import pprint
+import re
 
 import signal
 import socket
@@ -323,3 +324,38 @@ def chroot(dirname):
     Change root of all paths.
     """
     Path.ROOT = dirname
+
+
+def build_filter_regex(input_filter):
+    """
+    Converts the input filter string to a regular expression. Filter strings may contain asterisks
+    and question marks to represent wildcards (any and one, respectively). These wildcards may be
+    escaped with a backslash to represent their respective literals.
+
+    Returns a regular expression as a string to be compiled with re.compile(...).
+    """
+    literals = []
+    wildcards = []
+    output = []
+
+    # Break it up based on our special characters...
+    for match in re.finditer(r"((?:.*?(?:\\[*?\\])?)*?)((?<!=\\)[*?]|\Z)", input_filter):
+        literals.append(match.group(1))
+
+        if match.group(2):
+            wildcards.append(match.group(2))
+
+    # ...and put it all back together.
+    for literal in literals:
+        # Impl note:
+        # Unfortunately we need to unescape the literals so they can be safely re-escaped by the
+        # re.escape method; lest we risk doubly-escaping some stuff and breaking our regex
+        # horribly.
+        literal = re.sub(r"\\([*?\\])", r"\1", literal)
+        literal = re.escape(literal)
+
+        output.append(literal)
+        if len(wildcards):
+            output.append('.' + wildcards.pop(0))
+
+    return "^%s$" % ''.join(output)

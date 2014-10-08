@@ -290,7 +290,7 @@ class PoolFilter(object):
         return filtered_pools
 
 
-def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
+def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None, contains_text=None):
     """
     Wrapper around the UEP call to fetch pools, which forces a facts update
     if anything has changed before making the request. This ensures the
@@ -304,15 +304,16 @@ def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
 
     owner = uep.getOwner(consumer_uuid)
     ownerid = owner['key']
+
     return uep.getPoolsList(consumer=consumer_uuid, listAll=list_all,
-            active_on=active_on, owner=ownerid)
+            active_on=active_on, owner=ownerid, contains_text=contains_text)
 
 
 # TODO: This method is morphing the actual pool json and returning a new
 # dict which does not contain all the pool info. Not sure if this is really
 # necessary. Also some "view" specific things going on in here.
 def get_available_entitlements(facts, get_all=False, active_on=None,
-        overlapping=False, uninstalled=False, text=None):
+        overlapping=False, uninstalled=False, text=None, contains_text=None):
     """
     Returns a list of entitlement pools from the server.
 
@@ -328,7 +329,7 @@ def get_available_entitlements(facts, get_all=False, active_on=None,
 
     pool_stash = PoolStash(Facts(require(ENT_DIR), require(PROD_DIR)))
     dlist = pool_stash.get_filtered_pools_list(active_on, not get_all,
-           overlapping, uninstalled, text)
+           overlapping, uninstalled, text, contains_text)
 
     for pool in dlist:
         pool_wrapper = PoolWrapper(pool)
@@ -518,7 +519,7 @@ class PoolStash(object):
         log.debug("   %s already subscribed" % len(self.subscribed_pool_ids))
 
     def get_filtered_pools_list(self, active_on, incompatible,
-            overlapping, uninstalled, text):
+            overlapping, uninstalled, text, contains_text):
         """
         Used for CLI --available filtering
         cuts down on api calls
@@ -532,11 +533,11 @@ class PoolStash(object):
 
         if incompatible:
             for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                    self.identity.uuid, self.facts, active_on=active_on):
+                    self.identity.uuid, self.facts, active_on=active_on, contains_text=contains_text):
                 self.compatible_pools[pool['id']] = pool
         else:  # --all has been used
             for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                    self.identity.uuid, self.facts, list_all=True, active_on=active_on):
+                    self.identity.uuid, self.facts, list_all=True, active_on=active_on, contains_text=contains_text):
                 self.all_pools[pool['id']] = pool
 
         return self._filter_pools(incompatible, overlapping, uninstalled, False, text)
