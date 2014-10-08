@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime, timedelta
 import unittest
 import re
 import sys
@@ -8,13 +9,17 @@ import socket
 import stubs
 
 from subscription_manager import managercli, managerlib
+from subscription_manager.injection import provide, \
+        CERT_SORTER, PROD_DIR
+from subscription_manager.managercli import get_installed_product_status
 from subscription_manager.printing_utils import format_name, columnize, \
         _echo, _none_wrap
 from subscription_manager.repolib import Repo
-from stubs import MockStderr, StubEntitlementCertificate, \
-        StubConsumerIdentity, StubProduct, StubUEP
+from stubs import MockStderr, StubProductCertificate, StubEntitlementCertificate, \
+        StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, StubCertSorter
 from fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher
+
 
 import mock
 from mock import patch
@@ -23,6 +28,133 @@ from mock import Mock
 from rhsm import connection
 from M2Crypto import SSL
 from subscription_manager.overrides import Override
+
+
+class InstalledProductStatusTests(SubManFixture):
+
+    def test_entitlement_for_not_installed_product_shows_nothing(self):
+        product_directory = StubProductDirectory([])
+        provide(PROD_DIR, product_directory)
+
+        product_status = get_installed_product_status(product_directory,
+                None, StubUEP())
+
+        # no product certs installed...
+        self.assertEquals(0, len(product_status))
+
+    def test_entitlement_for_installed_product_shows_subscribed(self):
+        product_directory = StubProductDirectory(pids=['product1'])
+        provide(PROD_DIR, product_directory)
+        ent_cert = StubEntitlementCertificate('product1')
+
+        stub_sorter = StubCertSorter()
+        stub_sorter.valid_products['product1'] = [ent_cert]
+        provide(CERT_SORTER, stub_sorter)
+
+        product_status = get_installed_product_status(product_directory,
+                None, StubUEP())
+
+        self.assertEquals(1, len(product_status))
+        self.assertEquals("subscribed", product_status[0][4])
+
+    def test_expired_entitlement_for_installed_product_shows_expired(self):
+        ent_cert = StubEntitlementCertificate('product1',
+                end_date=(datetime.now() - timedelta(days=2)))
+
+        product_directory = StubProductDirectory(pids=['product1'])
+        provide(PROD_DIR, product_directory)
+        stub_sorter = StubCertSorter()
+        stub_sorter.expired_products['product1'] = [ent_cert]
+        provide(CERT_SORTER, stub_sorter)
+
+        product_status = get_installed_product_status(product_directory,
+                None, StubUEP())
+
+        self.assertEquals(1, len(product_status))
+        self.assertEquals("expired", product_status[0][4])
+
+    def test_no_entitlement_for_installed_product_shows_no_subscribed(self):
+        product_directory = StubProductDirectory(pids=['product1'])
+        provide(PROD_DIR, product_directory)
+        stub_sorter = StubCertSorter()
+        stub_sorter.unentitled_products['product1'] = None  # prod cert unused here
+        provide(CERT_SORTER, stub_sorter)
+
+        product_status = get_installed_product_status(product_directory,
+                None, StubUEP())
+
+        self.assertEquals(1, len(product_status))
+        self.assertEquals("not_subscribed", product_status[0][4])
+
+    def test_future_dated_entitlement_shows_future_subscribed(self):
+        product_directory = StubProductDirectory(pids=['product1'])
+        provide(PROD_DIR, product_directory)
+        ent_cert = StubEntitlementCertificate('product1',
+                    start_date=(datetime.now() + timedelta(days=1365)))
+        stub_sorter = StubCertSorter()
+        stub_sorter.future_products['product1'] = [ent_cert]
+        provide(CERT_SORTER, stub_sorter)
+
+        product_status = get_installed_product_status(product_directory,
+                None, StubUEP())
+        self.assertEquals(1, len(product_status))
+        self.assertEquals("future_subscribed", product_status[0][4])
+
+    def test_one_product_with_two_entitlements_lists_product_twice(self):
+        ent_cert = StubEntitlementCertificate('product1',
+            ['product2', 'product3'], sockets=10)
+        product_directory = StubProductDirectory(pids=['product1'])
+        provide(PROD_DIR, product_directory)
+        stub_sorter = StubCertSorter()
+        stub_sorter.valid_products['product1'] = [ent_cert, ent_cert]
+        provide(CERT_SORTER, stub_sorter)
+
+        product_status = get_installed_product_status(product_directory,
+                None, StubUEP())
+
+        # only "product" is installed
+        self.assertEquals(1, len(product_status))
+
+    def test_one_subscription_with_bundled_products_lists_once(self):
+        ent_cert = StubEntitlementCertificate('product1',
+            ['product2', 'product3'], sockets=10)
+        product_directory = StubProductDirectory(pids=['product1'])
+        provide(PROD_DIR, product_directory)
+        stub_sorter = StubCertSorter()
+        stub_sorter.valid_products['product1'] = [ent_cert]
+        stub_sorter.valid_products['product2'] = [ent_cert]
+        stub_sorter.valid_products['product3'] = [ent_cert]
+        provide(CERT_SORTER, stub_sorter)
+
+        product_status = get_installed_product_status(product_directory,
+                None, StubUEP())
+
+        # neither product3 or product 2 are installed
+        self.assertEquals(1, len(product_status))
+        self.assertEquals("product1", product_status[0][0])
+        self.assertEquals("subscribed", product_status[0][4])
+
+    def test_one_subscription_with_bundled_products_lists_once_part_two(self):
+        ent_cert = StubEntitlementCertificate('product1',
+            ['product2', 'product3'], sockets=10)
+
+        prod_dir = StubProductDirectory(pids=['product1', 'product2'])
+        provide(PROD_DIR, prod_dir)
+        stub_sorter = StubCertSorter()
+        stub_sorter.valid_products['product1'] = [ent_cert]
+        stub_sorter.valid_products['product2'] = [ent_cert]
+
+        provide(CERT_SORTER, stub_sorter)
+
+        product_status = get_installed_product_status(prod_dir,
+                None, StubUEP())
+
+        # product3 isn't installed
+        self.assertEquals(2, len(product_status))
+        self.assertEquals("product2", product_status[0][0])
+        self.assertEquals("subscribed", product_status[0][4])
+        self.assertEquals("product1", product_status[1][0])
+        self.assertEquals("subscribed", product_status[1][4])
 
 
 class TestCli(SubManFixture):
@@ -309,11 +441,104 @@ class TestListCommand(TestCliProxyCommand):
         self.assertTrue('888888888888' in cap.out)
 
     def test_print_consumed_no_ents(self):
-        try:
+        with Capture() as captured:
             self.cc.print_consumed()
-            self.fail("Should have exited.")
-        except SystemExit:
-            pass
+
+        lines = captured.out.split("\n")
+        self.assertEquals(len(lines) - 1, 1, "Error output consists of more than one line.")
+
+    def test_list_installed_with_ctfilter(self):
+        installed_product_certs = [
+            StubProductCertificate(product=StubProduct(name="test product*", product_id="8675309")),
+            StubProductCertificate(product=StubProduct(name="another(?) test\\product", product_id="123456"))
+        ]
+
+        test_data = [
+            ("", (False, False)),
+            ("input string", (False, False)),
+            ("*product", (False, True)),
+            ("*product*", (True, True)),
+            ("*test pro*uct*", (True, False)),
+            ("*test pro?uct*", (True, False)),
+            ("*test pr*ct*", (True, False)),
+            ("*test pr?ct*", (False, False)),
+            ("*another*", (False, True)),
+            ("*product\\*", (True, False)),
+            ("*product?", (True, False)),
+            ("*product?*", (True, False)),
+            ("*(\\?)*", (False, True)),
+            ("*test\\\\product", (False, True)),
+        ]
+
+        stub_sorter = StubCertSorter()
+
+        for product_cert in installed_product_certs:
+            product = product_cert.products[0]
+            stub_sorter.installed_products[product.id] = product_cert
+
+        provide(CERT_SORTER, stub_sorter)
+
+        for (test_num, data) in enumerate(test_data):
+            with Capture() as captured:
+                list_command = managercli.ListCommand()
+                list_command.main(["list", "--installed", "--matches", data[0]])
+
+            for (index, expected) in enumerate(data[1]):
+                if expected:
+                    self.assertTrue(installed_product_certs[index].name in captured.out, "Expected product was not found in output for test data %i" % test_num)
+                else:
+                    self.assertFalse(installed_product_certs[index].name in captured.out, "Unexpected product was found in output for test data %i" % test_num)
+
+    def test_list_consumed_with_ctfilter(self):
+        consumed = [
+            StubEntitlementCertificate(product=StubProduct(name="Test Entitlement 1", product_id="123"), provided_products=[
+                "test product a",
+                "beta product 1",
+                "shared product",
+                "troll* product?"
+            ]),
+
+            StubEntitlementCertificate(product=StubProduct(name="Test Entitlement 2", product_id="456"), provided_products=[
+                "test product b",
+                "beta product 1",
+                "shared product",
+                "back\\slash"
+            ])
+        ]
+
+        test_data = [
+            ("", (False, False)),
+            ("test entitlement ?", (True, True)),
+            ("*entitlement 1", (True, False)),
+            ("*entitlement 2", (False, True)),
+            ("input string", (False, False)),
+            ("*product", (True, True)),
+            ("*product*", (True, True)),
+            ("shared pro*nopenopenope", (False, False)),
+            ("*another*", (False, False)),
+            ("*product\\?", (True, False)),
+            ("*product ?", (True, True)),
+            ("*product?*", (True, True)),
+            ("*\\?*", (True, False)),
+            ("*\\\\*", (False, True)),
+            ("*k\\s*", (False, True)),
+            ("*23", (True, False)),
+            ("45?", (False, True)),
+        ]
+
+        for stubby in consumed:
+            self.ent_dir.certs.append(stubby)
+
+        for (test_num, data) in enumerate(test_data):
+            with Capture() as captured:
+                list_command = managercli.ListCommand()
+                list_command.main(["list", "--consumed", "--matches", data[0]])
+
+            for (index, expected) in enumerate(data[1]):
+                if expected:
+                    self.assertTrue(consumed[index].order.name in captured.out, "Expected product was not found in output for test data %i" % test_num)
+                else:
+                    self.assertFalse(consumed[index].order.name in captured.out, "Unexpected product was found in output for test data %i" % test_num)
 
     def test_print_consumed_one_ent_one_product(self):
         product = StubProduct("product1")
@@ -333,12 +558,12 @@ class TestListCommand(TestCliProxyCommand):
 
     def test_print_consumed_prints_nothing_with_no_service_level_match(self):
         self.ent_dir.certs.append(self.cert_with_service_level)
-        try:
+
+        with Capture() as captured:
             self.cc.print_consumed(service_level="NotFound")
-            self.fail("Should have exited since an entitlement with the " +
-                      "specified service level does not exist.")
-        except SystemExit:
-            pass
+
+        lines = captured.out.split("\n")
+        self.assertEquals(len(lines) - 1, 1, "Error output consists of more than one line.")
 
     def test_print_consumed_prints_enitlement_with_service_level_match(self):
         self.ent_dir.certs.append(self.cert_with_service_level)

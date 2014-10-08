@@ -7,7 +7,9 @@ from rhsm.utils import ServerUrlParseErrorEmpty, \
 from subscription_manager.utils import parse_server_info, \
     parse_baseurl_info, format_baseurl, \
     get_version, get_client_versions, \
-    get_server_versions, Versions, friendly_join, is_true_value, url_base_join
+    get_server_versions, Versions, friendly_join, is_true_value, url_base_join,\
+    ProductCertificateFilter, EntitlementCertificateFilter
+from stubs import StubProductCertificate, StubProduct, StubEntitlementCertificate
 
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
@@ -519,3 +521,162 @@ class TestTrueValue(fixture.SubManFixture):
         self.assertFalse(is_true_value("n"))
         self.assertFalse(is_true_value("t"))
         self.assertFalse(is_true_value("f"))
+
+
+class TestProductCertificateFilter(fixture.SubManFixture):
+
+    def test_set_filter_string(self):
+        test_data = [
+            (None, True),
+
+            ("", True),
+            ("test", True),
+            ("?", True),
+            ("*", True),
+            ("\\?", True),
+            ("\\*", True),
+            ("\\\\", True),
+            ("*test*", True),
+            ("*test\\?", True),
+            ("a?b\\\\*c\\?d", True),
+            ("**", True),
+            ("??", True),
+            ("*?", True),
+            ("?*", True),
+            ("te**st", True),
+            ("te*?st", True),
+            ("te?*st", True),
+            ("te??st", True),
+            ("*te\\st*", True),
+            ("*te\\\\st*", True),
+            ("*te\*\?st*", True),
+
+            (123, False),
+            (True, False),
+            (False, False),
+            (["nope"], False),
+            ({"key": "value"}, False)
+        ]
+
+        for (index, data) in enumerate(test_data):
+            cert_filter = ProductCertificateFilter()
+            result = cert_filter.set_filter_string(data[0])
+
+            self.assertEquals(result, data[1], "ProductCertificateFilter.set_filter_string failed with data set %i.\nActual:   %s\nExpected: %s)" % (index, result, data[1]))
+
+    def test_match(self):
+        prod_cert = StubProductCertificate(product=StubProduct(name="test*product?", product_id="123456789"))
+
+        test_data = [
+            (None, prod_cert, False),
+            ("", prod_cert, False),
+            ("test", prod_cert, False),
+            ("product", prod_cert, False),
+            ("test\*product\?", prod_cert, True),
+            ("test*", prod_cert, True),
+            ("test*********", prod_cert, True),
+            ("test?????????", prod_cert, True),
+            ("*product?", prod_cert, True),
+            ("*product\?", prod_cert, True),
+            ("?????product*", prod_cert, True),
+            ("*****product*", prod_cert, True),
+            ("?????????????", prod_cert, True),
+            ("*************", prod_cert, True),
+            ("??**??*??**??", prod_cert, True),
+            ("**??**?**??**", prod_cert, True),
+            ("test?product\?", prod_cert, True),
+            ("test*product?", prod_cert, True),
+            ("test*nope", prod_cert, False),
+            ("nope*product", prod_cert, False),
+            ("*nope*", prod_cert, False),
+            ("test*nope*product", prod_cert, False),
+
+            ("1234*", prod_cert, True),
+            ("*4567*", prod_cert, True),
+            ("123???789", prod_cert, True),
+            ("??34567??", prod_cert, True),
+            ("*4?6*", prod_cert, True),
+            ("1234", prod_cert, False),
+            ("??123456789", prod_cert, False),
+        ]
+
+        for (index, data) in enumerate(test_data):
+            cert_filter = ProductCertificateFilter(filter_string=data[0])
+            result = cert_filter.match(data[1])
+
+            self.assertEquals(result, data[2], "ProductCertificateFilter.match failed with data set %i.\nActual:   %s\nExpected: %s" % (index, result, data[2]))
+
+
+class TestEntitlementCertificateFilter(fixture.SubManFixture):
+
+    def test_set_service_level(self):
+        test_data = [
+            (None, True),
+            ("", True),
+            ("Bacon", True),
+            ("Cheese", True),
+            ("Burger", True),
+
+            (123, False),
+            (True, False),
+            (False, False),
+            (["nope"], False),
+            ({"key": "value"}, False)
+        ]
+
+        for (index, data) in enumerate(test_data):
+            cert_filter = EntitlementCertificateFilter()
+            result = cert_filter.set_service_level(data[0])
+
+            self.assertEquals(result, data[1], "EntitlementCertificateFilter.set_service_level failed with data set %i.\nActual:   %s\nExpected: %s)" % (index, result, data[1]))
+
+    def test_match(self):
+        prod_cert = StubEntitlementCertificate(product=StubProduct(name="test*entitlement?", product_id="123456789"), service_level="Premium", provided_products=[
+                "test product b",
+                "beta product 1",
+                "shared product",
+                "back\\slash"
+        ])
+
+        # Order information is hard-coded in the stub, so we've to modify it separately
+        prod_cert.order.contract = "Contract-A"
+
+        test_data = [
+            (None, None, prod_cert, False),
+
+            ("*entitlement*", None, prod_cert, True),
+            ("*shared*", None, prod_cert, True),
+            ("beta*", None, prod_cert, True),
+            ("123456789", None, prod_cert, True),
+            ("prem*", None, prod_cert, True),                   # service level via --contains-text vs --service-level
+            ("*contract*", None, prod_cert, True),
+            ("contract-a", None, prod_cert, True),
+            ("contract-b", None, prod_cert, False),
+            ("*entitlement*", "Premium", prod_cert, True),
+            ("*shared*", "Premium", prod_cert, True),
+            ("beta*", "Premium", prod_cert, True),
+            ("123456789", "Premium", prod_cert, True),
+            ("prem*", "Premium", prod_cert, True),              # ^
+            ("*contract*", "Premium", prod_cert, True),
+            ("contract-a", "Premium", prod_cert, True),
+            ("contract-b", "Premium", prod_cert, False),
+            ("*entitlement*", "Standard", prod_cert, False),
+            ("*shared*", "Standard", prod_cert, False),
+            ("beta*", "Standard", prod_cert, False),
+            ("123456789", "Standard", prod_cert, False),
+            ("prem*", "Standard", prod_cert, False),            # ^
+            ("*contract*", "Standard", prod_cert, False),
+            ("contract-a", "Standard", prod_cert, False),
+            ("contract-b", "Standard", prod_cert, False),
+            (None, "Premium", prod_cert, True),
+            (None, "pReMiUm", prod_cert, True),
+            (None, "Standard", prod_cert, False),
+            (None, "sTANDard", prod_cert, False),
+            (None, "aslfk;", prod_cert, False),
+        ]
+
+        for (index, data) in enumerate(test_data):
+            cert_filter = EntitlementCertificateFilter(filter_string=data[0], service_level=data[1])
+            result = cert_filter.match(data[2])
+
+            self.assertEquals(result, data[3], "EntitlementCertificateFilter.match failed with data set %i.\nActual:   %s\nExpected: %s" % (index, result, data[3]))

@@ -44,13 +44,14 @@ from subscription_manager.hwprobe import ClassicCheck
 import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
-from subscription_manager.managerlib import valid_quantity
+from subscription_manager.managerlib import valid_quantity, format_date
 from subscription_manager.release import ReleaseBackend
 from subscription_manager.repolib import RepoActionInvoker, RepoFile
 from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
-        restart_virt_who, get_terminal_width
+        restart_virt_who, get_terminal_width, \
+        ProductCertificateFilter, EntitlementCertificateFilter
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, _none_wrap, _echo
@@ -184,7 +185,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
 
 
 def show_autosubscribe_output(uep):
-    installed_status = managerlib.get_installed_product_status(inj.require(inj.PROD_DIR),
+    installed_status = get_installed_product_status(inj.require(inj.PROD_DIR),
             inj.require(inj.ENT_DIR), uep)
     if not installed_status:
         print _("No products installed.")
@@ -203,6 +204,50 @@ def show_autosubscribe_output(uep):
     if not all_subscribed:
         print _("Unable to find available subscriptions for all your installed products.")
     return subscribed
+
+
+def get_installed_product_status(product_directory, entitlement_directory, uep, filter_string=None):
+    """
+     Returns the Installed products and their subscription states
+    """
+    product_status = []
+
+    calculator = inj.require(inj.PRODUCT_DATE_RANGE_CALCULATOR, uep)
+    sorter = inj.require(inj.CERT_SORTER)
+    cert_filter = None
+
+    if filter_string is not None:
+        cert_filter = ProductCertificateFilter(filter_string)
+
+    print
+
+    for installed_product in sorter.installed_products:
+        product_cert = sorter.installed_products[installed_product]
+
+        if cert_filter is None or cert_filter.match(product_cert):
+            for product in product_cert.products:
+                begin = ""
+                end = ""
+                prod_status_range = calculator.calculate(product.id)
+
+                if prod_status_range:
+                    # Format the date in user's local time as the date
+                    # range is returned in GMT.
+                    begin = format_date(prod_status_range.begin())
+                    end = format_date(prod_status_range.end())
+
+                product_status.append((
+                    product.name,
+                    installed_product,
+                    product.version,
+                    ",".join(product.architectures),
+                    sorter.get_status(product.id),
+                    sorter.reasons.get_product_reasons(product),
+                    begin,
+                    end
+                ))
+
+    return product_status
 
 
 class CliCommand(AbstractCLICommand):
@@ -1454,7 +1499,7 @@ class AttachCommand(CliCommand):
                     return_code = 1
             # must be auto
             else:
-                products_installed = len(managerlib.get_installed_product_status(self.product_dir,
+                products_installed = len(get_installed_product_status(self.product_dir,
                                  self.entitlement_dir, self.cp))
                 # if we are green, we don't need to go to the server
                 self.sorter = inj.require(inj.CERT_SORTER)
@@ -2094,6 +2139,8 @@ class ListCommand(CliCommand):
                                help=_("shows pools which provide products that are not already covered; only used with --available"))
         self.parser.add_option("--match-installed", action="store_true",
                                help=_("shows only subscriptions matching products that are currently installed; only used with --available"))
+        self.parser.add_option("--matches", dest="filter_string",
+                               help=_("lists only subscriptions or products containing the specified search string in the subscription or product information, varying with the list requested and the server version (case-insensitive)."))
 
     def _validate_options(self):
         if (self.options.all and not self.options.available):
@@ -2102,8 +2149,7 @@ class ListCommand(CliCommand):
         if (self.options.on_date and not self.options.available):
             print _("Error: --ondate is only applicable with --available")
             sys.exit(-1)
-        if self.options.service_level is not None and not (self.options.consumed or
-                                              self.options.available):
+        if self.options.service_level is not None and not (self.options.consumed or self.options.available):
             print _("Error: --servicelevel is only applicable with --available or --consumed")
             sys.exit(-1)
         if not (self.options.available or self.options.consumed):
@@ -2119,23 +2165,26 @@ class ListCommand(CliCommand):
         """
         Executes the command.
         """
-
         self._validate_options()
 
         if self.options.installed:
-            iproducts = managerlib.get_installed_product_status(self.product_dir,
-                    self.entitlement_dir, self.cp)
-            if not len(iproducts):
-                print(_("No installed products to list"))
-                sys.exit(0)
-            print "+-------------------------------------------+"
-            print _("    Installed Product Status")
-            print "+-------------------------------------------+"
-            for product in iproducts:
-                status = STATUS_MAP[product[4]]
-                print columnize(INSTALLED_PRODUCT_STATUS, _none_wrap,
+            iproducts = get_installed_product_status(self.product_dir, self.entitlement_dir, self.cp, self.options.filter_string)
+
+            if len(iproducts):
+                print "+-------------------------------------------+"
+                print _("    Installed Product Status")
+                print "+-------------------------------------------+"
+
+                for product in iproducts:
+                    status = STATUS_MAP[product[4]]
+                    print columnize(INSTALLED_PRODUCT_STATUS, _none_wrap,
                                 product[0], product[1], product[2], product[3],
                                 status, product[5], product[6], product[7]) + "\n"
+            else:
+                if self.options.filter_string:
+                    print(_("No installed products matching the specified criteria were found."))
+                else:
+                    print(_("No installed products to list"))
 
         if self.options.available:
             self.assert_should_be_registered()
@@ -2154,42 +2203,46 @@ class ListCommand(CliCommand):
                                                            get_all=self.options.all,
                                                            active_on=on_date,
                                                            overlapping=self.options.no_overlap,
-                                                           uninstalled=self.options.match_installed)
+                                                           uninstalled=self.options.match_installed,
+                                                           filter_string=self.options.filter_string)
 
             # Filter certs by service level, if specified.
             # Allowing "" here.
             if self.options.service_level is not None:
-                epools = self._filter_pool_json_by_service_level(epools,
-                                                    self.options.service_level)
+                epools = self._filter_pool_json_by_service_level(epools, self.options.service_level)
 
-            if not len(epools):
-                print(_("No available subscription pools to list"))
-                sys.exit(0)
-            print("+-------------------------------------------+")
-            print("    " + _("Available Subscriptions"))
-            print("+-------------------------------------------+")
-            for data in epools:
-                if PoolWrapper(data).is_virt_only():
-                    machine_type = machine_type = _("Virtual")
+            if len(epools):
+                print("+-------------------------------------------+")
+                print("    " + _("Available Subscriptions"))
+                print("+-------------------------------------------+")
+
+                for data in epools:
+                    if PoolWrapper(data).is_virt_only():
+                        machine_type = machine_type = _("Virtual")
+                    else:
+                        machine_type = _("Physical")
+
+                    print columnize(AVAILABLE_SUBS_LIST, _none_wrap,
+                            data['productName'],
+                            data['providedProducts'],
+                            data['productId'],
+                            data['contractNumber'] or "",
+                            data['id'],
+                            data['quantity'],
+                            data['suggested'],
+                            data['service_level'] or "",
+                            data['service_type'] or "",
+                            data['pool_type'],
+                            data['endDate'],
+                            machine_type) + "\n"
+            else:
+                if self.options.filter_string:
+                    print(_("No available subscription pools matching the specified criteria were found."))
                 else:
-                    machine_type = _("Physical")
-
-                print columnize(AVAILABLE_SUBS_LIST, _none_wrap,
-                        data['productName'],
-                        data['providedProducts'],
-                        data['productId'],
-                        data['contractNumber'] or "",
-                        data['id'],
-                        data['quantity'],
-                        data['suggested'],
-                        data['service_level'] or "",
-                        data['service_type'] or "",
-                        data['pool_type'],
-                        data['endDate'],
-                        machine_type) + "\n"
+                    print(_("No available subscription pools to list"))
 
         if self.options.consumed:
-            self.print_consumed(service_level=self.options.service_level)
+            self.print_consumed(service_level=self.options.service_level, filter_string=self.options.filter_string)
 
     def _filter_pool_json_by_service_level(self, pools, service_level):
 
@@ -2202,92 +2255,90 @@ class ListCommand(CliCommand):
 
         return filter(filter_pool_data_by_service_level, pools)
 
-    def print_consumed(self, service_level=None):
+    def print_consumed(self, service_level=None, filter_string=None):
         # list all certificates that have not yet expired, even those
         # that are not yet active.
         certs = self.entitlement_dir.list()
+        cert_filter = EntitlementCertificateFilter(filter_string=filter_string, service_level=service_level)
 
-        # Filter certs by service level, if specified.
-        # Allowing "" here.
-        if service_level is not None:
-            def filter_cert_by_service_level(cert):
-                cert_level = ""
-                if cert.order and cert.order.service_level:
-                    cert_level = cert.order.service_level
-                return service_level.lower() == \
-                    cert_level.lower()
-            certs = filter(filter_cert_by_service_level, certs)
+        if len(certs):
+            # Check if we need to apply our cert filter
+            if service_level is not None or filter_string is not None:
+                certs = filter(cert_filter.match, certs)
 
-        if len(certs) == 0:
+            # Process and display our (filtered) certs:
+            if len(certs):
+                print("+-------------------------------------------+")
+                print("   " + _("Consumed Subscriptions"))
+                print("+-------------------------------------------+")
+
+                cert_reasons_map = inj.require(inj.CERT_SORTER).reasons.get_subscription_reasons_map()
+                pooltype_cache = inj.require(inj.POOLTYPE_CACHE)
+
+                for cert in certs:
+                    # for some certs, order can be empty
+                    # so we default the values and populate them if
+                    # they exist. BZ974587
+                    name = ""
+                    sku = ""
+                    contract = ""
+                    account = ""
+                    quantity_used = ""
+                    service_level = ""
+                    service_type = ""
+                    system_type = ""
+
+                    order = cert.order
+
+                    if order:
+                        service_level = order.service_level or ""
+                        service_type = order.service_type or ""
+                        name = order.name
+                        sku = order.sku
+                        contract = order.contract or ""
+                        account = order.account or ""
+                        quantity_used = order.quantity_used
+                        if order.virt_only:
+                            system_type = _("Virtual")
+                        else:
+                            system_type = _("Physical")
+
+                    pool_id = _("Not Available")
+                    if hasattr(cert.pool, "id"):
+                        pool_id = cert.pool.id
+
+                    product_names = [p.name for p in cert.products]
+
+                    reasons = []
+                    pool_type = ''
+
+                    if cert.subject and 'CN' in cert.subject:
+                        if cert.subject['CN'] in cert_reasons_map:
+                            reasons = cert_reasons_map[cert.subject['CN']]
+                        pool_type = pooltype_cache.get(pool_id)
+
+                    print columnize(CONSUMED_LIST, _none_wrap,
+                        name,
+                        product_names,
+                        sku,
+                        contract,
+                        account,
+                        cert.serial,
+                        pool_id,
+                        cert.is_valid(),
+                        quantity_used,
+                        service_level,
+                        service_type,
+                        reasons,
+                        pool_type,
+                        managerlib.format_date(cert.valid_range.begin()),
+                        managerlib.format_date(cert.valid_range.end()),
+                        system_type
+                    ) + "\n"
+            else:
+                print(_("No consumed subscription pools matching the specified criteria were found."))
+        else:
             print(_("No consumed subscription pools to list"))
-            sys.exit(0)
-
-        cert_reasons_map = inj.require(inj.CERT_SORTER).reasons.get_subscription_reasons_map()
-        pooltype_cache = inj.require(inj.POOLTYPE_CACHE)
-
-        print("+-------------------------------------------+")
-        print("   " + _("Consumed Subscriptions"))
-        print("+-------------------------------------------+")
-
-        for cert in certs:
-            # for some certs, order can be empty
-            # so we default the values and populate them if
-            # they exist. BZ974587
-            name = ""
-            sku = ""
-            contract = ""
-            account = ""
-            quantity_used = ""
-            service_level = ""
-            service_type = ""
-            system_type = ""
-
-            order = cert.order
-
-            if order:
-                service_level = order.service_level or ""
-                service_type = order.service_type or ""
-                name = order.name
-                sku = order.sku
-                contract = order.contract or ""
-                account = order.account or ""
-                quantity_used = order.quantity_used
-                if order.virt_only:
-                    system_type = _("Virtual")
-                else:
-                    system_type = _("Physical")
-
-            pool_id = _("Not Available")
-            if hasattr(cert.pool, "id"):
-                pool_id = cert.pool.id
-
-            product_names = [p.name for p in cert.products]
-
-            reasons = []
-            pool_type = ''
-
-            if cert.subject and 'CN' in cert.subject:
-                if cert.subject['CN'] in cert_reasons_map:
-                    reasons = cert_reasons_map[cert.subject['CN']]
-                pool_type = pooltype_cache.get(pool_id)
-
-            print columnize(CONSUMED_LIST, _none_wrap,
-                    name,
-                    product_names,
-                    sku,
-                    contract,
-                    account,
-                    cert.serial,
-                    pool_id,
-                    cert.is_valid(),
-                    quantity_used,
-                    service_level,
-                    service_type,
-                    reasons,
-                    pool_type,
-                    managerlib.format_date(cert.valid_range.begin()),
-                    managerlib.format_date(cert.valid_range.end()),
-                    system_type) + "\n"
 
 
 class OverrideCommand(CliCommand):

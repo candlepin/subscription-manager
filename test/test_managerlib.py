@@ -18,15 +18,13 @@ import unittest
 import os
 
 from stubs import StubCertificateDirectory, StubProductCertificate, \
-        StubProduct, StubEntitlementCertificate, StubProductDirectory, \
-        StubUEP, StubCertSorter
+        StubProduct, StubProductDirectory, StubCertSorter
 from fixture import SubManFixture
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
-        get_installed_product_status, \
         MergedPoolsStackingGroupSorter, MergedPools, \
         PoolStash, allows_multi_entitlement, valid_quantity
 from subscription_manager.injection import provide, \
-        CERT_SORTER, PROD_DIR
+        PROD_DIR
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
@@ -667,133 +665,6 @@ class PoolFilterTests(unittest.TestCase):
         return pool
 
 
-class InstalledProductStatusTests(SubManFixture):
-
-    def test_entitlement_for_not_installed_product_shows_nothing(self):
-        product_directory = StubProductDirectory([])
-        provide(PROD_DIR, product_directory)
-
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
-
-        # no product certs installed...
-        self.assertEquals(0, len(product_status))
-
-    def test_entitlement_for_installed_product_shows_subscribed(self):
-        product_directory = StubProductDirectory(pids=['product1'])
-        provide(PROD_DIR, product_directory)
-        ent_cert = StubEntitlementCertificate('product1')
-
-        stub_sorter = StubCertSorter()
-        stub_sorter.valid_products['product1'] = [ent_cert]
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
-
-        self.assertEquals(1, len(product_status))
-        self.assertEquals("subscribed", product_status[0][4])
-
-    def test_expired_entitlement_for_installed_product_shows_expired(self):
-        ent_cert = StubEntitlementCertificate('product1',
-                end_date=(datetime.now() - timedelta(days=2)))
-
-        product_directory = StubProductDirectory(pids=['product1'])
-        provide(PROD_DIR, product_directory)
-        stub_sorter = StubCertSorter()
-        stub_sorter.expired_products['product1'] = [ent_cert]
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
-
-        self.assertEquals(1, len(product_status))
-        self.assertEquals("expired", product_status[0][4])
-
-    def test_no_entitlement_for_installed_product_shows_no_subscribed(self):
-        product_directory = StubProductDirectory(pids=['product1'])
-        provide(PROD_DIR, product_directory)
-        stub_sorter = StubCertSorter()
-        stub_sorter.unentitled_products['product1'] = None  # prod cert unused here
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
-
-        self.assertEquals(1, len(product_status))
-        self.assertEquals("not_subscribed", product_status[0][4])
-
-    def test_future_dated_entitlement_shows_future_subscribed(self):
-        product_directory = StubProductDirectory(pids=['product1'])
-        provide(PROD_DIR, product_directory)
-        ent_cert = StubEntitlementCertificate('product1',
-                    start_date=(datetime.now() + timedelta(days=1365)))
-        stub_sorter = StubCertSorter()
-        stub_sorter.future_products['product1'] = [ent_cert]
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
-        self.assertEquals(1, len(product_status))
-        self.assertEquals("future_subscribed", product_status[0][4])
-
-    def test_one_product_with_two_entitlements_lists_product_twice(self):
-        ent_cert = StubEntitlementCertificate('product1',
-            ['product2', 'product3'], sockets=10)
-        product_directory = StubProductDirectory(pids=['product1'])
-        provide(PROD_DIR, product_directory)
-        stub_sorter = StubCertSorter()
-        stub_sorter.valid_products['product1'] = [ent_cert, ent_cert]
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
-
-        # only "product" is installed
-        self.assertEquals(1, len(product_status))
-
-    def test_one_subscription_with_bundled_products_lists_once(self):
-        ent_cert = StubEntitlementCertificate('product1',
-            ['product2', 'product3'], sockets=10)
-        product_directory = StubProductDirectory(pids=['product1'])
-        provide(PROD_DIR, product_directory)
-        stub_sorter = StubCertSorter()
-        stub_sorter.valid_products['product1'] = [ent_cert]
-        stub_sorter.valid_products['product2'] = [ent_cert]
-        stub_sorter.valid_products['product3'] = [ent_cert]
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
-
-        # neither product3 or product 2 are installed
-        self.assertEquals(1, len(product_status))
-        self.assertEquals("product1", product_status[0][0])
-        self.assertEquals("subscribed", product_status[0][4])
-
-    def test_one_subscription_with_bundled_products_lists_once_part_two(self):
-        ent_cert = StubEntitlementCertificate('product1',
-            ['product2', 'product3'], sockets=10)
-
-        prod_dir = StubProductDirectory(pids=['product1', 'product2'])
-        provide(PROD_DIR, prod_dir)
-        stub_sorter = StubCertSorter()
-        stub_sorter.valid_products['product1'] = [ent_cert]
-        stub_sorter.valid_products['product2'] = [ent_cert]
-
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = get_installed_product_status(prod_dir,
-                None, StubUEP())
-
-        # product3 isn't installed
-        self.assertEquals(2, len(product_status))
-        self.assertEquals("product2", product_status[0][0])
-        self.assertEquals("subscribed", product_status[0][4])
-        self.assertEquals("product1", product_status[1][0])
-        self.assertEquals("subscribed", product_status[1][4])
-
-
 class MockLog:
     def info(self):
         pass
@@ -1239,7 +1110,7 @@ class TestGetAvailableEntitlements(SubManFixture):
         cp = self.get_consumer_cp()
 
         # patch the mock for getPoolsList
-        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None):
+        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None, filter_string=None):
             if listAll:
                 return [self.build_pool_dict('1234'),
                         self.build_pool_dict('4321')]
@@ -1257,7 +1128,7 @@ class TestGetAvailableEntitlements(SubManFixture):
     def test_installed(self):
         cp = self.get_consumer_cp()
 
-        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None):
+        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None, filter_string=None):
             if listAll:
                 return [self.build_pool_dict('1234', ['some_product']),
                         self.build_pool_dict('4321'),
