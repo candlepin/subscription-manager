@@ -7,7 +7,7 @@ from rhsm.utils import ServerUrlParseErrorEmpty, \
 from subscription_manager.utils import parse_server_info, \
     parse_baseurl_info, format_baseurl, \
     get_version, get_client_versions, \
-    get_server_versions, Versions, friendly_join, is_true_value, url_base_join
+    get_server_versions, Versions, friendly_join, is_true_value, url_base_join, build_filter_regex
 
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
@@ -519,3 +519,36 @@ class TestTrueValue(fixture.SubManFixture):
         self.assertFalse(is_true_value("n"))
         self.assertFalse(is_true_value("t"))
         self.assertFalse(is_true_value("f"))
+
+
+class TestBuildFilterRegex(fixture.SubManFixture):
+
+    def test_build_filter_regex_valid_strings(self):
+        test_data = [
+            ("", "^$"),
+            ("test", "^test$"),
+            ("?", "^.?$"),
+            ("*", "^.*$"),
+            ("\\?", "^\\?$"),
+            ("\\*", "^\\*$"),
+            ("\\\\", "^\\\\$"),
+
+            ("*test*", "^.*test.*$"),
+            ("*test\\?", "^.*test\\?$"),
+            ("a?b\\\\*c\\?d", "^a.?b\\\\.*c\\?d$")
+        ]
+
+        for data in test_data:
+            result = build_filter_regex(data[0])
+            self.assertEquals(result, data[1], "Generated regex does not match expected for input \"%s\".\nActual:   %s\nExpected: %s" % (data[0], result, data[1]))
+
+    def test_build_filter_regex_invalid_input(self):
+        test_data = [
+            (None, TypeError),
+            (123, TypeError),
+            (["nope"], TypeError),
+            ({"key": "value"}, TypeError)
+        ]
+
+        for data in test_data:
+            self.assertRaises(data[1], build_filter_regex, data[0])

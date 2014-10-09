@@ -8,6 +8,7 @@ import socket
 import stubs
 
 from subscription_manager import managercli, managerlib
+from subscription_manager.cert_sorter import SUBSCRIBED, NOT_SUBSCRIBED
 from subscription_manager.printing_utils import format_name, columnize, \
         _echo, _none_wrap
 from subscription_manager.repolib import Repo
@@ -15,6 +16,7 @@ from stubs import MockStderr, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
 from fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher
+
 
 import mock
 from mock import patch
@@ -309,11 +311,113 @@ class TestListCommand(TestCliProxyCommand):
         self.assertTrue('888888888888' in cap.out)
 
     def test_print_consumed_no_ents(self):
-        try:
+        with Capture() as captured:
             self.cc.print_consumed()
-            self.fail("Should have exited.")
-        except SystemExit:
-            pass
+
+        lines = captured.out.split("\n")
+        self.assertEquals(len(lines) - 1, 1, "Error output consists of more than one line.")
+
+    @mock.patch('subscription_manager.managerlib.get_installed_product_status')
+    def test_list_installed_with_ctfilter(self, mlib_get_ips):
+        installed_products = [
+            (
+                "test product*",                # name
+                "8675309",                      # id
+                "6.1",                          # version
+                "x86_64",                       # arch
+                SUBSCRIBED,                     # status
+                "Not a real product",           # details
+                None,                           # start
+                None,                           # end
+            ),
+
+            (
+                "another(?) test\\product",     # name
+                "123456",                       # id
+                "7.0",                          # version
+                "x86_64",                       # arch
+                NOT_SUBSCRIBED,                 # status
+                "Not a real product",           # details
+                None,                           # start
+                None,                           # end
+            ),
+        ]
+
+        test_data = [
+            ("", (False, False)),
+            ("input string", (False, False)),
+            ("*product", (False, True)),
+            ("*product*", (True, True)),
+            ("*another*", (False, True)),
+            ("*product\\*", (True, False)),
+            ("*product?", (True, True)),
+            ("*product?*", (True, True)),
+            ("*(\\?)*", (False, True)),
+            ("*test\\\\product", (False, True)),
+        ]
+
+        mlib_get_ips.return_value = installed_products
+
+        for (test_num, data) in enumerate(test_data):
+            with Capture() as captured:
+                list_command = managercli.ListCommand()
+                list_command.main(["list", "--installed", "--contains-text", data[0]])
+
+            for (index, expected) in enumerate(data[1]):
+                if expected:
+                    self.assertTrue(installed_products[index][1] in captured.out, "Expected product was not found in output for test data %i" % test_num)
+                else:
+                    self.assertFalse(installed_products[index][1] in captured.out, "Unexpected product was found in output for test data %i" % test_num)
+
+    def test_list_consumed_with_ctfilter(self):
+        consumed = [
+            StubEntitlementCertificate(product=StubProduct(name="Test Entitlement 1", product_id="123"), provided_products=[
+                "test product a",
+                "beta product 1",
+                "shared product",
+                "troll* product?"
+            ]),
+
+            StubEntitlementCertificate(product=StubProduct(name="Test Entitlement 2", product_id="456"), provided_products=[
+                "test product b",
+                "beta product 1",
+                "shared product",
+                "back\\slash"
+            ])
+        ]
+
+        test_data = [
+            ("", (False, False)),
+            ("test entitlement ?", (True, True)),
+            ("*entitlement 1", (True, False)),
+            ("*entitlement 2", (False, True)),
+            ("input string", (False, False)),
+            ("*product", (True, True)),
+            ("*product*", (True, True)),
+            ("*another*", (False, False)),
+            ("*product\\?", (True, False)),
+            ("*product ?", (True, True)),
+            ("*product?*", (True, True)),
+            ("*\\?*", (True, False)),
+            ("*\\\\*", (False, True)),
+            ("*k\\s*", (False, True)),
+            ("*23", (True, False)),
+            ("45?", (False, True)),
+        ]
+
+        for stubby in consumed:
+            self.ent_dir.certs.append(stubby)
+
+        for (test_num, data) in enumerate(test_data):
+            with Capture() as captured:
+                list_command = managercli.ListCommand()
+                list_command.main(["list", "--consumed", "--contains-text", data[0]])
+
+            for (index, expected) in enumerate(data[1]):
+                if expected:
+                    self.assertTrue(consumed[index].order.name in captured.out, "Expected product was not found in output for test data %i" % test_num)
+                else:
+                    self.assertFalse(consumed[index].order.name in captured.out, "Unexpected product was found in output for test data %i" % test_num)
 
     def test_print_consumed_one_ent_one_product(self):
         product = StubProduct("product1")
@@ -333,12 +437,12 @@ class TestListCommand(TestCliProxyCommand):
 
     def test_print_consumed_prints_nothing_with_no_service_level_match(self):
         self.ent_dir.certs.append(self.cert_with_service_level)
-        try:
+
+        with Capture() as captured:
             self.cc.print_consumed(service_level="NotFound")
-            self.fail("Should have exited since an entitlement with the " +
-                      "specified service level does not exist.")
-        except SystemExit:
-            pass
+
+        lines = captured.out.split("\n")
+        self.assertEquals(len(lines) - 1, 1, "Error output consists of more than one line.")
 
     def test_print_consumed_prints_enitlement_with_service_level_match(self):
         self.ent_dir.certs.append(self.cert_with_service_level)
