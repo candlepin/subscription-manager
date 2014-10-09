@@ -93,9 +93,10 @@ class TestEntitlementSource(fixture.SubManFixture):
 
         ent_src = model.EntitlementSource()
         ent_src._entitlements = [ent1, ent2]
-        yum_list = ent_src.find_content(content_type='yum')
+        yum_list = model.find_content(ent_src, content_type='yum')
         self.assertEquals(1, len(yum_list))
         self.assertEquals('yum_content', yum_list[0].name)
-        cont_list = ent_src.find_content(content_type='containerImage')
+        cont_list = model.find_content(ent_src,
+            content_type='containerImage')
         self.assertEquals(1, len(cont_list))
         self.assertEquals('container_content', cont_list[0].name)

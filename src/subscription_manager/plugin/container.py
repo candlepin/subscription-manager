@@ -21,13 +21,14 @@ import os
 import shutil
 
 from subscription_manager import certlib
+from subscription_manager.model import find_content
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 _ = gettext.gettext
 
 
-CONTAINER_CONTENT_TYPE = "containerImage"
+CONTAINER_CONTENT_TYPE = "containerimage"
 
 
 class ContainerContentUpdateActionCommand(object):
@@ -44,8 +45,9 @@ class ContainerContentUpdateActionCommand(object):
 
         report = ContainerUpdateReport()
 
-        content_sets = self.ent_source.find_content(
+        content_sets = find_content(self.ent_source,
             content_type=CONTAINER_CONTENT_TYPE)
+        log.debug("Got content_sets: %s" % content_sets)
         unique_cert_paths = self._get_unique_paths(content_sets)
 
         cert_dir = ContainerCertDir(report=report, registry=self.registry)
