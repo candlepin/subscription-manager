@@ -68,7 +68,7 @@ rm -rf %{buildroot}
 
 %{python_sitearch}/rhsm/*
 %{python_sitearch}/rhsm-*.egg-info
-%attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
+%attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
 * Fri Oct 03 2014 Alex Wood <awood@redhat.com> 1.13.3-1
