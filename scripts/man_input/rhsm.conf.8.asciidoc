@@ -1,0 +1,136 @@
+rhsm.conf(8)
+============
+:doctype: manpage
+:man source:  rhsm.conf
+
+
+NAME
+----
+rhsm.conf - Configuration file for the subscription-mananager tooling
+
+
+DESCRIPTION
+-----------
+The rhsm.conf file is the configuration file for various subscription
+manager tooling. This includes *subscription-manager*,
+*subscription-manager-gui*, *rhsmcertd*, and and *virt-who*.
+
+
+[server] OPTIONS
+----------------
+hostname::
+  The hostname of the subscription service being used. The default is the
+  Red Hat Customer Portal which is subscription.rhn.redhat.com.
+
+prefix::
+  Server perfix where the subscription service is registered.
+
+port::
+  The port which the susbcription service is listening on.
+
+insecure::
+  This flag enables or disables certification verification using the
+  certificate authorities which are installed in /etc/rhsm/ca.
+
+ssl_verify_depth::
+  Sets the number of certificates whcih should be used to verify the
+  servers identity. This is an advanced control which can be used to
+  secure on premise installations.
+
+proxy_hostname::
+  Set this to a non-blank value if *subscription-manager* should use a
+  reverse proxy to access the subscription service. This sets the host
+  for the reverse proxy.
+
+proxy_port::
+  Set this to a non-blank value if *subscription-manager* should use a
+  reverse proxy to access the subscription service. This sets the port
+  for the reverse proxy.
+
+proxy_username::
+  Set this to a non-blank value if *subscription-manager* should use an
+  authenticated reverse proxy to access the subscription service. This 
+  sets the username for the reverse proxy.
+
+proxy_password::
+  Set this to a non-blank value if *subscription-manager* should use an
+  authenticated reverse proxy to access the subscription service. This 
+  sets the password for the reverse proxy.
+
+[rhsm] OPTIONS
+--------------
+baseurl::
+  This setting is the prefix for all content which is managed by the
+  subscription service. This should be the hostname for the Red Hat CDN,
+  the local Satellite or Capsule depending on your deployment.
+
+ca_cert_dir::
+  The location for the certificates which are used communicate with the
+  server and to pulldown content.
+
+repo_ca_cert::
+  The certificate to use for server side authentication during content
+  downloads.
+
+productCertDirectory::
+  The directory where product certificates should be stored.
+
+entitlementCertDirectory::
+  The directory where entitlement certificates should be stored.
+
+consumerCertDirectory::
+  The directory where the consumers identity certificate is stored.
+
+manage_repos::
+  Set this to '1' if subscription manager should manage a yum repos file.
+  If set, it will manage the file /etc/yum.repos.d/redhat.repo. If set
+  to '0' then the subscription is only used for tracking purposes, not
+  content.
+
+full_refresh_on_yum::
+  Set to '1' if the /etc/yum.repos.d/redhat.repo should be updated with
+  every server command. This will make yum less efficient, but can ensure
+  that the most recent data is brought down from the susbcription service.
+
+report_package_profile::
+  Set to '1' if *rhsmcertd* should report up the current package profile.
+  This reporting helps the subscription service to provide better errata
+  notifications.
+
+pluginDir::
+  The directory to search for subscription manager plugins
+
+pluginConfDir: 
+  The directory to search for plugin configuration files
+
+
+[rhsmcertd] OPTIONS
+-------------------
+certCheckInterval::
+  The number of minutes between runs of the *rhsmcertd* daemon
+
+autoAttachInterval::
+  The number of minutes between attempts to run auto-attach on this
+  consumer.
+
+
+AUTHOR
+------
+Bryan Kearney <bkearney@redhat.com>
+
+
+SEE ALSO
+--------
+*subscription-manager*(8), *subscription-manager-gui*(8), *rhsmcertd*(8)
+
+RESOURCES
+---------
+Main web site: http://www.candlepinproject.org/
+
+
+COPYING
+-------
+Copyright (c) 2010-2012 Red Hat, Inc. This is licensed  under  the  GNU  General  Public  License,  version  2  (GPLv2).  A  copy  of  this  license  is  available  at  http://www.gnu.org/licenses/old-
+licenses/gpl-2.0.txt.
+
+
