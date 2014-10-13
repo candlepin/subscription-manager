@@ -1863,8 +1863,7 @@ class ReposCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
         rc = 0
-        if cfg.has_option('rhsm', 'manage_repos') and \
-                not int(cfg.get('rhsm', 'manage_repos')):
+        if cfg.has_option('rhsm', 'manage_repos') and not int(cfg.get('rhsm', 'manage_repos')):
             print _("Repositories disabled by configuration.")
             return rc
 
@@ -1883,22 +1882,32 @@ class ReposCommand(CliCommand):
             rc = self._set_repo_status(repos, rl, self.options.repo_actions)
 
         if self.options.list:
-            if len(repos) > 0:
-                print("+----------------------------------------------------------+")
-                print _("    Available Repositories in %s") % rl.get_repo_file()
-                print("+----------------------------------------------------------+")
-                for repo in repos:
-                    show_enabled = repo["enabled"] != '0' and self.options.list_enabled
-                    show_disabled = repo["enabled"] == '0' and self.options.list_disabled
+            if len(repos):
+                # TODO: Perhaps this should be abstracted out as well...?
+                def filter_repos(repo):
+                    show_enabled = (self.options.list_enabled and repo["enabled"] != '0')
+                    show_disabled = (self.options.list_disabled and repo["enabled"] == '0')
 
-                    if show_enabled or show_disabled:
+                    return show_enabled or show_disabled
+
+                repos = filter(filter_repos, repos)
+
+                if len(repos):
+                    print("+----------------------------------------------------------+")
+                    print _("    Available Repositories in %s") % rl.get_repo_file()
+                    print("+----------------------------------------------------------+")
+
+                    for repo in repos:
                         print columnize(REPOS_LIST, _echo,
                             repo.id,
                             repo["name"],
                             repo["baseurl"],
                             repo["enabled"]) + "\n"
+                else:
+                    print _("There were no available repositories matching the specified criteria.")
             else:
                 print _("This system has no repositories available through subscriptions.")
+
         return rc
 
     def _set_repo_status(self, repos, repo_action_invoker, repo_actions):
