@@ -392,6 +392,34 @@ class TestGetServerVersions(fixture.SubManFixture):
 
     @patch('rhsm.connection.UEPConnection')
     @patch('subscription_manager.utils.ClassicCheck')
+    def test_get_server_versions_cp_with_status_bad_data(self, mock_classic, MockUep):
+        instance = mock_classic.return_value
+        instance.is_registered_with_classic.return_value = False
+        self._inject_mock_valid_consumer()
+        MockUep.supports_resource.return_value = True
+
+        dataset = [
+            {'version': None, 'release': '123'},
+            {'version': 123, 'release': '123'},
+
+            {'version': '123', 'release': None},
+            {'version': '123', 'release': 123},
+
+            {'version': None, 'release': None},
+            {'version': None, 'release': 123},
+            {'version': 123, 'release': None},
+            {'version': 123, 'release': 123},
+        ]
+
+        for value in dataset:
+            MockUep.getStatus.return_value = value
+            sv = get_server_versions(MockUep)
+            self.assertEquals(sv['server-type'], 'Red Hat Subscription Management')
+            self.assertEquals(sv['candlepin'], 'Unknown')
+            self.assertEquals(sv['rules-version'], 'Unknown')
+
+    @patch('rhsm.connection.UEPConnection')
+    @patch('subscription_manager.utils.ClassicCheck')
     def test_get_server_versions_cp_with_status_and_classic(self, mock_classic, MockUep):
         instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = True
