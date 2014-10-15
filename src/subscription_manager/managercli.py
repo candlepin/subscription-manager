@@ -1840,19 +1840,19 @@ class ReposCommand(CliCommand):
 
         self.parser.add_option("--list",
                                action="callback", callback=list_callback, dest="list", default=False,
-                               help=_("list all known repos for this system"))
+                               help=_("list all known repositories for this system"))
         self.parser.add_option("--list-enabled",
                                action="callback", callback=list_callback, dest="list_enabled", default=False,
-                               help=_("list known, enabled repos for this system"))
+                               help=_("list known, enabled repositories for this system"))
         self.parser.add_option("--list-disabled",
                                action="callback", callback=list_callback, dest="list_disabled", default=False,
-                               help=_("list known, disabled repos for this system"))
+                               help=_("list known, disabled repositories for this system"))
         self.parser.add_option("--enable", dest="enable", type="str",
                                action='callback', callback=repo_callback, metavar="REPOID",
-                               help=_("repo to enable (can be specified more than once). Wildcards (* and ?) are supported."))
+                               help=_("repository to enable (can be specified more than once). Wildcards (* and ?) are supported."))
         self.parser.add_option("--disable", dest="disable", type="str",
                                action='callback', callback=repo_callback, metavar="REPOID",
-                               help=_("repo to disable (can be specified more than once). Wildcards (* and ?) are supported."))
+                               help=_("repository to disable (can be specified more than once). Wildcards (* and ?) are supported."))
 
     def _validate_options(self):
         if not (self.options.list or hasattr(self.options, 'repo_actions')):
@@ -1919,8 +1919,8 @@ class ReposCommand(CliCommand):
             matches = set([repo for repo in repos if fnmatch.fnmatch(repo.id, repoid)])
             if not matches:
                 rc = 1
-                print _("Error: %s is not a valid repo ID. "
-                        "Use --list option to see valid repos.") % repoid
+                print _("Error: %s is not a valid repository ID. "
+                        "Use --list option to see valid repositories.") % repoid
 
             # Overwrite repo if it's already in the dict, we want the last
             # match to be the one sent to server.
@@ -1958,9 +1958,9 @@ class ReposCommand(CliCommand):
         for repo in repos_to_modify:
             # Watchout for string comparison here:
             if repos_to_modify[repo] == "1":
-                print _("Repo '%s' is enabled for this system.") % repo.id
+                print _("Repository '%s' is enabled for this system.") % repo.id
             else:
-                print _("Repo '%s' is disabled for this system.") % repo.id
+                print _("Repository '%s' is disabled for this system.") % repo.id
         return rc
 
 
