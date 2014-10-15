@@ -27,6 +27,8 @@ import urllib
 
 from M2Crypto import SSL, httpslib
 from M2Crypto.SSL import SSLError
+from M2Crypto import m2
+
 from urllib import urlencode
 
 from config import initConfig
@@ -244,7 +246,11 @@ class ContentConnection(object):
         self.proxy_password = proxy_password or config.get('server', 'proxy_password') or info['proxy_password']
 
     def _request(self, request_type, handler, body=None):
-        context = SSL.Context("tlsv1")
+        # See note in Restlib._request
+        context = SSL.Context("sslv23")
+
+        # Disable SSLv2 and SSLv3 support to avoid poodles.
+        context.set_options(m2.SSL_OP_NO_SSLv2 | m2.SSL_OP_NO_SSLv3)
 
         self._load_ca_certificates(context)
 
@@ -416,7 +422,21 @@ class Restlib(object):
     # FIXME: can method be emtpty?
     def _request(self, request_type, method, info=None):
         handler = self.apihandler + method
-        context = SSL.Context("tlsv1")
+
+        # See M2Crypto/SSL/Context.py in m2crypto source and
+        # https://www.openssl.org/docs/ssl/SSL_CTX_new.html
+        # This ends up invoking SSLv23_method, which is the catch all
+        # "be compatible" protocol, even though it explicitly is not
+        # using sslv2. This will by default potentially include sslv3
+        # if not used with post-poodle openssl. If however, the server
+        # intends to not offer sslv3, it's workable.
+        #
+        # So this supports tls1.2, 1.1, 1.0, and/or sslv3 if supported.
+        context = SSL.Context("sslv23")
+
+        # Disable SSLv2 and SSLv3 support to avoid poodles.
+        context.set_options(m2.SSL_OP_NO_SSLv2 | m2.SSL_OP_NO_SSLv3)
+
 
         if self.insecure:  # allow clients to work insecure mode if required..
             context.post_connection_check = NoOpChecker()
