@@ -10,7 +10,7 @@
 
 
 Name: python-rhsm
-Version: 1.13.4
+Version: 1.13.5
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -71,6 +71,9 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Oct 16 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.13.5-1
+- Renamed the "containstext" parameter to "matches." (crog@redhat.com)
+
 * Thu Oct 16 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.13.4-1
 - Added support for contains_text to UEPConnection.getPoolsList
   (crog@redhat.com)
