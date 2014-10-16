@@ -1010,7 +1010,7 @@ class UEPConnection:
 
         return self.conn.request_put(method)
 
-    def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None, contains_text=None):
+    def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None, filter_string=None):
         """
         List pools for a given consumer or owner.
 
@@ -1036,8 +1036,8 @@ class UEPConnection:
         if active_on:
             method = "%s&activeon=%s" % (method,
                     self.sanitize(active_on.isoformat(), plus=True))
-        if contains_text:
-            method = "%s&containstext=%s" % (method, self.sanitize(contains_text, plus=True))
+        if filter_string:
+            method = "%s&matches=%s" % (method, self.sanitize(filter_string, plus=True))
         results = self.conn.request_get(method)
         return results
 
