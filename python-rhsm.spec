@@ -10,7 +10,7 @@
 
 
 Name: python-rhsm
-Version: 1.13.3
+Version: 1.13.4
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -71,6 +71,10 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Oct 16 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.13.4-1
+- Added support for contains_text to UEPConnection.getPoolsList
+  (crog@redhat.com)
+
 * Fri Oct 03 2014 Alex Wood <awood@redhat.com> 1.13.3-1
 - Make more use of setup.py. (alikins@redhat.com)
 
