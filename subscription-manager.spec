@@ -317,6 +317,7 @@ rm -rf %{buildroot}
 %{_datadir}/icons/hicolor/scalable/apps/*.svg
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
+%{_datadir}/appdata/subscription-manager-gui.appdata.xml
 
 %{_bindir}/rhsm-icon
 %{_sysconfdir}/xdg/autostart/rhsm-icon.desktop
