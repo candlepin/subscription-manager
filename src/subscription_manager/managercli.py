@@ -978,7 +978,7 @@ class RegisterCommand(UserPassCommand):
                                help=_("register the system even if it is already registered"))
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
                                help=_("activation key to use for registration (can be specified more than once)"))
-        self.parser.add_option("--servicelevel", dest="service_level",
+        self.parser.add_option("--service-level", "--servicelevel", dest="service_level",
                                help=_("system preference used when subscribing automatically, requires --auto-attach"))
 
     def _validate_options(self):
@@ -1006,7 +1006,7 @@ class RegisterCommand(UserPassCommand):
             print(_("Error: Must specify an activation key"))
             sys.exit(-1)
         elif (self.options.service_level and not self.autoattach):
-            print(_("Error: Must use --auto-attach with --servicelevel."))
+            print(_("Error: Must use --auto-attach with --service-level."))
             sys.exit(-1)
         elif (self.options.activation_keys and not self.options.org):
             print(_("Error: Must provide --org with activation keys."))
@@ -1134,8 +1134,7 @@ class RegisterCommand(UserPassCommand):
 
         if self.autoattach:
             if 'serviceLevel' not in consumer and self.options.service_level:
-                system_exit(-1, _("Error: The --servicelevel option is not supported "
-                                 "by the server. Did not complete your request."))
+                system_exit(-1, _("Error: The --service-level option is not supported by the server. Did not complete your request."))
             autosubscribe(self.cp, consumer['uuid'],
                     service_level=self.options.service_level)
 
@@ -1418,7 +1417,7 @@ class AttachCommand(CliCommand):
                                help=_("number of subscriptions to attach"))
         self.parser.add_option("--auto", action='store_true',
             help=_("automatically attach compatible subscriptions to this system"))
-        self.parser.add_option("--servicelevel", dest="service_level",
+        self.parser.add_option("--service-level", "--servicelevel", dest="service_level",
                                help=_("service level to apply to this system, requires --auto"))
         # re bz #864207
         _("All installed products are covered by valid entitlements.")
@@ -1451,7 +1450,7 @@ class AttachCommand(CliCommand):
                 self.options.quantity = int(self.options.quantity)
 
         if (self.options.service_level and not self.options.auto):
-            print(_("Error: Must use --auto with --servicelevel."))
+            print(_("Error: Must use --auto with --service-level."))
             sys.exit(-1)
 
     def _do_command(self):
@@ -1518,7 +1517,7 @@ class AttachCommand(CliCommand):
                     if self.options.service_level:
                         consumer = self.cp.getConsumer(self.identity.uuid)
                         if 'serviceLevel' not in consumer:
-                            system_exit(-1, _("Error: The --servicelevel option is not "
+                            system_exit(-1, _("Error: The --service-level option is not "
                                              "supported by the server. Did not "
                                              "complete your request."))
                     autosubscribe(self.cp, self.identity.uuid,
@@ -2142,7 +2141,7 @@ class ListCommand(CliCommand):
                                       % strftime("%Y-%m-%d", localtime())))
         self.parser.add_option("--consumed", action='store_true',
                                help=_("show the subscriptions being consumed by this system"))
-        self.parser.add_option("--servicelevel", dest="service_level",
+        self.parser.add_option("--service-level", "--servicelevel", dest="service_level",
                                help=_("shows only subscriptions matching the specified service level; only used with --available and --consumed"))
         self.parser.add_option("--no-overlap", action='store_true',
                                help=_("shows pools which provide products that are not already covered; only used with --available"))
@@ -2159,7 +2158,7 @@ class ListCommand(CliCommand):
             print _("Error: --ondate is only applicable with --available")
             sys.exit(-1)
         if self.options.service_level is not None and not (self.options.consumed or self.options.available):
-            print _("Error: --servicelevel is only applicable with --available or --consumed")
+            print _("Error: --service-level is only applicable with --available or --consumed")
             sys.exit(-1)
         if not (self.options.available or self.options.consumed):
             self.options.installed = True
