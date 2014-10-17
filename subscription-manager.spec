@@ -168,8 +168,7 @@ make -f Makefile CFLAGS="%{optflags}"
 
 %install
 rm -rf %{buildroot}
-make -f Makefile install VERSION=%{version}-%{release} PREFIX=%{buildroot} MANPATH=%{_mandir} %{?install_ostree}
-
+make -f Makefile install VERSION=%{version}-%{release} PREFIX=%{buildroot} MANPATH=%{_mandir} OS_VERSION=%{?fedora}%{?rhel} %{?install_ostree}
 
 desktop-file-validate \
         %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
