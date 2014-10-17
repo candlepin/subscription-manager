@@ -364,22 +364,26 @@ class TestRegisterCommand(TestCliProxyCommand):
             self.fail("Exception Raised")
 
     def test_keys_and_consumerid(self):
-        self._test_exception(["--consumerid", "22", "--activationkey", "key"])
+        self._test_exception(["--consumer-id", "22", "--activation-key", "key"])
+        self._test_exception(["--consumerid", "22", "--activation-key", "key"])
 
     def test_key_and_org(self):
+        self._test_no_exception(["--activation-key", "key", "--org", "org"])
         self._test_no_exception(["--activationkey", "key", "--org", "org"])
 
     def test_key_and_no_org(self):
+        self._test_exception(["--activation-key", "key"])
         self._test_exception(["--activationkey", "key"])
 
     def test_empty_string_key_and_org(self):
+        self._test_exception(["--activation-key=", "--org", "org"])
         self._test_exception(["--activationkey=", "--org", "org"])
 
     def test_keys_and_username(self):
-        self._test_exception(["--username", "bob", "--activationkey", "key"])
+        self._test_exception(["--username", "bob", "--activation-key", "key"])
 
     def test_keys_and_environments(self):
-        self._test_exception(["--environment", "JarJar", "--activationkey", "Binks"])
+        self._test_exception(["--environment", "JarJar", "--activation-key", "Binks"])
 
     def test_env_and_org(self):
         self._test_no_exception(["--env", "env", "--org", "org"])
@@ -1138,6 +1142,10 @@ class TestOverrideCommand(TestCliProxyCommand):
         self.assertTrue(self.cc.options.list)
 
     def test_list_by_default_with_options_from_super_class(self):
+        self.cc.main(["--proxy", "http://www.example.com", "--proxy-user", "foo", "--proxy-password", "bar"])
+        self.cc._validate_options()
+        self.assertTrue(self.cc.options.list)
+
         self.cc.main(["--proxy", "http://www.example.com", "--proxyuser", "foo", "--proxypassword", "bar"])
         self.cc._validate_options()
         self.assertTrue(self.cc.options.list)

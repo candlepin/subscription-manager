@@ -142,11 +142,11 @@ name has the format
 
 
 .TP
-.B --proxyuser=PROXYUSERNAME
+.B --proxy-user=PROXY_USERNAME
 Gives the username to use to authenticate to the HTTP proxy.
 
 .TP
-.B --proxypass=PROXYPASSWORD
+.B --proxy-password=PROXY_PASSWORD
 Gives the password to use to authenticate to the HTTP proxy.
 
 .SS REGISTER OPTIONS
@@ -163,11 +163,11 @@ Gives the username for the account which is registering the system; this user ac
 Gives the user account password.
 
 .TP
-.B --serverurl=SERVER_HOSTNAME
+.B --server-url=SERVER_HOSTNAME
 Passes the name of the subscription service with which to register the system. The default value, if this is not given, is the Customer Portal Subscription Management service,
 .B subscription.rhn.redhat.com.
 If there is an on-premise subscription service such as Subscription Asset Manager, this parameter can be used to submit the hostname of the subscription service. For Subscription Asset Manager, if the Subscription Manager tool is configured with the Subscription Asset Manager RPM, then the default value for the
-.B --serverurl
+.B --server-url
 parameter is for the on-premise Subscription Asset Manager server.
 
 
@@ -185,15 +185,15 @@ Sets the name of the system to register. This defaults to the hostname.
 
 
 .TP
-.B --consumerid=CONSUMERID
+.B --consumer-id=CONSUMERID
 References an existing system inventory ID to resume using a previous registration for this system. The ID is used as an inventory number for the system in the subscription management service database. If the system's identity is lost or corrupted, this option allows it to resume using its previous identity and subscriptions.
 
 .TP
-.B --activationkey=KEYS
+.B --activation-key=KEYS
 Gives a comma-separated list of product keys to use to redeem or apply specific subscriptions to the system. This is used for preconfigured systems which may already have products installed. Activation keys are issued by an on-premise subscription management service, such as Subscription Asset Manager.
 .IP
 When the
-.B --activationkey
+.B --activation-key
 option is used, it is not necessary to use the
 .B --username
 and
@@ -203,7 +203,7 @@ options, because the authentication information is implicit in the activation ke
 For example:
 .RS
 .nf
-subscription-manager register --org="IT Dept" --activationkey=1234abcd
+subscription-manager register --org="IT Dept" --activation-key=1234abcd
 .fi
 .RE
 
@@ -213,7 +213,7 @@ Automatically attaches compatible subscriptions to this system.
 
 
 .TP
-.B --servicelevel=LEVEL
+.B --service-level=LEVEL
 Sets the preferred service level to use with subscriptions added to the system. Service levels are commonly premium, standard, and none, though other levels may be available depending on the product and the contract. This preference can only be used in conjunction with the
 .B --auto-attach
 option, and then it is used as one of the factors for matching subscriptions.
@@ -235,7 +235,7 @@ meaning that there are multiple organizations within one customer unit. A system
 Registers the system to an environment within an organization.
 
 .TP
-.B --type=CONSUMERTYPE
+.B --type=CONSUMER_TYPE
 Sets the type of unit to register. Most units in the inventory will use the default value of
 .B system.
 For development or test systems, this can be
@@ -261,7 +261,7 @@ The
 command applies a specific subscription to the system.
 
 .TP
-.B --pool=POOLID
+.B --pool=POOL_ID
 Gives the ID for the subscriptions pool (collection of products) to attach to the system. This option is required, unless
 .B --auto
 is used.
@@ -277,7 +277,7 @@ subscriptions) to cover the number of sockets, guests, or other characteristics.
 Automatically attaches the best-matched compatible subscription or subscriptions to the system.
 
 .TP
-.B --servicelevel=LEVEL
+.B --service-level=LEVEL
 Sets the preferred service level to use with subscriptions attached to the system. Service levels are commonly premium, standard, and none, though other levels may be available depending on the product and the contract. This preference can only be used in conjunction with the
 .B --auto
 option, and then it is used as one of the factors for matching subscriptions.
@@ -305,7 +305,7 @@ The
 command removes a subscription from the system. (This does not uninstall the associated products.)
 
 .TP
-.B --serial=SERIALNUMBER
+.B --serial=SERIAL_NUMBER
 Gives the serial number of the subscription certificate for the specific product to remove from the system. Subscription certificates attached to a system are in a certificate, in
 .B /etc/pki/entitlement/<serial_number>.pem.
 To remove multiple subscriptions, use the
@@ -413,7 +413,7 @@ Lists all of the subscriptions currently attached to the system.
 Lists products which are currently installed on the system which may (or may not) have subscriptions associated with them, as well as products with attached subscriptions which may (or may not) be installed.
 
 .TP
-.B --ondate=YYYY-MM-DD
+.B --on-date=YYYY-MM-DD
 Sets the date to use to search for active and available subscriptions. The default (if not explicitly passed) is today's date; using a later date looks for subscriptions which will be active then. This is only used with the
 .B --available
 option.
@@ -506,11 +506,11 @@ Gives the username for the account to use to connect to the organization account
 Gives the user account password.
 
 .TP
-.B --serverurl=SERVER_HOSTNAME
+.B --server-url=SERVER_HOSTNAME
 Passes the name of the subscription service to use to list all available organizations. The \fBorgs\fP command will list all organizations for the specified service for which the user account is granted access. The default value, if this is not given, is the Customer Portal Subscription Management service,
 .B https://subscription.rhn.redhat.com:443.
 If there is an on-premise subscription service such as Subscription Asset Manager, this parameter can be used to submit the hostname of the subscription service, in the form \fI[protocol://]servername[:port][/prefix]\fP. For Subscription Asset Manager, if the Subscription Manager tool is configured with the Subscription Asset Manager RPM, then the default value for the
-.B --serverurl
+.B --server-url
 parameter is for the on-premise Subscription Asset Manager server.
 
 
@@ -524,11 +524,11 @@ command lists the available subscription-manager plugins.
 List the available subscription-manager plugins.
 
 .TP
-.B --listslots
+.B --list-slots
 List the available plugin slots
 
 .TP
-.B --listhooks
+.B --list-hooks
 List the available plugin slots and the hooks that handle them.
 
 .TP
@@ -646,7 +646,7 @@ command removes all of the subscription and identity data from the local system
 This means that any of the subscriptions applied to the system are not available for other systems to use. The
 .B clean
 command is useful in cases where the local subscription information is corrupted or lost somehow, and the system will be reregistered using the
-.B register --consumerid=EXISTING_ID
+.B register --consumer-id=EXISTING_ID
 command.
 
 .PP
@@ -726,11 +726,11 @@ Overall Status: Current
 
 
 .TP
-.B --ondate=DATE
+.B --on-date=DATE
 Shows the system status for a specific date \fIin the future\fP. The format of the date is \fIYYYY-MM-DD\fP.
 
 .nf
-[root@server ~]# subscription-manager status --ondate=2014-01-01
+[root@server ~]# subscription-manager status --on-date=2014-01-01
 +-------------------------------------------+
      System Status Details
 +-------------------------------------------+
@@ -798,11 +798,11 @@ subscription-manager register --username=admin --password=secret
 With on-premise subscription services, such as Subscription Asset Manager, the infrastructure is more complex. The local administrator can define independent groups called
 .I organizations
 which represent physical or organizational divisions (\fB--org\fP). Those organizations can be subdivided into \fIenvironments\fP (\fB--environment\fP).
-Optionally, the information about what subscription service (\fB--serverurl\fP) and content delivery network (\fB--baseurl\fP) to use for the system registration can also be passed (which overrides the Red Hat Subscription Manager settings). The server and content URLs are usually configured in the Subscription Manager configuration before registering a system.
+Optionally, the information about what subscription service (\fB--server-url\fP) and content delivery network (\fB--baseurl\fP) to use for the system registration can also be passed (which overrides the Red Hat Subscription Manager settings). The server and content URLs are usually configured in the Subscription Manager configuration before registering a system.
 
 .nf
 subscription-manager register --username=admin --password=secret
---org="IT Dept" --environment="local dev" --serverurl=local-cloudforms.example.com --baseurl=https://local-cloudforms.example.com:8088/cfse
+--org="IT Dept" --environment="local dev" --server-url=local-cloudforms.example.com --baseurl=https://local-cloudforms.example.com:8088/cfse
 .fi
 
 
@@ -828,7 +828,7 @@ If a system is registered and then somehow its subscription information is lost 
 
 .nf
 subscription-manager register --username=admin
---password=secret --consumerid=1234abcd
+--password=secret --consumer-id=1234abcd
 .fi
 
 .PP
@@ -877,15 +877,15 @@ subscription-manager register --username=admin --password=secret
 
 .PP
 Auto-attach also supports an option to set a preferred service level with the selected subscriptions, the
-.B --servicelevel
+.B --service-level
 option. In this case, the
-.B --servicelevel
+.B --service-level
 option sets a preference that helps the auto-attach process select appropriate subscriptions. For example, if the preferred service level for a production server is premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the auto-attach process selects the subscription which offers a premium service level.
 
 .RS
 .nf
 subscription-manager register --username=admin --password=secret
---auto-attach --servicelevel=premium
+--auto-attach --service-level=premium
 .fi
 .RE
 
@@ -901,12 +901,12 @@ that subscription (meaning, it removes that subscription so that another system 
 .PP The
 .B list
 command shows you what subscriptions are available specifically to the system (meaning subscriptions which are active, have available quantities, and match the hardware and architecture) or all subscriptions for the organization. Using the
-.B --ondate
+.B --on-date
 option shows subscriptions that are or will be active at a specific time (otherwise, it shows subscriptions which are active today).
 
 .RS
 .nf
-subscription-manager list --available --ondate=2012-01-31
+subscription-manager list --available --on-date=2012-01-31
 +-------------------------------------------+
     Available Subscriptions
 +-------------------------------------------+
@@ -970,14 +970,14 @@ subscription-manager attach --auto
 
 .PP
 Auto-attach also supports an option to set a preferred service level with the selected subscriptions, the
-.B --servicelevel
+.B --service-level
 option. In this case, the
-.B --servicelevel
+.B --service-level
 option sets a preference that helps the auto-attach process select appropriate subscriptions. For example, if the preferred service level for a production server is premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the auto-attach process selects the subscription which offers a premium subscription.
 
 .RS
 .nf
-subscription-manager attach --auto --servicelevel=premium
+subscription-manager attach --auto --service-level=premium
 .fi
 .RE
 
@@ -1105,7 +1105,7 @@ tool can be run as a post-install script as part of the kickstart installation p
 .RS
 .nf
 %post --log=/root/ks-post.log
-/usr/sbin/subscription-manager register --username admin --password secret --org 'east colo' --auto-attach --servicelevel=premium --force
+/usr/sbin/subscription-manager register --username admin --password secret --org 'east colo' --auto-attach --service-level=premium --force
 .fi
 .RE
 

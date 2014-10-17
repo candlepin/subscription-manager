@@ -5,8 +5,8 @@
 #
 
 # options common to all subcommands (+ 3rd level opts for simplicity)
-_subscription_manager_common_opts="-h --help --proxy --proxyuser --proxypassword"
-_subscription_manager_common_url_opts="--insecure --serverurl"
+_subscription_manager_common_opts="-h --help --proxy --proxy-user --proxy-password"
+_subscription_manager_common_url_opts="--insecure --server-url"
 # complete functions for subcommands ($1 - current opt, $2 - previous opt)
 
 _subscription_manager_auto_attach()
@@ -27,7 +27,7 @@ _subscription_manager_attach()
           COMPREPLY=($(compgen -W "${POOLS}" -- ${1}))
           return 0
   esac
-  local opts="--auto --pool --quantity --servicelevel
+  local opts="--auto --pool --quantity --service-level
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -101,7 +101,7 @@ _subscription_manager_import()
 _subscription_manager_list()
 {
   local opts="--all --available --consumed --installed
-              --ondate --servicelevel
+              --on-date --service-level
               --match-installed --no-overlap
               --matches
               ${_subscription_manager_common_opts}"
@@ -125,7 +125,7 @@ _subscription_manager_repo_override()
 
 _subscription_manager_plugins()
 {
-  local opts="--list --listhooks --listslots --verbose
+  local opts="--list --list-hooks --list-slots --verbose
               -h --help"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -146,9 +146,9 @@ _subscription_manager_refresh()
 
 _subscription_manager_register()
 {
-  local opts="--activationkey --auto-attach --autosubscribe --baseurl --consumerid
+  local opts="--activation-key --auto-attach --autosubscribe --baseurl --consumer-id
               --environment --force --name --org --password --release
-              --servicelevel --type --username
+              --service-level --type --username
               ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
@@ -181,7 +181,7 @@ _subscription_manager_service_level()
 
 _subscription_manager_status()
 {
-  local opts="${_subscription_manager_common_opts} --ondate"
+  local opts="${_subscription_manager_common_opts} --on-date"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
