@@ -4,6 +4,7 @@ import unittest
 import re
 import sys
 import socket
+import os
 
 # for monkey patching config
 import stubs
@@ -258,11 +259,11 @@ class TestCliCommand(SubManFixture):
         sys.argv = ["subscription-manager", "version"]
         mock_in_container.return_value = True
         err_msg = 'subscription-manager is disabled when running inside a container.'\
-                  ' Please refer to your host system for subscription management.\n'
+                  ' Please refer to your host system for subscription management.\n\n'
         try:
             self.cc.main()
         except SystemExit, e:
-            self.assertEquals(-1, e.code)
+            self.assertEquals(os.EX_CONFIG, e.code)
         self.assertEquals(err_msg, sys.stderr.buffer)
 
 
@@ -352,7 +353,7 @@ class TestRegisterCommand(TestCliProxyCommand):
             self.cc.main(args)
             self.cc._validate_options()
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_USAGE)
         else:
             self.fail("No Exception Raised")
 
@@ -935,7 +936,7 @@ class TestAttachCommand(TestCliProxyCommand):
             self.cc.main(["--auto", "--quantity", arg])
             self.cc._validate_options()
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_USAGE)
         else:
             self.fail("No Exception Raised")
 
@@ -1016,9 +1017,9 @@ class TestImportCertCommand(TestCliCommand):
             # there seems to be an optparse issue
             # here that depends on version, on f14
             # we get sysexit with return code 2  from main, on f15, we
-            # get a -1 from validate_options
+            # get os.EX_USAGE from validate_options
             # i18n_optparse returns 2 on no args
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_USAGE)
 
 
 class TestServiceLevelCommand(TestCliProxyCommand):
@@ -1041,7 +1042,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
             self.cc.main(["--org", "one"])
             self.cc._validate_options()
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_USAGE)
 
     def test_org_requires_list_good(self):
         self.cc.main(["--org", "one", "--list"])
@@ -1051,7 +1052,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         try:
             self.cc.set_service_level('JARJAR')
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_UNAVAILABLE)
         else:
             self.fail("No Exception Raised")
 

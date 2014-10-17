@@ -62,8 +62,8 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 cfg = rhsm.config.initConfig()
 
-
-NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
+ERR_NOT_REGISTERED_MSG = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
+ERR_NOT_REGISTERED_CODE = 1
 
 # Translates the cert sorter status constants:
 STATUS_MAP = {
@@ -306,13 +306,9 @@ class CliCommand(AbstractCLICommand):
     def _do_command(self):
         pass
 
-    def _sys_exit(self, exit_code):
-        sys.exit(exit_code)
-
     def assert_should_be_registered(self):
         if not self.is_registered():
-            print(NOT_REGISTERED)
-            self._sys_exit(-1)
+            system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
 
     def is_registered(self):
         self.identity = inj.require(inj.IDENTITY)
@@ -357,8 +353,7 @@ class CliCommand(AbstractCLICommand):
 
         # TODO: For now, we disable the CLI entirely. We may want to allow some commands in the future.
         if rhsm.config.in_container():
-            sys.stderr.write(_("subscription-manager is disabled when running inside a container. Please refer to your host system for subscription management.\n"))
-            self._sys_exit(-1)
+            system_exit(os.EX_CONFIG, _("subscription-manager is disabled when running inside a container. Please refer to your host system for subscription management.\n"))
 
         config_changed = False
 
@@ -374,7 +369,7 @@ class CliCommand(AbstractCLICommand):
         if self.args:
             for arg in self.args:
                 print _("cannot parse argument: %s") % arg
-            self._sys_exit(-1)
+            system_exit(os.EX_USAGE)
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             cfg.set("server", "insecure", "1")
@@ -390,17 +385,14 @@ class CliCommand(AbstractCLICommand):
                 handle_exception("Error parsing serverurl:", e)
             # this trys to actually connect to the server and ping it
             try:
-                if not is_valid_server_info(self.server_hostname,
-                                            self.server_port,
-                                            self.server_prefix):
-                    print _("Unable to reach the server at %s:%s%s") % \
-                            (self.server_hostname,
-                             self.server_port,
-                             self.server_prefix)
-                    self._sys_exit(-1)
+                if not is_valid_server_info(self.server_hostname, self.server_port, self.server_prefix):
+                    system_exit(os.EX_UNAVAILABLE, _("Unable to reach the server at %s:%s%s") % (
+                        self.server_hostname,
+                        self.server_port,
+                        self.server_prefix
+                    ))
             except MissingCaCertException:
-                print _("Error: CA certificate for subscription service has not been installed.")
-                self._sys_exit(-1)
+                system_exit(os.EX_CONFIG, _("Error: CA certificate for subscription service has not been installed."))
 
             cfg.set("server", "hostname", self.server_hostname)
             cfg.set("server", "port", self.server_port)
@@ -599,7 +591,7 @@ class RefreshCommand(CliCommand):
             print (_("All local data refreshed"))
         except connection.RestlibException, re:
             log.error(re)
-            system_exit(-1, re.msg)
+            system_exit(os.EX_SOFTWARE, re.msg)
         except Exception, e:
             handle_exception(_("Unable to perform refresh due to the following exception: %s") % e, e)
 
@@ -621,12 +613,9 @@ class IdentityCommand(UserPassCommand):
     def _validate_options(self):
         self.assert_should_be_registered()
         if self.options.force and not self.options.regenerate:
-            print(_("--force can only be used with --regenerate"))
-            sys.exit(-1)
-        if (self.options.username or self.options.password) and \
-                not self.options.force:
-            print(_("--username and --password can only be used with --force"))
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("--force can only be used with --regenerate"))
+        if (self.options.username or self.options.password) and not self.options.force:
+            system_exit(os.EX_USAGE, _("--username and --password can only be used with --force"))
 
     def _do_command(self):
         # get current consumer identity
@@ -681,7 +670,7 @@ class IdentityCommand(UserPassCommand):
         except connection.RestlibException, re:
             log.exception(re)
             log.error(u"Error: Unable to generate a new identity for the system: %s" % re)
-            system_exit(-1, re.msg)
+            system_exit(os.EX_SOFTWARE, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to generate a new identity for the system"), e)
 
@@ -717,7 +706,7 @@ class OwnersCommand(UserPassCommand):
         except connection.RestlibException, re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve org list from server: %s" % re)
-            system_exit(-1, re.msg)
+            system_exit(os.EX_SOFTWARE, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve org list from server"), e)
 
@@ -726,8 +715,7 @@ class EnvironmentsCommand(OrgCommand):
 
     def __init__(self):
         shortdesc = _("Display the environments available for a user")
-        self._org_help_text = \
-            _("specify organization for environment list, using organization key")
+        self._org_help_text = _("specify organization for environment list, using organization key")
 
         super(EnvironmentsCommand, self).__init__("environments", shortdesc,
                                                   False)
@@ -760,7 +748,7 @@ class EnvironmentsCommand(OrgCommand):
         except connection.RestlibException, re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve environment list from server: %s" % re)
-            system_exit(-1, re.msg)
+            system_exit(os.EX_SOFTWARE, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
@@ -771,8 +759,7 @@ class AutohealCommand(CliCommand):
         self.uuid = inj.require(inj.IDENTITY).uuid
 
         shortdesc = _("Set if subscriptions are attached on a schedule (default of daily)")
-        self._org_help_text = \
-            _("specify whether to enable or disable auto-attaching of subscriptions")
+        self._org_help_text = _("specify whether to enable or disable auto-attaching of subscriptions")
         super(AutohealCommand, self).__init__("auto-attach", shortdesc,
                                                 False)
 
@@ -788,9 +775,8 @@ class AutohealCommand(CliCommand):
         self._show(autoheal)
 
     def _validate_options(self):
-        if not self.uuid and not self.is_registered():
-            print(NOT_REGISTERED)
-            sys.exit(-1)
+        if not self.uuid:
+            self.assert_should_be_registered()
 
     def _show(self, autoheal):
         if autoheal:
@@ -812,8 +798,7 @@ class ServiceLevelCommand(OrgCommand):
     def __init__(self):
 
         shortdesc = _("Manage service levels for this system")
-        self._org_help_text = \
-            _("specify an organization when listing available service levels using the organization key, only used with --list")
+        self._org_help_text = _("specify an organization when listing available service levels using the organization key, only used with --list")
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
                                                   False)
 
@@ -833,8 +818,7 @@ class ServiceLevelCommand(OrgCommand):
     def _set_service_level(self, service_level):
         consumer = self.cp.getConsumer(self.identity.uuid)
         if 'serviceLevel' not in consumer:
-            system_exit(-1, _("Error: The service-level command is not supported "
-                             "by the server."))
+            system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
         self.cp.updateConsumer(self.identity.uuid, service_level=service_level)
 
     def _validate_options(self):
@@ -850,19 +834,15 @@ class ServiceLevelCommand(OrgCommand):
            not self.options.unset:
             self.options.show = True
 
-        if self.options.org and \
-           not self.options.list:
-            print(_("Error: --org is only supported with the --list option"))
-            sys.exit(-1)
+        if self.options.org and not self.options.list:
+            system_exit(os.EX_USAGE, _("Error: --org is only supported with the --list option"))
 
         if not self.is_registered():
             if self.options.list:
                 if not (self.options.username and self.options.password):
-                    print(_("Error: you must register or specify --username and --password to list service levels"))
-                    sys.exit(-1)
+                    system_exit(os.EX_USAGE, _("Error: you must register or specify --username and --password to list service levels"))
             else:
-                print(NOT_REGISTERED)
-                sys.exit(-1)
+                system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
 
     def _do_command(self):
         self._validate_options()
@@ -892,7 +872,7 @@ class ServiceLevelCommand(OrgCommand):
         except connection.RestlibException, re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve service levels: %s" % re)
-            system_exit(-1, re.msg)
+            system_exit(os.EX_SOFTWARE, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
 
@@ -910,8 +890,7 @@ class ServiceLevelCommand(OrgCommand):
     def show_service_level(self):
         consumer = self.cp.getConsumer(self.identity.uuid)
         if 'serviceLevel' not in consumer:
-            system_exit(-1, _("Error: The service-level command is not supported by "
-                             "the server."))
+            system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
         service_level = consumer['serviceLevel'] or ""
         if service_level:
             print(_("Current service level: %s") % service_level)
@@ -919,9 +898,6 @@ class ServiceLevelCommand(OrgCommand):
             print _("Service level preference not set")
 
     def list_service_levels(self):
-        not_supported = _("Error: The service-level command is not supported by "
-                          "the server.")
-
         org_key = self.options.org
         if not org_key:
             if self.is_registered():
@@ -940,11 +916,10 @@ class ServiceLevelCommand(OrgCommand):
             else:
                 print _("This org does not have any subscriptions with service levels.")
         except connection.RemoteServerException, e:
-            system_exit(-1, not_supported)
+            system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
         except connection.RestlibException, e:
-            if e.code == 404 and\
-                e.msg.find('/servicelevels') > 0:
-                system_exit(-1, not_supported)
+            if e.code == 404 and e.msg.find('/servicelevels') > 0:
+                system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
             else:
                 raise e
 
@@ -984,33 +959,24 @@ class RegisterCommand(UserPassCommand):
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
         if self.is_registered() and not self.options.force:
-            print(_("This system is already registered. Use --force to override"))
-            sys.exit(1)
+            system_exit(os.EX_USAGE, _("This system is already registered. Use --force to override"))
         elif (self.options.consumername == ''):
-            print(_("Error: system name can not be empty."))
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: system name can not be empty."))
         elif (self.options.username and self.options.activation_keys):
-            print(_("Error: Activation keys do not require user credentials."))
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: Activation keys do not require user credentials."))
         elif (self.options.consumerid and self.options.activation_keys):
-            print(_("Error: Activation keys can not be used with previously registered IDs."))
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: Activation keys can not be used with previously registered IDs."))
         elif (self.options.environment and self.options.activation_keys):
-            print(_("Error: Activation keys do not allow environments to be specified."))
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: Activation keys do not allow environments to be specified."))
         elif (self.autoattach and self.options.activation_keys):
-            print(_("Error: Activation keys cannot be used with --auto-attach."))
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: Activation keys cannot be used with --auto-attach."))
         #746259: Don't allow the user to pass in an empty string as an activation key
         elif (self.options.activation_keys and '' in self.options.activation_keys):
-            print(_("Error: Must specify an activation key"))
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: Must specify an activation key"))
         elif (self.options.service_level and not self.autoattach):
-            print(_("Error: Must use --auto-attach with --servicelevel."))
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: Must use --auto-attach with --servicelevel."))
         elif (self.options.activation_keys and not self.options.org):
-            print(_("Error: Must provide --org with activation keys."))
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: Must provide --org with activation keys."))
 
     def persist_server_options(self):
         """
@@ -1245,8 +1211,8 @@ class UnRegisterCommand(CliCommand):
 
     def _do_command(self):
         if not self.is_registered():
-            print(_("This system is currently not registered."))
-            sys.exit(1)
+            # TODO: Should this use the standard NOT_REGISTERED message?
+            system_exit(ERR_NOT_REGISTERED_CODE, _("This system is currently not registered."))
 
         try:
             managerlib.unregister(self.cp, self.identity.uuid)
@@ -1291,8 +1257,7 @@ class RedeemCommand(CliCommand):
 
     def _validate_options(self):
         if not self.options.email:
-            print(_("Error: This command requires that you specify an email address with --email."))
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: This command requires that you specify an email address with --email."))
 
     def _do_command(self):
         """
@@ -1435,24 +1400,20 @@ class AttachCommand(CliCommand):
 
     def _validate_options(self):
         if not (self.options.pool or self.options.auto):
-            print _("Error: This command requires that you specify a pool with --pool or use --auto.")
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: This command requires that you specify a pool with --pool or use --auto."))
         if self.options.pool and self.options.auto:
-            print _("Error: Only one of --pool or --auto may be used with this command.")
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: Only one of --pool or --auto may be used with this command."))
 
         # Quantity must be a positive integer
         quantity = self.options.quantity
         if self.options.quantity:
             if not valid_quantity(quantity):
-                print _("Error: Quantity must be a positive integer.")
-                sys.exit(-1)
+                system_exit(os.EX_USAGE, _("Error: Quantity must be a positive integer."))
             else:
                 self.options.quantity = int(self.options.quantity)
 
         if (self.options.service_level and not self.options.auto):
-            print(_("Error: Must use --auto with --servicelevel."))
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: Must use --auto with --servicelevel."))
 
     def _do_command(self):
         """
@@ -1659,8 +1620,7 @@ class RemoveCommand(CliCommand):
                     for ent in self.entitlement_dir.list():
                         if str(ent.serial) in self.options.serials:
                             ent.delete()
-                            print _("Subscription with serial number %s removed from this system") \
-                                    % str(ent.serial)
+                            print _("Subscription with serial number %s removed from this system") % str(ent.serial)
                             count = count + 1
                     if count == 0:
                         return_code = 1
@@ -1743,8 +1703,7 @@ class ImportCertCommand(CliCommand):
 
     def _validate_options(self):
         if not self.options.certificate_file:
-            print _("Error: This command requires that you specify a certificate with --certificate.")
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: This command requires that you specify a certificate with --certificate."))
 
     def _do_command(self):
         self._validate_options()
@@ -2045,11 +2004,7 @@ class ConfigCommand(CliCommand):
                             too_many = True
                             break
             if too_many:
-                sys.stderr.write(
-                    _("Error: --list should not be used with any other options for setting or removing configurations.")
-                )
-                sys.stderr.write("\n")
-                sys.exit(-1)
+                system_exit(os.EX_USAGE, _("Error: --list should not be used with any other options for setting or removing configurations."))
 
         if not (self.options.list or self.options.remove):
             has = False
@@ -2064,11 +2019,8 @@ class ConfigCommand(CliCommand):
         if self.options.remove:
             for r in self.options.remove:
                 if not "." in r:
-                    sys.stderr.write(
-                        _("Error: configuration entry designation for removal must be of format [section.name]")
-                    )
-                    sys.stderr.write("\n")
-                    sys.exit(-1)
+                    system_exit(os.EX_USAGE, _("Error: configuration entry designation for removal must be of format [section.name]"))
+
                 section = r.split('.')[0]
                 name = r.split('.')[1]
                 found = False
@@ -2077,8 +2029,7 @@ class ConfigCommand(CliCommand):
                         if name == key:
                             found = True
                 if not found:
-                    sys.stderr.write(_("Error: Section %s and name %s does not exist.") % (section, name))
-                    sys.exit(-1)
+                    system_exit(os.EX_CONFIG, _("Error: Section %s and name %s does not exist.") % (section, name))
 
     def _do_command(self):
         self._validate_options()
@@ -2153,22 +2104,17 @@ class ListCommand(CliCommand):
 
     def _validate_options(self):
         if (self.options.all and not self.options.available):
-            print _("Error: --all is only applicable with --available")
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: --all is only applicable with --available"))
         if (self.options.on_date and not self.options.available):
-            print _("Error: --ondate is only applicable with --available")
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: --ondate is only applicable with --available"))
         if self.options.service_level is not None and not (self.options.consumed or self.options.available):
-            print _("Error: --servicelevel is only applicable with --available or --consumed")
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: --servicelevel is only applicable with --available or --consumed"))
         if not (self.options.available or self.options.consumed):
             self.options.installed = True
         if not self.options.available and self.options.match_installed:
-            print _("Error: --match-installed is only applicable with --available")
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: --match-installed is only applicable with --available"))
         if self.options.no_overlap and not self.options.available:
-            print _("Error: --no-overlap is only applicable with --available")
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: --no-overlap is only applicable with --available"))
 
     def _do_command(self):
         """
@@ -2379,18 +2325,14 @@ class OverrideCommand(CliCommand):
     def _validate_options(self):
         if self.options.additions or self.options.removals:
             if not self.options.repos:
-                print _("Error: You must specify a repository to modify")
-                sys.exit(-1)
+                system_exit(os.EX_USAGE, _("Error: You must specify a repository to modify"))
             if self.options.remove_all or self.options.list:
-                print _("Error: You may not use --add or --remove with --remove-all and --list")
-                sys.exit(-1)
+                system_exit(os.EX_USAGE, _("Error: You may not use --add or --remove with --remove-all and --list"))
         if self.options.list and self.options.remove_all:
-            print _("Error: You may not use --list with --remove-all")
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: You may not use --list with --remove-all"))
         if self.options.repos and not (self.options.list or self.options.additions
                 or self.options.removals or self.options.remove_all):
-            print _("Error: The --repo option must be used with --list or --add or --remove.")
-            sys.exit(-1)
+            system_exit(os.EX_USAGE, _("Error: The --repo option must be used with --list or --add or --remove."))
         # If no relevant options were given, just show a list
         if not (self.options.repos or self.options.additions
                 or self.options.removals or self.options.remove_all or self.options.list):
@@ -2402,7 +2344,7 @@ class OverrideCommand(CliCommand):
         self.assert_should_be_registered()
 
         if not self.cp.supports_resource('content_overrides'):
-            system_exit(-1, _("Error: The 'repo-override' command is not supported by the server."))
+            system_exit(os.EX_UNAVAILABLE, _("Error: The 'repo-override' command is not supported by the server."))
 
         # update entitlement certificates if necessary. If we do have new entitlements
         # CertLib.update() will call RepoActionInvoker.update().
@@ -2429,8 +2371,7 @@ class OverrideCommand(CliCommand):
                 if ex.code == 400:
                     # black listed overrides specified.
                     # Print message and return a less severe code.
-                    print str(ex)
-                    sys.exit(1)
+                    system_exit(1, ex)
                 else:
                     raise ex
 
@@ -2508,33 +2449,35 @@ class StatusCommand(CliCommand):
                 on_date = datetime.datetime(
                         *(strptime(self.options.on_date, '%Y-%m-%d')[0:6]))
                 if on_date.date() < datetime.datetime.now().date():
-                    print (_("Past dates are not allowed"))
-                    sys.exit(1)
+                    system_exit(os.EX_USAGE, _("Past dates are not allowed"))
                 self.sorter = ComplianceManager(on_date)
             except Exception:
-                print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
-                sys.exit(1)
+                system_exit(os.EX_DATAERR, _("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
         else:
             self.sorter = inj.require(inj.CERT_SORTER)
+
+        result = 0
 
         print("+-------------------------------------------+")
         print("   " + _("System Status Details"))
         print("+-------------------------------------------+")
 
-        if not self.is_registered():
+        if self.is_registered():
+            overall_status = self.sorter.get_system_status()
+            reasons = self.sorter.reasons.get_name_message_map()
+            print(_("Overall Status: %s\n") % overall_status)
+
+            columns = get_terminal_width()
+            for name in reasons:
+                print format_name(name + ':', 0, columns)
+                for message in reasons[name]:
+                    print '- %s' % format_name(message, 2, columns)
+                print ''
+        else:
             print(_("Overall Status: %s\n") % _("Unknown"))
-            return
+            result = 1
 
-        overall_status = self.sorter.get_system_status()
-        reasons = self.sorter.reasons.get_name_message_map()
-        print(_("Overall Status: %s\n") % overall_status)
-
-        columns = get_terminal_width()
-        for name in reasons:
-            print format_name(name + ':', 0, columns)
-            for message in reasons[name]:
-                print '- %s' % format_name(message, 2, columns)
-            print ''
+        return result
 
 
 class ManagerCLI(CLI):
