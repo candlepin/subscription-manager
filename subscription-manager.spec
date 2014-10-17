@@ -296,7 +296,7 @@ rm -rf %{buildroot}
 %{_mandir}/man8/rhsmcertd.8*
 %{_mandir}/man8/rct.8*
 %{_mandir}/man8/rhsm-debug.8*
-%{_mandir}/man8/rhsm.conf.8*
+%{_mandir}/man5/rhsm.conf.5*
 %doc LICENSE
 
 
