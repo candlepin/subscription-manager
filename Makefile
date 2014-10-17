@@ -183,6 +183,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d $(PREFIX)/etc/logrotate.d
 	install -d $(PREFIX)/etc/security/console.apps
 	install -d $(PREFIX)/etc/yum/pluginconf.d/
+	install -d $(PREFIX)/$(INSTALL_DIR)/man/man5/
 	install -d $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -d $(PREFIX)/$(INSTALL_DIR)/applications
 	install -d $(PREFIX)/var/log/rhsm
@@ -297,6 +298,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -m 644 man/subscription-manager-gui.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rct.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rhsm-debug.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
+	install -m 644 man/rhsm.conf.5 $(PREFIX)/$(INSTALL_DIR)/man/man5/
 
 	install -m 644 etc-conf/rhsm-icon.desktop \
 		$(PREFIX)/etc/xdg/autostart;\
