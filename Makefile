@@ -101,6 +101,7 @@ install-conf:
 	install -m 644 etc-conf/rhn-migrate-classic-to-rhsm.completion.sh $(PREFIX)/etc/bash_completion.d/rhn-migrate-classic-to-rhsm
 	install -m 644 etc-conf/rhsm-icon.completion.sh $(PREFIX)/etc/bash_completion.d/rhsm-icon
 	install -m 644 etc-conf/rhsmcertd.completion.sh $(PREFIX)/etc/bash_completion.d/rhsmcertd
+	install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(PREFIX)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml
 
 install-help-files:
 	install -d $(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager
@@ -203,6 +204,7 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d $(PREFIX)/usr/share/icons/hicolor/256x256/apps
 	install -d $(PREFIX)/usr/share/icons/hicolor/scalable/apps
 	install -d $(PREFIX)/usr/share/rhsm/subscription_manager/gui/firstboot
+	install -d $(PREFIX)/usr/share/appdata
 
 	# Adjust firstboot screen location for RHEL 6:
 	if [ $(OS_VERSION) -le 6 ]; then \
