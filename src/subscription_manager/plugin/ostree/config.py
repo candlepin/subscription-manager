@@ -14,6 +14,7 @@
 #
 
 import logging
+import os
 import re
 
 # iniparse.utils isn't in old versions
@@ -110,6 +111,14 @@ class KeyFileConfigParser(config.RhsmConfigParser):
 
         self.log_contents()
         log.debug("KeyFile.save %s" % self.config_file)
+
+        # create /ostree/repo/config if /ostree/repo exists
+        dir_name = os.path.dirname(self.config_file)
+        if not os.path.exists(dir_name):
+            log.warn("%s does not exist, so unable to save %s",
+                     dir_name, self.config_file)
+            return
+
         super(KeyFileConfigParser, self).save()
 
     def log_contents(self):
