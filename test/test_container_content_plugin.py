@@ -81,6 +81,21 @@ class TestKeyPair(fixture.SubManFixture):
         self.assertEquals("9000.1.2014-a.cert", kp.dest_cert_filename)
         self.assertEquals("9000.1.2014-a-key.key", kp.dest_key_filename)
 
+    def test_equality(self):
+        kp = KeyPair("/etc/pki/entitlement/9000.pem",
+            "/etc/pki/entitlement/9000-key.pem")
+        kp2 = KeyPair("/etc/pki/entitlement/9000.pem",
+            "/etc/pki/entitlement/9000-key.pem")
+        self.assertEqual(kp, kp2)
+
+    def test_inequality(self):
+        kp = KeyPair("/etc/pki/entitlement/9000.pem",
+            "/etc/pki/entitlement/9000-key.pem")
+        kp2 = KeyPair("/etc/pki/entitlement/9001.pem",
+            "/etc/pki/entitlement/9001-key.pem")
+        self.assertNotEqual(kp, kp2)
+        self.assertNotEqual(kp, "somestring")
+
 
 class TestContainerCertDir(fixture.SubManFixture):
 
