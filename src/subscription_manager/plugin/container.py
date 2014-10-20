@@ -121,9 +121,12 @@ class ContainerCertDir(object):
 
     def sync(self, expected_keypairs):
         log.debug("Syncing container certificates to %s" % self.path)
+        if not os.path.exists(self.DEFAULT_PATH):
+            log.warn("Docker cert directory does not exist, is docker installed?")
+            return
         if not os.path.exists(self.path):
             log.info("Container cert directory does not exist, creating it.")
-            os.makedirs(self.path)
+            os.mkdir(self.path)
 
         # Build up the list of certificates that should be in the
         # directory. We'll use this later to prune out any that need to
