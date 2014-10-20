@@ -103,6 +103,7 @@ _subscription_manager_list()
   local opts="--all --available --consumed --installed
               --ondate --servicelevel
               --match-installed --no-overlap
+              --matches
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
