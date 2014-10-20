@@ -140,15 +140,20 @@ class ContainerCertDir(object):
                 keypair.dest_key_filename)
             expected_files.append(keypair.dest_cert_filename)
             expected_files.append(keypair.dest_key_filename)
+            # WARNING: We assume that matching filenames must be the same
+            # certificate and key. Because we use serials in the filename, this
+            # should be safe.
             if not os.path.exists(full_cert_path):
                 log.info("Copying: %s -> %s" %
                     (keypair.cert_path, full_cert_path))
                 shutil.copyfile(keypair.cert_path, full_cert_path)
+                shutil.copymode(keypair.cert_path, full_cert_path)
                 self.report.added.append(full_cert_path)
             if not os.path.exists(full_key_path):
                 log.info("Copying: %s -> %s" %
                     (keypair.key_path, full_key_path))
                 shutil.copyfile(keypair.key_path, full_key_path)
+                shutil.copymode(keypair.key_path, full_key_path)
                 self.report.added.append(full_key_path)
 
         self._prune_old_certs(expected_files)
