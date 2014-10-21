@@ -13,6 +13,7 @@
 
 import mock
 
+import commands
 import fixture
 import tempfile
 import shutil
@@ -23,19 +24,33 @@ from subscription_manager.plugin.container import \
     ContainerContentUpdateActionCommand, KeyPair, ContainerCertDir, \
     ContainerUpdateReport
 
-DUMMY_CERT_LOCATION = "/dummy/certs"
+DUMMY_CERT_LOCATION = "dummy/certs"
 
 
 class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
+
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp(prefix='subman-container-plugin-tests')
+        self.src_certs_dir = os.path.join(self.temp_dir, "etc/pki/entitlement")
+        os.makedirs(self.src_certs_dir)
+
+        # This is where we'll setup for container certs:
+        self.host_cert_dir = os.path.join(self.temp_dir,
+            "etc/docker/certs.d/")
+        os.makedirs(self.host_cert_dir)
+
+    def tearDown(self):
+        shutil.rmtree(self.temp_dir)
 
     def _create_content(self, label, cert):
         return Content("containerImage", label, label, cert=cert)
 
     def _mock_cert(self, base_filename):
         cert = mock.Mock()
-        cert.path = "%s/%s.pem" % (DUMMY_CERT_LOCATION, base_filename)
-        cert.key_path.return_value = "%s/%s-key.pem" %  \
-            (DUMMY_CERT_LOCATION, base_filename)
+        cert.path = os.path.join(self.temp_dir, DUMMY_CERT_LOCATION,
+            "%s.pem" % base_filename)
+        cert.key_path.return_value = os.path.join(self.temp_dir, DUMMY_CERT_LOCATION,
+            "%s-key.pem" % base_filename)
         return cert
 
     def test_unique_paths_with_dupes(self):
@@ -53,12 +68,34 @@ class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
 
         contents = [content1, content2, content3, content1_dupe,
             content1_dupe2]
-        cmd = ContainerContentUpdateActionCommand(None, 'cdn.example.org')
+        cmd = ContainerContentUpdateActionCommand(None, ['cdn.example.org'],
+            self.host_cert_dir)
         cert_paths = cmd._get_unique_paths(contents)
         self.assertEquals(3, len(cert_paths))
         self.assertTrue(KeyPair(cert1.path, cert1.key_path()) in cert_paths)
         self.assertTrue(KeyPair(cert2.path, cert2.key_path()) in cert_paths)
         self.assertTrue(KeyPair(cert3.path, cert3.key_path()) in cert_paths)
+
+    def test_multi_directory(self):
+        host1 = 'hostname.example.org'
+        host2 = 'hostname2.example.org'
+        host3 = 'hostname3.example.org'
+
+        cert1 = self._mock_cert('5001')
+        content1 = self._create_content('content1', cert1)
+
+        self.assertFalse(os.path.exists(os.path.join(self.host_cert_dir, host1)))
+        self.assertFalse(os.path.exists(os.path.join(self.host_cert_dir, host2)))
+        self.assertFalse(os.path.exists(os.path.join(self.host_cert_dir, host3)))
+
+        cmd = ContainerContentUpdateActionCommand(None, [host1, host2, host3],
+            self.host_cert_dir)
+        cmd._find_content = mock.Mock(return_value=[])
+        cmd.perform()
+
+        self.assertTrue(os.path.exists(os.path.join(self.host_cert_dir, host1)))
+        self.assertTrue(os.path.exists(os.path.join(self.host_cert_dir, host2)))
+        self.assertTrue(os.path.exists(os.path.join(self.host_cert_dir, host3)))
 
 
 class TestKeyPair(fixture.SubManFixture):
@@ -107,12 +144,13 @@ class TestContainerCertDir(fixture.SubManFixture):
         # This is where we'll setup for container certs:
         container_dir = os.path.join(self.temp_dir,
             "etc/docker/certs.d/")
+        os.makedirs(container_dir)
 
         # Where we expect our certs to actually land:
         self.dest_dir = os.path.join(container_dir, 'cdn.example.org')
         self.report = ContainerUpdateReport()
         self.container_dir = ContainerCertDir(self.report, 'cdn.example.org',
-            path=container_dir)
+            host_cert_dir=container_dir)
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
@@ -124,12 +162,6 @@ class TestContainerCertDir(fixture.SubManFixture):
         if not os.path.exists(dir_path):
             os.makedirs(dir_path)
         open(os.path.join(dir_path, filename), 'a').close()
-
-    def test_created_if_missing(self):
-        # Doesn't exist yet:
-        self.assertFalse(os.path.exists(self.dest_dir))
-        self.container_dir.sync([])
-        self.assertTrue(os.path.exists(self.dest_dir))
 
     def test_first_install(self):
         cert1 = '1234.pem'

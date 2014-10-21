@@ -27,7 +27,6 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 _ = gettext.gettext
 
-
 CONTAINER_CONTENT_TYPE = "containerimage"
 
 
@@ -37,23 +36,30 @@ class ContainerContentUpdateActionCommand(object):
 
     Return a ContainerContentUpdateReport.
     """
-    def __init__(self, ent_source, registry):
+    def __init__(self, ent_source, registry_hostnames, host_cert_dir):
         self.ent_source = ent_source
-        self.registry = registry
+        self.registry_hostnames = registry_hostnames
+        self.host_cert_dir = host_cert_dir
 
     def perform(self):
 
         report = ContainerUpdateReport()
 
-        content_sets = find_content(self.ent_source,
-            content_type=CONTAINER_CONTENT_TYPE)
+        content_sets = self._find_content()
         log.debug("Got content_sets: %s" % content_sets)
         unique_cert_paths = self._get_unique_paths(content_sets)
 
-        cert_dir = ContainerCertDir(report=report, registry=self.registry)
-        cert_dir.sync(unique_cert_paths)
+        for registry_hostname in self.registry_hostnames:
+            cert_dir = ContainerCertDir(report=report,
+                registry=registry_hostname,
+                host_cert_dir=self.host_cert_dir)
+            cert_dir.sync(unique_cert_paths)
 
         return report
+
+    def _find_content(self):
+        return find_content(self.ent_source,
+            content_type=CONTAINER_CONTENT_TYPE)
 
     def _get_unique_paths(self, content_sets):
         """
@@ -105,24 +111,28 @@ class ContainerCertDir(object):
     /etc/docker/certs.d/.
     """
 
-    DEFAULT_PATH = "/etc/docker/certs.d/"
-
     # We will presume to manage files with these extensions in the
     # hostname directory we're dealing with. Any unexpected files with
     # these extensions will be removed. Any other files will be left
     # alone.
     MANAGED_EXTENSIONS = [".cert", ".key"]
 
-    def __init__(self, report, registry, path=None):
+    def __init__(self, report, registry, host_cert_dir):
         self.report = report
         self.registry = registry
-        self.path = path or self.DEFAULT_PATH
-        self.path = os.path.join(self.path, registry)
+
+        # This is the overall cert directory where hostname specific
+        # subdirectories will go:
+        self.host_cert_dir = host_cert_dir
+
+        # The final hostname specific cert directory we'll sync to:
+        self.path = os.path.join(self.host_cert_dir, registry)
 
     def sync(self, expected_keypairs):
         log.debug("Syncing container certificates to %s" % self.path)
-        if not os.path.exists(self.DEFAULT_PATH):
-            log.warn("Docker cert directory does not exist, is docker installed?")
+        if not os.path.exists(self.host_cert_dir):
+            log.warn("Container cert directory does not exist: %s" % self.host_cert_dir)
+            log.warn("Exiting plugin")
             return
         if not os.path.exists(self.path):
             log.info("Container cert directory does not exist, creating it.")

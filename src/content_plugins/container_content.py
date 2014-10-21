@@ -24,6 +24,10 @@ requires_api_version = "1.1"
 from subscription_manager.plugin.container import \
     ContainerContentUpdateActionCommand
 
+# Default location where we'll manage hostname specific directories of
+# certificates.
+HOSTNAME_CERT_DIR = "/etc/docker/certs.d/"
+
 
 class ContainerContentPlugin(base_plugin.SubManPlugin):
     """Plugin for adding docker content action to subscription-manager"""
@@ -37,8 +41,11 @@ class ContainerContentPlugin(base_plugin.SubManPlugin):
             conduit: An UpdateContentConduit
         """
         conduit.log.info("Updating container content.")
-        registry_hostname = conduit.conf_string('main', 'registry_hostname')
-        conduit.log.info("registry = %s" % registry_hostname)
-        report = ContainerContentUpdateActionCommand(
-            ent_source=conduit.ent_source, registry=registry_hostname).perform()
+        registry_hostnames = conduit.conf_string('main', 'registry_hostnames')
+        conduit.log.info("registry hostnames = %s" % registry_hostnames)
+        cmd = ContainerContentUpdateActionCommand(
+            ent_source=conduit.ent_source,
+            registry_hostnames=registry_hostnames.split(','),
+            host_cert_dir=HOSTNAME_CERT_DIR)
+        report = cmd.perform()
         conduit.reports.add(report)
