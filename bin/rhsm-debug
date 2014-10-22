@@ -75,3 +75,9 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         sys.stderr.write("\n" + _("User interrupted process."))
         sys.exit(0)
+    except Exception, e:
+        # rhsm-debug can be invoked from sosreport/libreport/abrt, so
+        # letting exceptions all the up to the system excepthook
+        # can cause chaos (abrt handler gets called, invokes sosreport, etc)
+        sys.stderr.write("Error collecting rhsm-debug information")
+        sys.exit(-1)
