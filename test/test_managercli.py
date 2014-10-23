@@ -5,6 +5,8 @@ import re
 import sys
 import socket
 import os
+import tempfile
+import contextlib
 
 # for monkey patching config
 import stubs
@@ -980,6 +982,26 @@ class TestConfigCommand(TestCliCommand):
 class TestAttachCommand(TestCliProxyCommand):
     command_class = managercli.AttachCommand
 
+    @classmethod
+    def setUpClass(cls):
+        # Create temp file(s) for processing pool IDs
+        cls.tempfiles = [
+            tempfile.mkstemp(),
+            tempfile.mkstemp()
+        ]
+
+        os.write(cls.tempfiles[0][0], "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n")
+        os.close(cls.tempfiles[0][0])
+
+        os.write(cls.tempfiles[1][0], "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n")
+        os.close(cls.tempfiles[1][0])
+
+    @classmethod
+    def tearDownClass(cls):
+        # Unlink temp files
+        for file in cls.tempfiles:
+            os.unlink(file[1])
+
     def _test_quantity_exception(self, arg):
         try:
             self.cc.main(["--auto", "--quantity", arg])
@@ -1008,6 +1030,38 @@ class TestAttachCommand(TestCliProxyCommand):
 
     def test_positive_quantity_as_float(self):
         self._test_quantity_exception("2.0")
+
+    def _test_pool_file_processing(self, file, expected):
+        self.cc.main(["--file", file])
+        self.cc._validate_options()
+
+        self.assertEquals(expected, self.cc.options.pool)
+
+    @contextlib.contextmanager
+    def mock_stdin(self, fileobj):
+        org_stdin = sys.stdin
+        sys.stdin = fileobj
+
+        try:
+            yield
+        finally:
+            sys.stdin = org_stdin
+
+    def test_pool_stdin_processing(self):
+        with self.mock_stdin(open(self.tempfiles[1][1])):
+            self._test_pool_file_processing('-', ["pool1", "pool2", "pool3", "pool4", "pool5", "pool6", "pool7", "pool8"])
+
+    def test_pool_file_processing(self):
+        self._test_pool_file_processing(self.tempfiles[0][1], ["pool1", "pool2", "pool3", "pool4", "pool5", "pool6", "pool7", "pool8"])
+
+    def test_pool_file_invalid(self):
+        try:
+            self.cc.main(["--file", "nonexistant_file.nope"])
+            self.cc._validate_options()
+        except SystemExit, e:
+            self.assertEquals(e.code, os.EX_DATAERR)
+        else:
+            self.fail("No Exception Raised")
 
 
 # Test Attach and Subscribe are the same

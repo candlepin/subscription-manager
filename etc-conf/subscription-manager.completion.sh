@@ -27,7 +27,7 @@ _subscription_manager_attach()
           COMPREPLY=($(compgen -W "${POOLS}" -- ${1}))
           return 0
   esac
-  local opts="--auto --pool --quantity --servicelevel
+  local opts="--auto --pool --quantity --servicelevel --file
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
