@@ -68,7 +68,7 @@ rm -rf %{buildroot}
 
 %{python_sitearch}/rhsm/*
 %{python_sitearch}/rhsm-*.egg-info
-%attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
+%attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
 * Thu Oct 16 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.13.5-1
