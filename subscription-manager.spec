@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.5
+Version: 1.13.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -401,6 +401,24 @@ fi
 %endif
 
 %changelog
+* Thu Oct 23 2014 Alex Wood <awood@redhat.com> 1.13.6-1
+- 1093325: Prevent rhsm-debug from throwing tbs (alikins@redhat.com)
+- Send list of compliance reasons on dbus (wpoteat@redhat.com)
+- 1149286: Updated autocompletion for RHN migration script. (crog@redhat.com)
+- Fix file name for rhsm.conf.5 in spec file (alikins@redhat.com)
+- 1120772: Don't traceback on missing /ostree/repo (alikins@redhat.com)
+- 1094747: add appdata metdata file (jesusr@redhat.com)
+- 1122107: Clarify registration --consumerid option in manpage.
+  (dgoodwin@redhat.com)
+- 1149636: Specify OS_VERSION to make in spec file. (awood@redhat.com)
+- Added client-side support for --matches on the list command.
+  (crog@redhat.com)
+- 1151925: Improved filtered listing output when results are empty.
+  (crog@redhat.com)
+- 990183: Add a manpage for rhsm.conf (bkearney@redhat.com)
+- 1122530: Improved grammar and abbreviation usage. (crog@redhat.com)
+- 1120576: Added additional testing of version parsing (crog@redhat.com)
+
 * Fri Oct 03 2014 Alex Wood <awood@redhat.com> 1.13.5-1
 - Use wildcards in the spec file. (awood@redhat.com)
 
