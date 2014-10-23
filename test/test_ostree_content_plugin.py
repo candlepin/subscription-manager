@@ -967,6 +967,7 @@ class TestOsTreeContents(fixture.SubManFixture):
             name="mock_content_%s" % name,
             label=name,
             enabled=True,
+            required_tags=[],
             gpg="path/to/gpg",
             url="http://mock.example.com/%s/" % name)
         return EntitlementCertContent.from_cert_content(content)
@@ -983,6 +984,48 @@ class TestOsTreeContents(fixture.SubManFixture):
 
         contents = find_content(ent_src,
             content_type=action_invoker.OSTREE_CONTENT_TYPE)
+        self.assertEquals(len(contents), 1)
+
+        for content in contents:
+            self.assertEquals(content.content_type,
+                action_invoker.OSTREE_CONTENT_TYPE)
+
+    def test_ent_source_prod_tags(self):
+        yc = self.create_content("yum", "yum_content")
+        oc = self.create_content("ostree", "ostree_content")
+
+        ent1 = Entitlement(contents=[yc])
+        ent2 = Entitlement(contents=[oc])
+
+        ent_src = EntitlementSource()
+        ent_src._entitlements = [ent1, ent2]
+
+        # faux prod_tags to hit find_content, but no content tags
+        ent_src.prod_tags = ['awesomeos-ostree-1', 'awesomeos-ostree-super']
+
+        contents = find_content(ent_src,
+            content_type=action_invoker.OSTREE_CONTENT_TYPE)
+        self.assertEquals(len(contents), 1)
+
+        for content in contents:
+            self.assertEquals(content.content_type,
+                action_invoker.OSTREE_CONTENT_TYPE)
+
+    def test_ent_source_prod_tags_and_content_tags(self):
+        oc = self.create_content("ostree", "ostree_content")
+        oc.tags = ['awesomeos-ostree-1']
+
+        ent = Entitlement(contents=[oc])
+
+        ent_src = EntitlementSource()
+        ent_src._entitlements = [ent]
+
+        # faux prod_tags to hit find_content, but no content tags
+        ent_src.prod_tags = ['awesomeos-ostree-1', 'awesomeos-ostree-super']
+
+        contents = find_content(ent_src,
+            content_type=action_invoker.OSTREE_CONTENT_TYPE)
+        print "contents", contents
         self.assertEquals(len(contents), 1)
 
         for content in contents:

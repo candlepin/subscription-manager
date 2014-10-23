@@ -27,12 +27,13 @@ class Content(object):
     A generic representation of entitled content.
     """
     def __init__(self, content_type, name, label, url=None,
-        gpg=None, cert=None):
+        gpg=None, tags=None, cert=None):
         self.content_type = content_type
         self.name = name
         self.label = label
         self.url = url
         self.gpg = gpg
+        self.tags = tags or []
         self.cert = cert
 
 
@@ -58,6 +59,8 @@ class EntitlementSource(object):
     def __init__(self):
         self._entitlements = []
 
+        self.prod_tags = []
+
     def __iter__(self):
         return iter(self._entitlements)
 
@@ -78,8 +81,28 @@ def find_content(ent_source, content_type=None):
     log.debug("Searching for content of type: %s" % content_type)
     for entitlement in ent_source:
         for content in entitlement.contents:
-            if content.content_type == content_type:
+            # this is basically matching_content from repolib
+            if content.content_type == content_type and \
+                    content_tag_match(content, ent_source):
                 log.debug("found content: %s" % content.label)
                 # no unique constraint atm
                 entitled_content.append(content)
     return entitled_content
+
+
+def content_tag_match(content, ent_source):
+    """See if content required tags are provided by installed products.
+
+    Note: this is skipped if the content does not have any required tags.
+    """
+
+    if not hasattr(ent_source, 'prod_tags'):
+        return True
+
+    log.debug(" REMOVE prod_tags: %s", ent_source.prod_tags)
+    all_tags_found = True
+    for content_tag in content.tags:
+        log.debug("content_tag %s prod_tags: %s", content_tag, ent_source.prod_tags)
+        if content_tag not in ent_source.prod_tags:
+            all_tags_found = False
+    return all_tags_found
