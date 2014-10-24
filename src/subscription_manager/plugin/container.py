@@ -86,9 +86,11 @@ class KeyPair(object):
         # the file extension.
         self.dest_cert_filename = "%s.cert" %  \
             os.path.splitext(os.path.basename(self.cert_path))[0]
-        # This will result in SERIAL-key.key for now, keeps it simpler:
+        # We use the base filename from the cert so avoid the SERIAL-key
+        # we would have with our normal entitlement certs. We need the
+        # base filename to be the same for both .cert and .key.
         self.dest_key_filename = "%s.key" % \
-            os.path.splitext(os.path.basename(self.key_path))[0]
+            os.path.splitext(os.path.basename(self.cert_path))[0]
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and

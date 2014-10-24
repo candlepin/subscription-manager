@@ -13,7 +13,6 @@
 
 import mock
 
-import commands
 import fixture
 import tempfile
 import shutil
@@ -104,19 +103,19 @@ class TestKeyPair(fixture.SubManFixture):
         kp = KeyPair("/etc/pki/entitlement/9000.pem",
             "/etc/pki/entitlement/9000-key.pem")
         self.assertEquals("9000.cert", kp.dest_cert_filename)
-        self.assertEquals("9000-key.key", kp.dest_key_filename)
+        self.assertEquals("9000.key", kp.dest_key_filename)
 
     def test_expected_filenames_weird_extensions(self):
         kp = KeyPair("/etc/pki/entitlement/9000.crt",
             "/etc/pki/entitlement/9000-key.crt")
         self.assertEquals("9000.cert", kp.dest_cert_filename)
-        self.assertEquals("9000-key.key", kp.dest_key_filename)
+        self.assertEquals("9000.key", kp.dest_key_filename)
 
     def test_expected_filenames_weird_filenames(self):
         kp = KeyPair("/etc/pki/entitlement/9000.1.2014-a.pem",
             "/etc/pki/entitlement/9000.1.2014-a-key.pem")
         self.assertEquals("9000.1.2014-a.cert", kp.dest_cert_filename)
-        self.assertEquals("9000.1.2014-a-key.key", kp.dest_key_filename)
+        self.assertEquals("9000.1.2014-a.key", kp.dest_key_filename)
 
     def test_equality(self):
         kp = KeyPair("/etc/pki/entitlement/9000.pem",
@@ -132,6 +131,13 @@ class TestKeyPair(fixture.SubManFixture):
             "/etc/pki/entitlement/9001-key.pem")
         self.assertNotEqual(kp, kp2)
         self.assertNotEqual(kp, "somestring")
+
+    def test_mixmatched_base_filenames(self):
+        kp = KeyPair("/etc/pki/entitlement/9000.1.2014-a.pem",
+            "/etc/pki/entitlement/9000.1.2014-a-key.pem")
+        self.assertEquals("9000.1.2014-a.cert", kp.dest_cert_filename)
+        self.assertEquals("9000.1.2014-a.key", kp.dest_key_filename)
+
 
 
 class TestContainerCertDir(fixture.SubManFixture):
@@ -172,22 +178,22 @@ class TestContainerCertDir(fixture.SubManFixture):
             os.path.join(self.src_certs_dir, key1))
         self.container_dir.sync([kp])
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.key')))
         self.assertEquals(2, len(self.report.added))
 
     def test_old_certs_cleaned_out(self):
         cert1 = '1234.cert'
-        key1 = '1234-key.key'
+        key1 = '1234.key'
         ca = 'myca.crt'  # This file extension should be left alone:
         self._touch(self.dest_dir, cert1)
         self._touch(self.dest_dir, key1)
         self._touch(self.dest_dir, ca)
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.key')))
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, ca)))
         self.container_dir.sync([])
         self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
-        self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
+        self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '1234.key')))
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, ca)))
         self.assertEquals(2, len(self.report.removed))
 
@@ -197,8 +203,8 @@ class TestContainerCertDir(fixture.SubManFixture):
         cert2 = '12345.pem'
         key2 = '12345-key.pem'
         old_cert = '444.cert'
-        old_key = '444-key.key'
-        old_key2 = 'another-key.key'
+        old_key = '444.key'
+        old_key2 = 'another.key'
         self._touch(self.src_certs_dir, cert1)
         self._touch(self.src_certs_dir, key1)
         self._touch(self.src_certs_dir, cert2)
@@ -212,11 +218,11 @@ class TestContainerCertDir(fixture.SubManFixture):
             os.path.join(self.src_certs_dir, key2))
         self.container_dir.sync([kp, kp2])
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234-key.key')))
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.key')))
         self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '12345.cert')))
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '12345-key.key')))
+        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '12345.key')))
 
         self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '444.cert')))
-        self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '444-key.key')))
+        self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '444.key')))
         self.assertEquals(4, len(self.report.added))
         self.assertEquals(3, len(self.report.removed))
