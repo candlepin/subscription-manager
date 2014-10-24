@@ -363,6 +363,24 @@ class OstreeOriginUpdater(object):
                 return r.name
         return None
 
+    def _remove_unconfigured_flag(self, origin_cfg):
+        """
+        Remove the origin.unconfigured-state option in the origin, indicating
+        we've tried to setup the remotes. Save the origin file and reload,
+        and return the new one. Does not persist the changes itself.
+        """
+        section = "origin"
+        option = "unconfigured-state"
+
+        # We have already checked for existing of origin section...
+        if not origin_cfg.has_option(section, option):
+            # nothing to to
+            return origin_cfg
+
+        origin_cfg.remove_option(section, option)
+
+        return origin_cfg
+
     def run(self):
         """
         Locate and update the currently deployed origin file.
@@ -381,6 +399,10 @@ class OstreeOriginUpdater(object):
         except config.NoSectionError:
             log.warn("No 'origin' section found in origin file: %s" % self.originfile)
             return
+
+        # Remove the unconfigured-state flag from the origin config.
+        # Note any changes to origin_cfg here are not saved until later.
+        origin_cfg = self._remove_unconfigured_flag(origin_cfg)
 
         if len(self.repo_config.remotes):
             log.warn("Multiple remotes configured in %s." % self.repo_config)
@@ -417,14 +439,25 @@ class OstreeOriginUpdater(object):
 
         log.debug("old_refspec: %s" % old_refspec)
         log.debug("new_refspec: %s" % new_refspec)
+
+        # A KeyfileConfigParser object comparison would be useful here to
+        # decide if we need to persist.
+
         if new_refspec != old_refspec:
             log.info("Updating refspec in: %s" % self.originfile)
             log.info("    old = %s" % old_refspec)
             log.info("    new = %s" % new_refspec)
             origin_cfg.set('origin', 'refspec', new_refspec)
             origin_cfg.save()
+
         else:
             log.debug("No change to refspec in %s" % self.originfile)
+
+        # FIXME: keep track of changes to avoid this
+        #        (or write a config object differ, etc)
+        log.debug("But saving %s anyway, in case other values changed.",
+                  self.originfile)
+        origin_cfg.save()
 
 
 class OstreeConfigUpdatesBuilder(object):

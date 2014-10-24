@@ -455,6 +455,12 @@ gpg-verify=true
         self.assertTrue(origin_parser.get('origin', 'refspec').
             startswith(expected_remote + ":"))
 
+    # Verify we either never had, or have since removed the unconfigured-state option
+    def _assert_no_unconfigured_option(self, origin_parser):
+
+        self.assertTrue(origin_parser.has_section('origin'))
+        self.assertFalse('unconfigured-state' in origin_parser.options('origin'))
+
     def test_one_remote_matching_ref(self):
         repo_cfg = """
 [core]
@@ -479,6 +485,7 @@ refspec=awesomeos-ostree-next-ostree:awesomeos-atomic/10.0-buildmaster/x86_64/st
         new_origin = config.KeyFileConfigParser(
             self.origin_cfg_path.name)
         self._assert_origin(new_origin, 'awesomeos-ostree-next-ostree')
+        self._assert_no_unconfigured_option(new_origin)
 
     # If the ref is mismatched, but we only have one:
     def test_one_remote_mismatched_ref(self):
@@ -504,6 +511,36 @@ refspec=origremote:thisisnotthesamewords/awesomeos8/x86_64/controller/docker
             self.origin_cfg_path.name)
         # FIXME: For now, we pick the first one.
         self._assert_origin(new_origin, 'awesomeos-atomic-ostree')
+        self._assert_no_unconfigured_option(new_origin)
+
+    # If the ref is mismatched, but we only have one, and verify
+    # we remove the unconfigured state
+    def test_one_remote_mismatched_ref_remove_unconfigured(self):
+        repo_cfg = """
+[core]
+repo_version=1
+mode=bare
+
+[remote "awesomeos-atomic-ostree"]
+url=http://awesome.example.com.not.real/
+gpg-verify=false
+
+"""
+
+    # ostree origins will have 'unconfigured-state' if they need setup
+        origin_cfg = """
+[origin]
+refspec=origremote:thisisnotthesamewords/awesomeos8/x86_64/controller/docker
+unconfigured-state=Use "subscription-manager register" to enable online updates
+"""
+
+        self._setup_config(repo_cfg, origin_cfg)
+        self.updater.run()
+        new_origin = config.KeyFileConfigParser(
+            self.origin_cfg_path.name)
+        # FIXME: For now, we pick the first one.
+        self._assert_origin(new_origin, 'awesomeos-atomic-ostree')
+        self._assert_no_unconfigured_option(new_origin)
 
     # If the ref is mismatched, but we only have one:
     def test_no_remotes(self):
@@ -526,6 +563,31 @@ refspec=origremote:thisisnotthesamewords/awesomeos8/x86_64/controller/docker
 
         # No remotes, we don't change the origin at all
         self._assert_origin(new_origin, 'origremote')
+        self._assert_no_unconfigured_option(new_origin)
+
+    # If the ref is mismatched, but we only have one:
+    def test_no_remotes_unconfigured(self):
+        repo_cfg = """
+[core]
+repo_version=1
+mode=bare
+
+"""
+
+        origin_cfg = """
+[origin]
+refspec=origremote:thisisnotthesamewords/awesomeos8/x86_64/controller/docker
+unconfigured-state=Use "subscription-manager register" to enable online updates
+"""
+
+        self._setup_config(repo_cfg, origin_cfg)
+        self.updater.run()
+        new_origin = config.KeyFileConfigParser(
+            self.origin_cfg_path.name)
+
+        # No remotes, we don't change the origin at all
+        self._assert_origin(new_origin, 'origremote')
+        self.assertTrue('unconfigured-state' in new_origin.options('origin'))
 
     def test_multi_remote_matching_ref(self):
         repo_cfg = """
@@ -553,6 +615,7 @@ refspec=origremote:awesome-ostree/awesomeos8/x86_64/controller/docker
         new_origin = config.KeyFileConfigParser(
             self.origin_cfg_path.name)
         self._assert_origin(new_origin, 'awesome-ostree')
+        self._assert_no_unconfigured_option(new_origin)
 
     def test_multi_remote_mismatched_ref(self):
         repo_cfg = """
@@ -580,6 +643,7 @@ refspec=origremote:thisisnoteitherofthose/awesomeos8/x86_64/controller/docker
             self.origin_cfg_path.name)
         # Remote should have been left alone
         self._assert_origin(new_origin, 'awesome-ostree')
+        self._assert_no_unconfigured_option(new_origin)
 
     def test_gi_wrapper_script_error(self):
         repo_cfg = """
