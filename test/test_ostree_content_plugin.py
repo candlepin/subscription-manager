@@ -505,6 +505,40 @@ refspec=origremote:thisisnotthesamewords/awesomeos8/x86_64/controller/docker
         # FIXME: For now, we pick the first one.
         self._assert_origin(new_origin, 'awesomeos-atomic-ostree')
 
+    # If the ref is mismatched, but we only have one, and verify
+    # we remove the unconfigured state
+    def test_one_remote_mismatched_ref_remove_unconfigured(self):
+        repo_cfg = """
+[core]
+repo_version=1
+mode=bare
+
+[remote "awesomeos-atomic-ostree"]
+url=http://awesome.example.com.not.real/
+gpg-verify=false
+
+"""
+
+    # ostree origins will have 'unconfigured-state' if they need setup
+        origin_cfg = """
+[origin]
+refspec=origremote:thisisnotthesamewords/awesomeos8/x86_64/controller/docker
+unconfigured-state=Use "subscription-manager register" to enable online updates
+"""
+
+        self._setup_config(repo_cfg, origin_cfg)
+        self.updater.run()
+        new_origin = config.KeyFileConfigParser(
+            self.origin_cfg_path.name)
+        # FIXME: For now, we pick the first one.
+        self._assert_origin(new_origin, 'awesomeos-atomic-ostree')
+        self._assert_unconfig_removed(new_origin)
+
+    def _assert_unconfig_removed(self, origin_parser):
+
+        self.assertTrue(origin_parser.has_section('origin'))
+        self.assertFalse('unconfigured-state' in origin_parser.options('origin'))
+
     # If the ref is mismatched, but we only have one:
     def test_no_remotes(self):
         repo_cfg = """
