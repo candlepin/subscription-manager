@@ -71,6 +71,7 @@ class EntitlementSource(object):
 def find_content(ent_source, content_type=None):
     """
     Scan all entitlements looking for content of the given type. (string)
+    Type will be compared case insensitive.
 
     Returns a list of model.Content.
     """
@@ -78,7 +79,7 @@ def find_content(ent_source, content_type=None):
     log.debug("Searching for content of type: %s" % content_type)
     for entitlement in ent_source:
         for content in entitlement.contents:
-            if content.content_type == content_type:
+            if content.content_type.lower() == content_type.lower():
                 log.debug("found content: %s" % content.label)
                 # no unique constraint atm
                 entitled_content.append(content)

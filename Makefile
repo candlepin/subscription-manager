@@ -130,15 +130,23 @@ install-content-plugins-conf-ostree:
 		$(RHSM_PLUGIN_CONF_DIR) ; \
 	fi;
 
+install-content-plugin-container:
+	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/container_content.py $(RHSM_PLUGIN_DIR)
+
+install-content-plugins-conf-container:
+	install -m 644 -p \
+		$(CONTENT_PLUGINS_SRC_DIR)/container_content.ContainerContentPlugin.conf \
+		$(RHSM_PLUGIN_CONF_DIR)
+
 install-content-plugins-dir:
 	install -d $(RHSM_PLUGIN_DIR)
 
 install-content-plugins-conf-dir:
 	install -d $(RHSM_PLUGIN_CONF_DIR)
 
-install-content-plugins-conf: install-content-plugins-conf-dir install-content-plugins-conf-ostree
+install-content-plugins-conf: install-content-plugins-conf-dir install-content-plugins-conf-ostree install-content-plugins-conf-container
 
-install-content-plugins: install-content-plugins-dir install-content-plugin-ostree
+install-content-plugins: install-content-plugins-dir install-content-plugin-ostree install-content-plugin-container
 
 
 install-plugins-conf-dir:
