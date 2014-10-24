@@ -18,6 +18,7 @@
 import gettext
 import logging
 import os
+import re
 import shutil
 
 from subscription_manager import certlib
@@ -28,6 +29,9 @@ log = logging.getLogger('rhsm-app.' + __name__)
 _ = gettext.gettext
 
 CONTAINER_CONTENT_TYPE = "containerimage"
+
+RH_CDN_REGEX = re.compile('cdn\.(?:.*\.)?redhat\.com')
+RH_CDN_CA = "/etc/rhsm/ca/redhat-uep.pem"
 
 
 class ContainerContentUpdateActionCommand(object):
@@ -169,6 +173,24 @@ class ContainerCertDir(object):
                 self.report.added.append(full_key_path)
 
         self._prune_old_certs(expected_files)
+
+        # If we see something that looks like Red Hat's CDN, we know we need
+        # to symlink the python-rhsm delivered CA cert in:
+        if RH_CDN_REGEX.match(os.path.basename(self.path)):
+            if not self._rh_cdn_ca_exists():
+                log.error("Detected a CDN hostname, but no CA certificate installed.")
+            else:
+                ca_symlink = os.path.join(self.path, 'redhat-uep.crt')
+                if not os.path.exists(ca_symlink):
+                    os.symlink(RH_CDN_CA, ca_symlink)
+                    log.info("Created symlink: %s -> %s" % (ca_symlink, RH_CDN_CA))
+
+    def _rh_cdn_ca_exists(self):
+        """
+        Check if the python-rhsm delivered redhat-uep.pem exists.
+        """
+        # Separate method for testing purposes.
+        return os.path.exists(RH_CDN_CA)
 
     def _prune_old_certs(self, expected_files):
         """
