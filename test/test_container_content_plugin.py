@@ -18,6 +18,8 @@ import tempfile
 import shutil
 import os.path
 
+from os.path import exists, join
+
 from subscription_manager.model import Content
 from subscription_manager.plugin.container import \
     ContainerContentUpdateActionCommand, KeyPair, ContainerCertDir, \
@@ -30,11 +32,11 @@ class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp(prefix='subman-container-plugin-tests')
-        self.src_certs_dir = os.path.join(self.temp_dir, "etc/pki/entitlement")
+        self.src_certs_dir = join(self.temp_dir, "etc/pki/entitlement")
         os.makedirs(self.src_certs_dir)
 
         # This is where we'll setup for container certs:
-        self.host_cert_dir = os.path.join(self.temp_dir,
+        self.host_cert_dir = join(self.temp_dir,
             "etc/docker/certs.d/")
         os.makedirs(self.host_cert_dir)
 
@@ -46,9 +48,9 @@ class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
 
     def _mock_cert(self, base_filename):
         cert = mock.Mock()
-        cert.path = os.path.join(self.temp_dir, DUMMY_CERT_LOCATION,
+        cert.path = join(self.temp_dir, DUMMY_CERT_LOCATION,
             "%s.pem" % base_filename)
-        cert.key_path.return_value = os.path.join(self.temp_dir, DUMMY_CERT_LOCATION,
+        cert.key_path.return_value = join(self.temp_dir, DUMMY_CERT_LOCATION,
             "%s-key.pem" % base_filename)
         return cert
 
@@ -80,21 +82,18 @@ class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
         host2 = 'hostname2.example.org'
         host3 = 'hostname3.example.org'
 
-        cert1 = self._mock_cert('5001')
-        content1 = self._create_content('content1', cert1)
-
-        self.assertFalse(os.path.exists(os.path.join(self.host_cert_dir, host1)))
-        self.assertFalse(os.path.exists(os.path.join(self.host_cert_dir, host2)))
-        self.assertFalse(os.path.exists(os.path.join(self.host_cert_dir, host3)))
+        self.assertFalse(exists(join(self.host_cert_dir, host1)))
+        self.assertFalse(exists(join(self.host_cert_dir, host2)))
+        self.assertFalse(exists(join(self.host_cert_dir, host3)))
 
         cmd = ContainerContentUpdateActionCommand(None, [host1, host2, host3],
             self.host_cert_dir)
         cmd._find_content = mock.Mock(return_value=[])
         cmd.perform()
 
-        self.assertTrue(os.path.exists(os.path.join(self.host_cert_dir, host1)))
-        self.assertTrue(os.path.exists(os.path.join(self.host_cert_dir, host2)))
-        self.assertTrue(os.path.exists(os.path.join(self.host_cert_dir, host3)))
+        self.assertTrue(exists(join(self.host_cert_dir, host1)))
+        self.assertTrue(exists(join(self.host_cert_dir, host2)))
+        self.assertTrue(exists(join(self.host_cert_dir, host3)))
 
 
 class TestKeyPair(fixture.SubManFixture):
@@ -139,21 +138,20 @@ class TestKeyPair(fixture.SubManFixture):
         self.assertEquals("9000.1.2014-a.key", kp.dest_key_filename)
 
 
-
 class TestContainerCertDir(fixture.SubManFixture):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp(prefix='subman-container-plugin-tests')
-        self.src_certs_dir = os.path.join(self.temp_dir, "etc/pki/entitlement")
+        self.src_certs_dir = join(self.temp_dir, "etc/pki/entitlement")
         os.makedirs(self.src_certs_dir)
 
         # This is where we'll setup for container certs:
-        container_dir = os.path.join(self.temp_dir,
+        container_dir = join(self.temp_dir,
             "etc/docker/certs.d/")
         os.makedirs(container_dir)
 
         # Where we expect our certs to actually land:
-        self.dest_dir = os.path.join(container_dir, 'cdn.redhat.com')
+        self.dest_dir = join(container_dir, 'cdn.redhat.com')
         self.report = ContainerUpdateReport()
         self.container_dir = ContainerCertDir(self.report, 'cdn.redhat.com',
             host_cert_dir=container_dir)
@@ -166,20 +164,20 @@ class TestContainerCertDir(fixture.SubManFixture):
         """
         Create an empty file in the given directory with the given filename.
         """
-        if not os.path.exists(dir_path):
+        if not exists(dir_path):
             os.makedirs(dir_path)
-        open(os.path.join(dir_path, filename), 'a').close()
+        open(join(dir_path, filename), 'a').close()
 
     def test_first_install(self):
         cert1 = '1234.pem'
         key1 = '1234-key.pem'
         self._touch(self.src_certs_dir, cert1)
         self._touch(self.src_certs_dir, key1)
-        kp = KeyPair(os.path.join(self.src_certs_dir, cert1),
-            os.path.join(self.src_certs_dir, key1))
+        kp = KeyPair(join(self.src_certs_dir, cert1),
+            join(self.src_certs_dir, key1))
         self.container_dir.sync([kp])
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.key')))
+        self.assertTrue(exists(join(self.dest_dir, '1234.cert')))
+        self.assertTrue(exists(join(self.dest_dir, '1234.key')))
         self.assertEquals(2, len(self.report.added))
 
     def test_old_certs_cleaned_out(self):
@@ -189,13 +187,13 @@ class TestContainerCertDir(fixture.SubManFixture):
         self._touch(self.dest_dir, cert1)
         self._touch(self.dest_dir, key1)
         self._touch(self.dest_dir, ca)
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.key')))
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, ca)))
+        self.assertTrue(exists(join(self.dest_dir, '1234.cert')))
+        self.assertTrue(exists(join(self.dest_dir, '1234.key')))
+        self.assertTrue(exists(join(self.dest_dir, ca)))
         self.container_dir.sync([])
-        self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
-        self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '1234.key')))
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, ca)))
+        self.assertFalse(exists(join(self.dest_dir, '1234.cert')))
+        self.assertFalse(exists(join(self.dest_dir, '1234.key')))
+        self.assertTrue(exists(join(self.dest_dir, ca)))
         self.assertEquals(2, len(self.report.removed))
 
     def test_all_together_now(self):
@@ -213,18 +211,18 @@ class TestContainerCertDir(fixture.SubManFixture):
         self._touch(self.dest_dir, old_cert)
         self._touch(self.dest_dir, old_key)
         self._touch(self.dest_dir, old_key2)
-        kp = KeyPair(os.path.join(self.src_certs_dir, cert1),
-            os.path.join(self.src_certs_dir, key1))
-        kp2 = KeyPair(os.path.join(self.src_certs_dir, cert2),
-            os.path.join(self.src_certs_dir, key2))
+        kp = KeyPair(join(self.src_certs_dir, cert1),
+            join(self.src_certs_dir, key1))
+        kp2 = KeyPair(join(self.src_certs_dir, cert2),
+            join(self.src_certs_dir, key2))
         self.container_dir.sync([kp, kp2])
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.cert')))
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '1234.key')))
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '12345.cert')))
-        self.assertTrue(os.path.exists(os.path.join(self.dest_dir, '12345.key')))
+        self.assertTrue(exists(join(self.dest_dir, '1234.cert')))
+        self.assertTrue(exists(join(self.dest_dir, '1234.key')))
+        self.assertTrue(exists(join(self.dest_dir, '12345.cert')))
+        self.assertTrue(exists(join(self.dest_dir, '12345.key')))
 
-        self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '444.cert')))
-        self.assertFalse(os.path.exists(os.path.join(self.dest_dir, '444.key')))
+        self.assertFalse(exists(join(self.dest_dir, '444.cert')))
+        self.assertFalse(exists(join(self.dest_dir, '444.key')))
         self.assertEquals(4, len(self.report.added))
         self.assertEquals(3, len(self.report.removed))
 
@@ -233,12 +231,12 @@ class TestContainerCertDir(fixture.SubManFixture):
         key1 = '1234-key.pem'
         self._touch(self.src_certs_dir, cert1)
         self._touch(self.src_certs_dir, key1)
-        kp = KeyPair(os.path.join(self.src_certs_dir, cert1),
-            os.path.join(self.src_certs_dir, key1))
+        kp = KeyPair(join(self.src_certs_dir, cert1),
+            join(self.src_certs_dir, key1))
         self.container_dir.sync([kp])
 
-        expected_symlink = os.path.join(self.dest_dir, 'redhat-uep.crt')
-        self.assertTrue(os.path.exists(expected_symlink))
+        expected_symlink = join(self.dest_dir, 'redhat-uep.crt')
+        self.assertTrue(exists(expected_symlink))
         self.assertTrue(os.path.islink(expected_symlink))
         self.assertEquals('/etc/rhsm/ca/redhat-uep.pem',
             os.path.realpath(expected_symlink))
@@ -248,14 +246,14 @@ class TestContainerCertDir(fixture.SubManFixture):
         key1 = '1234-key.pem'
         self._touch(self.src_certs_dir, cert1)
         self._touch(self.src_certs_dir, key1)
-        kp = KeyPair(os.path.join(self.src_certs_dir, cert1),
-            os.path.join(self.src_certs_dir, key1))
+        kp = KeyPair(join(self.src_certs_dir, cert1),
+            join(self.src_certs_dir, key1))
         # Mock that /etc/rhsm/ca/redhat-uep.pem doesn't exist:
         self.container_dir._rh_cdn_ca_exists = mock.Mock(return_value=False)
         self.container_dir.sync([kp])
 
-        expected_symlink = os.path.join(self.dest_dir, 'redhat-uep.crt')
-        self.assertFalse(os.path.exists(expected_symlink))
+        expected_symlink = join(self.dest_dir, 'redhat-uep.crt')
+        self.assertFalse(exists(expected_symlink))
 
     def test_cdn_ca_symlink_already_exists(self):
 
@@ -263,14 +261,14 @@ class TestContainerCertDir(fixture.SubManFixture):
         key1 = '1234-key.pem'
         self._touch(self.src_certs_dir, cert1)
         self._touch(self.src_certs_dir, key1)
-        kp = KeyPair(os.path.join(self.src_certs_dir, cert1),
-            os.path.join(self.src_certs_dir, key1))
+        kp = KeyPair(join(self.src_certs_dir, cert1),
+            join(self.src_certs_dir, key1))
         self.container_dir.sync([kp])
 
         # Run it again, the symlink already exists:
         self.container_dir.sync([kp])
-        expected_symlink = os.path.join(self.dest_dir, 'redhat-uep.crt')
-        self.assertTrue(os.path.exists(expected_symlink))
+        expected_symlink = join(self.dest_dir, 'redhat-uep.crt')
+        self.assertTrue(exists(expected_symlink))
         self.assertTrue(os.path.islink(expected_symlink))
         self.assertEquals('/etc/rhsm/ca/redhat-uep.pem',
             os.path.realpath(expected_symlink))
