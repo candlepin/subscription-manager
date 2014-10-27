@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.6
+Version: 1.13.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -467,6 +467,15 @@ fi
 %endif
 
 %changelog
+* Mon Oct 27 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.13.7-1
+- Add content/product tag matching for content plugins. (alikins@redhat.com)
+- Remove ostree 'unconfigured' after configuring. (alikins@redhat.com)
+- Symlink to redhat-uep.pem if we seem to be syncing a CDN hostname cert dir.
+  (dgoodwin@redhat.com)
+- Add a test for removing 'unconfigured-state' from origin (alikins@redhat.com)
+- Case insensitive content type searching. (dgoodwin@redhat.com)
+- Added container plugin for configuring Docker. (dgoodwin@redhat.com)
+
 * Thu Oct 23 2014 Alex Wood <awood@redhat.com> 1.13.6-1
 - 1093325: Prevent rhsm-debug from throwing tbs (alikins@redhat.com)
 - Send list of compliance reasons on dbus (wpoteat@redhat.com)
