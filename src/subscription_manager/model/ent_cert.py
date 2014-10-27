@@ -31,7 +31,7 @@ class EntitlementCertContent(Content):
         return cls(content_type=ent_cert_content.content_type,
             name=ent_cert_content.name, label=ent_cert_content.label,
             url=ent_cert_content.url, gpg=ent_cert_content.gpg,
-            cert=cert)
+            tags=ent_cert_content.required_tags, cert=cert)
 
 
 class EntitlementCertEntitlement(Entitlement):
@@ -59,6 +59,9 @@ class EntitlementDirEntitlementSource(EntitlementSource):
 
     def __init__(self):
         ent_dir = inj.require(inj.ENT_DIR)
+        prod_dir = inj.require(inj.PROD_DIR)
+
+        self.product_tags = prod_dir.get_provided_tags()
 
         # populate from ent certs
         self._entitlements = []
