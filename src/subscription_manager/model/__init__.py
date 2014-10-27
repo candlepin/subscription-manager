@@ -26,15 +26,19 @@ class Content(object):
     """
     A generic representation of entitled content.
     """
-    def __init__(self, content_type, name, label, url=None,
-        gpg=None, tags=None, cert=None):
+    def __init__(self, content_type, name, label,
+                 url=None, gpg=None, tags=None, cert=None,
+                 enabled=None, metadata_expire=None):
         self.content_type = content_type
         self.name = name
         self.label = label
+
         self.url = url
         self.gpg = gpg
         self.tags = tags or []
         self.cert = cert
+        self.enabled = enabled
+        self.metadata_expire = metadata_expire
 
 
 class Entitlement(object):
@@ -83,23 +87,19 @@ def find_content(ent_source, content_type=None):
         for content in entitlement.contents:
             # this is basically matching_content from repolib
             if content.content_type.lower() == content_type.lower() and \
-                    content_tag_match(content, ent_source):
-                log.debug("found content: %s" % content.label)
-                # no unique constraint atm
+                    content_tag_match(content.tags, ent_source.product_tags):
                 entitled_content.append(content)
     return entitled_content
 
 
-def content_tag_match(content, ent_source):
+def content_tag_match(content_tags, product_tags):
     """See if content required tags are provided by installed products.
 
     Note: this is skipped if the content does not have any required tags.
     """
 
     all_tags_found = True
-    for content_tag in content.tags:
-        log.debug("content_tag %s product_tags: %s",
-                  content_tag, ent_source.product_tags)
-        if content_tag not in ent_source.product_tags:
+    for content_tag in content_tags:
+        if content_tag not in product_tags:
             all_tags_found = False
     return all_tags_found
