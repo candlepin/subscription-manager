@@ -23,9 +23,23 @@ from os.path import exists, join
 from subscription_manager.model import Content
 from subscription_manager.plugin.container import \
     ContainerContentUpdateActionCommand, KeyPair, ContainerCertDir, \
-    ContainerUpdateReport
+    ContainerUpdateReport, RH_CDN_REGEX
 
 DUMMY_CERT_LOCATION = "dummy/certs"
+
+
+class CdnRegexTests(fixture.SubManFixture):
+
+    def test_cdn_match(self):
+        self.assertTrue(RH_CDN_REGEX.match('cdn.redhat.com'))
+
+    def test_stage_cdn_match(self):
+        self.assertTrue(RH_CDN_REGEX.match('cdn.stage.redhat.com'))
+
+    def test_anchors(self):
+        self.assertFalse(RH_CDN_REGEX.match('something.cdn.redhat.com.org'))
+        self.assertFalse(RH_CDN_REGEX.match('cdn.redhat.com.org'))
+        self.assertFalse(RH_CDN_REGEX.match('something.cdn.redhat.com'))
 
 
 class TestContainerContentUpdateActionCommand(fixture.SubManFixture):

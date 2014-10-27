@@ -30,7 +30,7 @@ _ = gettext.gettext
 
 CONTAINER_CONTENT_TYPE = "containerimage"
 
-RH_CDN_REGEX = re.compile('cdn\.(?:.*\.)?redhat\.com')
+RH_CDN_REGEX = re.compile('^cdn\.(?:.*\.)?redhat\.com$')
 RH_CDN_CA = "/etc/rhsm/ca/redhat-uep.pem"
 
 
