@@ -17,7 +17,7 @@ import mock
 from stubs import StubEntitlementDirectory, StubProductDirectory
 from stubs import StubEntActionInvoker, StubEntitlementCertificate
 from stubs import StubProduct
-from fixture import SubManFixture
+from fixture import SubManFixture, Capture
 import rhsm.connection as connection
 from subscription_manager import managercli
 from subscription_manager import injection as inj
@@ -44,24 +44,30 @@ class CliUnSubscribeTests(SubManFixture):
         mock_identity = self._inject_mock_valid_consumer()
         managercli.EntCertActionInvoker = StubEntActionInvoker
 
-        cmd.main(['unsubscribe', '--all'])
-        self.assertEquals(cmd.cp.called_unbind_uuid,
-                          mock_identity.uuid)
+        with Capture(silent=True) as cap:
+            cmd.main(['unsubscribe', '--all'])
+            self.assertEquals(cmd.cp.called_unbind_uuid, mock_identity.uuid)
+            self.assertTrue('deprecated' in cap.err)
 
-        cmd.main(['unsubscribe', '--serial=%s' % ent1.serial])
-        self.assertEquals(cmd.cp.called_unbind_serial, ['%s' % ent1.serial])
+        with Capture(silent=True) as cap:
+            cmd.main(['unsubscribe', '--serial=%s' % ent1.serial])
+            self.assertEquals(cmd.cp.called_unbind_serial, ['%s' % ent1.serial])
+            self.assertTrue('deprecated' in cap.err)
 
-        code = cmd.main(['unsubscribe', '--serial=%s' % ent2.serial, '--serial=%s' % ent3.serial])
-        self.assertEquals(cmd.cp.called_unbind_serial, ['%s' % ent2.serial, '%s' % ent3.serial])
-        self.assertEquals(code, 0)
+        with Capture(silent=True) as cap:
+            code = cmd.main(['unsubscribe', '--serial=%s' % ent2.serial, '--serial=%s' % ent3.serial])
+            self.assertEquals(cmd.cp.called_unbind_serial, ['%s' % ent2.serial, '%s' % ent3.serial])
+            self.assertEquals(code, 0)
+            self.assertTrue('deprecated' in cap.err)
 
         self.stub_cp_provider.get_consumer_auth_cp().unbindBySerial = mock.Mock(
-            side_effect=connection.RestlibException("Entitlement Certificate with serial number "
-                                                    "2300922701043065601 could not be found."))
-        code = cmd.main(['unsubscribe', '--serial=%s' % '2300922701043065601'])
+            side_effect=connection.RestlibException("Entitlement Certificate with serial number 2300922701043065601 could not be found.")
+        )
 
-        # FIXME: this causes something to freak out deep in nosetests...
-        #self.assertEquals(code, 1)
+        with Capture(silent=True) as cap:
+            code = cmd.main(['unsubscribe', '--serial=%s' % '2300922701043065601'])
+            self.assertEquals(code, 0)
+            self.assertTrue('deprecated' in cap.err)
 
     def test_unsubscribe_unregistered(self):
         prod = StubProduct('stub_product')
@@ -75,9 +81,11 @@ class CliUnSubscribeTests(SubManFixture):
 
         self._inject_mock_invalid_consumer()
 
-        cmd.main(['unsubscribe', '--all'])
-        self.assertTrue(cmd.entitlement_dir.list_called)
-        self.assertTrue(ent.is_deleted)
+        with Capture(silent=True) as cap:
+            cmd.main(['unsubscribe', '--all'])
+            self.assertTrue(cmd.entitlement_dir.list_called)
+            self.assertTrue(ent.is_deleted)
+            self.assertTrue('deprecated' in cap.err)
 
         prod = StubProduct('stub_product')
         ent1 = StubEntitlementCertificate(prod)
@@ -90,12 +98,16 @@ class CliUnSubscribeTests(SubManFixture):
                 StubProductDirectory([]))
         cmd = managercli.UnSubscribeCommand()
 
-        code = cmd.main(['unsubscribe', '--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial])
-        self.assertTrue(cmd.entitlement_dir.list_called)
-        self.assertTrue(ent1.is_deleted)
-        self.assertFalse(ent2.is_deleted)
-        self.assertTrue(ent3.is_deleted)
-        self.assertEquals(code, 0)
+        with Capture(silent=True) as cap:
+            code = cmd.main(['unsubscribe', '--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial])
+            self.assertTrue(cmd.entitlement_dir.list_called)
+            self.assertTrue(ent1.is_deleted)
+            self.assertFalse(ent2.is_deleted)
+            self.assertTrue(ent3.is_deleted)
+            self.assertEquals(code, 0)
+            self.assertTrue('deprecated' in cap.err)
 
-        code = cmd.main(['unsubscribe', '--serial=%s' % '33333333'])
-        self.assertEquals(code, 1)
+        with Capture(silent=True) as cap:
+            code = cmd.main(['unsubscribe', '--serial=%s' % '33333333'])
+            self.assertEquals(code, 1)
+            self.assertTrue('deprecated' in cap.err)

@@ -21,7 +21,7 @@ import fnmatch
 import getpass
 import gettext
 import logging
-from optparse import OptionValueError
+from optparse import OptionValueError, SUPPRESS_HELP
 import os
 import socket
 import sys
@@ -250,6 +250,14 @@ def get_installed_product_status(product_directory, entitlement_directory, uep, 
     return product_status
 
 
+def deprecated_opt_warning(option, opt_str, value, parser, alias):
+    sys.stderr.write(_("Warning: The \"%s\" option is deprecated. Use \"%s\" instead.\n") % (opt_str, alias))
+
+    opt_alias = parser.get_option(alias)
+    if opt_alias is not None:
+        opt_alias.process(alias, value, parser.values, parser)
+
+
 class CliCommand(AbstractCLICommand):
     """ Base class for all sub-commands. """
 
@@ -289,19 +297,19 @@ class CliCommand(AbstractCLICommand):
 
     def _add_url_options(self):
         """ Add options that allow the setting of the server URL."""
-        self.parser.add_option("--serverurl", dest="server_url",
-                               default=None, help=_("server URL in the form of https://hostname:port/prefix"))
-        self.parser.add_option("--insecure", action="store_true",
-                                default=False, help=_("do not check the server SSL certificate against available certificate authorities"))
+        self.parser.add_option("--server-url", dest="server_url", default=None, help=_("server URL in the form of https://hostname:port/prefix"))
+        self.parser.add_option("--insecure", action="store_true", default=False, help=_("do not check the server SSL certificate against available certificate authorities"))
+
+        self.parser.add_option("--serverurl", help=SUPPRESS_HELP, action="callback", callback=deprecated_opt_warning, nargs=1, type="string", callback_kwargs={"alias": "--server-url"})
 
     def _add_proxy_options(self):
         """ Add proxy options that apply to sub-commands that require network connections. """
-        self.parser.add_option("--proxy", dest="proxy_url",
-                               default=None, help=_("proxy URL in the form of proxy_hostname:proxy_port"))
-        self.parser.add_option("--proxyuser", dest="proxy_user",
-                                default=None, help=_("user for HTTP proxy with basic authentication"))
-        self.parser.add_option("--proxypassword", dest="proxy_password",
-                                default=None, help=_("password for HTTP proxy with basic authentication"))
+        self.parser.add_option("--proxy", dest="proxy_url", default=None, help=_("proxy URL in the form of proxy_hostname:proxy_port"))
+        self.parser.add_option("--proxy-user", dest="proxy_user", default=None, help=_("user for HTTP proxy with basic authentication"))
+        self.parser.add_option("--proxy-password", dest="proxy_password", default=None, help=_("password for HTTP proxy with basic authentication"))
+
+        self.parser.add_option("--proxyuser", help=SUPPRESS_HELP, action="callback", callback=deprecated_opt_warning, nargs=1, type="string", callback_kwargs={"alias": "--proxy-user"})
+        self.parser.add_option("--proxypassword", help=SUPPRESS_HELP, action="callback", callback=deprecated_opt_warning, nargs=1, type="string", callback_kwargs={"alias": "--proxy-password"})
 
     def _do_command(self):
         pass
@@ -505,10 +513,8 @@ class UserPassCommand(CliCommand):
         self._username = None
         self._password = None
 
-        self.parser.add_option("--username", dest="username",
-                               help=_("username to use when authorizing against the server"))
-        self.parser.add_option("--password", dest="password",
-                               help=_("password to use when authorizing against the server"))
+        self.parser.add_option("--username", dest="username", help=_("username to use when authorizing against the server"))
+        self.parser.add_option("--password", dest="password", help=_("password to use when authorizing against the server"))
 
     @staticmethod
     def _get_username_and_password(username, password):
@@ -550,8 +556,7 @@ class OrgCommand(UserPassCommand):
         self._org = None
         if not hasattr(self, "_org_help_text"):
             self._org_help_text = _("specify organization")
-        self.parser.add_option("--org", dest="org", metavar="ORG_KEY",
-            help=self._org_help_text)
+        self.parser.add_option("--org", dest="org", metavar="ORG_KEY", help=self._org_help_text)
 
     @staticmethod
     def _get_org(org):
@@ -613,10 +618,8 @@ class IdentityCommand(UserPassCommand):
 
         super(IdentityCommand, self).__init__("identity", shortdesc, False)
 
-        self.parser.add_option("--regenerate", action='store_true',
-                               help=_("request a new certificate be generated"))
-        self.parser.add_option("--force", action='store_true',
-                               help=_("force certificate regeneration (requires username and password); Only used with --regenerate"))
+        self.parser.add_option("--regenerate", action='store_true', help=_("request a new certificate be generated"))
+        self.parser.add_option("--force", action='store_true', help=_("force certificate regeneration (requires username and password); Only used with --regenerate"))
 
     def _validate_options(self):
         self.assert_should_be_registered()
@@ -776,12 +779,9 @@ class AutohealCommand(CliCommand):
         super(AutohealCommand, self).__init__("auto-attach", shortdesc,
                                                 False)
 
-        self.parser.add_option("--enable", dest="enable", action='store_true',
-                help=_("try to attach subscriptions for uncovered products each check-in"))
-        self.parser.add_option("--disable", dest="disable", action='store_true',
-                help=_("do not try to automatically attach subscriptions each check-in"))
-        self.parser.add_option("--show", dest="show", action='store_true',
-                help=_("show the current auto-attach preference"))
+        self.parser.add_option("--enable", dest="enable", action='store_true', help=_("try to attach subscriptions for uncovered products each check-in"))
+        self.parser.add_option("--disable", dest="disable", action='store_true', help=_("do not try to automatically attach subscriptions each check-in"))
+        self.parser.add_option("--show", dest="show", action='store_true', help=_("show the current auto-attach preference"))
 
     def _toggle(self, autoheal):
         self.cp.updateConsumer(self.uuid, autoheal=autoheal)
@@ -812,21 +812,14 @@ class ServiceLevelCommand(OrgCommand):
     def __init__(self):
 
         shortdesc = _("Manage service levels for this system")
-        self._org_help_text = \
-            _("specify an organization when listing available service levels using the organization key, only used with --list")
-        super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
-                                                  False)
+        self._org_help_text = _("specify an organization when listing available service levels using the organization key, only used with --list")
+        super(ServiceLevelCommand, self).__init__("service-level", shortdesc, False)
 
         self._add_url_options()
-        self.parser.add_option("--show", dest="show", action='store_true',
-                help=_("show this system's current service level"))
-        self.parser.add_option("--list", dest="list", action='store_true',
-                help=_("list all service levels available"))
-        self.parser.add_option("--set", dest="service_level",
-                               help=_("service level to apply to this system"))
-        self.parser.add_option("--unset", dest="unset",
-                               action='store_true',
-                               help=_("unset the service level for this system"))
+        self.parser.add_option("--show", dest="show", action='store_true', help=_("show this system's current service level"))
+        self.parser.add_option("--list", dest="list", action='store_true', help=_("list all service levels available"))
+        self.parser.add_option("--set", dest="service_level", help=_("service level to apply to this system"))
+        self.parser.add_option("--unset", dest="unset", action='store_true', help=_("unset the service level for this system"))
 
         self.identity = inj.require(inj.IDENTITY)
 
@@ -962,24 +955,24 @@ class RegisterCommand(UserPassCommand):
                                help=_("the type of unit to register, defaults to system"))
         self.parser.add_option("--name", dest="consumername", metavar="SYSTEMNAME",
                                help=_("name of the system to register, defaults to the hostname"))
-        self.parser.add_option("--consumerid", dest="consumerid", metavar="SYSTEMID",
+        self.parser.add_option("--consumer-id", dest="consumerid", metavar="SYSTEMID",
                                help=_("the existing system data is pulled from the server"))
         self.parser.add_option("--org", dest="org", metavar="ORG_KEY",
                                help=_("register with one of multiple organizations for the user, using organization key"))
         self.parser.add_option("--environment", dest="environment",
                                help=_("register with a specific environment in the destination org"))
-        self.parser.add_option("--release", dest="release",
-                               help=_("set a release version"))
-        self.parser.add_option("--autosubscribe", action='store_true',
-                               help=_("Deprecated, see --auto-attach"))
+        self.parser.add_option("--release", dest="release", help=_("set a release version"))
+        self.parser.add_option("--autosubscribe", action='store_true', help=SUPPRESS_HELP)
         self.parser.add_option("--auto-attach", action='store_true', dest="autoattach",
                                help=_("automatically attach compatible subscriptions to this system"))
         self.parser.add_option("--force", action='store_true',
                                help=_("register the system even if it is already registered"))
-        self.parser.add_option("--activationkey", action='append', dest="activation_keys",
-                               help=_("activation key to use for registration (can be specified more than once)"))
-        self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("system preference used when subscribing automatically, requires --auto-attach"))
+        self.parser.add_option("--activation-key", action='append', dest="activation_keys", help=_("activation key to use for registration (can be specified more than once)"))
+        self.parser.add_option("--service-level", dest="service_level", help=_("system preference used when subscribing automatically, requires --auto-attach"))
+
+        self.parser.add_option("--activationkey", help=SUPPRESS_HELP, action="callback", callback=deprecated_opt_warning, nargs=1, type="string", callback_kwargs={"alias": "--activation-key"})
+        self.parser.add_option("--consumerid", help=SUPPRESS_HELP, action="callback", callback=deprecated_opt_warning, nargs=1, type="string", callback_kwargs={"alias": "--consumer-id"})
+        self.parser.add_option("--servicelevel", help=SUPPRESS_HELP, action="callback", callback=deprecated_opt_warning, nargs=1, type="string", callback_kwargs={"alias": "--service-level"})
 
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
@@ -1006,7 +999,7 @@ class RegisterCommand(UserPassCommand):
             print(_("Error: Must specify an activation key"))
             sys.exit(-1)
         elif (self.options.service_level and not self.autoattach):
-            print(_("Error: Must use --auto-attach with --servicelevel."))
+            print(_("Error: Must use --auto-attach with --service-level."))
             sys.exit(-1)
         elif (self.options.activation_keys and not self.options.org):
             print(_("Error: Must provide --org with activation keys."))
@@ -1134,8 +1127,7 @@ class RegisterCommand(UserPassCommand):
 
         if self.autoattach:
             if 'serviceLevel' not in consumer and self.options.service_level:
-                system_exit(-1, _("Error: The --servicelevel option is not supported "
-                                 "by the server. Did not complete your request."))
+                system_exit(-1, _("Error: The --service-level option is not supported by the server. Did not complete your request."))
             autosubscribe(self.cp, consumer['uuid'],
                     service_level=self.options.service_level)
 
@@ -1418,8 +1410,11 @@ class AttachCommand(CliCommand):
                                help=_("number of subscriptions to attach"))
         self.parser.add_option("--auto", action='store_true',
             help=_("automatically attach compatible subscriptions to this system"))
-        self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("service level to apply to this system, requires --auto"))
+
+        self.parser.add_option("--service-level", dest="service_level", help=_("service level to apply to this system, requires --auto"))
+
+        self.parser.add_option("--servicelevel", help=SUPPRESS_HELP, action="callback", callback=deprecated_opt_warning, nargs=1, type="string", callback_kwargs={"alias": "--service-level"})
+
         # re bz #864207
         _("All installed products are covered by valid entitlements.")
         _("No need to update subscriptions at this time.")
@@ -1451,7 +1446,7 @@ class AttachCommand(CliCommand):
                 self.options.quantity = int(self.options.quantity)
 
         if (self.options.service_level and not self.options.auto):
-            print(_("Error: Must use --auto with --servicelevel."))
+            print(_("Error: Must use --auto with --service-level."))
             sys.exit(-1)
 
     def _do_command(self):
@@ -1518,7 +1513,7 @@ class AttachCommand(CliCommand):
                     if self.options.service_level:
                         consumer = self.cp.getConsumer(self.identity.uuid)
                         if 'serviceLevel' not in consumer:
-                            system_exit(-1, _("Error: The --servicelevel option is not "
+                            system_exit(-1, _("Error: The --service-level option is not "
                                              "supported by the server. Did not "
                                              "complete your request."))
                     autosubscribe(self.cp, self.identity.uuid,
@@ -1560,6 +1555,10 @@ class SubscribeCommand(AttachCommand):
 
     def _primary(self):
         return False
+
+    def _do_command(self):
+        sys.stderr.write(_("Warning: The \"subscribe\" command is deprecated. Use \"attach\" instead.\n"))
+        return super(SubscribeCommand, self)._do_command()
 
 
 class RemoveCommand(CliCommand):
@@ -1686,6 +1685,10 @@ class UnSubscribeCommand(RemoveCommand):
     def _primary(self):
         return False
 
+    def _do_command(self):
+        sys.stderr.write(_("Warning: The \"unsubscribe\" command is deprecated. Use \"remove\" instead.\n"))
+        return super(UnSubscribeCommand, self)._do_command()
+
 
 class FactsCommand(CliCommand):
 
@@ -1801,15 +1804,13 @@ class PluginsCommand(CliCommand):
         super(PluginsCommand, self).__init__("plugins", shortdesc, False)
 
         SM = "subscription-manager"
-        self.parser.add_option("--list", action="store_true",
-                                help=_("list %s plugins") % SM)
-        self.parser.add_option("--listslots", action="store_true",
-                                help=_("list %s plugin slots") % SM)
-        self.parser.add_option("--listhooks", action="store_true",
-                                help=_("list %s plugin hooks") % SM)
-        self.parser.add_option("--verbose", action="store_true",
-                               default=False,
-                               help=_("show verbose plugin info"))
+        self.parser.add_option("--list", action="store_true", help=_("list %s plugins") % SM)
+        self.parser.add_option("--list-slots", action="store_true", dest="listslots", help=_("list %s plugin slots") % SM)
+        self.parser.add_option("--list-hooks", action="store_true", dest="listhooks", help=_("list %s plugin hooks") % SM)
+        self.parser.add_option("--verbose", action="store_true", default=False, help=_("show verbose plugin info"))
+
+        self.parser.add_option("--listslots", help=SUPPRESS_HELP, action="callback", callback=deprecated_opt_warning, callback_kwargs={"alias": "--list-slots"})
+        self.parser.add_option("--listhooks", help=SUPPRESS_HELP, action="callback", callback=deprecated_opt_warning, callback_kwargs={"alias": "--list-hooks"})
 
     def _validate_options(self):
         # default to list
@@ -2137,13 +2138,10 @@ class ListCommand(CliCommand):
                                help=_("show those subscriptions which are available"))
         self.parser.add_option("--all", action='store_true',
                                help=_("used with --available to ensure all subscriptions are returned"))
-        self.parser.add_option("--ondate", dest="on_date",
-                                help=(_("date to search on, defaults to today's date, only used with --available (example: %s)")
-                                      % strftime("%Y-%m-%d", localtime())))
-        self.parser.add_option("--consumed", action='store_true',
-                               help=_("show the subscriptions being consumed by this system"))
-        self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("shows only subscriptions matching the specified service level; only used with --available and --consumed"))
+
+        self.parser.add_option("--on-date", dest="on_date", help=(_("date to search on, defaults to today's date, only used with --available (example: %s)") % strftime("%Y-%m-%d", localtime())))
+        self.parser.add_option("--consumed", action='store_true', help=_("show the subscriptions being consumed by this system"))
+        self.parser.add_option("--service-level", dest="service_level", help=_("shows only subscriptions matching the specified service level; only used with --available and --consumed"))
         self.parser.add_option("--no-overlap", action='store_true',
                                help=_("shows pools which provide products that are not already covered; only used with --available"))
         self.parser.add_option("--match-installed", action="store_true",
@@ -2151,15 +2149,18 @@ class ListCommand(CliCommand):
         self.parser.add_option("--matches", dest="filter_string",
                                help=_("lists only subscriptions or products containing the specified search string in the subscription or product information, varying with the list requested and the server version (case-insensitive)."))
 
+        self.parser.add_option("--ondate", help=SUPPRESS_HELP, action="callback", callback=deprecated_opt_warning, nargs=1, type="string", callback_kwargs={"alias": "--on-date"})
+        self.parser.add_option("--servicelevel", help=SUPPRESS_HELP, action="callback", callback=deprecated_opt_warning, nargs=1, type="string", callback_kwargs={"alias": "--service-level"})
+
     def _validate_options(self):
         if (self.options.all and not self.options.available):
             print _("Error: --all is only applicable with --available")
             sys.exit(-1)
         if (self.options.on_date and not self.options.available):
-            print _("Error: --ondate is only applicable with --available")
+            print _("Error: --on-date is only applicable with --available")
             sys.exit(-1)
         if self.options.service_level is not None and not (self.options.consumed or self.options.available):
-            print _("Error: --servicelevel is only applicable with --available or --consumed")
+            print _("Error: --service-level is only applicable with --available or --consumed")
             sys.exit(-1)
         if not (self.options.available or self.options.consumed):
             self.options.installed = True
@@ -2496,9 +2497,9 @@ class StatusCommand(CliCommand):
     def __init__(self):
         shortdesc = _("Show status information for this system's subscriptions and products")
         super(StatusCommand, self).__init__("status", shortdesc, True)
-        self.parser.add_option("--ondate", dest="on_date",
-                                help=(_("future date to check status on, defaults to today's date (example: %s)")
-                                      % strftime("%Y-%m-%d", localtime())))
+        self.parser.add_option("--on-date", dest="on_date", help=(_("future date to check status on, defaults to today's date (example: %s)") % strftime("%Y-%m-%d", localtime())))
+
+        self.parser.add_option("--ondate", help=SUPPRESS_HELP, action="callback", callback=deprecated_opt_warning, nargs=1, type="string", callback_kwargs={"alias": "--on-date"})
 
     def _do_command(self):
         # list status and all reasons it is not valid
