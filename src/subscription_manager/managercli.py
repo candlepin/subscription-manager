@@ -2101,6 +2101,8 @@ class ListCommand(CliCommand):
                                help=_("shows only subscriptions matching products that are currently installed; only used with --available"))
         self.parser.add_option("--matches", dest="filter_string",
                                help=_("lists only subscriptions or products containing the specified search string in the subscription or product information, varying with the list requested and the server version (case-insensitive)."))
+        self.parser.add_option("--pool-only", dest="pid_only", action="store_true",
+                               help=_("lists only the pool IDs for applicable available or consumed subscriptions; only used with --available and --consumed"))
 
     def _validate_options(self):
         if (self.options.all and not self.options.available):
@@ -2122,7 +2124,7 @@ class ListCommand(CliCommand):
         """
         self._validate_options()
 
-        if self.options.installed:
+        if self.options.installed and not self.options.pid_only:
             iproducts = get_installed_product_status(self.product_dir, self.entitlement_dir, self.cp, self.options.filter_string)
 
             if len(iproducts):
@@ -2167,37 +2169,41 @@ class ListCommand(CliCommand):
                 epools = self._filter_pool_json_by_service_level(epools, self.options.service_level)
 
             if len(epools):
-                print("+-------------------------------------------+")
-                print("    " + _("Available Subscriptions"))
-                print("+-------------------------------------------+")
+                if self.options.pid_only:
+                    for data in epools:
+                        print data['id']
+                else:
+                    print("+-------------------------------------------+")
+                    print("    " + _("Available Subscriptions"))
+                    print("+-------------------------------------------+")
 
-                for data in epools:
-                    if PoolWrapper(data).is_virt_only():
-                        machine_type = machine_type = _("Virtual")
-                    else:
-                        machine_type = _("Physical")
+                    for data in epools:
+                        if PoolWrapper(data).is_virt_only():
+                            machine_type = machine_type = _("Virtual")
+                        else:
+                            machine_type = _("Physical")
 
-                    print columnize(AVAILABLE_SUBS_LIST, _none_wrap,
-                            data['productName'],
-                            data['providedProducts'],
-                            data['productId'],
-                            data['contractNumber'] or "",
-                            data['id'],
-                            data['quantity'],
-                            data['suggested'],
-                            data['service_level'] or "",
-                            data['service_type'] or "",
-                            data['pool_type'],
-                            data['endDate'],
-                            machine_type) + "\n"
-            else:
+                        print columnize(AVAILABLE_SUBS_LIST, _none_wrap,
+                                data['productName'],
+                                data['providedProducts'],
+                                data['productId'],
+                                data['contractNumber'] or "",
+                                data['id'],
+                                data['quantity'],
+                                data['suggested'],
+                                data['service_level'] or "",
+                                data['service_type'] or "",
+                                data['pool_type'],
+                                data['endDate'],
+                                machine_type) + "\n"
+            elif not self.options.pid_only:
                 if self.options.filter_string:
                     print(_("No available subscription pools matching the specified criteria were found."))
                 else:
                     print(_("No available subscription pools to list"))
 
         if self.options.consumed:
-            self.print_consumed(service_level=self.options.service_level, filter_string=self.options.filter_string)
+            self.print_consumed(service_level=self.options.service_level, filter_string=self.options.filter_string, pid_only=self.options.pid_only)
 
     def _filter_pool_json_by_service_level(self, pools, service_level):
 
@@ -2210,7 +2216,7 @@ class ListCommand(CliCommand):
 
         return filter(filter_pool_data_by_service_level, pools)
 
-    def print_consumed(self, service_level=None, filter_string=None):
+    def print_consumed(self, service_level=None, filter_string=None, pid_only=False):
         # list all certificates that have not yet expired, even those
         # that are not yet active.
         certs = self.entitlement_dir.list()
@@ -2223,76 +2229,81 @@ class ListCommand(CliCommand):
 
             # Process and display our (filtered) certs:
             if len(certs):
-                print("+-------------------------------------------+")
-                print("   " + _("Consumed Subscriptions"))
-                print("+-------------------------------------------+")
+                if pid_only:
+                    for cert in certs:
+                        if hasattr(cert.pool, "id"):
+                            print cert.pool.id
+                else:
+                    print("+-------------------------------------------+")
+                    print("   " + _("Consumed Subscriptions"))
+                    print("+-------------------------------------------+")
 
-                cert_reasons_map = inj.require(inj.CERT_SORTER).reasons.get_subscription_reasons_map()
-                pooltype_cache = inj.require(inj.POOLTYPE_CACHE)
+                    cert_reasons_map = inj.require(inj.CERT_SORTER).reasons.get_subscription_reasons_map()
+                    pooltype_cache = inj.require(inj.POOLTYPE_CACHE)
 
-                for cert in certs:
-                    # for some certs, order can be empty
-                    # so we default the values and populate them if
-                    # they exist. BZ974587
-                    name = ""
-                    sku = ""
-                    contract = ""
-                    account = ""
-                    quantity_used = ""
-                    service_level = ""
-                    service_type = ""
-                    system_type = ""
+                    for cert in certs:
+                        # for some certs, order can be empty
+                        # so we default the values and populate them if
+                        # they exist. BZ974587
+                        name = ""
+                        sku = ""
+                        contract = ""
+                        account = ""
+                        quantity_used = ""
+                        service_level = ""
+                        service_type = ""
+                        system_type = ""
 
-                    order = cert.order
+                        order = cert.order
 
-                    if order:
-                        service_level = order.service_level or ""
-                        service_type = order.service_type or ""
-                        name = order.name
-                        sku = order.sku
-                        contract = order.contract or ""
-                        account = order.account or ""
-                        quantity_used = order.quantity_used
-                        if order.virt_only:
-                            system_type = _("Virtual")
-                        else:
-                            system_type = _("Physical")
+                        if order:
+                            service_level = order.service_level or ""
+                            service_type = order.service_type or ""
+                            name = order.name
+                            sku = order.sku
+                            contract = order.contract or ""
+                            account = order.account or ""
+                            quantity_used = order.quantity_used
+                            if order.virt_only:
+                                system_type = _("Virtual")
+                            else:
+                                system_type = _("Physical")
 
-                    pool_id = _("Not Available")
-                    if hasattr(cert.pool, "id"):
-                        pool_id = cert.pool.id
+                        pool_id = _("Not Available")
+                        if hasattr(cert.pool, "id"):
+                            pool_id = cert.pool.id
 
-                    product_names = [p.name for p in cert.products]
+                        product_names = [p.name for p in cert.products]
 
-                    reasons = []
-                    pool_type = ''
+                        reasons = []
+                        pool_type = ''
 
-                    if cert.subject and 'CN' in cert.subject:
-                        if cert.subject['CN'] in cert_reasons_map:
-                            reasons = cert_reasons_map[cert.subject['CN']]
-                        pool_type = pooltype_cache.get(pool_id)
+                        if cert.subject and 'CN' in cert.subject:
+                            if cert.subject['CN'] in cert_reasons_map:
+                                reasons = cert_reasons_map[cert.subject['CN']]
+                            pool_type = pooltype_cache.get(pool_id)
 
-                    print columnize(CONSUMED_LIST, _none_wrap,
-                        name,
-                        product_names,
-                        sku,
-                        contract,
-                        account,
-                        cert.serial,
-                        pool_id,
-                        cert.is_valid(),
-                        quantity_used,
-                        service_level,
-                        service_type,
-                        reasons,
-                        pool_type,
-                        managerlib.format_date(cert.valid_range.begin()),
-                        managerlib.format_date(cert.valid_range.end()),
-                        system_type
-                    ) + "\n"
-            else:
+                        print columnize(CONSUMED_LIST, _none_wrap,
+                            name,
+                            product_names,
+                            sku,
+                            contract,
+                            account,
+                            cert.serial,
+                            pool_id,
+                            cert.is_valid(),
+                            quantity_used,
+                            service_level,
+                            service_type,
+                            reasons,
+                            pool_type,
+                            managerlib.format_date(cert.valid_range.begin()),
+                            managerlib.format_date(cert.valid_range.end()),
+                            system_type
+                        ) + "\n"
+            elif not pid_only:
                 print(_("No consumed subscription pools matching the specified criteria were found."))
-        else:
+        elif not pid_only:
             print(_("No consumed subscription pools to list"))
 
 

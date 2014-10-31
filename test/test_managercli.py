@@ -17,7 +17,7 @@ from subscription_manager.printing_utils import format_name, columnize, \
         _echo, _none_wrap
 from subscription_manager.repolib import Repo
 from stubs import MockStderr, StubProductCertificate, StubEntitlementCertificate, \
-        StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, StubCertSorter
+        StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, StubCertSorter, StubPool
 from fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher
 
@@ -585,6 +585,55 @@ class TestListCommand(TestCliProxyCommand):
         pools = [{'service_level': 'Level1'}]
         filtered = self.cc._filter_pool_json_by_service_level(pools, "NotFound")
         self.assertEqual(0, len(filtered))
+
+    def test_list_installed_with_pidonly(self):
+        installed_product_certs = [
+            StubProductCertificate(product=StubProduct(name="test product*", product_id="8675309")),
+            StubProductCertificate(product=StubProduct(name="another(?) test\\product", product_id="123456"))
+        ]
+
+        stub_sorter = StubCertSorter()
+
+        for product_cert in installed_product_certs:
+            product = product_cert.products[0]
+            stub_sorter.installed_products[product.id] = product_cert
+
+        provide(CERT_SORTER, stub_sorter)
+
+        with Capture() as captured:
+            list_command = managercli.ListCommand()
+            list_command.main(["list", "--installed", "--pool-only"])
+
+        for cert in installed_product_certs:
+            self.assertFalse(cert.products[0].id in captured.out)
+
+    def test_list_consumed_with_pidonly(self):
+        consumed = [
+            StubEntitlementCertificate(product=StubProduct(name="Test Entitlement 1", product_id="123"), pool=StubPool("abc"), provided_products=[
+                "test product a",
+                "beta product 1",
+                "shared product",
+                "troll* product?"
+            ]),
+
+            StubEntitlementCertificate(product=StubProduct(name="Test Entitlement 2", product_id="456"), pool=StubPool("def"), provided_products=[
+                "test product b",
+                "beta product 1",
+                "shared product",
+                "back\\slash"
+            ])
+        ]
+
+        for stubby in consumed:
+            self.ent_dir.certs.append(stubby)
+
+        with Capture() as captured:
+            list_command = managercli.ListCommand()
+            list_command.main(["list", "--consumed", "--pool-only"])
+
+        for cert in consumed:
+            self.assertFalse(cert.order.name in captured.out)
+            self.assertTrue(cert.pool.id in captured.out)
 
 
 class TestUnRegisterCommand(TestCliProxyCommand):
