@@ -21,7 +21,7 @@
 rhn-migrate-classic-to-rhsm \- Migrates a system profile from Red Hat Network Classic Hosted to Customer Portal Subscription Management (hosted) or Subscription Asset Manager (on-premise).
 
 .SH SYNOPSIS
-rhn-migrate-classic-to-rhsm [--force] | [--no-auto] | [--service-level=SERVICE_LEVEL] | [--destination-url=URL] | [--legacy-user=LEGACY_USER] | [--legacy-password=LEGACY_PASSWORD] | [-destination-user=DESTINATION_USER] | [--destination-password=DESTINATION_PASSWORD] | [--org=ORG] | [--environment=ENVIRONMENT] | [--no-proxy] | [--help]
+rhn-migrate-classic-to-rhsm [--force] | [--no-auto] | [--servicelevel=SERVICE_LEVEL] | [--destination-url=URL] | [--legacy-user=LEGACY_USER] | [--legacy-password=LEGACY_PASSWORD] | [-destination-user=DESTINATION_USER] | [--destination-password=DESTINATION_PASSWORD] | [--org=ORG] | [--environment=ENVIRONMENT] | [--no-proxy] | [--help]
 
 .SH DESCRIPTION
 \fBrhn-migrate-classic-to-rhsm\fP migrates a system profile which is registered with Red Hat Network Classic to Customer Portal Subscription Management. This is intended for migrating from the host service, not for migrating from a Satellite system.
@@ -60,7 +60,7 @@ Ignore channels not available through Customer Portal Subscription Management (o
 Deletes the system from Red Hat Network Classic and registers it to Customer Portal Subscription Management, but does not attach any subscriptions to the system.
 
 .TP
-.B -s SERVICE_LEVEL, --service-level=SERVICE_LEVEL
+.B -s SERVICE_LEVEL, --servicelevel=SERVICE_LEVEL
 Sets a preferred service level for the system, such as premium or standard. This service level preference is then used as one of the criteria for auto-attaching subscriptions to the system.
 
 .TP
@@ -165,10 +165,10 @@ Please visit https://access.redhat.com/management/consumers/abcd1234 to view the
 The script prompts for a username and password to use to register the system; this same account is used to authenticate with both Red Hat Network Classic and Customer Portal Subscription Management.
 
 .PP
-Optionally, the \fB--service-level\fP argument sets an SLA preference to use with the system. The SLA associated with a subscription is then evaluated when determining what subscriptions to auto-attach to the system, along with other factors like installed products, existing channel assignments, and architecture.
+Optionally, the \fB--servicelevel\fP argument sets an SLA preference to use with the system. The SLA associated with a subscription is then evaluated when determining what subscriptions to auto-attach to the system, along with other factors like installed products, existing channel assignments, and architecture.
 
 .nf
-[root@server ~]# rhn-migrate-classic-to-rhsm --service-level=premium
+[root@server ~]# rhn-migrate-classic-to-rhsm --servicelevel=premium
 Red Hat account: jsmith@example.com
 Password:
 .fi

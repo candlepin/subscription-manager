@@ -176,7 +176,7 @@ class TestMigration(SubManFixture):
     def test_mutually_exclusive_auto_service_level_options(self):
         parser = OptionParser()
         migrate.add_parser_options(parser)
-        (options, args) = parser.parse_args(["--no-auto", "--service-level", "foo"])
+        (options, args) = parser.parse_args(["--no-auto", "--servicelevel", "foo"])
         self.assertRaises(SystemExit, migrate.validate_options, (options))
 
     @patch.object(rhsm.config.RhsmConfigParser, "get", autospec=True)
@@ -1059,7 +1059,7 @@ class TestMigration(SubManFixture):
             '--environment=env',
             '--consumer-id=id',
             '--auto-attach',
-            '--service-level=y',
+            '--servicelevel=y',
             ]
 
         self.engine.consumer_exists.assert_called_once_with(self.engine.consumer_id)
