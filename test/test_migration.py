@@ -1054,12 +1054,12 @@ class TestMigration(SubManFixture):
             'register',
             '--username=foo',
             '--password=bar',
-            '--server-url=http://example.com',
+            '--serverurl=http://example.com',
             '--org=org',
             '--environment=env',
-            '--consumer-id=id',
+            '--consumerid=id',
             '--auto-attach',
-            '--service-level=y',
+            '--servicelevel=y',
             ]
 
         self.engine.consumer_exists.assert_called_once_with(self.engine.consumer_id)
@@ -1104,7 +1104,7 @@ class TestMigration(SubManFixture):
             'register',
             '--username=foo',
             '--password=bar',
-            '--server-url=foobar',
+            '--serverurl=foobar',
             '--org=org',
             '--environment=env',
             '--auto-attach',

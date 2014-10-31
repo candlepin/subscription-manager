@@ -638,7 +638,7 @@ class MigrationEngine(object):
         print _("Attempting to register system to destination server...")
         cmd = ['subscription-manager', 'register', '--username=' + credentials.username, '--password=' + credentials.password]
         if self.options.destination_url:
-            cmd.append('--server-url=' + self.options.destination_url)
+            cmd.append('--serverurl=' + self.options.destination_url)
 
         if org:
             cmd.append('--org=' + org)
@@ -647,14 +647,14 @@ class MigrationEngine(object):
 
         if self.options.five_to_six:
             if self.consumer_exists(self.consumer_id):
-                cmd.append('--consumer-id=' + self.consumer_id)
+                cmd.append('--consumerid=' + self.consumer_id)
 
         if self.options.auto:
             cmd.append('--auto-attach')
 
         if self.options.service_level:
             servicelevel = self.select_service_level(org, self.options.service_level)
-            cmd.append('--service-level=' + servicelevel)
+            cmd.append('--servicelevel=' + servicelevel)
 
         subprocess.call(cmd)
 
