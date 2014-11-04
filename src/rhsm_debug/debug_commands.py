@@ -36,7 +36,8 @@ cfg = initConfig()
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
+ERR_NOT_REGISTERED_MSG = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
+ERR_NOT_REGISTERED_CODE = 1
 
 ASSEMBLE_DIR = '/var/spool/rhsm/debug'
 ROOT_READ_ONLY = 0600
@@ -76,8 +77,8 @@ class SystemCommand(CliCommand):
         self._validate_options()
         consumer = inj.require(inj.IDENTITY)
         if not consumer.is_valid():
-            print NOT_REGISTERED
-            sys.exit(-1)
+            print ERR_NOT_REGISTERED_MSG
+            sys.exit(ERR_NOT_REGISTERED_CODE)
 
         code = self._make_code()
         assemble_path = self._get_assemble_dir()
@@ -180,7 +181,7 @@ class SystemCommand(CliCommand):
 
         except Exception, e:
             managercli.handle_exception(_("Unable to create zip file of system information: %s") % e, e)
-            sys.exit(-1)
+            sys.exit(os.EX_SOFTWARE)
         finally:
             if assemble_path and os.path.exists(assemble_path):
                 shutil.rmtree(assemble_path, True)

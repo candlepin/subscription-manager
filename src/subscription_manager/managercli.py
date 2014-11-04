@@ -159,9 +159,9 @@ def handle_exception(msg, ex):
     mapped_message = exception_mapper.get_message(ex)
     if mapped_message:
         print mapped_message
-        sys.exit(-1)
+        sys.exit(os.EX_SOFTWARE)
     else:
-        system_exit(-1, ex)
+        system_exit(os.EX_SOFTWARE, ex)
 
 
 def autosubscribe(cp, consumer_uuid, service_level=None):
@@ -1058,7 +1058,7 @@ class RegisterCommand(UserPassCommand):
                                     facts=facts_dic)
         except connection.RestlibException, re:
             log.exception(re)
-            system_exit(-1, re.msg)
+            system_exit(os.EX_SOFTWARE, re.msg)
         except Exception, e:
             handle_exception(_("Error during registration: %s") % e, e)
 
@@ -1100,7 +1100,7 @@ class RegisterCommand(UserPassCommand):
 
         if self.autoattach:
             if 'serviceLevel' not in consumer and self.options.service_level:
-                system_exit(-1, _("Error: The --servicelevel option is not supported "
+                system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not supported "
                                  "by the server. Did not complete your request."))
             autosubscribe(self.cp, consumer['uuid'],
                     service_level=self.options.service_level)
@@ -1163,17 +1163,17 @@ class RegisterCommand(UserPassCommand):
                 env_matches = [env['id'] for env in env_list if env['name'] == environment_name]
                 if env_matches:
                     return env_matches[0]
-                system_exit(-1, _("No such environment: %s") % environment_name)
+                system_exit(os.EX_DATAERR, _("No such environment: %s") % environment_name)
 
             # Server doesn't support environments
             return environment_name
 
         if not supports_environments:
-            system_exit(-1, _("Error: Server does not support environments."))
+            system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
 
         env = cp.getEnvironment(owner_key=owner_key, name=environment_name)
         if not env:
-            system_exit(-1, _("No such environment: %s") % environment_name)
+            system_exit(os.EX_DATAERR, _("No such environment: %s") % environment_name)
         return env['id']
 
     def _determine_owner_key(self, cp):
@@ -1188,7 +1188,7 @@ class RegisterCommand(UserPassCommand):
         owners = cp.getOwnerList(self.username)
 
         if len(owners) == 0:
-            system_exit(-1, _("%s cannot register with any organizations.") % self.username)
+            system_exit(os.EX_SOFTWARE, _("%s cannot register with any organizations.") % self.username)
         if len(owners) == 1:
             return owners[0]['key']
 
@@ -1312,7 +1312,7 @@ class ReleaseCommand(CliCommand):
         err_msg = _("Error: The 'release' command is not supported by the server.")
         consumer = self.cp.getConsumer(self.identity.uuid)
         if 'releaseVer' not in consumer:
-            system_exit(-1, err_msg)
+            system_exit(os.EX_UNAVAILABLE, err_msg)
         return consumer['releaseVer']['releaseVer']
 
     def show_current_release(self):
@@ -1347,7 +1347,7 @@ class ReleaseCommand(CliCommand):
                 self.cp.updateConsumer(self.identity.uuid,
                         release=self.options.release)
             else:
-                system_exit(-1, _("No releases match '%s'.  "
+                system_exit(os.EX_DATAERR, _("No releases match '%s'.  "
                                  "Consult 'release --list' for a full listing.")
                                  % self.options.release)
             print _("Release set to: %s") % self.options.release
@@ -1355,7 +1355,7 @@ class ReleaseCommand(CliCommand):
             self._get_consumer_release()
             releases = self.release_backend.get_releases()
             if not releases:
-                system_exit(-1, _("No release versions available, please check subscriptions."))
+                system_exit(os.EX_CONFIG, _("No release versions available, please check subscriptions."))
 
             print("+-------------------------------------------+")
             print("          %s" % (_("Available Releases")))
@@ -1432,7 +1432,7 @@ class AttachCommand(CliCommand):
                     try:
                         # odd html strings will cause issues, reject them here.
                         if (pool.find("#") >= 0):
-                            system_exit(-1, _("Please enter a valid numeric pool ID."))
+                            system_exit(os.EX_USAGE, _("Please enter a valid numeric pool ID."))
                         # If quantity is None, server will assume 1. pre_subscribe will
                         # report the same.
                         self.plugin_manager.run("pre_subscribe",
@@ -1455,7 +1455,7 @@ class AttachCommand(CliCommand):
                         elif re.code == 400 or re.code == 404:
                             print re.msg  # no such pool.
                         else:
-                            system_exit(-1, re.msg)  # some other error.. don't try again
+                            system_exit(os.EX_SOFTWARE, re.msg)  # some other error.. don't try again
                 if not subscribed:
                     return_code = 1
             # must be auto
@@ -1479,7 +1479,7 @@ class AttachCommand(CliCommand):
                     if self.options.service_level:
                         consumer = self.cp.getConsumer(self.identity.uuid)
                         if 'serviceLevel' not in consumer:
-                            system_exit(-1, _("Error: The --servicelevel option is not "
+                            system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not "
                                              "supported by the server. Did not "
                                              "complete your request."))
                     autosubscribe(self.cp, self.identity.uuid,
@@ -1553,10 +1553,10 @@ class RemoveCommand(CliCommand):
                     print _("Error: '%s' is not a valid serial number") % serial
                     bad = True
             if bad:
-                system_exit(-1)
+                system_exit(os.EX_USAGE)
         elif not self.options.all:
             print _("Error: This command requires that you specify one of --serial or --all.")
-            system_exit(-1)
+            system_exit(os.EX_USAGE)
 
     def _do_command(self):
         """
@@ -1588,7 +1588,7 @@ class RemoveCommand(CliCommand):
                         except connection.RestlibException, re:
                             if re.code == 410:
                                 print re.msg
-                                system_exit(-1)
+                                system_exit(os.EX_SOFTWARE)
                             failure.append(re.msg)
                     if success:
                         print _("Serial numbers successfully removed at the server:")
@@ -1603,7 +1603,7 @@ class RemoveCommand(CliCommand):
                 self.entcertlib.update()
             except connection.RestlibException, re:
                 log.error(re)
-                system_exit(-1, re.msg)
+                system_exit(os.EX_SOFTWARE, re.msg)
             except Exception, e:
                 handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
         else:
@@ -1688,7 +1688,7 @@ class FactsCommand(CliCommand):
                 facts.update_check(self.cp, identity.uuid, force=True)
             except connection.RestlibException, re:
                 log.exception(re)
-                system_exit(-1, re.msg)
+                system_exit(os.EX_SOFTWARE, re.msg)
             print _("Successfully updated the system facts.")
 
 
@@ -2152,8 +2152,7 @@ class ListCommand(CliCommand):
                     on_date = datetime.datetime(
                             *(strptime(self.options.on_date, '%Y-%m-%d')[0:6]))
                 except Exception:
-                    print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
-                    sys.exit(1)
+                    system_exit(os.EX_DATAERR, _("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
 
             facts = inj.require(inj.FACTS)
             epools = managerlib.get_available_entitlements(facts=facts,
