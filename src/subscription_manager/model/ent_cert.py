@@ -31,7 +31,9 @@ class EntitlementCertContent(Content):
         return cls(content_type=ent_cert_content.content_type,
             name=ent_cert_content.name, label=ent_cert_content.label,
             url=ent_cert_content.url, gpg=ent_cert_content.gpg,
-            tags=ent_cert_content.required_tags, cert=cert)
+            tags=ent_cert_content.required_tags, cert=cert,
+            enabled=ent_cert_content.enabled,
+            metadata_expire=ent_cert_content.metadata_expire)
 
 
 class EntitlementCertEntitlement(Entitlement):

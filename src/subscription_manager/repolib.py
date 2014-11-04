@@ -23,6 +23,8 @@ import string
 import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import utils
+from subscription_manager import model
+from subscription_manager.model import ent_cert
 
 from rhsm.config import initConfig
 from rhsm.connection import RemoteServerException, RestlibException
@@ -107,6 +109,8 @@ class RepoUpdateActionCommand(object):
         # These should probably move closer their use
         self.ent_dir = inj.require(inj.ENT_DIR)
         self.prod_dir = inj.require(inj.PROD_DIR)
+
+        self.ent_source = ent_cert.EntitlementDirEntitlementSource()
 
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
@@ -208,101 +212,45 @@ class RepoUpdateActionCommand(object):
         return self.report
 
     def get_unique_content(self):
-        unique = set()
+        # FIXME Shouldn't this skip all of the repo updating?
         if not self.manage_repos:
-            return unique
-        ent_certs = self.ent_dir.list_valid()
+            return []
+
+        # baseurl and ca_cert could be "CDNInfo" or
+        # bundle with "ConnectionInfo" etc
         baseurl = CFG.get('rhsm', 'baseurl')
         ca_cert = CFG.get('rhsm', 'repo_ca_cert')
-        for ent_cert in ent_certs:
-            for r in self.get_content(ent_cert, baseurl, ca_cert):
-                unique.add(r)
-        return unique
 
-    def matching_content(self, ent_cert=None):
-        if ent_cert:
-            certs = [ent_cert]
-        else:
-            certs = self.ent_dir.list_valid()
+        content_list = self.get_all_content(baseurl, ca_cert)
 
-        lst = set()
+        # assumes items in content_list are hashable
+        return set(content_list)
 
-        for cert in certs:
-            if not cert.content:
-                continue
+    def get_all_content(self, baseurl, ca_cert):
+        matching_content = model.find_content(self.ent_source,
+                                              content_type="yum")
 
-            tags_we_have = self.prod_dir.get_provided_tags()
+        content_list = []
+        for content in matching_content:
+            repo = Repo.from_ent_cert_content(content, baseurl, ca_cert,
+                                              self.release)
 
-            for content in cert.content:
-                if not content.content_type in ALLOWED_CONTENT_TYPES:
-                    log.debug("Content type %s not allowed, skipping content: %s" % (
-                        content.content_type, content.label))
-                    continue
-
-                all_tags_found = True
-                for tag in content.required_tags:
-                    if not tag in tags_we_have:
-                        log.debug("Missing required tag '%s', skipping content: %s" % (
-                            tag, content.label))
-                        all_tags_found = False
-                if all_tags_found:
-                    lst.add(content)
-
-        return lst
-
-    def get_content(self, ent_cert, baseurl, ca_cert):
-        lst = []
-
-        for content in self.matching_content(ent_cert):
-            content_id = content.label
-            repo = Repo(content_id)
-            repo['name'] = content.name
-            if content.enabled:
-                repo['enabled'] = "1"
-            else:
-                repo['enabled'] = "0"
-            repo['baseurl'] = utils.url_base_join(baseurl,
-                                                  self._use_release_for_releasever(content.url))
-
-            # Extract the variables from thr url
-            repo_parts = repo['baseurl'].split("/")
-            repoid_vars = [part[1:] for part in repo_parts if part.startswith("$")]
-            if repoid_vars:
-                repo['ui_repoid_vars'] = " ".join(repoid_vars)
-
-            # If no GPG key URL is specified, turn gpgcheck off:
-            gpg_url = content.gpg
-            if not gpg_url:
-                repo['gpgkey'] = ""
-                repo['gpgcheck'] = '0'
-            else:
-                repo['gpgkey'] = utils.url_base_join(baseurl, gpg_url)
-                # Leave gpgcheck as the default of 1
-
-            repo['sslclientkey'] = ent_cert.key_path()
-            repo['sslclientcert'] = ent_cert.path
-            repo['sslcacert'] = ca_cert
-            repo['metadata_expire'] = content.metadata_expire
-
-            self._set_proxy_info(repo)
-
+            # overrides are yum repo only at the moment, but
+            # content sources will likely need to learn how to
+            # apply overrides as well, perhaps generically
             if self.override_supported and self.apply_overrides:
-                self._set_override_info(repo)
+                repo = self._set_override_info(repo)
 
-            lst.append(repo)
-        return lst
+            content_list.append(repo)
 
-    def _use_release_for_releasever(self, contenturl):
-        # FIXME: release ala uep.getRelease should not be an int
-        if self.release is None or \
-           len(self.release) == 0:
-            return contenturl
-        return contenturl.replace("$releasever", "%s" % self.release)
+        return content_list
 
     def _set_override_info(self, repo):
         # In the disconnected case, self.overrides will be an empty list
         for name, value in self.overrides.get(repo.id, {}).items():
             repo[name] = value
+
+        return repo
 
     def _is_overridden(self, repo, key):
         return key in self.overrides.get(repo.id, {})
@@ -311,23 +259,6 @@ class RepoUpdateActionCommand(object):
         written_value = self.written_overrides.overrides.get(repo.id, {}).get(key)
         # Compare values as strings to avoid casting problems from io
         return written_value is not None and value is not None and str(written_value) == str(value)
-
-    def _set_proxy_info(self, repo):
-        proxy = ""
-
-        proxy_host = CFG.get('server', 'proxy_hostname')
-        # proxy_port as string is fine here
-        proxy_port = CFG.get('server', 'proxy_port')
-        if proxy_host != "":
-            proxy = "https://%s" % proxy_host
-            if proxy_port != "":
-                proxy = "%s:%s" % (proxy, proxy_port)
-
-        # These could be empty string, in which case they will not be
-        # set in the yum repo file:
-        repo['proxy'] = proxy
-        repo['proxy_username'] = CFG.get('server', 'proxy_user')
-        repo['proxy_password'] = CFG.get('server', 'proxy_password')
 
     def _build_props(self, old_repo, new_repo):
         result = {}
@@ -477,6 +408,83 @@ class Repo(dict):
         for k, (m, d) in self.PROPERTIES.items():
             if k not in self.keys():
                 self[k] = d
+
+    @classmethod
+    def from_ent_cert_content(cls, content, baseurl, ca_cert, release):
+        """Create an instance of Repo() from an ent_cert.EntitlementCertContent().
+
+        And the other out of band info we need including baseurl, ca_cert, and
+        the release version string.
+        """
+
+        repo = cls(content.label)
+
+        repo['name'] = content.name
+
+        if content.enabled:
+            repo['enabled'] = "1"
+        else:
+            repo['enabled'] = "0"
+
+        expanded_url_path = Repo._expand_releasever(release, content.url)
+        repo['baseurl'] = utils.url_base_join(baseurl, expanded_url_path)
+
+        # Extract the variables from the url
+        repo_parts = repo['baseurl'].split("/")
+        repoid_vars = [part[1:] for part in repo_parts if part.startswith("$")]
+        if repoid_vars:
+            repo['ui_repoid_vars'] = " ".join(repoid_vars)
+
+        # If no GPG key URL is specified, turn gpgcheck off:
+        gpg_url = content.gpg
+        if not gpg_url:
+            repo['gpgkey'] = ""
+            repo['gpgcheck'] = '0'
+        else:
+            repo['gpgkey'] = utils.url_base_join(baseurl, gpg_url)
+            # Leave gpgcheck as the default of 1
+
+        repo['sslclientkey'] = content.cert.key_path()
+        repo['sslclientcert'] = content.cert.path
+        repo['sslcacert'] = ca_cert
+        repo['metadata_expire'] = content.metadata_expire
+
+        repo = Repo._set_proxy_info(repo)
+
+        return repo
+
+    @staticmethod
+    def _set_proxy_info(repo):
+        proxy = ""
+
+        # Worth passing in proxy config info to from_ent_cert_content()?
+        # That would decouple Repo some
+        proxy_host = CFG.get('server', 'proxy_hostname')
+        # proxy_port as string is fine here
+        proxy_port = CFG.get('server', 'proxy_port')
+        if proxy_host != "":
+            proxy = "https://%s" % proxy_host
+            if proxy_port != "":
+                proxy = "%s:%s" % (proxy, proxy_port)
+
+        # These could be empty string, in which case they will not be
+        # set in the yum repo file:
+        repo['proxy'] = proxy
+        repo['proxy_username'] = CFG.get('server', 'proxy_user')
+        repo['proxy_password'] = CFG.get('server', 'proxy_password')
+
+        return repo
+
+    @staticmethod
+    def _expand_releasever(release, contenturl):
+        if release is None or len(release) == 0:
+            return contenturl
+
+        # NOTE: This is building a url from external info
+        #       so likely needs more validation. In our case, the
+        #       external source is trusted (release list from tls
+        #       mutually authed cdn, or a tls mutual auth api)
+        return contenturl.replace("$releasever", "%s" % release)
 
     def _clean_id(self, repo_id):
         """

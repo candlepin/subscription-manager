@@ -173,8 +173,8 @@ class RepoUpdateActionTests(SubManFixture):
     def test_no_gpg_key(self):
 
         update_action = RepoUpdateActionCommand()
-        content = update_action.get_content(self.stub_ent_cert,
-                                            "http://example.com", None)
+        content = update_action.get_all_content(baseurl="http://example.com",
+                                                ca_cert=None)
         c1 = self._find_content(content, 'c1')
         self.assertEquals('', c1['gpgkey'])
         self.assertEquals('0', c1['gpgcheck'])
@@ -186,16 +186,16 @@ class RepoUpdateActionTests(SubManFixture):
     def test_gpg_key(self):
 
         update_action = RepoUpdateActionCommand()
-        content = update_action.get_content(self.stub_ent_cert,
-                                            "http://example.com", None)
+        content = update_action.get_all_content(baseurl="http://example.com",
+                                                ca_cert=None)
         c4 = self._find_content(content, 'c4')
         self.assertEquals('http://example.com/gpg.key', c4['gpgkey'])
         self.assertEquals('1', c4['gpgcheck'])
 
     def test_ui_repoid_vars(self):
         update_action = RepoUpdateActionCommand()
-        content = update_action.get_content(self.stub_ent_cert,
-                                            "http://example.com", None)
+        content = update_action.get_all_content(baseurl="http://example.com",
+                                            ca_cert=None)
         c4 = self._find_content(content, 'c4')
         self.assertEquals('some path', c4['ui_repoid_vars'])
         c2 = self._find_content(content, 'c2')
@@ -208,8 +208,8 @@ class RepoUpdateActionTests(SubManFixture):
 
     def test_only_allow_content_of_type_yum(self):
         update_action = RepoUpdateActionCommand()
-        content = update_action.get_content(self.stub_ent_cert,
-                                            "http://example.com", None)
+        content = update_action.get_all_content(baseurl="http://example.com",
+                                                ca_cert=None)
         self.assertTrue(self._find_content(content, "c1") is not None)
         self.assertTrue(self._find_content(content, "c5") is None)
         self.assertTrue(self._find_content(content, "c6") is None)

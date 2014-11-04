@@ -79,6 +79,72 @@ class EntitlementSourceBuilder(object):
         return es
 
 
+class TestContentTagMatch(fixture.SubManFixture):
+    def test_empty_content_empty_product(self):
+        content_tags = []
+        product_tags = []
+        matched = model.content_tag_match(content_tags, product_tags)
+        # no requires means no missing requires
+        self.assertTrue(matched)
+
+    def test_content_empty_product(self):
+        content_tags = ["awesomeos-1"]
+        product_tags = []
+        matched = model.content_tag_match(content_tags, product_tags)
+        # content requires 'awesomeos-1" but products do not provide
+        self.assertFalse(matched)
+
+    def test_empty_content_product_awesome(self):
+        content_tags = []
+        product_tags = ["awesomeos-1"]
+        matched = model.content_tag_match(content_tags, product_tags)
+        # no content requires, so anything matches
+        self.assertTrue(matched)
+
+    def test_content_awesome_product_awesome(self):
+        content_tags = ["awesomeos-1"]
+        product_tags = ["awesomeos-1"]
+        matched = model.content_tag_match(content_tags, product_tags)
+        # require awesomeos-1, have awesomeos-1
+        self.assertTrue(matched)
+
+    def test_content_awesome_product_meh(self):
+        content_tags = ["awesomeos-1"]
+        product_tags = ["mehos-1"]
+        matched = model.content_tag_match(content_tags, product_tags)
+        # The requires awesomeos-1 is not provided
+        self.assertFalse(matched)
+
+    def test_content_multiple_product_multiple(self):
+        content_tags = ["awesomeos-1", "awesomeos-server-1"]
+        product_tags = ["awesomeos-1", "awesomeos-server-1"]
+        matched = model.content_tag_match(content_tags, product_tags)
+        # content requires awesomeos-1 and awesomeos-server-1, and they are
+        # provided
+        self.assertTrue(matched)
+
+    def test_content_multiple_missing_product_multiple(self):
+        content_tags = ["awesomeos-server-1", "awesomeos-1"]
+        product_tags = ["awesomeos-1"]
+        matched = model.content_tag_match(content_tags, product_tags)
+        # content requires os and server, but only server is provided
+        self.assertFalse(matched)
+
+    def test_content_all_missing_product_multiple(self):
+        content_tags = ["mehos-1", "mehos-doorstop-1"]
+        product_tags = ["awesomeos-1", "awesomeos-server-1"]
+        matched = model.content_tag_match(content_tags, product_tags)
+        # none of the content required tags are provided
+        self.assertFalse(matched)
+
+    def test_content_dupes_product_dupes(self):
+        content_tags = ["awesomeos-1", "awesomeos-1", "awesomeos-1"]
+        product_tags = ["awesomeos-1", "awesomeos-1", "awesomeos-1"]
+        matched = model.content_tag_match(content_tags, product_tags)
+        # requires met multiple times
+        self.assertTrue(matched)
+
+
 class TestEntitlementSource(fixture.SubManFixture):
     def test_empty_init(self):
         es = model.EntitlementSource()
