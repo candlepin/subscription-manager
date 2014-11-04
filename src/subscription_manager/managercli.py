@@ -2467,7 +2467,7 @@ class StatusCommand(CliCommand):
         else:
             self.sorter = inj.require(inj.CERT_SORTER)
 
-        result = 0
+        result = 1
 
         print("+-------------------------------------------+")
         print("   " + _("System Status Details"))
@@ -2476,6 +2476,10 @@ class StatusCommand(CliCommand):
         if self.is_registered():
             overall_status = self.sorter.get_system_status()
             reasons = self.sorter.reasons.get_name_message_map()
+
+            if overall_status == "valid":
+                result = 0
+
             print(_("Overall Status: %s\n") % overall_status)
 
             columns = get_terminal_width()
@@ -2486,7 +2490,6 @@ class StatusCommand(CliCommand):
                 print ''
         else:
             print(_("Overall Status: %s\n") % _("Unknown"))
-            result = 1
 
         return result
 
