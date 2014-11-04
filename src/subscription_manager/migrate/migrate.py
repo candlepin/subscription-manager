@@ -785,9 +785,9 @@ def add_parser_options(parser, five_to_six_script=False):
     # Careful, the option is --no-auto but we are storing the opposite of its value.
     parser.add_option("-n", "--no-auto", action="store_false", default=True, dest="auto",
         help=_("don't execute the auto-attach option while registering with subscription manager"))
-    parser.add_option("-s", "--service-level",
+    parser.add_option("-s", "--servicelevel", dest="service_level",
         help=_("service level to follow when attaching subscriptions, for no service "
-            "level use --service-level=\"\""))
+            "level use --servicelevel=\"\""))
     # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
     parser.add_option("--no-proxy", action="store_true", dest='noproxy',
         help=_("don't use legacy proxy settings with destination server"))
@@ -820,7 +820,7 @@ def add_parser_options(parser, five_to_six_script=False):
 def validate_options(options):
     if options.service_level and not options.auto:
         # TODO Need to explain why this restriction exists.
-        system_exit(1, _("The --service-level and --no-auto options cannot be used together."))
+        system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))
 
 
 def is_hosted():

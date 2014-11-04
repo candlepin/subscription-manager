@@ -676,7 +676,7 @@ class TestEntitlementCertificateFilter(fixture.SubManFixture):
             ("*shared*", None, prod_cert, True),
             ("beta*", None, prod_cert, True),
             ("123456789", None, prod_cert, True),
-            ("prem*", None, prod_cert, True),                   # service level via --contains-text vs --service-level
+            ("prem*", None, prod_cert, True),                   # service level via --contains-text vs --servicelevel
             ("*contract*", None, prod_cert, True),
             ("contract-a", None, prod_cert, True),
             ("contract-b", None, prod_cert, False),
