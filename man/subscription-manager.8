@@ -264,7 +264,19 @@ command applies a specific subscription to the system.
 .B --pool=POOLID
 Gives the ID for the subscriptions pool (collection of products) to attach to the system. This option is required, unless
 .B --auto
-is used.
+or
+.B --file
+are used.
+
+.TP
+.B --file=FILE
+Specifies a file from which to read whitespace-delimited pool IDs. If FILE is "-", the pool IDs will be read from stdin.
+.br
+This option is required unless
+.B --auto
+or
+.B --pool
+are used.
 
 .TP
 .B --quantity=NUMBER

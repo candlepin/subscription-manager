@@ -17,12 +17,14 @@
 #
 
 import datetime
+import fileinput
 import fnmatch
 import getpass
 import gettext
 import logging
 from optparse import OptionValueError
 import os
+import re
 import socket
 import sys
 from time import localtime, strftime, strptime
@@ -1385,9 +1387,19 @@ class AttachCommand(CliCommand):
             help=_("automatically attach compatible subscriptions to this system"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("service level to apply to this system, requires --auto"))
+        self.parser.add_option("--file", dest="file",
+                                help=_("A file from which to read pool IDs. If a hyphen is provided, pool IDs will be read from stdin."))
         # re bz #864207
         _("All installed products are covered by valid entitlements.")
         _("No need to update subscriptions at this time.")
+
+    def _read_pool_ids(self, file):
+        if not self.options.pool:
+            self.options.pool = []
+
+        for line in fileinput.input(file):
+            for pool in filter(bool, re.split(r"\s+", line.strip())):
+                self.options.pool.append(pool)
 
     def _short_description(self):
         return _("Attach a specified subscription to the registered system")
@@ -1399,10 +1411,10 @@ class AttachCommand(CliCommand):
         return True
 
     def _validate_options(self):
-        if not (self.options.pool or self.options.auto):
-            system_exit(os.EX_USAGE, _("Error: This command requires that you specify a pool with --pool or use --auto."))
+        if not (self.options.pool or self.options.auto or self.options.file):
+            system_exit(os.EX_USAGE, _("Error: This command requires that you specify a pool with --pool or --file, or use --auto."))
         if self.options.pool and self.options.auto:
-            system_exit(os.EX_USAGE, _("Error: Only one of --pool or --auto may be used with this command."))
+            system_exit(os.EX_USAGE, _("Error: --auto may not be used when specifying pools."))
 
         # Quantity must be a positive integer
         quantity = self.options.quantity
@@ -1415,12 +1427,20 @@ class AttachCommand(CliCommand):
         if (self.options.service_level and not self.options.auto):
             system_exit(os.EX_USAGE, _("Error: Must use --auto with --servicelevel."))
 
+        # If a pools file was specified, process its contents and append it to options.pool
+        if self.options.file:
+            if self.options.file == '-' or os.path.isfile(self.options.file):
+                self._read_pool_ids(self.options.file)
+            else:
+                system_exit(os.EX_DATAERR, _("Error: The file \"%s\" does not exist or cannot be read.") % self.options.file)
+
     def _do_command(self):
         """
         Executes the command.
         """
         self.assert_should_be_registered()
         self._validate_options()
+
         try:
             cert_action_client = ActionClient()
             cert_action_client.update()
