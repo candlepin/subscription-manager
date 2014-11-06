@@ -223,11 +223,16 @@ class StatusCache(CacheManager):
             # which does not have the necessary API call.
             self.last_error = ex
             return None
-
-        # If we hit a network error, but no cache exists (extremely unlikely)
-        # then we are disconnected
-        except socket.error, ex:
+        except connection.AuthenticationException, ex:
+            log.error("Could not authenticate with server, check registration status.")
             log.exception(ex)
+            self.last_error = ex
+            return None
+        except (connection.RemoteServerException,
+                connection.NetworkException,
+                socket.error), ex:
+
+            log.error(ex)
             self.last_error = ex
             if not self._cache_exists():
                 log.error("Server unreachable, registered, but no cache exists.")
@@ -235,25 +240,10 @@ class StatusCache(CacheManager):
 
             log.warn("Unable to reach server, using cached status.")
             return self._read_cache()
-
-        except connection.NetworkException, ex:
-            log.exception(ex)
-            self.last_error = ex
-            if not self._cache_exists():
-                log.error("Server unreachable, registered, but no cache exists.")
-                raise
-
-            log.warn("Unable to reach server, using cached status.")
-            return self._read_cache()
         except connection.ExpiredIdentityCertException, ex:
             log.exception(ex)
             self.last_error = ex
             log.error("Bad identity, unable to connect to server")
-            return None
-        except connection.AuthenticationException, ex:
-            log.error("Could not authenticate with server, check registration status.")
-            log.exception(ex)
-            self.last_error = ex
             return None
 
     def to_dict(self):
