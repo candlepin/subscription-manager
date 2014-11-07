@@ -104,7 +104,7 @@ _subscription_manager_list()
               --ondate --servicelevel
               --match-installed --no-overlap
               --matches
-              --pool-id-only
+              --pool-only
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
