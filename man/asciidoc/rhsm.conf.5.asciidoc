@@ -13,7 +13,7 @@ DESCRIPTION
 -----------
 The rhsm.conf file is the configuration file for various subscription
 manager tooling. This includes *subscription-manager*,
-*subscription-manager-gui*, *rhsmcertd*, and and *virt-who*.
+*subscription-manager-gui*, *rhsmcertd*, and *virt-who*.
 
 
 [server] OPTIONS
@@ -23,7 +23,7 @@ hostname::
   Red Hat Customer Portal which is subscription.rhn.redhat.com.
 
 prefix::
-  Server perfix where the subscription service is registered.
+  Server prefix where the subscription service is registered.
 
 port::
   The port which the susbcription service is listening on.
@@ -33,7 +33,7 @@ insecure::
   certificate authorities which are installed in /etc/rhsm/ca.
 
 ssl_verify_depth::
-  Sets the number of certificates whcih should be used to verify the
+  Sets the number of certificates which should be used to verify the
   servers identity. This is an advanced control which can be used to
   secure on premise installations.
 
@@ -65,20 +65,20 @@ baseurl::
   the local Satellite or Capsule depending on your deployment.
 
 ca_cert_dir::
-  The location for the certificates which are used communicate with the
+  The location for the certificates which are used to communicate with the
   server and to pulldown content.
 
 repo_ca_cert::
   The certificate to use for server side authentication during content
   downloads.
 
-productCertDirectory::
+productCertDir::
   The directory where product certificates should be stored.
 
-entitlementCertDirectory::
+entitlementCertDir::
   The directory where entitlement certificates should be stored.
 
-consumerCertDirectory::
+consumerCertDir::
   The directory where the consumers identity certificate is stored.
 
 manage_repos::
@@ -90,12 +90,12 @@ manage_repos::
 full_refresh_on_yum::
   Set to '1' if the /etc/yum.repos.d/redhat.repo should be updated with
   every server command. This will make yum less efficient, but can ensure
-  that the most recent data is brought down from the susbcription service.
+  that the most recent data is brought down from the susbscription service.
 
 report_package_profile::
-  Set to '1' if *rhsmcertd* should report up the current package profile.
-  This reporting helps the subscription service to provide better errata
-  notifications.
+  Set to '1' if *rhsmcertd* should report the system's current package
+  profile to the subscription service. This report helps the subscription
+  service provide better errata notifications.
 
 pluginDir::
   The directory to search for subscription manager plugins

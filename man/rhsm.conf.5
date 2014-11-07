@@ -2,12 +2,12 @@
 .\"     Title: rhsm.conf
 .\"    Author: [see the "AUTHOR" section]
 .\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
-.\"      Date: 10/14/2014
+.\"      Date: 11/07/2014
 .\"    Manual: \ \&
 .\"    Source: rhsm.conf
 .\"  Language: English
 .\"
-.TH "RHSM\&.CONF" "5" "10/14/2014" "rhsm\&.conf" "\ \&"
+.TH "RHSM\&.CONF" "5" "11/07/2014" "rhsm\&.conf" "\ \&"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -31,7 +31,7 @@
 rhsm.conf \- Configuration file for the subscription\-mananager tooling
 .SH "DESCRIPTION"
 .sp
-The rhsm\&.conf file is the configuration file for various subscription manager tooling\&. This includes \fBsubscription\-manager\fR, \fBsubscription\-manager\-gui\fR, \fBrhsmcertd\fR, and and \fBvirt\-who\fR\&.
+The rhsm\&.conf file is the configuration file for various subscription manager tooling\&. This includes \fBsubscription\-manager\fR, \fBsubscription\-manager\-gui\fR, \fBrhsmcertd\fR, and \fBvirt\-who\fR\&.
 .SH "[SERVER] OPTIONS"
 .PP
 hostname
@@ -41,7 +41,7 @@ The hostname of the subscription service being used\&. The default is the Red Ha
 .PP
 prefix
 .RS 4
-Server perfix where the subscription service is registered\&.
+Server prefix where the subscription service is registered\&.
 .RE
 .PP
 port
@@ -56,7 +56,7 @@ This flag enables or disables certification verification using the certificate a
 .PP
 ssl_verify_depth
 .RS 4
-Sets the number of certificates whcih should be used to verify the servers identity\&. This is an advanced control which can be used to secure on premise installations\&.
+Sets the number of certificates which should be used to verify the servers identity\&. This is an advanced control which can be used to secure on premise installations\&.
 .RE
 .PP
 proxy_hostname
@@ -95,7 +95,7 @@ This setting is the prefix for all content which is managed by the subscription 
 .PP
 ca_cert_dir
 .RS 4
-The location for the certificates which are used communicate with the server and to pulldown content\&.
+The location for the certificates which are used to communicate with the server and to pulldown content\&.
 .RE
 .PP
 repo_ca_cert
@@ -103,17 +103,17 @@ repo_ca_cert
 The certificate to use for server side authentication during content downloads\&.
 .RE
 .PP
-productCertDirectory
+productCertDir
 .RS 4
 The directory where product certificates should be stored\&.
 .RE
 .PP
-entitlementCertDirectory
+entitlementCertDir
 .RS 4
 The directory where entitlement certificates should be stored\&.
 .RE
 .PP
-consumerCertDirectory
+consumerCertDir
 .RS 4
 The directory where the consumers identity certificate is stored\&.
 .RE
@@ -131,7 +131,7 @@ full_refresh_on_yum
 .RS 4
 Set to
 \fI1\fR
-if the /etc/yum\&.repos\&.d/redhat\&.repo should be updated with every server command\&. This will make yum less efficient, but can ensure that the most recent data is brought down from the susbcription service\&.
+if the /etc/yum\&.repos\&.d/redhat\&.repo should be updated with every server command\&. This will make yum less efficient, but can ensure that the most recent data is brought down from the susbscription service\&.
 .RE
 .PP
 report_package_profile
@@ -140,7 +140,7 @@ Set to
 \fI1\fR
 if
 \fBrhsmcertd\fR
-should report up the current package profile\&. This reporting helps the subscription service to provide better errata notifications\&.
+should report the system\(cqs current package profile to the subscription service\&. This report helps the subscription service provide better errata notifications\&.
 .RE
 .PP
 pluginDir
