@@ -21,11 +21,13 @@ from subscription_manager.gui import widgets
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.utils import friendly_join
 
+import logging
 import gettext
 import gobject
 import gtk
 import os
 
+log = logging.getLogger('rhsm-app.' + __name__)
 
 _ = gettext.gettext
 
@@ -296,18 +298,20 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         if self.backend.cs.system_status == 'valid':
             self._set_status_icons(VALID_STATUS)
-            if self.backend.cs.compliant_until:
+            if len(self.backend.cs.installed_products.keys()) == 0:
+                # No product certs installed, thus no compliant until date:
+                self.subscription_status_label.set_text(
+                        # I18N: Please add newlines if translation is longer:
+                        _("No installed products detected."))
+            elif self.backend.cs.compliant_until:
                 self.subscription_status_label.set_markup(
                         # I18N: Please add newlines if translation is longer:
                         _("System is properly subscribed through %s.") %
                         managerlib.format_date(self.backend.cs.compliant_until))
             else:
-                # No product certs installed, no first invalid date, and
-                # the subscription assistant can't do anything, so we'll disable
-                # the button to launch it:
+                log.warn("Server did not provide a compliant until date.")
                 self.subscription_status_label.set_text(
-                        # I18N: Please add newlines if translation is longer:
-                        _("No installed products detected."))
+                    _("System is properly subscribed."))
         elif self.backend.cs.system_status == 'partial':
             self._set_status_icons(PARTIAL_STATUS)
             self.subscription_status_label.set_markup(
