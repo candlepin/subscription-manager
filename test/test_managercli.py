@@ -1081,7 +1081,7 @@ class TestRemoveCommand(TestCliProxyCommand):
         try:
             self.cc._validate_options()
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_USAGE)
 
     def test_serial_no_value(self):
         try:
@@ -1395,7 +1395,7 @@ class HandleExceptionTests(unittest.TestCase):
         try:
             managercli.handle_exception(self.msg, e)
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_unicode(self):
         e = Exception("Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
@@ -1403,7 +1403,7 @@ class HandleExceptionTests(unittest.TestCase):
         try:
             managercli.handle_exception("a: %s" % e, e)
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_socket_error(self):
         # these error messages are bare strings, so we need to update the tests
@@ -1413,7 +1413,7 @@ class HandleExceptionTests(unittest.TestCase):
         try:
             managercli.handle_exception(self.msg, socket.error())
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_SOFTWARE)
         self.assertEqual(managercli.log.expected_msg, expected_msg)
 
     def test_he_restlib_exception(self):
@@ -1421,7 +1421,7 @@ class HandleExceptionTests(unittest.TestCase):
         try:
             managercli.handle_exception("huh", e)
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_restlib_exception_unicode(self):
         e = connection.RestlibException(404,
@@ -1429,35 +1429,35 @@ class HandleExceptionTests(unittest.TestCase):
         try:
             managercli.handle_exception("обновлении", e)
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_bad_certificate(self):
         e = connection.BadCertificateException("/road/to/nowhwere")
         try:
             managercli.handle_exception("huh", e)
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_remote_server_exception(self):
         e = connection.RemoteServerException(1984)
         try:
             managercli.handle_exception("huh", e)
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_network_exception(self):
         e = connection.NetworkException(1337)
         try:
             managercli.handle_exception("huh", e)
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_ssl_error(self):
         e = SSL.SSLError()
         try:
             managercli.handle_exception("huh", e)
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_ssl_wrong_host(self):
         e = SSL.Checker.WrongHost("expectedHost.example.com",
@@ -1466,7 +1466,7 @@ class HandleExceptionTests(unittest.TestCase):
         try:
             managercli.handle_exception("huh", e)
         except SystemExit, e:
-            self.assertEquals(e.code, -1)
+            self.assertEquals(e.code, os.EX_SOFTWARE)
 
 
 class TestFormatName(unittest.TestCase):
