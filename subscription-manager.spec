@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.7
+Version: 1.13.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -467,6 +467,18 @@ fi
 %endif
 
 %changelog
+* Fri Nov 07 2014 Unknown name <wpoteat@redhat.com> 1.13.8-1
+- Added support for attaching pools from a file/stdin. (crog@redhat.com)
+- Revert "1046132: Makes rhsm-icon slightly less annoying."
+  (dgoodwin@redhat.com)
+- Further improved exit code standardization (crog@redhat.com)
+- 1119688: Improved output of the status module (crog@redhat.com)
+- Make repolib tag matching use model.find_content (alikins@redhat.com)
+- Added the --pool-only option to subman's list command. (crog@redhat.com)
+- 1157761: Fixed incorrect option usage in migration tool. (crog@redhat.com)
+- 1157761: revert to "--servicelevel" (alikins@redhat.com)
+- 1119688: Improved error code usage in subman. (crog@redhat.com)
+
 * Mon Oct 27 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.13.7-1
 - Add content/product tag matching for content plugins. (alikins@redhat.com)
 - Remove ostree 'unconfigured' after configuring. (alikins@redhat.com)
