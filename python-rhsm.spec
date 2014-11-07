@@ -10,7 +10,7 @@
 
 
 Name: python-rhsm
-Version: 1.13.6
+Version: 1.13.7
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -71,6 +71,9 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Nov 07 2014 Unknown name <wpoteat@redhat.com> 1.13.7-1
+- 
+
 * Thu Oct 23 2014 Alex Wood <awood@redhat.com> 1.13.6-1
 - 1153375: Support TLSv1.2 and v1.1 by default. (alikins@redhat.com)
 - Set CA PEM files permissions to 644. (awood@redhat.com)
