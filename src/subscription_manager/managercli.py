@@ -2137,6 +2137,8 @@ class ListCommand(CliCommand):
             system_exit(os.EX_USAGE, _("Error: --match-installed is only applicable with --available"))
         if self.options.no_overlap and not self.options.available:
             system_exit(os.EX_USAGE, _("Error: --no-overlap is only applicable with --available"))
+        if self.options.pid_only and self.options.installed:
+            system_exit(os.EX_USAGE, _("Error: --pool-only is only applicable with --available and/or --consumed"))
 
     def _do_command(self):
         """
