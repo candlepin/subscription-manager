@@ -22,6 +22,7 @@ import dbus
 import dbus.service
 import dbus.glib
 import logging
+import gettext
 
 import sys
 sys.path.append("/usr/share/rhsm")
@@ -45,6 +46,8 @@ from subscription_manager.cert_sorter import RHSM_VALID, \
 
 import rhsm.config
 CFG = rhsm.config.initConfig()
+
+_ = gettext.gettext
 
 enable_debug = False
 
@@ -94,13 +97,14 @@ def get_compliance_status():
     sorter = require(CERT_SORTER)
     status = sorter.get_compliance_status()
     result = dbus.Dictionary({})
-    result.update({"system_status": (status['status'], "")})
-
-    for reason in status['reasons']:
-        label = reason['attributes']['product_id']
-        name = reason['attributes']['name']
-        message = reason['message']
-        result.update({label:(name, message)})
+    result.update({"system_status": (_("System is not registered."), "")})
+    if status:
+        result.update({"system_status": (status['status'], "")})
+        for reason in status['reasons']:
+            label = reason['attributes']['product_id']
+            name = reason['attributes']['name']
+            message = reason['message']
+            result.update({label:(name, message)})
     return result
 
 def check_if_ran_once(checker, loop):
