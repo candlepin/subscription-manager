@@ -26,7 +26,7 @@ from shutil import ignore_patterns
 import subscription_manager.injection as inj
 import subscription_manager.managercli as managercli
 from subscription_manager.managercli import CliCommand
-from subscription_manager.cli import InvalidCLIOptionError
+from subscription_manager.cli import InvalidCLIOptionError, system_exit
 from rhsm import ourjson as json
 from rhsm.config import initConfig
 
@@ -77,8 +77,7 @@ class SystemCommand(CliCommand):
         self._validate_options()
         consumer = inj.require(inj.IDENTITY)
         if not consumer.is_valid():
-            print ERR_NOT_REGISTERED_MSG
-            sys.exit(ERR_NOT_REGISTERED_CODE)
+            system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
 
         code = self._make_code()
         assemble_path = self._get_assemble_dir()
