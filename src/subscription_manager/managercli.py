@@ -160,8 +160,7 @@ def handle_exception(msg, ex):
     exception_mapper = ExceptionMapper()
     mapped_message = exception_mapper.get_message(ex)
     if mapped_message:
-        print mapped_message
-        sys.exit(os.EX_SOFTWARE)
+        system_exit(os.EX_SOFTWARE, mapped_message)
     else:
         system_exit(os.EX_SOFTWARE, ex)
 
