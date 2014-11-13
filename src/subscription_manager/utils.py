@@ -461,12 +461,12 @@ class EntitlementCertificateFilter(ProductCertificateFilter):
         """
         # Again: perhaps we should be validating our input object here...?
 
-        # Check service level filter
-        sl_check = self._sl_filter is None or (
-            cert.order
-            and cert.order.service_level
-            and cert.order.service_level.lower() == self._sl_filter.lower()
-        )
+        # Check for exact match on service level:
+        cert_service_level = ""  # No service level should match "".
+        if cert.order and cert.order.service_level:
+            cert_service_level = cert.order.service_level
+        sl_check = self._sl_filter is None or \
+            cert_service_level.lower() == self._sl_filter.lower()
 
         # Check filter string (contains-text)
         fs_check = self._fs_regex is None or (

@@ -659,52 +659,58 @@ class TestEntitlementCertificateFilter(fixture.SubManFixture):
             self.assertEquals(result, data[1], "EntitlementCertificateFilter.set_service_level failed with data set %i.\nActual:   %s\nExpected: %s)" % (index, result, data[1]))
 
     def test_match(self):
-        prod_cert = StubEntitlementCertificate(product=StubProduct(name="test*entitlement?", product_id="123456789"), service_level="Premium", provided_products=[
+        ent_cert = StubEntitlementCertificate(product=StubProduct(name="test*entitlement?", product_id="123456789"), service_level="Premium", provided_products=[
                 "test product b",
                 "beta product 1",
                 "shared product",
                 "back\\slash"
         ])
+        # Order information is hard-coded in the stub, so we've to modify it
+        # separately:
+        ent_cert.order.contract = "Contract-A"
 
-        # Order information is hard-coded in the stub, so we've to modify it separately
-        prod_cert.order.contract = "Contract-A"
+        no_sla_ent_cert = StubEntitlementCertificate(
+            product=StubProduct(name="nobodycares", product_id="123456789"),
+            service_level=None, provided_products=[])
 
         test_data = [
-            (None, None, prod_cert, False),
-
-            ("*entitlement*", None, prod_cert, True),
-            ("*shared*", None, prod_cert, True),
-            ("beta*", None, prod_cert, True),
-            ("123456789", None, prod_cert, True),
-            ("prem*", None, prod_cert, True),                   # service level via --contains-text vs --servicelevel
-            ("*contract*", None, prod_cert, True),
-            ("contract-a", None, prod_cert, True),
-            ("contract-b", None, prod_cert, False),
-            ("*entitlement*", "Premium", prod_cert, True),
-            ("*shared*", "Premium", prod_cert, True),
-            ("beta*", "Premium", prod_cert, True),
-            ("123456789", "Premium", prod_cert, True),
-            ("prem*", "Premium", prod_cert, True),              # ^
-            ("*contract*", "Premium", prod_cert, True),
-            ("contract-a", "Premium", prod_cert, True),
-            ("contract-b", "Premium", prod_cert, False),
-            ("*entitlement*", "Standard", prod_cert, False),
-            ("*shared*", "Standard", prod_cert, False),
-            ("beta*", "Standard", prod_cert, False),
-            ("123456789", "Standard", prod_cert, False),
-            ("prem*", "Standard", prod_cert, False),            # ^
-            ("*contract*", "Standard", prod_cert, False),
-            ("contract-a", "Standard", prod_cert, False),
-            ("contract-b", "Standard", prod_cert, False),
-            (None, "Premium", prod_cert, True),
-            (None, "pReMiUm", prod_cert, True),
-            (None, "Standard", prod_cert, False),
-            (None, "sTANDard", prod_cert, False),
-            (None, "aslfk;", prod_cert, False),
+            (None, None, ent_cert, False),
+            ("*entitlement*", None, ent_cert, True),
+            ("*shared*", None, ent_cert, True),
+            ("beta*", None, ent_cert, True),
+            ("123456789", None, ent_cert, True),
+            ("prem*", None, ent_cert, True),                   # service level via --contains-text vs --servicelevel
+            ("*contract*", None, ent_cert, True),
+            ("contract-a", None, ent_cert, True),
+            ("contract-b", None, ent_cert, False),
+            ("*entitlement*", "Premium", ent_cert, True),
+            ("*shared*", "Premium", ent_cert, True),
+            ("beta*", "Premium", ent_cert, True),
+            ("123456789", "Premium", ent_cert, True),
+            ("prem*", "Premium", ent_cert, True),              # ^
+            ("*contract*", "Premium", ent_cert, True),
+            ("contract-a", "Premium", ent_cert, True),
+            ("contract-b", "Premium", ent_cert, False),
+            ("*entitlement*", "Standard", ent_cert, False),
+            ("*shared*", "Standard", ent_cert, False),
+            ("beta*", "Standard", ent_cert, False),
+            ("123456789", "Standard", ent_cert, False),
+            ("prem*", "Standard", ent_cert, False),            # ^
+            ("*contract*", "Standard", ent_cert, False),
+            ("contract-a", "Standard", ent_cert, False),
+            ("contract-b", "Standard", ent_cert, False),
+            (None, "Premium", ent_cert, True),
+            (None, "pReMiUm", ent_cert, True),
+            (None, "Standard", ent_cert, False),
+            (None, "sTANDard", ent_cert, False),
+            (None, "aslfk;", ent_cert, False),
+            (None, "", ent_cert, False),
+            (None, "", no_sla_ent_cert, True),
         ]
 
         for (index, data) in enumerate(test_data):
-            cert_filter = EntitlementCertificateFilter(filter_string=data[0], service_level=data[1])
+            cert_filter = EntitlementCertificateFilter(
+                filter_string=data[0], service_level=data[1])
             result = cert_filter.match(data[2])
 
             self.assertEquals(result, data[3], "EntitlementCertificateFilter.match failed with data set %i.\nActual:   %s\nExpected: %s" % (index, result, data[3]))
