@@ -602,12 +602,15 @@ class TestListCommand(TestCliProxyCommand):
 
         provide(CERT_SORTER, stub_sorter)
 
-        with Capture() as captured:
-            list_command = managercli.ListCommand()
-            list_command.main(["list", "--installed", "--pool-only"])
+        try:
+            with Capture() as captured:
+                list_command = managercli.ListCommand()
+                list_command.main(["list", "--installed", "--pool-only"])
 
-        for cert in installed_product_certs:
-            self.assertFalse(cert.products[0].id in captured.out)
+            self.fail("Expected error did not occur")
+        except SystemExit:
+            for cert in installed_product_certs:
+                self.assertFalse(cert.products[0].id in captured.out)
 
     def test_list_consumed_with_pidonly(self):
         consumed = [
