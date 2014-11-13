@@ -2172,7 +2172,11 @@ class ListCommand(CliCommand):
                     on_date = datetime.datetime(
                             *(strptime(self.options.on_date, '%Y-%m-%d')[0:6]))
                 except Exception:
-                    system_exit(os.EX_DATAERR, _("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
+                    # Translators: dateexample is current date in format like 2014-11-31
+                    msg = _("Date entered is invalid. Date should be in YYYY-MM-DD format (example: {dateexample})")
+                    dateexample = strftime("%Y-%m-%d", localtime())
+                    system_exit(os.EX_DATAERR,
+                                msg.format(dateexample=dateexample))
 
             facts = inj.require(inj.FACTS)
             epools = managerlib.get_available_entitlements(facts=facts,
