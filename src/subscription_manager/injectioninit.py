@@ -15,8 +15,9 @@
 import subscription_manager.injection as inj
 
 
-from subscription_manager.cache import ProductStatusCache, EntitlementStatusCache, OverrideStatusCache, \
-    ProfileManager, InstalledProductsManager, PoolTypeCache
+from subscription_manager.cache import ProductStatusCache, \
+    EntitlementStatusCache, OverrideStatusCache, ProfileManager, \
+    InstalledProductsManager, PoolTypeCache, ReleaseStatusCache
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.certdirectory import EntitlementDirectory
@@ -46,9 +47,15 @@ def init_dep_injection():
     inj.provide(inj.ENT_DIR, EntitlementDirectory, singleton=True)
     inj.provide(inj.PROD_DIR, ProductDirectory, singleton=True)
 
+    # FIXME: find a way to handle exceptions when looking for
+    #        attributes of inj (can happen if yum has old inj module,
+    #        but runs a new version of injectioninit...)
     inj.provide(inj.ENTITLEMENT_STATUS_CACHE, EntitlementStatusCache, singleton=True)
     inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache, singleton=True)
     inj.provide(inj.OVERRIDE_STATUS_CACHE, OverrideStatusCache, singleton=True)
+    inj.provide(inj.RELEASE_STATUS_CACHE, ReleaseStatusCache,
+                singleton=False)
+
     inj.provide(inj.PROFILE_MANAGER, ProfileManager, singleton=True)
     inj.provide(inj.INSTALLED_PRODUCTS_MANAGER, InstalledProductsManager, singleton=True)
 
