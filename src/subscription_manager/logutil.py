@@ -23,6 +23,7 @@ stdout_handler = None
 LOG_FORMAT = u'%(asctime)s [%(levelname)s] %(cmd_name)s ' \
               '@%(filename)s:%(lineno)d - %(message)s'
 
+
 LOG_LEVEL = logging.DEBUG
 
 DEBUG_LOG_FORMAT = u'%(asctime)s [%(name)s %(levelname)s] ' \
@@ -63,6 +64,7 @@ def _get_handler():
     handler.setFormatter(logging.Formatter(LOG_FORMAT))
     handler.setLevel(LOG_LEVEL)
     handler.addFilter(ContextLoggingFilter(name=""))
+    handler.addFilter(PyWarningsLoggingFilter(name="py.warnings"))
 
     return handler
 
@@ -74,6 +76,7 @@ def _get_stdout_handler():
 
     handler = logging.StreamHandler()
     handler.addFilter(ContextLoggingFilter(name=""))
+    handler.addFilter(PyWarningsLoggingFilter(name="py.warnings"))
 
     return handler
 
@@ -93,17 +96,39 @@ class ContextLoggingFilter(object):
         return True
 
 
+class PyWarningsLoggingFilter(object):
+    """Add a prefix to the messages from py.warnings.
+
+    To help distinquish log messages from python and pygtk 'warnings',
+    while avoiding changing the log format.
+    """
+    label = "py.warnings:"
+
+    def __init__(self, name):
+        self.name = name
+
+    def filter(self, record):
+        record.msg = u'%s %s' % (self.label, record.msg)
+        return True
+
+
 def init_logger():
 
     handler = _get_handler()
 
     logging.getLogger("subscription_manager").setLevel(LOG_LEVEL)
     logging.getLogger("rhsm").setLevel(LOG_LEVEL)
+
+    # log python and pygtk "warnings" sent here by logging.captureWarnings
+    logging.getLogger("py.warnings").setLevel(logging.WARNING)
+
     # FIXME: remove 'rhsm-app' when we rename all the loggers
     logging.getLogger("rhsm-app").setLevel(LOG_LEVEL)
 
     logging.getLogger("subscription_manager").addHandler(_get_handler())
     logging.getLogger("rhsm").addHandler(_get_handler())
+    logging.getLogger("py.warnings").addHandler(_get_handler())
+
     # FIXME: remove
     logging.getLogger("rhsm-app").addHandler(_get_handler())
 

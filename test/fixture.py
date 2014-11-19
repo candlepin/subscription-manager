@@ -5,6 +5,10 @@ import sys
 import StringIO
 import tempfile
 
+# just log py.warnings (and pygtk warnings in particular)
+import logging
+logging.captureWarnings(True)
+
 from mock import Mock, MagicMock, NonCallableMock, patch, mock_open
 from contextlib import contextmanager
 
