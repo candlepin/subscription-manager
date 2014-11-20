@@ -47,7 +47,12 @@ _ = gettext.gettext
 # get with glib2-2.40
 # See https://bugzilla.gnome.org/show_bug.cgi?id=698614 for why we can
 # ignore this warning (it was reverted in glib2-2.42 and later...)
-logging.captureWarnings(True)
+
+try:
+    # python 2.7+ only
+    logging.captureWarnings(True)
+except AttributeError:
+    pass
 
 try:
     import gtk

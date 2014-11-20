@@ -7,7 +7,11 @@ import tempfile
 
 # just log py.warnings (and pygtk warnings in particular)
 import logging
-logging.captureWarnings(True)
+try:
+    # 2.7+
+    logging.captureWarnings(True)
+except AttributeError:
+    pass
 
 from mock import Mock, MagicMock, NonCallableMock, patch, mock_open
 from contextlib import contextmanager

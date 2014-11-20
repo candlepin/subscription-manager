@@ -64,7 +64,6 @@ def _get_handler():
     handler.setFormatter(logging.Formatter(LOG_FORMAT))
     handler.setLevel(LOG_LEVEL)
     handler.addFilter(ContextLoggingFilter(name=""))
-    handler.addFilter(PyWarningsLoggingFilter(name="py.warnings"))
 
     return handler
 
@@ -76,7 +75,6 @@ def _get_stdout_handler():
 
     handler = logging.StreamHandler()
     handler.addFilter(ContextLoggingFilter(name=""))
-    handler.addFilter(PyWarningsLoggingFilter(name="py.warnings"))
 
     return handler
 
@@ -96,6 +94,9 @@ class ContextLoggingFilter(object):
         return True
 
 
+# Note: this only does anything for python 2.6+, if the
+# logging module has 'captureWarnings'. Otherwise it will not
+# be triggered.
 class PyWarningsLoggingFilter(object):
     """Add a prefix to the messages from py.warnings.
 
@@ -121,6 +122,7 @@ def init_logger():
 
     # log python and pygtk "warnings" sent here by logging.captureWarnings
     logging.getLogger("py.warnings").setLevel(logging.WARNING)
+    logging.getLogger("py.warnings").addFilter(PyWarningsLoggingFilter(name="py.warnings"))
 
     # FIXME: remove 'rhsm-app' when we rename all the loggers
     logging.getLogger("rhsm-app").setLevel(LOG_LEVEL)
