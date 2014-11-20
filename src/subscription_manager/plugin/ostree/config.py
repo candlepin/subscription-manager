@@ -109,9 +109,6 @@ class KeyFileConfigParser(config.RhsmConfigParser):
     def save(self, config_file=None):
         self.tidy()
 
-        self.log_contents()
-        log.debug("KeyFile.save %s" % self.config_file)
-
         # create /ostree/repo/config if /ostree/repo exists
         dir_name = os.path.dirname(self.config_file)
         if not os.path.exists(dir_name):
@@ -120,12 +117,6 @@ class KeyFileConfigParser(config.RhsmConfigParser):
             return
 
         super(KeyFileConfigParser, self).save()
-
-    def log_contents(self):
-        for section in self.sections():
-            log.debug("section: %s" % section)
-            for key, value in self.items(section):
-                log.debug("     %s: %s" % (key, value))
 
 
 def replace_refspec_remote(refspec, new_remote):
@@ -150,7 +141,6 @@ class BaseOstreeConfigFile(object):
         return self.config_parser_class(config_file=self.filename)
 
     def save(self):
-        log.debug("OstreeConfigFile.save")
         self.config_parser.save()
 
 

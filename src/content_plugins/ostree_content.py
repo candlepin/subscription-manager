@@ -17,7 +17,6 @@ from subscription_manager import base_plugin
 requires_api_version = "1.1"
 
 # install our helper modules here
-from subscription_manager.plugin import ostree
 from subscription_manager.plugin.ostree import action_invoker
 
 
@@ -32,12 +31,7 @@ class OstreeContentPlugin(base_plugin.SubManPlugin):
         Args:
             conduit: A UpdateContentConduit
         """
-        conduit.log.info("Updating OSTree content.")
-        conduit.log.debug("ostree module: %s" % ostree)
-        conduit.log.debug("dir(ostree): %s" % dir(ostree))
-        conduit.log.debug("conduit.ent_source: %s" % conduit.ent_source)
-        for ent in conduit.ent_source:
-            conduit.log.debug("ent_source ent: %s" % ent)
+        conduit.log.info("ostree update_content_hook plugin.")
 
         report = action_invoker.OstreeContentUpdateActionCommand(ent_source=conduit.ent_source).perform()
         conduit.reports.add(report)
