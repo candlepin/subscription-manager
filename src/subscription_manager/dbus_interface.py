@@ -54,6 +54,7 @@ class DbusIface(object):
             self.validity_iface.update_status(
                     inj.require(inj.CERT_SORTER).get_status_for_icon(),
                     ignore_reply=self.has_main_loop)
+            self.validity_iface.emit_status(ignore_reply=self.has_main_loop)
         except dbus.DBusException, e:
             # Should be unreachable in the gui
             log.debug("Failed to update rhsmd")
