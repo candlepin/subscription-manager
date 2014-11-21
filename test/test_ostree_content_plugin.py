@@ -236,17 +236,17 @@ class BaseOstreeKeyFileTest(fixture.SubManFixture):
     pass
 
 
-class TestOstreeConfig(BaseOstreeKeyFileTest):
+class TestOstreeRepoConfig(BaseOstreeKeyFileTest):
     repo_cfg = """
 [remote "test-remote"]
 url = https://blip.example.com
 """
 
     def setUp(self):
-        super(TestOstreeConfig, self).setUp()
+        super(TestOstreeRepoConfig, self).setUp()
 
         self.repo_cfg_path = self.write_tempfile(self.repo_cfg)
-        self.repo_config = model.OstreeConfig(
+        self.repo_config = model.OstreeRepoConfig(
             repo_file_path=self.repo_cfg_path.name)
 
     def test_save(self):
@@ -267,13 +267,13 @@ url = https://blip.example.com
         super(TestOstreeConfigRepoFileWriter, self).setUp()
 
         self.repo_cfg_path = self.write_tempfile(self.repo_cfg)
-        self.repo_config = model.OstreeConfig(
+        self.repo_config = model.OstreeRepoConfig(
             repo_file_path=self.repo_cfg_path.name)
         self.repo_config.load()
 
     def test_save(self):
         mock_repo_file = mock.Mock()
-        rfw = model.OstreeConfigRepoFileWriter(mock_repo_file)
+        rfw = model.OstreeConfigFileWriter(mock_repo_file)
 
         rfw.save(self.repo_config)
 
@@ -296,7 +296,7 @@ class TestKeyFileConfigParser(BaseOstreeKeyFileTest):
         self.assertEquals(kf_cfg.items('section'), [])
 
 
-class TestOstreeConfigUpdates(BaseOstreeKeyFileTest):
+class TestOstreeRepoConfigUpdates(BaseOstreeKeyFileTest):
     repo_cfg = """
 [section_one]
 akey = 1
@@ -308,8 +308,8 @@ last_key = blippy
 
     def test_init(self):
         fid = self.write_tempfile(self.repo_cfg)
-        ostree_config = model.OstreeConfig(repo_file_path=fid.name)
-        new_ostree_config = model.OstreeConfig(repo_file_path=fid.name)
+        ostree_config = model.OstreeRepoConfig(repo_file_path=fid.name)
+        new_ostree_config = model.OstreeRepoConfig(repo_file_path=fid.name)
 
         updates = model.OstreeConfigUpdates(ostree_config, new_ostree_config)
         updates.apply()
@@ -403,10 +403,6 @@ class TestReplaceRefspecRemote(fixture.SubManFixture):
 class TestOstreeOriginUpdater(BaseOstreeKeyFileTest):
     # Multiple remotes, one matches ref:
     multi_repo_cfg = """
-[core]
-repo_version=1
-mode=bare
-
 [remote "lame-ostree"]
 url=http://lame.example.com.not.real/
 branches=lame-ostree/hyperlame/x86_64/controller/docker;
@@ -421,10 +417,6 @@ gpg-verify=false
 
     # Multiple remotes, none match ref:
     mismatched_multi_repo_cfg = """
-[core]
-repo_version=1
-mode=bare
-
 [remote "lame-ostree"]
 url=http://lame.example.com.not.real/
 branches=lame-ostree/hyperlame/x86_64/controller/docker;
@@ -439,7 +431,7 @@ gpg-verify=true
 
     def _setup_config(self, repo_cfg, origin_cfg):
         self.repo_cfg_path = self.write_tempfile(repo_cfg)
-        self.repo_config = model.OstreeConfig(
+        self.repo_config = model.OstreeRepoConfig(
             repo_file_path=self.repo_cfg_path.name)
         self.repo_config.load()
 
@@ -463,10 +455,6 @@ gpg-verify=true
 
     def test_one_remote_matching_ref(self):
         repo_cfg = """
-[core]
-repo_version=1
-mode=bare
-
 [remote "awesomeos-ostree-next-ostree"]
 url = https://awesome.cdn/content/awesomeos/next/10/ostree/repo
 gpg-verify = false
@@ -490,10 +478,6 @@ refspec=awesomeos-ostree-next-ostree:awesomeos-atomic/10.0-buildmaster/x86_64/st
     # If the ref is mismatched, but we only have one:
     def test_one_remote_mismatched_ref(self):
         repo_cfg = """
-[core]
-repo_version=1
-mode=bare
-
 [remote "awesomeos-atomic-ostree"]
 url=http://awesome.example.com.not.real/
 gpg-verify=false
@@ -517,10 +501,6 @@ refspec=origremote:thisisnotthesamewords/awesomeos8/x86_64/controller/docker
     # we remove the unconfigured state
     def test_one_remote_mismatched_ref_remove_unconfigured(self):
         repo_cfg = """
-[core]
-repo_version=1
-mode=bare
-
 [remote "awesomeos-atomic-ostree"]
 url=http://awesome.example.com.not.real/
 gpg-verify=false
@@ -544,12 +524,7 @@ unconfigured-state=Use "subscription-manager register" to enable online updates
 
     # If the ref is mismatched, but we only have one:
     def test_no_remotes(self):
-        repo_cfg = """
-[core]
-repo_version=1
-mode=bare
-
-"""
+        repo_cfg = ""
 
         origin_cfg = """
 [origin]
@@ -567,12 +542,7 @@ refspec=origremote:thisisnotthesamewords/awesomeos8/x86_64/controller/docker
 
     # If the ref is mismatched, but we only have one:
     def test_no_remotes_unconfigured(self):
-        repo_cfg = """
-[core]
-repo_version=1
-mode=bare
-
-"""
+        repo_cfg = ""
 
         origin_cfg = """
 [origin]
@@ -591,10 +561,6 @@ unconfigured-state=Use "subscription-manager register" to enable online updates
 
     def test_multi_remote_matching_ref(self):
         repo_cfg = """
-[core]
-repo_version=1
-mode=bare
-
 [remote "lame-ostree"]
 url=https://lame.example.com.not.real/
 gpg-verify=false
@@ -619,10 +585,6 @@ refspec=origremote:awesome-ostree/awesomeos8/x86_64/controller/docker
 
     def test_multi_remote_mismatched_ref(self):
         repo_cfg = """
-[core]
-repo_version=1
-mode=bare
-
 [remote "lame-ostree"]
 url=http://lame.example.com.not.real/
 gpg-verify=false
@@ -647,10 +609,6 @@ refspec=origremote:thisisnoteitherofthose/awesomeos8/x86_64/controller/docker
 
     def test_gi_wrapper_script_error(self):
         repo_cfg = """
-[core]
-repo_version=1
-mode=bare
-
 [remote "awesome-ostree"]
 url=http://awesome.example.com.not.real/
 branches=awesome-ostree/awesome7/x86_64/controller/docker;
@@ -1144,7 +1102,7 @@ branches=another-awesome-ostree-controller/awesome7/x86_64/controller/docker;
 gpg-verify=true
 """
 
-    @mock.patch("subscription_manager.plugin.ostree.model.OstreeConfigRepoFileStore")
+    @mock.patch("subscription_manager.plugin.ostree.model.OstreeConfigFileStore")
     def test_empty(self, mock_file_store):
         # FIXME: This does no validation
         mock_repo_file = mock.Mock()

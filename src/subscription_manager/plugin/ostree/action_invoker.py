@@ -42,54 +42,78 @@ class OstreeContentUpdateActionCommand(object):
     def __init__(self, ent_source):
         self.ent_source = ent_source
 
+    def migrate_core_config(self):
+        # starting state of ostree config
+        ostree_core_config = model.OstreeCoreConfig()
+
+        self.load_config(ostree_core_config)
+
+        # if it has remotes, we want to update to remove them
+        if not ostree_core_config.remotes:
+            return ostree_core_config
+
+        # empty the remote list
+        self.update_config(ostree_core_config,
+                           contents=[])
+
+        return ostree_core_config
+
     def perform(self):
 
-        # starting state of ostree config
-        ostree_config = model.OstreeConfig()
+        # see if it has remotes, if so, migrate it
+
+        self.migrate_core_config()
+
+        return self.update_repo_config()
+
+    def update_repo_config(self):
+        ostree_repo_config = model.OstreeRepoConfig()
 
         # populate config, handle exceptions
-        self.load_config(ostree_config)
+        self.load_config(ostree_repo_config)
 
         report = OstreeContentUpdateActionReport()
 
-        # return the composed set oEntitledContents
+        # return the composed set of EntitledContents
         entitled_contents = find_content(self.ent_source,
-            content_type=OSTREE_CONTENT_TYPE)
+                                         content_type=OSTREE_CONTENT_TYPE)
 
-        # CALCULATE UPDATES
-        # given current config, and the new contents, construct a list
-        # of remotes to apply to our local config of remotes.
-        updates_builder = \
-            model.OstreeConfigUpdatesBuilder(ostree_config,
-                                             contents=entitled_contents)
-        updates = updates_builder.build()
-
-        log.debug("Updates orig: %s" % updates.orig)
-        log.debug("Updates new: %s" % updates.new)
-        log.debug("Updates.new.remote_set: %s" % updates.new.remotes)
-
-        # persist the new stuff
-        updates.apply()
-        updates.save()
+        # update repo configs
+        updates = self.update_config(ostree_repo_config,
+                                     contents=entitled_contents)
 
         report.orig_remotes = list(updates.orig.remotes)
         report.remote_updates = list(updates.new.remotes)
 
         # reload the new config, so we have fresh remotes, etc
-        self.load_config(ostree_config)
+        self.load_config(ostree_repo_config)
 
         # Now that we've updated the ostree repo config, we need to
         # update the currently deployed osname tree .origin file:
-        self.update_origin_file(ostree_config)
+        self.update_origin_file(ostree_repo_config)
 
         log.debug("Ostree update report: %s" % report)
         return report
+
+    def update_config(self, ostree_config, contents):
+        """Update the remotes configured in a OstreeConfig."""
+
+        updates_builder = \
+            model.OstreeConfigUpdatesBuilder(ostree_config,
+                                             contents=contents)
+        updates = updates_builder.build()
+
+        updates.apply()
+        updates.save()
+
+        return updates
 
     def load_config(self, ostree_config):
         try:
             ostree_config.load()
         except ConfigParser.Error:
-            log.info("No ostree content repo config file found. Not loading ostree config.")
+            log.info("No ostree content config file found at: %s. Not loading ostree config.",
+                     ostree_config.repo_file_path)
 
     def update_origin_file(self, ostree_config):
         updater = model.OstreeOriginUpdater(ostree_config)
