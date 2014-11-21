@@ -1891,9 +1891,10 @@ class ReposCommand(CliCommand):
             return rc
 
         # Pull down any new entitlements and refresh the entitlements directory
-        cert_action_client = ActionClient()
-        cert_action_client.update()
-        self._request_validity_check()
+        if self.identity.is_valid():
+            cert_action_client = ActionClient()
+            cert_action_client.update()
+            self._request_validity_check()
 
         self.use_overrides = self.cp.supports_resource('content_overrides')
 
