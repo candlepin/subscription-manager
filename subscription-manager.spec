@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.8
+Version: 1.13.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -466,6 +466,27 @@ fi
 %endif
 
 %changelog
+* Fri Nov 21 2014 William Poteat <wpoteat@redhat.com> 1.13.9-1
+- Move ostree config to /etc/ostree/remotes.d/redhat.conf (alikins@redhat.com)
+- 1147463: Log py.warnings to shutup gobject warning (alikins@redhat.com)
+- 1159266: rhsm-icon -i fails with "TypeError: 'NoneType' object has no
+  attribute '__getitem__'" (wpoteat@redhat.com)
+- 1145833: Do not package sat5to6 with subscription-manager. (awood@redhat.com)
+- 1156627: Fix list consumed matching no service level to "".
+  (dgoodwin@redhat.com)
+- 1162331: Changed how debug_commands.py prints errors. (crog@redhat.com)
+- 1160150: Repos --list leads to deletion of certificates imported to a system
+  (wpoteat@redhat.com)
+- 1162170: Added error output when --pool-only is used with --installed.
+  (crog@redhat.com)
+- 990183: Fix typos in the new man page (bkearney@redhat.com)
+- 1161694: Modify the --pool-id-only to be --pool-only in bash completion and
+  man page (bkearney@redhat.com)
+- Use .format strings for --ondate example message (alikins@redhat.com)
+- 1113741: Fix rhsmd traceback on 502 errors. (alikins@redhat.com)
+- 1157387: Fix incorrect no installed products detected status in GUI.
+  (dgoodwin@redhat.com)
+
 * Fri Nov 07 2014 Unknown name <wpoteat@redhat.com> 1.13.8-1
 - Added support for attaching pools from a file/stdin. (crog@redhat.com)
 - Revert "1046132: Makes rhsm-icon slightly less annoying."
