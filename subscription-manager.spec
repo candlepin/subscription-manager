@@ -245,7 +245,6 @@ rm -rf %{buildroot}
 %{_sysconfdir}/bash_completion.d/rhsm-icon
 %{_sysconfdir}/bash_completion.d/rhsmcertd
 
-%attr(700,root,root) %{_sysconfdir}/cron.daily/rhsmd
 %{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
 %dir %{_datadir}/rhsm

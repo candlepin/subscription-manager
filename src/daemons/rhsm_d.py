@@ -16,7 +16,6 @@
 # in this software or its documentation.
 #
 
-import syslog
 import gobject
 import dbus
 import dbus.service
@@ -35,7 +34,6 @@ logutil.init_logger()
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
-from subscription_manager.branding import get_branding
 from subscription_manager.injection import require, IDENTITY, CERT_SORTER, PROD_DIR
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
@@ -260,14 +258,6 @@ def parse_force_signal(cli_arg):
         sys.exit(-1)
 
 
-def log_syslog(level, msg):
-    syslog.openlog("rhsmd")
-    syslog.syslog(level, msg)
-    log.info("rhsmd: %s" % msg)
-    if enable_debug:
-        print msg
-
-
 def main():
 
     log.info("rhsmd started")
@@ -277,9 +267,6 @@ def main():
             help="Display debug messages", action="store_true", default=False)
     parser.add_option("-k", "--keep-alive", dest="keep_alive",
             help="Stay running (don't shut down after the first dbus call)",
-            action="store_true", default=False)
-    parser.add_option("-s", "--syslog", dest="syslog",
-            help="Run standalone and log result to syslog",
             action="store_true", default=False)
     parser.add_option("-f", "--force-signal", dest="force_signal",
             help="Force firing of a signal " +
@@ -298,37 +285,6 @@ def main():
 
     global enable_debug
     enable_debug = options.debug
-
-    # short-circuit dbus initialization
-    if options.syslog:
-        log.info("logging subscription status to syslog")
-        status = check_status(force_signal)
-        if status == RHSM_EXPIRED:
-            log_syslog(syslog.LOG_NOTICE,
-                       "This system is missing one or more subscriptions. " +
-                        "Please run subscription-manager for more information.")
-        elif status == RHSM_PARTIALLY_VALID:
-            log_syslog(syslog.LOG_NOTICE,
-                       "This system is missing one or more subscriptions " +
-                       "to fully cover its products. " +
-                       "Please run subscription-manager for more information.")
-        elif status == RHSM_WARNING:
-            log_syslog(syslog.LOG_NOTICE,
-                       "This system's subscriptions are about to expire. " +
-                       "Please run subscription-manager for more information.")
-        elif status == RHN_CLASSIC:
-            log_syslog(syslog.LOG_NOTICE,
-                       get_branding().RHSMD_REGISTERED_TO_OTHER)
-        elif status == RHSM_REGISTRATION_REQUIRED:
-            log_syslog(syslog.LOG_NOTICE,
-                       "In order for Subscription Manager to provide your " +
-                       "system with updates, your system must be registered " +
-                       "with the Customer Portal. Please enter your Red Hat " +
-                       "login to ensure your system is up-to-date.")
-
-        # Return an exit code for the program. having valid entitlements is
-        # good, so it gets an exit status of 0.
-        return status
 
     system_bus = dbus.SystemBus()
     loop = gobject.MainLoop()

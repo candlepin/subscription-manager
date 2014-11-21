@@ -187,7 +187,6 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 	install -d $(PREFIX)/etc/rhsm
 	install -d $(PREFIX)/etc/rhsm/facts
 	install -d $(PREFIX)/etc/xdg/autostart
-	install -d $(PREFIX)/etc/cron.daily
 	install -d $(PREFIX)/etc/pam.d
 	install -d $(PREFIX)/etc/logrotate.d
 	install -d $(PREFIX)/etc/security/console.apps
@@ -313,8 +312,6 @@ install-files: dbus-service-install compile-po desktop-files install-plugins
 		$(PREFIX)/etc/xdg/autostart;\
 	install bin/rhsm-icon $(PREFIX)/usr/bin;\
 
-	install -m 700 etc-conf/rhsmd.cron \
-		$(PREFIX)/etc/cron.daily/rhsmd
 	install -m 644 etc-conf/subscription-manager-gui.desktop \
 		$(PREFIX)/$(INSTALL_DIR)/applications
 
