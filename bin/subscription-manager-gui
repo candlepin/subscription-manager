@@ -41,6 +41,19 @@ import logging
 import gettext
 _ = gettext.gettext
 
+# Capture python (and pygtk) warnings that normally print to
+# stderr and log them. This is mainly to avoid the
+# "Attempt to add property * after class was initialised" warning we
+# get with glib2-2.40
+# See https://bugzilla.gnome.org/show_bug.cgi?id=698614 for why we can
+# ignore this warning (it was reverted in glib2-2.42 and later...)
+
+try:
+    # python 2.7+ only
+    logging.captureWarnings(True)
+except AttributeError:
+    pass
+
 try:
     import gtk
 except RuntimeError, e:
