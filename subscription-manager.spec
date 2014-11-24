@@ -22,7 +22,7 @@
 
 Name: subscription-manager
 Version: 1.12.14
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -446,6 +446,9 @@ fi
 %endif
 
 %changelog
+* Mon Nov 24 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.12.14-8
+- 1113741: Fix rhsmd traceback on 502 errors. (alikins@redhat.com)
+
 * Mon Sep 15 2014 jesus m. rodriguez <jesusr@redhat.com> 1.12.14-7
 - 1134963: Fix 'release --list' on some systems. (alikins@redhat.com)
 
