@@ -14,7 +14,7 @@
 
 Name: subscription-manager
 Version: 1.10.14
-Release: 10%{?dist}
+Release: 11%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -419,6 +419,9 @@ fi
 %endif
 
 %changelog
+* Mon Nov 24 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.10.14-11
+- 1113741: Fix rhsmd traceback on 502 errors. (alikins@redhat.com)
+
 * Thu Sep 11 2014 Alex Wood <awood@redhat.com> 1.10.14-10
 - 1131213: Do not ignore server info passed in to cp_provider.
   (awood@redhat.com)
