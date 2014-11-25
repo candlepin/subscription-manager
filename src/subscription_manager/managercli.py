@@ -743,7 +743,7 @@ class EnvironmentsCommand(OrgCommand):
                 else:
                     print _("This org does not have any environments.")
             else:
-                print _("Error: Server does not support environments.")
+                system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
 
             log.info("Successfully retrieved environment list from server.")
         except connection.RestlibException, re:
@@ -2502,7 +2502,7 @@ class StatusCommand(CliCommand):
             overall_status = self.sorter.get_system_status()
             reasons = self.sorter.reasons.get_name_message_map()
 
-            if overall_status == "valid":
+            if self.sorter.is_valid():
                 result = 0
 
             print(_("Overall Status: %s\n") % overall_status)
