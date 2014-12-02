@@ -50,12 +50,10 @@ log = logging.getLogger("rhsm-app.rhsmd")
 from subscription_manager import logutil
 logutil.init_logger()
 
-from subscription_manager.injectioninit import init_dep_injection
-init_dep_injection()
 
-
-# if we get here, we should be okay to use a excepthook that
-# uses our logging and inj
+# If we get here, we should be okay to use define excepthook that
+# uses our logging. Set this up before we do injection init, since
+# that has a lot of potential failures.
 def excepthook_logging(exc_type, exc_value, exc_traceback):
     framelist = traceback.format_exception(exc_type, exc_value, exc_traceback)
     log.error("Unhandled rhsmd exception caught by the logging excepthook: %s",
@@ -64,6 +62,9 @@ def excepthook_logging(exc_type, exc_value, exc_traceback):
     return excepthook_base(exc_type, exc_value, exc_traceback)
 
 sys.excepthook = excepthook_logging
+
+from subscription_manager.injectioninit import init_dep_injection
+init_dep_injection()
 
 from subscription_manager.branding import get_branding
 from subscription_manager.injection import require, IDENTITY, CERT_SORTER, PROD_DIR
