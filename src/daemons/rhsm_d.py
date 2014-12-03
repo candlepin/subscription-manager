@@ -15,6 +15,24 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import sys
+
+enable_debug = False
+
+
+def excepthook_base(exc_type, exc_value, exc_traceback):
+    # something failed before we even got logging setup
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+
+    if enable_debug:
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+
+    # something fundamental failed... how quiet should we be?
+    sys.exit(0)
+
+sys.excepthook = excepthook_base
 
 import syslog
 import gobject
@@ -23,14 +41,27 @@ import dbus.service
 import dbus.glib
 import logging
 import gettext
+import traceback
 
-import sys
 sys.path.append("/usr/share/rhsm")
 
 log = logging.getLogger("rhsm-app.rhsmd")
 
 from subscription_manager import logutil
 logutil.init_logger()
+
+
+# If we get here, we should be okay to use define excepthook that
+# uses our logging. Set this up before we do injection init, since
+# that has a lot of potential failures.
+def excepthook_logging(exc_type, exc_value, exc_traceback):
+    framelist = traceback.format_exception(exc_type, exc_value, exc_traceback)
+    log.error("Unhandled rhsmd exception caught by the logging excepthook: %s",
+              "".join(framelist))
+
+    return excepthook_base(exc_type, exc_value, exc_traceback)
+
+sys.excepthook = excepthook_logging
 
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
@@ -48,8 +79,6 @@ import rhsm.config
 CFG = rhsm.config.initConfig()
 
 _ = gettext.gettext
-
-enable_debug = False
 
 
 def debug(msg):
@@ -329,6 +358,12 @@ def main():
         # Return an exit code for the program. having valid entitlements is
         # good, so it gets an exit status of 0.
         return status
+
+    # we are not running from cron here, so unset the excepthook
+    # though, we may be running from cli, or as a dbus activation. For
+    # cli, we should traceback. For dbus, we should try to log it and
+    # raise dbus exception?
+    sys.excepthook = sys.__excepthook__
 
     system_bus = dbus.SystemBus()
     loop = gobject.MainLoop()
