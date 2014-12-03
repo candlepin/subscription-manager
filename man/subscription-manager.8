@@ -680,9 +680,12 @@ file, such as
 which is used to configure the subscription management service. When changing the Subscription Manager configuration, the settings are identified with the format
 .I section.name
 and then the new value. For example:
+
+.RS
 .nf
 server.hostname=newsubscription.example.com
 .fi
+.RE
 
 .TP
 .B --list
@@ -714,6 +717,8 @@ Sets a parameter to a new, specified value. This is commonly used for connection
 The
 .B version
 command displays information about the current Subscription Manager package, the subscription service the system is registered to (if it is currently registered), and the subscription management server that the system is configured to use. For example:
+
+.RS
 .nf
 [root@server ~]# subscription-manager version
 server type: Red Hat Subscription Management
@@ -722,6 +727,7 @@ subscription management rules: 5.9
 subscription-manager: 1.12.1-1.git.28.5cd97a5.fc20
 python-rhsm: 1.11.4-1.git.1.2f38ded.fc20
 .fi
+.RE
 
 .PP
 This command has no options.
@@ -732,6 +738,7 @@ The
 .B status
 command shows the current status of the products and attached subscriptions for the system. If some products are not fully covered or subscriptions have expired, then the \fBstatus\fP command shows why subscriptions are not current and returns an error code.
 
+.RS
 .nf
 [root@server ~]# subscription-manager status
 +-------------------------------------------+
@@ -739,12 +746,14 @@ command shows the current status of the products and attached subscriptions for 
 +-------------------------------------------+
 Overall Status: Current
 .fi
+.RE
 
 
 .TP
 .B --ondate=DATE
 Shows the system status for a specific date \fIin the future\fP. The format of the date is \fIYYYY-MM-DD\fP.
 
+.RS
 .nf
 [root@server ~]# subscription-manager status --ondate=2014-01-01
 +-------------------------------------------+
@@ -752,6 +761,7 @@ Shows the system status for a specific date \fIin the future\fP. The format of t
 +-------------------------------------------+
 Overall Status: Insufficient
 .fi
+.RE
 
 .SS DEPRECATED COMMANDS
 As the structures of subscription configuration have changed, some of the original management commands have become obsolete. These commands have been replaced with updated commands.
@@ -806,9 +816,11 @@ prompts for the username and password interactively.
 .PP
 When there is a single organization or when using the Customer Portal Subscription Management service, all that is required is the username/password set. For example:
 
+.RS
 .nf
 subscription-manager register --username=admin --password=secret
 .fi
+.RE
 
 .PP
 With on-premise subscription services, such as Subscription Asset Manager, the infrastructure is more complex. The local administrator can define independent groups called
@@ -816,10 +828,12 @@ With on-premise subscription services, such as Subscription Asset Manager, the i
 which represent physical or organizational divisions (\fB--org\fP). Those organizations can be subdivided into \fIenvironments\fP (\fB--environment\fP).
 Optionally, the information about what subscription service (\fB--serverurl\fP) and content delivery network (\fB--baseurl\fP) to use for the system registration can also be passed (which overrides the Red Hat Subscription Manager settings). The server and content URLs are usually configured in the Subscription Manager configuration before registering a system.
 
+.RS
 .nf
 subscription-manager register --username=admin --password=secret
---org="IT Dept" --environment="local dev" --serverurl=local-cloudforms.example.com --baseurl=https://local-cloudforms.example.com:8088/cfse
+--org="IT Dept" --environment="local dev" --serverurl=local-cloudforms.example.com --baseurl=https://local-cloudforms.example.com:8088/cfFe
 .fi
+.RE
 
 
 .PP
@@ -833,24 +847,29 @@ there will be errors about being unable to load the owners interface.
 .PP
 Some information is assigned automatically. Subscription Manager automatically generates a unique ID for the system which is used by the subscription management service and it assigns a unit type, which indicates what kinds of software are available for the system. The name for the entry can be manually assigned (for use within an on-premise subscription service, for instance). A handful of subscriptions (such as specialized servers for content or identity management) have their own specific unit type. For example:
 
+.RS
 .nf
 subscription-manager register --username=admin
 --password=secret --type=system --name=server1
 --org="IT Dept"
 .fi
+.RE
 
 .PP
 If a system is registered and then somehow its subscription information is lost -- a drive crashes or the certificates are deleted or corrupted -- the system can be reregistered, with all of its subscriptions restored, by registering with the existing ID.
 
+.RS
 .nf
 subscription-manager register --username=admin
 --password=secret --consumerid=1234abcd
 .fi
+.RE
 
 .PP
 A system uses an SSL client certificate (its identity certificate) to authenticate to the subscriptions system to check for updates or changes to subscriptions. If the identity certificate is lost or corrupted, it can be regenerated using the
 .B identity
 command.
+
 .RS
 .nf
 subscription-manager identity --regenerate
@@ -874,6 +893,7 @@ eff9a4c9-3579-49e5-a52f-83f2db29ab52 server.example.com
 A system is unregistered and removed from the subscription management service simply by running the
 .B unregister
 command. Unregistering a system and removing its attached subscriptions can free up subscriptions when a system is taken offline or moved to a different department.
+
 .RS
 .nf
 subscription-manager unregister
@@ -884,6 +904,7 @@ subscription-manager unregister
 An option with registration,
 .B --auto-attach,
 will automatically attach the subscriptions pool which best matches the system architecture and configuration to the newly-registered system. This option attaches subscriptions as part of the registration process, rather than separately managing subscriptions.
+
 .RS
 .nf
 subscription-manager register --username=admin --password=secret
@@ -942,6 +963,7 @@ Machine Type:		physical
 The
 .B list
 command can also be used to show what products you currently have installed, as a way of tracking what products you have versus what subscriptions you have on the system.
+
 .RS
 .nf
 subscription-manager list --installed
@@ -961,9 +983,35 @@ Ends:		08/31/2015
 .RE
 
 .PP
+The
+.B list
+can be filtered to only include products or subscriptions that match the query string provided to
+.B --matches
+option.
+
+.RS
+.nf
+subscription-manager list --instaled --matches="*Server*"
+
++-------------------------------------------+
+    Installed Product Status
++-------------------------------------------+
+
+ProductName:	Red Hat Enterprise Linux Server
+Product ID:	69
+Version: 	6.3
+Arch:		x86_64
+Status:		Subscribed
+Started:	07/26/2012
+Ends:		08/31/2015
+.fi
+.RE
+
+.PP
 Attaching a subscription requires the ID for the subscription pool (the
 .I --pool
 option). For example:
+
 .RS
 .nf
 subscription-manager attach
@@ -977,6 +1025,7 @@ As with the
 command, the system can be auto-attached to the best-fitting subscriptions using the
 .B --auto
 option:
+
 .RS
 .nf
 subscription-manager attach --auto
@@ -1002,6 +1051,7 @@ Some subscriptions define a count based on attributes of the system itself, like
 use the
 .B --quantity
 option. For example:
+
 .RS
 .nf
 subscription-manager attach
@@ -1012,6 +1062,7 @@ subscription-manager attach
 
 .PP
 Removing subscription from a system releases the subscription back into the pool. The system remains registered with the subscription management service. Each product has an identifying X.509 certificate installed with it. To remove a subscription for a specific product, specify the serial number (or numbers, in multiple \fB--serial\fP options) of the certificate:
+
 .RS
 .nf
 subscription-manager remove --serial=1128750306742160
@@ -1035,6 +1086,7 @@ its existing subscriptions.
 After registration, subscriptions on preconfigured systems can be claimed using the
 .B redeem
 command, which essentially auto-attaches the system to its preexisting subscriptions.
+
 .RS
 .nf
 subscription-manager redeem --email=admin@example.com --org="IT Dept"
@@ -1075,6 +1127,7 @@ is the configuration section in the file: server, rhsm, or rhsmcertd.
 
 .PP
 For example, to change the hostname of the subscription management service host:
+
 .RS
 .nf
 subscription-manager config --server.hostname=myserver.example.com
@@ -1098,6 +1151,7 @@ subscription-manager facts --update
 The collected facts can also be overridden by creating a JSON file in the
 .B /etc/rhsm/facts/
 directory. These have simple formats that define a fact and value:
+
 .RS
 .nf
 {"fact1": "value1","fact2": "value2"}
@@ -1118,6 +1172,7 @@ command will update the collected facts with the new, manual facts or values.
 The
 .B subscription-manager
 tool can be run as a post-install script as part of the kickstart installation process. This allows subscription management (registering and applying subscriptions) to be automated along with installation. For example:
+
 .RS
 .nf
 %post --log=/root/ks-post.log
