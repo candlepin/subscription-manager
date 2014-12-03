@@ -90,7 +90,7 @@ manage_repos::
 full_refresh_on_yum::
   Set to '1' if the /etc/yum.repos.d/redhat.repo should be updated with
   every server command. This will make yum less efficient, but can ensure
-  that the most recent data is brought down from the susbscription service.
+  that the most recent data is brought down from the subscription service.
 
 report_package_profile::
   Set to '1' if *rhsmcertd* should report the system's current package
