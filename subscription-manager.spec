@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.9
+Version: 1.13.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -466,6 +466,10 @@ fi
 %endif
 
 %changelog
+* Wed Dec 03 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.13.10-1
+- 1103824: Add a catchall excepthook for rhsmd (alikins@redhat.com)
+- 1119688: Improved exit code usage (crog@redhat.com)
+
 * Fri Nov 21 2014 William Poteat <wpoteat@redhat.com> 1.13.9-1
 - Move ostree config to /etc/ostree/remotes.d/redhat.conf (alikins@redhat.com)
 - 1147463: Log py.warnings to shutup gobject warning (alikins@redhat.com)
