@@ -13,7 +13,7 @@
 
 Name: subscription-manager
 Version: 1.11.3
-Release: 11%{?dist}
+Release: 12%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -400,6 +400,10 @@ fi
 %endif
 
 %changelog
+* Fri Dec 05 2014 Adrian Likins <alikins@redhat.com> 1.11.3-12
+- 1103824: Add a catchall excepthook for rhsmd (alikins@redhat.com)
+- 1113741: Fix rhsmd traceback on 502 errors. (alikins@redhat.com)
+
 * Wed Sep 24 2014 Alex Wood <awood@redhat.com> 1.11.3-11
 - 1131213: Do not ignore server info passed in to cp_provider.
   (awood@redhat.com)
