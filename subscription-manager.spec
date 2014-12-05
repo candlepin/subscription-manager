@@ -14,7 +14,7 @@
 
 Name: subscription-manager
 Version: 1.10.14
-Release: 11%{?dist}
+Release: 12%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -419,6 +419,9 @@ fi
 %endif
 
 %changelog
+* Fri Dec 05 2014 Adrian Likins <alikins@redhat.com> 1.10.14-12
+- 1167463: Add a catchall excepthook for rhsmd (alikins@redhat.com)
+
 * Mon Nov 24 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.10.14-11
 - 1113741: Fix rhsmd traceback on 502 errors. (alikins@redhat.com)
 
