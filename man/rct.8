@@ -1,4 +1,4 @@
-.TH rct 8 "May 23, 2013" "version 1.3" "Certificate Information Tool"  Deon Lackey 
+.TH rct 8
 .SH NAME
 rct \- Displays information (headers) about or size and statistics of a entitlement, product, or identity certificate used by Red Hat Subscription Manager.
 
@@ -32,15 +32,15 @@ Extracts the contents of the manifest archive.
 
 
 .SH THE STAT-CERT COMMAND
-The \fBrct\fP tool is used to gather information about the already-issued certificates being used by Subscription Manager. The main reason for that is that certificate sizes, for a number of reasons, impact content delivery service performance. 
+The \fBrct\fP tool is used to gather information about the already-issued certificates being used by Subscription Manager. The main reason for that is that certificate sizes, for a number of reasons, impact content delivery service performance.
 
 .PP
-For large accounts and organizations, there can be a very large number of products and content sets available. Older versions of entitlement certificates (version 1.0) used different (less efficient) DER encoding, so that large amounts of information results in very large certificates. (This is what caused timeouts or crashes when dealing with some content services.) Newer entitlement certificate versions (version 3.0) use more efficient encoding on large content sets, , resulting in smaller certificate content sizes and better service performance. 
+For large accounts and organizations, there can be a very large number of products and content sets available. Older versions of entitlement certificates (version 1.0) used different (less efficient) DER encoding, so that large amounts of information results in very large certificates. (This is what caused timeouts or crashes when dealing with some content services.) Newer entitlement certificate versions (version 3.0) use more efficient encoding on large content sets, , resulting in smaller certificate content sizes and better service performance.
 
 .PP
 If there are problems with the content service timing out or returning errors, then the \fBrct stat-cert\fP command can be used to check the size and version of a given entitlement certificate quickly.
 
-.PP 
+.PP
 A large number of content sets is anything over 185 total sets. Both the total number of content sets and the size of the DER encoding in the certificate could affect performance.
 
 .SS OPTIONS
@@ -208,14 +208,14 @@ Product:
 .RE
 
 .PP
-The most information is contained in the entitlement certficate. Along with the \fBCertificate\fP and \fBSubject\fP, it also has a \fBProduct\fP section that defines the product group that is covered by the subscription. 
+The most information is contained in the entitlement certficate. Along with the \fBCertificate\fP and \fBSubject\fP, it also has a \fBProduct\fP section that defines the product group that is covered by the subscription.
 .PP
-Then, it contains an \fBOrder\fP section that details everything related to the purchase of the subscription (such as the contract number, service level, total quantity, quantities assigned to the system, and other details on the subscription). 
+Then, it contains an \fBOrder\fP section that details everything related to the purchase of the subscription (such as the contract number, service level, total quantity, quantities assigned to the system, and other details on the subscription).
 .PP
 A subscription for a product covers the version purchased \fIand\fP every previous version of the product. For example, when a subscription is purchased for Red Hat Enterprise Linux 6.4, the subscription provides full access to all RHEL 6 repositories, \fBplus\fP access to all RHEL 5 repositories and then other included product content repositories, like Subscription Asset Manager. Every available content repository is listed in a \fBContent\fP section that contains the repository name, associated tags, its URL, and a notice on whether the yum repository is enabled by default. For example:
 .RS
 .nf
-[root@server ~]# rct cat-cert /etc/pki/entitlement/2027912482659389239.pem  
+[root@server ~]# rct cat-cert /etc/pki/entitlement/2027912482659389239.pem
 +-------------------------------------------+
         Entitlement Certificate
 +-------------------------------------------+

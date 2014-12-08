@@ -14,7 +14,7 @@
 .\" along with this man page; if not, write to the Free Software
 .\" Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 .\"
-.TH "rhn-migrate-classic-to-rhsm" "8" "January 7, 2013" "Version 0.7" ""
+.TH "rhn-migrate-classic-to-rhsm" "8"
 
 .SH NAME
 
@@ -61,7 +61,7 @@ Deletes the system from Red Hat Network Classic and registers it to Customer Por
 
 .TP
 .B -s SERVICE_LEVEL, --servicelevel=SERVICE_LEVEL
-Sets a preferred service level for the system, such as premium or standard. This service level preference is then used as one of the criteria for auto-attaching subscriptions to the system.
+Sets a preferred service level for the system, such as premium or standard. This service-level preference is then used as one of the criteria for auto-attaching subscriptions to the system.
 
 .TP
 .B --org=ORG
@@ -130,35 +130,34 @@ migration.migration_date: 2012-09-14T14:55:29.280519
 The \fBrhn-migrate-classic-to-rhsm\fP tool, by default, auto-attaches the best-matching subscriptions to the system. This allows migrations to be automated.
 .nf
 [root@server ~]# rhn-migrate-classic-to-rhsm
-Red Hat account: jsmith@example.com
-Password:
+Legacy username: jsmith@rhn.example.com
+Legacy password:
 
-Retrieving existing RHN Classic subscription information ...
-+----------------------------------+
-System is currently subscribed to:
-+----------------------------------+
-rhel-i386-client-5
+Retrieving existing legacy subscription information...
 
-List of channels for which certs are being copied
-rhel-i386-client-5
++-----------------------------------------------------+
+System is currently subscribed to these legacy channels:
++-----------------------------------------------------+
+rhel-x86_64-server-6
 
-Product Certificates copied successfully to /etc/pki/product !!
++-----------------------------------------------------+
+Installing product certificates for these legacy channels:
++-----------------------------------------------------+
+rhel-x86_64-server-6
 
-Preparing to unregister system from RHN Classic ...
-System successfully unregistered from RHN Classic.
+Product certificates installed successfully to /etc/pki/product.
 
-Attempting to register system to RHN ...
-The system has been registered with id: abcd1234
-System 'server.example.com' successfully registered to RHN.
+Preparing to unregister system from legacy server...
+System successfully unregistered from legacy server.
 
-Attempting to auto-subscribe to appropriate subscriptions ...
+Attempting to register system to destination server...
+The system has been registered with ID: e6876d95-3564-4506-a44e-cb0c1b651434
+
 Installed Product Current Status:
-ProductName:            Red Hat Enterprise Linux Desktop
-Status:                 Subscribed
+Product Name: Red Hat Enterprise Linux Server
+Status:       Subscribed
 
-Successfully subscribed.
-
-Please visit https://access.redhat.com/management/consumers/abcd1234 to view the details, and to make changes if necessary.
+System 'jsmith.rhn.example.com' successfully registered.
 .fi
 
 .PP
@@ -177,7 +176,7 @@ Password:
 The \fBrhn-migrate-classic-to-rhsm\fP tool migrates the system to Customer Portal Subscription Management (hosted) services by default. This uses the default configuration for Subscription Manager, which points to the subscription management services for the Customer Portal. For infrastructures which have an on-premise subscription management service such as Subscription Asset Manager, this configuration can be changed so that the migration process registers the systems to the on-premise subscription management service and attaches the appropriate subscriptions.
 
 .PP
-This is done by using the \fB--destination-url\fP option, which specifies the URL of the on-premise service. In this case, the authorization credentials must also be given for the on-premise subscription management service account (which is independent of the RHN account).
+This is done by using the \fB--destination-url\fP option, which specifies the URL of the on-premise service. In this case, the authorization credentials must also be given for the on-premise subscription management service account (which is independent of the RHN classic account).
 
 .nf
 [root@server ~]# rhn-migrate-classic-to-rhsm --destination-url=sam.example.com
