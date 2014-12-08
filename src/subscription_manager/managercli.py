@@ -188,9 +188,12 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
 def show_autosubscribe_output(uep):
     installed_status = get_installed_product_status(inj.require(inj.PROD_DIR),
             inj.require(inj.ENT_DIR), uep)
+
     if not installed_status:
-        print _("No products installed.")
-        return 1
+        # Returning an error code here breaks registering when no products are installed, and the
+        # AttachCommand already performs this check before calling.
+        return 0
+
     log.info("Attempted to auto-attach/heal the system.")
     print _("Installed Product Current Status:")
     subscribed = 1
@@ -1508,7 +1511,7 @@ class AttachCommand(CliCommand):
                 report = self.entcertlib.update()
 
             if report and report.exceptions():
-                print 'Entitlement Certificate(s) update failed due to the following reasons:'
+                print _('Entitlement Certificate(s) update failed due to the following reasons:')
                 for e in report.exceptions():
                     print '\t-', str(e)
             elif self.options.auto:
