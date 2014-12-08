@@ -2123,7 +2123,7 @@ class ListCommand(CliCommand):
         self.parser.add_option("--match-installed", action="store_true",
                                help=_("shows only subscriptions matching products that are currently installed; only used with --available"))
         self.parser.add_option("--matches", dest="filter_string",
-                               help=_("lists only subscriptions or products containing the specified search string in the subscription or product information, varying with the list requested and the server version (case-insensitive)."))
+                               help=_("lists only subscriptions or products containing the specified expression in the subscription or product information, varying with the list requested and the server version (case-insensitive)."))
         self.parser.add_option("--pool-only", dest="pid_only", action="store_true",
                                help=_("lists only the pool IDs for applicable available or consumed subscriptions; only used with --available and --consumed"))
 
@@ -2164,7 +2164,7 @@ class ListCommand(CliCommand):
                                 status, product[5], product[6], product[7]) + "\n"
             else:
                 if self.options.filter_string:
-                    print(_("No installed products matching the specified criteria were found."))
+                    print(_("No installed products were found matching the expression \"%s\".") % self.options.filter_string)
                 else:
                     print(_("No installed products to list"))
 
@@ -2225,8 +2225,21 @@ class ListCommand(CliCommand):
                                 data['endDate'],
                                 machine_type) + "\n"
             elif not self.options.pid_only:
-                if self.options.filter_string:
-                    print(_("No available subscription pools matching the specified criteria were found."))
+                if self.options.filter_string and self.options.service_level:
+                    print(
+                        _("No available subscription pools were found matching the expression \"%s\" and the service level \"%s\".")
+                        % (self.options.filter_string, self.options.service_level)
+                    )
+                elif self.options.filter_string:
+                    print(
+                        _("No available subscription pools were found matching the expression \"%s\".")
+                        % (self.options.filter_string)
+                    )
+                elif self.options.service_level:
+                    print(
+                        _("No available subscription pools were found matching the service level \"%s\".")
+                        % (self.options.service_level)
+                    )
                 else:
                     print(_("No available subscription pools to list"))
 
@@ -2330,7 +2343,23 @@ class ListCommand(CliCommand):
                             system_type
                         ) + "\n"
             elif not pid_only:
-                print(_("No consumed subscription pools matching the specified criteria were found."))
+                if filter_string and service_level:
+                    print(
+                        _("No consumed subscription pools were found matching the expression \"%s\" and the service level \"%s\".")
+                        % (filter_string, service_level)
+                    )
+                elif filter_string:
+                    print(
+                        _("No consumed subscription pools were found matching the expression \"%s\".")
+                        % (filter_string)
+                    )
+                elif service_level:
+                    print(
+                        _("No consumed subscription pools were found matching the service level \"%s\".")
+                        % (service_level)
+                    )
+                else:
+                    print(_("No consumed subscription pools were found matching the specified criteria."))
         elif not pid_only:
             print(_("No consumed subscription pools to list"))
 
