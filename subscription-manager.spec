@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.10
+Version: 1.13.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -466,6 +466,13 @@ fi
 %endif
 
 %changelog
+* Tue Dec 09 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.13.11-1
+- 1132981: Fixed exit code when registering system with no products installed
+  (crog@redhat.com)
+- Add 'list --matches' example to man page. (alikins@redhat.com)
+- 1149286: Removed obsolete CLI options from auto-completion (crog@redhat.com)
+- 990183: Spelling errors in man pages (wpoteat@redhat.com)
+
 * Wed Dec 03 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.13.10-1
 - 1103824: Add a catchall excepthook for rhsmd (alikins@redhat.com)
 - 1119688: Improved exit code usage (crog@redhat.com)
