@@ -13,7 +13,7 @@
 
 Name: subscription-manager
 Version: 1.11.3
-Release: 13%{?dist}
+Release: 14%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -400,6 +400,10 @@ fi
 %endif
 
 %changelog
+* Tue Dec 09 2014 Adrian Likins <alikins@redhat.com> 1.11.3-14
+- Unrevert "1131213: Do not ignore server info passed in to
+  cp_provider."" (alikins@redhat.com)
+
 * Fri Dec 05 2014 Adrian Likins <alikins@redhat.com> 1.11.3-13
 - Revert "1131213: Do not ignore server info passed in to cp_provider."
   (alikins@redhat.com)
