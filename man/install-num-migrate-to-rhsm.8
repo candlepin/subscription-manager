@@ -14,42 +14,42 @@
 .\" along with this man page; if not, write to the Free Software
 .\" Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 .\"
-.TH "install-num-migrate-to-rhsm" "8" "September 5, 2012" "Version 0.3" ""
+.TH "install-num-migrate-to-rhsm" "8"
 
 .SH NAME
 
-install-num-migrate-to-rhsm \- Checks the installation number for a system and installs the required product certificates. This is used for migrating an offline system to Customer Portal Subscription Management. 
+install-num-migrate-to-rhsm \- Checks the installation number for a system and installs the required product certificates. This is used for migrating an offline system to Customer Portal Subscription Management.
 
 .SH SYNOPSIS
 install-num-migrate-to-rhsm [--dryrun|--instnum=NUMBER|--help]
 
 .SH DESCRIPTION
-\fBinstall-num-migrate-to-rhsm\fP migrates a system using legacy Red Hat Enterprise Linux installation numbers to the X.509 certificates used by Customer Portal Subscription Management. 
+\fBinstall-num-migrate-to-rhsm\fP migrates a system using legacy Red Hat Enterprise Linux installation numbers to the X.509 certificates used by Customer Portal Subscription Management.
 
 .PP
 While the \fBinstall-num-migrate-to-rhsm\fP script performs the migration operation, the data used to map the channels to the corresponding product certificates is defined in the \fBsubscription-manager-migration-data\fP package. The \fBsubscription-manager-migration-data\fP package must be installed before the \fBinstall-num-migrate-to-rhsm\fP script can be run successfully.
 
 .SH BACKGROUND
-Access to support and updates for products is determined through 
+Access to support and updates for products is determined through
 .I subscriptions.
-Subscriptions are assigned or 
-.I attached 
-to a system, which means that the system has the right to install and update a product with full support. Even disconnected or offline systems still need a way to track the products installed on them and the subscriptions used by them. In the older Red Hat Network Classic model of subscription management, a system was associated with a 
+Subscriptions are assigned or
+.I attached
+to a system, which means that the system has the right to install and update a product with full support. Even disconnected or offline systems still need a way to track the products installed on them and the subscriptions used by them. In the older Red Hat Network Classic model of subscription management, a system was associated with a
 .I channel.
-In Customer Portal Subscription Management, installed products and subscriptions are identified through 
+In Customer Portal Subscription Management, installed products and subscriptions are identified through
 .I X.509 certificates.
 Either way, a channel or a certificate provides a means of recognizing and tracking the products and subscriptions for a system, even an offline system.
 
 .PP
-When Red Hat software is purchased through a vendor, the purchased software is identified in a 
-.I installation number 
+When Red Hat software is purchased through a vendor, the purchased software is identified in a
+.I installation number
 or
-.I subscription number. 
+.I subscription number.
 Installation numbers are described more in the Knowledgebase article:
 <https://access.redhat.com/kb/docs/DOC-15408>
 
 .PP
-This number is located in the 
+This number is located in the
 .B /etc/sysconfig/rhn/install-num
 file. The installation number is in essence a code which contains all of the information about the products and versions purchased for the system. For example, this installation number shows that it is valid for RHEL Client and RHEL Workstation channels.
 .nf
@@ -85,15 +85,15 @@ Prints the specific help information for the given command.
 
 .TP
 .B -d, --dryrun
-Performs a dry run of the script. This 
-.I indicates 
-what product certificates will be installed into the 
+Performs a dry run of the script. This
+.I indicates
+what product certificates will be installed into the
 .B /usr/share/rhsm/product
 directory, but does not actually install the product certificates in the directory.
 
 .TP
 .B -i NUMBER, --instnum=NUMBER
-Migrates the channels and product certificates based on the manually-entered installation number rather than the number in 
+Migrates the channels and product certificates based on the manually-entered installation number rather than the number in
 .B /etc/sysconfig/rhn/install-num.
 This is an advanced option; most migrations will use the standard installation number in the system configuration.
 
@@ -109,7 +109,7 @@ The script installs the product certificates that correspond to the available ch
 <https://access.redhat.com/knowledge/docs/en-US/Red_Hat_Customer_Portal/1/html/Red_Hat_Network_Certificate-based_Subscription_Management/managing-consumers.html#web-consumer-register>
 
 .PP
-After migration, the system facts maintained by Subscription Manager display what script was used for migration. 
+After migration, the system facts maintained by Subscription Manager display what script was used for migration.
 
 .nf
 [root@server ~]# subscription-manager facts --list | grep migr
@@ -126,7 +126,7 @@ Because the \fBinstall-num-migrate-to-rhsm\fP command does not register the syst
 The 16-character activation key issued by a vendor which contains all of the subscription and product information for the system. This is used during the installation process.
 
 .IP \fI/etc/sysconfig/rhn/systemid\fP
-The digital server ID for this machine if the system has been registered with Red Hat Network Classic. 
+The digital server ID for this machine if the system has been registered with Red Hat Network Classic.
 This file does not exist otherwise.
 
 .IP \fI/etc/sysconfig/rhn/up2date\fP
@@ -159,5 +159,5 @@ Report bugs to <http://bugzilla.redhat.com>.
 Copyright \(co 2011 Red Hat, Inc.
 
 .PP
-This is free software; see the source for copying conditions.  There is 
+This is free software; see the source for copying conditions.  There is
 NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
