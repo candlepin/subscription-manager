@@ -197,8 +197,16 @@ class StatusCache(CacheManager):
             log.exception(ex)
             self.last_error = ex
             return None
-        except (connection.RemoteServerException,
-                connection.NetworkException,
+        except connection.ExpiredIdentityCertException, ex:
+            log.exception(ex)
+            self.last_error = ex
+            log.error("Bad identity, unable to connect to server")
+            return None
+        except connection.GoneException:
+            raise
+        # all of the abover are subclasses of ConnectionException that
+        # get handled first
+        except (connection.ConnectionException,
                 socket.error), ex:
 
             log.error(ex)
@@ -209,11 +217,6 @@ class StatusCache(CacheManager):
 
             log.warn("Unable to reach server, using cached status.")
             return self._read_cache()
-        except connection.ExpiredIdentityCertException, ex:
-            log.exception(ex)
-            self.last_error = ex
-            log.error("Bad identity, unable to connect to server")
-            return None
 
     def to_dict(self):
         return self.server_status
@@ -240,12 +243,32 @@ class StatusCache(CacheManager):
             return True
         return super(StatusCache, self)._cache_exists()
 
+    def read_status(self, uep, uuid):
+        """
+        Return status, from cache if it exists, otherwise load_status
+        and write cache and return it.
+
+        If load_status fails, we return it's return value. For
+        a fail with a cache, it will be the cached values. Otherwise
+        it will be None.
+
+        Methods calling this should handle the None, likely by
+        using a default value instead of calling it again. If there is
+        no default, the None likely indicates an error needs to be raised.
+        """
+
+        if not self.server_status:
+            self.server_status = self.load_status(uep, uuid)
+        return self.server_status
+
     def write_cache(self):
         """
         This is threaded because it should never block in runtime.
         Writing to disk means it will be read from memory for the rest of this run.
         """
-        threading.Thread(target=super(StatusCache, self).write_cache, args=[False], name="WriteCache%s" % self.__class__.__name__).start()
+        threading.Thread(target=super(StatusCache, self).write_cache,
+                         args=[False],
+                         name="WriteCache%s" % self.__class__.__name__).start()
         log.debug("Started thread to write cache: %s" % self.CACHE_FILE)
 
     # we override a @classmethod with an instance method in the sub class?
@@ -289,6 +312,25 @@ class OverrideStatusCache(StatusCache):
 
     def _sync_with_server(self, uep, consumer_uuid):
         self.server_status = uep.getContentOverrides(consumer_uuid)
+
+
+class ReleaseStatusCache(StatusCache):
+    """
+    Manages the cache of the consumers 'release' setting applied to yum repos.
+    """
+    CACHE_FILE = "/var/lib/rhsm/cache/releasever.json"
+
+    def _sync_with_server(self, uep, consumer_uuid):
+        def get_release(uuid):
+
+            #raise connection.RemoteServerException(500, "GET", "/release")
+            return uep.getRelease(consumer_uuid)
+            #raise connection.RestlibException(500, "something broke")
+
+        self.server_status = get_release(consumer_uuid)
+
+    # our read_status could check for "full_refresh_on_yum", since
+    # we are yum specific, and not triggered till late.
 
 
 # this is injected normally

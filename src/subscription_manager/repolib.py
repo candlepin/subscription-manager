@@ -27,7 +27,6 @@ from subscription_manager import model
 from subscription_manager.model import ent_cert
 
 from rhsm.config import initConfig
-from rhsm.connection import RemoteServerException, RestlibException
 
 # FIXME: local imports
 
@@ -88,6 +87,78 @@ class RepoActionInvoker(BaseActionInvoker):
             os.unlink(repo_file.path)
         # When the repo is removed, also remove the override tracker
         WrittenOverrideCache.delete_cache()
+
+
+# This is $releasever specific, but expanding other vars would be similar,
+# just the marker, and get_expansion would change
+#
+# For example, for full craziness, we could expand facts in urls...
+class YumReleaseverSource(object):
+    """
+    Contains a ReleaseStatusCache and releasever helpers.
+
+    get_expansion() gets 'release' from consumer info from server,
+    using the cache as required.
+    """
+    marker = "$releasever"
+    # if all eles fails the default is to leave the marker un expanded
+    default = marker
+
+    def __init__(self):
+
+        self.release_status_cache = inj.require(inj.RELEASE_STATUS_CACHE)
+        self._expansion = None
+
+        self.identity = inj.require(inj.IDENTITY)
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = self.cp_provider.get_consumer_auth_cp()
+
+    # FIXME: these guys are really more of model helpers for the object
+    #        represent a release.
+    @staticmethod
+    def is_not_empty(expansion):
+        if expansion is None or len(expansion) == 0:
+            return False
+        return True
+
+    @staticmethod
+    def is_set(result):
+        """Check result for existing, and having a non empty value.
+
+        Return True if result has a non empty, non null result['releaseVer']
+
+        False indicates we don't know or it is not set.
+        """
+        if result is None:
+            return False
+        try:
+            release = result['releaseVer']
+            return YumReleaseverSource.is_not_empty(release)
+        except Exception:
+            return False
+
+    def get_expansion(self):
+        # mem cache
+        if self._expansion:
+            return self._expansion
+
+        result = self.release_status_cache.read_status(self.uep,
+                                                       self.identity.uuid)
+
+        # status cache returned None, which points to a failure.
+        # Since we only have one value, use the default there and cache it
+        # NOTE: the _expansion caches exists for the lifetime of the object,
+        #       so a new created YumReleaseverSource needs to be created when
+        #       you think there may be a new release set. We assume it will be
+        #       the same for the lifetime of a RepoUpdateActionCommand
+        if not self.is_set(result):
+            # we got a result indicating we don't know the release, use the
+            # default. This could be server error or just an "unset" release.
+            self._expansion = self.default
+            return self._expansion
+
+        self._expansion = result['releaseVer']
+        return self._expansion
 
 
 class RepoUpdateActionCommand(object):
@@ -152,18 +223,6 @@ class RepoUpdateActionCommand(object):
                 if item['contentLabel'] not in self.overrides:
                     self.overrides[item['contentLabel']] = {}
                 self.overrides[item['contentLabel']][item['name']] = item['value']
-
-        message = "Release API is not supported by the server. Using default."
-        try:
-            result = self.uep.getRelease(self.identity.uuid)
-            self.release = result['releaseVer']
-        except RemoteServerException, e:
-            log.debug(message)
-        except RestlibException, e:
-            if e.code == 404:
-                log.debug(message)
-            else:
-                raise
 
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
@@ -231,9 +290,19 @@ class RepoUpdateActionCommand(object):
                                               content_type="yum")
 
         content_list = []
+
+        # avoid checking for release/etc if there is no matching_content
+        if not matching_content:
+            return content_list
+
+        # wait until we know we have content before fetching
+        # release. We could make YumReleaseverSource understand
+        # cache_only as well.
+        release_source = YumReleaseverSource()
+
         for content in matching_content:
             repo = Repo.from_ent_cert_content(content, baseurl, ca_cert,
-                                              self.release)
+                                              release_source)
 
             # overrides are yum repo only at the moment, but
             # content sources will likely need to learn how to
@@ -247,6 +316,7 @@ class RepoUpdateActionCommand(object):
 
     def _set_override_info(self, repo):
         # In the disconnected case, self.overrides will be an empty list
+
         for name, value in self.overrides.get(repo.id, {}).items():
             repo[name] = value
 
@@ -410,7 +480,7 @@ class Repo(dict):
                 self[k] = d
 
     @classmethod
-    def from_ent_cert_content(cls, content, baseurl, ca_cert, release):
+    def from_ent_cert_content(cls, content, baseurl, ca_cert, release_source):
         """Create an instance of Repo() from an ent_cert.EntitlementCertContent().
 
         And the other out of band info we need including baseurl, ca_cert, and
@@ -426,7 +496,7 @@ class Repo(dict):
         else:
             repo['enabled'] = "0"
 
-        expanded_url_path = Repo._expand_releasever(release, content.url)
+        expanded_url_path = Repo._expand_releasever(release_source, content.url)
         repo['baseurl'] = utils.url_base_join(baseurl, expanded_url_path)
 
         # Extract the variables from the url
@@ -476,15 +546,21 @@ class Repo(dict):
         return repo
 
     @staticmethod
-    def _expand_releasever(release, contenturl):
-        if release is None or len(release) == 0:
+    def _expand_releasever(release_source, contenturl):
+        # no $releasever to expand
+        if release_source.marker not in contenturl:
             return contenturl
+
+        expansion = release_source.get_expansion()
 
         # NOTE: This is building a url from external info
         #       so likely needs more validation. In our case, the
         #       external source is trusted (release list from tls
         #       mutually authed cdn, or a tls mutual auth api)
-        return contenturl.replace("$releasever", "%s" % release)
+        # NOTE: The on disk cache is more vulnerable, since it is
+        #       trusted.
+        return contenturl.replace(release_source.marker,
+                                  expansion)
 
     def _clean_id(self, repo_id):
         """

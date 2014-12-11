@@ -28,7 +28,7 @@ from fixture import SubManFixture
 from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \
         InstalledProductsManager, EntitlementStatusCache, \
-        PoolTypeCache
+        PoolTypeCache, ReleaseStatusCache
 
 from rhsm.profile import Package, RPMProfile
 
@@ -258,6 +258,74 @@ class TestInstalledProductsCache(SubManFixture):
         uep.updateConsumer.assert_called_with(uuid,
                 installed_products=self.mgr.format_for_server())
         self.assertEquals(0, self.mgr.write_cache.call_count)
+
+
+class TestReleaseStatusCache(SubManFixture):
+    def setUp(self):
+        super(TestReleaseStatusCache, self).setUp()
+        self.release_cache = ReleaseStatusCache()
+        self.release_cache.write_cache = Mock()
+
+    def test_load_from_server(self):
+        uep = Mock()
+        dummy_release = {'releaseVer': 'MockServer'}
+        uep.getRelease = Mock(return_value=dummy_release)
+
+        self.release_cache.read_status(uep, "THISISAUUID")
+
+        self.assertEquals(dummy_release, self.release_cache.server_status)
+
+    def test_server_no_release_call(self):
+        uep = Mock()
+        uep.getRelease = Mock(side_effect=RestlibException("boom"))
+
+        status = self.release_cache.read_status(uep, "SOMEUUID")
+        self.assertEquals(None, status)
+
+    def test_server_network_error_no_cache(self):
+        uep = Mock()
+        uep.getRelease = Mock(side_effect=socket.error("boom"))
+        self.release_cache._cache_exists = Mock(return_value=False)
+        self.assertEquals(None, self.release_cache.read_status(uep, "SOMEUUID"))
+
+    def test_server_network_error_with_cache(self):
+        uep = Mock()
+        uep.getRelease = Mock(side_effect=socket.error("boom"))
+        dummy_release = {'releaseVer': 'MockServer'}
+        self.release_cache._read_cache = Mock(return_value=dummy_release)
+        self.release_cache._cache_exists = Mock(return_value=True)
+        self.assertEquals(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
+
+    def test_server_network_works_with_cache(self):
+        uep = Mock()
+        dummy_release = {'releaseVer': 'MockServer'}
+        uep.getRelease = Mock(return_value=dummy_release)
+
+        self.release_cache._cache_exists = Mock(return_value=True)
+        self.release_cache._read_cache = Mock(return_value=dummy_release)
+        self.assertEquals(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
+        self.assertEquals(1, self.release_cache.write_cache.call_count)
+        self.assertEquals(0, self.release_cache._read_cache.call_count)
+
+        self.assertEquals(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
+        self.assertEquals(1, uep.getRelease.call_count)
+
+    def test_server_network_works_cache_caches(self):
+        uep = Mock()
+        dummy_release = {'releaseVer': 'MockServer'}
+        uep.getRelease = Mock(return_value=dummy_release)
+
+        self.release_cache._cache_exists = Mock(return_value=False)
+        self.release_cache.server_status = None
+        self.release_cache._read_cache = Mock(return_value=dummy_release)
+        self.assertEquals(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
+        self.assertEquals(1, self.release_cache.write_cache.call_count)
+        self.assertEquals(0, self.release_cache._read_cache.call_count)
+
+        self.release_cache._cache_exists = Mock(return_value=True)
+        self.assertEquals(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
+        self.assertEquals(1, self.release_cache.write_cache.call_count)
+        self.assertEquals(1, uep.getRelease.call_count)
 
 
 class TestEntitlementStatusCache(SubManFixture):

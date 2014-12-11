@@ -21,7 +21,7 @@ import tempfile
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
-        OverrideStatusCache, ProfileManager, InstalledProductsManager
+        OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache
 from subscription_manager.facts import Facts
 from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
@@ -612,6 +612,15 @@ class StubProductStatusCache(ProductStatusCache):
 
 
 class StubOverrideStatusCache(OverrideStatusCache):
+
+    def write_cache(self):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+
+class StubReleaseStatusCache(ReleaseStatusCache):
 
     def write_cache(self):
         pass

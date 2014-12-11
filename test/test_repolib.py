@@ -24,7 +24,7 @@ from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
         StubProductDirectory, StubConsumerIdentity
 from subscription_manager.repolib import Repo, RepoUpdateActionCommand, \
-        TidyWriter, RepoFile
+        TidyWriter, RepoFile, YumReleaseverSource
 from subscription_manager import injection as inj
 
 from subscription_manager import repolib
@@ -474,6 +474,111 @@ class TidyWriterTests(unittest.TestCase):
         tidy_writer.close()
 
         self.assertEquals("test stuff\n\ntest\n", output.getvalue())
+
+
+class YumReleaseverSourceTest(SubManFixture):
+    def test_init(self):
+        #inj.provide(inj.RELEASE_STATUS_CACHE, Mock())
+        #override_cache_mock = inj.require(inj.OVERRIDE_STATUS_CACHE)
+
+        release_source = YumReleaseverSource()
+        self.assertEquals(release_source._expansion, None)
+        self.assertEquals(release_source.marker, "$releasever")
+        self.assertEquals(release_source.marker, release_source.default)
+
+    def test_default(self):
+        release_source = YumReleaseverSource()
+
+        exp = release_source.get_expansion()
+        self.assertEquals(exp, "$releasever")
+
+    def test_mem_cache_works(self):
+        inj.provide(inj.RELEASE_STATUS_CACHE, Mock())
+        release_mock = inj.require(inj.RELEASE_STATUS_CACHE)
+
+        release = "MockServer"
+        mock_release = {'releaseVer': release}
+        release_mock.read_status = Mock(return_value=mock_release)
+        release_source = YumReleaseverSource()
+
+        exp = release_source.get_expansion()
+        self.assertEquals(exp, release)
+        self.assertEquals(release_source._expansion, release)
+
+        exp = release_source.get_expansion()
+        self.assertEquals(exp, release)
+
+    def test_mem_cache_pre_cached(self):
+        inj.provide(inj.RELEASE_STATUS_CACHE, Mock())
+        release_mock = inj.require(inj.RELEASE_STATUS_CACHE)
+
+        release = "MockServer"
+        mock_release = {'releaseVer': release}
+        release_mock.read_status = Mock(return_value=mock_release)
+        release_source = YumReleaseverSource()
+
+        cached_release = "CachedMockServer"
+        release_source._expansion = cached_release
+        exp = release_source.get_expansion()
+        self.assertEquals(exp, cached_release)
+        self.assertEquals(release_source._expansion, cached_release)
+
+    def test_read_status_not_set(self):
+        inj.provide(inj.RELEASE_STATUS_CACHE, Mock())
+        release_mock = inj.require(inj.RELEASE_STATUS_CACHE)
+
+        release = ""
+        mock_release = {'releaseVer': release}
+        release_mock.read_status = Mock(return_value=mock_release)
+        release_source = YumReleaseverSource()
+
+        exp = release_source.get_expansion()
+
+        # we were unset, should return the default
+        self.assertEquals(exp, YumReleaseverSource.default)
+        # and cache it
+        self.assertEquals(release_source._expansion, YumReleaseverSource.default)
+
+
+class YumReleaseverSourceIsNotEmptyTest(SubManFixture):
+    def test_empty_string(self):
+        self.assertFalse(YumReleaseverSource.is_not_empty(""))
+
+    def test_none(self):
+        self.assertFalse(YumReleaseverSource.is_not_empty(None))
+
+    def test_empty_list(self):
+        self.assertFalse(YumReleaseverSource.is_not_empty([]))
+
+    def test_number(self):
+        self.assertTrue(YumReleaseverSource.is_not_empty("7"))
+
+    def test_string(self):
+        self.assertTrue(YumReleaseverSource.is_not_empty("Super"))
+
+
+class YumReleaseverSourceIsSetTest(SubManFixture):
+    def test_none(self):
+        self.assertFalse(YumReleaseverSource.is_set(None))
+
+    def test_key_error(self):
+        self.assertFalse(YumReleaseverSource.is_set({'not_release_ver': 'blippy'}))
+
+    def test_not_a_dict(self):
+        self.assertFalse(YumReleaseverSource.is_set(['some string']))
+
+    def test_releasever_zero(self):
+        self.assertFalse(YumReleaseverSource.is_set({'releaseVer': 0}))
+
+    def test_releasever_none(self):
+        self.assertFalse(YumReleaseverSource.is_set({'releaseVer': None}))
+
+    def test_releasever_7server(self):
+        self.assertTrue(YumReleaseverSource.is_set({'releaseVer': '7Server'}))
+
+    def test_releasever_the_string_none(self):
+        # you laugh, but someone thinks that would be an awesome product name.
+        self.assertTrue(YumReleaseverSource.is_set({'releaseVer': 'None'}))
 
 
 class RepoFileTest(unittest.TestCase):
