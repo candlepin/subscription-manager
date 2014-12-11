@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.11
+Version: 1.13.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -466,6 +466,15 @@ fi
 %endif
 
 %changelog
+* Thu Dec 11 2014 William Poteat <wpoteat@redhat.com> 1.13.12-1
+- Latest strings from zanata. (alikins@redhat.com)
+- 1122530: Removed/updated more obsoleted documentation, dates and versions
+  (crog@redhat.com)
+- 1159348: Improved list error output when using list criteria
+  (crog@redhat.com)
+- 1142918: Fixed proxy config button labels (crog@redhat.com)
+- Move repolibs release fetch to the last minute. (alikins@redhat.com)
+
 * Tue Dec 09 2014 Devan Goodwin <dgoodwin@rm-rf.ca> 1.13.11-1
 - 1132981: Fixed exit code when registering system with no products installed
   (crog@redhat.com)
