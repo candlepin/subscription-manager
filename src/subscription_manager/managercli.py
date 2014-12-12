@@ -192,6 +192,7 @@ def show_autosubscribe_output(uep):
     if not installed_status:
         # Returning an error code here breaks registering when no products are installed, and the
         # AttachCommand already performs this check before calling.
+        print _("No products installed.")
         return 0
 
     log.info("Attempted to auto-attach/heal the system.")
