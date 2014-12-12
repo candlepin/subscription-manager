@@ -87,7 +87,7 @@ class NetworkConfigDialog:
         self.proxyEntry.connect("focus-out-event", self.clean_proxy_entry)
 
         self.xml.get_widget("cancelButton").connect("clicked", self.on_cancel_clicked)
-        self.xml.get_widget("okButton").connect("clicked", self.on_ok_clicked)
+        self.xml.get_widget("saveButton").connect("clicked", self.on_save_clicked)
         self.xml.get_widget("testConnectionButton").connect("clicked",
                                                             self.on_test_connection_clicked)
 
@@ -167,7 +167,7 @@ class NetworkConfigDialog:
         self.set_initial_values()
         self.dlg.present()
 
-    def on_ok_clicked(self, button):
+    def on_save_clicked(self, button):
         self.write_values()
         self.dlg.hide()
 

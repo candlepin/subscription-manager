@@ -286,14 +286,14 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="okButton">
-                <property name="label" translatable="yes">_Ok</property>
+              <widget class="GtkButton" id="saveButton">
+                <property name="label" translatable="yes">_Save</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
                 <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Ok Button</atkproperty>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Save Button</atkproperty>
                 </accessibility>
               </widget>
               <packing>
