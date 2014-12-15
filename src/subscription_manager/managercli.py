@@ -28,6 +28,10 @@ import re
 import socket
 import sys
 from time import localtime, strftime, strptime
+import gobject
+import dbus
+import dbus.mainloop
+import dbus.mainloop.glib
 
 from M2Crypto import X509
 
@@ -477,6 +481,9 @@ class CliCommand(AbstractCLICommand):
 
         # do the work, catch most common errors here:
         try:
+            # start the loop
+            dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+
             return_code = self._do_command()
 
             # Only persist the config changes if there was no exception
@@ -488,6 +495,11 @@ class CliCommand(AbstractCLICommand):
         except X509.X509Error, e:
             log.error(e)
             print _('System certificates corrupted. Please reregister.')
+        finally:
+            # wait for the end of the loop
+            ctx = gobject.MainLoop().get_context()
+            while (ctx.pending()):
+                ctx.iteration()
 
 
 class UserPassCommand(CliCommand):

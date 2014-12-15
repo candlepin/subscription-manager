@@ -14,7 +14,7 @@
 #
 
 import dbus
-import inspect
+import gobject
 import logging
 import subscription_manager.injection as inj
 
@@ -27,13 +27,9 @@ class DbusIface(object):
 
     def __init__(self):
         try:
-            # Only follow names if there is a default main loop
-            self.has_main_loop = self._get_main_loop() is not None
-
             self.bus = dbus.SystemBus()
-            validity_obj = self._get_validity_object(self.service_name,
-                    '/EntitlementStatus',
-                    follow_name_owner_changes=self.has_main_loop)
+            validity_obj = self.bus.get_object(self.service_name,
+                    '/EntitlementStatus')
             self.validity_iface = dbus.Interface(validity_obj,
                     dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
 
@@ -51,27 +47,10 @@ class DbusIface(object):
 
     def _update(self):
         try:
-            self.validity_iface.update_status(
-                    inj.require(inj.CERT_SORTER).get_status_for_icon(),
-                    ignore_reply=self.has_main_loop)
-            self.validity_iface.emit_status(ignore_reply=self.has_main_loop)
+            status = inj.require(inj.CERT_SORTER).get_status_for_icon()
+            gobject.idle_add(self.validity_iface.update_status, status)
+            gobject.idle_add(self.validity_iface.emit_status)
         except dbus.DBusException, e:
             # Should be unreachable in the gui
             log.debug("Failed to update rhsmd")
             log.exception(e)
-
-    # RHEL5 doesn't support 'follow_name_owner_changes'
-    def _get_validity_object(self, *args, **kwargs):
-        iface_args = inspect.getargspec(self.bus.get_object)[0]
-        if 'follow_name_owner_changes' not in iface_args and \
-                'follow_name_owner_changes' in kwargs:
-            log.debug("installed python-dbus doesn't support 'follow_name_owner_changes'")
-            del kwargs['follow_name_owner_changes']
-        return self.bus.get_object(*args, **kwargs)
-
-    # RHEL5 doesn't support 'get_default_main_loop'
-    def _get_main_loop(self):
-        if not hasattr(dbus, "get_default_main_loop"):
-            log.debug("installed python-dbus doesn't support 'get_default_main_loop'")
-            return None
-        return dbus.get_default_main_loop()
