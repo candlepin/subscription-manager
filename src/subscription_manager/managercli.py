@@ -291,6 +291,8 @@ class CliCommand(AbstractCLICommand):
         self.identity = inj.require(inj.IDENTITY)
 
     def _request_validity_check(self):
+        log.debug("request_validity_check")
+        print "rvc"
         # Make sure the sorter is fresh (low footprint if it is)
         inj.require(inj.CERT_SORTER).force_cert_check()
         inj.require(inj.DBUS_IFACE).update()
@@ -479,10 +481,12 @@ class CliCommand(AbstractCLICommand):
         else:
             self.cp = None
 
+        #dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        #a = gobject.MainLoop()
+        #print a, dir(a)
         # do the work, catch most common errors here:
         try:
             # start the loop
-            dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
             return_code = self._do_command()
 
@@ -497,9 +501,7 @@ class CliCommand(AbstractCLICommand):
             print _('System certificates corrupted. Please reregister.')
         finally:
             # wait for the end of the loop
-            ctx = gobject.MainLoop().get_context()
-            while (ctx.pending()):
-                ctx.iteration()
+            print "finally"
 
 
 class UserPassCommand(CliCommand):
@@ -1134,7 +1136,19 @@ class RegisterCommand(UserPassCommand):
             self.sorter.force_cert_check()
             subscribed = show_autosubscribe_output(self.cp)
 
+        mainloop = gobject.MainLoop()
+        print "mainloop", dbus.get_default_main_loop()
+        #dbus_iface = inj.require(inj.DBUS_IFACE)
+        #print dbus_iface
+        #dbus_iface
+        print mainloop, dir(mainloop)
         self._request_validity_check()
+
+        mainctx = mainloop.get_context()
+        #print ctx, dir(ctx)
+        while (mainctx.pending()):
+            print mainctx.iteration()
+        mainloop.quit()
         return subscribed
 
     def _persist_identity_cert(self, consumer):

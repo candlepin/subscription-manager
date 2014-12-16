@@ -29,7 +29,8 @@ class DbusIface(object):
         try:
             self.bus = dbus.SystemBus()
             validity_obj = self.bus.get_object(self.service_name,
-                    '/EntitlementStatus')
+                    '/EntitlementStatus',
+                    follow_name_owner_changes=dbus.get_default_main_loop())
             self.validity_iface = dbus.Interface(validity_obj,
                     dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
 
@@ -47,6 +48,8 @@ class DbusIface(object):
 
     def _update(self):
         try:
+            print "_update"
+            print dbus.get_default_main_loop()
             status = inj.require(inj.CERT_SORTER).get_status_for_icon()
             gobject.idle_add(self.validity_iface.update_status, status)
             gobject.idle_add(self.validity_iface.emit_status)
