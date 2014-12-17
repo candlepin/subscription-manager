@@ -990,6 +990,7 @@ class TestAttachCommand(TestCliProxyCommand):
         # Create temp file(s) for processing pool IDs
         cls.tempfiles = [
             tempfile.mkstemp(),
+            tempfile.mkstemp(),
             tempfile.mkstemp()
         ]
 
@@ -998,6 +999,9 @@ class TestAttachCommand(TestCliProxyCommand):
 
         os.write(cls.tempfiles[1][0], "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n")
         os.close(cls.tempfiles[1][0])
+
+        # The third temp file intentionally left empty for testing empty sets of data.
+        os.close(cls.tempfiles[2][0])
 
     @classmethod
     def tearDownClass(cls):
@@ -1054,8 +1058,29 @@ class TestAttachCommand(TestCliProxyCommand):
         with self.mock_stdin(open(self.tempfiles[1][1])):
             self._test_pool_file_processing('-', ["pool1", "pool2", "pool3", "pool4", "pool5", "pool6", "pool7", "pool8"])
 
+    def test_pool_stdin_empty(self):
+        try:
+            with self.mock_stdin(open(self.tempfiles[2][1])):
+                self.cc.main(["--file", "-"])
+                self.cc._validate_options()
+
+        except SystemExit, e:
+            self.assertEquals(e.code, os.EX_DATAERR)
+        else:
+            self.fail("No Exception Raised")
+
     def test_pool_file_processing(self):
         self._test_pool_file_processing(self.tempfiles[0][1], ["pool1", "pool2", "pool3", "pool4", "pool5", "pool6", "pool7", "pool8"])
+
+    def test_pool_file_empty(self):
+        try:
+            self.cc.main(["--file", self.tempfiles[2][1]])
+            self.cc._validate_options()
+
+        except SystemExit, e:
+            self.assertEquals(e.code, os.EX_DATAERR)
+        else:
+            self.fail("No Exception Raised")
 
     def test_pool_file_invalid(self):
         try:

@@ -1433,6 +1433,12 @@ class AttachCommand(CliCommand):
         if self.options.file:
             if self.options.file == '-' or os.path.isfile(self.options.file):
                 self._read_pool_ids(self.options.file)
+
+                if len(self.options.pool) < 1:
+                    if self.options.file == '-':
+                        system_exit(os.EX_DATAERR, _("Error: Received data does not contain any pool IDs."))
+                    else:
+                        system_exit(os.EX_DATAERR, _("Error: The file \"%s\" does not contain any pool IDs.") % self.options.file)
             else:
                 system_exit(os.EX_DATAERR, _("Error: The file \"%s\" does not exist or cannot be read.") % self.options.file)
 
