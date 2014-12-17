@@ -168,8 +168,8 @@ Optionally, the \fB--servicelevel\fP argument sets an SLA preference to use with
 
 .nf
 [root@server ~]# rhn-migrate-classic-to-rhsm --servicelevel=premium
-Red Hat account: jsmith@example.com
-Password:
+Legacy username: jsmith@rhn.example.com
+Legacy password:
 .fi
 
 .SS MIGRATION TO ON-PREMISE SERVICES
@@ -180,8 +180,10 @@ This is done by using the \fB--destination-url\fP option, which specifies the UR
 
 .nf
 [root@server ~]# rhn-migrate-classic-to-rhsm --destination-url=sam.example.com
-Red Hat account: jsmith@example.com
-Password:
+Legacy username: jsmith@rhn.example.com
+Legacy password:
+Destination username: jsmith@sam.example.com
+Destination password:
 .fi
 
 .SH FILES
