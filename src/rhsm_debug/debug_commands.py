@@ -176,7 +176,7 @@ class SystemCommand(CliCommand):
                 # rename only works on the same filesystem, but it is atomic.
                 os.rename(content_path, dest_dir_name)
 
-                print _("Wrote: %s/%s") % (self.options.destination, archive_name)
+                print _("Wrote: %s") % dest_dir_name
 
         except Exception, e:
             managercli.handle_exception(_("Unable to create zip file of system information: %s") % e, e)
