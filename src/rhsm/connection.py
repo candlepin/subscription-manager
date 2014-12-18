@@ -441,7 +441,10 @@ class Restlib(object):
         if self.insecure:  # allow clients to work insecure mode if required..
             context.post_connection_check = NoOpChecker()
         else:
-            context.set_verify(SSL.verify_fail_if_no_peer_cert, self.ssl_verify_depth)
+            # Proper peer verification is essential to prevent MITM attacks.
+            context.set_verify(
+                    SSL.verify_peer | SSL.verify_fail_if_no_peer_cert,
+                    self.ssl_verify_depth)
             if self.ca_dir is not None:
                 self._load_ca_certificates(context)
         if self.cert_file and os.path.exists(self.cert_file):
