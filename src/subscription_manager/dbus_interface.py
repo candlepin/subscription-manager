@@ -46,13 +46,18 @@ class DbusIface(object):
     def update(self):
         pass
 
+    def update_status(self):
+        self.validity_iface.update_status(
+                inj.require(inj.CERT_SORTER).get_status_for_icon(),
+                ignore_reply=dbus.get_default_main_loop)
+
+    def emit_status(self):
+        self.validity_iface.emit_status()
+
     def _update(self):
         try:
-            print "_update"
-            print dbus.get_default_main_loop()
-            status = inj.require(inj.CERT_SORTER).get_status_for_icon()
-            gobject.idle_add(self.validity_iface.update_status, status)
-            gobject.idle_add(self.validity_iface.emit_status)
+            gobject.idle_add(self.update_status)
+            gobject.idle_add(self.emit_status)
         except dbus.DBusException, e:
             # Should be unreachable in the gui
             log.debug("Failed to update rhsmd")
