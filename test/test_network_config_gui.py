@@ -120,14 +120,14 @@ class TestNetworkConfigDialog(SubManFixture):
         self.nc.on_cancel_clicked(self.nc.xml.get_widget("cancelButton"))
         self.assertEquals(self.expected, self.nc.cfg.store)
 
-    def test_network_cfg_ok_change_values(self):
+    def test_network_cfg_save_change_values(self):
         self.nc = networkConfig.NetworkConfigDialog()
         self.stubConfig = stubs.StubConfig()
         self.nc.cfg = self.stubConfig
         self.nc.xml.get_widget("enableProxyButton").set_active(True)
         self.nc.xml.get_widget("proxyEntry").set_text("example.com:10000")
         self.expected = {}
-        self.nc.on_ok_clicked(self.nc.xml.get_widget("okButton"))
+        self.nc.on_save_clicked(self.nc.xml.get_widget("saveButton"))
         self.assertNotEquals(self.expected, self.nc.cfg.store)
 
     @mock.patch('subscription_manager.gui.networkConfig.connection.UEPConnection.getStatus')
