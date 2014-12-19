@@ -225,7 +225,18 @@ class Hardware:
             vers_mod_data = re.split('(?<!\\\):', data['CPE_NAME'])
             if len(vers_mod_data) >= 6:
                 version_modifier = vers_mod_data[5].lower().replace('\\:', ':')
-
+	elif os.path.exists('/usr/bin/lsb_release'):
+		# The follwing four lines capture the output of running lsb_release -d and -i
+		description = Popen(["lsb_release", "-d"], stdout=PIPE)
+		descoutput = description.communicate()[0].rstrip('\r\n').split(':\t')[1].split()
+		distid = Popen(["lsb_release", "-i"], stdout=PIPE)
+		idoutput = distid.communicate()[0].rstrip('\r\n').split(':\t')[1]
+		# Assign the output from lsb_release into the appropriate variables
+		version = descoutput[-1]
+		tempDist = descoutput[:-2]
+		distname = " ".join(tempDist)
+		dist_id = idoutput
+		version_modifier = version.split('.')[-1]
         elif os.path.exists('/etc/redhat-release'):
             # from platform.py from python2.
             _lsb_release_version = re.compile(r'(.+)'
