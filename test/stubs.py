@@ -387,7 +387,7 @@ class StubUEP:
         return False
 
     def registerConsumer(self, name, type, facts, owner, environment, keys,
-                         installed_products):
+                         installed_products, content_tags):
         return self.registered_consumer_info
 
     def unregisterConsumer(self, uuid):
@@ -412,7 +412,8 @@ class StubUEP:
         return ['Pro', 'Super Pro', 'ProSumer']
 
     def updateConsumer(self, consumer, facts=None, installed_products=None,
-                       guest_uuids=None, service_level=None, release=None, autoheal=None):
+                       guest_uuids=None, service_level=None, release=None, autoheal=None,
+                       content_tags=None):
         return consumer
 
     def setEnvironmentList(self, env_list):

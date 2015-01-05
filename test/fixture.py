@@ -61,6 +61,10 @@ class FakeException(Exception):
 
 
 class Matcher(object):
+    @staticmethod
+    def set_eq(first, second):
+        return set(first) == set(second)
+
     def __init__(self, compare, some_obj):
         self.compare = compare
         self.some_obj = some_obj

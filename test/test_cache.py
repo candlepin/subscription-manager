@@ -23,7 +23,7 @@ from mock import Mock
 # used to get a user readable cfg class for test cases
 from stubs import StubProduct, StubProductCertificate, StubCertificateDirectory, \
         StubEntitlementCertificate, StubPool, StubEntitlementDirectory
-from fixture import SubManFixture
+from fixture import SubManFixture, Matcher
 
 from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \
@@ -171,9 +171,9 @@ class TestInstalledProductsCache(SubManFixture):
     def setUp(self):
         super(TestInstalledProductsCache, self).setUp()
         self.prod_dir = StubCertificateDirectory([
-            StubProductCertificate(StubProduct('a-product', name="Product A")),
-            StubProductCertificate(StubProduct('b-product', name="Product B")),
-            StubProductCertificate(StubProduct('c-product', name="Product C")),
+            StubProductCertificate(StubProduct('a-product', name="Product A", provided_tags="product,product-a")),
+            StubProductCertificate(StubProduct('b-product', name="Product B", provided_tags="product,product-b")),
+            StubProductCertificate(StubProduct('c-product', name="Product C", provided_tags="product-c")),
         ])
 
         inj.provide(inj.PROD_DIR, self.prod_dir)
@@ -185,11 +185,15 @@ class TestInstalledProductsCache(SubManFixture):
         self.assertTrue('b-product' in self.mgr.installed)
         self.assertTrue('c-product' in self.mgr.installed)
         self.assertEquals("Product A", self.mgr.installed['a-product']['productName'])
+        self.assertEquals(set(["product", "product-a", "product-b", "product-c"]), set(self.mgr.tags))
 
     def test_load_data(self):
         cached = {
-                'prod1': 'Product 1',
-                'prod2': 'Product 2'
+                'products': {
+                    'prod1': 'Product 1',
+                    'prod2': 'Product 2'
+                },
+                'tags': ['p1', 'p2']
         }
         mock_file = Mock()
         mock_file.read = Mock(return_value=json.dumps(cached))
@@ -199,8 +203,26 @@ class TestInstalledProductsCache(SubManFixture):
 
     def test_has_changed(self):
         cached = {
-                'prod1': 'Product 1',
-                'prod2': 'Product 2'
+                'products': {
+                   'prod1': 'Product 1',
+                   'prod2': 'Product 2'
+                },
+                'tags': ['p1', 'p2']
+        }
+
+        self.mgr._read_cache = Mock(return_value=cached)
+        self.mgr._cache_exists = Mock(return_value=True)
+
+        self.assertTrue(self.mgr.has_changed())
+
+    def test_has_changed_with_tags_only(self):
+        cached = {
+                'products': {
+                    'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
+                    'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
+                    'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
+                },
+                'tags': ['different']
         }
 
         self.mgr._read_cache = Mock(return_value=cached)
@@ -210,9 +232,12 @@ class TestInstalledProductsCache(SubManFixture):
 
     def test_has_not_changed(self):
         cached = {
-                'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
-                'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
-                'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
+                'products': {
+                    'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
+                    'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
+                    'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
+                },
+                'tags': ['product-a', 'product-b', 'product-c', 'product']
         }
 
         self.mgr._read_cache = Mock(return_value=cached)
@@ -241,7 +266,10 @@ class TestInstalledProductsCache(SubManFixture):
 
         self.mgr.update_check(uep, uuid)
 
+        expected = ["product", "product-a", "product-b", "product-c"]
+        match_tags = Matcher(Matcher.set_eq, expected)
         uep.updateConsumer.assert_called_with(uuid,
+                content_tags=match_tags,
                 installed_products=self.mgr.format_for_server())
         self.assertEquals(1, self.mgr.write_cache.call_count)
 
@@ -255,7 +283,10 @@ class TestInstalledProductsCache(SubManFixture):
         uep.updateConsumer = Mock(side_effect=Exception('BOOM!'))
 
         self.assertRaises(Exception, self.mgr.update_check, uep, uuid)
+        expected = ["product", "product-a", "product-b", "product-c"]
+        match_tags = Matcher(Matcher.set_eq, expected)
         uep.updateConsumer.assert_called_with(uuid,
+                content_tags=match_tags,
                 installed_products=self.mgr.format_for_server())
         self.assertEquals(0, self.mgr.write_cache.call_count)
 

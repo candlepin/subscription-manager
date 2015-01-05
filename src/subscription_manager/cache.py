@@ -409,6 +409,7 @@ class InstalledProductsManager(CacheManager):
 
     def __init__(self):
         self._installed = None
+        self.tags = None
 
         self.product_dir = inj.require(inj.PROD_DIR)
 
@@ -428,7 +429,7 @@ class InstalledProductsManager(CacheManager):
     installed = property(_get_installed, _set_installed)
 
     def to_dict(self):
-        return self.installed
+        return {"products": self.installed, "tags": self.tags}
 
     def _load_data(self, open_file):
         json_str = open_file.read()
@@ -440,14 +441,20 @@ class InstalledProductsManager(CacheManager):
             return True
 
         cached = self._read_cache()
+        products = cached['products']
+        tags = cached['tags']
 
         self._setup_installed()
 
-        if len(cached.keys()) != len(self.installed.keys()):
+        if len(products.keys()) != len(self.installed.keys()):
             return True
 
-        if cached != self.installed:
+        if products != self.installed:
             return True
+
+        if set(tags) != set(self.tags):
+            return True
+
         return False
 
     def _setup_installed(self):
@@ -456,13 +463,19 @@ class InstalledProductsManager(CacheManager):
         and what the server can use.
         """
         self._installed = {}
+        self.tags = set()
         for prod_cert in self.product_dir.list():
             prod = prod_cert.products[0]
+            self.tags |= set(prod.provided_tags)
             self._installed[prod.id] = {'productId': prod.id,
                     'productName': prod.name,
                     'version': prod.version,
                     'arch': ','.join(prod.architectures)
                     }
+        # sets are not JSON serializable
+        # TODO: Maybe add a custom JSONEncoder for this.  Converting back
+        # and forth to lists makes testing a pain.  See http://stackoverflow.com/questions/3768895
+        self.tags = list(self.tags)
 
     def format_for_server(self):
         """
@@ -476,7 +489,8 @@ class InstalledProductsManager(CacheManager):
 
     def _sync_with_server(self, uep, consumer_uuid):
         uep.updateConsumer(consumer_uuid,
-                installed_products=self.format_for_server())
+                installed_products=self.format_for_server(),
+                content_tags=self.tags)
 
 
 class PoolTypeCache(object):
