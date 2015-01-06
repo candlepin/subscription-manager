@@ -79,5 +79,5 @@ if __name__ == '__main__':
         # rhsm-debug can be invoked from sosreport/libreport/abrt, so
         # letting exceptions all the up to the system excepthook
         # can cause chaos (abrt handler gets called, invokes sosreport, etc)
-        sys.stderr.write("Error collecting rhsm-debug information")
+        sys.stderr.write("Error collecting rhsm-debug information: %s\n" % e)
         sys.exit(-1)
