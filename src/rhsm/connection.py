@@ -726,7 +726,8 @@ class UEPConnection:
 
     def registerConsumer(self, name="unknown", type="system", facts={},
             owner=None, environment=None, keys=None,
-            installed_products=None, uuid=None, hypervisor_id=None):
+            installed_products=None, uuid=None, hypervisor_id=None,
+            content_tags=None):
         """
         Creates a consumer on candlepin server
         """
@@ -741,6 +742,9 @@ class UEPConnection:
 
         if hypervisor_id is not None:
             params['hypervisorId'] = {'hypervisorId': hypervisor_id}
+
+        if content_tags is not None:
+            params['contentTags'] = content_tags
 
         url = "/consumers"
         if environment:
@@ -781,7 +785,7 @@ class UEPConnection:
 
     def updateConsumer(self, uuid, facts=None, installed_products=None,
             guest_uuids=None, service_level=None, release=None,
-            autoheal=None, hypervisor_id=None):
+            autoheal=None, hypervisor_id=None, content_tags=None):
         """
         Update a consumer on the server.
 
@@ -804,6 +808,8 @@ class UEPConnection:
             params['autoheal'] = autoheal
         if hypervisor_id is not None:
             params['hypervisorId'] = {'hypervisorId': hypervisor_id}
+        if content_tags is not None:
+            params['contentTags'] = content_tags
 
         # The server will reject a service level that is not available
         # in the consumer's organization, so no need to check if it's safe
