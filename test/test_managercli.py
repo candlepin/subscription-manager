@@ -1044,6 +1044,32 @@ class TestAttachCommand(TestCliProxyCommand):
 
         self.assertEquals(expected, self.cc.options.pool)
 
+    def test_pool_option_or_auto_option(self):
+        self.cc.main(["--auto", "--pool", "1234"])
+        self.assertRaises(SystemExit, self.cc._validate_options)
+
+    def test_servicelevel_option_but_no_auto_option(self):
+        with self.mock_stdin(open(self.tempfiles[1][1])):
+            self.cc.main(["--servicelevel", "Super", "--file", "-"])
+            self.cc._validate_options()
+
+    def test_servicelevel_option_with_pool_option(self):
+        self.cc.main(["--servicelevel", "Super", "--pool", "1232342342313"])
+        # need a assertRaises that checks a SystemsExit code and message
+        self.assertRaises(SystemExit, self.cc._validate_options)
+
+    def test_just_pools_option(self):
+        self.cc.main(["--pool", "1234"])
+        self.cc._validate_options()
+
+    def test_just_auto_option(self):
+        self.cc.main(["--auto"])
+        self.cc._validate_options()
+
+    def test_no_options_defaults_to_auto(self):
+        self.cc.main([])
+        self.cc._validate_options()
+
     @contextlib.contextmanager
     def mock_stdin(self, fileobj):
         org_stdin = sys.stdin

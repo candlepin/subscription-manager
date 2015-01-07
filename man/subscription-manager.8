@@ -261,22 +261,22 @@ The
 command applies a specific subscription to the system.
 
 .TP
-.B --pool=POOLID
-Gives the ID for the subscriptions pool (collection of products) to attach to the system. This option is required, unless
 .B --auto
+Automatically attaches the best-matched compatible subscription or subscriptions to the system. This is the default unless
+.B --pool
 or
 .B --file
 are used.
 
 .TP
+.B --pool=POOLID
+Gives the ID for the subscriptions pool (collection of products) to attach to the system. This overrides the default of --auto.
+
+.TP
 .B --file=FILE
-Specifies a file from which to read whitespace-delimited pool IDs. If FILE is "-", the pool IDs will be read from stdin.
-.br
-This option is required unless
-.B --auto
-or
-.B --pool
-are used.
+Specifies a file from which to read whitespace-delimited pool IDs. If FILE is "-", the pool IDs will be read from stdin. This overrides the default of
+.B
+--auto.
 
 .TP
 .B --quantity=NUMBER
@@ -284,9 +284,6 @@ Attaches a specified number of subscriptions to the system. Subscriptions may ha
 .I stacking
 subscriptions) to cover the number of sockets, guests, or other characteristics.
 
-.TP
-.B --auto
-Automatically attaches the best-matched compatible subscription or subscriptions to the system.
 
 .TP
 .B --servicelevel=LEVEL
@@ -1022,13 +1019,13 @@ subscription-manager attach
 .pp
 As with the
 .B register
-command, the system can be auto-attached to the best-fitting subscriptions using the
+command, the system can be auto-attached to the best-fitting subscriptions. This is the default action and is equilivent to  using the
 .B --auto
 option:
 
 .RS
 .nf
-subscription-manager attach --auto
+subscription-manager attach
 .fi
 .RE
 
@@ -1042,7 +1039,7 @@ option sets a preference that helps the auto-attach process select appropriate s
 
 .RS
 .nf
-subscription-manager attach --auto --servicelevel=premium
+subscription-manager attach --servicelevel=premium
 .fi
 .RE
 
