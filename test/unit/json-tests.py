@@ -1,5 +1,4 @@
-#
-# Copyright (c) 2013 Red Hat, Inc.
+# Copyright (c) 2015 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
 # version 2 (GPLv2). There is NO WARRANTY for this software, express or
@@ -13,18 +12,15 @@
 # in this software or its documentation.
 #
 
-# So we can use simplejson if it's available on rhel6, since
-# is faster there, or fallback to builtin json.
-#
-# We can decide if the package should require it via the spec
-# file.
-try:
-    from simplejson import *
-except ImportError:
-    from json import *
+import unittest
+from rhsm import ourjson as json
 
 
-def encode(obj):
-    if isinstance(obj, set):
-        return list(obj)
-    raise TypeError(repr(obj) + " is not JSON serializable")
+class JsonTests(unittest.TestCase):
+    def test_custom_set_encoding(self):
+        s = set(['a', 'b', 'c', 'c'])
+        result = json.dumps(s, default=json.encode)
+        # Python prints lists with single quotes, JSON with double quotes
+        # so we need to convert to do a string comparison.
+        expected = "[%s]" % ", ".join(['"%s"' % x for x in s])
+        self.assertEquals(expected, result)
