@@ -1384,8 +1384,8 @@ class AttachCommand(CliCommand):
         self.substoken = None
         self.parser.add_option("--pool", dest="pool", action='append',
                                help=_("the ID of the pool to attach (can be specified more than once)"))
-        self.parser.add_option("--quantity", dest="quantity",
-                               help=_("number of subscriptions to attach"))
+        self.parser.add_option("--quantity", dest="quantity", type="int",
+            help=_("number of subscriptions to attach"))
         self.parser.add_option("--auto", action='store_true',
             help=_("automatically attach compatible subscriptions to this system"))
         self.parser.add_option("--servicelevel", dest="service_level",
@@ -1420,15 +1420,8 @@ class AttachCommand(CliCommand):
             system_exit(os.EX_USAGE, _("Error: --auto may not be used when specifying pools."))
 
         # Quantity must be a positive integer
-        quantity = self.options.quantity
-        if self.options.quantity:
-            if not valid_quantity(quantity):
-                system_exit(os.EX_USAGE, _("Error: Quantity must be a positive integer."))
-            else:
-                self.options.quantity = int(self.options.quantity)
-
-        if (self.options.service_level and not self.options.auto):
-            system_exit(os.EX_USAGE, _("Error: Must use --auto with --servicelevel."))
+        if self.options.quantity is not None and not valid_quantity(self.options.quantity):
+            system_exit(os.EX_DATAERR, _("Error: Quantity must be a positive integer."))
 
         # If a pools file was specified, process its contents and append it to options.pool
         if self.options.file:
