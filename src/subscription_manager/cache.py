@@ -104,7 +104,7 @@ class CacheManager(object):
             if not os.access(os.path.dirname(self.CACHE_FILE), os.R_OK):
                 os.makedirs(os.path.dirname(self.CACHE_FILE))
             f = open(self.CACHE_FILE, "w+")
-            json.dump(self.to_dict(), f)
+            json.dump(self.to_dict(), f, default=json.encode)
             f.close()
             if debug:
                 log.debug("Wrote cache: %s" % self.CACHE_FILE)
@@ -442,7 +442,7 @@ class InstalledProductsManager(CacheManager):
 
         cached = self._read_cache()
         products = cached['products']
-        tags = cached['tags']
+        tags = set(cached['tags'])
 
         self._setup_installed()
 
@@ -452,7 +452,7 @@ class InstalledProductsManager(CacheManager):
         if products != self.installed:
             return True
 
-        if set(tags) != set(self.tags):
+        if tags != self.tags:
             return True
 
         return False
@@ -472,10 +472,6 @@ class InstalledProductsManager(CacheManager):
                     'version': prod.version,
                     'arch': ','.join(prod.architectures)
                     }
-        # sets are not JSON serializable
-        # TODO: Maybe add a custom JSONEncoder for this.  Converting back
-        # and forth to lists makes testing a pain.  See http://stackoverflow.com/questions/3768895
-        self.tags = list(self.tags)
 
     def format_for_server(self):
         """

@@ -23,7 +23,7 @@ from mock import Mock
 # used to get a user readable cfg class for test cases
 from stubs import StubProduct, StubProductCertificate, StubCertificateDirectory, \
         StubEntitlementCertificate, StubPool, StubEntitlementDirectory
-from fixture import SubManFixture, Matcher
+from fixture import SubManFixture
 
 from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \
@@ -267,9 +267,8 @@ class TestInstalledProductsCache(SubManFixture):
         self.mgr.update_check(uep, uuid)
 
         expected = ["product", "product-a", "product-b", "product-c"]
-        match_tags = Matcher(Matcher.set_eq, expected)
         uep.updateConsumer.assert_called_with(uuid,
-                content_tags=match_tags,
+                content_tags=set(expected),
                 installed_products=self.mgr.format_for_server())
         self.assertEquals(1, self.mgr.write_cache.call_count)
 
@@ -284,9 +283,8 @@ class TestInstalledProductsCache(SubManFixture):
 
         self.assertRaises(Exception, self.mgr.update_check, uep, uuid)
         expected = ["product", "product-a", "product-b", "product-c"]
-        match_tags = Matcher(Matcher.set_eq, expected)
         uep.updateConsumer.assert_called_with(uuid,
-                content_tags=match_tags,
+                content_tags=set(expected),
                 installed_products=self.mgr.format_for_server())
         self.assertEquals(0, self.mgr.write_cache.call_count)
 

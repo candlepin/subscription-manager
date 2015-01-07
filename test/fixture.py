@@ -63,6 +63,7 @@ class FakeException(Exception):
 class Matcher(object):
     @staticmethod
     def set_eq(first, second):
+        """Useful for dealing with sets that have been cast to or instantiated as lists."""
         return set(first) == set(second)
 
     def __init__(self, compare, some_obj):

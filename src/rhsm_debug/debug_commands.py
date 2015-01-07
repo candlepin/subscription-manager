@@ -197,7 +197,7 @@ class SystemCommand(CliCommand):
     def _write_flat_file(self, content_path, filename, content):
         path = os.path.join(content_path, filename)
         with open(path, "w+") as fo:
-            fo.write(json.dumps(content, indent=4, sort_keys=True))
+            fo.write(json.dumps(content, indent=4, sort_keys=True, default=json.encode))
 
     def _copy_directory(self, src_path, dest_path, ignore_pats=[]):
         rel_path = src_path
