@@ -24,6 +24,7 @@ import logging
 import os
 import socket
 import threading
+import sys
 from M2Crypto import SSL
 
 from rhsm.config import initConfig
@@ -169,7 +170,7 @@ class StatusCache(CacheManager):
         """
         Load status from wherever is appropriate.
 
-        If server is reachable, return it's response
+        If server is reachable, return its response
         and cache the results to disk.
 
         If the server is not reachable, return the latest cache if
@@ -216,6 +217,8 @@ class StatusCache(CacheManager):
                 return None
 
             log.warn("Unable to reach server, using cached status.")
+            sys.stderr.write(_("Unable to reach server, using cached status.\n"))
+
             return self._read_cache()
 
     def to_dict(self):

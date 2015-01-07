@@ -23,7 +23,7 @@ from mock import Mock
 # used to get a user readable cfg class for test cases
 from stubs import StubProduct, StubProductCertificate, StubCertificateDirectory, \
         StubEntitlementCertificate, StubPool, StubEntitlementDirectory
-from fixture import SubManFixture
+from fixture import SubManFixture, Capture
 
 from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \
@@ -294,7 +294,11 @@ class TestReleaseStatusCache(SubManFixture):
         dummy_release = {'releaseVer': 'MockServer'}
         self.release_cache._read_cache = Mock(return_value=dummy_release)
         self.release_cache._cache_exists = Mock(return_value=True)
-        self.assertEquals(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
+
+        with Capture(True):
+            status = self.release_cache.read_status(uep, "SOMEUUID")
+
+        self.assertEquals(dummy_release, status)
 
     def test_server_network_works_with_cache(self):
         uep = Mock()
@@ -357,7 +361,10 @@ class TestEntitlementStatusCache(SubManFixture):
         uep.getCompliance = Mock(side_effect=socket.error("boom"))
         self.status_cache._cache_exists = Mock(return_value=True)
         self.status_cache._read_cache = Mock(return_value=dummy_status)
-        status = self.status_cache.load_status(uep, "SOMEUUID")
+
+        with Capture(True):
+            status = self.status_cache.load_status(uep, "SOMEUUID")
+
         self.assertEquals(dummy_status, status)
         self.assertEquals(1, self.status_cache._read_cache.call_count)
 
