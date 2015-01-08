@@ -38,6 +38,7 @@ from rhsm.utils import remove_scheme, ServerUrlParseError
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.action_client import ActionClient, UnregisterActionClient
+from subscription_manager.cache import StatusCache
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
@@ -1895,6 +1896,15 @@ class ReposCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
         rc = 0
+
+        # Hack to get around scoping issues with closures in 2.x
+        using_cache = [False]
+
+        def load_status_callback(cache, success, cached):
+            using_cache[0] = success and cached
+
+        StatusCache.register_load_status_callback(load_status_callback)
+
         if cfg.has_option('rhsm', 'manage_repos') and not int(cfg.get('rhsm', 'manage_repos')):
             print _("Repositories disabled by configuration.")
             return rc
@@ -1915,6 +1925,10 @@ class ReposCommand(CliCommand):
             rc = self._set_repo_status(repos, rl, self.options.repo_actions)
 
         if self.options.list:
+            if using_cache[0]:
+                sys.stderr.write(_("Unable to reach server, using cached status.\n"))
+                rc = 1
+
             if len(repos):
                 # TODO: Perhaps this should be abstracted out as well...?
                 def filter_repos(repo):

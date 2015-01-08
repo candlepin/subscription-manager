@@ -23,12 +23,12 @@ from mock import Mock
 # used to get a user readable cfg class for test cases
 from stubs import StubProduct, StubProductCertificate, StubCertificateDirectory, \
         StubEntitlementCertificate, StubPool, StubEntitlementDirectory
-from fixture import SubManFixture, Capture
+from fixture import SubManFixture
 
 from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \
         InstalledProductsManager, EntitlementStatusCache, \
-        PoolTypeCache, ReleaseStatusCache
+        PoolTypeCache, ReleaseStatusCache, StatusCache
 
 from rhsm.profile import Package, RPMProfile
 
@@ -166,6 +166,76 @@ class TestProfileManager(unittest.TestCase):
         return mock_profile
 
 
+class TestStatusCache(unittest.TestCase):
+    def test_register_and_remove_load_status_callback(self):
+        def test_callback_one(a, b, c):
+            pass
+
+        def test_callback_two(a, b, c):
+            pass
+
+        result = StatusCache.remove_load_status_callback(test_callback_one)
+        self.assertFalse(result)
+
+        result = StatusCache.register_load_status_callback(test_callback_one)
+        self.assertTrue(result)
+
+        result = StatusCache.register_load_status_callback(test_callback_two)
+        self.assertTrue(result)
+
+        result = StatusCache.register_load_status_callback(test_callback_one)
+        self.assertFalse(result)
+
+        result = StatusCache.register_load_status_callback(test_callback_two)
+        self.assertFalse(result)
+
+        result = StatusCache.remove_load_status_callback(test_callback_one)
+        self.assertTrue(result)
+
+        result = StatusCache.remove_load_status_callback(test_callback_one)
+        self.assertFalse(result)
+
+        result = StatusCache.remove_load_status_callback(test_callback_two)
+        self.assertTrue(result)
+
+        result = StatusCache.remove_load_status_callback(test_callback_two)
+        self.assertFalse(result)
+
+    def test_execute_callbacks(self):
+        call_count = [0, 0]
+
+        def test_callback_one(a, b, c):
+            self.assertEquals((a, b, c), ('a', 'b', 'c'))
+            call_count[0] += 1
+
+        def test_callback_two(a, b, c):
+            self.assertEquals((a, b, c), ('a', 'b', 'c'))
+            call_count[1] += 1
+
+        StatusCache._notify_load_status_callbacks('a', 'b', 'c')
+        self.assertEquals(call_count, [0, 0])
+
+        StatusCache.register_load_status_callback(test_callback_one)
+
+        StatusCache._notify_load_status_callbacks('a', 'b', 'c')
+        self.assertEquals(call_count, [1, 0])
+
+        StatusCache.register_load_status_callback(test_callback_two)
+
+        StatusCache._notify_load_status_callbacks('a', 'b', 'c')
+        self.assertEquals(call_count, [2, 1])
+
+        StatusCache.remove_load_status_callback(test_callback_one)
+
+        StatusCache._notify_load_status_callbacks('a', 'b', 'c')
+        self.assertEquals(call_count, [2, 2])
+
+        StatusCache.remove_load_status_callback(test_callback_two)
+
+        StatusCache._notify_load_status_callbacks('a', 'b', 'c')
+        self.assertEquals(call_count, [2, 2])
+
+
 class TestInstalledProductsCache(SubManFixture):
 
     def setUp(self):
@@ -295,9 +365,7 @@ class TestReleaseStatusCache(SubManFixture):
         self.release_cache._read_cache = Mock(return_value=dummy_release)
         self.release_cache._cache_exists = Mock(return_value=True)
 
-        with Capture(True):
-            status = self.release_cache.read_status(uep, "SOMEUUID")
-
+        status = self.release_cache.read_status(uep, "SOMEUUID")
         self.assertEquals(dummy_release, status)
 
     def test_server_network_works_with_cache(self):
@@ -362,9 +430,7 @@ class TestEntitlementStatusCache(SubManFixture):
         self.status_cache._cache_exists = Mock(return_value=True)
         self.status_cache._read_cache = Mock(return_value=dummy_status)
 
-        with Capture(True):
-            status = self.status_cache.load_status(uep, "SOMEUUID")
-
+        status = self.status_cache.load_status(uep, "SOMEUUID")
         self.assertEquals(dummy_status, status)
         self.assertEquals(1, self.status_cache._read_cache.call_count)
 
