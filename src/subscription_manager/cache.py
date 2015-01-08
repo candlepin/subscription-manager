@@ -441,8 +441,12 @@ class InstalledProductsManager(CacheManager):
             return True
 
         cached = self._read_cache()
-        products = cached['products']
-        tags = set(cached['tags'])
+        try:
+            products = cached['products']
+            tags = set(cached['tags'])
+        except KeyError:
+            # Handle older cache formats
+            return True
 
         self._setup_installed()
 
