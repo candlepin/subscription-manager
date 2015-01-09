@@ -169,7 +169,7 @@ class StatusCache(CacheManager):
         """
         Load status from wherever is appropriate.
 
-        If server is reachable, return it's response
+        If server is reachable, return its response
         and cache the results to disk.
 
         If the server is not reachable, return the latest cache if
@@ -181,26 +181,32 @@ class StatusCache(CacheManager):
             self._sync_with_server(uep, uuid)
             self.write_cache()
             self.last_error = False
+
+            StatusCache._notify_load_status_callbacks(self, True, False)
             return self.server_status
         except SSL.SSLError, ex:
             log.exception(ex)
             self.last_error = ex
             log.error("Consumer certificate is invalid")
+            StatusCache._notify_load_status_callbacks(self, False, False)
             return None
         except connection.RestlibException, ex:
             # Indicates we may be talking to a very old candlepin server
             # which does not have the necessary API call.
             self.last_error = ex
+            StatusCache._notify_load_status_callbacks(self, False, False)
             return None
         except connection.AuthenticationException, ex:
             log.error("Could not authenticate with server, check registration status.")
             log.exception(ex)
             self.last_error = ex
+            StatusCache._notify_load_status_callbacks(self, False, False)
             return None
         except connection.ExpiredIdentityCertException, ex:
             log.exception(ex)
             self.last_error = ex
             log.error("Bad identity, unable to connect to server")
+            StatusCache._notify_load_status_callbacks(self, False, False)
             return None
         except connection.GoneException:
             raise
@@ -213,9 +219,12 @@ class StatusCache(CacheManager):
             self.last_error = ex
             if not self._cache_exists():
                 log.error("Server unreachable, registered, but no cache exists.")
+                StatusCache._notify_load_status_callbacks(self, False, False)
                 return None
 
             log.warn("Unable to reach server, using cached status.")
+            StatusCache._notify_load_status_callbacks(self, True, True)
+
             return self._read_cache()
 
     def to_dict(self):
@@ -275,6 +284,58 @@ class StatusCache(CacheManager):
     def delete_cache(self):
         super(StatusCache, self).delete_cache()
         self.server_status = None
+
+    @staticmethod
+    def register_load_status_callback(callback):
+        """
+        Registers the specified callback with this class. If the callback has already been
+        registered with this class, this method does nothing.
+
+        The callback will be called each time the load_status method is invoked. For each
+        invocation, the callback will receive the StatusCache instance on which the load_status
+        method was invoked, if operation completed successfully and whether or not the result was
+        returned from cache.
+
+        Returns true if the callback was registered succesfully; false otherwise.
+        """
+        try:
+            if callback not in StatusCache._ls_callbacks:
+                StatusCache._ls_callbacks.append(callback)
+                return True
+
+        except AttributeError:
+            StatusCache._ls_callbacks = [callback]
+            return True
+
+        return False
+
+    @staticmethod
+    def remove_load_status_callback(callback):
+        """
+        Removes the specified callback from this class. If the callback had not been previously
+        registered with this class, this method does nothing.
+
+        Returns true if the callback was removed successfully; false otherwise.
+        """
+        try:
+            StatusCache._ls_callbacks.remove(callback)
+            return True
+
+        except ValueError:
+            pass
+
+        except AttributeError:
+            pass
+
+        return False
+
+    @staticmethod
+    def _notify_load_status_callbacks(instance, success, exception):
+        try:
+            for callback in StatusCache._ls_callbacks:
+                callback(instance, success, exception)
+        except AttributeError:
+            pass
 
 
 class EntitlementStatusCache(StatusCache):
