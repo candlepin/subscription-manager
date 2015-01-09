@@ -2291,7 +2291,8 @@ class ListCommand(CliCommand):
                     print("   " + _("Consumed Subscriptions"))
                     print("+-------------------------------------------+")
 
-                    cert_reasons_map = inj.require(inj.CERT_SORTER).reasons.get_subscription_reasons_map()
+                    sorter = inj.require(inj.CERT_SORTER)
+                    cert_reasons_map = sorter.reasons.get_subscription_reasons_map()
                     pooltype_cache = inj.require(inj.POOLTYPE_CACHE)
 
                     for cert in certs:
@@ -2335,6 +2336,16 @@ class ListCommand(CliCommand):
                             if cert.subject['CN'] in cert_reasons_map:
                                 reasons = cert_reasons_map[cert.subject['CN']]
                             pool_type = pooltype_cache.get(pool_id)
+
+                        # 1180400: Status details is empty when GUI is not
+                        if not reasons:
+                            if cert in sorter.valid_entitlement_certs:
+                                reasons.append(_("Subscription is current"))
+                            else:
+                                if cert.valid_range.end() < datetime.now(GMT()):
+                                    reasons.append(_("Subscription is expired"))
+                                else:
+                                    reasons.append(_("Subscription has not begun"))
 
                         print columnize(CONSUMED_LIST, _none_wrap,
                             name,
