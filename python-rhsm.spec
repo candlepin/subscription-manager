@@ -10,7 +10,7 @@
 
 
 Name: python-rhsm
-Version: 1.13.9
+Version: 1.13.10
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -71,6 +71,11 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Jan 09 2015 William Poteat <wpoteat@redhat.com> 1.13.10-1
+- Add custom JSON encoding for set objects. (awood@redhat.com)
+- Update SSL context options to follow the M2Crypto standard idiom.
+  (awood@redhat.com)
+
 * Wed Jan 07 2015 Devan Goodwin <dgoodwin@rm-rf.ca> 1.13.9-1
 - Allow clients to report product tags. (awood@redhat.com)
 
