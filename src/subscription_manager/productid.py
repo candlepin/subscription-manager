@@ -104,7 +104,7 @@ class ProductDatabase:
     def write(self):
         f = open(self.__fn(), 'w')
         try:
-            json.dump(self.content, f, indent=2)
+            json.dump(self.content, f, indent=2, default=json.encode)
         except Exception:
             pass
         f.close()

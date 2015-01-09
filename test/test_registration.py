@@ -49,6 +49,7 @@ class CliRegistrationTests(SubManFixture):
     def _inject_ipm(self):
         #stub_ipm = stubs.StubInstalledProductsManager()
         mock_ipm = NonCallableMock(spec=cache.InstalledProductsManager)
+        mock_ipm.tags = None
         inj.provide(inj.INSTALLED_PRODUCTS_MANAGER, mock_ipm)
         return mock_ipm
 

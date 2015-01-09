@@ -977,7 +977,7 @@ class RegisterCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("Error: Activation keys do not allow environments to be specified."))
         elif (self.autoattach and self.options.activation_keys):
             system_exit(os.EX_USAGE, _("Error: Activation keys cannot be used with --auto-attach."))
-        #746259: Don't allow the user to pass in an empty string as an activation key
+        # 746259: Don't allow the user to pass in an empty string as an activation key
         elif (self.options.activation_keys and '' in self.options.activation_keys):
             system_exit(os.EX_USAGE, _("Error: Must specify an activation key"))
         elif (self.options.service_level and not self.autoattach):
@@ -1044,7 +1044,7 @@ class RegisterCommand(UserPassCommand):
                                     facts=facts_dic)
 
             if self.options.consumerid:
-                #TODO remove the username/password
+                # TODO remove the username/password
                 log.info("Registering as existing consumer: %s" %
                         self.options.consumerid)
                 consumer = admin_cp.getConsumer(self.options.consumerid,
@@ -1059,7 +1059,8 @@ class RegisterCommand(UserPassCommand):
                      type=self.options.consumertype, facts=facts_dic,
                      owner=owner_key, environment=environment_id,
                      keys=self.options.activation_keys,
-                     installed_products=self.installed_mgr.format_for_server())
+                     installed_products=self.installed_mgr.format_for_server(),
+                     content_tags=self.installed_mgr.tags)
                 self.installed_mgr.write_cache()
             self.plugin_manager.run("post_register_consumer", consumer=consumer,
                                     facts=facts_dic)
