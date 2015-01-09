@@ -290,9 +290,22 @@ def get_available_entitlements(facts, get_all=False, active_on=None,
     The 'all' setting can be used to return all pools, even if the rules do
     not pass. (i.e. show pools that are incompatible for your hardware)
     """
-    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
-            'providedProducts', 'productId', 'attributes', 'pool_type',
-            'service_level', 'service_type', 'suggested', 'contractNumber']
+    columns = [
+        'id',
+        'quantity',
+        'consumed',
+        'endDate',
+        'productName',
+        'providedProducts',
+        'productId',
+        'attributes',
+        'pool_type',
+        'service_level',
+        'service_type',
+        'suggested',
+        'contractNumber',
+        'management_enabled'
+    ]
 
     pool_stash = PoolStash(Facts(require(ENT_DIR), require(PROD_DIR)))
     dlist = pool_stash.get_filtered_pools_list(active_on, not get_all,
@@ -312,6 +325,7 @@ def get_available_entitlements(facts, get_all=False, active_on=None,
         pool['service_type'] = support_attrs['support_type']
         pool['suggested'] = pool_wrapper.get_suggested_quantity()
         pool['pool_type'] = pool_wrapper.get_pool_type()
+        pool['management_enabled'] = pool_wrapper.management_enabled()
 
         if pool['suggested'] is None:
             pool['suggested'] = ""

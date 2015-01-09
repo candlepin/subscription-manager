@@ -427,6 +427,7 @@ class TestListCommand(TestCliProxyCommand):
                      'productId': 'dummy-id',
                      'providedProducts': [],
                      'id': '888888888888',
+                     'management_enabled': True,
                      'attributes': [{'name': 'is_virt_only',
                                      'value': 'false'}],
                      'pool_type': 'Some Type',

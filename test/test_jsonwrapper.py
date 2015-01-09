@@ -20,7 +20,8 @@ from subscription_manager.jsonwrapper import PoolWrapper
 class TestPoolWrapper(unittest.TestCase):
 
     def _create_wrapper(self, add_is_virt_only=False, is_virt_only_value="true",
-                        add_stacking_id=False, stacking_id=None, pool_type=None):
+                        add_stacking_id=False, stacking_id=None, pool_type=None,
+                        add_management_enabled=False, management_enabled_value="true"):
         attrs = {}
         if add_is_virt_only:
             attrs['virt_only'] = is_virt_only_value
@@ -28,6 +29,9 @@ class TestPoolWrapper(unittest.TestCase):
         prod_attrs = {}
         if add_stacking_id:
             prod_attrs['stacking_id'] = stacking_id
+
+        if add_management_enabled:
+            prod_attrs['management_enabled'] = management_enabled_value
 
         calculatedAttributes = None
         if pool_type:
@@ -76,3 +80,23 @@ class TestPoolWrapper(unittest.TestCase):
     def test_no_compliance_type(self):
         wrapper = self._create_wrapper()
         self.assertEquals('', wrapper.get_pool_type())
+
+    def test_management_enabled_when_attribute_is_false(self):
+        wrapper = self._create_wrapper(add_management_enabled=True, management_enabled_value="false")
+        self.assertFalse(wrapper.management_enabled())
+
+    def test_management_enabled_when_attribute_is_true(self):
+        wrapper = self._create_wrapper(add_management_enabled=True, management_enabled_value="true")
+        self.assertTrue(wrapper.management_enabled())
+
+    def test_management_enabled_when_attribute_is_1(self):
+        wrapper = self._create_wrapper(add_management_enabled=True, management_enabled_value="1")
+        self.assertTrue(wrapper.management_enabled())
+
+    def test_management_enabled_when_attribute_is_0(self):
+        wrapper = self._create_wrapper(add_management_enabled=True, management_enabled_value="0")
+        self.assertFalse(wrapper.management_enabled())
+
+    def test_management_enabled_when_attribute_is_not_set(self):
+        wrapper = self._create_wrapper()
+        self.assertFalse(wrapper.management_enabled())

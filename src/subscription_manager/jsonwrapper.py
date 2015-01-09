@@ -40,6 +40,9 @@ class PoolWrapper(object):
 
         return virt_only
 
+    def management_enabled(self):
+        return is_true_value(self._get_attribute_value('productAttributes', 'management_enabled'))
+
     def get_stacking_id(self):
         return self._get_attribute_value('productAttributes', 'stacking_id')
 
