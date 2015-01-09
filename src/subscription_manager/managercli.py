@@ -94,6 +94,7 @@ AVAILABLE_SUBS_LIST = [
     _("SKU:"),
     _("Contract:"),
     _("Pool ID:"),
+    _("Provides Management:"),
     _("Available:"),
     _("Suggested:"),
     _("Service Level:"),
@@ -133,6 +134,7 @@ CONSUMED_LIST = [
     _("Account:"),
     _("Serial:"),
     _("Pool ID:"),
+    _("Provides Management:"),
     _("Active:"),
     _("Quantity Used:"),
     _("Service Level:"),
@@ -2223,12 +2225,18 @@ class ListCommand(CliCommand):
                         else:
                             machine_type = _("Physical")
 
+                        if 'management_enabled' in data and data['management_enabled']:
+                            data['management_enabled'] = _("Yes")
+                        else:
+                            data['management_enabled'] = _("No")
+
                         print columnize(AVAILABLE_SUBS_LIST, _none_wrap,
                                 data['productName'],
                                 data['providedProducts'],
                                 data['productId'],
                                 data['contractNumber'] or "",
                                 data['id'],
+                                data['management_enabled'],
                                 data['quantity'],
                                 data['suggested'],
                                 data['service_level'] or "",
@@ -2306,6 +2314,7 @@ class ListCommand(CliCommand):
                         service_level = ""
                         service_type = ""
                         system_type = ""
+                        provides_management = "No"
 
                         order = cert.order
 
@@ -2321,6 +2330,11 @@ class ListCommand(CliCommand):
                                 system_type = _("Virtual")
                             else:
                                 system_type = _("Physical")
+
+                            if order.provides_management:
+                                provides_management = _("Yes")
+                            else:
+                                provides_management = _("No")
 
                         pool_id = _("Not Available")
                         if hasattr(cert.pool, "id"):
@@ -2344,6 +2358,7 @@ class ListCommand(CliCommand):
                             account,
                             cert.serial,
                             pool_id,
+                            provides_management,
                             cert.is_valid(),
                             quantity_used,
                             service_level,
