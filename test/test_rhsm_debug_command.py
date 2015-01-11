@@ -97,6 +97,7 @@ class TestCompileCommand(TestCliCommand):
             self.cc._makedir = self._makedir
             self.test_dir = os.getcwd()
             path = path_join(self.test_dir, "testing-dir")
+            self._makedir(path)
             self.cc.main(["--destination", path, "--no-archive"])
         except SystemExit:
             self.fail("Exception Raised")
@@ -130,6 +131,7 @@ class TestCompileCommand(TestCliCommand):
             self.cc._makedir = self._makedir
             self.test_dir = os.getcwd()
             path = path_join(self.test_dir, "testing-dir")
+            self._makedir(path)
             self.cc.main(["--destination", path, "--no-archive", "--sos"])
         except SystemExit:
             self.fail("Exception Raised")
@@ -164,6 +166,7 @@ class TestCompileCommand(TestCliCommand):
             self.cc._makedir = self._makedir
             self.test_dir = os.getcwd()
             path = path_join(self.test_dir, "testing-dir")
+            self._makedir(path)
             self.cc.main(["--destination", path, "--no-archive", "--no-subscriptions"])
         except SystemExit:
             self.fail("Exception Raised")
@@ -227,7 +230,7 @@ class TestCompileCommand(TestCliCommand):
 
     # directory we can write to while not root
     def _get_assemble_dir(self):
-        self.assemble_path = path_join(self.test_dir, "assemble-dir")
+        self.assemble_path = path_join(self.test_dir, "assemble-dir/%s" % datetime.now().strftime("%Y%m%d-%f"))
         os.makedirs(path_join(self.assemble_path, "/etc/rhsm/ca/"))
         os.makedirs(path_join(self.assemble_path, "/etc/rhsm/pluginconf.d/"))
         os.makedirs(path_join(self.assemble_path, "/etc/rhsm/facts/"))
