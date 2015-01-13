@@ -64,14 +64,25 @@ class SystemCommand(CliCommand):
         self.parser.add_option("--no-subscriptions", action='store_true',
                                default=False, dest="nosubs",
                                help=_("exclude subscription data"))
+        self.assemble_path = ASSEMBLE_DIR
 
     def _get_usage(self):
         return _("%%prog %s [OPTIONS] ") % self.name
 
     def _validate_options(self):
-        if self.options.destination and self.options.archive:
-            if not os.path.exists(self.options.destination):
+        if self.options.archive:
+            if self.options.destination and not os.path.exists(self.options.destination):
                 raise InvalidCLIOptionError(_("The destination directory for the archive must already exist."))
+        # no archive, check if we can safely copy to dest.
+        else:
+            if not self._dirs_on_same_device(self.assemble_path, self.options.destination):
+                msg = _("To use the no-archive option, the destination directory '%s' "
+                        "must exist on the same file system as the "
+                        "data assembly directory '%s'." % (self.options.destination, self.assemble_path))
+                raise InvalidCLIOptionError(msg)
+
+    def _dirs_on_same_device(self, dir1, dir2):
+        return os.stat(dir1).st_dev == os.stat(dir2).st_dev
 
     def _do_command(self):
         self._validate_options()
@@ -80,13 +91,12 @@ class SystemCommand(CliCommand):
             system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
 
         code = self._make_code()
-        assemble_path = self._get_assemble_dir()
         archive_name = "rhsm-debug-system-%s" % code
         tar_file_name = "%s.tar.gz" % archive_name
-        # /var/log/rhsm/debuf/rhsm-debug-system-20131212-121234/
-        content_path = os.path.join(assemble_path, archive_name)
-        # /var/log/rhsm/debug/rhsm-debug-system-20131212-123413.tar.gz
-        tar_file_path = os.path.join(assemble_path, tar_file_name)
+        # /var/spool/rhsm/debug/rhsm-debug-system-20131212-121234/
+        content_path = os.path.join(self.assemble_path, archive_name)
+        # /var/spool/rhsm/debug/rhsm-debug-system-20131212-123413.tar.gz
+        tar_file_path = os.path.join(self.assemble_path, tar_file_name)
 
         try:
             # assemble path is in the package, so should always exist
@@ -182,8 +192,8 @@ class SystemCommand(CliCommand):
             managercli.handle_exception(_("Unable to create zip file of system information: %s") % e, e)
             sys.exit(os.EX_SOFTWARE)
         finally:
-            if assemble_path and os.path.exists(assemble_path):
-                shutil.rmtree(assemble_path, True)
+            if content_path and os.path.isdir(content_path):
+                shutil.rmtree(content_path, True)
 
     def _make_code(self):
         return datetime.now().strftime("%Y%m%d-%f")
@@ -213,9 +223,6 @@ class SystemCommand(CliCommand):
         self._copy_directory(src_path,
                              dest_path,
                              KEY_IGNORE_PATS)
-
-    def _get_assemble_dir(self):
-        return ASSEMBLE_DIR
 
     def _makedir(self, dest_dir_name):
         os.makedirs(dest_dir_name, ROOT_READ_ONLY)
