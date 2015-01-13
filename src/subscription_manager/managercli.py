@@ -34,6 +34,7 @@ from M2Crypto import X509
 import rhsm.config
 import rhsm.connection as connection
 from rhsm.utils import remove_scheme, ServerUrlParseError
+from rhsm.certificate import GMT
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker
@@ -2357,7 +2358,7 @@ class ListCommand(CliCommand):
                             if cert in sorter.valid_entitlement_certs:
                                 reasons.append(_("Subscription is current"))
                             else:
-                                if cert.valid_range.end() < datetime.now(GMT()):
+                                if cert.valid_range.end() < datetime.datetime.now(GMT()):
                                     reasons.append(_("Subscription is expired"))
                                 else:
                                     reasons.append(_("Subscription has not begun"))
