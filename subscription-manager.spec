@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.12
+Version: 1.13.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -466,6 +466,23 @@ fi
 %endif
 
 %changelog
+* Wed Jan 14 2015 William Poteat <wpoteat@redhat.com> 1.13.13-1
+- 1175284: Show warning for crossdev --noarchive (wpoteat@redhat.com)
+- Add missing import of GMT() (alikins@redhat.com)
+- 1180400: "Status Details" are now populated on CLI (crog@redhat.com)
+- 1180395: Added "Provides Management" to subman list output (crog@redhat.com)
+- Bumping required python-rhsm version (mstead@redhat.com)
+- Don't fail when product cache has an old format. (awood@redhat.com)
+- Use custom JSON encoding function to encode sets. (awood@redhat.com)
+- Make 'attach' auto unless otherwise specified. (alikins@redhat.com)
+- Add product tag reporting to client. (awood@redhat.com)
+- 1175185: Removed extra slash from rhsm-debug output (crog@redhat.com)
+- 1175291: Fixed a bug with attaching pools via empty file (crog@redhat.com)
+- 1070585: Changed button label from "Ok" to "Save" (crog@redhat.com)
+- 1122530: Updated man page examples (crog@redhat.com)
+- 1132981: Reverted removal of warning message (crog@redhat.com)
+- 1058231: Adjusted "last update" label positioning (crog@redhat.com)
+
 * Thu Dec 11 2014 William Poteat <wpoteat@redhat.com> 1.13.12-1
 - Latest strings from zanata. (alikins@redhat.com)
 - 1122530: Removed/updated more obsoleted documentation, dates and versions
