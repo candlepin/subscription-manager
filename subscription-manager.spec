@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.13
+Version: 1.13.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -466,6 +466,9 @@ fi
 %endif
 
 %changelog
+* Wed Jan 14 2015 William Poteat <wpoteat@redhat.com> 1.13.14-1
+- Revert "Make 'attach' auto unless otherwise specified." (wpoteat@redhat.com)
+
 * Wed Jan 14 2015 William Poteat <wpoteat@redhat.com> 1.13.13-1
 - 1175284: Show warning for crossdev --noarchive (wpoteat@redhat.com)
 - Add missing import of GMT() (alikins@redhat.com)
