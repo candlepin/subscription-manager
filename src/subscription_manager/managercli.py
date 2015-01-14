@@ -1386,13 +1386,12 @@ class AttachCommand(CliCommand):
 
         self.product = None
         self.substoken = None
-        self.auto_attach = True
         self.parser.add_option("--pool", dest="pool", action='append',
                                help=_("the ID of the pool to attach (can be specified more than once)"))
         self.parser.add_option("--quantity", dest="quantity",
-            help=_("number of subscriptions to attach"))
+                               help=_("number of subscriptions to attach"))
         self.parser.add_option("--auto", action='store_true',
-            help=_("Automatically attach compatible subscriptions to this system. This is the default action."))
+            help=_("automatically attach compatible subscriptions to this system"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("service level to apply to this system, requires --auto"))
         self.parser.add_option("--file", dest="file",
@@ -1419,20 +1418,21 @@ class AttachCommand(CliCommand):
         return True
 
     def _validate_options(self):
-        if self.options.pool:
-            if self.options.auto:
-                system_exit(os.EX_USAGE, _("Error: --auto may not be used when specifying pools."))
-            if self.options.service_level:
-                system_exit(os.EX_USAGE, _("Error: Servicelevel is unused with --pool"))
+        if not (self.options.pool or self.options.auto or self.options.file):
+            system_exit(os.EX_USAGE, _("Error: This command requires that you specify a pool with --pool or --file, or use --auto."))
+        if self.options.pool and self.options.auto:
+            system_exit(os.EX_USAGE, _("Error: --auto may not be used when specifying pools."))
 
         # Quantity must be a positive integer
-        # TODO: simplify with a optparse type="int"
         quantity = self.options.quantity
         if self.options.quantity:
             if not valid_quantity(quantity):
                 system_exit(os.EX_USAGE, _("Error: Quantity must be a positive integer."))
             else:
                 self.options.quantity = int(self.options.quantity)
+
+        if (self.options.service_level and not self.options.auto):
+            system_exit(os.EX_USAGE, _("Error: Must use --auto with --servicelevel."))
 
         # If a pools file was specified, process its contents and append it to options.pool
         if self.options.file:
@@ -1454,11 +1454,6 @@ class AttachCommand(CliCommand):
         self.assert_should_be_registered()
         self._validate_options()
 
-        # --pool or --file turns off default auto attach
-        if self.options.pool or self.options.file:
-            self.auto_attach = False
-
-        # TODO: change to if self.auto_attach: else: pool/file stuff
         try:
             cert_action_client = ActionClient()
             cert_action_client.update()
@@ -1530,7 +1525,7 @@ class AttachCommand(CliCommand):
                 print _('Entitlement Certificate(s) update failed due to the following reasons:')
                 for e in report.exceptions():
                     print '\t-', str(e)
-            elif self.auto_attach:
+            elif self.options.auto:
                 if not products_installed:
                     return_code = 1
                 else:
