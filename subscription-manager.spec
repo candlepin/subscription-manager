@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.15
+Version: 1.13.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -466,6 +466,9 @@ fi
 %endif
 
 %changelog
+* Thu Jan 15 2015 William Poteat <wpoteat@redhat.com> 1.13.16-1
+- 884285: Needs to maintain loop for dbus calls (wpoteat@redhat.com)
+
 * Thu Jan 15 2015 William Poteat <wpoteat@redhat.com> 1.13.15-1
 - Pull of strings from translators (wpoteat@redhat.com)
 
