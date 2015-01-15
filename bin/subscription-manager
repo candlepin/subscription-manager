@@ -55,6 +55,9 @@ try:
     from subscription_manager import logutil
     logutil.init_logger()
 
+    from dbus.mainloop.glib import DBusGMainLoop
+    DBusGMainLoop(set_as_default=True)
+
     from subscription_manager.injectioninit import init_dep_injection
     init_dep_injection()
 
