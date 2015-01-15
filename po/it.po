@@ -1,16 +1,17 @@
 # fvalen <fvalen@fedoraproject.org>, 2014. #zanata
+# fvalen <fvalen@fedoraproject.org>, 2015. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-11 14:14-0500\n"
-"PO-Revision-Date: 2014-11-18 06:33-0500\n"
-"Last-Translator: fvalen <fvalen@fedoraproject.org>\n"
-"Language-Team: Italian\n"
-"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-01-05 11:56-0500\n"
+"Last-Translator: fvalen <fvalen@fedoraproject.org>\n"
+"Language-Team: Italian\n"
+"Language: it\n"
 "X-Generator: Zanata 3.5.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
@@ -45,7 +46,8 @@ msgstr "AVVERTENZA"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:13
-msgid "This system has already been registered with Red Hat using RHN Classic."
+msgid ""
+"This system has already been registered with Red Hat using RHN Classic."
 msgstr "Questo sistema è già stato registrato con Red Hat usando RHN Classic."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
@@ -56,6 +58,7 @@ msgid ""
 msgstr ""
 "Il sistema è stato nuovamente registrato usando il Red Hat Subscription "
 "Management. Red Hat consiglia agli utenti di eseguire una sola registrazione."
+""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:17
@@ -1004,7 +1007,8 @@ msgstr "Prodotti installati"
 #, python-format
 msgid "There was an error removing %s with serial number %s"
 msgstr ""
-"Si è verificato un errore durante la rimozione di %s con un numero seriale %s"
+"Si è verificato un errore durante la rimozione di %s con un numero seriale "
+"%s"
 
 #: ../src/subscription_manager/gui/mysubstab.py:144
 msgid "Removing"
@@ -1126,7 +1130,8 @@ msgstr "Il sistema non è registrato."
 #. System must be registered but unable to reach server:
 #: ../src/subscription_manager/gui/installedtab.py:207
 msgid "Entitlement server is unreachable."
-msgstr "Impossibile stabilire un collegamento con il server per l'entitlement."
+msgstr ""
+"Impossibile stabilire un collegamento con il server per l'entitlement."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/installedtab.py:210
@@ -1365,11 +1370,11 @@ msgstr ""
 
 #: ../src/subscription_manager/migrate/migrate.py:415
 msgid ""
-"To remove a channel, use 'rhn-channel --remove --"
-"channel=<conflicting_channel>'."
+"To remove a channel, use 'rhn-channel --remove --channel="
+"<conflicting_channel>'."
 msgstr ""
-"Per rimuovere un canale usa 'rhn-channel --remove --"
-"channel=<conflicting_channel>'."
+"Per rimuovere un canale usa 'rhn-channel --remove --channel="
+"<conflicting_channel>'."
 
 #: ../src/subscription_manager/migrate/migrate.py:427
 #, python-format
@@ -1393,8 +1398,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/migrate/migrate.py:464
-msgid ""
-"\n"
+msgid "\n"
 "Use --force to ignore these channels and continue the migration.\n"
 msgstr ""
 "\n"
@@ -1402,16 +1406,15 @@ msgstr ""
 
 #: ../src/subscription_manager/migrate/migrate.py:478
 msgid "Installing product certificates for these legacy channels:"
-msgstr "Installazione certificati dei prodotti per questi canali preesistenti:"
+msgstr ""
+"Installazione certificati dei prodotti per questi canali preesistenti:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:506
 #, python-format
-msgid ""
-"\n"
+msgid "\n"
 "Product certificates installed successfully to %s."
-msgstr ""
-"\n"
+msgstr "\n"
 "Certificati del prodotto installati con successo su %s."
 
 #: ../src/subscription_manager/migrate/migrate.py:579
@@ -1428,7 +1431,8 @@ msgstr ""
 "completeta dal server preesistente per il sistema %s."
 
 #: ../src/subscription_manager/migrate/migrate.py:599
-msgid "Please investigate on the Customer Portal at https://access.redhat.com."
+msgid ""
+"Please investigate on the Customer Portal at https://access.redhat.com."
 msgstr "Controllare sul Portale clienti https://access.redhat.com."
 
 #: ../src/subscription_manager/migrate/migrate.py:609
@@ -1492,11 +1496,9 @@ msgstr "Nessuna preferenza del livello di servizio"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/migrate/migrate.py:696
 #, python-format
-msgid ""
-"\n"
+msgid "\n"
 "Service level \"%s\" is not available."
-msgstr ""
-"\n"
+msgstr "\n"
 "Il livello di servizio \"%s\" non è disponibile."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
@@ -1505,11 +1507,9 @@ msgid "Please select a service level agreement for this system."
 msgstr "Selezionare un contratto del livello di servizio per questo sistema."
 
 #: ../src/subscription_manager/migrate/migrate.py:734
-msgid ""
-"\n"
+msgid "\n"
 "Couldn't enable extra repositories."
-msgstr ""
-"\n"
+msgstr "\n"
 "Impossibile abilitare repository aggiuntivi."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author fvalen
@@ -1528,7 +1528,8 @@ msgstr "Recupero informazioni sulla sottoscrizione preesistente in corso ..."
 
 #: ../src/subscription_manager/migrate/migrate.py:759
 msgid "System is currently subscribed to these legacy channels:"
-msgstr "Il sistema è attualmente sottoscritto ai seguenti canali preesistenti:"
+msgstr ""
+"Il sistema è attualmente sottoscritto ai seguenti canali preesistenti:"
 
 #: ../src/subscription_manager/migrate/migrate.py:771
 msgid "Preparing to unregister system from legacy server..."
@@ -1819,7 +1820,8 @@ msgstr "Stato corrente del prodotto installato"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:209
-msgid "Unable to find available subscriptions for all your installed products."
+msgid ""
+"Unable to find available subscriptions for all your installed products."
 msgstr ""
 "Impossibile trovare le sottoscrizioni disponibili per tutti i prodotti "
 "installati."
@@ -1858,7 +1860,8 @@ msgid ""
 "refer to your host system for subscription management.\n"
 msgstr ""
 "Se eseguito all'interno di un container subscription-manager risulterà "
-"disabilitato . Per la gestione delle sottoscrizioni usare il sistema host. \n"
+"disabilitato . Per la gestione delle sottoscrizioni usare il sistema host. "
+"\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:375
@@ -2086,7 +2089,8 @@ msgstr ""
 #: ../src/subscription_manager/managercli.py:766
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
 msgstr ""
-"specificare se abilitare o disabilitare l'auto-attaching delle sottoscrizioni"
+"specificare se abilitare o disabilitare l'auto-attaching delle "
+"sottoscrizioni"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:771
@@ -2261,7 +2265,8 @@ msgstr ""
 
 #: ../src/subscription_manager/managercli.py:961
 msgid ""
-"system preference used when subscribing automatically, requires --auto-attach"
+"system preference used when subscribing automatically, requires --auto-"
+"attach"
 msgstr ""
 "preferenze del sistema usate con la sottoscrizione automatica, ha bisogno di "
 "--auto-attach"
@@ -2391,7 +2396,8 @@ msgstr ""
 #: ../src/subscription_manager/managercli.py:1264
 msgid ""
 "Error: This command requires that you specify an email address with --email."
-msgstr "Errore: Con questo comando specificare un indirizzo email con --email."
+msgstr ""
+"Errore: Con questo comando specificare un indirizzo email con --email."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:1301
@@ -2508,12 +2514,13 @@ msgid ""
 "Error: This command requires that you specify a pool with --pool or --file, "
 "or use --auto."
 msgstr ""
-"Errore: Con questo comando specificare un pool con --pool o --file, o usare "
-"--auto."
+"Errore: Con questo comando specificare un pool con --pool o --file, o usare -"
+"-auto."
 
 #: ../src/subscription_manager/managercli.py:1419
 msgid "Error: --auto may not be used when specifying pools."
-msgstr "Errore: --auto può non essere utilizzato quando si specificano i pool."
+msgstr ""
+"Errore: --auto può non essere utilizzato quando si specificano i pool."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:1425
@@ -2560,6 +2567,7 @@ msgstr ""
 #: ../src/subscription_manager/managercli.py:1514
 msgid "Entitlement Certificate(s) update failed due to the following reasons:"
 msgstr ""
+"Aggiornamento certificato entitlement fallito a causa dei seguenti motivi:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:1539
@@ -2593,7 +2601,8 @@ msgstr "Errore: '%s' non è un numero seriale valido"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:1580
-msgid "Error: This command requires that you specify one of --serial or --all."
+msgid ""
+"Error: This command requires that you specify one of --serial or --all."
 msgstr ""
 "Errore: Con questo comando specificare una opzione tra  --serial o --all."
 
@@ -2625,7 +2634,8 @@ msgstr "I numeri seriali non sono stati rimossi con successo dal server:"
 #: ../src/subscription_manager/managercli.py:1650
 #, python-format
 msgid "Unable to perform remove due to the following exception: %s"
-msgstr "Impossibile eseguire la rimozione a causa della seguente eccezione: %s"
+msgstr ""
+"Impossibile eseguire la rimozione a causa della seguente eccezione: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:1639
@@ -2786,6 +2796,7 @@ msgstr "Repositori disponibili in %s"
 msgid "There were no available repositories matching the specified criteria."
 msgstr ""
 "Non è stato trovato alcun repositorio corrispondente al criterio specificato."
+""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:1936
@@ -2815,7 +2826,8 @@ msgstr "Il repositorio '%s' è disabilitato per questo sistema."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:2006
-msgid "List, set, or remove the configuration parameters in use by this system"
+msgid ""
+"List, set, or remove the configuration parameters in use by this system"
 msgstr ""
 "Elencare, impostare o rimuovere i parametri di configurazione usati da "
 "questo sistema"
@@ -2954,6 +2966,10 @@ msgid ""
 "the subscription or product information, varying with the list requested and "
 "the server version (case-insensitive)."
 msgstr ""
+"elenca solo le sottoscrizioni o i prodotti contenenti l'espressione "
+"specificata nelle informazioni sul prodotto o sulla sottoscrizione, che "
+"variano con l'elenco richiesto e la versione del server (ignora maiuscole/"
+"minuscole)."
 
 #: ../src/subscription_manager/managercli.py:2128
 msgid ""
@@ -2975,8 +2991,10 @@ msgstr "Errore: --ondate è applicabile solo con --available"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:2136
-msgid "Error: --servicelevel is only applicable with --available or --consumed"
-msgstr "Errore: --servicelevel è solo applicabile con --available o --consumed"
+msgid ""
+"Error: --servicelevel is only applicable with --available or --consumed"
+msgstr ""
+"Errore: --servicelevel è solo applicabile con --available o --consumed"
 
 #: ../src/subscription_manager/managercli.py:2140
 msgid "Error: --match-installed is only applicable with --available"
@@ -3000,6 +3018,7 @@ msgstr "    Stato prodotto installato"
 #, python-format
 msgid "No installed products were found matching the expression \"%s\"."
 msgstr ""
+"Nessun prodotto installato trovato che corrisponde all'espressione \"%s\"."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:2169
@@ -3026,18 +3045,24 @@ msgid ""
 "No available subscription pools were found matching the expression \"%s\" "
 "and the service level \"%s\"."
 msgstr ""
+"Nessun pool di sottoscrizione trovato corrisponde all'espressione \"%s\" e "
+"al livello di servizio \"%s\"."
 
 #: ../src/subscription_manager/managercli.py:2235
 #, python-format
 msgid ""
 "No available subscription pools were found matching the expression \"%s\"."
 msgstr ""
+"Nessun pool di sottoscrizione trovato corrisponde all'espressione \"%s\"."
 
 #: ../src/subscription_manager/managercli.py:2240
 #, python-format
 msgid ""
 "No available subscription pools were found matching the service level \"%s\"."
+""
 msgstr ""
+"Nessun pool di sottoscrizione trovato che corrisponde al livello di servizio "
+"\"%s\"."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:2244
@@ -3060,23 +3085,29 @@ msgid ""
 "No consumed subscription pools were found matching the expression \"%s\" and "
 "the service level \"%s\"."
 msgstr ""
+"Nessun pool di sottoscrizione consumato corrisponde all'espressione \"%s\" e "
+"al livello di servizio \"%s\"."
 
 #: ../src/subscription_manager/managercli.py:2353
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the expression \"%s\"."
 msgstr ""
+"Nessun pool di sottoscrizione consumato corrisponde all'espressione \"%s\"."
 
 #: ../src/subscription_manager/managercli.py:2358
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the service level \"%s\"."
 msgstr ""
+"Nessun pool di sottoscrizione consumato corrisponde al livello di servizio "
+"\"%s\"."
 
 #: ../src/subscription_manager/managercli.py:2362
 msgid ""
 "No consumed subscription pools were found matching the specified criteria."
 msgstr ""
+"Nessun pool di sottoscrizione consumato corrisponde al criterio specificato."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:2364
@@ -3093,8 +3124,8 @@ msgstr "repositorio da modificare (può essere specificato più di una volta)"
 
 #: ../src/subscription_manager/managercli.py:2374
 msgid ""
-"name of the override to remove (can be specified more than once); used with "
-"--repo option."
+"name of the override to remove (can be specified more than once); used with -"
+"-repo option."
 msgstr ""
 "nome dell'override da rimuovere (può essere specificato più di una volta); "
 "usato con l'opzione --repo."
@@ -3115,7 +3146,8 @@ msgstr ""
 "fornendo l'opzione --repo"
 
 #: ../src/subscription_manager/managercli.py:2381
-msgid "list all overrides; can be specific to a repository by providing --repo"
+msgid ""
+"list all overrides; can be specific to a repository by providing --repo"
 msgstr ""
 "elencare tutti gli override; può essere specifico ad un repositorio fornendo "
 "l'opzione --repo"
@@ -3138,7 +3170,8 @@ msgid "Error: You may not use --list with --remove-all"
 msgstr "Errore: Non è possibile usare --list con --remove-all"
 
 #: ../src/subscription_manager/managercli.py:2403
-msgid "Error: The --repo option must be used with --list or --add or --remove."
+msgid ""
+"Error: The --repo option must be used with --list or --add or --remove."
 msgstr ""
 "Errore: L'opzione --repo deve essere usata con --list o --add o --remove."
 
@@ -3206,7 +3239,8 @@ msgstr "Non è possibile usare le date passate."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:2523
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr ""
 "La data inserita non è valida. La data deve avere un formato YYYY-MM-DD (per "
 "esempio: "
@@ -3409,7 +3443,8 @@ msgstr "Errore durante la lettura delle informazioni di rete:"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/hwprobe.py:707
 msgid "Error reading network interface information:"
-msgstr "Errore durante la lettura delle informazioni dell'interfaccia di rete:"
+msgstr ""
+"Errore durante la lettura delle informazioni dell'interfaccia di rete:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/hwprobe.py:803
@@ -3930,7 +3965,7 @@ msgstr "Impossibile aggiornare i certificati per l'entitlement e repositori"
 
 #: ../src/daemons/rhsm_d.py:169
 msgid "System not registered."
-msgstr ""
+msgstr "Il sistema non è registrato."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/data/activation_key.glade.h:1
@@ -5062,7 +5097,7 @@ msgstr "_Annulla"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:17
 msgid "Cancel Button"
-msgstr ""
+msgstr "Pulsante annulla"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:18
 msgid "_Ok"
@@ -5218,6 +5253,7 @@ msgstr "Sottoscrizioni con entitlement parziali"
 #: ../src/rhsm_icon/rhsm_icon.c:221
 msgid ""
 "This system is missing one or more subscriptions to fully cover its products."
+""
 msgstr ""
 "Uno o più sottoscrizioni risultano mancanti per questo sistema per poter "
 "includere tutti i suoi prodotti."

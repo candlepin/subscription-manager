@@ -1,16 +1,17 @@
 # gcintra <gcintra@fedoraproject.org>, 2014. #zanata
+# gcintra <gcintra@fedoraproject.org>, 2015. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-11 14:14-0500\n"
-"PO-Revision-Date: 2014-11-20 07:02-0500\n"
-"Last-Translator: gcintra <gcintra@fedoraproject.org>\n"
-"Language-Team: Portuguese (Brazil)\n"
-"Language: pt-BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-01-06 04:17-0500\n"
+"Last-Translator: gcintra <gcintra@fedoraproject.org>\n"
+"Language-Team: Portuguese (Brazil)\n"
+"Language: pt-BR\n"
 "X-Generator: Zanata 3.5.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
@@ -45,7 +46,8 @@ msgstr "AVISO"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:13
-msgid "This system has already been registered with Red Hat using RHN Classic."
+msgid ""
+"This system has already been registered with Red Hat using RHN Classic."
 msgstr "Este sistema já foi registrado com a Red Hat usando RHN Classic."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -423,7 +425,8 @@ msgstr "Modificado"
 #, python-format
 msgid "Are you sure you want to remove all overrides for <b>%s</b>?"
 msgstr ""
-"Você tem certeza de que deseja remover todas as subscrições para o <b>%s</b>?"
+"Você tem certeza de que deseja remover todas as subscrições para o <b>%s</"
+"b>?"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/reposgui.py:253
@@ -1370,11 +1373,11 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:415
 msgid ""
-"To remove a channel, use 'rhn-channel --remove --"
-"channel=<conflicting_channel>'."
+"To remove a channel, use 'rhn-channel --remove --channel="
+"<conflicting_channel>'."
 msgstr ""
-"Para remover um canal, use o 'rhn-channel --remove --"
-"channel=<conflicting_channel>'."
+"Para remover um canal, use o 'rhn-channel --remove --channel="
+"<conflicting_channel>'."
 
 #: ../src/subscription_manager/migrate/migrate.py:427
 #, python-format
@@ -1396,11 +1399,9 @@ msgstr "Nenhum certificado de produto mapeado nestes canais da legacia:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:464
-msgid ""
-"\n"
+msgid "\n"
 "Use --force to ignore these channels and continue the migration.\n"
-msgstr ""
-"\n"
+msgstr "\n"
 "Use --force para ignorar estes canais e continuar a migração. \n"
 
 #: ../src/subscription_manager/migrate/migrate.py:478
@@ -1410,11 +1411,9 @@ msgstr "Instalando os certificados do produto para estes canais da legacia:"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:506
 #, python-format
-msgid ""
-"\n"
+msgid "\n"
 "Product certificates installed successfully to %s."
-msgstr ""
-"\n"
+msgstr "\n"
 "Certificados do Produto instalados com sucesso em %s"
 
 #: ../src/subscription_manager/migrate/migrate.py:579
@@ -1431,7 +1430,8 @@ msgstr ""
 "da legacia para o sistema %s."
 
 #: ../src/subscription_manager/migrate/migrate.py:599
-msgid "Please investigate on the Customer Portal at https://access.redhat.com."
+msgid ""
+"Please investigate on the Customer Portal at https://access.redhat.com."
 msgstr "Por favor veja o Portal do Consumidor em https://access.redhat.com."
 
 #: ../src/subscription_manager/migrate/migrate.py:609
@@ -1495,11 +1495,9 @@ msgstr "Nenhuma preferência de nível de serviço."
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:696
 #, python-format
-msgid ""
-"\n"
+msgid "\n"
 "Service level \"%s\" is not available."
-msgstr ""
-"\n"
+msgstr "\n"
 "Nível de Serviço \"%s\" não está disponível."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -1508,11 +1506,9 @@ msgid "Please select a service level agreement for this system."
 msgstr "Por favor, selecione um acordo de nível de serviço para este sistema."
 
 #: ../src/subscription_manager/migrate/migrate.py:734
-msgid ""
-"\n"
+msgid "\n"
 "Couldn't enable extra repositories."
-msgstr ""
-"\n"
+msgstr "\n"
 "Não foi possível habilitar repositórios extras."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author gcintra
@@ -1536,8 +1532,8 @@ msgstr "O sistema está registrado atualmente nestes canais de legacia:"
 #: ../src/subscription_manager/migrate/migrate.py:771
 msgid "Preparing to unregister system from legacy server..."
 msgstr ""
-"Preparando para cancelar registro do sistema a partir do servidor da "
-"legacia... "
+"Preparando para cancelar registro do sistema a partir do servidor da legacia."
+".. "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:787
@@ -1639,8 +1635,8 @@ msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
 msgstr ""
-"Este sistema ainda não foi registrado. Tente 'subscription-manager register "
-"--help' para mais informações"
+"Este sistema ainda não foi registrado. Tente 'subscription-manager register -"
+"-help' para mais informações"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:81
@@ -1822,7 +1818,8 @@ msgstr "Estado Atual do Produto Instalado: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:209
-msgid "Unable to find available subscriptions for all your installed products."
+msgid ""
+"Unable to find available subscriptions for all your installed products."
 msgstr ""
 "Incapaz de encontrar subscrições disponíveis para todos os produtos "
 "instalados."
@@ -1861,8 +1858,8 @@ msgid ""
 "refer to your host system for subscription management.\n"
 msgstr ""
 "subscription-manager é desabilitado ao ser executado dentro de um container. "
-"Por favor, consulte seu sistema host para obter gerenciamento de "
-"subscrição.\n"
+"Por favor, consulte seu sistema host para obter gerenciamento de subscrição."
+"\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:375
@@ -2258,7 +2255,8 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:961
 msgid ""
-"system preference used when subscribing automatically, requires --auto-attach"
+"system preference used when subscribing automatically, requires --auto-"
+"attach"
 msgstr ""
 "preferência do sistema usada ao se registrar automaticamente, requer --auto-"
 "attach"
@@ -2294,7 +2292,8 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:976
 msgid "Error: Activation keys cannot be used with --auto-attach."
-msgstr "Erro: Chaves de ativação não podem ser utilizadas sem o --auto-attach."
+msgstr ""
+"Erro: Chaves de ativação não podem ser utilizadas sem o --auto-attach."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:979
@@ -2557,6 +2556,8 @@ msgstr ""
 #: ../src/subscription_manager/managercli.py:1514
 msgid "Entitlement Certificate(s) update failed due to the following reasons:"
 msgstr ""
+"Atualização do(s) Certificado(s) de Serviços falhou devido a diversas razões:"
+""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1539
@@ -2588,7 +2589,8 @@ msgstr "Erro: O '%s' não é um número serial válido "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1580
-msgid "Error: This command requires that you specify one of --serial or --all."
+msgid ""
+"Error: This command requires that you specify one of --serial or --all."
 msgstr ""
 "Erro: Este comando requer que você especifique um dos --serial ou --all."
 
@@ -2813,7 +2815,8 @@ msgstr "Repositório '%s' está desabilitado para este sistema."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:2006
-msgid "List, set, or remove the configuration parameters in use by this system"
+msgid ""
+"List, set, or remove the configuration parameters in use by this system"
 msgstr ""
 "Listar, definir ou remover os parâmetros de configuração em uso por este "
 "sistema."
@@ -2952,6 +2955,9 @@ msgid ""
 "the subscription or product information, varying with the list requested and "
 "the server version (case-insensitive)."
 msgstr ""
+"listar somente subscrições ou produtos que contenham a expressão "
+"especificada nas informações de subscrição ou produto, variando com a lista "
+"requerida e a versão do servidor (com letras maiúsculas e minúsculas)."
 
 #: ../src/subscription_manager/managercli.py:2128
 msgid ""
@@ -2973,7 +2979,8 @@ msgstr "Error: --ondate é apenas aplicável com --available"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:2136
-msgid "Error: --servicelevel is only applicable with --available or --consumed"
+msgid ""
+"Error: --servicelevel is only applicable with --available or --consumed"
 msgstr ""
 "Erro: --servicelevel é aplicável somente com o --available ou --consumed."
 
@@ -3002,6 +3009,8 @@ msgstr "    Estado de Produtos Instalados"
 #, python-format
 msgid "No installed products were found matching the expression \"%s\"."
 msgstr ""
+"Não foi encontrado nenhum produto instalado coincidindo com a  expressão "
+"\"%s\"."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:2169
@@ -3028,18 +3037,25 @@ msgid ""
 "No available subscription pools were found matching the expression \"%s\" "
 "and the service level \"%s\"."
 msgstr ""
+"Não foi encontrado nenhum pool de subscrição disponível coincidindo a "
+"expressão \"%s\" e os níveis de serviço \"%s\"."
 
 #: ../src/subscription_manager/managercli.py:2235
 #, python-format
 msgid ""
 "No available subscription pools were found matching the expression \"%s\"."
 msgstr ""
+"Não foi encontrado nenhum pool de subscrição disponível coincidindo a "
+"expressão \"%s\"."
 
 #: ../src/subscription_manager/managercli.py:2240
 #, python-format
 msgid ""
 "No available subscription pools were found matching the service level \"%s\"."
+""
 msgstr ""
+"Não foi encontrado nenhum pool de subscrição disponível coincidindo os "
+"níveis de serviço \"%s\"."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:2244
@@ -3062,23 +3078,31 @@ msgid ""
 "No consumed subscription pools were found matching the expression \"%s\" and "
 "the service level \"%s\"."
 msgstr ""
+"Não foi encontrado nenhum pool de subscrição consumido coincidindo a "
+"expressão \"%s\" e os níveis de serviço \"%s\"."
 
 #: ../src/subscription_manager/managercli.py:2353
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the expression \"%s\"."
 msgstr ""
+"Não foi encontrado nenhum pool de subscrição consumido coincidindo a "
+"expressão \"%s\"."
 
 #: ../src/subscription_manager/managercli.py:2358
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the service level \"%s\"."
 msgstr ""
+"Não foi encontrado nenhum pool de subscrição consumido coincidindo os níveis "
+"de serviço \"%s\"."
 
 #: ../src/subscription_manager/managercli.py:2362
 msgid ""
 "No consumed subscription pools were found matching the specified criteria."
 msgstr ""
+"Não foi encontrado nenhum pool de subscrição consumido coincidindo os "
+"critérios especificados."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:2364
@@ -3098,8 +3122,8 @@ msgstr "repositório a ser modificado (pode ser especificado mais de uma vez)"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:2374
 msgid ""
-"name of the override to remove (can be specified more than once); used with "
-"--repo option."
+"name of the override to remove (can be specified more than once); used with -"
+"-repo option."
 msgstr ""
 "nome da sobrescrição a ser removida (pode ser especificada mais de uma vez); "
 "usada com a opção --repo."
@@ -3123,7 +3147,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:2381
-msgid "list all overrides; can be specific to a repository by providing --repo"
+msgid ""
+"list all overrides; can be specific to a repository by providing --repo"
 msgstr ""
 "listar todas as sobrescrições; pode ser específica à um repositório, "
 "fornecendo o --repo"
@@ -3151,8 +3176,10 @@ msgstr "Erro: Você não deve usar o --list com o --remove-all"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:2403
-msgid "Error: The --repo option must be used with --list or --add or --remove."
-msgstr "Erro: A opção --repo deve ser usada com a --list ou --add ou --remove."
+msgid ""
+"Error: The --repo option must be used with --list or --add or --remove."
+msgstr ""
+"Erro: A opção --repo deve ser usada com a --list ou --add ou --remove."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:2415
@@ -3220,7 +3247,8 @@ msgstr "Datas passadas não são permitidas"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:2523
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr ""
 "A data inserida está inválida. A data deve aparecer no formato AAAA-MM-DD "
 "(exemplo:"
@@ -3886,6 +3914,7 @@ msgstr "os dados estarão num diretório descompactado"
 msgid "only data not already included in sos report will be collected"
 msgstr ""
 "serão coletados somente os dados que já não foram incluídos no relatório sos "
+""
 
 #: ../src/rhsm_debug/debug_commands.py:66
 msgid "exclude subscription data"
@@ -4572,7 +4601,8 @@ msgstr "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:5
 msgid "<b>Select a common service level for this system's subscriptions:</b>"
 msgstr ""
-"<b>Selecione um nível de serviço comum para estas subscrições de sistema:</b>"
+"<b>Selecione um nível de serviço comum para estas subscrições de sistema:</"
+"b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:1
@@ -5123,7 +5153,7 @@ msgstr "_Cancelar"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:17
 msgid "Cancel Button"
-msgstr ""
+msgstr "Cancelar Botão"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:18
 msgid "_Ok"
@@ -5279,6 +5309,7 @@ msgstr "Subscrições com Direitos Parciais"
 #: ../src/rhsm_icon/rhsm_icon.c:221
 msgid ""
 "This system is missing one or more subscriptions to fully cover its products."
+""
 msgstr ""
 "Este sistema não possui um ou mais subscrições para cobrir totalmente seus "
 "produtos"
