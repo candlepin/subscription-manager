@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.16
+Version: 1.13.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -466,6 +466,11 @@ fi
 %endif
 
 %changelog
+* Tue Jan 20 2015 William Poteat <wpoteat@redhat.com> 1.13.17-1
+- Revert "884285: Needs to maintain loop for dbus calls" (alikins@redhat.com)
+- Revert "1159266: rhsm-icon -i fails with "TypeError: 'NoneType' object has no attribute '__getitem__'""
+- Revert "Send list of compliance reasons on dbus"
+
 * Thu Jan 15 2015 William Poteat <wpoteat@redhat.com> 1.13.16-1
 - 884285: Needs to maintain loop for dbus calls (wpoteat@redhat.com)
 
