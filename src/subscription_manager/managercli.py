@@ -28,7 +28,6 @@ import re
 import socket
 import sys
 from time import localtime, strftime, strptime
-import gobject
 
 from M2Crypto import X509
 
@@ -493,13 +492,6 @@ class CliCommand(AbstractCLICommand):
         except X509.X509Error, e:
             log.error(e)
             print _('System certificates corrupted. Please reregister.')
-        finally:
-            # clear the loop
-            mainloop = gobject.MainLoop()
-            mainctx = mainloop.get_context()
-            while (mainctx.pending()):
-                mainctx.iteration()
-            mainloop.quit()
 
 
 class UserPassCommand(CliCommand):

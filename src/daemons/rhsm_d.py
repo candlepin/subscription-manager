@@ -34,13 +34,13 @@ def excepthook_base(exc_type, exc_value, exc_traceback):
 
 sys.excepthook = excepthook_base
 
+import gettext
 import syslog
 import gobject
 import dbus
 import dbus.service
 import dbus.glib
 import logging
-import gettext
 import traceback
 
 sys.path.append("/usr/share/rhsm")
@@ -67,7 +67,7 @@ from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
 from subscription_manager.branding import get_branding
-from subscription_manager.injection import require, IDENTITY, CERT_SORTER, PROD_DIR
+from subscription_manager.injection import require, IDENTITY, CERT_SORTER
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
@@ -118,30 +118,8 @@ def check_status(force_signal):
         return pre_result
 
     sorter = require(CERT_SORTER)
+
     return sorter.get_status_for_icon()
-
-
-def refresh_compliance_status(dbus_properties):
-    sorter = require(CERT_SORTER)
-    installed_products = require(PROD_DIR)
-    status = sorter.get_compliance_status()
-
-    dbus_properties["Status"] = _("System is not registered.")
-    if status:
-        dbus_properties["Status"] = status['status']
-        dbus_properties["Entitlements"] = {}
-        for prod in status['compliantProducts']:
-            state = sorter.get_status(prod)
-            installed_product = installed_products.find_by_product(prod).products[0]
-            dbus_properties["Entitlements"][prod] = (installed_product.name, state, _("Subscribed"))
-        for reason in status['reasons']:
-            label = reason['attributes']['product_id']
-            name = reason['attributes']['name']
-            message = reason['message']
-            state = sorter.get_status(label)
-            dbus_properties["Entitlements"][label] = (name, state, message)
-    else:
-        dbus_properties.pop("Entitlements", None)
 
 
 def check_if_ran_once(checker, loop):
@@ -153,10 +131,9 @@ def check_if_ran_once(checker, loop):
 
 
 class StatusChecker(dbus.service.Object):
-    INTERFACE_NAME = "com.redhat.SubscriptionManager"
 
     def __init__(self, bus, keep_alive, force_signal, loop):
-        name = dbus.service.BusName(self.INTERFACE_NAME, bus)
+        name = dbus.service.BusName("com.redhat.SubscriptionManager", bus)
         dbus.service.Object.__init__(self, name, "/EntitlementStatus")
         self.has_run = False
         #this will get set after first invocation
@@ -164,12 +141,6 @@ class StatusChecker(dbus.service.Object):
         self.keep_alive = keep_alive
         self.force_signal = force_signal
         self.loop = loop
-        self._dbus_properties = {
-            "Version": "1.0",
-            "Status": _("System not registered."),
-            "Entitlements": {}
-        }
-
 
     @dbus.service.signal(
         dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus',
@@ -177,7 +148,6 @@ class StatusChecker(dbus.service.Object):
     def entitlement_status_changed(self, status_code):
         log.info("D-Bus signal com.redhat.SubscriptionManager.EntitlementStatus.entitlement_status_changed emitted")
         debug("signal fired! code is " + str(status_code))
-
 
     #this is so we can guarantee exit after the dbus stuff is done, since
     #certain parts of that are async
@@ -218,52 +188,6 @@ class StatusChecker(dbus.service.Object):
         self.last_status = status
         self.has_run = True
         self.watchdog()
-
-    @dbus.service.method(
-            dbus_interface="com.redhat.SubscriptionManager.EntitlementStatus",
-            in_signature='')
-    def emit_status(self):
-        log.info("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.emit_status called ")
-        refresh_compliance_status(self._dbus_properties)
-        # this code assumes that all properties change
-        changes = self._dbus_properties
-        log.info("emit_PropertiesChanged called, changed properties: %s", str(changes))
-        self.PropertiesChanged(self.INTERFACE_NAME, changes, [])
-
-    @dbus.service.signal(
-            dbus_interface=dbus.PROPERTIES_IFACE,
-            signature="sa{sv}as")
-    def PropertiesChanged(self, interface_name, changed_properties,
-                          invalidated_properties):
-        log.info("PropertiesChanged called")
-
-    @dbus.service.method(
-            dbus_interface=dbus.PROPERTIES_IFACE,
-            in_signature="ss", out_signature="v")
-    def Get(self, interface_name, property_name):
-        log.info("Get(%s, %s) called", interface_name, property_name)
-        refresh_compliance_status(self._dbus_properties)
-        if self._dbus_properties.has_key(property_name):
-            return self.GetAll(interface_name)[property_name]
-        raise dbus.exceptions.DBusException("Uknown property %s", property_name)
-
-    @dbus.service.method(
-            dbus_interface=dbus.PROPERTIES_IFACE,
-            in_signature="s", out_signature="a{sv}")
-    def GetAll(self, interface_name):
-        log.info("GetAll(%s) called", interface_name)
-        refresh_compliance_status(self._dbus_properties)
-        if interface_name == self.INTERFACE_NAME:
-            return self._dbus_properties
-        else:
-            raise dbus.exceptions.DBusException("SubscriptionManager does not implement %s interface" % interface_name)
-
-    @dbus.service.method(
-            dbus_interface=dbus.PROPERTIES_IFACE,
-            in_signature="ssv")
-    def Set(self, interface_name, property_name, new_value):
-        log.info("Set(%s) called", interface_name)
-        raise dbus.exceptions.DBusException("All SubscriptionManager properties are read-only")
 
 
 def parse_force_signal(cli_arg):

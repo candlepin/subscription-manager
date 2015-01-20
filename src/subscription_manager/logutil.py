@@ -20,7 +20,7 @@ CERT_LOG = '/var/log/rhsm/rhsmcertd.log'
 handler = None
 stdout_handler = None
 
-LOG_FORMAT = u'%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d ' \
+LOG_FORMAT = u'%(asctime)s [%(levelname)s] %(cmd_name)s ' \
               '@%(filename)s:%(lineno)d - %(message)s'
 
 
