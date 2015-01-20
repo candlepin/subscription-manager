@@ -67,13 +67,14 @@ from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
 from subscription_manager.branding import get_branding
-from subscription_manager.injection import require, IDENTITY, CERT_SORTER, PROD_DIR
+from subscription_manager.injection import require, IDENTITY, CERT_SORTER
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
 from subscription_manager.cert_sorter import RHSM_VALID, \
         RHSM_EXPIRED, RHSM_WARNING, RHSM_PARTIALLY_VALID, \
         RHN_CLASSIC, RHSM_REGISTRATION_REQUIRED
+from subscription_manager.managerlib import refresh_compliance_status
 
 import rhsm.config
 CFG = rhsm.config.initConfig()
@@ -121,29 +122,6 @@ def check_status(force_signal):
     return sorter.get_status_for_icon()
 
 
-def refresh_compliance_status(dbus_properties):
-    sorter = require(CERT_SORTER)
-    installed_products = require(PROD_DIR)
-    status = sorter.get_compliance_status()
-
-    dbus_properties["Status"] = _("System is not registered.")
-    if status:
-        dbus_properties["Status"] = status['status']
-        dbus_properties["Entitlements"] = {}
-        for prod in status['compliantProducts']:
-            state = sorter.get_status(prod)
-            installed_product = installed_products.find_by_product(prod).products[0]
-            dbus_properties["Entitlements"][prod] = (installed_product.name, state, _("Subscribed"))
-        for reason in status['reasons']:
-            label = reason['attributes']['product_id']
-            name = reason['attributes']['name']
-            message = reason['message']
-            state = sorter.get_status(label)
-            dbus_properties["Entitlements"][label] = (name, state, message)
-    else:
-        dbus_properties.pop("Entitlements", None)
-
-
 def check_if_ran_once(checker, loop):
     if checker.has_run:
         msg = "D-Bus com.redhat.SubscriptionManager.EntitlementStatus.check_status called once, exiting"
@@ -167,9 +145,7 @@ class StatusChecker(dbus.service.Object):
         self._dbus_properties = {
             "Version": "1.0",
             "Status": _("System not registered."),
-            "Entitlements": {}
         }
-
 
     @dbus.service.signal(
         dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus',
@@ -177,7 +153,6 @@ class StatusChecker(dbus.service.Object):
     def entitlement_status_changed(self, status_code):
         log.info("D-Bus signal com.redhat.SubscriptionManager.EntitlementStatus.entitlement_status_changed emitted")
         debug("signal fired! code is " + str(status_code))
-
 
     #this is so we can guarantee exit after the dbus stuff is done, since
     #certain parts of that are async
@@ -224,10 +199,9 @@ class StatusChecker(dbus.service.Object):
             in_signature='')
     def emit_status(self):
         log.info("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.emit_status called ")
-        refresh_compliance_status(self._dbus_properties)
+        self._dbus_properties = refresh_compliance_status(self._dbus_properties)
         # this code assumes that all properties change
         changes = self._dbus_properties
-        log.info("emit_PropertiesChanged called, changed properties: %s", str(changes))
         self.PropertiesChanged(self.INTERFACE_NAME, changes, [])
 
     @dbus.service.signal(
@@ -235,7 +209,7 @@ class StatusChecker(dbus.service.Object):
             signature="sa{sv}as")
     def PropertiesChanged(self, interface_name, changed_properties,
                           invalidated_properties):
-        log.info("PropertiesChanged called")
+        pass
 
     @dbus.service.method(
             dbus_interface=dbus.PROPERTIES_IFACE,
