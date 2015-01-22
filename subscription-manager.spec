@@ -116,6 +116,13 @@ from the server. Populates /etc/docker/certs.d appropriately.
 %{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
 %{rhsm_plugins_dir}/container_content.py*
 %{_datadir}/rhsm/subscription_manager/plugin/container.py*
+# Copying Red Hat CA cert into each directory:
+%attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/cdn.redhat.com
+%attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/access.redhat.com
+%attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/registry.access.redhat.com
+%attr(644,root,root) %{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-uep.crt
+%attr(644,root,root) %{_sysconfdir}/docker/certs.d/access.redhat.com/redhat-uep.crt
+%attr(644,root,root) %{_sysconfdir}/docker/certs.d/registry.access.redhat.com/redhat-uep.crt
 
 %package -n subscription-manager-gui
 Summary: A GUI interface to manage Red Hat product subscriptions
@@ -201,6 +208,15 @@ touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
 # fake out the certificate directories
 mkdir -p %{buildroot}%{_sysconfdir}/pki/consumer
 mkdir -p %{buildroot}%{_sysconfdir}/pki/entitlement
+
+# Setup cert directories for the container plugin:
+mkdir -p %{buildroot}%{_sysconfdir}/docker/certs.d/
+mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
+mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/registry.access.redhat.com
+mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/access.redhat.com
+install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-uep.crt
+install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}%{_sysconfdir}/docker/certs.d/registry.access.redhat.com/redhat-uep.crt
+install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}%{_sysconfdir}/docker/certs.d/access.redhat.com/redhat-uep.crt
 
 %post -n subscription-manager-gui
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
