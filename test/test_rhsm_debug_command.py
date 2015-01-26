@@ -82,7 +82,7 @@ class TestCompileCommand(TestCliCommand):
     # permissions. It will make those dirs in tar.
     def test_command_tar(self):
         try:
-            self.cc.main(["--destination", self.path])
+            self.cc.main(["--subscriptions", "--destination", self.path])
         except SystemExit:
             self.fail("Exception Raised")
 
@@ -110,7 +110,7 @@ class TestCompileCommand(TestCliCommand):
     # permissions. It will make those dirs in tree.
     def test_command_tree(self):
         try:
-            self.cc.main(["--destination", self.path, "--no-archive"])
+            self.cc.main(["--subscriptions", "--destination", self.path, "--no-archive"])
         except SystemExit:
             self.fail("Exception Raised")
 
@@ -136,7 +136,7 @@ class TestCompileCommand(TestCliCommand):
     # sos flag limits included data
     def test_command_sos(self):
         try:
-            self.cc.main(["--destination", self.path, "--no-archive", "--sos"])
+            self.cc.main(["--subscriptions", "--destination", self.path, "--no-archive", "--sos"])
         except SystemExit:
             self.fail("Exception Raised")
 
@@ -167,6 +167,17 @@ class TestCompileCommand(TestCliCommand):
         except SystemExit:
             self.fail("Exception Raised")
 
+        self._assert_no_subs()
+
+    def test_command_no_subs_default(self):
+        try:
+            self.cc.main(["--destination", self.path, "--no-archive"])
+        except SystemExit:
+            self.fail("Exception Raised")
+
+        self._assert_no_subs()
+
+    def _assert_no_subs(self):
         try:
             tree_path = path_join(self.path, self.code)
             self.assertTrue(os.path.exists(path_join(tree_path, "consumer.json")))

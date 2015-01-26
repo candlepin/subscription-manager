@@ -61,9 +61,16 @@ class SystemCommand(CliCommand):
         self.parser.add_option("--sos", action='store_true',
                                default=False, dest="sos",
                                help=_("only data not already included in sos report will be collected"))
-        self.parser.add_option("--no-subscriptions", action='store_true',
-                               default=False, dest="nosubs",
-                               help=_("exclude subscription data"))
+        # The default is to not collect org level subscriptions info. The
+        # --subscriptions option can be used to include that.
+        # "--no-subscriptions" is now the default, but keep it for
+        # cli backwards compatibility.
+        self.parser.add_option("--no-subscriptions", action='store_false',
+                               dest="include_subs",
+                               help=_("exclude subscription data (default)"))
+        self.parser.add_option("--subscriptions", action='store_true',
+                               default=False, dest="include_subs",
+                               help=_("include subscription data"))
         self.assemble_path = ASSEMBLE_DIR
 
     def _get_usage(self):
@@ -103,7 +110,7 @@ class SystemCommand(CliCommand):
             self._makedir(content_path)
 
             owner = self.cp.getOwner(consumer.uuid)
-            if not self.options.nosubs:
+            if self.options.include_subs:
                 try:
                     self._write_flat_file(content_path, "subscriptions.json",
                                       self.cp.getSubscriptionList(owner['key']))
