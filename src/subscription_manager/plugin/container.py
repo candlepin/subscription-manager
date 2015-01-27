@@ -31,7 +31,7 @@ _ = gettext.gettext
 CONTAINER_CONTENT_TYPE = "containerimage"
 
 RH_CDN_REGEX = re.compile('^cdn\.(?:.*\.)?redhat\.com$')
-RH_CDN_CA = "/etc/rhsm/ca/redhat-uep.pem"
+RH_CDN_CA = "/etc/rhsm/ca/redhat-entitlement-authority.pem"
 
 
 class ContainerContentUpdateActionCommand(object):
@@ -180,14 +180,15 @@ class ContainerCertDir(object):
             if not self._rh_cdn_ca_exists():
                 log.error("Detected a CDN hostname, but no CA certificate installed.")
             else:
-                ca_symlink = os.path.join(self.path, 'redhat-uep.crt')
+                outfile = "%s.crt" % os.path.splitext(os.path.basename(RH_CDN_CA))[0]
+                ca_symlink = os.path.join(self.path, outfile)
                 if not os.path.exists(ca_symlink):
                     os.symlink(RH_CDN_CA, ca_symlink)
                     log.info("Created symlink: %s -> %s" % (ca_symlink, RH_CDN_CA))
 
     def _rh_cdn_ca_exists(self):
         """
-        Check if the python-rhsm delivered redhat-uep.pem exists.
+        Check if the python-rhsm delivered CA PEM exists.
         """
         # Separate method for testing purposes.
         return os.path.exists(RH_CDN_CA)

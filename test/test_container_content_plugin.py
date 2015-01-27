@@ -23,9 +23,11 @@ from os.path import exists, join
 from subscription_manager.model import Content
 from subscription_manager.plugin.container import \
     ContainerContentUpdateActionCommand, KeyPair, ContainerCertDir, \
-    ContainerUpdateReport, RH_CDN_REGEX
+    ContainerUpdateReport, RH_CDN_REGEX, RH_CDN_CA
 
 DUMMY_CERT_LOCATION = "dummy/certs"
+
+CA_NAME = os.path.basename(RH_CDN_CA)
 
 
 class CdnRegexTests(fixture.SubManFixture):
@@ -240,7 +242,8 @@ class TestContainerCertDir(fixture.SubManFixture):
         self.assertEquals(4, len(self.report.added))
         self.assertEquals(3, len(self.report.removed))
 
-    def test_cdn_ca_symlink(self):
+    @mock.patch("os.symlink")
+    def test_cdn_ca_symlink(self, mock_link):
         cert1 = '1234.pem'
         key1 = '1234-key.pem'
         self._touch(self.src_certs_dir, cert1)
@@ -249,11 +252,8 @@ class TestContainerCertDir(fixture.SubManFixture):
             join(self.src_certs_dir, key1))
         self.container_dir.sync([kp])
 
-        expected_symlink = join(self.dest_dir, 'redhat-uep.crt')
-        self.assertTrue(exists(expected_symlink))
-        self.assertTrue(os.path.islink(expected_symlink))
-        self.assertEquals('/etc/rhsm/ca/redhat-uep.pem',
-            os.path.realpath(expected_symlink))
+        expected_symlink = join(self.dest_dir, "%s.crt" % os.path.splitext(CA_NAME)[0])
+        mock_link.assert_called_once_with(RH_CDN_CA, expected_symlink)
 
     def test_cdn_ca_doesnt_exist_no_symlink(self):
         cert1 = '1234.pem'
@@ -262,15 +262,14 @@ class TestContainerCertDir(fixture.SubManFixture):
         self._touch(self.src_certs_dir, key1)
         kp = KeyPair(join(self.src_certs_dir, cert1),
             join(self.src_certs_dir, key1))
-        # Mock that /etc/rhsm/ca/redhat-uep.pem doesn't exist:
+        # Mock that /etc/rhsm/ca/redhat-entitlement-authority.pem doesn't exist:
         self.container_dir._rh_cdn_ca_exists = mock.Mock(return_value=False)
         self.container_dir.sync([kp])
 
-        expected_symlink = join(self.dest_dir, 'redhat-uep.crt')
+        expected_symlink = join(self.dest_dir, "%s.crt" % os.path.splitext(CA_NAME)[0])
         self.assertFalse(exists(expected_symlink))
 
     def test_cdn_ca_symlink_already_exists(self):
-
         cert1 = '1234.pem'
         key1 = '1234-key.pem'
         self._touch(self.src_certs_dir, cert1)
@@ -279,10 +278,17 @@ class TestContainerCertDir(fixture.SubManFixture):
             join(self.src_certs_dir, key1))
         self.container_dir.sync([kp])
 
+        expected_symlink = join(self.dest_dir, "%s.crt" % os.path.splitext(CA_NAME)[0])
+
         # Run it again, the symlink already exists:
-        self.container_dir.sync([kp])
-        expected_symlink = join(self.dest_dir, 'redhat-uep.crt')
-        self.assertTrue(exists(expected_symlink))
-        self.assertTrue(os.path.islink(expected_symlink))
-        self.assertEquals('/etc/rhsm/ca/redhat-uep.pem',
-            os.path.realpath(expected_symlink))
+        with mock.patch("os.symlink") as mock_link:
+            with mock.patch("os.path.exists") as mock_exists:
+                # Make the real os.path.exists call unless the module is asking
+                # about the symlink which should already exist in this test
+                def side_effects(path):
+                    if path == expected_symlink:
+                        return True
+                    return os.path.exists(path)
+                mock_exists.side_effects = side_effects
+                self.container_dir.sync([kp])
+                self.assertFalse(mock_link.called)
