@@ -118,11 +118,8 @@ from the server. Populates /etc/docker/certs.d appropriately.
 %{_datadir}/rhsm/subscription_manager/plugin/container.py*
 # Copying Red Hat CA cert into each directory:
 %attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/cdn.redhat.com
-%attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/access.redhat.com
-%attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/registry.access.redhat.com
-%attr(644,root,root) %{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-uep.crt
-%attr(644,root,root) %{_sysconfdir}/docker/certs.d/access.redhat.com/redhat-uep.crt
-%attr(644,root,root) %{_sysconfdir}/docker/certs.d/registry.access.redhat.com/redhat-uep.crt
+%attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
+%attr(644,root,root) %{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
 
 %package -n subscription-manager-gui
 Summary: A GUI interface to manage Red Hat product subscriptions
@@ -212,11 +209,12 @@ mkdir -p %{buildroot}%{_sysconfdir}/pki/entitlement
 # Setup cert directories for the container plugin:
 mkdir -p %{buildroot}%{_sysconfdir}/docker/certs.d/
 mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
-mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/registry.access.redhat.com
-mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/access.redhat.com
-install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-uep.crt
-install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}%{_sysconfdir}/docker/certs.d/registry.access.redhat.com/redhat-uep.crt
-install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}%{_sysconfdir}/docker/certs.d/access.redhat.com/redhat-uep.crt
+install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
+
+# The normal redhat-uep.pem is actually a bundle of three CAs.  Docker does not handle bundles well
+# and only reads the first CA in the bundle.  We need to put the right CA a file by itself.
+mkdir -p %{buildroot}%{_sysconfdir}/etc/rhsm/ca
+install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
 
 %post -n subscription-manager-gui
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :

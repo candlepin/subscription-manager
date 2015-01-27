@@ -144,7 +144,11 @@ install-content-plugins-dir:
 install-content-plugins-conf-dir:
 	install -d $(RHSM_PLUGIN_CONF_DIR)
 
-install-content-plugins-conf: install-content-plugins-conf-dir install-content-plugins-conf-ostree install-content-plugins-conf-container
+install-content-plugins-ca:
+	install -d $(PREFIX)/etc/rhsm/ca
+	install -m 644 -p etc-conf/redhat-entitlement-authority.pem $(PREFIX)/etc/rhsm/ca/redhat-entitlement-authority.pem
+
+install-content-plugins-conf: install-content-plugins-conf-dir install-content-plugins-conf-ostree install-content-plugins-conf-container install-content-plugins-ca
 
 install-content-plugins: install-content-plugins-dir install-content-plugin-ostree install-content-plugin-container
 
