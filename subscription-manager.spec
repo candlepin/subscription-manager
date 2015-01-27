@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.18
+Version: 1.13.19
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -480,6 +480,9 @@ fi
 %endif
 
 %changelog
+* Tue Jan 27 2015 Adrian Likins <alikins@redhat.com> 1.13.19-1
+- 1186386: Provide one and only one Red Hat CA to Docker. (awood@redhat.com)
+
 * Mon Jan 26 2015 William Poteat <wpoteat@redhat.com> 1.13.18-1
 - 1184940: Update container plugin config. (dgoodwin@redhat.com)
 
