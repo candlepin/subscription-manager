@@ -225,18 +225,14 @@ class Hardware:
             vers_mod_data = re.split('(?<!\\\):', data['CPE_NAME'])
             if len(vers_mod_data) >= 6:
                 version_modifier = vers_mod_data[5].lower().replace('\\:', ':')
-	elif os.path.exists('/usr/bin/lsb_release'):
-		# The follwing four lines capture the output of running lsb_release -d and -i
-		description = Popen(["lsb_release", "-d"], stdout=PIPE)
-		descoutput = description.communicate()[0].rstrip('\r\n').split(':\t')[1].split()
-		distid = Popen(["lsb_release", "-i"], stdout=PIPE)
-		idoutput = distid.communicate()[0].rstrip('\r\n').split(':\t')[1]
-		# Assign the output from lsb_release into the appropriate variables
-		version = descoutput[-1]
-		tempDist = descoutput[:-2]
-		distname = " ".join(tempDist)
-		dist_id = idoutput
-		version_modifier = version.split('.')[-1]
+        elif os.path.exists('/usr/bin/lsb_release'):
+            #Removes quotation marks, periods, and numbers from relase name
+            fullname = re.sub('[".0-9]', '', self._get_output('lsb_release', '-ds'))
+            #Removes the word 'release' that Oracle adds in
+            distname = re.sub('release', '', fullname)
+            #Removes potential quotation marks for dist_id and version
+            dist_id = re.sub('["]', '', self._get_output('lsb_release', '-is'))
+            version = re.sub('["]', '', self._get_output('lsb_release', '-rs'))
         elif os.path.exists('/etc/redhat-release'):
             # from platform.py from python2.
             _lsb_release_version = re.compile(r'(.+)'
@@ -780,9 +776,9 @@ class Hardware:
         self.allhw.update(virt_dict)
         return virt_dict
 
-    def _get_output(self, cmd):
+    def _get_output(self, cmd, arg=""):
         log.debug("Running '%s'" % cmd)
-        process = Popen([cmd], stdout=PIPE, stderr=PIPE)
+        process = Popen([cmd, arg], stdout=PIPE, stderr=PIPE)
         (std_output, std_error) = process.communicate()
 
         log.debug("%s stdout: %s" % (cmd, std_output))
