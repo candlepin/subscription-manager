@@ -231,7 +231,7 @@ class Hardware:
             #Removes the word 'release' that Oracle adds in
             distname = re.sub('release', '', fullname)
             #Removes potential quotation marks for dist_id and version
-            dist_id = re.sub('["]', '', self._get_output('lsb_release', '-is'))
+            dist_id = re.sub('["]', '', self._get_output('lsb_release', '-cs'))
             version = re.sub('["]', '', self._get_output('lsb_release', '-rs'))
         elif os.path.exists('/etc/redhat-release'):
             # from platform.py from python2.
