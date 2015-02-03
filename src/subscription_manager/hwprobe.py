@@ -225,22 +225,14 @@ class Hardware:
             vers_mod_data = re.split('(?<!\\\):', data['CPE_NAME'])
             if len(vers_mod_data) >= 6:
                 version_modifier = vers_mod_data[5].lower().replace('\\:', ':')
-        elif os.path.exists('/usr/bin/lsb_release'):
-            #Removes quotation marks, periods, and numbers from relase name
-            fullname = re.sub('[".0-9]', '', self._get_output('lsb_release', '-ds'))
-            #Removes the word 'release' that Oracle adds in
-            distname = re.sub('release', '', fullname)
-            #Removes potential quotation marks for dist_id and version
-            dist_id = re.sub('["]', '', self._get_output('lsb_release', '-cs'))
-            version = re.sub('["]', '', self._get_output('lsb_release', '-rs'))
-        elif os.path.exists('/etc/redhat-release'):
+	elif os.path.exists('/etc/oracle-release') or os.path.exists('/etc/redhat-release'): 
             # from platform.py from python2.
             _lsb_release_version = re.compile(r'(.+)'
                                               ' release '
                                               '([\d.]+)'
                                               '\s*(?!\()(\S*)\s*'
                                               '[^(]*(?:\((.+)\))?')
-            f = self._open_release('/etc/redhat-release')
+            f = self._open_release('/etc/redhat-release') or self._open_release('/etc/redhat-release') 
             firstline = f.readline()
             f.close()
 
