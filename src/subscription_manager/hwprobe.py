@@ -768,9 +768,9 @@ class Hardware:
         self.allhw.update(virt_dict)
         return virt_dict
 
-    def _get_output(self, cmd, arg=""):
+    def _get_output(self, cmd):
         log.debug("Running '%s'" % cmd)
-        process = Popen([cmd, arg], stdout=PIPE, stderr=PIPE)
+        process = Popen([cmd], stdout=PIPE, stderr=PIPE)
         (std_output, std_error) = process.communicate()
 
         log.debug("%s stdout: %s" % (cmd, std_output))
