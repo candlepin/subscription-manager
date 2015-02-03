@@ -226,14 +226,14 @@ class Hardware:
             if len(vers_mod_data) >= 6:
                 version_modifier = vers_mod_data[5].lower().replace('\\:', ':')
 
-	elif os.path.exists('/etc/oracle-release') or os.path.exists('/etc/redhat-release'): 
+	elif os.path.exists('/etc/oracle-release') or os.path.exists('/etc/redhat-release'):
             # from platform.py from python2.
             _lsb_release_version = re.compile(r'(.+)'
                                               ' release '
                                               '([\d.]+)'
                                               '\s*(?!\()(\S*)\s*'
                                               '[^(]*(?:\((.+)\))?')
-            f = self._open_release('/etc/oracle-release') or self._open_release('/etc/redhat-release') 
+            f = self._open_release('/etc/oracle-release') or self._open_release('/etc/redhat-release')
             firstline = f.readline()
             f.close()
 
