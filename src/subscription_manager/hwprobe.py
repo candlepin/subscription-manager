@@ -233,7 +233,10 @@ class Hardware:
                                               '([\d.]+)'
                                               '\s*(?!\()(\S*)\s*'
                                               '[^(]*(?:\((.+)\))?')
-            f = self._open_release('/etc/oracle-release') or self._open_release('/etc/redhat-release')
+            try:
+                f = self._open_release('/etc/oracle-release')
+            except IOError as e:
+                f = self._open_release('/etc/redhat-release')
             firstline = f.readline()
             f.close()
 
