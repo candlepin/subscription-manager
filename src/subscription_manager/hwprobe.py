@@ -233,7 +233,7 @@ class Hardware:
                                               '([\d.]+)'
                                               '\s*(?!\()(\S*)\s*'
                                               '[^(]*(?:\((.+)\))?')
-            f = self._open_release('/etc/redhat-release') or self._open_release('/etc/redhat-release') 
+            f = self._open_release('/etc/oracle-release') or self._open_release('/etc/redhat-release') 
             firstline = f.readline()
             f.close()
 
