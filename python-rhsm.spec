@@ -22,7 +22,7 @@ License: GPLv2
 # cd client/python-rhsm
 # tito build --tag python-rhsm-$VERSION-$RELEASE --tgz
 Source0: %{name}-%{version}.tar.gz
-URL: http://fedorahosted.org/candlepin
+URL: http://www.candlepinproject.org
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires: m2crypto
