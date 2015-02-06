@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.14.0
+Version: 1.14.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -484,6 +484,15 @@ fi
 %endif
 
 %changelog
+* Fri Feb 06 2015 Devan Goodwin <dgoodwin@rm-rf.ca> 1.14.1-1
+- 976855: populate a "version.py" at build time (alikins@redhat.com)
+- Fixed typo in subscription-manager-gui (crog@redhat.com)
+- 1186386: Provide one and only one Red Hat CA to Docker. (awood@redhat.com)
+- 1114117: Stop collecting subs info by default. (alikins@redhat.com)
+- 1184940: Update container plugin config. (dgoodwin@redhat.com)
+- 1183122: Fix KeyErrors building dbus ent status (alikins@redhat.com)
+- 884285: Needs to maintain loop for dbus calls (wpoteat@redhat.com)
+
 * Wed Jan 14 2015 William Poteat <wpoteat@redhat.com> 1.13.13-1
 - 1175284: Show warning for crossdev --noarchive (wpoteat@redhat.com)
 - Add missing import of GMT() (alikins@redhat.com)
