@@ -7,7 +7,7 @@ from rhsm.utils import ServerUrlParseErrorEmpty, \
 from subscription_manager.utils import parse_server_info, \
     parse_baseurl_info, format_baseurl, \
     get_version, get_client_versions, \
-    get_server_versions, Versions, friendly_join, is_true_value, url_base_join,\
+    get_server_versions, friendly_join, is_true_value, url_base_join,\
     ProductCertificateFilter, EntitlementCertificateFilter
 from stubs import StubProductCertificate, StubProduct, StubEntitlementCertificate
 
@@ -332,11 +332,10 @@ NOT_COLLECTED = "non-collected-package"
 class TestGetServerVersions(fixture.SubManFixture):
 
     @patch('subscription_manager.utils.ClassicCheck')
-    @patch.object(certlib.ConsumerIdentity, 'existsAndValid')
-    def test_get_server_versions_classic(self, mci_exists_and_valid, MockClassicCheck):
+    def test_get_server_versions_classic(self, MockClassicCheck):
+        self._inject_mock_invalid_consumer()
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = True
-        mci_exists_and_valid.return_value = False
 
         sv = get_server_versions(None)
         self.assertEquals(sv['server-type'], "RHN Classic")
@@ -463,43 +462,44 @@ class TestGetServerVersions(fixture.SubManFixture):
 
 
 class TestGetClientVersions(fixture.SubManFixture):
-    @patch('subscription_manager.utils.Versions')
-    def test_get_client_versions(self, MockVersions):
-        # FIXME: the singleton-esqu nature of subscription_manager.utils.Versions
-        # make mocking/stubbing a little odd, more exhaustive testing
-        # will require figuing that out
-        instance = MockVersions.return_value
-
-        instance.get_version.return_value = '2'
-        instance.get_release.return_value = '3'
+    @patch('subscription_manager.utils.subscription_manager.version')
+    @patch('subscription_manager.utils.rhsm.version')
+    def test_get_client_versions(self, mock_rhsm_version, mock_sub_version):
+        mock_rhsm_version.rpm_version = '1.2.3-4'
+        mock_sub_version.rpm_version = '9.8.7-6'
         cv = get_client_versions()
 
-        self.assertEquals(cv['subscription-manager'], "2-3")
-        self.assertEquals(cv['python-rhsm'], '2-3')
+        self.assertEquals(cv['subscription-manager'], "9.8.7-6")
+        self.assertEquals(cv['python-rhsm'], '1.2.3-4')
+        self.assertTrue(isinstance(cv['python-rhsm'], str))
+        self.assertTrue(isinstance(cv['subscription-manager'], str))
 
-    @patch('subscription_manager.utils.Versions')
-    def test_get_client_versions_strings(self, MockVersions):
-        instance = MockVersions.return_value
-        instance.get_version.return_value = 'as'
-        instance.get_release.return_value = 'vc'
+    @patch('subscription_manager.utils.subscription_manager.version')
+    @patch('subscription_manager.utils.rhsm.version')
+    def test_get_client_versions_strings(self, mock_rhsm_version, mock_sub_version):
+        mock_rhsm_version.rpm_version = 'ab-cd'
+        mock_sub_version.rpm_version = 'ef-gh'
         cv = get_client_versions()
 
-        self.assertEquals(cv['subscription-manager'], "as-vc")
-        self.assertEquals(cv['python-rhsm'], 'as-vc')
+        self.assertEquals(cv['subscription-manager'], "ef-gh")
+        self.assertEquals(cv['python-rhsm'], 'ab-cd')
 
-    @patch('subscription_manager.utils.Versions')
-    def test_get_client_versions_exception(self, MockVersions):
+    @patch('subscription_manager.utils.subscription_manager.version')
+    @patch('subscription_manager.utils.rhsm.version')
+    def test_get_client_versions_exception(self, mock_rhsm_version, mock_sub_version):
         def raise_exception(arg):
             raise Exception("boom" + arg)
 
-        instance = MockVersions.return_value
-        instance.get_version.return_value = 'as'
-        instance.get_release.return_value = 'vc'
-        instance.get_version.side_effect = raise_exception
+        mock_rhsm_version.rpm_version = '1.2.3-4'
+        mock_sub_version.rpm_version = '9.8.7-6'
+
+        # Not actually much that can raise exceptions, it's just a static
+        # attribute.
+        mock_rhsm_version.side_effect = raise_exception
 
         cv = get_client_versions()
-        self.assertEquals(cv['subscription-manager'], "Unknown")
-        self.assertEquals(cv['python-rhsm'], 'Unknown')
+        self.assertEquals(cv['subscription-manager'], "9.8.7-6")
+        self.assertEquals(cv['python-rhsm'], '1.2.3-4')
 
 
 class TestGetVersion(fixture.SubManFixture):
@@ -516,13 +516,6 @@ class TestGetVersion(fixture.SubManFixture):
         versions.get_release.return_value = ""
         result = get_version(versions, "foobar")
         self.assertEquals("1.0", result)
-class TestClientVersion(unittest.TestCase):
-    def test_get_client_versions(self):
-        client_versions = get_client_versions()
-        self.assertTrue('python-rhsm' in client_versions)
-        self.assertTrue('subscription-manager' in client_versions)
-        self.assertTrue(isinstance(client_versions['python-rhsm'], str))
-        self.assertTrue(isinstance(client_versions['subscription-manager'], str))
 
 
 class TestFriendlyJoin(fixture.SubManFixture):
