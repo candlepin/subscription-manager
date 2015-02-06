@@ -566,7 +566,7 @@ class SelectSLAScreen(Screen):
                                  _("No service level will cover all "
                                  "installed products. Please manually "
                                  "subscribe using multiple service levels "
-                                 "via the \"All Available Susbscriptions\" "
+                                 "via the \"All Available Subscriptions\" "
                                  "tab or purchase additional subscriptions."),
                                  parent=self._parent.parent)
             self._parent.finish_registration(failed=True)
