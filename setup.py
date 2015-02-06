@@ -16,7 +16,59 @@ import os
 
 from glob import glob
 
+from subprocess import Popen, PIPE
+
 from setuptools import setup, find_packages, Extension
+from setuptools.command.build_py import build_py
+
+
+# subclass build_py so we can generate
+# version.py based on either args passed
+# in (--rpm-version, --rpm-release) or
+# from a guess generated from 'git describe'
+#
+class rpm_version_release_build_py(build_py):
+    user_options = build_py.user_options + \
+            [('rpm-version=',
+              None,
+              'version of the rpm this is built for'),
+            ('rpm-release=',
+             None,
+             'release of the rpm this is built for')]
+
+    def initialize_options(self):
+        build_py.initialize_options(self)
+        self.rpm_version = os.getenv('PYTHON_RHSM_VERSION')
+        self.rpm_release = os.getenv('PYTHON_RHSM_RELEASE')
+
+    def get_git_describe(self):
+        cmd = ["git", "describe"]
+        process = Popen(cmd, stdout=PIPE)
+        output = process.communicate()[0].strip()
+        if output.startswith('python-rhsm-'):
+            return output[len('python-rhsm-'):]
+        return 'unknown'
+
+    def run(self):
+        # create a "version.py" that includes the rpm version
+        # info passed to our new build_py args
+        if not self.dry_run:
+            version_dir = os.path.join(self.build_lib, 'rhsm')
+            version_file = os.path.join(version_dir, 'version.py')
+            version_release = "unknown"
+            if self.rpm_version and self.rpm_release:
+                version_release = "%s-%s" % (self.rpm_version,
+                                               self.rpm_release)
+            else:
+                version_release = self.get_git_describe()
+            try:
+                self.mkpath(version_dir)
+                f = open(version_file, 'w')
+                f.write("rpm_version = '%s'\n" % version_release)
+                f.close()
+            except EnvironmentError:
+                raise
+        build_py.run(self)
 
 from distutils import log
 from distutils.command.clean import clean as _clean
@@ -45,6 +97,7 @@ cmdclass = {
 }
 
 setup(
+    cmdclass={'build_py': rpm_version_release_build_py},
     name="rhsm",
     version='1.13.10',
     description='A Python library to communicate with a Red Hat Unified Entitlement Platform',
@@ -58,7 +111,6 @@ setup(
     },
     packages=find_packages('src'),
     include_package_data=True,
-    cmdclass=cmdclass,
     ext_modules=[Extension('rhsm._certificate', ['src/certificate.c'],
                            libraries=['ssl', 'crypto'])],
     test_suite='nose.collector',
