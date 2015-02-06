@@ -37,10 +37,11 @@ from subscription_manager import injection as inj
 # compatibility.
 from rhsm.utils import parse_url
 
+import subscription_manager.version
+import rhsm.version
 from rhsm.connection import UEPConnection, RestlibException, GoneException
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
-from rhsm.version import Versions
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -205,15 +206,13 @@ def get_terminal_width():
 def get_client_versions():
     # It's possible (though unlikely, and kind of broken) to have more
     # than one version of python-rhsm/subscription-manager installed.
-    # Versions() will only return one (and I suspect it's not predictable
-    # which it will return).
+    # This will return whatever version we are using.
     sm_version = _("Unknown")
     pr_version = _("Unknown")
 
     try:
-        versions = Versions()
-        sm_version = get_version(versions, Versions.SUBSCRIPTION_MANAGER)
-        pr_version = get_version(versions, Versions.PYTHON_RHSM)
+        pr_version = rhsm.version.rpm_version
+        sm_version = subscription_manager.version.rpm_version
     except Exception, e:
         log.debug("Client Versions: Unable to check client versions")
         log.exception(e)
