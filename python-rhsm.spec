@@ -47,7 +47,6 @@ entitlements, certificates, and access to content.
 %setup -q -n python-rhsm-%{version}
 
 %build
-#%{__python} setup.py build
 # create a version.py with the rpm version info
 PYTHON_RHSM_VERSION=%{version} PYTHON_RHSM_RELEASE=%{release} %{__python} setup.py build
 
