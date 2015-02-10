@@ -763,8 +763,6 @@ class Hardware:
             # if host_type is not defined, do nothing (#768397)
             pass
 
-        log.info("virt.is_guest: %s" % virt_dict.get('virt.is_guest', 'Not Set'))
-        log.info("virt.host_type: %s" % virt_dict.get('virt.host_type', 'Not Set'))
 
         self.allhw.update(virt_dict)
         return virt_dict
@@ -819,7 +817,6 @@ class Hardware:
         except IOError:
             pass
 
-        log.info("virt.uuid: %s" % self.allhw.get('virt.uuid', 'Not Set'))
 
     def log_platform_firmware_warnings(self):
         "Log any warnings from firmware info gather,and/or clear them."
@@ -850,6 +847,11 @@ class Hardware:
         #Thus, we can't figure it out within the main data collection loop.
         if self.allhw.get('virt.is_guest'):
             self.get_virt_uuid()
+
+        log.info("collected virt facts: virt.is_guest=%s, virt.host_type=%s, virt.uuid=%s",
+                 self.allhw.get('virt.is_guest', 'Not Set'),
+                 self.allhw.get('virt.host_type', 'Not Set'),
+                 self.allhw.get('virt.uuid', 'Not Set'))
 
         return self.allhw
 
