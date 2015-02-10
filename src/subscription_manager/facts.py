@@ -70,7 +70,7 @@ class Facts(CacheManager):
         including new keys or deleted keys
         """
         if not self._cache_exists():
-            log.info("Cache %s does not exit" % self.CACHE_FILE)
+            log.debug("Cache %s does not exit" % self.CACHE_FILE)
             return True
 
         cached_facts = self._read_cache() or {}
@@ -120,7 +120,7 @@ class Facts(CacheManager):
         try:
             f = open(file_path)
         except IOError:
-            log.warn("Unabled to open custom facts file: %s" % file_path)
+            log.warn("Unable to open custom facts file: %s" % file_path)
             return None
 
         json_buffer = f.read()

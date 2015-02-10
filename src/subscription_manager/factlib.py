@@ -100,8 +100,9 @@ class FactsActionCommand(object):
             # CacheManager.update_check calls self.has_changed,
             # is the self.facts.has_changed above redundant?
             self.facts.update_check(self.uep, consumer_identity.uuid)
+            log.info("Facts have been updated.")
         else:
-            log.info("Facts have not changed, skipping upload.")
+            log.debug("Facts have not changed, skipping upload.")
 
         # FIXME: can populate this with more info later
         return self.report
