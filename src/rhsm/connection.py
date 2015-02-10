@@ -439,7 +439,6 @@ class Restlib(object):
         # Disable SSLv2 and SSLv3 support to avoid poodles.
         context.set_options(m2.SSL_OP_NO_SSLv2 | m2.SSL_OP_NO_SSLv3)
 
-
         if self.insecure:  # allow clients to work insecure mode if required..
             context.post_connection_check = NoOpChecker()
         else:
@@ -662,6 +661,10 @@ class UEPConnection:
         #    raise Exception("Must specify either username/password or "
         #            "cert_file/key_file")
 
+        proxy_description = None
+        if self.proxy_hostname and self.proxy_port:
+            proxy_description = "http_proxy=%s:%s " % (self.proxy_hostname, self.proxy_port)
+        auth_description = None
         # initialize connection
         if using_basic_auth:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
@@ -670,7 +673,7 @@ class UEPConnection:
                     proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
                     ssl_verify_depth=self.ssl_verify_depth)
-            log.info("Using basic authentication as: %s" % username)
+            auth_description = "auth=basic username=%s" % username
         elif using_id_cert_auth:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
                                 cert_file=self.cert_file, key_file=self.key_file,
@@ -678,21 +681,22 @@ class UEPConnection:
                                 proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                                 ca_dir=self.ca_cert_dir, insecure=self.insecure,
                                 ssl_verify_depth=self.ssl_verify_depth)
-            log.info("Using certificate authentication: key = %s, cert = %s, "
-                     "ca = %s, insecure = %s" %
-                     (self.key_file, self.cert_file, self.ca_cert_dir,
-                      self.insecure))
+            auth_description = "auth=identity_cert ca_dir=%s verify=%s" % (self.ca_cert_dir, self.insecure)
         else:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
                     proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
                     ssl_verify_depth=self.ssl_verify_depth)
-            log.info("Using no auth")
+            auth_description = "auth=none"
 
         self.resources = None
-        log.info("Connection Built: host: %s, port: %s, handler: %s" %
-                (self.host, self.ssl_port, self.handler))
+        connection_description = ""
+        if proxy_description:
+            connection_description += proxy_description
+        connection_description += "host=%s port=%s handler=%s %s" % (self.host, self.ssl_port,
+                                                                    self.handler, auth_description)
+        log.info("Connection built: %s", connection_description)
 
     def _load_supported_resources(self):
         """
@@ -708,8 +712,8 @@ class UEPConnection:
         resources_list = self.conn.request_get("/")
         for r in resources_list:
             self.resources[r['rel']] = r['href']
-        log.debug("Server supports the following resources:")
-        log.debug(self.resources)
+        log.debug("Server supports the following resources: %s",
+                  self.resources)
 
     def supports_resource(self, resource_name):
         """
