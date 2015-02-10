@@ -23,6 +23,7 @@ import subscription_manager.injection as inj
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
 from subscription_manager import file_monitor
+from subscription_manager import utils
 
 _ = gettext.gettext
 
@@ -114,7 +115,7 @@ class ComplianceManager(object):
         try:
             return self.cp_provider.get_consumer_auth_cp().getCompliance(self.identity.uuid, self.on_date)
         except Exception, e:
-            log.debug("Failed to get compliance data from the server")
+            log.warn("Failed to get compliance data from the server")
             log.exception(e)
             return None
 
@@ -189,13 +190,22 @@ class ComplianceManager(object):
 
         self._scan_entitlement_certs()
 
-        log.debug("valid entitled products: %s" % self.valid_products.keys())
-        log.debug("expired entitled products: %s" % self.expired_products.keys())
-        log.debug("partially entitled products: %s" % self.partially_valid_products.keys())
-        log.debug("unentitled products: %s" % self.unentitled_products.keys())
-        log.debug("future products: %s" % self.future_products.keys())
+        self.log_products()
+
+    def log_products(self):
+        def fj(pids):
+            return utils.friendly_join(pids)
+
+        log.info("Product status: valid_products=%s partial_products=%s expired_products=%s"
+                 " unentitled_producs=%s future_products=%s valid_until=%s",
+                 fj(self.valid_products.keys()),
+                 fj(self.partially_valid_products.keys()),
+                 fj(self.expired_products.keys()),
+                 fj(self.unentitled_products.keys()),
+                 fj(self.future_products.keys()),
+                 self.compliant_until)
+
         log.debug("partial stacks: %s" % self.partial_stacks.keys())
-        log.debug("entitlements valid until: %s" % self.compliant_until)
 
     def _scan_entitlement_certs(self):
         """
