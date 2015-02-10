@@ -64,7 +64,7 @@ class BrandInstaller(object):
         if current_brand.is_outdated_by(new_brand):
             self._install(new_brand)
         else:
-            log.info("Product branding info does not need to be updated")
+            log.debug("Product branding info does not need to be updated")
 
     def _get_brand_picker(self):
         raise NotImplementedError
