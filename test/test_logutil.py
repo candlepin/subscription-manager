@@ -17,12 +17,6 @@ class TestLogutil(fixture.SubManFixture):
     def setUp(self):
         super(TestLogutil, self).setUp()
 
-        # By default, we try to use a RotatingFileHandler with the rhsm log.
-        # We don't want to do that for unit tests, so just return a dummy path
-        mock.patch("subscription_manager.logutil._get_log_file_path", return_value="./not/a/valid/path")
-
-        mock.patch("logging.StreamHandler", new=NullHandler)
-
     def tearDown(self):
         self.remove_loggers()
         super(TestLogutil, self).tearDown()
@@ -34,22 +28,31 @@ class TestLogutil(fixture.SubManFixture):
         logging.getLogger("rhsm-app").handlers = []
         logging.getLogger().handlers = []
 
-    def test_init_logger(self):
-        logutil.init_logger()
+    def test_file_config(self):
+        logutil.file_config(logging_config="test/test-logging.conf")
         sm_logger = logging.getLogger("subscription_manager")
         rhsm_logger = logging.getLogger("rhsm")
-        self.assertEqual(sm_logger.getEffectiveLevel(), logutil.LOG_LEVEL)
-        self.assertEqual(rhsm_logger.getEffectiveLevel(), logutil.LOG_LEVEL)
+        self.assertEqual(sm_logger.getEffectiveLevel(), logging.DEBUG)
+        self.assertEqual(rhsm_logger.getEffectiveLevel(), logging.DEBUG)
 
-    def test_init_logger_debug(self):
+    @mock.patch.object(logutil, 'LOGGING_CONFIG', "test/test-logging.conf")
+    def test_log_init(self):
+        logutil.init_logger()
+        sm_logger = logging.getLogger("subscription_manager")
+        rhsm_logger = logging.getLogger("rhsm-app")
+        self.assertEqual(sm_logger.getEffectiveLevel(), logging.DEBUG)
+        self.assertEqual(rhsm_logger.getEffectiveLevel(), logging.DEBUG)
+
+    def test_file_config_debug(self):
         with mock.patch.dict('os.environ', {'SUBMAN_DEBUG': '1'}):
-            logutil.init_logger()
+            logutil.file_config(logging_config="test/test-logging.conf")
             debug_logger = logging.getLogger()
-            self.assertEqual(debug_logger.getEffectiveLevel(), logging.DEBUG)
+            self.assertEqual(debug_logger.getEffectiveLevel(), logging.NOTSET)
 
+    @mock.patch.object(logutil, 'LOGGING_CONFIG', "test/test-logging.conf")
     def test_init_logger_for_yum(self):
         logutil.init_logger_for_yum()
         sm_logger = logging.getLogger("subscription_manager")
-        rhsm_logger = logging.getLogger("rhsm")
+        rhsm_logger = logging.getLogger("rhsm-app")
         self.assertFalse(sm_logger.propagate)
         self.assertFalse(rhsm_logger.propagate)

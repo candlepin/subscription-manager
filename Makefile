@@ -98,6 +98,7 @@ dbus-service-install:
 install-conf:
 	install etc-conf/rhsm.conf $(PREFIX)/etc/rhsm/
 	install -T etc-conf/logrotate.conf $(PREFIX)/etc/logrotate.d/subscription-manager
+	install -T etc-conf/logging.conf $(PREFIX)/etc/rhsm/logging.conf
 	install etc-conf/plugin/*.conf $(PREFIX)/etc/yum/pluginconf.d/
 	install -m 644 etc-conf/subscription-manager.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager
 	install -m 644 etc-conf/rct.completion.sh $(PREFIX)/etc/bash_completion.d/rct

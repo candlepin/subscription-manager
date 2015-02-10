@@ -249,6 +249,7 @@ rm -rf %{buildroot}
 #remove the repo file when we are deleted
 %ghost %{_sysconfdir}/yum.repos.d/redhat.repo
 
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/rhsm/logging.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/subscription-manager.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/product-id.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
