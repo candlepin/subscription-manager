@@ -763,7 +763,6 @@ class Hardware:
             # if host_type is not defined, do nothing (#768397)
             pass
 
-
         self.allhw.update(virt_dict)
         return virt_dict
 
@@ -816,7 +815,6 @@ class Hardware:
             self.allhw['virt.uuid'] = uuid.rstrip("\r\n")
         except IOError:
             pass
-
 
     def log_platform_firmware_warnings(self):
         "Log any warnings from firmware info gather,and/or clear them."

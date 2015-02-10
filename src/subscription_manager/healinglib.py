@@ -82,7 +82,7 @@ class HealingUpdateAction(object):
 
             today = datetime.datetime.now(certificate.GMT())
             tomorrow = today + datetime.timedelta(days=1)
-            valid_today = False;
+            valid_today = False
 
             # Check if we're invalid today and heal if so. If we are
             # valid, see if 24h from now is greater than our "valid until"
