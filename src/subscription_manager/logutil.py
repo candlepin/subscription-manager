@@ -10,10 +10,18 @@
 #
 
 import logging
-from logging.handlers import RotatingFileHandler
+import logging.handlers
 import os
 import sys
 
+# default log level
+LOG_LEVEL = logging.DEBUG
+
+# if we should use the syslog handler
+USE_SYSLOG = False
+
+# we setup logging before setting up config, so we
+# don't try to get them out of the config module.
 RHSM_LOG = '/var/log/rhsm/rhsm.log'
 CERT_LOG = '/var/log/rhsm/rhsmcertd.log'
 
@@ -24,11 +32,13 @@ LOG_FORMAT = u'%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d ' \
               '@%(filename)s:%(lineno)d - %(message)s'
 
 
-LOG_LEVEL = logging.DEBUG
-
 DEBUG_LOG_FORMAT = u'%(asctime)s [%(name)s %(levelname)s] ' \
                     '%(cmd_name)s(%(process)d):%(threadName)s ' \
                     '@%(filename)s:%(funcName)s:%(lineno)d - %(message)s'
+
+# syslog handles the time and cmd_name
+SYSLOG_FORMAT = u'[%(levelname)s] ' \
+                '@%(filename)s:%(lineno)d - %(message)s'
 
 
 def _get_log_file_path():
@@ -51,20 +61,28 @@ def _get_handler():
     if handler is not None:
         return handler
 
-    path = _get_log_file_path()
-
     # Try to write to /var/log, fallback on console logging:
     try:
-        handler = RotatingFileHandler(path, maxBytes=0x100000, backupCount=5, encoding='utf-8')
+        if USE_SYSLOG:
+            handler = _get_syslog_handler()
+        else:
+            handler = _get_rotating_handler()
     except IOError:
         handler = logging.StreamHandler()
     except Exception:
         handler = logging.StreamHandler()
 
-    handler.setFormatter(logging.Formatter(LOG_FORMAT))
     handler.setLevel(LOG_LEVEL)
     handler.addFilter(ContextLoggingFilter(name=""))
 
+    return handler
+
+
+def _get_rotating_handler():
+    path = _get_log_file_path()
+    handler = logging.handlers.RotatingFileHandler(path, maxBytes=0x100000,
+                                                   backupCount=5, encoding='utf-8')
+    handler.setFormatter(logging.Formatter(LOG_FORMAT))
     return handler
 
 
@@ -79,6 +97,13 @@ def _get_stdout_handler():
     return handler
 
 
+def _get_syslog_handler():
+    handler = logging.handlers.SysLogHandler(address="/dev/log")
+    handler.setFormatter(logging.Formatter(SYSLOG_FORMAT))
+    return handler
+
+
+# Don't need this for syslog
 class ContextLoggingFilter(object):
     current_cmd = os.path.basename(sys.argv[0])
     cmd_line = ' '.join(sys.argv)
