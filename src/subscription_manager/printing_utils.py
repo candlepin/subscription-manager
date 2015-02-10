@@ -39,8 +39,10 @@ def columnize(caption_list, callback, *args, **kwargs):
     """
     indent = kwargs.get('indent', 0)
     caption_list = [" " * indent + caption for caption in caption_list]
-    padding = min(sorted(map(utf8_width, caption_list))[-1] + 1,
-            int(get_terminal_width() / 2))
+    columns = get_terminal_width()
+    padding = sorted(map(utf8_width, caption_list))[-1] + 1
+    if columns:
+        padding = min(padding, int(columns / 2))
     padded_list = []
     for caption in caption_list:
         lines = format_name(caption, indent, padding - 1).split('\n')
@@ -49,7 +51,6 @@ def columnize(caption_list, callback, *args, **kwargs):
         padded_list.append(fixed_caption)
 
     lines = zip(padded_list, args)
-    columns = get_terminal_width()
     output = []
     for (caption, value) in lines:
         if isinstance(value, list):
