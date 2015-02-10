@@ -20,7 +20,7 @@ sys.path.append("/usr/share/rhsm")
 import logging
 
 from subscription_manager import logutil
-logutil.init_logger()
+#logutil.init_logger()
 
 from rhsm import connection
 

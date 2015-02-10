@@ -359,7 +359,7 @@ class MainWindow(widgets.GladeWidget):
 
     def _on_unregister_prompt_response(self, dialog, response):
         if not response:
-            log.info("unregistrater not confirmed. cancelling")
+            log.debug("unregister prompt not confirmed. cancelling")
             return
         log.info("Proceeding with un-registration: %s", self.identity.uuid)
         self._perform_unregister()
