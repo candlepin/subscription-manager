@@ -169,3 +169,6 @@ class Identity(object):
         return "<%s, name=%s, uuid=%s, consumer=%s>" % \
                 (self.__class__.__name__,
                 self.name, self.uuid, self.consumer)
+
+    def log_str(self):
+        return "Consumer Identity name=%s uuid=%s" % (self.name, self.uuid)
