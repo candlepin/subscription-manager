@@ -154,6 +154,7 @@ class RegisterScreen(widgets.GladeWidget):
 
         # XXX needed by firstboot
         self.password = None
+        self.exit_on_error = None
 
     def show(self):
         # Ensure that we start on the first page and that
@@ -212,6 +213,13 @@ class RegisterScreen(widgets.GladeWidget):
             self.finish_registration()
             return True
         elif result == DONT_CHANGE:
+            # let firstboot get around the nav that would
+            # leave you stuck in a loop with bad networking.
+            exit_on_error = self._screens[self._current_screen]._parent.exit_on_error
+            network_error = self._screens[self._current_screen].network_error
+
+            if exit_on_error and network_error:
+                self.finish_registration()
             return False
 
         self._screens[self._current_screen].post()
@@ -297,6 +305,7 @@ class Screen(widgets.GladeWidget):
         self.index = -1
         self._parent = parent
         self._backend = backend
+        self.network_error = None
 
     def pre(self):
         return False
@@ -666,7 +675,13 @@ class OrganizationScreen(Screen):
         if error is not None:
             handle_gui_exception(error, REGISTER_ERROR,
                     self._parent.window)
-            self._parent.pre_done(CREDENTIALS_PAGE)
+            # rhbz #1191237 - On error, tell firstboot "success", so that
+            #                 we can get out of the loop. _parent._apply_result
+            #                 is in the rhsm_login.moduleClass firstboot module,
+            #                 and lets us proceed to the next firstboot screen,
+            #                 which is actually the end.
+            self._parent.finish_registration(failed=True)
+            #self._parent._apply_result = self._parent._RESULT_SUCCESS
             return
 
         owners = [(owner['key'], owner['displayName']) for owner in owners]
@@ -939,6 +954,10 @@ class ChooseServerScreen(Screen):
 
     def apply(self):
         server = self.server_entry.get_text()
+
+        # We'll unset it if we survive the next challenge
+        # FIXME: Just letting the exceptions bubble up is likely easier.
+        self.network_error = True
         try:
             (hostname, port, prefix) = parse_server_info(server)
             CFG.set('server', 'hostname', hostname)
