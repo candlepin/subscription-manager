@@ -666,7 +666,12 @@ class OrganizationScreen(Screen):
         if error is not None:
             handle_gui_exception(error, REGISTER_ERROR,
                     self._parent.window)
-            self._parent.pre_done(CREDENTIALS_PAGE)
+            # rhbz #1191237 - On error, tell firstboot "success", so that
+            #                 we can get out of the loop. _parent._apply_result
+            #                 is in the rhsm_login.moduleClass firstboot module,
+            #                 and lets us proceed to the next firstboot screen,
+            #                 which is actually the end.
+            self._parent._apply_result = self._parent._RESULT_SUCCESS
             return
 
         owners = [(owner['key'], owner['displayName']) for owner in owners]
