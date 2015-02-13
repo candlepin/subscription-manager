@@ -190,6 +190,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         """
         Create a new firstboot Module for the 'register' screen.
         """
+        log.debug("%s init", type(self).__name__)
         RhsmFirstbootModule.__init__(self,        # Firstboot module title
         # Note: translated title needs to be unique across all
         # firstboot modules, not just the rhsm ones. See bz #828042
@@ -219,6 +220,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # Will be False if we are on an older RHEL version where
         # rhn-client-tools already does some things so we don't have to.
         self.standalone = True
+        log.debug("standalone=%s", self.standalone)
         distribution = Hardware().get_distribution()
         log.debug("Distribution: %s" % str(distribution))
         try:
@@ -293,6 +295,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         value.
         """
 
+        log.debug("apply interface=%s", interface)
         # on el5 we can't just move to another page, we have to set the next
         # page then do an apply. since we've already done our work async, skip
         # this time through
@@ -301,6 +304,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
             # Reset back to first screen in our module in case the user hits back.
             # The firstboot register screen subclass will handle unregistering
             # if necessary when it runs again.
+            log.debug("huh?")
             self.show()
             return self._RESULT_SUCCESS
 
@@ -314,7 +318,6 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # see bz #810363
         try:
             valid_registration = self.register()
-
         except socket.error, e:
             handle_gui_exception(e, e, self.window)
             return self._RESULT_FAILURE
@@ -460,6 +463,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
             # el5 is easy, we can just pretend the next button was clicked,
             # and tell our own logic not to run for the button press.
             self._skip_apply_for_page_jump = True
+            log.debug("_skip_apply_for_page_jump=%s (set to True)", self._skip_apply_for_page_jump)
             self.compat_parent.nextClicked()
         else:
             self._apply_result = self._RESULT_SUCCESS
