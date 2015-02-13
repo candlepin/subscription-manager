@@ -242,6 +242,9 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         self._apply_result = self._RESULT_FAILURE
 
+        # FIXME: This is specific to rhel7 firstboot
+        self.exit_on_error = True
+
     def _set_initial_screen(self):
         """
         Override parent method as in some cases, we use a different
@@ -444,7 +447,10 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         log.info("Finishing registration, failed=%s" % failed)
         if failed:
             self._set_navigation_sensitive(True)
-            self._run_pre(registergui.CREDENTIALS_PAGE)
+            # on error, go straight to FINISH, which will shortly be
+            # back into this method with failed=False, which is a lie,
+            # but it lets us exit firstboot.
+            self._run_pre(registergui.FINISH)
         else:
             self._registration_finished = True
             self._skip_remaining_screens(self.interface)
