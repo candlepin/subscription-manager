@@ -289,19 +289,32 @@ class RegisterScreen(widgets.GladeWidget):
         self.register_dialog.show()
 
     def _set_initial_screen(self):
-        self._set_screen(CHOOSE_SERVER_PAGE)
+        target = self._get_initial_screen()
+        self._set_screen(target)
+
+    def _get_initial_screen(self):
+        return CHOOSE_SERVER_PAGE
 
     def _set_navigation_sensitive(self, sensitive):
         self.cancel_button.set_sensitive(sensitive)
         self.register_button.set_sensitive(sensitive)
+
+    # for subman gui, we don't need to switch screens on error
+    # but for firstboot, we will go back to the info screen if
+    # we have it.
+    def error_screen(self):
+        return DONT_CHANGE
 
     def _set_screen(self, screen):
         if screen > PROGRESS_PAGE:
             self._current_screen = screen
             if self._screens[screen].needs_gui:
                 self._set_register_label(screen)
+                log.debug("going to register_notebook index=%s", self._screens[screen].index)
                 self.register_notebook.set_current_page(self._screens[screen].index)
+
         else:
+            log.debug("going to register_notebook screen + 1 index=%s", screen + 1)
             self.register_notebook.set_current_page(screen + 1)
 
         if get_state() == REGISTERING:
@@ -325,7 +338,7 @@ class RegisterScreen(widgets.GladeWidget):
 
     # callback needs the extra arg, so just a wrapper here
     def _on_register_button_clicked(self, button):
-        log.debug("on_register_button_clicked")
+        log.debug("=== CLICK === on_register_button_clicked")
         self.register()
 
     def register(self):
@@ -347,6 +360,7 @@ class RegisterScreen(widgets.GladeWidget):
         return False
 
     def _run_pre(self, screen):
+        log.debug("_run_pre screen=%s", screen)
         # XXX move this into the button handling somehow?
         if screen == FINISH:
             self.finish_registration()
@@ -371,6 +385,7 @@ class RegisterScreen(widgets.GladeWidget):
         # XXX it would be cool here to do some async spinning while the
         # main window gui refreshes itself
 
+        log.debug(" .... the other finish_registration failed=%s", failed)
         self.close_window()
 
         self.emit_consumer_signal()
@@ -394,6 +409,7 @@ class RegisterScreen(widgets.GladeWidget):
             screen.clear()
 
     def pre_done(self, next_screen):
+        log.debug("pre_done next_screen=%s", next_screen)
         self._set_navigation_sensitive(True)
         if next_screen == DONT_CHANGE:
             self._set_screen(self._current_screen)
@@ -793,7 +809,7 @@ class OrganizationScreen(Screen):
         if error is not None:
             handle_gui_exception(error, REGISTER_ERROR,
                     self._parent.window)
-            self._parent.pre_done(CREDENTIALS_PAGE)
+            self._parent.finish_registration(failed=True)
             return
 
         owners = [(owner['key'], owner['displayName']) for owner in owners]
@@ -1077,16 +1093,16 @@ class ChooseServerScreen(Screen):
                     show_error_window(_("Unable to reach the server at %s:%s%s") %
                                       (hostname, port, prefix),
                                       self._parent.window)
-                    return DONT_CHANGE
+                    return self._parent.error_screen()
             except MissingCaCertException:
                 show_error_window(_("CA certificate for subscription service has not been installed."),
                                   self._parent.window)
-                return DONT_CHANGE
+                return self._parent.error_screen()
 
         except ServerUrlParseError:
             show_error_window(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"),
                               self._parent.window)
-            return DONT_CHANGE
+            return self._parent.error_screen()
 
         log.info("Writing server data to rhsm.conf")
         CFG.save()
@@ -1362,6 +1378,7 @@ class InfoScreen(Screen):
         ]
 
     def __init__(self, parent, backend):
+        log.debug("InfoScreen init")
         super(InfoScreen, self).__init__(
                 "registration_info.glade", parent, backend)
         self.button_label = _("Next")
@@ -1374,9 +1391,11 @@ class InfoScreen(Screen):
         self.glade.signal_autoconnect(callbacks)
 
     def pre(self):
-        return True
+        log.debug("InfoScreen pre")
+        return False
 
     def apply(self):
+        log.debug("InfoScreen apply")
         if self.register_radio.get_active():
             log.debug("Proceeding with registration.")
             return CHOOSE_SERVER_PAGE
@@ -1385,6 +1404,7 @@ class InfoScreen(Screen):
             return FINISH
 
     def post(self):
+        log.debug("InfoScreen post")
         pass
 
     def _on_why_register_button_clicked(self, button):
