@@ -166,7 +166,17 @@ class RegisterScreen(widgets.GladeWidget):
         self.register_dialog.show()
 
     def _set_initial_screen(self):
-        self._set_screen(CHOOSE_SERVER_PAGE)
+        target = self._get_initial_screen()
+        self._set_screen(target)
+
+    def _get_initial_screen(self):
+        return CHOOSE_SERVER_PAGE
+
+    # for subman gui, we don't need to switch screens on error
+    # but for firstboot, we will go back to the info screen if
+    # we have it.
+    def error_screen(self):
+        return DONT_CHANGE
 
     def _set_navigation_sensitive(self, sensitive):
         self.cancel_button.set_sensitive(sensitive)
@@ -666,7 +676,7 @@ class OrganizationScreen(Screen):
         if error is not None:
             handle_gui_exception(error, REGISTER_ERROR,
                     self._parent.window)
-            self._parent.pre_done(CREDENTIALS_PAGE)
+            self._parent.finish_registration(failed=True)
             return
 
         owners = [(owner['key'], owner['displayName']) for owner in owners]
@@ -950,16 +960,16 @@ class ChooseServerScreen(Screen):
                     show_error_window(_("Unable to reach the server at %s:%s%s") %
                                       (hostname, port, prefix),
                                       self._parent.window)
-                    return DONT_CHANGE
+                    return self._parent.error_screen()
             except MissingCaCertException:
                 show_error_window(_("CA certificate for subscription service has not been installed."),
                                   self._parent.window)
-                return DONT_CHANGE
+                return self._parent.error_screen()
 
         except ServerUrlParseError:
             show_error_window(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"),
                               self._parent.window)
-            return DONT_CHANGE
+            return self._parent.error_screen()
 
         log.info("Writing server data to rhsm.conf")
         CFG.save()
@@ -1247,7 +1257,7 @@ class InfoScreen(Screen):
         self.glade.signal_autoconnect(callbacks)
 
     def pre(self):
-        return True
+        return False
 
     def apply(self):
         if self.register_radio.get_active():

@@ -242,15 +242,18 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         self._apply_result = self._RESULT_FAILURE
 
-    def _set_initial_screen(self):
+    def _get_initial_screen(self):
         """
         Override parent method as in some cases, we use a different
         starting screen.
         """
         if self.standalone:
-            self._set_screen(registergui.INFO_PAGE)
+            return registergui.INFO_PAGE
         else:
-            self._set_screen(registergui.CHOOSE_SERVER_PAGE)
+            return registergui.CHOOSE_SERVER_PAGE
+
+    def error_screen(self):
+        return self._get_initial_screen()
 
     def _read_rhn_proxy_settings(self):
         if not rhn_config:
@@ -444,7 +447,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         log.info("Finishing registration, failed=%s" % failed)
         if failed:
             self._set_navigation_sensitive(True)
-            self._run_pre(registergui.CREDENTIALS_PAGE)
+            self._set_initial_screen()
         else:
             self._registration_finished = True
             self._skip_remaining_screens(self.interface)
