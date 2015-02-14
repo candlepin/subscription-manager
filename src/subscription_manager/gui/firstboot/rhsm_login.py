@@ -190,6 +190,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         """
         Create a new firstboot Module for the 'register' screen.
         """
+        log.debug("%s init", type(self).__name__)
         RhsmFirstbootModule.__init__(self,        # Firstboot module title
         # Note: translated title needs to be unique across all
         # firstboot modules, not just the rhsm ones. See bz #828042
@@ -219,8 +220,10 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # Will be False if we are on an older RHEL version where
         # rhn-client-tools already does some things so we don't have to.
         self.standalone = True
+        log.debug("standalone=%s", self.standalone)
         distribution = Hardware().get_distribution()
         log.debug("Distribution: %s" % str(distribution))
+
         try:
             dist_version = float(distribution[1])
             # We run this for Fedora as well, but all we really care about here
@@ -242,15 +245,20 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         self._apply_result = self._RESULT_FAILURE
 
-    def _set_initial_screen(self):
+    def _get_initial_screen(self):
         """
         Override parent method as in some cases, we use a different
         starting screen.
         """
+        # are we ever not standalone on rhel7+ ?
         if self.standalone:
-            self._set_screen(registergui.INFO_PAGE)
+            return registergui.INFO_PAGE
         else:
-            self._set_screen(registergui.CHOOSE_SERVER_PAGE)
+            return registergui.CHOOSE_SERVER_PAGE
+
+    def error_screen(self):
+        log.debug("l error_screen")
+        return self._get_initial_screen()
 
     def _read_rhn_proxy_settings(self):
         if not rhn_config:
@@ -293,6 +301,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         value.
         """
 
+        log.debug("apply interface=%s", interface)
         # on el5 we can't just move to another page, we have to set the next
         # page then do an apply. since we've already done our work async, skip
         # this time through
@@ -301,6 +310,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
             # Reset back to first screen in our module in case the user hits back.
             # The firstboot register screen subclass will handle unregistering
             # if necessary when it runs again.
+            log.debug("huh?")
             self.show()
             return self._RESULT_SUCCESS
 
@@ -310,11 +320,13 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # we may still have RHN installed, and possibly configured.
         self._read_rhn_proxy_settings()
 
+        # IDEA: we could pass self.interface down into the registerguiScreen
+        # screens, and use it to move to the info page on errors?
+
         # bad proxy settings can cause socket.error or friends here
         # see bz #810363
         try:
             valid_registration = self.register()
-
         except socket.error, e:
             handle_gui_exception(e, e, self.window)
             return self._RESULT_FAILURE
@@ -357,11 +369,12 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # Get rid of the 'register' and 'cancel' buttons, as we are going to
         # use the 'forward' and 'back' buttons provided by the firsboot module
         # to drive the same functionality
+        log.debug("destroy_widgets")
         self._destroy_widget('register_button')
         self._destroy_widget('cancel_button')
 
         # In firstboot, we leverage the RHN setup proxy settings already
-        # presented to the user, so hide the choose server screen's proxy
+        # presented to the user, so hide the choose server sa/creen's proxy
         # text and button. But, if we are standalone, show our versions.
         if not self.standalone:
             screen = self._screens[registergui.CHOOSE_SERVER_PAGE]
@@ -373,12 +386,15 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # NOTE: On EL5 this does not appear to be called when the user
         # presses Back, only when they go through the first time.
         self.show()
+        log.debug("initializeUi")
 
     def focus(self):
         """
         Focus the initial UI element on the page, in this case the
         login name field.
         """
+        log.debug("focus?")
+        pass
         # FIXME:  This is currently broken
         # login_text = self.glade.get_widget("account_login")
         # login_text.grab_focus()
@@ -444,11 +460,17 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         log.info("Finishing registration, failed=%s" % failed)
         if failed:
             self._set_navigation_sensitive(True)
-            self._run_pre(registergui.CREDENTIALS_PAGE)
+            #self._run_pre(registergui.CREDENTIALS_PAGE)
+            log.debug("going to info page")
+            log.debug("run_pre %s", registergui.INFO_PAGE)
+            #self.run_pre(registergui.INFO_PAGE)
+            self._set_initial_screen()
+            log.debug("post run_pre %s", registergui.INFO_PAGE)
         else:
             self._registration_finished = True
             self._skip_remaining_screens(self.interface)
             registergui.RegisterScreen.finish_registration(self, failed=failed)
+        log.debug("finish")
 
     def _skip_remaining_screens(self, interface):
         """
@@ -460,6 +482,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
             # el5 is easy, we can just pretend the next button was clicked,
             # and tell our own logic not to run for the button press.
             self._skip_apply_for_page_jump = True
+            log.debug("_skip_apply_for_page_jump=%s (set to True)", self._skip_apply_for_page_jump)
             self.compat_parent.nextClicked()
         else:
             self._apply_result = self._RESULT_SUCCESS

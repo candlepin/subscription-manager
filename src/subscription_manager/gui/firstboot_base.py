@@ -13,10 +13,13 @@
 # in this software or its documentation.
 #
 
+import logging
 import sys
+
 
 sys.path.append("/usr/share/rhsm")
 
+log = logging.getLogger('rhsm-app.' + __name__)
 # rhsm_login init the injector before we are loaded
 from subscription_manager import injection as inj
 
@@ -37,6 +40,7 @@ except Exception:
     _version = "el5"
     from firstboot_module_window import FirstbootModuleWindow
 
+log.debug("_version=%s", _version)
 
 if _version == "el5":
     ParentClass = FirstbootModuleWindow
@@ -48,14 +52,16 @@ class RhsmFirstbootModule(ParentClass):
 
     def __init__(self, title, sidebar_title, priority, compat_priority):
         ParentClass.__init__(self)
-
+        log.debug("%s init", type(self).__name__)
         if _version == "el6":
+            log.debug("el6 _is_compat = False")
             # set this so subclasses can override behaviour if needed
             self._is_compat = False
             self._RESULT_SUCCESS = RESULT_SUCCESS
             self._RESULT_FAILURE = RESULT_FAILURE
             self._RESULT_JUMP = RESULT_JUMP
         else:
+            log.debug("_is_compat = True")
             self._is_compat = True
             self._RESULT_SUCCESS = True
             self._RESULT_FAILURE = None

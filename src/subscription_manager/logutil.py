@@ -134,6 +134,9 @@ def init_logger():
     # FIXME: remove
     logging.getLogger("rhsm-app").addHandler(_get_handler())
 
+    logging.getLogger("rhsm.connection").setLevel(logging.WARN)
+    logging.getLogger("requests").setLevel(logging.WARN)
+
     # dump logs to stdout, and (re)set log level
     # to DEBUG
     if 'SUBMAN_DEBUG' in os.environ:
