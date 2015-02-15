@@ -46,13 +46,13 @@ CFLAGS ?= -g -Wall
 %.pyc: %.py
 	python -c "import py_compile; py_compile.compile('$<')"
 
-build:	rhsmcertd rhsm-icon
+build:	set-versions rhsmcertd rhsm-icon
 
 # we never "remake" this makefile, so add a target so
 # we stop searching for implicit rules on how to remake it
 Makefile: ;
 
-clean:
+clean: clean-versions
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
 	rm -f bin/rhsmcertd
 	rm -f bin/rhsm-icon
@@ -185,6 +185,10 @@ install: install-files install-conf install-help-files install-plugins-conf
 set-versions:
 	sed -e 's/RPM_VERSION/$(VERSION)/g' $(SRC_DIR)/version.py.in > $(SRC_DIR)/version.py
 	sed -e 's/RPM_VERSION/$(VERSION)/g' $(RCT_SRC_DIR)/version.py.in > $(RCT_SRC_DIR)/version.py
+
+clean-versions:
+	rm -rf $(SRC_DIR)/version.py
+	rm -rf $(RCT_SRC_DIR)/version.py
 
 install-files: set-versions dbus-service-install compile-po desktop-files install-plugins
 	install -d $(CODE_DIR)/gui/data/icons
@@ -559,7 +563,7 @@ install-pip-requirements:
 	@pip install -r test-requirements.txt
 
 .PHONY: jenkins
-jenkins: install-pip-requirements stylish stylish-harder coverage-jenkins
+jenkins: set-versions install-pip-requirements stylish stylish-harder coverage-jenkins
 
 
 
