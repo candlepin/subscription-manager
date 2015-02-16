@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.19
+Version: 1.13.20
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -480,6 +480,9 @@ fi
 %endif
 
 %changelog
+* Mon Feb 16 2015 Adrian Likins <alikins@redhat.com> 1.13.20-1
+- 1191237: Fix problems exitting firstboot on errors (alikins@redhat.com)
+
 * Tue Jan 27 2015 Adrian Likins <alikins@redhat.com> 1.13.19-1
 - 1186386: Provide one and only one Red Hat CA to Docker. (awood@redhat.com)
 
