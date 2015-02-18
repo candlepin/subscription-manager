@@ -260,35 +260,37 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
     def _read_rhn_proxy_settings(self):
         if not rhn_config:
             return
+
         # Read and store rhn-setup's proxy settings, as they have been set
         # on the prior screen (which is owned by rhn-setup)
         up2date_cfg = rhn_config.initUp2dateConfig()
         cfg = rhsm.config.initConfig()
 
-        if up2date_cfg['enableProxy']:
-            proxy = up2date_cfg['httpProxy']
-            if proxy:
-                # Remove any URI scheme provided
-                proxy = remove_scheme(proxy)
-                try:
-                    host, port = proxy.split(':')
-                    cfg.set('server', 'proxy_hostname', host)
-                    cfg.set('server', 'proxy_port', port)
-                except ValueError:
-                    cfg.set('server', 'proxy_hostname', proxy)
-                    cfg.set('server', 'proxy_port',
-                            rhsm.config.DEFAULT_PROXY_PORT)
-            if up2date_cfg['enableProxyAuth']:
-                cfg.set('server', 'proxy_user', up2date_cfg['proxyUser'])
-                cfg.set('server', 'proxy_password',
-                        up2date_cfg['proxyPassword'])
-        else:
-            cfg.set('server', 'proxy_hostname', '')
-            cfg.set('server', 'proxy_port', '')
-            cfg.set('server', 'proxy_user', '')
-            cfg.set('server', 'proxy_password', '')
+        # Don't do anything if proxies aren't enabled in rhn config.
+        if not up2date_cfg['enableProxy']:
+            return
 
-        cfg.save()
+        proxy = up2date_cfg['httpProxy']
+        if proxy:
+            # Remove any URI scheme provided
+            proxy = remove_scheme(proxy)
+            try:
+                host, port = proxy.split(':')
+                # the rhn proxy value is unicode, assume we can
+                # cast to ascii ints
+                port = str(int(port))
+                cfg.set('server', 'proxy_hostname', host)
+                cfg.set('server', 'proxy_port', port)
+            except ValueError:
+                cfg.set('server', 'proxy_hostname', proxy)
+                cfg.set('server', 'proxy_port',
+                        rhsm.config.DEFAULT_PROXY_PORT)
+
+        if up2date_cfg['enableProxyAuth']:
+            cfg.set('server', 'proxy_user', up2date_cfg['proxyUser'])
+            cfg.set('server', 'proxy_password',
+                    up2date_cfg['proxyPassword'])
+
         self.backend.cp_provider.set_connection_info()
 
     def apply(self, interface, testing=False):
@@ -310,10 +312,6 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
             return self._RESULT_SUCCESS
 
         self.interface = interface
-
-        # Note, even if we are standalone firstboot mode (no rhn modules),
-        # we may still have RHN installed, and possibly configured.
-        self._read_rhn_proxy_settings()
 
         # bad proxy settings can cause socket.error or friends here
         # see bz #810363
@@ -375,6 +373,11 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
     def initializeUI(self):
         # Need to make sure that each time the UI is initialized we reset back
         # to the main register screen.
+
+        # Note, even if we are standalone firstboot mode (no rhn modules),
+        # we may still have RHN installed, and possibly configured.
+        self._read_rhn_proxy_settings()
+
         # NOTE: On EL5 this does not appear to be called when the user
         # presses Back, only when they go through the first time.
         self.show()
