@@ -8,6 +8,8 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 
 import gtk
 
+gtk.gdk.threads_init()
+
 import rhsm
 
 sys.path.append("/usr/share/rhsm")
