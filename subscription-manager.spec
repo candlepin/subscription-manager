@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.20
+Version: 1.13.21
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -480,6 +480,10 @@ fi
 %endif
 
 %changelog
+* Wed Feb 18 2015 Adrian Likins <alikins@redhat.com> 1.13.21-1
+- 1191237: Fix proxy "test connection" in firstboot. (alikins@redhat.com)
+- 1191237: Make proxy config "save" work in firstboot. (alikins@redhat.com)
+
 * Mon Feb 16 2015 Adrian Likins <alikins@redhat.com> 1.13.20-1
 - 1191237: Fix problems exitting firstboot on errors (alikins@redhat.com)
 
