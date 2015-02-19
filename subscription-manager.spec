@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.13.21
+Version: 1.13.22
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -480,6 +480,9 @@ fi
 %endif
 
 %changelog
+* Thu Feb 19 2015 Devan Goodwin <dgoodwin@rm-rf.ca> 1.13.22-1
+- 1191241: Handle network starting after subman does. (alikins@redhat.com)
+
 * Wed Feb 18 2015 Adrian Likins <alikins@redhat.com> 1.13.21-1
 - 1191237: Fix proxy "test connection" in firstboot. (alikins@redhat.com)
 - 1191237: Make proxy config "save" work in firstboot. (alikins@redhat.com)
