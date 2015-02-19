@@ -182,7 +182,7 @@ subscriptions
 %setup -q
 
 %build
-make -f Makefile CFLAGS="%{optflags}"
+make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}"
 
 %install
 rm -rf %{buildroot}
