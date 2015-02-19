@@ -94,6 +94,33 @@ REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
     _("Please see /var/log/rhsm/rhsm.log for more information.")
 
 
+# from old smolt code.. Force glibc to call res_init()
+# to rest the resolv configuration, including reloading
+# resolv.conf. This attempt to handle the case where we
+# start up with no networking, fail name resolution calls,
+# and cache them for the life of the process, even after
+# the network starts up, and for dhcp, updates resolv.conf
+def reset_resolver():
+    """Attempt to reset the system hostname resolver.
+    returns 0 on success, or -1 if an error occurs."""
+    try:
+        import ctypes
+        try:
+            resolv = ctypes.CDLL("libc.so.6")
+            r = resolv.__res_init()
+        except (OSError, AttributeError):
+            log.warn("could not find __res_init in libc.so.6")
+            r = -1
+        return r
+    except ImportError:
+        # If ctypes isn't supported (older versions of python for example)
+        # Then just don't do anything
+        pass
+    except Exception, e:
+        log.warning("reset_resolver failed: %s", e)
+        pass
+
+
 class RegisterScreen(widgets.GladeWidget):
     """
       Registration Widget Screen
@@ -924,6 +951,10 @@ class ChooseServerScreen(Screen):
         self.server_entry.set_text(config.DEFAULT_HOSTNAME)
 
     def _on_proxy_button_clicked(self, widget):
+        # proxy dialog may attempt to resolve proxy and server names, so
+        # bump the resolver as well.
+        self.reset_resolver()
+
         self.network_config_dialog.set_parent_window(self._parent.window)
         self.network_config_dialog.show()
 
@@ -947,6 +978,12 @@ class ChooseServerScreen(Screen):
             # that is first unparseable and then later parseable.
             self.activation_key_checkbox.set_sensitive(True)
 
+    def reset_resolver(self):
+        try:
+            reset_resolver()
+        except Exception, e:
+            log.warn("Error from reset_resolver: %s", e)
+
     def apply(self):
         server = self.server_entry.get_text()
         try:
@@ -954,6 +991,8 @@ class ChooseServerScreen(Screen):
             CFG.set('server', 'hostname', hostname)
             CFG.set('server', 'port', port)
             CFG.set('server', 'prefix', prefix)
+
+            self.reset_resolver()
 
             try:
                 if not is_valid_server_info(hostname, port, prefix):
