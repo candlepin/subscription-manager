@@ -17,6 +17,9 @@
 Helper methods for mocking up JSON model objects, certificates, etc.
 """
 
+from datetime import timedelta, datetime
+
+from rhsm.certificate import GMT
 
 hashlib = None
 md5 = None
@@ -24,10 +27,6 @@ try:
     import hashlib
 except ImportError:
     import md5
-
-from datetime import timedelta, datetime
-
-from rhsm.certificate import GMT
 
 
 #grumble, no hashblib on 2.4 and

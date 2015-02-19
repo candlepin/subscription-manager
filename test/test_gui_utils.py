@@ -2,14 +2,13 @@ import unittest
 
 import gtk
 
+from subscription_manager.gui import utils
+from subscription_manager.gui import storage
+
 # we need gtk 2.18+ to do the right markup in likify
 MIN_GTK_MAJOR = 2
 MIN_GTK_MINOR = 18
 MIN_GTK_MICRO = 0
-
-
-from subscription_manager.gui import utils
-from subscription_manager.gui import storage
 
 
 class TestLinkify(unittest.TestCase):

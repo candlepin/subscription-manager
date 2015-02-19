@@ -19,14 +19,14 @@ import os
 
 import gtk
 
-_ = gettext.gettext
-
 from subscription_manager import rhelentbranding
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui.utils import show_error_window
 from subscription_manager.managerlib import ImportFileExtractor
 
 log = logging.getLogger('rhsm-app.' + __name__)
+
+_ = gettext.gettext
 
 
 class ImportSubDialog(object):

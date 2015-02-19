@@ -14,22 +14,16 @@
 # in this software or its documentation.
 #
 import gettext
-_ = gettext.gettext
-
 import glob
 import imp
 import inspect
+import logging
 import os
 
 from iniparse import SafeConfigParser
 from iniparse.compat import NoSectionError, NoOptionError
 
-import logging
-log = logging.getLogger('rhsm-app.' + __name__)
-
 from rhsm.config import initConfig
-cfg = initConfig()
-
 from subscription_manager.base_plugin import SubManPlugin
 
 # The API_VERSION constant defines the current plugin API version. It is used
@@ -50,6 +44,12 @@ API_VERSION = "1.1"
 
 DEFAULT_SEARCH_PATH = "/usr/share/rhsm-plugins/"
 DEFAULT_CONF_PATH = "/etc/rhsm/pluginconf.d/"
+
+cfg = initConfig()
+
+log = logging.getLogger('rhsm-app.' + __name__)
+
+_ = gettext.gettext
 
 
 class PluginException(Exception):

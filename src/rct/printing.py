@@ -14,13 +14,14 @@
 #
 
 import gettext
-_ = gettext.gettext
+import signal
 
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, IdentityCertificate
 
 # BZ 973938 python doesn't correctly handle SIGPIPE
-import signal
 signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+
+_ = gettext.gettext
 
 
 # TODO: to be extra paranoid, we could ask to print

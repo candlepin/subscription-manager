@@ -17,6 +17,9 @@ import logging
 import os
 import re
 
+from rhsm import config
+from subscription_manager import utils
+
 # iniparse.utils isn't in old versions
 # but it's always there if ostree is
 iniparse_tidy = None
@@ -24,10 +27,6 @@ try:
     from iniparse.utils import tidy as iniparse_tidy
 except ImportError:
     pass
-
-
-from rhsm import config
-from subscription_manager import utils
 
 log = logging.getLogger("rhsm-app." + __name__)
 

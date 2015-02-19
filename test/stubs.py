@@ -14,11 +14,12 @@
 #
 
 import StringIO
-from rhsm import config
-import random
+from datetime import datetime, timedelta
 import mock
+import random
 import tempfile
 
+from rhsm import config
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
         OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache
@@ -27,6 +28,13 @@ from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
 from subscription_manager.gui.utils import AsyncWidgetUpdater, handle_gui_exception
 from rhsm.certificate2 import Version
+from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
+
+from rhsm.certificate import parse_tags
+from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
+        Product, Content, Order
+from rhsm import profile
+
 
 from rhsm import ourjson as json
 
@@ -94,15 +102,6 @@ config.CFG = StubConfig()
 
 # we are not actually reading test/rhsm.conf, it's just a placeholder
 config.CFG.read("test/rhsm.conf")
-
-from datetime import datetime, timedelta
-
-from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
-
-from rhsm.certificate import parse_tags
-from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
-        Product, Content, Order
-from rhsm import profile
 
 
 class MockActionLock(ActionLock):
