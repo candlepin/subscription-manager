@@ -279,6 +279,9 @@ class Capture(object):
         def getvalue(self):
             return self.buf.getvalue()
 
+        def isatty(self):
+            return False
+
     def __init__(self, silent=False):
         self.silent = silent
 
