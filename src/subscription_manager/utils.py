@@ -469,11 +469,11 @@ class EntitlementCertificateFilter(ProductCertificateFilter):
 
         # Check filter string (contains-text)
         fs_check = self._fs_regex is None or (
-            super(EntitlementCertificateFilter, self).match(cert)
-            or (cert.order.name and self._fs_regex.match(cert.order.name) is not None)
-            or (cert.order.sku and self._fs_regex.match(cert.order.sku) is not None)
-            or (cert.order.service_level and self._fs_regex.match(cert.order.service_level) is not None)
-            or (cert.order.contract and self._fs_regex.match(cert.order.contract) is not None)
+            super(EntitlementCertificateFilter, self).match(cert) or
+            (cert.order.name and self._fs_regex.match(cert.order.name) is not None) or
+            (cert.order.sku and self._fs_regex.match(cert.order.sku) is not None) or
+            (cert.order.service_level and self._fs_regex.match(cert.order.service_level) is not None) or
+            (cert.order.contract and self._fs_regex.match(cert.order.contract) is not None)
         )
 
         return sl_check and fs_check and (self._sl_filter is not None or self._fs_regex is not None)
