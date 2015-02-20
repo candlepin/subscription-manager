@@ -17,6 +17,7 @@ import datetime
 import gettext
 import os
 import time
+import warnings
 
 import gobject
 import gtk
@@ -37,6 +38,17 @@ GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 WARNING_COLOR = '#FFFB82'
 EXPIRED_COLOR = '#FFAF99'
+
+# Some versions of gtk has incorrect translations for the calendar widget
+# and gtk itself complains about this with errors like:
+#
+# "GtkWarning: Whoever translated calendar:MY did so wrongly."
+#
+# We can't fix that (it's the shipped translations for gtk itself), so just
+# ignore it.
+warnings.filterwarnings(action="ignore",
+                        category=Warning,
+                        message=".*Whoever translated.*wrongly.")
 
 
 class GladeWidget(object):
