@@ -150,6 +150,15 @@ class MainWindow(widgets.GladeWidget):
         log.debug("Client Versions: %s " % get_client_versions())
         log.debug("Server Versions: %s " % get_server_versions(self.backend.cp_provider.get_consumer_auth_cp()))
 
+        settings = self.main_window.get_settings()
+        # prevent gtk from trying to save a list of recently used files, which
+        # as root, causes gtk warning:
+        #  "Attempting to set the permissions of `/root/.local/share/recently-used.xbel'
+        # The __name__ use is just for the 'origin' value gtk uses to store
+        # where a Gtk.Settings value was set.
+        settings.set_long_property('gtk-recent-files-max-age', 0,
+                                   "%s:%s" % (__name__, type(self).__name__))
+
         self.product_dir = prod_dir or self.backend.product_dir
         self.entitlement_dir = ent_dir or self.backend.entitlement_dir
 
