@@ -18,11 +18,12 @@ import inspect
 from socket import error as socket_error
 from M2Crypto.SSL import SSLError
 import gettext
-_ = gettext.gettext
 
 from rhsm import connection, utils
 
 from subscription_manager.entcertlib import Disconnected
+
+_ = gettext.gettext
 
 SOCKET_MESSAGE = _('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.')
 NETWORK_MESSAGE = _('Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.')

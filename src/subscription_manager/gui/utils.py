@@ -17,17 +17,14 @@ import datetime
 import gettext
 import logging
 import re
+import threading
 
 import gobject
 import gtk
 import gtk.glade
-import threading
+
 from subscription_manager.exceptions import ExceptionMapper
-
-_ = lambda x: gettext.ldgettext("rhsm", x)
-
 import rhsm.connection as connection
-
 from subscription_manager.gui import messageWindow
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -41,6 +38,8 @@ EVEN_ROW_COLOR = '#eeeeee'
 
 # set if we are in firstboot, to disable linkify, see bz#814378
 FIRSTBOOT = False
+
+_ = lambda x: gettext.ldgettext("rhsm", x)
 
 
 def running_as_firstboot():

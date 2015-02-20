@@ -18,10 +18,9 @@ import os
 import sys
 
 from subscription_manager.printing_utils import columnize, _echo
+from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter
 
 _ = gettext.gettext
-
-from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter
 
 
 class InvalidCLIOptionError(Exception):

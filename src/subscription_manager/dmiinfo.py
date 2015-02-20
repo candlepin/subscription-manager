@@ -13,14 +13,14 @@
 #
 
 import gettext
-import os
 import logging
+import os
+
+import dmidecode
 
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
-
-import dmidecode
 
 
 class DmiFirmwareInfoProvider(object):

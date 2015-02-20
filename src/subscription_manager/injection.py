@@ -12,6 +12,7 @@
 # in this software or its documentation.
 #
 
+import types
 
 # Supported Features:
 IDENTITY = "IDENTITY"
@@ -31,8 +32,6 @@ FACTS = "FACTS"
 PROFILE_MANAGER = "PROFILE_MANAGER"
 INSTALLED_PRODUCTS_MANAGER = "INSTALLED_PRODUCTS_MANAGER"
 RELEASE_STATUS_CACHE = "RELEASE_STATUS_CACHE"
-
-import types
 
 
 class FeatureBroker:

@@ -1,13 +1,9 @@
 import os
+import gettext
 import glob
+import locale
 import unittest
 import sys
-
-import locale
-import gettext
-_ = gettext.gettext
-
-#locale.setlocale(locale.LC_ALL, '')
 
 from stubs import MockStderr
 from subscription_manager import managercli
@@ -19,6 +15,7 @@ APP = "rhsm"
 DIR = '/usr/share/locale/'
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
+_ = gettext.gettext
 
 po_files = glob.glob("po/*.po")
 langs = []

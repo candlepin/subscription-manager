@@ -14,20 +14,19 @@
 
 from copy import copy
 from datetime import datetime
+import gettext
 import logging
 
 from rhsm.certificate import GMT
 from rhsm.connection import RestlibException
 import subscription_manager.injection as inj
-
-log = logging.getLogger('rhsm-app.' + __name__)
-
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
 from subscription_manager import file_monitor
 
-import gettext
 _ = gettext.gettext
+
+log = logging.getLogger('rhsm-app.' + __name__)
 
 FUTURE_SUBSCRIBED = "future_subscribed"
 SUBSCRIBED = "subscribed"
