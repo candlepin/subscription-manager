@@ -2446,12 +2446,12 @@ class OverrideCommand(CliCommand):
                 system_exit(os.EX_USAGE, _("Error: You may not use --add or --remove with --remove-all and --list"))
         if self.options.list and self.options.remove_all:
             system_exit(os.EX_USAGE, _("Error: You may not use --list with --remove-all"))
-        if self.options.repos and not (self.options.list or self.options.additions
-                or self.options.removals or self.options.remove_all):
+        if self.options.repos and not (self.options.list or self.options.additions or
+                                       self.options.removals or self.options.remove_all):
             system_exit(os.EX_USAGE, _("Error: The --repo option must be used with --list or --add or --remove."))
         # If no relevant options were given, just show a list
-        if not (self.options.repos or self.options.additions
-                or self.options.removals or self.options.remove_all or self.options.list):
+        if not (self.options.repos or self.options.additions or
+                self.options.removals or self.options.remove_all or self.options.list):
             self.options.list = True
 
     def _do_command(self):

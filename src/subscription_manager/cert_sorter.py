@@ -208,9 +208,9 @@ class ComplianceManager(object):
         """
         # Subtract out the valid and partially valid items from the
         # list of installed products
-        unknown_products = dict((k, v) for (k, v) in self.installed_products.items()
-                                if k not in self.valid_products.keys()
-                                and k not in self.partially_valid_products.keys())
+        unknown_products = dict((k, v) for (k, v) in self.installed_products.items() if
+                                k not in self.valid_products.keys() and
+                                k not in self.partially_valid_products.keys())
         ent_certs = self.entitlement_dir.list()
 
         on_date = datetime.now(GMT())
