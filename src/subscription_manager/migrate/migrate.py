@@ -162,11 +162,11 @@ class MigrationEngine(object):
 
     def get_auth(self):
         self.legacy_creds = self.authenticate(self.options.legacy_user, self.options.legacy_password,
-                _("Legacy username: "), _("Legacy password: "))
+            _("Legacy username: "), _("Legacy password: "))
 
         if not self.is_hosted or self.options.destination_url:
             self.destination_creds = self.authenticate(self.options.destination_user, self.options.destination_password,
-                    _("Destination username: "), _("Destination password: "))
+                _("Destination username: "), _("Destination password: "))
         else:
             self.destination_creds = self.legacy_creds   # make them the same
 
@@ -636,21 +636,32 @@ class MigrationEngine(object):
         # Prepended a \n so translation can proceed without hitch
         print ("")
         print _("Attempting to register system to destination server...")
-        cmd = ['subscription-manager', 'register', '--username=' + credentials.username, '--password=' + credentials.password]
+        cmd = ['subscription-manager', 'register']
+
+        # Candlepin doesn't want user credentials with activation keys
+        # Auto-attach and environments are also forbidden
+        if self.options.activation_keys:
+            for key in self.options.activation_keys:
+                cmd.append('--activationkey=' + key)
+        else:
+            cmd.append('--username=' + credentials.username)
+            cmd.append('--password=' + credentials.password)
+
+            if environment:
+                cmd.append('--environment=' + environment)
+
+            if self.options.auto:
+                cmd.append('--auto-attach')
+
         if self.options.destination_url:
             cmd.append('--serverurl=' + self.options.destination_url)
 
         if org:
             cmd.append('--org=' + org)
-        if environment:
-            cmd.append('--environment=' + environment)
 
         if self.options.five_to_six:
             if self.consumer_exists(self.consumer_id):
                 cmd.append('--consumerid=' + self.consumer_id)
-
-        if self.options.auto:
-            cmd.append('--auto-attach')
 
         if self.options.service_level:
             servicelevel = self.select_service_level(org, self.options.service_level)
@@ -748,7 +759,10 @@ class MigrationEngine(object):
             environment = None
         else:
             org = self.get_org(self.destination_creds.username)
-            environment = self.get_environment(org)
+            if self.options.activation_keys:
+                environment = None
+            else:
+                environment = self.get_environment(org)
 
         # TODO Not sure this is necessary.  See BZ 1086367
         self.check_is_org_admin(rpc_session, session_key, self.legacy_creds.username)
@@ -791,6 +805,7 @@ def add_parser_options(parser, five_to_six_script=False):
     # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
     parser.add_option("--no-proxy", action="store_true", dest='noproxy',
         help=_("don't use legacy proxy settings with destination server"))
+
     if five_to_six_script:
         valid_states = ["keep", "unentitle", "purge"]
         parser.add_option("--registration-state", type="choice",
@@ -804,6 +819,10 @@ def add_parser_options(parser, five_to_six_script=False):
             help=_("environment to register to"))
         parser.add_option("-f", "--force", action="store_true", default=False,
             help=_("ignore channels not available on destination server"))
+        # Activation keys can't be used with previously registered IDs so no point in even
+        # offering the option for 5to6
+        parser.add_option("--activation-key", action="append", dest="activation_keys",
+            help=_("activation key to use for registration (can be specified more than once)"))
 
     parser.add_option("--legacy-user",
         help=_("specify the user name on the legacy server"))
@@ -818,6 +837,8 @@ def add_parser_options(parser, five_to_six_script=False):
 
 
 def validate_options(options):
+    if options.activation_keys and options.environment:
+        system_exit(1, _("The --activation-key and --environment options cannot be used together."))
     if options.service_level and not options.auto:
         # TODO Need to explain why this restriction exists.
         system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))
@@ -830,11 +851,15 @@ def is_hosted():
 
 
 def set_defaults(options, five_to_six_script):
+    """For options allowed in one script but not the other, we need to supply
+    set the attribute on the option object to a sensible default to avoid
+    dereferencing an undefined attribute."""
     options.five_to_six = five_to_six_script
     if five_to_six_script:
         options.org = None
         options.environment = None
         options.force = True
+        options.activation_keys = None
     else:
         options.registration_state = "purge"
 

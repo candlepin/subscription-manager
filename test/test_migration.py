@@ -140,6 +140,7 @@ class TestMigration(SubManFixture):
         self.assertFalse(parser.has_option("--org"))
         self.assertFalse(parser.has_option("--environment"))
         self.assertFalse(parser.has_option("--force"))
+        self.assertFalse(parser.has_option("--activation-key"))
         (opts, args) = parser.parse_args([])
         migrate.set_defaults(opts, five_to_six)
         self.assertTrue(opts.five_to_six)
@@ -154,6 +155,7 @@ class TestMigration(SubManFixture):
         self.assertTrue(parser.has_option("--org"))
         self.assertTrue(parser.has_option("--environment"))
         self.assertTrue(parser.has_option("--force"))
+        self.assertTrue(parser.has_option("--activation-key"))
         (opts, args) = parser.parse_args([])
         migrate.set_defaults(opts, five_to_six_script=False)
         self.assertFalse(opts.five_to_six)
@@ -177,6 +179,12 @@ class TestMigration(SubManFixture):
         parser = OptionParser()
         migrate.add_parser_options(parser)
         (options, args) = parser.parse_args(["--no-auto", "--servicelevel", "foo"])
+        self.assertRaises(SystemExit, migrate.validate_options, (options))
+
+    def test_mutually_exclusive_activation_keys_and_environment(self):
+        parser = OptionParser()
+        migrate.add_parser_options(parser)
+        (options, args) = parser.parse_args(["--environment", "foo", "--activation-key", "bar"])
         self.assertRaises(SystemExit, migrate.validate_options, (options))
 
     @patch.object(rhsm.config.RhsmConfigParser, "get", autospec=True)
@@ -1054,11 +1062,11 @@ class TestMigration(SubManFixture):
             'register',
             '--username=foo',
             '--password=bar',
+            '--environment=env',
+            '--auto-attach',
             '--serverurl=http://example.com',
             '--org=org',
-            '--environment=env',
             '--consumerid=id',
-            '--auto-attach',
             '--servicelevel=y',
             ]
 
@@ -1082,11 +1090,33 @@ class TestMigration(SubManFixture):
             'register',
             '--username=foo',
             '--password=bar',
-            '--org=org',
             '--environment=env',
+            '--org=org',
             ]
 
         mock_subprocess.assert_called_once_with(arg_list)
+
+    @patch("subprocess.call", autospec=True)
+    def test_register_with_activation_keys(self, mock_subprocess):
+        self.engine.options = self.create_options(destination_url='foobar', activation_keys=['hello', 'world'])
+
+        credentials = MagicMock()
+        credentials.username = "foo"
+        credentials.password = "bar"
+
+        mock_subprocess.return_value = 0
+        self._inject_mock_valid_consumer()
+        self.engine.register(credentials, "org", "env")
+
+        arg_list = ['subscription-manager',
+            'register',
+            '--activationkey=hello',
+            '--activationkey=world',
+            '--serverurl=foobar',
+            '--org=org',
+            ]
+
+        mock_subprocess.assert_called_with(arg_list)
 
     @patch("subprocess.call", autospec=True)
     def test_register(self, mock_subprocess):
@@ -1104,10 +1134,10 @@ class TestMigration(SubManFixture):
             'register',
             '--username=foo',
             '--password=bar',
-            '--serverurl=foobar',
-            '--org=org',
             '--environment=env',
             '--auto-attach',
+            '--serverurl=foobar',
+            '--org=org',
             ]
 
         mock_subprocess.assert_called_with(arg_list)
