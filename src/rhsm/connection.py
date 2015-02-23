@@ -45,12 +45,33 @@ except ImportError:
 from rhsm import ourjson as json
 from rhsm.utils import get_env_proxy_info
 
-# on EL5, there is a really long socket timeout. The
-# best thing we can do is set a process wide default socket timeout.
-# Limit this to affected python versions only, just to minimize any
-# problems the default timeout might cause.
-if sys.version_info[0] == 2 and sys.version_info[0] <= 4:
-    socket.setdefaulttimeout(60)
+global_socket_timeout = 60
+timeout_altered = None
+
+
+def set_default_socket_timeout_if_python_2_3():
+    """If using python 2.3 set a global socket default timeout.
+
+    On EL5/python2.3, there is a really long socket timeout. The
+    best thing we can do is set a process wide default socket timeout.
+    Limit this to affected python versions only, just to minimize any
+    problems the default timeout might cause.
+
+    Return True if we change it.
+    """
+
+    global timeout_altered
+
+    # once per module instance should be plenty
+    if timeout_altered:
+        return timeout_altered
+
+    if sys.version_info[0] == 2 and sys.version_info[1] < 4:
+        socket.setdefaulttimeout(global_socket_timeout)
+        timeout_altered = True
+        return
+
+    timeout_altered = False
 
 
 class NullHandler(logging.Handler):
@@ -244,6 +265,8 @@ class ContentConnection(object):
         self.password = password
         self.ssl_verify_depth = ssl_verify_depth
 
+        self.timeout_altered = False
+
         # get the proxy information from the environment variable
         # if available
         info = get_env_proxy_info()
@@ -272,6 +295,8 @@ class ContentConnection(object):
             handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
         else:
             conn = httpslib.HTTPSConnection(self.host, safe_int(self.ssl_port), ssl_context=context)
+
+        set_default_socket_timeout_if_python_2_3()
 
         conn.request("GET", handler, body="", headers={"Host": "%s:%s" % (self.host, self.ssl_port), "Content-Length": "0"})
         response = conn.getresponse()
@@ -341,7 +366,6 @@ class Restlib(object):
     """
      A wrapper around httplib to make rest calls easier
     """
-
     def __init__(self, host, ssl_port, apihandler,
             username=None, password=None,
             proxy_hostname=None, proxy_port=None,
@@ -473,6 +497,10 @@ class Restlib(object):
         if body is None:
             headers = dict(self.headers.items() +
                            {"Content-Length": "0"}.items())
+
+        # NOTE: alters global timeout_altered (and socket timeout)
+        set_default_socket_timeout_if_python_2_3()
+
         try:
             conn.request(request_type, handler, body=body, headers=headers)
         except SSLError:
