@@ -46,7 +46,7 @@ CFLAGS ?= -g -Wall
 %.pyc: %.py
 	python -c "import py_compile; py_compile.compile('$<')"
 
-build:	set-versions rhsmcertd rhsm-icon
+build: set-versions rhsmcertd rhsm-icon
 
 # we never "remake" this makefile, so add a target so
 # we stop searching for implicit rules on how to remake it
@@ -563,7 +563,7 @@ install-pip-requirements:
 	@pip install -r test-requirements.txt
 
 .PHONY: jenkins
-jenkins: set-versions install-pip-requirements stylish stylish-harder coverage-jenkins
+jenkins: install-pip-requirements build stylish stylish-harder coverage-jenkins
 
 
 
