@@ -19,6 +19,7 @@ import logging
 import os
 import pprint
 import re
+import sys
 
 import signal
 import socket
@@ -170,6 +171,8 @@ def get_terminal_width():
     """
     Attempt to determine the current terminal size.
     """
+    if not sys.stdout.isatty():
+        return None
     dim = None
     try:
         def ioctl_gwinsz(fd):
