@@ -29,11 +29,11 @@ License: GPLv2
 
 # How to create the source tarball:
 #
-# git clone git://git.fedorahosted.org/git/subscription-manager.git/
+# git clone https://github.com/candlepin/subscription-manager.git
 # yum install tito
 # tito build --tag subscription-manager-$VERSION-$RELEASE --tgz
 Source0: %{name}-%{version}.tar.gz
-URL:     https://fedorahosted.org/subscription-manager/
+URL:     http://www.candlepinproject.org/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires:  python-ethtool
