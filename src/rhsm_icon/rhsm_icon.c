@@ -29,7 +29,7 @@
 #include <libnotify/notify.h>
 #include <dbus/dbus-glib.h>
 
-/* 
+/*
  * NOTIFY_CHECK_VERSION is only defined in libnotify versions that don't
  * support attaching to a status icon.
  *
@@ -76,14 +76,15 @@ static bool check_immediately = false;
 
 static GOptionEntry entries[] = {
 	{"check-period", 'c', 0, G_OPTION_ARG_INT, &check_period,
-	 N_("how often to check for validity (in seconds)"), NULL},
+	 N_("how often to check for validity (in seconds; default is one day)"), NULL},
 	{"debug", 'd', 0, G_OPTION_ARG_NONE, &debug,
 	 N_("show debug messages"), NULL},
 	{"force-icon", 'f', 0, G_OPTION_ARG_STRING, &force_icon,
 	 N_("force display of the icon (expired, partial or warning)"),
 	 "TYPE"},
 	{"check-immediately", 'i', 0, G_OPTION_ARG_NONE, &check_immediately,
-	 N_("run the first status check right away"), NULL},
+	 N_("run the first status check without delay "
+	    "(otherwise wait 4 minutes)"), NULL},
 	{NULL}
 };
 
