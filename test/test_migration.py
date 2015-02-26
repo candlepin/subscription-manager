@@ -187,6 +187,20 @@ class TestMigration(SubManFixture):
         (options, args) = parser.parse_args(["--environment", "foo", "--activation-key", "bar"])
         self.assertRaises(SystemExit, migrate.validate_options, (options))
 
+    def test_activation_keys_require_org(self):
+        parser = OptionParser()
+        migrate.add_parser_options(parser)
+        (options, args) = parser.parse_args(["--activation-key", "bar"])
+        self.assertRaises(SystemExit, migrate.validate_options, (options))
+
+    def test_activation_key_forbids_destination_credentials(self):
+        parser = OptionParser()
+        migrate.add_parser_options(parser)
+        (options, args) = parser.parse_args(["--activation-key", "bar", "--destination-user", "x"])
+        self.assertRaises(SystemExit, migrate.validate_options, (options))
+        (options, args) = parser.parse_args(["--activation-key", "bar", "--destination-password", "y"])
+        self.assertRaises(SystemExit, migrate.validate_options, (options))
+
     @patch.object(rhsm.config.RhsmConfigParser, "get", autospec=True)
     def test_is_hosted(self, mock_get):
         mock_get.return_value = "subscription.rhn.redhat.com"
@@ -497,18 +511,21 @@ class TestMigration(SubManFixture):
 
     def test_no_server_url_provided_basic_auth(self):
         expected, get_int_expected = self._setup_rhsmcfg_mocks()
-        self.engine.get_candlepin_basic_auth_connection("some_username", "some_password")
+        self.engine.get_candlepin_connection("some_username", "some_password")
         self.assertTrue(self.engine.rhsmcfg.get.call_args_list == expected)
         self.assertTrue(self.engine.rhsmcfg.get_int.call_args_list == get_int_expected)
 
     def test_bad_server_url_basic_auth(self):
-        try:
-            self.engine.options = self.create_options(destination_url='http://')
-            self.engine.get_candlepin_basic_auth_connection("some_username", "some_password")
-        except SystemExit, e:
-            self.assertEquals(e.code, -1)
-        else:
-            self.fail("No exception raised")
+        self.engine.options = self.create_options(destination_url='http://')
+        self.assertRaises(SystemExit,
+                self.engine.get_candlepin_connection,
+                "some_username",
+                "some_password")
+
+    def test_no_auth_connection_returned(self):
+        conn = self.engine.get_candlepin_connection(None, None)
+        self.assertEquals(None, conn.username)
+        self.assertEquals(None, conn.password)
 
     # default injected identity is "valid"
     def test_already_registered_to_rhsm(self):
@@ -517,7 +534,7 @@ class TestMigration(SubManFixture):
             five_to_six=False
         )
         with Capture() as c:
-            self.assertRaises(SystemExit, self.engine.check_ok_to_proceed, "some_name")
+            self.assertRaises(SystemExit, self.engine.check_ok_to_proceed)
             self.assertTrue("Red Hat Subscription Management" in c.err)
             self.assertTrue("access.redhat.com" in c.err)
 
@@ -527,14 +544,14 @@ class TestMigration(SubManFixture):
             five_to_six=True
         )
         with Capture() as c:
-            self.assertRaises(SystemExit, self.engine.check_ok_to_proceed, "some_name")
+            self.assertRaises(SystemExit, self.engine.check_ok_to_proceed)
             self.assertTrue("Satellite 6" in c.err)
 
     def test_ssl_error(self):
         self._inject_mock_invalid_consumer()
-        self.engine.cp.getOwnerList = MagicMock(side_effect=SSL.SSLError)
+        self.engine.cp.getStatus = MagicMock(side_effect=SSL.SSLError)
         try:
-            self.engine.check_ok_to_proceed("some_username")
+            self.engine.check_ok_to_proceed()
         except SystemExit, e:
             self.assertEquals(e.code, 1)
         else:
