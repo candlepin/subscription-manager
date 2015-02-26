@@ -10,7 +10,7 @@
 
 
 Name: python-rhsm
-Version: 1.14.1
+Version: 1.14.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -72,6 +72,10 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Feb 26 2015 Alex Wood <awood@redhat.com> 1.14.2-1
+- 1195446: Only set global socket timeout on RHEL 5. (alikins@redhat.com)
+- Cleanup up connection logging. (alikins@redhat.com)
+
 * Fri Feb 06 2015 Devan Goodwin <dgoodwin@rm-rf.ca> 1.14.1-1
 - 976855: build_py now populates version.py with ver (alikins@redhat.com)
 - 1187587: Correct project URL in spec file. (awood@redhat.com)
