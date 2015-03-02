@@ -193,8 +193,7 @@ class ComplianceManager(object):
         self.log_products()
 
     def log_products(self):
-        def fj(pids):
-            return utils.friendly_join(pids)
+        fj = utils.friendly_join
 
         log.info("Product status: valid_products=%s partial_products=%s expired_products=%s"
                  " unentitled_producs=%s future_products=%s valid_until=%s",
