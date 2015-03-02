@@ -233,11 +233,7 @@ class Hardware:
                                               '([\d.]+)'
                                               '\s*(?!\()(\S*)\s*'
                                               '[^(]*(?:\((.+)\))?')
-	    if os.path.exists('/etc/oracle-release'):
-                f = self._open_release('/etc/oracle-release')
-	    else:
-                f = self._open_release('/etc/redhat-release')
-
+            f = self._open_release('/etc/redhat-release')
             firstline = f.readline()
             f.close()
 
