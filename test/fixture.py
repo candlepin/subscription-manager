@@ -36,19 +36,19 @@ class FakeLogger:
         self.msg = None
         self.logged_exception = None
 
-    def debug(self, buf):
+    def debug(self, buf, *args, **kwargs):
         self.msg = buf
 
-    def error(self, buf):
+    def error(self, buf, *args, **kwargs):
         self.msg = buf
 
-    def exception(self, e):
+    def exception(self, e, *args, **kwargs):
         self.logged_exception = e
 
     def set_expected_msg(self, msg):
         self.expected_msg = msg
 
-    def info(self, buf):
+    def info(self, buf, *args, **kwargs):
         self.msg = buf
 
 
