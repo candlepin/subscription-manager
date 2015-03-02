@@ -27,7 +27,7 @@ class TestFormatTime(unittest.TestCase):
     @freeze_time("2013-9-14")  # During DST
     @patch('subscription_manager.managerlib.tzlocal')
     def test_system_dst(self, mock_tz):
-        mock_tz.return_value = tzstr('EST5EDT')
+        mock_tz.return_value = tzstr(u'EST5EDT')
         test = datetime(2014, 12, 21, 4, 59, 0, tzinfo=tzutc())
         self.assertEquals(managerlib.format_date(test), '12/20/2014')
         test = datetime(2014, 12, 21, 5, 0, 0, tzinfo=tzutc())
@@ -57,7 +57,7 @@ class TestFormatTime(unittest.TestCase):
     @freeze_time("2013-12-14")  # During EST
     @patch('subscription_manager.managerlib.tzlocal')
     def test_system_est(self, mock_tz):
-        mock_tz.return_value = tzstr('EST5EDT')
+        mock_tz.return_value = tzstr(u'EST5EDT')
         test = datetime(2014, 12, 21, 4, 59, 0, tzinfo=tzutc())
         self.assertEquals(managerlib.format_date(test), '12/20/2014')
         test = datetime(2014, 12, 21, 5, 0, 0, tzinfo=tzutc())
