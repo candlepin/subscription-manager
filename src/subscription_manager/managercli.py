@@ -326,7 +326,7 @@ class CliCommand(AbstractCLICommand):
 
     def is_registered(self):
         self.identity = inj.require(inj.IDENTITY)
-        log.info(self.identity.log_str())
+        log.info('%s', self.identity)
         return self.identity.is_valid()
 
     def persist_server_options(self):
