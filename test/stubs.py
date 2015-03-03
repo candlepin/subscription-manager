@@ -381,6 +381,8 @@ class StubUEP:
         self.called_unregister_uuid = None
         self.called_unbind_uuid = None
         self.called_unbind_serial = []
+        self.username = username
+        self.password = password
 
     def supports_resource(self, resource):
         return False

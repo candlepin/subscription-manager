@@ -164,7 +164,9 @@ class MigrationEngine(object):
         self.legacy_creds = self.authenticate(self.options.legacy_user, self.options.legacy_password,
             _("Legacy username: "), _("Legacy password: "))
 
-        if not self.is_hosted or self.options.destination_url:
+        if self.options.activation_keys:
+            self.destination_creds = UserCredentials(None, None)
+        elif not self.is_hosted or self.options.destination_url:
             self.destination_creds = self.authenticate(self.options.destination_user, self.options.destination_password,
                 _("Destination username: "), _("Destination password: "))
         else:
@@ -221,17 +223,18 @@ class MigrationEngine(object):
 
         return connection_info
 
-    def get_candlepin_basic_auth_connection(self, username, password):
+    def get_candlepin_connection(self, username, password):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
-
         connection_info = self._get_connection_info()
-
-        self.cp_provider.set_user_pass(username, password)
         self.cp_provider.set_connection_info(**connection_info)
 
-        return self.cp_provider.get_basic_auth_cp()
+        if username and password:
+            self.cp_provider.set_user_pass(username, password)
+            return self.cp_provider.get_basic_auth_cp()
 
-    def check_ok_to_proceed(self, username):
+        return self.cp_provider.get_no_auth_cp()
+
+    def check_ok_to_proceed(self):
         # check if this machine is already registered to Certicate-based RHN
         identity = inj.require(inj.IDENTITY)
         if identity.is_valid():
@@ -243,7 +246,7 @@ class MigrationEngine(object):
             system_exit(1, msgs)
 
         try:
-            self.cp.getOwnerList(username)
+            self.cp.getStatus()
         except SSLError, e:
             print _("The CA certificate for the destination server has not been installed.")
             system_exit(1, CONNECTION_FAILURE % e)
@@ -749,8 +752,8 @@ class MigrationEngine(object):
     def main(self, args=None):
         self.get_auth()
         self.transfer_http_proxy_settings()
-        self.cp = self.get_candlepin_basic_auth_connection(self.destination_creds.username, self.destination_creds.password)
-        self.check_ok_to_proceed(self.destination_creds.username)
+        self.cp = self.get_candlepin_connection(self.destination_creds.username, self.destination_creds.password)
+        self.check_ok_to_proceed()
 
         (rpc_session, session_key) = self.connect_to_rhn(self.legacy_creds)
         if self.options.five_to_six:
@@ -758,10 +761,11 @@ class MigrationEngine(object):
             org = None
             environment = None
         else:
-            org = self.get_org(self.destination_creds.username)
             if self.options.activation_keys:
                 environment = None
+                org = self.options.org
             else:
+                org = self.get_org(self.destination_creds.username)
                 environment = self.get_environment(org)
 
         # TODO Not sure this is necessary.  See BZ 1086367
@@ -837,8 +841,14 @@ def add_parser_options(parser, five_to_six_script=False):
 
 
 def validate_options(options):
-    if options.activation_keys and options.environment:
-        system_exit(1, _("The --activation-key and --environment options cannot be used together."))
+    if options.activation_keys:
+        if options.environment:
+            system_exit(1, _("The --activation-key and --environment options cannot be used together."))
+        if options.destination_user or options.destination_password:
+            system_exit(1, _("The --activation-key option precludes the use of --destination-user and --destination-password"))
+        if not options.org:
+            system_exit(1, _("The --activation-key option requires that a --org be given."))
+
     if options.service_level and not options.auto:
         # TODO Need to explain why this restriction exists.
         system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))

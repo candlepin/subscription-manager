@@ -11,7 +11,7 @@ _rhn-migrate-classic-to-rhsm()
 	first="${COMP_WORDS[1]}"
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
-	opts="-h --help --environment -f --force -n --no-auto --no-proxy --org -s --servicelevel --legacy-user --legacy-password --destination-url --destination-user --destination-password"
+	opts="-h --help --environment -f --force -n --no-auto --no-proxy --org -s --servicelevel --legacy-user --legacy-password --destination-url --destination-user --destination-password --activation-key"
 
 	case "${cur}" in
 		-*)
