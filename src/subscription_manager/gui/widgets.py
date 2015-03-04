@@ -49,6 +49,13 @@ EXPIRED_COLOR = '#FFAF99'
 warnings.filterwarnings(action="ignore",
                         category=Warning,
                         message=".*Whoever translated.*wrongly.")
+# Ignore warnings about "Attempt to add property * after class was initialised"
+# we get with glib2-2.40
+# See https://bugzilla.gnome.org/show_bug.cgi?id=698614 for why we can
+# ignore this warning (it was reverted in glib2-2.42 and later...)
+warnings.filterwarnings(action="ignore",
+                        category=Warning,
+                        message=".*ttempt to add property.*after class.*")
 
 
 class GladeWidget(object):
