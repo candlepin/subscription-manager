@@ -265,6 +265,8 @@ class CliCommand(AbstractCLICommand):
     def __init__(self, name="cli", shortdesc=None, primary=False):
         AbstractCLICommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
 
+        self.log = self._get_logger()
+
         if self.require_connection():
             self._add_proxy_options()
 
@@ -290,6 +292,9 @@ class CliCommand(AbstractCLICommand):
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
 
         self.identity = inj.require(inj.IDENTITY)
+
+    def _get_logger(self):
+        return logging.getLogger('rhsm-app.%s.%s' % (self.__module__, self.__class__.__name__))
 
     def _request_validity_check(self):
         # Make sure the sorter is fresh (low footprint if it is)
@@ -321,7 +326,7 @@ class CliCommand(AbstractCLICommand):
 
     def is_registered(self):
         self.identity = inj.require(inj.IDENTITY)
-        log.info("self.identity: %s" % self.identity)
+        log.info('%s', self.identity)
         return self.identity.is_valid()
 
     def persist_server_options(self):
@@ -1405,6 +1410,7 @@ class AttachCommand(CliCommand):
                                help=_("service level to apply to this system, requires --auto"))
         self.parser.add_option("--file", dest="file",
                                 help=_("A file from which to read pool IDs. If a hyphen is provided, pool IDs will be read from stdin."))
+
         # re bz #864207
         _("All installed products are covered by valid entitlements.")
         _("No need to update subscriptions at this time.")
@@ -1735,6 +1741,7 @@ class FactsCommand(CliCommand):
             except connection.RestlibException, re:
                 log.exception(re)
                 system_exit(os.EX_SOFTWARE, re.msg)
+            log.info("Succesfully updated the system facts.")
             print _("Successfully updated the system facts.")
 
 

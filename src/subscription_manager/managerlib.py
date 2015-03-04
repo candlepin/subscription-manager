@@ -825,7 +825,7 @@ def clean_all_data(backup=True):
         shutil.rmtree(consumer_dir_backup, ignore_errors=True)
 
         # Copy current consumer dir:
-        log.info("Backing up %s to %s." % (consumer_dir, consumer_dir_backup))
+        log.debug("Backing up %s to %s.", consumer_dir, consumer_dir_backup)
         shutil.copytree(consumer_dir, consumer_dir_backup)
 
 # FIXME FIXME

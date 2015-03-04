@@ -18,6 +18,8 @@ import sys
 LOG_LEVEL = logging.DEBUG
 
 # if we should use the syslog handler
+# TODO: we could use syslog by default, and override to
+#       log file if configured.
 USE_SYSLOG = False
 
 # we setup logging before setting up config, so we

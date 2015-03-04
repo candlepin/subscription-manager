@@ -212,7 +212,7 @@ class NetworkConfigDialog:
         # connection through the proxy was successful.
         except (connection.RemoteServerException,
                 connection.RestlibException) as e:
-            log.info("Reporting proxy connection as good despite %s" %
+            log.warn("Reporting proxy connection as good despite %s" %
              e)
             return True
         except connection.NetworkException, e:

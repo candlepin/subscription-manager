@@ -1010,7 +1010,7 @@ class ChooseServerScreen(Screen):
                               self._parent.window)
             return self._parent.error_screen()
 
-        log.info("Writing server data to rhsm.conf")
+        log.debug("Writing server data to rhsm.conf")
         CFG.save()
         self._backend.update()
         if self.activation_key_checkbox.get_active():
@@ -1120,7 +1120,7 @@ class AsyncBackend(object):
         """
         try:
             if not current_sla:
-                log.info("Saving selected service level for this system.")
+                log.debug("Saving selected service level for this system.")
                 self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(uuid,
                         service_level=dry_run_result.service_level)
 
@@ -1129,7 +1129,7 @@ class AsyncBackend(object):
             for pool_quantity in dry_run_result.json:
                 pool_id = pool_quantity['pool']['id']
                 quantity = pool_quantity['quantity']
-                log.info("  pool %s quantity %s" % (pool_id, quantity))
+                log.debug("  pool %s quantity %s" % (pool_id, quantity))
                 self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid,
                                         pool_id=pool_id, quantity=quantity)
                 ents = self.backend.cp_provider.get_consumer_auth_cp().bindByEntitlementPool(uuid, pool_id, quantity)
@@ -1303,7 +1303,7 @@ class InfoScreen(Screen):
             log.debug("Proceeding with registration.")
             return CHOOSE_SERVER_PAGE
         else:
-            log.info("Skipping registration.")
+            log.debug("Skipping registration.")
             return FINISH
 
     def post(self):

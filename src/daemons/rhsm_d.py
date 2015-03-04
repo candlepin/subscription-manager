@@ -151,7 +151,7 @@ class StatusChecker(dbus.service.Object):
         dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus',
         signature='i')
     def entitlement_status_changed(self, status_code):
-        log.info("D-Bus signal com.redhat.SubscriptionManager.EntitlementStatus.entitlement_status_changed emitted")
+        log.debug("D-Bus signal com.redhat.SubscriptionManager.EntitlementStatus.entitlement_status_changed emitted")
         debug("signal fired! code is " + str(status_code))
 
     #this is so we can guarantee exit after the dbus stuff is done, since
@@ -168,7 +168,7 @@ class StatusChecker(dbus.service.Object):
         returns: 0 if entitlements are valid, 1 if not valid,
                  2 if close to expiry
         """
-        log.info("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.check_status called")
+        log.debug("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.check_status called")
         ret = check_status(self.force_signal)
         if (ret != self.last_status):
             debug("Validity status changed, fire signal")
@@ -183,7 +183,7 @@ class StatusChecker(dbus.service.Object):
             dbus_interface="com.redhat.SubscriptionManager.EntitlementStatus",
             in_signature='i')
     def update_status(self, status):
-        log.info("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.update_status called with status = %s" % status)
+        log.debug("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.update_status called with status = %s" % status)
         pre_result = pre_check_status(self.force_signal)
         if pre_result is not None:
             status = pre_result
@@ -198,7 +198,7 @@ class StatusChecker(dbus.service.Object):
             dbus_interface="com.redhat.SubscriptionManager.EntitlementStatus",
             in_signature='')
     def emit_status(self):
-        log.info("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.emit_status called ")
+        log.debug("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.emit_status called ")
         self._dbus_properties = refresh_compliance_status(self._dbus_properties)
         # this code assumes that all properties change
         changes = self._dbus_properties
@@ -215,7 +215,7 @@ class StatusChecker(dbus.service.Object):
             dbus_interface=dbus.PROPERTIES_IFACE,
             in_signature="ss", out_signature="v")
     def Get(self, interface_name, property_name):
-        log.info("Get(%s, %s) called", interface_name, property_name)
+        log.debug("Get(%s, %s) called", interface_name, property_name)
         refresh_compliance_status(self._dbus_properties)
         if self._dbus_properties.has_key(property_name):
             return self.GetAll(interface_name)[property_name]
@@ -225,7 +225,7 @@ class StatusChecker(dbus.service.Object):
             dbus_interface=dbus.PROPERTIES_IFACE,
             in_signature="s", out_signature="a{sv}")
     def GetAll(self, interface_name):
-        log.info("GetAll(%s) called", interface_name)
+        log.debug("GetAll(%s) called", interface_name)
         refresh_compliance_status(self._dbus_properties)
         if interface_name == self.INTERFACE_NAME:
             return self._dbus_properties
@@ -236,7 +236,7 @@ class StatusChecker(dbus.service.Object):
             dbus_interface=dbus.PROPERTIES_IFACE,
             in_signature="ssv")
     def Set(self, interface_name, property_name, new_value):
-        log.info("Set(%s) called", interface_name)
+        log.debug("Set(%s) called", interface_name)
         raise dbus.exceptions.DBusException("All SubscriptionManager properties are read-only")
 
 

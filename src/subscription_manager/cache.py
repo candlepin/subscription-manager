@@ -83,7 +83,7 @@ class CacheManager(object):
     def delete_cache(cls):
         """ Delete the cache for this collection from disk. """
         if os.path.exists(cls.CACHE_FILE):
-            log.info("Deleting cache: %s" % cls.CACHE_FILE)
+            log.debug("Deleting cache: %s" % cls.CACHE_FILE)
             os.remove(cls.CACHE_FILE)
 
     def _cache_exists(self):
@@ -135,9 +135,9 @@ class CacheManager(object):
         """
         Check if data has changed, and push an update if so.
         """
-        log.info("Checking current system info against cache: %s" % self.CACHE_FILE)
+        log.debug("Checking current system info against cache: %s" % self.CACHE_FILE)
         if self.has_changed() or force:
-            log.info("System data has changed, updating server.")
+            log.debug("System data has changed, updating server.")
             try:
                 self._sync_with_server(uep, consumer_uuid)
                 self.write_cache()
@@ -152,7 +152,7 @@ class CacheManager(object):
                 raise Exception(_("Error updating system data on the server, see /var/log/rhsm/rhsm.log "
                         "for more details."))
         else:
-            log.info("No changes.")
+            log.debug("No changes.")
             return 0  # No updates performed.
 
 
@@ -389,7 +389,7 @@ class ProfileManager(CacheManager):
 
     def has_changed(self):
         if not self._cache_exists():
-            log.info("Cache does not exist")
+            log.debug("Cache does not exist")
             return True
 
         cached_profile = self._read_cache()
@@ -437,7 +437,7 @@ class InstalledProductsManager(CacheManager):
 
     def has_changed(self):
         if not self._cache_exists():
-            log.info("Cache does not exist")
+            log.debug("Cache does not exist")
             return True
 
         cached = self._read_cache()

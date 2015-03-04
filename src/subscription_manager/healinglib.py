@@ -79,10 +79,10 @@ class HealingUpdateAction(object):
             return 0
 
         try:
-            log.info("Checking if system requires healing.")
 
             today = datetime.datetime.now(certificate.GMT())
             tomorrow = today + datetime.timedelta(days=1)
+            valid_today = False
 
             # Check if we're invalid today and heal if so. If we are
             # valid, see if 24h from now is greater than our "valid until"
@@ -104,8 +104,7 @@ class HealingUpdateAction(object):
                 # hmm, we use RLock, maybe we could use it here
                 self.report = cert_updater.update()
             else:
-                log.info("Entitlements are valid for today: %s" %
-                        today)
+                valid_today = True
 
                 if cs.compliant_until is None:
                     # Edge case here, not even sure this can happen as we
@@ -121,8 +120,14 @@ class HealingUpdateAction(object):
                                             entitlement_data=ents)
                     self.report = cert_updater.update()
                 else:
-                    log.info("Entitlements are valid for tomorrow: %s" %
-                            tomorrow)
+                    valid_tomorrow = True
+
+            msg = "Entitlement auto healing was checked and entitlements"
+            if valid_today:
+                msg += " are valid today %s" % today
+                if valid_tomorrow:
+                    msg += " and tomorrow %s" % tomorrow
+            log.info(msg)
 
         except Exception, e:
             log.error("Error attempting to auto-heal:")
@@ -130,5 +135,5 @@ class HealingUpdateAction(object):
             self.report._exceptions.append(e)
             return self.report
         else:
-            log.info("Auto-heal check complete.")
+            log.debug("Auto-heal check complete.")
             return self.report

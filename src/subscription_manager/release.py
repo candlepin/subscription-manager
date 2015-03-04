@@ -93,7 +93,7 @@ class CdnReleaseVersionProvider(object):
                     release_product = product
 
         if release_product is None:
-            log.info("No products with RHEL product tags found")
+            log.debug("No products with RHEL product tags found")
             return []
 
         entitlements = self.entitlement_dir.list_for_product(release_product.id)
@@ -184,5 +184,5 @@ class CdnReleaseVersionProvider(object):
                         return True
                     # else, we don't match, keep looking
 
-        log.info("No matching products with RHEL product tags found")
+        log.debug("No matching products with RHEL product tags found")
         return False
