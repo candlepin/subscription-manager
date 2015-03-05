@@ -9,104 +9,20 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
+import ConfigParser
 import logging
 import logging.handlers
+import logging.config
 import os
 import sys
 
-# default log level
-LOG_LEVEL = logging.DEBUG
-
-# if we should use the syslog handler
-# TODO: we could use syslog by default, and override to
-#       log file if configured.
-USE_SYSLOG = False
-
-# we setup logging before setting up config, so we
-# don't try to get them out of the config module.
-RHSM_LOG = '/var/log/rhsm/rhsm.log'
-CERT_LOG = '/var/log/rhsm/rhsmcertd.log'
-
-handler = None
-stdout_handler = None
-
-LOG_FORMAT = u'%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d ' \
-              '@%(filename)s:%(lineno)d - %(message)s'
-
-
-DEBUG_LOG_FORMAT = u'%(asctime)s [%(name)s %(levelname)s] ' \
-                    '%(cmd_name)s(%(process)d):%(threadName)s ' \
-                    '@%(filename)s:%(funcName)s:%(lineno)d - %(message)s'
-
-# syslog handles the time and cmd_name
-SYSLOG_FORMAT = u'[%(levelname)s] ' \
-                '@%(filename)s:%(lineno)d - %(message)s'
-
-
-def _get_log_file_path():
-    path = RHSM_LOG
-    try:
-        if not os.path.isdir("/var/log/rhsm"):
-            os.mkdir("/var/log/rhsm")
-    except EnvironmentError:
-        # ignore failures to create log dir
-        # /var/log may be read-only in rhel5 anaconda and
-        # we don't want to break anaconda
-        # see https://bugzilla.redhat.com/show_bug.cgi?id=670973#c54
-        pass
-    return path
-
-
-def _get_handler():
-    # we only need one global handler
-    global handler
-    if handler is not None:
-        return handler
-
-    # Try to write to /var/log, fallback on console logging:
-    try:
-        if USE_SYSLOG:
-            handler = _get_syslog_handler()
-        else:
-            handler = _get_rotating_handler()
-    except IOError:
-        handler = logging.StreamHandler()
-    except Exception:
-        handler = logging.StreamHandler()
-
-    handler.setLevel(LOG_LEVEL)
-    handler.addFilter(ContextLoggingFilter(name=""))
-
-    return handler
-
-
-def _get_rotating_handler():
-    path = _get_log_file_path()
-    handler = logging.handlers.RotatingFileHandler(path, maxBytes=0x100000,
-                                                   backupCount=5, encoding='utf-8')
-    handler.setFormatter(logging.Formatter(LOG_FORMAT))
-    return handler
-
-
-def _get_stdout_handler():
-    global stdout_handler
-    if stdout_handler is not None:
-        return stdout_handler
-
-    handler = logging.StreamHandler()
-    handler.addFilter(ContextLoggingFilter(name=""))
-
-    return handler
-
-
-def _get_syslog_handler():
-    handler = logging.handlers.SysLogHandler(address="/dev/log")
-    handler.setFormatter(logging.Formatter(SYSLOG_FORMAT))
-    return handler
+LOGGING_CONFIG = "/etc/rhsm/logging.conf"
+LOGFILE_PATH = "/var/log/rhsm/rhsm.log"
 
 
 # Don't need this for syslog
 class ContextLoggingFilter(object):
+    """Find the name of the process as 'cmd_name'"""
     current_cmd = os.path.basename(sys.argv[0])
     cmd_line = ' '.join(sys.argv)
 
@@ -121,6 +37,44 @@ class ContextLoggingFilter(object):
         return True
 
 
+class SubmanDebugLoggingFilter(object):
+    """Filter all log records unless env SUBMAN_DEBUG exists
+
+    Used to turn on stdout logging for cli debugging."""
+
+    def __init__(self, name):
+        self.name = name
+        self.on = 'SUBMAN_DEBUG' in os.environ
+
+    def filter(self, record):
+        return self.on
+
+
+# NOTE: python 2.6 and earlier versions of the logging module
+#       defined the log handlers as old style classes. In order
+#       to use super(), we also inherit from 'object'
+class RHSMLogHandler(logging.handlers.RotatingFileHandler, object):
+    """Logging Handler for /var/log/rhsm/rhsm.log"""
+    def __init__(self, *args, **kwargs):
+        try:
+            super(RHSMLogHandler, self).__init__(*args, **kwargs)
+        # fallback to stdout if we can't open our logger
+        except Exception:
+            logging.StreamHandler.__init__(self)
+        self.addFilter(ContextLoggingFilter(name=""))
+
+
+class SubmanDebugHandler(logging.StreamHandler, object):
+    """Logging Handler for cli debugging.
+
+    This handler only emits records if SUBMAN_DEBUG exists in os.environ."""
+
+    def __init__(self, *args, **kwargs):
+        super(SubmanDebugHandler, self).__init__(*args, **kwargs)
+        self.addFilter(ContextLoggingFilter(name=""))
+        self.addFilter(SubmanDebugLoggingFilter(name=""))
+
+
 # Note: this only does anything for python 2.6+, if the
 # logging module has 'captureWarnings'. Otherwise it will not
 # be triggered.
@@ -128,8 +82,8 @@ class PyWarningsLoggingFilter(object):
     """Add a prefix to the messages from py.warnings.
 
     To help distinquish log messages from python and pygtk 'warnings',
-    while avoiding changing the log format.
-    """
+    while avoiding changing the log format."""
+
     label = "py.warnings:"
 
     def __init__(self, name):
@@ -140,39 +94,48 @@ class PyWarningsLoggingFilter(object):
         return True
 
 
+class PyWarningsLogger(logging.getLoggerClass()):
+    """Logger for py.warnings for use in file based logging config."""
+    level = logging.WARNING
+
+    def __init__(self, name):
+        super(PyWarningsLogger, self).__init__(name)
+
+        self.setLevel(self.level)
+        self.addFilter(PyWarningsLoggingFilter(name="py.warnings"))
+
+
+def file_config(logging_config):
+    """Load logging config from the file logging_config and setup logging."""
+
+    # NOTE: without disable_existing_loggers, this would have to
+    # be close to the first thing ran. Any loggers created after
+    # that are disabled. This likely includes module level loggers
+    # like all of ours.
+    try:
+        logging.config.fileConfig(logging_config,
+                                  defaults={'logfilepath': LOGFILE_PATH},
+                                  disable_existing_loggers=False)
+    except ConfigParser.Error, e:
+        # If the log config file doesn't exist, or is empty, we end up
+        # with ConfigParser errors.
+
+        # TODO: fallback default logger?
+        print e
+
+
 def init_logger():
+    """Load logging config file and setup logging.
 
-    handler = _get_handler()
+    Only needs to be called once per process."""
 
-    logging.getLogger("subscription_manager").setLevel(LOG_LEVEL)
-    logging.getLogger("rhsm").setLevel(LOG_LEVEL)
-
-    # log python and pygtk "warnings" sent here by logging.captureWarnings
-    logging.getLogger("py.warnings").setLevel(logging.WARNING)
-    logging.getLogger("py.warnings").addFilter(PyWarningsLoggingFilter(name="py.warnings"))
-
-    # FIXME: remove 'rhsm-app' when we rename all the loggers
-    logging.getLogger("rhsm-app").setLevel(LOG_LEVEL)
-
-    logging.getLogger("subscription_manager").addHandler(_get_handler())
-    logging.getLogger("rhsm").addHandler(_get_handler())
-    logging.getLogger("py.warnings").addHandler(_get_handler())
-
-    # FIXME: remove
-    logging.getLogger("rhsm-app").addHandler(_get_handler())
-
-    # dump logs to stdout, and (re)set log level
-    # to DEBUG
-    if 'SUBMAN_DEBUG' in os.environ:
-        handler = _get_stdout_handler()
-
-        handler.setFormatter(logging.Formatter(DEBUG_LOG_FORMAT))
-        logging.getLogger().setLevel(logging.DEBUG)
-        logging.getLogger().addHandler(handler)
+    file_config(logging_config=LOGGING_CONFIG)
 
 
 def init_logger_for_yum():
     init_logger()
+
+    # TODO: switch this to reference /etc/rhsm/yum_logging.conf
 
     # Don't send log records up to yum/yum plugin conduit loggers
     logging.getLogger("subscription_manager").propagate = False
