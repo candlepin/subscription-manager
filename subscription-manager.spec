@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.14.1
+Version: 1.14.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -485,6 +485,39 @@ fi
 %endif
 
 %changelog
+* Mon Mar 09 2015 Alex Wood <awood@redhat.com> 1.14.2-1
+- Move to fileConfig based logging. (alikins@redhat.com)
+- Ignore glib warnings about class properties. (alikins@redhat.com)
+- log level updates, mostly info->debug. (alikins@redhat.com)
+- Condense virt fact logging to one info level entry. (alikins@redhat.com)
+- Log to info when we update facts. (alikins@redhat.com)
+- Change branding 'nothing-happened' logs to debug. (alikins@redhat.com)
+- Condense cert_sorter logged info. (alikins@redhat.com)
+- Change most cache related log msgs to debug level. (alikins@redhat.com)
+- Make D-Bus related log entries debug level. (alikins@redhat.com)
+- Change heal logging to be more concise. (alikins@redhat.com)
+- Add log friendy str version of Identity (alikins@redhat.com)
+- 1133647: Fix messageWindow deprecation warning. (alikins@redhat.com)
+- 1183382: Fix test case to work with dateutil 2. (alikins@redhat.com)
+- Revert "Added check for /etc/oracle-release in hwprobe" (alikins@redhat.com)
+- 1196416: Migration should not need credentials with activation keys
+  (awood@redhat.com)
+- 1196385: Add --activation-key option to migration man page.
+  (awood@redhat.com)
+- 1196418: Add bash completion for --activation-key in migration.
+  (awood@redhat.com)
+- Update spec to point to github / new project website. (dgoodwin@redhat.com)
+- Quiet "Whoever translated calendar*" warnings. (alikins@redhat.com)
+- Stop 'recently-used.xbel' warnings, disable mru (alikins@redhat.com)
+- 1154375: Allow use of activation keys during migration. (awood@redhat.com)
+- 1191237: Fix proxy "test connection" in firstboot. (alikins@redhat.com)
+- 1191237: Make proxy config "save" work in firstboot. (alikins@redhat.com)
+- 1191241: Handle network starting after subman does. (alikins@redhat.com)
+- 1145077, disabled column wrapping during redirects (jmolet@redhat.com)
+- Add syslog logging handler. (alikins@redhat.com)
+- 1191237: Fix problems exitting firstboot on errors (alikins@redhat.com)
+- 1163398, fixing rhsm-icon --help descriptions (jmolet@redhat.com)
+
 * Fri Feb 06 2015 Devan Goodwin <dgoodwin@rm-rf.ca> 1.14.1-1
 - 976855: populate a "version.py" at build time (alikins@redhat.com)
 - Fixed typo in subscription-manager-gui (crog@redhat.com)
