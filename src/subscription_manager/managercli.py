@@ -1003,6 +1003,11 @@ class RegisterCommand(UserPassCommand):
         Executes the command.
         """
 
+        log.debug("HEY LOGGER, %s", "I like cheese",
+                  extra={'cheese': 'yes,please',
+                         'SYSLOG_IDENTIFIER': 'my-cool-rhsm-app',
+                         'some_number': 2344523452345})
+
         self.log_client_version()
 
         # Always warn the user if registered to old RHN/Spacewalk

@@ -6,7 +6,13 @@ PYTHON ?= python
 INSTALL_DIR = usr/share
 INSTALL_MODULE = rhsm
 PKGNAME = subscription_manager
-CODE_DIR = $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
+ANACONDA_ADDON_NAME = com_redhat_subscription_manager
+
+# where most of our python modules live. Note this is not on
+# the default python system path. If you are importing modules from here, and
+# you can't commit to this repo, you should feel bad and stop doing that.
+PYTHON_INST_DIR = $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
+
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
 BIN_DIR := bin/
@@ -14,21 +20,40 @@ BIN_FILES := $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui
 			 $(BIN_DIR)/rhn-migrate-classic-to-rhsm \
 			 $(BIN_DIR)/rct \
 			 $(BIN_DIR)/rhsm-debug
-SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
 
-RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
-RHSM_PLUGIN_CONF_DIR := $(PREFIX)/etc/rhsm/pluginconf.d/
-
+# Where various bits of code live in the git repo
 BASE_SRC_DIR := src
 SRC_DIR := $(BASE_SRC_DIR)/subscription_manager
-RCT_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
 RCT_SRC_DIR := $(BASE_SRC_DIR)/rct
-RD_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
 RD_SRC_DIR := $(BASE_SRC_DIR)/rhsm_debug
 RHSM_ICON_SRC_DIR := $(BASE_SRC_DIR)/rhsm_icon
 DAEMONS_SRC_DIR := $(BASE_SRC_DIR)/daemons
 EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
 CONTENT_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/content_plugins/
+ANACONDA_ADDON_SRC_DIR := $(SRC_DIR)/gui/initial-setup
+ANACONDA_ADDON_MODULE_SRC_DIR := $(ANACONDA_ADDON_SRC_DIR)/$(ANACONDA_ADDON_NAME)
+
+# dirs we install to
+SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
+RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
+RHSM_PLUGIN_CONF_DIR := $(PREFIX)/etc/rhsm/pluginconf.d/
+ANACONDA_ADDON_INST_DIR := /usr/share/anaconda/addons/
+INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
+RCT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
+RD_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
+
+ANACONDA_ADDON_SRC_DIR := $(BASE_SRC_DIR)/initial-setup
+ANACONDA_ADDON_MODULE_SRC_DIR := $(ANACONDA_ADDON_SRC_DIR)/$(ANACONDA_ADDON_NAME)
+
+# dirs we install to 
+SUBMAN_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
+SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
+RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
+RHSM_PLUGIN_CONF_DIR := $(PREFIX)/etc/rhsm/pluginconf.d/
+ANACONDA_ADDON_INST_DIR := $(PREFIX)/usr/share/anaconda/addons/
+INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
+RCT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
+RD_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
 
 # If we skip install ostree plugin, unset by default
 # override from spec file for rhel6
@@ -191,6 +216,23 @@ install-example-plugins-conf:
 	install -d $(RHSM_PLUGIN_CONF_DIR)
 	install -m 644 -p $(EXAMPLE_PLUGINS_SRC_DIR)/*.conf $(RHSM_PLUGIN_CONF_DIR)
 
+# initial-setup, as in the 'initial-setup' rpm that runs at first boot.
+install-initial-setup:
+	install -d $(ANACONDA_ADDON_INST_DIR)
+	install -d $(INITIAL_SETUP_INST_DIR)
+	install -d $(INITIAL_SETUP_INST_DIR)/gui
+	install -d $(INITIAL_SETUP_INST_DIR)/gui/spokes
+	# This dir moves between rhel7 and fedora20
+	install -d $(INITIAL_SETUP_INST_DIR)/gui/categories
+	install -d $(INITIAL_SETUP_INST_DIR)/ks
+
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/*.py $(INITIAL_SETUP_INST_DIR)/
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/*.py $(INITIAL_SETUP_INST_DIR)/gui/
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/categories/*.py $(INITIAL_SETUP_INST_DIR)/gui/categories/
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/spokes/*.py $(INITIAL_SETUP_INST_DIR)/gui/spokes/
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/spokes/*.glade $(INITIAL_SETUP_INST_DIR)/gui/spokes/
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/ks/*.py $(INITIAL_SETUP_INST_DIR)/ks/
+
 .PHONY: install
 install: install-files install-po install-conf install-help-files install-plugins-conf
 
@@ -205,14 +247,16 @@ clean-versions:
 install-po: compile-po
 	cp -R po/build/* $(PREFIX)/$(INSTALL_DIR)/locale/
 
-install-files: set-versions dbus-service-install compile-po desktop-files install-plugins install-ga
-	install -d $(CODE_DIR)/gui/data/icons
-	install -d $(CODE_DIR)/branding
-	install -d $(CODE_DIR)/model
-	install -d $(CODE_DIR)/migrate
-	install -d $(CODE_DIR)/plugin
-	install -d $(CODE_DIR)/plugin/ostree
-
+install-files: set-versions dbus-service-install compile-po desktop-files install-plugins install-initial-setup
+	install -d $(PYTHON_INST_DIR)/gui
+	install -d $(PYTHON_INST_DIR)/gui/data/icons
+	install -d $(PYTHON_INST_DIR)/branding
+	install -d $(PYTHON_INST_DIR)/model
+	install -d $(PYTHON_INST_DIR)/migrate
+	install -d $(PYTHON_INST_DIR)/plugin
+	install -d $(PYTHON_INST_DIR)/plugin/ostree
+	install -d $(PYTHON_INST_DIR)/plugin
+	install -d $(PYTHON_INST_DIR)/plugin/ostree
 	install -d $(PREFIX)/$(INSTALL_DIR)/locale/
 	install -d $(PREFIX)/usr/lib/yum-plugins/
 	install -d $(PREFIX)/usr/sbin
@@ -258,20 +302,20 @@ install-files: set-versions dbus-service-install compile-po desktop-files instal
 		$(PREFIX)/usr/libexec/rhsmcertd-worker
 
 
-	install -m 644 -p $(SRC_DIR)/*.py $(CODE_DIR)
-	install -m 644 -p $(SRC_DIR)/gui/*.py $(CODE_DIR)/gui
-	install -m 644 -p $(SRC_DIR)/migrate/*.py $(CODE_DIR)/migrate
-	install -m 644 -p $(SRC_DIR)/branding/*.py $(CODE_DIR)/branding
-	install -m 644 -p $(SRC_DIR)/model/*.py $(CODE_DIR)/model
-	install -m 644 -p $(SRC_DIR)/plugin/*.py $(CODE_DIR)/plugin
+	install -m 644 -p $(SRC_DIR)/*.py $(PYTHON_INST_DIR)/
+	install -m 644 -p $(SRC_DIR)/gui/*.py $(PYTHON_INST_DIR)/gui
+	install -m 644 -p $(SRC_DIR)/migrate/*.py $(PYTHON_INST_DIR)/migrate
+	install -m 644 -p $(SRC_DIR)/branding/*.py $(PYTHON_INST_DIR)/branding
+	install -m 644 -p $(SRC_DIR)/model/*.py $(PYTHON_INST_DIR)/model
+	install -m 644 -p $(SRC_DIR)/plugin/*.py $(PYTHON_INST_DIR)/plugin
 	install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/
 
 	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager-gui
 
-	install -m 644 $(SRC_DIR)/gui/data/*.glade $(CODE_DIR)/gui/data/
+	install -m 644 $(SRC_DIR)/gui/data/*.glade $(SUBMAN_INST_DIR)/gui/data/
 
 	if [ "$(INSTALL_OSTREE_PLUGIN)" = "true" ] ; then \
-		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(CODE_DIR)/plugin/ostree ; \
+		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(SUBMAN_INST_DIR)/plugin/ostree ; \
 	fi
 
 	#icons
@@ -292,7 +336,7 @@ install-files: set-versions dbus-service-install compile-po desktop-files instal
 	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/scalable/apps/*.svg \
 		$(PREFIX)/usr/share/icons/hicolor/scalable/apps
 	install -m 644 $(SRC_DIR)/gui/data/icons/*.svg \
-		$(CODE_DIR)/gui/data/icons
+		$(SUBMAN_INST_DIR)/gui/data/icons
 
 	install bin/subscription-manager $(PREFIX)/usr/sbin
 	install bin/rhn-migrate-classic-to-rhsm  $(PREFIX)/usr/sbin
@@ -363,12 +407,12 @@ install-files: set-versions dbus-service-install compile-po desktop-files instal
 	install -m 644 etc-conf/subscription-manager.console \
 		$(PREFIX)/etc/security/console.apps/subscription-manager
 
-	install -d $(RCT_CODE_DIR)
-	install -m 644 -p $(RCT_SRC_DIR)/*.py $(RCT_CODE_DIR)
+	install -d $(RCT_INST_DIR)
+	install -m 644 -p $(RCT_SRC_DIR)/*.py $(RCT_INST_DIR)
 	install bin/rct $(PREFIX)/usr/bin
 
-	install -d $(RD_CODE_DIR)
-	install -m 644 -p $(RD_SRC_DIR)/*.py $(RD_CODE_DIR)
+	install -d $(RD_INST_DIR)
+	install -m 644 -p $(RD_SRC_DIR)/*.py $(RD_INST_DIR)
 	install bin/rhsm-debug $(PREFIX)/usr/bin
 
 

@@ -178,6 +178,15 @@ Requires: librsvg2
 %description -n subscription-manager-firstboot
 This package contains the firstboot screens for subscription-manager.
 
+%package -n subscription-manager-initial-setup-addon
+Summary: initial-setup screens for subscription-manager
+Group: System Environment/Base
+Requires: %{name} = %{version}-%{release}
+Requires: initial-setup
+
+%description -n subscription-manager-initial-setup-addon
+This package contains the initial-setup screens for subscription-manager.
+
 %package -n subscription-manager-migration
 Summary: Migration scripts for moving to certificate based subscriptions
 Group: System Environment/Base
@@ -415,6 +424,20 @@ rm -rf %{buildroot}
 %else
 %{_datadir}/firstboot/modules/rhsm_login.py*
 %endif
+
+%files -n subscription-manager-initial-setup-addon
+%defattr(-,root,root,-)
+%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/
+%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/
+%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/
+%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/categories/
+%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/*.py*
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/*.py*
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.glade
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.py*
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/categories/*.py*
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/*.py*
 
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)

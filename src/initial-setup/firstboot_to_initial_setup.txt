@@ -1,0 +1,195 @@
+
+RHEL7 firstboot migration
+
+General
+=======
+
+Firstboot has been replaced with "initial setup".
+https://github.com/rhinstaller/initial-setup
+(rhel7-branch)
+
+initial-setup runs on firstboot, and can use data
+collected in anaconda to do configuration. install-setup
+modules are based on anaconda addons.
+
+
+The Bad
+=======
+
+
+pygtk/gtk compatability:
+
+    subscription-manager-gui is based on pygtk2.
+    initial-setup is based on pygtk3 and gobject-introspection.
+
+    They are not particular compatible, and shouldn't be used
+    in the same process. ie, we need to port the gui to pygtk3,
+    or write new pygtk3 based gui for initial setup.
+
+libglade -> GtkBuilder:
+
+    A subset of gtk compat, but we have to port the ui that
+    uses gtk.glade to gtk.GtkBuilder.
+
+    The api's are similar, but the glade files are not quite
+    compatible, so that means branching them or providing multiple
+    versions.
+
+    There are also a few kluges for gtk.glade that we should be
+    able to remove, mostly related to being able to import sub
+    sections of glade files. And better support for TreeView
+
+gui flow:
+
+    initial-setup is based on a hub and spoke gui flow, which
+    is different from the "wizard" approach of previous firstboot
+    modules.
+
+    TBD: if we can adapt to this approach. In a lot of ways,
+    initial-setup seems to expect 'one screen modules', much
+    like firstboot. And that for multiple stage gui flows, that
+    the order is fairly linear.
+
+tui/script support:
+
+    Generally initial-setup modules are meant to gather some
+    info, and then basically add it to a kickstart file to be
+    ran in one go.
+
+    Depending on the level of ui sophistication we want, this
+    might be difficult.
+
+needs to be as async as possible
+
+    pygtk3 and anaconda both work best if the networking tools
+    are non-blocking and async. The current python-rhsm module
+    is not at all, though gui.managerui.AsyncBackend is part
+    way there, although by using a thread model instead of
+    an event driven model.
+
+    How much this is a requirement is unknown, though the
+    flow in and out of 'spokes' is important (a spoke shouldn't
+    block the app, as it would prevent returning to the hub...)
+
+Submodules
+==========
+This module has various related git repos included as submodules.
+Those include:
+  anaconda from  git@github.com:rhinstaller/anaconda.git
+  initial-setup from git@github.com:rhinstaller/initial-setup.git
+
+ some addons:
+  hello-world-anaconda-addon from git@github.com:vpodzime/hello-world-anaconda-addon.git
+  kdump-anaconda-addon from git@github.com:daveyoung/kdump-anaconda-addon.git
+  oscap-anaconda-addon from https://git.fedorahosted.org/git/oscap-anaconda-addon.git
+  anaconda-realmd from https://git.fedorahosted.org/git/anaconda-realmd.git
+
+
+The Plan
+========
+
+Anaconda docs suggest getting the "ks" ui portion working first, since
+the other ui modules provide data to it.
+
+Then tui/gui.
+
+
+Source Code Layout
+==================
+
+Addon modules are installed onto the system at:
+
+    /usr/share/anaconda/addons/
+
+Each addon needs to create a dir there using reverse domain snake style
+name (see
+https://vpodzime.fedorapeople.org/anaconda-addon-development-guide/#section_kickstart_support).
+
+For example, for us:
+
+    com_redhat_rhsm/
+
+Inside our addon dir, we need:
+    com_redhat_rhsm/
+                ks/
+                tui/
+                  spokes/
+                gui/
+                  spokes/
+
+Addon modules
+=============
+
+The modules in those directories are introspected to find anaconda base
+clases (which must be added to modules __all__ list).
+
+For the 'ks' modules, that means the AddonData class:
+
+    from pyanaconda.addons import AddonData
+
+That class represents the data that will can come from a kickstart file.
+The class also knows how to parse the kickstart data for the addon and
+act on it.
+
+The spokes module classes can expose a setup() and an execute().
+execute is called to apply the changes after the install/setup
+transaction.
+
+For gui spokes, the base class is:
+
+    from pyanaconda.ui.gui.spokes import NormalSpoke
+
+Running initial-setup for test/dev
+==================================
+
+WARNING WARNING WARNING:
+
+With the default version of initial setup, if it launches into tui mode,
+
+DO NOT EXIT WITHOUT AGREEING TO THE LICENSE TERMS. IT WILL REBOOT YOUR
+SYSTEM.
+
+
+It will reboot.
+
+To defang, you can edit /usr/lib/python2.7/site-packages/initial_setup/__main__.py
+and comment out the 'os.reboot' line after "EULA not accepted, leaving Initial Setup enabled and rebooting the system"
+
+
+initial-setup is a pretty picky about it's setup. To test gui mode you
+need:
+
+* DISPLAY env var set to a display it has access to.
+
+
+Misc design notes
+=================
+
+Based on previous firstboot code, etc.
+
+* DO NOT MULTIPLE INHERIT ANYTHING
+
+* DO NOT ATTEMPT TO MAKE ONE CLASS MATCH THE API OF TWO DIFFERENT INCOMPATIBLE CLASSES
+
+* DO NOT OVERLOAD STATE TRANSITIONS
+
+* DO NOT ATTEMPT TO SUPPORT MULTIPLE RHEL VERSIONS WITH THE SAME VERSION OF THE CODE
+
+* DO NOT ATTEMPT TO INHERIT CLASSES AND TO INHERIT MULTIPLE PARENT WIDGETS
+
+* DO NOT INVENT ANOTHER INHERITANCE PARADIGM BASED ON ACCUMULATING TO A
+  LIST OF WIDGETS
+
+* DO NOT OVERRIDE ASYNC METHODS WITH SYNC METHODS IN SUBCLASSES
+
+
+Links
+=====
+
+https://fedoraproject.org/wiki/Features/NewFirstboot
+https://fedoraproject.org/wiki/Anaconda/Contribute#initial_setup - Notes
+on dev setup for anaconda/initial-setup.
+
+* USEFUL *
+https://github.com/vpodzime/anaconda-addon-development-guide/
+https://vpodzime.fedorapeople.org/anaconda-addon-development-guide/
