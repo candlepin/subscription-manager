@@ -21,6 +21,7 @@ import time
 import warnings
 
 from gi.repository import GObject
+from gi.repository import Gtk
 import gtk
 import pango
 
@@ -543,7 +544,7 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
 
         # FIXME
-        self.start_end_date_text.modify_base(gtk.STATE_NORMAL, self.original_bg)
+        #self.start_end_date_text.modify_base(gtk.STATE_NORMAL, self.original_bg)
         # FIXME
 
 
@@ -617,7 +618,7 @@ class DatePicker(gtk.HBox):
         """
         gtk.HBox.__init__(self)
 
-        image = gtk.image_new_from_icon_name('x-office-calendar', gtk.ICON_SIZE_MENU)
+        image = Gtk.Image.new_from_icon_name('x-office-calendar', Gtk.IconSize.MENU)
         image.show()
 
         # set the timezone so we can sent it to the server
