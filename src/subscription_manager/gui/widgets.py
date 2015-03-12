@@ -20,8 +20,8 @@ import os
 import time
 import warnings
 
+from gi.repository import GObject
 import gtk
-import gobject
 import pango
 
 
@@ -563,12 +563,12 @@ class CellRendererDate(gtk.CellRendererText):
     """
 
     __gproperties__ = {
-            'date': (gobject.TYPE_PYOBJECT, 'date', 'date displayed',
-                gobject.PARAM_READWRITE)
+            'date': (GObject.TYPE_PYOBJECT, 'date', 'date displayed',
+                GObject.PARAM_READWRITE)
     }
 
     def __init__(self):
-        self.__gobject_init__()
+        GObject.GObject.__init__(self)
 
     def do_set_property(self, prop, value):
         """
@@ -588,8 +588,8 @@ class CellRendererDate(gtk.CellRendererText):
 class DatePicker(gtk.HBox):
 
     __gsignals__ = {
-            'date-picked-cal': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, tuple()),
-            'date-picked-text': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, tuple())
+            'date-picked-cal': (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, tuple()),
+            'date-picked-text': (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, tuple())
     }
 
     def __init__(self, date):
