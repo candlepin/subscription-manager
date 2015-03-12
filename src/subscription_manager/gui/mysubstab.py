@@ -335,8 +335,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         entry['installed_text'] = '%s / %s' % (len(installed), len(products))
         entry['start_date'] = cert.valid_range.begin()
         entry['expiration_date'] = cert.valid_range.end()
-        entry['quantity'] = order.quantity_used
-        entry['serial'] = cert.serial
+        entry['quantity'] = str(order.quantity_used)
+        entry['serial'] = str(cert.serial)
         entry['align'] = 0.5         # Center horizontally
         entry['background'] = None
         entry['is_group_row'] = False
