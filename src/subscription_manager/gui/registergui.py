@@ -283,7 +283,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
             self._screens.append(screen)
             if screen.needs_gui:
                 screen.index = self.register_notebook.append_page(
-                        screen.container)
+                        screen.container, tab_label=None)
 
         self._current_screen = CHOOSE_SERVER_PAGE
 
