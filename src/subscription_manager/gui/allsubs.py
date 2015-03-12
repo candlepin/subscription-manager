@@ -106,8 +106,13 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.edit_quantity_label.set_label(quantity_column.get_column_legend_text())
 
+
+
+        # FIXME: Likely a correct way to do this now, so stub this out now
         # Ensure all cells are colored according the the store.
-        set_background_model_index(self.top_view, self.store['background'])
+        #set_background_model_index(self.top_view, self.store['background'])
+        # FIXME
+
 
         self.top_view.connect("row_activated",
                               widgets.expand_collapse_on_row_activated_callback)
