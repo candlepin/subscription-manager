@@ -14,11 +14,14 @@
 #
 
 import gtk
+import logging
 
 
 class MappedStore(object):
     def __init__(self, type_map):
         self.type_index = {}
+        self.log = logging.getLogger('rhsm-app.' + __name__ +
+                                     self.__class__.__name__)
 
         # Enumerate the keys and store the int index
         for i, type_key in enumerate(type_map.iterkeys()):
@@ -33,6 +36,8 @@ class MappedStore(object):
         entry = [None] * self.get_n_columns()
 
         for key, value in item_map.iteritems():
+            self.log.debug("create_initial_entry key=%s, value=%s",
+                           key, value)
             entry[self[key]] = value
         return entry
 
@@ -72,6 +77,9 @@ class MappedListStore(MappedStore, gtk.ListStore):
 
 class MappedTreeStore(MappedStore, gtk.TreeStore):
     def __init__(self, type_map):
+        self.log = logging.getLogger('rhsm-app.' + __name__ +
+                                     self.__class__.__name__)
+        self.log.debug("MappedTreeStore type_map=%s", type_map)
         MappedStore.__init__(self, type_map)
         # Use the types from the map to call the parent constructor
         gtk.TreeStore.__init__(self, *type_map.values())
