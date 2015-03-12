@@ -123,8 +123,127 @@ def reset_resolver():
 
 class RegisterScreen(widgets.GladeWidget):
     """
-      Registration Widget Screen
+    Registration Widget Screen
+
+    RegisterScreen is the parent widget of registration screens, and
+    also the base class of the firstboot rhsm_module.
+
+    RegisterScreen has a list of Screen subclasses.
+
+    Screen subclasses can be Screen, NonGuiScreen, or GuiScreen
+    classes. Only GuiScreen classes are user visible. NonGuiScreen
+    and subclasses are use for state transitions (a betweeb screens
+    check for pools, for example)
+
+    The rhsmModule.apply() runs RegisterScreen.register().
+    RegisterScreen.register runs the current screens .apply().
+
+    A Screen.apply() will return the index of the next screen that
+    should be invoked (which may be a different screen, the same screen,
+    or the special numbers for DONT_CHANGE and FINISH.
+
+    In firstboot, calling the firstboot modules .apply() results in calling
+    rhsm_module.moduleClass.apply() which calls the first Screen.apply()
+    (also self._current_screen).
+
+    After the Screen.apply(), RegisterScreen.register checks it's return
+    for DONT_CHANGE or FINISH.
+
+    If the apply returns a screen index, then the Screen.post() is called.
+    The return value is ignored.
+
+    Then RegisterScreen.register calls RegisterScreen.run_pre() on the
+    screen index that the current_screen .apply() returned(Ie, the
+    next screen).
+
+    run_pre() checks that it's arg (the result of above apply(), what
+    is still currently the next screen) is not DONT_CHANGE/FINISH.
+
+    If not, then it calls self._set_screen() whichs updates
+    self._current_screen to point to the next screen.
+
+    run_pre() then calls the new current_screens's .pre()
+
+    .register()
+        next_screen = current_screen.apply()
+        current_screen.post()
+        RegisterScreen.run_pre(next_screen)
+        RegisterScreen._set_screen(next_screen)
+            current_screen = next_screen
+
+            Then if current_screen is a gui screen, the visible
+            gui will update with the new widgets.
+
+        The new current_screen has its pre() method invoked. pre()
+        methods may return an Async representing that a request
+        has been called and a callback registered. If that's the case,
+        then RegisterScreen._set_screen() sets the current screen
+        to a progress screen.
+
+    The return value of RegisterScreen.run_pre() is ignored, and
+    RegisterScreen.register() returns False.
+
+    This returns to rhsm_login.apply(), where valid_registration is
+    set to the return value. valid_registration=True indicates a
+    succesful registration
+
+    If valid_registration=True, we are basically done with registeration.
+    But rhsm_login can't return from apply() yet, since that could
+    potential lead to firstboot ending if it's the last or only module.
+
+    gtk main loop iterations are run, mostly to let any threads finish
+    up and any idle loop thread watchers to dry up.
+
+    The return value of rhsm_login.apply() at this point is actualy
+    the _apply_result instance variable. Register Screens() are expected
+    to set this by calling their _a_ finish_registration() method. For
+    subscription-manager-gui that means RegisterScreen.finish_registration,
+    usually access as a Screens() self._parent.finish_registration.
+
+    For firstboot screens, self._parent will be rhsm_module.moduleClass
+    (also a subclass of RegisterScreen).
+
+    rhsm_module.finish_registration() will check the "failed" boolean,
+    and either return to a Screen() (CredentialsPage, atm). Or if
+    failed=True, it will also call RegisterScreen.finish_registration(),
+    that closes the gui window.
+
+    The UI flow is a result of the order of RegisterScreen._screens,
+    and the screen indexes returned by Screen.apply().
+
+    But, between the Screen activity call also change the flow, most
+    notably the results of any async calls and callbacks invoked from
+    the screens .pre()
+
+    A common case is the async callbacks error handling calling
+    self._parent.finish_registration(failed=True)
+
+    The async callback can also call RegisterScreen.pre_done() to send the
+    UI to a different screen. RHSM api call results that indicate multiple
+    choices for a sub would send flow to a chooseSub GuiScreen vs a
+    NonGuiScreen for attaching a sub, for example.
+
+    RegisterScreen.run_pre schedules async jobs, they get queued, and
+    wait for their callbacks. The callbacks then can use pre_done()
+    to finish the tasks the run_pre started. Typicaly the UI will
+    see the Progress screens in the meantime.
+
+    If going to screen requires an async task, run_pre starts it by
+    calling the new screens pre(), setting that screen to current (_set_screen),
+    and then setting the GuiScreen to the progress screens. Screen
+    transitions that don't need async tasks just return nothing from
+    their pre() and go to the next screen in the order in self._screens.
+
+    Note the the flow of firstboot through multiple modules is driven
+    by the return value of rhsm_login.apply(). firstboot itself maintains
+    a list of modules and a an ordered list of them. True goes to the
+    next screen, False stays. Except for RHEL6, where it is the opposite.
+
+    As of RHEL7.0+, none of that matters much, since rhsm_login is the
+    only module in firstboot.
+
     """
+
     widget_names = ['register_dialog', 'register_notebook',
                     'register_progressbar', 'register_details_label',
                     'cancel_button', 'register_button', 'progress_label']
