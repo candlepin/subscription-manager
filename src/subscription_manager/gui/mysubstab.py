@@ -377,7 +377,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         return installed_products
 
-    def _update_progress_renderer(self, column, cell_renderer, tree_model, tree_iter):
+    def _update_progress_renderer(self, column, cell_renderer, tree_model, tree_iter, data=None):
         hide_progress = tree_model.get_value(tree_iter, self.store['is_group_row'])
         background_color = tree_model.get_value(tree_iter, self.store['background'])
 
