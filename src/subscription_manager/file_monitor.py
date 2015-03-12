@@ -19,7 +19,8 @@ Watch for and be notified of changes in a file.
 Perfers to use gio as the backend, but can fallback to polling.
 """
 
-import gobject
+from gi.repository import GObject
+from gi.repository import GLib
 import os
 
 import rhsm.config
@@ -55,15 +56,16 @@ class MonitorDirectory(object):
         return result
 
 
-class Monitor(gobject.GObject):
+class Monitor(GObject.GObject):
 
     __gsignals__ = {
-        'changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-            (gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN))
+        'changed': (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE,
+            (GObject.TYPE_BOOLEAN, GObject.TYPE_BOOLEAN, GObject.TYPE_BOOLEAN))
     }
 
     def __init__(self):
-        self.__gobject_init__()
+        #self.__gobject_init__()
+        GObject.GObject.__init__(self)
         cfg = rhsm.config.initConfig()
         # Identity, Entitlements, Products
         self.dirs = [MonitorDirectory(cfg.get('rhsm', 'consumerCertDir')),
@@ -71,7 +73,7 @@ class Monitor(gobject.GObject):
                 MonitorDirectory(cfg.get('rhsm', 'productCertDir'))]
 
         # poll every 2 seconds for changes
-        gobject.timeout_add(2000, self.run_check)
+        GLib.timeout_add(2000, self.run_check)
 
     def run_check(self):
         result = [directory.update() for directory in self.dirs]

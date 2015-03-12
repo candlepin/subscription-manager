@@ -45,17 +45,19 @@ _ = gettext.gettext
 # stderr and log them.
 # Additional warnings filters are in gui/widgets.py
 
+log = logging.getLogger("rhsm-app.subscription-manager-gui")
+
 try:
     # python 2.7+ only
     logging.captureWarnings(True)
 except AttributeError:
     pass
 
-try:
-    import gtk
-except RuntimeError, e:
-    print _("Unable to open a display")
-    sys.exit(1)
+#try:
+#    import gtk
+#except RuntimeError, e:
+#    print _("Unable to open a display")
+#    sys.exit(1)
 
 # Since the location of these def's keeps moving, hardcoded them here as per the spec
 # see http://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-names
@@ -74,6 +76,11 @@ REQUEST_NAME_REPLY_ALREADY_OWNER = 4
 # in rhel7. So for rhel5, we conditionally import dbus_bindings
 # use bus_request_name, otherwise we use the newer bus.request_name
 
+from gi import pygtkcompat
+pygtkcompat.enable()
+pygtkcompat.enable_gtk(version='3.0')
+
+import gtk
 
 def _request_name_rhel5(bus, bus_name):
     return dbus.dbus_bindings.bus_request_name(bus.get_connection(), bus_name.get_name())
@@ -131,6 +138,8 @@ try:
     from subscription_manager.i18n_optparse import OptionParser, \
         WrappedIndentedHelpFormatter, USAGE
 except ImportError, e:
+    log.exception(e)
+    raise
     system_exit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
 
@@ -211,4 +220,5 @@ if __name__ == '__main__':
         system_exit(0, "\nUser interrupted process.")
     except Exception, e:
         log.exception(e)
+        raise
         system_exit(1, e)
