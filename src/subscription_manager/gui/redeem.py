@@ -25,16 +25,17 @@ _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class RedeemDialog(widgets.GladeWidget):
+class RedeemDialog(widgets.SubmanBaseWidget):
     """GTK dialog for allowing the user to redeem any subscriptions
     associated with this machine.
     """
     widget_names = ['redeem_dialog', 'email_entry']
+    gui_file = "redeem.glade"
 
     def __init__(self, backend):
-        super(RedeemDialog, self).__init__('redeem.glade')
+        super(RedeemDialog, self).__init__()
 
-        self.glade.signal_autoconnect({
+        self.connect_signals({
             "on_redeem_dialog_delete_event": self._hide_callback,
             "on_cancel_button_clicked": self._hide_callback,
             "on_redeem_button_clicked": self._redeem,

@@ -169,10 +169,10 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
 
 class ManuallySubscribeScreen(registergui.Screen):
     widget_names = registergui.Screen.widget_names + ['title']
+    gui_file = "manually_subscribe.glade"
 
     def __init__(self, parent, backend):
-        super(ManuallySubscribeScreen, self).__init__(
-                "manually_subscribe.glade", parent, backend)
+        super(ManuallySubscribeScreen, self).__init__(parent, backend)
 
         self.button_label = _("Finish")
 
@@ -370,7 +370,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         glade file.
         """
         self.vbox = gtk.VBox(spacing=10)
-        self.register_dialog = self.glade.get_widget("dialog-vbox6")
+        self.register_dialog = self.get_widget("dialog-vbox6")
         self.register_dialog.reparent(self.vbox)
 
         # Get rid of the 'register' and 'cancel' buttons, as we are going to
@@ -413,7 +413,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         See gtk.Widget.destroy()
         """
-        widget = self.glade.get_widget(widget_name)
+        widget = self.get_object(widget_name)
         widget.destroy()
 
     def _set_navigation_sensitive(self, sensitive):
@@ -454,7 +454,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         Return the text value of an input widget referenced
         by name.
         """
-        widget = self.glade.get_widget(widget_name)
+        widget = self.get_object(widget_name)
         return widget.get_text()
 
     def _set_register_label(self, screen):

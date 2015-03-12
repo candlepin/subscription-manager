@@ -53,7 +53,7 @@ class MessageWindow(gobject.GObject):
     }
 
     def __init__(self, text, parent=None, title=None):
-        gobject.GObject.__init__(self)
+        self.__gobject_init__()
         self.rc = None
 
         # this seems to be wordwrapping text passed to

@@ -27,7 +27,7 @@ _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class SystemFactsDialog(widgets.GladeWidget):
+class SystemFactsDialog(widgets.SubmanBaseWidget):
     """GTK dialog for displaying the current system facts, as well as
     providing functionality to update the UEP server with the current
     system facts.
@@ -36,16 +36,17 @@ class SystemFactsDialog(widgets.GladeWidget):
                     'last_update_label', 'owner_label', 'owner_title',
                     'environment_label', 'environment_title',
                     'system_id_label', 'system_id_title']
+    gui_file = "factsdialog.glade"
 
     def __init__(self, facts):
 
-        super(SystemFactsDialog, self).__init__('factsdialog.glade')
+        super(SystemFactsDialog, self).__init__()
 
         #self.consumer = consumer
         self.identity = inj.require(inj.IDENTITY)
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.facts = facts
-        self.glade.signal_autoconnect({
+        self.connect_signals({
                 "on_system_facts_dialog_delete_event": self._hide_callback,
                 "on_close_button_clicked": self._hide_callback,
                 "on_facts_update_button_clicked": self._update_facts_callback

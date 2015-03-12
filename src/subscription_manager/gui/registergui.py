@@ -25,7 +25,6 @@ import threading
 
 import gobject
 import gtk
-import gtk.glade
 
 import rhsm.config as config
 from rhsm.utils import ServerUrlParseError
@@ -52,9 +51,9 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 
 gettext.textdomain("rhsm")
 
-gtk.glade.bindtextdomain("rhsm")
+#gtk.glade.bindtextdomain("rhsm")
 
-gtk.glade.textdomain("rhsm")
+#gtk.glade.textdomain("rhsm")
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -121,7 +120,7 @@ def reset_resolver():
         pass
 
 
-class RegisterScreen(widgets.GladeWidget):
+class RegisterScreen(widgets.SubmanBaseWidget):
     """
     Registration Widget Screen
 
@@ -247,12 +246,13 @@ class RegisterScreen(widgets.GladeWidget):
     widget_names = ['register_dialog', 'register_notebook',
                     'register_progressbar', 'register_details_label',
                     'cancel_button', 'register_button', 'progress_label']
+    gui_file = "registration.glade"
 
     def __init__(self, backend, facts=None, parent=None, callbacks=None):
         """
         Callbacks will be executed when registration status changes.
         """
-        widgets.GladeWidget.__init__(self, "registration.glade")
+        super(RegisterScreen, self).__init__()
 
         self.backend = backend
         self.identity = require(IDENTITY)
@@ -262,12 +262,11 @@ class RegisterScreen(widgets.GladeWidget):
 
         self.async = AsyncBackend(self.backend)
 
-        dic = {"on_register_cancel_button_clicked": self.cancel,
-               "on_register_button_clicked": self._on_register_button_clicked,
-               "hide": self.cancel,
-               "on_register_dialog_delete_event": self._delete_event,
-            }
-        self.glade.signal_autoconnect(dic)
+        callbacks = {"on_register_cancel_button_clicked": self.cancel,
+                     "on_register_button_clicked": self._on_register_button_clicked,
+                     "hide": self.cancel,
+                     "on_register_dialog_delete_event": self._delete_event}
+        self.connect_signals(callbacks)
 
         self.window = self.register_dialog
         self.register_dialog.set_transient_for(self.parent)
@@ -441,11 +440,12 @@ class AutobindWizard(RegisterScreen):
         self._run_pre(SELECT_SLA_PAGE)
 
 
-class Screen(widgets.GladeWidget):
-    widget_names = widgets.GladeWidget.widget_names + ['container']
+class Screen(widgets.SubmanBaseWidget):
+    widget_names = ['container']
+    gui_file = None
 
-    def __init__(self, glade_file, parent, backend):
-        super(Screen, self).__init__(glade_file)
+    def __init__(self, parent, backend):
+        super(Screen, self).__init__()
 
         self.pre_message = ""
         self.button_label = _("Register")
@@ -559,10 +559,11 @@ class ConfirmSubscriptionsScreen(Screen):
     widget_names = Screen.widget_names + ['subs_treeview', 'back_button',
                                           'sla_label']
 
+    gui_file = "confirmsubs.glade"
+
     def __init__(self, parent, backend):
 
-        super(ConfirmSubscriptionsScreen, self).__init__("confirmsubs.glade",
-                                                         parent,
+        super(ConfirmSubscriptionsScreen, self).__init__(parent,
                                                          backend)
         self.button_label = _("Attach")
 
@@ -601,8 +602,8 @@ class ConfirmSubscriptionsScreen(Screen):
 
         for pool_quantity in self._dry_run_result.json:
             self.store.append([pool_quantity['pool']['productName'],
-                PoolWrapper(pool_quantity['pool']).is_virt_only(),
-                pool_quantity['quantity']])
+                              PoolWrapper(pool_quantity['pool']).is_virt_only(),
+                              str(pool_quantity['quantity'])])
 
     def pre(self):
         self.set_model()
@@ -617,10 +618,10 @@ class SelectSLAScreen(Screen):
     widget_names = Screen.widget_names + ['product_list_label',
                                           'sla_radio_container',
                                           'owner_treeview']
+    gui_file = "selectsla.glade"
 
     def __init__(self, parent, backend):
-        super(SelectSLAScreen, self).__init__("selectsla.glade",
-                                               parent, backend)
+        super(SelectSLAScreen, self).__init__(parent, backend)
 
         self.pre_message = _("Finding suitable service levels")
         self.button_label = _("Next")
@@ -747,10 +748,10 @@ class SelectSLAScreen(Screen):
 
 class EnvironmentScreen(Screen):
     widget_names = Screen.widget_names + ['environment_treeview']
+    gui_file = "environment.glade"
 
     def __init__(self, parent, backend):
-        super(EnvironmentScreen, self).__init__("environment.glade",
-                                                 parent, backend)
+        super(EnvironmentScreen, self).__init__(parent, backend)
 
         self.pre_message = _("Fetching list of possible environments")
         renderer = gtk.CellRendererText()
@@ -804,10 +805,10 @@ class EnvironmentScreen(Screen):
 
 class OrganizationScreen(Screen):
     widget_names = Screen.widget_names + ['owner_treeview']
+    gui_file = "organization.glade"
 
     def __init__(self, parent, backend):
-        super(OrganizationScreen, self).__init__("organization.glade",
-                                                  parent, backend)
+        super(OrganizationScreen, self).__init__(parent, backend)
 
         self.pre_message = _("Fetching list of possible organizations")
 
@@ -870,22 +871,22 @@ class OrganizationScreen(Screen):
 
 class CredentialsScreen(Screen):
     widget_names = Screen.widget_names + ['skip_auto_bind', 'consumer_name',
-                                          'account_login', 'account_password']
+                                          'account_login', 'account_password',
+                                          'registration_tip_label',
+                                          'registration_header_label']
+
+    gui_file = "credentials.glade"
 
     def __init__(self, parent, backend):
-        super(CredentialsScreen, self).__init__("credentials.glade",
-                                                 parent, backend)
+        super(CredentialsScreen, self).__init__(parent, backend)
 
         self._initialize_consumer_name()
 
-        register_tip_label = self.glade.get_widget("registration_tip_label")
-        register_tip_label.set_label("<small>%s</small>" %
-                                     get_branding().GUI_FORGOT_LOGIN_TIP)
+        self.registration_tip_label.set_label("<small>%s</small>" %
+                                          get_branding().GUI_FORGOT_LOGIN_TIP)
 
-        register_header_label = \
-                self.glade.get_widget("registration_header_label")
-        register_header_label.set_label("<b>%s</b>" %
-                                        get_branding().GUI_REGISTRATION_HEADER)
+        self.registration_header_label.set_label("<b>%s</b>" %
+                                             get_branding().GUI_REGISTRATION_HEADER)
 
     def _initialize_consumer_name(self):
         if not self.consumer_name.get_text():
@@ -952,10 +953,10 @@ class ActivationKeyScreen(Screen):
                 'organization_entry',
                 'consumer_entry',
         ]
+    gui_file = "activation_key.glade"
 
     def __init__(self, parent, backend):
-        super(ActivationKeyScreen, self).__init__("activation_key.glade",
-                                                    parent, backend)
+        super(ActivationKeyScreen, self).__init__(parent, backend)
         self._initialize_consumer_name()
 
     def _initialize_consumer_name(self):
@@ -1039,19 +1040,14 @@ class RefreshSubscriptionsScreen(NoGuiScreen):
 
 
 class ChooseServerScreen(Screen):
-    # STYLE ME
-    widget_names = Screen.widget_names + [
-                'server_entry',
-                'proxy_frame',
-                'default_button',
-                'choose_server_label',
-                'activation_key_checkbox',
-        ]
+    widget_names = Screen.widget_names + ['server_entry', 'proxy_frame',
+                                          'default_button', 'choose_server_label',
+                                          'activation_key_checkbox']
+    gui_file = "choose_server.glade"
 
     def __init__(self, parent, backend):
 
-        super(ChooseServerScreen, self).__init__("choose_server.glade",
-                                                 parent, backend)
+        super(ChooseServerScreen, self).__init__(parent, backend)
 
         self.button_label = _("Next")
 
@@ -1060,7 +1056,8 @@ class ChooseServerScreen(Screen):
                 "on_proxy_button_clicked": self._on_proxy_button_clicked,
                 "on_server_entry_changed": self._on_server_entry_changed,
             }
-        self.glade.signal_autoconnect(callbacks)
+
+        self.connect_signals(callbacks)
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
 
@@ -1401,10 +1398,10 @@ class InfoScreen(Screen):
                 'skip_radio',
                 'why_register_dialog'
         ]
+    gui_file = "registration_info.glade"
 
     def __init__(self, parent, backend):
-        super(InfoScreen, self).__init__(
-                "registration_info.glade", parent, backend)
+        super(InfoScreen, self).__init__(parent, backend)
         self.button_label = _("Next")
         callbacks = {
                 "on_why_register_button_clicked":
@@ -1412,7 +1409,9 @@ class InfoScreen(Screen):
                 "on_back_to_reg_button_clicked":
                     self._on_back_to_reg_button_clicked
             }
-        self.glade.signal_autoconnect(callbacks)
+
+        # FIXME: self.conntect_signals to wrap self.gui.connect_signals
+        self.connect_signals(callbacks)
 
     def pre(self):
         return False

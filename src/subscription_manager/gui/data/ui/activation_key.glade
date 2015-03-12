@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
-<glade-interface>
+<interface>
   <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
-  <widget class="GtkVBox" id="container">
+  <object class="GtkVBox" id="container">
     <property name="visible">True</property>
     <child>
-      <widget class="GtkLabel" id="label1">
+      <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
         <property name="xalign">0</property>
         <property name="yalign">0.10000000149011612</property>
         <property name="label" translatable="yes">&lt;b&gt;Please enter the following for this system:&lt;/b&gt;</property>
         <property name="use_markup">True</property>
-      </widget>
+      </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">False</property>
@@ -19,15 +19,15 @@
       </packing>
     </child>
     <child>
-      <widget class="GtkTable" id="table1">
+      <object class="GtkTable" id="table1">
         <property name="visible">True</property>
         <property name="n_rows">3</property>
         <property name="n_columns">2</property>
         <child>
-          <widget class="GtkLabel" id="label2">
+          <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="label" translatable="yes">Organization:</property>
-          </widget>
+          </object>
           <packing>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options">GTK_FILL</property>
@@ -36,10 +36,10 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="label3">
+          <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="label" translatable="yes">Activation Key:</property>
-          </widget>
+          </object>
           <packing>
             <property name="top_attach">1</property>
             <property name="bottom_attach">2</property>
@@ -50,10 +50,10 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="label4">
+          <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="label" translatable="yes">System Name:</property>
-          </widget>
+          </object>
           <packing>
             <property name="top_attach">2</property>
             <property name="bottom_attach">3</property>
@@ -64,30 +64,34 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkEntry" id="organization_entry">
+          <object class="GtkEntry" id="organization_entry">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="tooltip" translatable="yes">This must be the organization key, not the name.</property>
+            <property name="tooltip-text" translatable="yes">This must be the organization key, not the name.</property>
             <property name="invisible_char">&#x25CF;</property>
-            <accessibility>
-              <atkproperty name="AtkObject::accessible-name" translatable="yes">organization_entry</atkproperty>
-            </accessibility>
-          </widget>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="a11y-organization_entry1">
+                <property name="AtkObject::accessible-name" translatable="yes">organization_entry</property>
+              </object>
+            </child>
+          </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkEntry" id="activation_key_entry">
+          <object class="GtkEntry" id="activation_key_entry">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="tooltip" translatable="yes">Multiple Activation Keys can be entered by separating them with a comma or a space.</property>
+            <property name="tooltip-text" translatable="yes">Multiple Activation Keys can be entered by separating them with a comma or a space.</property>
             <property name="invisible_char">&#x25CF;</property>
-            <accessibility>
-              <atkproperty name="AtkObject::accessible-name" translatable="yes">activation_key_entry</atkproperty>
-            </accessibility>
-          </widget>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="a11y-activation_key_entry1">
+                <property name="AtkObject::accessible-name" translatable="yes">activation_key_entry</property>
+              </object>
+            </child>
+          </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
@@ -96,14 +100,16 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkEntry" id="consumer_entry">
+          <object class="GtkEntry" id="consumer_entry">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="invisible_char">&#x25CF;</property>
-            <accessibility>
-              <atkproperty name="AtkObject::accessible-name" translatable="yes">consumer_entry</atkproperty>
-            </accessibility>
-          </widget>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="a11y-consumer_entry1">
+                <property name="AtkObject::accessible-name" translatable="yes">consumer_entry</property>
+              </object>
+            </child>
+          </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
@@ -111,7 +117,7 @@
             <property name="bottom_attach">3</property>
           </packing>
         </child>
-      </widget>
+      </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">False</property>
@@ -119,5 +125,5 @@
         <property name="position">1</property>
       </packing>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+</interface>

@@ -1,19 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<glade-interface>
+<?xml version="1.0"?>
+<interface>
+  <object class="GtkTextBuffer" id="textbuffer1">
+    <property name="text">Your installed products could be covered using one of multiple service levels.</property>
+  </object>
   <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
-  <widget class="GtkVBox" id="container">
+  <object class="GtkVBox" id="container">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="spacing">7</property>
     <child>
-      <widget class="GtkLabel" id="label3">
+      <object class="GtkLabel" id="label3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">&lt;b&gt;Select Service Level&lt;/b&gt;</property>
         <property name="use_markup">True</property>
-      </widget>
+      </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">False</property>
@@ -21,12 +24,12 @@
       </packing>
     </child>
     <child>
-      <widget class="GtkVBox" id="vbox2">
+      <object class="GtkVBox" id="vbox2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">12</property>
         <child>
-          <widget class="GtkTextView" id="detection_label">
+          <object class="GtkTextView" id="detection_label">
             <property name="visible">True</property>
             <property name="sensitive">False</property>
             <property name="can_focus">False</property>
@@ -36,8 +39,8 @@
             <property name="right_margin">10</property>
             <property name="cursor_visible">False</property>
             <property name="accepts_tab">False</property>
-            <property name="text" translatable="yes">Your installed products could be covered using one of multiple service levels.</property>
-          </widget>
+            <property name="buffer">textbuffer1</property>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
@@ -45,7 +48,7 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="detected_products_label">
+          <object class="GtkLabel" id="detected_products_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
@@ -53,7 +56,7 @@
             <property name="xpad">10</property>
             <property name="label" translatable="yes">&lt;b&gt;Installed products:&lt;/b&gt;</property>
             <property name="use_markup">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
@@ -61,7 +64,7 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="product_list_label">
+          <object class="GtkLabel" id="product_list_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
@@ -70,7 +73,7 @@
             <property name="label" translatable="yes">prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8</property>
             <property name="use_markup">True</property>
             <property name="wrap">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
@@ -78,7 +81,7 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="subscribe_all_as_label">
+          <object class="GtkLabel" id="subscribe_all_as_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
@@ -86,7 +89,7 @@
             <property name="xpad">10</property>
             <property name="label" translatable="yes">&lt;b&gt;Select a common service level for this system's subscriptions:&lt;/b&gt;</property>
             <property name="use_markup">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
@@ -94,29 +97,29 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkScrolledWindow" id="scrolledwindow1">
+          <object class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hscrollbar_policy">automatic</property>
             <property name="vscrollbar_policy">automatic</property>
             <child>
-              <widget class="GtkViewport" id="viewport1">
+              <object class="GtkViewport" id="viewport1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="resize_mode">queue</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <widget class="GtkVBox" id="sla_radio_container">
+                  <object class="GtkVBox" id="sla_radio_container">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="border_width">4</property>
                     <child>
-                      <widget class="GtkLabel" id="label1">
+                      <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">label</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
@@ -124,35 +127,35 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label2">
+                      <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">label</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
-                  </widget>
+                  </object>
                 </child>
-              </widget>
+              </object>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">4</property>
           </packing>
         </child>
-      </widget>
+      </object>
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+</interface>

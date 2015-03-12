@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<glade-interface>
+<interface>
   <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy toplevel-contextual -->
-  <widget class="GtkWindow" id="progressWindow">
+  <object class="GtkWindow" id="progressWindow">
     <property name="visible">True</property>
     <property name="title" translatable="yes">Progress Dialog</property>
     <property name="modal">True</property>
@@ -14,26 +14,26 @@
     <property name="type_hint">dialog</property>
     <property name="deletable">False</property>
     <child>
-      <widget class="GtkVBox" id="vbox1">
+      <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
         <property name="border_width">5</property>
         <property name="spacing">5</property>
         <child>
-          <widget class="GtkLabel" id="progressLabel">
+          <object class="GtkLabel" id="progressLabel">
             <property name="visible">True</property>
             <property name="xalign">0</property>
             <property name="yalign">0</property>
             <property name="wrap">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkProgressBar" id="progressBar">
+          <object class="GtkProgressBar" id="progressBar">
             <property name="visible">True</property>
             <property name="pulse_step">0.10000000149</property>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
@@ -41,16 +41,16 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="statusLabel">
+          <object class="GtkLabel" id="statusLabel">
             <property name="visible">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="position">2</property>
           </packing>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+</interface>

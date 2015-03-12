@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<glade-interface>
-  <!-- interface-requires gtk+ 2.16 -->
+<interface>
+  <requires lib="gtk+" version="2.24"/>
   <!-- interface-naming-policy project-wide -->
-  <widget class="GtkWindow" id="system_facts_dialog">
+  <object class="GtkWindow" id="system_facts_dialog">
     <property name="width_request">500</property>
     <property name="height_request">400</property>
     <property name="can_focus">False</property>
@@ -11,57 +11,59 @@
     <property name="window_position">center-on-parent</property>
     <property name="icon_name">subscription-manager</property>
     <property name="type_hint">dialog</property>
-    <signal name="delete_event" handler="on_system_facts_dialog_delete_event"/>
+    <signal name="delete-event" handler="on_system_facts_dialog_delete_event" swapped="no"/>
     <child>
-      <widget class="GtkVBox" id="dialog-vbox2">
+      <object class="GtkVBox" id="dialog-vbox2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">2</property>
         <child>
-          <widget class="GtkVBox" id="vbox2">
+          <object class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <widget class="GtkTable" id="table2">
+              <object class="GtkTable" id="table2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="n_rows">3</property>
                 <property name="n_columns">2</property>
                 <child>
-                  <widget class="GtkLabel" id="system_id_title">
+                  <object class="GtkLabel" id="system_id_title">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="xpad">10</property>
                     <property name="label" translatable="yes">System Identity:</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="x_options">GTK_FILL</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="system_id_label">
+                  <object class="GtkLabel" id="system_id_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="selectable">True</property>
-                    <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">System Identity Value</atkproperty>
-                    </accessibility>
-                  </widget>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="system_id_label-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">System Identity Value</property>
+                      </object>
+                    </child>
+                  </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="owner_title">
+                  <object class="GtkLabel" id="owner_title">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="xpad">10</property>
                     <property name="label" translatable="yes">Organization:</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
@@ -69,15 +71,17 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="owner_label">
+                  <object class="GtkLabel" id="owner_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="selectable">True</property>
-                    <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Organization Value</atkproperty>
-                    </accessibility>
-                  </widget>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="owner_label-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Organization Value</property>
+                      </object>
+                    </child>
+                  </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
@@ -86,13 +90,13 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="environment_title">
+                  <object class="GtkLabel" id="environment_title">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="xpad">10</property>
                     <property name="label" translatable="yes">Environment:</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
@@ -100,15 +104,17 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="environment_label">
+                  <object class="GtkLabel" id="environment_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="selectable">True</property>
-                    <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Environment</atkproperty>
-                    </accessibility>
-                  </widget>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="environment_label-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Environment</property>
+                      </object>
+                    </child>
+                  </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
@@ -116,7 +122,7 @@
                     <property name="bottom_attach">3</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -124,28 +130,30 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="hbox1">
+              <object class="GtkHBox" id="hbox1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <widget class="GtkScrolledWindow" id="scrolledwindow2">
+                  <object class="GtkScrolledWindow" id="scrolledwindow2">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">automatic</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">etched-in</property>
                     <child>
-                      <widget class="GtkTreeView" id="facts_view">
+                      <object class="GtkTreeView" id="facts_view">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="has_focus">True</property>
                         <property name="rules_hint">True</property>
-                        <accessibility>
-                          <atkproperty name="AtkObject::accessible-name" translatable="yes">facts_view</atkproperty>
-                        </accessibility>
-                      </widget>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="facts_view-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">facts_view</property>
+                          </object>
+                        </child>
+                      </object>
                     </child>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
@@ -156,7 +164,7 @@
                 <child>
                   <placeholder/>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
@@ -164,7 +172,7 @@
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
@@ -172,21 +180,21 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox2">
+          <object class="GtkHBox" id="hbox2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <widget class="GtkVBox" id="vbox3">
+              <object class="GtkVBox" id="vbox3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <widget class="GtkLabel" id="last_update_title">
+                  <object class="GtkLabel" id="last_update_title">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="xpad">10</property>
                     <property name="label" translatable="yes">Last Update:</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
@@ -194,22 +202,24 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="last_update_label">
+                  <object class="GtkLabel" id="last_update_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="xpad">10</property>
-                    <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Update Time</atkproperty>
-                    </accessibility>
-                  </widget>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="last_update_label-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Update Time</property>
+                      </object>
+                    </child>
+                  </object>
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
@@ -217,17 +227,17 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="hbox4">
+              <object class="GtkHBox" id="hbox4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <widget class="GtkButton" id="update_button">
+                  <object class="GtkButton" id="update_button">
                     <property name="label" translatable="yes">Update Facts</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_facts_update_button_clicked"/>
-                  </widget>
+                    <signal name="clicked" handler="on_facts_update_button_clicked" swapped="no"/>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
@@ -236,16 +246,18 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkButton" id="close_button">
+                  <object class="GtkButton" id="close_button">
                     <property name="label" translatable="yes">Close</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">close_button</atkproperty>
-                    </accessibility>
-                    <signal name="clicked" handler="on_close_button_clicked"/>
-                  </widget>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="close_button-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">close_button</property>
+                      </object>
+                    </child>
+                    <signal name="clicked" handler="on_close_button_clicked" swapped="no"/>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
@@ -253,7 +265,7 @@
                     <property name="position">1</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
@@ -261,7 +273,7 @@
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
@@ -269,7 +281,7 @@
             <property name="position">1</property>
           </packing>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+</interface>

@@ -36,20 +36,21 @@ log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
 
 
-class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
+class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
     """
     GTK dialog for managing repositories and their overrides.
     """
     widget_names = ['main_window', 'reset_button', 'close_button',
                     'name_text', 'baseurl_text', 'scrolledwindow',
                     'other_overrides_view']
+    gui_file = "repositories.glade"
 
     ENTS_PROVIDE_NO_REPOS = _("Attached subscriptions do not provide any repositories.")
     NO_ATTACHED_SUBS = _("No repositories are available without an attached subscription.")
     REPOS_DISABLED_BY_CFG = _("Repositories disabled by configuration.")
 
     def __init__(self, backend, parent):
-        super(RepositoriesDialog, self).__init__('repositories.glade')
+        super(RepositoriesDialog, self).__init__()
 
         # Set up dynamic elements
         self.overrides_treeview = gtk.TreeView()
@@ -68,11 +69,9 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         self.identity = require(IDENTITY)
         self.ent_dir = require(ENT_DIR)
 
-        self.glade.signal_autoconnect({
-                "on_dialog_delete_event": self._on_close,
-                "on_close_button_clicked": self._on_close,
-                "on_reset_button_clicked": self._on_reset_repo,
-        })
+        self.connect_signals({"on_dialog_delete_event": self._on_close,
+                              "on_close_button_clicked": self._on_close,
+                              "on_reset_button_clicked": self._on_reset_repo})
 
         self.overrides_store = MappedListStore({
             "repo_id": str,

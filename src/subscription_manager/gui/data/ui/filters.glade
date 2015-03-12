@@ -1,89 +1,93 @@
 <?xml version="1.0"?>
-<glade-interface>
+<interface>
   <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
-  <widget class="GtkWindow" id="filter_product_window">
+  <object class="GtkWindow" id="filter_product_window">
     <property name="title" translatable="yes">Filter Options</property>
     <property name="icon-name">subscription-manager</property>
     <property name="type_hint">menu</property>
-    <signal name="delete_event" handler="on_filter_product_window_delete_event"/>
+    <signal handler="on_filter_product_window_delete_event" name="delete_event"/>
     <child>
-      <widget class="GtkAlignment" id="alignment1">
+      <object class="GtkAlignment" id="alignment1">
         <property name="visible">True</property>
         <property name="top_padding">10</property>
         <property name="bottom_padding">10</property>
         <property name="left_padding">10</property>
         <property name="right_padding">10</property>
         <child>
-          <widget class="GtkVBox" id="vbox1">
+          <object class="GtkVBox" id="vbox1">
             <property name="visible">True</property>
-
             <child>
-              <widget class="GtkVBox" id="vbox2">
+              <object class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
-
                 <child>
-                  <widget class="GtkLabel" id="label1">
+                  <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Only show subscriptions that:</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkCheckButton" id="compatible_checkbutton">
+                  <object class="GtkCheckButton" id="compatible_checkbutton">
                     <property name="label" translatable="yes">match my system</property>
-                    <property name="tooltip" translatable="yes">Only show subscriptions which can be attached to this machine and architecture</property>
+                    <property name="tooltip-text" translatable="yes">Only show subscriptions which can be attached to this machine and architecture</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Match System</atkproperty>
-                    </accessibility>
-                    <signal name="toggled" handler="on_compatible_checkbutton_toggled"/>
-                  </widget>
+                    <signal handler="on_compatible_checkbutton_toggled" name="toggled"/>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="a11y-compatible_checkbutton1">
+                        <property name="AtkObject::accessible-name" translatable="yes">Match System</property>
+                      </object>
+                    </child>
+                  </object>
                   <packing>
                     <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkCheckButton" id="installed_checkbutton">
+                  <object class="GtkCheckButton" id="installed_checkbutton">
                     <property name="label" translatable="yes">match my installed products</property>
-                    <property name="tooltip" translatable="yes">Only show subscriptions which can be applied to products installed on this machine</property>
+                    <property name="tooltip-text" translatable="yes">Only show subscriptions which can be applied to products installed on this machine</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Match Installed</atkproperty>
-                    </accessibility>
-                    <signal name="toggled" handler="on_installed_checkbutton_toggled"/>
-                  </widget>
+                    <signal handler="on_installed_checkbutton_toggled" name="toggled"/>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="a11y-installed_checkbutton1">
+                        <property name="AtkObject::accessible-name" translatable="yes">Match Installed</property>
+                      </object>
+                    </child>
+                  </object>
                   <packing>
                     <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkCheckButton" id="no_overlapping_checkbutton">
+                  <object class="GtkCheckButton" id="no_overlapping_checkbutton">
                     <property name="label" translatable="yes">Only show subscriptions that: provide products that are not already covered</property>
-                    <property name="tooltip" translatable="yes">Hide subscriptions whose provided products have a Subscribed status</property>
+                    <property name="tooltip-text" translatable="yes">Hide subscriptions whose provided products have a Subscribed status</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Do Not Overlap</atkproperty>
-                    </accessibility>
-                    <signal name="toggled" handler="on_no_overlapping_checkbutton_toggled"/>
-                  </widget>
+                    <signal handler="on_no_overlapping_checkbutton_toggled" name="toggled"/>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="a11y-no_overlapping_checkbutton1">
+                        <property name="AtkObject::accessible-name" translatable="yes">Do Not Overlap</property>
+                      </object>
+                    </child>
+                  </object>
                   <packing>
                     <property name="position">3</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -91,13 +95,13 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="hbox1">
+              <object class="GtkHBox" id="hbox1">
                 <property name="visible">True</property>
                 <child>
-                  <widget class="GtkLabel" id="contains_text_label">
+                  <object class="GtkLabel" id="contains_text_label">
                     <property name="visible">True</property>
                     <property name="label" translatable="yes">Contain the text</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
@@ -106,20 +110,22 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="contains_text_entry">
+                  <object class="GtkEntry" id="contains_text_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">&#x25CF;</property>
-                    <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Text in Subscription</atkproperty>
-                    </accessibility>
-                    <signal name="changed" handler="on_contains_text_entry_changed"/>
-                  </widget>
+                    <signal handler="on_contains_text_entry_changed" name="changed"/>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="a11y-contains_text_entry1">
+                        <property name="AtkObject::accessible-name" translatable="yes">Text in Subscription</property>
+                      </object>
+                    </child>
+                  </object>
                   <packing>
                     <property name="position">1</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -128,29 +134,29 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="hbox2">
+              <object class="GtkHBox" id="hbox2">
                 <property name="visible">True</property>
                 <child>
                   <placeholder/>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="position">2</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkHButtonBox" id="hbuttonbox1">
+              <object class="GtkHButtonBox" id="hbuttonbox1">
                 <property name="visible">True</property>
                 <property name="layout_style">edge</property>
                 <child>
-                  <widget class="GtkButton" id="clear_button">
+                  <object class="GtkButton" id="clear_button">
                     <property name="label">gtk-clear</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_clear_button_clicked"/>
-                  </widget>
+                    <signal handler="on_clear_button_clicked" name="clicked"/>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
@@ -158,30 +164,30 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkButton" id="close_button">
+                  <object class="GtkButton" id="close_button">
                     <property name="label">gtk-close</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_close_button_clicked"/>
-                  </widget>
+                    <signal handler="on_close_button_clicked" name="clicked"/>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">3</property>
               </packing>
             </child>
-          </widget>
+          </object>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+</interface>

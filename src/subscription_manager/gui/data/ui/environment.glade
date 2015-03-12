@@ -1,26 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<glade-interface>
+<?xml version="1.0"?>
+<interface>
   <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
-  <widget class="GtkVBox" id="container">
+  <object class="GtkVBox" id="container">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">25</property>
     <property name="spacing">7</property>
-    <accessibility>
-      <atkproperty name="AtkObject::accessible-name">env_select_vbox</atkproperty>
-    </accessibility>
     <child>
-      <widget class="GtkLabel" id="env_select_vbox_label">
+      <object class="GtkLabel" id="env_select_vbox_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">&lt;b&gt;Environment Selection&lt;/b&gt;</property>
         <property name="use_markup">True</property>
-        <accessibility>
-          <atkproperty name="AtkObject::accessible-name" translatable="yes">env_select_vbox_label</atkproperty>
-        </accessibility>
-      </widget>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="a11y-env_select_vbox_label1">
+            <property name="AtkObject::accessible-name" translatable="yes">env_select_vbox_label</property>
+          </object>
+        </child>
+      </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
@@ -28,7 +27,7 @@
       </packing>
     </child>
     <child>
-      <widget class="GtkScrolledWindow" id="env_select_vbox_scrolledwindow">
+      <object class="GtkScrolledWindow" id="env_select_vbox_scrolledwindow">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="border_width">8</property>
@@ -36,20 +35,27 @@
         <property name="vscrollbar_policy">automatic</property>
         <property name="shadow_type">etched-in</property>
         <child>
-          <widget class="GtkTreeView" id="environment_treeview">
+          <object class="GtkTreeView" id="environment_treeview">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <accessibility>
-              <atkproperty name="AtkObject::accessible-name" translatable="yes">environment_treeview</atkproperty>
-            </accessibility>
-          </widget>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="a11y-environment_treeview1">
+                <property name="AtkObject::accessible-name" translatable="yes">environment_treeview</property>
+              </object>
+            </child>
+          </object>
         </child>
-      </widget>
+      </object>
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
     </child>
-  </widget>
-</glade-interface>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="a11y-container1">
+        <property name="AtkObject::accessible-name">env_select_vbox</property>
+      </object>
+    </child>
+  </object>
+</interface>

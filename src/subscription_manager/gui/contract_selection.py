@@ -15,12 +15,10 @@
 
 import datetime
 import gettext
-import os
 import time
 
 import gobject
 import gtk
-import gtk.glade
 
 from subscription_manager.gui import widgets
 from subscription_manager.gui.storage import MappedListStore
@@ -30,41 +28,28 @@ from subscription_manager.managerlib import allows_multi_entitlement
 
 _ = gettext.gettext
 
-prefix = os.path.dirname(__file__)
 
-CONTRACT_SELECTION_GLADE = os.path.join(prefix, "data/contract_selection.glade")
-
-
-class ContractSelectionWindow(object):
+class ContractSelectionWindow(widgets.SubmanBaseWidget):
+    widget_names = ["contract_selection_window", "subscribe_button",
+                    "edit_quantity_label", "contract_selection_treeview",
+                    "subscription_name_label", "total_contracts_label"]
+    gui_file = "contract_selection.glade"
 
     def __init__(self, selected_callback, cancel_callback):
         self._selected_callback = selected_callback
         self._cancel_callback = cancel_callback
         self.total_contracts = 0
-        self.contract_selection_xml = gtk.glade.XML(CONTRACT_SELECTION_GLADE)
-        self.contract_selection_win = self.contract_selection_xml.get_widget(
-            "contract_selection_window")
-        self.subscribe_button = self.contract_selection_xml.get_widget('subscribe_button')
-        self.edit_quantity_label = self.contract_selection_xml.get_widget('edit_quantity_label')
 
-        self.contract_selection_treeview = \
-                self.contract_selection_xml.get_widget(
-                        "contract_selection_treeview")
         self.contract_selection_treeview.get_selection().connect("changed",
             self._on_contract_selection)
 
-        self.subscription_name_label = self.contract_selection_xml.get_widget(
-            "subscription_name_label")
         self.subscription_name_label.set_line_wrap(True)
         self.subscription_name_label.connect('size-allocate', lambda label, size: label.set_size_request(size.width - 1, -1))
 
-        self.total_contracts_label = self.contract_selection_xml.get_widget(
-            "total_contracts_label")
-
-        self.contract_selection_xml.signal_autoconnect({
-            "on_cancel_button_clicked": self._cancel_button_clicked,
-            "on_subscribe_button_clicked": self._subscribe_button_clicked,
-        })
+        callbacks = {"on_cancel_button_clicked": self._cancel_button_clicked,
+                     "size-allocate": lambda label, size: label.set_size_request(size.width - 1, -1),
+                     "on_subscribe_button_clicked": self._subscribe_button_clicked}
+        self.connect_signals(callbacks)
 
         self.model = MappedListStore(self.get_type_map())
         self.contract_selection_treeview.set_model(self.model)
@@ -86,41 +71,52 @@ class ContractSelectionWindow(object):
 
     def show(self):
         self.populate_treeview()
-        self.contract_selection_win.show_all()
+        self.contract_selection_window.show_all()
 
     def destroy(self):
         self.contract_selection_win.destroy()
 
     def populate_treeview(self):
         renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("Contract"), renderer,
-                text=self.model['contract_number'])
+        column = gtk.TreeViewColumn(_("Contract"),
+                                    renderer,
+                                    text=self.model['contract_number'])
         column.set_expand(True)
         column.set_sort_column_id(self.model['contract_number'])
-        self.model.set_sort_func(self.model['contract_number'], self._sort_text, None)
+        self.model.set_sort_func(self.model['contract_number'],
+                                 self._sort_text, None)
         self.contract_selection_treeview.append_column(column)
 
         column = widgets.MachineTypeColumn(self.model['is_virt_only'])
         column.set_sort_column_id(self.model['is_virt_only'])
-        self.model.set_sort_func(self.model['is_virt_only'], self._sort_machine_type, column)
+        self.model.set_sort_func(self.model['is_virt_only'],
+                                 self._sort_machine_type, column)
         self.contract_selection_treeview.append_column(column)
 
         renderer = gtk.CellRendererText()
         renderer.set_property("xalign", 0.5)
-        column = gtk.TreeViewColumn(_("Used / Total"), renderer,
-                text=self.model['consumed_fraction'])
+        column = gtk.TreeViewColumn(_("Used / Total"),
+                                    renderer,
+                                    text=self.model['consumed_fraction'])
         self.contract_selection_treeview.append_column(column)
 
         renderer = widgets.CellRendererDate()
-        column = gtk.TreeViewColumn(_("Start Date"), renderer, date=self.model['start_date'])
+        column = gtk.TreeViewColumn(_("Start Date"),
+                                    renderer,
+                                    date=self.model['start_date'])
         column.set_sort_column_id(self.model['start_date'])
-        self.model.set_sort_func(self.model['start_date'], self._sort_date, None)
+        self.model.set_sort_func(self.model['start_date'],
+                                 self._sort_date, None)
         self.contract_selection_treeview.append_column(column)
 
         renderer = widgets.CellRendererDate()
-        column = gtk.TreeViewColumn(_("End Date"), renderer, date=self.model['end_date'])
+        column = gtk.TreeViewColumn(_("End Date"),
+                                    renderer,
+                                    date=self.model['end_date'])
         column.set_sort_column_id(self.model['end_date'])
-        self.model.set_sort_func(self.model['end_date'], self._sort_date, None)
+        self.model.set_sort_func(self.model['end_date'],
+                                 self._sort_date,
+                                 None)
         self.contract_selection_treeview.append_column(column)
 
         column = widgets.QuantitySelectionColumn(_("Quantity"), self.model,
@@ -182,7 +178,8 @@ class ContractSelectionWindow(object):
         selection = self.contract_selection_treeview.get_selection()
         model, iter = selection.get_selected()
         if iter is not None:
-            pool, quantity = model.get(iter, model['pool'], model['default_quantity'])
+            pool, quantity = model.get(iter, model['pool'],
+                                       model['default_quantity'])
             self._selected_callback(pool, quantity)
 
     def _on_contract_selection(self, widget):

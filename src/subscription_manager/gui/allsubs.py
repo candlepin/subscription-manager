@@ -44,10 +44,11 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                         'active_on_checkbutton', 'subscribe_button',
                         'edit_quantity_label', 'scrolledwindow',
                         'filter_options_button', 'applied_filters_label']
+    gui_file = "allsubs.glade"
 
     def __init__(self, backend, facts, parent_win):
 
-        super(AllSubscriptionsTab, self).__init__('allsubs.glade')
+        super(AllSubscriptionsTab, self).__init__()
 
         # Set up dynamic elements
         self.no_subs_label, self.no_subs_label_viewport = widgets.get_scrollable_label()
@@ -121,7 +122,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.filter_dialog = FilterOptionsWindow(self.filters, self)
 
         self.update_applied_filters_label()
-        self.glade.signal_autoconnect({
+        self.connect_signals({
             "on_search_button_clicked": self.search_button_clicked,
             "on_subscribe_button_clicked": self.subscribe_button_clicked,
             "on_filter_options_button_clicked": self.filter_options_button_clicked,

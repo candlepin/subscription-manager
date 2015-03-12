@@ -21,9 +21,6 @@ import threading
 import gobject
 import socket
 
-import gtk
-import gtk.glade
-
 import rhsm.config
 import rhsm.connection as connection
 import rhsm.utils
@@ -34,16 +31,16 @@ from subscription_manager.gui.utils import show_error_window
 import subscription_manager.injection as inj
 
 from subscription_manager.gui import progress
+from subscription_manager.gui import widgets
 
 _ = gettext.gettext
 
 DIR = os.path.dirname(__file__)
-GLADE_XML = os.path.join(DIR, "data/networkConfig.glade")
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class NetworkConfigDialog:
+class NetworkConfigDialog(widgets.SubmanBaseWidget):
     """This is the dialog that allows setting http proxy settings.
 
     It uses the instant apply paradigm or whatever you wanna call it that the
@@ -51,17 +48,16 @@ class NetworkConfigDialog:
     changed, the new setting will be saved.
 
     """
+    widget_names = ["networkConfigDialog", "enableProxyButton", "enableProxyAuthButton",
+                    "proxyEntry", "proxyUserEntry", "proxyPasswordEntry",
+                    "cancelButton", "saveButton", "testConnectionButton",
+                    "connectionStatusLabel"]
+    gui_file = "networkConfig.glade"
 
     def __init__(self):
-        self.xml = gtk.glade.XML(GLADE_XML)
         # Get widgets we'll need to access
-        self.dlg = self.xml.get_widget("networkConfigDialog")
-        self.enableProxyButton = self.xml.get_widget("enableProxyButton")
-        self.enableProxyAuthButton = self.xml.get_widget("enableProxyAuthButton")
-        self.proxyEntry = self.xml.get_widget("proxyEntry")
-        self.proxyUserEntry = self.xml.get_widget("proxyUserEntry")
-        self.proxyPasswordEntry = self.xml.get_widget("proxyPasswordEntry")
 
+        super(NetworkConfigDialog, self).__init__()
         self.org_timeout = socket.getdefaulttimeout()
         self.progress_bar = None
 
@@ -86,12 +82,11 @@ class NetworkConfigDialog:
 
         self.proxyEntry.connect("focus-out-event", self.clean_proxy_entry)
 
-        self.xml.get_widget("cancelButton").connect("clicked", self.on_cancel_clicked)
-        self.xml.get_widget("saveButton").connect("clicked", self.on_save_clicked)
-        self.xml.get_widget("testConnectionButton").connect("clicked",
-                                                            self.on_test_connection_clicked)
+        self.cancelButton.connect("clicked", self.on_cancel_clicked)
+        self.saveButton.connect("clicked", self.on_save_clicked)
+        self.testConnectionButton.connect("clicked", self.on_test_connection_clicked)
 
-        self.dlg.connect("delete-event", self.deleted)
+        self.networkConfigDialog.connect("delete-event", self.deleted)
 
     def set_initial_values(self):
         proxy_url = self.cfg.get("server", "proxy_hostname") or ""
@@ -99,37 +94,37 @@ class NetworkConfigDialog:
         if proxy_url:
             proxy_url = proxy_url + ':' + (self.cfg.get("server", "proxy_port") or rhsm.config.DEFAULT_PROXY_PORT)
 
-        self.xml.get_widget("proxyEntry").set_text("%s" % proxy_url)
+        self.proxyEntry.set_text("%s" % proxy_url)
 
         # show proxy/proxy auth sections as being enabled if we have values set
         # rhn actualy has a seperate for config flag for enabling, which seems overkill
         if self.cfg.get("server", "proxy_hostname"):
-            self.xml.get_widget("enableProxyButton").set_active(True)
+            self.enableProxyButton.set_active(True)
         if self.cfg.get("server", "proxy_hostname") and self.cfg.get("server", "proxy_user"):
-            self.xml.get_widget("enableProxyAuthButton").set_active(True)
+            self.enableProxyAuthButton.set_active(True)
 
-        self.enable_action(self.xml.get_widget("enableProxyAuthButton"))
-        self.enable_action(self.xml.get_widget("enableProxyButton"))
+        self.enable_action(self.enableProxyAuthButton)
+        self.enable_action(self.enableProxyButton)
 
         # the extra or "" are to make sure we don't str None
-        self.xml.get_widget("proxyUserEntry").set_text(str(self.cfg.get("server", "proxy_user") or ""))
-        self.xml.get_widget("proxyPasswordEntry").set_text(str(self.cfg.get("server", "proxy_password") or ""))
-        self.xml.get_widget("connectionStatusLabel").set_label("")
+        self.proxyUserEntry.set_text(str(self.cfg.get("server", "proxy_user") or ""))
+        self.proxyPasswordEntry.set_text(str(self.cfg.get("server", "proxy_password") or ""))
+        self.connectionStatusLabel.set_label("")
         # If there is no proxy information, disable the proxy test
         # button.
-        if not self.xml.get_widget("enableProxyButton").get_active():
-            self.xml.get_widget("testConnectionButton").set_sensitive(False)
-            self.xml.get_widget("enableProxyAuthButton").set_sensitive(False)
+        if not self.enableProxyButton.get_active():
+            self.testConnectionButton.set_sensitive(False)
+            self.enableProxyAuthButton.set_sensitive(False)
 
     def write_values(self, widget=None, dummy=None):
-        proxy = self.xml.get_widget("proxyEntry").get_text() or ""
+        proxy = self.proxyEntry.get_text() or ""
 
         # don't save these values if they are disabled in the gui
-        if proxy and self.xml.get_widget("enableProxyButton").get_active():
+        if proxy and self.enableProxyButton.get_active():
             # Remove any URI scheme provided
             proxy = remove_scheme(proxy)
             # Update the proxy entry field to show we removed any scheme
-            self.xml.get_widget("proxyEntry").set_text(proxy)
+            self.proxyEntry.set_text(proxy)
             try:
                 proxy_hostname, proxy_port = proxy.split(':')
                 self.cfg.set("server", "proxy_hostname", proxy_hostname)
@@ -143,14 +138,14 @@ class NetworkConfigDialog:
             self.cfg.set("server", "proxy_hostname", "")
             self.cfg.set("server", "proxy_port", "")
 
-        if self.xml.get_widget("enableProxyAuthButton").get_active():
-            if self.xml.get_widget("proxyUserEntry").get_text() is not None:
+        if self.enableProxyAuthButton.get_active():
+            if self.proxyUserEntry.get_text() is not None:
                 self.cfg.set("server", "proxy_user",
-                             str(self.xml.get_widget("proxyUserEntry").get_text()))
+                             str(self.proxyUserEntry.get_text()))
 
-            if self.xml.get_widget("proxyPasswordEntry").get_text() is not None:
+            if self.proxyPasswordEntry.get_text() is not None:
                 self.cfg.set("server", "proxy_password",
-                             str(self.xml.get_widget("proxyPasswordEntry").get_text()))
+                             str(self.proxyPasswordEntry.get_text()))
         else:
             self.cfg.set("server", "proxy_user", "")
             self.cfg.set("server", "proxy_password", "")
@@ -161,33 +156,31 @@ class NetworkConfigDialog:
         except Exception:
             show_error_window(_("There was an error saving your configuration.") +
                               _("Make sure that you own %s.") % self.cfg.fileName,
-                                parent=self.dlg)
+                                parent=self.networkConfigDialog)
 
     def show(self):
         self.set_initial_values()
-        self.dlg.present()
+        self.networkConfigDialog.present()
 
     def on_save_clicked(self, button):
         self.write_values()
-        self.dlg.hide()
+        self.networkConfigDialog.hide()
 
     def on_cancel_clicked(self, button):
-        self.dlg.hide()
+        self.networkConfigDialog.hide()
 
     def enable_test_button(self, button):
-        test_connection_button = self.xml.get_widget("testConnectionButton")
-        test_connection_button.set_sensitive(button.get_active())
+        self.testConnectionButton.set_sensitive(button.get_active())
 
     def clear_connection_label(self, entry):
-        self.xml.get_widget("connectionStatusLabel").set_label("")
+        self.connectionStatusLabel.set_label("")
 
         # only used as callback from test_connection thread
     def on_test_connection_finish(self, result):
-        connection_label = self.xml.get_widget("connectionStatusLabel")
         if result:
-            connection_label.set_label(_("Proxy connection succeeded"))
+            self.connectionStatusLabel.set_label(_("Proxy connection succeeded"))
         else:
-            connection_label.set_label(_("Proxy connection failed"))
+            self.connectionStatusLabel.set_label(_("Proxy connection failed"))
         self._clear_progress_bar()
 
     def _reset_socket_timeout(self):
@@ -274,7 +267,7 @@ class NetworkConfigDialog:
 
     def deleted(self, event, data):
         self.write_values()
-        self.dlg.hide()
+        self.networkConfigDialog.hide()
         self._clear_progress_bar()
         return True
 
@@ -285,7 +278,7 @@ class NetworkConfigDialog:
         else:
             self.progress_bar = progress.Progress(_("Testing Connection"), _("Please wait"))
             self.timer = gobject.timeout_add(100, self.progress_bar.pulse)
-            self.progress_bar.set_parent_window(self.dlg)
+            self.progress_bar.set_parent_window(self.networkConfigDialog)
 
     def _clear_progress_bar(self):
         if not self.progress_bar:  # progress bar could be none iff self.test_connection is called directly
@@ -298,19 +291,19 @@ class NetworkConfigDialog:
 
     def enable_action(self, button):
         if button.get_name() == "enableProxyButton":
-            self.xml.get_widget("proxyEntry").set_sensitive(button.get_active())
-            self.xml.get_widget("proxyEntry").grab_focus()
-            self.xml.get_widget("enableProxyAuthButton").set_sensitive(button.get_active())
+            self.proxyEntry.set_sensitive(button.get_active())
+            self.proxyEntry.grab_focus()
+            self.enableProxyAuthButton.set_sensitive(button.get_active())
             # Proxy authentication should only be active if proxy is also enabled
-            self.xml.get_widget("proxyUserEntry").set_sensitive(button.get_active() and
-                    self.xml.get_widget("enableProxyAuthButton").get_active())
-            self.xml.get_widget("proxyPasswordEntry").set_sensitive(button.get_active() and
-                    self.xml.get_widget("enableProxyAuthButton").get_active())
+            self.proxyUserEntry.set_sensitive(button.get_active() and
+                    self.enableProxyAuthButton.get_active())
+            self.proxyPasswordEntry.set_sensitive(button.get_active() and
+                    self.enableProxyAuthButton.get_active())
         elif button.get_name() == "enableProxyAuthButton":
-            self.xml.get_widget("proxyUserEntry").set_sensitive(button.get_active())
-            self.xml.get_widget("proxyPasswordEntry").set_sensitive(button.get_active())
-            self.xml.get_widget("usernameLabel").set_sensitive(button.get_active())
-            self.xml.get_widget("passwordLabel").set_sensitive(button.get_active())
+            self.proxyUserEntry.set_sensitive(button.get_active())
+            self.proxyPasswordEntry.set_sensitive(button.get_active())
+            self.get_object("usernameLabel").set_sensitive(button.get_active())
+            self.get_object("passwordLabel").set_sensitive(button.get_active())
 
     def set_parent_window(self, window):
-        self.dlg.set_transient_for(window)
+        self.networkConfigDialog.set_transient_for(window)

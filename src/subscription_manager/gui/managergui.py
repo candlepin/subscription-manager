@@ -28,7 +28,6 @@ import urllib2
 import webbrowser
 
 import gtk
-import gtk.glade
 
 import rhsm.config as config
 
@@ -61,7 +60,6 @@ _ = gettext.gettext
 
 gettext.textdomain("rhsm")
 
-gtk.glade.bindtextdomain("rhsm")
 gtk.window_set_default_icon_name("subscription-manager")
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -123,18 +121,19 @@ class Backend(object):
         return self.cp_provider.get_content_connection()
 
 
-class MainWindow(widgets.GladeWidget):
+class MainWindow(widgets.SubmanBaseWidget):
     """
     The new RHSM main window.
     """
     widget_names = ['main_window', 'notebook', 'system_name_label',
                     'register_menu_item', 'unregister_menu_item',
                     'redeem_menu_item', 'settings_menu_item', 'repos_menu_item']
+    gui_file = "mainwindow.glade"
 
     def __init__(self, backend=None, facts=None,
                  ent_dir=None, prod_dir=None,
                  auto_launch_registration=False):
-        super(MainWindow, self).__init__('mainwindow.glade')
+        super(MainWindow, self).__init__()
 
         self.backend = backend or Backend()
         self.identity = require(IDENTITY)
@@ -175,7 +174,7 @@ class MainWindow(widgets.GladeWidget):
         self.import_sub_dialog = ImportSubDialog()
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
-        self.network_config_dialog.xml.get_widget("saveButton").connect("clicked", self._config_changed)
+        self.network_config_dialog.saveButton.connect("clicked", self._config_changed)
 
         self.redeem_dialog = redeem.RedeemDialog(self.backend)
 
@@ -207,7 +206,7 @@ class MainWindow(widgets.GladeWidget):
         self.notebook.append_page(self.my_subs_tab.get_content(),
                 gtk.Label(self.my_subs_tab.get_label()))
 
-        self.glade.signal_autoconnect({
+        self.connect_signals({
             "on_register_menu_item_activate": self._register_item_clicked,
             "on_unregister_menu_item_activate": self._unregister_item_clicked,
             "on_import_cert_menu_item_activate": self._import_cert_item_clicked,

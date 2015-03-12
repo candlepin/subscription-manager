@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<glade-interface>
+<interface>
   <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
-  <widget class="GtkDialog" id="networkConfigDialog">
+  <object class="GtkDialog" id="networkConfigDialog">
     <property name="title" translatable="yes">Proxy Configuration</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
@@ -10,22 +10,20 @@
     <property name="type_hint">dialog</property>
     <property name="icon-name">subscription-manager</property>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox1">
+      <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
-
         <child>
-          <widget class="GtkVBox" id="vbox4">
+          <object class="GtkVBox" id="vbox4">
             <property name="visible">True</property>
             <property name="border_width">10</property>
-
             <property name="spacing">10</property>
             <child>
-              <widget class="GtkLabel" id="label18">
+              <object class="GtkLabel" id="label18">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">&lt;b&gt;HTTP Proxy&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -33,68 +31,69 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="alignment5">
+              <object class="GtkAlignment" id="alignment5">
                 <property name="visible">True</property>
                 <property name="left_padding">20</property>
                 <child>
-                  <widget class="GtkVBox" id="vbox5">
+                  <object class="GtkVBox" id="vbox5">
                     <property name="visible">True</property>
-
                     <property name="spacing">10</property>
                     <child>
-                      <widget class="GtkCheckButton" id="enableProxyButton">
+                      <object class="GtkCheckButton" id="enableProxyButton">
                         <property name="label" translatable="yes">I would like to connect via an _HTTP proxy.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
-                        <accessibility>
-                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Proxy Checkbox</atkproperty>
-                        </accessibility>
-                      </widget>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="a11y-enableProxyButton1">
+                            <property name="AtkObject::accessible-name" translatable="yes">Proxy Checkbox</property>
+                          </object>
+                        </child>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkAlignment" id="alignment11">
+                      <object class="GtkAlignment" id="alignment11">
                         <property name="visible">True</property>
                         <property name="left_padding">22</property>
                         <child>
-                          <widget class="GtkTable" id="table6">
+                          <object class="GtkTable" id="table6">
                             <property name="visible">True</property>
                             <property name="n_rows">2</property>
                             <property name="n_columns">2</property>
                             <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
                             <child>
-                              <widget class="GtkHBox" id="hbox6">
+                              <object class="GtkHBox" id="hbox6">
                                 <property name="visible">True</property>
                                 <property name="spacing">5</property>
                                 <child>
-                                  <widget class="GtkImage" id="image16">
+                                  <object class="GtkImage" id="image16">
                                     <property name="visible">True</property>
                                     <property name="stock">gtk-info</property>
-                                  </widget>
+                                  </object>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkLabel" id="label20">
+                                  <object class="GtkLabel" id="label20">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Example:&lt;/b&gt; proxy.example.com:3128&lt;/small&gt;</property>
                                     <property name="use_markup">True</property>
-                                  </widget>
+                                  </object>
                                   <packing>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
@@ -103,28 +102,30 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="label19">
+                              <object class="GtkLabel" id="label19">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Proxy Location:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">proxyEntry</property>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkEntry" id="proxyEntry">
+                              <object class="GtkEntry" id="proxyEntry">
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">Enter in the format hostname(:port)</property>
-                                <accessibility>
-                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Proxy Location Text</atkproperty>
-                                </accessibility>
-                              </widget>
+                                <property name="tooltip-text" translatable="yes">Enter in the format hostname(:port)</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="a11y-proxyEntry1">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Proxy Location Text</property>
+                                  </object>
+                                </child>
+                              </object>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
@@ -135,63 +136,65 @@
                             <child>
                               <placeholder/>
                             </child>
-                          </widget>
+                          </object>
                         </child>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkCheckButton" id="enableProxyAuthButton">
+                      <object class="GtkCheckButton" id="enableProxyAuthButton">
                         <property name="label" translatable="yes">Use Au_thentication with HTTP Proxy:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
-                        <accessibility>
-                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Authentication Checkbox</atkproperty>
-                        </accessibility>
-                      </widget>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="a11y-enableProxyAuthButton1">
+                            <property name="AtkObject::accessible-name" translatable="yes">Authentication Checkbox</property>
+                          </object>
+                        </child>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkAlignment" id="alignment13">
+                      <object class="GtkAlignment" id="alignment13">
                         <property name="visible">True</property>
                         <property name="left_padding">22</property>
                         <child>
-                          <widget class="GtkTable" id="table7">
+                          <object class="GtkTable" id="table7">
                             <property name="visible">True</property>
                             <property name="n_rows">2</property>
                             <property name="n_columns">2</property>
                             <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
                             <child>
-                              <widget class="GtkLabel" id="usernameLabel">
+                              <object class="GtkLabel" id="usernameLabel">
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Proxy _Username:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">proxyUserEntry</property>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="passwordLabel">
+                              <object class="GtkLabel" id="passwordLabel">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Proxy P_assword:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">proxyPasswordEntry</property>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
@@ -200,14 +203,16 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkEntry" id="proxyUserEntry">
+                              <object class="GtkEntry" id="proxyUserEntry">
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
-                                <accessibility>
-                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Username Text</atkproperty>
-                                </accessibility>
-                              </widget>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="a11y-proxyUserEntry1">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Username Text</property>
+                                  </object>
+                                </child>
+                              </object>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
@@ -216,15 +221,17 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkEntry" id="proxyPasswordEntry">
+                              <object class="GtkEntry" id="proxyPasswordEntry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="visibility">False</property>
                                 <property name="invisible_char">&#x2022;</property>
-                                <accessibility>
-                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Password Text</atkproperty>
-                                </accessibility>
-                              </widget>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="a11y-proxyPasswordEntry1">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Password Text</property>
+                                  </object>
+                                </child>
+                              </object>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
@@ -233,52 +240,56 @@
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
-                          </widget>
+                          </object>
                         </child>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="position">3</property>
                       </packing>
                     </child>
-                  </widget>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="position">1</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="connectionStatusLabel">
+          <object class="GtkLabel" id="connectionStatusLabel">
             <property name="visible">True</property>
-            <accessibility>
-              <atkproperty name="AtkObject::accessible-name" translatable="yes">connectionStatusLabel</atkproperty>
-            </accessibility>
-          </widget>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="a11y-connectionStatusLabel1">
+                <property name="AtkObject::accessible-name" translatable="yes">connectionStatusLabel</property>
+              </object>
+            </child>
+          </object>
           <packing>
             <property name="position">3</property>
           </packing>
         </child>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area1">
+          <object class="GtkHButtonBox" id="dialog-action_area1">
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
-              <widget class="GtkButton" id="cancelButton">
+              <object class="GtkButton" id="cancelButton">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Cancel Button</atkproperty>
-                </accessibility>
-              </widget>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="a11y-cancelButton1">
+                    <property name="AtkObject::accessible-name" translatable="yes">Cancel Button</property>
+                  </object>
+                </child>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -286,16 +297,18 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="saveButton">
+              <object class="GtkButton" id="saveButton">
                 <property name="label" translatable="yes">_Save</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Save Button</atkproperty>
-                </accessibility>
-              </widget>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="a11y-saveButton1">
+                    <property name="AtkObject::accessible-name" translatable="yes">Save Button</property>
+                  </object>
+                </child>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -303,30 +316,32 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="testConnectionButton">
+              <object class="GtkButton" id="testConnectionButton">
                 <property name="label" translatable="yes">_Test Connection</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Test Connection Button</atkproperty>
-                </accessibility>
-              </widget>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="a11y-testConnectionButton1">
+                    <property name="AtkObject::accessible-name" translatable="yes">Test Connection Button</property>
+                  </object>
+                </child>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+</interface>

@@ -44,13 +44,14 @@ EXPIRED_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 class MySubscriptionsTab(widgets.SubscriptionManagerTab):
     widget_names = widgets.SubscriptionManagerTab.widget_names + \
                     ['details_box', 'unsubscribe_button']
+    gui_file = "mysubs.glade"
 
     def __init__(self, backend, parent_win,
                  ent_dir, prod_dir):
         """
         Create a new 'My Subscriptions' tab.
         """
-        super(MySubscriptionsTab, self).__init__('mysubs.glade')
+        super(MySubscriptionsTab, self).__init__()
         self.backend = backend
         self.identity = inj.require(inj.IDENTITY)
         self.parent_win = parent_win
@@ -113,7 +114,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         # Don't update the icon in the first run, we don't have real compliance data yet
         self.update_subscriptions(update_dbus=False)
 
-        self.glade.signal_autoconnect({'on_unsubscribe_button_clicked': self.unsubscribe_button_clicked})
+        self.connect_signals({'on_unsubscribe_button_clicked': self.unsubscribe_button_clicked})
 
     def get_store(self):
         return MappedTreeStore(self.get_type_map())

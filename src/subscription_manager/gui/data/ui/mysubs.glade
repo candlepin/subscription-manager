@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<glade-interface>
+<?xml version="1.0"?>
+<interface>
   <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
-  <widget class="GtkWindow" id="temp-window">
+  <object class="GtkWindow" id="temp-window">
     <property name="can_focus">False</property>
     <property name="icon_name">subscription-manager</property>
     <child>
-      <widget class="GtkVPaned" id="content">
+      <object class="GtkVPaned" id="content">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">12</property>
         <child>
-          <widget class="GtkScrolledWindow" id="scrolledwindow1">
+          <object class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="height_request">50</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -20,22 +20,24 @@
             <property name="vscrollbar_policy">automatic</property>
             <property name="shadow_type">etched-in</property>
             <child>
-              <widget class="GtkTreeView" id="top_view">
+              <object class="GtkTreeView" id="top_view">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">My Subscriptions View</atkproperty>
-                </accessibility>
-              </widget>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="a11y-top_view1">
+                    <property name="AtkObject::accessible-name" translatable="yes">My Subscriptions View</property>
+                  </object>
+                </child>
+              </object>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="resize">True</property>
             <property name="shrink">False</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkVBox" id="details_box">
+          <object class="GtkVBox" id="details_box">
             <property name="height_request">75</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -44,33 +46,35 @@
               <placeholder/>
             </child>
             <child>
-              <widget class="GtkHBox" id="hbox1">
+              <object class="GtkHBox" id="hbox1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <widget class="GtkHButtonBox" id="hbuttonbox1">
+                  <object class="GtkHButtonBox" id="hbuttonbox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="layout_style">end</property>
                     <child>
-                      <widget class="GtkButton" id="unsubscribe_button">
+                      <object class="GtkButton" id="unsubscribe_button">
                         <property name="label" translatable="yes">Remove</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="yalign">0.46000000834465027</property>
-                        <accessibility>
-                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Remove</atkproperty>
-                        </accessibility>
-                        <signal name="clicked" handler="on_unsubscribe_button_clicked" />
-                      </widget>
+                        <signal handler="on_unsubscribe_button_clicked" name="clicked"/>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="a11y-unsubscribe_button1">
+                            <property name="AtkObject::accessible-name" translatable="yes">Remove</property>
+                          </object>
+                        </child>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
@@ -78,7 +82,7 @@
                     <property name="position">0</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -86,13 +90,13 @@
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="resize">True</property>
             <property name="shrink">False</property>
           </packing>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+</interface>

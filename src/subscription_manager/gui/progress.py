@@ -14,17 +14,17 @@
 #
 
 import gtk
-import gtk.glade
 
 from subscription_manager.gui import widgets
 
 
-class Progress(widgets.GladeWidget):
+class Progress(widgets.SubmanBaseWidget):
 
     widget_names = ['progressWindow', 'progressLabel', 'progressBar', 'statusLabel']
+    gui_file = "progress.glade"
 
     def __init__(self, title, label):
-        super(Progress, self).__init__('progress.glade')
+        super(Progress, self).__init__()
 
         self.progressWindow.connect("delete-event", self._on_delete_event)
         cursor = gtk.gdk.Cursor(gtk.gdk.WATCH)

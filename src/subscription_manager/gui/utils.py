@@ -21,7 +21,6 @@ import threading
 
 import gobject
 import gtk
-import gtk.glade
 
 from subscription_manager.exceptions import ExceptionMapper
 import rhsm.connection as connection

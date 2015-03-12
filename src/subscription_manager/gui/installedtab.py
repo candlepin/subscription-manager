@@ -56,12 +56,13 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 ['product_text', 'product_arch_text', 'validity_text',
                  'subscriptions_view', 'subscription_status_label',
                  'update_certificates_button', 'register_button']
+    gui_file = "installed.glade"
 
     def __init__(self, backend, facts, tab_icon,
                  parent, ent_dir, prod_dir):
         # The row striping in this TreeView is handled automatically
         # because we have the rules_hint set to True in the Glade file.
-        super(InstalledProductsTab, self).__init__('installed.glade')
+        super(InstalledProductsTab, self).__init__()
 
         self.tab_icon = tab_icon
 
@@ -100,11 +101,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         self.set_sorts(self.store, cols)
 
-        self.glade.signal_autoconnect({
+        self.connect_signals({
             "on_update_certificates_button_clicked":
-            parent._update_certificates_button_clicked,
-        })
-        self.glade.signal_autoconnect({
+                parent._update_certificates_button_clicked,
             "on_register_button_clicked": parent._register_item_clicked,
         })
 

@@ -17,7 +17,6 @@ import gettext
 import logging
 
 import gtk
-import gtk.glade
 
 from subscription_manager.gui import widgets
 from subscription_manager.gui import utils
@@ -29,7 +28,7 @@ _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class PreferencesDialog(widgets.GladeWidget):
+class PreferencesDialog(widgets.SubmanBaseWidget):
     """
     Dialog for setting system preferences.
 
@@ -39,11 +38,12 @@ class PreferencesDialog(widgets.GladeWidget):
     """
 
     widget_names = ['dialog', 'release_combobox', 'sla_combobox',
-            'autoheal_checkbox', 'autoheal_event', 'autoheal_label',
-            'close_button']
+                    'autoheal_checkbox', 'autoheal_event', 'autoheal_label',
+                    'close_button']
+    gui_file = "preferences.glade"
 
     def __init__(self, backend, parent):
-        super(PreferencesDialog, self).__init__('preferences.glade')
+        super(PreferencesDialog, self).__init__()
         self.backend = backend
         self.allow_callbacks = False
         self.identity = inj.require(inj.IDENTITY)

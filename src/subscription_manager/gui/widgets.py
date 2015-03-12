@@ -15,12 +15,13 @@
 
 import datetime
 import gettext
+import logging
 import os
 import time
 import warnings
 
-import gobject
 import gtk
+import gobject
 import pango
 
 
@@ -58,24 +59,64 @@ warnings.filterwarnings(action="ignore",
                         message=".*ttempt to add property.*after class.*")
 
 
-class GladeWidget(object):
+class FileBasedGui(object):
     widget_names = []
+    file_dir = None
+    gui_file = None
 
-    def __init__(self, glade_file):
+    def gui_file_path(self):
+        return os.path.join(self.file_dir, self.gui_file)
+
+
+class BuilderFileBasedWidget(FileBasedGui):
+    widget_names = []
+    file_dir = GLADE_DIR
+
+    @classmethod
+    def from_file(cls, builder_file):
+        builder_based_widget = cls()
+        builder_based_widget.gui_file = builder_file
+
+        builder_based_widget._load_file()
+
+        return builder_based_widget
+
+    def _load_file(self):
+        path = self.gui_file_path()
+        self.log.debug("gui_file_path=%s", path)
+        self.builder.add_from_file(self.gui_file_path())
+
+    def __init__(self):
         """
         Create a new widget backed by the give glade file (assumed to be in data/).
         The initial_widget_names is a list of widgets to pull in as instance
         variables.
         """
-        self.glade = gtk.glade.XML(os.path.join(GLADE_DIR, glade_file))
+        self.log = logging.getLogger('rhsm-app.' + __name__ +
+                                     '.' + self.__class__.__name__)
 
-        if self.widget_names:
-            self.pull_widgets()
+        self.builder = gtk.Builder()
 
-    def _get_widget_names(self):
-        return
+    def get_object(self, name):
+        return self.builder.get_object(name)
 
-    def pull_widgets(self):
+    def connect_signals(self, handlers_dict):
+        return self.builder.connect_signals(handlers_dict)
+
+
+class SubmanBaseWidget(object):
+    widget_names = []
+    gui_file = None
+
+    def __init__(self):
+        self.gui = self._gui_factory()
+        self.pull_widgets(self.gui, self.widget_names)
+
+    def _gui_factory(self):
+        gui = BuilderFileBasedWidget.from_file(self.gui_file)
+        return gui
+
+    def pull_widgets(self, file_based_gui, widget_names):
         """
         This is a convenience method to pull the widgets from the 'names' list
         out of the given glade file, and make them available as variables on self.
@@ -83,8 +124,15 @@ class GladeWidget(object):
         For example:  a widget with the name age_input could be accessed via self.age_input
         """
 
-        for name in self.widget_names:
-            setattr(self, name, self.glade.get_widget(name))
+        for name in widget_names:
+            setattr(self, name, file_based_gui.get_object(name))
+
+    def connect_signals(self, signals):
+        return self.gui.connect_signals(signals)
+
+    # glade version -> get_widget
+    def get_object(self, object_name):
+        return self.gui.get_object(object_name)
 
 
 class HasSortableWidget(object):
@@ -140,7 +188,7 @@ class HasSortableWidget(object):
                 model.set_value(iter, model['background'], r[1])
 
 
-class SubscriptionManagerTab(GladeWidget, HasSortableWidget):
+class SubscriptionManagerTab(SubmanBaseWidget, HasSortableWidget):
     widget_names = ['top_view', 'content']
     # approx gtk version we need for grid lines to work
     # and not throw errors, this relates to basically rhel6
@@ -148,14 +196,19 @@ class SubscriptionManagerTab(GladeWidget, HasSortableWidget):
     MIN_GTK_MINOR_GRID = 18
     MIN_GTK_MICRO_GRID = 0
 
-    def __init__(self, glade_file):
+    gui_file = None
+
+    def __init__(self):
         """
         Creates a new tab widget, given the specified glade file and a list of
         widget names to extract to instance variables.
         """
         # Mix the specified widgets with standard names in the
         # glade file by convention
-        super(SubscriptionManagerTab, self).__init__(glade_file)
+        super(SubscriptionManagerTab, self).__init__()
+
+#        self.builder = BuilderFileGui.from_file(glade_file)
+
         self.content.unparent()
 
         # In the allsubs tab, we don't show the treeview until it is populated
@@ -325,13 +378,13 @@ class ProductsTable(object):
             return self.no_icon
 
 
-class SubDetailsWidget(GladeWidget):
+class SubDetailsWidget(SubmanBaseWidget):
     widget_names = ["sub_details_vbox", "subscription_text", "products_view",
                     "support_level_and_type_text", "sku_text", "pool_type_text"]
-    glade_file = "subdetails.glade"
+    gui_file = "subdetails.glade"
 
     def __init__(self, product_dir):
-        super(SubDetailsWidget, self).__init__(self.glade_file)
+        super(SubDetailsWidget, self).__init__()
 
         self.sub_details_vbox.unparent()
 
@@ -449,7 +502,7 @@ class ContractSubDetailsWidget(SubDetailsWidget):
                      "virt_only_text",
                      "details_view"]
 
-    glade_file = "subdetailscontract.glade"
+    gui_file = "subdetailscontract.glade"
 
     def __init__(self, product_dir):
         super(ContractSubDetailsWidget, self).__init__(product_dir)
