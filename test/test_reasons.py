@@ -24,6 +24,10 @@ ENT_ID_2 = "ff8080813e468fd8013e4694a4921179"
 INST_PID_3 = "801"  # non-entitled ram limiting product
 INST_PID_4 = "900"  # multiattr stack
 ENT_ID_4 = "ff8080813e468fd8013e4690f041031b"
+
+# not in valid ents
+NOT_VALID_ENT_ID = "ff8080813e468fd802344690f041031b"
+
 STACK_1 = 'multiattr-stack-test'  # multiattr
 STACK_2 = '1'  # awesomeos 64
 
@@ -65,10 +69,20 @@ class ReasonsTests(unittest.TestCase):
             'Only covers 8GB of 31GB of RAM.',
             '31', '8', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
             stack='multiattr-stack-test'))
+        reason_list.append(self.build_ent_reason_with_attrs('RAM',
+            'A different way to say Only covers 8GB of 31GB of RAM.',
+            '31', '8', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
+            stack='multiattr-stack-test'))
+        # This is a dupe of the above, since reasons.py has code for detecting
+        # dupe messages or names.
+        reason_list.append(self.build_ent_reason_with_attrs('RAM',
+            'Only covers 8GB of 31GB of RAM.',
+            '31', '8', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
+            stack='multiattr-stack-test'))
         reason_list.append(self.build_ent_reason_with_attrs('ARCH',
             'Covers architecture ppc64 but the system is x86_64.',
             'x86_64', 'ppc64', name='Awesome OS for ppc64',
-            ent='ff8080813e468fd8013e4694a4921179'))
+            ent=ENT_ID_2))
 
         self.sorter.reasons = Reasons(reason_list, self.sorter)
 
@@ -84,17 +98,19 @@ class ReasonsTests(unittest.TestCase):
 
     def test_get_product_reasons(self):
         messages = self.sorter.reasons.get_product_reasons(PROD_4)
-        self.assertEquals(3, len(messages))
+        self.assertEquals(4, len(messages))
         expectations = []
         expectations.append("Only covers 16 of 32 cores.")
         expectations.append("Only covers 8GB of 31GB of RAM.")
         expectations.append("Only covers 4 of 8 sockets.")
         for expected in expectations:
             self.assertTrue(expected in messages)
+
         messages = self.sorter.reasons.get_product_reasons(PROD_2)
         self.assertEquals(1, len(messages))
         expected = "Covers architecture ppc64 but the system is x86_64."
         self.assertEquals(expected, messages[0])
+
         reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6',
                 prod=INST_PID_1, name="Awesome OS for x86_64")
         self.sorter.reasons.reasons.append(reason)
@@ -102,14 +118,67 @@ class ReasonsTests(unittest.TestCase):
         self.assertEquals(0, len(messages))
         self.sorter.reasons.reasons.remove(reason)
 
+    def test_get_subscription_reasons(self):
+        sub_reasons = self.sorter.reasons.get_subscription_reasons(ENT_ID_1)
+        self.assertEquals(0, len(sub_reasons))
+
+        sub_reasons = self.sorter.reasons.get_subscription_reasons(ENT_ID_2)
+        self.assertEquals(1, len(sub_reasons))
+        expected = "Covers architecture ppc64 but the system is x86_64."
+        actual = sub_reasons[0]
+        self.assertEquals(expected, actual)
+
     def test_get_subscription_reasons_map(self):
         sub_reason_map = self.sorter.reasons.get_subscription_reasons_map()
-        self.assertEquals(3, len(sub_reason_map[ENT_ID_4]))
+        self.assertEquals(4, len(sub_reason_map[ENT_ID_4]))
         self.assertEquals(0, len(sub_reason_map[ENT_ID_1]))
         self.assertEquals(1, len(sub_reason_map[ENT_ID_2]))
         expected = "Covers architecture ppc64 but the system is x86_64."
         actual = sub_reason_map[ENT_ID_2][0]
         self.assertEquals(expected, actual)
+
+    def test_get_subscription_reasons_map_ent_id_not_in_valid_ent_certs(self):
+        reason_expired_entid = \
+            self.build_ent_reason_with_attrs(key='ARCH', message='This is not a reason reasons.',
+                                             has='x86_64', covered='ppc64',
+                                             name='Awesome OS for ppc64',
+                                             ent=NOT_VALID_ENT_ID)
+
+        self.sorter.valid_entitlement_certs = []
+        self.sorter.reasons = Reasons([reason_expired_entid], self.sorter)
+
+        sub_reason_map = self.sorter.reasons.get_subscription_reasons_map()
+        self.assertTrue(NOT_VALID_ENT_ID not in sub_reason_map)
+
+    def test_get_subscription_reasons_map_message_not_in_result(self):
+        # This is to cover the duplicate message finding code
+        reason_expired_entid = \
+            self.build_ent_reason_with_attrs(key='ARCH',
+                                             message='Some new reason.',
+                                             has='x86_64', covered='ppc64',
+                                             name='Awesome OS for ppc64',
+                                             ent=ENT_ID_2)
+
+        reason_expired_entid_2 = \
+            self.build_ent_reason_with_attrs(key='ARCH',
+                                             message='Some new reason.',
+                                             has='x86_64', covered='ppc64',
+                                             name='Awesome OS for ppc64',
+                                             ent=ENT_ID_2)
+        another_stack_reason = \
+        self.build_ent_reason_with_attrs(key='SOCKETS',
+                                         message='Only covers 4 of 8 sockets.',
+                                         has='8',
+                                         covered='4',
+                                         name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
+                                         stack='multiattr-stack-test')
+
+        self.sorter.reasons.reasons.append(reason_expired_entid)
+        self.sorter.reasons.reasons.append(reason_expired_entid_2)
+        self.sorter.reasons.reasons.append(another_stack_reason)
+
+        sub_reason_map = self.sorter.reasons.get_subscription_reasons_map()
+        self.assertTrue(ENT_ID_2 in sub_reason_map)
 
     def test_get_reason_id(self):
         reason = self.build_ent_reason_with_attrs(
@@ -128,9 +197,10 @@ class ReasonsTests(unittest.TestCase):
     def test_get_name_message_map(self):
         name_message_map = self.sorter.reasons.get_name_message_map()
         self.assertEquals(3, len(name_message_map))
-        expected = ['Only covers 16 of 32 cores.',
-            'Only covers 4 of 8 sockets.',
-            'Only covers 8GB of 31GB of RAM.']
+        expected = ['A different way to say Only covers 8GB of 31GB of RAM.',
+                    'Only covers 16 of 32 cores.',
+                    'Only covers 4 of 8 sockets.',
+                    'Only covers 8GB of 31GB of RAM.']
         self.assortEquals(expected, name_message_map[
             'Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)'])
 
