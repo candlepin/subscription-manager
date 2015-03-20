@@ -352,6 +352,9 @@ class MigrationEngine(object):
     def check_has_access(self, rpc_session, session_key):
         try:
             if session_key is None:
+                # We should not never be here.  This method has a guard that keeps it from being
+                # called when not needed.  If we see this error, someone has made a programming
+                # mistake.
                 raise Exception("No session key available.  Check that XMLRPC connection is being made with credentials.")
 
             rpc_session.system.getDetails(session_key, self.system_id)
@@ -822,6 +825,7 @@ def add_parser_options(parser, five_to_six_script=False):
 
     if five_to_six_script:
         default_registration_state = "unentitle"
+        valid_states = ["keep", "unentitle", "purge"]
     else:
         # The consumerid provides these
         parser.add_option("--org", dest='org',
@@ -835,8 +839,9 @@ def add_parser_options(parser, five_to_six_script=False):
         parser.add_option("--activation-key", action="append", dest="activation_keys",
             help=_("activation key to use for registration (can be specified more than once)"))
         default_registration_state = "purge"
+        # Hosted doesn't have unentitle
+        valid_states = ["keep", "purge"]
 
-    valid_states = ["keep", "unentitle", "purge"]
     parser.add_option("--registration-state", type="choice",
         choices=valid_states, metavar=",".join(valid_states), default=default_registration_state,
         help=_("state to leave system in on legacy server (default is '%s')") % default_registration_state)

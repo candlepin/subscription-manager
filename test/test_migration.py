@@ -190,6 +190,13 @@ class TestMigration(SubManFixture):
         valid = ["keep", "unentitle", "purge"]
         for opt in valid:
             (options, args) = parser.parse_args(["--registration-state", opt])
+
+        parser = OptionParser()
+        migrate.add_parser_options(parser, five_to_six_script=False)
+        valid = ["keep", "purge"]
+        for opt in valid:
+            (options, args) = parser.parse_args(["--registration-state", opt])
+
         self.assertRaises(SystemExit, parser.parse_args, ["--registration-state", "blah"])
 
     def test_registration_state_default(self):
