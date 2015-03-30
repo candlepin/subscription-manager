@@ -268,8 +268,14 @@ class ContentConnection(object):
         self.timeout_altered = False
 
         # get the proxy information from the environment variable
-        # if available
-        info = get_env_proxy_info()
+        # if available and host is not in no_proxy
+        if urllib.proxy_bypass_environment(self.host):
+            info = {'proxy_username': '',
+                   'proxy_hostname': '',
+                   'proxy_port': '',
+                   'proxy_password': ''}
+        else:
+            info = get_env_proxy_info()
 
         self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname') or info['proxy_hostname']
         self.proxy_port = proxy_port or config.get('server', 'proxy_port') or info['proxy_port']
@@ -651,8 +657,14 @@ class UEPConnection:
         self.handler = self.handler.rstrip("/")
 
         # get the proxy information from the environment variable
-        # if available
-        info = get_env_proxy_info()
+        # if available and host is not in no_proxy
+        if urllib.proxy_bypass_environment(self.host):
+            info = {'proxy_username': '',
+                   'proxy_hostname': '',
+                   'proxy_port': '',
+                   'proxy_password': ''}
+        else:
+            info = get_env_proxy_info()
 
         self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname') or info['proxy_hostname']
         self.proxy_port = proxy_port or config.get('server', 'proxy_port') or info['proxy_port']
