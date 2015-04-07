@@ -36,7 +36,7 @@ class Reasons(object):
     def get_subscription_reasons_map(self):
         """
         returns a dictionary that maps
-        subscriptions to lists of reasons
+        valid entitlements to lists of reasons.
         """
         result = {}
         for s in self.sorter.valid_entitlement_certs:
@@ -44,21 +44,31 @@ class Reasons(object):
 
         for reason in self.reasons:
             if 'entitlement_id' in reason['attributes']:
-                if reason['message'] not in result[reason['attributes']['entitlement_id']]:
-                    result[reason['attributes']['entitlement_id']].append(reason['message'])
+                # Note 'result' won't have entries for any expired certs, so
+                # result['some_ent_that_has_expired'] could throw a KeyError
+                ent_id = reason['attributes']['entitlement_id']
+                if ent_id in result:
+                    if reason['message'] in result[ent_id]:
+                        continue
+
+                    result[ent_id].append(reason['message'])
+
             elif 'stack_id' in reason['attributes']:
-                for s in self.get_stack_subscriptions(reason['attributes']['stack_id']):
-                    if reason['message'] not in result[s]:
-                        result[s].append(reason['message'])
+                for s_id in self.get_stack_subscriptions(reason['attributes']['stack_id']):
+                    if reason['message'] in result[s_id]:
+                        continue
+                    result[s_id].append(reason['message'])
         return result
 
     def get_name_message_map(self):
         result = {}
         for reason in self.reasons:
-            if reason['attributes']['name'] not in result:
-                result[reason['attributes']['name']] = []
-            if reason['message'] not in result[reason['attributes']['name']]:
-                result[reason['attributes']['name']].append(reason['message'])
+            reason_name = reason['attributes']['name']
+            if reason_name not in result:
+                result[reason_name] = []
+            if reason['message'] in result[reason_name]:
+                continue
+            result[reason_name].append(reason['message'])
         return result
 
     def get_stack_subscriptions(self, stack_id):
