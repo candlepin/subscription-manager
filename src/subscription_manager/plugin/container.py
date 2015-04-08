@@ -13,7 +13,7 @@
 # in this software or its documentation.
 #
 
-""" Core code for the container content plugin. """
+""" Core code for the container content plug-in. """
 
 import gettext
 import logging
@@ -138,7 +138,7 @@ class ContainerCertDir(object):
         log.debug("Syncing container certificates to %s" % self.path)
         if not os.path.exists(self.host_cert_dir):
             log.warn("Container cert directory does not exist: %s" % self.host_cert_dir)
-            log.warn("Exiting plugin")
+            log.warn("Exiting plug-in")
             return
         if not os.path.exists(self.path):
             log.info("Container cert directory does not exist, creating it.")

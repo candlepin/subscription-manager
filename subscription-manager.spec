@@ -1,6 +1,6 @@
 # Prefer systemd over sysv on Fedora 17+ and RHEL 7+
 %global use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
-# For optional building of ostree-plugin sub package. Unrelated to systemd
+# For optional building of ostree-plugin subpackage. Unrelated to systemd
 # but the same versions apply at the moment.
 %global has_ostree %use_systemd
 %global use_old_firstboot (0%{?rhel} && 0%{?rhel} <= 6)
@@ -84,11 +84,11 @@ platform.
 
 %if %has_ostree
 %package -n subscription-manager-plugin-ostree
-Summary: A plugin for handling OSTree content.
+Summary: A plug-in for handling OSTree content.
 Group: System Environment/Base
 
 Requires: pygobject3-base
-# plugin needs a slightly newer version of python-iniparse for 'tidy'
+# plug-in needs a slightly newer version of python-iniparse for 'tidy'
 Requires:  python-iniparse >= 0.4
 
 %description -n subscription-manager-plugin-ostree
@@ -104,7 +104,7 @@ the remote in the currently deployed .origin file.
 %endif
 
 %package -n subscription-manager-plugin-container
-Summary: A plugin for handling container content.
+Summary: A plug-in for handling container content.
 Group: System Environment/Base
 
 %description -n subscription-manager-plugin-container
@@ -206,7 +206,7 @@ touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
 mkdir -p %{buildroot}%{_sysconfdir}/pki/consumer
 mkdir -p %{buildroot}%{_sysconfdir}/pki/entitlement
 
-# Setup cert directories for the container plugin:
+# Setup cert directories for the container plug-in:
 mkdir -p %{buildroot}%{_sysconfdir}/docker/certs.d/
 mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
@@ -329,14 +329,14 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/plugin/*.py*
 
 %{_datadir}/rhsm/subscription_manager/version.py*
-# subscription-manager plugins
+# subscription-manager plug-ins
 %dir %{rhsm_plugins_dir}
 %dir %{_sysconfdir}/rhsm/pluginconf.d
-# add default plugins here when we have some
+# add default plug-ins here when we have some
 
-# yum plugins
+# yum plug-ins
 # Using _prefix + lib here instead of libdir as that evaluates to /usr/lib64 on x86_64,
-# but yum plugins seem to normally be sent to /usr/lib/:
+# but yum plug-ins seem to normally be sent to /usr/lib/:
 %{_prefix}/lib/yum-plugins/subscription-manager.py*
 %{_prefix}/lib/yum-plugins/product-id.py*
 

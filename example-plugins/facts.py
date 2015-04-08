@@ -21,7 +21,7 @@ import json
 
 
 class FactsPlugin(SubManPlugin):
-    """Plugin for adding additional facts to subscription-manager facts"""
+    """Plug-in for adding additional facts to subscription-manager facts"""
     name = "facts"
 
     def post_facts_collection_hook(self, conduit):

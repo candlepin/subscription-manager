@@ -63,7 +63,7 @@ def init_dep_injection():
 
     inj.provide(inj.CERT_SORTER, CertSorter, singleton=True)
 
-    # Set up plugin manager as a singleton.
+    # Set up PluginManager as a singleton.
     # FIXME: should we aggressively catch exceptions here? If we can't
     # create a PluginManager we should probably raise an exception all the way up
     inj.provide(inj.PLUGIN_MANAGER, PluginManager, singleton=True)

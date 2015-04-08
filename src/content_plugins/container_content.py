@@ -14,7 +14,7 @@
 #
 
 """
-A subscription-manager plugin to watch for docker content in
+A subscription-manager plug-in to watch for docker content in
 entitlement certificates, and correctly configure to use them.
 """
 
@@ -30,7 +30,7 @@ HOSTNAME_CERT_DIR = "/etc/docker/certs.d/"
 
 
 class ContainerContentPlugin(base_plugin.SubManPlugin):
-    """Plugin for adding docker content action to subscription-manager"""
+    """Plug-in for adding docker content action to subscription-manager"""
     name = "container_content"
 
     def update_content_hook(self, conduit):

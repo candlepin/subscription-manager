@@ -20,7 +20,7 @@ requires_api_version = "1.0"
 
 
 class AllSlotsPlugin(SubManPlugin):
-    """Plugin with hooks for all slots."""
+    """Plug-in with hooks for all slots."""
     name = "all_slots"
     all_slots = True
 

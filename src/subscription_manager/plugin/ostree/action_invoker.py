@@ -23,7 +23,7 @@ from subscription_manager.model import find_content
 
 from subscription_manager.plugin.ostree import model
 
-# plugins get
+# plug-ins get
 log = logging.getLogger('rhsm-app.' + __name__)
 
 _ = gettext.gettext

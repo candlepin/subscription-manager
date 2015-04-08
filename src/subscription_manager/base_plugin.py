@@ -17,12 +17,12 @@
 class SubManPlugin(object):
     """Base class for all subscription-manager "rhsm-plugins"
 
-    Plugins need to subclass SubManPlugin() to be found
+    Plug-ins need to subclass SubManPlugin() to be found
     """
     name = None
     conf = None
     # if all_slots is set, the plugin will get registered to all slots
-    # it is up to the plugin to handle providing callables
+    # it is up to the plug-in to handle providing callables
     all_slots = None
 
     # did we have hooks that match provided slots? aka
