@@ -129,7 +129,7 @@
 	</para>
 
 			<para>
-				The basis of software management is a <emphasis>subscription</emphasis>. A subscription contains both the <emphasis>products</emphasis> that are available, the support levels, and the <emphasis>quantities</emphasis>, or number of servers, that the product can be installed on. A subscription is roughly analogous to a user license, in that it grants all of the rights to that product to that system. Unlike a user license, a subscription does not grant the right to <emphasis>use</emphasis> the software; with the subscription model, a subscription grants the ability to download the packages and receive updates. 
+				The basis of software management is a <emphasis>subscription</emphasis>. A subscription contains both the <emphasis>products</emphasis> that are available, the support levels, and the <emphasis>quantities</emphasis>, or number of servers, that the product can be installed on. A subscription is roughly analogous to a user license, in that it grants all of the rights to that product to that system. Unlike a user license, a subscription does not grant the right to <emphasis>use</emphasis> the software; with the subscription model, a subscription grants the ability to download the packages and receive updates.
 			</para>
 			<para>
 				Subscriptions are managed though a subscription management service such as the Customer Portal Subscription Management (hosted) or an on-premise service like Subscription Asset Manager. A second service delivers the actual software bits, in tandem with the subscriptions managed for a system.
@@ -138,7 +138,7 @@
 				The subscription management service maintains a list of every subscription or set of subscriptions for an organization. The list of subscriptions is a <emphasis>pool</emphasis>, identified by a unique ID (called a <emphasis>pool ID</emphasis>). A system is <emphasis>registered</emphasis>, or added, to the subscription management service to allow it to manage the subscriptions for that system. Like the subscription, the system is also added to the subscription management service inventory and is assigned a unique ID within the service. The subscriptions and system entries, together, comprise the <emphasis>inventory</emphasis>.
 			</para>
 			<para>
-				A system allocates, or <emphasis>attaches</emphasis>, one of the quantities of a product in a subscription to itself. 
+				A system allocates, or <emphasis>attaches</emphasis>, one of the quantities of a product in a subscription to itself.
 			</para>
 			<para>
 				The repository where the product software is located is organized according to the <emphasis>product</emphasis>. Each product group within
@@ -283,7 +283,7 @@
 		<primary>subscriptions</primary>
 		<secondary>registering</secondary>
 	</indexterm>
-		
+
 
 		<sect2 id="registering-ui">
 			<title>Registering Systems with Customer Portal Subscription Management</title>
@@ -308,7 +308,7 @@
 			</listitem>
 				<listitem>
 					<para>
-						Click the <guibutton>Register</guibutton> button in the <guilabel>My Installed Products</guilabel> tab. 
+						Click the <guibutton>Register</guibutton> button in the <guilabel>My Installed Products</guilabel> tab.
 					</para>
 				</listitem>
 				<listitem>
@@ -335,7 +335,7 @@
 				<para>
 					For example:
 				</para>
-				
+
 				<!--
 				code is 14 chars too long
 				adding break
@@ -372,7 +372,7 @@
 
 		<sect2 id="activating-sam"><title>Registering to Subscription Asset Manager with an Activation Key</title>
 			<para>
-				An on-premise Subscription Asset Manager can pre-configure subscriptions to use for a system, and that pre-configured set of subscriptions is identified by an activation key. That key can then be used to attach those subscriptions on a local system.
+				An on-premise Subscription Asset Manager can preconfigure subscriptions to use for a system, and that preconfigured set of subscriptions is identified by an activation key. That key can then be used to attach those subscriptions on a local system.
 			</para>
 			<para>
 				Activation keys for &SAM; are configured before the system is ever created or added to the inventory, and the activation keys are passed <emphasis>as part of</emphasis> registering the system.
@@ -380,7 +380,7 @@
 			<orderedlist>
 				<listitem>
 					<para>
-			Install the configuration RPM to point Subscription Manager to the subscription application. 
+			Install the configuration RPM to point Subscription Manager to the subscription application.
 					For example:
 				</para>
 				<!--
@@ -417,7 +417,7 @@
 				</listitem>
 			</orderedlist>
 			<para>
-				After the registration completes, all of the pre-configured subscriptions are attached to the system.
+				After the registration completes, all of the preconfigured subscriptions are attached to the system.
 			</para>
 		</sect2>
 
@@ -505,7 +505,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							Select the desired subscription. 
+							Select the desired subscription.
 						</para>
 					</listitem>
 					<listitem>
@@ -544,7 +544,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							Select the subscription to remove. 
+							Select the subscription to remove.
 						</para>
 
 					</listitem>
@@ -558,7 +558,7 @@
 				</orderedlist>
 
 		</sect2>
-		
+
 
 			<sect2 id="ADDING-SUB">
 				<title>Manually Importing a New Subscription</title>
@@ -624,7 +624,7 @@
 				</listitem>
 					<listitem>
 						<para>
-							Launch the Subscription Manager GUI. 
+							Launch the Subscription Manager GUI.
 						</para>
 					</listitem>
 					<listitem>
@@ -671,7 +671,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							In the dialog window, enter the email address to send the notification to when the redemption is complete. Because the redemption process can take several minutes to contact the vendor and receive information about the pre-configured subscriptions, the notification message is sent through email rather than through the Subscription Manager dialog window.
+							In the dialog window, enter the email address to send the notification to when the redemption is complete. Because the redemption process can take several minutes to contact the vendor and receive information about the preconfigured subscriptions, the notification message is sent through email rather than through the Subscription Manager dialog window.
 						</para>
 					</listitem>
 					<listitem>
@@ -727,7 +727,7 @@
 				The filters dynamically search for available subscriptions.
 			</para>
 						<para>
-							By default, the displayed subscriptions are filtered so that they are compatible with the system's recognized hardware, operating 
+							By default, the displayed subscriptions are filtered so that they are compatible with the system's recognized hardware, operating
 							system version, and installed products. These filters can be changed to filter by other criteria:
 						</para>
 						<itemizedlist>
@@ -766,8 +766,8 @@
 			</formalpara>
 		</sect1>
 
-		
-		
+
+
 
 	<sect1 id="sla-preferences"><title>Setting Service Level Preferences</title>
 	<indexterm>
@@ -792,7 +792,7 @@
 				The service information for each subscription is part of the subscription details. Two attributes are displayed, per subscription: its support level and its support type. The <emphasis>level</emphasis> defines how quickly support is guaranteed to respond to a case. The <emphasis>type</emphasis> defines the methods of communication; for production level support, this is always web and phone.
 			</para>
 			<para>
-				An account can have multiple levels of support available, even for the same product. 
+				An account can have multiple levels of support available, even for the same product.
 					A system can be set up to select subscriptions based on a preferred service level. This is used as a component in autoattaching subscriptions to the system.
 				</para>
 		<para>
@@ -816,7 +816,7 @@
 			</listitem>
 		</orderedlist>
 	</sect1>
-		
+
 
 	<sect1 id="ystream-preferences"><title>Setting Release Version Preferences</title>
 	<indexterm>
@@ -832,23 +832,23 @@
 		<secondary>static release version</secondary>
 	</indexterm>
 	<para>
-		Many IT environments have to be certified to meet a certain level of security or other 
-		criteria. In that case, major upgrades must be carefully planned and controlled &mdash; 
-		so administrators can't simply run <command>yum update</command> and move from version to 
+		Many IT environments have to be certified to meet a certain level of security or other
+		criteria. In that case, major upgrades must be carefully planned and controlled &mdash;
+		so administrators can't simply run <command>yum update</command> and move from version to
 		version.
 	</para>
 	<para>
 		The preferences dialog can set a preferred minor, or <emphasis>y-stream</emphasis>, release
-		number for the system to stick to. This limits the system to content repositories associated 
-		with that operating system version instead of moving to the newest or latest version repositories. 
-		For example, if the preferred operating system version is 6.3, then 6.3 content repositories are 
-		preferred for all installed and subscribed products for the system, even if other repositories 
+		number for the system to stick to. This limits the system to content repositories associated
+		with that operating system version instead of moving to the newest or latest version repositories.
+		For example, if the preferred operating system version is 6.3, then 6.3 content repositories are
+		preferred for all installed and subscribed products for the system, even if other repositories
 		are available.
 	</para>
 		<para>
 			To assign a preferred operating system version:
 		</para>
-		
+
 		<orderedlist>
 			<listitem>
 				<para>
@@ -883,8 +883,8 @@
 		<secondary>notifications</secondary>
 	</indexterm>
 		<para>
-			The Red Hat Subscription Manager provides a series of log and UI messages that indicate any changes to the valid certificates of any installed products for a system. In the Subscription Manager GUI, 
-			the status of the system subscriptions is color-coded, where <emphasis>green</emphasis> means all subscriptions are attached for all installed products, <emphasis>yellow</emphasis> 
+			The Red Hat Subscription Manager provides a series of log and UI messages that indicate any changes to the valid certificates of any installed products for a system. In the Subscription Manager GUI,
+			the status of the system subscriptions is color-coded, where <emphasis>green</emphasis> means all subscriptions are attached for all installed products, <emphasis>yellow</emphasis>
 			means that some products may not have all of the required subscriptions attached but updates are still in effect, and <emphasis>red</emphasis> means that updates are disabled.
 		</para>
 		<figure id="fig.status">
@@ -906,7 +906,7 @@
 		<para>
 			As any installed product nears the expiration date of the subscription, the Subscription Manager daemon will issue a warning. A similar message is given when the system has products without a valid certificate, meaning either there is not subscription attached that covers that product or the product is installed past the expiration of the subscription. Clicking the <guilabel>Manage My Subscriptions...</guilabel> button in the subscription notification window opens the Red Hat Subscription Manager GUI to view and update subscriptions.
 		</para>
-		
+
 		<figure id="fig.ents-nag-warning">
 			<title>Subscription Warning Message</title>
 			<mediaobject>
