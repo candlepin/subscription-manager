@@ -27,6 +27,7 @@ from rhsm.config import initConfig
 from rhsm.certificate import Key, CertificateException, create_from_pem
 
 import subscription_manager.cache as cache
+import subscription_manager.cert_sorter as cert_sorter
 from subscription_manager.cert_sorter import StackingGroupSorter, ComplianceManager
 from subscription_manager import identity
 from subscription_manager.facts import Facts
@@ -886,7 +887,6 @@ def refresh_compliance_status(default_dbus_properties):
     sorter = require(CERT_SORTER)
     installed_products = require(PROD_DIR)
     status = sorter.get_compliance_status()
-
     dbus_properties = {}
     dbus_properties.update(default_dbus_properties)
 
@@ -913,6 +913,7 @@ def refresh_compliance_status(default_dbus_properties):
         label = product_id or 'Unknown label'
         name = attrs.get('name') or 'Unknown name'
         message = reason.get('message') or 'Unknown message'
+        state = cert_sorter.UNKNOWN
 
         if product_id:
             state = sorter.get_status(label)
