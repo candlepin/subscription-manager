@@ -40,7 +40,7 @@ Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  pygobject2
 Requires:  virt-what
-Requires:  python-rhsm >= 1.13.10
+Requires:  python-rhsm >= 1.14.2
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 Requires:  usermode
