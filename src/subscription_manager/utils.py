@@ -294,10 +294,14 @@ def restart_virt_who():
 
 
 def friendly_join(items):
-    if (not items or len(items) == 0):
+    if items is None:
         return ""
 
-    items = list(items)
+    items = [str(x) for x in items if x is not None]
+
+    if not items:
+        return ""
+
     if len(items) == 1:
         return items[0]
 
@@ -308,6 +312,7 @@ def friendly_join(items):
     if len(items) > 2:
         first_string = first_string + ','
 
+    # FIXME: This is wrong in most non english locales.
     return first_string + " %s " % _("and") + last
 
 
