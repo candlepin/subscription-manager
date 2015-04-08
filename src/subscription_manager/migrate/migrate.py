@@ -138,6 +138,12 @@ class MigrationEngine(object):
         self.rhncfg = initUp2dateConfig()
         self.rhsmcfg = rhsm.config.initConfig()
 
+        # Sometimes we need to send up the entire contents of the systemid file
+        # which is referred to in Satellite 5 nomenclature as a "certificate"
+        # although it is not an X509 certificate.
+        self.system_id_contents = open(self.rhncfg["systemIdPath"], 'r').read()
+        self.system_id = self.get_system_id(self.system_id_contents)
+
         self.proxy_host = None
         self.proxy_port = None
         self.proxy_user = None
@@ -161,8 +167,11 @@ class MigrationEngine(object):
         return UserCredentials(username, password)
 
     def get_auth(self):
-        self.legacy_creds = self.authenticate(self.options.legacy_user, self.options.legacy_password,
-            _("Legacy username: "), _("Legacy password: "))
+        if self.options.registration_state == "keep":
+            self.legacy_creds = UserCredentials(None, None)
+        else:
+            self.legacy_creds = self.authenticate(self.options.legacy_user, self.options.legacy_password,
+                _("Legacy username: "), _("Legacy password: "))
 
         if self.options.activation_keys:
             self.destination_creds = UserCredentials(None, None)
@@ -315,6 +324,7 @@ class MigrationEngine(object):
     def connect_to_rhn(self, credentials):
         hostname = self.rhncfg['serverURL'].split('/')[2]
         server_url = 'https://%s/rpc/api' % (hostname)
+
         try:
             if self.rhncfg['enableProxy']:
                 proxy = "%s:%s" % (self.proxy_host, self.proxy_port)
@@ -329,20 +339,28 @@ class MigrationEngine(object):
             ca = self.rhncfg["sslCACert"]
             rpc_session.add_trusted_cert(ca)
 
-            session_key = rpc_session.auth.login(credentials.username, credentials.password)
+            if credentials.username and credentials.password:
+                session_key = rpc_session.auth.login(credentials.username, credentials.password)
+            else:
+                session_key = None
+
             return (rpc_session, session_key)
         except Exception, e:
             log.exception(e)
             system_exit(1, _("Unable to authenticate to legacy server.  ") + SEE_LOG_FILE)
 
-    def check_is_org_admin(self, rpc_session, session_key, username):
+    def check_has_access(self, rpc_session, session_key):
         try:
-            roles = rpc_session.user.listRoles(session_key, username)
+            if session_key is None:
+                # We should not ever be here.  This method has a guard that keeps it from being
+                # called when not needed.  If we see this error, someone has made a programming
+                # mistake.
+                raise Exception("No session key available.  Check that XMLRPC connection is being made with credentials.")
+
+            rpc_session.system.getDetails(session_key, self.system_id)
         except Exception, e:
             log.exception(e)
-            system_exit(1, _("Problem encountered determining user roles on legacy server.  ") + SEE_LOG_FILE)
-        if "org_admin" not in roles:
-            system_exit(1, _("You must be an org admin to successfully run this script."))
+            system_exit(1, _("You do not have access to system %s.  " % self.system_id) + SEE_LOG_FILE)
 
     def resolve_base_channel(self, label, rpc_session, session_key):
         try:
@@ -534,8 +552,8 @@ class MigrationEngine(object):
             except OSError, e:
                 log.info(e)
 
-    def get_system_id(self, system_id_path):
-        p = libxml2.parseDoc(open(system_id_path, 'r').read())
+    def get_system_id(self, content):
+        p = libxml2.parseDoc(content)
         system_id = int(p.xpathEval('string(//member[* = "system_id"]/value/string)').split('-')[1])
         return system_id
 
@@ -544,7 +562,7 @@ class MigrationEngine(object):
 
         if not os.path.exists(FACT_FILE):
             f = open(FACT_FILE, 'w')
-            json.dump({"migration.classic_system_id": self.get_system_id(self.rhncfg["systemIdPath"]),
+            json.dump({"migration.classic_system_id": self.system_id,
                        "migration.migrated_from": self.rhncfg['serverURL'],
                        "migration.migration_date": migration_date}, f)
             f.close()
@@ -574,9 +592,8 @@ class MigrationEngine(object):
         f.close()
 
     def legacy_unentitle(self, rpc_session):
-        system_id = open(self.rhncfg["systemIdPath"], 'r').read()
         try:
-            rpc_session.system.unentitle(system_id)
+            rpc_session.system.unentitle(self.system_id_contents)
         except Exception, e:
             log.exception("Could not unentitle system on Satellite 5.", e)
             system_exit(1, _("Could not unentitle system on legacy server.  ") + SEE_LOG_FILE)
@@ -587,23 +604,22 @@ class MigrationEngine(object):
 
     def legacy_purge(self, rpc_session, session_key):
         system_id_path = self.rhncfg["systemIdPath"]
-        system_id = self.get_system_id(system_id_path)
 
-        log.info("Deleting system %s from legacy server...", system_id)
+        log.info("Deleting system %s from legacy server...", self.system_id)
         try:
-            result = rpc_session.system.deleteSystems(session_key, system_id)
+            result = rpc_session.system.deleteSystems(session_key, self.system_id)
         except Exception:
-            log.exception("Could not delete system %s from legacy server" % system_id)
+            log.exception("Could not delete system %s from legacy server" % self.system_id)
             # If we time out or get a network error, log it and keep going.
             shutil.move(system_id_path, system_id_path + ".save")
-            print _("Did not receive a completed unregistration message from legacy server for system %s.") % system_id
+            print _("Did not receive a completed unregistration message from legacy server for system %s.") % self.system_id
 
             if self.is_hosted:
                 print _("Please investigate on the Customer Portal at https://access.redhat.com.")
             return
 
         if result:
-            log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", system_id)
+            log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", self.system_id)
             os.remove(system_id_path)
             try:
                 self.disable_yum_rhn_plugin()
@@ -615,11 +631,8 @@ class MigrationEngine(object):
             system_exit(1, _("Unable to unregister system from legacy server.  ") + SEE_LOG_FILE)
 
     def load_transition_data(self, rpc_session):
-        # We need to send up the entire contents of the systemid file which is referred to in
-        # Satellite 5 nomenclature as a "certificate" although it is not an X509 certificate.
-        system_id = open(self.rhncfg["systemIdPath"], 'r').read()
         try:
-            transition_data = rpc_session.system.transitionDataForSystem(system_id)
+            transition_data = rpc_session.system.transitionDataForSystem(self.system_id_contents)
             self.consumer_id = transition_data['uuid']
         except Exception, e:
             log.exception(e)
@@ -768,8 +781,8 @@ class MigrationEngine(object):
                 org = self.get_org(self.destination_creds.username)
                 environment = self.get_environment(org)
 
-        # TODO Not sure this is necessary.  See BZ 1086367
-        self.check_is_org_admin(rpc_session, session_key, self.legacy_creds.username)
+        if self.options.registration_state != "keep":
+            self.check_has_access(rpc_session, session_key)
 
         print
         print _("Retrieving existing legacy subscription information...")
@@ -811,10 +824,8 @@ def add_parser_options(parser, five_to_six_script=False):
         help=_("don't use legacy proxy settings with destination server"))
 
     if five_to_six_script:
+        default_registration_state = "unentitle"
         valid_states = ["keep", "unentitle", "purge"]
-        parser.add_option("--registration-state", type="choice",
-            choices=valid_states, metavar=",".join(valid_states), default="unentitle",
-            help=_("state to leave system in on legacy server (not available in hosted environments; default is 'unentitle')"))
     else:
         # The consumerid provides these
         parser.add_option("--org", dest='org',
@@ -827,6 +838,13 @@ def add_parser_options(parser, five_to_six_script=False):
         # offering the option for 5to6
         parser.add_option("--activation-key", action="append", dest="activation_keys",
             help=_("activation key to use for registration (can be specified more than once)"))
+        default_registration_state = "purge"
+        # Hosted doesn't have unentitle
+        valid_states = ["keep", "purge"]
+
+    parser.add_option("--registration-state", type="choice",
+        choices=valid_states, metavar=",".join(valid_states), default=default_registration_state,
+        help=_("state to leave system in on legacy server (default is '%s')") % default_registration_state)
 
     parser.add_option("--legacy-user",
         help=_("specify the user name on the legacy server"))
@@ -870,8 +888,6 @@ def set_defaults(options, five_to_six_script):
         options.environment = None
         options.force = True
         options.activation_keys = None
-    else:
-        options.registration_state = "purge"
 
 
 def main(args=None, five_to_six_script=False):

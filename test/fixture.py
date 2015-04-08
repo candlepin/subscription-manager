@@ -1,4 +1,5 @@
 import difflib
+import os
 import pprint
 import unittest
 import sys
@@ -28,6 +29,19 @@ def open_mock(content, **kwargs):
     m = mock_open(read_data=content)
     with patch('__builtin__.open', m, create=True, **kwargs) as m:
         yield m
+
+
+@contextmanager
+def temp_file(content, *args, **kwargs):
+    try:
+        kwargs['delete'] = False
+        kwargs.setdefault('prefix', 'sub-man-test')
+        fh = tempfile.NamedTemporaryFile(*args, **kwargs)
+        fh.write(content)
+        fh.close()
+        yield fh.name
+    finally:
+        os.unlink(fh.name)
 
 
 class FakeLogger:

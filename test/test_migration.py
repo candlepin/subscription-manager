@@ -21,8 +21,9 @@ import unittest
 
 from mock import patch, NonCallableMock, MagicMock, Mock, call
 from M2Crypto import SSL
-from fixture import Capture, SubManFixture, open_mock
+from fixture import Capture, SubManFixture, temp_file
 from optparse import OptionParser
+from textwrap import dedent
 
 from subscription_manager import injection as inj
 from subscription_manager.migrate import migrate
@@ -99,9 +100,31 @@ class TestMigration(SubManFixture):
     def setUp(self):
         super(TestMigration, self).setUp()
         migrate.initUp2dateConfig = lambda: {}
+
+        self.system_id = dedent("""
+        <params>
+          <param>
+            <value>
+              <struct>
+                <member>
+                  <name>system_id</name>
+                  <value>
+                    <string>ID-123</string>
+                  </value>
+                </member>
+              </struct>
+            </value>
+          </param>
+        </params>
+        """)
+
         patch('subscription_manager.migrate.migrate.ProductDatabase').start()
-        self.engine = migrate.MigrationEngine(self.create_options())
-        self.engine.cp = stubs.StubUEP()
+        with temp_file(self.system_id) as temp_id_file:
+            with patch("subscription_manager.migrate.migrate.initUp2dateConfig") as init_conf:
+                init_conf.return_value = {"systemIdPath": temp_id_file}
+                self.engine = migrate.MigrationEngine(self.create_options())
+                self.engine.cp = stubs.StubUEP()
+                self.system_id_file = temp_id_file
 
         # These tests print a lot to stdout and stderr
         # so quiet them.
@@ -151,7 +174,7 @@ class TestMigration(SubManFixture):
     def test_classic_migration_options(self):
         parser = OptionParser()
         migrate.add_parser_options(parser)
-        self.assertFalse(parser.has_option("--registration-state"))
+        self.assertTrue(parser.has_option("--registration-state"))
         self.assertTrue(parser.has_option("--org"))
         self.assertTrue(parser.has_option("--environment"))
         self.assertTrue(parser.has_option("--force"))
@@ -167,6 +190,13 @@ class TestMigration(SubManFixture):
         valid = ["keep", "unentitle", "purge"]
         for opt in valid:
             (options, args) = parser.parse_args(["--registration-state", opt])
+
+        parser = OptionParser()
+        migrate.add_parser_options(parser, five_to_six_script=False)
+        valid = ["keep", "purge"]
+        for opt in valid:
+            (options, args) = parser.parse_args(["--registration-state", opt])
+
         self.assertRaises(SystemExit, parser.parse_args, ["--registration-state", "blah"])
 
     def test_registration_state_default(self):
@@ -433,40 +463,22 @@ class TestMigration(SubManFixture):
 
     @patch("rhn.rpclib.Server")
     def test_load_transition_data(self, mock_server):
-        rhn_config = {
-            "systemIdPath": "/some/path",
-            }
-        self.engine.rhncfg = rhn_config
         mock_server.system.transitionDataForSystem.return_value = {"uuid": "1"}
-        with open_mock("contents") as f:
-            self.engine.load_transition_data(mock_server)
-            f.assert_called_once_with("/some/path", "r")
-            mock_server.system.transitionDataForSystem.assert_called_once_with("contents")
-            self.assertEquals("1", self.engine.consumer_id)
+        self.engine.load_transition_data(mock_server)
+        mock_server.system.transitionDataForSystem.assert_called_once_with(self.system_id)
+        self.assertEquals("1", self.engine.consumer_id)
 
     @patch("rhn.rpclib.Server")
     def test_legacy_unentitle(self, mock_server):
-        rhn_config = {
-            "systemIdPath": "/some/path",
-            }
-        self.engine.rhncfg = rhn_config
         self.engine.disable_yum_rhn_plugin = MagicMock(return_value=True)
-        with open_mock("contents") as f:
-            self.engine.legacy_unentitle(mock_server)
-            f.assert_called_once_with("/some/path", "r")
-            mock_server.system.unentitle.assert_called_once_with("contents")
+        self.engine.legacy_unentitle(mock_server)
+        mock_server.system.unentitle.assert_called_once_with(self.system_id)
 
     @patch("rhn.rpclib.Server")
     def test_legacy_unentitle_fails_gracefully(self, mock_server):
-        rhn_config = {
-            "systemIdPath": "/some/path",
-            }
-        self.engine.rhncfg = rhn_config
         self.engine.disable_yum_rhn_plugin = MagicMock(side_effect=IOError)
-        with open_mock("contents") as f:
-            self.engine.legacy_unentitle(mock_server)
-            f.assert_called_once_with("/some/path", "r")
-            mock_server.system.unentitle.assert_called_once_with("contents")
+        self.engine.legacy_unentitle(mock_server)
+        mock_server.system.unentitle.assert_called_once_with(self.system_id)
 
     @patch("rhn.rpclib.Server")
     @patch("subscription_manager.migrate.migrate.getChannels")
@@ -797,20 +809,19 @@ class TestMigration(SubManFixture):
         mock_server.assert_called_with("https://some.host.example.com/rpc/api", proxy="proxy_user:proxy_pass@proxy.example.com:3128")
         ms.auth.login.assert_called_with("username", "password")
 
-    def test_check_is_org_admin(self):
+    def test_check_has_access(self):
         sc = MagicMock()
-        sc.user.listRoles.return_value = ["org_admin"]
-        self.engine.check_is_org_admin(sc, None, "some_username")
+        sc.system.getDetails.return_value = True
+        self.engine.check_has_access(sc, "key")
 
-    @patch("rhn.rpclib.Server")
-    def test_check_is_org_admin_failure(self, mock_server):
-        mock_server.user.listRoles.return_value = ["bogus_role"]
-        try:
-            self.engine.check_is_org_admin(mock_server, None, "some_username")
-        except SystemExit, e:
-            self.assertEquals(e.code, 1)
-        else:
-            self.fail("No exception raised")
+    def test_check_has_access_failure(self):
+        sc = MagicMock()
+        sc.system.getDetails.side_effect = NameError
+        self.assertRaises(SystemExit, self.engine.check_has_access, sc, Mock(name="fake key"))
+        self.assertEquals(1, len(sc.system.getDetails.mock_calls))
+
+    def test_check_has_access_fails_with_no_key(self):
+        self.assertRaises(SystemExit, self.engine.check_has_access, Mock(name="fake session"), None)
 
     def test_conflicting_channels(self):
         channels = ["jbappplatform-4.3.0-i386-server-5-rpm",
@@ -992,8 +1003,6 @@ class TestMigration(SubManFixture):
 
     @patch("shutil.move", autospec=True)
     def test_unregister_from_rhn_exception(self, mock_shutil):
-        rhn_config = {"systemIdPath": "/some/path"}
-        self.engine.rhncfg = rhn_config
         sc = MagicMock()
         sc.system.deleteSystems.side_effect = Exception
 
@@ -1002,10 +1011,8 @@ class TestMigration(SubManFixture):
 
         self.engine.disable_yum_rhn_plugin = stub_disable_yum_rhn_plugin
 
-        with patch.object(self.engine, 'get_system_id', autospec=True) as sid:
-            sid.return_value = "foo"
-            self.engine.legacy_purge(sc, None)
-            mock_shutil.assert_called_with("/some/path", "/some/path.save")
+        self.engine.legacy_purge(sc, None)
+        mock_shutil.assert_called_with(self.system_id_file, "%s.save" % self.system_id_file)
 
     @patch("__builtin__.open", autospec=True)
     def test_disable_yum_rhn_plugin(self, mock_open):
@@ -1027,8 +1034,6 @@ class TestMigration(SubManFixture):
 
     @patch("os.remove", autospec=True)
     def test_unregister_from_rhn(self, mock_remove):
-        rhn_config = {"systemIdPath": "/some/path"}
-        self.engine.rhncfg = rhn_config
         sc = MagicMock()
         sc.system.deleteSystems.return_value = True
 
@@ -1037,9 +1042,8 @@ class TestMigration(SubManFixture):
 
         self.engine.disable_yum_rhn_plugin = stub_disable_yum_rhn_plugin
 
-        with patch.object(self.engine, 'get_system_id', autospec=True):
-            self.engine.legacy_purge(sc, None)
-            mock_remove.assert_called_with("/some/path")
+        self.engine.legacy_purge(sc, None)
+        mock_remove.assert_called_with(self.system_id_file)
 
     @patch("subprocess.call", autospec=True)
     def test_register_failure(self, mock_subprocess):
@@ -1195,10 +1199,7 @@ class TestMigration(SubManFixture):
         mrf.write.assert_called_with()
 
     def test_get_system_id(self):
-        rhn_config = {
-            "systemIdPath": "/tmp/foo",
-        }
-        mock_file = """
+        mock_id = """
         <params>
           <param>
             <value>
@@ -1214,7 +1215,5 @@ class TestMigration(SubManFixture):
           </param>
         </params>
         """
-        self.engine.rhncfg = rhn_config
-        with open_mock(mock_file) as m:
-            system_id = self.engine.get_system_id(m)
-            self.assertEquals(123, system_id)
+        system_id = self.engine.get_system_id(mock_id)
+        self.assertEquals(123, system_id)
