@@ -1437,7 +1437,7 @@ class AttachCommand(CliCommand):
             if self.options.auto:
                 system_exit(os.EX_USAGE, _("Error: --auto may not be used when specifying pools."))
             if self.options.service_level:
-                system_exit(os.EX_USAGE, _("Error: Servicelevel is unused with --pool"))
+                system_exit(os.EX_USAGE, _("Error: The --servicelevel option cannot be used when specifying pools."))
 
         # Quantity must be a positive integer
         # TODO: simplify with a optparse type="int"
