@@ -1,0 +1,82 @@
+#!/usr/bin/python -S
+#
+# wrapper for subscription Manager commandline tool.
+#
+# Copyright (c) 2010 Red Hat, Inc.
+#
+# Authors: Pradeep Kilambi
+#
+# This software is licensed to you under the GNU General Public License,
+# version 2 (GPLv2). There is NO WARRANTY for this software, express or
+# implied, including the implied warranties of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2
+# along with this software; if not, see
+# http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+#
+# Red Hat trademarks are not licensed under GPLv2. No permission is
+# granted to use or replicate Red Hat trademarks that are incorporated
+# in this software or its documentation.
+#
+
+if __name__ != '__main__':
+    raise ImportError("module cannot be imported")
+
+import sys
+sys.setdefaultencoding('utf-8')
+import site
+import os
+
+
+def system_exit(code, msgs=None):
+    "Exit with a code and optional message(s). Saved a few lines of code."
+
+    if msgs:
+        if type(msgs) not in [type([]), type(())]:
+            msgs = (msgs, )
+        for msg in msgs:
+            sys.stderr.write(str(msg) + '\n')
+    sys.exit(code)
+
+_LIBPATH = "/usr/share/rhsm"
+# add to the path if need be
+if _LIBPATH not in sys.path:
+    sys.path.append(_LIBPATH)
+
+
+# this has to be done first thing due to module level translated vars.
+from subscription_manager.i18n import configure_i18n
+configure_i18n()
+
+from subscription_manager import logutil
+logutil.init_logger()
+
+from dbus.mainloop.glib import DBusGMainLoop
+DBusGMainLoop(set_as_default=True)
+
+from subscription_manager.injectioninit import init_dep_injection
+init_dep_injection()
+
+from subscription_manager import managercli
+
+from smurl import cli
+
+
+def main():
+    # execute
+    try:
+        return cli.SmurlCLI().main()
+    except KeyboardInterrupt:
+        system_exit(0, "\nUser interrupted process.")
+
+    return 0
+
+
+if __name__ == '__main__':
+    try:
+        sys.exit(abs(main() or 0))
+    except SystemExit, e:
+        #this is a non-exceptional exception thrown by Python 2.4, just
+        #re-raise, bypassing handle_exception
+        raise e
+    except KeyboardInterrupt:
+        system_exit(0, "\nUser interrupted process.")

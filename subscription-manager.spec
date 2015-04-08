@@ -259,6 +259,7 @@ rm -rf %{buildroot}
 %{_sysconfdir}/bash_completion.d/rhn-migrate-classic-to-rhsm
 %{_sysconfdir}/bash_completion.d/rhsm-icon
 %{_sysconfdir}/bash_completion.d/rhsmcertd
+%{_sysconfdir}/bash_completion.d/smurl
 
 %attr(700,root,root) %{_sysconfdir}/cron.daily/rhsmd
 %{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
@@ -376,11 +377,19 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/rhsm_debug/*commands.py*
 %attr(755,root,root) %{_bindir}/rhsm-debug
 
+# Include smurl cli api tool
+%dir %{_datadir}/rhsm/smurl
+%{_datadir}/rhsm/smurl/__init__.py*
+%{_datadir}/rhsm/smurl/cli.py*
+%{_datadir}/rhsm/smurl/commands.py*
+%attr(755,root,root) %{_bindir}/smurl
+
 %doc
 %{_mandir}/man8/subscription-manager.8*
 %{_mandir}/man8/rhsmcertd.8*
 %{_mandir}/man8/rct.8*
 %{_mandir}/man8/rhsm-debug.8*
+%{_mandir}/man8/smurl.8*
 %{_mandir}/man5/rhsm.conf.5*
 %doc LICENSE
 

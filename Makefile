@@ -25,6 +25,8 @@ RCT_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
 RCT_SRC_DIR := $(BASE_SRC_DIR)/rct
 RD_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
 RD_SRC_DIR := $(BASE_SRC_DIR)/rhsm_debug
+SMURL_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/smurl
+SMURL_SRC_DIR := $(BASE_SRC_DIR)/smurl
 RHSM_ICON_SRC_DIR := $(BASE_SRC_DIR)/rhsm_icon
 DAEMONS_SRC_DIR := $(BASE_SRC_DIR)/daemons
 EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
@@ -35,7 +37,7 @@ CONTENT_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/content_plugins/
 INSTALL_OSTREE_PLUGIN ?= true
 
 YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
-ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
+ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(SMURL_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
 
 # sets a version that is more or less latest tag plus commit sha
 VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
@@ -106,6 +108,7 @@ install-conf:
 	install -m 644 etc-conf/rhn-migrate-classic-to-rhsm.completion.sh $(PREFIX)/etc/bash_completion.d/rhn-migrate-classic-to-rhsm
 	install -m 644 etc-conf/rhsm-icon.completion.sh $(PREFIX)/etc/bash_completion.d/rhsm-icon
 	install -m 644 etc-conf/rhsmcertd.completion.sh $(PREFIX)/etc/bash_completion.d/rhsmcertd
+	install -m 644 etc-conf/smurl.completion.sh $(PREFIX)/etc/bash_completion.d/smurl
 	install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(PREFIX)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml
 
 install-help-files:
@@ -324,6 +327,7 @@ install-files: set-versions dbus-service-install compile-po desktop-files instal
 	install -m 644 man/subscription-manager-gui.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rct.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rhsm-debug.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
+	install -m 644 man/smurl.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rhsm.conf.5 $(PREFIX)/$(INSTALL_DIR)/man/man5/
 
 	install -m 644 etc-conf/rhsm-icon.desktop \
@@ -356,6 +360,10 @@ install-files: set-versions dbus-service-install compile-po desktop-files instal
 	install -m 644 -p $(RD_SRC_DIR)/*.py $(RD_CODE_DIR)
 	install bin/rhsm-debug $(PREFIX)/usr/bin
 
+	install -d $(SMURL_CODE_DIR)
+	install -m 644 -p $(SMURL_SRC_DIR)/*.py $(SMURL_CODE_DIR)
+	install bin/smurl $(PREFIX)/usr/bin
+
 
 desktop-files: etc-conf/rhsm-icon.desktop \
 				etc-conf/subscription-manager-gui.desktop
@@ -384,7 +392,7 @@ coverage-jenkins:
 po/POTFILES.in:
 	# generate the POTFILES.in file expected by intltool. it wants one
 	# file per line, but we're lazy.
-	find $(SRC_DIR)/ $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) -name "*.py" > po/POTFILES.in
+	find $(SRC_DIR)/ $(RCT_SRC_DIR) $(RD_SRC_DIR) $(SMURL_SRC_DIR) $(DAEMONS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) -name "*.py" > po/POTFILES.in
 	find $(SRC_DIR)/gui/data/ -name "*.glade" >> po/POTFILES.in
 	find $(BIN_DIR) -name "*-to-rhsm" >> po/POTFILES.in
 	find $(BIN_DIR) -name "subscription-manager*" >> po/POTFILES.in
@@ -394,6 +402,7 @@ po/POTFILES.in:
 	find etc-conf/ -name "*.desktop.in" >> po/POTFILES.in
 	find $(RCT_SRC_DIR)/ -name "*.py" >> po/POTFILES.in
 	find $(RD_SRC_DIR)/ -name "*.py" >> po/POTFILES.in
+	find $(SMURL_SRC_DIR)/ -name "*.py" >> po/POTFILES.in
 	echo $$(echo `pwd`|rev | sed -r 's|[^/]+|..|g') | sed 's|$$|$(shell find /usr/lib*/python2* -name "optparse.py")|' >> po/POTFILES.in
 
 .PHONY: po/POTFILES.in %.desktop
