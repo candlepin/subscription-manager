@@ -578,8 +578,8 @@ class MigrationEngine(object):
         try:
             rpc_session.system.unentitle(system_id)
         except Exception, e:
-            log.exception("Could not unentitle system on Satellite 5.", e)
-            system_exit(1, _("Could not unentitle system on legacy server.  ") + SEE_LOG_FILE)
+            log.exception("Could not remove system entitlement on Satellite 5.", e)
+            system_exit(1, _("Could not remove system entitlement on legacy server.  ") + SEE_LOG_FILE)
         try:
             self.disable_yum_rhn_plugin()
         except Exception:
