@@ -352,7 +352,7 @@ class MigrationEngine(object):
     def check_has_access(self, rpc_session, session_key):
         try:
             if session_key is None:
-                # We should not never be here.  This method has a guard that keeps it from being
+                # We should not ever be here.  This method has a guard that keeps it from being
                 # called when not needed.  If we see this error, someone has made a programming
                 # mistake.
                 raise Exception("No session key available.  Check that XMLRPC connection is being made with credentials.")
