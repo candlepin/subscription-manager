@@ -137,7 +137,7 @@ class MySubscriptionsTabTest(SubManFixture):
         self._assert_entry_1(column_entries[1])
         self._assert_entry_2(column_entries[2])
 
-    def test_no_subscriptions_unregister_button_is_blank(self):
+    def test_no_subscriptions_deregister_button_is_blank(self):
         cert_dir = StubCertificateDirectory([])
         my_subs_tab = MySubscriptionsTab(self.backend,
                                          None,
@@ -145,7 +145,7 @@ class MySubscriptionsTabTest(SubManFixture):
                                          StubProductDirectory([]))
         self.assertFalse(my_subs_tab.unsubscribe_button.get_property('sensitive'))
 
-    def test_unselect_unregister_button_is_blank(self):
+    def test_unselect_deregister_button_is_blank(self):
         self.my_subs_tab.on_no_selection()
         self.assertFalse(self.my_subs_tab.unsubscribe_button.get_property('sensitive'))
 

@@ -306,7 +306,7 @@ class CertSorter(ComplianceManager):
     Originally this class actually sorted certificates and calculated status,
     but this is handled by the server today.
 
-    If unregistered we report status as unknown.
+    If unregistered, we report status as unknown.
 
     On every successful server fetch (for *right now*), we cache the results.
     In the event we are unable to reach the server periodically, we will

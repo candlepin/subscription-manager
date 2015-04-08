@@ -781,13 +781,13 @@ def format_date(dt):
         return ""
 
 
-def unregister(uep, consumer_uuid):
+def deregister(uep, consumer_uuid):
     """
-    Shared logic for un-registration.
+    Shared logic for deregistration.
     """
     uep.unregisterConsumer(consumer_uuid)
-    log.info("Successfully un-registered.")
-    system_log("Unregistered machine with identity: %s" % consumer_uuid)
+    log.info("Successfully deregistered.")
+    system_log("Deregistered machine with identity: %s" % consumer_uuid)
     clean_all_data(backup=False)
 
 

@@ -72,11 +72,11 @@ class HealingActionClient(base_action_client.BaseActionClient):
 # *Lib things are weird, since some are idempotent, but
 # some arent. entcertlib/repolib .update can both install
 # certs, and/or delete all of them.
-class UnregisterActionClient(base_action_client.BaseActionClient):
-    """CertManager for cleaning up on unregister.
+class DeregisterActionClient(base_action_client.BaseActionClient):
+    """CertManager for cleaning up on deregister.
 
     This class should not need a consumer id, or a uep connection, since it
-    is running post unregister.
+    is running post deregister.
     """
     def _get_libset(self):
 

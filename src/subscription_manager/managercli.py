@@ -39,7 +39,7 @@ from rhsm.certificate import GMT
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker
-from subscription_manager.action_client import ActionClient, UnregisterActionClient
+from subscription_manager.action_client import ActionClient, DeregisterActionClient
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
@@ -1033,13 +1033,13 @@ class RegisterCommand(UserPassCommand):
             # errors are encountered.
             old_uuid = self.identity.uuid
             try:
-                managerlib.unregister(self.cp, old_uuid)
+                managerlib.deregister(self.cp, old_uuid)
                 self.entitlement_dir.__init__()
                 self.product_dir.__init__()
-                log.info("--force specified, unregistered old consumer: %s" % old_uuid)
-                print(_("The system with UUID %s has been unregistered") % old_uuid)
+                log.info("--force specified, deregistered old consumer: %s" % old_uuid)
+                print(_("The system with UUID %s has been deregistered") % old_uuid)
             except Exception, e:
-                log.error("Unable to unregister consumer: %s" % old_uuid)
+                log.error("Unable to deregister consumer: %s" % old_uuid)
                 log.exception(e)
 
         facts = inj.require(inj.FACTS)
@@ -1220,13 +1220,23 @@ class RegisterCommand(UserPassCommand):
         return owner_key
 
 
-class UnRegisterCommand(CliCommand):
+class DeregisterCommand(CliCommand):
 
     def __init__(self):
-        shortdesc = get_branding().CLI_UNREGISTER
+        super(DeregisterCommand, self).__init__(
+            self._command_name(),
+            self._short_description(),
+            self._primary()
+        )
 
-        super(UnRegisterCommand, self).__init__("unregister", shortdesc,
-                                                True)
+    def _short_description(self):
+        return get_branding().CLI_DEREGISTER
+
+    def _command_name(self):
+        return "deregister"
+
+    def _primary(self):
+        return True
 
     def _validate_options(self):
         pass
@@ -1237,11 +1247,11 @@ class UnRegisterCommand(CliCommand):
             system_exit(ERR_NOT_REGISTERED_CODE, _("This system is currently not registered."))
 
         try:
-            managerlib.unregister(self.cp, self.identity.uuid)
+            managerlib.deregister(self.cp, self.identity.uuid)
         except Exception, e:
-            handle_exception("Unregister failed", e)
+            handle_exception("Deregister failed", e)
 
-        # managerlib.unregister reloads the now None provided identity
+        # managerlib.deregister reloads the now None provided identity
         # so cp_provider provided auth_cp's should fail, like the below
 
         #this block is simply to ensure that the yum repos got updated. If it fails,
@@ -1250,7 +1260,7 @@ class UnRegisterCommand(CliCommand):
         try:
             # there is no consumer cert at this point, a uep object
             # is not useful
-            cleanup_certmgr = UnregisterActionClient()
+            cleanup_certmgr = DeregisterActionClient()
             cleanup_certmgr.update()
         except Exception, e:
             pass
@@ -1260,7 +1270,21 @@ class UnRegisterCommand(CliCommand):
         # We have new credentials, restart virt-who
         restart_virt_who()
 
-        print(_("System has been unregistered."))
+        print(_("System has been deregistered."))
+
+
+class UnregisterCommand(DeregisterCommand):
+    def __init__(self):
+        super(UnregisterCommand, self).__init__()
+
+    def _short_description(self):
+        return _("Deprecated, see deregister")
+
+    def _command_name(self):
+        return "unregister"
+
+    def _primary(self):
+        return False
 
 
 class RedeemCommand(CliCommand):
@@ -2609,8 +2633,8 @@ class StatusCommand(CliCommand):
 class ManagerCLI(CLI):
 
     def __init__(self):
-        commands = [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand,
-                    SubscribeCommand, UnSubscribeCommand, FactsCommand,
+        commands = [RegisterCommand, DeregisterCommand, UnregisterCommand, ConfigCommand,
+                    ListCommand, SubscribeCommand, UnSubscribeCommand, FactsCommand,
                     IdentityCommand, OwnersCommand, RefreshCommand, CleanCommand,
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,

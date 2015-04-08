@@ -609,10 +609,10 @@ class MigrationEngine(object):
                 self.disable_yum_rhn_plugin()
             except Exception:
                 pass
-            print _("System successfully unregistered from legacy server.")
+            print _("System successfully deregistered from legacy server.")
         else:
             # If the legacy server reports that deletion just failed, then quit.
-            system_exit(1, _("Unable to unregister system from legacy server.  ") + SEE_LOG_FILE)
+            system_exit(1, _("Unable to deregister system from legacy server.  ") + SEE_LOG_FILE)
 
     def load_transition_data(self, rpc_session):
         # We need to send up the entire contents of the systemid file which is referred to in
@@ -786,7 +786,7 @@ class MigrationEngine(object):
 
         if self.options.registration_state == "purge":
             print
-            print _("Preparing to unregister system from legacy server...")
+            print _("Preparing to deregister system from legacy server...")
             self.legacy_purge(rpc_session, session_key)
         elif self.options.registration_state == "unentitle":
             self.legacy_unentitle(rpc_session)

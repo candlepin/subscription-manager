@@ -208,7 +208,7 @@ cert_check (gboolean heal)
 		warn ("(%s) Update failed (%d), retry will occur on next run.",
 		      action, status);
 	}
-	//returning FALSE will unregister the timer, always return TRUE
+	//returning FALSE will deregister the timer, always return TRUE
 	return TRUE;
 }
 

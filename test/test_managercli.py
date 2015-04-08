@@ -642,8 +642,8 @@ class TestListCommand(TestCliProxyCommand):
             self.assertTrue(cert.pool.id in captured.out)
 
 
-class TestUnRegisterCommand(TestCliProxyCommand):
-    command_class = managercli.UnRegisterCommand
+class TestDeregisterCommand(TestCliProxyCommand):
+    command_class = managercli.DeregisterCommand
 
 
 class TestRedeemCommand(TestCliProxyCommand):

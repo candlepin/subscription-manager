@@ -45,16 +45,16 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkImageMenuItem" id="unregister_menu_item">
-                        <property name="label" translatable="yes">_Unregister</property>
+                      <widget class="GtkImageMenuItem" id="deregister_menu_item">
+                        <property name="label" translatable="yes">_Deregister</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">False</property>
-                        <signal name="activate" handler="on_unregister_menu_item_activate" />
+                        <signal name="activate" handler="on_deregister_menu_item_activate" />
                         <accelerator key="u" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <child internal-child="image">
-                          <widget class="GtkImage" id="unregister_image">
+                          <widget class="GtkImage" id="deregister_image">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="stock">gtk-disconnect</property>

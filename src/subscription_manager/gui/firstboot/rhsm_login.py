@@ -158,7 +158,7 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
         identity = require(IDENTITY)
         if identity.is_valid():
             try:
-                managerlib.unregister(self._parent.backend.cp_provider.get_consumer_auth_cp(),
+                managerlib.deregister(self._parent.backend.cp_provider.get_consumer_auth_cp(),
                         self._parent.identity.uuid)
             except socket.error, e:
                 handle_gui_exception(e, e, self._parent.window)
@@ -306,7 +306,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         if self._skip_apply_for_page_jump:
             self._skip_apply_for_page_jump = False
             # Reset back to first screen in our module in case the user hits back.
-            # The firstboot register screen subclass will handle unregistering
+            # The firstboot register screen subclass will handle deregistering
             # if necessary when it runs again.
             self.show()
             return self._RESULT_SUCCESS

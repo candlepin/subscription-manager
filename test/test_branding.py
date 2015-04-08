@@ -56,5 +56,5 @@ class BrandingTests(unittest.TestCase):
         custom_branding = TestBranding()
         branding = Branding(custom_branding)
 
-        self.assertEquals("Unregister the system from the server",
-                branding.CLI_UNREGISTER)
+        self.assertEquals("Deregister the system from the server",
+                branding.CLI_DEREGISTER)

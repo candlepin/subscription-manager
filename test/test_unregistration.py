@@ -24,15 +24,15 @@ from mock import patch
 class CliUnRegistrationTests(SubManFixture):
 
     @patch('subscription_manager.managerlib.clean_all_data')
-    def test_unregister_removes_consumer_cert(self, clean_data_mock):
+    def test_deregister_removes_consumer_cert(self, clean_data_mock):
         connection.UEPConnection = StubUEP
 
         mock_injected_identity = self._inject_mock_valid_consumer()
 
         # When
-        cmd = managercli.UnRegisterCommand()
+        cmd = managercli.DeregisterCommand()
 
         CacheManager.delete_cache = classmethod(lambda cls: None)
 
-        cmd.main(['unregister'])
-        self.assertEquals(mock_injected_identity.uuid, cmd.cp.called_unregister_uuid)
+        cmd.main(['deregister'])
+        self.assertEquals(mock_injected_identity.uuid, cmd.cp.called_deregister_uuid)

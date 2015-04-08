@@ -128,7 +128,7 @@ class MainWindow(widgets.GladeWidget):
     The new RHSM main window.
     """
     widget_names = ['main_window', 'notebook', 'system_name_label',
-                    'register_menu_item', 'unregister_menu_item',
+                    'register_menu_item', 'deregister_menu_item',
                     'redeem_menu_item', 'settings_menu_item', 'repos_menu_item']
 
     def __init__(self, backend=None, facts=None,
@@ -209,7 +209,7 @@ class MainWindow(widgets.GladeWidget):
 
         self.glade.signal_autoconnect({
             "on_register_menu_item_activate": self._register_item_clicked,
-            "on_unregister_menu_item_activate": self._unregister_item_clicked,
+            "on_deregister_menu_item_activate": self._deregister_item_clicked,
             "on_import_cert_menu_item_activate": self._import_cert_item_clicked,
             "on_view_facts_menu_item_activate": self._facts_item_clicked,
             "on_proxy_config_menu_item_activate": self._proxy_config_item_clicked,
@@ -251,11 +251,11 @@ class MainWindow(widgets.GladeWidget):
         return self.identity.is_valid()
 
     def _on_sla_back_button_press(self):
-        self._perform_unregister()
+        self._perform_deregister()
         self._register_item_clicked(None)
 
     def _on_sla_cancel_button_press(self):
-        self._perform_unregister()
+        self._perform_deregister()
 
     def on_registration_changed(self):
         # Show the All Subscriptions tab if registered, hide it otherwise:
@@ -266,7 +266,7 @@ class MainWindow(widgets.GladeWidget):
             self.notebook.set_current_page(0)
             self.notebook.remove_page(2)
 
-        # we've unregistered, clear pools from all subscriptions tab
+        # we've deregistered, clear pools from all subscriptions tab
         # so it's correct if we reshow it
         self.all_subs_tab.sub_details.clear()
         self.all_subs_tab.clear_pools()
@@ -301,11 +301,11 @@ class MainWindow(widgets.GladeWidget):
         is_registered = self.registered()
         if is_registered:
             self.register_menu_item.hide()
-            self.unregister_menu_item.show()
+            self.deregister_menu_item.show()
             self.settings_menu_item.show()  # preferences
         else:
             self.register_menu_item.show()
-            self.unregister_menu_item.hide()
+            self.deregister_menu_item.hide()
             self.settings_menu_item.hide()
 
         show_overrides = False
@@ -357,25 +357,25 @@ class MainWindow(widgets.GladeWidget):
                                       "Please see /var/log/rhsm/rhsm.log for more information."),
                                  self._get_window())
 
-    def _on_unregister_prompt_response(self, dialog, response):
+    def _on_deregister_prompt_response(self, dialog, response):
         if not response:
-            log.debug("unregister prompt not confirmed. cancelling")
+            log.debug("deregister prompt not confirmed. cancelling")
             return
         log.info("Proceeding with un-registration: %s", self.identity.uuid)
-        self._perform_unregister()
+        self._perform_deregister()
 
-    def _perform_unregister(self):
+    def _perform_deregister(self):
         try:
-            managerlib.unregister(self.backend.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+            managerlib.deregister(self.backend.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
         except Exception, e:
-            log.error("Error unregistering system with entitlement platform.")
-            handle_gui_exception(e, _("<b>Errors were encountered during unregister.</b>") +
+            log.error("Error deregistering system with entitlement platform.")
+            handle_gui_exception(e, _("<b>Errors were encountered during deregistration.</b>") +
                                       "\n%s\n" +
                                       _("Please see /var/log/rhsm/rhsm.log for more information."),
                                 self.main_window,
                                 log_msg="Consumer may need to be manually cleaned up: %s" %
                                 self.identity.uuid)
-        # managerlib.unregister removes product and entitlement directories
+        # managerlib.deregister removes product and entitlement directories
         self.backend.product_dir.__init__()
         self.backend.entitlement_dir.__init__()
 
@@ -384,12 +384,12 @@ class MainWindow(widgets.GladeWidget):
 
         self.backend.cs.force_cert_check()
 
-    def _unregister_item_clicked(self, widget):
-        log.info("Unregister button pressed, asking for confirmation.")
+    def _deregister_item_clicked(self, widget):
+        log.info("Deregister button pressed, asking for confirmation.")
         prompt = messageWindow.YesNoDialog(
-                _("<b>Are you sure you want to unregister?</b>"),
+                _("<b>Are you sure you want to deregister?</b>"),
                 self._get_window())
-        prompt.connect('response', self._on_unregister_prompt_response)
+        prompt.connect('response', self._on_deregister_prompt_response)
 
     def _proxy_config_item_clicked(self, widget):
         self.network_config_dialog.set_parent_window(self._get_window())
