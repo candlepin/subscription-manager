@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.14.2
+Version: 1.14.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -485,6 +485,23 @@ fi
 %endif
 
 %changelog
+* Thu Apr 09 2015 Alex Wood <awood@redhat.com> 1.14.3-1
+- 1170314: Clarify that manage_repos 0 will delete redhat.repo.
+  (dgoodwin@redhat.com)
+- 1207958: Fix traceback when contract # is None (alikins@redhat.com)
+- 1117525,1189950,1188961 latest strings from zanata (alikins@redhat.com)
+- 1200972: Fixed grammar issue with error message in the attach command
+  (crog@redhat.com)
+- Bumping required python-rhsm version (mstead@redhat.com)
+- 1204012: Added missing documentation for the --release option
+  (crog@redhat.com)
+- 1209519: Removed erroneous information in help message for subman
+  (crog@redhat.com)
+- 1198369: refresh_compliance_status now has a default value for state
+  (crog@redhat.com)
+- 1180273: Allow migration without requiring RHN credentials (awood@redhat.com)
+- 1201727: Handle reasons with expired ent id (alikins@redhat.com)
+
 * Mon Mar 09 2015 Alex Wood <awood@redhat.com> 1.14.2-1
 - Move to fileConfig based logging. (alikins@redhat.com)
 - Ignore glib warnings about class properties. (alikins@redhat.com)
