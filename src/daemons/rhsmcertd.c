@@ -440,7 +440,7 @@ main (int argc, char *argv[])
 
 	// note that we call the function directly first, before assigning a timer
 	// to it. Otherwise, it would only get executed when the timer went off, and
-	// not at startup.
+	// not at start-up.
 	//
 	// NOTE: We put the initial checks on a timer so that in the case of systemd,
 	// we can ensure that the network interfaces are all up before the initial
