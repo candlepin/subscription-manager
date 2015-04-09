@@ -1,4 +1,4 @@
-.TH subscription-manager 8
+.TH subscription-manager 8 - - "Subscription Management"
 .SH NAME
 subscription-manager \- Registers systems to a subscription management service and then attaches and manages subscriptions for software products.
 
@@ -228,7 +228,7 @@ the existing system entry is unregistered first, all of its subscriptions are re
 .B --org=ORG
 Assigns the system to an organization. Infrastructures which are managed on-site may be
 .I multi-tenant,
-meaning that there are multiple organizations within one customer unit. A system may be assigned manually to one of these suborganizations. When a system is registered with the Customer Portal, this is not required. When a system is registered with an on-premise application such as Subscription Asset Manager, this argument \fIis\fP required, even if there is only a single organization configured.
+meaning that there are multiple organizations within one customer unit. A system may be assigned manually to one of these organizations. When a system is registered with the Customer Portal, this is not required. When a system is registered with an on-premise application such as Subscription Asset Manager, this argument \fIis\fP required, unless there is only a single organization configured.
 
 .TP
 .B --environment=ENV
@@ -238,9 +238,9 @@ Registers the system to an environment within an organization.
 .B --type=CONSUMERTYPE
 Sets the type of unit to register. Most units in the inventory will use the default value of
 .B system.
-For development or test systems, this can be
+For development or test units, this can be
 .B person
-, which indicates a personal (rather than organizational) subscription. Other systems can be
+, which indicates a personal (rather than organizational) unit. Another type of unit can be
 .B candlepin
 for a local content service or
 .B domain
@@ -302,7 +302,7 @@ Enables the auto-attach option for the system. If there is any change in the sub
 
 .TP
 .B --disable
-Disables the auto-attach option for the system. If auto-attach is disabled, then any changes in installed products or subscriptions for the system (including expirations) must be addressed manually by the administrator.
+Disables the auto-attach option for the system. If auto-attach is disabled, then any changes in installed products or subscriptions for the system (including expired subscriptions) must be addressed manually by the administrator.
 
 .TP
 .B --show
@@ -658,7 +658,7 @@ command removes all of the subscription and identity data from the local system
 .I without affecting the system information in the subscription management service.
 This means that any of the subscriptions applied to the system are not available for other systems to use. The
 .B clean
-command is useful in cases where the local subscription information is corrupted or lost somehow, and the system will be reregistered using the
+command is useful in cases where the local subscription information is corrupted or lost somehow, and the system will be re-registered using the
 .B register --consumerid=EXISTING_ID
 command.
 
@@ -988,7 +988,7 @@ option.
 
 .RS
 .nf
-subscription-manager list --instaled --matches="*Server*"
+subscription-manager list --installed --matches="*Server*"
 
 +-------------------------------------------+
     Installed Product Status
@@ -1019,7 +1019,7 @@ subscription-manager attach
 .pp
 As with the
 .B register
-command, the system can be auto-attached to the best-fitting subscriptions. This is the default action and is equilivent to  using the
+command, the system can be auto-attached to the best-fitting subscriptions. This is the default action and is equivalent to  using the
 .B --auto
 option:
 
