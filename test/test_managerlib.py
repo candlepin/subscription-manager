@@ -22,10 +22,9 @@ from stubs import StubCertificateDirectory, StubProductCertificate, \
 from fixture import SubManFixture
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
         MergedPoolsStackingGroupSorter, MergedPools, \
-        PoolStash, allows_multi_entitlement, valid_quantity, \
-        refresh_compliance_status
+        PoolStash, allows_multi_entitlement, valid_quantity
 from subscription_manager.injection import provide, \
-        PROD_DIR, CERT_SORTER
+        PROD_DIR
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
@@ -1160,72 +1159,3 @@ class TestGetAvailableEntitlements(SubManFixture):
             'productAttributes': [{'name': 'foo',
                 'value': 'blip'}]
             }
-
-
-class TestRefreshComplianceStatus(SubManFixture):
-    def setUp(self):
-        super(TestRefreshComplianceStatus, self).setUp()
-        # default_dbus_properties
-        self._dbus_properties = {"Version": "1.0",
-                                 "Status": "System not registered."}
-        self.ddp = self._dbus_properties
-
-    def test(self):
-        dbus_compliance = refresh_compliance_status(self.ddp)
-
-        self.assertTrue('Status' in dbus_compliance)
-        self.assertEquals(dbus_compliance['Status'], 'System is not registered.')
-
-    def _stub_sorter(self, compliance_status):
-        self.sorter = StubCertSorter()
-
-        def get_compliance_status():
-            return compliance_status
-
-        self.sorter.get_compliance_status = get_compliance_status
-        provide(CERT_SORTER, self.sorter)
-
-    def _create_cert(self, product_id, label, version, provided_tags):
-        cert = StubProductCertificate(StubProduct(product_id, label, version=version,
-                                   provided_tags=provided_tags))
-        cert.delete = Mock()
-        cert.write = Mock()
-        return cert
-
-    def test_emtpty_status(self):
-        self._stub_sorter({})
-
-        dbus_compliance = refresh_compliance_status(self.ddp)
-        self.assertTrue('Status' in dbus_compliance)
-        self.assertEquals(dbus_compliance['Status'], 'System is not registered.')
-
-    def test_valid_no_reason(self):
-        status = {'compliantProducts': {},
-                  'reasons': [],
-                  'status': 'valid'
-                      }
-
-        self._stub_sorter(status)
-
-        dbus_compliance = refresh_compliance_status(self.ddp)
-        self.assertTrue('Status' in dbus_compliance)
-        self.assertEquals(dbus_compliance['Status'], 'valid')
-
-    def test_valid(self):
-        status = {'compliantProducts': {'37060': []},
-                  'reasons': [{'attributes': {'product_id': '37060',
-                                              'name': 'awesomeos'},
-                                'message': 'this is a reason message'}],
-                  'status': 'valid'
-                      }
-
-        self._stub_sorter(status)
-        self.sorter.valid_products = ['37060']
-
-        prod_cert = self._create_cert('37060', 'awesomeos-server', '7.0', 'rhel-7,rhel-7-server')
-        self.prod_dir.certs.append(prod_cert)
-        dbus_compliance = refresh_compliance_status(self.ddp)
-        self.assertTrue('Status' in dbus_compliance)
-        self.assertTrue('Entitlements' in dbus_compliance)
-        self.assertTrue('37060' in dbus_compliance['Entitlements'])
-        self.assertTrue('awesomeos' in dbus_compliance['Entitlements']['37060'])

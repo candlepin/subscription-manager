@@ -14,7 +14,7 @@
 #
 
 import dbus
-import gobject
+import inspect
 import logging
 import subscription_manager.injection as inj
 
@@ -24,15 +24,14 @@ log = logging.getLogger('rhsm-app.' + __name__)
 class DbusIface(object):
 
     service_name = 'com.redhat.SubscriptionManager'
-    has_main_loop = False
 
     def __init__(self):
         try:
             # Only follow names if there is a default main loop
-            self.has_main_loop = dbus.get_default_main_loop() is not None
+            self.has_main_loop = self._get_main_loop() is not None
 
             self.bus = dbus.SystemBus()
-            validity_obj = self.bus.get_object(self.service_name,
+            validity_obj = self._get_validity_object(self.service_name,
                     '/EntitlementStatus',
                     follow_name_owner_changes=self.has_main_loop)
             self.validity_iface = dbus.Interface(validity_obj,
@@ -50,19 +49,28 @@ class DbusIface(object):
     def update(self):
         pass
 
-    def update_status(self):
-        self.validity_iface.update_status(
-                inj.require(inj.CERT_SORTER).get_status_for_icon(),
-                ignore_reply=self.has_main_loop)
-
-    def emit_status(self):
-        self.validity_iface.emit_status()
-
     def _update(self):
         try:
-            gobject.idle_add(self.update_status)
-            gobject.idle_add(self.emit_status)
+            self.validity_iface.update_status(
+                    inj.require(inj.CERT_SORTER).get_status_for_icon(),
+                    ignore_reply=self.has_main_loop)
         except dbus.DBusException, e:
             # Should be unreachable in the gui
             log.debug("Failed to update rhsmd")
             log.exception(e)
+
+    # RHEL5 doesn't support 'follow_name_owner_changes'
+    def _get_validity_object(self, *args, **kwargs):
+        iface_args = inspect.getargspec(self.bus.get_object)[0]
+        if 'follow_name_owner_changes' not in iface_args and \
+                'follow_name_owner_changes' in kwargs:
+            log.debug("installed python-dbus doesn't support 'follow_name_owner_changes'")
+            del kwargs['follow_name_owner_changes']
+        return self.bus.get_object(*args, **kwargs)
+
+    # RHEL5 doesn't support 'get_default_main_loop'
+    def _get_main_loop(self):
+        if not hasattr(dbus, "get_default_main_loop"):
+            log.debug("installed python-dbus doesn't support 'get_default_main_loop'")
+            return None
+        return dbus.get_default_main_loop()
