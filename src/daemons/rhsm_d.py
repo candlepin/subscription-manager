@@ -40,7 +40,6 @@ import dbus
 import dbus.service
 import dbus.glib
 import logging
-import gettext
 import traceback
 
 sys.path.append("/usr/share/rhsm")
@@ -74,12 +73,11 @@ from subscription_manager.i18n_optparse import OptionParser, \
 from subscription_manager.cert_sorter import RHSM_VALID, \
         RHSM_EXPIRED, RHSM_WARNING, RHSM_PARTIALLY_VALID, \
         RHN_CLASSIC, RHSM_REGISTRATION_REQUIRED
-from subscription_manager.managerlib import refresh_compliance_status
 
 import rhsm.config
 CFG = rhsm.config.initConfig()
 
-_ = gettext.gettext
+enable_debug = False
 
 
 def debug(msg):
@@ -119,6 +117,7 @@ def check_status(force_signal):
         return pre_result
 
     sorter = require(CERT_SORTER)
+
     return sorter.get_status_for_icon()
 
 
@@ -131,10 +130,9 @@ def check_if_ran_once(checker, loop):
 
 
 class StatusChecker(dbus.service.Object):
-    INTERFACE_NAME = "com.redhat.SubscriptionManager"
 
     def __init__(self, bus, keep_alive, force_signal, loop):
-        name = dbus.service.BusName(self.INTERFACE_NAME, bus)
+        name = dbus.service.BusName("com.redhat.SubscriptionManager", bus)
         dbus.service.Object.__init__(self, name, "/EntitlementStatus")
         self.has_run = False
         #this will get set after first invocation
@@ -142,10 +140,6 @@ class StatusChecker(dbus.service.Object):
         self.keep_alive = keep_alive
         self.force_signal = force_signal
         self.loop = loop
-        self._dbus_properties = {
-            "Version": "1.0",
-            "Status": _("System not registered."),
-        }
 
     @dbus.service.signal(
         dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus',
@@ -193,51 +187,6 @@ class StatusChecker(dbus.service.Object):
         self.last_status = status
         self.has_run = True
         self.watchdog()
-
-    @dbus.service.method(
-            dbus_interface="com.redhat.SubscriptionManager.EntitlementStatus",
-            in_signature='')
-    def emit_status(self):
-        log.debug("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.emit_status called ")
-        self._dbus_properties = refresh_compliance_status(self._dbus_properties)
-        # this code assumes that all properties change
-        changes = self._dbus_properties
-        self.PropertiesChanged(self.INTERFACE_NAME, changes, [])
-
-    @dbus.service.signal(
-            dbus_interface=dbus.PROPERTIES_IFACE,
-            signature="sa{sv}as")
-    def PropertiesChanged(self, interface_name, changed_properties,
-                          invalidated_properties):
-        pass
-
-    @dbus.service.method(
-            dbus_interface=dbus.PROPERTIES_IFACE,
-            in_signature="ss", out_signature="v")
-    def Get(self, interface_name, property_name):
-        log.debug("Get(%s, %s) called", interface_name, property_name)
-        refresh_compliance_status(self._dbus_properties)
-        if self._dbus_properties.has_key(property_name):
-            return self.GetAll(interface_name)[property_name]
-        raise dbus.exceptions.DBusException("Uknown property %s", property_name)
-
-    @dbus.service.method(
-            dbus_interface=dbus.PROPERTIES_IFACE,
-            in_signature="s", out_signature="a{sv}")
-    def GetAll(self, interface_name):
-        log.debug("GetAll(%s) called", interface_name)
-        refresh_compliance_status(self._dbus_properties)
-        if interface_name == self.INTERFACE_NAME:
-            return self._dbus_properties
-        else:
-            raise dbus.exceptions.DBusException("SubscriptionManager does not implement %s interface" % interface_name)
-
-    @dbus.service.method(
-            dbus_interface=dbus.PROPERTIES_IFACE,
-            in_signature="ssv")
-    def Set(self, interface_name, property_name, new_value):
-        log.debug("Set(%s) called", interface_name)
-        raise dbus.exceptions.DBusException("All SubscriptionManager properties are read-only")
 
 
 def parse_force_signal(cli_arg):
