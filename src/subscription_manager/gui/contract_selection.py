@@ -55,6 +55,8 @@ class ContractSelectionWindow(object):
 
         self.subscription_name_label = self.contract_selection_xml.get_widget(
             "subscription_name_label")
+        self.subscription_name_label.set_line_wrap(True)
+        self.subscription_name_label.connect('size-allocate', lambda label, size: label.set_size_request(size.width - 1, -1))
 
         self.total_contracts_label = self.contract_selection_xml.get_widget(
             "total_contracts_label")
