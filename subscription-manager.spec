@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.14.4
+Version: 1.14.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -485,6 +485,9 @@ fi
 %endif
 
 %changelog
+* Tue Apr 14 2015 William Poteat <wpoteat@redhat.com> 1.14.5-1
+- 1211557: Fix crash when rsyslog not running. (dgoodwin@redhat.com)
+
 * Tue Apr 14 2015 William Poteat <wpoteat@redhat.com> 1.14.4-1
 - 1141257: Fix wrapping of subscription name in contract dialog
   (mstead@redhat.com)
