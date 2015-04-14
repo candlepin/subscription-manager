@@ -31,7 +31,8 @@ from subscription_manager.injection import PLUGIN_MANAGER, require
 
 from subscription_manager import rhelproduct
 
-from subscription_manager.utils import DefaultDict
+from subscription_manager import utils
+from subscription_manager import repolib
 
 import subscription_manager.injection as inj
 from rhsm import ourjson as json
@@ -49,7 +50,7 @@ class DatabaseDirectory(Directory):
         self.create()
 
 
-class ProductIdRepoMap(DefaultDict):
+class ProductIdRepoMap(utils.DefaultDict):
 
     def __init__(self, *args, **kwargs):
         self.default_factory = list
@@ -330,6 +331,29 @@ class ProductManager:
 
         self.plugin_manager = require(PLUGIN_MANAGER)
 
+    def find_temp_disabled_repos(self, enabled):
+        """Find repo from redhat.repo that have been disabled from cli."""
+        yum_enabled = [x[1] for x in enabled]
+
+        # Read the redhat.repo file so we can check if any of our
+        # repos have been disabled by --disablerepo or another plugin.
+        repo_file = repolib.RepoFile()
+        repo_file.read()
+
+        enabled_in_redhat_repo = []
+        for section in repo_file.sections():
+            repo = repo_file.section(section)
+
+            if utils.is_true_value(repo.get('enabled', '0')):
+                enabled_in_redhat_repo.append(repo.id)
+
+        temp_disabled = []
+        for enabled_repo in enabled_in_redhat_repo:
+            if enabled_repo not in yum_enabled:
+                temp_disabled.append(enabled_repo)
+
+        return temp_disabled
+
     def update(self, yb):
         # FIXME: finding enabled and finding active should
         #        be classes themselves that would be easier to mock
@@ -338,8 +362,13 @@ class ProductManager:
         #        without trying to mock half of yum
         if yb is None:
             yb = yum.YumBase()
+
         enabled = self.get_enabled(yb)
         active = self.get_active(yb)
+
+        # populate the temp_disabled list so update_remove has it
+        # this could likely happen later...
+        temp_disabled_repos = self.find_temp_disabled_repos(enabled)
 
         # only execute this on versions of yum that track
         # which repo a package came from, aka, 3.2.28 and newer
@@ -349,7 +378,7 @@ class ProductManager:
             # that we have packages from repo's that are
             # not active. See #806457
             if enabled and active:
-                self.update_removed(active)
+                self.update_removed(active, temp_disabled_repos)
 
         # TODO: it would probably be useful to keep track of
         # the state a bit, so we can report what we did
@@ -357,7 +386,9 @@ class ProductManager:
 
     def _check_yum_version_tracks_repos(self):
         major, minor, micro = yum.__version_info__
-        if major >= 3 and minor >= 2 and micro >= 28:
+        yum_version = RpmVersion(version="%s.%s.%s" % (major, minor, micro))
+        needed_version = RpmVersion(version="3.2.28")
+        if yum_version >= needed_version:
             return True
         return False
 
@@ -410,6 +441,8 @@ class ProductManager:
         products_to_update_db = []
         products_installed = []
 
+        log.debug("active %s", active)
+        log.debug("enabled %s", enabled)
         # track updated product ids seperately in case we want
         # to run plugins
         products_to_update = []
@@ -599,7 +632,7 @@ class ProductManager:
     # We should only delete productcerts if there are no
     # packages from that repo installed (not "active")
     # and we have the product cert installed.
-    def update_removed(self, active):
+    def update_removed(self, active, temp_disabled_repos=None):
         """remove product certs for inactive products
 
         For each installed product cert, check to see if we still have
@@ -621,7 +654,11 @@ class ProductManager:
         Side effects:
             deletes certs that need to be deleted
         """
+        temp_disabled_repos = temp_disabled_repos or []
         certs_to_delete = []
+
+        log.debug("Checking for product certs to remove. Active include: %s",
+                  active)
 
         for cert in self.pdir.list():
             p = cert.products[0]
@@ -661,16 +698,20 @@ class ProductManager:
                 # we could be very confused here, so do not
                 # delete anything. see bz #736424
                 if repo in self.meta_data_errors:
-                    log.info("%s has meta-data errors.  Not deleting product cert %s." % (repo, prod_hash))
+                    log.debug("%s has meta-data errors.  Not deleting product cert %s.", repo, prod_hash)
                     delete_product_cert = False
 
                 # do not delete a product cert if the repo[a] associated with it's prod_hash
                 # has packages installed.
                 if repo in active:
+                    log.debug("%s is an active repo. Not deleting product cert %s", repo, prod_hash)
                     delete_product_cert = False
 
-                # other reasons not to delete.
-                #  is this a rhel product cert?
+                # If product id maps to a repo that we know is only temporarily
+                # disabled, don't delete it.
+                if repo in temp_disabled_repos:
+                    log.warn("%s is disabled via yum cmdline. Not deleting product cert %s", repo, prod_hash)
+                    delete_product_cert = False
 
                 # is the repo we find here actually active? try harder to find active?
 
@@ -682,6 +723,9 @@ class ProductManager:
 
         # TODO: plugin hook for pre_product_id_delete
         for (product, cert) in certs_to_delete:
+            log.info("None of the repos for %s are active: %s",
+                     product.id,
+                     self.db.find_repos(product.id))
             log.info("product cert %s for %s is being deleted" % (product.id, product.id))
             cert.delete()
             self.pdir.refresh()
@@ -700,23 +744,44 @@ class ProductManager:
 
         active = set([])
 
+        # If a package is in a enabled and 'protected' repo, and
+
+        # This searches all the package sacks in this yum instances
+        # package sack, aka all the enabled repos
         packages = yb.pkgSack.returnPackages()
+
         for p in packages:
             repo = p.repoid
-
             # if a pkg is in multiple repo's, this will consider
             # all the repo's with the pkg "active".
+            # NOTE: if a package is from a disabled repo, we won't
+            # find it with this, because 'packages' won't include it.
             db_pkg = yb.rpmdb.searchNevra(name=p.name, arch=p.arch)
-
             # that pkg is not actually installed
             if not db_pkg:
+                # Effect of this is that a package that is only
+                # available from disabled repos, it is not considered
+                # an active package.
+                # If none of the packages from a repo are active, then
+                # the repo will not be considered active.
+                #
+                # Note however that packages that are installed, but
+                # from an disabled repo, but that are also available
+                # from another enabled repo will mark both repos as
+                # active. This is why add on repos that include base
+                # os packages almost never get marked for product cert
+                # deletion. Anything that could have possible come from
+                # that repo or be updated with makes the repo 'active'.
                 continue
 
+            # The pkg is installed, so the repo it was installed
+            # from is considered 'active'
             # yum on 5.7 list everything as "installed" instead
             # of the repo it came from
             if repo in (None, "installed"):
                 continue
             active.add(repo)
+
         return active
 
     def get_enabled(self, yb):
@@ -733,12 +798,17 @@ class ProductManager:
                     continue
                 lst.append((cert, repo.id))
             except yum.Errors.RepoMDError, e:
-                log.warn("Error loading productid metadata for %s." % repo)
+                # We have to look in all repos for productids, not just
+                # the ones we create, or anaconda doesn't install it.
                 self.meta_data_errors.append(repo.id)
             except Exception, e:
                 log.warn("Error loading productid metadata for %s." % repo)
                 log.exception(e)
                 self.meta_data_errors.append(repo.id)
+
+        if self.meta_data_errors:
+            log.debug("Unable to load productid metadata for repos: %s",
+                      self.meta_data_errors)
         return lst
 
     def _get_cert(self, fn):
