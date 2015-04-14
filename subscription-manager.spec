@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.14.3
+Version: 1.14.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -485,6 +485,14 @@ fi
 %endif
 
 %changelog
+* Tue Apr 14 2015 William Poteat <wpoteat@redhat.com> 1.14.4-1
+- 1141257: Fix wrapping of subscription name in contract dialog
+  (mstead@redhat.com)
+- 1147404: Fixed firstboot title length issues (mstead@redhat.com)
+- 1207306: Revert DBus compliance status code. (dgoodwin@redhat.com)
+- 1195501: Properly refresh repo file on override deletion (mstead@redhat.com)
+- Add Fedora 22 to Fedora releaser branches. (awood@redhat.com)
+
 * Thu Apr 09 2015 Alex Wood <awood@redhat.com> 1.14.3-1
 - 1170314: Clarify that manage_repos 0 will delete redhat.repo.
   (dgoodwin@redhat.com)
