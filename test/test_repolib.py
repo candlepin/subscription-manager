@@ -1,4 +1,5 @@
 #
+# -*- coding: utf-8 -*-#
 # Copyright (c) 2010, 2011 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -39,6 +40,17 @@ class RepoTests(unittest.TestCase):
         repo_id = 'valid-label'
         repo = Repo(repo_id)
         self.assertEquals(repo_id, repo.id)
+
+    def test_valid_unicode_just_ascii_label_for_id(self):
+        repo_id = u'valid-label'
+        repo = Repo(repo_id)
+        self.assertEquals(repo_id, repo.id)
+
+    def test_invalid_unicode_label_for_id(self):
+        repo_id = u'valid-不明-label'
+        repo = Repo(repo_id)
+        expected = 'valid----label'
+        self.assertEquals(expected, repo.id)
 
     def test_invalid_label_with_spaces(self):
         repo_id = 'label with spaces'

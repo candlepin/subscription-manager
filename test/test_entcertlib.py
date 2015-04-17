@@ -1,4 +1,5 @@
 #
+# -*- coding: utf-8 -*-#
 # Copyright (c) 2012 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -15,6 +16,8 @@
 
 from mock import Mock, patch
 from datetime import timedelta, datetime
+import locale
+import os
 
 from stubs import StubEntitlementCertificate, StubProduct, StubEntitlementDirectory
 
@@ -37,6 +40,32 @@ class TestingUpdateAction(entcertlib.EntCertUpdateAction):
 
     def __init__(self):
         entcertlib.EntCertUpdateAction.__init__(self)
+
+
+class TestEntCertUpdateReport(SubManFixture):
+    def test(self):
+        r = entcertlib.EntCertUpdateReport()
+        r.expected = u'12312'
+        r.valid = [u'2342∰']
+        r.added.append(self._stub_cert())
+        r.rogue.append(self._stub_cert())
+
+        # an UnicodeError will fail the tests
+        report_str = str(r)
+        '%s' % report_str
+
+        self._set_locale('de_DE.utf8')
+        report_str = str(r)
+        '%s' % r
+
+    def _set_locale(self, lang):
+        os.environ['LANG'] = lang
+        locale.setlocale(locale.LC_ALL, '')
+
+    def _stub_cert(self):
+        stub_ent_cert = StubEntitlementCertificate(StubProduct(u"ஒரு அற்புதமான இயங்கு"))
+        stub_ent_cert.order.name = u'一些秩序'
+        return stub_ent_cert
 
 
 class UpdateActionTests(SubManFixture):
