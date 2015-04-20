@@ -1,4 +1,5 @@
 import difflib
+import locale
 import os
 import pprint
 import unittest
@@ -42,6 +43,17 @@ def temp_file(content, *args, **kwargs):
         yield fh.name
     finally:
         os.unlink(fh.name)
+
+
+@contextmanager
+def locale_context(new_locale, category=None):
+    category = category or locale.LC_ALL
+    old_locale = locale.getlocale(category)
+    locale.setlocale(category, new_locale)
+    try:
+        yield
+    finally:
+        locale.setlocale(category, old_locale)
 
 
 class FakeLogger:
