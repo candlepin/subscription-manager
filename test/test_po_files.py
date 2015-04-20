@@ -5,6 +5,8 @@ import locale
 import unittest
 import sys
 
+import fixture
+
 from stubs import MockStderr
 from subscription_manager import managercli
 from subscription_manager.printing_utils import to_unicode_or_bust
@@ -62,24 +64,33 @@ class TestLocale(unittest.TestCase):
         locale.setlocale(locale.LC_ALL, '')
         gettext.bindtextdomain(APP, DIR)
 
+    def test_pos(self):
+        for lang in self.test_locales:
+            print lang
+            l = "%s.utf8" % lang
+            with fixture.locale_context(new_locale=l):
+                print '%s' % _("Enabled")
+
 
 class TestUnicodeGettext(TestLocale):
     def setUp(self):
-        self._setupLang("ja_JP.UTF-8")
+        #self._setupLang("ja_JP.UTF-8")
         sys.stderr = MockStderr()
 
     def tearDown(self):
-        self._setupLang("en_US")
+        #self._setupLang("en_US")
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
 
     def test_ja_not_serial(self):
-        msg = _("'%s' is not a valid serial number") % "123123"
-        unicode(to_unicode_or_bust(msg)).encode("UTF-8") + '\n'
+        with fixture.locale_context(new_locale='ja_JP.UTF-8'):
+            msg = _("'%s' is not a valid serial number") % "123123"
+            unicode(to_unicode_or_bust(msg)).encode("UTF-8") + '\n'
 
     def test_system_exit(self):
-        try:
-            managercli.system_exit(1, _("'%s' is not a valid serial number") % "123123")
-        except SystemExit:
-            # tis okay, we are looking for unicode errors on the string encode
-            pass
+        with fixture.locale_context(new_locale='ja_JP.UTF-8'):
+            try:
+                managercli.system_exit(1, _("'%s' is not a valid serial number") % "123123")
+            except SystemExit:
+                # tis okay, we are looking for unicode errors on the string encode
+                pass
