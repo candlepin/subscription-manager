@@ -2355,20 +2355,23 @@ class ListCommand(CliCommand):
                         reasons = []
                         pool_type = ''
 
-                        if cert.subject and 'CN' in cert.subject:
-                            if cert.subject['CN'] in cert_reasons_map:
-                                reasons = cert_reasons_map[cert.subject['CN']]
-                            pool_type = pooltype_cache.get(pool_id)
+                        if inj.require(inj.CERT_SORTER).are_reasons_supported():
+                            if cert.subject and 'CN' in cert.subject:
+                                if cert.subject['CN'] in cert_reasons_map:
+                                    reasons = cert_reasons_map[cert.subject['CN']]
+                                pool_type = pooltype_cache.get(pool_id)
 
-                        # 1180400: Status details is empty when GUI is not
-                        if not reasons:
-                            if cert in sorter.valid_entitlement_certs:
-                                reasons.append(_("Subscription is current"))
-                            else:
-                                if cert.valid_range.end() < datetime.datetime.now(GMT()):
-                                    reasons.append(_("Subscription is expired"))
+                            # 1180400: Status details is empty when GUI is not
+                            if not reasons:
+                                if cert in sorter.valid_entitlement_certs:
+                                    reasons.append(_("Subscription is current"))
                                 else:
-                                    reasons.append(_("Subscription has not begun"))
+                                    if cert.valid_range.end() < datetime.datetime.now(GMT()):
+                                        reasons.append(_("Subscription is expired"))
+                                    else:
+                                        reasons.append(_("Subscription has not begun"))
+                        else:
+                            reasons.append(_("Subscription management service doesn't support Status Details."))
 
                         print columnize(CONSUMED_LIST, _none_wrap,
                             name,
