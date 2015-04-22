@@ -174,7 +174,7 @@ class TestMigration(SubManFixture):
     def test_classic_migration_options(self):
         parser = OptionParser()
         migrate.add_parser_options(parser)
-        self.assertTrue(parser.has_option("--registration-state"))
+        self.assertTrue(parser.has_option("--keep"))
         self.assertTrue(parser.has_option("--org"))
         self.assertTrue(parser.has_option("--environment"))
         self.assertTrue(parser.has_option("--force"))
@@ -193,11 +193,11 @@ class TestMigration(SubManFixture):
 
         parser = OptionParser()
         migrate.add_parser_options(parser, five_to_six_script=False)
-        valid = ["keep", "purge"]
-        for opt in valid:
-            (options, args) = parser.parse_args(["--registration-state", opt])
+        (options, args) = parser.parse_args(["--keep"])
+        self.assertEquals("keep", options.registration_state)
 
-        self.assertRaises(SystemExit, parser.parse_args, ["--registration-state", "blah"])
+        (options, args) = parser.parse_args([""])
+        self.assertEquals("purge", options.registration_state)
 
     def test_registration_state_default(self):
         parser = OptionParser()
@@ -332,6 +332,22 @@ class TestMigration(SubManFixture):
         self.engine.get_auth()
         self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
         self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEquals(self.engine.destination_creds.username, "destination_username")
+        self.assertEquals(self.engine.destination_creds.password, "destination_password")
+
+    @patch("__builtin__.raw_input", autospec=True)
+    @patch("getpass.getpass", autospec=True)
+    def test_gets_destination_auth_in_keep_state(self, mock_getpass, mock_input):
+        self.engine.options = self.create_options(
+            registration_state='keep'
+        )
+        mock_input.return_value = "destination_username"
+        mock_getpass.return_value = "destination_password"
+
+        self.engine.is_hosted = False
+        self.engine.get_auth()
+        self.assertEquals(self.engine.legacy_creds.username, None)
+        self.assertEquals(self.engine.legacy_creds.password, None)
         self.assertEquals(self.engine.destination_creds.username, "destination_username")
         self.assertEquals(self.engine.destination_creds.password, "destination_password")
 
