@@ -370,7 +370,7 @@ class StubConsumerIdentity(object):
         return ""
 
 
-class StubUEP:
+class StubUEP(object):
     def __init__(self, host=None, ssl_port=None, handler=None,
                  username=None, password=None,
                  proxy_hostname=None, proxy_port=None,
@@ -456,8 +456,8 @@ class StubUEP:
         return []
 
 
-class StubBackend:
-    def __init__(self, uep=StubUEP()):
+class StubBackend(object):
+    def __init__(self, uep=None):
         self.cp_provider = StubCPProvider()
         self.entitlement_dir = None
         self.product_dir = None
@@ -513,7 +513,7 @@ class StubFacts(Facts):
         self.server_status = None
 
 
-class StubConsumer:
+class StubConsumer(object):
     def __init__(self):
         self.uuid = None
 
@@ -527,9 +527,9 @@ class StubConsumer:
         return "12341234234"
 
 
-class StubEntActionInvoker:
-    def __init__(self, uep=StubUEP()):
-        self.uep = uep
+class StubEntActionInvoker(object):
+    def __init__(self, uep=None):
+        self.uep = uep or StubUEP()
 
     def update(self):
         pass
@@ -551,10 +551,11 @@ class StubCertSorter(CertSorter):
 
 class StubCPProvider(object):
 
-    consumer_auth_cp = StubUEP()
-    basic_auth_cp = StubUEP()
-    no_auth_cp = StubUEP()
-    content_connection = StubContentConnection()
+    def __init__(self):
+        self.consumer_auth_cp = StubUEP()
+        self.basic_auth_cp = StubUEP()
+        self.no_auth_cp = StubUEP()
+        self.content_connection = StubContentConnection()
 
     def set_connection_info(self,
                 host=None,
