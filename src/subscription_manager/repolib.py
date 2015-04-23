@@ -1,4 +1,5 @@
 #
+# -*- coding: utf-8 -*-#
 # Copyright (c) 2010 Red Hat, Inc.
 #
 # Authors: Jeff Ortel <jortel@redhat.com>
@@ -415,10 +416,13 @@ class RepoActionReport(ActionReport):
         return '\n'.join(r)
 
     def repo_format(self, repo):
-        return "[id:%s %s]" % (repo.id, repo['name'])
+        msg = "[id:%s %s]" % (repo.id,
+                               repo['name'])
+        return msg.encode('utf8')
 
     def section_format(self, section):
-        return "[%s]" % section
+        msg = "[%s]" % section
+        return msg.encode('utf8')
 
     def format_repos(self, repos):
         return self.format_repos_info(repos, self.repo_format)
@@ -427,13 +431,13 @@ class RepoActionReport(ActionReport):
         return self.format_repos_info(sections, self.section_format)
 
     def __str__(self):
-        s = ['Repo updates\n']
+        s = [_('Repo updates') + '\n']
         s.append(_('Total repo updates: %d') % self.updates())
         s.append(_('Updated'))
         s.append(self.format_repos(self.repo_updates))
         s.append(_('Added (new)'))
         s.append(self.format_repos(self.repo_added))
-        s.append(_('Deleted'))
+        s.append(_('Deletedfd'))
         # deleted are former repo sections, but they are the same type
         s.append(self.format_sections(self.repo_deleted))
         return '\n'.join(s)
@@ -487,6 +491,7 @@ class Repo(dict):
         the release version string.
         """
 
+        log.debug("content.label %s %s", content.label, type(content.label))
         repo = cls(content.label)
 
         repo['name'] = content.name

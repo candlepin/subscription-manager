@@ -1,4 +1,5 @@
 #
+# -*- coding: utf-8 -*-#
 # Copyright (c) 2010, 2011 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -19,7 +20,7 @@ from iniparse import RawConfigParser
 from mock import Mock, patch
 from StringIO import StringIO
 
-from fixture import SubManFixture
+import fixture
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
         StubProductDirectory, StubConsumerIdentity
@@ -39,6 +40,17 @@ class RepoTests(unittest.TestCase):
         repo_id = 'valid-label'
         repo = Repo(repo_id)
         self.assertEquals(repo_id, repo.id)
+
+    def test_valid_unicode_just_ascii_label_for_id(self):
+        repo_id = u'valid-label'
+        repo = Repo(repo_id)
+        self.assertEquals(repo_id, repo.id)
+
+    def test_invalid_unicode_label_for_id(self):
+        repo_id = u'valid-不明-label'
+        repo = Repo(repo_id)
+        expected = 'valid----label'
+        self.assertEquals(expected, repo.id)
 
     def test_invalid_label_with_spaces(self):
         repo_id = 'label with spaces'
@@ -62,7 +74,29 @@ class RepoTests(unittest.TestCase):
         self.assertTrue(('fake_prop', 'fake') in existing_repo.items())
 
 
-class RepoUpdateActionTests(SubManFixture):
+class RepoActionReportTests(fixture.SubManFixture):
+    def test(self):
+        report = repolib.RepoActionReport()
+        repo = self._repo(u'a-unicode-content-label', u'A unicode repo name')
+        report.repo_updates.append(repo)
+        report.repo_added.append(repo)
+        deleted_section = u'einige-repo-name'
+        deleted_section_2 = u'一些回購名稱'
+        report.repo_deleted = [deleted_section, deleted_section_2]
+
+        # okay as long as no UnicodeErrors
+        str(report)
+
+        with fixture.locale_context('de_DE.utf8'):
+            str(report)
+
+    def _repo(self, id, name):
+        repo = repolib.Repo(repo_id=id)
+        repo['name'] = name
+        return repo
+
+
+class RepoUpdateActionTests(fixture.SubManFixture):
 
     def setUp(self):
         super(RepoUpdateActionTests, self).setUp()
@@ -476,7 +510,7 @@ class TidyWriterTests(unittest.TestCase):
         self.assertEquals("test stuff\n\ntest\n", output.getvalue())
 
 
-class YumReleaseverSourceTest(SubManFixture):
+class YumReleaseverSourceTest(fixture.SubManFixture):
     def test_init(self):
         #inj.provide(inj.RELEASE_STATUS_CACHE, Mock())
         #override_cache_mock = inj.require(inj.OVERRIDE_STATUS_CACHE)
@@ -540,7 +574,7 @@ class YumReleaseverSourceTest(SubManFixture):
         self.assertEquals(release_source._expansion, YumReleaseverSource.default)
 
 
-class YumReleaseverSourceIsNotEmptyTest(SubManFixture):
+class YumReleaseverSourceIsNotEmptyTest(fixture.SubManFixture):
     def test_empty_string(self):
         self.assertFalse(YumReleaseverSource.is_not_empty(""))
 
@@ -557,7 +591,7 @@ class YumReleaseverSourceIsNotEmptyTest(SubManFixture):
         self.assertTrue(YumReleaseverSource.is_not_empty("Super"))
 
 
-class YumReleaseverSourceIsSetTest(SubManFixture):
+class YumReleaseverSourceIsSetTest(fixture.SubManFixture):
     def test_none(self):
         self.assertFalse(YumReleaseverSource.is_set(None))
 

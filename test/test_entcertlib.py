@@ -1,4 +1,5 @@
 #
+# -*- coding: utf-8 -*-#
 # Copyright (c) 2012 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -18,14 +19,14 @@ from datetime import timedelta, datetime
 
 from stubs import StubEntitlementCertificate, StubProduct, StubEntitlementDirectory
 
-from fixture import SubManFixture
+import fixture
 
 from subscription_manager.certdirectory import Writer
 from subscription_manager import entcertlib
 from subscription_manager import injection as inj
 
 
-class TestDisconnected(SubManFixture):
+class TestDisconnected(fixture.SubManFixture):
     def test_repr(self):
         # no err_msg, so empty repr
         discon = entcertlib.Disconnected()
@@ -39,7 +40,29 @@ class TestingUpdateAction(entcertlib.EntCertUpdateAction):
         entcertlib.EntCertUpdateAction.__init__(self)
 
 
-class UpdateActionTests(SubManFixture):
+class TestEntCertUpdateReport(fixture.SubManFixture):
+    def test(self):
+        r = entcertlib.EntCertUpdateReport()
+        r.expected = u'12312'
+        r.valid = [u'2342∰']
+        r.added.append(self._stub_cert())
+        r.rogue.append(self._stub_cert())
+
+        # an UnicodeError will fail the tests
+        report_str = str(r)
+        '%s' % report_str
+
+        with fixture.locale_context('de_DE.utf8'):
+            report_str = str(r)
+            '%s' % r
+
+    def _stub_cert(self):
+        stub_ent_cert = StubEntitlementCertificate(StubProduct(u"ஒரு அற்புதமான இயங்கு"))
+        stub_ent_cert.order.name = u'一些秩序'
+        return stub_ent_cert
+
+
+class UpdateActionTests(fixture.SubManFixture):
 
     @patch("subscription_manager.entcertlib.EntitlementCertBundleInstaller.build_cert")
     @patch.object(Writer, "write")
