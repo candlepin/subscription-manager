@@ -34,8 +34,9 @@ def excepthook_base(exc_type, exc_value, exc_traceback):
 
 sys.excepthook = excepthook_base
 
+from gi.repository import GObject
+from gi.repository import GLib
 import syslog
-import gobject
 import dbus
 import dbus.service
 import dbus.glib
@@ -152,7 +153,7 @@ class StatusChecker(dbus.service.Object):
     #certain parts of that are async
     def watchdog(self):
         if not self.keep_alive:
-            gobject.idle_add(check_if_ran_once, self, self.loop)
+            GLib.idle_add(check_if_ran_once, self, self.loop)
 
     @dbus.service.method(
         dbus_interface="com.redhat.SubscriptionManager.EntitlementStatus",
@@ -289,7 +290,7 @@ def main():
     sys.excepthook = sys.__excepthook__
 
     system_bus = dbus.SystemBus()
-    loop = gobject.MainLoop()
+    loop = GObject.MainLoop()
     checker = StatusChecker(system_bus, options.keep_alive, force_signal, loop)
 
     if options.immediate:
