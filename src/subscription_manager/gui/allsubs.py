@@ -25,7 +25,7 @@ from subscription_manager.gui.contract_selection import ContractSelectionWindow
 from subscription_manager.gui.filter import FilterOptionsWindow, Filters
 from subscription_manager.gui import progress
 from subscription_manager.gui.storage import MappedTreeStore
-from subscription_manager.gui.utils import apply_highlight, show_error_window, handle_gui_exception, set_background_model_index
+from subscription_manager.gui.utils import apply_highlight, show_error_window, handle_gui_exception
 from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, require
 from subscription_manager.jsonwrapper import PoolWrapper
