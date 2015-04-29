@@ -118,6 +118,11 @@ class SubManFixture(unittest.TestCase):
         self.mock_calc = NonCallableMock()
         self.mock_calc.calculate.return_value = None
 
+        # Avoid trying to read real /etc/yum.repos.d/redhat.repo
+        self.mock_repofile_path_exists_patcher = patch('subscription_manager.repolib.RepoFile.path_exists')
+        mock_repofile_path_exists = self.mock_repofile_path_exists_patcher.start()
+        mock_repofile_path_exists.return_value = True
+
         inj.provide(inj.IDENTITY, id_mock)
         inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR, self.mock_calc)
 
@@ -171,6 +176,7 @@ class SubManFixture(unittest.TestCase):
 
     def tearDown(self):
         self.dbus_patcher.stop()
+        self.mock_repofile_path_exists_patcher.stop()
         self.is_valid_server_patcher.stop()
 
         for f in self.files_to_cleanup:

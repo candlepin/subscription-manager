@@ -678,14 +678,19 @@ class RepoFile(ConfigParser):
         # Simulate manage repos turned off if no yum.repos.d directory exists.
         # This indicates yum is not installed so clearly no need for us to
         # manage repos.
-        if not os.path.exists(self.repos_dir):
+        if not self.path_exists(self.repos_dir):
             log.warn("%s does not exist, turning manage_repos off." %
                     self.repos_dir)
             self.manage_repos = 0
         self.create()
 
+    # Easier than trying to mock/patch os.path.exists
+    def path_exists(self, path):
+        "wrapper around os.path.exists"
+        return os.path.exists(path)
+
     def exists(self):
-        return os.path.exists(self.path)
+        return self.path_exists(self.path)
 
     def read(self):
         ConfigParser.read(self, self.path)
@@ -744,7 +749,7 @@ class RepoFile(ConfigParser):
             return Repo(section, self.items(section))
 
     def create(self):
-        if os.path.exists(self.path) or not self.manage_repos:
+        if self.path_exists(self.path) or not self.manage_repos:
             return
         f = open(self.path, 'w')
         s = []
