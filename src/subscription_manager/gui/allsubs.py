@@ -266,12 +266,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
                 self.store.add_map(tree_iter, {
                     'virt_only': self._machine_type(entry.pools),
-                    'product_name': entry.product_name,
+                    'product_name': str(entry.product_name),
                     'product_name_formatted': apply_highlight(entry.product_name,
                                                               self.get_filter_text()),
                     'quantity_to_consume': suggested_quantity,
-                    'available': available,
-                    'product_id': entry.product_id,
+                    'available': str(available),
+                    'product_id': str(entry.product_id),
                     'pool_id': entry.pools[0]['id'],  # not displayed, just for lookup later
                     'merged_pools': entry,  # likewise not displayed, for subscription
                     'align': 0.5,
@@ -281,7 +281,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'support_level': support_level,
                     'support_type': support_type,
                     'quantity_increment': quantity_increment,
-                    'pool_type': pool_type
+                    'pool_type': str(pool_type)
                 })
 
         # Ensure that all nodes are expanded in the tree view.
@@ -411,7 +411,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.pb = progress.Progress(_("Attaching"),
                 _("Attaching subscription. Please wait."))
         self.timer = gobject.timeout_add(100, self.pb.pulse)
-        self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
+        #self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
 
         # Spin off a thread to handle binding the selected pool.
         # After it has completed the actual bind call, available

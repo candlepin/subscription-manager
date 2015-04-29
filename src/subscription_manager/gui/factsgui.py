@@ -113,10 +113,10 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
             new_group = fact.split(".", 1)[0]
             if new_group != group:
                 group = new_group
-                parent = self.facts_store.append(None, [group, ""])
+                parent = self.facts_store.append(None, [str(group), ""])
             if str(value).strip() == "":
                 value = _("Unknown")
-            self.facts_store.append(parent, [fact, value])
+            self.facts_store.append(parent, [str(fact), str(value)])
 
         identity = inj.require(inj.IDENTITY)
         self._display_system_id(identity)
