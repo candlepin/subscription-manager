@@ -36,6 +36,7 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
     gui_file = "contract_selection.glade"
 
     def __init__(self, selected_callback, cancel_callback):
+        super(ContractSelectionWindow, self).__init__()
         self._selected_callback = selected_callback
         self._cancel_callback = cancel_callback
         self.total_contracts = 0
@@ -44,7 +45,6 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
             self._on_contract_selection)
 
         self.subscription_name_label.set_line_wrap(True)
-        self.subscription_name_label.connect('size-allocate', lambda label, size: label.set_size_request(size.width - 1, -1))
 
         callbacks = {"on_cancel_button_clicked": self._cancel_button_clicked,
                      "size-allocate": lambda label, size: label.set_size_request(size.width - 1, -1),
@@ -74,7 +74,7 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
         self.contract_selection_window.show_all()
 
     def destroy(self):
-        self.contract_selection_win.destroy()
+        self.contract_selection_window.destroy()
 
     def populate_treeview(self):
         renderer = gtk.CellRendererText()
@@ -168,8 +168,17 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
             'quantity_increment': quantity_increment,
             })
 
+    def toplevel(self):
+        tl = self.get_toplevel()
+        if tl.is_toplevel():
+            return tl
+        else:
+            self.log.debug("no toplevel window?")
+            return None
+
     def set_parent_window(self, window):
-        self.contract_selection_win.set_transient_for(window)
+        self.log.debug('window %s', window)
+        self.contract_selection_window.set_transient_for(window)
 
     def _cancel_button_clicked(self, button):
         self._cancel_callback()

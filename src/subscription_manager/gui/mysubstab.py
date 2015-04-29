@@ -145,7 +145,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             self.pb = progress.Progress(_("Removing"),
                     _("Removing subscription. Please wait."))
             self.timer = gobject.timeout_add(100, self.pb.pulse)
-            self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
+            content_toplevel = self.content.get_toplevel()
+            if content_toplevel.is_toplevel():
+                self.pb.set_parent_window(content_toplevel)
             self.async_bind.unbind(serial, selection, self._unsubscribe_callback, self._handle_unbind_exception)
         else:
             # unregistered, just delete the certs directly

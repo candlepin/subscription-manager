@@ -36,8 +36,6 @@ class MappedStore(object):
         entry = [None] * self.get_n_columns()
 
         for key, value in item_map.iteritems():
-            self.log.debug("create_initial_entry key=%s, value=%s",
-                           key, value)
             entry[self[key]] = value
         return entry
 

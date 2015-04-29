@@ -366,7 +366,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 # show pulsating progress bar while we wait for results
                 self.pb = progress.Progress(pb_title, pb_label)
                 self.timer = gobject.timeout_add(100, self.pb.pulse)
-                #self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
+                tl = self.content.get_toplevel()
+                if tl.is_toplevel():
+                    self.pb.set_parent_window(tl)
 
             # fire off async refresh
             async_stash = async.AsyncPool(self.pool_stash)
@@ -411,8 +413,11 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.pb = progress.Progress(_("Attaching"),
                 _("Attaching subscription. Please wait."))
         self.timer = gobject.timeout_add(100, self.pb.pulse)
-        #self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
-
+        content_toplevel = self.content.get_toplevel()
+        # get_toplevel() can return a GtkWindow that is within another
+        # GtkWindow. See the get_toplevel() gtk docs
+        if content_toplevel.is_toplevel():
+            self.pb.set_parent_window(content_toplevel)
         # Spin off a thread to handle binding the selected pool.
         # After it has completed the actual bind call, available
         # subs will be refreshed, but we won't re-run compliance
@@ -449,7 +454,11 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.contract_selection = ContractSelectionWindow(
                 self._contract_selected, self._contract_selection_cancelled)
 
-        self.contract_selection.set_parent_window(self.content.get_parent_window().get_user_data())
+        content_toplevel = self.content.get_toplevel()
+        self.log.debug("content_toplevel %s", content_toplevel)
+        if content_toplevel.is_toplevel():
+            self.contract_selection.set_parent_window(content_toplevel)
+        #self.log.debug("user_data %s", pw.get_user_data())
         merged_pools.sort_virt_to_top()
 
         for pool in merged_pools.pools:
