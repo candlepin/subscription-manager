@@ -112,6 +112,8 @@ class SubmanBaseWidget(object):
     def __init__(self):
         self.gui = self._gui_factory()
         self.pull_widgets(self.gui, self.widget_names)
+        self.log = logging.getLogger('rhsm-app.' + __name__ +
+                                     '.' + self.__class__.__name__)
 
     def _gui_factory(self):
         gui = BuilderFileBasedWidget.from_file(self.gui_file)
@@ -708,7 +710,7 @@ class DatePicker(gtk.HBox):
         self._calendar_window.set_modal(True)
         self._calendar_window.set_title(_("Date Selection"))
         self._calendar_window.set_transient_for(
-                self.get_parent_window().get_user_data())
+                self.get_parent())
 
         self._calendar.select_month(self._date.month - 1, self._date.year)
         self._calendar.select_day(self._date.day)
@@ -789,7 +791,7 @@ class ToggleTextColumn(gtk.TreeViewColumn):
         self.pack_start(self.renderer, False)
         self.set_cell_data_func(self.renderer, self._render_cell)
 
-    def _render_cell(self, column, cell_renderer, tree_model, tree_iter):
+    def _render_cell(self, column, cell_renderer, tree_model, tree_iter, data=None):
         # Clear the cell if we are a parent row.
         if tree_model.iter_n_children(tree_iter) > 0:
             cell_renderer.set_property("text", "")
@@ -923,7 +925,7 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
             # Do nothing... The value entered in the grid will be reset.
             pass
 
-    def _update_cell_based_on_data(self, column, cell_renderer, tree_model, tree_iter):
+    def _update_cell_based_on_data(self, column, cell_renderer, tree_model, tree_iter, Data=None):
         # Clear the cell if we are a parent row.
         if tree_model.iter_n_children(tree_iter) > 0:
             cell_renderer.set_property("text", "")
