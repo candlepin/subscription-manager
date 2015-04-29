@@ -220,5 +220,5 @@ if __name__ == '__main__':
         system_exit(0, "\nUser interrupted process.")
     except Exception, e:
         log.exception(e)
-        raise
+        #raise
         system_exit(1, e)

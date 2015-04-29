@@ -366,7 +366,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 # show pulsating progress bar while we wait for results
                 self.pb = progress.Progress(pb_title, pb_label)
                 self.timer = gobject.timeout_add(100, self.pb.pulse)
-                self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
+                #self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
 
             # fire off async refresh
             async_stash = async.AsyncPool(self.pool_stash)
