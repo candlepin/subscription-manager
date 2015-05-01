@@ -744,7 +744,7 @@ class ProductManager:
 
         active = set([])
 
-        # If a package is in a enabled and 'protected' repo, and
+        # If a package is in a enabled and 'protected' repo
 
         # This searches all the package sacks in this yum instances
         # package sack, aka all the enabled repos
