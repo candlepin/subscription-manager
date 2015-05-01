@@ -25,6 +25,8 @@ from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.utils import chroot
+from subscription_manager.injectioninit import init_dep_injection
+from subscription_manager import logutil
 from rhsm import connection
 from rhsm import config
 
@@ -125,10 +127,8 @@ def postconfig_hook(conduit):
     # register rpm name for yum history recording"
     # yum on 5.7 doesn't have this method, so check for it
 
-    from subscription_manager import logutil
     logutil.init_logger_for_yum()
 
-    from subscription_manager.injectioninit import init_dep_injection
     init_dep_injection()
 
     # If a tool (it's, e.g., Mock) manages a chroot via 'yum --installroot',
