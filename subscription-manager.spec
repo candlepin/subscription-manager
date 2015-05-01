@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.14.5
+Version: 1.14.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -485,6 +485,16 @@ fi
 %endif
 
 %changelog
+* Fri May 01 2015 William Poteat <wpoteat@redhat.com> 1.14.6-1
+- 1149095: Fix error when yum updates subman modules (alikins@redhat.com)
+- 1159163: Fix prod id del because of --disablerepo (alikins@redhat.com)
+- 1180273: Migrate from RHN Classic without credentials (awood@redhat.com)
+- 1213418: Message agreement between GUI and CLI in disconnected system
+  (wpoteat@redhat.com)
+- 1199597: Fix UnicodeError from repolib's report (alikins@redhat.com)
+- 1209519: Removed excerpt from man page listing --auto as a requirement
+  (crog@redhat.com)
+
 * Tue Apr 14 2015 William Poteat <wpoteat@redhat.com> 1.14.5-1
 - 1211557: Fix crash when rsyslog not running. (dgoodwin@redhat.com)
 
