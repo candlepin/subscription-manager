@@ -12,6 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
+import os
 import re
 import rhsm.config
 import StringIO
@@ -374,7 +375,7 @@ class TestMigration(SubManFixture):
         try:
             self.engine.transfer_http_proxy_settings()
         except SystemExit, e:
-            self.assertEquals(e.code, 1)
+            self.assertEquals(e.code, os.EX_CONFIG)
         else:
             self.fail("No exception raised")
 
@@ -581,7 +582,7 @@ class TestMigration(SubManFixture):
         try:
             self.engine.check_ok_to_proceed()
         except SystemExit, e:
-            self.assertEquals(e.code, 1)
+            self.assertEquals(e.code, os.EX_SOFTWARE)
         else:
             self.fail("No exception raised")
 
@@ -638,7 +639,7 @@ class TestMigration(SubManFixture):
         try:
             self.engine.get_org("some_username")
         except SystemExit, e:
-            self.assertEquals(e.code, 1)
+            self.assertEquals(e.code, os.EX_DATAERR)
         else:
             self.fail("No exception raised")
 
@@ -662,7 +663,7 @@ class TestMigration(SubManFixture):
         try:
             self.engine.get_org("some_username")
         except SystemExit, e:
-            self.assertEquals(e.code, 1)
+            self.assertEquals(e.code, os.EX_DATAERR)
         else:
             self.fail("No exception raised")
 
@@ -671,7 +672,7 @@ class TestMigration(SubManFixture):
         try:
             self.engine.get_environment("some_org")
         except SystemExit, e:
-            self.assertEquals(e.code, 1)
+            self.assertEquals(e.code, os.EX_SOFTWARE)
         else:
             self.fail("No exception raised")
 
@@ -758,7 +759,7 @@ class TestMigration(SubManFixture):
         try:
             self.engine.get_environment("some_org")
         except SystemExit, e:
-            self.assertEquals(e.code, 1)
+            self.assertEquals(e.code, os.EX_DATAERR)
         else:
             self.fail("No exception raised")
 
@@ -787,7 +788,7 @@ class TestMigration(SubManFixture):
         try:
             self.engine.get_environment("some_org")
         except SystemExit, e:
-            self.assertEquals(e.code, 1)
+            self.assertEquals(e.code, os.EX_DATAERR)
         else:
             self.fail("No exception raised")
 
@@ -798,7 +799,7 @@ class TestMigration(SubManFixture):
         try:
             self.engine.get_environment("some_org")
         except SystemExit, e:
-            self.assertEquals(e.code, 1)
+            self.assertEquals(e.code, os.EX_UNAVAILABLE)
         else:
             self.fail("No exception raised")
 

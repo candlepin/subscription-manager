@@ -190,7 +190,7 @@ class MigrationEngine(object):
                 self.proxy_host, self.proxy_port = http_proxy.split(':')
             except ValueError, e:
                 log.exception(e)
-                system_exit(1, _("Could not read legacy proxy settings.  ") + SEE_LOG_FILE)
+                system_exit(os.EX_CONFIG, _("Could not read legacy proxy settings.  ") + SEE_LOG_FILE)
 
             if self.rhncfg['enableProxyAuth']:
                 self.proxy_user = self.rhncfg['proxyUser']
@@ -212,15 +212,17 @@ class MigrationEngine(object):
             self.rhsmcfg.save()
 
     def _get_connection_info(self):
+        url_parse_error = os.EX_USAGE
         try:
             if self.options.destination_url is None:
+                url_parse_error = os.EX_CONFIG
                 hostname = self.rhsmcfg.get('server', 'hostname')
                 port = self.rhsmcfg.get_int('server', 'port')
                 prefix = self.rhsmcfg.get('server', 'prefix')
             else:
                 (_user, _password, hostname, port, prefix) = parse_url(self.options.destination_url, default_port=443)
         except ServerUrlParseError, e:
-            system_exit(-1, _("Error parsing server URL: %s") % e.msg)
+            system_exit(url_parse_error, _("Error parsing server URL: %s") % e.msg)
 
         connection_info = {'host': hostname, 'ssl_port': int(port), 'handler': prefix}
 
@@ -258,17 +260,17 @@ class MigrationEngine(object):
             self.cp.getStatus()
         except SSLError, e:
             print _("The CA certificate for the destination server has not been installed.")
-            system_exit(1, CONNECTION_FAILURE % e)
+            system_exit(os.EX_SOFTWARE, CONNECTION_FAILURE % e)
         except Exception, e:
             log.exception(e)
-            system_exit(1, CONNECTION_FAILURE % e)
+            system_exit(os.EX_SOFTWARE, CONNECTION_FAILURE % e)
 
     def get_org(self, username):
         try:
             owner_list = self.cp.getOwnerList(username)
         except Exception, e:
             log.exception(e)
-            system_exit(1, CONNECTION_FAILURE % e)
+            system_exit(os.EX_SOFTWARE, CONNECTION_FAILURE % e)
 
         if len(owner_list) == 0:
             system_exit(1, _("%s cannot register with any organizations.") % username)
@@ -286,7 +288,7 @@ class MigrationEngine(object):
                     org = owner_data['key']
                     break
             if not org:
-                system_exit(1, _("Couldn't find organization '%s'.") % org_input)
+                system_exit(os.EX_DATAERR, _("Couldn't find organization '%s'.") % org_input)
         return org
 
     def get_environment(self, owner_key):
@@ -295,10 +297,10 @@ class MigrationEngine(object):
             if self.cp.supports_resource('environments'):
                 environment_list = self.cp.getEnvironmentList(owner_key)
             elif self.options.environment:
-                system_exit(1, _("Environments are not supported by this server."))
+                system_exit(os.EX_UNAVAILABLE, _("Environments are not supported by this server."))
         except Exception, e:
             log.exception(e)
-            system_exit(1, CONNECTION_FAILURE % e)
+            system_exit(os.EX_SOFTWARE, CONNECTION_FAILURE % e)
 
         environment = None
         if len(environment_list) > 0:
@@ -317,7 +319,7 @@ class MigrationEngine(object):
                     environment = env_data['name']
                     break
             if not environment:
-                system_exit(1, _("Couldn't find environment '%s'.") % env_input)
+                system_exit(os.EX_DATAERR, _("Couldn't find environment '%s'.") % env_input)
 
         return environment
 
@@ -367,7 +369,7 @@ class MigrationEngine(object):
             details = rpc_session.channel.software.getDetails(session_key, label)
         except Exception, e:
             log.exception(e)
-            system_exit(1, _("Problem encountered getting the list of subscribed channels.  ") + SEE_LOG_FILE)
+            system_exit(os.EX_SOFTWARE, _("Problem encountered getting the list of subscribed channels.  ") + SEE_LOG_FILE)
         if details['clone_original']:
             return self.resolve_base_channel(details['clone_original'], rpc_session, session_key)
         return details
@@ -377,7 +379,7 @@ class MigrationEngine(object):
             channels = getChannels().channels()
         except Exception, e:
             log.exception(e)
-            system_exit(1, _("Problem encountered getting the list of subscribed channels.  ") + SEE_LOG_FILE)
+            system_exit(os.EX_SOFTWARE, _("Problem encountered getting the list of subscribed channels.  ") + SEE_LOG_FILE)
         if self.options.five_to_six:
             channels = [self.resolve_base_channel(c['label'], rpc_session, session_key) for c in channels]
         return [x['label'] for x in channels]
@@ -445,7 +447,7 @@ class MigrationEngine(object):
             dic_data = self.read_channel_cert_mapping(mappingfile)
         except IOError, e:
             log.exception(e)
-            system_exit(1, _("Unable to read mapping file: %(mappingfile)s.\n"
+            system_exit(os.EX_CONFIG, _("Unable to read mapping file: %(mappingfile)s.\n"
                 "Please check that you have the %(package)s package installed.") % {
                     "mappingfile": mappingfile,
                     "package": "subscription-manager-migration-data"})
@@ -482,8 +484,7 @@ class MigrationEngine(object):
 
         if unrecognized_channels or invalid_rhsm_channels:
             if not self.options.force:
-                print(_("\nUse --force to ignore these channels and continue the migration.\n"))
-                sys.exit(1)
+                system_exit(1, _("\nUse --force to ignore these channels and continue the migration.\n"))
 
         # At this point applicable_certs looks something like this
         # { '1': { 'cert-a-1.pem': ['channel1', 'channel2'], 'cert-b-1.pem': ['channel3'] } }
@@ -596,7 +597,7 @@ class MigrationEngine(object):
             rpc_session.system.unentitle(self.system_id_contents)
         except Exception, e:
             log.exception("Could not unentitle system on Satellite 5.", e)
-            system_exit(1, _("Could not unentitle system on legacy server.  ") + SEE_LOG_FILE)
+            system_exit(os.EX_SOFTWARE, _("Could not unentitle system on legacy server.  ") + SEE_LOG_FILE)
         try:
             self.disable_yum_rhn_plugin()
         except Exception:
@@ -865,15 +866,15 @@ def add_parser_options(parser, five_to_six_script=False):
 def validate_options(options):
     if options.activation_keys:
         if options.environment:
-            system_exit(1, _("The --activation-key and --environment options cannot be used together."))
+            system_exit(os.EX_USAGE, _("The --activation-key and --environment options cannot be used together."))
         if options.destination_user or options.destination_password:
-            system_exit(1, _("The --activation-key option precludes the use of --destination-user and --destination-password"))
+            system_exit(os.EX_USAGE, _("The --activation-key option precludes the use of --destination-user and --destination-password"))
         if not options.org:
-            system_exit(1, _("The --activation-key option requires that a --org be given."))
+            system_exit(os.EX_USAGE, _("The --activation-key option requires that a --org be given."))
 
     if options.service_level and not options.auto:
         # TODO Need to explain why this restriction exists.
-        system_exit(1, _("The --servicelevel and --no-auto options cannot be used together."))
+        system_exit(os.EX_USAGE, _("The --servicelevel and --no-auto options cannot be used together."))
 
 
 def is_hosted():

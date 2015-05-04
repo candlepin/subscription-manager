@@ -1202,7 +1202,7 @@ class RegisterCommand(UserPassCommand):
         owners = cp.getOwnerList(self.username)
 
         if len(owners) == 0:
-            system_exit(os.EX_SOFTWARE, _("%s cannot register with any organizations.") % self.username)
+            system_exit(1, _("%s cannot register with any organizations.") % self.username)
         if len(owners) == 1:
             return owners[0]['key']
 
