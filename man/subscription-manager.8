@@ -289,9 +289,10 @@ subscriptions) to cover the number of sockets, guests, or other characteristics.
 
 .TP
 .B --servicelevel=LEVEL
-Sets the preferred service level to use with subscriptions attached to the system. Service levels are commonly premium, standard, and none, though other levels may be available depending on the product and the contract. This preference can only be used in conjunction with the
-.B --auto
-option, and then it is used as one of the factors for matching subscriptions.
+Sets the preferred service level to use with subscriptions automatically attached to the system. Service levels are commonly premium, standard, and none, though other levels may be available depending on the product and the contract. This option cannot be used when attaching specific pools via
+.B --pool
+or
+.B --file.
 
 .SS AUTO-ATTACH OPTIONS
 The
