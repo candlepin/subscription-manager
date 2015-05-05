@@ -22,8 +22,9 @@ import warnings
 
 from gi.repository import GObject
 from gi.repository import Gtk
-from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import Pango
+from gi.reposotory import GdkPixbuf
 
 
 from rhsm.certificate import GMT
@@ -512,15 +513,9 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         # Save the original background color for the
         # start_end_date_text widget so we can restore it in the
         # clear() function.
-
-
-
-
         # FIXME
         #self.original_bg = self.start_end_date_text.rc_get_style().base[Gtk.StateType.NORMAL]
         # FIXME
-
-
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
@@ -588,8 +583,8 @@ class CellRendererDate(Gtk.CellRendererText):
                 GObject.PARAM_READWRITE)
     }
 
-    def __init__(self):
-        GObject.GObject.__init__(self)
+    #def __init__(self):
+    #    GObject.GObject.__init__(self)
 
     def do_set_property(self, prop, value):
         """
@@ -617,7 +612,8 @@ class DatePicker(Gtk.HBox):
         """
         Initialize the DatePicker. date is a python datetime.date object.
         """
-        GObject.GObject.__init__(self)
+        super(DatePicker, self).__init__()
+        #GObject.GObject.__init__(self)
 
         image = Gtk.Image.new_from_icon_name('x-office-calendar', Gtk.IconSize.MENU)
         image.show()
@@ -761,7 +757,9 @@ class CheckBoxColumn(Gtk.TreeViewColumn):
         self._toggle_callback = toggle_callback
         self.renderer = Gtk.CellRendererToggle()
         self.renderer.set_radio(False)
-        GObject.GObject.__init__(self, column_title, self.renderer, active=self.store[self.store_key])
+        super(CheckBoxColumn, self).__init__(column_title,
+                                             self.renderer,
+                                             active=self.store[self.store_key])
         self.renderer.connect("toggled", self._on_toggle)
 
     def _on_toggle(self, widget, path):
@@ -783,7 +781,7 @@ class ToggleTextColumn(Gtk.TreeViewColumn):
     value in the store.
     """
     def __init__(self, column_title, model_idx):
-        GObject.GObject.__init__(self, column_title)
+        super(ToggleTextColumn, self).__init__(column_title)
         self.model_idx = model_idx
         self.renderer = Gtk.CellRendererText()
         self.renderer.set_property('xalign', 0.5)
@@ -852,8 +850,9 @@ class QuantitySelectionColumn(Gtk.TreeViewColumn):
         self.quantity_renderer.connect("edited", self._on_edit, tree_model)
         self.quantity_renderer.connect("editing-started", self._setup_editor)
 
-        GObject.GObject.__init__(self, column_title, self.quantity_renderer,
-                                    text=self.quantity_store_idx)
+        super(QuantitySelectionColumn, self).__init__(self, column_title,
+                                                      self.quantity_renderer,
+                                                      text=self.quantity_store_idx)
         self.set_cell_data_func(self.quantity_renderer, self._update_cell_based_on_data)
 
     def _setup_editor(self, cellrenderer, editable, path):
@@ -955,14 +954,15 @@ class TextTreeViewColumn(Gtk.TreeViewColumn):
         self.text_renderer = Gtk.CellRendererText()
         self.store_key = store_key
 
+        # FIXME: this is kind of weird...
         if markup:
-            GObject.GObject.__init__(self, self.column_title,
-                                        self.text_renderer,
-                                        markup=store[store_key])
+            super(TextTreeViewColumn, self).__init__(self, self.column_title,
+                                                     self.text_renderer,
+                                                     markup=store[store_key])
         else:
-            GObject.GObject.__init__(self, self.column_title,
-                                        self.text_renderer,
-                                        text=store[store_key])
+            super(TextTreeViewColumn, self).__init__(self, self.column_title,
+                                                    self.text_renderer,
+                                                    text=store[store_key])
 
         if expand:
             self.set_expand(True)

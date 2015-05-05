@@ -25,6 +25,7 @@ import logging
 import gettext
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import GdkPixbuf
 import os
 
 log = logging.getLogger('rhsm-app.' + __name__)

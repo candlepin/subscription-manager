@@ -17,6 +17,7 @@ import gettext
 import logging
 
 from gi.repository import Gtk
+from gi.repository import GdkPixbuf
 
 import rhsm.config
 from subscription_manager.gui.utils import handle_gui_exception
