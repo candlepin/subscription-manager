@@ -89,10 +89,14 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
 
         self.other_overrides = OverridesTable(self.other_overrides_view)
 
+
+        # FIXME: think this needs get_style_context() and possible a
+        # Gtk.StyleProvider for gtk3
         # Change the background color of the no_repos_label_container to the same color
         # as the label's base color. The event container allows us to change the color.
-        label_base_color = self.no_repos_label.style.base[Gtk.StateType.NORMAL]
-        self.no_repos_label_viewport.modify_bg(Gtk.StateType.NORMAL, label_base_color)
+        #label_base_color = self.no_repos_label.get_style_context().base[Gtk.StateType.NORMAL]
+        #self.no_repos_label_viewport.modify_bg(Gtk.StateType.NORMAL, label_base_color)
+
 
         self.overrides_treeview.set_model(self.overrides_store)
 
@@ -108,7 +112,9 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
             self._on_gpgcheck_toggle_changed)
         self.overrides_treeview.append_column(gpgcheck_col)
 
-        repo_id_col = TextTreeViewColumn(self.overrides_store, _("Repository ID"), 'repo_id',
+        repo_id_col = TextTreeViewColumn(self.overrides_store,
+                                         _("Repository ID"),
+                                         'repo_id',
                                          expand=True)
         self.overrides_treeview.append_column(repo_id_col)
         sortable_cols.append((repo_id_col, 'text', 'repo_id'))
