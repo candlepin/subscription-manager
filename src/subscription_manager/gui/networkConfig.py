@@ -18,7 +18,7 @@ import gettext
 import logging
 import os
 import threading
-import gobject
+from gi.repository import GObject
 import socket
 
 import rhsm.config
@@ -188,7 +188,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
 
     def test_connection_wrapper(self, proxy_host, proxy_port, proxy_user, proxy_password):
         connection_status = self.test_connection(proxy_host, proxy_port, proxy_user, proxy_password)
-        gobject.idle_add(self.on_test_connection_finish, connection_status)
+        GObject.idle_add(self.on_test_connection_finish, connection_status)
 
     def test_connection(self, proxy_host, proxy_port, proxy_user, proxy_password):
         cp = connection.UEPConnection(
@@ -277,7 +277,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             self.progress_bar.set_label(_("Please wait"))
         else:
             self.progress_bar = progress.Progress(_("Testing Connection"), _("Please wait"))
-            self.timer = gobject.timeout_add(100, self.progress_bar.pulse)
+            self.timer = GObject.timeout_add(100, self.progress_bar.pulse)
             self.progress_bar.set_parent_window(self.networkConfigDialog)
 
     def _clear_progress_bar(self):
@@ -285,7 +285,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             return
 
         self.progress_bar.hide()
-        gobject.source_remove(self.timer)
+        GObject.source_remove(self.timer)
         self.timer = 0
         self.progress_bar = None
 

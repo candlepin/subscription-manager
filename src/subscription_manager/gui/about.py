@@ -18,8 +18,8 @@ import gettext
 import os
 import subprocess
 
-from gtk import RESPONSE_DELETE_EVENT, RESPONSE_CANCEL, \
-                AboutDialog as GtkAboutDialog, Label
+#from gi.repository import Gtk
+from gi.repository import Gtk
 
 from subscription_manager.gui.utils import get_running_as_firstboot
 from subscription_manager.utils import get_client_versions, get_server_versions
@@ -44,7 +44,7 @@ prefix = os.path.dirname(__file__)
 class AboutDialog(object):
     def __init__(self, parent, backend):
         self.backend = backend
-        self.dialog = GtkAboutDialog()
+        self.dialog = Gtk.AboutDialog()
         self.dialog.set_transient_for(parent)
         self.dialog.set_modal(True)
         self.dialog.set_name(_("Subscription Manager"))
@@ -56,15 +56,15 @@ class AboutDialog(object):
         self.dialog.set_logo_icon_name("subscription-manager")
         self.dialog.set_icon_name("subscription-manager")
 
-        next_update_label = Label()
-        python_rhsm_version_label = Label()
-        sub_man_version_label = Label()
-        backend_version_label = Label()
+        next_update_label = Gtk.Label()
+        python_rhsm_version_label = Gtk.Label()
+        sub_man_version_label = Gtk.Label()
+        backend_version_label = Gtk.Label()
         context_box = self.dialog.vbox.get_children()[0]
-        context_box.pack_end(next_update_label)
-        context_box.pack_end(python_rhsm_version_label)
-        context_box.pack_end(sub_man_version_label)
-        context_box.pack_end(backend_version_label)
+        context_box.pack_end(next_update_label, True, True, 0)
+        context_box.pack_end(python_rhsm_version_label, True, True, 0)
+        context_box.pack_end(sub_man_version_label, True, True, 0)
+        context_box.pack_end(backend_version_label, True, True, 0)
 
         self._set_next_update(next_update_label)
 
@@ -86,7 +86,7 @@ class AboutDialog(object):
         self.dialog.show()
 
     def _handle_response(self, dialog, response):
-        if response == RESPONSE_DELETE_EVENT or response == RESPONSE_CANCEL:
+        if response == Gtk.ResponseType.DELETE_EVENT or response == Gtk.ResponseType.CANCEL:
             self.dialog.destroy()
 
     def _set_next_update(self, next_update_label):

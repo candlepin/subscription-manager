@@ -15,7 +15,7 @@
 
 import gettext
 import logging
-import gtk
+from gi.repository import Gtk
 
 from subscription_manager.gui import widgets
 
@@ -49,7 +49,7 @@ class FilterOptionsWindow(widgets.SubmanBaseWidget):
         self.parent = parent
 
         # Center on parent when opened.
-        self.filter_product_window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+        self.filter_product_window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
         self.filter_product_window.set_transient_for(self.parent.parent_win)
 
         # Set all the filters to their default values before the signals are
@@ -96,7 +96,7 @@ class FilterOptionsWindow(widgets.SubmanBaseWidget):
 
     def deleted(self, event, data):
         self.filter_product_window.hide()
-        # See http://faq.pygtk.org/index.py?req=show&file=faq10.006.htp
+        # See http://faq.pyGtk.org/index.py?req=show&file=faq10.006.htp
         return True
 
     def close_button_clicked(self, widget):

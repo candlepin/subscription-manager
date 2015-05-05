@@ -13,7 +13,7 @@
 # in this software or its documentation.
 #
 
-import gtk
+from gi.repository import Gtk
 import logging
 
 
@@ -43,7 +43,7 @@ class MappedStore(object):
         return item in self.type_index
 
 
-class MappedListStore(MappedStore, gtk.ListStore):
+class MappedListStore(MappedStore, Gtk.ListStore):
 
     def __init__(self, type_map):
         """
@@ -52,11 +52,11 @@ class MappedListStore(MappedStore, gtk.ListStore):
         string that identifies the item and 'type' is a gobject type or some
         built-in python type that is suitable for conversion to a gobject type.
 
-        See contructor for gtk.ListStore.
+        See contructor for Gtk.ListStore.
         """
         MappedStore.__init__(self, type_map)
         # Use the types from the map to call the parent constructor
-        gtk.ListStore.__init__(self, *type_map.values())
+        GObject.GObject.__init__(self, *type_map.values())
 
     def __getitem__(self, key):
         return self.type_index[key]
@@ -73,14 +73,14 @@ class MappedListStore(MappedStore, gtk.ListStore):
         self.append(self._create_initial_entry(item_map))
 
 
-class MappedTreeStore(MappedStore, gtk.TreeStore):
+class MappedTreeStore(MappedStore, Gtk.TreeStore):
     def __init__(self, type_map):
         self.log = logging.getLogger('rhsm-app.' + __name__ +
                                      self.__class__.__name__)
         self.log.debug("MappedTreeStore type_map=%s", type_map)
         MappedStore.__init__(self, type_map)
         # Use the types from the map to call the parent constructor
-        gtk.TreeStore.__init__(self, *type_map.values())
+        GObject.GObject.__init__(self, *type_map.values())
 
     def __getitem__(self, key):
         return self.type_index[key]

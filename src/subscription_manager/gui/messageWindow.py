@@ -14,8 +14,8 @@
 #
 import gettext
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 _ = gettext.gettext
 
@@ -45,20 +45,20 @@ def wrap_text(txt):
     return '\n'.join(map(wrap_line, txt.split('\n')))
 
 
-class MessageWindow(gobject.GObject):
+class MessageWindow(GObject.GObject):
 
     __gsignals__ = {
-            'response': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-                (gobject.TYPE_BOOLEAN,))
+            'response': (GObject.SignalFlags.RUN_LAST, None,
+                (GObject.TYPE_BOOLEAN,))
     }
 
     def __init__(self, text, parent=None, title=None):
-        self.__gobject_init__()
+        GObject.GObject.__init__(self)
         self.rc = None
 
         # this seems to be wordwrapping text passed to
         # it, which is making for ugly error messages
-        self.dialog = gtk.MessageDialog(parent, 0, self.STYLE, self.BUTTONS)
+        self.dialog = Gtk.MessageDialog(parent, 0, self.STYLE, self.BUTTONS)
 
         if title:
             self.dialog.set_title(title)
@@ -68,18 +68,18 @@ class MessageWindow(gobject.GObject):
 
         self.dialog.set_default_response(0)
 
-        self.dialog.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+        self.dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
         self.dialog.show_all()
         self.dialog.set_icon_name('subscription-manager')
 
         self.dialog.set_modal(True)
         #this seems spurious, but without it, a ref to this obj gets "lost"
-        gobject.add_emission_hook(self, 'response', self.noop_hook)
+        GObject.add_emission_hook(self, 'response', self.noop_hook)
 
         self.dialog.connect("response", self._on_response_event)
 
     def _on_response_event(self, dialog, response):
-        rc = response in [gtk.RESPONSE_OK, gtk.RESPONSE_YES]
+        rc = response in [Gtk.ResponseType.OK, Gtk.ResponseType.YES]
         self.emit('response', rc)
         self.hide()
 
@@ -92,29 +92,29 @@ class MessageWindow(gobject.GObject):
 
 class ErrorDialog(MessageWindow):
 
-    BUTTONS = gtk.BUTTONS_OK
-    STYLE = gtk.MESSAGE_ERROR
+    BUTTONS = Gtk.ButtonsType.OK
+    STYLE = Gtk.MessageType.ERROR
 
 
 class OkDialog(MessageWindow):
 
-    BUTTONS = gtk.BUTTONS_OK
-    STYLE = gtk.MESSAGE_INFO
+    BUTTONS = Gtk.ButtonsType.OK
+    STYLE = Gtk.MessageType.INFO
 
 
 class InfoDialog(MessageWindow):
 
-    BUTTONS = gtk.BUTTONS_OK
-    STYLE = gtk.MESSAGE_INFO
+    BUTTONS = Gtk.ButtonsType.OK
+    STYLE = Gtk.MessageType.INFO
 
 
 class YesNoDialog(MessageWindow):
 
-    BUTTONS = gtk.BUTTONS_YES_NO
-    STYLE = gtk.MESSAGE_QUESTION
+    BUTTONS = Gtk.ButtonsType.YES_NO
+    STYLE = Gtk.MessageType.QUESTION
 
 
 class ContinueDialog(MessageWindow):
 
-    BUTTONS = gtk.BUTTONS_OK_CANCEL
-    STYLE = gtk.MESSAGE_WARNING
+    BUTTONS = Gtk.ButtonsType.OK_CANCEL
+    STYLE = Gtk.MessageType.WARNING

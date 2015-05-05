@@ -17,7 +17,7 @@ import gettext
 import logging
 import os
 
-import gtk
+from gi.repository import Gtk
 
 from subscription_manager import rhelentbranding
 from subscription_manager.gui import messageWindow
@@ -37,23 +37,23 @@ class ImportSubDialog(object):
     def __init__(self):
         self._parent = None
 
-        self.dialog = gtk.FileChooserDialog(_("Import Certificates"),
-                None, gtk.FILE_CHOOSER_ACTION_OPEN,
-                (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                 _("Import"), gtk.RESPONSE_OK))
-        self.dialog.set_default_response(gtk.RESPONSE_OK)
+        self.dialog = Gtk.FileChooserDialog(_("Import Certificates"),
+                None, Gtk.FileChooserAction.OPEN,
+                (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                 _("Import"), Gtk.ResponseType.OK))
+        self.dialog.set_default_response(Gtk.ResponseType.OK)
         self.dialog.set_modal(True)
 
         self.dialog.set_local_only(True)
         self.dialog.set_select_multiple(True)
         self.dialog.set_icon_name('subscription-manager')
 
-        afilter = gtk.FileFilter()
+        afilter = Gtk.FileFilter()
         afilter.set_name(_("Certificates"))
         afilter.add_pattern("*.pem")
         self.dialog.add_filter(afilter)
 
-        afilter = gtk.FileFilter()
+        afilter = Gtk.FileFilter()
         afilter.set_name(_("All files"))
         afilter.add_pattern("*")
         self.dialog.add_filter(afilter)
@@ -62,9 +62,9 @@ class ImportSubDialog(object):
         self.dialog.connect("delete-event", self._delete_event)
 
     def _on_dialog_response(self, dialog, response_id):
-        if response_id == gtk.RESPONSE_CANCEL:
+        if response_id == Gtk.ResponseType.CANCEL:
             return self._cancel_button_clicked()
-        elif response_id == gtk.RESPONSE_OK:
+        elif response_id == Gtk.ResponseType.OK:
             return self._import_button_clicked()
         # other response is on dialog destroy, we don't act on that.
 

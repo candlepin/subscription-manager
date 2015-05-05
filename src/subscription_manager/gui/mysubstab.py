@@ -17,8 +17,8 @@ import gettext
 import os
 from datetime import datetime
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 from rhsm.certificate import GMT
 
@@ -67,12 +67,12 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         # Put the details widget in the middle
         details = self.sub_details.get_widget()
-        self.details_box.pack_start(details)
+        self.details_box.pack_start(details, True, True, 0)
 
         # Set up columns on the view
-        text_renderer = gtk.CellRendererText()
-        image_renderer = gtk.CellRendererPixbuf()
-        column = gtk.TreeViewColumn(_('Subscription'))
+        text_renderer = Gtk.CellRendererText()
+        image_renderer = Gtk.CellRendererPixbuf()
+        column = Gtk.TreeViewColumn(_('Subscription'))
         column.set_expand(True)
         column.pack_start(image_renderer, False)
         column.pack_start(text_renderer, False)
@@ -82,20 +82,20 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                             self.store['background'])
         column.add_attribute(image_renderer, 'cell-background',
                             self.store['background'])
-        column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+        column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
 
         self.top_view.append_column(column)
         cols = []
         cols.append((column, 'text', 'subscription'))
 
-        progress_renderer = gtk.CellRendererProgress()
-        products_column = gtk.TreeViewColumn(_("Installed Products"),
+        progress_renderer = Gtk.CellRendererProgress()
+        products_column = Gtk.TreeViewColumn(_("Installed Products"),
                                              progress_renderer,
                                              value=self.store['installed_value'],
                                              text=self.store['installed_text'])
         products_column.add_attribute(progress_renderer, 'cell-background',
                             self.store['background'])
-        self.empty_progress_renderer = gtk.CellRendererText()
+        self.empty_progress_renderer = Gtk.CellRendererText()
         products_column.pack_end(self.empty_progress_renderer, True)
         products_column.set_cell_data_func(progress_renderer, self._update_progress_renderer)
         self.top_view.append_column(products_column)
@@ -122,7 +122,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
     def _clear_progress_bar(self):
         if self.pb:
             self.pb.hide()
-            gobject.source_remove(self.timer)
+            GObject.source_remove(self.timer)
             self.timer = 0
             self.pb = None
 
@@ -144,7 +144,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         if self.identity.is_valid():
             self.pb = progress.Progress(_("Removing"),
                     _("Removing subscription. Please wait."))
-            self.timer = gobject.timeout_add(100, self.pb.pulse)
+            self.timer = GObject.timeout_add(100, self.pb.pulse)
             content_toplevel = self.content.get_toplevel()
             if content_toplevel.is_toplevel():
                 self.pb.set_parent_window(content_toplevel)
@@ -162,7 +162,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             return
 
         # remove all markup, see rh bz#982286
-        subscription_text = gobject.markup_escape_text(selection['subscription'])
+        subscription_text = GObject.markup_escape_text(selection['subscription'])
 
         prompt = messageWindow.YesNoDialog(_("Are you sure you want to remove %s?") % subscription_text,
                 self.content.get_toplevel())
@@ -213,7 +213,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         # Update the parent image if required.
         if new_parent_image and tree_iter:
             self.store.set_value(tree_iter, self.store['image'],
-                    gtk.gdk.pixbuf_new_from_file_at_size(new_parent_image, 13, 13))
+                    GdkPixbuf.Pixbuf.new_from_file_at_size(new_parent_image, 13, 13))
 
     def find_unique_name_count(self, entitlements):
         result = dict()
@@ -230,12 +230,12 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def get_type_map(self):
         return {
-            'image': gtk.gdk.Pixbuf,
+            'image': GdkPixbuf.Pixbuf,
             'subscription': str,
             'installed_value': float,
             'installed_text': str,
-            'start_date': gobject.TYPE_PYOBJECT,
-            'expiration_date': gobject.TYPE_PYOBJECT,
+            'start_date': GObject.TYPE_PYOBJECT,
+            'expiration_date': GObject.TYPE_PYOBJECT,
             'quantity': str,
             'serial': str,
             'align': float,
@@ -331,7 +331,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         # Initialize an entry list of the proper length
         entry = {}
         if image:
-            entry['image'] = gtk.gdk.pixbuf_new_from_file_at_size(image, 13, 13)
+            entry['image'] = GdkPixbuf.Pixbuf.new_from_file_at_size(image, 13, 13)
         entry['subscription'] = order.name
         entry['installed_value'] = self._percentage(installed, products)
         entry['installed_text'] = '%s / %s' % (len(installed), len(products))

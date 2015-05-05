@@ -17,8 +17,8 @@ import datetime
 import gettext
 import time
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 from subscription_manager.gui import widgets
 from subscription_manager.gui.storage import MappedListStore
@@ -58,11 +58,11 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
         return {
                 'contract_number': str,
                 'consumed_fraction': str,
-                'start_date': gobject.TYPE_PYOBJECT,
-                'end_date': gobject.TYPE_PYOBJECT,
+                'start_date': GObject.TYPE_PYOBJECT,
+                'end_date': GObject.TYPE_PYOBJECT,
                 'default_quantity': int,
                 'product_name': str,
-                'pool': gobject.TYPE_PYOBJECT,
+                'pool': GObject.TYPE_PYOBJECT,
                 'is_virt_only': bool,
                 'multi_entitlement': bool,
                 'quantity_available': int,
@@ -77,8 +77,8 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
         self.contract_selection_window.destroy()
 
     def populate_treeview(self):
-        renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("Contract"),
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn(_("Contract"),
                                     renderer,
                                     text=self.model['contract_number'])
         column.set_expand(True)
@@ -93,15 +93,15 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
                                  self._sort_machine_type, column)
         self.contract_selection_treeview.append_column(column)
 
-        renderer = gtk.CellRendererText()
+        renderer = Gtk.CellRendererText()
         renderer.set_property("xalign", 0.5)
-        column = gtk.TreeViewColumn(_("Used / Total"),
+        column = Gtk.TreeViewColumn(_("Used / Total"),
                                     renderer,
                                     text=self.model['consumed_fraction'])
         self.contract_selection_treeview.append_column(column)
 
         renderer = widgets.CellRendererDate()
-        column = gtk.TreeViewColumn(_("Start Date"),
+        column = Gtk.TreeViewColumn(_("Start Date"),
                                     renderer,
                                     date=self.model['start_date'])
         column.set_sort_column_id(self.model['start_date'])
@@ -110,7 +110,7 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
         self.contract_selection_treeview.append_column(column)
 
         renderer = widgets.CellRendererDate()
-        column = gtk.TreeViewColumn(_("End Date"),
+        column = Gtk.TreeViewColumn(_("End Date"),
                                     renderer,
                                     date=self.model['end_date'])
         column.set_sort_column_id(self.model['end_date'])

@@ -27,8 +27,8 @@ import subprocess
 import urllib2
 import webbrowser
 
-import gtk
-#import gtk.glade
+from gi.repository import Gtk
+#import Gtk.glade
 from gi.repository import Gtk
 
 import rhsm.config as config
@@ -62,8 +62,8 @@ _ = gettext.gettext
 
 gettext.textdomain("rhsm")
 
-#gtk.glade.bindtextdomain("rhsm")
-#gtk.window_set_default_icon_name("subscription-manager")
+#Gtk.glade.bindtextdomain("rhsm")
+#Gtk.Window.set_default_icon_name("subscription-manager")
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -181,9 +181,9 @@ class MainWindow(widgets.SubmanBaseWidget):
 
         self.redeem_dialog = redeem.RedeemDialog(self.backend)
 
-        self.installed_tab_icon = gtk.Image()
-        self.installed_tab_icon.set_from_stock(gtk.STOCK_YES,
-                gtk.ICON_SIZE_MENU)
+        self.installed_tab_icon = Gtk.Image()
+        self.installed_tab_icon.set_from_stock(Gtk.STOCK_YES,
+                Gtk.IconSize.MENU)
 
         self.installed_tab = InstalledProductsTab(self.backend,
                                                   self.facts,
@@ -200,14 +200,14 @@ class MainWindow(widgets.SubmanBaseWidget):
                                                 self.facts,
                                                 self.main_window)
 
-        hbox = gtk.HBox(spacing=6)
+        hbox = Gtk.HBox(spacing=6)
         hbox.pack_start(self.installed_tab_icon, False, False)
-        hbox.pack_start(gtk.Label(self.installed_tab.get_label()), False, False)
+        hbox.pack_start(Gtk.Label(self.installed_tab.get_label()), False, False, 0)
         self.notebook.append_page(self.installed_tab.get_content(), hbox)
         hbox.show_all()
 
         self.notebook.append_page(self.my_subs_tab.get_content(),
-                gtk.Label(self.my_subs_tab.get_label()))
+                                  Gtk.Label(label=self.my_subs_tab.get_label()))
 
         self.connect_signals({
             "on_register_menu_item_activate": self._register_item_clicked,
@@ -221,7 +221,7 @@ class MainWindow(widgets.SubmanBaseWidget):
             "on_about_menu_item_activate": self._about_item_clicked,
             "on_getting_started_menu_item_activate": self._getting_started_item_clicked,
             "on_online_docs_menu_item_activate": self._online_docs_item_clicked,
-            "on_quit_menu_item_activate": gtk.main_quit,
+            "on_quit_menu_item_activate": Gtk.main_quit,
         })
 
         def on_cert_change():
@@ -263,7 +263,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         # Show the All Subscriptions tab if registered, hide it otherwise:
         if self.registered() and self.notebook.get_n_pages() == 2:
             self.notebook.append_page(self.all_subs_tab.get_content(),
-                    gtk.Label(self.all_subs_tab.get_label()))
+                    Gtk.Label(label=self.all_subs_tab.get_label()))
         elif not self.registered() and self.notebook.get_n_pages() == 3:
             self.notebook.set_current_page(0)
             self.notebook.remove_page(2)
@@ -417,7 +417,7 @@ class MainWindow(widgets.SubmanBaseWidget):
 
     def _getting_started_item_clicked(self, widget):
         try:
-            # unfortunately, gtk.show_uri does not work in RHEL 5
+            # unfortunately, Gtk.show_uri does not work in RHEL 5
             subprocess.call(["gnome-open", "ghelp:subscription-manager"])
         except Exception, e:
             # if we can't open it, it's probably because the user didn't

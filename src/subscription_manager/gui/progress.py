@@ -13,7 +13,7 @@
 # in this software or its documentation.
 #
 
-import gtk
+from gi.repository import Gtk
 
 from subscription_manager.gui import widgets
 
@@ -27,7 +27,7 @@ class Progress(widgets.SubmanBaseWidget):
         super(Progress, self).__init__()
 
         self.progressWindow.connect("delete-event", self._on_delete_event)
-        cursor = gtk.gdk.Cursor(gtk.gdk.WATCH)
+        cursor = Gdk.Cursor.new(Gdk.CursorType.WATCH)
         self.progressWindow.window.set_cursor(cursor)
 
         self.lastProgress = 0.0

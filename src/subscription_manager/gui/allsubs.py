@@ -15,10 +15,10 @@
 
 import datetime
 import gettext
-import gobject
+from gi.repository import GObject
 import logging
 
-import gtk
+from gi.repository import Gtk
 
 from subscription_manager import async
 from subscription_manager.gui.contract_selection import ContractSelectionWindow
@@ -76,9 +76,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.date_picker_hbox.add(self.date_picker)
 
         # Custom build of the subscription column.
-        title_text_renderer = gtk.CellRendererText()
+        title_text_renderer = Gtk.CellRendererText()
         title_text_renderer.set_property('xalign', 0.0)
-        subscription_column = gtk.TreeViewColumn(_('Subscription'),
+        subscription_column = Gtk.TreeViewColumn(_('Subscription'),
                                         title_text_renderer,
                                         markup=self.store['product_name_formatted'])
         subscription_column.set_expand(True)
@@ -142,12 +142,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def get_type_map(self):
         return {
-            'virt_only': gobject.TYPE_PYOBJECT,
+            'virt_only': GObject.TYPE_PYOBJECT,
             'product_name': str,
             'available': str,
             'product_id': str,
             'pool_id': str,
-            'merged_pools': gobject.TYPE_PYOBJECT,
+            'merged_pools': GObject.TYPE_PYOBJECT,
             'product_name_formatted': str,
             'quantity_to_consume': int,
             'background': str,
@@ -365,7 +365,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             else:
                 # show pulsating progress bar while we wait for results
                 self.pb = progress.Progress(pb_title, pb_label)
-                self.timer = gobject.timeout_add(100, self.pb.pulse)
+                self.timer = GObject.timeout_add(100, self.pb.pulse)
                 tl = self.content.get_toplevel()
                 if tl.is_toplevel():
                     self.pb.set_parent_window(tl)
@@ -380,7 +380,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
     def _clear_progress_bar(self):
         if self.pb:
             self.pb.hide()
-            gobject.source_remove(self.timer)
+            GObject.source_remove(self.timer)
             self.timer = 0
             self.pb = None
 
@@ -412,7 +412,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         # Start the progress bar
         self.pb = progress.Progress(_("Attaching"),
                 _("Attaching subscription. Please wait."))
-        self.timer = gobject.timeout_add(100, self.pb.pulse)
+        self.timer = GObject.timeout_add(100, self.pb.pulse)
         content_toplevel = self.content.get_toplevel()
         # get_toplevel() can return a GtkWindow that is within another
         # GtkWindow. See the get_toplevel() gtk docs

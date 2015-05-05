@@ -23,8 +23,8 @@ from subscription_manager.utils import friendly_join
 
 import logging
 import gettext
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 import os
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -38,10 +38,10 @@ INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 UNKNOWN_IMG = os.path.join(prefix, "data/icons/unknown.svg")
 
 ICONSET = {
-    'green': gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 13, 13),
-    'red': gtk.gdk.pixbuf_new_from_file_at_size(INVALID_IMG, 13, 13),
-    'yellow': gtk.gdk.pixbuf_new_from_file_at_size(PARTIAL_IMG, 13, 13),
-    'unknown': gtk.gdk.pixbuf_new_from_file_at_size(UNKNOWN_IMG, 13, 13),
+    'green': GdkPixbuf.Pixbuf.new_from_file_at_size(VALID_IMG, 13, 13),
+    'red': GdkPixbuf.Pixbuf.new_from_file_at_size(INVALID_IMG, 13, 13),
+    'yellow': GdkPixbuf.Pixbuf.new_from_file_at_size(PARTIAL_IMG, 13, 13),
+    'unknown': GdkPixbuf.Pixbuf.new_from_file_at_size(UNKNOWN_IMG, 13, 13),
 }
 
 
@@ -74,9 +74,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.backend = backend
 
         # Product column
-        text_renderer = gtk.CellRendererText()
-        image_renderer = gtk.CellRendererPixbuf()
-        column = gtk.TreeViewColumn(_('Product'))
+        text_renderer = Gtk.CellRendererText()
+        image_renderer = Gtk.CellRendererPixbuf()
+        column = Gtk.TreeViewColumn(_('Product'))
 
         column.set_expand(True)
         column.pack_start(image_renderer, False)
@@ -252,16 +252,16 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def get_type_map(self):
         return {
-            'image': gtk.gdk.Pixbuf,
+            'image': GdkPixbuf.Pixbuf,
             'product': str,
             'product_id': str,
             'version': str,
             'arch': str,
             'status': str,
             'validity_note': str,
-            'subscription': gobject.TYPE_PYOBJECT,
-            'start_date': gobject.TYPE_PYOBJECT,
-            'expiration_date': gobject.TYPE_PYOBJECT,
+            'subscription': GObject.TYPE_PYOBJECT,
+            'start_date': GObject.TYPE_PYOBJECT,
+            'expiration_date': GObject.TYPE_PYOBJECT,
             'serial': str,
             'align': float
         }
@@ -278,7 +278,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         elif status_type == UNKNOWN_STATUS:
             img = UNKNOWN_IMG
 
-        pix_buf = gtk.gdk.pixbuf_new_from_file_at_size(img, 13, 13)
+        pix_buf = GdkPixbuf.Pixbuf.new_from_file_at_size(img, 13, 13)
         self.tab_icon.set_from_pixbuf(pix_buf)
 
     def _set_validity_status(self):

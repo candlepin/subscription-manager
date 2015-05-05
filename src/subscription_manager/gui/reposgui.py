@@ -16,7 +16,7 @@
 import gettext
 import logging
 
-import gtk
+from gi.repository import Gtk
 
 import rhsm.config
 from subscription_manager.gui.utils import handle_gui_exception
@@ -53,7 +53,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
         super(RepositoriesDialog, self).__init__()
 
         # Set up dynamic elements
-        self.overrides_treeview = gtk.TreeView()
+        self.overrides_treeview = Gtk.TreeView()
         # Add at-spi because we no longer create this widget from glade
         self.overrides_treeview.get_accessible().set_name("Repository View")
         self.no_repos_label, self.no_repos_label_viewport = widgets.get_scrollable_label()
@@ -77,7 +77,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
             "repo_id": str,
             "enabled": bool,
             "modified": bool,
-            "modified-icon": gtk.gdk.Pixbuf,
+            "modified-icon": GdkPixbuf.Pixbuf,
             "name": str,
             "baseurl": str,
             "gpgcheck": bool,
@@ -90,13 +90,13 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
 
         # Change the background color of the no_repos_label_container to the same color
         # as the label's base color. The event container allows us to change the color.
-        label_base_color = self.no_repos_label.style.base[gtk.STATE_NORMAL]
-        self.no_repos_label_viewport.modify_bg(gtk.STATE_NORMAL, label_base_color)
+        label_base_color = self.no_repos_label.style.base[Gtk.StateType.NORMAL]
+        self.no_repos_label_viewport.modify_bg(Gtk.StateType.NORMAL, label_base_color)
 
         self.overrides_treeview.set_model(self.overrides_store)
 
-        self.modified_icon = self.overrides_treeview.render_icon(gtk.STOCK_APPLY,
-                                                                 gtk.ICON_SIZE_MENU)
+        self.modified_icon = self.overrides_treeview.render_icon(Gtk.STOCK_APPLY,
+                                                                 Gtk.IconSize.MENU)
 
         sortable_cols = []
         enabled_col = CheckBoxColumn(_("Enabled"), self.overrides_store, 'enabled',
@@ -112,7 +112,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
         self.overrides_treeview.append_column(repo_id_col)
         sortable_cols.append((repo_id_col, 'text', 'repo_id'))
 
-        modified_col = gtk.TreeViewColumn(_("Modified"), gtk.CellRendererPixbuf(),
+        modified_col = Gtk.TreeViewColumn(_("Modified"), Gtk.CellRendererPixbuf(),
                                           pixbuf=self.overrides_store['modified-icon'])
         self.overrides_treeview.append_column(modified_col)
         sortable_cols.append((modified_col, 'text', 'modified'))
@@ -136,7 +136,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
         current_overrides = self.backend.overrides.get_overrides(self.identity.uuid) or []
         self._refresh(current_overrides)
         # By default sort by repo_id
-        self.overrides_store.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        self.overrides_store.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     def _refresh(self, current_overrides, repo_id_to_select=None):
         overrides_per_repo = {}

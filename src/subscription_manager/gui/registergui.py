@@ -23,8 +23,8 @@ import socket
 import sys
 import threading
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 import rhsm.config as config
 from rhsm.utils import ServerUrlParseError
@@ -51,9 +51,9 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 
 gettext.textdomain("rhsm")
 
-#gtk.glade.bindtextdomain("rhsm")
+#Gtk.glade.bindtextdomain("rhsm")
 
-#gtk.glade.textdomain("rhsm")
+#Gtk.glade.textdomain("rhsm")
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -307,7 +307,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
 
         self._set_navigation_sensitive(True)
         self._clear_registration_widgets()
-        self.timer = gobject.timeout_add(100, self._timeout_callback)
+        self.timer = GObject.timeout_add(100, self._timeout_callback)
         self.register_dialog.show()
 
     def _set_initial_screen(self):
@@ -337,11 +337,11 @@ class RegisterScreen(widgets.SubmanBaseWidget):
             self.register_notebook.set_current_page(screen + 1)
 
         if get_state() == REGISTERING:
-            if not isinstance(self.register_dialog, gtk.VBox):
+            if not isinstance(self.register_dialog, Gtk.VBox):
                 self.register_dialog.set_title(_("System Registration"))
             self.progress_label.set_markup(_("<b>Registering</b>"))
         elif get_state() == SUBSCRIBING:
-            if not isinstance(self.register_dialog, gtk.VBox):
+            if not isinstance(self.register_dialog, Gtk.VBox):
                 self.register_dialog.set_title(_("Subscription Attachment"))
             self.progress_label.set_markup(_("<b>Attaching</b>"))
 
@@ -403,7 +403,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
 
         self.emit_consumer_signal()
 
-        gobject.source_remove(self.timer)
+        GObject.source_remove(self.timer)
 
     def emit_consumer_signal(self):
         for method in self.callbacks:
@@ -567,9 +567,9 @@ class ConfirmSubscriptionsScreen(Screen):
                                                          backend)
         self.button_label = _("Attach")
 
-        self.store = gtk.ListStore(str, bool, str)
+        self.store = Gtk.ListStore(str, bool, str)
         self.subs_treeview.set_model(self.store)
-        self.subs_treeview.get_selection().set_mode(gtk.SELECTION_NONE)
+        self.subs_treeview.get_selection().set_mode(Gtk.SelectionMode.NONE)
 
         self.add_text_column(_("Subscription"), 0, True)
 
@@ -580,8 +580,8 @@ class ConfirmSubscriptionsScreen(Screen):
         self.add_text_column(_("Quantity"), 2)
 
     def add_text_column(self, name, index, expand=False):
-        text_renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(name, text_renderer, text=index)
+        text_renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn(name, text_renderer, text=index)
         column.set_expand(expand)
 
         self.subs_treeview.append_column(column)
@@ -636,7 +636,7 @@ class SelectSLAScreen(Screen):
         # then pack_start so we don't end up with radio buttons at the bottom
         # of the screen.
         for sla in reversed(sla_data_map.keys()):
-            radio = gtk.RadioButton(group=group, label=sla)
+            radio = Gtk.RadioButton(group=group, label=sla)
             radio.connect("toggled", self._radio_clicked, sla)
             self.sla_radio_container.pack_start(radio, expand=False, fill=False)
             radio.show()
@@ -754,8 +754,8 @@ class EnvironmentScreen(Screen):
         super(EnvironmentScreen, self).__init__(parent, backend)
 
         self.pre_message = _("Fetching list of possible environments")
-        renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("Environment"), renderer, text=1)
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn(_("Environment"), renderer, text=1)
         self.environment_treeview.set_property("headers-visible", False)
         self.environment_treeview.append_column(column)
 
@@ -793,7 +793,7 @@ class EnvironmentScreen(Screen):
         self._parent.environment = self._environment
 
     def set_model(self, envs):
-        environment_model = gtk.ListStore(str, str)
+        environment_model = Gtk.ListStore(str, str)
         for env in envs:
             environment_model.append(env)
 
@@ -812,8 +812,8 @@ class OrganizationScreen(Screen):
 
         self.pre_message = _("Fetching list of possible organizations")
 
-        renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("Organization"), renderer, text=1)
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn(_("Organization"), renderer, text=1)
         self.owner_treeview.set_property("headers-visible", False)
         self.owner_treeview.append_column(column)
 
@@ -859,7 +859,7 @@ class OrganizationScreen(Screen):
         self._parent.owner_key = self._owner_key
 
     def set_model(self, owners):
-        owner_model = gtk.ListStore(str, str)
+        owner_model = Gtk.ListStore(str, str)
         for owner in owners:
             owner_model.append(owner)
 
@@ -1344,13 +1344,13 @@ class AsyncBackend(object):
             return True
 
     def get_owner_list(self, username, callback):
-        gobject.idle_add(self._watch_thread)
+        GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._get_owner_list,
                          name="GetOwnerListThread",
                          args=(username, callback)).start()
 
     def get_environment_list(self, owner_key, callback):
-        gobject.idle_add(self._watch_thread)
+        GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._get_environment_list,
                          name="GetEnvironmentListThread",
                          args=(owner_key, callback)).start()
@@ -1359,27 +1359,27 @@ class AsyncBackend(object):
         """
         Run consumer registration asyncronously
         """
-        gobject.idle_add(self._watch_thread)
+        GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._register_consumer,
                          name="RegisterConsumerThread",
                          args=(name, facts, owner,
                                env, activation_keys, callback)).start()
 
     def subscribe(self, uuid, current_sla, dry_run_result, callback):
-        gobject.idle_add(self._watch_thread)
+        GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._subscribe,
                          name="SubscribeThread",
                          args=(uuid, current_sla,
                                dry_run_result, callback)).start()
 
     def find_service_levels(self, consumer, facts, callback):
-        gobject.idle_add(self._watch_thread)
+        GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._find_service_levels,
                          name="FindServiceLevelsThread",
                          args=(consumer, facts, callback)).start()
 
     def refresh(self, callback):
-        gobject.idle_add(self._watch_thread)
+        GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._refresh,
                          name="RefreshThread",
                          args=(callback,)).start()

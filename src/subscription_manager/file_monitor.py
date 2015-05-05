@@ -59,7 +59,7 @@ class MonitorDirectory(object):
 class Monitor(GObject.GObject):
 
     __gsignals__ = {
-        'changed': (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE,
+        'changed': (GObject.SignalFlags.RUN_LAST, None,
             (GObject.TYPE_BOOLEAN, GObject.TYPE_BOOLEAN, GObject.TYPE_BOOLEAN))
     }
 

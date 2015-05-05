@@ -54,7 +54,7 @@ except AttributeError:
     pass
 
 #try:
-#    import gtk
+#    from gi.repository import Gtk
 #except RuntimeError, e:
 #    print _("Unable to open a display")
 #    sys.exit(1)
@@ -76,11 +76,9 @@ REQUEST_NAME_REPLY_ALREADY_OWNER = 4
 # in rhel7. So for rhel5, we conditionally import dbus_bindings
 # use bus_request_name, otherwise we use the newer bus.request_name
 
-from gi import pygtkcompat
-pygtkcompat.enable()
-pygtkcompat.enable_gtk(version='3.0')
+from gi.repository import Gtk
+from gi.repository import Gdk
 
-import gtk
 
 def _request_name_rhel5(bus, bus_name):
     return dbus.dbus_bindings.bus_request_name(bus.get_connection(), bus_name.get_name())
@@ -96,7 +94,7 @@ try:
 except ImportError, e:
     request_name = _request_name
 
-gtk.gdk.threads_init()
+Gdk.threads_init()
 
 
 def system_exit(code, msgs=None):
@@ -209,9 +207,9 @@ if __name__ == '__main__':
             SubscriptionManagerService(main.main_window)
 
         # Exit the gtk loop when the window is closed
-        main.main_window.connect('hide', gtk.main_quit)
+        main.main_window.connect('hide', Gtk.main_quit)
 
-        sys.exit(gtk.main() or 0)
+        sys.exit(Gtk.main() or 0)
     except SystemExit, e:
         # this is a non-exceptional exception thrown by Python 2.4, just
         # re-raise, bypassing handle_exception
