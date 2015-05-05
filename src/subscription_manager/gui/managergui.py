@@ -201,7 +201,7 @@ class MainWindow(widgets.SubmanBaseWidget):
                                                 self.main_window)
 
         hbox = Gtk.HBox(spacing=6)
-        hbox.pack_start(self.installed_tab_icon, False, False)
+        hbox.pack_start(self.installed_tab_icon, False, False, 0)
         hbox.pack_start(Gtk.Label(self.installed_tab.get_label()), False, False, 0)
         self.notebook.append_page(self.installed_tab.get_content(), hbox)
         hbox.show_all()
