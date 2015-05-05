@@ -28,7 +28,7 @@ class Progress(widgets.SubmanBaseWidget):
 
         self.progressWindow.connect("delete-event", self._on_delete_event)
         cursor = Gdk.Cursor.new(Gdk.CursorType.WATCH)
-        self.progressWindow.window.set_cursor(cursor)
+        self.progressWindow.get_window().set_cursor(cursor)
 
         self.lastProgress = 0.0
 
