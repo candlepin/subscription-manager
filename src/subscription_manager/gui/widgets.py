@@ -24,7 +24,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
-from gi.reposotory import GdkPixbuf
+from gi.repository import GdkPixbuf
 
 
 from rhsm.certificate import GMT
@@ -850,7 +850,7 @@ class QuantitySelectionColumn(Gtk.TreeViewColumn):
         self.quantity_renderer.connect("edited", self._on_edit, tree_model)
         self.quantity_renderer.connect("editing-started", self._setup_editor)
 
-        super(QuantitySelectionColumn, self).__init__(self, column_title,
+        super(QuantitySelectionColumn, self).__init__(column_title,
                                                       self.quantity_renderer,
                                                       text=self.quantity_store_idx)
         self.set_cell_data_func(self.quantity_renderer, self._update_cell_based_on_data)
@@ -956,13 +956,16 @@ class TextTreeViewColumn(Gtk.TreeViewColumn):
 
         # FIXME: this is kind of weird...
         if markup:
-            super(TextTreeViewColumn, self).__init__(self, self.column_title,
-                                                     self.text_renderer,
-                                                     markup=store[store_key])
+            super(TextTreeViewColumn, self).__init__(self.column_title,
+                                                     self.text_renderer)
+
+                                                     #markup=store[store_key])
         else:
-            super(TextTreeViewColumn, self).__init__(self, self.column_title,
-                                                    self.text_renderer,
-                                                    text=store[store_key])
+            super(TextTreeViewColumn, self).__init__(self.column_title,
+                                                     self.text_renderer,
+                                                     text=store[store_key])
+
+                                                     #                                        text=store[store_key])
 
         if expand:
             self.set_expand(True)

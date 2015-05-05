@@ -176,8 +176,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.pooltype_cache.update()
         sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
         self.store.clear()
-        for group in sorter.groups:
-            self._add_group(group)
+
+        # FIXME: mapped list store inits are weird
+        #for group in sorter.groups:
+        #    self._add_group(group)
         self.top_view.expand_all()
         self._stripe_rows(None, self.store)
         if update_dbus:

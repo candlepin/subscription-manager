@@ -219,7 +219,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                     entry['status'] = _('Not Subscribed')
                     entry['validity_note'] = _("Not Subscribed")
 
-                self.store.add_map(entry)
+                # FIXME
+                # TODO: fix mapped stores
+                #self.store.add_map(entry)
         # 811340: Select the first product in My Installed Products
         # table by default.
         selection = self.top_view.get_selection()

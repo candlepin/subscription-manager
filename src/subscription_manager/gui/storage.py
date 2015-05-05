@@ -35,6 +35,7 @@ class MappedStore(object):
         """
         entry = [None] * self.get_n_columns()
 
+        self.log.debug('entry %s', entry)
         for key, value in item_map.iteritems():
             entry[self[key]] = value
         return entry
@@ -55,8 +56,10 @@ class MappedListStore(MappedStore, Gtk.ListStore):
         See contructor for Gtk.ListStore.
         """
         MappedStore.__init__(self, type_map)
+        Gtk.ListStore.__init__(self)
         # Use the types from the map to call the parent constructor
-        GObject.GObject.__init__(self, *type_map.values())
+
+        #GObject.GObject.__init__(self, *type_map.values())
 
     def __getitem__(self, key):
         return self.type_index[key]
@@ -79,8 +82,9 @@ class MappedTreeStore(MappedStore, Gtk.TreeStore):
                                      self.__class__.__name__)
         self.log.debug("MappedTreeStore type_map=%s", type_map)
         MappedStore.__init__(self, type_map)
+        Gtk.TreeStore.__init__(self)
         # Use the types from the map to call the parent constructor
-        GObject.GObject.__init__(self, *type_map.values())
+        #GObject.GObject.__init__(self, *type_map.values())
 
     def __getitem__(self, key):
         return self.type_index[key]
