@@ -1,6 +1,6 @@
 import unittest
 
-import gtk
+from gi.repository import Gtk
 
 from subscription_manager.gui import utils
 from subscription_manager.gui import storage
@@ -31,7 +31,7 @@ class TestLinkify(unittest.TestCase):
     expected_example_1 = """<a href="%s">%s</a>""" % (example_1, example_1)
     expected_example_2 = """<a href="%s">%s</a>""" % (example_2, example_2)
 
-    if gtk.check_version(MIN_GTK_MAJOR, MIN_GTK_MINOR, MIN_GTK_MICRO):
+    if Gtk.check_version(MIN_GTK_MAJOR, MIN_GTK_MINOR, MIN_GTK_MICRO):
         __test__ = False
 
     def test_no_url(self):

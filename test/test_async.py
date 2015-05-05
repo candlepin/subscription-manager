@@ -15,7 +15,7 @@
 
 
 import datetime
-import gobject
+from gi.repository import GObject
 import fixture
 
 import mock
@@ -71,9 +71,9 @@ class TestAsyncPool(fixture.SubManFixture):
         self.ap = async.AsyncPool(self.pool_stash)
 
         # add a timeout and a idle handler
-        self.idle = gobject.idle_add(self.ap.refresh, datetime.date.today(), self.idle_callback)
-        self.timer = gobject.timeout_add(50, self.idle_callback)
-        self.mainloop = gobject.MainLoop()
+        self.idle = GObject.idle_add(self.ap.refresh, datetime.date.today(), self.idle_callback)
+        self.timer = GObject.timeout_add(50, self.idle_callback)
+        self.mainloop = GObject.MainLoop()
 
     def test(self):
         self._create_async_pool()

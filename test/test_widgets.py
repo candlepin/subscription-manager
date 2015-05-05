@@ -14,7 +14,9 @@
 
 import unittest
 
-import gtk
+import test_po_files
+
+from gi.repository import Gtk
 from datetime import datetime, timedelta
 from rhsm.certificate import GMT
 
@@ -127,7 +129,7 @@ class TestDatePicker(unittest.TestCase):
 class BaseColumnTest(unittest.TestCase):
 
     def _assert_column_value(self, column_class, model_bool_val, expected_text):
-        model = gtk.ListStore(bool)
+        model = Gtk.ListStore(bool)
         model.append([model_bool_val])
 
         column = column_class(0)
@@ -217,9 +219,9 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
     def _run_filter_value_test(self, test_input_value, is_allowed, upper=15, lower=1, step_incr=1):
         column, tree_model, tree_iter = self._setup_column(1, True)
 
-        adjustment = gtk.Adjustment(upper=upper, lower=lower, value=7.0, step_incr=step_incr)
+        adjustment = Gtk.Adjustment(upper=upper, lower=lower, value=7.0, step_incr=step_incr)
         # Simulate the editable created by the CellRendererSpin object.
-        editable = gtk.SpinButton()
+        editable = Gtk.SpinButton()
         editable.set_property("adjustment", adjustment)
 
         self.stopped = False

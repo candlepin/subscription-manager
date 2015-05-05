@@ -15,7 +15,7 @@
 
 import mock
 
-import gtk
+from gi.repository import Gtk
 
 import stubs
 
@@ -56,7 +56,7 @@ class TestPreferencesDialog(SubManFixture):
         self._getPrefDialog()
         self.preferences_dialog.show()
         identity = require(IDENTITY)
-        event = gtk.gdk.Event(gtk.gdk.BUTTON_PRESS)
+        event = Gdk.Event(Gdk.EventType.BUTTON_PRESS)
 
         self.preferences_dialog.autoheal_event.emit("button-press-event", event)
         MockUep.assert_called_with(identity.uuid, autoheal=False)
