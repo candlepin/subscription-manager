@@ -13,7 +13,7 @@
 # in this software or its documentation.
 #
 
-from gi.repository import Gtk
+from gi.repository import Gdk
 
 from subscription_manager.gui import widgets
 
