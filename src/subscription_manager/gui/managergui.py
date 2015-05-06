@@ -28,8 +28,6 @@ import urllib2
 import webbrowser
 
 from gi.repository import Gtk
-#import Gtk.glade
-from gi.repository import Gtk
 
 import rhsm.config as config
 

@@ -21,7 +21,6 @@ import threading
 
 from gi.repository import GObject
 from gi.repository import Gtk
-from gi.repository import Gtk
 
 from subscription_manager.exceptions import ExceptionMapper
 import rhsm.connection as connection
@@ -225,17 +224,9 @@ def gather_group(store, iter, group):
             gather_group(store, child_iter, group)
             child_iter = store.iter_next(child_iter)
 
-
-
-    # FIXME
-    # REVIEW  I'm not sure where TreeRowReference is defined, but it seems to
-    # work
     refs = Gtk.TreeRowReference.new(store, store.get_path(iter))
-    # FIXME
-
-
-
     group.append(refs)
+
     return group
 
 
