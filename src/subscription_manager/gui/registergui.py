@@ -638,7 +638,8 @@ class SelectSLAScreen(Screen):
         for sla in reversed(sla_data_map.keys()):
             radio = Gtk.RadioButton(group=group, label=sla)
             radio.connect("toggled", self._radio_clicked, sla)
-            self.sla_radio_container.pack_start(radio, expand=False, fill=False)
+            self.sla_radio_container.pack_start(radio, expand=False,
+                                                fill=False, padding=0)
             radio.show()
             group = radio
 
