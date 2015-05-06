@@ -33,9 +33,11 @@ class MappedStore(object):
         specify all keys, and a 'None' value is inserted by default into
         positions that are omitted
         """
+
+        # get_n_columns() is 0 if the subclasses Gtk.ListStore isn't
+        # init'ed first, since no column info is known
         entry = [None] * self.get_n_columns()
 
-        self.log.debug('entry %s', entry)
         for key, value in item_map.iteritems():
             entry[self[key]] = value
         return entry
@@ -44,6 +46,8 @@ class MappedStore(object):
         return item in self.type_index
 
 
+# FIXME: There isn't much reason to make the MappedStores inherit MappedStore
+#        it could just have-a MappedStore
 class MappedListStore(MappedStore, Gtk.ListStore):
 
     def __init__(self, type_map):
@@ -55,11 +59,11 @@ class MappedListStore(MappedStore, Gtk.ListStore):
 
         See contructor for Gtk.ListStore.
         """
-        MappedStore.__init__(self, type_map)
-        Gtk.ListStore.__init__(self)
-        # Use the types from the map to call the parent constructor
 
-        #GObject.GObject.__init__(self, *type_map.values())
+        # FIXME: this is fragile, since the .values() ordering is not reliable
+        MappedStore.__init__(self, type_map)
+        Gtk.ListStore.__init__(self, *type_map.values())
+        # Use the types from the map to call the parent constructor
 
     def __getitem__(self, key):
         return self.type_index[key]
@@ -80,14 +84,13 @@ class MappedTreeStore(MappedStore, Gtk.TreeStore):
     def __init__(self, type_map):
         self.log = logging.getLogger('rhsm-app.' + __name__ +
                                      self.__class__.__name__)
-        self.log.debug("MappedTreeStore type_map=%s", type_map)
+        # FIXME: How does this work? .values() is not sorted, so could change?
         MappedStore.__init__(self, type_map)
-        Gtk.TreeStore.__init__(self)
-        # Use the types from the map to call the parent constructor
-        #GObject.GObject.__init__(self, *type_map.values())
+        Gtk.TreeStore.__init__(self, *type_map.values())
 
     def __getitem__(self, key):
         return self.type_index[key]
 
     def add_map(self, tree_iter, item_map):
-        return self.append(tree_iter, self._create_initial_entry(item_map))
+        return self.append(tree_iter,
+                           self._create_initial_entry(item_map))

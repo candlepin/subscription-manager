@@ -166,8 +166,10 @@ class MySubscriptionsTabTest(SubManFixture):
         self.assertEquals(self.cert1.valid_range.end(), entry['expiration_date'])
         self.assertEquals("0 / 1", entry['installed_text'])
         self.assertEquals(0, entry['installed_value'])
-        self.assertEquals(self.cert1.order.quantity_used, entry['quantity'])
-        self.assertEquals(self.cert1.serial, entry['serial'])
+        # The quantity/serial column is of type string, so when we fetch it from the
+        # widget, it is a str.
+        self.assertEquals(str(self.cert1.order.quantity_used), entry['quantity'])
+        self.assertEquals(str(self.cert1.serial), entry['serial'])
         self.assertFalse(entry['is_group_row'])
 
     def _assert_entry_2(self, entry):
@@ -176,8 +178,8 @@ class MySubscriptionsTabTest(SubManFixture):
         self.assertEquals(self.cert2.valid_range.end(), entry['expiration_date'])
         self.assertEquals("0 / 1", entry['installed_text'])
         self.assertEquals(0, entry['installed_value'])
-        self.assertEquals(self.cert2.order.quantity_used, entry['quantity'])
-        self.assertEquals(self.cert2.serial, entry['serial'])
+        self.assertEquals(str(self.cert2.order.quantity_used), entry['quantity'])
+        self.assertEquals(str(self.cert2.serial), entry['serial'])
         self.assertFalse(entry['is_group_row'])
 
     def _assert_group_entry(self, entry):

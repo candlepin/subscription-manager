@@ -178,8 +178,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.store.clear()
 
         # FIXME: mapped list store inits are weird
-        #for group in sorter.groups:
-        #    self._add_group(group)
+        for group in sorter.groups:
+            self._add_group(group)
+
         self.top_view.expand_all()
         self._stripe_rows(None, self.store)
         if update_dbus:
@@ -239,6 +240,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             'installed_text': str,
             'start_date': GObject.TYPE_PYOBJECT,
             'expiration_date': GObject.TYPE_PYOBJECT,
+
+            # In the rhsm.certficate models, quantity is an int
+            # and serial is a long, we could store them in the widget
+            # store that way
             'quantity': str,
             'serial': str,
             'align': float,

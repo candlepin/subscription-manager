@@ -221,7 +221,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
                 # FIXME
                 # TODO: fix mapped stores
-                #self.store.add_map(entry)
+                self.store.add_map(entry)
         # 811340: Select the first product in My Installed Products
         # table by default.
         selection = self.top_view.get_selection()
