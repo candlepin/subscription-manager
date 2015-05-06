@@ -5,7 +5,7 @@
 %global has_ostree %use_systemd
 %global use_old_firstboot (0%{?rhel} && 0%{?rhel} <= 6)
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
-%global use_gtk3 0
+%global use_gtk3 1
 
 
 %global _hardened_build 1
