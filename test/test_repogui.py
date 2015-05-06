@@ -159,7 +159,8 @@ class TestReposGui(SubManFixture):
 
     def _get_text(self, text_view):
         start, end = text_view.get_buffer().get_bounds()
-        return text_view.get_buffer().get_text(start, end)
+        return text_view.get_buffer().get_text(start, end,
+                                               include_hidden_chars=False)
 
     def _get_combo_box_value(self, combo_box):
         column = combo_box.get_active()
