@@ -957,15 +957,12 @@ class TextTreeViewColumn(Gtk.TreeViewColumn):
         # FIXME: this is kind of weird...
         if markup:
             super(TextTreeViewColumn, self).__init__(self.column_title,
-                                                     self.text_renderer)
-
-                                                     #markup=store[store_key])
+                                                     self.text_renderer,
+                                                     markup=store[store_key])
         else:
             super(TextTreeViewColumn, self).__init__(self.column_title,
                                                      self.text_renderer,
                                                      text=store[store_key])
-
-                                                     #                                        text=store[store_key])
 
         if expand:
             self.set_expand(True)
