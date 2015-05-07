@@ -79,7 +79,7 @@ check-syntax:
 	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o nul -S $(CHK_SOURCES)
 
 
-ICON_FLAGS = `pkg-config --cflags --libs gtk+-2.0 libnotify gconf-2.0 dbus-glib-1`
+ICON_FLAGS = `pkg-config --cflags --libs gtk+-3.0 libnotify gconf-2.0 dbus-glib-1`
 
 rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c bin
 	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o bin/rhsm-icon $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
