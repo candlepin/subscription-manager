@@ -125,7 +125,7 @@ from the server. Populates /etc/docker/certs.d appropriately.
 Summary: A GUI interface to manage Red Hat product subscriptions
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
-Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
+Requires: pygtk2 pygtk2-libglade
 Requires: usermode-gtk
 Requires: dbus-x11
 Requires: gnome-icon-theme
