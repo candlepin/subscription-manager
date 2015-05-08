@@ -15,8 +15,8 @@
 
 import gettext
 import logging
-from gi.repository import Gtk
 
+from subscription_manager import ga
 from subscription_manager.gui import widgets
 
 _ = gettext.gettext
@@ -49,7 +49,7 @@ class FilterOptionsWindow(widgets.SubmanBaseWidget):
         self.parent = parent
 
         # Center on parent when opened.
-        self.filter_product_window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
+        self.filter_product_window.set_position(ga.Gtk.WindowPosition.CENTER_ON_PARENT)
         self.filter_product_window.set_transient_for(self.parent.parent_win)
 
         # Set all the filters to their default values before the signals are

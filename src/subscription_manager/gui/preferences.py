@@ -16,8 +16,7 @@
 import gettext
 import logging
 
-from gi.repository import Gtk
-
+from subscription_manager import ga
 from subscription_manager.gui import widgets
 from subscription_manager.gui import utils
 from subscription_manager import injection as inj
@@ -58,8 +57,8 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
 
         # The first string is the displayed service level; the second is
         # the value sent to Candlepin.
-        self.release_model = Gtk.ListStore(str, str)
-        self.sla_model = Gtk.ListStore(str, str)
+        self.release_model = ga.Gtk.ListStore(str, str)
+        self.sla_model = ga.Gtk.ListStore(str, str)
 
         self.release_combobox.set_model(self.release_model)
         self.sla_combobox.set_model(self.sla_model)

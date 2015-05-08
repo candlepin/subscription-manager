@@ -16,8 +16,9 @@
 import gettext
 import logging
 
-from gi.repository import Gtk
+#from gi.repository import Gtk
 
+from subscription_manager import ga
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception, linkify
 from subscription_manager import injection as inj
@@ -53,7 +54,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
                 })
 
         # Set up the model
-        self.facts_store = Gtk.TreeStore(str, str)
+        self.facts_store = ga.Gtk.TreeStore(str, str)
         self.facts_view.set_model(self.facts_store)
 
         # Set up columns on the view
@@ -73,7 +74,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
         self.display_facts()
 
         # Set sorting by fact name
-        self.facts_store.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+        self.facts_store.set_sort_column_id(0, ga.Gtk.SortType.ASCENDING)
 
         self.update_button.set_sensitive(bool(self.identity.uuid))
         self.system_facts_dialog.present()
@@ -191,7 +192,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
         @param order: The 0-based index of the created column
         (in relation to other columns)
         """
-        column = Gtk.TreeViewColumn(name, Gtk.CellRendererText(), text=order)
+        column = ga.Gtk.TreeViewColumn(name, ga.Gtk.CellRendererText(), text=order)
         self.facts_view.append_column(column)
 
     def set_parent_window(self, window):

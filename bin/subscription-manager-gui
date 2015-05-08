@@ -54,9 +54,6 @@ except AttributeError:
     pass
 
 
-from gi.repository import Gtk
-from gi.repository import GObject
-
 # Since the location of these def's keeps moving, hardcoded them here as per the spec
 # see http://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-names
 REQUEST_NAME_REPLY_PRIMARY_OWNER = 1
@@ -89,8 +86,6 @@ try:
 except ImportError, e:
     request_name = _request_name
 
-GObject.threads_init()
-
 
 def system_exit(code, msgs=None):
     "Exit with a code and optional message(s). Saved a few lines of code."
@@ -110,6 +105,12 @@ _LIBPATH = "/usr/share/rhsm"
 if _LIBPATH not in sys.path:
     sys.path.append(_LIBPATH)
 
+#from gi.repository import Gtk
+#from gi.repository import GObject
+
+from subscription_manager import ga
+
+ga.GObject.threads_init()
 
 # quick check to see if you are a super-user.
 if os.getuid() != 0:
@@ -201,9 +202,9 @@ if __name__ == '__main__':
             SubscriptionManagerService(main.main_window)
 
         # Exit the gtk loop when the window is closed
-        main.main_window.connect('hide', Gtk.main_quit)
+        main.main_window.connect('hide', ga.Gtk.main_quit)
 
-        sys.exit(Gtk.main() or 0)
+        sys.exit(ga.Gtk.main() or 0)
     except SystemExit, e:
         # this is a non-exceptional exception thrown by Python 2.4, just
         # re-raise, bypassing handle_exception

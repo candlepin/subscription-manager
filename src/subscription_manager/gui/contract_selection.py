@@ -17,9 +17,7 @@ import datetime
 import gettext
 import time
 
-from gi.repository import GObject
-from gi.repository import Gtk
-
+from subscription_manager import ga
 from subscription_manager.gui import widgets
 from subscription_manager.gui.storage import MappedListStore
 from subscription_manager import isodate
@@ -58,11 +56,11 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
         return {
                 'contract_number': str,
                 'consumed_fraction': str,
-                'start_date': GObject.TYPE_PYOBJECT,
-                'end_date': GObject.TYPE_PYOBJECT,
+                'start_date': ga.GObject.TYPE_PYOBJECT,
+                'end_date': ga.GObject.TYPE_PYOBJECT,
                 'default_quantity': int,
                 'product_name': str,
-                'pool': GObject.TYPE_PYOBJECT,
+                'pool': ga.GObject.TYPE_PYOBJECT,
                 'is_virt_only': bool,
                 'multi_entitlement': bool,
                 'quantity_available': int,
@@ -77,10 +75,10 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
         self.contract_selection_window.destroy()
 
     def populate_treeview(self):
-        renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn(_("Contract"),
-                                    renderer,
-                                    text=self.model['contract_number'])
+        renderer = ga.Gtk.CellRendererText()
+        column = ga.Gtk.TreeViewColumn(_("Contract"),
+                                       renderer,
+                                       text=self.model['contract_number'])
         column.set_expand(True)
         column.set_sort_column_id(self.model['contract_number'])
         self.model.set_sort_func(self.model['contract_number'],
@@ -93,15 +91,15 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
                                  self._sort_machine_type, column)
         self.contract_selection_treeview.append_column(column)
 
-        renderer = Gtk.CellRendererText()
+        renderer = ga.Gtk.CellRendererText()
         renderer.set_property("xalign", 0.5)
-        column = Gtk.TreeViewColumn(_("Used / Total"),
+        column = ga.Gtk.TreeViewColumn(_("Used / Total"),
                                     renderer,
                                     text=self.model['consumed_fraction'])
         self.contract_selection_treeview.append_column(column)
 
         renderer = widgets.CellRendererDate()
-        column = Gtk.TreeViewColumn(_("Start Date"),
+        column = ga.Gtk.TreeViewColumn(_("Start Date"),
                                     renderer,
                                     date=self.model['start_date'])
         column.set_sort_column_id(self.model['start_date'])
@@ -110,7 +108,7 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
         self.contract_selection_treeview.append_column(column)
 
         renderer = widgets.CellRendererDate()
-        column = Gtk.TreeViewColumn(_("End Date"),
+        column = ga.Gtk.TreeViewColumn(_("End Date"),
                                     renderer,
                                     date=self.model['end_date'])
         column.set_sort_column_id(self.model['end_date'])

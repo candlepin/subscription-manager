@@ -19,8 +19,9 @@ import logging
 import re
 import threading
 
-from gi.repository import GObject
-from gi.repository import Gtk
+#from gi.repository import GObject
+#from gi.repository import Gtk
+from subscription_manager import ga
 
 from subscription_manager.exceptions import ExceptionMapper
 import rhsm.connection as connection
@@ -116,7 +117,7 @@ def linkify(msg):
     #  ? or () or - or / or ;
     url_regex = re.compile("""https?://[\w\.\?\(\)\-\/]*""")
 
-    if Gtk.check_version(MIN_GTK_MAJOR, MIN_GTK_MINOR, MIN_GTK_MICRO):
+    if ga.Gtk.check_version(MIN_GTK_MAJOR, MIN_GTK_MINOR, MIN_GTK_MICRO):
         return msg
 
     # dont linkify in firstboot
@@ -135,7 +136,7 @@ def apply_highlight(text, highlight):
     Apply pango markup to highlight a search term in a string
     """
     if not highlight:
-        return GObject.markup_escape_text(text)
+        return ga.GObject.markup_escape_text(text)
 
     regex = re.compile("(" + re.escape(highlight) + ")", re.I)
     parts = regex.split(text)
@@ -145,9 +146,9 @@ def apply_highlight(text, highlight):
     on_search_term = False
     for part in parts:
         if on_search_term:
-            escaped += "<b>%s</b>" % GObject.markup_escape_text(part)
+            escaped += "<b>%s</b>" % ga.GObject.markup_escape_text(part)
         else:
-            escaped += GObject.markup_escape_text(part)
+            escaped += ga.GObject.markup_escape_text(part)
         on_search_term = not on_search_term
 
     return "".join(escaped)
@@ -224,7 +225,7 @@ def gather_group(store, iter, group):
             gather_group(store, child_iter, group)
             child_iter = store.iter_next(child_iter)
 
-    refs = Gtk.TreeRowReference.new(store, store.get_path(iter))
+    refs = ga.tree_row_reference(store, store.get_path(iter))
     group.append(refs)
 
     return group
@@ -255,12 +256,12 @@ class AsyncWidgetUpdater(object):
         try:
             result = backend_method(*args, **kwargs)
             if callback:
-                GObject.idle_add(callback, result)
+                ga.GObject.idle_add(callback, result)
         except Exception, e:
             message = exception_msg or str(e)
-            GObject.idle_add(handle_gui_exception, e, message, self.parent_window)
+            ga.GObject.idle_add(handle_gui_exception, e, message, self.parent_window)
         finally:
-            GObject.idle_add(widget_update.finished)
+            ga.GObject.idle_add(widget_update.finished)
 
     def update(self, widget_update, backend_method, args=None, kwargs=None, exception_msg=None, callback=None):
         threading.Thread(target=self.worker, args=(widget_update,

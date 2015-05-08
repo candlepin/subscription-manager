@@ -18,7 +18,7 @@ import gettext
 import logging
 import os
 import threading
-from gi.repository import GObject
+#from gi.repository import GObject
 import socket
 
 import rhsm.config
@@ -27,6 +27,7 @@ import rhsm.utils
 from rhsm.utils import remove_scheme
 from rhsm.utils import parse_url
 
+from subscription_manager import ga
 from subscription_manager.gui.utils import show_error_window
 import subscription_manager.injection as inj
 
@@ -188,7 +189,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
 
     def test_connection_wrapper(self, proxy_host, proxy_port, proxy_user, proxy_password):
         connection_status = self.test_connection(proxy_host, proxy_port, proxy_user, proxy_password)
-        GObject.idle_add(self.on_test_connection_finish, connection_status)
+        ga.GObject.idle_add(self.on_test_connection_finish, connection_status)
 
     def test_connection(self, proxy_host, proxy_port, proxy_user, proxy_password):
         cp = connection.UEPConnection(
@@ -277,7 +278,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             self.progress_bar.set_label(_("Please wait"))
         else:
             self.progress_bar = progress.Progress(_("Testing Connection"), _("Please wait"))
-            self.timer = GObject.timeout_add(100, self.progress_bar.pulse)
+            self.timer = ga.GObject.timeout_add(100, self.progress_bar.pulse)
             self.progress_bar.set_parent_window(self.networkConfigDialog)
 
     def _clear_progress_bar(self):
@@ -285,7 +286,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             return
 
         self.progress_bar.hide()
-        GObject.source_remove(self.timer)
+        ga.GObject.source_remove(self.timer)
         self.timer = 0
         self.progress_bar = None
 

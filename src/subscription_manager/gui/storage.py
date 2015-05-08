@@ -13,8 +13,8 @@
 # in this software or its documentation.
 #
 
-from gi.repository import Gtk
 import logging
+from subscription_manager import ga
 
 
 class MappedStore(object):
@@ -48,7 +48,7 @@ class MappedStore(object):
 
 # FIXME: There isn't much reason to make the MappedStores inherit MappedStore
 #        it could just have-a MappedStore
-class MappedListStore(MappedStore, Gtk.ListStore):
+class MappedListStore(MappedStore, ga.Gtk.ListStore):
 
     def __init__(self, type_map):
         """
@@ -62,7 +62,7 @@ class MappedListStore(MappedStore, Gtk.ListStore):
 
         # FIXME: this is fragile, since the .values() ordering is not reliable
         MappedStore.__init__(self, type_map)
-        Gtk.ListStore.__init__(self, *type_map.values())
+        ga.Gtk.ListStore.__init__(self, *type_map.values())
         # Use the types from the map to call the parent constructor
 
     def __getitem__(self, key):
@@ -80,13 +80,13 @@ class MappedListStore(MappedStore, Gtk.ListStore):
         self.append(self._create_initial_entry(item_map))
 
 
-class MappedTreeStore(MappedStore, Gtk.TreeStore):
+class MappedTreeStore(MappedStore, ga.Gtk.TreeStore):
     def __init__(self, type_map):
         self.log = logging.getLogger('rhsm-app.' + __name__ +
                                      self.__class__.__name__)
         # FIXME: How does this work? .values() is not sorted, so could change?
         MappedStore.__init__(self, type_map)
-        Gtk.TreeStore.__init__(self, *type_map.values())
+        ga.Gtk.TreeStore.__init__(self, *type_map.values())
 
     def __getitem__(self, key):
         return self.type_index[key]

@@ -19,8 +19,7 @@ import Queue
 import threading
 import gettext
 
-from gi.repository import GObject
-
+from subscription_manager import ga
 from subscription_manager.entcertlib import Disconnected
 from subscription_manager.managerlib import fetch_certificates
 from subscription_manager.injection import IDENTITY, \
@@ -61,7 +60,7 @@ class AsyncPool(object):
         """
         Run pool stash refresh asynchronously.
         """
-        GObject.idle_add(self._watch_thread)
+        ga.GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._run_refresh,
                 args=(active_on, callback, data)).start()
 
@@ -81,12 +80,12 @@ class AsyncBind(object):
             ents = self.cp_provider.get_consumer_auth_cp().bindByEntitlementPool(self.identity.uuid, pool['id'], quantity)
             self.plugin_manager.run("post_subscribe", consumer_uuid=self.identity.uuid, entitlement_data=ents)
             if bind_callback:
-                GObject.idle_add(bind_callback)
+                ga.GObject.idle_add(bind_callback)
             fetch_certificates(self.certlib)
             if cert_callback:
-                GObject.idle_add(cert_callback)
+                ga.GObject.idle_add(cert_callback)
         except Exception, e:
-            GObject.idle_add(except_callback, e)
+            ga.GObject.idle_add(except_callback, e)
 
     def _run_unbind(self, serial, selection, callback, except_callback):
         """
@@ -101,9 +100,9 @@ class AsyncBind(object):
                 pass
 
             if callback:
-                GObject.idle_add(callback)
+                ga.GObject.idle_add(callback)
         except Exception, e:
-            GObject.idle_add(except_callback, e, selection)
+            ga.GObject.idle_add(except_callback, e, selection)
 
     def bind(self, pool, quantity, except_callback, bind_callback=None, cert_callback=None):
         threading.Thread(target=self._run_bind,
