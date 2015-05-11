@@ -169,6 +169,16 @@ install-plugins-dir:
 
 install-plugins: install-plugins-dir install-content-plugins
 
+install-ga-dir:
+	install -d $(CODE_DIR)/ga
+	install -d $(CODE_DIR)/ga/ga_gtk2
+
+# Install our gtk2/gtk3 compat modules
+# TODO: make this default to only install the approriate version for a rhel release
+install-ga: install-ga-dir
+	install -m 644 -p $(SRC_DIR)/ga/*.py $(CODE_DIR)/ga
+	install -m 644 -p $(SRC_DIR)/ga/ga_gtk2/*.py $(CODE_DIR)/ga/ga_gtk2
+
 
 .PHONY: install-example-plugins
 install-example-plugins: install-example-plugins-files install-example-plugins-conf
@@ -195,7 +205,7 @@ clean-versions:
 install-po: compile-po
 	cp -R po/build/* $(PREFIX)/$(INSTALL_DIR)/locale/
 
-install-files: set-versions dbus-service-install desktop-files install-plugins
+install-files: set-versions dbus-service-install compile-po desktop-files install-plugins install-ga
 	install -d $(CODE_DIR)/gui/data/icons
 	install -d $(CODE_DIR)/branding
 	install -d $(CODE_DIR)/model
