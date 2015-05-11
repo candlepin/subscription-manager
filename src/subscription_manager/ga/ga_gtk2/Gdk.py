@@ -12,4 +12,11 @@ class CursorType(object):
     WATCH = WATCH
 
 
-__all__ = [color_parse, Cursor, WindowTypeHint]
+class EventType(object):
+    BUTTON_PRESS = BUTTON_PRESS
+
+
+enums = [CursorType, EventType, WindowTypeHint]
+classes = [Cursor]
+methods = [color_parse]
+__all__ = classes + methods + enums
