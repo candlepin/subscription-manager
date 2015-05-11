@@ -15,11 +15,11 @@
 
 
 import datetime
-from gi.repository import GObject
 import fixture
 
 import mock
 
+from subscription_manager import ga
 import subscription_manager.injection as inj
 from subscription_manager.injection import provide, IDENTITY
 from subscription_manager import async
@@ -71,9 +71,9 @@ class TestAsyncPool(fixture.SubManFixture):
         self.ap = async.AsyncPool(self.pool_stash)
 
         # add a timeout and a idle handler
-        self.idle = GObject.idle_add(self.ap.refresh, datetime.date.today(), self.idle_callback)
-        self.timer = GObject.timeout_add(50, self.idle_callback)
-        self.mainloop = GObject.MainLoop()
+        self.idle = ga.GObject.idle_add(self.ap.refresh, datetime.date.today(), self.idle_callback)
+        self.timer = ga.GObject.timeout_add(50, self.idle_callback)
+        self.mainloop = ga.GObject.MainLoop()
 
     def test(self):
         self._create_async_pool()

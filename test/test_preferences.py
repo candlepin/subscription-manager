@@ -15,11 +15,11 @@
 
 import mock
 
-from gi.repository import Gdk
 
 import stubs
 
 from fixture import SubManFixture
+from subscription_manager import ga
 from subscription_manager.injection import require, provide, IDENTITY
 
 from subscription_manager.gui import preferences
@@ -56,7 +56,7 @@ class TestPreferencesDialog(SubManFixture):
         self._getPrefDialog()
         self.preferences_dialog.show()
         identity = require(IDENTITY)
-        event = Gdk.Event(Gdk.EventType.BUTTON_PRESS)
+        event = ga.Gdk.Event(ga.Gdk.EventType.BUTTON_PRESS)
 
         self.preferences_dialog.autoheal_event.emit("button-press-event", event)
         MockUep.assert_called_with(identity.uuid, autoheal=False)
