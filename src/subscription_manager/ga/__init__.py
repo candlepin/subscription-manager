@@ -1,6 +1,8 @@
-
+import os
 
 GTK_VERSION = "gtk3"
+if 'SUBMAN_GTK_VERSION' in os.environ:
+    GTK_VERSION = os.environ.get('SUBMAN_GTK_VERSION')
 
 if GTK_VERSION == "gtk2":
     from subscription_manager.ga.ga_gtk2 import Gtk
