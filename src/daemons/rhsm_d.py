@@ -17,7 +17,7 @@
 #
 import sys
 
-enable_debug = False
+enable_debug = True
 
 
 def excepthook_base(exc_type, exc_value, exc_traceback):
@@ -34,8 +34,6 @@ def excepthook_base(exc_type, exc_value, exc_traceback):
 
 sys.excepthook = excepthook_base
 
-from gi.repository import GObject
-from gi.repository import GLib
 import syslog
 import dbus
 import dbus.service
@@ -45,6 +43,7 @@ import traceback
 
 sys.path.append("/usr/share/rhsm")
 
+from subscription_manager import ga
 log = logging.getLogger("rhsm-app.rhsmd")
 
 from subscription_manager import logutil
@@ -153,7 +152,7 @@ class StatusChecker(dbus.service.Object):
     #certain parts of that are async
     def watchdog(self):
         if not self.keep_alive:
-            GLib.idle_add(check_if_ran_once, self, self.loop)
+            ga.GLib.idle_add(check_if_ran_once, self, self.loop)
 
     @dbus.service.method(
         dbus_interface="com.redhat.SubscriptionManager.EntitlementStatus",
@@ -290,7 +289,7 @@ def main():
     sys.excepthook = sys.__excepthook__
 
     system_bus = dbus.SystemBus()
-    loop = GObject.MainLoop()
+    loop = ga.GObject.MainLoop()
     checker = StatusChecker(system_bus, options.keep_alive, force_signal, loop)
 
     if options.immediate:
