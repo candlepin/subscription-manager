@@ -14,8 +14,10 @@
 #
 
 import os
+import logging
 import shutil
 import tarfile
+import tempfile
 from datetime import datetime
 
 import fixture
@@ -28,6 +30,8 @@ from subscription_manager.cli import InvalidCLIOptionError
 
 
 cfg = initConfig()
+
+log = logging.getLogger(__name__)
 
 
 def path_join(first, second):
@@ -59,15 +63,50 @@ class TestCompileCommand(TestCliCommand):
         self._orig_copy_directory = self.cc._copy_directory
         self.cc._copy_directory = self._copy_directory
         self.cc._makedir = self._makedir
+
         self.test_dir = self._get_test_dir()
+
         self.path = self._create_test_path(self.test_dir)
-        self.cc.assemble_path = self._create_assemble_dir()
+        self.assemble_top_dir = os.path.join(self.test_dir, "assemble-dir")
+        self.assemble_path = self._create_assemble_dir(self.assemble_top_dir)
+
+        # monkeypatch cli commands assemble path
+        self.cc.assemble_path = self.assemble_path
+
+        self.expected_paths = ["consumer.json", "compliance.json", "entitlements.json",
+                               "pools.json", "version.json", "subscriptions.json",
+                               "/etc/rhsm", "/var/log/rhsm", "/var/lib/rhsm",
+                               # we use a test specific config, with default values
+                               "/etc/pki/product",
+                               "/etc/pki/entitlement", "/etc/pki/consumer",
+                               "/etc/pki/product-default"]
+
+    def _rmtree_error_callback(self, function, path, excinfo):
+        """Ignore errors in rmtree, but log them."""
+        log.debug("rmtree on path %s", path)
+        log.exception(excinfo)
+
+    def _rmtree(self, path):
+        log.debug("rmtree deleting dir at %s", path)
+        shutil.rmtree(path, onerror=self._rmtree_error_callback)
+
+    def _unlink(self, path):
+        log.debug("unlinking %s", path)
+        try:
+            os.unlink(path)
+        except OSError, e:
+            log.debug("error %s likely because we deleted it's parent already",
+                      e)
 
     def tearDown(self):
         super(TestCompileCommand, self).tearDown()
-        del self.test_dir
-        del self.path
-        del self.cc.assemble_path
+
+        self._rmtree(self.test_dir)
+
+        # cleanup any archives we've created
+        if self.cc.final_destination_path:
+            log.debug("cleaning up %s", self.cc.final_destination_path)
+            self._unlink(self.cc.final_destination_path)
 
     def test_assemble_dir_on_different_device_that_destination_dir(self):
         def faux_dirs_on_same_device(dir1, dir2):
@@ -76,6 +115,23 @@ class TestCompileCommand(TestCliCommand):
         self.cc._dirs_on_same_device = faux_dirs_on_same_device
         self.assertRaises(InvalidCLIOptionError, self.cc.main,
                           ["--destination", self.path, "--no-archive"])
+
+    def _assert_expected_paths_exists(self):
+        tree_path = path_join(self.path, self.code)
+        for expected_path in self.expected_paths:
+            full_path = path_join(tree_path, expected_path)
+            if os.path.exists(full_path):
+                continue
+            self.fail("Expected the path %s to exists in the destination path,"
+                      "but it does not" % full_path)
+
+    def _assert_unexpected_paths_do_not_exist(self, unexpected):
+        tree_path = path_join(self.path, self.code)
+        for unexpected_path in unexpected:
+            full_path = path_join(tree_path, unexpected_path)
+            if os.path.exists(full_path):
+                self.fail("Expected the path %s to not exists in the destination path,"
+                          "but it does." % full_path)
 
     # Runs the tar file creation.
     # It does not write the certs or log files because of
@@ -86,24 +142,16 @@ class TestCompileCommand(TestCliCommand):
         except SystemExit:
             self.fail("Exception Raised")
 
-        try:
-            tar_path = path_join(self.path, "rhsm-debug-system-%s.tar.gz" % self.time_code)
-            tar_file = tarfile.open(tar_path, "r")
-            self.assertTrue(tar_file.getmember(path_join(self.code, "consumer.json")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "compliance.json")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "entitlements.json")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "pools.json")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "version.json")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "subscriptions.json")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "/etc/rhsm")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "/var/log/rhsm")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "/var/lib/rhsm")) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'productCertDir'))) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'entitlementCertDir'))) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, cfg.get('rhsm', 'consumerCertDir'))) is not None)
-            self.assertTrue(tar_file.getmember(path_join(self.code, "etc/pki/product-default")) is not None)
-        finally:
-            shutil.rmtree(self.path)
+        tar_path = path_join(self.path, "rhsm-debug-system-%s.tar.gz" % self.time_code)
+        tar_file = tarfile.open(tar_path, "r")
+
+        for expected_path in self.expected_paths:
+            actual_tar_path = path_join(self.code, expected_path)
+            try:
+                tar_file.getmember(actual_tar_path)
+            except KeyError:
+                # KeyError means it wasnt in the tarfile
+                self.fail("Excepted %s in tar_file, but it was not." % expected_path)
 
     # Runs the non-tar tree creation.
     # It does not write the certs or log files because of
@@ -114,23 +162,7 @@ class TestCompileCommand(TestCliCommand):
         except SystemExit:
             self.fail("Exception Raised")
 
-        try:
-            tree_path = path_join(self.path, self.code)
-            self.assertTrue(os.path.exists(path_join(tree_path, "consumer.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "compliance.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "entitlements.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "pools.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "version.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "subscriptions.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "/etc/rhsm")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "/var/log/rhsm")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "/var/lib/rhsm")))
-            self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'productCertDir'))))
-            self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'entitlementCertDir'))))
-            self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'consumerCertDir'))))
-            self.assertTrue(os.path.exists(path_join(tree_path, "/etc/pki/product-default")))
-        finally:
-            shutil.rmtree(self.path)
+        self._assert_expected_paths_exists()
 
     # Runs the non-tar tree creation.
     # sos flag limits included data
@@ -140,24 +172,17 @@ class TestCompileCommand(TestCliCommand):
         except SystemExit:
             self.fail("Exception Raised")
 
-        try:
-            tree_path = path_join(self.path, self.code)
-            self.assertTrue(os.path.exists(path_join(tree_path, "consumer.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "compliance.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "entitlements.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "pools.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "version.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "subscriptions.json")))
-            self.assertFalse(os.path.exists(path_join(tree_path, "/etc/rhsm")))
-            self.assertFalse(os.path.exists(path_join(tree_path, "/var/log/rhsm")))
-            self.assertFalse(os.path.exists(path_join(tree_path, "/var/lib/rhsm")))
-            # if cert directories are default, these should not be included
-            self.assertFalse(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'productCertDir'))))
-            self.assertFalse(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'entitlementCertDir'))))
-            self.assertFalse(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'consumerCertDir'))))
-            self.assertFalse(os.path.exists(path_join(tree_path, "/etc/pki/product-default")))
-        finally:
-            shutil.rmtree(self.path)
+        non_sos_paths = ["/etc/rhsm", "/var/log/rhsm", "/var/lib/rhsm",
+                         "/etc/pki/product", "/etc/pki/entitlement",
+                         "/etc/pki/consumer", "/etc/pki/product-default"]
+
+        # TODO: these would make more sense as set()'s
+        for non_sos_path in non_sos_paths:
+            self.expected_paths.remove(non_sos_path)
+
+        self._assert_expected_paths_exists()
+
+        self._assert_unexpected_paths_do_not_exist(non_sos_paths)
 
     # Runs the non-tar tree creation.
     # no-subscriptions flag limits included data
@@ -167,7 +192,11 @@ class TestCompileCommand(TestCliCommand):
         except SystemExit:
             self.fail("Exception Raised")
 
-        self._assert_no_subs()
+        self.expected_paths.remove("subscriptions.json")
+        unexpected_paths = ["subscriptions.json"]
+
+        self._assert_expected_paths_exists()
+        self._assert_unexpected_paths_do_not_exist(unexpected_paths)
 
     def test_command_no_subs_default(self):
         try:
@@ -178,24 +207,8 @@ class TestCompileCommand(TestCliCommand):
         self._assert_no_subs()
 
     def _assert_no_subs(self):
-        try:
-            tree_path = path_join(self.path, self.code)
-            self.assertTrue(os.path.exists(path_join(tree_path, "consumer.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "compliance.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "entitlements.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "pools.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "version.json")))
-            self.assertFalse(os.path.exists(path_join(tree_path, "subscriptions.json")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "/etc/rhsm")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "/var/log/rhsm")))
-            self.assertTrue(os.path.exists(path_join(tree_path, "/var/lib/rhsm")))
-            # if cert directories are default, these should not be included
-            self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'productCertDir'))))
-            self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'entitlementCertDir'))))
-            self.assertTrue(os.path.exists(path_join(tree_path, cfg.get('rhsm', 'consumerCertDir'))))
-            self.assertTrue(os.path.exists(path_join(tree_path, "/etc/pki/product-default")))
-        finally:
-            shutil.rmtree(self.path)
+        self.expected_paths.remove("subscriptions.json")
+        self._assert_expected_paths_exists()
 
     # Test to see that the filter on copy directory properly skips any -key.pem files
     def test_copy_private_key_filter(self):
@@ -225,11 +238,11 @@ class TestCompileCommand(TestCliCommand):
             print e
             raise
         finally:
-            shutil.rmtree(path1)
-            shutil.rmtree(path2)
+            self._rmtree(path1)
+            self._rmtree(path2)
 
     # by not creating the destination directory
-    #  we expect the validation to fail
+    # we expect the validation to fail
     def test_archive_to_non_exist_dir(self):
 
         # test path is created in setup, so delete it
@@ -249,21 +262,22 @@ class TestCompileCommand(TestCliCommand):
         self.code = "rhsm-debug-system-%s" % self.time_code
         return self.time_code
 
-    def _create_assemble_dir(self):
-        assemble_path = path_join(self.test_dir, "assemble-dir/%s" % datetime.now().strftime("%Y%m%d-%f"))
-        os.makedirs(path_join(assemble_path, "/etc/rhsm/ca/"))
-        os.makedirs(path_join(assemble_path, "/etc/rhsm/pluginconf.d/"))
-        os.makedirs(path_join(assemble_path, "/etc/rhsm/facts/"))
-        os.makedirs(path_join(assemble_path, "/var/log/rhsm/"))
-        os.makedirs(path_join(assemble_path, "/var/lib/rhsm/"))
-        os.makedirs(path_join(assemble_path, cfg.get('rhsm', 'productCertDir')))
-        os.makedirs(path_join(assemble_path, cfg.get('rhsm', 'entitlementCertDir')))
-        os.makedirs(path_join(assemble_path, cfg.get('rhsm', 'consumerCertDir')))
-        os.makedirs(path_join(assemble_path, "/etc/pki/product-default"))
-        return assemble_path
+    def _create_assemble_dir(self, assemble_top_dir):
+        assemble_dir_path = path_join(assemble_top_dir, "/%s" % datetime.now().strftime("%Y%m%d-%f"))
+
+        assemble_paths = ["/etc/rhsm/ca", "/etc/rhsm/pluginconf.d/", "/etc/rhsm/facts",
+                          "/var/log/rhsm", "/var/lib/rhsm", "/etc/pki/product",
+                          "/etc/pki/entitlement", "/etc/pki/consumer",
+                          "/etc/pki/product-default"]
+
+        for assemble_path in assemble_paths:
+            os.makedirs(path_join(assemble_dir_path, assemble_path))
+
+        return assemble_dir_path
 
     def _get_test_dir(self):
-        test_dir = os.getcwd()
+        test_dir = tempfile.mkdtemp(suffix="-subman-unittests", prefix="test-rhsm-debug-")
+        log.debug("Created testing tempdir %s", test_dir)
         return test_dir
 
     def _create_test_path(self, test_dir):
@@ -273,8 +287,7 @@ class TestCompileCommand(TestCliCommand):
 
     # write to my directory instead
     def _copy_directory(self, path, prefix, ignore_pats=[]):
-        #print "_copy_directory: %s, %s" % (path, prefix)
-        shutil.copytree(path_join(self.cc.assemble_path, path), path_join(prefix, path))
+        shutil.copytree(path_join(self.assemble_path, path), path_join(prefix, path))
 
     # tests run as non-root
     def _makedir(self, dest_dir_name):
