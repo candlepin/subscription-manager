@@ -86,8 +86,6 @@ class BuilderFileBasedWidget(FileBasedGui):
         return builder_based_widget
 
     def _load_file(self):
-        path = self.gui_file_path()
-        self.log.debug("gui_file_path=%s", path)
         self.builder.add_from_file(self.gui_file_path())
 
     def __init__(self):
