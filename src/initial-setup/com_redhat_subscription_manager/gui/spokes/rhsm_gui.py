@@ -17,11 +17,11 @@
 #
 
 import logging
-import sys
 
 from pyanaconda.ui.gui.spokes import NormalSpoke
 from pyanaconda.ui.common import FirstbootOnlySpokeMixIn
 from pyanaconda.ui.gui.categories.system import SystemCategory
+from pyanaconda.ui.gui import GUIObject
 
 # need sys.path?
 
@@ -30,10 +30,11 @@ log = logging.getLogger(__name__)
 #from gi.repository import Gtk
 #from gi.repository from gi.repository import Gtk
 
-log.debug("sys.path=%s", sys.path)
+from subscription_manager import ga
+ga.GObject.threads_init()
 from subscription_manager.gui import managergui
 from subscription_manager.injectioninit import init_dep_injection
-#from subscription_manager.injection import PLUGIN_MANAGER, IDENTITY, require
+from subscription_manager import injection as inj
 from subscription_manager.gui import registergui
 
 # FIXME
@@ -42,7 +43,7 @@ __all__ = ["RHSMSpoke"]
 
 
 class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
-    buildrObjects = ["RHSMSpokeWindow"]
+    buildrObjects = ["RHSMSpokeWindow", "AnacondaSpokeWindow-action_area1"]
 
     mainWidgetName = "RHSMSpokeWindow"
 
@@ -54,7 +55,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
 
     title = "Subscription Manager"
 
-    def __not_init__(self, data, storage, payload, instclass):
+    def __init__(self, data, storage, payload, instclass):
         log.debug("I've been __init__()'ed")
         NormalSpoke.__init__(self, data, storage, payload, instclass)
         log.debug("data %s", repr(self.data))
@@ -64,24 +65,34 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         self._done = False
 
     def initialize(self):
-        log.debug("I've been initialize()'ed")
+        log.debug("running self.initialize")
         NormalSpoke.initialize(self)
         self._done = False
         init_dep_injection()
+
+        facts = inj.require(inj.FACTS)
         backend = managergui.Backend()
         log.debug("backend=%s", backend)
+        self.registergui = registergui.RegisterScreen(backend, facts)
+        self._action_area = self.builder.get_object("AnacondaSpokeWindow-action_area1")
+        self.register_box = self.registergui.dialog_vbox6
 
-        self.registergui = registergui.RegisterScreen(backend)
+        self.registergui.window.remove(self.register_box)
+        self._action_area.pack_end(self.register_box, True, True, 0)
+        self._action_area.show()
+        self.register_box.show_all()
+        self.registergui.show()
 
-    def run(self):
-        log.debug("run")
-        self.registergui.window.show()
-        rc = self.registergui.window.run()
-        self.registergui.window.hide()
+    def finished(self):
+        self._done = True
 
-        return rc
-
+    # Update gui widgets to reflect state of self.data
     def refresh(self):
+        #log.debug("refresh, self.data=%s", self.data)
+        #log.debug("data.addons %s", self.data.addons)
+        log.debug("data.addons.com_redhat_subscription_manager %s",
+                  self.data.addons.com_redhat_subscription_manager)
+
         pass
 
     def apply(self):
@@ -99,8 +110,8 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
     @property
     def completed(self):
         log.info("completed")
-        #return bool(self._done)
-        return True
+        return self._done
+        #return True
 
     @property
     def mandatory(self):
@@ -109,11 +120,3 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
     @property
     def status(self):
         return "Likely not working."
-
-    def on_big_button_activate(self, button, *args):
-        log.debug("big button was _A_ctivated, now preparing to do  absolutely nothing. %s", args)
-
-    def on_big_button_clicked(self, button, *args):
-        self._done = True
-        log.debug("big button was clicked, now doing absolutely nothing. %s %s", button, args)
-        log.debug("self %s, self._done %s", self, self._done)
