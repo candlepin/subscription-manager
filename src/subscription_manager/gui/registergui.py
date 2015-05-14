@@ -246,7 +246,8 @@ class RegisterScreen(widgets.SubmanBaseWidget):
 
     widget_names = ['register_dialog', 'register_notebook',
                     'register_progressbar', 'register_details_label',
-                    'cancel_button', 'register_button', 'progress_label']
+                    'cancel_button', 'register_button', 'progress_label',
+                    'dialog_vbox6']
     gui_file = "registration.glade"
 
     def __init__(self, backend, facts=None, parent=None, callbacks=None):
@@ -270,7 +271,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         self.connect_signals(callbacks)
 
         self.window = self.register_dialog
-        self.register_dialog.set_transient_for(self.parent)
+        #self.register_dialog.set_transient_for(self.parent)
 
         screen_classes = [ChooseServerScreen, ActivationKeyScreen,
                           CredentialsScreen, OrganizationScreen,
@@ -301,6 +302,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         # XXX needed by firstboot
         self.password = None
 
+    # FIXME: not a show() at all anymore
     def show(self):
         # Ensure that we start on the first page and that
         # all widgets are cleared.
@@ -309,7 +311,6 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         self._set_navigation_sensitive(True)
         self._clear_registration_widgets()
         self.timer = ga.GObject.timeout_add(100, self._timeout_callback)
-        self.register_dialog.show()
 
     def _set_initial_screen(self):
         target = self._get_initial_screen()
@@ -324,6 +325,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
     def error_screen(self):
         return DONT_CHANGE
 
+    # FIXME: skipping for now
     def _set_navigation_sensitive(self, sensitive):
         self.cancel_button.set_sensitive(sensitive)
         self.register_button.set_sensitive(sensitive)
@@ -338,6 +340,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
             self.register_notebook.set_current_page(screen + 1)
 
         if get_state() == REGISTERING:
+            # aka, if this is firstboot
             if not isinstance(self.register_dialog, ga.Gtk.VBox):
                 self.register_dialog.set_title(_("System Registration"))
             self.progress_label.set_markup(_("<b>Registering</b>"))
@@ -381,6 +384,8 @@ class RegisterScreen(widgets.SubmanBaseWidget):
             self.finish_registration()
             return
 
+        while ga.Gtk.events_pending():
+            ga.Gtk.main_iteration()
         self._set_screen(screen)
         async = self._screens[self._current_screen].pre()
         if async:
@@ -400,7 +405,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         # XXX it would be cool here to do some async spinning while the
         # main window gui refreshes itself
 
-        self.close_window()
+#        self.close_window()
 
         self.emit_consumer_signal()
 
@@ -423,6 +428,9 @@ class RegisterScreen(widgets.SubmanBaseWidget):
             screen.clear()
 
     def pre_done(self, next_screen):
+        while ga.Gtk.events_pending():
+            ga.Gtk.main_iteration()
+
         self._set_navigation_sensitive(True)
         if next_screen == DONT_CHANGE:
             self._set_screen(self._current_screen)
@@ -492,6 +500,7 @@ class NoGuiScreen(object):
 class PerformRegisterScreen(NoGuiScreen):
 
     def __init__(self, parent, backend):
+        log.debug("prs parent %s", parent)
         super(PerformRegisterScreen, self).__init__(parent, backend)
         self.pre_message = _("Registering your system")
 
@@ -519,6 +528,7 @@ class PerformRegisterScreen(NoGuiScreen):
         log.info("Registering to owner: %s environment: %s" %
                  (self._parent.owner_key, self._parent.environment))
 
+        log.debug("self._parent %s", self._parent)
         self._parent.async.register_consumer(self._parent.consumername,
                                              self._parent.facts,
                                              self._parent.owner_key,
@@ -690,6 +700,7 @@ class SelectSLAScreen(Screen):
             elif isinstance(error[1], GoneException):
                 InfoDialog(_("Consumer has been deleted."), parent=self._parent.parent)
             else:
+                log.exception(error)
                 handle_gui_exception(error, _("Error subscribing"),
                                      self._parent.parent)
             self._parent.finish_registration(failed=True)
@@ -732,7 +743,10 @@ class SelectSLAScreen(Screen):
 
     def pre(self):
         set_state(SUBSCRIBING)
-        self._parent.async.find_service_levels(self._parent.identity,
+        log.debug("self._parent.identity %s", self._parent.identity)
+        self._parent.identity.reload()
+        log.debug("self._parent.identity2 %s", self._parent.identity)
+        self._parent.async.find_service_levels(self._parent.identity.uuid,
                                                self._parent.facts,
                                                self._on_get_service_levels_cb)
         return True
@@ -1204,11 +1218,14 @@ class AsyncBackend(object):
             self.plugin_manager.run("post_register_consumer", consumer=retval,
                 facts=facts.get_facts())
 
+            log.debug("_register_consumer, post register, %s", self.backend.cp_provider)
+            require(IDENTITY).reload()
             # Facts and installed products went out with the registration
             # request, manually write caches to disk:
             facts.write_cache()
             installed_mgr.write_cache()
 
+            log.debug("_register_consumer, post register2, %s", self.backend.cp_provider)
             cp = self.backend.cp_provider.get_basic_auth_cp()
 
             # In practice, the only time this condition should be true is
@@ -1220,6 +1237,7 @@ class AsyncBackend(object):
                 self.backend.update()
                 cp = self.backend.cp_provider.get_consumer_auth_cp()
 
+            log.debug("_register_consumer, post register3, %s", self.backend.cp_provider)
             # FIXME: this looks like we are updating package profile as
             #        basic auth
             profile_mgr = require(PROFILE_MANAGER)
@@ -1267,9 +1285,18 @@ class AsyncBackend(object):
 
     # This guy is really ugly to run in a thread, can we run it
     # in the main thread with just the network stuff threaded?
-    def _find_suitable_service_levels(self, consumer, facts):
+    def _find_suitable_service_levels(self, consumer_uuid, facts):
+
+        # FIXME:
+        log.debug("_find_suitable_service_levels, pre backend.update")
+        self.backend.update()
+        log.debug("_find_suitable_service_levels, post backend.update")
+        log.debug("self.backend.cp_provider %s", self.backend.cp_provider)
+        log.debug("self.beackend.cp_provider.get_consumer_auth_cp() %s",
+                  self.backend.cp_provider.get_consumer_auth_cp())
+
         consumer_json = self.backend.cp_provider.get_consumer_auth_cp().getConsumer(
-                consumer.getConsumerId())
+                consumer_uuid)
 
         if 'serviceLevel' not in consumer_json:
             raise ServiceLevelNotSupportedException()
@@ -1286,11 +1313,13 @@ class AsyncBackend(object):
                 len(self.backend.cs.partial_stacks) == 0:
             raise AllProductsCoveredException()
 
+        log.debug("presla")
         if current_sla:
             available_slas = [current_sla]
             log.debug("Using system's current service level: %s" %
                     current_sla)
         else:
+            log.debug("pre getServiceLevelList %s", owner_key)
             available_slas = self.backend.cp_provider.get_consumer_auth_cp().getServiceLevelList(owner_key)
             log.debug("Available service levels: %s" % available_slas)
 
@@ -1299,11 +1328,13 @@ class AsyncBackend(object):
         suitable_slas = {}
 
         # eek, in a thread
+        log.debug("pre action_client")
         action_client = ActionClient(facts=facts)
         action_client.update()
+        log.debug("post action_client")
 
         for sla in available_slas:
-            dry_run_json = self.backend.cp_provider.get_consumer_auth_cp().dryRunBind(consumer.uuid, sla)
+            dry_run_json = self.backend.cp_provider.get_consumer_auth_cp().dryRunBind(consumer_uuid, sla)
             dry_run = DryRunResult(sla, dry_run_json, self.backend.cs)
 
             # If we have a current SLA for this system, we do not need
@@ -1313,12 +1344,12 @@ class AsyncBackend(object):
                 suitable_slas[sla] = dry_run
         return (current_sla, self.backend.cs.unentitled_products.values(), suitable_slas)
 
-    def _find_service_levels(self, consumer, facts, callback):
+    def _find_service_levels(self, consumer_uuid, facts, callback):
         """
         method run in the worker thread.
         """
         try:
-            suitable_slas = self._find_suitable_service_levels(consumer, facts)
+            suitable_slas = self._find_suitable_service_levels(consumer_uuid, facts)
             self.queue.put((callback, suitable_slas, None))
         except Exception:
             self.queue.put((callback, None, sys.exc_info()))
@@ -1337,6 +1368,7 @@ class AsyncBackend(object):
         """
         try:
             (callback, retval, error) = self.queue.get(block=False)
+            log.debug("callback=%s retval=%s error=%s", callback, retval, error)
             if error:
                 callback(retval, error=error)
             else:
@@ -1361,7 +1393,9 @@ class AsyncBackend(object):
         """
         Run consumer registration asyncronously
         """
+        log.debug("register_consumer, about to idle add")
         ga.GObject.idle_add(self._watch_thread)
+        log.debug("register_consumer, about to Thread")
         threading.Thread(target=self._register_consumer,
                          name="RegisterConsumerThread",
                          args=(name, facts, owner,
@@ -1374,11 +1408,13 @@ class AsyncBackend(object):
                          args=(uuid, current_sla,
                                dry_run_result, callback)).start()
 
-    def find_service_levels(self, consumer, facts, callback):
+    def find_service_levels(self, consumer_uuid, facts, callback):
+        log.debug("find_service_levels, about to idle add")
         ga.GObject.idle_add(self._watch_thread)
+        log.debug("find_service_levels, about to Trhead")
         threading.Thread(target=self._find_service_levels,
                          name="FindServiceLevelsThread",
-                         args=(consumer, facts, callback)).start()
+                         args=(consumer_uuid, facts, callback)).start()
 
     def refresh(self, callback):
         ga.GObject.idle_add(self._watch_thread)
