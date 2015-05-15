@@ -141,7 +141,11 @@ class MigrationEngine(object):
         # Sometimes we need to send up the entire contents of the systemid file
         # which is referred to in Satellite 5 nomenclature as a "certificate"
         # although it is not an X509 certificate.
-        self.system_id_contents = open(self.rhncfg["systemIdPath"], 'r').read()
+        try:
+            self.system_id_contents = open(self.rhncfg["systemIdPath"], 'r').read()
+        except IOError:
+            system_exit(os.EX_IOERR, _("Could not read legacy systemid at %s") % self.rhncfg["systemIdPath"])
+
         self.system_id = self.get_system_id(self.system_id_contents)
 
         self.proxy_host = None
