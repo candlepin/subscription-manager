@@ -1,6 +1,28 @@
 
 RHEL7 firstboot migration
 
+
+IMPORTANT NOTES:
+
+Don't try dev/test with the default RHEL initial-setup, it will
+reboot your system. Try the branch at:
+
+https://github.com/alikins/initial-setup/tree/rhel7-devel
+
+That branch has been defang'ed a bit.
+
+GLADE: Forget about trying to edit the glade files needed
+with the rhel7 glade (glade or glade-3). It either crashes,
+outputs the wrong version of the xml, and/or doesn't allow
+you to actually use the glade catalog of AnacondaWidgets.
+
+Use a glade from f20/f21, and make sure the project properties
+is setup to "AnacondaWidgets" 1.0, and Gtk version of 3.0.
+
+You also must have the anaconda-widgets-devel package installed,
+and it's deps.
+
+
 General
 =======
 
