@@ -37,8 +37,6 @@ from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager import injection as inj
 from subscription_manager.gui import registergui
 
-# FIXME
-
 __all__ = ["RHSMSpoke"]
 
 
@@ -73,15 +71,20 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         facts = inj.require(inj.FACTS)
         backend = managergui.Backend()
         log.debug("backend=%s", backend)
-        self.registergui = registergui.RegisterScreen(backend, facts)
-        self._action_area = self.builder.get_object("AnacondaSpokeWindow-action_area1")
-        self.register_box = self.registergui.dialog_vbox6
 
-        self.registergui.window.remove(self.register_box)
-        self._action_area.pack_end(self.register_box, True, True, 0)
+        self._registergui = registergui.RegisterScreen(backend, facts,
+                                                       callbacks=[self.finished])
+        self._action_area = self.builder.get_object("AnacondaSpokeWindow-action_area1")
+        self._register_box = self._registergui.dialog_vbox6
+
+        # we have a ref to _register_box, but need to remove it from
+        # the regustergui.window (a GtkDialog), and add it to the main
+        # box in the action area of our initial-setup screen.
+        self._registergui.window.remove(self._register_box)
+        self._action_area.pack_end(self._register_box, True, True, 0)
         self._action_area.show()
-        self.register_box.show_all()
-        self.registergui.show()
+        self._register_box.show_all()
+        self._registergui.show()
 
     def finished(self):
         self._done = True

@@ -100,6 +100,7 @@ class CacheManager(object):
         manually write to disk.
         """
         # Logging in this method (when threaded) can cause a segfault, BZ 988861 and 988430
+        log.debug("REMOVEME: Am I segfaulting here?")
         try:
             if not os.access(os.path.dirname(self.CACHE_FILE), os.R_OK):
                 os.makedirs(os.path.dirname(self.CACHE_FILE))
@@ -113,6 +114,7 @@ class CacheManager(object):
                 log.error("Unable to write cache: %s" %
                         self.CACHE_FILE)
                 log.exception(e)
+        log.debug("REMOVEME: done writing cache, did I segfault?")
 
     def _read_cache(self):
         """
@@ -268,7 +270,7 @@ class StatusCache(CacheManager):
         Writing to disk means it will be read from memory for the rest of this run.
         """
         threading.Thread(target=super(StatusCache, self).write_cache,
-                         args=[False],
+                         args=[True],
                          name="WriteCache%s" % self.__class__.__name__).start()
         log.debug("Started thread to write cache: %s" % self.CACHE_FILE)
 

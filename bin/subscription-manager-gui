@@ -44,7 +44,6 @@ _ = gettext.gettext
 # Capture python (and pygtk) warnings that normally print to
 # stderr and log them.
 # Additional warnings filters are in gui/widgets.py
-
 log = logging.getLogger("rhsm-app.subscription-manager-gui")
 
 try:

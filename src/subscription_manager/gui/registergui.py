@@ -23,6 +23,7 @@ import socket
 import sys
 import threading
 
+
 from subscription_manager import ga
 #from gi.repository import GObject
 #from gi.repository import Gtk
@@ -380,16 +381,18 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         return False
 
     def _run_pre(self, screen):
+        log.debug("run_pre, %s", screen)
         # XXX move this into the button handling somehow?
         if screen == FINISH:
             self.finish_registration()
             return
 
-        while ga.Gtk.events_pending():
-            ga.Gtk.main_iteration()
+        #while ga.Gtk.events_pending():
+        #    ga.Gtk.main_iteration()
         self._set_screen(screen)
         async = self._screens[self._current_screen].pre()
         if async:
+            log.debug("run_pre, async")
             self._set_navigation_sensitive(False)
             self._set_screen(PROGRESS_PAGE)
             self._set_register_details_label(
@@ -401,12 +404,14 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         return True
 
     def finish_registration(self, failed=False):
+        log.debug("registergui.finish_registration")
         # failed is used by the firstboot subclasses to decide if they should
         # advance the screen or not.
         # XXX it would be cool here to do some async spinning while the
         # main window gui refreshes itself
 
-#        self.close_window()
+        # FIXME: subman-gui needs this but initial-setup doesnt
+        # self.close_window()
 
         self.emit_consumer_signal()
 
@@ -429,8 +434,8 @@ class RegisterScreen(widgets.SubmanBaseWidget):
             screen.clear()
 
     def pre_done(self, next_screen):
-        while ga.Gtk.events_pending():
-            ga.Gtk.main_iteration()
+        #while ga.Gtk.events_pending():
+        #    ga.Gtk.main_iteration()
 
         self._set_navigation_sensitive(True)
         if next_screen == DONT_CHANGE:
