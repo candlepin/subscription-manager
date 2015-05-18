@@ -1,7 +1,7 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 2.10 -->
-  <!-- interface-naming-policy project-wide -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="register_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -13,14 +13,15 @@
     <property name="icon_name">subscription-manager</property>
     <property name="type_hint">dialog</property>
     <property name="deletable">False</property>
-    <signal handler="on_register_dialog_delete_event" name="delete_event"/>
+    <signal name="delete-event" handler="on_register_dialog_delete_event" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog_vbox6">
+      <object class="GtkBox" id="dialog-vbox6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area6">
+          <object class="GtkButtonBox" id="dialog-action_area6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
@@ -32,9 +33,9 @@
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <property name="image_position">right</property>
-                <signal handler="on_register_cancel_button_clicked" name="clicked"/>
+                <signal name="clicked" handler="on_register_cancel_button_clicked" swapped="no"/>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="a11y-cancel_button1">
+                  <object class="AtkObject" id="cancel_button-atkobject">
                     <property name="AtkObject::accessible-name">cancel_button</property>
                   </object>
                 </child>
@@ -54,9 +55,9 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="image_position">right</property>
-                <signal handler="on_register_button_clicked" name="clicked"/>
+                <signal name="clicked" handler="on_register_button_clicked" swapped="no"/>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="a11y-register_button1">
+                  <object class="AtkObject" id="register_button-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">register_button</property>
                     <property name="AtkObject::accessible-description">register_button</property>
                   </object>
@@ -69,7 +70,7 @@
               </packing>
             </child>
             <child internal-child="accessible">
-              <object class="AtkObject" id="a11y-dialog-action_area61">
+              <object class="AtkObject" id="dialog-action_area6-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes">registration_dialog_action_area</property>
               </object>
             </child>
@@ -101,7 +102,7 @@
                     <property name="label" translatable="yes">&lt;b&gt;Registering&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="a11y-progress_label1">
+                      <object class="AtkObject" id="progress_label-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes">progress_label</property>
                       </object>
                     </child>
@@ -117,10 +118,8 @@
                   <object class="GtkProgressBar" id="register_progressbar">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="activity_mode">True</property>
-
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="a11y-register_progressbar1">
+                      <object class="AtkObject" id="register_progressbar-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes">register_progressbar</property>
                       </object>
                     </child>
@@ -138,7 +137,7 @@
                     <property name="xalign">0</property>
                     <property name="use_markup">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="a11y-register_details_label1">
+                      <object class="AtkObject" id="register_details_label-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes">register_details_label</property>
                       </object>
                     </child>
@@ -169,14 +168,14 @@
           </packing>
         </child>
         <child internal-child="accessible">
-          <object class="AtkObject" id="a11y-dialog-vbox6">
+          <object class="AtkObject" id="dialog-vbox6-atkobject">
             <property name="AtkObject::accessible-name" translatable="yes">register_dialog_main_vbox</property>
           </object>
         </child>
       </object>
     </child>
     <child internal-child="accessible">
-      <object class="AtkObject" id="a11y-register_dialog1">
+      <object class="AtkObject" id="register_dialog-atkobject">
         <property name="AtkObject::accessible-name">register_dialog</property>
       </object>
     </child>

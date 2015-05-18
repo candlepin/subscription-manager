@@ -249,6 +249,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
                     'cancel_button', 'register_button', 'progress_label',
                     'dialog_vbox6']
     gui_file = "registration.glade"
+    __gtype_name__ = 'RegisterScreen'
 
     def __init__(self, backend, facts=None, parent=None, callbacks=None):
         """
