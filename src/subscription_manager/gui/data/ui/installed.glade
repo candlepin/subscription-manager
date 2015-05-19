@@ -6,16 +6,19 @@
     <property name="can_focus">False</property>
     <property name="icon_name">subscription-manager</property>
     <child>
-      <object class="GtkVBox" id="vbox1">
+      <object class="GtkBox" id="vbox1">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkVPaned" id="content">
+          <object class="GtkPaned" id="content">
+            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="border_width">12</property>
             <child>
-              <object class="GtkVBox" id="vbox5">
+              <object class="GtkBox" id="vbox5">
+                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">1</property>
@@ -25,7 +28,8 @@
                     <property name="can_focus">False</property>
                     <property name="bottom_padding">3</property>
                     <child>
-                      <object class="GtkHBox" id="hbox1">
+                      <object class="GtkBox" id="hbox1">
+                        <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">3</property>
@@ -147,12 +151,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="details_vbox">
+              <object class="GtkBox" id="details_vbox">
+                <property name="orientation">vertical</property>
                 <property name="height_request">50</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkVBox" id="vbox2">
+                  <object class="GtkBox" id="vbox2">
+                    <property name="orientation">vertical</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>

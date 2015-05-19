@@ -11,12 +11,14 @@
     <property name="type_hint">dialog</property>
     <property name="icon-name">subscription-manager</property>
     <child>
-      <object class="GtkVBox" id="vbox1">
+      <object class="GtkBox" id="vbox1">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="border_width">4</property>
         <property name="spacing">3</property>
         <child>
-          <object class="GtkVBox" id="vbox2">
+          <object class="GtkBox" id="vbox2">
+            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <property name="border_width">6</property>
             <property name="spacing">3</property>
@@ -34,7 +36,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkHSeparator" id="hseparator1">
+              <object class="GtkSeparator" id="hseparator1">
+                <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
               </object>
               <packing>
@@ -47,7 +50,8 @@
                 <property name="visible">True</property>
                 <property name="left_padding">16</property>
                 <child>
-                  <object class="GtkVBox" id="vbox3">
+                  <object class="GtkBox" id="vbox3">
+                    <property name="orientation">vertical</property>
                     <property name="visible">True</property>
                     <property name="spacing">3</property>
                     <child>
@@ -118,7 +122,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkHBox" id="hbox1">
+                      <object class="GtkBox" id="hbox1">
+                        <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <child>
                           <object class="GtkLabel" id="edit_quantity_label">
@@ -176,7 +181,8 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHButtonBox" id="hbuttonbox1">
+          <object class="GtkButtonBox" id="hbuttonbox1">
+            <property name="orientation">horizontal</property>
             <property name="visible">True</property>
             <property name="border_width">6</property>
             <property name="spacing">5</property>

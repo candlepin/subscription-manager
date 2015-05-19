@@ -1,17 +1,20 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 2.10 -->
-  <!-- interface-naming-policy project-wide -->
-  <object class="GtkVBox" id="container">
+  <requires lib="gtk+" version="3.0"/>
+  <object class="GtkBox" id="container">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkVBox" id="choose_server_vbox">
+      <object class="GtkBox" id="choose_server_vbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">16</property>
         <child>
-          <object class="GtkHBox" id="hbox2">
+          <object class="GtkBox" id="hbox2">
+            <property name="orientation">horizontal</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -25,7 +28,7 @@
                 <property name="use_markup">True</property>
                 <property name="wrap">True</property>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="a11y-choose_server_label1">
+                  <object class="AtkObject" id="choose_server_label-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">choose_server_label</property>
                   </object>
                 </child>
@@ -40,7 +43,7 @@
               <object class="GtkEventBox" id="eventbox1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip-text" translatable="yes">Registering with Customer Portal, Subscription Asset Manager, Satellite or Candlepin servers can be used to provide your system with updates and allow management through the selected server's interface.</property>
+                <property name="tooltip_text" translatable="yes">Registering with Customer Portal, Subscription Asset Manager, Satellite or Candlepin servers can be used to provide your system with updates and allow management through the selected server's interface.</property>
                 <property name="visible_window">False</property>
                 <child>
                   <object class="GtkAlignment" id="alignment2">
@@ -52,7 +55,7 @@
                       <object class="GtkImage" id="image2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip-text" translatable="yes">Registering with Customer Portal, Subscription Asset Manager, Satellite or Candlepin servers can be used to provide your system with updates and allow management through the selected server's interface.</property>
+                        <property name="tooltip_text" translatable="yes">Registering with Customer Portal, Subscription Asset Manager, Satellite or Candlepin servers can be used to provide your system with updates and allow management through the selected server's interface.</property>
                         <property name="xalign">1</property>
                         <property name="stock">gtk-info</property>
                       </object>
@@ -90,7 +93,7 @@
                 <property name="xpad">12</property>
                 <property name="label" translatable="yes">I will register with:</property>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="a11y-server_label1">
+                  <object class="AtkObject" id="server_label-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">server_label</property>
                   </object>
                 </child>
@@ -103,16 +106,14 @@
               <object class="GtkEntry" id="server_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip-text" translatable="yes">hostname[:port][/prefix]</property>
-                <property name="invisible_char">&#x25CF;</property>
+                <property name="tooltip_text" translatable="yes">hostname[:port][/prefix]</property>
+                <property name="invisible_char">●</property>
                 <property name="width_chars">30</property>
                 <property name="primary_icon_activatable">False</property>
                 <property name="secondary_icon_activatable">False</property>
-                <property name="primary_icon_sensitive">True</property>
-                <property name="secondary_icon_sensitive">True</property>
-                <signal handler="on_server_entry_changed" name="changed"/>
+                <signal name="changed" handler="on_server_entry_changed" swapped="no"/>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="a11y-server_entry1">
+                  <object class="AtkObject" id="server_entry-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">server_entry</property>
                   </object>
                 </child>
@@ -128,10 +129,10 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip-text" translatable="yes">Reset to register with Customer Portal.</property>
-                <signal handler="on_default_button_clicked" name="clicked"/>
+                <property name="tooltip_text" translatable="yes">Reset to register with Customer Portal.</property>
+                <signal name="clicked" handler="on_default_button_clicked" swapped="no"/>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="a11y-default_button1">
+                  <object class="AtkObject" id="default_button-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">default_button</property>
                   </object>
                 </child>
@@ -146,7 +147,7 @@
               <object class="GtkEventBox" id="eventbox2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip-text" translatable="yes">Activation Keys are alphanumeric strings that are preconfigured by your system administrators to automatically register your system and attach all necessary subscriptions.</property>
+                <property name="tooltip_text" translatable="yes">Activation Keys are alphanumeric strings that are preconfigured by your system administrators to automatically register your system and attach all necessary subscriptions.</property>
 
                 <property name="visible_window">False</property>
                 <child>
@@ -162,7 +163,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkHBox" id="hbox3">
+              <object class="GtkBox" id="hbox3">
+                <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">5</property>
@@ -191,7 +193,7 @@
                       <object class="GtkImage" id="image3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip-text" translatable="yes">Activation Keys are alphanumeric strings that are preconfigured by your system administrators to automatically register your system and attach all necessary subscriptions.</property>
+                        <property name="tooltip_text" translatable="yes">Activation Keys are alphanumeric strings that are preconfigured by your system administrators to automatically register your system and attach all necessary subscriptions.</property>
                         <property name="xalign">1</property>
                         <property name="stock">gtk-info</property>
                       </object>
@@ -231,7 +233,8 @@
                 <property name="bottom_padding">12</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkHBox" id="hbox1">
+                  <object class="GtkBox" id="hbox1">
+                    <property name="orientation">horizontal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>
@@ -266,9 +269,9 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal handler="on_proxy_button_clicked" name="clicked"/>
+                        <signal name="clicked" handler="on_proxy_button_clicked" swapped="no"/>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="a11y-proxy_button1">
+                          <object class="AtkObject" id="proxy_button-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes">proxy_button</property>
                           </object>
                         </child>
@@ -284,7 +287,7 @@
                 </child>
               </object>
             </child>
-            <child type="label">
+            <child type="label_item">
               <placeholder/>
             </child>
           </object>

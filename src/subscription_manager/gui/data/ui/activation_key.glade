@@ -1,12 +1,15 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 2.10 -->
-  <!-- interface-naming-policy project-wide -->
-  <object class="GtkVBox" id="container">
+  <requires lib="gtk+" version="3.0"/>
+  <object class="GtkBox" id="container">
     <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
     <child>
       <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="yalign">0.10000000149011612</property>
         <property name="label" translatable="yes">&lt;b&gt;Please enter the following for this system:&lt;/b&gt;</property>
@@ -21,11 +24,13 @@
     <child>
       <object class="GtkTable" id="table1">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="n_rows">3</property>
         <property name="n_columns">2</property>
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="label" translatable="yes">Organization:</property>
           </object>
           <packing>
@@ -38,6 +43,7 @@
         <child>
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="label" translatable="yes">Activation Key:</property>
           </object>
           <packing>
@@ -52,6 +58,7 @@
         <child>
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="label" translatable="yes">System Name:</property>
           </object>
           <packing>
@@ -67,10 +74,10 @@
           <object class="GtkEntry" id="organization_entry">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="tooltip-text" translatable="yes">This must be the organization key, not the name.</property>
-            <property name="invisible_char">&#x25CF;</property>
+            <property name="tooltip_text" translatable="yes">This must be the organization key, not the name.</property>
+            <property name="invisible_char">●</property>
             <child internal-child="accessible">
-              <object class="AtkObject" id="a11y-organization_entry1">
+              <object class="AtkObject" id="organization_entry-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes">organization_entry</property>
               </object>
             </child>
@@ -84,10 +91,10 @@
           <object class="GtkEntry" id="activation_key_entry">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="tooltip-text" translatable="yes">Multiple Activation Keys can be entered by separating them with a comma or a space.</property>
-            <property name="invisible_char">&#x25CF;</property>
+            <property name="tooltip_text" translatable="yes">Multiple Activation Keys can be entered by separating them with a comma or a space.</property>
+            <property name="invisible_char">●</property>
             <child internal-child="accessible">
-              <object class="AtkObject" id="a11y-activation_key_entry1">
+              <object class="AtkObject" id="activation_key_entry-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes">activation_key_entry</property>
               </object>
             </child>
@@ -103,9 +110,9 @@
           <object class="GtkEntry" id="consumer_entry">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="invisible_char">&#x25CF;</property>
+            <property name="invisible_char">●</property>
             <child internal-child="accessible">
-              <object class="AtkObject" id="a11y-consumer_entry1">
+              <object class="AtkObject" id="consumer_entry-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes">consumer_entry</property>
               </object>
             </child>

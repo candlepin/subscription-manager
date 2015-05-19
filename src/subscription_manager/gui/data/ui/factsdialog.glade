@@ -13,12 +13,14 @@
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="on_system_facts_dialog_delete_event" swapped="no"/>
     <child>
-      <object class="GtkVBox" id="dialog-vbox2">
+      <object class="GtkBox" id="dialog-vbox2">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">2</property>
         <child>
-          <object class="GtkVBox" id="vbox2">
+          <object class="GtkBox" id="vbox2">
+            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -130,7 +132,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkHBox" id="hbox1">
+              <object class="GtkBox" id="hbox1">
+                <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -180,11 +183,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="hbox2">
+          <object class="GtkBox" id="hbox2">
+            <property name="orientation">horizontal</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkVBox" id="vbox3">
+              <object class="GtkBox" id="vbox3">
+                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -227,7 +232,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkHBox" id="hbox4">
+              <object class="GtkBox" id="hbox4">
+                <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>

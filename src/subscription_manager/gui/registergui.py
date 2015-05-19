@@ -258,6 +258,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         """
         super(RegisterScreen, self).__init__()
 
+        log.debug("RegisterScreen.init")
         self.backend = backend
         self.identity = require(IDENTITY)
         self.facts = facts
@@ -272,6 +273,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
                      "on_register_dialog_delete_event": self._delete_event}
         self.connect_signals(callbacks)
 
+        log.debug("self.register_dialog %s", self.register_dialog)
         self.window = self.register_dialog
         #self.register_dialog.set_transient_for(self.parent)
 

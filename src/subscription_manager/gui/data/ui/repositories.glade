@@ -19,12 +19,14 @@
     <property name="deletable">False</property>
     <signal handler="on_dialog_delete_event" name="delete_event"/>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="main_container">
+      <object class="GtkBox" id="main_container">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area1">
+          <object class="GtkButtonBox" id="dialog-action_area1">
+            <property name="orientation">horizontal</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">edge</property>
@@ -76,7 +78,8 @@
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="vbox1">
+          <object class="GtkBox" id="vbox1">
+            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -109,7 +112,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="details_vbox">
+              <object class="GtkBox" id="details_vbox">
+                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>

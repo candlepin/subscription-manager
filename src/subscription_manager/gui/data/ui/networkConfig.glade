@@ -10,10 +10,12 @@
     <property name="type_hint">dialog</property>
     <property name="icon-name">subscription-manager</property>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox1">
+      <object class="GtkBox" id="dialog-vbox1">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <child>
-          <object class="GtkVBox" id="vbox4">
+          <object class="GtkBox" id="vbox4">
+            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <property name="border_width">10</property>
             <property name="spacing">10</property>
@@ -35,7 +37,8 @@
                 <property name="visible">True</property>
                 <property name="left_padding">20</property>
                 <child>
-                  <object class="GtkVBox" id="vbox5">
+                  <object class="GtkBox" id="vbox5">
+                    <property name="orientation">vertical</property>
                     <property name="visible">True</property>
                     <property name="spacing">10</property>
                     <child>
@@ -69,7 +72,8 @@
                             <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
                             <child>
-                              <object class="GtkHBox" id="hbox6">
+                              <object class="GtkBox" id="hbox6">
+                                <property name="orientation">horizontal</property>
                                 <property name="visible">True</property>
                                 <property name="spacing">5</property>
                                 <child>
@@ -274,7 +278,8 @@
           </packing>
         </child>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area1">
+          <object class="GtkButtonBox" id="dialog-action_area1">
+            <property name="orientation">horizontal</property>
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>

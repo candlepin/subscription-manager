@@ -74,6 +74,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
 
         self._registergui = registergui.RegisterScreen(backend, facts,
                                                        callbacks=[self.finished])
+        log.debug("self.registergui %s", self._registergui)
         self._action_area = self.builder.get_object("AnacondaSpokeWindow-action_area1")
         self._register_box = self._registergui.dialog_vbox6
 

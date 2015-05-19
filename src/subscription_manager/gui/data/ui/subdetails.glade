@@ -6,7 +6,8 @@
     <property name="can_focus">False</property>
     <property name="icon_name">subscription-manager</property>
     <child>
-      <object class="GtkVBox" id="sub_details_vbox">
+      <object class="GtkBox" id="sub_details_vbox">
+        <property name="orientation">vertical</property>
         <property name="height_request">50</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
