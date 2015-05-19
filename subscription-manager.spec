@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.14.6
+Version: 1.14.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -485,6 +485,16 @@ fi
 %endif
 
 %changelog
+* Tue May 19 2015 William Poteat <wpoteat@redhat.com> 1.14.7-1
+- 1220287: Proxy Save accel fix with latest strings. (alikins@redhat.com)
+- 1212515: Print error message for missing systemid file. (awood@redhat.com)
+- Added missing option to the migration manual page (crog@redhat.com)
+- Specified error codes on system_exit in rhn-migrate-classic-to-rhsm
+  (crog@redhat.com)
+- Updated the manual pages for the attach command (crog@redhat.com)
+- Remove locale based DatePicker tests. (alikins@redhat.com)
+- Make rhsm-debug test cases clean up better. (alikins@redhat.com)
+
 * Fri May 01 2015 William Poteat <wpoteat@redhat.com> 1.14.6-1
 - 1149095: Fix error when yum updates subman modules (alikins@redhat.com)
 - 1159163: Fix prod id del because of --disablerepo (alikins@redhat.com)
