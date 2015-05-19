@@ -30,7 +30,7 @@ class RedeemDialog(widgets.SubmanBaseWidget):
     associated with this machine.
     """
     widget_names = ['redeem_dialog', 'email_entry']
-    gui_file = "redeem.glade"
+    gui_file = "redeem"
 
     def __init__(self, backend):
         super(RedeemDialog, self).__init__()

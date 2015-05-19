@@ -39,11 +39,16 @@ from subscription_manager import managerlib
 
 _ = gettext.gettext
 
-GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
+GLADE_DIR = os.path.join(os.path.dirname(__file__), "data/glade")
+UI_DIR = os.path.join(os.path.dirname(__file__), "data/ui")
+UI_SUFFIX = "ui"
+GLADE_SUFFIX = "glade"
+
 
 WARNING_COLOR = '#FFFB82'
 EXPIRED_COLOR = '#FFAF99'
 
+log = logging.getLogger("rhsm-app." + __name__)
 # Some versions of gtk has incorrect translations for the calendar widget
 # and gtk itself complains about this with errors like:
 #
@@ -67,26 +72,39 @@ class FileBasedGui(object):
     widget_names = []
     file_dir = None
     gui_file = None
+    gui_file_suffix = None
 
+    @property
     def gui_file_path(self):
-        return os.path.join(self.file_dir, self.gui_file)
+        gui_file_full_path = os.path.join(self.file_dir,
+                                          "%s.%s" % (self.gui_file,
+                                                     self.gui_file_suffix))
+
+        log.debug("loading gui file %s", gui_file_full_path)
+        return gui_file_full_path
 
 
 class BuilderFileBasedWidget(FileBasedGui):
     widget_names = []
-    file_dir = GLADE_DIR
+
+    # old libglade/glade files were .glade
+    # newer builder files were also .glade
+    # latest gtk3+ gtk.Builder files are .ui
+    file_dir = UI_DIR
+    gui_file_suffix = UI_SUFFIX
 
     @classmethod
     def from_file(cls, builder_file):
         builder_based_widget = cls()
         builder_based_widget.gui_file = builder_file
+        builder_based_widget.file_dir = ga.GTK_BUILDER_FILES_DIR
 
         builder_based_widget._load_file()
 
         return builder_based_widget
 
     def _load_file(self):
-        self.builder.add_from_file(self.gui_file_path())
+        self.builder.add_from_file(self.gui_file_path)
 
     def __init__(self):
         """
@@ -106,6 +124,7 @@ class BuilderFileBasedWidget(FileBasedGui):
         return self.builder.connect_signals(handlers_dict)
 
 
+# FIXME: not actually a widget, just an object that has a widget
 class SubmanBaseWidget(object):
     widget_names = []
     gui_file = None
@@ -385,7 +404,7 @@ class ProductsTable(object):
 class SubDetailsWidget(SubmanBaseWidget):
     widget_names = ["sub_details_vbox", "subscription_text", "products_view",
                     "support_level_and_type_text", "sku_text", "pool_type_text"]
-    gui_file = "subdetails.glade"
+    gui_file = "subdetails"
 
     def __init__(self, product_dir):
         super(SubDetailsWidget, self).__init__()
@@ -506,7 +525,7 @@ class ContractSubDetailsWidget(SubDetailsWidget):
                      "virt_only_text",
                      "details_view"]
 
-    gui_file = "subdetailscontract.glade"
+    gui_file = "subdetailscontract"
 
     def __init__(self, product_dir):
         super(ContractSubDetailsWidget, self).__init__(product_dir)

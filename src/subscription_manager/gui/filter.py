@@ -40,7 +40,7 @@ class FilterOptionsWindow(widgets.SubmanBaseWidget):
     widget_names = ['filter_product_window', 'compatible_checkbutton',
                     'installed_checkbutton', 'no_overlapping_checkbutton',
                     'contains_text_entry']
-    gui_file = "filters.glade"
+    gui_file = "filters"
 
     def __init__(self, filters, parent):
 

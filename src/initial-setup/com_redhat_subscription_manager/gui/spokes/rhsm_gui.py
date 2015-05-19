@@ -41,11 +41,11 @@ __all__ = ["RHSMSpoke"]
 
 
 class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
-    buildrObjects = ["RHSMSpokeWindow", "AnacondaSpokeWindow-action_area1"]
+    buildrObjects = ["RHSMSpokeWindow", "RHSMSpokeWindow-action_area1"]
 
     mainWidgetName = "RHSMSpokeWindow"
 
-    uiFile = "rhsm_gui.glade"
+    uiFile = "rhsm_gui.ui"
 
     category = SystemCategory
 
@@ -74,8 +74,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
 
         self._registergui = registergui.RegisterScreen(backend, facts,
                                                        callbacks=[self.finished])
-        log.debug("self.registergui %s", self._registergui)
-        self._action_area = self.builder.get_object("AnacondaSpokeWindow-action_area1")
+        self._action_area = self.builder.get_object("RHSMSpokeWindow-action_area1")
         self._register_box = self._registergui.dialog_vbox6
 
         # we have a ref to _register_box, but need to remove it from
@@ -88,6 +87,8 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         self._registergui.show()
 
     def finished(self):
+        log.debug("finished callback")
+        self._registergui.done()
         self._done = True
 
     # Update gui widgets to reflect state of self.data
@@ -100,11 +101,12 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         pass
 
     def apply(self):
-        log.debug("help me, I'm being apply()'ed")
-        self.data.addons.com_redhat_subscription_manager.text = "applied! yay!"
+        log.debug("apply")
+        self.data.addons.com_redhat_subscription_manager.text = \
+            "System is registered to Red Hat Subscription Management."
 
     def execute(self):
-        log.debug("execute() is not a good method to anthropomorphize")
+        log.debug("execute")
 
     @property
     def ready(self):
@@ -113,9 +115,8 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
 
     @property
     def completed(self):
-        log.info("completed")
+        log.info(" COMPLETED")
         return self._done
-        #return True
 
     @property
     def mandatory(self):
@@ -123,4 +124,8 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
 
     @property
     def status(self):
-        return "Likely not working."
+        log.debug("status prop")
+        if self._done:
+            return "System is registered to RHSM."
+        else:
+            return "System is not registered to RHSM."

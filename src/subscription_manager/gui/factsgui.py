@@ -37,7 +37,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
                     'last_update_label', 'owner_label', 'owner_title',
                     'environment_label', 'environment_title',
                     'system_id_label', 'system_id_title']
-    gui_file = "factsdialog.glade"
+    gui_file = "factsdialog"
 
     def __init__(self, facts):
 

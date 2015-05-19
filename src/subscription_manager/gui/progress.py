@@ -22,7 +22,7 @@ from subscription_manager.gui import widgets
 class Progress(widgets.SubmanBaseWidget):
 
     widget_names = ['progressWindow', 'progressLabel', 'progressBar', 'statusLabel']
-    gui_file = "progress.glade"
+    gui_file = "progress"
 
     def __init__(self, title, label):
         super(Progress, self).__init__()

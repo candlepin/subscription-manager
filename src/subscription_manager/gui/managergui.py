@@ -134,7 +134,7 @@ class MainWindow(widgets.SubmanBaseWidget):
     widget_names = ['main_window', 'notebook', 'system_name_label',
                     'register_menu_item', 'unregister_menu_item',
                     'redeem_menu_item', 'settings_menu_item', 'repos_menu_item']
-    gui_file = "mainwindow.glade"
+    gui_file = "mainwindow"
 
     def __init__(self, backend=None, facts=None,
                  ent_dir=None, prod_dir=None,

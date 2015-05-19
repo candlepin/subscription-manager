@@ -24,6 +24,7 @@
       <object class="GtkBox" id="vbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="valign">start</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
@@ -33,7 +34,6 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkBox" id="hbox2">
-                <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -101,16 +101,19 @@
               <object class="GtkViewport" id="viewport1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="valign">start</property>
                 <property name="resize_mode">queue</property>
                 <child>
                   <object class="GtkBox" id="hbox1">
-                    <property name="orientation">vertical</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="valign">start</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkTreeView" id="subs_treeview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="valign">start</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="treeview-selection1"/>
                         </child>

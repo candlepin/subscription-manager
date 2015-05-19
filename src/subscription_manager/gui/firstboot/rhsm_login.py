@@ -169,7 +169,7 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
 
 class ManuallySubscribeScreen(registergui.Screen):
     widget_names = registergui.Screen.widget_names + ['title']
-    gui_file = "manually_subscribe.glade"
+    gui_file = "manually_subscribe"
 
     def __init__(self, parent, backend):
         super(ManuallySubscribeScreen, self).__init__(parent, backend)

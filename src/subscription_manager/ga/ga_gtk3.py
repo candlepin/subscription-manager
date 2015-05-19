@@ -1,4 +1,7 @@
 
+# TODO: make this smarter and based on path to module
+GTK_BUILDER_FILES_DIR = "/usr/share/rhsm/subscription_manager/gui/data/ui/"
+
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gdk

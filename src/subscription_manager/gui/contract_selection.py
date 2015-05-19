@@ -31,7 +31,7 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
     widget_names = ["contract_selection_window", "subscribe_button",
                     "edit_quantity_label", "contract_selection_treeview",
                     "subscription_name_label", "total_contracts_label"]
-    gui_file = "contract_selection.glade"
+    gui_file = "contract_selection"
 
     def __init__(self, selected_callback, cancel_callback):
         super(ContractSelectionWindow, self).__init__()

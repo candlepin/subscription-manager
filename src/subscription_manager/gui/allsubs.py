@@ -43,7 +43,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                         'active_on_checkbutton', 'subscribe_button',
                         'edit_quantity_label', 'scrolledwindow',
                         'filter_options_button', 'applied_filters_label']
-    gui_file = "allsubs.glade"
+    gui_file = "allsubs"
 
     def __init__(self, backend, facts, parent_win):
 

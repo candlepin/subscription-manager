@@ -53,7 +53,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
                     "proxyEntry", "proxyUserEntry", "proxyPasswordEntry",
                     "cancelButton", "saveButton", "testConnectionButton",
                     "connectionStatusLabel"]
-    gui_file = "networkConfig.glade"
+    gui_file = "networkConfig"
 
     def __init__(self):
         # Get widgets we'll need to access

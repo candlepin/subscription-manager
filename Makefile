@@ -55,6 +55,10 @@ INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
 RCT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
 RD_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
 
+# ui builder data files
+GLADE_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/glade
+UI_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/ui
+
 # If we skip install ostree plugin, unset by default
 # override from spec file for rhel6
 INSTALL_OSTREE_PLUGIN ?= true
@@ -95,7 +99,8 @@ EXAMPLE_PLUGINS_PYFILES := `find "$(EXAMPLE_PLUGINS_SRC_DIR)/*.py"`
 # whitespace are required for testing.
 TESTFILES=`find  test/ \( ! -name certdata.py ! -name manifestdata.py \) -name "*.py"`
 STYLEFILES=$(PYFILES) $(BIN_FILES) $(TESTFILES)
-GLADEFILES=`find src/subscription_manager/gui/data -name "*.glade"`
+GLADEFILES=`find src/subscription_manager/gui/data/glade -name "*.glade"`
+UIFILES=`find src/subscription_manager/gui/data/ui -name "*.ui"`
 
 rhsmcertd: $(DAEMONS_SRC_DIR)/rhsmcertd.c bin
 	$(CC) $(CFLAGS) $(LDFLAGS) $(RHSMCERTD_FLAGS) $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd
@@ -230,7 +235,7 @@ install-initial-setup:
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/*.py $(INITIAL_SETUP_INST_DIR)/gui/
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/categories/*.py $(INITIAL_SETUP_INST_DIR)/gui/categories/
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/spokes/*.py $(INITIAL_SETUP_INST_DIR)/gui/spokes/
-	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/spokes/*.glade $(INITIAL_SETUP_INST_DIR)/gui/spokes/
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/spokes/*.ui $(INITIAL_SETUP_INST_DIR)/gui/spokes/
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/ks/*.py $(INITIAL_SETUP_INST_DIR)/ks/
 
 .PHONY: install
@@ -245,8 +250,17 @@ clean-versions:
 	rm -rf $(RCT_SRC_DIR)/version.py
 
 
+install-glade:
+	install -d $(GLADE_INST_DIR)
+	install -m 644 $(SRC_DIR)/gui/data/glade/*.glade $(SUBMAN_INST_DIR)/gui/data/glade/
 
-install-files: set-versions dbus-service-install compile-po desktop-files install-plugins install-initial-setup install-ga
+install-ui:
+	install -d $(UI_INST_DIR)
+	install -m 644 $(SRC_DIR)/gui/data/ui/*.ui $(SUBMAN_INST_DIR)/gui/data/ui/
+
+install-gui: install-glade install-ui
+
+install-files: set-versions dbus-service-install compile-po desktop-files install-plugins install-initial-setup install-ga install-gui
 	install -d $(PYTHON_INST_DIR)/gui
 	install -d $(PYTHON_INST_DIR)/gui/data/icons
 	install -d $(PYTHON_INST_DIR)/branding
@@ -311,7 +325,6 @@ install-files: set-versions dbus-service-install compile-po desktop-files instal
 
 	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager-gui
 
-	install -m 644 $(SRC_DIR)/gui/data/*.glade $(SUBMAN_INST_DIR)/gui/data/
 
 	if [ "$(INSTALL_OSTREE_PLUGIN)" = "true" ] ; then \
 		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(SUBMAN_INST_DIR)/plugin/ostree ; \

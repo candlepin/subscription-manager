@@ -39,7 +39,7 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
     widget_names = ['dialog', 'release_combobox', 'sla_combobox',
                     'autoheal_checkbox', 'autoheal_event', 'autoheal_label',
                     'close_button']
-    gui_file = "preferences.glade"
+    gui_file = "preferences"
 
     def __init__(self, backend, parent):
         super(PreferencesDialog, self).__init__()

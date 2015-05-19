@@ -5,18 +5,20 @@
   <object class="GtkBox" id="container">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="valign">start</property>
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkBox" id="choose_server_vbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="valign">start</property>
         <property name="orientation">vertical</property>
         <property name="spacing">16</property>
         <child>
           <object class="GtkBox" id="hbox2">
-            <property name="orientation">horizontal</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="valign">start</property>
             <child>
               <object class="GtkLabel" id="choose_server_label">
                 <property name="width_request">520</property>
@@ -80,6 +82,7 @@
           <object class="GtkTable" id="table1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="valign">start</property>
             <property name="n_rows">2</property>
             <property name="n_columns">3</property>
             <child>
@@ -164,9 +167,9 @@
             </child>
             <child>
               <object class="GtkBox" id="hbox3">
-                <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="valign">start</property>
                 <property name="spacing">5</property>
                 <child>
                   <object class="GtkCheckButton" id="activation_key_checkbox">
@@ -187,6 +190,7 @@
                   <object class="GtkAlignment" id="alignment3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="valign">start</property>
                     <property name="xalign">0</property>
                     <property name="left_padding">5</property>
                     <child>
@@ -224,19 +228,21 @@
           <object class="GtkFrame" id="proxy_frame">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="valign">start</property>
             <property name="label_xalign">0</property>
             <child>
               <object class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="valign">start</property>
                 <property name="top_padding">12</property>
                 <property name="bottom_padding">12</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkBox" id="hbox1">
-                    <property name="orientation">horizontal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="valign">start</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkImage" id="image1">

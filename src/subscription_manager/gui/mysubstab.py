@@ -42,7 +42,7 @@ EXPIRED_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 class MySubscriptionsTab(widgets.SubscriptionManagerTab):
     widget_names = widgets.SubscriptionManagerTab.widget_names + \
                     ['details_box', 'unsubscribe_button']
-    gui_file = "mysubs.glade"
+    gui_file = "mysubs"
 
     def __init__(self, backend, parent_win,
                  ent_dir, prod_dir):

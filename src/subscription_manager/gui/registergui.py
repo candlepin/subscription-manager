@@ -88,6 +88,7 @@ CONFIRM_SUBS_PAGE = 7
 PERFORM_SUBSCRIBE_PAGE = 8
 REFRESH_SUBSCRIPTIONS_PAGE = 9
 INFO_PAGE = 10
+DONE_PAGE = 11
 FINISH = 100
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
@@ -120,6 +121,10 @@ def reset_resolver():
     except Exception, e:
         log.warning("reset_resolver failed: %s", e)
         pass
+
+
+class RegistrationBox(widgets.SubmanBaseWidget):
+    gui_file = "registration_box"
 
 
 class RegisterScreen(widgets.SubmanBaseWidget):
@@ -249,7 +254,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
                     'register_progressbar', 'register_details_label',
                     'cancel_button', 'register_button', 'progress_label',
                     'dialog_vbox6']
-    gui_file = "registration.glade"
+    gui_file = "registration"
     __gtype_name__ = 'RegisterScreen'
 
     def __init__(self, backend, facts=None, parent=None, callbacks=None):
@@ -275,14 +280,14 @@ class RegisterScreen(widgets.SubmanBaseWidget):
 
         log.debug("self.register_dialog %s", self.register_dialog)
         self.window = self.register_dialog
-        #self.register_dialog.set_transient_for(self.parent)
+        self.register_dialog.set_transient_for(self.parent)
 
         screen_classes = [ChooseServerScreen, ActivationKeyScreen,
                           CredentialsScreen, OrganizationScreen,
                           EnvironmentScreen, PerformRegisterScreen,
                           SelectSLAScreen, ConfirmSubscriptionsScreen,
                           PerformSubscribeScreen, RefreshSubscriptionsScreen,
-                          InfoScreen]
+                          InfoScreen, DoneScreen]
         self._screens = []
         for screen_class in screen_classes:
             screen = screen_class(self, self.backend)
@@ -422,6 +427,9 @@ class RegisterScreen(widgets.SubmanBaseWidget):
     def emit_consumer_signal(self):
         for method in self.callbacks:
             method()
+
+    def done(self):
+        self._set_screen(DONE_PAGE)
 
     def close_window(self):
         set_state(REGISTERING)
@@ -578,7 +586,7 @@ class ConfirmSubscriptionsScreen(Screen):
     widget_names = Screen.widget_names + ['subs_treeview', 'back_button',
                                           'sla_label']
 
-    gui_file = "confirmsubs.glade"
+    gui_file = "confirmsubs"
 
     def __init__(self, parent, backend):
 
@@ -637,7 +645,7 @@ class SelectSLAScreen(Screen):
     widget_names = Screen.widget_names + ['product_list_label',
                                           'sla_radio_container',
                                           'owner_treeview']
-    gui_file = "selectsla.glade"
+    gui_file = "selectsla"
 
     def __init__(self, parent, backend):
         super(SelectSLAScreen, self).__init__(parent, backend)
@@ -772,7 +780,7 @@ class SelectSLAScreen(Screen):
 
 class EnvironmentScreen(Screen):
     widget_names = Screen.widget_names + ['environment_treeview']
-    gui_file = "environment.glade"
+    gui_file = "environment"
 
     def __init__(self, parent, backend):
         super(EnvironmentScreen, self).__init__(parent, backend)
@@ -829,7 +837,7 @@ class EnvironmentScreen(Screen):
 
 class OrganizationScreen(Screen):
     widget_names = Screen.widget_names + ['owner_treeview']
-    gui_file = "organization.glade"
+    gui_file = "organization"
 
     def __init__(self, parent, backend):
         super(OrganizationScreen, self).__init__(parent, backend)
@@ -899,7 +907,7 @@ class CredentialsScreen(Screen):
                                           'registration_tip_label',
                                           'registration_header_label']
 
-    gui_file = "credentials.glade"
+    gui_file = "credentials"
 
     def __init__(self, parent, backend):
         super(CredentialsScreen, self).__init__(parent, backend)
@@ -977,7 +985,7 @@ class ActivationKeyScreen(Screen):
                 'organization_entry',
                 'consumer_entry',
         ]
-    gui_file = "activation_key.glade"
+    gui_file = "activation_key"
 
     def __init__(self, parent, backend):
         super(ActivationKeyScreen, self).__init__(parent, backend)
@@ -1067,7 +1075,7 @@ class ChooseServerScreen(Screen):
     widget_names = Screen.widget_names + ['server_entry', 'proxy_frame',
                                           'default_button', 'choose_server_label',
                                           'activation_key_checkbox']
-    gui_file = "choose_server.glade"
+    gui_file = "choose_server"
 
     def __init__(self, parent, backend):
 
@@ -1431,6 +1439,14 @@ class AsyncBackend(object):
                          args=(callback,)).start()
 
 
+class DoneScreen(Screen):
+    gui_file = "done_box"
+
+    def __init__(self, parent, backend):
+        super(DoneScreen, self).__init__(parent, backend)
+        self.pre_message = "We are done."
+
+
 class InfoScreen(Screen):
     """
     An informational screen taken from rhn-client-tools and only displayed
@@ -1444,7 +1460,7 @@ class InfoScreen(Screen):
                 'skip_radio',
                 'why_register_dialog'
         ]
-    gui_file = "registration_info.glade"
+    gui_file = "registration_info"
 
     def __init__(self, parent, backend):
         super(InfoScreen, self).__init__(parent, backend)

@@ -12,6 +12,7 @@ if GTK_VERSION == "gtk2":
     from subscription_manager.ga.ga_gtk2 import GdkPixbuf
     from subscription_manager.ga.ga_gtk2 import Pango
     from subscription_manager.ga.ga_gtk2.Gtk import tree_row_reference
+    from subscription_manager.ga.ga_gtk2 import GTK_BUILDER_FILES_DIR
 
 if GTK_VERSION == "gtk3":
     # ga_gtk3 has an __all__ that includes all the symbols we
@@ -23,5 +24,6 @@ if GTK_VERSION == "gtk3":
     from subscription_manager.ga.ga_gtk3 import GdkPixbuf
     from subscription_manager.ga.ga_gtk3 import Pango
     from subscription_manager.ga.ga_gtk3 import tree_row_reference
+    from subscription_manager.ga.ga_gtk3 import GTK_BUILDER_FILES_DIR
 
 #__all__ = [Gtk]

@@ -58,7 +58,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 ['product_text', 'product_arch_text', 'validity_text',
                  'subscriptions_view', 'subscription_status_label',
                  'update_certificates_button', 'register_button']
-    gui_file = "installed.glade"
+    gui_file = "installed"
 
     def __init__(self, backend, facts, tab_icon,
                  parent, ent_dir, prod_dir):

@@ -43,7 +43,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
     widget_names = ['main_window', 'reset_button', 'close_button',
                     'name_text', 'baseurl_text', 'scrolledwindow',
                     'other_overrides_view']
-    gui_file = "repositories.glade"
+    gui_file = "repositories"
 
     ENTS_PROVIDE_NO_REPOS = _("Attached subscriptions do not provide any repositories.")
     NO_ATTACHED_SUBS = _("No repositories are available without an attached subscription.")
