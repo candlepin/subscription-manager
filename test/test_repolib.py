@@ -14,6 +14,7 @@
 # in this software or its documentation.
 #
 
+import re
 import unittest
 
 from iniparse import RawConfigParser
@@ -94,6 +95,25 @@ class RepoActionReportTests(fixture.SubManFixture):
         repo = repolib.Repo(repo_id=id)
         repo['name'] = name
         return repo
+
+    def test_empty(self):
+        report = repolib.RepoActionReport()
+        self.assertEquals(report.updates(), 0)
+        '%s' % report
+        str(report)
+
+    def test_format(self):
+        report = repolib.RepoActionReport()
+        repo = self._repo('a-repo-label', 'A Repo Name')
+        report.repo_updates.append(repo)
+        res = str(report)
+        # needs tests run in eng locale, coupled to report format since
+        # I managed to typo them
+        report_label_regexes = ['^Repo updates$', '^Total repo updates:',
+                                '^Updated$', '^Added \(new\)$', '^Deleted$']
+        for report_label_regex in report_label_regexes:
+            if not re.search(report_label_regex, res, re.MULTILINE):
+                self.fail("Expected to match the report label regex  %s but did not" % report_label_regex)
 
 
 class RepoUpdateActionTests(fixture.SubManFixture):
