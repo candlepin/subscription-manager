@@ -22,7 +22,7 @@ sys.path.append('/usr/share/rhsm')
 
 
 from subscription_manager import logutil
-from subscription_manager.productid import ProductManager
+from subscription_manager.productid import ProductManager, package_manager
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
 
@@ -51,7 +51,7 @@ def posttrans_hook(conduit):
     chroot(conduit.getConf().installroot)
     try:
         pm = ProductManager()
-        pm.update(conduit._base)
+        pm.update(package_manager(conduit._base))
         conduit.info(3, 'Installed products updated.')
     except Exception, e:
         conduit.error(3, str(e))

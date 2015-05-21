@@ -40,6 +40,8 @@ from rhsm import ourjson as json
 _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 
+PRODUCTID = 'productid'
+
 
 class DatabaseDirectory(Directory):
 
@@ -290,6 +292,162 @@ class ProductId(object):
 
     # def compare(self, other):   # version check?
 
+def package_manager(base=None):
+    if str(base.__class__) == "<class 'yum.YumBase'>":
+        import yum
+        return YumWrapper(base)
+    elif str(base.__class__) == "<class 'dnf.cli.cli.BaseCli'>":
+        import dnf
+        return DnfWrapper(base)
+    else:
+        import yum
+        return YumWrapper(yum.YumBase())
+
+class YumWrapper:
+    def __init__(self, base):
+          self.base = base
+
+    def get_enabled(self, meta_data_errors):
+        """find yum repos that are enabled"""
+        lst = []
+        enabled = self.base.repos.listEnabled()
+
+        # skip repo's that we don't have productid info for...
+        for repo in enabled:
+            try:
+                fn = repo.retrieveMD(PRODUCTID)
+                cert = _get_cert(fn)
+                if cert is None:
+                    continue
+                lst.append((cert, repo.id))
+            except yum.Errors.RepoMDError, e:
+                # We have to look in all repos for productids, not just
+                # the ones we create, or anaconda doesn't install it.
+                meta_data_errors.append(repo.id)
+            except Exception, e:
+                log.warn("Error loading productid metadata for %s." % repo)
+                log.exception(e)
+                meta_data_errors.append(repo.id)
+
+        if meta_data_errors:
+            log.debug("Unable to load productid metadata for repos: %s",
+                      meta_data_errors)
+        return lst
+
+    # find the list of repo's that provide packages that
+    # are actually installed.
+    def get_active(self):
+        """find yum repos that have packages installed"""
+
+        active = set([])
+
+        # If a package is in a enabled and 'protected' repo
+
+        # This searches all the package sacks in this yum instances
+        # package sack, aka all the enabled repos
+        packages = self.base.pkgSack.returnPackages()
+
+        for p in packages:
+            repo = p.repoid
+            # if a pkg is in multiple repo's, this will consider
+            # all the repo's with the pkg "active".
+            # NOTE: if a package is from a disabled repo, we won't
+            # find it with this, because 'packages' won't include it.
+            db_pkg = self.base.rpmdb.searchNevra(name=p.name, arch=p.arch)
+            # that pkg is not actually installed
+            if not db_pkg:
+                # Effect of this is that a package that is only
+                # available from disabled repos, it is not considered
+                # an active package.
+                # If none of the packages from a repo are active, then
+                # the repo will not be considered active.
+                #
+                # Note however that packages that are installed, but
+                # from an disabled repo, but that are also available
+                # from another enabled repo will mark both repos as
+                # active. This is why add on repos that include base
+                # os packages almost never get marked for product cert
+                # deletion. Anything that could have possible come from
+                # that repo or be updated with makes the repo 'active'.
+                continue
+
+            # The pkg is installed, so the repo it was installed
+            # from is considered 'active'
+            # yum on 5.7 list everything as "installed" instead
+            # of the repo it came from
+            if repo in (None, "installed"):
+                continue
+            active.add(repo)
+
+        return active
+
+    def check_version_tracks_repos(self):
+        major, minor, micro = yum.__version_info__
+        yum_version = RpmVersion(version="%s.%s.%s" % (major, minor, micro))
+        needed_version = RpmVersion(version="3.2.28")
+        if yum_version >= needed_version:
+            return True
+        return False
+
+class DnfWrapper:
+    def __init__(self, base):
+          self.base = base
+
+    def _download_productid(self, repo):
+        with dnf.util.tmpdir() as tmpdir:
+            handle = repo._handle_new_remote(tmpdir)
+            handle.setopt(librepo.LRO_PROGRESSCB, None)
+            handle.setopt(librepo.LRO_YUMDLIST, [PRODUCTID])
+            res = handle.perform()
+        return res.yum_repo.get(PRODUCTID, None)
+
+    def get_enabled(self, meta_data_errors):
+        """find repos that are enabled"""
+        lst = []
+        enabled = self.base.repos.iter_enabled()
+
+        # skip repo's that we don't have productid info for...
+        for repo in enabled:
+            try:
+                fn = self._download_productid(repo)
+                if fn:
+                    cert = _get_cert(fn)
+                    if cert is None:
+                        continue
+                    lst.append((cert, repo.id))
+                else:
+                    # We have to look in all repos for productids, not just
+                    # the ones we create, or anaconda doesn't install it.
+                    meta_data_errors.append(repo.id)
+            except Exception, e:
+                log.warn("Error loading productid metadata for %s." % repo)
+                log.exception(e)
+                meta_data_errors.append(repo.id)
+
+        if meta_data_errors:
+            log.debug("Unable to load productid metadata for repos: %s",
+                      meta_data_errors)
+        return lst
+
+    # find the list of repo's that provide packages that
+    # are actually installed.
+    def get_active(self):
+        """find yum repos that have packages installed"""
+        # installed packages
+        installed_na = self.base.sack.query().installed().na_dict()
+        # available version of installed
+        avail_pkgs = self.base.sack.query().available().filter(name=
+                                          [k[0] for k in installed_na.keys()])
+
+        active = set()
+        for p in avail_pkgs:
+            if (p.name, p.arch) in installed_na:
+                active.add(p.repoid)
+
+        return active
+
+    def check_version_tracks_repos(self):
+        return True
 
 class ProductManager:
     """Manager product certs, detecting when they need to be installed, or deleted.
@@ -312,9 +470,6 @@ class ProductManager:
         product_dir: a ProductDirectory class (optional)
         product_db: A ProductDatabase class (optional)
     """
-
-    REPO = 'from_repo'
-    PRODUCTID = 'productid'
 
     def __init__(self, product_dir=None, product_db=None):
 
@@ -355,16 +510,11 @@ class ProductManager:
         return temp_disabled
 
     def update(self, yb):
-        # FIXME: finding enabled and finding active should
-        #        be classes themselves that would be easier to mock
-        #        ProductManager shouldn't know anything about YumBase
-        #        ie, need a ProductCertProvider so we could mock it
-        #        without trying to mock half of yum
         if yb is None:
-            yb = yum.YumBase()
+            yb = package_manager()
 
-        enabled = self.get_enabled(yb)
-        active = self.get_active(yb)
+        enabled = yb.get_enabled(self.meta_data_errors)
+        active = yb.get_active()
 
         # populate the temp_disabled list so update_remove has it
         # this could likely happen later...
@@ -372,7 +522,7 @@ class ProductManager:
 
         # only execute this on versions of yum that track
         # which repo a package came from, aka, 3.2.28 and newer
-        if self._check_yum_version_tracks_repos():
+        if yb.check_version_tracks_repos():
             # check that we have any repo's enabled
             # and that we have some enabled repo's. Not just
             # that we have packages from repo's that are
@@ -383,14 +533,6 @@ class ProductManager:
         # TODO: it would probably be useful to keep track of
         # the state a bit, so we can report what we did
         self.update_installed(enabled, active)
-
-    def _check_yum_version_tracks_repos(self):
-        major, minor, micro = yum.__version_info__
-        yum_version = RpmVersion(version="%s.%s.%s" % (major, minor, micro))
-        needed_version = RpmVersion(version="3.2.28")
-        if yum_version >= needed_version:
-            return True
-        return False
 
     def _is_workstation(self, product_cert):
         if product_cert.name == "Red Hat Enterprise Linux Workstation" and \
@@ -737,90 +879,16 @@ class ProductManager:
             self.db.delete(product.id)
             self.db.write()
 
-    # find the list of repo's that provide packages that
-    # are actually installed.
-    def get_active(self, yb):
-        """find yum repos that have packages installed"""
-
-        active = set([])
-
-        # If a package is in a enabled and 'protected' repo
-
-        # This searches all the package sacks in this yum instances
-        # package sack, aka all the enabled repos
-        packages = yb.pkgSack.returnPackages()
-
-        for p in packages:
-            repo = p.repoid
-            # if a pkg is in multiple repo's, this will consider
-            # all the repo's with the pkg "active".
-            # NOTE: if a package is from a disabled repo, we won't
-            # find it with this, because 'packages' won't include it.
-            db_pkg = yb.rpmdb.searchNevra(name=p.name, arch=p.arch)
-            # that pkg is not actually installed
-            if not db_pkg:
-                # Effect of this is that a package that is only
-                # available from disabled repos, it is not considered
-                # an active package.
-                # If none of the packages from a repo are active, then
-                # the repo will not be considered active.
-                #
-                # Note however that packages that are installed, but
-                # from an disabled repo, but that are also available
-                # from another enabled repo will mark both repos as
-                # active. This is why add on repos that include base
-                # os packages almost never get marked for product cert
-                # deletion. Anything that could have possible come from
-                # that repo or be updated with makes the repo 'active'.
-                continue
-
-            # The pkg is installed, so the repo it was installed
-            # from is considered 'active'
-            # yum on 5.7 list everything as "installed" instead
-            # of the repo it came from
-            if repo in (None, "installed"):
-                continue
-            active.add(repo)
-
-        return active
-
-    def get_enabled(self, yb):
-        """find yum repos that are enabled"""
-        lst = []
-        enabled = yb.repos.listEnabled()
-
-        # skip repo's that we don't have productid info for...
-        for repo in enabled:
-            try:
-                fn = repo.retrieveMD(self.PRODUCTID)
-                cert = self._get_cert(fn)
-                if cert is None:
-                    continue
-                lst.append((cert, repo.id))
-            except yum.Errors.RepoMDError, e:
-                # We have to look in all repos for productids, not just
-                # the ones we create, or anaconda doesn't install it.
-                self.meta_data_errors.append(repo.id)
-            except Exception, e:
-                log.warn("Error loading productid metadata for %s." % repo)
-                log.exception(e)
-                self.meta_data_errors.append(repo.id)
-
-        if self.meta_data_errors:
-            log.debug("Unable to load productid metadata for repos: %s",
-                      self.meta_data_errors)
-        return lst
-
-    def _get_cert(self, fn):
-        if fn.endswith('.gz'):
-            f = GzipFile(fn)
-        else:
-            f = open(fn)
-        try:
-            pem = f.read()
-            return create_from_pem(pem)
-        finally:
-            f.close()
+def _get_cert(fn):
+    if fn.endswith('.gz'):
+        f = GzipFile(fn)
+    else:
+        f = open(fn)
+    try:
+        pem = f.read()
+        return create_from_pem(pem)
+    finally:
+        f.close()
 
 if __name__ == '__main__':
     pm = ProductManager()
