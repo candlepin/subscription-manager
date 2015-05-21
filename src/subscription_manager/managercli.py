@@ -2104,7 +2104,7 @@ class ConfigCommand(CliCommand):
                         cfg.set(section, name, '')
                         print _("You have removed the value for section %s and name %s.") % (section, name)
                     else:
-                        cfg.remove_option(section, name)
+                        cfg.set(section, name, cfg.get_default(section, name))
                         print _("You have removed the value for section %s and name %s.") % (section, name)
                         print _("The default value for %s will now be used.") % (name)
                 except Exception:
