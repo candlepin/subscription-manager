@@ -437,7 +437,7 @@ class RepoActionReport(ActionReport):
         s.append(self.format_repos(self.repo_updates))
         s.append(_('Added (new)'))
         s.append(self.format_repos(self.repo_added))
-        s.append(_('Deletedfd'))
+        s.append(_('Deleted'))
         # deleted are former repo sections, but they are the same type
         s.append(self.format_sections(self.repo_deleted))
         return '\n'.join(s)
