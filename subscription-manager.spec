@@ -232,15 +232,28 @@ Requires: subscription-manager-migration-data
 This package contains scripts that aid in moving to certificate based
 subscriptions
 
+%package -n dnf-plugin-subscription-manager
+Summary: Subscription Manager plugins for DNF
+Group: System Environment/Base
+Requires: %{name} = %{version}-%{release}
+Requires: dnf > 1.0.0
+
+%description -n dnf-plugin-subscription-manager
+Subscription Manager plugins for DNF, contains subscription-manager and product-id plugins.
+
 %prep
 %setup -q
 
 %build
-make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" %{?gtk_version}
+make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
+    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" %{?gtk_version}
 
 %install
 rm -rf %{buildroot}
-make -f Makefile install VERSION=%{version}-%{release} PREFIX=%{buildroot} MANPATH=%{_mandir} OS_VERSION=%{?fedora}%{?rhel} OS_DIST=%{dist} %{?gtk_version} %{?install_ostree} %{?post_boot_tool}
+make -f Makefile install VERSION=%{version}-%{release} \
+    PREFIX=%{buildroot} MANPATH=%{_mandir} PYTHON_SITELIB=%{python_sitelib} \
+    OS_VERSION=%{?fedora}%{?rhel} OS_DIST=%{dist} \
+    %{?install_ostree} %{?post_boot_tool} %{?gtk_version}
 
 desktop-file-validate \
         %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
@@ -502,6 +515,10 @@ rm -rf %{buildroot}
 %if 0%{?fedora} > 14
 %doc README.Fedora
 %endif
+
+%files -n dnf-plugin-subscription-manager
+%defattr(-,root,root,-)
+%{python_sitelib}/dnf-plugins/*
 
 %post
 %if %use_systemd

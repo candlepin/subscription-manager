@@ -2,6 +2,7 @@ SHELL := /bin/bash
 PREFIX ?=
 SYSCONF ?= etc
 PYTHON ?= python
+PYTHON_SITELIB ?= usr/lib/python2.7/site-packages
 
 INSTALL_DIR = usr/share
 INSTALL_MODULE = rhsm
@@ -68,7 +69,8 @@ endif
 
 
 YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
-ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
+DNF_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
+ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) $(DNF_PLUGINS_SRC_DIR)
 
 # sets a version that is more or less latest tag plus commit sha
 VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
@@ -319,6 +321,7 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 	install -d $(PYTHON_INST_DIR)/plugin/ostree
 	install -d $(PREFIX)/$(INSTALL_DIR)/locale/
 	install -d $(PREFIX)/usr/lib/yum-plugins/
+	install -d $(PREFIX)/$(PYTHON_SITELIB)/dnf-plugins/
 	install -d $(PREFIX)/usr/sbin
 	install -d $(PREFIX)/etc/rhsm
 	install -d $(PREFIX)/etc/rhsm/facts
@@ -364,7 +367,7 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 	install -m 644 -p $(SRC_DIR)/model/*.py $(PYTHON_INST_DIR)/model
 	install -m 644 -p $(SRC_DIR)/plugin/*.py $(PYTHON_INST_DIR)/plugin
 	install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/
-
+	install -m 644 -p src/dnf-plugins/*.py $(PREFIX)/$(PYTHON_SITELIB)/dnf-plugins/
 	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager-gui
 
 
