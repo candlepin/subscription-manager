@@ -178,6 +178,15 @@ Requires: subscription-manager-migration-data
 This package contains scripts that aid in moving to certificate based
 subscriptions
 
+%package -n dnf-plugin-subscription-manager
+Summary: Subscription Manager plugins for DNF
+Group: System Environment/Base
+Requires: %{name} = %{version}-%{release}
+Requires: dnf > 1.0.0
+
+%description -n dnf-plugin-subscription-manager
+Subscription Manager plugins for DNF, contains subscription-manager and product-id plugins.
+
 %prep
 %setup -q
 
@@ -186,7 +195,7 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}"
 
 %install
 rm -rf %{buildroot}
-make -f Makefile install VERSION=%{version}-%{release} PREFIX=%{buildroot} MANPATH=%{_mandir} OS_VERSION=%{?fedora}%{?rhel} %{?install_ostree}
+make -f Makefile install VERSION=%{version}-%{release} PREFIX=%{buildroot} MANPATH=%{_mandir} PYTHON_SITELIB=%{python_sitelib} OS_VERSION=%{?fedora}%{?rhel} %{?install_ostree}
 
 desktop-file-validate \
         %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
@@ -445,6 +454,10 @@ rm -rf %{buildroot}
 %if 0%{?fedora} > 14
 %doc README.Fedora
 %endif
+
+%files -n dnf-plugin-subscription-manager
+%defattr(-,root,root,-)
+%{python_sitelib}/dnf-plugins/*
 
 %post
 %if %use_systemd
