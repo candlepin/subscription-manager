@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-21 11:15-0400\n"
-"PO-Revision-Date: 2015-05-21 02:48-0400\n"
+"PO-Revision-Date: 2015-05-21 08:07-0400\n"
 "Last-Translator: ypoyarko <ypoyarko@redhat.com>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
@@ -178,7 +178,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:28
 msgid "RHN Classic and Red Hat Subscription Management"
-msgstr "RHN Classic и Управление подписками Red Hat"
+msgstr "RHN Classic и управление подписками Red Hat"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:30
@@ -221,8 +221,7 @@ msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
 msgstr ""
-"Удаленная ошибка сервера. Проверьте настройки подключения или проверьте /var/"
-"log/rhsm/rhsm.log"
+"Ошибка сервера. Проверьте настройки подключения и /var/log/rhsm/rhsm.log"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/exceptions.py:33
@@ -931,14 +930,15 @@ msgstr "Ошибка соединения с сервером: %s:%s%s"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:1004
 msgid "CA certificate for subscription service has not been installed."
-msgstr "Сертификат CA для службы подписок не установлен."
+msgstr ""
+"Не установлен сертификат доверенного центра сертификации для службы подписок."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:1009
 msgid ""
 "Please provide a hostname with optional port and/or prefix: hostname[:port][/"
 "prefix]"
-msgstr "Укажите имя узла в формате hostname[:port][/prefix]"
+msgstr "Укажите имя узла в формате «узел[:порт][/префикс]»"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:1066
@@ -954,7 +954,7 @@ msgstr "Ошибка при получении подписки: %s"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/reposgui.py:47
 msgid "Attached subscriptions do not provide any repositories."
-msgstr "Назначенные подписки не включают репозитории."
+msgstr "Назначенные подписки не предоставляют репозитории."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/reposgui.py:48
@@ -1294,7 +1294,7 @@ msgstr "Неверный выбор. Выберите один из предло
 #: ../src/subscription_manager/migrate/migrate.py:147
 #, python-format
 msgid "Could not read legacy systemid at %s"
-msgstr ""
+msgstr "Не удалось прочитать прежний systemid на %s"
 
 #: ../src/subscription_manager/migrate/migrate.py:178
 msgid "Legacy username: "
@@ -1965,7 +1965,9 @@ msgstr "Ошибка разбора адреса сервера:"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:408
 msgid "Error: CA certificate for subscription service has not been installed."
-msgstr "Ошибка. Сертификат CA службы подписок не установлен."
+msgstr ""
+"Ошибка. Сертификат доверенного центра сертификации для службы подписок не "
+"установлен."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:423
