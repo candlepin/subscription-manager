@@ -286,10 +286,15 @@ class RepoUpdateActionCommand(object):
         # assumes items in content_list are hashable
         return set(content_list)
 
-    def get_all_content(self, baseurl, ca_cert):
-        matching_content = model.find_content(self.ent_source,
-                                              content_type="yum")
+    # Expose as public API for RepoActionInvoker.is_managed, since that
+    # is used by openshift tooling.
+    # See https://bugzilla.redhat.com/show_bug.cgi?id=1223038
+    def matching_content(self):
+        return model.find_content(self.ent_source,
+                                  content_type="yum")
 
+    def get_all_content(self, baseurl, ca_cert):
+        matching_content = self.matching_content()
         content_list = []
 
         # avoid checking for release/etc if there is no matching_content
