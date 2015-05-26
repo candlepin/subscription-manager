@@ -24,12 +24,59 @@ from StringIO import StringIO
 import fixture
 from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
-        StubProductDirectory, StubConsumerIdentity
-from subscription_manager.repolib import Repo, RepoUpdateActionCommand, \
-        TidyWriter, RepoFile, YumReleaseverSource
+        StubProductDirectory, StubConsumerIdentity, StubEntitlementDirectory
+from subscription_manager.repolib import Repo, RepoActionInvoker, \
+        RepoUpdateActionCommand, TidyWriter, RepoFile, YumReleaseverSource
 from subscription_manager import injection as inj
 
 from subscription_manager import repolib
+
+
+class TestRepoActionInvoker(fixture.SubManFixture):
+    def _stub_content(self):
+        stub_prod = StubProduct('stub_product',
+                                provided_tags="stub-product")
+
+        stub_content = StubContent("a_test_repo",
+                                   required_tags="stub-product")
+
+        stub_ent_cert = StubEntitlementCertificate(stub_prod,
+                                                   content=[stub_content])
+        stub_prod_cert = StubProductCertificate(stub_prod)
+
+        stub_ent_dir = StubEntitlementDirectory([stub_ent_cert])
+        stub_prod_dir = StubProductDirectory([stub_prod_cert])
+
+        inj.provide(inj.ENT_DIR, stub_ent_dir)
+        inj.provide(inj.PROD_DIR, stub_prod_dir)
+
+    def test_is_managed(self):
+        self._stub_content()
+        repo_action_invoker = RepoActionInvoker()
+        repo_label = 'a_test_repo'
+
+        im_result = repo_action_invoker.is_managed(repo_label)
+
+        self.assertTrue(im_result)
+
+    def test_get_repo_file(self):
+        repo_action_invoker = RepoActionInvoker()
+
+        repo_file = repo_action_invoker.get_repo_file()
+        self.assertFalse(repo_file is None)
+
+    def test_get_repos_empty_dirs(self):
+        repo_action_invoker = RepoActionInvoker()
+        repos = repo_action_invoker.get_repos()
+        if repos:
+            self.fail("get_repos() should have returned an empty set but did not.")
+
+    def test_get_repos(self):
+        self._stub_content()
+        repo_action_invoker = RepoActionInvoker()
+        repos = repo_action_invoker.get_repos()
+        if len(repos) == 0:
+            self.fail("get_repos() should have a set of Repo's, but the set is empty.")
 
 
 class RepoTests(unittest.TestCase):
