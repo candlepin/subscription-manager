@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.14.7
+Version: 1.14.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -485,6 +485,12 @@ fi
 %endif
 
 %changelog
+* Tue May 26 2015 William Poteat <wpoteat@redhat.com> 1.14.8-1
+- 1223860: Revert to default value on remove command (wpoteat@redhat.com)
+- translation sync from zanata (alikins@redhat.com)
+- 1223852: fix 'Deletedfd' string in repo report (alikins@redhat.com)
+- Remove gnome-python2-canvas,gnome-python2 deps (alikins@redhat.com)
+
 * Tue May 19 2015 William Poteat <wpoteat@redhat.com> 1.14.7-1
 - 1220287: Proxy Save accel fix with latest strings. (alikins@redhat.com)
 - 1212515: Print error message for missing systemid file. (awood@redhat.com)
