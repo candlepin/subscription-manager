@@ -563,7 +563,9 @@ class Hardware:
 
         self.lscpuinfo = {}
         # let us specify a test dir of /sys info for testing
-        ls_cpu_path = 'LANG=en_US.UTF-8 /usr/bin/lscpu'
+        # If the user env sets LC_ALL, it overrides a LANG here, so
+        # use LC_ALL here. See rhbz#1225435
+        ls_cpu_path = 'LC_ALL=en_US.UTF-8 /usr/bin/lscpu'
         ls_cpu_cmd = ls_cpu_path
 
         if self.testing:
