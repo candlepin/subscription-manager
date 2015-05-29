@@ -527,6 +527,18 @@ class TestFriendlyJoin(fixture.SubManFixture):
         self.assertEquals("Three, Two, and One", friendly_join(set(["One", "Two", "Three"])))
         self.assertEquals("", friendly_join([]))
         self.assertEquals("", friendly_join(None))
+        self.assertEquals("", friendly_join(set()))
+        self.assertEquals("One", friendly_join([None, "One"]))
+        self.assertEquals("One", friendly_join(["One", None]))
+        self.assertEquals("", friendly_join([None, None, None]))
+
+        # We allow any iterable, so test a set created from a list with dupes
+        words = set(["Two", "One", "Two", "Two"])
+        res = friendly_join(words)
+        self.assertTrue(res in ["One and Two", "Two and One"])
+
+        self.assertEquals("1, 2, 3, 4, 5, 6, and fish",
+                          friendly_join([1, 2, u"3", 4, "5", 6, "fish"]))
 
 
 class TestTrueValue(fixture.SubManFixture):

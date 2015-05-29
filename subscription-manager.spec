@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.14.2
+Version: 1.14.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -40,7 +40,7 @@ Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  pygobject2
 Requires:  virt-what
-Requires:  python-rhsm >= 1.13.10
+Requires:  python-rhsm >= 1.14.2
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 Requires:  usermode
@@ -125,7 +125,7 @@ from the server. Populates /etc/docker/certs.d appropriately.
 Summary: A GUI interface to manage Red Hat product subscriptions
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
-Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
+Requires: pygtk2 pygtk2-libglade
 Requires: usermode-gtk
 Requires: dbus-x11
 Requires: gnome-icon-theme
@@ -485,6 +485,60 @@ fi
 %endif
 
 %changelog
+* Tue May 26 2015 William Poteat <wpoteat@redhat.com> 1.14.8-1
+- 1223860: Revert to default value on remove command (wpoteat@redhat.com)
+- translation sync from zanata (alikins@redhat.com)
+- 1223852: fix 'Deletedfd' string in repo report (alikins@redhat.com)
+- Remove gnome-python2-canvas,gnome-python2 deps (alikins@redhat.com)
+
+* Tue May 19 2015 William Poteat <wpoteat@redhat.com> 1.14.7-1
+- 1220287: Proxy Save accel fix with latest strings. (alikins@redhat.com)
+- 1212515: Print error message for missing systemid file. (awood@redhat.com)
+- Added missing option to the migration manual page (crog@redhat.com)
+- Specified error codes on system_exit in rhn-migrate-classic-to-rhsm
+  (crog@redhat.com)
+- Updated the manual pages for the attach command (crog@redhat.com)
+- Remove locale based DatePicker tests. (alikins@redhat.com)
+- Make rhsm-debug test cases clean up better. (alikins@redhat.com)
+
+* Fri May 01 2015 William Poteat <wpoteat@redhat.com> 1.14.6-1
+- 1149095: Fix error when yum updates subman modules (alikins@redhat.com)
+- 1159163: Fix prod id del because of --disablerepo (alikins@redhat.com)
+- 1180273: Migrate from RHN Classic without credentials (awood@redhat.com)
+- 1213418: Message agreement between GUI and CLI in disconnected system
+  (wpoteat@redhat.com)
+- 1199597: Fix UnicodeError from repolib's report (alikins@redhat.com)
+- 1209519: Removed excerpt from man page listing --auto as a requirement
+  (crog@redhat.com)
+
+* Tue Apr 14 2015 William Poteat <wpoteat@redhat.com> 1.14.5-1
+- 1211557: Fix crash when rsyslog not running. (dgoodwin@redhat.com)
+
+* Tue Apr 14 2015 William Poteat <wpoteat@redhat.com> 1.14.4-1
+- 1141257: Fix wrapping of subscription name in contract dialog
+  (mstead@redhat.com)
+- 1147404: Fixed firstboot title length issues (mstead@redhat.com)
+- 1207306: Revert DBus compliance status code. (dgoodwin@redhat.com)
+- 1195501: Properly refresh repo file on override deletion (mstead@redhat.com)
+- Add Fedora 22 to Fedora releaser branches. (awood@redhat.com)
+
+* Thu Apr 09 2015 Alex Wood <awood@redhat.com> 1.14.3-1
+- 1170314: Clarify that manage_repos 0 will delete redhat.repo.
+  (dgoodwin@redhat.com)
+- 1207958: Fix traceback when contract # is None (alikins@redhat.com)
+- 1117525,1189950,1188961 latest strings from zanata (alikins@redhat.com)
+- 1200972: Fixed grammar issue with error message in the attach command
+  (crog@redhat.com)
+- Bumping required python-rhsm version (mstead@redhat.com)
+- 1204012: Added missing documentation for the --release option
+  (crog@redhat.com)
+- 1209519: Removed erroneous information in help message for subman
+  (crog@redhat.com)
+- 1198369: refresh_compliance_status now has a default value for state
+  (crog@redhat.com)
+- 1180273: Allow migration without requiring RHN credentials (awood@redhat.com)
+- 1201727: Handle reasons with expired ent id (alikins@redhat.com)
+
 * Mon Mar 09 2015 Alex Wood <awood@redhat.com> 1.14.2-1
 - Move to fileConfig based logging. (alikins@redhat.com)
 - Ignore glib warnings about class properties. (alikins@redhat.com)

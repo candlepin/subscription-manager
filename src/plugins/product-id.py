@@ -24,6 +24,7 @@ sys.path.append('/usr/share/rhsm')
 from subscription_manager import logutil
 from subscription_manager.productid import ProductManager
 from subscription_manager.utils import chroot
+from subscription_manager.injectioninit import init_dep_injection
 
 requires_api_version = '2.6'
 plugin_type = (TYPE_CORE,)
@@ -39,7 +40,6 @@ def posttrans_hook(conduit):
         conduit.registerPackageName("subscription-manager")
 
     try:
-        from subscription_manager.injectioninit import init_dep_injection
         init_dep_injection()
     except ImportError, e:
         conduit.error(3, str(e))

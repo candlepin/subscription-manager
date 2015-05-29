@@ -1,26 +1,18 @@
-import os
 import gettext
-import glob
-import locale
 import unittest
-import sys
 
-from stubs import MockStderr
+import fixture
+
 from subscription_manager import managercli
 from subscription_manager.printing_utils import to_unicode_or_bust
 
 # Localization domain:
 APP = "rhsm"
-# Directory where translations are deployed:
-DIR = '/usr/share/locale/'
+DIR = "/usr/share/locale"
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
-_ = gettext.gettext
 
-po_files = glob.glob("po/*.po")
-langs = []
-for po_file in po_files:
-    langs.append(po_file[:-3])
+_ = gettext.gettext
 
 
 class TestLocale(unittest.TestCase):
@@ -57,29 +49,24 @@ class TestLocale(unittest.TestCase):
         "zh_TW",  # Chinese Traditional
         "ko_KR"]  # korean
 
-    def _setupLang(self, lang):
-        os.environ['LANG'] = lang
-        locale.setlocale(locale.LC_ALL, '')
-        gettext.bindtextdomain(APP, DIR)
+    def test_pos(self):
+        for lang in self.test_locales:
+            l = "%s.utf8" % lang
+            with fixture.locale_context(l):
+                '%s' % _("Unable to find available subscriptions for all your installed products.")
 
 
 class TestUnicodeGettext(TestLocale):
-    def setUp(self):
-        self._setupLang("ja_JP.UTF-8")
-        sys.stderr = MockStderr()
-
-    def tearDown(self):
-        self._setupLang("en_US")
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
-
     def test_ja_not_serial(self):
-        msg = _("'%s' is not a valid serial number") % "123123"
-        unicode(to_unicode_or_bust(msg)).encode("UTF-8") + '\n'
+        with fixture.locale_context('ja_JP.UTF-8'):
+            msg = _("'%s' is not a valid serial number") % "123123"
+            unicode(to_unicode_or_bust(msg)).encode("UTF-8") + '\n'
 
     def test_system_exit(self):
-        try:
-            managercli.system_exit(1, _("'%s' is not a valid serial number") % "123123")
-        except SystemExit:
-            # tis okay, we are looking for unicode errors on the string encode
-            pass
+        with fixture.locale_context('ja_JP.UTF-8'):
+            try:
+                with fixture.Capture(silent=True):
+                    managercli.system_exit(1, _("'%s' is not a valid serial number") % "123123")
+            except SystemExit:
+                # tis okay, we are looking for unicode errors on the string encode
+                pass

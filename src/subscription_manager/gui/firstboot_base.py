@@ -77,6 +77,17 @@ class RhsmFirstbootModule(ParentClass):
         # el5 value to get access to parent object for page jumping
         self.needsparent = 1
 
+    def renderModule(self, interface):
+        ParentClass.renderModule(self, interface)
+        label_container = self.vbox.get_children()[0]
+        title_label = label_container.get_children()[0]
+
+        # Set the title to wrap and connect to size-allocate to
+        # properly resize the label so that it takes up the most
+        # space it can.
+        title_label.set_line_wrap(True)
+        title_label.connect('size-allocate', lambda label, size: label.set_size_request(size.width - 1, -1))
+
     def needsNetwork(self):
         """
         This lets firstboot know that networking is required, in order to

@@ -230,7 +230,7 @@ class StatusCache(CacheManager):
         Prefer in memory cache to avoid io.  If it doesn't exist, save
         the disk cache to the in-memory cache to avoid reading again.
         """
-        if not self.server_status:
+        if self.server_status is None:
             self.server_status = super(StatusCache, self)._read_cache()
         return self.server_status
 
@@ -239,7 +239,7 @@ class StatusCache(CacheManager):
         If a cache exists in memory, we have written it to the disk
         No need for unnecessary disk io here.
         """
-        if self.server_status:
+        if not self.server_status is None:
             return True
         return super(StatusCache, self)._cache_exists()
 
@@ -257,7 +257,7 @@ class StatusCache(CacheManager):
         no default, the None likely indicates an error needs to be raised.
         """
 
-        if not self.server_status:
+        if self.server_status is None:
             self.server_status = self.load_status(uep, uuid)
         return self.server_status
 

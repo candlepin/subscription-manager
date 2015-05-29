@@ -21,7 +21,7 @@
 rhn-migrate-classic-to-rhsm \- Migrates a system profile from Red Hat Network Classic Hosted to Customer Portal Subscription Management (hosted) or Subscription Asset Manager (on-premise).
 
 .SH SYNOPSIS
-rhn-migrate-classic-to-rhsm [--force] | [--no-auto] | [--servicelevel=SERVICE_LEVEL] | [--destination-url=URL] | [--legacy-user=LEGACY_USER] | [--legacy-password=LEGACY_PASSWORD] | [-destination-user=DESTINATION_USER] | [--destination-password=DESTINATION_PASSWORD] | [--org=ORG] | [--environment=ENVIRONMENT] | [--no-proxy] [--activation-key=ACTIVATION_KEY] | [--help]
+rhn-migrate-classic-to-rhsm [--force] | [--no-auto] [--keep] | [--servicelevel=SERVICE_LEVEL] | [--destination-url=URL] | [--legacy-user=LEGACY_USER] | [--legacy-password=LEGACY_PASSWORD] | [--destination-user=DESTINATION_USER] | [--destination-password=DESTINATION_PASSWORD] | [--org=ORG] | [--environment=ENVIRONMENT] | [--no-proxy] [--activation-key=ACTIVATION_KEY] | [--help]
 
 .SH DESCRIPTION
 \fBrhn-migrate-classic-to-rhsm\fP migrates a system profile which is registered with Red Hat Network Classic to Customer Portal Subscription Management. This is intended for migrating from the host service, not for migrating from a Satellite system.
@@ -74,6 +74,10 @@ Sets which environment within the organization the system belongs to. Every acco
 .TP
 .B --activation-key=ACTIVATION_KEY
 Sets an activation key to use during registration to the subscription management service.  Use of an activation key requires the user to supply the \fIorganization\fP that the system will be registered to.  This option may be supplied multiple times.
+
+.TP
+.B --keep
+Leaves the system profile on the legacy system.  Normally the system profile on the legacy system is deleted.
 
 .TP
 .B --no-proxy

@@ -1,4 +1,5 @@
 #
+# -*- coding: utf-8 -*-#
 # Copyright (c) 2010 Red Hat, Inc.
 #
 # Authors: Jeff Ortel <jortel@redhat.com>
@@ -415,10 +416,13 @@ class RepoActionReport(ActionReport):
         return '\n'.join(r)
 
     def repo_format(self, repo):
-        return "[id:%s %s]" % (repo.id, repo['name'])
+        msg = "[id:%s %s]" % (repo.id,
+                               repo['name'])
+        return msg.encode('utf8')
 
     def section_format(self, section):
-        return "[%s]" % section
+        msg = "[%s]" % section
+        return msg.encode('utf8')
 
     def format_repos(self, repos):
         return self.format_repos_info(repos, self.repo_format)
@@ -427,7 +431,7 @@ class RepoActionReport(ActionReport):
         return self.format_repos_info(sections, self.section_format)
 
     def __str__(self):
-        s = ['Repo updates\n']
+        s = [_('Repo updates') + '\n']
         s.append(_('Total repo updates: %d') % self.updates())
         s.append(_('Updated'))
         s.append(self.format_repos(self.repo_updates))
@@ -487,6 +491,7 @@ class Repo(dict):
         the release version string.
         """
 
+        log.debug("content.label %s %s", content.label, type(content.label))
         repo = cls(content.label)
 
         repo['name'] = content.name
@@ -673,14 +678,19 @@ class RepoFile(ConfigParser):
         # Simulate manage repos turned off if no yum.repos.d directory exists.
         # This indicates yum is not installed so clearly no need for us to
         # manage repos.
-        if not os.path.exists(self.repos_dir):
+        if not self.path_exists(self.repos_dir):
             log.warn("%s does not exist, turning manage_repos off." %
                     self.repos_dir)
             self.manage_repos = 0
         self.create()
 
+    # Easier than trying to mock/patch os.path.exists
+    def path_exists(self, path):
+        "wrapper around os.path.exists"
+        return os.path.exists(path)
+
     def exists(self):
-        return os.path.exists(self.path)
+        return self.path_exists(self.path)
 
     def read(self):
         ConfigParser.read(self, self.path)
@@ -739,7 +749,7 @@ class RepoFile(ConfigParser):
             return Repo(section, self.items(section))
 
     def create(self):
-        if os.path.exists(self.path) or not self.manage_repos:
+        if self.path_exists(self.path) or not self.manage_repos:
             return
         f = open(self.path, 'w')
         s = []

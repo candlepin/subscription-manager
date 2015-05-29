@@ -28,7 +28,6 @@ import re
 import socket
 import sys
 from time import localtime, strftime, strptime
-import gobject
 
 from M2Crypto import X509
 
@@ -498,13 +497,6 @@ class CliCommand(AbstractCLICommand):
         except X509.X509Error, e:
             log.error(e)
             print _('System certificates corrupted. Please reregister.')
-        finally:
-            # clear the loop
-            mainloop = gobject.MainLoop()
-            mainctx = mainloop.get_context()
-            while (mainctx.pending()):
-                mainctx.iteration()
-            mainloop.quit()
 
 
 class UserPassCommand(CliCommand):
@@ -1210,7 +1202,7 @@ class RegisterCommand(UserPassCommand):
         owners = cp.getOwnerList(self.username)
 
         if len(owners) == 0:
-            system_exit(os.EX_SOFTWARE, _("%s cannot register with any organizations.") % self.username)
+            system_exit(1, _("%s cannot register with any organizations.") % self.username)
         if len(owners) == 1:
             return owners[0]['key']
 
@@ -1437,7 +1429,7 @@ class AttachCommand(CliCommand):
             if self.options.auto:
                 system_exit(os.EX_USAGE, _("Error: --auto may not be used when specifying pools."))
             if self.options.service_level:
-                system_exit(os.EX_USAGE, _("Error: Servicelevel is unused with --pool"))
+                system_exit(os.EX_USAGE, _("Error: The --servicelevel option cannot be used when specifying pools."))
 
         # Quantity must be a positive integer
         # TODO: simplify with a optparse type="int"
@@ -2112,7 +2104,7 @@ class ConfigCommand(CliCommand):
                         cfg.set(section, name, '')
                         print _("You have removed the value for section %s and name %s.") % (section, name)
                     else:
-                        cfg.remove_option(section, name)
+                        cfg.set(section, name, cfg.get_default(section, name))
                         print _("You have removed the value for section %s and name %s.") % (section, name)
                         print _("The default value for %s will now be used.") % (name)
                 except Exception:
@@ -2363,20 +2355,23 @@ class ListCommand(CliCommand):
                         reasons = []
                         pool_type = ''
 
-                        if cert.subject and 'CN' in cert.subject:
-                            if cert.subject['CN'] in cert_reasons_map:
-                                reasons = cert_reasons_map[cert.subject['CN']]
-                            pool_type = pooltype_cache.get(pool_id)
+                        if inj.require(inj.CERT_SORTER).are_reasons_supported():
+                            if cert.subject and 'CN' in cert.subject:
+                                if cert.subject['CN'] in cert_reasons_map:
+                                    reasons = cert_reasons_map[cert.subject['CN']]
+                                pool_type = pooltype_cache.get(pool_id)
 
-                        # 1180400: Status details is empty when GUI is not
-                        if not reasons:
-                            if cert in sorter.valid_entitlement_certs:
-                                reasons.append(_("Subscription is current"))
-                            else:
-                                if cert.valid_range.end() < datetime.datetime.now(GMT()):
-                                    reasons.append(_("Subscription is expired"))
+                            # 1180400: Status details is empty when GUI is not
+                            if not reasons:
+                                if cert in sorter.valid_entitlement_certs:
+                                    reasons.append(_("Subscription is current"))
                                 else:
-                                    reasons.append(_("Subscription has not begun"))
+                                    if cert.valid_range.end() < datetime.datetime.now(GMT()):
+                                        reasons.append(_("Subscription is expired"))
+                                    else:
+                                        reasons.append(_("Subscription has not begun"))
+                        else:
+                            reasons.append(_("Subscription management service doesn't support Status Details."))
 
                         print columnize(CONSUMED_LIST, _none_wrap,
                             name,

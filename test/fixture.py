@@ -1,4 +1,6 @@
 import difflib
+import locale
+import os
 import pprint
 import unittest
 import sys
@@ -28,6 +30,30 @@ def open_mock(content, **kwargs):
     m = mock_open(read_data=content)
     with patch('__builtin__.open', m, create=True, **kwargs) as m:
         yield m
+
+
+@contextmanager
+def temp_file(content, *args, **kwargs):
+    try:
+        kwargs['delete'] = False
+        kwargs.setdefault('prefix', 'sub-man-test')
+        fh = tempfile.NamedTemporaryFile(*args, **kwargs)
+        fh.write(content)
+        fh.close()
+        yield fh.name
+    finally:
+        os.unlink(fh.name)
+
+
+@contextmanager
+def locale_context(new_locale, category=None):
+    category = category or locale.LC_ALL
+    old_locale = locale.getlocale(category)
+    locale.setlocale(category, new_locale)
+    try:
+        yield
+    finally:
+        locale.setlocale(category, old_locale)
 
 
 class FakeLogger:
@@ -92,6 +118,11 @@ class SubManFixture(unittest.TestCase):
         self.mock_calc = NonCallableMock()
         self.mock_calc.calculate.return_value = None
 
+        # Avoid trying to read real /etc/yum.repos.d/redhat.repo
+        self.mock_repofile_path_exists_patcher = patch('subscription_manager.repolib.RepoFile.path_exists')
+        mock_repofile_path_exists = self.mock_repofile_path_exists_patcher.start()
+        mock_repofile_path_exists.return_value = True
+
         inj.provide(inj.IDENTITY, id_mock)
         inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR, self.mock_calc)
 
@@ -145,6 +176,7 @@ class SubManFixture(unittest.TestCase):
 
     def tearDown(self):
         self.dbus_patcher.stop()
+        self.mock_repofile_path_exists_patcher.stop()
         self.is_valid_server_patcher.stop()
 
         for f in self.files_to_cleanup:

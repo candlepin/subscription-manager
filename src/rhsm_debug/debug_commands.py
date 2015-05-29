@@ -73,6 +73,9 @@ class SystemCommand(CliCommand):
                                help=_("include subscription data"))
         self.assemble_path = ASSEMBLE_DIR
 
+        # so we can track the path of the archive for tests.
+        self.final_destination_path = None
+
     def _get_usage(self):
         return _("%%prog %s [OPTIONS] ") % self.name
 
@@ -177,6 +180,9 @@ class SystemCommand(CliCommand):
                     tf.close()
 
                 final_path = os.path.join(self.options.destination, "rhsm-debug-system-%s.tar.gz" % code)
+
+                self.final_destination_path = final_path
+
                 sfm = SaferFileMove()
                 sfm.move(tar_file_path, final_path)
                 print _("Wrote: %s") % final_path
