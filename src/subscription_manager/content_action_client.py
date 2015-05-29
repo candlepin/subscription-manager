@@ -26,31 +26,31 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 
 class ContentPluginActionReport(certlib.ActionReport):
-    """Aggragate the info reported by each content plug-in.
+    """Aggragate the info reported by each content plugin.
 
     Just a set of reports that include info about the content
-    plug-in that created it.
+    plugin that created it.
     """
-    name = "Content Plug-in Reports"
+    name = "Content Plugin Reports"
 
     def __init__(self):
         super(ContentPluginActionReport, self).__init__()
         self.reports = set()
 
     def add(self, report):
-        # report should include info about what plug-in generated it
+        # report should include info about what plugin generated it
         self.reports.add(report)
 
 
 class ContentPluginActionCommand(object):
-    """An ActionCommand used to wrap 'content_update' plug-in invocations.
+    """An ActionCommand used to wrap 'content_update' plugin invocations.
 
     args:
         content_plugin_runner: a PluginHookRunner created with
               PluginManager.runiter('content_update').runiter()
 
     perform() runs the PluginHookRunner and returns the ContentActionReport
-      that PluginHookRunner.run() adds to the content plug-in conduit.
+      that PluginHookRunner.run() adds to the content plugin conduit.
     """
     def __init__(self, content_plugin_runner):
         self.runner = content_plugin_runner
@@ -64,7 +64,7 @@ class ContentPluginActionCommand(object):
 class ContentPluginActionInvoker(certlib.BaseActionInvoker):
     """ActionInvoker for ContentPluginActionCommands."""
     def __init__(self, content_plugin_runner):
-        """Create a ContentPluginActionInvoker to wrap content plug-in PluginHookRunner.
+        """Create a ContentPluginActionInvoker to wrap content plugin PluginHookRunner.
 
         Pass a PluginHookRunner to ContentPluginActionCommand. Do the
         normal ActionInvoker tasks and collect ActionReports.
@@ -84,10 +84,10 @@ class ContentPluginActionInvoker(certlib.BaseActionInvoker):
 class ContentActionClient(base_action_client.BaseActionClient):
 
     def _get_libset(self):
-        """Return a generator that creates a ContentPluginAction* for each update_content plug-in.
+        """Return a generator that creates a ContentPluginAction* for each update_content plugin.
 
         The iterable return includes the yum repo action invoker, and a ContentPluginActionInvoker
-        for each plug-in hook mapped to the 'update_content_hook' slot.
+        for each plugin hook mapped to the 'update_content_hook' slot.
         """
 
         yield repolib.RepoActionInvoker()

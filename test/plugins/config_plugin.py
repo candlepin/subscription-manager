@@ -5,18 +5,18 @@ from subscription_manager.base_plugin import SubManPlugin
 requires_api_version = "1.0"
 
 
-# This plug-in should fail to load as there is no associated
+# This plugin should fail to load as there is no associated
 # config file.
 class NoConfigPlugin(SubManPlugin):
     pass
 
 
-# This plug-in should fail to load as there is a malformed
+# This plugin should fail to load as there is a malformed
 # associated config file.
 class BadConfigPlugin(SubManPlugin):
     pass
 
 
-# This plug-in should load.
+# This plugin should load.
 class GoodConfigPlugin(SubManPlugin):
     pass

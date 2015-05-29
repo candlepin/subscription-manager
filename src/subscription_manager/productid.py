@@ -411,7 +411,7 @@ class ProductManager:
         products_installed = []
 
         # track updated product ids seperately in case we want
-        # to run plug-ins
+        # to run plugins
         products_to_update = []
 
         # enabled means we have a repo, it's enabled=1, it has a productid metadata
@@ -531,7 +531,7 @@ class ProductManager:
 
     def install_product_certs(self, product_certs):
         # collect info, then do the needful later, so we can hook
-        # up a plug-in in between and let it munge these lists, so a plug-in
+        # up a plugin in between and let it munge these lists, so a plugin
         # could blacklist a product cert for example.
         self.plugin_manager.run('pre_product_id_install', product_list=product_certs)
         # ProductCertDb.install()
@@ -680,12 +680,12 @@ class ProductManager:
             if delete_product_cert:
                 certs_to_delete.append((p, cert))
 
-        # TODO: plug-in hook for pre_product_id_delete
+        # TODO: plugin hook for pre_product_id_delete
         for (product, cert) in certs_to_delete:
             log.info("product cert %s for %s is being deleted" % (product.id, product.id))
             cert.delete()
             self.pdir.refresh()
-            #TODO: plug-in hook for post_product_id_delete
+            #TODO: plugin hook for post_product_id_delete
 
             # it should be safe to delete it's entry now, we either dont
             # know anything about it's repos, it doesnt have any, or none

@@ -55,7 +55,7 @@ class Facts(CacheManager):
         # that we need to update
         self.graylist = ['cpu.cpu_mhz', 'lscpu.cpu_mhz']
 
-        # plug-in manager so we can add custom facst via plug-in
+        # plugin manager so we can add custom facst via plugin
         self.plugin_manager = require(PLUGIN_MANAGER)
 
     def get_last_update(self):

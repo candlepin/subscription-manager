@@ -21,7 +21,7 @@ from subscription_manager.plugin.ostree import action_invoker
 
 
 class OstreeContentPlugin(base_plugin.SubManPlugin):
-    """Plug-in for adding ostree content action to subscription-manager"""
+    """Plugin for adding ostree content action to subscription-manager"""
     name = "ostree_content"
 
     def update_content_hook(self, conduit):
@@ -31,7 +31,7 @@ class OstreeContentPlugin(base_plugin.SubManPlugin):
         Args:
             conduit: A UpdateContentConduit
         """
-        conduit.log.info("ostree update_content_hook plug-in.")
+        conduit.log.info("ostree update_content_hook plugin.")
 
         report = action_invoker.OstreeContentUpdateActionCommand(ent_source=conduit.ent_source).perform()
         conduit.reports.add(report)

@@ -58,7 +58,7 @@ class HealingUpdateAction(object):
     Returns an EntCertUpdateReport with information about any ent
     certs that were changed.
 
-    Plug-in hooks:
+    Plugin hooks:
         pre_auto_attach
         post_auto_attach
     """

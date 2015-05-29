@@ -294,7 +294,7 @@ class EntitlementCertBundlesInstaller(object):
         self.exceptions = bundle_installer.exceptions
         self.post_install()
 
-    # TODO: add subman plug-in slot,conduit,hooks
+    # TODO: add subman plugin slot,conduit,hooks
     def pre_install(self):
         """Hook called before any ent cert bundles are installed."""
         log.debug("cert bundles pre_install")
@@ -345,7 +345,7 @@ class EntitlementCertBundleInstaller(object):
 
         self.post_install(bundle)
 
-    # TODO: add subman plug-in, slot, and conduit
+    # TODO: add subman plugin, slot, and conduit
     def pre_install(self, bundle):
         """Hook called before an ent cert bundle is installed."""
         log.debug("Ent cert bundle pre_install")

@@ -1833,19 +1833,19 @@ class ImportCertCommand(CliCommand):
 
 class PluginsCommand(CliCommand):
     def __init__(self):
-        shortdesc = _("View and configure subscription-manager plug-ins")
+        shortdesc = _("View and configure subscription-manager plugins")
         super(PluginsCommand, self).__init__("plugins", shortdesc, False)
 
         SM = "subscription-manager"
         self.parser.add_option("--list", action="store_true",
-                                help=_("list %s plug-ins") % SM)
+                                help=_("list %s plugins") % SM)
         self.parser.add_option("--listslots", action="store_true",
-                                help=_("list %s plug-in slots") % SM)
+                                help=_("list %s plugin slots") % SM)
         self.parser.add_option("--listhooks", action="store_true",
-                                help=_("list %s plug-in hooks") % SM)
+                                help=_("list %s plugin hooks") % SM)
         self.parser.add_option("--verbose", action="store_true",
                                default=False,
-                               help=_("show verbose plug-in info"))
+                               help=_("show verbose plugin info"))
 
     def _validate_options(self):
         # default to list
