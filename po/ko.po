@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-21 11:15-0400\n"
-"PO-Revision-Date: 2015-05-20 09:53-0400\n"
+"PO-Revision-Date: 2015-05-25 08:58-0400\n"
 "Last-Translator: eukim <eukim@fedoraproject.org>\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
@@ -552,12 +552,12 @@ msgstr "%s을 소유하고 있는지 확인합니다.  "
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/networkConfig.py:188
 msgid "Proxy connection succeeded"
-msgstr "프록시 연결"
+msgstr "프록시에 성공적으로 연결했습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/networkConfig.py:190
 msgid "Proxy connection failed"
-msgstr "프록시 연결 실패"
+msgstr "프록시 연결에 실패했습니다"
 
 #: ../src/subscription_manager/gui/networkConfig.py:283
 #: ../src/subscription_manager/gui/networkConfig.py:286
@@ -1292,7 +1292,7 @@ msgstr "잘못된 선택을 입력했습니다. 위의 메뉴에서 선택한 �
 #: ../src/subscription_manager/migrate/migrate.py:147
 #, python-format
 msgid "Could not read legacy systemid at %s"
-msgstr ""
+msgstr "%s에서 기존 시스템 ID를 읽을 수 없습니다"
 
 #: ../src/subscription_manager/migrate/migrate.py:178
 msgid "Legacy username: "
@@ -1932,12 +1932,12 @@ msgstr "proxy_hostname:proxy_port 형식의 프록시 URL"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:315
 msgid "user for HTTP proxy with basic authentication"
-msgstr "기본 인증을 갖는 HTTP proxy 사용자 "
+msgstr "기본 인증을 갖는 HTTP 프록시 사용자 "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:317
 msgid "password for HTTP proxy with basic authentication"
-msgstr "기본 인증을 갖는 HTTP proxy 암호 "
+msgstr "기본 인증을 갖는 HTTP 프록시 암호 "
 
 #: ../src/subscription_manager/managercli.py:369
 msgid ""
@@ -3995,12 +3995,12 @@ msgstr "활성키를 사용합니다 "
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:13
 msgid "If required, please configure your proxy before moving forward."
-msgstr "필요한 경우 다음 단계로 진행하기 전 proxy를 설정하십시오."
+msgstr "필요한 경우 다음 단계로 진행하기 전 프록시를 설정하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:14
 msgid "Configure Proxy"
-msgstr "Proxy 설정"
+msgstr "프록시 설정"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:15
@@ -4230,7 +4230,7 @@ msgstr "시스템 정보 보기 (_F)"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
 msgid "Configure Pro_xy"
-msgstr "Proxy 설정 (_X)"
+msgstr "프록시 설정 (_X)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
@@ -4288,12 +4288,12 @@ msgstr "삭제 "
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:1
 msgid "Proxy Configuration"
-msgstr "Proxy 설정 "
+msgstr "프록시 설정 "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:2
 msgid "<b>HTTP Proxy</b>"
-msgstr "<b>HTTP Proxy</b>  "
+msgstr "<b>HTTP 프록시</b>  "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:3
@@ -4303,7 +4303,7 @@ msgstr "HTTP 프록시를 통해 연결하고자 합니다. (_H)"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:4
 msgid "Proxy Checkbox"
-msgstr "Proxy 체크박스 "
+msgstr "프록시 체크박스 "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:5
@@ -4313,7 +4313,7 @@ msgstr "<small><b>예:</b> proxy.example.com:3128</small>"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:6
 msgid "_Proxy Location:"
-msgstr "Proxy 위치(_P):   "
+msgstr "프록시 위치(_P):   "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:7
@@ -4323,12 +4323,12 @@ msgstr "hostname(:port) 형식으로 입력 "
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:8
 msgid "Proxy Location Text"
-msgstr "Proxy 위치 텍스트 "
+msgstr "프록시 위치 텍스트 "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:9
 msgid "Use Au_thentication with HTTP Proxy:"
-msgstr "HTTP Proxy로 인증 사용(_t):   "
+msgstr "HTTP 프록시로 인증 사용(_t):   "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:10
@@ -4338,12 +4338,12 @@ msgstr "인증 체크 박스 "
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:11
 msgid "Proxy _Username:"
-msgstr "Proxy 사용자 이름(_U):   "
+msgstr "프록시 사용자 이름(_U):   "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:12
 msgid "Proxy P_assword:"
-msgstr "Proxy 암호(_a):  "
+msgstr "프록시 암호(_a):  "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:13
