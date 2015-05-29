@@ -163,7 +163,7 @@ if __name__ == '__main__':
     parser = OptionParser(usage=USAGE,
                           formatter=WrappedIndentedHelpFormatter())
     parser.add_option("--register", action='store_true',
-                      help=_("launches the registration dialog on start-up"))
+                      help=_("launches the registration dialog on startup"))
     options, args = parser.parse_args(args=sys.argv)
 
     log = logging.getLogger("rhsm-app.subscription-manager-gui")
