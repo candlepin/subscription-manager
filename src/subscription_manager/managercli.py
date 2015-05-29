@@ -1930,10 +1930,10 @@ class ReposCommand(CliCommand):
                                help=_("list known, disabled repositories for this system"))
         self.parser.add_option("--enable", dest="enable", type="str",
                                action='callback', callback=repo_callback, metavar="REPOID",
-                               help=_("repository to enable (can be specified more than once). Wild-cards (* and ?) are supported."))
+                               help=_("repository to enable (can be specified more than once). Wildcards (* and ?) are supported."))
         self.parser.add_option("--disable", dest="disable", type="str",
                                action='callback', callback=repo_callback, metavar="REPOID",
-                               help=_("repository to disable (can be specified more than once). Wild-cards (* and ?) are supported."))
+                               help=_("repository to disable (can be specified more than once). Wildcards (* and ?) are supported."))
 
     def _validate_options(self):
         if not (self.options.list or hasattr(self.options, 'repo_actions')):

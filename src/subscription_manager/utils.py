@@ -350,7 +350,7 @@ class ProductCertificateFilter(CertificateFilter):
     def set_filter_string(self, filter_string):
         """
         Sets this filter's filter string to the specified string. The filter string may use ? or *
-        for wild-cards, representing one or any characters, respectively.
+        for wildcards, representing one or any characters, respectively.
 
         Returns True if the specified filter string was processed and assigned successfully; False
         otherwise.
@@ -370,7 +370,7 @@ class ProductCertificateFilter(CertificateFilter):
                 [^*?\\]*        # Character literals and other uninteresting junk (greedy)
                 (?:\\.?)*       # Anything escaped with a backslash, or just a trailing backslash
             )*)                 # Repeat the above sequence 0+ times, greedily
-            ([*?]|\Z)           # Any of our wild-cards (* or ?) not preceded by a backslash OR end of input
+            ([*?]|\Z)           # Any of our wildcards (* or ?) not preceded by a backslash OR end of input
         """
 
         if filter_string is not None:
