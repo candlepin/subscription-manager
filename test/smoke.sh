@@ -61,7 +61,7 @@ run_sm () {
 }
 
 # basics
-run_sm deregister
+run_sm unregister
 run_sm register --username "${USERNAME}" --password "${PASSWORD}" --org "${ORG}" --force
 run_sm list --installed
 run_sm list --available
@@ -81,18 +81,18 @@ run_sm orgs --username "${USERNAME}" --password "${PASSWORD}"
 run_sm release --list
 run_sm remove --all
 run_sm plugins --list
-run_sm deregister
+run_sm unregister
 
 # activation keys
-run_sm deregister
+run_sm unregister
 run_sm register --activationkey "${ACTIVATION_KEY}" --org "${ORG}" --force
-run_sm deregister
+run_sm unregister
 run_sm register --activationkey "${ACTIVATION_KEY}" --org "${ORG}" --force --auto-attach
-run_sm deregister
+run_sm unregister
 
 # what to run after the tests, ie, restore configs, etc
 #post () {
-#
+#    
 #}
 
 #post

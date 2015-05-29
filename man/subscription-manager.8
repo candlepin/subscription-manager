@@ -62,7 +62,7 @@ has specific options available for each command, depending on what operation is 
 1. register
 
 .IP
-2. deregister
+2. unregister
 
 .IP
 3. attach
@@ -247,9 +247,9 @@ for a local content service or
 for an IP domain.
 
 
-.SS DEREGISTER OPTIONS
+.SS UNREGISTER OPTIONS
 The
-.B deregister
+.B unregister
 command removes a system's subscriptions and removes it from the subscription management service.
 
 .PP
@@ -790,7 +790,7 @@ has two major tasks:
 makes it easier for network administrators to maintain parity between software subscriptions and updates and their installed products by tracking and managing what subscriptions are attached to a system and when those subscriptions expire or are exceeded.
 
 
-.SS REGISTERING AND DEREGISTERING MACHINES
+.SS REGISTERING AND UNREGISTERING MACHINES
 A system is either
 .I registered
 to a subscription management service -- which makes all of the subscriptions available to the system -- or it is not registered. Unregistered systems necessarily lack valid software subscriptions because there is no way to record that the subscriptions have been used nor any way to renew them.
@@ -888,12 +888,12 @@ eff9a4c9-3579-49e5-a52f-83f2db29ab52 server.example.com
 
 .PP
 A system is unregistered and removed from the subscription management service simply by running the
-.B deregister
-command. Deregistering a system and removing its attached subscriptions can free up subscriptions when a system is taken offline or moved to a different department.
+.B unregister
+command. Unregistering a system and removing its attached subscriptions can free up subscriptions when a system is taken offline or moved to a different department.
 
 .RS
 .nf
-subscription-manager deregister
+subscription-manager unregister
 .fi
 .RE
 

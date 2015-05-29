@@ -94,7 +94,7 @@ class CertSorterTests(SubManFixture):
         self.sorter.is_registered = Mock(return_value=True)
 
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
-    def test_deregistered_status(self, mock_update):
+    def test_unregistered_status(self, mock_update):
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=False)
         self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
@@ -120,7 +120,7 @@ class CertSorterTests(SubManFixture):
         self.assertEquals(expected, sorter.get_system_status())
 
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
-    def test_deregistered_system_status(self, mock_update):
+    def test_unregistered_system_status(self, mock_update):
         self.status_mgr.load_status = Mock(
                 return_value=None)
         sorter = CertSorter()

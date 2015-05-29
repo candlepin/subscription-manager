@@ -378,7 +378,7 @@ class StubUEP:
                  cert_file=None, key_file=None):
         self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid'}
         self.environment_list = []
-        self.called_deregister_uuid = None
+        self.called_unregister_uuid = None
         self.called_unbind_uuid = None
         self.called_unbind_serial = []
         self.username = username
@@ -392,7 +392,7 @@ class StubUEP:
         return self.registered_consumer_info
 
     def unregisterConsumer(self, uuid):
-        self.called_deregister_uuid = uuid
+        self.called_unregister_uuid = uuid
 
     def getOwnerList(self, username):
         return [{'key': 'dummyowner'}]

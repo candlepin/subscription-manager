@@ -5,7 +5,7 @@ _ = gettext.gettext
 class Branding(object):
     def __init__(self):
         self.CLI_REGISTER = _("Register this system to the Customer Portal or another subscription management service")
-        self.CLI_DEREGISTER = _("Deregister this system from the Customer Portal or another subscription management service")
+        self.CLI_UNREGISTER = _("Unregister this system from the Customer Portal or another subscription management service")
         self.RHSMD_REGISTERED_TO_OTHER = \
                 _("This system is registered to RHN Classic.")
         self.REGISTERED_TO_OTHER_WARNING = _("WARNING") + \
@@ -14,7 +14,7 @@ class Branding(object):
             "\n\n" + \
             _("Your system is being registered again using Red Hat Subscription Management. Red Hat recommends that customers only register once.") + \
             "\n\n" + \
-            _("To learn how to deregister from either service please consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563")
+            _("To learn how to unregister from either service please consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563")
         self.REGISTERED_TO_OTHER_SUMMARY = _("RHN Classic")
         self.REGISTERED_TO_SUBSCRIPTION_MANAGEMENT_SUMMARY = _("Red Hat Subscription Management")
         self.GUI_REGISTRATION_HEADER = \

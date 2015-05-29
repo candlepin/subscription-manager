@@ -991,7 +991,7 @@ class TestMigration(SubManFixture):
             self.assertTrue(re.match(regex, channel))
 
     @patch("shutil.move", autospec=True)
-    def test_deregister_from_rhn_exception(self, mock_shutil):
+    def test_unregister_from_rhn_exception(self, mock_shutil):
         rhn_config = {"systemIdPath": "/some/path"}
         self.engine.rhncfg = rhn_config
         sc = MagicMock()
@@ -1026,7 +1026,7 @@ class TestMigration(SubManFixture):
         self.assertTrue(mo.write.call_args_list == expected)
 
     @patch("os.remove", autospec=True)
-    def test_deregister_from_rhn(self, mock_remove):
+    def test_unregister_from_rhn(self, mock_remove):
         rhn_config = {"systemIdPath": "/some/path"}
         self.engine.rhncfg = rhn_config
         sc = MagicMock()

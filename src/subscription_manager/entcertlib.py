@@ -226,7 +226,7 @@ class EntCertUpdateAction(object):
 
         identity = inj.require(inj.IDENTITY)
         if not identity.is_valid():
-            # We can get here on deregister, with no id or ent certs or repos,
+            # We can get here on unregister, with no id or ent certs or repos,
             # but don't want to raise an exception that would be logged. So
             # empty result set is returned.
             return results
