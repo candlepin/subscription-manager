@@ -18,12 +18,13 @@ import sys
 sys.path.append('/usr/share/rhsm')
 
 from subscription_manager import logutil
-from subscription_manager.productid import ProductManager, package_manager
+from subscription_manager.productid import ProductManager
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
 
 from dnfpluginscore import _, logger
 import dnf
+import logging
 
 class ProductId(dnf.Plugin):
     name = 'product-id'
@@ -50,8 +51,72 @@ class ProductId(dnf.Plugin):
         logutil.init_logger_for_yum()
         chroot(self.base.conf.installroot)
         try:
-            pm = ProductManager()
-            pm.update(package_manager(self.base))
+            pm = DnfProductManager(self.base)
+            pm.update_all()
             logger.info(_('Installed products updated.'))
         except Exception as e:
             logger.error(str(e))
+
+log = logging.getLogger('rhsm-app.' + __name__)
+
+class DnfProductManager(ProductManager):
+    def __init__(self, base):
+        self.base = base
+        ProductManager.__init__(self)
+
+    def update_all(self):
+        return self.update(self.get_enabled(),
+                           self.get_active(),
+                           True)
+
+    def _download_productid(self, repo):
+        with dnf.util.tmpdir() as tmpdir:
+            handle = repo._handle_new_remote(tmpdir)
+            handle.setopt(librepo.LRO_PROGRESSCB, None)
+            handle.setopt(librepo.LRO_YUMDLIST, [self.PRODUCTID])
+            res = handle.perform()
+        return res.yum_repo.get(self.PRODUCTID, None)
+
+    def get_enabled(self):
+        """find repos that are enabled"""
+        lst = []
+        enabled = self.base.repos.iter_enabled()
+
+        # skip repo's that we don't have productid info for...
+        for repo in enabled:
+            try:
+                fn = self._download_productid(repo)
+                if fn:
+                    cert = self._get_cert(fn)
+                    if cert is None:
+                        continue
+                    lst.append((cert, repo.id))
+                else:
+                    # We have to look in all repos for productids, not just
+                    # the ones we create, or anaconda doesn't install it.
+                    self.meta_data_errors.append(repo.id)
+            except Exception, e:
+                log.warn("Error loading productid metadata for %s." % repo)
+                log.exception(e)
+                self.meta_data_errors.append(repo.id)
+
+        if self.meta_data_errors:
+            log.debug("Unable to load productid metadata for repos: %s",
+                      self.meta_data_errors)
+        return lst
+
+    # find the list of repo's that provide packages that
+    # are actually installed.
+    def get_active(self):
+        """find yum repos that have packages installed"""
+        # installed packages
+        installed_na = self.base.sack.query().installed().na_dict()
+        # available version of installed
+        avail_pkgs = self.base.sack.query().available().filter(name=
+                                          [k[0] for k in installed_na.keys()])
+        active = set()
+        for p in avail_pkgs:
+            if (p.name, p.arch) in installed_na:
+                active.add(p.repoid)
+
+        return active
