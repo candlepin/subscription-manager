@@ -490,8 +490,6 @@ class Repo(dict):
         And the other out of band info we need including baseurl, ca_cert, and
         the release version string.
         """
-
-        log.debug("content.label %s %s", content.label, type(content.label))
         repo = cls(content.label)
 
         repo['name'] = content.name
