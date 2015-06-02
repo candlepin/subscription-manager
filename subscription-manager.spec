@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.14.8
+Version: 1.14.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -485,6 +485,10 @@ fi
 %endif
 
 %changelog
+* Tue Jun 02 2015 William Poteat <wpoteat@redhat.com> 1.14.9-1
+- 1223038: Fix API used by openshift clients. (alikins@redhat.com)
+- 1195824: Latest strings from zanata (alikins@redhat.com)
+
 * Tue May 26 2015 William Poteat <wpoteat@redhat.com> 1.14.8-1
 - 1223860: Revert to default value on remove command (wpoteat@redhat.com)
 - translation sync from zanata (alikins@redhat.com)
