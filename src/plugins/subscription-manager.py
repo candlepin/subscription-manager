@@ -24,6 +24,7 @@ sys.path.append('/usr/share/rhsm')
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager.certlib import Locker
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager import logutil
@@ -47,6 +48,33 @@ not_registered_warning = \
 
 no_subs_warning = \
 "This system is registered to Red Hat Subscription Management, but is not receiving updates. You can use subscription-manager to assign subscriptions."
+
+
+# If running from the yum plugin, we want to avoid blocking
+# yum forever on locks created by other rhsm processes. We try
+# to acquire the lock before potentially updating redhat.repo, but
+# if we can't, the plugin will fail back to not updating it.
+# So this class provides a Locker uses the default ACTION_LOCK,
+# but if it would have to wait for it, it decides to do nothing
+# instead.
+class YumRepoLocker(Locker):
+    def __init__(self, conduit):
+        super(YumRepoLocker, self).__init__()
+        self.conduit = conduit
+
+    def run(self, action):
+        # lock.acquire will return False if it would block
+        # NOTE: acquire can return None, True, or False
+        #       with different meanings.
+        nonblocking = self.lock.acquire(blocking=False)
+        if nonblocking is False:
+            # Could try to grab the pid for the log message, but it's a bit of a race.
+            self.conduit.info(3, "Another process has the cert lock. We will not attempt to update certs or repos.")
+            return 0
+        try:
+            return action()
+        finally:
+            self.lock.release()
 
 
 def update(conduit, cache_only):
@@ -80,7 +108,7 @@ def update(conduit, cache_only):
     if config.in_container():
         conduit.info(3, "Subscription Manager is operating in container mode.")
 
-    rl = RepoActionInvoker(cache_only=cache_only)
+    rl = RepoActionInvoker(cache_only=cache_only, locker=YumRepoLocker(conduit=conduit))
     rl.update()
 
 
