@@ -10,7 +10,7 @@
 
 
 Name: python-rhsm
-Version: 1.14.2
+Version: 1.14.3
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -72,6 +72,11 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Tue Jun 02 2015 William Poteat <wpoteat@redhat.com> 1.14.3-1
+- 1225600: Default config entry needs to include the substitution string
+  (wpoteat@redhat.com)
+- Add F22 to Fedora branches. (awood@redhat.com)
+
 * Thu Feb 26 2015 Alex Wood <awood@redhat.com> 1.14.2-1
 - 1195446: Only set global socket timeout on RHEL 5. (alikins@redhat.com)
 - Cleanup up connection logging. (alikins@redhat.com)
