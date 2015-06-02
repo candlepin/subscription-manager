@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.14.9
+Version: 1.15.0
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -40,7 +40,7 @@ Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  pygobject2
 Requires:  virt-what
-Requires:  python-rhsm >= 1.14.2
+Requires:  python-rhsm >= 1.15.0
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 Requires:  usermode
