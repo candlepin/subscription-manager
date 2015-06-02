@@ -20,8 +20,15 @@ import os
 from threading import RLock as Mutex
 import time
 
+# how long to sleep before rechecking if we can
+# acquire the lock.
+LOCK_WAIT_DURATION = 0.5
 
-class LockFile:
+import logging
+log = logging.getLogger("rhsm-app." + __file__)
+
+
+class LockFile(object):
 
     def __init__(self, path):
         self.path = path
@@ -84,7 +91,7 @@ class LockFile:
         self.close()
 
 
-class Lock:
+class Lock(object):
 
     mutex = Mutex()
 
@@ -92,6 +99,8 @@ class Lock:
         self.depth = 0
         self.path = path
         self.lockdir = None
+        self.blocking = None
+
         lock_dir, fn = os.path.split(self.path)
         try:
             if not os.path.exists(lock_dir):
@@ -100,7 +109,19 @@ class Lock:
         except Exception:
             self.lockdir = None
 
-    def acquire(self):
+    def acquire(self, blocking=None):
+        """Behaviour here is modeled after threading.RLock.acquire.
+
+        If 'blocking' is False, we return True if we didn't need to block and we acquired the lock.
+        We return False if couldn't acquire the lock and would have
+        had to wait and block.
+
+        if 'blocking' is None, we return None when we acquire the lock, otherwise block until we do.
+
+        if 'blocking' is True, we behave the same as with blocking=None, except we return True.
+
+        """
+
         if self.lockdir is None:
             return
         f = LockFile(self.path)
@@ -111,18 +132,31 @@ class Lock:
                     f.getpid()
                     if f.mypid():
                         self.P()
+                        if blocking is not None:
+                            return True
                         return
+
                     if f.valid():
                         f.close()
-                        time.sleep(0.5)
+                        # Note: blocking has three meanings for
+                        # None, True, False, so 'not blocking' != 'blocking == False'
+                        if blocking is False:
+                            return False
+                        time.sleep(LOCK_WAIT_DURATION)
                     else:
                         break
                 self.P()
                 f.setpid()
-            except OSError:
+            except OSError, e:
+                log.exception(e)
                 print "could not create lock"
         finally:
             f.close()
+
+        # if no blocking arg is passed, return nothing/None
+        if blocking is not None:
+            return True
+        return None
 
     def release(self):
         if self.lockdir is None:
@@ -183,4 +217,4 @@ class ActionLock(Lock):
     PATH = '/var/run/rhsm/cert.pid'
 
     def __init__(self):
-        Lock.__init__(self, self.PATH)
+        super(ActionLock, self).__init__(self.PATH)

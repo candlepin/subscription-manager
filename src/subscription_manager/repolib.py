@@ -45,14 +45,15 @@ _ = gettext.gettext
 
 class RepoActionInvoker(BaseActionInvoker):
     """Invoker for yum repo updating related actions."""
-    def __init__(self, cache_only=False):
+    def __init__(self, cache_only=False, locker=None):
+        super(RepoActionInvoker, self).__init__(locker=locker)
         self.cache_only = cache_only
-        BaseActionInvoker.__init__(self)
         self.identity = inj.require(inj.IDENTITY)
 
     def _do_update(self):
         action = RepoUpdateActionCommand(cache_only=self.cache_only)
-        return action.perform()
+        res = action.perform()
+        return res
 
     def is_managed(self, repo):
         action = RepoUpdateActionCommand(cache_only=self.cache_only)
@@ -206,14 +207,20 @@ class RepoUpdateActionCommand(object):
         if not self.identity.is_valid():
             return
 
+        # NOTE: if anything in the RepoActionInvoker init blocks, and it
+        #       could, yum could still block. The closest thing to an
+        #       event loop we have is the while True: sleep() in lock.py:Lock.acquire()
+
         # Only attempt to update the overrides if they are supported
         # by the server.
         if self.override_supported:
             self.written_overrides._read_cache()
+
             try:
                 override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
             except KeyError:
                 override_cache = OverrideStatusCache()
+
             if cache_only:
                 status = override_cache._read_cache()
             else:
