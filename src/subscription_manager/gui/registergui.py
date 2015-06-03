@@ -132,7 +132,7 @@ class RegisterScreen(widgets.GladeWidget):
 
     Screen subclasses can be Screen, NonGuiScreen, or GuiScreen
     classes. Only GuiScreen classes are user visible. NonGuiScreen
-    and subclasses are use for state transitions (a betweeb screens
+    and subclasses are used for state transitions (a between screens
     check for pools, for example)
 
     The rhsmModule.apply() runs RegisterScreen.register().
@@ -140,7 +140,7 @@ class RegisterScreen(widgets.GladeWidget):
 
     A Screen.apply() will return the index of the next screen that
     should be invoked (which may be a different screen, the same screen,
-    or the special numbers for DONT_CHANGE and FINISH.
+    or the special numbers for DONT_CHANGE and FINISH.)
 
     In firstboot, calling the firstboot modules .apply() results in calling
     rhsm_module.moduleClass.apply() which calls the first Screen.apply()
@@ -152,14 +152,14 @@ class RegisterScreen(widgets.GladeWidget):
     If the apply returns a screen index, then the Screen.post() is called.
     The return value is ignored.
 
-    Then RegisterScreen.register calls RegisterScreen.run_pre() on the
-    screen index that the current_screen .apply() returned(Ie, the
+    The RegisterScreen.register calls RegisterScreen.run_pre() on the
+    screen index that the current_screen .apply() returned(i.e. the
     next screen).
 
     run_pre() checks that it's arg (the result of above apply(), what
     is still currently the next screen) is not DONT_CHANGE/FINISH.
 
-    If not, then it calls self._set_screen() whichs updates
+    If not, then it calls self._set_screen() which updates
     self._current_screen to point to the next screen.
 
     run_pre() then calls the new current_screens's .pre()
@@ -175,7 +175,7 @@ class RegisterScreen(widgets.GladeWidget):
             gui will update with the new widgets.
 
         The new current_screen has its pre() method invoked. pre()
-        methods may return an Async representing that a request
+        methods may return an async representing that a request
         has been called and a callback registered. If that's the case,
         then RegisterScreen._set_screen() sets the current screen
         to a progress screen.
@@ -196,7 +196,7 @@ class RegisterScreen(widgets.GladeWidget):
 
     The return value of rhsm_login.apply() at this point is actualy
     the _apply_result instance variable. Register Screens() are expected
-    to set this by calling their _a_ finish_registration() method. For
+    to set this by calling their finish_registration() method. For
     subscription-manager-gui that means RegisterScreen.finish_registration,
     usually access as a Screens() self._parent.finish_registration.
 
