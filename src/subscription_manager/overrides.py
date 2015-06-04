@@ -16,8 +16,12 @@
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
 
+import logging
+
+log = logging.getLogger('rhsm-app.' + __name__)
 
 # Module for manipulating content overrides
+
 
 class Overrides(object):
     def __init__(self):

@@ -190,6 +190,7 @@ class StatusCache(CacheManager):
         except connection.RestlibException, ex:
             # Indicates we may be talking to a very old candlepin server
             # which does not have the necessary API call.
+            log.exception(ex)
             self.last_error = ex
             return None
         except connection.AuthenticationException, ex:

@@ -23,8 +23,8 @@ class Locker(object):
 
 
 class BaseActionInvoker(object):
-    def __init__(self):
-        self.locker = Locker()
+    def __init__(self, locker=None):
+        self.locker = locker or Locker()
         self.report = None
 
     def update(self):
