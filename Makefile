@@ -42,6 +42,7 @@ VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
 
 # inherit from env if set so rpm can override
 CFLAGS ?= -g -Wall
+LDFLAGS ?=
 
 %.pyc: %.py
 	python -c "import py_compile; py_compile.compile('$<')"
@@ -72,16 +73,16 @@ STYLEFILES=$(PYFILES) $(BIN_FILES) $(TESTFILES)
 GLADEFILES=`find src/subscription_manager/gui/data -name "*.glade"`
 
 rhsmcertd: $(DAEMONS_SRC_DIR)/rhsmcertd.c bin
-	$(CC) $(CFLAGS) $(RHSMCERTD_FLAGS) $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd
+	$(CC) $(CFLAGS) $(LDFLAGS) $(RHSMCERTD_FLAGS) $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd
 
 check-syntax:
-	$(CC) $(CFLAGS) $(ICON_FLAGS) -o nul -S $(CHK_SOURCES)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o nul -S $(CHK_SOURCES)
 
 
 ICON_FLAGS = `pkg-config --cflags --libs gtk+-2.0 libnotify gconf-2.0 dbus-glib-1`
 
 rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c bin
-	$(CC) $(CFLAGS) $(ICON_FLAGS) -o bin/rhsm-icon $(RHSM_ICON_SRC_DIR)/rhsm_icon.c;\
+	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o bin/rhsm-icon $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
 
 dbus-service-install:
 	install -d $(PREFIX)/etc/dbus-1/system.d
