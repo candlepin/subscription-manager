@@ -8,6 +8,7 @@
 # simplejson is not available in RHEL 7 at all.
 %global use_simplejson (0%{?rhel} && 0%{?rhel} == 5)
 
+%global _hardened_build 1
 
 Name: python-rhsm
 Version: 1.14.2
@@ -48,7 +49,7 @@ entitlements, certificates, and access to content.
 
 %build
 # create a version.py with the rpm version info
-PYTHON_RHSM_VERSION=%{version} PYTHON_RHSM_RELEASE=%{release} %{__python} setup.py build
+PYTHON_RHSM_VERSION=%{version} PYTHON_RHSM_RELEASE=%{release} CFLAGS="%{optflags}" LDFLAGS="%{__global_ldflags}" %{__python} setup.py build
 
 %install
 rm -rf %{buildroot}
