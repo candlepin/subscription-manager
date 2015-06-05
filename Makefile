@@ -418,11 +418,13 @@ uniq-po:
 
 # Compile translations
 compile-po:
+	@ echo -n "Compiling po files for: " ; \
 	for lang in $(basename $(notdir $(wildcard po/*.po))) ; do \
-		echo $$lang ; \
+		echo -n "$$lang " ; \
 		mkdir -p po/build/$$lang/LC_MESSAGES/ ; \
-		msgfmt -c --statistics -o po/build/$$lang/LC_MESSAGES/rhsm.mo po/$$lang.po ; \
-	done
+		msgfmt --check-format --check-domain -o po/build/$$lang/LC_MESSAGES/rhsm.mo po/$$lang.po ; \
+	done ; \
+	echo ;
 
 # just run a check to make sure these compile
 polint:
