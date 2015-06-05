@@ -209,7 +209,9 @@ desktop-file-validate \
 
 desktop-file-validate \
         %{buildroot}/usr/share/applications/subscription-manager-gui.desktop
+
 %find_lang rhsm
+%find_lang %{name} --with-gnome
 
 # fix timestamps on our byte compiled files so them match across arches
 find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
@@ -249,6 +251,8 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %clean
 rm -rf %{buildroot}
 
+# base/cli tools use the gettext domain 'rhsm', while the
+# gnome-help tools use domain 'subscription-manager'
 %files -f rhsm.lang
 %defattr(-,root,root,-)
 
@@ -366,7 +370,7 @@ rm -rf %{buildroot}
 %doc LICENSE
 
 
-%files -n subscription-manager-gui
+%files -n subscription-manager-gui -f subscription-manager.lang
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
@@ -399,12 +403,6 @@ rm -rf %{buildroot}
 %doc
 %{_mandir}/man8/subscription-manager-gui.8*
 %{_mandir}/man8/rhsm-icon.8*
-%{_datadir}/omf/subscription-manager
-%attr(644,root,root) %{_datadir}/omf/subscription-manager/*.omf
-%{_datadir}/gnome/help/subscription-manager
-%{_datadir}/gnome/help/subscription-manager/C
-%attr(644,root,root) %{_datadir}/gnome/help/subscription-manager/C/*.xml
-%attr(755,root,root) %{_datadir}/gnome/help/subscription-manager/C/figures/*.png
 %doc LICENSE
 
 %files -n subscription-manager-firstboot
