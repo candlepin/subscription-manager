@@ -242,6 +242,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         self.interface = None
 
+        self.proxies_were_enabled_from_gui = None
         self._apply_result = self._RESULT_FAILURE
 
     def _get_initial_screen(self):
@@ -266,9 +267,24 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         up2date_cfg = rhn_config.initUp2dateConfig()
         cfg = rhsm.config.initConfig()
 
+        # Track if we have changed this in the gui proxy dialog, if
+        # we have changed it to disabled, then we apply "null", otherwise
+        # if the version off the fs was disabled, we ignore the up2date proxy settings.
+        #
         # Don't do anything if proxies aren't enabled in rhn config.
         if not up2date_cfg['enableProxy']:
+            if self.proxies_were_enabled_from_gui:
+                cfg.set('server', 'proxy_hostname', '')
+                cfg.set('server', 'proxy_port', '')
+                self.backend.cp_provider.set_connection_info()
+
             return
+
+        # If we get here, we think we are enabling or updating proxy info
+        # based on changes from the gui proxy settings dialog, so take that
+        # to mean that enabledProxy=0 means to unset proxy info, not just to
+        # not override it.
+        self.proxies_were_enabled_from_gui = up2date_cfg['enableProxy']
 
         proxy = up2date_cfg['httpProxy']
         if proxy:
