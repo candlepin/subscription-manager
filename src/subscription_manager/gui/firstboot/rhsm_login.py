@@ -268,6 +268,12 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         # Don't do anything if proxies aren't enabled in rhn config.
         if not up2date_cfg['enableProxy']:
+            # If the rhn config has just flipped it's enabled flag,
+            # we need to unset our proxy_ cfg to be equilivent.
+            cfg.set('server', 'proxy_hostname', '')
+            cfg.set('server', 'proxy_port', '')
+            # reset the connection info to get new proxy settings
+            self.backend.cp_provider.set_connection_info()
             return
 
         proxy = up2date_cfg['httpProxy']
