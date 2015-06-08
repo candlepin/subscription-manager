@@ -21,7 +21,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.14.9
+Version: 1.14.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -485,6 +485,11 @@ fi
 %endif
 
 %changelog
+* Mon Jun 08 2015 William Poteat <wpoteat@redhat.com> 1.14.10-1
+- 1225435: Use LC_ALL instead of LANG for lscpu. (alikins@redhat.com)
+- 1228807: Make disabling proxy via gui apply (alikins@redhat.com)
+- 1224806: Prevent yum blocking on rhsm locks (alikins@redhat.com)
+
 * Tue Jun 02 2015 William Poteat <wpoteat@redhat.com> 1.14.9-1
 - 1223038: Fix API used by openshift clients. (alikins@redhat.com)
 - 1195824: Latest strings from zanata (alikins@redhat.com)
