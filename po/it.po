@@ -5,13 +5,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-21 11:15-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2015-05-21 05:30-0400\n"
 "Last-Translator: fvalen <fvalen@fedoraproject.org>\n"
 "Language-Team: Italian\n"
 "Language: it\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Zanata 3.6.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
@@ -117,7 +117,8 @@ msgstr "Questo sistema è registrato con RHN Classic."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:13
-msgid "This system has already been registered with Red Hat using RHN Classic."
+msgid ""
+"This system has already been registered with Red Hat using RHN Classic."
 msgstr "Questo sistema è già stato registrato con Red Hat usando RHN Classic."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
@@ -128,6 +129,7 @@ msgid ""
 msgstr ""
 "Il sistema è stato nuovamente registrato usando il Red Hat Subscription "
 "Management. Red Hat consiglia agli utenti di eseguire una sola registrazione."
+""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/redhat_branding.py:17
@@ -296,7 +298,8 @@ msgstr "Errore durante la lettura delle informazioni di rete:"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/hwprobe.py:707
 msgid "Error reading network interface information:"
-msgstr "Errore durante la lettura delle informazioni dell'interfaccia di rete:"
+msgstr ""
+"Errore durante la lettura delle informazioni dell'interfaccia di rete:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/hwprobe.py:800
@@ -417,7 +420,8 @@ msgstr "Il sistema non è registrato."
 #. System must be registered but unable to reach server:
 #: ../src/subscription_manager/gui/installedtab.py:207
 msgid "Entitlement server is unreachable."
-msgstr "Impossibile stabilire un collegamento con il server per l'entitlement."
+msgstr ""
+"Impossibile stabilire un collegamento con il server per l'entitlement."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/installedtab.py:210
@@ -872,8 +876,8 @@ msgstr ""
 #: ../src/subscription_manager/gui/registergui.py:603
 msgid ""
 "No service level will cover all installed products. Please manually "
-"subscribe using multiple service levels via the \"All Available Subscriptions"
-"\" tab or purchase additional subscriptions."
+"subscribe using multiple service levels via the \"All Available "
+"Subscriptions\" tab or purchase additional subscriptions."
 msgstr ""
 "Nessun livello di servizio coprirà tutti i prodotti installati. Eseguire una "
 "sottoscrizione manuale usando i livelli del servizio multipli tramite la "
@@ -1027,7 +1031,8 @@ msgstr "Prodotti installati"
 #, python-format
 msgid "There was an error removing %s with serial number %s"
 msgstr ""
-"Si è verificato un errore durante la rimozione di %s con un numero seriale %s"
+"Si è verificato un errore durante la rimozione di %s con un numero seriale "
+"%s"
 
 #: ../src/subscription_manager/gui/mysubstab.py:144
 msgid "Removing"
@@ -1451,11 +1456,11 @@ msgstr ""
 
 #: ../src/subscription_manager/migrate/migrate.py:442
 msgid ""
-"To remove a channel, use 'rhn-channel --remove --"
-"channel=<conflicting_channel>'."
+"To remove a channel, use 'rhn-channel --remove --channel="
+"<conflicting_channel>'."
 msgstr ""
-"Per rimuovere un canale usa 'rhn-channel --remove --"
-"channel=<conflicting_channel>'."
+"Per rimuovere un canale usa 'rhn-channel --remove --channel="
+"<conflicting_channel>'."
 
 #: ../src/subscription_manager/migrate/migrate.py:454
 #, python-format
@@ -1479,8 +1484,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/migrate/migrate.py:491
-msgid ""
-"\n"
+msgid "\n"
 "Use --force to ignore these channels and continue the migration.\n"
 msgstr ""
 "\n"
@@ -1488,16 +1492,15 @@ msgstr ""
 
 #: ../src/subscription_manager/migrate/migrate.py:504
 msgid "Installing product certificates for these legacy channels:"
-msgstr "Installazione certificati dei prodotti per questi canali preesistenti:"
+msgstr ""
+"Installazione certificati dei prodotti per questi canali preesistenti:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:532
 #, python-format
-msgid ""
-"\n"
+msgid "\n"
 "Product certificates installed successfully to %s."
-msgstr ""
-"\n"
+msgstr "\n"
 "Certificati del prodotto installati con successo su %s."
 
 #: ../src/subscription_manager/migrate/migrate.py:604
@@ -1514,7 +1517,8 @@ msgstr ""
 "completeta dal server preesistente per il sistema %s."
 
 #: ../src/subscription_manager/migrate/migrate.py:623
-msgid "Please investigate on the Customer Portal at https://access.redhat.com."
+msgid ""
+"Please investigate on the Customer Portal at https://access.redhat.com."
 msgstr "Controllare sul Portale clienti https://access.redhat.com."
 
 #: ../src/subscription_manager/migrate/migrate.py:633
@@ -1578,11 +1582,9 @@ msgstr "Nessuna preferenza del livello di servizio"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/migrate/migrate.py:728
 #, python-format
-msgid ""
-"\n"
+msgid "\n"
 "Service level \"%s\" is not available."
-msgstr ""
-"\n"
+msgstr "\n"
 "Il livello di servizio \"%s\" non è disponibile."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
@@ -1591,11 +1593,9 @@ msgid "Please select a service level agreement for this system."
 msgstr "Selezionare un contratto del livello di servizio per questo sistema."
 
 #: ../src/subscription_manager/migrate/migrate.py:766
-msgid ""
-"\n"
+msgid "\n"
 "Couldn't enable extra repositories."
-msgstr ""
-"\n"
+msgstr "\n"
 "Impossibile abilitare repository aggiuntivi."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author fvalen
@@ -1614,7 +1614,8 @@ msgstr "Recupero informazioni sulla sottoscrizione preesistente in corso ..."
 
 #: ../src/subscription_manager/migrate/migrate.py:795
 msgid "System is currently subscribed to these legacy channels:"
-msgstr "Il sistema è attualmente sottoscritto ai seguenti canali preesistenti:"
+msgstr ""
+"Il sistema è attualmente sottoscritto ai seguenti canali preesistenti:"
 
 #: ../src/subscription_manager/migrate/migrate.py:807
 msgid "Preparing to unregister system from legacy server..."
@@ -1702,9 +1703,11 @@ msgid "specify the password on the destination server"
 msgstr "specificare la password sul server di destinazione"
 
 #: ../src/subscription_manager/migrate/migrate.py:873
-msgid "The --activation-key and --environment options cannot be used together."
+msgid ""
+"The --activation-key and --environment options cannot be used together."
 msgstr ""
 "Le opzioni --activation-key e --environment non possono essere usate insieme."
+""
 
 #: ../src/subscription_manager/migrate/migrate.py:875
 msgid ""
@@ -1952,7 +1955,8 @@ msgstr "Stato corrente del prodotto installato"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:213
-msgid "Unable to find available subscriptions for all your installed products."
+msgid ""
+"Unable to find available subscriptions for all your installed products."
 msgstr ""
 "Impossibile trovare le sottoscrizioni disponibili per tutti i prodotti "
 "installati."
@@ -1991,7 +1995,8 @@ msgid ""
 "refer to your host system for subscription management.\n"
 msgstr ""
 "Se eseguito all'interno di un container subscription-manager risulterà "
-"disabilitato . Per la gestione delle sottoscrizioni usare il sistema host. \n"
+"disabilitato . Per la gestione delle sottoscrizioni usare il sistema host. "
+"\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:384
@@ -2219,7 +2224,8 @@ msgstr ""
 #: ../src/subscription_manager/managercli.py:775
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
 msgstr ""
-"specificare se abilitare o disabilitare l'auto-attaching delle sottoscrizioni"
+"specificare se abilitare o disabilitare l'auto-attaching delle "
+"sottoscrizioni"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:780
@@ -2386,7 +2392,8 @@ msgstr "registra il sistema anche se già registrato"
 
 #: ../src/subscription_manager/managercli.py:970
 msgid ""
-"system preference used when subscribing automatically, requires --auto-attach"
+"system preference used when subscribing automatically, requires --auto-"
+"attach"
 msgstr ""
 "preferenze del sistema usate con la sottoscrizione automatica, ha bisogno di "
 "--auto-attach"
@@ -2516,7 +2523,8 @@ msgstr ""
 #: ../src/subscription_manager/managercli.py:1274
 msgid ""
 "Error: This command requires that you specify an email address with --email."
-msgstr "Errore: Con questo comando specificare un indirizzo email con --email."
+msgstr ""
+"Errore: Con questo comando specificare un indirizzo email con --email."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:1311
@@ -2633,7 +2641,8 @@ msgstr "Assegnare una sottoscrizioni specifica al sistema registrato"
 
 #: ../src/subscription_manager/managercli.py:1430
 msgid "Error: --auto may not be used when specifying pools."
-msgstr "Errore: --auto può non essere utilizzato quando si specificano i pool."
+msgstr ""
+"Errore: --auto può non essere utilizzato quando si specificano i pool."
 
 #: ../src/subscription_manager/managercli.py:1432
 msgid "Error: The --servicelevel option cannot be used when specifying pools."
@@ -2724,7 +2733,8 @@ msgstr "Errore: '%s' non è un numero seriale valido"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:1602
-msgid "Error: This command requires that you specify one of --serial or --all."
+msgid ""
+"Error: This command requires that you specify one of --serial or --all."
 msgstr ""
 "Errore: Con questo comando specificare una opzione tra  --serial o --all."
 
@@ -2756,7 +2766,8 @@ msgstr "I numeri seriali non sono stati rimossi con successo dal server:"
 #: ../src/subscription_manager/managercli.py:1672
 #, python-format
 msgid "Unable to perform remove due to the following exception: %s"
-msgstr "Impossibile eseguire la rimozione a causa della seguente eccezione: %s"
+msgstr ""
+"Impossibile eseguire la rimozione a causa della seguente eccezione: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:1661
@@ -2917,6 +2928,7 @@ msgstr "Repositori disponibili in %s"
 msgid "There were no available repositories matching the specified criteria."
 msgstr ""
 "Non è stato trovato alcun repositorio corrispondente al criterio specificato."
+""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:1959
@@ -2946,7 +2958,8 @@ msgstr "Il repositorio '%s' è disabilitato per questo sistema."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:2029
-msgid "List, set, or remove the configuration parameters in use by this system"
+msgid ""
+"List, set, or remove the configuration parameters in use by this system"
 msgstr ""
 "Elencare, impostare o rimuovere i parametri di configurazione usati da "
 "questo sistema"
@@ -3110,8 +3123,10 @@ msgstr "Errore: --ondate è applicabile solo con --available"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: ../src/subscription_manager/managercli.py:2159
-msgid "Error: --servicelevel is only applicable with --available or --consumed"
-msgstr "Errore: --servicelevel è solo applicabile con --available o --consumed"
+msgid ""
+"Error: --servicelevel is only applicable with --available or --consumed"
+msgstr ""
+"Errore: --servicelevel è solo applicabile con --available o --consumed"
 
 #: ../src/subscription_manager/managercli.py:2163
 msgid "Error: --match-installed is only applicable with --available"
@@ -3176,6 +3191,7 @@ msgstr ""
 #, python-format
 msgid ""
 "No available subscription pools were found matching the service level \"%s\"."
+""
 msgstr ""
 "Nessun pool di sottoscrizione trovato che corrisponde al livello di servizio "
 "\"%s\"."
@@ -3252,8 +3268,8 @@ msgstr "repositorio da modificare (può essere specificato più di una volta)"
 
 #: ../src/subscription_manager/managercli.py:2424
 msgid ""
-"name of the override to remove (can be specified more than once); used with "
-"--repo option."
+"name of the override to remove (can be specified more than once); used with -"
+"-repo option."
 msgstr ""
 "nome dell'override da rimuovere (può essere specificato più di una volta); "
 "usato con l'opzione --repo."
@@ -3274,7 +3290,8 @@ msgstr ""
 "fornendo l'opzione --repo"
 
 #: ../src/subscription_manager/managercli.py:2431
-msgid "list all overrides; can be specific to a repository by providing --repo"
+msgid ""
+"list all overrides; can be specific to a repository by providing --repo"
 msgstr ""
 "elencare tutti gli override; può essere specifico ad un repositorio fornendo "
 "l'opzione --repo"
@@ -3297,7 +3314,8 @@ msgid "Error: You may not use --list with --remove-all"
 msgstr "Errore: Non è possibile usare --list con --remove-all"
 
 #: ../src/subscription_manager/managercli.py:2453
-msgid "Error: The --repo option must be used with --list or --add or --remove."
+msgid ""
+"Error: The --repo option must be used with --list or --add or --remove."
 msgstr ""
 "Errore: L'opzione --repo deve essere usata con --list o --add o --remove."
 
@@ -3365,7 +3383,8 @@ msgstr "Non è possibile usare le date passate."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:2573
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr ""
 "La data inserita non è valida. La data deve avere un formato YYYY-MM-DD (per "
 "esempio: "
@@ -5296,6 +5315,7 @@ msgstr "Sottoscrizioni con entitlement parziali"
 #: ../src/rhsm_icon/rhsm_icon.c:222
 msgid ""
 "This system is missing one or more subscriptions to fully cover its products."
+""
 msgstr ""
 "Uno o più sottoscrizioni risultano mancanti per questo sistema per poter "
 "includere tutti i suoi prodotti."
