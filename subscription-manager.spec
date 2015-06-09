@@ -337,16 +337,16 @@ rm -rf %{buildroot}
 %dir %{_datadir}/rhsm/subscription_manager/branding
 %dir %{_datadir}/rhsm/subscription_manager/model
 %dir %{_datadir}/rhsm/subscription_manager/plugin
-%dir %{_datadir}/rhsm/subscription_manager/ga
-%dir %{_datadir}/rhsm/subscription_manager/ga/ga_gtk2
+%dir %{_datadir}/rhsm/subscription_manager/ga_impls
+%dir %{_datadir}/rhsm/subscription_manager/ga_impls/ga_gtk2
 
 # code, python modules and packages
 %{_datadir}/rhsm/subscription_manager/*.py*
 
 %{_datadir}/rhsm/subscription_manager/branding/*.py*
 
-%{_datadir}/rhsm/subscription_manager/ga/*.py*
-%{_datadir}/rhsm/subscription_manager/ga/ga_gtk2/*.py*
+%{_datadir}/rhsm/subscription_manager/ga_impls/*.py*
+%{_datadir}/rhsm/subscription_manager/ga_impls/ga_gtk2/*.py*
 
 %{_datadir}/rhsm/subscription_manager/model/*.py*
 

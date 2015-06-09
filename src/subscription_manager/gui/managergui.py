@@ -27,14 +27,10 @@ import subprocess
 import urllib2
 import webbrowser
 
-#from gi.repository import Gtk
-#from gi.repository import GObject
 
 import rhsm.config as config
 
-from subscription_manager import ga
-print 'ga', ga
-print 'ga.GObject', ga.GObject
+from subscription_manager.ga import Gtk as ga_Gtk
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker
@@ -141,10 +137,6 @@ class MainWindow(widgets.SubmanBaseWidget):
                  auto_launch_registration=False):
         super(MainWindow, self).__init__()
 
-        log.debug("ga %s", ga)
-        log.debug("ga.GObject %s", ga.GObject)
-
-        log.debug("ga.GObject.PARAM_READWRITE %s", ga.GObject.PARAM_READWRITE)
         self.backend = backend or Backend()
         self.identity = require(IDENTITY)
 
@@ -188,9 +180,9 @@ class MainWindow(widgets.SubmanBaseWidget):
 
         self.redeem_dialog = redeem.RedeemDialog(self.backend)
 
-        self.installed_tab_icon = ga.Gtk.Image()
-        self.installed_tab_icon.set_from_stock(ga.Gtk.STOCK_YES,
-                ga.Gtk.IconSize.MENU)
+        self.installed_tab_icon = ga_Gtk.Image()
+        self.installed_tab_icon.set_from_stock(ga_Gtk.STOCK_YES,
+                ga_Gtk.IconSize.MENU)
 
         self.installed_tab = InstalledProductsTab(self.backend,
                                                   self.facts,
@@ -207,14 +199,14 @@ class MainWindow(widgets.SubmanBaseWidget):
                                                 self.facts,
                                                 self.main_window)
 
-        hbox = ga.Gtk.HBox(spacing=6)
+        hbox = ga_Gtk.HBox(spacing=6)
         hbox.pack_start(self.installed_tab_icon, False, False, 0)
-        hbox.pack_start(ga.Gtk.Label(self.installed_tab.get_label()), False, False, 0)
+        hbox.pack_start(ga_Gtk.Label(self.installed_tab.get_label()), False, False, 0)
         self.notebook.append_page(self.installed_tab.get_content(), hbox)
         hbox.show_all()
 
         self.notebook.append_page(self.my_subs_tab.get_content(),
-                                  ga.Gtk.Label(self.my_subs_tab.get_label()))
+                                  ga_Gtk.Label(self.my_subs_tab.get_label()))
 
         self.connect_signals({
             "on_register_menu_item_activate": self._register_item_clicked,
@@ -228,7 +220,7 @@ class MainWindow(widgets.SubmanBaseWidget):
             "on_about_menu_item_activate": self._about_item_clicked,
             "on_getting_started_menu_item_activate": self._getting_started_item_clicked,
             "on_online_docs_menu_item_activate": self._online_docs_item_clicked,
-            "on_quit_menu_item_activate": ga.Gtk.main_quit,
+            "on_quit_menu_item_activate": ga_Gtk.main_quit,
         })
 
         def on_cert_change():
@@ -270,7 +262,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         # Show the All Subscriptions tab if registered, hide it otherwise:
         if self.registered() and self.notebook.get_n_pages() == 2:
             self.notebook.append_page(self.all_subs_tab.get_content(),
-                    ga.Gtk.Label(self.all_subs_tab.get_label()))
+                    ga_Gtk.Label(self.all_subs_tab.get_label()))
         elif not self.registered() and self.notebook.get_n_pages() == 3:
             self.notebook.set_current_page(0)
             self.notebook.remove_page(2)

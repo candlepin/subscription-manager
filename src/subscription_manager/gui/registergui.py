@@ -24,9 +24,8 @@ import sys
 import threading
 
 
-from subscription_manager import ga
-#from gi.repository import GObject
-#from gi.repository import Gtk
+from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.ga import GObject as ga_GObject
 
 import rhsm.config as config
 from rhsm.utils import ServerUrlParseError
@@ -319,7 +318,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
 
         self._set_navigation_sensitive(True)
         self._clear_registration_widgets()
-        self.timer = ga.GObject.timeout_add(100, self._timeout_callback)
+        self.timer = ga_GObject.timeout_add(100, self._timeout_callback)
 
     def _set_initial_screen(self):
         target = self._get_initial_screen()
@@ -350,11 +349,11 @@ class RegisterScreen(widgets.SubmanBaseWidget):
 
         if get_state() == REGISTERING:
             # aka, if this is firstboot
-            if not isinstance(self.register_dialog, ga.Gtk.VBox):
+            if not isinstance(self.register_dialog, ga_Gtk.VBox):
                 self.register_dialog.set_title(_("System Registration"))
             self.progress_label.set_markup(_("<b>Registering</b>"))
         elif get_state() == SUBSCRIBING:
-            if not isinstance(self.register_dialog, ga.Gtk.VBox):
+            if not isinstance(self.register_dialog, ga_Gtk.VBox):
                 self.register_dialog.set_title(_("Subscription Attachment"))
             self.progress_label.set_markup(_("<b>Attaching</b>"))
 
@@ -394,8 +393,8 @@ class RegisterScreen(widgets.SubmanBaseWidget):
             self.finish_registration()
             return
 
-        #while ga.Gtk.events_pending():
-        #    ga.Gtk.main_iteration()
+        #while ga_Gtk.events_pending():
+        #    ga_Gtk.main_iteration()
         self._set_screen(screen)
         async = self._screens[self._current_screen].pre()
         if async:
@@ -422,7 +421,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
 
         self.emit_consumer_signal()
 
-        ga.GObject.source_remove(self.timer)
+        ga_GObject.source_remove(self.timer)
 
     def emit_consumer_signal(self):
         for method in self.callbacks:
@@ -444,8 +443,8 @@ class RegisterScreen(widgets.SubmanBaseWidget):
             screen.clear()
 
     def pre_done(self, next_screen):
-        #while ga.Gtk.events_pending():
-        #    ga.Gtk.main_iteration()
+        #while ga_Gtk.events_pending():
+        #    ga_Gtk.main_iteration()
 
         self._set_navigation_sensitive(True)
         if next_screen == DONT_CHANGE:
@@ -594,9 +593,9 @@ class ConfirmSubscriptionsScreen(Screen):
                                                          backend)
         self.button_label = _("Attach")
 
-        self.store = ga.Gtk.ListStore(str, bool, str)
+        self.store = ga_Gtk.ListStore(str, bool, str)
         self.subs_treeview.set_model(self.store)
-        self.subs_treeview.get_selection().set_mode(ga.Gtk.SelectionMode.NONE)
+        self.subs_treeview.get_selection().set_mode(ga_Gtk.SelectionMode.NONE)
 
         self.add_text_column(_("Subscription"), 0, True)
 
@@ -607,8 +606,8 @@ class ConfirmSubscriptionsScreen(Screen):
         self.add_text_column(_("Quantity"), 2)
 
     def add_text_column(self, name, index, expand=False):
-        text_renderer = ga.Gtk.CellRendererText()
-        column = ga.Gtk.TreeViewColumn(name, text_renderer, text=index)
+        text_renderer = ga_Gtk.CellRendererText()
+        column = ga_Gtk.TreeViewColumn(name, text_renderer, text=index)
         column.set_expand(expand)
 
         self.subs_treeview.append_column(column)
@@ -663,7 +662,7 @@ class SelectSLAScreen(Screen):
         # then pack_start so we don't end up with radio buttons at the bottom
         # of the screen.
         for sla in reversed(sla_data_map.keys()):
-            radio = ga.Gtk.RadioButton(group=group, label=sla)
+            radio = ga_Gtk.RadioButton(group=group, label=sla)
             radio.connect("toggled", self._radio_clicked, sla)
             self.sla_radio_container.pack_start(radio, expand=False,
                                                 fill=False, padding=0)
@@ -786,8 +785,8 @@ class EnvironmentScreen(Screen):
         super(EnvironmentScreen, self).__init__(parent, backend)
 
         self.pre_message = _("Fetching list of possible environments")
-        renderer = ga.Gtk.CellRendererText()
-        column = ga.Gtk.TreeViewColumn(_("Environment"), renderer, text=1)
+        renderer = ga_Gtk.CellRendererText()
+        column = ga_Gtk.TreeViewColumn(_("Environment"), renderer, text=1)
         self.environment_treeview.set_property("headers-visible", False)
         self.environment_treeview.append_column(column)
 
@@ -825,7 +824,7 @@ class EnvironmentScreen(Screen):
         self._parent.environment = self._environment
 
     def set_model(self, envs):
-        environment_model = ga.Gtk.ListStore(str, str)
+        environment_model = ga_Gtk.ListStore(str, str)
         for env in envs:
             environment_model.append(env)
 
@@ -844,8 +843,8 @@ class OrganizationScreen(Screen):
 
         self.pre_message = _("Fetching list of possible organizations")
 
-        renderer = ga.Gtk.CellRendererText()
-        column = ga.Gtk.TreeViewColumn(_("Organization"), renderer, text=1)
+        renderer = ga_Gtk.CellRendererText()
+        column = ga_Gtk.TreeViewColumn(_("Organization"), renderer, text=1)
         self.owner_treeview.set_property("headers-visible", False)
         self.owner_treeview.append_column(column)
 
@@ -891,7 +890,7 @@ class OrganizationScreen(Screen):
         self._parent.owner_key = self._owner_key
 
     def set_model(self, owners):
-        owner_model = ga.Gtk.ListStore(str, str)
+        owner_model = ga_Gtk.ListStore(str, str)
         for owner in owners:
             owner_model.append(owner)
 
@@ -1394,13 +1393,13 @@ class AsyncBackend(object):
             return True
 
     def get_owner_list(self, username, callback):
-        ga.GObject.idle_add(self._watch_thread)
+        ga_GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._get_owner_list,
                          name="GetOwnerListThread",
                          args=(username, callback)).start()
 
     def get_environment_list(self, owner_key, callback):
-        ga.GObject.idle_add(self._watch_thread)
+        ga_GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._get_environment_list,
                          name="GetEnvironmentListThread",
                          args=(owner_key, callback)).start()
@@ -1410,7 +1409,7 @@ class AsyncBackend(object):
         Run consumer registration asyncronously
         """
         log.debug("register_consumer, about to idle add")
-        ga.GObject.idle_add(self._watch_thread)
+        ga_GObject.idle_add(self._watch_thread)
         log.debug("register_consumer, about to Thread")
         threading.Thread(target=self._register_consumer,
                          name="RegisterConsumerThread",
@@ -1418,7 +1417,7 @@ class AsyncBackend(object):
                                env, activation_keys, callback)).start()
 
     def subscribe(self, uuid, current_sla, dry_run_result, callback):
-        ga.GObject.idle_add(self._watch_thread)
+        ga_GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._subscribe,
                          name="SubscribeThread",
                          args=(uuid, current_sla,
@@ -1426,14 +1425,14 @@ class AsyncBackend(object):
 
     def find_service_levels(self, consumer_uuid, facts, callback):
         log.debug("find_service_levels, about to idle add")
-        ga.GObject.idle_add(self._watch_thread)
+        ga_GObject.idle_add(self._watch_thread)
         log.debug("find_service_levels, about to Trhead")
         threading.Thread(target=self._find_service_levels,
                          name="FindServiceLevelsThread",
                          args=(consumer_uuid, facts, callback)).start()
 
     def refresh(self, callback):
-        ga.GObject.idle_add(self._watch_thread)
+        ga_GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._refresh,
                          name="RefreshThread",
                          args=(callback,)).start()

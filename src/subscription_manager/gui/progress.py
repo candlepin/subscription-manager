@@ -15,7 +15,7 @@
 
 #from gi.repository import Gdk
 
-from subscription_manager import ga
+from subscription_manager.ga import Gdk as ga_Gdk
 from subscription_manager.gui import widgets
 
 
@@ -28,7 +28,7 @@ class Progress(widgets.SubmanBaseWidget):
         super(Progress, self).__init__()
 
         self.progressWindow.connect("delete-event", self._on_delete_event)
-        cursor = ga.Gdk.Cursor(ga.Gdk.CursorType.WATCH)
+        cursor = ga_Gdk.Cursor(ga_Gdk.CursorType.WATCH)
         self.progressWindow.get_window().set_cursor(cursor)
 
         self.lastProgress = 0.0

@@ -30,12 +30,16 @@ log = logging.getLogger(__name__)
 #from gi.repository import Gtk
 #from gi.repository from gi.repository import Gtk
 
-from subscription_manager import ga
-ga.GObject.threads_init()
+from subscription_manager import ga_loader
+ga_loader.init_ga()
+
+from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.gui import managergui
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager import injection as inj
 from subscription_manager.gui import registergui
+
+ga_GObject.threads_init()
 
 __all__ = ["RHSMSpoke"]
 

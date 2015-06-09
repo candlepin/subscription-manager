@@ -19,7 +19,7 @@ import fixture
 
 import mock
 
-from subscription_manager import ga
+from subscription_manager.ga import GObject as ga_GObject
 import subscription_manager.injection as inj
 from subscription_manager.injection import provide, IDENTITY
 from subscription_manager import async
@@ -71,9 +71,9 @@ class TestAsyncPool(fixture.SubManFixture):
         self.ap = async.AsyncPool(self.pool_stash)
 
         # add a timeout and a idle handler
-        self.idle = ga.GObject.idle_add(self.ap.refresh, datetime.date.today(), self.idle_callback)
-        self.timer = ga.GObject.timeout_add(50, self.idle_callback)
-        self.mainloop = ga.GObject.MainLoop()
+        self.idle = ga_GObject.idle_add(self.ap.refresh, datetime.date.today(), self.idle_callback)
+        self.timer = ga_GObject.timeout_add(50, self.idle_callback)
+        self.mainloop = ga_GObject.MainLoop()
 
     def test(self):
         self._create_async_pool()

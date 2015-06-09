@@ -21,7 +21,8 @@ Perfers to use gio as the backend, but can fallback to polling.
 
 #from gi.repository import GObject
 #from gi.repository import GLib
-from subscription_manager import ga
+from subscription_manager.ga import GObject
+from subscription_manager.ga import GLib
 
 import os
 
@@ -58,16 +59,16 @@ class MonitorDirectory(object):
         return result
 
 
-class Monitor(ga.GObject.GObject):
+class Monitor(GObject.GObject):
 
     __gsignals__ = {
-        'changed': (ga.GObject.SignalFlags.RUN_LAST, None,
-            (ga.GObject.TYPE_BOOLEAN, ga.GObject.TYPE_BOOLEAN, ga.GObject.TYPE_BOOLEAN))
+        'changed': (GObject.SignalFlags.RUN_LAST, None,
+            (GObject.TYPE_BOOLEAN, GObject.TYPE_BOOLEAN, GObject.TYPE_BOOLEAN))
     }
 
     def __init__(self):
         #self.__gobject_init__()
-        ga.GObject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         cfg = rhsm.config.initConfig()
         # Identity, Entitlements, Products
         self.dirs = [MonitorDirectory(cfg.get('rhsm', 'consumerCertDir')),
@@ -75,7 +76,7 @@ class Monitor(ga.GObject.GObject):
                 MonitorDirectory(cfg.get('rhsm', 'productCertDir'))]
 
         # poll every 2 seconds for changes
-        ga.GLib.timeout_add(2000, self.run_check)
+        GLib.timeout_add(2000, self.run_check)
 
     def run_check(self):
         result = [directory.update() for directory in self.dirs]

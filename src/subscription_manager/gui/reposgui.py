@@ -16,7 +16,8 @@
 import gettext
 import logging
 
-from subscription_manager import ga
+from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.ga import GdkPixbuf as ga_GdkPixbuf
 
 import rhsm.config
 from subscription_manager.gui.utils import handle_gui_exception
@@ -53,7 +54,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
         super(RepositoriesDialog, self).__init__()
 
         # Set up dynamic elements
-        self.overrides_treeview = ga.Gtk.TreeView()
+        self.overrides_treeview = ga_Gtk.TreeView()
         # Add at-spi because we no longer create this widget from glade
         self.overrides_treeview.get_accessible().set_name("Repository View")
         self.no_repos_label, self.no_repos_label_viewport = widgets.get_scrollable_label()
@@ -77,7 +78,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
             "repo_id": str,
             "enabled": bool,
             "modified": bool,
-            "modified-icon": ga.GdkPixbuf.Pixbuf,
+            "modified-icon": ga_GdkPixbuf.Pixbuf,
             "name": str,
             "baseurl": str,
             "gpgcheck": bool,
@@ -99,8 +100,8 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
 
         self.overrides_treeview.set_model(self.overrides_store)
 
-        self.modified_icon = self.overrides_treeview.render_icon(ga.Gtk.STOCK_APPLY,
-                                                                 ga.Gtk.IconSize.MENU)
+        self.modified_icon = self.overrides_treeview.render_icon(ga_Gtk.STOCK_APPLY,
+                                                                 ga_Gtk.IconSize.MENU)
 
         sortable_cols = []
         enabled_col = CheckBoxColumn(_("Enabled"), self.overrides_store, 'enabled',
@@ -118,7 +119,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
         self.overrides_treeview.append_column(repo_id_col)
         sortable_cols.append((repo_id_col, 'text', 'repo_id'))
 
-        modified_col = ga.Gtk.TreeViewColumn(_("Modified"), ga.Gtk.CellRendererPixbuf(),
+        modified_col = ga_Gtk.TreeViewColumn(_("Modified"), ga_Gtk.CellRendererPixbuf(),
                                           pixbuf=self.overrides_store['modified-icon'])
         self.overrides_treeview.append_column(modified_col)
         sortable_cols.append((modified_col, 'text', 'modified'))
@@ -142,7 +143,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
         current_overrides = self.backend.overrides.get_overrides(self.identity.uuid) or []
         self._refresh(current_overrides)
         # By default sort by repo_id
-        self.overrides_store.set_sort_column_id(0, ga.Gtk.SortType.ASCENDING)
+        self.overrides_store.set_sort_column_id(0, ga_Gtk.SortType.ASCENDING)
 
     def _refresh(self, current_overrides, repo_id_to_select=None):
         overrides_per_repo = {}

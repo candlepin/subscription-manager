@@ -20,13 +20,12 @@ from subscription_manager.branding import get_branding
 from subscription_manager.gui import widgets
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.utils import friendly_join
-from subscription_manager import ga
 
 import logging
 import gettext
-#from gi.repository import GObject
-#from gi.repository import Gtk
-#from gi.repository import GdkPixbuf
+from subscription_manager.ga import GObject as ga_GObject
+from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.ga import GdkPixbuf as ga_GdkPixbuf
 import os
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -40,10 +39,10 @@ INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 UNKNOWN_IMG = os.path.join(prefix, "data/icons/unknown.svg")
 
 ICONSET = {
-    'green': ga.GdkPixbuf.Pixbuf.new_from_file_at_size(VALID_IMG, 13, 13),
-    'red': ga.GdkPixbuf.Pixbuf.new_from_file_at_size(INVALID_IMG, 13, 13),
-    'yellow': ga.GdkPixbuf.Pixbuf.new_from_file_at_size(PARTIAL_IMG, 13, 13),
-    'unknown': ga.GdkPixbuf.Pixbuf.new_from_file_at_size(UNKNOWN_IMG, 13, 13),
+    'green': ga_GdkPixbuf.Pixbuf.new_from_file_at_size(VALID_IMG, 13, 13),
+    'red': ga_GdkPixbuf.Pixbuf.new_from_file_at_size(INVALID_IMG, 13, 13),
+    'yellow': ga_GdkPixbuf.Pixbuf.new_from_file_at_size(PARTIAL_IMG, 13, 13),
+    'unknown': ga_GdkPixbuf.Pixbuf.new_from_file_at_size(UNKNOWN_IMG, 13, 13),
 }
 
 
@@ -76,9 +75,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.backend = backend
 
         # Product column
-        text_renderer = ga.Gtk.CellRendererText()
-        image_renderer = ga.Gtk.CellRendererPixbuf()
-        column = ga.Gtk.TreeViewColumn(_('Product'))
+        text_renderer = ga_Gtk.CellRendererText()
+        image_renderer = ga_Gtk.CellRendererPixbuf()
+        column = ga_Gtk.TreeViewColumn(_('Product'))
 
         column.set_expand(True)
         column.pack_start(image_renderer, False)
@@ -256,16 +255,16 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def get_type_map(self):
         return {
-            'image': ga.GdkPixbuf.Pixbuf,
+            'image': ga_GdkPixbuf.Pixbuf,
             'product': str,
             'product_id': str,
             'version': str,
             'arch': str,
             'status': str,
             'validity_note': str,
-            'subscription': ga.GObject.TYPE_PYOBJECT,
-            'start_date': ga.GObject.TYPE_PYOBJECT,
-            'expiration_date': ga.GObject.TYPE_PYOBJECT,
+            'subscription': ga_GObject.TYPE_PYOBJECT,
+            'start_date': ga_GObject.TYPE_PYOBJECT,
+            'expiration_date': ga_GObject.TYPE_PYOBJECT,
             'serial': str,
             'align': float
         }
@@ -282,7 +281,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         elif status_type == UNKNOWN_STATUS:
             img = UNKNOWN_IMG
 
-        pix_buf = ga.GdkPixbuf.Pixbuf.new_from_file_at_size(img, 13, 13)
+        pix_buf = ga_GdkPixbuf.Pixbuf.new_from_file_at_size(img, 13, 13)
         self.tab_icon.set_from_pixbuf(pix_buf)
 
     def _set_validity_status(self):

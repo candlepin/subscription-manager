@@ -17,7 +17,7 @@ import gettext
 import logging
 import os
 
-from subscription_manager import ga
+from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager import rhelentbranding
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui.utils import show_error_window
@@ -36,23 +36,23 @@ class ImportSubDialog(object):
     def __init__(self):
         self._parent = None
 
-        self.dialog = ga.Gtk.FileChooserDialog(_("Import Certificates"),
-                None, ga.Gtk.FileChooserAction.OPEN,
-                (ga.Gtk.STOCK_CANCEL, ga.Gtk.ResponseType.CANCEL,
-                 _("Import"), ga.Gtk.ResponseType.OK))
-        self.dialog.set_default_response(ga.Gtk.ResponseType.OK)
+        self.dialog = ga_Gtk.FileChooserDialog(_("Import Certificates"),
+                None, ga_Gtk.FileChooserAction.OPEN,
+                (ga_Gtk.STOCK_CANCEL, ga_Gtk.ResponseType.CANCEL,
+                 _("Import"), ga_Gtk.ResponseType.OK))
+        self.dialog.set_default_response(ga_Gtk.ResponseType.OK)
         self.dialog.set_modal(True)
 
         self.dialog.set_local_only(True)
         self.dialog.set_select_multiple(True)
         self.dialog.set_icon_name('subscription-manager')
 
-        afilter = ga.Gtk.FileFilter()
+        afilter = ga_Gtk.FileFilter()
         afilter.set_name(_("Certificates"))
         afilter.add_pattern("*.pem")
         self.dialog.add_filter(afilter)
 
-        afilter = ga.Gtk.FileFilter()
+        afilter = ga_Gtk.FileFilter()
         afilter.set_name(_("All files"))
         afilter.add_pattern("*")
         self.dialog.add_filter(afilter)
@@ -61,9 +61,9 @@ class ImportSubDialog(object):
         self.dialog.connect("delete-event", self._delete_event)
 
     def _on_dialog_response(self, dialog, response_id):
-        if response_id == ga.Gtk.ResponseType.CANCEL:
+        if response_id == ga_Gtk.ResponseType.CANCEL:
             return self._cancel_button_clicked()
-        elif response_id == ga.Gtk.ResponseType.OK:
+        elif response_id == ga_Gtk.ResponseType.OK:
             return self._import_button_clicked()
         # other response is on dialog destroy, we don't act on that.
 

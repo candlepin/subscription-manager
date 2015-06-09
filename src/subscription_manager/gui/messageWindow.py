@@ -14,9 +14,9 @@
 #
 import gettext
 
-from subscription_manager import ga
-#from gi.repository import GObject
-#from gi.repository import Gtk
+from subscription_manager.ga import GObject as ga_GObject
+from subscription_manager.ga import Gtk as ga_Gtk
+
 
 _ = gettext.gettext
 
@@ -46,20 +46,20 @@ def wrap_text(txt):
     return '\n'.join(map(wrap_line, txt.split('\n')))
 
 
-class MessageWindow(ga.GObject.GObject):
+class MessageWindow(ga_GObject.GObject):
 
     __gsignals__ = {
-            'response': (ga.GObject.SignalFlags.RUN_LAST, None,
-                (ga.GObject.TYPE_BOOLEAN,))
+            'response': (ga_GObject.SignalFlags.RUN_LAST, None,
+                (ga_GObject.TYPE_BOOLEAN,))
     }
 
     def __init__(self, text, parent=None, title=None):
-        ga.GObject.GObject.__init__(self)
+        ga_GObject.GObject.__init__(self)
         self.rc = None
 
         # this seems to be wordwrapping text passed to
         # it, which is making for ugly error messages
-        self.dialog = ga.Gtk.MessageDialog(parent, 0, self.STYLE, self.BUTTONS)
+        self.dialog = ga_Gtk.MessageDialog(parent, 0, self.STYLE, self.BUTTONS)
 
         if title:
             self.dialog.set_title(title)
@@ -69,18 +69,18 @@ class MessageWindow(ga.GObject.GObject):
 
         self.dialog.set_default_response(0)
 
-        self.dialog.set_position(ga.Gtk.WindowPosition.CENTER_ON_PARENT)
+        self.dialog.set_position(ga_Gtk.WindowPosition.CENTER_ON_PARENT)
         self.dialog.show_all()
         self.dialog.set_icon_name('subscription-manager')
 
         self.dialog.set_modal(True)
         #this seems spurious, but without it, a ref to this obj gets "lost"
-        ga.GObject.add_emission_hook(self, 'response', self.noop_hook)
+        ga_GObject.add_emission_hook(self, 'response', self.noop_hook)
 
         self.dialog.connect("response", self._on_response_event)
 
     def _on_response_event(self, dialog, response):
-        rc = response in [ga.Gtk.ResponseType.OK, ga.Gtk.ResponseType.YES]
+        rc = response in [ga_Gtk.ResponseType.OK, ga_Gtk.ResponseType.YES]
         self.emit('response', rc)
         self.hide()
 
@@ -93,29 +93,29 @@ class MessageWindow(ga.GObject.GObject):
 
 class ErrorDialog(MessageWindow):
 
-    BUTTONS = ga.Gtk.ButtonsType.OK
-    STYLE = ga.Gtk.MessageType.ERROR
+    BUTTONS = ga_Gtk.ButtonsType.OK
+    STYLE = ga_Gtk.MessageType.ERROR
 
 
 class OkDialog(MessageWindow):
 
-    BUTTONS = ga.Gtk.ButtonsType.OK
-    STYLE = ga.Gtk.MessageType.INFO
+    BUTTONS = ga_Gtk.ButtonsType.OK
+    STYLE = ga_Gtk.MessageType.INFO
 
 
 class InfoDialog(MessageWindow):
 
-    BUTTONS = ga.Gtk.ButtonsType.OK
-    STYLE = ga.Gtk.MessageType.INFO
+    BUTTONS = ga_Gtk.ButtonsType.OK
+    STYLE = ga_Gtk.MessageType.INFO
 
 
 class YesNoDialog(MessageWindow):
 
-    BUTTONS = ga.Gtk.ButtonsType.YES_NO
-    STYLE = ga.Gtk.MessageType.QUESTION
+    BUTTONS = ga_Gtk.ButtonsType.YES_NO
+    STYLE = ga_Gtk.MessageType.QUESTION
 
 
 class ContinueDialog(MessageWindow):
 
-    BUTTONS = ga.Gtk.ButtonsType.OK_CANCEL
-    STYLE = ga.Gtk.MessageType.WARNING
+    BUTTONS = ga_Gtk.ButtonsType.OK_CANCEL
+    STYLE = ga_Gtk.MessageType.WARNING

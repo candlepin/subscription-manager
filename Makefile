@@ -200,14 +200,14 @@ install-plugins-dir:
 install-plugins: install-plugins-dir install-content-plugins
 
 install-ga-dir:
-	install -d $(PYTHON_INST_DIR)/ga
-	install -d $(PYTHON_INST_DIR)/ga/ga_gtk2
+	install -d $(PYTHON_INST_DIR)/ga_impls
+	install -d $(PYTHON_INST_DIR)/ga_impls/ga_gtk2
 
 # Install our gtk2/gtk3 compat modules
 # TODO: make this default to only install the approriate version for a rhel release
 install-ga: install-ga-dir
-	install -m 644 -p $(SRC_DIR)/ga/*.py $(PYTHON_INST_DIR)/ga
-	install -m 644 -p $(SRC_DIR)/ga/ga_gtk2/*.py $(PYTHON_INST_DIR)/ga/ga_gtk2
+	install -m 644 -p $(SRC_DIR)/ga_impls/*.py $(PYTHON_INST_DIR)/ga_impls
+	install -m 644 -p $(SRC_DIR)/ga_impls/ga_gtk2/*.py $(PYTHON_INST_DIR)/ga_impls/ga_gtk2
 
 
 .PHONY: install-example-plugins

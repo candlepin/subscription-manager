@@ -17,7 +17,7 @@ import unittest
 
 import mock
 
-from subscription_manager import ga
+from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.gui import about
 
 
@@ -38,7 +38,7 @@ class TestAboutDialog(unittest.TestCase):
         about_dialog.show()
         # a response we do not how to handle
         about_dialog.dialog.emit("response",
-                                 ga.Gtk.ResponseType.YES)
+                                 ga_Gtk.ResponseType.YES)
         # and a "response" we know how to handle
         about_dialog.dialog.emit("response",
-                                 ga.Gtk.ResponseType.CANCEL)
+                                 ga_Gtk.ResponseType.CANCEL)
