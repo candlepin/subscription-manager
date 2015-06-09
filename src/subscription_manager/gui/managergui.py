@@ -309,13 +309,14 @@ class MainWindow(widgets.SubmanBaseWidget):
         """
         is_registered = self.registered()
         if is_registered:
-            self.register_menu_item.hide()
-            self.unregister_menu_item.show()
-            self.settings_menu_item.show()  # preferences
+            #self.register_menu_item.hide()
+            self.register_menu_item.set_sensitive(False)
+            self.unregister_menu_item.set_sensitive(True)
+            self.settings_menu_item.set_sensitive(True)  # preferences
         else:
-            self.register_menu_item.show()
-            self.unregister_menu_item.hide()
-            self.settings_menu_item.hide()
+            self.register_menu_item.set_sensitive(True)
+            self.unregister_menu_item.set_sensitive(False)
+            self.settings_menu_item.set_sensitive(False)
 
         show_overrides = False
         try:
@@ -327,9 +328,9 @@ class MainWindow(widgets.SubmanBaseWidget):
             log.debug(e)
 
         if show_overrides:
-            self.repos_menu_item.show()
+            self.repos_menu_item.set_sensitive(True)
         else:
-            self.repos_menu_item.hide()
+            self.repos_menu_item.set_sensitive(False)
 
     def _show_redemption_buttons(self):
         # Check if consumer can redeem a subscription - if an identity cert exists
@@ -343,9 +344,9 @@ class MainWindow(widgets.SubmanBaseWidget):
                 can_redeem = False
 
         if can_redeem:
-            self.redeem_menu_item.show()
+            self.redeem_menu_item.set_sensitive(True)
         else:
-            self.redeem_menu_item.hide()
+            self.redeem_menu_item.set_sensitive(False)
 
     def _register_item_clicked(self, widget):
         self.registration_dialog.show()
