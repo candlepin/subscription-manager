@@ -24,6 +24,7 @@ import os
 import socket
 import sys
 import urllib
+import time
 
 from M2Crypto import SSL, httpslib
 from M2Crypto.SSL import SSLError
@@ -520,6 +521,7 @@ class Restlib(object):
             "content": response.read(),
             "status": response.status,
         }
+
         response_log = 'Response: status=' + str(result['status'])
         if response.getheader('x-candlepin-request-uuid'):
             response_log = "%s, requestUuid=%s" % (response_log,
@@ -544,7 +546,7 @@ class Restlib(object):
     def validateResponse(self, response, request_type=None, handler=None):
 
         # FIXME: what are we supposed to do with a 204?
-        if str(response['status']) not in ["200", "204"]:
+        if str(response['status']) not in ["200", "202", "204"]:
             parsed = {}
             if not response.get('content'):
                 parsed = {}
@@ -731,6 +733,7 @@ class UEPConnection:
             auth_description = "auth=none"
 
         self.resources = None
+        self.capabilities = None
         connection_description = ""
         if proxy_description:
             connection_description += proxy_description
@@ -765,6 +768,26 @@ class UEPConnection:
             self._load_supported_resources()
 
         return resource_name in self.resources
+
+    def _load_manager_capabilities(self):
+        """
+        Loads manager capabilities by doing a GET on the status
+        resource located at '/status/'
+        """
+        self.capabilities = {}
+        self.capabilities = self.conn.request_get("/status/")
+        self.capabilities = self.capabilities['managerCapabilities']
+        log.debug("Server has the following capabilities: %s",
+                  self.capabilities)
+
+    def has_capability(self, capability):
+        """
+        Check if the server we're connected to has a particular capability.
+        """
+        if self.capabilities is None:
+            self._load_manager_capabilities()
+
+        return capability in self.capabilities
 
     def shutDown(self):
         self.conn.close()
@@ -822,9 +845,27 @@ class UEPConnection:
             'host-id-2': ['guest-id-3', 'guest-id-4']
         }
         """
-        query_params = urlencode({"owner": owner, "env": env})
-        url = "/hypervisors?%s" % (query_params)
-        return self.conn.request_post(url, host_guest_mapping)
+        if (self.has_capability("hypervisors_async")):
+            priorContentType = self.conn.headers['Content-type']
+            self.conn.headers['Content-type'] = 'text/plain'
+            query_params = urlencode({"env": env, "cloaked": False})
+            url = "/hypervisors/%s?%s" % (owner, query_params)
+            res = self.conn.request_post(url, host_guest_mapping)
+            self.conn.headers['Content-type'] = priorContentType
+            #GOLDFISH
+            while(not res['done'] or res['state'] == 'RUNNING'):
+                    res = self.conn.request_post(res['statusPath'])
+                    time.sleep(2)
+            res = res['resultData']
+        else:
+            # fall back to original report api
+            # this results in the same json as in the result_data field
+            # of the new api method
+            query_params = urlencode({"owner": owner, "env": env})
+            url = "/hypervisors?%s" % (query_params)
+            res = self.conn.request_post(url, host_guest_mapping)
+        print(res)
+        return res
 
     def updateConsumerFacts(self, consumer_uuid, facts={}):
         """
