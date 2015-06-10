@@ -1292,6 +1292,23 @@ class UEPConnection:
         results = self.conn.request_get(method)
         return results
 
+    def getJob(self, job_id):
+        """
+        Returns the status of a candlepin job.
+        """
+        method = "/jobs/%s" % job_id
+        results = self.conn.request_get(method)
+        return results
+
+    def updateJobStatus(self, job_status):
+        """
+        Given a dict representing a candlepin JobStatus, check it's status.
+        """
+        # let key error bubble up
+        method = job_status['statusPath']
+        results = self.conn.request_get(method)
+        return results
+
     def sanitize(self, url_param, plus=False):
         #This is a wrapper around urllib.quote to avoid issues like the one
         #discussed in http://bugs.python.org/issue9301
