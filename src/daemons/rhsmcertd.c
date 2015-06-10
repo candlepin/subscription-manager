@@ -426,7 +426,9 @@ main (int argc, char *argv[])
 	int heal_interval_seconds = config->heal_interval_seconds;
 	free (config);
 
-	daemon (0, 0);
+	if (daemon (0, 0) == -1)
+        return EXIT_FAILURE;
+
 	if (get_lock () != 0) {
 		error ("unable to get lock, exiting");
 		return EXIT_FAILURE;
