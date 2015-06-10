@@ -23,12 +23,12 @@ import warnings
 from rhsm.certificate import GMT
 from dateutil.tz import tzlocal
 
-from subscription_manager.ga import info as ga_info
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.ga import Gdk as ga_Gdk
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.ga import Pango as ga_Pango
 from subscription_manager.ga import GdkPixbuf as ga_GdkPixbuf
+from subscription_manager.ga import gtk_compat as ga_gtk_compat
 
 
 from subscription_manager.gui import messageWindow
@@ -98,8 +98,8 @@ class BuilderFileBasedWidget(FileBasedGui):
         builder_based_widget.gui_file = builder_file
 
         #print "ga", ga.GTK_BUILDER_FILES_DIR
-        builder_based_widget.gui_file_suffix = ga_info.GTK_BUILDER_FILES_SUFFIX
-        builder_based_widget.file_dir = ga_info.GTK_BUILDER_FILES_DIR
+        builder_based_widget.gui_file_suffix = ga_gtk_compat.GTK_BUILDER_FILES_SUFFIX
+        builder_based_widget.file_dir = ga_gtk_compat.GTK_BUILDER_FILES_DIR
 
         builder_based_widget._load_file()
 

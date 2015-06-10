@@ -19,9 +19,9 @@ import logging
 import re
 import threading
 
-from subscription_manager import ga
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.ga import gtk_compat as ga_gtk_compat
 
 from subscription_manager.exceptions import ExceptionMapper
 import rhsm.connection as connection
@@ -225,7 +225,7 @@ def gather_group(store, iter, group):
             gather_group(store, child_iter, group)
             child_iter = store.iter_next(child_iter)
 
-    refs = ga.tree_row_reference(store, store.get_path(iter))
+    refs = ga_gtk_compat.tree_row_reference(store, store.get_path(iter))
     group.append(refs)
 
     return group
