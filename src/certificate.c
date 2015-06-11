@@ -41,13 +41,14 @@
  * Thus, we write our own binding!
  */
 
+#include "Python.h"
+
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
 #include <openssl/pem.h>
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
 
-#include "Python.h"
 #include "structmember.h"
 
 #define MAX_BUF 256
