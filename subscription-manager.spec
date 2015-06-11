@@ -22,7 +22,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.15.0
+Version: 1.15.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -469,6 +469,49 @@ fi
 %endif
 
 %changelog
+* Thu Jun 11 2015 Alex Wood <awood@redhat.com> 1.15.1-1
+- Don't try to set file attrs on symlinks in spec (alikins@redhat.com)
+- 1228807: Make disabling proxy via gui apply (alikins@redhat.com)
+- Use find_lang --with-gnome for the gnome help (alikins@redhat.com)
+- Cast return daemon() to void to quiet warnings. (alikins@redhat.com)
+- Make the 'compile-po' step in the build quiet. (alikins@redhat.com)
+- Make desktop-file-validate warnings. (alikins@redhat.com)
+- rpm spec file reorg (alikins@redhat.com)
+- 1224806: Prevent yum blocking on rhsm locks (alikins@redhat.com)
+- 1092564: Add LDFLAGS to makefile so RPM can modify them. (awood@redhat.com)
+- Update registergui.py (wpoteat@redhat.com)
+- Bump version to 1.15 (wpoteat@redhat.com)
+- Remove spurious debug logging about content labels (alikins@redhat.com)
+- Revert "1189953: Replaced usage of "startup" with "start-up""
+  (crog@redhat.com)
+- Revert "1149098: Removed uses of the non-word "unregister"" (crog@redhat.com)
+- Revert "1189937: Added hypens to instances of the non-word "wildcard""
+  (crog@redhat.com)
+- Revert "1200507: Hyphenated uses of the non-word "plugin."" (crog@redhat.com)
+- 1225435: Use LC_ALL instead of LANG for lscpu. (alikins@redhat.com)
+- Remove mutable default args in stubs (alikins@redhat.com)
+- Add notes about how register/firstboot interact. (alikins@redhat.com)
+- 1189953: Replaced usage of "startup" with "start-up" (crog@redhat.com)
+- 1194453: Fixed typos and grammar issues in the rhsmcertd man page
+  (crog@redhat.com)
+- 1192646: Fixed typos and grammar issues in the RHSM conf man page
+  (crog@redhat.com)
+- 1192574: Fixed typos and grammar issues in subman GUI man page
+  (crog@redhat.com)
+- 1192120: Fixed typos and grammar issues in subman man page (crog@redhat.com)
+- 1192094: Fixed erroneous usage of "servicelevel" for the subman command
+  (crog@redhat.com)
+- 1194468: Fixed typos and grammar in rhsm-debug man page (crog@redhat.com)
+- 1193991: Fixed typos and header for RCT man page. (crog@redhat.com)
+- 1200507: Hyphenated uses of the non-word "plugin." (crog@redhat.com)
+- 1189946: Removed extraneous hyphens from instances of "pre-configure"
+  (crog@redhat.com)
+- 1189937: Added hypens to instances of the non-word "wildcard"
+  (crog@redhat.com)
+- 1149098: Removed uses of the non-word "unregister" (crog@redhat.com)
+- 1189880: Removed the non-word "unentitle" from error messages
+  (crog@redhat.com)
+
 * Tue Jun 02 2015 William Poteat <wpoteat@redhat.com> 1.14.9-1
 - 1223038: Fix API used by openshift clients. (alikins@redhat.com)
 - 1195824: Latest strings from zanata (alikins@redhat.com)
