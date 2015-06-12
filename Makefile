@@ -15,6 +15,7 @@ PYTHON_INST_DIR = $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
 
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
+OS_DIST ?= $(shell rpm --eval='%dist')
 BIN_DIR := bin/
 BIN_FILES := $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui \
 			 $(BIN_DIR)/rhn-migrate-classic-to-rhsm \
@@ -63,6 +64,20 @@ UI_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/ui
 # override from spec file for rhel6
 INSTALL_OSTREE_PLUGIN ?= true
 
+# Default differences between el6 and el7
+ifeq ($(OS_DIST),.el6)
+   GTK_VERSION?=2
+   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/rhn/up2date_client/firstboot
+   INSTALL_FIRSTBOOT?=true
+   INSTALL_INITIAL_SETUP?=false
+else
+   GTK_VERSION?=3
+   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/firstboot/modules
+   INSTALL_FIRSTBOOT?=true
+   INSTALL_INITIAL_SETUP?=true
+endif
+
+
 YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
 ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
 
@@ -72,6 +87,7 @@ VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
 # inherit from env if set so rpm can override
 CFLAGS ?= -g -Wall
 LDFLAGS ?=
+
 
 %.pyc: %.py
 	python -c "import py_compile; py_compile.compile('$<')"
@@ -93,6 +109,8 @@ bin:
 
 RHSMCERTD_FLAGS = `pkg-config --cflags --libs glib-2.0`
 
+ICON_FLAGS=`pkg-config --cflags --libs "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
+
 PYFILES := `find $(ALL_SRC_DIRS) -name "*.py"`
 EXAMPLE_PLUGINS_PYFILES := `find "$(EXAMPLE_PLUGINS_SRC_DIR)/*.py"`
 # Ignore certdata.py from style checks as tabs and trailing
@@ -107,9 +125,6 @@ rhsmcertd: $(DAEMONS_SRC_DIR)/rhsmcertd.c bin
 
 check-syntax:
 	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o nul -S $(CHK_SOURCES)
-
-
-ICON_FLAGS = `pkg-config --cflags --libs gtk+-3.0 libnotify gconf-2.0 dbus-glib-1`
 
 rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c bin
 	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o bin/rhsm-icon $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
@@ -199,16 +214,29 @@ install-plugins-dir:
 
 install-plugins: install-plugins-dir install-content-plugins
 
+.PHONY: install-ga-dir
 install-ga-dir:
 	install -d $(PYTHON_INST_DIR)/ga_impls
-	install -d $(PYTHON_INST_DIR)/ga_impls/ga_gtk2
 
 # Install our gtk2/gtk3 compat modules
-# TODO: make this default to only install the approriate version for a rhel release
-install-ga: install-ga-dir
-	install -m 644 -p $(SRC_DIR)/ga_impls/*.py $(PYTHON_INST_DIR)/ga_impls
+# just the gtk3 stuff
+.PHONY: install-ga-gtk3
+install-ga-gtk3: install-ga-dir
+	install -m 644 -p $(SRC_DIR)/ga_impls/__init__.py* $(PYTHON_INST_DIR)/ga_impls
+	install -m 644 -p $(SRC_DIR)/ga_impls/ga_gtk3.py* $(PYTHON_INST_DIR)/ga_impls
+
+.PHONY: install-ga-gtk2
+install-ga-gtk2: install-ga-dir
+	install -d $(PYTHON_INST_DIR)/ga_impls/ga_gtk2
+	install -m 644 -p $(SRC_DIR)/ga_impls/__init__.py* $(PYTHON_INST_DIR)/ga_impls
 	install -m 644 -p $(SRC_DIR)/ga_impls/ga_gtk2/*.py $(PYTHON_INST_DIR)/ga_impls/ga_gtk2
 
+.PHONY: install-ga
+ifeq ($(GTK_VERSION),2)
+ install-ga: install-ga-gtk2
+else
+ install-ga: install-ga-gtk3
+endif
 
 .PHONY: install-example-plugins
 install-example-plugins: install-example-plugins-files install-example-plugins-conf
@@ -222,21 +250,46 @@ install-example-plugins-conf:
 	install -m 644 -p $(EXAMPLE_PLUGINS_SRC_DIR)/*.conf $(RHSM_PLUGIN_CONF_DIR)
 
 # initial-setup, as in the 'initial-setup' rpm that runs at first boot.
-install-initial-setup:
+.PHONY: install-initial-setup-real
+install-initial-setup-real:
+	echo "installing initial-setup" ; \
+	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree_content.py $(RHSM_PLUGIN_DIR)
 	install -d $(ANACONDA_ADDON_INST_DIR)
 	install -d $(INITIAL_SETUP_INST_DIR)
 	install -d $(INITIAL_SETUP_INST_DIR)/gui
 	install -d $(INITIAL_SETUP_INST_DIR)/gui/spokes
-	# This dir moves between rhel7 and fedora20
 	install -d $(INITIAL_SETUP_INST_DIR)/gui/categories
 	install -d $(INITIAL_SETUP_INST_DIR)/ks
-
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/*.py $(INITIAL_SETUP_INST_DIR)/
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/*.py $(INITIAL_SETUP_INST_DIR)/gui/
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/categories/*.py $(INITIAL_SETUP_INST_DIR)/gui/categories/
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/spokes/*.py $(INITIAL_SETUP_INST_DIR)/gui/spokes/
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/spokes/*.ui $(INITIAL_SETUP_INST_DIR)/gui/spokes/
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/ks/*.py $(INITIAL_SETUP_INST_DIR)/ks/
+
+.PHONY: install-firstboot-real
+install-firstboot-real:
+	echo "Installing firstboot to $(FIRSTBOOT_MODULES_DIR)"; \
+	install -d $(FIRSTBOOT_MODULES_DIR); \
+	install -m644 $(SRC_DIR)/gui/firstboot/*.py* $(FIRSTBOOT_MODULES_DIR)/;\
+
+
+.PHONY: install-firstboot
+ifeq ($(INSTALL_FIRSTBOOT),true)
+install-firstboot: install-firstboot-real
+else
+install-firstboot: ;
+endif
+
+.PHONY: install-initial-setup
+ifeq ($(INSTALL_INITIAL_SETUP),true)
+install-initial-setup: install-initial-setup-real
+else
+install-initial-setup: ;
+endif
+
+.PHONY: install-post-boot
+install-post-boot: install-firstboot install-initial-setup
 
 .PHONY: install
 install: install-files install-po install-conf install-help-files install-plugins-conf
@@ -249,7 +302,6 @@ clean-versions:
 	rm -rf $(SRC_DIR)/version.py
 	rm -rf $(RCT_SRC_DIR)/version.py
 
-
 install-glade:
 	install -d $(GLADE_INST_DIR)
 	install -m 644 $(SRC_DIR)/gui/data/glade/*.glade $(SUBMAN_INST_DIR)/gui/data/glade/
@@ -258,9 +310,10 @@ install-ui:
 	install -d $(UI_INST_DIR)
 	install -m 644 $(SRC_DIR)/gui/data/ui/*.ui $(SUBMAN_INST_DIR)/gui/data/ui/
 
+# We could choose here, but it doesn't matter.
 install-gui: install-glade install-ui
 
-install-files: set-versions dbus-service-install compile-po desktop-files install-plugins install-initial-setup install-ga install-gui
+install-files: set-versions dbus-service-install compile-po desktop-files install-plugins install-post-boot install-ga install-gui
 	install -d $(PYTHON_INST_DIR)/gui
 	install -d $(PYTHON_INST_DIR)/gui/data/icons
 	install -d $(PYTHON_INST_DIR)/branding
@@ -303,12 +356,6 @@ install-files: set-versions dbus-service-install compile-po desktop-files instal
 	install -d $(PREFIX)/usr/share/rhsm/subscription_manager/gui/firstboot
 	install -d $(PREFIX)/usr/share/appdata
 
-	# Adjust firstboot screen location for RHEL 6:
-	if [ $(OS_VERSION) -le 6 ]; then \
-		install -d $(PREFIX)/usr/share/rhn/up2date_client/firstboot; \
-	else \
-		install -d $(PREFIX)/usr/share/firstboot/modules; \
-	fi; \
 
 	install -d $(PREFIX)/usr/libexec
 	install -m 755 $(DAEMONS_SRC_DIR)/rhsmcertd-worker.py \
@@ -381,12 +428,6 @@ install-files: set-versions dbus-service-install compile-po desktop-files instal
 		fi; \
 	fi; \
 
-	# RHEL 6 Customizations:
-	if [ $(OS_VERSION) -le 6 ]; then \
-		install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/rhn/up2date_client/firstboot;\
-	else \
-		install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/firstboot/modules/;\
-	fi;\
 
 	install -m 644 man/rhn-migrate-classic-to-rhsm.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rhsmcertd.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/

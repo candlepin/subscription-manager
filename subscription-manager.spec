@@ -5,8 +5,8 @@
 %global has_ostree %use_systemd
 %global use_old_firstboot (0%{?rhel} && 0%{?rhel} <= 6)
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
-%global use_gtk3 1
-
+%global use_gtk3 %use_systemd
+%global use_initial_setup %use_systemd
 
 %global _hardened_build 1
 
@@ -19,6 +19,19 @@
 %define install_ostree INSTALL_OSTREE_PLUGIN=true
 %else
 %define install_ostree INSTALL_OSTREE_PLUGIN=false
+%endif
+
+# makefile will guess, but be specific.
+%if %{use_gtk3}
+%define gtk_version GTK_VERSION=3
+%else
+%define gtk_version GTK_VERSION=2
+%endif
+
+%if %{use_initial_setup}
+%define post_boot_tool INSTALL_INITIAL_SETUP=true INSTALL_FIRSTBOOT=false
+%else
+%define post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=true
 %endif
 
 Name: subscription-manager
@@ -178,6 +191,7 @@ Requires: librsvg2
 %description -n subscription-manager-firstboot
 This package contains the firstboot screens for subscription-manager.
 
+%if %use_initial_setup
 %package -n subscription-manager-initial-setup-addon
 Summary: initial-setup screens for subscription-manager
 Group: System Environment/Base
@@ -186,6 +200,7 @@ Requires: initial-setup
 
 %description -n subscription-manager-initial-setup-addon
 This package contains the initial-setup screens for subscription-manager.
+%endif
 
 %package -n subscription-manager-migration
 Summary: Migration scripts for moving to certificate based subscriptions
@@ -207,11 +222,11 @@ subscriptions
 %setup -q
 
 %build
-make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" LDFLAGS="%{__global_ldflags}"
+make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" %{?gtk_version}
 
 %install
 rm -rf %{buildroot}
-make -f Makefile install VERSION=%{version}-%{release} PREFIX=%{buildroot} MANPATH=%{_mandir} OS_VERSION=%{?fedora}%{?rhel} %{?install_ostree}
+make -f Makefile install VERSION=%{version}-%{release} PREFIX=%{buildroot} MANPATH=%{_mandir} OS_VERSION=%{?fedora}%{?rhel} OS_DIST=%{dist} %{?gtk_version} %{?install_ostree} %{?post_boot_tool}
 
 desktop-file-validate \
         %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
@@ -337,16 +352,22 @@ rm -rf %{buildroot}
 %dir %{_datadir}/rhsm/subscription_manager/branding
 %dir %{_datadir}/rhsm/subscription_manager/model
 %dir %{_datadir}/rhsm/subscription_manager/plugin
-%dir %{_datadir}/rhsm/subscription_manager/ga_impls
-%dir %{_datadir}/rhsm/subscription_manager/ga_impls/ga_gtk2
 
 # code, python modules and packages
 %{_datadir}/rhsm/subscription_manager/*.py*
 
 %{_datadir}/rhsm/subscription_manager/branding/*.py*
 
-%{_datadir}/rhsm/subscription_manager/ga_impls/*.py*
+# our gtk2/gtk3 compat modules
+%dir %{_datadir}/rhsm/subscription_manager/ga_impls
+%{_datadir}/rhsm/subscription_manager/ga_impls/__init__.py*
+
+%if %use_gtk3
+%{_datadir}/rhsm/subscription_manager/ga_impls/ga_gtk3.py*
+%else
+%dir %{_datadir}/rhsm/subscription_manager/ga_impls/ga_gtk2
 %{_datadir}/rhsm/subscription_manager/ga_impls/ga_gtk2/*.py*
+%endif
 
 %{_datadir}/rhsm/subscription_manager/model/*.py*
 
@@ -427,15 +448,8 @@ rm -rf %{buildroot}
 %{_mandir}/man8/rhsm-icon.8*
 %doc LICENSE
 
-%files -n subscription-manager-firstboot
-%defattr(-,root,root,-)
-# RHEL 6 needs a different location for firstboot modules:
-%if %use_old_firstboot
-%{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
-%else
-%{_datadir}/firstboot/modules/rhsm_login.py*
-%endif
 
+%if %use_initial_setup
 %files -n subscription-manager-initial-setup-addon
 %defattr(-,root,root,-)
 %dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/
@@ -449,6 +463,12 @@ rm -rf %{buildroot}
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.py*
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/categories/*.py*
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/*.py*
+%else
+
+%files -n subscription-manager-firstboot
+%defattr(-,root,root,-)
+%{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
+%endif
 
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)
