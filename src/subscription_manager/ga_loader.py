@@ -127,7 +127,7 @@ class GaImporterGtk2(GaImporter):
 
 
 def init_ga():
-    GTK_VERSION = "3"
+    GTK_VERSION = "2"
     if 'SUBMAN_GTK_VERSION' in os.environ:
         GTK_VERSION = os.environ.get('SUBMAN_GTK_VERSION')
 
