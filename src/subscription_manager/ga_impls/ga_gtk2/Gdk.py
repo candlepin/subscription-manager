@@ -1,7 +1,6 @@
-#from gtk.gdk import color_parse
-#from gtk.gdk import WINDOW_TYPE_HINT_DIALOG
-
-from gtk.gdk import *
+from gtk.gdk import color_parse
+from gtk.gdk import Cursor
+from gtk.gdk import BUTTON_PRESS, WATCH, WINDOW_TYPE_HINT_DIALOG
 
 
 class WindowTypeHint(object):

@@ -1,4 +1,4 @@
-from pango import *
+from pango import WEIGHT_BOLD, WRAP_WORD
 
 
 class WrapMode(object):

@@ -560,11 +560,9 @@ class ContractSubDetailsWidget(SubDetailsWidget):
     def _clear_other_details(self):
         #Clear row highlighting
 
-
         # FIXME
         #self.start_end_date_text.modify_base(ga_Gtk.StateType.NORMAL, self.original_bg)
         # FIXME
-
 
         self._set(self.contract_number_text, "")
         self._set(self.start_end_date_text, "")
@@ -585,7 +583,6 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
         if expiring:
             return self.warning_color
-
 
         # FIXME, try to return the orig color, or remove this?
         #return self.original_bg

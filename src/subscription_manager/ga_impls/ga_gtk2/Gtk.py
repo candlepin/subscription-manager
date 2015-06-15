@@ -1,15 +1,29 @@
 
-from gtk import *
-#from gtk import Button, Calendar, CellRendererText, Entry, HBox
-#from gtk import Image, Label, ListStore, TreeStore
-#from gtk import TextBuffer, TreeViewColumn
-#from gtk import STOCK_APPLY, STOCK_REMOVE, STOCK_YES
-#from gtk import ICON_SIZE_MENU
-#from gtk import SORT_ASCENDING
-#from gtk import SELECTION_NONE
-#from gtk import STATE_NORMAL
-#from gtk import WINDOW_TOPLEVEL
-#from gtk import main_quit
+# classes widgets
+from gtk import AboutDialog, Adjustment, Button, Calendar, CellRendererPixbuf
+from gtk import CellRendererProgress, CellRendererSpin, CellRendererText, Entry
+from gtk import FileChooserDialog, FileFilter, Frame, HBox, HButtonBox, Image
+from gtk import Label, ListStore, RadioButton, TextBuffer, TreeRowReference
+from gtk import TreeStore, TreeView, TreeViewColumn, VBox, Viewport
+
+# enums
+from gtk import BUTTONBOX_END
+from gtk import BUTTONS_OK, BUTTONS_OK_CANCEL, BUTTONS_YES_NO
+from gtk import FILE_CHOOSER_ACTION_OPEN
+from gtk import MESSAGE_ERROR, MESSAGE_INFO, MESSAGE_QUESTION, MESSAGE_WARNING
+from gtk import RESPONSE_CANCEL, RESPONSE_DELETE_EVENT, RESPONSE_OK, RESPONSE_YES
+from gtk import STOCK_APPLY, STOCK_REMOVE, STOCK_YES
+from gtk import TREE_VIEW_COLUMN_AUTOSIZE
+from gtk import ICON_SIZE_MENU
+from gtk import SORT_ASCENDING
+from gtk import SELECTION_NONE
+from gtk import STATE_NORMAL
+from gtk import WINDOW_TOPLEVEL
+from gtk import WIN_POS_MOUSE, WIN_POS_CENTER_ON_PARENT
+
+# methods
+from gtk import image_new_from_icon_name
+from gtk import main_quit
 
 
 class ButtonBoxStyle(object):

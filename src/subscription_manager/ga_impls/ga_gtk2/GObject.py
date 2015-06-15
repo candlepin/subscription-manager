@@ -1,8 +1,9 @@
 
 import gtk
-#import gobject
-#from gobject import
-from gobject import *
+from gobject import GObject
+from gobject import SIGNAL_RUN_LAST
+from gobject import TYPE_BOOLEAN, TYPE_PYOBJECT, PARAM_READWRITE
+from gobject import idle_add, markup_escape_text, source_remove, timeout_add
 
 threads_init = gtk.gdk.threads_init
 
