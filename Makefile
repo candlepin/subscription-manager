@@ -603,7 +603,7 @@ find-missing-widgets:
 	DEFINED_WIDGETS=`mktemp` ||exit 1; \
 	perl -n -e "if (/get_widget\([\'|\"](.*?)[\'|\"]\)/) { print(\"\$$1\n\")}" $(STYLEFILES) > $$USED_WIDGETS; \
 	pcregrep -h -o  -M  "(?:widgets|widget_names) = \[.*\s*.*?\s*.*\]" $(STYLEFILES) | perl -0 -n -e "my @matches = /[\'|\"](.*?)[\'|\"]/sg ; $$,=\"\n\"; print(@matches);" >> $$USED_WIDGETS; \
-	perl -n -e "if (/<widget class=\".*?\" id=\"(.*?)\">/) { print(\"\$$1\n\")}" $(GLADEFILES) > $$DEFINED_WIDGETS; \
+	perl -n -e "if (/<object class=\".*?\" id=\"(.*?)\">/) { print(\"\$$1\n\")}" $(GLADEFILES) $(UIFILES) > $$DEFINED_WIDGETS; \
 	while read line; do grep -F "$$line" $$DEFINED_WIDGETS > /dev/null ; STAT="$$?"; if [ "$$STAT" -ne "0" ] ; then echo "$$line"; fi;  done < $$USED_WIDGETS | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
@@ -614,7 +614,7 @@ find-missing-widgets:
 find-missing-signals:
 	@TMPFILE=`mktemp` || exit 1; \
 	DEFINED_SIGNALS=`mktemp` ||exit 1; \
-	perl -n -e "if (/<signal name=\"(.*?)\" handler=\"(.*?)\"/) { print(\"\$$2\n\")}" $(GLADEFILES) > $$DEFINED_SIGNALS; \
+	perl -n -e "if (/<signal name=\"(.*?)\" handler=\"(.*?)\"/) { print(\"\$$2\n\")}" $(GLADEFILES) $(UIFILES) > $$DEFINED_SIGNALS; \
 	while read line; do grep -F  "$$line" $(PYFILES) > /dev/null; STAT="$$?"; if [ "$$STAT" -ne "0" ] ; then echo "$$line"; fi;  done < $$DEFINED_SIGNALS | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 # try to clean up the "swapped=no" signal thing in
