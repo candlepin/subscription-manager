@@ -14,8 +14,6 @@
 
 import unittest
 
-#import test_po_files
-
 #from gi.repository import Gtk
 from datetime import datetime, timedelta
 from rhsm.certificate import GMT
