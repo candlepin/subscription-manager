@@ -1,9 +1,11 @@
 
 # classes widgets
-from gtk import AboutDialog, Adjustment, Button, Calendar, CellRendererPixbuf
-from gtk import CellRendererProgress, CellRendererSpin, CellRendererText, Entry
+from gtk import AboutDialog, Adjustment, Builder, Button, Calendar, CellRendererPixbuf
+from gtk import CellRendererProgress, CellRendererSpin, CellRendererText
+from gtk import CellRendererToggle, Entry
 from gtk import FileChooserDialog, FileFilter, Frame, HBox, HButtonBox, Image
-from gtk import Label, ListStore, RadioButton, TextBuffer, TreeRowReference
+from gtk import Label, ListStore, MessageDialog, RadioButton, SpinButton
+from gtk import TextBuffer, TreeRowReference
 from gtk import TreeStore, TreeView, TreeViewColumn, VBox, Viewport
 
 # enums
@@ -24,6 +26,7 @@ from gtk import WIN_POS_MOUSE, WIN_POS_CENTER_ON_PARENT
 # methods
 from gtk import image_new_from_icon_name
 from gtk import main_quit
+from gtk import check_version
 
 
 class ButtonBoxStyle(object):
@@ -102,13 +105,14 @@ enums = [ButtonsType, ButtonBoxStyle, FileChooserAction, IconSize, MessageType,
          ResponseType, SelectionMode, SortType, StateType, TreeViewColumnSizing,
          WindowPosition]
 
-widgets = [AboutDialog, Adjustment, Button, Calendar, CellRendererPixbuf,
+widgets = [AboutDialog, Adjustment, Builder, Button, Calendar, CellRendererPixbuf,
            CellRendererProgress, CellRendererSpin,
-           CellRendererText, Entry, FileChooserDialog, FileFilter, Frame, HBox,
-           HButtonBox, Image, Label, ListStore,
-           RadioButton, TextBuffer, TreeStore, TreeView, TreeViewColumn,
+           CellRendererText, CellRendererToggle,
+           Entry, FileChooserDialog, FileFilter, Frame, HBox,
+           HButtonBox, Image, Label, ListStore, MessageDialog,
+           RadioButton, SpinButton, TextBuffer, TreeStore, TreeView, TreeViewColumn,
            VBox, Viewport]
 
-misc = [main_quit]
+methods = [check_version, main_quit]
 
-__all__ = widgets + constants + misc + enums
+__all__ = widgets + constants + methods + enums

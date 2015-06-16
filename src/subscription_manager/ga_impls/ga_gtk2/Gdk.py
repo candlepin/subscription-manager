@@ -1,5 +1,5 @@
 from gtk.gdk import color_parse
-from gtk.gdk import Cursor
+from gtk.gdk import Cursor, Event
 from gtk.gdk import BUTTON_PRESS, WATCH, WINDOW_TYPE_HINT_DIALOG
 
 
@@ -16,6 +16,6 @@ class EventType(object):
 
 
 enums = [CursorType, EventType, WindowTypeHint]
-classes = [Cursor]
+classes = [Cursor, Event]
 methods = [color_parse]
 __all__ = classes + methods + enums
