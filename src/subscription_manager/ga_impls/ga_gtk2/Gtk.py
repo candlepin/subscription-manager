@@ -14,8 +14,8 @@ from gtk import BUTTONS_OK, BUTTONS_OK_CANCEL, BUTTONS_YES_NO
 from gtk import FILE_CHOOSER_ACTION_OPEN
 from gtk import MESSAGE_ERROR, MESSAGE_INFO, MESSAGE_QUESTION, MESSAGE_WARNING
 from gtk import RESPONSE_CANCEL, RESPONSE_DELETE_EVENT, RESPONSE_OK, RESPONSE_YES
-from gtk import STOCK_APPLY, STOCK_REMOVE, STOCK_YES
-from gtk import TREE_VIEW_COLUMN_AUTOSIZE
+from gtk import STOCK_APPLY, STOCK_CANCEL, STOCK_REMOVE, STOCK_YES
+from gtk import TREE_VIEW_COLUMN_AUTOSIZE, TREE_VIEW_GRID_LINES_BOTH
 from gtk import ICON_SIZE_MENU
 from gtk import SORT_ASCENDING
 from gtk import SELECTION_NONE
@@ -77,6 +77,10 @@ class TreeViewColumnSizing(object):
     AUTOSIZE = TREE_VIEW_COLUMN_AUTOSIZE
 
 
+class TreeViewGridLines(object):
+    BOTH = TREE_VIEW_GRID_LINES_BOTH
+
+
 class WindowType(object):
     TOPLEVEL = WINDOW_TOPLEVEL
 
@@ -99,11 +103,11 @@ def tree_row_reference(model, path):
 
 # Attempt to keep the list of faux Gtk 3 names we are
 # providing to a min.
-constants = [STOCK_APPLY, STOCK_REMOVE, STOCK_YES]
+constants = [STOCK_APPLY, STOCK_CANCEL, STOCK_REMOVE, STOCK_YES]
 
 enums = [ButtonsType, ButtonBoxStyle, FileChooserAction, IconSize, MessageType,
          ResponseType, SelectionMode, SortType, StateType, TreeViewColumnSizing,
-         WindowPosition]
+         TreeViewGridLines, WindowPosition]
 
 widgets = [AboutDialog, Adjustment, Builder, Button, Calendar, CellRendererPixbuf,
            CellRendererProgress, CellRendererSpin,

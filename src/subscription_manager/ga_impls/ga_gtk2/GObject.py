@@ -6,7 +6,8 @@ from gobject import GObject
 from gobject import MainLoop
 
 # methods
-from gobject import idle_add, markup_escape_text, source_remove, timeout_add
+from gobject import add_emission_hook, idle_add, source_remove, timeout_add
+from gobject import markup_escape_text
 
 # enums
 from gobject import SIGNAL_RUN_LAST
@@ -20,8 +21,8 @@ class SignalFlags(object):
 
 
 constants = [TYPE_BOOLEAN, TYPE_PYOBJECT, PARAM_READWRITE]
-methods = [idle_add, markup_escape_text, source_remove, threads_init,
-           timeout_add]
+methods = [add_emission_hook, idle_add, markup_escape_text,
+           source_remove, threads_init, timeout_add]
 enums = [SignalFlags]
 objects = [GObject, MainLoop]
 __all__ = objects + methods + constants + enums
