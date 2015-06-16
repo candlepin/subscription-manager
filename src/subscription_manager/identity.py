@@ -37,11 +37,11 @@ class ConsumerIdentity:
 
     @classmethod
     def keypath(cls):
-        return Path.join(cls.PATH, cls.KEY)
+        return str(Path.join(cls.PATH, cls.KEY))
 
     @classmethod
     def certpath(cls):
-        return Path.join(cls.PATH, cls.CERT)
+        return str(Path.join(cls.PATH, cls.CERT))
 
     @classmethod
     def read(cls):
