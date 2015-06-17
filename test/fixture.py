@@ -113,6 +113,7 @@ class SubManFixture(unittest.TestCase):
         id_mock.exists_and_valid = Mock(return_value=True)
         id_mock.uuid = 'fixture_identity_mock_uuid'
         id_mock.name = 'fixture_identity_mock_name'
+        id_mock.cert_dir_path = "/not/a/real/path/to/pki/consumer/"
 
         # Don't really care about date ranges here:
         self.mock_calc = NonCallableMock()
@@ -218,6 +219,7 @@ class SubManFixture(unittest.TestCase):
         identity = NonCallableMock(name='ValidIdentityMock')
         identity.uuid = uuid or "VALIDCONSUMERUUID"
         identity.is_valid = Mock(return_value=True)
+        identity.cert_dir_path = "/not/a/real/path/to/pki/consumer/"
         inj.provide(inj.IDENTITY, identity)
         return identity
 
@@ -229,6 +231,7 @@ class SubManFixture(unittest.TestCase):
         invalid_identity = NonCallableMock(name='InvalidIdentityMock')
         invalid_identity.is_valid = Mock(return_value=False)
         invalid_identity.uuid = uuid or "INVALIDCONSUMERUUID"
+        invalid_identity.cert_dir_path = "/not/a/real/path/to/pki/consumer/"
         inj.provide(inj.IDENTITY, invalid_identity)
         return invalid_identity
 

@@ -57,9 +57,6 @@ class TestAsyncPool(fixture.SubManFixture):
         return True
 
     def _create_async_pool(self):
-        id_mock = mock.Mock()
-        id_mock.uuid = 'some-consumer-uuid'
-        provide(IDENTITY, id_mock)
         provide(inj.CP_PROVIDER, stubs.StubCPProvider())
         inj.provide(inj.PROD_DIR, stubs.StubProductDirectory())
         inj.provide(inj.ENT_DIR, stubs.StubEntitlementDirectory())

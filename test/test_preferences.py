@@ -42,16 +42,6 @@ def get_releases():
 class TestPreferencesDialog(SubManFixture):
     _getConsumerData = None
 
-    def setUp(self):
-        super(TestPreferencesDialog, self).setUp()
-        # FIXME: this is c&p and could be in a fixture sub class
-        #        that  does the same things StubConsumer does now
-        self.id_mock = mock.Mock()
-        self.id_mock.name = "John Q Consumer"
-        self.id_mock.uuid = "not_actually_a_uuid"
-        self.id_mock.exists_and_valid = mock.Mock(return_value=True)
-        provide(IDENTITY, self.id_mock)
-
     @mock.patch.object(stubs.StubUEP, 'updateConsumer')
     def testAutohealChanged(self, MockUep):
         self._getPrefDialog()
@@ -105,12 +95,7 @@ class TestPreferencesDialog(SubManFixture):
         self.preferences_dialog.show()
 
     def testShowPreferencesDialogNoConsumer(self):
-        id_mock = mock.Mock()
-        id_mock.name = "John Q Consumer"
-        id_mock.uuid = None
-        id_mock.exists_and_valid = mock.Mock(return_value=True)
-        provide(IDENTITY, id_mock)
-
+        self._inject_mock_invalid_consumer()
         self._getPrefDialog()
         self.preferences_dialog.show()
 

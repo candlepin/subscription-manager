@@ -31,6 +31,7 @@ import webbrowser
 import rhsm.config as config
 
 from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.ga import GLib as ga_GLib
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker
@@ -121,6 +122,11 @@ class Backend(object):
                                                      cdn_port=cdn_port)
         # ContentConnection now handles reading the proxy information
         return self.cp_provider.get_content_connection()
+
+    # cause cert_sorter to cert_check to cause file_monitor.Monitor to look for
+    # for new certs, add this as a main loop timer callback to do that on timer.
+    def on_cert_check_timer(self):
+        self.cs.force_cert_check()
 
 
 class MainWindow(widgets.SubmanBaseWidget):
@@ -223,7 +229,11 @@ class MainWindow(widgets.SubmanBaseWidget):
             "on_quit_menu_item_activate": ga_Gtk.main_quit,
         })
 
-        def on_cert_change():
+        # TODO: why is this defined in the init scope?
+        # When something causes cert_sorter to upate it's state, refresh the gui
+        # The cert directories being updated will cause this (either noticed
+        # from a timer, or via cert_sort.force_cert_check).
+        def on_cert_sorter_cert_change():
             # Update installed products
             self.installed_tab.update_products()
             self.installed_tab._set_validity_status()
@@ -234,7 +244,7 @@ class MainWindow(widgets.SubmanBaseWidget):
             # Reset repos dialog, see bz 1132919
             self.repos_dialog = RepositoriesDialog(self.backend, self._get_window())
 
-        self.backend.cs.add_callback(on_cert_change)
+        self.backend.cs.add_callback(on_cert_sorter_cert_change)
 
         self.main_window.show_all()
 
@@ -245,11 +255,19 @@ class MainWindow(widgets.SubmanBaseWidget):
         # Update everything with compliance data
         self.backend.cs.notify()
 
+        # managergui needs cert_sort.cert_monitor.run_check() to run
+        # on a timer to detect cert changes from outside the gui
+        # (via rhsmdd for example, or manually provisioned).
+        ga_GLib.timeout_add(2000, self._on_cert_check_timer)
+
         if auto_launch_registration and not self.registered():
             self._register_item_clicked(None)
 
     def registered(self):
         return self.identity.is_valid()
+
+    def _on_cert_check_timer(self):
+        self.backend.on_cert_check_timer()
 
     def _on_sla_back_button_press(self):
         self._perform_unregister()

@@ -325,8 +325,18 @@ class CertSorter(ComplianceManager):
         super(CertSorter, self).__init__()
         self.callbacks = set()
 
-        self.cert_monitor = file_monitor.Monitor()
-        self.cert_monitor.connect('changed', self.on_cert_changed)
+        cert_dir_monitors = [file_monitor.MonitorDirectory(inj.require(inj.PROD_DIR).path,
+                                                           self.on_prod_dir_changed),
+                             file_monitor.MonitorDirectory(inj.require(inj.ENT_DIR).path,
+                                                           self.on_ent_dir_changed),
+                             file_monitor.MonitorDirectory(inj.require(inj.IDENTITY).cert_dir_path,
+                                                           self.on_identity_changed)]
+
+        # Note: no timer is setup to poll file_monitor by cert_sorter itself,
+        # the gui can add one.
+        self.cert_monitor = \
+            file_monitor.MonitorDirectories(dir_monitors=cert_dir_monitors,
+                                            changed_callback=self.on_certs_changed)
 
     def get_compliance_status(self):
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
@@ -344,7 +354,7 @@ class CertSorter(ComplianceManager):
                 pass
 
     def force_cert_check(self):
-        self.cert_monitor.run_check()
+        self.cert_monitor.update()
 
     def notify(self):
         for callback in copy(self.callbacks):
@@ -364,14 +374,7 @@ class CertSorter(ComplianceManager):
         self.load()
         self.notify()
 
-    def on_cert_changed(self, monitor, ident_changed, ent_changed, prod_changed):
-        if ident_changed:
-            self.on_identity_changed()
-        if ent_changed:
-            self.on_ent_dir_changed()
-        if prod_changed:
-            self.on_prod_dir_changed()
-
+    def on_certs_changed(self):
         # Now that local data has been refreshed, updated compliance
         self.on_change()
 
