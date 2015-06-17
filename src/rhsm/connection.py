@@ -852,11 +852,6 @@ class UEPConnection:
             url = "/hypervisors/%s?%s" % (owner, query_params)
             res = self.conn.request_post(url, host_guest_mapping)
             self.conn.headers['Content-type'] = priorContentType
-            #GOLDFISH
-            while(not res['done'] or res['state'] == 'RUNNING'):
-                    res = self.conn.request_post(res['statusPath'])
-                    time.sleep(2)
-            res = res['resultData']
         else:
             # fall back to original report api
             # this results in the same json as in the result_data field
@@ -1296,7 +1291,8 @@ class UEPConnection:
         """
         Returns the status of a candlepin job.
         """
-        method = "/jobs/%s" % job_id
+        query_params = urlencode({"result_data":True})
+        method = "/jobs/%s?%s" % (job_id, query_params)
         results = self.conn.request_get(method)
         return results
 
