@@ -11,7 +11,7 @@
 %global _hardened_build 1
 
 Name: python-rhsm
-Version: 1.15.0
+Version: 1.15.1
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -73,6 +73,14 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Jun 11 2015 Alex Wood <awood@redhat.com> 1.15.1-1
+- Move Python.h include to be first include (alikins@redhat.com)
+- 1092564: Provide LDFLAGS to setup.py to enable hardened build.
+  (awood@redhat.com)
+- Bump version to 1.15 (wpoteat@redhat.com)
+- Do not process proxy environment variables if host is in no_proxy
+  (martin.matuska@axelspringer.de)
+
 * Tue Jun 02 2015 William Poteat <wpoteat@redhat.com> 1.14.3-1
 - 1225600: Default config entry needs to include the substitution string
   (wpoteat@redhat.com)
