@@ -25,6 +25,7 @@ from gtk import WIN_POS_MOUSE, WIN_POS_CENTER_ON_PARENT
 
 # methods
 from gtk import image_new_from_icon_name
+from gtk import main
 from gtk import main_quit
 from gtk import check_version
 
@@ -117,6 +118,6 @@ widgets = [AboutDialog, Adjustment, Builder, Button, Calendar, CellRendererPixbu
            RadioButton, SpinButton, TextBuffer, TreeStore, TreeView, TreeViewColumn,
            VBox, Viewport]
 
-methods = [check_version, main_quit]
+methods = [check_version, main, main_quit]
 
 __all__ = widgets + constants + methods + enums
