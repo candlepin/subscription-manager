@@ -21,7 +21,7 @@ import mock
 
 from subscription_manager.ga import GObject as ga_GObject
 import subscription_manager.injection as inj
-from subscription_manager.injection import provide, IDENTITY
+from subscription_manager.injection import provide
 from subscription_manager import async
 from subscription_manager import managerlib
 

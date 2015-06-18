@@ -1,8 +1,6 @@
 import tempfile
-import time
 import shutil
 import os
-import glob
 
 import mock
 
