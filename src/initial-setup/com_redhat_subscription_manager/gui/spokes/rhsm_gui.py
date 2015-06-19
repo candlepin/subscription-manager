@@ -30,7 +30,9 @@ RHSM_PATH = "/usr/share/rhsm"
 sys.path.append(RHSM_PATH)
 
 from subscription_manager import ga_loader
-ga_loader.init_ga()
+
+# initial-setup only works with gtk version 3
+ga_loader.init_ga(version="3")
 
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.gui import managergui
@@ -80,6 +82,9 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         self._action_area = self.builder.get_object("RHSMSpokeWindow-action_area1")
         self._register_box = self._registergui.dialog_vbox6
 
+        # FIXME
+        self._registergui.close_window_callback = self._close_window_callback
+
         # we have a ref to _register_box, but need to remove it from
         # the regustergui.window (a GtkDialog), and add it to the main
         # box in the action area of our initial-setup screen.
@@ -87,7 +92,10 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         self._action_area.pack_end(self._register_box, True, True, 0)
         self._action_area.show()
         self._register_box.show_all()
-        self._registergui.show()
+        self._registergui.initialize()
+
+    def _close_window_callback(self):
+        pass
 
     def finished(self):
         log.debug("finished callback")

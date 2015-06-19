@@ -310,8 +310,11 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         # XXX needed by firstboot
         self.password = None
 
-    # FIXME: not a show() at all anymore
-    def show(self):
+        # FIXME: a 'done' signal maybe?
+        # initial_setup needs to be able to make this empty
+        self.close_window_callback = self._close_window_callback
+
+    def initialize(self):
         # Ensure that we start on the first page and that
         # all widgets are cleared.
         self._set_initial_screen()
@@ -319,6 +322,12 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         self._set_navigation_sensitive(True)
         self._clear_registration_widgets()
         self.timer = ga_GObject.timeout_add(100, self._timeout_callback)
+
+    def show(self):
+        # initial-setup module skips this, since it results in a
+        # new top level window that isn't reparented to the initial-setup
+        # screen.
+        self.register_dialog.show()
 
     def _set_initial_screen(self):
         target = self._get_initial_screen()
@@ -417,7 +426,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         # main window gui refreshes itself
 
         # FIXME: subman-gui needs this but initial-setup doesnt
-        # self.close_window()
+        self.close_window_callback()
 
         self.emit_consumer_signal()
 
@@ -431,6 +440,10 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         self._set_screen(DONE_PAGE)
 
     def close_window(self):
+        if self.close_window_callback:
+            self.close_window_callback()
+
+    def _close_window_callback(self):
         set_state(REGISTERING)
         self.register_dialog.hide()
         return True
