@@ -859,7 +859,6 @@ class UEPConnection:
             query_params = urlencode({"owner": owner, "env": env})
             url = "/hypervisors?%s" % (query_params)
             res = self.conn.request_post(url, host_guest_mapping)
-        print(res)
         return res
 
     def updateConsumerFacts(self, consumer_uuid, facts={}):

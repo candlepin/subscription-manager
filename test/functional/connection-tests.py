@@ -16,6 +16,7 @@
 import os
 import random
 import string
+import time
 import unittest
 
 from nose.plugins.attrib import attr
@@ -40,13 +41,17 @@ class ConnectionTests(unittest.TestCase):
         self.cp = UEPConnection(username="admin", password="admin",
                 insecure=True)
 
-        consumerInfo = self.cp.registerConsumer("test-consumer", "system", owner="admin")
-        self.consumer_uuid = consumerInfo['uuid']
+        self.consumer = self.cp.registerConsumer("test-consumer", "system", owner="admin")
+        self.consumer_uuid = self.consumer['uuid']
 
     def test_supports_resource(self):
         self.assertTrue(self.cp.supports_resource('consumers'))
         self.assertTrue(self.cp.supports_resource('admin'))
         self.assertFalse(self.cp.supports_resource('boogity'))
+
+    def test_has_capacity(self):
+        self.assertTrue(self.cp.has_capacity('cores'))
+        self.assertFalse(self.cp.has_capacity('boogityboo'))
 
     def test_update_consumer_can_update_guests_with_empty_list(self):
         self.cp.updateConsumer(self.consumer_uuid, guest_uuids=[])
