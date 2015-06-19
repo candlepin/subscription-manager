@@ -126,8 +126,10 @@ class GaImporterGtk2(GaImporter):
                                                          'Pango']}
 
 
-def init_ga():
-    GTK_VERSION = "2"
+def init_ga(version=None):
+    DEFAULT_GTK_VERSION = "2"
+    GTK_VERSION = version or DEFAULT_GTK_VERSION
+
     if 'SUBMAN_GTK_VERSION' in os.environ:
         GTK_VERSION = os.environ.get('SUBMAN_GTK_VERSION')
 
