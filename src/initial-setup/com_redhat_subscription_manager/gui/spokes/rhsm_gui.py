@@ -17,18 +17,17 @@
 #
 
 import logging
+import sys
 
 from pyanaconda.ui.gui.spokes import NormalSpoke
 from pyanaconda.ui.common import FirstbootOnlySpokeMixIn
 from pyanaconda.ui.gui.categories.system import SystemCategory
 from pyanaconda.ui.gui import GUIObject
 
-# need sys.path?
-
 log = logging.getLogger(__name__)
 
-#from gi.repository import Gtk
-#from gi.repository from gi.repository import Gtk
+RHSM_PATH = "/usr/share/rhsm"
+sys.path.append(RHSM_PATH)
 
 from subscription_manager import ga_loader
 ga_loader.init_ga()
