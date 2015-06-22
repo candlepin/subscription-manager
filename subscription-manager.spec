@@ -22,7 +22,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.15.1
+Version: 1.15.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -469,6 +469,11 @@ fi
 %endif
 
 %changelog
+* Mon Jun 22 2015 Chris Rog <crog@redhat.com> 1.15.2-1
+- Added release target for RHEL 7.2 (crog@redhat.com)
+- Move po compile/install for faster 'install-files' (alikins@redhat.com)
+- Stop using deprecated Tito settings. (awood@redhat.com)
+
 * Thu Jun 11 2015 Alex Wood <awood@redhat.com> 1.15.1-1
 - Don't try to set file attrs on symlinks in spec (alikins@redhat.com)
 - 1228807: Make disabling proxy via gui apply (alikins@redhat.com)
