@@ -11,7 +11,7 @@
 %global _hardened_build 1
 
 Name: python-rhsm
-Version: 1.15.1
+Version: 1.15.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -73,6 +73,10 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Mon Jun 22 2015 Chris Rog <crog@redhat.com> 1.15.2-1
+- Added releaser configuration for RHEL 7.2 (crog@redhat.com)
+- Use non-deprecated Tito properties. (awood@redhat.com)
+
 * Thu Jun 11 2015 Alex Wood <awood@redhat.com> 1.15.1-1
 - Move Python.h include to be first include (alikins@redhat.com)
 - 1092564: Provide LDFLAGS to setup.py to enable hardened build.
