@@ -59,23 +59,16 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
     title = "Subscription Manager"
 
     def __init__(self, data, storage, payload, instclass):
-        log.debug("I've been __init__()'ed")
         NormalSpoke.__init__(self, data, storage, payload, instclass)
-        log.debug("data %s", repr(self.data))
-        log.debug("storage %s", self.storage)
-        log.debug("payload %s", self.payload)
-        log.debug("instclass %s", self.instclass)
         self._done = False
 
     def initialize(self):
-        log.debug("running self.initialize")
         NormalSpoke.initialize(self)
         self._done = False
         init_dep_injection()
 
         facts = inj.require(inj.FACTS)
         backend = managergui.Backend()
-        log.debug("backend=%s", backend)
 
         self._registergui = registergui.RegisterScreen(backend, facts,
                                                        callbacks=[self.finished])
@@ -98,35 +91,29 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         pass
 
     def finished(self):
-        log.debug("finished callback")
         self._registergui.done()
         self._done = True
 
     # Update gui widgets to reflect state of self.data
     def refresh(self):
-        #log.debug("refresh, self.data=%s", self.data)
-        #log.debug("data.addons %s", self.data.addons)
         log.debug("data.addons.com_redhat_subscription_manager %s",
                   self.data.addons.com_redhat_subscription_manager)
 
         pass
 
     def apply(self):
-        log.debug("apply")
         self.data.addons.com_redhat_subscription_manager.text = \
             "System is registered to Red Hat Subscription Management."
 
     def execute(self):
-        log.debug("execute")
+        pass
 
     @property
     def ready(self):
-        log.debug(" READY")
         return True
 
     @property
     def completed(self):
-        log.info(" COMPLETED")
         return self._done
 
     @property
@@ -135,7 +122,6 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
 
     @property
     def status(self):
-        log.debug("status prop")
         if self._done:
             return "System is registered to RHSM."
         else:
