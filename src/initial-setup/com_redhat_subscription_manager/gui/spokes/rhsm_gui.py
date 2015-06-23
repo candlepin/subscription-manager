@@ -32,7 +32,7 @@ sys.path.append(RHSM_PATH)
 from subscription_manager import ga_loader
 
 # initial-setup only works with gtk version 3
-ga_loader.init_ga(version="3")
+ga_loader.init_ga(gtk_version="3")
 
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.gui import managergui

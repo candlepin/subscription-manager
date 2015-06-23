@@ -20,6 +20,8 @@ import sys
 import logging
 log = logging.getLogger('rhsm-app.' + __name__)
 
+from subscription_manager import version
+
 
 class GaImporter(object):
     namespace = "subscription_manager.ga"
@@ -126,9 +128,15 @@ class GaImporterGtk2(GaImporter):
                                                          'Pango']}
 
 
-def init_ga(version=None):
+def init_ga(gtk_version=None):
     DEFAULT_GTK_VERSION = "2"
-    GTK_VERSION = version or DEFAULT_GTK_VERSION
+    gtk_version_from_build = None
+
+    # ignore version.py info if it hasn't been set.
+    if version.gtk_version != "GTK_VERSION":
+        gtk_version_from_build = version.gtk_version
+
+    GTK_VERSION = gtk_version or gtk_version_from_build or DEFAULT_GTK_VERSION
 
     if 'SUBMAN_GTK_VERSION' in os.environ:
         GTK_VERSION = os.environ.get('SUBMAN_GTK_VERSION')
