@@ -24,7 +24,6 @@ import os
 import socket
 import sys
 import urllib
-import time
 
 from M2Crypto import SSL, httpslib
 from M2Crypto.SSL import SSLError
@@ -1290,7 +1289,7 @@ class UEPConnection:
         """
         Returns the status of a candlepin job.
         """
-        query_params = urlencode({"result_data":True})
+        query_params = urlencode({"result_data": True})
         method = "/jobs/%s?%s" % (job_id, query_params)
         results = self.conn.request_get(method)
         return results
