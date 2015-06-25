@@ -76,7 +76,7 @@ def is_repo_important(repo):
     if repo.repofile != '/etc/yum.repos.d/redhat.repo':
         return False
     not_important_suffixes = ('debug-rpms', 'source-rpms', 'beta-rpms')
-    return not any(repo.id.endswith(suffix) for suffix in not_important_suffixes)
+    return not repo.id.endswith(not_important_suffixes)
 
 
 def suggest_enabling(conduit):
