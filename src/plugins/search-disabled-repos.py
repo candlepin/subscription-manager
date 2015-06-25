@@ -91,7 +91,7 @@ To enable this functionality please set 'notify_only=0' in %s
 def prompt_temporarily_enable_repos(conduit):
     msg = conduit.pretty_output_restring() + """\n**********************************************************************
 Dependency resolving failed due to missing dependencies.
-Some repositories on your system are disabled, yum can enable them
+Some repositories on your system are disabled, but yum can enable them
 and search for missing dependencies. This will require downloading
 metadata for disabled repositories and may take some time and traffic.
 **********************************************************************\n"""
@@ -100,10 +100,11 @@ metadata for disabled repositories and may take some time and traffic.
 
 
 def prompt_permanently_enable_repos(conduit, repos):
+    repos_str = '\n'.join(repo for repo in repos)
     msg = """*******************************************************************
 Dependency resolving was successful thanks to enabling these repositories:
-*******************************************************************\n"""
-    msg += '\n'.join(repo for repo in repos)
-    prompt = "\nWould you like to permanently enable these repositories? [y/N]: "
+%s
+*******************************************************************\n""" % repos_str
+    prompt = "Would you like to permanently enable these repositories? [y/N]: "
     return conduit.promptYN(msg, prompt=prompt)
 
