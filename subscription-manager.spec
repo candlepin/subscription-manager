@@ -296,6 +296,7 @@ rm -rf %{buildroot}
 # yum plugin config
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/subscription-manager.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/product-id.conf
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/search-disabled-repos.conf
 
 # misc system config
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
