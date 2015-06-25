@@ -344,6 +344,7 @@ rm -rf %{buildroot}
 # but yum plugins seem to normally be sent to /usr/lib/:
 %{_prefix}/lib/yum-plugins/subscription-manager.py*
 %{_prefix}/lib/yum-plugins/product-id.py*
+%{_prefix}/lib/yum-plugins/search-disabled-repos.py*
 
 
 # Incude rt CLI tool
