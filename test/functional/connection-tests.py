@@ -16,6 +16,7 @@
 import os
 import random
 import string
+import time
 import unittest
 
 from nose.plugins.attrib import attr
@@ -40,13 +41,18 @@ class ConnectionTests(unittest.TestCase):
         self.cp = UEPConnection(username="admin", password="admin",
                 insecure=True)
 
-        consumerInfo = self.cp.registerConsumer("test-consumer", "system", owner="admin")
-        self.consumer_uuid = consumerInfo['uuid']
+        self.consumer = self.cp.registerConsumer("test-consumer", "system", owner="admin")
+        self.consumer_uuid = self.consumer['uuid']
 
     def test_supports_resource(self):
         self.assertTrue(self.cp.supports_resource('consumers'))
         self.assertTrue(self.cp.supports_resource('admin'))
         self.assertFalse(self.cp.supports_resource('boogity'))
+
+    def test_has_capability(self):
+        self.cp.capabilities = ['cores', 'hypervisors_async']
+        self.assertTrue(self.cp.has_capability('cores'))
+        self.assertFalse(self.cp.has_capability('boogityboo'))
 
     def test_update_consumer_can_update_guests_with_empty_list(self):
         self.cp.updateConsumer(self.consumer_uuid, guest_uuids=[])
@@ -221,10 +227,12 @@ class HypervisorCheckinTests(unittest.TestCase):
 
     def test_hypervisor_checkin_can_pass_empty_map_and_updates_nothing(self):
         response = self.cp.hypervisorCheckIn("admin", "", {})
-
-        self.assertEqual(len(response['failedUpdate']), 0)
-        self.assertEqual(len(response['updated']), 0)
-        self.assertEqual(len(response['created']), 0)
+        if self.cp.has_capability('hypervisors_async'):
+            self.assertEqual(response['resultData'], None)
+        else:
+            self.assertEqual(len(response['failedUpdate']), 0)
+            self.assertEqual(len(response['updated']), 0)
+            self.assertEqual(len(response['created']), 0)
 
 
 @attr('functional')

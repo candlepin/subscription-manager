@@ -155,22 +155,14 @@ class RestlibValidateResponseTests(unittest.TestCase):
 
     # 202 ACCEPTED
     def test_202_empty(self):
-        self.assertRaises(NetworkException, self.vr, "202", "")
+        self.vr("202", "")
 
     def test_202_none(self):
-        self.assertRaises(NetworkException, self.vr, "202", None)
+        self.vr("202", None)
 
     def test_202_json(self):
         content = u'{"something": "whatever"}'
-        try:
-            self.vr("202", content)
-        except RestlibException, e:
-            self.assertEquals("202", e.code)
-#            self.assertEquals(self.request_type, e.request_type)
-#            self.assertEquals(self.handler, e.handler)
-            self.assertTrue(e.msg is "")
-        else:
-            self.fail("Should of raised a Restlib exception")
+        self.vr("202", content)
 
     # 204 NO CONTENT
     # no exceptions is okay
