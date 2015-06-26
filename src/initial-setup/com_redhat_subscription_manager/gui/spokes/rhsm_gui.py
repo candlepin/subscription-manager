@@ -75,7 +75,10 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         self._action_area = self.builder.get_object("RHSMSpokeWindow-action_area1")
         self._register_box = self._registergui.dialog_vbox6
 
-        # FIXME
+        # FIXME: close_window handling is kind of a mess. Standlone subman gui,
+        # the firstboot screens, and initial-setup need it to do different
+        # things. Potentially a 'Im done with this window now' signal, with
+        # each attaching different handlers.
         self._registergui.close_window_callback = self._close_window_callback
 
         # we have a ref to _register_box, but need to remove it from
