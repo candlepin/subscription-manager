@@ -1,4 +1,5 @@
 
+# To get gtk.gdk.threads_init
 import gtk
 
 # objects
@@ -13,6 +14,9 @@ from gobject import markup_escape_text
 from gobject import SIGNAL_RUN_LAST
 from gobject import TYPE_BOOLEAN, TYPE_PYOBJECT, PARAM_READWRITE
 
+# These are not exact replacements, but for our purposes they
+# are used in the same places in the same way. A purely GObject
+# app with no gui may want to distinquish.
 threads_init = gtk.gdk.threads_init
 
 

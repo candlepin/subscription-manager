@@ -1,3 +1,7 @@
+#
+# Question: So, why not just 'from gtk import *' ?
+# Answer: Because there are name collisions and semantic changes. So this
+#         only imports names used in subscription-manager and are known to work.
 
 # classes widgets
 from gtk import AboutDialog, Adjustment, Builder, Button, Calendar, CellRendererPixbuf
@@ -28,6 +32,11 @@ from gtk import image_new_from_icon_name
 from gtk import main
 from gtk import main_quit
 from gtk import check_version
+
+# gtk2 (or more specifically, pygtk2) provided all of it's enums and
+# constants in the top level 'gtk' module. Gtk3 (or more specifically, gobject
+# introspection of Gtk3) moves them into seperate classes. The enum
+# classes here map the Gtk3 class and attr names to gtk2 names.
 
 
 class ButtonBoxStyle(object):
@@ -92,13 +101,21 @@ class WindowPosition(object):
 
 
 class GaImage(Image):
+    """A subclass of Gtk.Image that provides a Gtk3 style constructor."""
     @classmethod
     def new_from_icon_name(cls, icon_name, size):
         return image_new_from_icon_name(icon_name, size)
-# NOTE: icky
+
+# NOTE: ga.Gtk.Image will be the GaImage subclass above, and not the gtk2
+#       gtk.Image. However, aside from the added constructor, the rest of
+#       the Gtk.Image is not provided here.
 Image = GaImage
 
 
+# Gtk2's TreeRowReference is a class, while Gtk3's TreeRowReference is
+# non-callable class that has to be constructed with it's .new() method.
+# Provide a helper method that provides a compatible interface. snake_case
+# naming used to distinquish it from the "real" TreeRowReference.
 def tree_row_reference(model, path):
     return TreeRowReference(model, path)
 
