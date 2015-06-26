@@ -342,7 +342,10 @@ class RegisterScreen(widgets.SubmanBaseWidget):
     def error_screen(self):
         return DONT_CHANGE
 
-    # FIXME: skipping for now
+    # FIXME: This exists because standalone gui needs to update the nav
+    #        buttons in it's own top level window, while firstboot needs to
+    #        update the buttons in the main firstboot window. Firstboot version
+    #        has additional logic for rhel5/rhel6 differences.
     def _set_navigation_sensitive(self, sensitive):
         self.cancel_button.set_sensitive(sensitive)
         self.register_button.set_sensitive(sensitive)
@@ -402,8 +405,6 @@ class RegisterScreen(widgets.SubmanBaseWidget):
             self.finish_registration()
             return
 
-        #while ga_Gtk.events_pending():
-        #    ga_Gtk.main_iteration()
         self._set_screen(screen)
         async = self._screens[self._current_screen].pre()
         if async:
@@ -456,9 +457,6 @@ class RegisterScreen(widgets.SubmanBaseWidget):
             screen.clear()
 
     def pre_done(self, next_screen):
-        #while ga_Gtk.events_pending():
-        #    ga_Gtk.main_iteration()
-
         self._set_navigation_sensitive(True)
         if next_screen == DONT_CHANGE:
             self._set_screen(self._current_screen)
