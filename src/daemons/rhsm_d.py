@@ -17,7 +17,7 @@
 #
 import sys
 
-enable_debug = True
+enable_debug = False
 
 
 def excepthook_base(exc_type, exc_value, exc_traceback):
