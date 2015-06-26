@@ -22,8 +22,66 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 from subscription_manager import version
 
+""" Try importing from a 'ga' that is dynamic and imports
+    the gi.repository style names into the module. This
+    uses python's sys.metapath support to add a custom
+    importer to the "front" of sys.path. The custom
+    importer knows how to handle imports for
+    'subscription_manager.ga'. The importer is in the
+    ga_loader module, and is used to decide which impl
+    of 'ga' is used (gtk2 or gtk3).
+
+    Currently doing 'from subscription_manager.ga import GObject as ga_Gobject'
+    since for gtk2 cases, it's not really GObject, and we avoid
+    shadowing well known names, but maybe it doesn't matter.
+
+    The 'virtual' module 'ga' will import the correct
+    implementation from the ga_impls/ dir. ga_loader
+    decides which version to use. It currently defaults
+    to gtk3, with an env variable to override for testing.
+
+"""
+
 
 class GaImporter(object):
+    """Custom module importer protocol that finds and loads the 'ga' Gtk2/Gtk3 compat virtual module.
+
+    This implements the module "Importer Protocol" as defined
+    in PEP302 (https://www.python.org/dev/peps/pep-0302/). It provides
+    both a module finder (find_modules) and a module loader (load_modules).
+
+    This lets different sub classes of this module to all provide a set of
+    module names in the 'ga' namespace, but to provide different implementations.
+
+    When an instance of this class is added to sys.meta_path, all imports that
+    reference modules by name (ie, normal 'import bar' statements) the names are first passed
+    to this classes 'find_module' method. When this class is asked for modules in
+    the 'ga' package, it returns itself (which is also a module loader).
+
+    This classes load_module() is used to decide which implemention of the 'ga'
+    package to load. GaImporter.virtual_modules is a dict mapping full module name
+    to the full name of the module that is to be loaded for that name.
+
+    The 'ga' module implementations are in the ga_impls/ module.
+    The available implementations are 'ga_gtk2' and 'ga_gtk3'.
+
+    The 'ga' module itself provides a Gtk3-like API.
+
+    The 'ga_impls/ga_gtk3' implementation is an export of the full 'gi.repository.Gtk',
+    and a few helper methods and names.
+
+    The 'ga_impls/ga_gtk2' implementation is more complicated. It maps a subset of
+    Gtk2 names and widgets to their Gtk3 equilivent. This includes an assortment
+    of class enums, and helper methods. The bulk of the API compat is just mapping
+    names like 'gtk.Window' to Gtk style names like 'gi.repository.Gtk.Window'.
+
+    NOTE: Only symbols actually used in subscription-manager are provided. This
+          is not a general purpose Gtk3 interface for Gtk2. Names are imported
+          directly and export directly in module __all__ attributes. This is to
+          make sure any Gtk3 widgets used in subman have working gtk2 equilivents
+          and ga_gtk2 provides it.
+    """
+
     namespace = "subscription_manager.ga"
     virtual_modules = {}
 
@@ -81,6 +139,15 @@ class GaImporter(object):
         return ret
 
     def _namespace_module(self):
+        """Create and return a 'ga' package module.
+
+        Since the 'ga' module has to work for Gtk2/Gtk3, but can't import
+        either, we create a new module instance and add it to the system
+        path.
+
+        Imports like 'from ga import Gtk3' first have to import 'ga'. When
+        they do, the module instance is the one we create here.
+        """
         return self._new_module(self.namespace)
 
     def _dirprint(self, module):
@@ -129,6 +196,38 @@ class GaImporterGtk2(GaImporter):
 
 
 def init_ga(gtk_version=None):
+    """Decide which GaImporter implementation to load.
+
+    Applications should import this module and call this method before
+    importing anything from the 'ga' namespace.
+
+    After calling this method, a GaImporter implementation is added to sys.meta_path.
+    This sets up a module finder and loader that will return 'virtual' modules
+    when asked for 'ga.Gtk' for example. Depending on the GaImporter, 'ga.Gtk'
+    may be implemented with Gtk3 or gtk2.
+
+    The default implementation is the gtk2 based one (DEFAULT_GTK_VERSION).
+
+    The acceptable values of 'gtk_version' are '2' and '3', for gtk2 and
+    gtk3.
+
+    It can be overridden by, in order:
+
+        Hardcoded DEFAULT_GTK_VERSION.
+        (default is '2')
+
+        The value of subscription_manager.version.gtk_version if it exists
+        and is not None.
+        (As set at build time)
+
+        The 'gtk_version' argument to this method if not None.
+        (The default is None)
+
+        The value of the environment variable 'SUBMAN_GTK_VERSION' if set
+        to '2' or '3'.
+        (default is unset)
+    """
+
     DEFAULT_GTK_VERSION = "2"
     gtk_version_from_build = None
 
