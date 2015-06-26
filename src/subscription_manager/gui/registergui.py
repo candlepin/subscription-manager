@@ -262,7 +262,6 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         """
         super(RegisterScreen, self).__init__()
 
-        log.debug("RegisterScreen.init")
         self.backend = backend
         self.identity = require(IDENTITY)
         self.facts = facts
@@ -277,7 +276,6 @@ class RegisterScreen(widgets.SubmanBaseWidget):
                      "on_register_dialog_delete_event": self._delete_event}
         self.connect_signals(callbacks)
 
-        log.debug("self.register_dialog %s", self.register_dialog)
         self.window = self.register_dialog
         self.register_dialog.set_transient_for(self.parent)
 
@@ -399,7 +397,6 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         return False
 
     def _run_pre(self, screen):
-        log.debug("run_pre, %s", screen)
         # XXX move this into the button handling somehow?
         if screen == FINISH:
             self.finish_registration()
@@ -408,7 +405,6 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         self._set_screen(screen)
         async = self._screens[self._current_screen].pre()
         if async:
-            log.debug("run_pre, async")
             self._set_navigation_sensitive(False)
             self._set_screen(PROGRESS_PAGE)
             self._set_register_details_label(
@@ -420,7 +416,6 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         return True
 
     def finish_registration(self, failed=False):
-        log.debug("registergui.finish_registration")
         # failed is used by the firstboot subclasses to decide if they should
         # advance the screen or not.
         # XXX it would be cool here to do some async spinning while the
@@ -526,7 +521,6 @@ class NoGuiScreen(object):
 class PerformRegisterScreen(NoGuiScreen):
 
     def __init__(self, parent, backend):
-        log.debug("prs parent %s", parent)
         super(PerformRegisterScreen, self).__init__(parent, backend)
         self.pre_message = _("Registering your system")
 
@@ -554,7 +548,6 @@ class PerformRegisterScreen(NoGuiScreen):
         log.info("Registering to owner: %s environment: %s" %
                  (self._parent.owner_key, self._parent.environment))
 
-        log.debug("self._parent %s", self._parent)
         self._parent.async.register_consumer(self._parent.consumername,
                                              self._parent.facts,
                                              self._parent.owner_key,
@@ -769,9 +762,7 @@ class SelectSLAScreen(Screen):
 
     def pre(self):
         set_state(SUBSCRIBING)
-        log.debug("self._parent.identity %s", self._parent.identity)
         self._parent.identity.reload()
-        log.debug("self._parent.identity2 %s", self._parent.identity)
         self._parent.async.find_service_levels(self._parent.identity.uuid,
                                                self._parent.facts,
                                                self._on_get_service_levels_cb)
@@ -1244,14 +1235,12 @@ class AsyncBackend(object):
             self.plugin_manager.run("post_register_consumer", consumer=retval,
                 facts=facts.get_facts())
 
-            log.debug("_register_consumer, post register, %s", self.backend.cp_provider)
             require(IDENTITY).reload()
             # Facts and installed products went out with the registration
             # request, manually write caches to disk:
             facts.write_cache()
             installed_mgr.write_cache()
 
-            log.debug("_register_consumer, post register2, %s", self.backend.cp_provider)
             cp = self.backend.cp_provider.get_basic_auth_cp()
 
             # In practice, the only time this condition should be true is
@@ -1263,7 +1252,6 @@ class AsyncBackend(object):
                 self.backend.update()
                 cp = self.backend.cp_provider.get_consumer_auth_cp()
 
-            log.debug("_register_consumer, post register3, %s", self.backend.cp_provider)
             # FIXME: this looks like we are updating package profile as
             #        basic auth
             profile_mgr = require(PROFILE_MANAGER)
@@ -1314,12 +1302,7 @@ class AsyncBackend(object):
     def _find_suitable_service_levels(self, consumer_uuid, facts):
 
         # FIXME:
-        log.debug("_find_suitable_service_levels, pre backend.update")
         self.backend.update()
-        log.debug("_find_suitable_service_levels, post backend.update")
-        log.debug("self.backend.cp_provider %s", self.backend.cp_provider)
-        log.debug("self.beackend.cp_provider.get_consumer_auth_cp() %s",
-                  self.backend.cp_provider.get_consumer_auth_cp())
 
         consumer_json = self.backend.cp_provider.get_consumer_auth_cp().getConsumer(
                 consumer_uuid)
@@ -1339,13 +1322,11 @@ class AsyncBackend(object):
                 len(self.backend.cs.partial_stacks) == 0:
             raise AllProductsCoveredException()
 
-        log.debug("presla")
         if current_sla:
             available_slas = [current_sla]
             log.debug("Using system's current service level: %s" %
                     current_sla)
         else:
-            log.debug("pre getServiceLevelList %s", owner_key)
             available_slas = self.backend.cp_provider.get_consumer_auth_cp().getServiceLevelList(owner_key)
             log.debug("Available service levels: %s" % available_slas)
 
@@ -1354,10 +1335,8 @@ class AsyncBackend(object):
         suitable_slas = {}
 
         # eek, in a thread
-        log.debug("pre action_client")
         action_client = ActionClient(facts=facts)
         action_client.update()
-        log.debug("post action_client")
 
         for sla in available_slas:
             dry_run_json = self.backend.cp_provider.get_consumer_auth_cp().dryRunBind(consumer_uuid, sla)
@@ -1394,7 +1373,6 @@ class AsyncBackend(object):
         """
         try:
             (callback, retval, error) = self.queue.get(block=False)
-            log.debug("callback=%s retval=%s error=%s", callback, retval, error)
             if error:
                 callback(retval, error=error)
             else:
@@ -1419,9 +1397,7 @@ class AsyncBackend(object):
         """
         Run consumer registration asyncronously
         """
-        log.debug("register_consumer, about to idle add")
         ga_GObject.idle_add(self._watch_thread)
-        log.debug("register_consumer, about to Thread")
         threading.Thread(target=self._register_consumer,
                          name="RegisterConsumerThread",
                          args=(name, facts, owner,
@@ -1435,9 +1411,7 @@ class AsyncBackend(object):
                                dry_run_result, callback)).start()
 
     def find_service_levels(self, consumer_uuid, facts, callback):
-        log.debug("find_service_levels, about to idle add")
         ga_GObject.idle_add(self._watch_thread)
-        log.debug("find_service_levels, about to Trhead")
         threading.Thread(target=self._find_service_levels,
                          name="FindServiceLevelsThread",
                          args=(consumer_uuid, facts, callback)).start()
