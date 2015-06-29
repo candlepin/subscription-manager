@@ -18,6 +18,7 @@
 
 import logging
 import os
+import fnmatch
 
 from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 from yum.constants import TS_INSTALL_STATES
@@ -26,6 +27,7 @@ requires_api_version = '2.7'
 plugin_type = (TYPE_CORE, TYPE_INTERACTIVE)
 
 PLUGIN_CONF_PATH = '/etc/yum/pluginconf.d/search-disabled-repos.conf'
+DEFAULT_IGNORED_REPOS = ('*debug-rpms', '*source-rpms', '*beta-rpms')
 
 attempted = False
 old_enabled_repos = []
@@ -36,7 +38,9 @@ def postresolve_hook(conduit):
         return
 
     repo_storage = conduit.getRepos()
-    disabled_repos = set((repo for repo in repo_storage.repos.values() if not repo.enabled and is_repo_important(repo)))
+    ignored_repos = conduit.confList('main', 'ignored_repos', default=DEFAULT_IGNORED_REPOS)
+    disabled_repos = set((repo for repo in repo_storage.repos.values()
+                                        if not repo.enabled and is_repo_important(repo, ignored_repos)))
     if not disabled_repos:
         return
 
@@ -72,11 +76,11 @@ def postverifytrans_hook(conduit):
             conduit.info(logging.DEBUG, 'Repo permanently enabled: %s' % repo)
 
 
-def is_repo_important(repo):
+def is_repo_important(repo, ignored_repos):
     if repo.repofile != '/etc/yum.repos.d/redhat.repo':
         return False
-    not_important_suffixes = ('debug-rpms', 'source-rpms', 'beta-rpms')
-    return not repo.id.endswith(not_important_suffixes)
+
+    return not any(fnmatch.fnmatch(repo.id, pattern) for pattern in ignored_repos)
 
 
 def suggest_enabling(conduit):
