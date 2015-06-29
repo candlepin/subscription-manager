@@ -68,8 +68,14 @@ else
 endif
 
 
+# always true until fedora is just dnf
+INSTALL_YUM_PLUGINS ?= true
 YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
+
+# for fc22 or newer
+INSTALL_DNF_PLUGINS ?= false
 DNF_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
+
 ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) $(DNF_PLUGINS_SRC_DIR)
 
 # sets a version that is more or less latest tag plus commit sha
@@ -320,8 +326,6 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 	install -d $(PYTHON_INST_DIR)/plugin
 	install -d $(PYTHON_INST_DIR)/plugin/ostree
 	install -d $(PREFIX)/$(INSTALL_DIR)/locale/
-	install -d $(PREFIX)/usr/lib/yum-plugins/
-	install -d $(PREFIX)/$(PYTHON_SITELIB)/dnf-plugins/
 	install -d $(PREFIX)/usr/sbin
 	install -d $(PREFIX)/etc/rhsm
 	install -d $(PREFIX)/etc/rhsm/facts
@@ -330,7 +334,6 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 	install -d $(PREFIX)/etc/pam.d
 	install -d $(PREFIX)/etc/logrotate.d
 	install -d $(PREFIX)/etc/security/console.apps
-	install -d $(PREFIX)/etc/yum/pluginconf.d/
 	install -d $(PREFIX)/$(INSTALL_DIR)/man/man5/
 	install -d $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -d $(PREFIX)/$(INSTALL_DIR)/applications
@@ -358,7 +361,6 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 	install -m 755 $(DAEMONS_SRC_DIR)/rhsmcertd-worker.py \
 		$(PREFIX)/usr/libexec/rhsmcertd-worker
 
-
 	install -m 644 -p $(SRC_DIR)/*.py $(PYTHON_INST_DIR)/
 	install -m 644 -p $(SRC_DIR)/api/*.py $(PYTHON_INST_DIR)/api
 	install -m 644 -p $(SRC_DIR)/gui/*.py $(PYTHON_INST_DIR)/gui
@@ -366,14 +368,22 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 	install -m 644 -p $(SRC_DIR)/branding/*.py $(PYTHON_INST_DIR)/branding
 	install -m 644 -p $(SRC_DIR)/model/*.py $(PYTHON_INST_DIR)/model
 	install -m 644 -p $(SRC_DIR)/plugin/*.py $(PYTHON_INST_DIR)/plugin
-	install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/
-	install -m 644 -p src/dnf-plugins/*.py $(PREFIX)/$(PYTHON_SITELIB)/dnf-plugins/
 	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager-gui
-
 
 	if [ "$(INSTALL_OSTREE_PLUGIN)" = "true" ] ; then \
 		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(SUBMAN_INST_DIR)/plugin/ostree ; \
 	fi
+	if [ "$(INSTALL_YUM_PLUGINS)" = "true" ] ; then \
+		echo "YUM" ; \
+		install -d $(PREFIX)/etc/yum/pluginconf.d/ ; \
+		install -d $(PREFIX)/usr/lib/yum-plugins/ ; \
+		install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/ ; \
+	fi ; \
+	if [ "$(INSTALL_DNF_PLUGINS)" = "true" ] ; then \
+		echo "DNF" ; \
+		install -d $(PREFIX)/$(PYTHON_SITELIB)/dnf-plugins/ ; \
+		install -m 644 -p src/dnf-plugins/*.py $(PREFIX)/$(PYTHON_SITELIB)/dnf-plugins/ ; \
+	fi ; \
 
 	#icons
 	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/16x16/apps/*.png \

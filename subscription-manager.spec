@@ -20,6 +20,9 @@
 %global use_firstboot 1
 %endif
 
+%global use_dnf (0%{?fedora} && 0%{?fedora} >= 22)
+
+
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
@@ -45,6 +48,16 @@
 %define post_boot_tool INSTALL_INITIAL_SETUP=true INSTALL_FIRSTBOOT=false
 %else
 %define post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=true
+%endif
+
+# makefile defaults to INSTALL_YUM_PLUGIN=true
+%define install_yum_plugins INSTALL_YUM_PLUGINS=true
+
+# makefile defaults to INSTALL_DNF_PLUGIN=false
+%if %{use_dnf}
+%define install_dnf_plugins INSTALL_DNF_PLUGINS=true
+%else
+%define install_dnf_plugins INSTALL_DNF_PLUGINS=false
 %endif
 
 Name: subscription-manager
@@ -232,6 +245,7 @@ Requires: subscription-manager-migration-data
 This package contains scripts that aid in moving to certificate based
 subscriptions
 
+%if %use_dnf
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
 Group: System Environment/Base
@@ -240,6 +254,7 @@ Requires: dnf > 1.0.0
 
 %description -n dnf-plugin-subscription-manager
 Subscription Manager plugins for DNF, contains subscription-manager and product-id plugins.
+%endif
 
 %prep
 %setup -q
@@ -253,7 +268,8 @@ rm -rf %{buildroot}
 make -f Makefile install VERSION=%{version}-%{release} \
     PREFIX=%{buildroot} MANPATH=%{_mandir} PYTHON_SITELIB=%{python_sitelib} \
     OS_VERSION=%{?fedora}%{?rhel} OS_DIST=%{dist} \
-    %{?install_ostree} %{?post_boot_tool} %{?gtk_version}
+    %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
+    %{?install_yum_plugins} %{?install_dnf_plugins}
 
 desktop-file-validate \
         %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
@@ -516,9 +532,11 @@ rm -rf %{buildroot}
 %doc README.Fedora
 %endif
 
+%if %use_dnf
 %files -n dnf-plugin-subscription-manager
 %defattr(-,root,root,-)
 %{python_sitelib}/dnf-plugins/*
+%endif
 
 %post
 %if %use_systemd
