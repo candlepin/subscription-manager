@@ -31,18 +31,6 @@ RHSM_ICON_SRC_DIR := $(BASE_SRC_DIR)/rhsm_icon
 DAEMONS_SRC_DIR := $(BASE_SRC_DIR)/daemons
 EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
 CONTENT_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/content_plugins/
-ANACONDA_ADDON_SRC_DIR := $(SRC_DIR)/gui/initial-setup
-ANACONDA_ADDON_MODULE_SRC_DIR := $(ANACONDA_ADDON_SRC_DIR)/$(ANACONDA_ADDON_NAME)
-
-# dirs we install to
-SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
-RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
-RHSM_PLUGIN_CONF_DIR := $(PREFIX)/etc/rhsm/pluginconf.d/
-ANACONDA_ADDON_INST_DIR := /usr/share/anaconda/addons/
-INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
-RCT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
-RD_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
-
 ANACONDA_ADDON_SRC_DIR := $(BASE_SRC_DIR)/initial-setup
 ANACONDA_ADDON_MODULE_SRC_DIR := $(ANACONDA_ADDON_SRC_DIR)/$(ANACONDA_ADDON_NAME)
 
@@ -51,10 +39,11 @@ SUBMAN_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
 SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
 RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
 RHSM_PLUGIN_CONF_DIR := $(PREFIX)/etc/rhsm/pluginconf.d/
-ANACONDA_ADDON_INST_DIR := $(PREFIX)/usr/share/anaconda/addons/
+ANACONDA_ADDON_INST_DIR := $(PREFIX)/usr/share/anaconda/addons
 INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
 RCT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
 RD_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
+RHSM_LOCALE_DIR := $(PREFIX)/$(INSTALL_DIR)/locale
 
 # ui builder data files
 GLADE_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/glade
@@ -299,6 +288,9 @@ set-versions:
 	sed -e 's/RPM_VERSION/$(VERSION)/g' $(RCT_SRC_DIR)/version.py.in > $(RCT_SRC_DIR)/version.py
 	sed -e 's/GTK_VERSION/$(GTK_VERSION)/g' $(SRC_DIR)/version.py.in > $(SRC_DIR)/version.py
 
+install-po: compile-po
+	install -d $(RHSM_LOCALE_DIR)
+	cp -R po/build/* $(RHSM_LOCALE_DIR)/
 
 clean-versions:
 	rm -rf $(SRC_DIR)/version.py
@@ -315,7 +307,7 @@ install-ui:
 # We could choose here, but it doesn't matter.
 install-gui: install-glade install-ui
 
-install-files: set-versions dbus-service-install compile-po desktop-files install-plugins install-post-boot install-ga install-gui
+install-files: set-versions dbus-service-install desktop-files install-plugins install-post-boot install-ga install-gui
 	install -d $(PYTHON_INST_DIR)/gui
 	install -d $(PYTHON_INST_DIR)/gui/data/icons
 	install -d $(PYTHON_INST_DIR)/branding
