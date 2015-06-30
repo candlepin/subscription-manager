@@ -16,14 +16,32 @@ external applications.
 
 All reasonable efforts will be made to maintain compatibility.
 """
+from functools import wraps
+
+injected = False
+
+
+def request_injection(func):
+    @wraps(func)
+    def func_wrapper(*args, **kwargs):
+        global injected
+        if not injected:
+            from subscription_manager import logutil
+            logutil.init_logger()
+
+            from subscription_manager.injectioninit import init_dep_injection
+            init_dep_injection()
+            injected = True
+        return func(*args, **kwargs)
+    return func_wrapper
+
 
 from .repos import disable_yum_repositories, enable_yum_repositories
 
 from subscription_manager.version import rpm_version as version
 
-from functools import wraps
-
 __all__ = [
+    'request_injection',
     'disable_yum_repositories',
     'enable_yum_repositories',
     'version',

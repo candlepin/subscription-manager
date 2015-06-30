@@ -12,16 +12,13 @@
 #
 import fnmatch
 
-from subscription_manager import logutil
-logutil.init_logger()
-
-from subscription_manager.injectioninit import init_dep_injection
-init_dep_injection()
-
 import subscription_manager.injection as inj
+
+from subscription_manager.api import request_injection
 from subscription_manager.repolib import RepoActionInvoker, RepoFile
 
 
+@request_injection
 def _set_enable_for_yum_repositories(setting, *repo_ids):
     invoker = RepoActionInvoker()
     repos = invoker.get_repos()

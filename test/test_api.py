@@ -99,8 +99,6 @@ class RepoApiTest(SubManFixture):
     def test_update_overrides_cache(self, mock_set, mock_supports):
         mock_supports.return_value = True
 
-        self._inject_mock_valid_consumer("123")
-
         repo_settings = {
             'enabled': '0',
         }
@@ -108,7 +106,13 @@ class RepoApiTest(SubManFixture):
             Repo('hello', repo_settings.items()),
         ]
         self.repo_file.items.return_value = repo_settings.items()
-        result = api.enable_yum_repositories('hello')
+
+        @api.request_injection
+        def munge_injection():
+            self._inject_mock_valid_consumer("123")
+            return api.enable_yum_repositories('hello')
+
+        result = munge_injection()
 
         expected_overrides = [{
             'contentLabel': 'hello',
