@@ -32,7 +32,7 @@ def configure_i18n(with_glade=False):
     gettext.bindtextdomain(APP, DIR)
     gettext.textdomain(APP)
 
-    if (with_glade):
-        import gtk.glade
-        gtk.glade.bindtextdomain(APP, DIR)
-        gtk.glade.textdomain(APP)
+#    if (with_glade):
+#        import gtk.glade
+#        gtk.glade.bindtextdomain(APP, DIR)
+#        gtk.glade.textdomain(APP)

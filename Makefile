@@ -6,33 +6,66 @@ PYTHON ?= python
 INSTALL_DIR = usr/share
 INSTALL_MODULE = rhsm
 PKGNAME = subscription_manager
-CODE_DIR = $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
+ANACONDA_ADDON_NAME = com_redhat_subscription_manager
+
+# where most of our python modules live. Note this is not on
+# the default python system path. If you are importing modules from here, and
+# you can't commit to this repo, you should feel bad and stop doing that.
+PYTHON_INST_DIR = $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
+
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
+OS_DIST ?= $(shell rpm --eval='%dist')
 BIN_DIR := bin/
 BIN_FILES := $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui \
 			 $(BIN_DIR)/rhn-migrate-classic-to-rhsm \
 			 $(BIN_DIR)/rct \
 			 $(BIN_DIR)/rhsm-debug
-SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
 
-RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
-RHSM_PLUGIN_CONF_DIR := $(PREFIX)/etc/rhsm/pluginconf.d/
-
+# Where various bits of code live in the git repo
 BASE_SRC_DIR := src
 SRC_DIR := $(BASE_SRC_DIR)/subscription_manager
-RCT_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
 RCT_SRC_DIR := $(BASE_SRC_DIR)/rct
-RD_CODE_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
 RD_SRC_DIR := $(BASE_SRC_DIR)/rhsm_debug
 RHSM_ICON_SRC_DIR := $(BASE_SRC_DIR)/rhsm_icon
 DAEMONS_SRC_DIR := $(BASE_SRC_DIR)/daemons
 EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
 CONTENT_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/content_plugins/
+ANACONDA_ADDON_SRC_DIR := $(BASE_SRC_DIR)/initial-setup
+ANACONDA_ADDON_MODULE_SRC_DIR := $(ANACONDA_ADDON_SRC_DIR)/$(ANACONDA_ADDON_NAME)
+
+# dirs we install to 
+SUBMAN_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
+SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
+RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
+RHSM_PLUGIN_CONF_DIR := $(PREFIX)/etc/rhsm/pluginconf.d/
+ANACONDA_ADDON_INST_DIR := $(PREFIX)/usr/share/anaconda/addons
+INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
+RCT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
+RD_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
+RHSM_LOCALE_DIR := $(PREFIX)/$(INSTALL_DIR)/locale
+
+# ui builder data files
+GLADE_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/glade
+UI_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/ui
 
 # If we skip install ostree plugin, unset by default
 # override from spec file for rhel6
 INSTALL_OSTREE_PLUGIN ?= true
+
+# Default differences between el6 and el7
+ifeq ($(OS_DIST),.el6)
+   GTK_VERSION?=2
+   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/rhn/up2date_client/firstboot
+   INSTALL_FIRSTBOOT?=true
+   INSTALL_INITIAL_SETUP?=false
+else
+   GTK_VERSION?=3
+   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/firstboot/modules
+   INSTALL_FIRSTBOOT?=true
+   INSTALL_INITIAL_SETUP?=true
+endif
+
 
 YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
 ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
@@ -43,6 +76,7 @@ VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
 # inherit from env if set so rpm can override
 CFLAGS ?= -g -Wall
 LDFLAGS ?=
+
 
 %.pyc: %.py
 	python -c "import py_compile; py_compile.compile('$<')"
@@ -64,22 +98,22 @@ bin:
 
 RHSMCERTD_FLAGS = `pkg-config --cflags --libs glib-2.0`
 
+ICON_FLAGS=`pkg-config --cflags --libs "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
+
 PYFILES := `find $(ALL_SRC_DIRS) -name "*.py"`
 EXAMPLE_PLUGINS_PYFILES := `find "$(EXAMPLE_PLUGINS_SRC_DIR)/*.py"`
 # Ignore certdata.py from style checks as tabs and trailing
 # whitespace are required for testing.
 TESTFILES=`find  test/ \( ! -name certdata.py ! -name manifestdata.py \) -name "*.py"`
 STYLEFILES=$(PYFILES) $(BIN_FILES) $(TESTFILES)
-GLADEFILES=`find src/subscription_manager/gui/data -name "*.glade"`
+GLADEFILES=`find src/subscription_manager/gui/data/glade -name "*.glade"`
+UIFILES=`find src/subscription_manager/gui/data/ui -name "*.ui"`
 
 rhsmcertd: $(DAEMONS_SRC_DIR)/rhsmcertd.c bin
 	$(CC) $(CFLAGS) $(LDFLAGS) $(RHSMCERTD_FLAGS) $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd
 
 check-syntax:
 	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o nul -S $(CHK_SOURCES)
-
-
-ICON_FLAGS = `pkg-config --cflags --libs gtk+-2.0 libnotify gconf-2.0 dbus-glib-1`
 
 rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c bin
 	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o bin/rhsm-icon $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
@@ -169,6 +203,29 @@ install-plugins-dir:
 
 install-plugins: install-plugins-dir install-content-plugins
 
+.PHONY: install-ga-dir
+install-ga-dir:
+	install -d $(PYTHON_INST_DIR)/ga_impls
+
+# Install our gtk2/gtk3 compat modules
+# just the gtk3 stuff
+.PHONY: install-ga-gtk3
+install-ga-gtk3: install-ga-dir
+	install -m 644 -p $(SRC_DIR)/ga_impls/__init__.py* $(PYTHON_INST_DIR)/ga_impls
+	install -m 644 -p $(SRC_DIR)/ga_impls/ga_gtk3.py* $(PYTHON_INST_DIR)/ga_impls
+
+.PHONY: install-ga-gtk2
+install-ga-gtk2: install-ga-dir
+	install -d $(PYTHON_INST_DIR)/ga_impls/ga_gtk2
+	install -m 644 -p $(SRC_DIR)/ga_impls/__init__.py* $(PYTHON_INST_DIR)/ga_impls
+	install -m 644 -p $(SRC_DIR)/ga_impls/ga_gtk2/*.py $(PYTHON_INST_DIR)/ga_impls/ga_gtk2
+
+.PHONY: install-ga
+ifeq ($(GTK_VERSION),2)
+ install-ga: install-ga-gtk2
+else
+ install-ga: install-ga-gtk3
+endif
 
 .PHONY: install-example-plugins
 install-example-plugins: install-example-plugins-files install-example-plugins-conf
@@ -181,28 +238,85 @@ install-example-plugins-conf:
 	install -d $(RHSM_PLUGIN_CONF_DIR)
 	install -m 644 -p $(EXAMPLE_PLUGINS_SRC_DIR)/*.conf $(RHSM_PLUGIN_CONF_DIR)
 
+# initial-setup, as in the 'initial-setup' rpm that runs at first boot.
+.PHONY: install-initial-setup-real
+install-initial-setup-real:
+	echo "installing initial-setup" ; \
+	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree_content.py $(RHSM_PLUGIN_DIR)
+	install -d $(ANACONDA_ADDON_INST_DIR)
+	install -d $(INITIAL_SETUP_INST_DIR)
+	install -d $(INITIAL_SETUP_INST_DIR)/gui
+	install -d $(INITIAL_SETUP_INST_DIR)/gui/spokes
+	install -d $(INITIAL_SETUP_INST_DIR)/gui/categories
+	install -d $(INITIAL_SETUP_INST_DIR)/ks
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/*.py $(INITIAL_SETUP_INST_DIR)/
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/*.py $(INITIAL_SETUP_INST_DIR)/gui/
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/categories/*.py $(INITIAL_SETUP_INST_DIR)/gui/categories/
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/spokes/*.py $(INITIAL_SETUP_INST_DIR)/gui/spokes/
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/spokes/*.ui $(INITIAL_SETUP_INST_DIR)/gui/spokes/
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/ks/*.py $(INITIAL_SETUP_INST_DIR)/ks/
+
+.PHONY: install-firstboot-real
+install-firstboot-real:
+	echo "Installing firstboot to $(FIRSTBOOT_MODULES_DIR)"; \
+	install -d $(FIRSTBOOT_MODULES_DIR); \
+	install -m644 $(SRC_DIR)/gui/firstboot/*.py* $(FIRSTBOOT_MODULES_DIR)/;\
+
+
+.PHONY: install-firstboot
+ifeq ($(INSTALL_FIRSTBOOT),true)
+install-firstboot: install-firstboot-real
+else
+install-firstboot: ;
+endif
+
+.PHONY: install-initial-setup
+ifeq ($(INSTALL_INITIAL_SETUP),true)
+install-initial-setup: install-initial-setup-real
+else
+install-initial-setup: ;
+endif
+
+.PHONY: install-post-boot
+install-post-boot: install-firstboot install-initial-setup
+
 .PHONY: install
 install: install-files install-po install-conf install-help-files install-plugins-conf
 
 set-versions:
 	sed -e 's/RPM_VERSION/$(VERSION)/g' $(SRC_DIR)/version.py.in > $(SRC_DIR)/version.py
 	sed -e 's/RPM_VERSION/$(VERSION)/g' $(RCT_SRC_DIR)/version.py.in > $(RCT_SRC_DIR)/version.py
+	sed -e 's/GTK_VERSION/$(GTK_VERSION)/g' $(SRC_DIR)/version.py.in > $(SRC_DIR)/version.py
+
+install-po: compile-po
+	install -d $(RHSM_LOCALE_DIR)
+	cp -R po/build/* $(RHSM_LOCALE_DIR)/
 
 clean-versions:
 	rm -rf $(SRC_DIR)/version.py
 	rm -rf $(RCT_SRC_DIR)/version.py
 
-install-po: compile-po
-	cp -R po/build/* $(PREFIX)/$(INSTALL_DIR)/locale/
+install-glade:
+	install -d $(GLADE_INST_DIR)
+	install -m 644 $(SRC_DIR)/gui/data/glade/*.glade $(SUBMAN_INST_DIR)/gui/data/glade/
 
-install-files: set-versions dbus-service-install desktop-files install-plugins
-	install -d $(CODE_DIR)/gui/data/icons
-	install -d $(CODE_DIR)/branding
-	install -d $(CODE_DIR)/model
-	install -d $(CODE_DIR)/migrate
-	install -d $(CODE_DIR)/plugin
-	install -d $(CODE_DIR)/plugin/ostree
+install-ui:
+	install -d $(UI_INST_DIR)
+	install -m 644 $(SRC_DIR)/gui/data/ui/*.ui $(SUBMAN_INST_DIR)/gui/data/ui/
 
+# We could choose here, but it doesn't matter.
+install-gui: install-glade install-ui
+
+install-files: set-versions dbus-service-install desktop-files install-plugins install-post-boot install-ga install-gui
+	install -d $(PYTHON_INST_DIR)/gui
+	install -d $(PYTHON_INST_DIR)/gui/data/icons
+	install -d $(PYTHON_INST_DIR)/branding
+	install -d $(PYTHON_INST_DIR)/model
+	install -d $(PYTHON_INST_DIR)/migrate
+	install -d $(PYTHON_INST_DIR)/plugin
+	install -d $(PYTHON_INST_DIR)/plugin/ostree
+	install -d $(PYTHON_INST_DIR)/plugin
+	install -d $(PYTHON_INST_DIR)/plugin/ostree
 	install -d $(PREFIX)/$(INSTALL_DIR)/locale/
 	install -d $(PREFIX)/usr/lib/yum-plugins/
 	install -d $(PREFIX)/usr/sbin
@@ -236,32 +350,25 @@ install-files: set-versions dbus-service-install desktop-files install-plugins
 	install -d $(PREFIX)/usr/share/rhsm/subscription_manager/gui/firstboot
 	install -d $(PREFIX)/usr/share/appdata
 
-	# Adjust firstboot screen location for RHEL 6:
-	if [ $(OS_VERSION) -le 6 ]; then \
-		install -d $(PREFIX)/usr/share/rhn/up2date_client/firstboot; \
-	else \
-		install -d $(PREFIX)/usr/share/firstboot/modules; \
-	fi; \
 
 	install -d $(PREFIX)/usr/libexec
 	install -m 755 $(DAEMONS_SRC_DIR)/rhsmcertd-worker.py \
 		$(PREFIX)/usr/libexec/rhsmcertd-worker
 
 
-	install -m 644 -p $(SRC_DIR)/*.py $(CODE_DIR)
-	install -m 644 -p $(SRC_DIR)/gui/*.py $(CODE_DIR)/gui
-	install -m 644 -p $(SRC_DIR)/migrate/*.py $(CODE_DIR)/migrate
-	install -m 644 -p $(SRC_DIR)/branding/*.py $(CODE_DIR)/branding
-	install -m 644 -p $(SRC_DIR)/model/*.py $(CODE_DIR)/model
-	install -m 644 -p $(SRC_DIR)/plugin/*.py $(CODE_DIR)/plugin
+	install -m 644 -p $(SRC_DIR)/*.py $(PYTHON_INST_DIR)/
+	install -m 644 -p $(SRC_DIR)/gui/*.py $(PYTHON_INST_DIR)/gui
+	install -m 644 -p $(SRC_DIR)/migrate/*.py $(PYTHON_INST_DIR)/migrate
+	install -m 644 -p $(SRC_DIR)/branding/*.py $(PYTHON_INST_DIR)/branding
+	install -m 644 -p $(SRC_DIR)/model/*.py $(PYTHON_INST_DIR)/model
+	install -m 644 -p $(SRC_DIR)/plugin/*.py $(PYTHON_INST_DIR)/plugin
 	install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/
 
 	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager-gui
 
-	install -m 644 $(SRC_DIR)/gui/data/*.glade $(CODE_DIR)/gui/data/
 
 	if [ "$(INSTALL_OSTREE_PLUGIN)" = "true" ] ; then \
-		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(CODE_DIR)/plugin/ostree ; \
+		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(SUBMAN_INST_DIR)/plugin/ostree ; \
 	fi
 
 	#icons
@@ -282,7 +389,7 @@ install-files: set-versions dbus-service-install desktop-files install-plugins
 	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/scalable/apps/*.svg \
 		$(PREFIX)/usr/share/icons/hicolor/scalable/apps
 	install -m 644 $(SRC_DIR)/gui/data/icons/*.svg \
-		$(CODE_DIR)/gui/data/icons
+		$(SUBMAN_INST_DIR)/gui/data/icons
 
 	install bin/subscription-manager $(PREFIX)/usr/sbin
 	install bin/rhn-migrate-classic-to-rhsm  $(PREFIX)/usr/sbin
@@ -315,12 +422,6 @@ install-files: set-versions dbus-service-install desktop-files install-plugins
 		fi; \
 	fi; \
 
-	# RHEL 6 Customizations:
-	if [ $(OS_VERSION) -le 6 ]; then \
-		install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/rhn/up2date_client/firstboot;\
-	else \
-		install -m644 $(SRC_DIR)/gui/firstboot/*.py $(PREFIX)/usr/share/firstboot/modules/;\
-	fi;\
 
 	install -m 644 man/rhn-migrate-classic-to-rhsm.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
 	install -m 644 man/rhsmcertd.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
@@ -353,12 +454,12 @@ install-files: set-versions dbus-service-install desktop-files install-plugins
 	install -m 644 etc-conf/subscription-manager.console \
 		$(PREFIX)/etc/security/console.apps/subscription-manager
 
-	install -d $(RCT_CODE_DIR)
-	install -m 644 -p $(RCT_SRC_DIR)/*.py $(RCT_CODE_DIR)
+	install -d $(RCT_INST_DIR)
+	install -m 644 -p $(RCT_SRC_DIR)/*.py $(RCT_INST_DIR)
 	install bin/rct $(PREFIX)/usr/bin
 
-	install -d $(RD_CODE_DIR)
-	install -m 644 -p $(RD_SRC_DIR)/*.py $(RD_CODE_DIR)
+	install -d $(RD_INST_DIR)
+	install -m 644 -p $(RD_SRC_DIR)/*.py $(RD_INST_DIR)
 	install bin/rhsm-debug $(PREFIX)/usr/bin
 
 
@@ -496,7 +597,7 @@ find-missing-widgets:
 	DEFINED_WIDGETS=`mktemp` ||exit 1; \
 	perl -n -e "if (/get_widget\([\'|\"](.*?)[\'|\"]\)/) { print(\"\$$1\n\")}" $(STYLEFILES) > $$USED_WIDGETS; \
 	pcregrep -h -o  -M  "(?:widgets|widget_names) = \[.*\s*.*?\s*.*\]" $(STYLEFILES) | perl -0 -n -e "my @matches = /[\'|\"](.*?)[\'|\"]/sg ; $$,=\"\n\"; print(@matches);" >> $$USED_WIDGETS; \
-	perl -n -e "if (/<widget class=\".*?\" id=\"(.*?)\">/) { print(\"\$$1\n\")}" $(GLADEFILES) > $$DEFINED_WIDGETS; \
+	perl -n -e "if (/<object class=\".*?\" id=\"(.*?)\">/) { print(\"\$$1\n\")}" $(GLADEFILES) $(UIFILES) > $$DEFINED_WIDGETS; \
 	while read line; do grep -F "$$line" $$DEFINED_WIDGETS > /dev/null ; STAT="$$?"; if [ "$$STAT" -ne "0" ] ; then echo "$$line"; fi;  done < $$USED_WIDGETS | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
@@ -507,7 +608,7 @@ find-missing-widgets:
 find-missing-signals:
 	@TMPFILE=`mktemp` || exit 1; \
 	DEFINED_SIGNALS=`mktemp` ||exit 1; \
-	perl -n -e "if (/<signal name=\"(.*?)\" handler=\"(.*?)\"/) { print(\"\$$2\n\")}" $(GLADEFILES) > $$DEFINED_SIGNALS; \
+	perl -n -e "if (/<signal name=\"(.*?)\" handler=\"(.*?)\"/) { print(\"\$$2\n\")}" $(GLADEFILES) $(UIFILES) > $$DEFINED_SIGNALS; \
 	while read line; do grep -F  "$$line" $(PYFILES) > /dev/null; STAT="$$?"; if [ "$$STAT" -ne "0" ] ; then echo "$$line"; fi;  done < $$DEFINED_SIGNALS | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 # try to clean up the "swapped=no" signal thing in

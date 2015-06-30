@@ -598,8 +598,9 @@ class PoolStash(object):
         provided for a given pool. If we do not actually have any info on this
         pool, return None.
         """
-        pool = self.all_pools[pool_id]
+        pool = self.all_pools.get(pool_id)
         if pool is None:
+            log.debug("pool id %s not found in all_pools", pool_id)
             return None
 
         provided_products = []

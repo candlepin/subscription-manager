@@ -28,14 +28,17 @@ class RegisterScreenTests(SubManFixture):
                 CREDENTIALS_PAGE
 
     def test_show(self):
+        self.rs.initialize()
         self.rs.show()
 
     def test_show_registration_returns_to_choose_server_screen(self):
+        self.rs.initialize()
         self.rs.show()
         self.rs.register()
         self.assertEquals(CREDENTIALS_PAGE,
                           self.rs.register_notebook.get_current_page() - 1)
         self.rs.cancel(self.rs.cancel_button)
+        self.rs.initialize()
         self.rs.show()
         self.assertEquals(CHOOSE_SERVER_PAGE,
                           self.rs.register_notebook.get_current_page())

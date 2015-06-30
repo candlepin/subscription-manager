@@ -268,8 +268,8 @@ class StatusCache(CacheManager):
         Writing to disk means it will be read from memory for the rest of this run.
         """
         threading.Thread(target=super(StatusCache, self).write_cache,
-                         args=[False],
-                         name="WriteCache%s" % self.__class__.__name__).start()
+                         args=[True],
+                         name="WriteCache%sThread" % self.__class__.__name__).start()
         log.debug("Started thread to write cache: %s" % self.CACHE_FILE)
 
     # we override a @classmethod with an instance method in the sub class?

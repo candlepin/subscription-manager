@@ -15,10 +15,9 @@
 
 import unittest
 
-from gtk import RESPONSE_CANCEL, RESPONSE_YES
-
 import mock
 
+from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.gui import about
 
 
@@ -38,6 +37,8 @@ class TestAboutDialog(unittest.TestCase):
         about_dialog = about.AboutDialog(None, backend_mock)
         about_dialog.show()
         # a response we do not how to handle
-        about_dialog.dialog.emit("response", RESPONSE_YES)
+        about_dialog.dialog.emit("response",
+                                 ga_Gtk.ResponseType.YES)
         # and a "response" we know how to handle
-        about_dialog.dialog.emit("response", RESPONSE_CANCEL)
+        about_dialog.dialog.emit("response",
+                                 ga_Gtk.ResponseType.CANCEL)

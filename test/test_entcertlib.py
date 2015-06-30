@@ -49,11 +49,11 @@ class TestEntCertUpdateReport(fixture.SubManFixture):
         r.rogue.append(self._stub_cert())
 
         # an UnicodeError will fail the tests
-        report_str = str(r)
+        report_str = unicode(r)
         '%s' % report_str
 
         with fixture.locale_context('de_DE.utf8'):
-            report_str = str(r)
+            report_str = unicode(r)
             '%s' % r
 
     def _stub_cert(self):

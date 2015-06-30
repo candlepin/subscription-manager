@@ -15,17 +15,17 @@
 
 import datetime
 import gettext
-import gobject
 import logging
 
-import gtk
+from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.ga import GObject as ga_GObject
 
 from subscription_manager import async
 from subscription_manager.gui.contract_selection import ContractSelectionWindow
 from subscription_manager.gui.filter import FilterOptionsWindow, Filters
 from subscription_manager.gui import progress
 from subscription_manager.gui.storage import MappedTreeStore
-from subscription_manager.gui.utils import apply_highlight, show_error_window, handle_gui_exception, set_background_model_index
+from subscription_manager.gui.utils import apply_highlight, show_error_window, handle_gui_exception
 from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, require
 from subscription_manager.jsonwrapper import PoolWrapper
@@ -44,10 +44,11 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                         'active_on_checkbutton', 'subscribe_button',
                         'edit_quantity_label', 'scrolledwindow',
                         'filter_options_button', 'applied_filters_label']
+    gui_file = "allsubs"
 
     def __init__(self, backend, facts, parent_win):
 
-        super(AllSubscriptionsTab, self).__init__('allsubs.glade')
+        super(AllSubscriptionsTab, self).__init__()
 
         # Set up dynamic elements
         self.no_subs_label, self.no_subs_label_viewport = widgets.get_scrollable_label()
@@ -75,9 +76,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.date_picker_hbox.add(self.date_picker)
 
         # Custom build of the subscription column.
-        title_text_renderer = gtk.CellRendererText()
+        title_text_renderer = ga_Gtk.CellRendererText()
         title_text_renderer.set_property('xalign', 0.0)
-        subscription_column = gtk.TreeViewColumn(_('Subscription'),
+        subscription_column = ga_Gtk.TreeViewColumn(_('Subscription'),
                                         title_text_renderer,
                                         markup=self.store['product_name_formatted'])
         subscription_column.set_expand(True)
@@ -105,8 +106,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.edit_quantity_label.set_label(quantity_column.get_column_legend_text())
 
+        # FIXME: Likely a correct way to do this now, so stub this out now
         # Ensure all cells are colored according the the store.
-        set_background_model_index(self.top_view, self.store['background'])
+        #set_background_model_index(self.top_view, self.store['background'])
+        # FIXME
 
         self.top_view.connect("row_activated",
                               widgets.expand_collapse_on_row_activated_callback)
@@ -121,7 +124,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.filter_dialog = FilterOptionsWindow(self.filters, self)
 
         self.update_applied_filters_label()
-        self.glade.signal_autoconnect({
+        self.connect_signals({
             "on_search_button_clicked": self.search_button_clicked,
             "on_subscribe_button_clicked": self.subscribe_button_clicked,
             "on_filter_options_button_clicked": self.filter_options_button_clicked,
@@ -136,12 +139,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def get_type_map(self):
         return {
-            'virt_only': gobject.TYPE_PYOBJECT,
+            'virt_only': ga_GObject.TYPE_PYOBJECT,
             'product_name': str,
             'available': str,
             'product_id': str,
             'pool_id': str,
-            'merged_pools': gobject.TYPE_PYOBJECT,
+            'merged_pools': ga_GObject.TYPE_PYOBJECT,
             'product_name_formatted': str,
             'quantity_to_consume': int,
             'background': str,
@@ -260,12 +263,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
                 self.store.add_map(tree_iter, {
                     'virt_only': self._machine_type(entry.pools),
-                    'product_name': entry.product_name,
+                    'product_name': str(entry.product_name),
                     'product_name_formatted': apply_highlight(entry.product_name,
                                                               self.get_filter_text()),
                     'quantity_to_consume': suggested_quantity,
-                    'available': available,
-                    'product_id': entry.product_id,
+                    'available': str(available),
+                    'product_id': str(entry.product_id),
                     'pool_id': entry.pools[0]['id'],  # not displayed, just for lookup later
                     'merged_pools': entry,  # likewise not displayed, for subscription
                     'align': 0.5,
@@ -275,7 +278,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'support_level': support_level,
                     'support_type': support_type,
                     'quantity_increment': quantity_increment,
-                    'pool_type': pool_type
+                    'pool_type': str(pool_type)
                 })
 
         # Ensure that all nodes are expanded in the tree view.
@@ -359,8 +362,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             else:
                 # show pulsating progress bar while we wait for results
                 self.pb = progress.Progress(pb_title, pb_label)
-                self.timer = gobject.timeout_add(100, self.pb.pulse)
-                self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
+                self.timer = ga_GObject.timeout_add(100, self.pb.pulse)
+                tl = self.content.get_toplevel()
+                if tl.is_toplevel():
+                    self.pb.set_parent_window(tl)
 
             # fire off async refresh
             async_stash = async.AsyncPool(self.pool_stash)
@@ -372,7 +377,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
     def _clear_progress_bar(self):
         if self.pb:
             self.pb.hide()
-            gobject.source_remove(self.timer)
+            ga_GObject.source_remove(self.timer)
             self.timer = 0
             self.pb = None
 
@@ -404,9 +409,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         # Start the progress bar
         self.pb = progress.Progress(_("Attaching"),
                 _("Attaching subscription. Please wait."))
-        self.timer = gobject.timeout_add(100, self.pb.pulse)
-        self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
-
+        self.timer = ga_GObject.timeout_add(100, self.pb.pulse)
+        content_toplevel = self.content.get_toplevel()
+        # get_toplevel() can return a GtkWindow that is within another
+        # GtkWindow. See the get_toplevel() gtk docs
+        if content_toplevel.is_toplevel():
+            self.pb.set_parent_window(content_toplevel)
         # Spin off a thread to handle binding the selected pool.
         # After it has completed the actual bind call, available
         # subs will be refreshed, but we won't re-run compliance
@@ -443,7 +451,11 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.contract_selection = ContractSelectionWindow(
                 self._contract_selected, self._contract_selection_cancelled)
 
-        self.contract_selection.set_parent_window(self.content.get_parent_window().get_user_data())
+        content_toplevel = self.content.get_toplevel()
+        self.log.debug("content_toplevel %s", content_toplevel)
+        if content_toplevel.is_toplevel():
+            self.contract_selection.set_parent_window(content_toplevel)
+        #self.log.debug("user_data %s", pw.get_user_data())
         merged_pools.sort_virt_to_top()
 
         for pool in merged_pools.pools:

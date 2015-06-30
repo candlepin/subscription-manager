@@ -18,8 +18,8 @@ class TestNetworkConfigDialog(SubManFixture):
         self.stubConfig = stubs.StubConfig()
 
     def test_network_cfg_parse_proxy_entry(self):
-        self.nc.xml.get_widget("enableProxyButton").set_active(True)
-        proxy_entry = self.nc.xml.get_widget("proxyEntry")
+        self.nc.enableProxyButton.set_active(True)
+        proxy_entry = self.nc.proxyEntry
 
         proxy_entry.set_text("example.com:10000")
         expected = ('example.com', '10000')
@@ -48,8 +48,8 @@ class TestNetworkConfigDialog(SubManFixture):
 
     @mock.patch('subscription_manager.gui.networkConfig.rhsm.utils.parse_url')
     def test_network_cfg_parse_proxy_entry_unexpected_exception(self, mock_parse_url):
-        self.nc.xml.get_widget("enableProxyButton").set_active(True)
-        proxy_entry = self.nc.xml.get_widget("proxyEntry")
+        self.nc.enableProxyButton.set_active(True)
+        proxy_entry = self.nc.proxyEntry
         mock_parse_url.side_effect = rhsm.utils.ServerUrlParseError
         proxy_entry.set_text("example.com:10000")
         expected = ('example.com', '10000')
@@ -58,8 +58,8 @@ class TestNetworkConfigDialog(SubManFixture):
 
     @mock.patch('subscription_manager.gui.networkConfig.rhsm.utils.parse_url')
     def test_network_cfg_parse_proxy_entry_exceptions(self, mock_parse_url):
-        self.nc.xml.get_widget("enableProxyButton").set_active(True)
-        proxy_entry = self.nc.xml.get_widget("proxyEntry")
+        self.nc.enableProxyButton.set_active(True)
+        proxy_entry = self.nc.proxyEntry
         mock_parse_url.side_effect = rhsm.utils.ServerUrlParseErrorPort
         proxy_entry.set_text("example.com:")
         expected = ('example.com', rhsm.config.DEFAULT_PROXY_PORT)
@@ -74,32 +74,31 @@ class TestNetworkConfigDialog(SubManFixture):
         self.nc = networkConfig.NetworkConfigDialog()
         self.stubConfig = stubs.StubConfig()
         self.nc.cfg = self.stubConfig
-        self.nc.xml.get_widget("enableProxyButton").set_active(True)
-        self.nc.xml.get_widget("proxyEntry").set_text("example.com:10000")
+        self.nc.enableProxyButton.set_active(True)
+        self.nc.proxyEntry.set_text("example.com:10000")
         self.nc.write_values()
 
     def test_network_cfg_write_values_no_port(self):
         self.nc = networkConfig.NetworkConfigDialog()
         self.stubConfig = stubs.StubConfig()
         self.nc.cfg = self.stubConfig
-        self.nc.xml.get_widget("enableProxyButton").set_active(True)
-        self.nc.xml.get_widget("proxyEntry").set_text("example.com")
+        self.nc.enableProxyButton.set_active(True)
+        self.nc.proxyEntry.set_text("example.com")
         self.nc.write_values()
 
     def test_network_cfg_write_values_with_auth(self):
         self.nc = networkConfig.NetworkConfigDialog()
         self.stubConfig = stubs.StubConfig()
         self.nc.cfg = self.stubConfig
-        self.nc.xml.get_widget("enableProxyButton").set_active(True)
-        self.nc.xml.get_widget("proxyEntry").set_text("example.com:10000")
-        self.nc.xml.get_widget("enableProxyAuthButton").set_active(True)
-        self.nc.xml.get_widget("proxyUserEntry").set_text("redhatUser")
-        self.nc.xml.get_widget("proxyPasswordEntry").set_text("redhatPass")
+        self.nc.enableProxyButton.set_active(True)
+        self.nc.proxyEntry.set_text("example.com:10000")
+        self.nc.enableProxyAuthButton.set_active(True)
+        self.nc.proxyUserEntry.set_text("redhatUser")
+        self.nc.proxyPasswordEntry.set_text("redhatPass")
         self.nc.write_values()
 
         actual_user = self.nc.cfg.store['server.proxy_user']
         actual_password = self.nc.cfg.store['server.proxy_password']
-
         self.assertTrue(actual_user == "redhatUser")
         self.assertTrue(actual_password == "redhatPass")
 
@@ -114,20 +113,20 @@ class TestNetworkConfigDialog(SubManFixture):
         self.nc = networkConfig.NetworkConfigDialog()
         self.stubConfig = stubs.StubConfig()
         self.nc.cfg = self.stubConfig
-        self.nc.xml.get_widget("enableProxyButton").set_active(True)
-        self.nc.xml.get_widget("proxyEntry").set_text("example.com:10000")
+        self.nc.enableProxyButton.set_active(True)
+        self.nc.proxyEntry.set_text("example.com:10000")
         self.expected = {}
-        self.nc.on_cancel_clicked(self.nc.xml.get_widget("cancelButton"))
+        self.nc.on_cancel_clicked(self.nc.cancelButton)
         self.assertEquals(self.expected, self.nc.cfg.store)
 
     def test_network_cfg_save_change_values(self):
         self.nc = networkConfig.NetworkConfigDialog()
         self.stubConfig = stubs.StubConfig()
         self.nc.cfg = self.stubConfig
-        self.nc.xml.get_widget("enableProxyButton").set_active(True)
-        self.nc.xml.get_widget("proxyEntry").set_text("example.com:10000")
+        self.nc.enableProxyButton.set_active(True)
+        self.nc.proxyEntry.set_text("example.com:10000")
         self.expected = {}
-        self.nc.on_save_clicked(self.nc.xml.get_widget("saveButton"))
+        self.nc.on_save_clicked(self.nc.saveButton)
         self.assertNotEquals(self.expected, self.nc.cfg.store)
 
     @mock.patch('subscription_manager.gui.networkConfig.connection.UEPConnection.getStatus')
@@ -246,14 +245,14 @@ class TestNetworkConfigDialog(SubManFixture):
         self.assertEquals(expected, actual)
 
     def test_network_cfg_on_connection_finish(self):
-        connection_status_label = self.nc.xml.get_widget("connectionStatusLabel")
+        connection_status_label = self.nc.connectionStatusLabel
         expected = "Proxy connection succeeded"
         self.nc.on_test_connection_finish(True)
         actual = connection_status_label.get_text()
         self.assertEquals(expected, actual)
 
     def test_network_cfg_on_connection_finish_fail(self):
-        connection_status_label = self.nc.xml.get_widget("connectionStatusLabel")
+        connection_status_label = self.nc.connectionStatusLabel
         expected = "Proxy connection failed"
         self.nc.on_test_connection_finish(False)
         actual = connection_status_label.get_text()
@@ -264,15 +263,15 @@ class TestNetworkConfigDialog(SubManFixture):
 
     @mock.patch('subscription_manager.gui.networkConfig.threading.Thread')
     def test_network_cfg_on_test_connection_clicked_auth(self, mock_thread):
-        self.nc.xml.get_widget("enableProxyButton").set_active(True)
-        proxy_entry = self.nc.xml.get_widget("proxyEntry")
+        self.nc.enableProxyButton.set_active(True)
+        proxy_entry = self.nc.proxyEntry
         proxy_entry.set_text("example.com:10000")
-        self.nc.xml.get_widget("enableProxyAuthButton").set_active(True)
-        proxy_user_entry = self.nc.xml.get_widget("proxyUserEntry")
+        self.nc.enableProxyAuthButton.set_active(True)
+        proxy_user_entry = self.nc.proxyUserEntry
         proxy_user_entry.set_text("redhatUser")
-        proxy_password_entry = self.nc.xml.get_widget("proxyPasswordEntry")
+        proxy_password_entry = self.nc.proxyPasswordEntry
         proxy_password_entry.set_text("redhatPass")
-        test_connection_button = self.nc.xml.get_widget("testConnectionButton")
+        test_connection_button = self.nc.testConnectionButton
         self.nc.on_test_connection_clicked(test_connection_button)
         expected = mock.call(args=('example.com', '10000', 'redhatUser', 'redhatPass'),
                              name=mock.ANY, target=mock.ANY)
@@ -282,15 +281,15 @@ class TestNetworkConfigDialog(SubManFixture):
 
     @mock.patch('subscription_manager.gui.networkConfig.threading.Thread')
     def test_network_cfg_on_test_connection_clicked_no_auth(self, mock_thread):
-        self.nc.xml.get_widget("enableProxyButton").set_active(True)
-        proxy_entry = self.nc.xml.get_widget("proxyEntry")
+        self.nc.enableProxyButton.set_active(True)
+        proxy_entry = self.nc.proxyEntry
         proxy_entry.set_text("example.com:10000")
-        self.nc.xml.get_widget("enableProxyAuthButton").set_active(False)
-        proxy_user_entry = self.nc.xml.get_widget("proxyUserEntry")
+        self.nc.enableProxyAuthButton.set_active(False)
+        proxy_user_entry = self.nc.proxyUserEntry
         proxy_user_entry.set_text("redhatUser")
-        proxy_password_entry = self.nc.xml.get_widget("proxyPasswordEntry")
+        proxy_password_entry = self.nc.proxyPasswordEntry
         proxy_password_entry.set_text("redhatPass")
-        test_connection_button = self.nc.xml.get_widget("testConnectionButton")
+        test_connection_button = self.nc.testConnectionButton
         self.nc.on_test_connection_clicked(test_connection_button)
         expected = mock.call(args=('example.com', '10000', None, None), name=mock.ANY, target=mock.ANY)
         actual = mock_thread.call_args_list

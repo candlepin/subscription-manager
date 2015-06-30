@@ -23,8 +23,9 @@ from subscription_manager.utils import friendly_join
 
 import logging
 import gettext
-import gobject
-import gtk
+from subscription_manager.ga import GObject as ga_GObject
+from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.ga import GdkPixbuf as ga_GdkPixbuf
 import os
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -38,10 +39,10 @@ INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 UNKNOWN_IMG = os.path.join(prefix, "data/icons/unknown.svg")
 
 ICONSET = {
-    'green': gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 13, 13),
-    'red': gtk.gdk.pixbuf_new_from_file_at_size(INVALID_IMG, 13, 13),
-    'yellow': gtk.gdk.pixbuf_new_from_file_at_size(PARTIAL_IMG, 13, 13),
-    'unknown': gtk.gdk.pixbuf_new_from_file_at_size(UNKNOWN_IMG, 13, 13),
+    'green': ga_GdkPixbuf.Pixbuf.new_from_file_at_size(VALID_IMG, 13, 13),
+    'red': ga_GdkPixbuf.Pixbuf.new_from_file_at_size(INVALID_IMG, 13, 13),
+    'yellow': ga_GdkPixbuf.Pixbuf.new_from_file_at_size(PARTIAL_IMG, 13, 13),
+    'unknown': ga_GdkPixbuf.Pixbuf.new_from_file_at_size(UNKNOWN_IMG, 13, 13),
 }
 
 
@@ -56,12 +57,13 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 ['product_text', 'product_arch_text', 'validity_text',
                  'subscriptions_view', 'subscription_status_label',
                  'update_certificates_button', 'register_button']
+    gui_file = "installed"
 
     def __init__(self, backend, facts, tab_icon,
                  parent, ent_dir, prod_dir):
         # The row striping in this TreeView is handled automatically
         # because we have the rules_hint set to True in the Glade file.
-        super(InstalledProductsTab, self).__init__('installed.glade')
+        super(InstalledProductsTab, self).__init__()
 
         self.tab_icon = tab_icon
 
@@ -73,9 +75,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.backend = backend
 
         # Product column
-        text_renderer = gtk.CellRendererText()
-        image_renderer = gtk.CellRendererPixbuf()
-        column = gtk.TreeViewColumn(_('Product'))
+        text_renderer = ga_Gtk.CellRendererText()
+        image_renderer = ga_Gtk.CellRendererPixbuf()
+        column = ga_Gtk.TreeViewColumn(_('Product'))
 
         column.set_expand(True)
         column.pack_start(image_renderer, False)
@@ -100,11 +102,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         self.set_sorts(self.store, cols)
 
-        self.glade.signal_autoconnect({
+        self.connect_signals({
             "on_update_certificates_button_clicked":
-            parent._update_certificates_button_clicked,
-        })
-        self.glade.signal_autoconnect({
+                parent._update_certificates_button_clicked,
             "on_register_button_clicked": parent._register_item_clicked,
         })
 
@@ -219,6 +219,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                     entry['status'] = _('Not Subscribed')
                     entry['validity_note'] = _("Not Subscribed")
 
+                # FIXME
+                # TODO: fix mapped stores
                 self.store.add_map(entry)
         # 811340: Select the first product in My Installed Products
         # table by default.
@@ -253,16 +255,16 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def get_type_map(self):
         return {
-            'image': gtk.gdk.Pixbuf,
+            'image': ga_GdkPixbuf.Pixbuf,
             'product': str,
             'product_id': str,
             'version': str,
             'arch': str,
             'status': str,
             'validity_note': str,
-            'subscription': gobject.TYPE_PYOBJECT,
-            'start_date': gobject.TYPE_PYOBJECT,
-            'expiration_date': gobject.TYPE_PYOBJECT,
+            'subscription': ga_GObject.TYPE_PYOBJECT,
+            'start_date': ga_GObject.TYPE_PYOBJECT,
+            'expiration_date': ga_GObject.TYPE_PYOBJECT,
             'serial': str,
             'align': float
         }
@@ -279,7 +281,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         elif status_type == UNKNOWN_STATUS:
             img = UNKNOWN_IMG
 
-        pix_buf = gtk.gdk.pixbuf_new_from_file_at_size(img, 13, 13)
+        pix_buf = ga_GdkPixbuf.Pixbuf.new_from_file_at_size(img, 13, 13)
         self.tab_icon.set_from_pixbuf(pix_buf)
 
     def _set_validity_status(self):

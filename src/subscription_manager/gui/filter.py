@@ -15,17 +15,13 @@
 
 import gettext
 import logging
-import os
-import gtk
 
+from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.gui import widgets
 
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
-
-prefix = os.path.dirname(__file__)
-GLADE_XML = os.path.join(prefix, "data/filters.glade")
 
 
 class Filters(object):
@@ -40,26 +36,27 @@ class Filters(object):
         return len(filter(None, self.__dict__.values()))
 
 
-class FilterOptionsWindow(widgets.GladeWidget):
+class FilterOptionsWindow(widgets.SubmanBaseWidget):
     widget_names = ['filter_product_window', 'compatible_checkbutton',
                     'installed_checkbutton', 'no_overlapping_checkbutton',
                     'contains_text_entry']
+    gui_file = "filters"
 
     def __init__(self, filters, parent):
 
-        super(FilterOptionsWindow, self).__init__(GLADE_XML)
+        super(FilterOptionsWindow, self).__init__()
         self.filters = filters
         self.parent = parent
 
         # Center on parent when opened.
-        self.filter_product_window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+        self.filter_product_window.set_position(ga_Gtk.WindowPosition.CENTER_ON_PARENT)
         self.filter_product_window.set_transient_for(self.parent.parent_win)
 
         # Set all the filters to their default values before the signals are
         # connected.  Otherwise, their callbacks will be triggered when we
         # call set_active().
         self.set_initial_widget_state()
-        self.glade.signal_autoconnect({
+        self.connect_signals({
             "on_filter_product_window_delete_event": self.deleted,
             "on_clear_button_clicked": self.clear_button_clicked,
             "on_close_button_clicked": self.close_button_clicked,
@@ -99,7 +96,7 @@ class FilterOptionsWindow(widgets.GladeWidget):
 
     def deleted(self, event, data):
         self.filter_product_window.hide()
-        # See http://faq.pygtk.org/index.py?req=show&file=faq10.006.htp
+        # See http://faq.pyGtk.org/index.py?req=show&file=faq10.006.htp
         return True
 
     def close_button_clicked(self, widget):

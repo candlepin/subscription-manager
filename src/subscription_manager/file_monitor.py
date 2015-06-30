@@ -15,68 +15,79 @@
 
 """
 Watch for and be notified of changes in a file.
-
-Perfers to use gio as the backend, but can fallback to polling.
 """
-
-import gobject
 import os
-
-import rhsm.config
 
 
 class MonitorDirectory(object):
 
-    def __init__(self, path):
+    def __init__(self, path, changed_callback=None):
         self.mtime = None
         self.exists = None
         self.path = path
+        self._changed_callback = changed_callback
         self.update()
 
     def _check_mtime(self):
         mtime = 0
         try:
-            mtime = os.path.getmtime(self.path)
+            mtime = self._get_mtime(self.path)
             exists = True
         except OSError:
             exists = False
         return (mtime, exists)
 
+    def _get_mtime(self, path):
+        return os.path.getmtime(path)
+
+    def _on_changed(self):
+        if self._changed_callback:
+            self._changed_callback()
+
+    def _changed(self, mtime, mtime2, exists, exists2):
+        return mtime != mtime2 or exists != exists2
+
     def update(self):
         mtime, exists = self._check_mtime()
 
         # Has something changed?
-        result = mtime != self.mtime or exists != self.exists
+        result = self._changed(mtime, self.mtime, exists, self.exists)
 
         # Update saved values
         self.mtime = mtime
         self.exists = exists
 
+        if result:
+            self._on_changed()
+
         return result
 
 
-class Monitor(gobject.GObject):
+class MonitorDirectories(object):
 
-    __gsignals__ = {
-        'changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-            (gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN))
-    }
+    def __init__(self, dir_monitors=None, changed_callback=None):
+        """Attach a timer callback to call run_check to poll periodically."""
+        self.dir_monitors = dir_monitors or []
+        self._changed_callback = changed_callback
 
-    def __init__(self):
-        self.__gobject_init__()
-        cfg = rhsm.config.initConfig()
-        # Identity, Entitlements, Products
-        self.dirs = [MonitorDirectory(cfg.get('rhsm', 'consumerCertDir')),
-                MonitorDirectory(cfg.get('rhsm', 'entitlementCertDir')),
-                MonitorDirectory(cfg.get('rhsm', 'productCertDir'))]
+    def update(self):
+        # check all the dirs in a batch, to hopefully coalesce
+        # related changes into one callback.
 
-        # poll every 2 seconds for changes
-        gobject.timeout_add(2000, self.run_check)
-
-    def run_check(self):
-        result = [directory.update() for directory in self.dirs]
+        results = [dir_monitor.update() for dir_monitor in self.dir_monitors]
 
         # If something has changed
-        if True in result:
-            self.emit("changed", *result)
+        if True in results:
+            self._on_changed()
+
         return True
+
+    def _on_changed(self):
+        if self._changed_callback:
+            self._changed_callback()
+
+    @classmethod
+    def from_path_list(cls, path_list=None, changed_callback=None):
+        dir_monitors = [MonitorDirectory(path) for path in path_list]
+        return cls(dir_monitors=dir_monitors,
+                   changed_callback=changed_callback)

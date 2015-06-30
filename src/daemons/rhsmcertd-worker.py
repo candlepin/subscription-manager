@@ -23,6 +23,9 @@ from subscription_manager import logutil
 
 from rhsm import connection
 
+from subscription_manager import ga
+sys.meta_path.append(ga.GaImporter())
+
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 

@@ -135,6 +135,9 @@ class Identity(object):
             self.consumer = self._get_consumer_identity()
             self.name = self.consumer.getConsumerName()
             self.uuid = self.consumer.getConsumerId()
+            # since Identity gets dep injected, lets look up
+            # the cert dir on the active id instead of the global config
+            self.cert_dir_path = self.consumer.PATH
 
         # XXX shouldn't catch the global exception here, but that's what
         # existsAndValid did, so this is better.
@@ -144,6 +147,7 @@ class Identity(object):
             self.consumer = None
             self.name = None
             self.uuid = None
+            self.cert_dir_path = CFG.get('rhsm', 'consumerCertDir')
 
     def _get_consumer_identity(self):
         # FIXME: wrap in exceptions, catch IOErrors etc, raise anything else

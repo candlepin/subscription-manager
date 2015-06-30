@@ -16,7 +16,7 @@
 import gettext
 import logging
 
-import gtk
+from subscription_manager.ga import Gtk as ga_Gtk
 
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception, linkify
@@ -27,7 +27,7 @@ _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class SystemFactsDialog(widgets.GladeWidget):
+class SystemFactsDialog(widgets.SubmanBaseWidget):
     """GTK dialog for displaying the current system facts, as well as
     providing functionality to update the UEP server with the current
     system facts.
@@ -36,23 +36,24 @@ class SystemFactsDialog(widgets.GladeWidget):
                     'last_update_label', 'owner_label', 'owner_title',
                     'environment_label', 'environment_title',
                     'system_id_label', 'system_id_title']
+    gui_file = "factsdialog"
 
     def __init__(self, facts):
 
-        super(SystemFactsDialog, self).__init__('factsdialog.glade')
+        super(SystemFactsDialog, self).__init__()
 
         #self.consumer = consumer
         self.identity = inj.require(inj.IDENTITY)
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.facts = facts
-        self.glade.signal_autoconnect({
+        self.connect_signals({
                 "on_system_facts_dialog_delete_event": self._hide_callback,
                 "on_close_button_clicked": self._hide_callback,
                 "on_facts_update_button_clicked": self._update_facts_callback
                 })
 
         # Set up the model
-        self.facts_store = gtk.TreeStore(str, str)
+        self.facts_store = ga_Gtk.TreeStore(str, str)
         self.facts_view.set_model(self.facts_store)
 
         # Set up columns on the view
@@ -72,7 +73,7 @@ class SystemFactsDialog(widgets.GladeWidget):
         self.display_facts()
 
         # Set sorting by fact name
-        self.facts_store.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        self.facts_store.set_sort_column_id(0, ga_Gtk.SortType.ASCENDING)
 
         self.update_button.set_sensitive(bool(self.identity.uuid))
         self.system_facts_dialog.present()
@@ -112,10 +113,10 @@ class SystemFactsDialog(widgets.GladeWidget):
             new_group = fact.split(".", 1)[0]
             if new_group != group:
                 group = new_group
-                parent = self.facts_store.append(None, [group, ""])
+                parent = self.facts_store.append(None, [str(group), ""])
             if str(value).strip() == "":
                 value = _("Unknown")
-            self.facts_store.append(parent, [fact, value])
+            self.facts_store.append(parent, [str(fact), str(value)])
 
         identity = inj.require(inj.IDENTITY)
         self._display_system_id(identity)
@@ -181,8 +182,8 @@ class SystemFactsDialog(widgets.GladeWidget):
         self.display_facts()
 
     def _add_column(self, name, order):
-        """Adds a gtk.TreeViewColumn suitable for displaying text to
-        the facts gtk.TreeView.
+        """Adds a Gtk.TreeViewColumn suitable for displaying text to
+        the facts Gtk.TreeView.
 
         @type   name: string
         @param  name: The name of the created column
@@ -190,7 +191,7 @@ class SystemFactsDialog(widgets.GladeWidget):
         @param order: The 0-based index of the created column
         (in relation to other columns)
         """
-        column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=order)
+        column = ga_Gtk.TreeViewColumn(name, ga_Gtk.CellRendererText(), text=order)
         self.facts_view.append_column(column)
 
     def set_parent_window(self, window):

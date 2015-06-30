@@ -14,10 +14,11 @@
 
 import unittest
 
-import gtk
+#from gi.repository import Gtk
 from datetime import datetime, timedelta
 from rhsm.certificate import GMT
 
+from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui.widgets import MachineTypeColumn, QuantitySelectionColumn, \
                                              SubDetailsWidget, ContractSubDetailsWidget, \
@@ -76,7 +77,9 @@ class TestContractSubDetailsWidget(TestSubDetailsWidget):
         reasons = ['reason 1', 'reason 2']
         details.show("Some Product", reasons=reasons, start=datetime.now(GMT()), end=datetime.now(GMT()) + timedelta(days=365))
         buff = details.details_view.get_buffer()
-        result_list = buff.get_text(buff.get_bounds()[0], buff.get_bounds()[1]).split("\n")
+        result_list = buff.get_text(buff.get_bounds()[0],
+                                    buff.get_bounds()[1],
+                                    include_hidden_chars=False).split("\n")
         self.assertEquals(reasons, result_list)
 
     def testVirtOnly(self):
@@ -90,7 +93,7 @@ class TestContractSubDetailsWidget(TestSubDetailsWidget):
                      support_type='s_t', virt_only='v_o')
         s_iter = details.virt_only_text.get_buffer().get_start_iter()
         e_iter = details.virt_only_text.get_buffer().get_end_iter()
-        self.assertEquals(details.virt_only_text.get_buffer().get_text(s_iter, e_iter), 'v_o')
+        self.assertEquals(details.virt_only_text.get_buffer().get_text(s_iter, e_iter, False), 'v_o')
 
 
 class TestDatePicker(unittest.TestCase):
@@ -127,7 +130,7 @@ class TestDatePicker(unittest.TestCase):
 class BaseColumnTest(unittest.TestCase):
 
     def _assert_column_value(self, column_class, model_bool_val, expected_text):
-        model = gtk.ListStore(bool)
+        model = ga_Gtk.ListStore(bool)
         model.append([model_bool_val])
 
         column = column_class(0)
@@ -217,9 +220,9 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
     def _run_filter_value_test(self, test_input_value, is_allowed, upper=15, lower=1, step_incr=1):
         column, tree_model, tree_iter = self._setup_column(1, True)
 
-        adjustment = gtk.Adjustment(upper=upper, lower=lower, value=7.0, step_incr=step_incr)
+        adjustment = ga_Gtk.Adjustment(upper=upper, lower=lower, value=7.0, step_incr=step_incr)
         # Simulate the editable created by the CellRendererSpin object.
-        editable = gtk.SpinButton()
+        editable = ga_Gtk.SpinButton()
         editable.set_property("adjustment", adjustment)
 
         self.stopped = False

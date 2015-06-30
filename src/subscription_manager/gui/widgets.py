@@ -15,17 +15,21 @@
 
 import datetime
 import gettext
+import logging
 import os
 import time
 import warnings
 
-import gobject
-import gtk
-import pango
-
-
 from rhsm.certificate import GMT
 from dateutil.tz import tzlocal
+
+from subscription_manager.ga import GObject as ga_GObject
+from subscription_manager.ga import Gdk as ga_Gdk
+from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.ga import Pango as ga_Pango
+from subscription_manager.ga import GdkPixbuf as ga_GdkPixbuf
+from subscription_manager.ga import gtk_compat as ga_gtk_compat
+
 
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import storage
@@ -34,11 +38,16 @@ from subscription_manager import managerlib
 
 _ = gettext.gettext
 
-GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
+GLADE_DIR = os.path.join(os.path.dirname(__file__), "data/glade")
+UI_DIR = os.path.join(os.path.dirname(__file__), "data/ui")
+UI_SUFFIX = "ui"
+GLADE_SUFFIX = "glade"
+
 
 WARNING_COLOR = '#FFFB82'
 EXPIRED_COLOR = '#FFAF99'
 
+log = logging.getLogger("rhsm-app." + __name__)
 # Some versions of gtk has incorrect translations for the calendar widget
 # and gtk itself complains about this with errors like:
 #
@@ -58,24 +67,81 @@ warnings.filterwarnings(action="ignore",
                         message=".*ttempt to add property.*after class.*")
 
 
-class GladeWidget(object):
+class FileBasedGui(object):
+    widget_names = []
+    file_dir = None
+    gui_file = None
+    gui_file_suffix = None
+
+    @property
+    def gui_file_path(self):
+        gui_file_full_path = os.path.join(self.file_dir,
+                                          "%s.%s" % (self.gui_file,
+                                                     self.gui_file_suffix))
+
+        log.debug("loading gui file %s", gui_file_full_path)
+        return gui_file_full_path
+
+
+class BuilderFileBasedWidget(FileBasedGui):
     widget_names = []
 
-    def __init__(self, glade_file):
+    # old libglade/glade files were .glade
+    # newer builder files were also .glade
+    # latest gtk3+ gtk.Builder files are .ui
+    file_dir = UI_DIR
+    gui_file_suffix = UI_SUFFIX
+
+    @classmethod
+    def from_file(cls, builder_file):
+        builder_based_widget = cls()
+        builder_based_widget.gui_file = builder_file
+
+        #print "ga", ga.GTK_BUILDER_FILES_DIR
+        builder_based_widget.gui_file_suffix = ga_gtk_compat.GTK_BUILDER_FILES_SUFFIX
+        builder_based_widget.file_dir = ga_gtk_compat.GTK_BUILDER_FILES_DIR
+
+        builder_based_widget._load_file()
+
+        return builder_based_widget
+
+    def _load_file(self):
+        self.builder.add_from_file(self.gui_file_path)
+
+    def __init__(self):
         """
         Create a new widget backed by the give glade file (assumed to be in data/).
         The initial_widget_names is a list of widgets to pull in as instance
         variables.
         """
-        self.glade = gtk.glade.XML(os.path.join(GLADE_DIR, glade_file))
+        self.log = logging.getLogger('rhsm-app.' + __name__ +
+                                     '.' + self.__class__.__name__)
 
-        if self.widget_names:
-            self.pull_widgets()
+        self.builder = ga_Gtk.Builder()
 
-    def _get_widget_names(self):
-        return
+    def get_object(self, name):
+        return self.builder.get_object(name)
 
-    def pull_widgets(self):
+    def connect_signals(self, handlers_dict):
+        return self.builder.connect_signals(handlers_dict)
+
+
+# FIXME: not actually a widget, just an object that has a widget
+class SubmanBaseWidget(object):
+    widget_names = []
+    gui_file = None
+
+    def __init__(self):
+        self.gui = self._gui_factory()
+        self.pull_widgets(self.gui, self.widget_names)
+        self.log = logging.getLogger('rhsm-app.' + __name__ +
+                                     '.' + self.__class__.__name__)
+
+    def _gui_factory(self):
+        gui = BuilderFileBasedWidget.from_file(self.gui_file)
+        return gui
+
+    def pull_widgets(self, file_based_gui, widget_names):
         """
         This is a convenience method to pull the widgets from the 'names' list
         out of the given glade file, and make them available as variables on self.
@@ -83,8 +149,15 @@ class GladeWidget(object):
         For example:  a widget with the name age_input could be accessed via self.age_input
         """
 
-        for name in self.widget_names:
-            setattr(self, name, self.glade.get_widget(name))
+        for name in widget_names:
+            setattr(self, name, file_based_gui.get_object(name))
+
+    def connect_signals(self, signals):
+        return self.gui.connect_signals(signals)
+
+    # glade version -> get_widget
+    def get_object(self, object_name):
+        return self.gui.get_object(object_name)
 
 
 class HasSortableWidget(object):
@@ -140,7 +213,7 @@ class HasSortableWidget(object):
                 model.set_value(iter, model['background'], r[1])
 
 
-class SubscriptionManagerTab(GladeWidget, HasSortableWidget):
+class SubscriptionManagerTab(SubmanBaseWidget, HasSortableWidget):
     widget_names = ['top_view', 'content']
     # approx gtk version we need for grid lines to work
     # and not throw errors, this relates to basically rhel6
@@ -148,26 +221,31 @@ class SubscriptionManagerTab(GladeWidget, HasSortableWidget):
     MIN_GTK_MINOR_GRID = 18
     MIN_GTK_MICRO_GRID = 0
 
-    def __init__(self, glade_file):
+    gui_file = None
+
+    def __init__(self):
         """
         Creates a new tab widget, given the specified glade file and a list of
         widget names to extract to instance variables.
         """
         # Mix the specified widgets with standard names in the
         # glade file by convention
-        super(SubscriptionManagerTab, self).__init__(glade_file)
+        super(SubscriptionManagerTab, self).__init__()
+
+#        self.builder = BuilderFileGui.from_file(glade_file)
+
         self.content.unparent()
 
         # In the allsubs tab, we don't show the treeview until it is populated
         if self.top_view is None:
-            self.top_view = gtk.TreeView()
+            self.top_view = ga_Gtk.TreeView()
 
         # grid lines seem busted in rhel5, so we disable
         # in glade and turn on here for unbroken versions
-        if gtk.check_version(self.MIN_GTK_MAJOR_GRID,
-                             self.MIN_GTK_MINOR_GRID,
-                             self.MIN_GTK_MICRO_GRID) is None:
-            self.top_view.set_enable_tree_lines(gtk.TREE_VIEW_GRID_LINES_BOTH)
+        if ga_Gtk.check_version(self.MIN_GTK_MAJOR_GRID,
+                                self.MIN_GTK_MINOR_GRID,
+                                self.MIN_GTK_MICRO_GRID) is None:
+            self.top_view.set_enable_tree_lines(ga_Gtk.TREE_VIEW_GRID_LINES_BOTH)
 
         self.store = self.get_store()
         self.top_view.set_model(self.store)
@@ -179,16 +257,16 @@ class SubscriptionManagerTab(GladeWidget, HasSortableWidget):
         return storage.MappedListStore(self.get_type_map())
 
     def add_text_column(self, name, store_key, expand=False, markup=False):
-        text_renderer = gtk.CellRendererText()
+        text_renderer = ga_Gtk.CellRendererText()
 
         if markup:
-            column = gtk.TreeViewColumn(name,
-                                        text_renderer,
-                                        markup=self.store[store_key])
+            column = ga_Gtk.TreeViewColumn(name,
+                                           text_renderer,
+                                           markup=self.store[store_key])
         else:
-            column = gtk.TreeViewColumn(name,
-                                        text_renderer,
-                                        text=self.store[store_key])
+            column = ga_Gtk.TreeViewColumn(name,
+                                           text_renderer,
+                                           text=self.store[store_key])
 
         if expand:
             column.set_expand(True)
@@ -204,9 +282,9 @@ class SubscriptionManagerTab(GladeWidget, HasSortableWidget):
 
     def add_date_column(self, name, store_key, expand=False):
         date_renderer = CellRendererDate()
-        column = gtk.TreeViewColumn(name,
-                                    date_renderer,
-                                    date=self.store[store_key])
+        column = ga_Gtk.TreeViewColumn(name,
+                                       date_renderer,
+                                       date=self.store[store_key])
         if expand:
             column.set_expand(True)
         else:
@@ -254,12 +332,12 @@ class SelectionWrapper(object):
 
 class OverridesTable(object):
     def __init__(self, table_widget):
-        table_widget.get_selection().set_mode(gtk.SELECTION_NONE)
-        self.override_store = gtk.ListStore(str, str)
+        table_widget.get_selection().set_mode(ga_Gtk.SelectionMode.NONE)
+        self.override_store = ga_Gtk.ListStore(str, str)
         table_widget.set_model(self.override_store)
 
         for idx, colname in enumerate([_("Name"), _("Value")]):
-            column = gtk.TreeViewColumn(colname, gtk.CellRendererText(), markup=0, text=idx)
+            column = ga_Gtk.TreeViewColumn(colname, ga_Gtk.CellRendererText(), markup=0, text=idx)
             column.set_expand(True)
             table_widget.append_column(column)
 
@@ -271,30 +349,30 @@ class OverridesTable(object):
 
 
 class ProductsTable(object):
-    def __init__(self, table_widget, product_dir, yes_id=gtk.STOCK_APPLY,
-                 no_id=gtk.STOCK_REMOVE):
+    def __init__(self, table_widget, product_dir, yes_id=ga_Gtk.STOCK_APPLY,
+                 no_id=ga_Gtk.STOCK_REMOVE):
         """
-        Create a new products table, populating the gtk.TreeView.
+        Create a new products table, populating the Gtk.TreeView.
 
         yes_id and no_id are GTK constants that specify the icon to
         use for representing if a product is installed.
         """
 
-        table_widget.get_selection().set_mode(gtk.SELECTION_NONE)
+        table_widget.get_selection().set_mode(ga_Gtk.SelectionMode.NONE)
         self.table_widget = table_widget
-        self.product_store = gtk.ListStore(str, gtk.gdk.Pixbuf)
+        self.product_store = ga_Gtk.ListStore(str, ga_GdkPixbuf.Pixbuf)
         table_widget.set_model(self.product_store)
 
         self.yes_icon = self._render_icon(yes_id)
         self.no_icon = self._render_icon(no_id)
         self.product_dir = product_dir
 
-        name_column = gtk.TreeViewColumn(_("Product"),
-                                         gtk.CellRendererText(),
+        name_column = ga_Gtk.TreeViewColumn(_("Product"),
+                                         ga_Gtk.CellRendererText(),
                                          markup=0)
         name_column.set_expand(True)
-        installed_column = gtk.TreeViewColumn(_("Installed"),
-                                              gtk.CellRendererPixbuf(),
+        installed_column = ga_Gtk.TreeViewColumn(_("Installed"),
+                                              ga_Gtk.CellRendererPixbuf(),
                                               pixbuf=1)
 
         table_widget.append_column(name_column)
@@ -316,7 +394,7 @@ class ProductsTable(object):
         self.table_widget.get_accessible().set_name(accessibility_name)
 
     def _render_icon(self, icon_id):
-        return self.table_widget.render_icon(icon_id, gtk.ICON_SIZE_MENU)
+        return self.table_widget.render_icon(icon_id, ga_Gtk.IconSize.MENU)
 
     def _get_icon(self, product_id):
         if self.product_dir.find_by_product(product_id):
@@ -325,20 +403,20 @@ class ProductsTable(object):
             return self.no_icon
 
 
-class SubDetailsWidget(GladeWidget):
+class SubDetailsWidget(SubmanBaseWidget):
     widget_names = ["sub_details_vbox", "subscription_text", "products_view",
                     "support_level_and_type_text", "sku_text", "pool_type_text"]
-    glade_file = "subdetails.glade"
+    gui_file = "subdetails"
 
     def __init__(self, product_dir):
-        super(SubDetailsWidget, self).__init__(self.glade_file)
+        super(SubDetailsWidget, self).__init__()
 
         self.sub_details_vbox.unparent()
 
         self.bundled_products = ProductsTable(self.products_view, product_dir)
 
-        self.expired_color = gtk.gdk.color_parse(EXPIRED_COLOR)
-        self.warning_color = gtk.gdk.color_parse(WARNING_COLOR)
+        self.expired_color = ga_Gdk.color_parse(EXPIRED_COLOR)
+        self.warning_color = ga_Gdk.color_parse(WARNING_COLOR)
 
         self._set_accessibility_names()
 
@@ -354,10 +432,10 @@ class SubDetailsWidget(GladeWidget):
         """
         products = products or []
         # set a new buffer to clear out all the old tag information
-        self.subscription_text.set_buffer(gtk.TextBuffer())
+        self.subscription_text.set_buffer(ga_Gtk.TextBuffer())
         self._set(self.subscription_text, name)
         buf = self.subscription_text.get_buffer()
-        tag = buf.create_tag("highlight-tag", weight=pango.WEIGHT_BOLD)
+        tag = buf.create_tag("highlight-tag", weight=ga_Pango.Weight.BOLD)
 
         for index in utils.find_text(name, highlight):
             buf.apply_tag(tag, buf.get_iter_at_offset(index),
@@ -449,14 +527,16 @@ class ContractSubDetailsWidget(SubDetailsWidget):
                      "virt_only_text",
                      "details_view"]
 
-    glade_file = "subdetailscontract.glade"
+    gui_file = "subdetailscontract"
 
     def __init__(self, product_dir):
         super(ContractSubDetailsWidget, self).__init__(product_dir)
         # Save the original background color for the
         # start_end_date_text widget so we can restore it in the
         # clear() function.
-        self.original_bg = self.start_end_date_text.rc_get_style().base[gtk.STATE_NORMAL]
+        # FIXME
+        #self.original_bg = self.start_end_date_text.rc_get_style().base[ga_Gtk.StateType.NORMAL]
+        # FIXME
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
@@ -467,7 +547,7 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
         self._set(self.details_view, '\n'.join(reasons))
 
-        self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
+        self.start_end_date_text.modify_base(ga_Gtk.StateType.NORMAL,
                 self._get_date_bg(end, expiring))
 
         self._set(self.contract_number_text, contract)
@@ -479,7 +559,11 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
     def _clear_other_details(self):
         #Clear row highlighting
-        self.start_end_date_text.modify_base(gtk.STATE_NORMAL, self.original_bg)
+
+        # FIXME
+        #self.start_end_date_text.modify_base(ga_Gtk.StateType.NORMAL, self.original_bg)
+        # FIXME
+
         self._set(self.contract_number_text, "")
         self._set(self.start_end_date_text, "")
         self._set(self.account_text, "")
@@ -500,22 +584,25 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         if expiring:
             return self.warning_color
 
-        return self.original_bg
+        # FIXME, try to return the orig color, or remove this?
+        #return self.original_bg
+        return self.expired_color
+        # FIXME
 
 
-class CellRendererDate(gtk.CellRendererText):
+class CellRendererDate(ga_Gtk.CellRendererText):
 
     """
     Custom cell renderer to display the date in the user's locale.
     """
 
     __gproperties__ = {
-            'date': (gobject.TYPE_PYOBJECT, 'date', 'date displayed',
-                gobject.PARAM_READWRITE)
+            'date': (ga_GObject.TYPE_PYOBJECT, 'date', 'date displayed',
+                ga_GObject.PARAM_READWRITE)
     }
 
-    def __init__(self):
-        self.__gobject_init__()
+    #def __init__(self):
+    #    GObject.GObject.__init__(self)
 
     def do_set_property(self, prop, value):
         """
@@ -529,29 +616,30 @@ class CellRendererDate(gtk.CellRendererText):
         else:
             date = value
 
-        gtk.CellRendererText.set_property(self, 'text', date)
+        ga_Gtk.CellRendererText.set_property(self, 'text', date)
 
 
-class DatePicker(gtk.HBox):
+class DatePicker(ga_Gtk.HBox):
 
     __gsignals__ = {
-            'date-picked-cal': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, tuple()),
-            'date-picked-text': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, tuple())
+            'date-picked-cal': (ga_GObject.SignalFlags.RUN_LAST, None, tuple()),
+            'date-picked-text': (ga_GObject.SignalFlags.RUN_LAST, None, tuple())
     }
 
     def __init__(self, date):
         """
         Initialize the DatePicker. date is a python datetime.date object.
         """
-        gtk.HBox.__init__(self)
+        super(DatePicker, self).__init__()
+        #GObject.GObject.__init__(self)
 
-        image = gtk.image_new_from_icon_name('x-office-calendar', gtk.ICON_SIZE_MENU)
+        image = ga_Gtk.Image.new_from_icon_name('x-office-calendar', ga_Gtk.IconSize.MENU)
         image.show()
 
         # set the timezone so we can sent it to the server
         self._date = datetime.datetime(date.year, date.month, date.day,
                 tzinfo=tzlocal())
-        self._date_entry = gtk.Entry()
+        self._date_entry = ga_Gtk.Entry()
         self._date_entry.set_width_chars(10)
 
         self._date_entry.set_text(self._date.date().isoformat())
@@ -559,18 +647,18 @@ class DatePicker(gtk.HBox):
         atk_entry = self._date_entry.get_accessible()
         atk_entry.set_name('date-entry')
 
-        self._cal_button = gtk.Button()
+        self._cal_button = ga_Gtk.Button()
         self._cal_button.set_image(image)
         atk_entry = self._cal_button.get_accessible()
         atk_entry.set_name("Calendar")
 
-        self.pack_start(self._date_entry)
-        self.pack_start(self._cal_button)
+        self.pack_start(self._date_entry, True, True, 0)
+        self.pack_start(self._cal_button, True, True, 0)
         self._cal_button.connect("clicked", self._button_clicked)
         self.connect('date-picked-cal', self._date_update_cal)
         self.connect('date-picked-text', self._date_update_text)
 
-        self._calendar = gtk.Calendar()
+        self._calendar = ga_Gtk.Calendar()
         atk_entry = self._calendar.get_accessible()
         atk_entry.set_name("Calendar")
 
@@ -630,32 +718,32 @@ class DatePicker(gtk.HBox):
         self._calendar.select_day(self._date.day)
 
     def _button_clicked(self, button):
-        self._calendar_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        self._calendar_window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+        self._calendar_window = ga_Gtk.Window(ga_Gtk.WindowType.TOPLEVEL)
+        self._calendar_window.set_type_hint(ga_Gdk.WindowTypeHint.DIALOG)
         self._calendar_window.set_modal(True)
         self._calendar_window.set_title(_("Date Selection"))
         self._calendar_window.set_transient_for(
-                self.get_parent_window().get_user_data())
+                self.get_parent())
 
         self._calendar.select_month(self._date.month - 1, self._date.year)
         self._calendar.select_day(self._date.day)
 
-        vbox = gtk.VBox(spacing=3)
+        vbox = ga_Gtk.VBox(spacing=3)
         vbox.set_border_width(2)
-        vbox.pack_start(self._calendar)
+        vbox.pack_start(self._calendar, True, True, 0)
 
-        button_box = gtk.HButtonBox()
-        button_box.set_layout(gtk.BUTTONBOX_END)
-        vbox.pack_start(button_box)
+        button_box = ga_Gtk.HButtonBox()
+        button_box.set_layout(ga_Gtk.ButtonBoxStyle.END)
+        vbox.pack_start(button_box, True, True, 0)
 
-        button = gtk.Button(_("Today"))
+        button = ga_Gtk.Button(_("Today"))
         button.connect("clicked", self._today_clicked)
-        button_box.pack_start(button)
+        button_box.pack_start(button, True, True, 0)
 
-        frame = gtk.Frame()
+        frame = ga_Gtk.Frame()
         frame.add(vbox)
         self._calendar_window.add(frame)
-        self._calendar_window.set_position(gtk.WIN_POS_MOUSE)
+        self._calendar_window.set_position(ga_Gtk.WindowPosition.MOUSE)
         self._calendar_window.show_all()
 
         self._calendar.connect("day-selected-double-click",
@@ -679,15 +767,17 @@ class DatePicker(gtk.HBox):
         self._destroy()
 
 
-class CheckBoxColumn(gtk.TreeViewColumn):
+class CheckBoxColumn(ga_Gtk.TreeViewColumn):
 
     def __init__(self, column_title, store, store_key, toggle_callback=None):
         self.store = store
         self.store_key = store_key
         self._toggle_callback = toggle_callback
-        self.renderer = gtk.CellRendererToggle()
+        self.renderer = ga_Gtk.CellRendererToggle()
         self.renderer.set_radio(False)
-        gtk.TreeViewColumn.__init__(self, column_title, self.renderer, active=self.store[self.store_key])
+        super(CheckBoxColumn, self).__init__(column_title,
+                                             self.renderer,
+                                             active=self.store[self.store_key])
         self.renderer.connect("toggled", self._on_toggle)
 
     def _on_toggle(self, widget, path):
@@ -703,20 +793,20 @@ class CheckBoxColumn(gtk.TreeViewColumn):
             self._toggle_callback(tree_iter, new_state)
 
 
-class ToggleTextColumn(gtk.TreeViewColumn):
+class ToggleTextColumn(ga_Gtk.TreeViewColumn):
     """
-    A gtk.TreeViewColumn that toggles between two text values based on a boolean
+    A ga_Gtk.TreeViewColumn that toggles between two text values based on a boolean
     value in the store.
     """
     def __init__(self, column_title, model_idx):
-        gtk.TreeViewColumn.__init__(self, column_title)
+        super(ToggleTextColumn, self).__init__(column_title)
         self.model_idx = model_idx
-        self.renderer = gtk.CellRendererText()
+        self.renderer = ga_Gtk.CellRendererText()
         self.renderer.set_property('xalign', 0.5)
         self.pack_start(self.renderer, False)
         self.set_cell_data_func(self.renderer, self._render_cell)
 
-    def _render_cell(self, column, cell_renderer, tree_model, tree_iter):
+    def _render_cell(self, column, cell_renderer, tree_model, tree_iter, data=None):
         # Clear the cell if we are a parent row.
         if tree_model.iter_n_children(tree_iter) > 0:
             cell_renderer.set_property("text", "")
@@ -762,7 +852,7 @@ class MachineTypeColumn(ToggleTextColumn):
         return self.BOTH_MACHINES
 
 
-class QuantitySelectionColumn(gtk.TreeViewColumn):
+class QuantitySelectionColumn(ga_Gtk.TreeViewColumn):
     def __init__(self, column_title, tree_model, quantity_store_idx, is_multi_entitled_store_idx,
                  available_store_idx=None, quantity_increment_idx=None, editable=True):
         self.quantity_store_idx = quantity_store_idx
@@ -770,16 +860,17 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
         self.available_store_idx = available_store_idx
         self.quantity_increment_idx = quantity_increment_idx
 
-        self.quantity_renderer = gtk.CellRendererSpin()
+        self.quantity_renderer = ga_Gtk.CellRendererSpin()
         self.quantity_renderer.set_property("xalign", 0)
         self.quantity_renderer.set_property("adjustment",
-            gtk.Adjustment(lower=1, upper=100, step_incr=1))
+            ga_Gtk.Adjustment(lower=1, upper=100, step_incr=1))
         self.quantity_renderer.set_property("editable", editable)
         self.quantity_renderer.connect("edited", self._on_edit, tree_model)
         self.quantity_renderer.connect("editing-started", self._setup_editor)
 
-        gtk.TreeViewColumn.__init__(self, column_title, self.quantity_renderer,
-                                    text=self.quantity_store_idx)
+        super(QuantitySelectionColumn, self).__init__(column_title,
+                                                      self.quantity_renderer,
+                                                      text=self.quantity_store_idx)
         self.set_cell_data_func(self.quantity_renderer, self._update_cell_based_on_data)
 
     def _setup_editor(self, cellrenderer, editable, path):
@@ -850,7 +941,7 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
             # Do nothing... The value entered in the grid will be reset.
             pass
 
-    def _update_cell_based_on_data(self, column, cell_renderer, tree_model, tree_iter):
+    def _update_cell_based_on_data(self, column, cell_renderer, tree_model, tree_iter, Data=None):
         # Clear the cell if we are a parent row.
         if tree_model.iter_n_children(tree_iter) > 0:
             cell_renderer.set_property("text", "")
@@ -872,23 +963,24 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
                     increment = 1
 
                 cell_renderer.set_property("adjustment",
-                    gtk.Adjustment(lower=int(increment), upper=int(available), step_incr=int(increment)))
+                    ga_Gtk.Adjustment(lower=int(increment), upper=int(available), step_incr=int(increment)))
 
 
-class TextTreeViewColumn(gtk.TreeViewColumn):
+class TextTreeViewColumn(ga_Gtk.TreeViewColumn):
     def __init__(self, store, column_title, store_key, expand=False, markup=False):
         self.column_title = column_title
-        self.text_renderer = gtk.CellRendererText()
+        self.text_renderer = ga_Gtk.CellRendererText()
         self.store_key = store_key
 
+        # FIXME: this is kind of weird...
         if markup:
-            gtk.TreeViewColumn.__init__(self, self.column_title,
-                                        self.text_renderer,
-                                        markup=store[store_key])
+            super(TextTreeViewColumn, self).__init__(self.column_title,
+                                                     self.text_renderer,
+                                                     markup=store[store_key])
         else:
-            gtk.TreeViewColumn.__init__(self, self.column_title,
-                                        self.text_renderer,
-                                        text=store[store_key])
+            super(TextTreeViewColumn, self).__init__(self.column_title,
+                                                     self.text_renderer,
+                                                     text=store[store_key])
 
         if expand:
             self.set_expand(True)
@@ -918,7 +1010,7 @@ class WidgetSwitcher(object):
 
 def expand_collapse_on_row_activated_callback(treeview, path, view_column):
     """
-    A gtk.TreeView callback allowing row expand/collapse on double-click or key
+    A ga_Gtk.TreeView callback allowing row expand/collapse on double-click or key
     press (space, return, enter).
     """
     if treeview.row_expanded(path):
@@ -930,11 +1022,11 @@ def expand_collapse_on_row_activated_callback(treeview, path, view_column):
 
 
 def get_scrollable_label():
-    label = gtk.Label()
+    label = ga_Gtk.Label()
     label.set_use_markup(True)
     label.set_line_wrap(True)
-    label.set_line_wrap_mode(pango.WRAP_WORD)
-    viewport = gtk.Viewport()
+    label.set_line_wrap_mode(ga_Pango.WrapMode.WORD)
+    viewport = ga_Gtk.Viewport()
     viewport.add(label)
     viewport.show_all()
     return label, viewport

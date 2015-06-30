@@ -13,12 +13,16 @@
 # in this software or its documentation.
 #
 
-import gtk
+import logging
+
+from subscription_manager.ga import Gtk as ga_Gtk
 
 
 class MappedStore(object):
     def __init__(self, type_map):
         self.type_index = {}
+        self.log = logging.getLogger('rhsm-app.' + __name__ +
+                                     self.__class__.__name__)
 
         # Enumerate the keys and store the int index
         for i, type_key in enumerate(type_map.iterkeys()):
@@ -30,6 +34,9 @@ class MappedStore(object):
         specify all keys, and a 'None' value is inserted by default into
         positions that are omitted
         """
+
+        # get_n_columns() is 0 if the subclasses Gtk.ListStore isn't
+        # init'ed first, since no column info is known
         entry = [None] * self.get_n_columns()
 
         for key, value in item_map.iteritems():
@@ -40,7 +47,9 @@ class MappedStore(object):
         return item in self.type_index
 
 
-class MappedListStore(MappedStore, gtk.ListStore):
+# FIXME: There isn't much reason to make the MappedStores inherit MappedStore
+#        it could just have-a MappedStore
+class MappedListStore(MappedStore, ga_Gtk.ListStore):
 
     def __init__(self, type_map):
         """
@@ -49,11 +58,13 @@ class MappedListStore(MappedStore, gtk.ListStore):
         string that identifies the item and 'type' is a gobject type or some
         built-in python type that is suitable for conversion to a gobject type.
 
-        See contructor for gtk.ListStore.
+        See contructor for Gtk.ListStore.
         """
+
+        # FIXME: this is fragile, since the .values() ordering is not reliable
         MappedStore.__init__(self, type_map)
+        ga_Gtk.ListStore.__init__(self, *type_map.values())
         # Use the types from the map to call the parent constructor
-        gtk.ListStore.__init__(self, *type_map.values())
 
     def __getitem__(self, key):
         return self.type_index[key]
@@ -70,14 +81,17 @@ class MappedListStore(MappedStore, gtk.ListStore):
         self.append(self._create_initial_entry(item_map))
 
 
-class MappedTreeStore(MappedStore, gtk.TreeStore):
+class MappedTreeStore(MappedStore, ga_Gtk.TreeStore):
     def __init__(self, type_map):
+        self.log = logging.getLogger('rhsm-app.' + __name__ +
+                                     self.__class__.__name__)
+        # FIXME: How does this work? .values() is not sorted, so could change?
         MappedStore.__init__(self, type_map)
-        # Use the types from the map to call the parent constructor
-        gtk.TreeStore.__init__(self, *type_map.values())
+        ga_Gtk.TreeStore.__init__(self, *type_map.values())
 
     def __getitem__(self, key):
         return self.type_index[key]
 
     def add_map(self, tree_iter, item_map):
-        return self.append(tree_iter, self._create_initial_entry(item_map))
+        return self.append(tree_iter,
+                           self._create_initial_entry(item_map))

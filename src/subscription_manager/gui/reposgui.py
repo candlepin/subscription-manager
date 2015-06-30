@@ -16,7 +16,8 @@
 import gettext
 import logging
 
-import gtk
+from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.ga import GdkPixbuf as ga_GdkPixbuf
 
 import rhsm.config
 from subscription_manager.gui.utils import handle_gui_exception
@@ -36,23 +37,24 @@ log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
 
 
-class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
+class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
     """
     GTK dialog for managing repositories and their overrides.
     """
     widget_names = ['main_window', 'reset_button', 'close_button',
                     'name_text', 'baseurl_text', 'scrolledwindow',
                     'other_overrides_view']
+    gui_file = "repositories"
 
     ENTS_PROVIDE_NO_REPOS = _("Attached subscriptions do not provide any repositories.")
     NO_ATTACHED_SUBS = _("No repositories are available without an attached subscription.")
     REPOS_DISABLED_BY_CFG = _("Repositories disabled by configuration.")
 
     def __init__(self, backend, parent):
-        super(RepositoriesDialog, self).__init__('repositories.glade')
+        super(RepositoriesDialog, self).__init__()
 
         # Set up dynamic elements
-        self.overrides_treeview = gtk.TreeView()
+        self.overrides_treeview = ga_Gtk.TreeView()
         # Add at-spi because we no longer create this widget from glade
         self.overrides_treeview.get_accessible().set_name("Repository View")
         self.no_repos_label, self.no_repos_label_viewport = widgets.get_scrollable_label()
@@ -68,17 +70,15 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         self.identity = require(IDENTITY)
         self.ent_dir = require(ENT_DIR)
 
-        self.glade.signal_autoconnect({
-                "on_dialog_delete_event": self._on_close,
-                "on_close_button_clicked": self._on_close,
-                "on_reset_button_clicked": self._on_reset_repo,
-        })
+        self.connect_signals({"on_dialog_delete_event": self._on_close,
+                              "on_close_button_clicked": self._on_close,
+                              "on_reset_button_clicked": self._on_reset_repo})
 
         self.overrides_store = MappedListStore({
             "repo_id": str,
             "enabled": bool,
             "modified": bool,
-            "modified-icon": gtk.gdk.Pixbuf,
+            "modified-icon": ga_GdkPixbuf.Pixbuf,
             "name": str,
             "baseurl": str,
             "gpgcheck": bool,
@@ -89,15 +89,17 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
 
         self.other_overrides = OverridesTable(self.other_overrides_view)
 
+        # FIXME: think this needs get_style_context() and possible a
+        # Gtk.StyleProvider for gtk3
         # Change the background color of the no_repos_label_container to the same color
         # as the label's base color. The event container allows us to change the color.
-        label_base_color = self.no_repos_label.style.base[gtk.STATE_NORMAL]
-        self.no_repos_label_viewport.modify_bg(gtk.STATE_NORMAL, label_base_color)
+        #label_base_color = self.no_repos_label.get_style_context().base[Gtk.StateType.NORMAL]
+        #self.no_repos_label_viewport.modify_bg(Gtk.StateType.NORMAL, label_base_color)
 
         self.overrides_treeview.set_model(self.overrides_store)
 
-        self.modified_icon = self.overrides_treeview.render_icon(gtk.STOCK_APPLY,
-                                                                 gtk.ICON_SIZE_MENU)
+        self.modified_icon = self.overrides_treeview.render_icon(ga_Gtk.STOCK_APPLY,
+                                                                 ga_Gtk.IconSize.MENU)
 
         sortable_cols = []
         enabled_col = CheckBoxColumn(_("Enabled"), self.overrides_store, 'enabled',
@@ -108,12 +110,14 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
             self._on_gpgcheck_toggle_changed)
         self.overrides_treeview.append_column(gpgcheck_col)
 
-        repo_id_col = TextTreeViewColumn(self.overrides_store, _("Repository ID"), 'repo_id',
+        repo_id_col = TextTreeViewColumn(self.overrides_store,
+                                         _("Repository ID"),
+                                         'repo_id',
                                          expand=True)
         self.overrides_treeview.append_column(repo_id_col)
         sortable_cols.append((repo_id_col, 'text', 'repo_id'))
 
-        modified_col = gtk.TreeViewColumn(_("Modified"), gtk.CellRendererPixbuf(),
+        modified_col = ga_Gtk.TreeViewColumn(_("Modified"), ga_Gtk.CellRendererPixbuf(),
                                           pixbuf=self.overrides_store['modified-icon'])
         self.overrides_treeview.append_column(modified_col)
         sortable_cols.append((modified_col, 'text', 'modified'))
@@ -137,7 +141,7 @@ class RepositoriesDialog(widgets.GladeWidget, HasSortableWidget):
         current_overrides = self.backend.overrides.get_overrides(self.identity.uuid) or []
         self._refresh(current_overrides)
         # By default sort by repo_id
-        self.overrides_store.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        self.overrides_store.set_sort_column_id(0, ga_Gtk.SortType.ASCENDING)
 
     def _refresh(self, current_overrides, repo_id_to_select=None):
         overrides_per_repo = {}

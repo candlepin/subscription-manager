@@ -27,10 +27,11 @@ import subprocess
 import urllib2
 import webbrowser
 
-import gtk
-import gtk.glade
 
 import rhsm.config as config
+
+from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.ga import GLib as ga_GLib
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker
@@ -61,8 +62,8 @@ _ = gettext.gettext
 
 gettext.textdomain("rhsm")
 
-gtk.glade.bindtextdomain("rhsm")
-gtk.window_set_default_icon_name("subscription-manager")
+#Gtk.glade.bindtextdomain("rhsm")
+#Gtk.Window.set_default_icon_name("subscription-manager")
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -122,19 +123,25 @@ class Backend(object):
         # ContentConnection now handles reading the proxy information
         return self.cp_provider.get_content_connection()
 
+    # cause cert_sorter to cert_check to cause file_monitor.Monitor to look for
+    # for new certs, add this as a main loop timer callback to do that on timer.
+    def on_cert_check_timer(self):
+        self.cs.force_cert_check()
 
-class MainWindow(widgets.GladeWidget):
+
+class MainWindow(widgets.SubmanBaseWidget):
     """
     The new RHSM main window.
     """
     widget_names = ['main_window', 'notebook', 'system_name_label',
                     'register_menu_item', 'unregister_menu_item',
                     'redeem_menu_item', 'settings_menu_item', 'repos_menu_item']
+    gui_file = "mainwindow"
 
     def __init__(self, backend=None, facts=None,
                  ent_dir=None, prod_dir=None,
                  auto_launch_registration=False):
-        super(MainWindow, self).__init__('mainwindow.glade')
+        super(MainWindow, self).__init__()
 
         self.backend = backend or Backend()
         self.identity = require(IDENTITY)
@@ -175,13 +182,13 @@ class MainWindow(widgets.GladeWidget):
         self.import_sub_dialog = ImportSubDialog()
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
-        self.network_config_dialog.xml.get_widget("saveButton").connect("clicked", self._config_changed)
+        self.network_config_dialog.saveButton.connect("clicked", self._config_changed)
 
         self.redeem_dialog = redeem.RedeemDialog(self.backend)
 
-        self.installed_tab_icon = gtk.Image()
-        self.installed_tab_icon.set_from_stock(gtk.STOCK_YES,
-                gtk.ICON_SIZE_MENU)
+        self.installed_tab_icon = ga_Gtk.Image()
+        self.installed_tab_icon.set_from_stock(ga_Gtk.STOCK_YES,
+                ga_Gtk.IconSize.MENU)
 
         self.installed_tab = InstalledProductsTab(self.backend,
                                                   self.facts,
@@ -198,16 +205,16 @@ class MainWindow(widgets.GladeWidget):
                                                 self.facts,
                                                 self.main_window)
 
-        hbox = gtk.HBox(spacing=6)
-        hbox.pack_start(self.installed_tab_icon, False, False)
-        hbox.pack_start(gtk.Label(self.installed_tab.get_label()), False, False)
+        hbox = ga_Gtk.HBox(spacing=6)
+        hbox.pack_start(self.installed_tab_icon, False, False, 0)
+        hbox.pack_start(ga_Gtk.Label(self.installed_tab.get_label()), False, False, 0)
         self.notebook.append_page(self.installed_tab.get_content(), hbox)
         hbox.show_all()
 
         self.notebook.append_page(self.my_subs_tab.get_content(),
-                gtk.Label(self.my_subs_tab.get_label()))
+                                  ga_Gtk.Label(self.my_subs_tab.get_label()))
 
-        self.glade.signal_autoconnect({
+        self.connect_signals({
             "on_register_menu_item_activate": self._register_item_clicked,
             "on_unregister_menu_item_activate": self._unregister_item_clicked,
             "on_import_cert_menu_item_activate": self._import_cert_item_clicked,
@@ -219,10 +226,14 @@ class MainWindow(widgets.GladeWidget):
             "on_about_menu_item_activate": self._about_item_clicked,
             "on_getting_started_menu_item_activate": self._getting_started_item_clicked,
             "on_online_docs_menu_item_activate": self._online_docs_item_clicked,
-            "on_quit_menu_item_activate": gtk.main_quit,
+            "on_quit_menu_item_activate": ga_Gtk.main_quit,
         })
 
-        def on_cert_change():
+        # TODO: why is this defined in the init scope?
+        # When something causes cert_sorter to upate it's state, refresh the gui
+        # The cert directories being updated will cause this (either noticed
+        # from a timer, or via cert_sort.force_cert_check).
+        def on_cert_sorter_cert_change():
             # Update installed products
             self.installed_tab.update_products()
             self.installed_tab._set_validity_status()
@@ -233,7 +244,7 @@ class MainWindow(widgets.GladeWidget):
             # Reset repos dialog, see bz 1132919
             self.repos_dialog = RepositoriesDialog(self.backend, self._get_window())
 
-        self.backend.cs.add_callback(on_cert_change)
+        self.backend.cs.add_callback(on_cert_sorter_cert_change)
 
         self.main_window.show_all()
 
@@ -244,11 +255,19 @@ class MainWindow(widgets.GladeWidget):
         # Update everything with compliance data
         self.backend.cs.notify()
 
+        # managergui needs cert_sort.cert_monitor.run_check() to run
+        # on a timer to detect cert changes from outside the gui
+        # (via rhsmdd for example, or manually provisioned).
+        ga_GLib.timeout_add(2000, self._on_cert_check_timer)
+
         if auto_launch_registration and not self.registered():
             self._register_item_clicked(None)
 
     def registered(self):
         return self.identity.is_valid()
+
+    def _on_cert_check_timer(self):
+        self.backend.on_cert_check_timer()
 
     def _on_sla_back_button_press(self):
         self._perform_unregister()
@@ -261,7 +280,7 @@ class MainWindow(widgets.GladeWidget):
         # Show the All Subscriptions tab if registered, hide it otherwise:
         if self.registered() and self.notebook.get_n_pages() == 2:
             self.notebook.append_page(self.all_subs_tab.get_content(),
-                    gtk.Label(self.all_subs_tab.get_label()))
+                    ga_Gtk.Label(self.all_subs_tab.get_label()))
         elif not self.registered() and self.notebook.get_n_pages() == 3:
             self.notebook.set_current_page(0)
             self.notebook.remove_page(2)
@@ -300,13 +319,14 @@ class MainWindow(widgets.GladeWidget):
         """
         is_registered = self.registered()
         if is_registered:
-            self.register_menu_item.hide()
-            self.unregister_menu_item.show()
-            self.settings_menu_item.show()  # preferences
+            #self.register_menu_item.hide()
+            self.register_menu_item.set_sensitive(False)
+            self.unregister_menu_item.set_sensitive(True)
+            self.settings_menu_item.set_sensitive(True)  # preferences
         else:
-            self.register_menu_item.show()
-            self.unregister_menu_item.hide()
-            self.settings_menu_item.hide()
+            self.register_menu_item.set_sensitive(True)
+            self.unregister_menu_item.set_sensitive(False)
+            self.settings_menu_item.set_sensitive(False)
 
         show_overrides = False
         try:
@@ -318,9 +338,9 @@ class MainWindow(widgets.GladeWidget):
             log.debug(e)
 
         if show_overrides:
-            self.repos_menu_item.show()
+            self.repos_menu_item.set_sensitive(True)
         else:
-            self.repos_menu_item.hide()
+            self.repos_menu_item.set_sensitive(False)
 
     def _show_redemption_buttons(self):
         # Check if consumer can redeem a subscription - if an identity cert exists
@@ -334,11 +354,13 @@ class MainWindow(widgets.GladeWidget):
                 can_redeem = False
 
         if can_redeem:
-            self.redeem_menu_item.show()
+            self.redeem_menu_item.set_sensitive(True)
         else:
-            self.redeem_menu_item.hide()
+            self.redeem_menu_item.set_sensitive(False)
 
     def _register_item_clicked(self, widget):
+        self.log.debug("_register_item_clicked widget=%s", widget)
+        self.registration_dialog.initialize()
         self.registration_dialog.show()
 
     def _preferences_item_clicked(self, widget):
@@ -415,7 +437,7 @@ class MainWindow(widgets.GladeWidget):
 
     def _getting_started_item_clicked(self, widget):
         try:
-            # unfortunately, gtk.show_uri does not work in RHEL 5
+            # unfortunately, Gtk.show_uri does not work in RHEL 5
             subprocess.call(["gnome-open", "ghelp:subscription-manager"])
         except Exception, e:
             # if we can't open it, it's probably because the user didn't

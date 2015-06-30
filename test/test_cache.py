@@ -12,12 +12,13 @@
 #
 
 import os
+import logging
 import unittest
 import random
 import shutil
 import socket
 import tempfile
-import threading
+import time
 from mock import Mock
 
 # used to get a user readable cfg class for test cases
@@ -35,6 +36,8 @@ from rhsm.profile import Package, RPMProfile
 from rhsm.connection import RestlibException, UnauthorizedException
 
 from subscription_manager import injection as inj
+
+log = logging.getLogger(__name__)
 
 
 class _FACT_MATCHER(object):
@@ -418,21 +421,26 @@ class TestEntitlementStatusCache(SubManFixture):
         status_cache.CACHE_FILE = cache_file
         status_cache.write_cache()
 
-        def threadActive(name):
-            for thread in threading.enumerate():
-                if thread.getName() == name:
-                    return True
-            return False
+        # try to load the file 5 times, if
+        # we still can't read it, fail
+        # we don't know when the write_cache thread ends or
+        # when it starts. Need to track the cache threads
+        # but we do not...
 
-        # If the file exists, and the thread that writes it does not, we know writing has completed
-        while not (os.path.exists(cache_file) and not threadActive("WriteCacheEntitlementStatusCache")):
-            pass
-        try:
-            new_status_buf = open(cache_file).read()
-            new_status = json.loads(new_status_buf)
-            self.assertEquals(new_status, mock_server_status)
-        finally:
-            shutil.rmtree(cache_dir)
+        tries = 0
+        while tries <= 5:
+            try:
+                new_status_buf = open(cache_file).read()
+                new_status = json.loads(new_status_buf)
+                break
+            except Exception, e:
+                log.exception(e)
+                tries += 1
+                time.sleep(.1)
+                continue
+
+        shutil.rmtree(cache_dir)
+        self.assertEquals(new_status, mock_server_status)
 
     def test_unauthorized_exception_handled(self):
         uep = Mock()
