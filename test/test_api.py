@@ -49,7 +49,7 @@ class RepoApiTest(SubManFixture):
         self.repo_file.items.return_value = repo_settings.items()
         result = api.disable_yum_repositories('hello')
 
-        self.assertIn(call.write(), self.repo_file.mock_calls)
+        self.assertTrue(call.write() in self.repo_file.mock_calls)
         self.assertEquals(1, result)
 
     def test_enable_repo(self):
@@ -62,7 +62,7 @@ class RepoApiTest(SubManFixture):
         self.repo_file.items.return_value = repo_settings.items()
         result = api.enable_yum_repositories('hello')
 
-        self.assertIn(call.write(), self.repo_file.mock_calls)
+        self.assertTrue(call.write() in self.repo_file.mock_calls)
         self.assertEquals(1, result)
 
     def test_enable_repo_wildcard(self):
@@ -78,7 +78,7 @@ class RepoApiTest(SubManFixture):
 
         result = api.enable_yum_repositories('he*')
 
-        self.assertIn(call.write(), self.repo_file.mock_calls)
+        self.assertTrue(call.write() in self.repo_file.mock_calls)
         self.assertEquals(2, result)
 
     def test_does_not_enable_nonmatching_repos(self):
@@ -91,7 +91,7 @@ class RepoApiTest(SubManFixture):
         self.repo_file.items.return_value = repo_settings.items()
         result = api.enable_yum_repositories('hello')
 
-        self.assertNotIn(call.write(), self.repo_file.mock_calls)
+        self.assertFalse(call.write() in self.repo_file.mock_calls)
         self.assertEquals(0, result)
 
     @patch.object(StubUEP, 'supports_resource')
@@ -119,6 +119,6 @@ class RepoApiTest(SubManFixture):
             'name': 'enabled',
             'value': '1',
         }]
-        self.assertIn(call("123", expected_overrides), mock_set.mock_calls)
-        self.assertIn(call.update(), self.invoker.mock_calls)
+        self.assertTrue(call("123", expected_overrides) in mock_set.mock_calls)
+        self.assertTrue(call.update() in self.invoker.mock_calls)
         self.assertEquals(1, result)
