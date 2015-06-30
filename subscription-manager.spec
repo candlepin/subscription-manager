@@ -9,6 +9,7 @@
 
 
 %global _hardened_build 1
+%{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 # A couple files are for RHEL 5 only:
 %if 0%{?rhel} == 5
