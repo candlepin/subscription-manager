@@ -317,6 +317,7 @@ def friendly_join(items):
 
 
 def is_true_value(test_string):
+    raise Exception("FOOO")
     val = str(test_string).lower()
     return val == "1" or val == "true" or val == "yes"
 
