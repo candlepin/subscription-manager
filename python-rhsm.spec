@@ -9,6 +9,7 @@
 %global use_simplejson (0%{?rhel} && 0%{?rhel} == 5)
 
 %global _hardened_build 1
+%{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
 Version: 1.15.2
