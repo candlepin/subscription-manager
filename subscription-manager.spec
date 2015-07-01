@@ -3,10 +3,30 @@
 # For optional building of ostree-plugin sub package. Unrelated to systemd
 # but the same versions apply at the moment.
 %global has_ostree %use_systemd
-%global use_old_firstboot (0%{?rhel} && 0%{?rhel} <= 6)
+%global use_old_firstboot 0
+%global use_firstboot 1
+%global use_initial_setup 0
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
 %global use_gtk3 %use_systemd
-%global use_initial_setup %use_systemd
+%global rhel7_minor %(%{__grep} -o "7.[0-9]*" /etc/redhat-release |%{__sed} -s 's/7.//')
+
+%if 0%{rhel} == 7
+%if (0%{?rhel_7_minor} >= 2)
+# 7.2+
+%global use_initial_setup 1
+%global use_firstboot 0
+%endif
+# 7+
+%global use_firstboot 1
+%global use_initial_setup 0
+%endif
+
+# 6 < rhel < 7
+%if 0%{rhel} == 6
+%global use_initial_setup 0
+%global use_firstboot 1
+%global use_old_firstboot 1
+%endif
 
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
@@ -176,6 +196,7 @@ This package contains a GTK+ graphical interface for configuring and
 registering a system with a Red Hat Entitlement platform and manage
 subscriptions.
 
+%if %use_firstboot
 %package -n subscription-manager-firstboot
 Summary: Firstboot screens for subscription manager
 Group: System Environment/Base
@@ -191,6 +212,7 @@ Requires: librsvg2
 
 %description -n subscription-manager-firstboot
 This package contains the firstboot screens for subscription-manager.
+%endif
 
 %if %use_initial_setup
 %package -n subscription-manager-initial-setup-addon
@@ -467,11 +489,16 @@ rm -rf %{buildroot}
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.py*
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/categories/*.py*
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/*.py*
-%else
+%endif
 
+%if %use_firstboot
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
+%if %use_old_firstboot
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
+%else
+%{_datadir}/firstboot/modules/rhsm_login.py*
+%endif
 %endif
 
 %files -n subscription-manager-migration
