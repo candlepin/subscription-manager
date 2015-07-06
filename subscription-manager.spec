@@ -36,7 +36,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.15.2
+Version: 1.15.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -526,6 +526,17 @@ fi
 %endif
 
 %changelog
+* Mon Jul 06 2015 Adrian Likins <alikins@redhat.com> 1.15.3-1
+- 1232508: file_monitor is no longer a gobject (alikins@redhat.com)
+- Add 'subscription-manager-initial-setup-addon' sub package (alikins@redhat.com)
+- Make 'subscription-manager-firstboot' optional (alikins@redhat.com)
+- Make 'firstboot' and 'initial-setup' RHEL version dependent (alikins@redhat.com)
+- Add initial-setup modules. (alikins@redhat.com)
+- Port gui from gtk2 to gtk3 via 'ga' (alikins@redhat.com)
+- Make gui support gtk2 and gtk3 (alikins@redhat.com)
+- Add module 'ga' ('gtk any') as Gtk ver abstraction (alikins@redhat.com)
+- Add search-disabled-repos plugin. (vmukhame@redhat.com)
+
 * Mon Jun 22 2015 Chris Rog <crog@redhat.com> 1.15.2-1
 - Added release target for RHEL 7.2 (crog@redhat.com)
 - Move po compile/install for faster 'install-files' (alikins@redhat.com)
