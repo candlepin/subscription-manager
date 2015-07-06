@@ -4,52 +4,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-21 11:15-0400\n"
+"POT-Creation-Date: 2015-07-06 14:33-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2015-05-21 05:41-0400\n"
 "Last-Translator: leahliu <lliu@redhat.com>\n"
 "Language-Team: Chinese (Simplified, China)\n"
 "Language: zh-Hans-CN\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Zanata 3.6.2\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/entcertlib.py:271
-#, python-format
-msgid "%s local certificate has been deleted."
-msgid_plural "%s local certificates have been deleted."
-msgstr[0] "已删除 %s 本地证书。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/entcertlib.py:425
-#, python-format
-msgid "Total updates: %d"
-msgstr "总更新数：%d"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/entcertlib.py:426
-#, python-format
-msgid "Found (local) serial# %s"
-msgstr "找到（本地）序列号 # %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/entcertlib.py:427
-#, python-format
-msgid "Expected (UEP) serial# %s"
-msgstr "预期的（UEP）序列号 # %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/entcertlib.py:428
-#: ../src/subscription_manager/repolib.py:438
-msgid "Added (new)"
-msgstr "添加的（新建）"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/entcertlib.py:429
-msgid "Deleted (rogue):"
-msgstr "删除的（rogue）："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/branding/__init__.py:81
@@ -182,287 +146,40 @@ msgid ""
 msgstr "提示：忘记您的登录或者密码？请查看 http://redhat.com/forgot_password"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:28
-msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr "网络出错，无法连接到服务器。详情请查看 /var/log/rhsm/rhsm.log。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:29
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr "网络出错。请查看连接详情，或者 /var/log/rhsm/rhsm.log。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:30
-msgid "Unauthorized: Invalid credentials for request."
-msgstr "未授权：请求的无效证书。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:31
-msgid "Forbidden: Invalid credentials for request."
-msgstr "禁止：请求的无效证书。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:32
-msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr "远程服务器出错。详情请查看连接情况或者 /var/log/rhsm/rhsm.log。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:33
+#: ../src/subscription_manager/entcertlib.py:271
 #, python-format
-msgid "Bad CA certificate: %s"
-msgstr "错误的 CA 证书：%s"
+msgid "%s local certificate has been deleted."
+msgid_plural "%s local certificates have been deleted."
+msgstr[0] "已删除 %s 本地证书。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:34
-#: ../src/daemons/rhsmcertd-worker.py:60
-msgid "Your identity certificate has expired"
-msgstr "您的身份识别证书已过期"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:35
+#: ../src/subscription_manager/entcertlib.py:425
 #, python-format
-msgid "Unable to verify server's identity: %s"
-msgstr "无法确认服务器身份：%s"
+msgid "Total updates: %d"
+msgstr "总更新数：%d"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:36
-msgid "Server URL can not be empty"
-msgstr "服务器 URL 不能为空"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:37
-msgid ""
-"Server URL is just a schema. Should include hostname, and/or port and path"
-msgstr "服务器 URL 只是一个方案。应包含主机名和（/或者）端口和路径。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:38
-msgid "Server URL can not be None"
-msgstr "服务器 URL 不能为无"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:39
-msgid "Server URL port should be numeric"
-msgstr "服务器 URL 端口应该是数字"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:40
-msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr "服务器 URL 包含无效方案。支持 http:// 和 https://。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/hwprobe.py:273
-msgid "Error reading system memory information:"
-msgstr "读取系统内存信息出错："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/hwprobe.py:583
-msgid "Error reading system CPU information:"
-msgstr "读取系统 CPU 信息出错："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/hwprobe.py:608
-msgid "Error reading networking information:"
-msgstr "读取联网信息出错："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/hwprobe.py:707
-msgid "Error reading network interface information:"
-msgstr "读取网络接口信息出错："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/hwprobe.py:800
-msgid "Virtualization platform does not support UUIDs"
-msgstr "虚拟化平台不支持 UUID"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/hwprobe.py:802
+#: ../src/subscription_manager/entcertlib.py:426
 #, python-format
-msgid "Error finding UUID: %s"
-msgstr "寻找 UUID 出错：%s"
+msgid "Found (local) serial# %s"
+msgstr "找到（本地）序列号 # %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/printing_utils.py:137
-#: ../src/subscription_manager/gui/widgets.py:398
-#: ../src/subscription_manager/gui/factsgui.py:146
-#: ../src/subscription_manager/managercli.py:666
-msgid "None"
-msgstr "无"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:78
-#: ../src/subscription_manager/gui/widgets.py:292 ../src/rct/printing.py:43
-msgid "Product"
-msgstr "产品"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:89
-#: ../src/rct/printing.py:46 ../src/rct/printing.py:125
-msgid "Version"
-msgstr "版本"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:92
-msgid "Status"
-msgstr "状态"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:95
-#: ../src/subscription_manager/gui/contract_selection.py:115
-#: ../src/rct/printing.py:127 ../src/rct/manifest_commands.py:231
-msgid "Start Date"
-msgstr "起始日期"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:98
-#: ../src/subscription_manager/gui/mysubstab.py:102
-#: ../src/subscription_manager/gui/contract_selection.py:121
-#: ../src/rct/printing.py:128 ../src/rct/manifest_commands.py:232
-msgid "End Date"
-msgstr "终止日期"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:181
-#: ../src/subscription_manager/managercli.py:73
-msgid "Future Subscription"
-msgstr "未来订阅"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:182
-msgid "Future Subscribed"
-msgstr "未来订阅的"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:185
-#: ../src/subscription_manager/managercli.py:76
-msgid "Expired"
-msgstr "已过期"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:195
+#: ../src/subscription_manager/entcertlib.py:427
 #, python-format
-msgid "Subscription %s is expired"
-msgstr "订阅 %s 已过期"
+msgid "Expected (UEP) serial# %s"
+msgstr "预期的（UEP）序列号 # %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:198
-#: ../src/subscription_manager/gui/installedtab.py:199
-#: ../src/subscription_manager/managercli.py:77
-msgid "Partially Subscribed"
-msgstr "部分已订阅"
+#: ../src/subscription_manager/entcertlib.py:428
+#: ../src/subscription_manager/repolib.py:450
+msgid "Added (new)"
+msgstr "添加的（新建）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. Shouldn't be reachable.
-#. Reason has no id attr
-#. It's possible (though unlikely, and kind of broken) to have more
-#. than one version of python-rhsm/subscription-manager installed.
-#. This will return whatever version we are using.
-#: ../src/subscription_manager/gui/installedtab.py:202
-#: ../src/subscription_manager/gui/factsgui.py:90
-#: ../src/subscription_manager/gui/factsgui.py:117
-#: ../src/subscription_manager/managercli.py:78
-#: ../src/subscription_manager/managercli.py:343
-#: ../src/subscription_manager/managercli.py:344
-#: ../src/subscription_manager/managercli.py:347
-#: ../src/subscription_manager/managercli.py:348
-#: ../src/subscription_manager/managercli.py:1726
-#: ../src/subscription_manager/managercli.py:2599
-#: ../src/subscription_manager/cert_sorter.py:47
-#: ../src/subscription_manager/reasons.py:93
-#: ../src/subscription_manager/utils.py:213
-#: ../src/subscription_manager/utils.py:214
-#: ../src/subscription_manager/utils.py:228
-#: ../src/subscription_manager/utils.py:230
-#: ../src/subscription_manager/utils.py:248
-#: ../src/subscription_manager/utils.py:249
-#: ../src/subscription_manager/utils.py:250
-#: ../src/subscription_manager/utils.py:269
-msgid "Unknown"
-msgstr "未知的"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:204
-msgid "System is not registered."
-msgstr "这个系统尚未注册。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. System must be registered but unable to reach server:
-#: ../src/subscription_manager/gui/installedtab.py:207
-msgid "Entitlement server is unreachable."
-msgstr "无法连接授权服务器。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:210
-#: ../src/subscription_manager/managercli.py:74
-msgid "Subscribed"
-msgstr "已订阅"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:212
-#, python-format
-msgid "Covered by contract %s through %s"
-msgid_plural "Covered by contracts %s through %s"
-msgstr[0] "由合同 %s 到 %s 覆盖"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:219
-#: ../src/subscription_manager/gui/installedtab.py:220
-#: ../src/subscription_manager/managercli.py:75
-msgid "Not Subscribed"
-msgstr "未订阅的"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:271
-msgid "My Installed Products"
-msgstr "我已安装的产品"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:305
-msgid "No installed products detected."
-msgstr "没有探测到安装的产品。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:309
-#, python-format
-msgid "System is properly subscribed through %s."
-msgstr "已正确地通过 %s 订阅系统。"
-
-#: ../src/subscription_manager/gui/installedtab.py:314
-msgid "System is properly subscribed."
-msgstr "已成功订阅系统。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:319
-msgid "This system does not match subscription limits."
-msgstr "这个系统与订阅限制不匹配。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:325
-#, python-format
-msgid "%s installed products do not have valid subscriptions."
-msgstr "%s 安装的产品没有有效订阅。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:330
-msgid "1 installed product does not have a valid subscription."
-msgstr "1 安装的产品没有有效订阅。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:335
-msgid "Keep your system up to date by registering."
-msgstr "注册以便保证您的系统更新。"
+#: ../src/subscription_manager/entcertlib.py:429
+msgid "Deleted (rogue):"
+msgstr "删除的（rogue）："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:63
@@ -487,7 +204,7 @@ msgstr "所有安装的产品都已订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:78
-#: ../src/subscription_manager/gui/registergui.py:571
+#: ../src/subscription_manager/gui/registergui.py:723
 msgid "Error subscribing"
 msgstr "订阅错误"
 
@@ -531,302 +248,702 @@ msgid "Subscription Registration"
 msgstr "订阅注册"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:162
-msgid "There was an error saving your configuration."
-msgstr "保存您的配置时出错。"
+#: ../src/subscription_manager/gui/about.py:28
+msgid ""
+"\n"
+"This software is licensed to you under the GNU General Public License, "
+"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
+"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
+"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
+"this software; if not, see:\n"
+"\n"
+"http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
+"\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
+"use or replicate Red Hat trademarks that are incorporated in this software "
+"or its documentation.\n"
+msgstr ""
+"\n"
+"This software is licensed to you under the GNU General Public License, "
+"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
+"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
+"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
+"this software; if not, see:\n"
+"\n"
+"http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
+"\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
+"use or replicate Red Hat trademarks that are incorporated in this software "
+"or its documentation.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:163
+#: ../src/subscription_manager/gui/about.py:49
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:13
+msgid "Subscription Manager"
+msgstr "Subscription Manager"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/about.py:54
+msgid "Copyright (c) 2012 Red Hat, Inc."
+msgstr "版权所有（c）2012 Red Hat, Inc."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys, author John Sefler
+#: ../src/subscription_manager/gui/about.py:74
+#: ../src/subscription_manager/gui/about.py:76
 #, python-format
-msgid "Make sure that you own %s."
-msgstr "确定您拥有 %s。"
+msgid "<b>%s version:</b> %s"
+msgstr "<b>%s 版本:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:188
-msgid "Proxy connection succeeded"
-msgstr "代理服务器连接成功"
+#: ../src/subscription_manager/gui/about.py:78
+#, python-format
+msgid "<b>subscription management service version:</b> %s"
+msgstr "<b>订阅管理服务版本：</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:190
-msgid "Proxy connection failed"
-msgstr "代理服务器连接失败"
-
-#: ../src/subscription_manager/gui/networkConfig.py:283
-#: ../src/subscription_manager/gui/networkConfig.py:286
-msgid "Testing Connection"
-msgstr "测试连接"
-
-#: ../src/subscription_manager/gui/networkConfig.py:284
-#: ../src/subscription_manager/gui/networkConfig.py:286
-msgid "Please wait"
-msgstr "请稍候"
+#: ../src/subscription_manager/gui/about.py:102
+#, python-format
+msgid "<b>Next System Check-in:</b> %s"
+msgstr "<b>下一次系统登录：</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. Add at-spi because we no longer create this widget from glade
-#: ../src/subscription_manager/gui/allsubs.py:55
+#: ../src/subscription_manager/gui/allsubs.py:56
 msgid "All Subscriptions View"
 msgstr "所有订阅查看"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:80
-#: ../src/subscription_manager/gui/registergui.py:454
-#: ../src/subscription_manager/gui/mysubstab.py:74
+#: ../src/subscription_manager/gui/allsubs.py:81
+#: ../src/subscription_manager/gui/mysubstab.py:76
+#: ../src/subscription_manager/gui/registergui.py:604
 msgid "Subscription"
 msgstr "订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:92
+#: ../src/subscription_manager/gui/allsubs.py:93
 msgid "Available"
 msgstr "可用的"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. Set up the quantity column.
-#: ../src/subscription_manager/gui/allsubs.py:96
-#: ../src/subscription_manager/gui/registergui.py:460
-#: ../src/subscription_manager/gui/mysubstab.py:105
-#: ../src/subscription_manager/gui/contract_selection.py:126
-#: ../src/rct/printing.py:83 ../src/rct/manifest_commands.py:229
+#: ../src/subscription_manager/gui/allsubs.py:97
+#: ../src/subscription_manager/gui/contract_selection.py:122
+#: ../src/subscription_manager/gui/mysubstab.py:107
+#: ../src/subscription_manager/gui/registergui.py:610
+#: ../src/rct/manifest_commands.py:229 ../src/rct/printing.py:83
 msgid "Quantity"
 msgstr "数量"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:175
+#: ../src/subscription_manager/gui/allsubs.py:178
 msgid "Press Update to search for subscriptions."
 msgstr "按更新搜索订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:210
+#: ../src/subscription_manager/gui/allsubs.py:213
 #, python-format
 msgid "No subscriptions are available on %s."
 msgstr "%s 中没有可用订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:216
+#: ../src/subscription_manager/gui/allsubs.py:219
 msgid "No subscriptions match current filters."
 msgstr "没有与当前过滤器匹配的订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:231
-#: ../src/subscription_manager/gui/contract_selection.py:143
+#: ../src/subscription_manager/gui/allsubs.py:234
+#: ../src/subscription_manager/gui/contract_selection.py:139
 #: ../src/subscription_manager/managerlib.py:337 ../src/rct/printing.py:82
 msgid "Unlimited"
 msgstr "无限"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:344
+#: ../src/subscription_manager/gui/allsubs.py:347
 msgid "All Available Subscriptions"
 msgstr "所有可用订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:354
+#: ../src/subscription_manager/gui/allsubs.py:357
 msgid "Searching"
 msgstr "搜索中"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:355
+#: ../src/subscription_manager/gui/allsubs.py:358
 msgid "Searching for subscriptions. Please wait."
 msgstr "正在搜索订阅，请稍候。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:369
+#: ../src/subscription_manager/gui/allsubs.py:374
 #, python-format
 msgid "Error fetching subscriptions from server:  %s"
 msgstr "从服务器获取订阅出错：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:383
+#: ../src/subscription_manager/gui/allsubs.py:388
 #, python-format
 msgid "Unable to search for subscriptions:  %s"
 msgstr "无法搜索订阅：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:394
+#: ../src/subscription_manager/gui/allsubs.py:399
 #, python-format
 msgid "Error getting subscription: %s"
 msgstr "获取订阅出错：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:398
+#: ../src/subscription_manager/gui/allsubs.py:403
 msgid "Quantity must be a positive number."
 msgstr "数量必须是一个正数。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. Start the progress bar
-#: ../src/subscription_manager/gui/allsubs.py:405
+#: ../src/subscription_manager/gui/allsubs.py:410
 msgid "Attaching"
 msgstr "附加中"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:406
+#: ../src/subscription_manager/gui/allsubs.py:411
 msgid "Attaching subscription. Please wait."
 msgstr "正在附加订阅，请稍候。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:425
+#: ../src/subscription_manager/gui/allsubs.py:433
 #, python-format
 msgid "%s applied"
 msgstr "应用 %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:40
+#: ../src/subscription_manager/gui/contract_selection.py:81
+#: ../src/rct/manifest_commands.py:237 ../src/rct/printing.py:76
+msgid "Contract"
+msgstr "合同"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/contract_selection.py:98
+msgid "Used / Total"
+msgstr "已使用 / 总计"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/contract_selection.py:104
+#: ../src/subscription_manager/gui/installedtab.py:97
+#: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:127
+msgid "Start Date"
+msgstr "起始日期"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/contract_selection.py:113
+#: ../src/subscription_manager/gui/installedtab.py:100
+#: ../src/subscription_manager/gui/mysubstab.py:104
+#: ../src/rct/manifest_commands.py:232 ../src/rct/printing.py:128
+msgid "End Date"
+msgstr "终止日期"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. Set up columns on the view
+#: ../src/subscription_manager/gui/factsgui.py:60
+msgid "Fact"
+msgstr "详情"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/factsgui.py:61
+#: ../src/subscription_manager/gui/widgets.py:339
+msgid "Value"
+msgstr "值"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. Shouldn't be reachable.
+#. Reason has no id attr
+#. It's possible (though unlikely, and kind of broken) to have more
+#. than one version of python-rhsm/subscription-manager installed.
+#. This will return whatever version we are using.
+#: ../src/subscription_manager/gui/factsgui.py:91
+#: ../src/subscription_manager/gui/factsgui.py:118
+#: ../src/subscription_manager/gui/installedtab.py:202
+#: ../src/subscription_manager/reasons.py:93
+#: ../src/subscription_manager/utils.py:213
+#: ../src/subscription_manager/utils.py:214
+#: ../src/subscription_manager/utils.py:228
+#: ../src/subscription_manager/utils.py:230
+#: ../src/subscription_manager/utils.py:248
+#: ../src/subscription_manager/utils.py:249
+#: ../src/subscription_manager/utils.py:250
+#: ../src/subscription_manager/utils.py:269
+#: ../src/subscription_manager/managercli.py:78
+#: ../src/subscription_manager/managercli.py:343
+#: ../src/subscription_manager/managercli.py:344
+#: ../src/subscription_manager/managercli.py:347
+#: ../src/subscription_manager/managercli.py:348
+#: ../src/subscription_manager/managercli.py:1726
+#: ../src/subscription_manager/managercli.py:2599
+#: ../src/subscription_manager/cert_sorter.py:47
+msgid "Unknown"
+msgstr "未知的"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/factsgui.py:103
+msgid "No previous update"
+msgstr "没有之前的更新"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/factsgui.py:147
+#: ../src/subscription_manager/gui/widgets.py:476
+#: ../src/subscription_manager/printing_utils.py:137
+#: ../src/subscription_manager/managercli.py:666
+msgid "None"
+msgstr "无"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/importsub.py:39
 msgid "Import Certificates"
 msgstr "导入证书"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:43
+#: ../src/subscription_manager/gui/importsub.py:42
 msgid "Import"
 msgstr "导入"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:52
+#: ../src/subscription_manager/gui/importsub.py:51
 msgid "Certificates"
 msgstr "证书"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:57
+#: ../src/subscription_manager/gui/importsub.py:56
 msgid "All files"
 msgstr "所有文件"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:123
+#: ../src/subscription_manager/gui/importsub.py:122
 msgid "The following certificate files did not exist:"
 msgstr "以下证书文件不存在："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:126
+#: ../src/subscription_manager/gui/importsub.py:125
 msgid "The following files are not valid certificates and were not imported:"
 msgstr "以下文件不是有效证书，因此没有导入："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:131
+#: ../src/subscription_manager/gui/importsub.py:130
 msgid ""
 "An error occurred while importing the following certificates. Please check "
 "the log file for more information."
 msgstr "导入以下证书时出错。详情请查看日志文件。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:135
+#: ../src/subscription_manager/gui/importsub.py:134
 msgid "The following certificates were successfully imported:"
 msgstr "成功导入以下两个证书："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. if we get to this point, the import was successful
-#: ../src/subscription_manager/gui/importsub.py:140
+#: ../src/subscription_manager/gui/importsub.py:139
 msgid "Certificate import was successful."
 msgstr "证书导入成功。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. An empty string entry is used for "un-setting" the system's SLA:
-#. for unsetting
-#: ../src/subscription_manager/gui/preferences.py:116
-#: ../src/subscription_manager/gui/preferences.py:142
-#: ../src/subscription_manager/gui/widgets.py:371
-msgid "Not Set"
-msgstr "未设置"
+#: ../src/subscription_manager/gui/installedtab.py:80
+#: ../src/subscription_manager/gui/widgets.py:370 ../src/rct/printing.py:43
+msgid "Product"
+msgstr "产品"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:92
-msgid "<b>Unable to register the system.</b>"
-msgstr "<b>无法注册该系统。</b>"
+#: ../src/subscription_manager/gui/installedtab.py:91
+#: ../src/rct/printing.py:46 ../src/rct/printing.py:125
+msgid "Version"
+msgstr "版本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:94
-#: ../src/subscription_manager/gui/managergui.py:374
+#: ../src/subscription_manager/gui/installedtab.py:94
+msgid "Status"
+msgstr "状态"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:181
+#: ../src/subscription_manager/managercli.py:73
+msgid "Future Subscription"
+msgstr "未来订阅"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:182
+msgid "Future Subscribed"
+msgstr "未来订阅的"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:185
+#: ../src/subscription_manager/managercli.py:76
+msgid "Expired"
+msgstr "已过期"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:195
+#, python-format
+msgid "Subscription %s is expired"
+msgstr "订阅 %s 已过期"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:198
+#: ../src/subscription_manager/gui/installedtab.py:199
+#: ../src/subscription_manager/managercli.py:77
+msgid "Partially Subscribed"
+msgstr "部分已订阅"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:204
+msgid "System is not registered."
+msgstr "这个系统尚未注册。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. System must be registered but unable to reach server:
+#: ../src/subscription_manager/gui/installedtab.py:207
+msgid "Entitlement server is unreachable."
+msgstr "无法连接授权服务器。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:210
+#: ../src/subscription_manager/managercli.py:74
+msgid "Subscribed"
+msgstr "已订阅"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:212
+#, python-format
+msgid "Covered by contract %s through %s"
+msgid_plural "Covered by contracts %s through %s"
+msgstr[0] "由合同 %s 到 %s 覆盖"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:219
+#: ../src/subscription_manager/gui/installedtab.py:220
+#: ../src/subscription_manager/managercli.py:75
+msgid "Not Subscribed"
+msgstr "未订阅的"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:273
+msgid "My Installed Products"
+msgstr "我已安装的产品"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:307
+msgid "No installed products detected."
+msgstr "没有探测到安装的产品。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:311
+#, python-format
+msgid "System is properly subscribed through %s."
+msgstr "已正确地通过 %s 订阅系统。"
+
+#: ../src/subscription_manager/gui/installedtab.py:316
+msgid "System is properly subscribed."
+msgstr "已成功订阅系统。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:321
+msgid "This system does not match subscription limits."
+msgstr "这个系统与订阅限制不匹配。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:327
+#, python-format
+msgid "%s installed products do not have valid subscriptions."
+msgstr "%s 安装的产品没有有效订阅。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:332
+msgid "1 installed product does not have a valid subscription."
+msgstr "1 安装的产品没有有效订阅。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:337
+msgid "Keep your system up to date by registering."
+msgstr "注册以便保证您的系统更新。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:370
+msgid ""
+"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr "首选项对话框中出错。详情请查看 /var/log/rhsm/rhsm.log 。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:378
+msgid ""
+"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr "库对话出错。详情请查看 /var/log/rhsm/rhsm.log。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:394
+msgid "<b>Errors were encountered during unregister.</b>"
+msgstr "<b>取消注册的过程中出错。</b>"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:396
+#: ../src/subscription_manager/gui/registergui.py:95
 msgid "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr "详情请查看 /var/log/rhsm/rhsm.log。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:223
-#: ../src/subscription_manager/gui/data/registration.glade.h:1
+#: ../src/subscription_manager/gui/managergui.py:412
+msgid "<b>Are you sure you want to unregister?</b>"
+msgstr "<b>您确定要取消注册吗？</b>"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:468
+msgid "System Already Registered"
+msgstr "系统已经注册"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:93
+msgid "Installed Products"
+msgstr "安装的产品"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:132
+#, python-format
+msgid "There was an error removing %s with serial number %s"
+msgstr "删除序列号为 %s 的 %s 时出错"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:146
+msgid "Removing"
+msgstr "删除中"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:147
+msgid "Removing subscription. Please wait."
+msgstr "正在删除，请稍候。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:168
+#, python-format
+msgid "Are you sure you want to remove %s?"
+msgstr "您确定要删除 %s 吗？"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:198
+#, python-format
+msgid "Stack of %s and %s others"
+msgstr "%s 堆栈及 %s 其他"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:201
+#, python-format
+msgid "Stack of %s and 1 other"
+msgstr "%s 堆栈及 1 其他"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:203
+#, python-format
+msgid "Stack of %s"
+msgstr "%s 堆栈"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:233
+msgid "My Subscriptions"
+msgstr "我的订阅"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:278
+msgid "Subscription is current."
+msgstr "当前订阅"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:281
+msgid "Subscription is expired."
+msgstr "过期订阅"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:283
+msgid "Subscription has not begun."
+msgstr "订阅还未开始"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:285
+#: ../src/subscription_manager/managercli.py:2374
+msgid "Subscription management service doesn't support Status Details."
+msgstr "订阅管理服务不支持状态详情"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:292
+#: ../src/subscription_manager/gui/widgets.py:837
+#: ../src/subscription_manager/managercli.py:2233
+#: ../src/subscription_manager/managercli.py:2340
+msgid "Virtual"
+msgstr "虚拟的"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:294
+#: ../src/subscription_manager/gui/widgets.py:836
+#: ../src/subscription_manager/managercli.py:2235
+#: ../src/subscription_manager/managercli.py:2342
+msgid "Physical"
+msgstr "物理的"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:297
+#: ../src/subscription_manager/managercli.py:2238
+#: ../src/subscription_manager/managercli.py:2345
+msgid "Yes"
+msgstr "是"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:299
+#: ../src/subscription_manager/managercli.py:2240
+#: ../src/subscription_manager/managercli.py:2347
+msgid "No"
+msgstr "否"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:158
+msgid "There was an error saving your configuration."
+msgstr "保存您的配置时出错。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:159
+#, python-format
+msgid "Make sure that you own %s."
+msgstr "确定您拥有 %s。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:182
+msgid "Proxy connection succeeded"
+msgstr "代理服务器连接成功"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:184
+msgid "Proxy connection failed"
+msgstr "代理服务器连接失败"
+
+#: ../src/subscription_manager/gui/networkConfig.py:277
+#: ../src/subscription_manager/gui/networkConfig.py:280
+msgid "Testing Connection"
+msgstr "测试连接"
+
+#: ../src/subscription_manager/gui/networkConfig.py:278
+#: ../src/subscription_manager/gui/networkConfig.py:280
+msgid "Please wait"
+msgstr "请稍候"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. An empty string entry is used for "un-setting" the system's SLA:
+#. for unsetting
+#: ../src/subscription_manager/gui/preferences.py:115
+#: ../src/subscription_manager/gui/preferences.py:141
+#: ../src/subscription_manager/gui/widgets.py:449
+msgid "Not Set"
+msgstr "未设置"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/redeem.py:56
+#, python-format
+msgid "Error redeeming subscription: %s"
+msgstr "兑换权利出错：%s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:93
+msgid "<b>Unable to register the system.</b>"
+msgstr "<b>无法注册该系统。</b>"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:363
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:1
 msgid "System Registration"
 msgstr "系统注册"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:224
-#: ../src/subscription_manager/gui/data/registration.glade.h:6
+#: ../src/subscription_manager/gui/registergui.py:364
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:5
 msgid "<b>Registering</b>"
 msgstr "<b>注册</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:227
+#: ../src/subscription_manager/gui/registergui.py:367
 msgid "Subscription Attachment"
 msgstr "订阅附件"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:228
+#: ../src/subscription_manager/gui/registergui.py:368
 msgid "<b>Attaching</b>"
 msgstr "<b>附加中</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:332
-#: ../src/subscription_manager/gui/data/installed.glade.h:4
-#: ../src/subscription_manager/gui/data/registration.glade.h:4
+#: ../src/subscription_manager/gui/registergui.py:481
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:2
 msgid "Register"
 msgstr "注册"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:376
+#: ../src/subscription_manager/gui/registergui.py:525
 msgid "Registering your system"
 msgstr "注册您的系统"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:416
-#: ../src/subscription_manager/gui/registergui.py:906
+#: ../src/subscription_manager/gui/registergui.py:565
+#: ../src/subscription_manager/gui/registergui.py:1059
 msgid "Attaching subscriptions"
 msgstr "正在附加订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:420
-#: ../src/subscription_manager/gui/registergui.py:910
+#: ../src/subscription_manager/gui/registergui.py:569
+#: ../src/subscription_manager/gui/registergui.py:1063
 #, python-format
 msgid "Error subscribing: %s"
 msgstr "订阅错误：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:448
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:7
+#: ../src/subscription_manager/gui/registergui.py:598
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:7
 msgid "Attach"
 msgstr "附加"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:506
+#: ../src/subscription_manager/gui/registergui.py:656
 msgid "Finding suitable service levels"
 msgstr "查找合适的服务等级"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:507
-#: ../src/subscription_manager/gui/registergui.py:937
-#: ../src/subscription_manager/gui/registergui.py:1289
+#: ../src/subscription_manager/gui/registergui.py:657
+#: ../src/subscription_manager/gui/registergui.py:1085
+#: ../src/subscription_manager/gui/registergui.py:1451
 msgid "Next"
 msgstr "下一步"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:560
+#: ../src/subscription_manager/gui/registergui.py:711
 msgid "Unable to auto-attach, server does not support service levels."
 msgstr "无法自动添加，服务器不支持服务等级。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:563
+#: ../src/subscription_manager/gui/registergui.py:714
 msgid ""
 "No installed products on system. No need to attach subscriptions at this "
 "time."
 msgstr "系统中没有安装的产品。这次不需要附加订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:566
+#: ../src/subscription_manager/gui/registergui.py:717
 msgid ""
 "All installed products are covered by valid entitlements. No need to attach "
 "subscriptions at this time."
 msgstr "有效授权涵盖所有安装的产品。这次不需要附加订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:569
+#: ../src/subscription_manager/gui/registergui.py:720
 msgid "Consumer has been deleted."
 msgstr "已删除用户。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:585
+#: ../src/subscription_manager/gui/registergui.py:737
 #, python-format
 msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
@@ -834,7 +951,7 @@ msgid ""
 msgstr ""
 "在当前的服务等级中没有可用订阅：%s。请使用“所有可用订阅”标签手动附加订阅。"
 
-#: ../src/subscription_manager/gui/registergui.py:603
+#: ../src/subscription_manager/gui/registergui.py:755
 msgid ""
 "No service level will cover all installed products. Please manually "
 "subscribe using multiple service levels via the \"All Available Subscriptions"
@@ -844,405 +961,202 @@ msgstr ""
 "手动订阅，或者购买附加订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:636
+#: ../src/subscription_manager/gui/registergui.py:789
 msgid "Fetching list of possible environments"
 msgstr "附加可能的环境列表"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:638
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:7
+#: ../src/subscription_manager/gui/registergui.py:791
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:7
 msgid "Environment"
 msgstr "环境"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:693
+#: ../src/subscription_manager/gui/registergui.py:846
 msgid "Fetching list of possible organizations"
 msgstr "附加可能的机构列表"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:696
+#: ../src/subscription_manager/gui/registergui.py:849
 msgid "Organization"
 msgstr "机构"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:715
+#: ../src/subscription_manager/gui/registergui.py:868
 #, python-format
 msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>用户 %s 无法注册任何机构。</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:777
-#: ../src/subscription_manager/gui/registergui.py:883
+#: ../src/subscription_manager/gui/registergui.py:930
+#: ../src/subscription_manager/gui/registergui.py:1036
 msgid "You must enter a system name."
 msgstr "您必须输入系统名称。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:785
+#: ../src/subscription_manager/gui/registergui.py:938
 msgid "You must enter a login."
 msgstr "您必须输入登录。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:790
+#: ../src/subscription_manager/gui/registergui.py:943
 msgid "You must enter a password."
 msgstr "您必须输入密码。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:869
+#: ../src/subscription_manager/gui/registergui.py:1022
 msgid "You must enter an organization."
 msgstr "必须输入一个机构。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:876
+#: ../src/subscription_manager/gui/registergui.py:1029
 msgid "You must enter an activation key."
 msgstr "必须输入一个激活码。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:999
+#: ../src/subscription_manager/gui/registergui.py:1148
 #: ../src/subscription_manager/managercli.py:402
 #, python-format
 msgid "Unable to reach the server at %s:%s%s"
 msgstr "无法在 %s 连接该服务器：%s%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:1004
+#: ../src/subscription_manager/gui/registergui.py:1153
 msgid "CA certificate for subscription service has not been installed."
 msgstr "没有安装订阅服务的 CA 证书。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:1009
+#: ../src/subscription_manager/gui/registergui.py:1158
 msgid ""
 "Please provide a hostname with optional port and/or prefix: hostname[:port][/"
 "prefix]"
 msgstr "请使用可选端口和（/或者）前缀提供主机名：主机名[:端口][/前缀]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:1066
+#: ../src/subscription_manager/gui/registergui.py:1215
 msgid "Server supports environments, but none are available."
 msgstr "服务器支持环境，但没有可用的。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/redeem.py:55
-#, python-format
-msgid "Error redeeming subscription: %s"
-msgstr "兑换权利出错：%s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:47
+#: ../src/subscription_manager/gui/reposgui.py:49
 msgid "Attached subscriptions do not provide any repositories."
 msgstr "附加的订阅不提供任何库。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:48
+#: ../src/subscription_manager/gui/reposgui.py:50
 msgid "No repositories are available without an attached subscription."
 msgstr "没有附加订阅就没有库可用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:49
+#: ../src/subscription_manager/gui/reposgui.py:51
 #: ../src/subscription_manager/managercli.py:1916
 msgid "Repositories disabled by configuration."
 msgstr "配置禁用的库。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:103 ../src/rct/printing.py:108
+#: ../src/subscription_manager/gui/reposgui.py:105 ../src/rct/printing.py:108
 msgid "Enabled"
 msgstr "已启用"
 
-#: ../src/subscription_manager/gui/reposgui.py:107
+#: ../src/subscription_manager/gui/reposgui.py:109
 msgid "Gpgcheck"
 msgstr "Gpgcheck"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:111
+#: ../src/subscription_manager/gui/reposgui.py:114
 msgid "Repository ID"
 msgstr "库 ID"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:116
+#: ../src/subscription_manager/gui/reposgui.py:120
 msgid "Modified"
 msgstr "已修改"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:252
+#: ../src/subscription_manager/gui/reposgui.py:256
 #, python-format
 msgid "Are you sure you want to remove all overrides for <b>%s</b>?"
 msgstr "您确定要为 <b>%s</b> 删除所有覆盖吗？"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:253
+#: ../src/subscription_manager/gui/reposgui.py:257
 msgid "Confirm Remove All Overrides"
 msgstr "确定删除所有覆盖"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:271
+#: ../src/subscription_manager/gui/reposgui.py:275
 msgid "Unable to reset repository overrides."
 msgstr "无法重设库覆盖。"
 
-#: ../src/subscription_manager/gui/reposgui.py:312
+#: ../src/subscription_manager/gui/reposgui.py:316
 #, python-format
 msgid "Unable to update %s override."
 msgstr "无法更新 %s 覆盖。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:91
-msgid "Installed Products"
-msgstr "安装的产品"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:130
-#, python-format
-msgid "There was an error removing %s with serial number %s"
-msgstr "删除序列号为 %s 的 %s 时出错"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:144
-msgid "Removing"
-msgstr "删除中"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:145
-msgid "Removing subscription. Please wait."
-msgstr "正在删除，请稍候。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:164
-#, python-format
-msgid "Are you sure you want to remove %s?"
-msgstr "您确定要删除 %s 吗？"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:191
-#, python-format
-msgid "Stack of %s and %s others"
-msgstr "%s 堆栈及 %s 其他"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:194
-#, python-format
-msgid "Stack of %s and 1 other"
-msgstr "%s 堆栈及 1 其他"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:196
-#, python-format
-msgid "Stack of %s"
-msgstr "%s 堆栈"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:226
-msgid "My Subscriptions"
-msgstr "我的订阅"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:267
-msgid "Subscription is current."
-msgstr "当前订阅"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:270
-msgid "Subscription is expired."
-msgstr "过期订阅"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:272
-msgid "Subscription has not begun."
-msgstr "订阅还未开始"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:274
-#: ../src/subscription_manager/managercli.py:2374
-msgid "Subscription management service doesn't support Status Details."
-msgstr "订阅管理服务不支持状态详情"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:281
-#: ../src/subscription_manager/gui/widgets.py:747
-#: ../src/subscription_manager/managercli.py:2233
-#: ../src/subscription_manager/managercli.py:2340
-msgid "Virtual"
-msgstr "虚拟的"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:283
-#: ../src/subscription_manager/gui/widgets.py:746
-#: ../src/subscription_manager/managercli.py:2235
-#: ../src/subscription_manager/managercli.py:2342
-msgid "Physical"
-msgstr "物理的"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:286
-#: ../src/subscription_manager/managercli.py:2238
-#: ../src/subscription_manager/managercli.py:2345
-msgid "Yes"
-msgstr "是"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:288
-#: ../src/subscription_manager/managercli.py:2240
-#: ../src/subscription_manager/managercli.py:2347
-msgid "No"
-msgstr "否"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/about.py:29
-msgid ""
-"\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
-"\n"
-"http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
-"\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
-msgstr ""
-"\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
-"\n"
-"http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
-"\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/about.py:50
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:1
-#: ../etc-conf/subscription-manager-gui.desktop.in.h:2
-msgid "Subscription Manager"
-msgstr "Subscription Manager"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/about.py:55
-msgid "Copyright (c) 2012 Red Hat, Inc."
-msgstr "版权所有（c）2012 Red Hat, Inc."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys, author John Sefler
-#: ../src/subscription_manager/gui/about.py:75
-#: ../src/subscription_manager/gui/about.py:77
-#, python-format
-msgid "<b>%s version:</b> %s"
-msgstr "<b>%s 版本:</b> %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/about.py:79
-#, python-format
-msgid "<b>subscription management service version:</b> %s"
-msgstr "<b>订阅管理服务版本：</b> %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/about.py:103
-#, python-format
-msgid "<b>Next System Check-in:</b> %s"
-msgstr "<b>下一次系统登录：</b> %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:261 ../src/rct/printing.py:45
-#: ../src/rct/printing.py:73 ../src/rct/printing.py:103
+#: ../src/subscription_manager/gui/widgets.py:339
 #: ../src/rct/manifest_commands.py:204 ../src/rct/manifest_commands.py:228
+#: ../src/rct/printing.py:45 ../src/rct/printing.py:73
+#: ../src/rct/printing.py:103
 msgid "Name"
 msgstr "名称"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:261
-#: ../src/subscription_manager/gui/factsgui.py:60
-msgid "Value"
-msgstr "值"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:296
+#: ../src/subscription_manager/gui/widgets.py:374
 msgid "Installed"
 msgstr "安装的"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:599
+#: ../src/subscription_manager/gui/widgets.py:687
 msgid "Invalid date format. Please re-enter a valid date. Example: "
 msgstr "无效日期格式。请重新输入有效日期。例如："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:636
+#: ../src/subscription_manager/gui/widgets.py:724
 msgid "Date Selection"
 msgstr "日期选择"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:651
+#: ../src/subscription_manager/gui/widgets.py:739
 msgid "Today"
 msgstr "今天"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:748
+#: ../src/subscription_manager/gui/widgets.py:838
 msgid "Both"
 msgstr "二者均可"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. content-type is required, no need to xstr
-#: ../src/subscription_manager/gui/widgets.py:751 ../src/rct/printing.py:102
-#: ../src/rct/manifest_commands.py:206
+#: ../src/subscription_manager/gui/widgets.py:841
+#: ../src/rct/manifest_commands.py:206 ../src/rct/printing.py:102
 msgid "Type"
 msgstr "类型"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:823
+#: ../src/subscription_manager/gui/widgets.py:914
 msgid "Click to Adjust Quantity"
 msgstr "点击调整数量"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:348
-msgid ""
-"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr "首选项对话框中出错。详情请查看 /var/log/rhsm/rhsm.log 。"
+#. note default is lower caps
+#: ../src/subscription_manager/i18n_optparse.py:39
+msgid "%prog [OPTIONS]"
+msgstr "%prog [选项]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:356
-msgid ""
-"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr "库对话出错。详情请查看 /var/log/rhsm/rhsm.log。"
+#: ../src/subscription_manager/i18n_optparse.py:129
+#: ../../../../..//usr/lib64/python2.7/optparse.py:374
+#, python-format
+msgid "Usage: %s\n"
+msgstr "使用：%s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:372
-msgid "<b>Errors were encountered during unregister.</b>"
-msgstr "<b>取消注册的过程中出错。</b>"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:390
-msgid "<b>Are you sure you want to unregister?</b>"
-msgstr "<b>您确定要取消注册吗？</b>"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:446
-msgid "System Already Registered"
-msgstr "系统已经注册"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:96
-#: ../src/rct/printing.py:76 ../src/rct/manifest_commands.py:237
-msgid "Contract"
-msgstr "合同"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:110
-msgid "Used / Total"
-msgstr "已使用 / 总计"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. Set up columns on the view
-#: ../src/subscription_manager/gui/factsgui.py:59
-msgid "Fact"
-msgstr "详情"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/factsgui.py:102
-msgid "No previous update"
-msgstr "没有之前的更新"
+#. translators: arg 1 is the program name, arg 2 is the error message
+#: ../src/subscription_manager/i18n_optparse.py:145
+#, python-format
+msgid "%s: error: %s"
+msgstr "%s：错误：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:61
@@ -1448,8 +1362,8 @@ msgstr ""
 "成功将产品证书安装到 %s"
 
 #: ../src/subscription_manager/migrate/migrate.py:604
-msgid "Could not unentitle system on legacy server.  "
-msgstr "无法为原有服务器中的系统授权。"
+msgid "Could not remove system entitlement on legacy server.  "
+msgstr ""
 
 #: ../src/subscription_manager/migrate/migrate.py:620
 #, python-format
@@ -1649,13 +1563,6 @@ msgstr "--activation-key 选项要求给定--org。"
 msgid "The --servicelevel and --no-auto options cannot be used together."
 msgstr "--servicelevel 和 --no-auto 选项不能一起使用。"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/cache.py:152
-msgid ""
-"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr "在服务器中更新系统时出错，详情请查看 /var/log/rhsm/rhsm.log。"
-
 #: ../src/subscription_manager/plugin/ostree/action_invoker.py:147
 msgid "Updates:"
 msgstr "更新："
@@ -1672,6 +1579,177 @@ msgstr "已删除："
 #: ../src/subscription_manager/plugin/container.py:236
 msgid "Removed:"
 msgstr "已删除；"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. usage format strips any leading 'usage' so
+#. do not iclude it
+#: ../src/subscription_manager/cli.py:61
+#, python-format
+msgid "%%prog %s [OPTIONS]"
+msgstr "%%prog %s [选项]"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/cli.py:92
+#, python-format
+msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+msgstr "使用: %s 模块名称 [模块选项] [--help]"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/cli.py:104
+msgid "Primary Modules:"
+msgstr "主模块："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/cli.py:105
+msgid "Other Modules:"
+msgstr "其他模块："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/dmiinfo.py:56
+#: ../src/subscription_manager/dmiinfo.py:102
+#, python-format
+msgid "Error reading system DMI information: %s"
+msgstr "读取系统 DMI 信息出错：%s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/dmiinfo.py:77
+#, python-format
+msgid "Error reading system DMI information with %s: %s"
+msgstr "读取有 %s 的系统 DMI 信息时出错：%s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:28
+msgid ""
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
+msgstr "网络出错，无法连接到服务器。详情请查看 /var/log/rhsm/rhsm.log。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:29
+msgid ""
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
+msgstr "网络出错。请查看连接详情，或者 /var/log/rhsm/rhsm.log。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:30
+msgid "Unauthorized: Invalid credentials for request."
+msgstr "未授权：请求的无效证书。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:31
+msgid "Forbidden: Invalid credentials for request."
+msgstr "禁止：请求的无效证书。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:32
+msgid ""
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
+msgstr "远程服务器出错。详情请查看连接情况或者 /var/log/rhsm/rhsm.log。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:33
+#, python-format
+msgid "Bad CA certificate: %s"
+msgstr "错误的 CA 证书：%s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:34
+#: ../src/daemons/rhsmcertd-worker.py:63
+msgid "Your identity certificate has expired"
+msgstr "您的身份识别证书已过期"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:35
+#, python-format
+msgid "Unable to verify server's identity: %s"
+msgstr "无法确认服务器身份：%s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:36
+msgid "Server URL can not be empty"
+msgstr "服务器 URL 不能为空"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:37
+msgid ""
+"Server URL is just a schema. Should include hostname, and/or port and path"
+msgstr "服务器 URL 只是一个方案。应包含主机名和（/或者）端口和路径。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:38
+msgid "Server URL can not be None"
+msgstr "服务器 URL 不能为无"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:39
+msgid "Server URL port should be numeric"
+msgstr "服务器 URL 端口应该是数字"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:40
+msgid "Server URL has an invalid scheme. http:// and https:// are supported"
+msgstr "服务器 URL 包含无效方案。支持 http:// 和 https://。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/reasons.py:85
+msgid "Product "
+msgstr "产品 "
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/reasons.py:87
+msgid "Subscription "
+msgstr "订阅 "
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/reasons.py:89
+msgid "Stack "
+msgstr "堆栈 "
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. TODO: Should this use the standard NOT_REGISTERED message?
+#: ../src/subscription_manager/utils.py:229
+#: ../src/subscription_manager/managercli.py:1229
+msgid "This system is currently not registered."
+msgstr "这个系统目前没有注册。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. FIXME: This is wrong in most non english locales.
+#: ../src/subscription_manager/utils.py:316
+msgid "and"
+msgstr "和"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/hwprobe.py:273
+msgid "Error reading system memory information:"
+msgstr "读取系统内存信息出错："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/hwprobe.py:585
+msgid "Error reading system CPU information:"
+msgstr "读取系统 CPU 信息出错："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/hwprobe.py:610
+msgid "Error reading networking information:"
+msgstr "读取联网信息出错："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/hwprobe.py:709
+msgid "Error reading network interface information:"
+msgstr "读取网络接口信息出错："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/hwprobe.py:802
+msgid "Virtualization platform does not support UUIDs"
+msgstr "虚拟化平台不支持 UUID"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/hwprobe.py:804
+#, python-format
+msgid "Error finding UUID: %s"
+msgstr "寻找 UUID 出错：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:68
@@ -2361,13 +2439,6 @@ msgstr "错误：该服务器不支持 --servicelevel 选项。未完成您的�
 #, python-format
 msgid "No such environment: %s"
 msgstr "没有这个环境：%s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. TODO: Should this use the standard NOT_REGISTERED message?
-#: ../src/subscription_manager/managercli.py:1229
-#: ../src/subscription_manager/utils.py:229
-msgid "This system is currently not registered."
-msgstr "这个系统目前没有注册。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1255
@@ -3197,6 +3268,30 @@ msgstr "系统状态详情"
 msgid "Overall Status: %s\n"
 msgstr "总体状态：%s\n"
 
+#: ../src/subscription_manager/repolib.py:446
+msgid "Repo updates"
+msgstr "库更新"
+
+#: ../src/subscription_manager/repolib.py:447
+#, python-format
+msgid "Total repo updates: %d"
+msgstr "库更新总计：%d"
+
+#: ../src/subscription_manager/repolib.py:448
+msgid "Updated"
+msgstr "已更新"
+
+#: ../src/subscription_manager/repolib.py:452
+msgid "Deleted"
+msgstr "已删除"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/cache.py:152
+msgid ""
+"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr "在服务器中更新系统时出错，详情请查看 /var/log/rhsm/rhsm.log。"
+
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/cert_sorter.py:44
 msgid "Current"
@@ -3213,99 +3308,267 @@ msgid "Invalid"
 msgstr "无效"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/reasons.py:85
-msgid "Product "
-msgstr "产品 "
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/reasons.py:87
-msgid "Subscription "
-msgstr "订阅 "
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/reasons.py:89
-msgid "Stack "
-msgstr "堆栈 "
-
-#: ../src/subscription_manager/repolib.py:434
-msgid "Repo updates"
-msgstr "库更新"
-
-#: ../src/subscription_manager/repolib.py:435
+#: ../src/rct/cert_commands.py:38
 #, python-format
-msgid "Total repo updates: %d"
-msgstr "库更新总计：%d"
-
-#: ../src/subscription_manager/repolib.py:436
-msgid "Updated"
-msgstr "已更新"
-
-#: ../src/subscription_manager/repolib.py:440
-msgid "Deleted"
-msgstr "已删除"
+msgid "%%prog %s [OPTIONS] CERT_FILE"
+msgstr "%%prog %s [选项] CERT_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. usage format strips any leading 'usage' so
-#. do not iclude it
-#: ../src/subscription_manager/cli.py:61
+#: ../src/rct/cert_commands.py:46 ../src/rct/manifest_commands.py:253
 #, python-format
-msgid "%%prog %s [OPTIONS]"
-msgstr "%%prog %s [选项]"
+msgid "Unable to read certificate file '%s': %s"
+msgstr "无法读取证书文件 '%s': %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/cli.py:92
+#: ../src/rct/cert_commands.py:52
+msgid "You must specify a certificate file."
+msgstr "您必须指定一个证书文件。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:55
+msgid "The specified certificate file does not exist."
+msgstr "指定的证书文件不存在。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:62
+msgid "Print certificate information"
+msgstr "输出证书信息"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:66
+msgid "do not show the cert's product information"
+msgstr "不显示证书的产品信息"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:68
+msgid "do not show the cert's content info"
+msgstr "不显示证书的内容信息"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:83
+msgid "Print certificate statistics and sizes"
+msgstr "输出证书统计和大小"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:89
 #, python-format
-msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "使用: %s 模块名称 [模块选项] [--help]"
+msgid "Type: %s"
+msgstr "类型：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/cli.py:104
-msgid "Primary Modules:"
-msgstr "主模块："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/cli.py:105
-msgid "Other Modules:"
-msgstr "其他模块："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/dmiinfo.py:56
-#: ../src/subscription_manager/dmiinfo.py:102
+#: ../src/rct/cert_commands.py:90
 #, python-format
-msgid "Error reading system DMI information: %s"
-msgstr "读取系统 DMI 信息出错：%s"
+msgid "Version: %s"
+msgstr "版本：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/dmiinfo.py:77
+#: ../src/rct/cert_commands.py:91
 #, python-format
-msgid "Error reading system DMI information with %s: %s"
-msgstr "读取有 %s 的系统 DMI 信息时出错：%s"
+msgid "DER size: %db"
+msgstr "DER 大小：%db"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. FIXME: This is wrong in most non english locales.
-#: ../src/subscription_manager/utils.py:316
-msgid "and"
-msgstr "和"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. note default is lower caps
-#: ../src/subscription_manager/i18n_optparse.py:39
-msgid "%prog [OPTIONS]"
-msgstr "%prog [选项]"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:129
-#: ../../../../..//usr/lib64/python2.7/optparse.py:374
+#: ../src/rct/cert_commands.py:95
 #, python-format
-msgid "Usage: %s\n"
-msgstr "使用：%s\n"
+msgid "Subject Key ID size: %db"
+msgstr "主题键 ID 大小：%db"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:145
+#: ../src/rct/cert_commands.py:101
 #, python-format
-msgid "%s: error: %s"
-msgstr "%s：错误：%s"
+msgid "Content sets: %s"
+msgstr "内容：%s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:64
+msgid "Manifest zip is invalid."
+msgstr "清单压缩文件无效。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:84
+#, python-format
+msgid "Unable to find file \"%s\" in manifest."
+msgstr "无法在清单中找到文件 \"%s\"。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:108
+msgid "Manifest zip attempted to extract outside of the base directory."
+msgstr "尝试从基本目录外提取的清单压缩文件"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:114
+msgid "Unable to trace symbolic link.  Possibly circular linkage."
+msgstr "无法跟踪符号链接。可能是循环链接。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:140
+#, python-format
+msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
+msgstr "%%prog %s [选项] MANIFEST_FILE"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:145
+msgid "You must specify a manifest file."
+msgstr "您必须指定一个清单文件。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:148
+msgid "The specified manifest file does not exist."
+msgstr "指定的清单文件不存在。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:172
+msgid "Print manifest information"
+msgstr "输出清单信息"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:193
+msgid "Server"
+msgstr "服务器"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:194
+msgid "Server Version"
+msgstr "服务器版本"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:195
+msgid "Date Created"
+msgstr "创建日期"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:196
+msgid "Creator"
+msgstr "创建者"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:197
+msgid "General:"
+msgstr "常规："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:205
+msgid "UUID"
+msgstr "UUID"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:207
+msgid "Consumer:"
+msgstr "使用者："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:221
+msgid "Subscriptions:"
+msgstr "订阅："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:230
+msgid "Created"
+msgstr "已创建"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:78
+msgid "Service Level"
+msgstr "服务等级"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:79
+msgid "Service Type"
+msgstr "服务类型"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:235
+msgid "Architectures"
+msgstr "架构"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:236 ../src/rct/printing.py:75
+msgid "SKU"
+msgstr "SKU"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:238 ../src/rct/printing.py:72
+msgid "Order"
+msgstr "订单"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:77
+msgid "Account"
+msgstr "帐户"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:242
+msgid "Entitlement File"
+msgstr "授权文件"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:247
+msgid "Certificate File"
+msgstr "证书文件"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:255
+msgid "Certificate Version"
+msgstr "证书版本"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:257
+msgid "Subscription:"
+msgstr "订阅："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:262
+msgid "Provided Products:"
+msgstr "已提供的产品："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:266
+msgid "Content Sets:"
+msgstr "内容组："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:275
+msgid "\tManifest"
+msgstr "\t清单"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:287
+msgid "Dump the contents of a manifest"
+msgstr "转储清单内容"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:291
+msgid "directory to extract the manifest to"
+msgstr "保存提取清单的目录"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:294
+msgid "overwrite files which may exist"
+msgstr "覆盖可能已存在的文件"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. useful error for file already exists
+#: ../src/rct/manifest_commands.py:303
+#, python-format
+msgid "File \"%s\" exists. Use -f to force overwriting the file."
+msgstr "文件 \"%s\" 已存在。请使用 -f 强制覆盖该文件。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. generic error for everything else
+#: ../src/rct/manifest_commands.py:306
+msgid "Manifest could not be written:"
+msgstr "无法写入清单："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:319
+#, python-format
+msgid "The manifest has been dumped to the %s directory"
+msgstr "已将该清单转储至 %s 目录"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:322
+msgid "The manifest has been dumped to the current directory"
+msgstr "已将该清单转储至当前目录"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/rct/printing.py:44
@@ -3332,35 +3595,10 @@ msgstr "品牌类型"
 msgid "Brand Name"
 msgstr "品牌名称"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/printing.py:72 ../src/rct/manifest_commands.py:238
-msgid "Order"
-msgstr "订单"
-
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author leahliu
 #: ../src/rct/printing.py:74
 msgid "Number"
 msgstr "数字"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/printing.py:75 ../src/rct/manifest_commands.py:236
-msgid "SKU"
-msgstr "SKU"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/printing.py:77 ../src/rct/manifest_commands.py:239
-msgid "Account"
-msgstr "帐户"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/printing.py:78 ../src/rct/manifest_commands.py:233
-msgid "Service Level"
-msgstr "服务等级"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/printing.py:79 ../src/rct/manifest_commands.py:234
-msgid "Service Type"
-msgstr "服务类型"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/rct/printing.py:84
@@ -3499,244 +3737,6 @@ msgid "Unknown Certificate Type"
 msgstr "未知证书类型"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:64
-msgid "Manifest zip is invalid."
-msgstr "清单压缩文件无效。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:84
-#, python-format
-msgid "Unable to find file \"%s\" in manifest."
-msgstr "无法在清单中找到文件 \"%s\"。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:108
-msgid "Manifest zip attempted to extract outside of the base directory."
-msgstr "尝试从基本目录外提取的清单压缩文件"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:114
-msgid "Unable to trace symbolic link.  Possibly circular linkage."
-msgstr "无法跟踪符号链接。可能是循环链接。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:140
-#, python-format
-msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
-msgstr "%%prog %s [选项] MANIFEST_FILE"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:145
-msgid "You must specify a manifest file."
-msgstr "您必须指定一个清单文件。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:148
-msgid "The specified manifest file does not exist."
-msgstr "指定的清单文件不存在。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:172
-msgid "Print manifest information"
-msgstr "输出清单信息"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:193
-msgid "Server"
-msgstr "服务器"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:194
-msgid "Server Version"
-msgstr "服务器版本"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:195
-msgid "Date Created"
-msgstr "创建日期"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:196
-msgid "Creator"
-msgstr "创建者"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:197
-msgid "General:"
-msgstr "常规："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:205
-msgid "UUID"
-msgstr "UUID"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:207
-msgid "Consumer:"
-msgstr "使用者："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:221
-msgid "Subscriptions:"
-msgstr "订阅："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:230
-msgid "Created"
-msgstr "已创建"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:235
-msgid "Architectures"
-msgstr "架构"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:242
-msgid "Entitlement File"
-msgstr "授权文件"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:247
-msgid "Certificate File"
-msgstr "证书文件"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:253 ../src/rct/cert_commands.py:46
-#, python-format
-msgid "Unable to read certificate file '%s': %s"
-msgstr "无法读取证书文件 '%s': %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:255
-msgid "Certificate Version"
-msgstr "证书版本"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:257
-msgid "Subscription:"
-msgstr "订阅："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:262
-msgid "Provided Products:"
-msgstr "已提供的产品："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:266
-msgid "Content Sets:"
-msgstr "内容组："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:275
-msgid "\tManifest"
-msgstr "\t清单"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:287
-msgid "Dump the contents of a manifest"
-msgstr "转储清单内容"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:291
-msgid "directory to extract the manifest to"
-msgstr "保存提取清单的目录"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:294
-msgid "overwrite files which may exist"
-msgstr "覆盖可能已存在的文件"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. useful error for file already exists
-#: ../src/rct/manifest_commands.py:303
-#, python-format
-msgid "File \"%s\" exists. Use -f to force overwriting the file."
-msgstr "文件 \"%s\" 已存在。请使用 -f 强制覆盖该文件。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. generic error for everything else
-#: ../src/rct/manifest_commands.py:306
-msgid "Manifest could not be written:"
-msgstr "无法写入清单："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:319
-#, python-format
-msgid "The manifest has been dumped to the %s directory"
-msgstr "已将该清单转储至 %s 目录"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:322
-msgid "The manifest has been dumped to the current directory"
-msgstr "已将该清单转储至当前目录"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:38
-#, python-format
-msgid "%%prog %s [OPTIONS] CERT_FILE"
-msgstr "%%prog %s [选项] CERT_FILE"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:52
-msgid "You must specify a certificate file."
-msgstr "您必须指定一个证书文件。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:55
-msgid "The specified certificate file does not exist."
-msgstr "指定的证书文件不存在。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:62
-msgid "Print certificate information"
-msgstr "输出证书信息"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:66
-msgid "do not show the cert's product information"
-msgstr "不显示证书的产品信息"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:68
-msgid "do not show the cert's content info"
-msgstr "不显示证书的内容信息"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:83
-msgid "Print certificate statistics and sizes"
-msgstr "输出证书统计和大小"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:89
-#, python-format
-msgid "Type: %s"
-msgstr "类型：%s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:90
-#, python-format
-msgid "Version: %s"
-msgstr "版本：%s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:91
-#, python-format
-msgid "DER size: %db"
-msgstr "DER 大小：%db"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:95
-#, python-format
-msgid "Subject Key ID size: %db"
-msgstr "主题键 ID 大小：%db"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:101
-#, python-format
-msgid "Content sets: %s"
-msgstr "内容：%s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/rhsm_debug/debug_commands.py:50
 msgid "Assemble system information as a tar file or directory"
 msgstr "将系统信息组合为 tar 文件或者目录"
@@ -3798,19 +3798,19 @@ msgid "Unable to create zip file of system information: %s"
 msgstr "无法生成系统信息的 zip 文件：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/daemons/rhsmcertd-worker.py:44
+#: ../src/daemons/rhsmcertd-worker.py:47
 msgid "Updating entitlement certificates & repositories"
 msgstr "更新授权证书和库"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/daemons/rhsmcertd-worker.py:65
+#: ../src/daemons/rhsmcertd-worker.py:68
 msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
 msgstr "这个用户的侧写已从该服务器中删除。现在将归档其本地证书。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/daemons/rhsmcertd-worker.py:67
+#: ../src/daemons/rhsmcertd-worker.py:70
 msgid ""
 "Certificates archived to '/etc/pki/consumer.old'. Contact your system "
 "administrator if you need more information."
@@ -3818,24 +3818,106 @@ msgstr ""
 "将证书归档至 '/etc/pki/consumer.old'。如果需要更多信息请联络您的系统管理员。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/daemons/rhsmcertd-worker.py:93
+#: ../src/daemons/rhsmcertd-worker.py:96
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "无法更新授权证书和库"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:3
+msgid "<b>Please enter the following for this system:</b>"
+msgstr "<b>请为这个系统输入以下内容：</b>"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:4
+msgid "Organization:"
+msgstr "机构："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:3
+msgid "Activation Key:"
+msgstr "激活码："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:5
+msgid "System Name:"
+msgstr "系统名称："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:5
+msgid "This must be the organization key, not the name."
+msgstr "这个必须是机构密钥，而不是名称。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:6
+msgid "organization_entry"
+msgstr "organization_entry"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:7
+msgid ""
+"Multiple Activation Keys can be entered by separating them with a comma or a "
+"space."
+msgstr "可输入使用逗号或者空格分开的多个激活码。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:8
+msgid "activation_key_entry"
+msgstr "activation_key_entry"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:9
+msgid "consumer_entry"
+msgstr "consumer_entry"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:1
+msgid "<b>Show subscriptions active on:</b>"
+msgstr "<b>显示活跃订阅：</b>"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:2
+msgid "Update"
+msgstr "更新"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:3
+msgid "Search"
+msgstr "搜索"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:5
+msgid "label"
+msgstr "标签"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:5
+msgid "Filters"
+msgstr "过滤器"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:6
+msgid "* Click to Adjust Quantity"
+msgstr "* 点击调整数量"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:1
 msgid ""
 "The subscription management service you register with will provide your "
 "system with updates and allow additional management."
 msgstr "您用来注册的订阅管理服务将为您提供系统更新，并可让您进行附加管理。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:2
 msgid "choose_server_label"
 msgstr "choose_server_label"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:3
 msgid ""
 "Registering with Customer Portal, Subscription Asset Manager, Satellite or "
 "Candlepin servers can be used to provide your system with updates and allow "
@@ -3845,319 +3927,431 @@ msgstr ""
 "服务器的注册为您提供系统更新，并可让您通过所选服务器界面进行管理。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:4
 msgid "I will register with:"
 msgstr "我要注册："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:5
 msgid "server_label"
 msgstr "server_label"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:6
 msgid "hostname[:port][/prefix]"
 msgstr "hostname[:port][/prefix]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:7
 msgid "server_entry"
 msgstr "server_entry"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:8
 msgid "Default"
 msgstr "默认"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:9
 msgid "Reset to register with Customer Portal."
 msgstr "重新使用客户门户网站注册。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:10
 msgid "default_button"
 msgstr "default_button"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:11
 msgid ""
-"Activation Keys are alphanumeric strings that are pre-configured by your "
+"Activation Keys are alphanumeric strings that are preconfigured by your "
 "system administrators to automatically register your system and attach all "
 "necessary subscriptions."
 msgstr ""
-"激活码是由数字字母组成的字符串，它由您的系统管理员预先配置，以便自动注册您的"
-"系统并附加所有需要的订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:12
 msgid "I will use an Activation Key"
 msgstr "我要使用激活码"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:13
 msgid "If required, please configure your proxy before moving forward."
 msgstr "如果需要，请在进入下一步前配置您的代理服务器。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:14
 msgid "Configure Proxy"
 msgstr "配置代理服务器"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:15
 msgid "proxy_button"
 msgstr "proxy_button"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:1
+msgid "<b>Confirm Subscriptions</b>"
+msgstr "<b>确认订阅</b>"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:2
+msgid "Using service level:"
+msgstr "使用服务等级："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:3
+msgid "SLA"
+msgstr "SLA"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:4
+msgid "The following subscriptions will be attached:"
+msgstr "将附加一下订阅："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:5
+msgid "Selected Subscriptions Table"
+msgstr "所选订阅表"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:6
+msgid "Core repositories will be enabled for each product."
+msgstr "将为每个产品启用核心库。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:1
 msgid "Contract Selection"
 msgstr "合同选择"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:2
 msgid "<b>Choose the specific contract to use:</b>"
 msgstr "<b>选择要使用的具体合同：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:3
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:2
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:2
 msgid "<b>Subscription:</b>"
 msgstr "<b>订阅：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:4
 msgid "<b>Total Contracts:</b>"
 msgstr "<b>合同总数：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:5
 msgid "* Click to Change Quantity"
 msgstr "* 点击修改数量"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:6
 msgid "SLA Selection Table"
 msgstr "SLA 选择表"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/environment.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:1
+msgid "Password:"
+msgstr "密码："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:2
+msgid "Login:"
+msgstr "登录："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:4
+msgid "system_instructions_label"
+msgstr "system_instructions_label"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:6
+msgid "system_name_label"
+msgstr "system_name_label"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:7
+msgid "A unique label for this system"
+msgstr "这个系统的唯一标签"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:8
+msgid "Manually attach subscriptions after registration"
+msgstr "注册后手动附加订阅"
+
+#: ../src/subscription_manager/gui/data/glade/done_box.glade.h:1
+msgid "Done!"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/environment.glade.h:1
 msgid "<b>Environment Selection</b>"
 msgstr "<b>环境选择</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/environment.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/environment.glade.h:2
 msgid "env_select_vbox_label"
 msgstr "env_select_vbox_label"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/environment.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/environment.glade.h:3
 msgid "environment_treeview"
 msgstr "environment_treeview"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:1
+msgid "Subscription Manager - Facts"
+msgstr "Subscription Manager  -- 详情"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:2
+msgid "System Identity:"
+msgstr "系统身份："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:3
+msgid "System Identity Value"
+msgstr "系统身份值"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:5
+msgid "Organization Value"
+msgstr "机构值"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:6
+msgid "Environment:"
+msgstr "环境："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:8
+msgid "facts_view"
+msgstr "facts_view"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:9
+msgid "Last Update:"
+msgstr "上一个更新："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:10
+msgid "Update Time"
+msgstr "更新时间"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:11
+msgid "Update Facts"
+msgstr "更新详情"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:4
+msgid "Close"
+msgstr "关闭"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:5
+msgid "close_button"
+msgstr "close_button"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:1
 msgid "Filter Options"
 msgstr "过滤器选项"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:2
 msgid "Only show subscriptions that:"
 msgstr "只显示订阅："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:3
 msgid "match my system"
 msgstr "匹配我的系统"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:4
 msgid ""
 "Only show subscriptions which can be attached to this machine and "
 "architecture"
 msgstr "只显示可附加到这台机器和架构的订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:5
 msgid "Match System"
 msgstr "匹配系统"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:6
 msgid "match my installed products"
 msgstr "与我安装的产品匹配"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:7
 msgid ""
 "Only show subscriptions which can be applied to products installed on this "
 "machine"
 msgstr "只显示可用于安装到这台机器中产品的订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:8
 msgid "Match Installed"
 msgstr "安装的匹配"
 
-#: ../src/subscription_manager/gui/data/filters.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:9
 msgid ""
 "Only show subscriptions that: provide products that are not already covered"
 msgstr "只显示提供未覆盖产品列表的订阅"
 
-#: ../src/subscription_manager/gui/data/filters.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:10
 msgid "Hide subscriptions whose provided products have a Subscribed status"
 msgstr "隐藏提供有已订阅状态产品的订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:11
 msgid "Do Not Overlap"
 msgstr "不要重叠"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:12
 msgid "Contain the text"
 msgstr "包含文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:13
 msgid "Text in Subscription"
 msgstr "订阅中的文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:1
 msgid "<b>Status:</b>"
 msgstr "<b>状态：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:2
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:6
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:4
-msgid "label"
-msgstr "标签"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:3
 msgid "Overall Status"
 msgstr "总体状态"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:5
 msgid "Register System"
 msgstr "注册系统"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:6
 msgid "Auto-attach"
 msgstr "自动附加"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:7
 msgid "Installed View"
 msgstr "安装的查看"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:8
 msgid "<b>Product's Subscription Details</b>"
 msgstr "<b>产品的订阅详情</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:9
 msgid "<b>Product:</b>"
 msgstr "<b>产品：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:10
 msgid "<b>Subscriptions:</b>"
 msgstr "<b>订阅：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:11
 msgid "Product Text"
 msgstr "产品文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:12
 msgid "Providing Subscriptions Text"
 msgstr "提供订阅文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:13
 msgid "Certificate Status Text"
 msgstr "证书状态文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:14
 msgid "<b>Arch:</b>"
 msgstr "<b>架构：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:15
 msgid "Arch Text"
 msgstr "架构文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:1
 msgid "_System"
 msgstr "系统（_S）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:2
 msgid "_Register"
 msgstr "注册（_R）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:3
 msgid "_Unregister"
 msgstr "取消注册（_U）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:4
 msgid "_Import Cert"
 msgstr "导入证书（_I）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:5
 msgid "R_edeem Subscription"
 msgstr "恢复订阅（_e）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:6
 msgid "View System _Facts"
 msgstr "查看系统详情（_F）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:7
 msgid "Configure Pro_xy"
 msgstr "配置代理服务器（_x）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:8
 msgid "Repo_sitories"
 msgstr "库（_s）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:9
 msgid "_Preferences"
 msgstr "首选项（_P）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:10
 msgid "_Help"
 msgstr "帮助（_H）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:11
 msgid "_Getting Started"
 msgstr "开始（_G）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:12
 msgid "_Online Documentation"
 msgstr "在线文档（_O）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/manually_subscribe.glade.h:1
 msgid ""
 "You will need to use Red Hat Subscription Manager to manually attach "
 "subscriptions to this system after completing firstboot."
@@ -4166,7 +4360,7 @@ msgstr ""
 "加订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/manually_subscribe.glade.h:2
 msgid ""
 "After opening Red Hat Subscription Manager, manually attach subscriptions "
 "via the <b>All Available Subscriptions</b> tab."
@@ -4175,153 +4369,153 @@ msgstr ""
 "阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mysubs.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/mysubs.glade.h:1
 msgid "My Subscriptions View"
 msgstr "我的订阅查看"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mysubs.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/mysubs.glade.h:2
 msgid "Remove"
 msgstr "删除"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:1
 msgid "Proxy Configuration"
 msgstr "Proxy 配置"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:2
 msgid "<b>HTTP Proxy</b>"
 msgstr "<b>HTTP 代理服务器</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:3
 msgid "I would like to connect via an _HTTP proxy."
 msgstr "我想通过 _HTTP 代理服务器连接。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:4
 msgid "Proxy Checkbox"
 msgstr "代理服务器复选框"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:5
 msgid "<small><b>Example:</b> proxy.example.com:3128</small>"
 msgstr "<small><b>示例：</b> proxy.example.com:3128</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:6
 msgid "_Proxy Location:"
 msgstr "代理服务器位置（_P）："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:7
 msgid "Enter in the format hostname(:port)"
 msgstr "输入格式 hostname(:port)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:8
 msgid "Proxy Location Text"
 msgstr "代理服务器位置文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:9
 msgid "Use Au_thentication with HTTP Proxy:"
 msgstr "使用 HTTP 代理服务器验证（_t）："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:10
 msgid "Authentication Checkbox"
 msgstr "认证复选框"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:11
 msgid "Proxy _Username:"
 msgstr "代理服务器用户名（_U）："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:12
 msgid "Proxy P_assword:"
 msgstr "代理服务器密码（_a）："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:13
 msgid "Username Text"
 msgstr "用户名文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:14
 msgid "Password Text"
 msgstr "密码文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:15
 msgid "connectionStatusLabel"
 msgstr "connectionStatusLabel"
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:16
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:16
 msgid "_Cancel"
 msgstr "取消（_C）"
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:17
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:17
 msgid "Cancel Button"
 msgstr "取消按钮"
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:18
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:18
 msgid "_Save"
 msgstr "保存（_S）"
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:19
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:19
 msgid "Save Button"
 msgstr "保存按钮"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:20
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:20
 msgid "_Test Connection"
 msgstr "测试连接（_T）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:21
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:21
 msgid "Test Connection Button"
 msgstr "测试连接按钮"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/organization.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/organization.glade.h:1
 msgid "<b>Organization Selection</b>"
 msgstr "<b>机构选择</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/organization.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/organization.glade.h:2
 msgid "org_selection_label"
 msgstr "org_selection_label"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/organization.glade.h:3
-msgid "org_selection_scrolledwindow"
-msgstr "org_selection_scrolledwindow"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/organization.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/organization.glade.h:3
 msgid "owner_treeview"
 msgstr "owner_treeview"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/organization.glade.h:4
+msgid "org_selection_scrolledwindow"
+msgstr "org_selection_scrolledwindow"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:1
 msgid "System Preferences"
 msgstr "系统属性"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:2
 msgid "autoheal_checkbox"
 msgstr "autoheal_checkbox"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:3
 msgid "Enable auto-attach preference"
 msgstr "启用 auto-attach 属性"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
@@ -4329,66 +4523,66 @@ msgstr ""
 "<small>如果启用，则会为所有调度中未覆盖的产品附加订阅（默认为每日）。</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:5
 msgid "Release version:"
 msgstr "发行版本："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:6
 msgid "release_selection_combobox"
 msgstr "release_selection_combobox"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:7
 msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
 msgstr "<small>安装和更新软件包时沿用您系统的发行属性。</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:8
 msgid "Service level preference:"
 msgstr "服务等级属性："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:9
 msgid "sla_selection_combobox"
 msgstr "sla_selection_combobox"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:10
 msgid ""
 "<small>Your system's service level preference is followed when subscribing "
 "automatically.</small>"
 msgstr "<small>自动订阅时采用您的系统服务等级属性。</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/progress.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/progress.glade.h:1
 msgid "Progress Dialog"
 msgstr "进程条"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:1
 msgid "Subscription Redemption"
 msgstr "订阅兑换"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:2
 msgid "Cancel"
 msgstr "取消"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:3
 msgid "Redeem"
 msgstr "兑换"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:4
 msgid "Redeeming the subscription may take a few minutes."
 msgstr "兑换订阅可能需要几分钟。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:5
 msgid ""
 "Please provide an email address to receive notification\n"
 "when the redemption is complete."
@@ -4397,52 +4591,52 @@ msgstr ""
 "时接收通知。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:7
 msgid "Email Address:"
 msgstr "电子邮件地址："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:8
 msgid "Email Address Text"
 msgstr "电子邮件地址文本："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:2
-msgid "register_dialog_main_vbox"
-msgstr "register_dialog_main_vbox"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:3
-msgid "registration_dialog_action_area"
-msgstr "registration_dialog_action_area"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:3
 msgid "register_button"
 msgstr "register_button"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:4
+msgid "registration_dialog_action_area"
+msgstr "registration_dialog_action_area"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:6
 msgid "progress_label"
 msgstr "progress_label"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:7
 msgid "register_progressbar"
 msgstr "register_progressbar"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:8
 msgid "register_details_label"
 msgstr "register_details_label"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:9
 msgid "page 2"
 msgstr "页 2"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:10
+msgid "register_dialog_main_vbox"
+msgstr "register_dialog_main_vbox"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:1
 msgid ""
 "This assistant will guide you through the process of registering your system "
 "with Red Hat to receive software updates and other benefits. You will need "
@@ -4451,84 +4645,74 @@ msgstr ""
 "这个助手将为您演示在 Red Hat 注册系统以便接收软件更新和其他优惠的步骤。您需要"
 "以下信息方可注册："
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:2
-msgid "• A network connection"
-msgstr "• 网络连接"
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:2
+msgid "&#x2022; A network connection"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:3
+msgid "&#x2022; Your account login"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:3
-msgid "• Your account login"
-msgstr "• 您的帐户登录"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:4
 msgid "Your account login"
 msgstr "您的帐户登录"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:5
-msgid "• The address of a subscription management service (optional)"
-msgstr "• 订阅管理服务地址（自选）"
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:5
+msgid "&#x2022; The address of a subscription management service (optional)"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:6
 msgid "_Why Should I Register?"
 msgstr "为什么要注册（_W）？"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:7
 msgid "Why Should I Register?"
 msgstr "为什么要注册？"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:8
 msgid ""
 "Would you like to register your system at this time? <b>(Strongly "
 "recommended.)</b>"
 msgstr "您这次额要注册您的系统吗？ <b>（强烈推荐。）</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:9
 msgid "_Yes, I'd like to register now."
 msgstr "是，我要现在注册（_Y）。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:10
 msgid "_No, I prefer to register at a later time."
 msgstr "不，我想以后注册（_N）。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:11
 msgid "Why Register"
 msgstr "为什么注册？"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:12
 msgid ""
 "Registering your system with Red Hat allows you to take full advantage of "
 "the benefits of a paid subscription, including:"
 msgstr "在 Red Hat 注册您的系统可让您充分享受付费订阅的好处，其中包括："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:13
 msgid "_Close"
 msgstr "关闭（_C）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:14
-#: ../src/subscription_manager/gui/data/repositories.glade.h:5
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:12
-msgid "Close"
-msgstr "关闭"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:15
 msgid "<b>Security &amp; Updates:</b>"
 msgstr "<b>安全性 &amp; 更新：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:16
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:16
 msgid ""
 "Receive the latest software updates, including security updates, keeping "
 "this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
@@ -4537,24 +4721,24 @@ msgstr ""
 "新</b>且<b>安全</b>。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:17
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:17
 msgid "<b>Downloads &amp; Upgrades:</b>"
 msgstr "<b>下载 &amp; 升级：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:18
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:18
 msgid ""
 "Download installation images for Red Hat Enterprise Linux releases, "
 "including new releases."
 msgstr "下载 Red Hat Enterprise Linux 发行本安装映像，其中包括新发行本。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:19
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:19
 msgid "<b>Support:</b>"
 msgstr "<b>支持：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:20
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:20
 msgid ""
 "Access to the technical support experts at Red Hat or Red Hat's partners for "
 "help with any issues you might encounter with this system."
@@ -4563,17 +4747,17 @@ msgstr ""
 "问题。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:21
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:21
 msgid "<b>Management:</b>"
 msgstr "<b>管理：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:22
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:22
 msgid "Management"
 msgstr "管理"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:23
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:23
 msgid ""
 "Manage subscriptions and systems registered to Customer Portal via access."
 "redhat.com or through one of our other subscription management services."
@@ -4582,7 +4766,7 @@ msgstr ""
 "阅和系统。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author leahliu
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:24
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:24
 msgid ""
 "<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
 "privacy_statement.html</small>"
@@ -4591,403 +4775,198 @@ msgstr ""
 "privacy_statement.html</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:1
 msgid "Manage Repositories"
 msgstr "管理库"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:2
-msgid "manage_repositories_dialog"
-msgstr "manage_repositories_dialog"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:2
 msgid "Remove All Overrides"
 msgstr "删除所有覆盖"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:3
 msgid "remove_all_overrides_button"
 msgstr "remove_all_overrides_button"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:6
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:13
-msgid "close_button"
-msgstr "close_button"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:7
-msgid ""
-"Manage the repositories your subscriptions grant you access to by enabling, "
-"disabling and overriding certain fields."
-msgstr "通过启用、禁用和覆盖某些字段管理您的订阅为您授权访问的库。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:6
 msgid "<b>Repository Details</b>"
 msgstr "<b>库详情</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:7
 msgid "<b>Name:</b>"
 msgstr "<b>名称</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:10
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:3
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:5
 msgid "Subscription Text"
 msgstr "订阅文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:9
 msgid "<b>Base URL:</b>"
 msgstr "<b>基本 URL:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:12
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:11
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:21
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:21
 msgid "SKU Text"
 msgstr "SKU 文本"
 
-#: ../src/subscription_manager/gui/data/repositories.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:11
 msgid "<b>Other Overrides:</b>"
 msgstr "<b>其他覆盖：</b>"
 
-#: ../src/subscription_manager/gui/data/repositories.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:12
 msgid "Other Overrides Table"
 msgstr "其他覆盖列表"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:13
+msgid "manage_repositories_dialog"
+msgstr "manage_repositories_dialog"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:1
 msgid "<b>Select Service Level</b>"
 msgstr "<b>选择服务等级</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:2
-msgid ""
-"Your installed products could be covered using one of multiple service "
-"levels."
-msgstr "使用多服务等级之一无法覆盖安装的产品。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:2
 msgid "<b>Installed products:</b>"
 msgstr "<b>安装的产品：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:3
 msgid "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 msgstr "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:4
 msgid "<b>Select a common service level for this system's subscriptions:</b>"
 msgstr "<b>为这个系统的订阅选择一个常用服务等级：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:1
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:1
 msgid "<b>Subscription Details</b>"
 msgstr "<b>订阅详情</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:4
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:12
 msgid "<b>Products:</b>"
 msgstr "<b>产品：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:5
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:13
 msgid "Bundled Products Table"
 msgstr "组合产品表"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:22
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:22
 msgid "<b>Service Level, Type:</b>"
 msgstr "<b>服务等级，类型：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:23
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:23
 msgid "Support Level And Type Text"
 msgstr "支持等级和类型文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:8
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:6
 msgid "<b>Subscription Type:</b>"
 msgstr "<b>订阅类型：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:9
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:7
 msgid "Subscription Type Text"
 msgstr "订阅类型文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:10
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:20
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:20
 msgid "<b>SKU:</b>"
 msgstr "<b>SKU：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:3
 msgid "<b>Start - End Date:</b>"
 msgstr "<b>起始--终止日期：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:4
 msgid "<b>Contract:</b>"
 msgstr "<b>合同：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:8
 msgid "Start End Date Text"
 msgstr "起始终止日期文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:9
 msgid "Contract Number Text"
 msgstr "合同号文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:10
 msgid "<b>Account:</b>"
 msgstr "<b>帐户：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:11
 msgid "Account Text"
 msgstr "帐户文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:14
 msgid "<b>Status Details:</b>"
 msgstr "<b>订阅详情：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:15
 msgid "Status Details Text"
 msgstr "状态详情文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:16
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:16
 msgid "<b>Provides Management:</b>"
 msgstr "<b>提供管理：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:17
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:17
 msgid "Provides Management Text"
 msgstr "提供管理文本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:18
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:18
 msgid "<b>Type:</b>"
 msgstr "<b>类型：</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:19
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:19
 msgid "Support Type Text"
 msgstr "支持类型文本"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:1
-#: ../src/subscription_manager/gui/data/credentials.glade.h:3
-msgid "<b>Please enter the following for this system:</b>"
-msgstr "<b>请为这个系统输入以下内容：</b>"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:2
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:4
-msgid "Organization:"
-msgstr "机构："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:3
-msgid "Activation Key:"
-msgstr "激活码："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:4
-#: ../src/subscription_manager/gui/data/credentials.glade.h:5
-msgid "System Name:"
-msgstr "系统名称："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:5
-msgid "This must be the organization key, not the name."
-msgstr "这个必须是机构密钥，而不是名称。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:6
-msgid "organization_entry"
-msgstr "organization_entry"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:7
-msgid ""
-"Multiple Activation Keys can be entered by separating them with a comma or a "
-"space."
-msgstr "可输入使用逗号或者空格分开的多个激活码。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:8
-msgid "activation_key_entry"
-msgstr "activation_key_entry"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:9
-msgid "consumer_entry"
-msgstr "consumer_entry"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:1
-msgid "<b>Show subscriptions active on:</b>"
-msgstr "<b>显示活跃订阅：</b>"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:2
-msgid "Update"
-msgstr "更新"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:3
-msgid "Search"
-msgstr "搜索"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:5
-msgid "Filters"
-msgstr "过滤器"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:6
-msgid "* Click to Adjust Quantity"
-msgstr "* 点击调整数量"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
-msgid "<b>Confirm Subscriptions</b>"
-msgstr "<b>确认订阅</b>"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
-msgid "Using service level:"
-msgstr "使用服务等级："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:3
-msgid "SLA"
-msgstr "SLA"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
-msgid "The following subscriptions will be attached:"
-msgstr "将附加一下订阅："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:5
-msgid "Selected Subscriptions Table"
-msgstr "所选订阅表"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:6
-msgid "Core repositories will be enabled for each product."
-msgstr "将为每个产品启用核心库。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:1
-msgid "Password:"
-msgstr "密码："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:2
-msgid "Login:"
-msgstr "登录："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:4
-msgid "system_instructions_label"
-msgstr "system_instructions_label"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:6
-msgid "system_name_label"
-msgstr "system_name_label"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:7
-msgid "A unique label for this system"
-msgstr "这个系统的唯一标签"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:8
-msgid "Manually attach subscriptions after registration"
-msgstr "注册后手动附加订阅"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:1
-msgid "Subscription Manager - Facts"
-msgstr "Subscription Manager  -- 详情"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:2
-msgid "System Identity:"
-msgstr "系统身份："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:3
-msgid "System Identity Value"
-msgstr "系统身份值"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:5
-msgid "Organization Value"
-msgstr "机构值"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:6
-msgid "Environment:"
-msgstr "环境："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:8
-msgid "facts_view"
-msgstr "facts_view"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:9
-msgid "Last Update:"
-msgstr "上一个更新："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:10
-msgid "Update Time"
-msgstr "更新时间"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:11
-msgid "Update Facts"
-msgstr "更新详情"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../bin/subscription-manager-gui:57
-msgid "Unable to open a display"
-msgstr "无法打开显示"
-
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author John Sefler
-#: ../bin/subscription-manager-gui:158
+#: ../bin/subscription-manager-gui:166
 #, c-format
 msgid "%s is already running"
 msgstr "%s 已在运行中"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../bin/subscription-manager-gui:166
+#: ../bin/subscription-manager-gui:174
 msgid "launches the registration dialog on startup"
 msgstr "启动时载入注册对话框"
 
@@ -5157,11 +5136,6 @@ msgstr "选项解析失败：%s\n"
 #: ../etc-conf/rhsm-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
 msgstr "红帽订阅有效性程序（Red Hat Subscription Validity Applet）"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../etc-conf/rhsm-icon.desktop.in.h:2
-msgid "Subscription Validity Applet"
-msgstr "订阅有效性程序"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../etc-conf/subscription-manager-gui.desktop.in.h:1

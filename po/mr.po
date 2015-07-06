@@ -3,53 +3,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-21 11:15-0400\n"
+"POT-Creation-Date: 2015-07-06 14:33-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2014-12-18 12:25-0500\n"
 "Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
 "Language-Team: Marathi <sshedmak@redhat.com>\n"
 "Language: mr\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Zanata 3.6.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/entcertlib.py:271
-#, python-format
-msgid "%s local certificate has been deleted."
-msgid_plural "%s local certificates have been deleted."
-msgstr[0] "%s स्थानीय प्रमाणपत्र नष्ट केले."
-msgstr[1] "%s स्थानीय प्रमाणपत्र नष्ट केलेत."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/entcertlib.py:425
-#, python-format
-msgid "Total updates: %d"
-msgstr "एकूण सुधारणा: %d"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/entcertlib.py:426
-#, python-format
-msgid "Found (local) serial# %s"
-msgstr "(स्थानीय) सिरीअल# %s आढळले"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/entcertlib.py:427
-#, python-format
-msgid "Expected (UEP) serial# %s"
-msgstr "अपेक्षीत (UEP) सिरीअल# %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/entcertlib.py:428
-#: ../src/subscription_manager/repolib.py:438
-msgid "Added (new)"
-msgstr "समाविष्ट केले (नवीन)"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/entcertlib.py:429
-msgid "Deleted (rogue):"
-msgstr "नष्ट केले (दुष्ट):"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/branding/__init__.py:81
@@ -184,295 +147,41 @@ msgstr ""
 "टिप: लॉगीन किंवा पासवर्ड विसरलात? http://redhat.com/forgot_password येथे पहा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:28
-msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"नेटवर्क त्रुटी, सर्व्हरशी जोडणी करणे अशक्य. कृपया अधिक माहितीकरिता /var/log/rhsm/rhsm."
-"log लॉग पहा."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:29
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"नेटवर्क त्रुटी. कृपया जोडणी तपशील तपासा, किंवा अधिक माहितीकरिता /var/log/rhsm/rhsm."
-"log पहा."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:30
-msgid "Unauthorized: Invalid credentials for request."
-msgstr "अनाधिकृत: विनंतीकरिता अवैध श्रेय."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:31
-msgid "Forbidden: Invalid credentials for request."
-msgstr "निषिध्द: विनंतीकरिता अवैध श्रेय."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:32
-msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr ""
-"रिमोट सर्व्हर त्रुटी. कृपया तपशील अहवाल तपासा, किंवा अधिक माहितीकरिता /var/log/"
-"rhsm/rhsm.log पहा."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:33
+#: ../src/subscription_manager/entcertlib.py:271
 #, python-format
-msgid "Bad CA certificate: %s"
-msgstr "अयोग्य CA प्रमाणपत्र: %s"
+msgid "%s local certificate has been deleted."
+msgid_plural "%s local certificates have been deleted."
+msgstr[0] "%s स्थानीय प्रमाणपत्र नष्ट केले."
+msgstr[1] "%s स्थानीय प्रमाणपत्र नष्ट केलेत."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:34
-#: ../src/daemons/rhsmcertd-worker.py:60
-msgid "Your identity certificate has expired"
-msgstr "ओळख प्रमाणपत्राची वेळसमाप्ति झाली"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:35
+#: ../src/subscription_manager/entcertlib.py:425
 #, python-format
-msgid "Unable to verify server's identity: %s"
-msgstr "सर्व्हरची ओळख तपासण्यास अशक्य: %s"
+msgid "Total updates: %d"
+msgstr "एकूण सुधारणा: %d"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:36
-msgid "Server URL can not be empty"
-msgstr "सर्व्हर URL रिकामे असणे अशक्य"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:37
-msgid ""
-"Server URL is just a schema. Should include hostname, and/or port and path"
-msgstr ""
-"सर्व्हर URL फक्त स्किमा आहे. त्यात यजमाननाव, व/किंवा पोर्ट व मार्ग समाविष्टीत असायला हवे"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:38
-msgid "Server URL can not be None"
-msgstr "सर्व्हर URL चे मूल्य रिकामे असणे अशक्य"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:39
-msgid "Server URL port should be numeric"
-msgstr "सर्व्हर URL पोर्ट संख्यायीक असणे आवश्यक"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/exceptions.py:40
-msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr "सर्व्हर URL मध्ये अवैध स्किमा आढळले. http:// व https:// समर्थीत आहे"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/hwprobe.py:273
-msgid "Error reading system memory information:"
-msgstr "प्रणालीची मेमरी माहिती वाचतेवेळी त्रुटी:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/hwprobe.py:583
-msgid "Error reading system CPU information:"
-msgstr "CPU माहिती वाचतेवेळी त्रुटी:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/hwprobe.py:608
-msgid "Error reading networking information:"
-msgstr "नेटवर्किंग माहिती वाचतेवेळी त्रुटी:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/hwprobe.py:707
-msgid "Error reading network interface information:"
-msgstr "नेटवर्क इंटरफेस माहिती वाचतेवेळी त्रुटी:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/hwprobe.py:800
-msgid "Virtualization platform does not support UUIDs"
-msgstr "वर्च्युअलाइजेशन प्लॅटफॉर्म UUIDs करिता समर्थन पुरवत नाही"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/hwprobe.py:802
+#: ../src/subscription_manager/entcertlib.py:426
 #, python-format
-msgid "Error finding UUID: %s"
-msgstr "UUID शोधतेवेळी त्रुटी: %s"
+msgid "Found (local) serial# %s"
+msgstr "(स्थानीय) सिरीअल# %s आढळले"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/printing_utils.py:137
-#: ../src/subscription_manager/gui/widgets.py:398
-#: ../src/subscription_manager/gui/factsgui.py:146
-#: ../src/subscription_manager/managercli.py:666
-msgid "None"
-msgstr "काहिच नाही"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:78
-#: ../src/subscription_manager/gui/widgets.py:292 ../src/rct/printing.py:43
-msgid "Product"
-msgstr "उत्पादन"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:89
-#: ../src/rct/printing.py:46 ../src/rct/printing.py:125
-msgid "Version"
-msgstr "आवृत्ती"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:92
-msgid "Status"
-msgstr "स्थिती"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:95
-#: ../src/subscription_manager/gui/contract_selection.py:115
-#: ../src/rct/printing.py:127 ../src/rct/manifest_commands.py:231
-msgid "Start Date"
-msgstr "प्रारंभ दिनांक"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:98
-#: ../src/subscription_manager/gui/mysubstab.py:102
-#: ../src/subscription_manager/gui/contract_selection.py:121
-#: ../src/rct/printing.py:128 ../src/rct/manifest_commands.py:232
-msgid "End Date"
-msgstr "समाप्ति दिनांक"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:181
-#: ../src/subscription_manager/managercli.py:73
-msgid "Future Subscription"
-msgstr "भविष्यातील सबस्क्रिप्शन"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:182
-msgid "Future Subscribed"
-msgstr "फ्युचरकरिता सबस्क्राइब केले"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:185
-#: ../src/subscription_manager/managercli.py:76
-msgid "Expired"
-msgstr "वेळ समाप्ति"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:195
+#: ../src/subscription_manager/entcertlib.py:427
 #, python-format
-msgid "Subscription %s is expired"
-msgstr "सबस्क्रिप्शन %s ची वेळ समाप्ति आढळली"
+msgid "Expected (UEP) serial# %s"
+msgstr "अपेक्षीत (UEP) सिरीअल# %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:198
-#: ../src/subscription_manager/gui/installedtab.py:199
-#: ../src/subscription_manager/managercli.py:77
-msgid "Partially Subscribed"
-msgstr "अपुरेरित्या सबस्क्राइब केले"
+#: ../src/subscription_manager/entcertlib.py:428
+#: ../src/subscription_manager/repolib.py:450
+msgid "Added (new)"
+msgstr "समाविष्ट केले (नवीन)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. Shouldn't be reachable.
-#. Reason has no id attr
-#. It's possible (though unlikely, and kind of broken) to have more
-#. than one version of python-rhsm/subscription-manager installed.
-#. This will return whatever version we are using.
-#: ../src/subscription_manager/gui/installedtab.py:202
-#: ../src/subscription_manager/gui/factsgui.py:90
-#: ../src/subscription_manager/gui/factsgui.py:117
-#: ../src/subscription_manager/managercli.py:78
-#: ../src/subscription_manager/managercli.py:343
-#: ../src/subscription_manager/managercli.py:344
-#: ../src/subscription_manager/managercli.py:347
-#: ../src/subscription_manager/managercli.py:348
-#: ../src/subscription_manager/managercli.py:1726
-#: ../src/subscription_manager/managercli.py:2599
-#: ../src/subscription_manager/cert_sorter.py:47
-#: ../src/subscription_manager/reasons.py:93
-#: ../src/subscription_manager/utils.py:213
-#: ../src/subscription_manager/utils.py:214
-#: ../src/subscription_manager/utils.py:228
-#: ../src/subscription_manager/utils.py:230
-#: ../src/subscription_manager/utils.py:248
-#: ../src/subscription_manager/utils.py:249
-#: ../src/subscription_manager/utils.py:250
-#: ../src/subscription_manager/utils.py:269
-msgid "Unknown"
-msgstr "अपरिचीत"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:204
-msgid "System is not registered."
-msgstr "प्रणालीची नोंदणी झाली नाही."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. System must be registered but unable to reach server:
-#: ../src/subscription_manager/gui/installedtab.py:207
-msgid "Entitlement server is unreachable."
-msgstr "एंटाइटलमेंट सर्व्हर पोहचण्याजोगी नाही."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:210
-#: ../src/subscription_manager/managercli.py:74
-msgid "Subscribed"
-msgstr "सबस्क्राइब्ड्"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:212
-#, python-format
-msgid "Covered by contract %s through %s"
-msgid_plural "Covered by contracts %s through %s"
-msgstr[0] "काँट्रॅक्ट %s तर्फे संलग्न %s"
-msgstr[1] "काँट्रॅक्ट %s तर्फे संलग्न %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:219
-#: ../src/subscription_manager/gui/installedtab.py:220
-#: ../src/subscription_manager/managercli.py:75
-msgid "Not Subscribed"
-msgstr "सबस्क्राइब्ड् नाही"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:271
-msgid "My Installed Products"
-msgstr "माझी इंस्टॉल झालेली उत्पादने"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:305
-msgid "No installed products detected."
-msgstr "इंस्टॉल झालेली उत्पादने आढळले नाही."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:309
-#, python-format
-msgid "System is properly subscribed through %s."
-msgstr "%s तर्फे प्रणाली योग्यरित्या सबस्क्राइब झाले."
-
-#: ../src/subscription_manager/gui/installedtab.py:314
-msgid "System is properly subscribed."
-msgstr "प्रणाली योग्यरित्या सबस्क्राइब झाली."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:319
-msgid "This system does not match subscription limits."
-msgstr "हि प्रणाली सबस्क्रिप्शन मर्यादासह जुळत नाही."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:325
-#, python-format
-msgid "%s installed products do not have valid subscriptions."
-msgstr "%s इंस्टॉल झालेल्या उत्पादनांकरिता वैध सपस्क्रिप्शन्स् नाही."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:330
-msgid "1 installed product does not have a valid subscription."
-msgstr "इंस्टॉल झालेल्या १ उत्पादनाकडे वैध सबस्क्रिप्शन नाही."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:335
-msgid "Keep your system up to date by registering."
-msgstr "नोंदणीकरून प्रणालीला ताजे ठेवा."
+#: ../src/subscription_manager/entcertlib.py:429
+msgid "Deleted (rogue):"
+msgstr "नष्ट केले (दुष्ट):"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:63
@@ -499,7 +208,7 @@ msgstr "सर्व इंस्टॉल झालेली उत्पाद
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:78
-#: ../src/subscription_manager/gui/registergui.py:571
+#: ../src/subscription_manager/gui/registergui.py:723
 msgid "Error subscribing"
 msgstr "सबस्क्राइब करतेवेळी त्रुटी"
 
@@ -543,174 +252,282 @@ msgid "Subscription Registration"
 msgstr "सबस्क्रिप्शन नोंदणी"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:162
-msgid "There was an error saving your configuration."
-msgstr "तुमची संरचना साठवतेवेळी त्रुटी आढळली."
+#: ../src/subscription_manager/gui/about.py:28
+msgid ""
+"\n"
+"This software is licensed to you under the GNU General Public License, "
+"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
+"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
+"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
+"this software; if not, see:\n"
+"\n"
+"http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
+"\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
+"use or replicate Red Hat trademarks that are incorporated in this software "
+"or its documentation.\n"
+msgstr ""
+"\n"
+"This software is licensed to you under the GNU General Public License, "
+"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
+"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
+"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
+"this software; if not, see:\n"
+"\n"
+"http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
+"\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
+"use or replicate Red Hat trademarks that are incorporated in this software "
+"or its documentation.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:163
+#: ../src/subscription_manager/gui/about.py:49
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:13
+msgid "Subscription Manager"
+msgstr "सबस्क्रिप्शन व्यवस्थापक"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/about.py:54
+msgid "Copyright (c) 2012 Red Hat, Inc."
+msgstr "Copyright (c) 2012 Red Hat, Inc."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/about.py:74
+#: ../src/subscription_manager/gui/about.py:76
 #, python-format
-msgid "Make sure that you own %s."
-msgstr "तुमच्याकडे %s ची मालकी आहे याची खात्री करा."
+msgid "<b>%s version:</b> %s"
+msgstr "<b>%s आवृत्ती:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:188
-msgid "Proxy connection succeeded"
-msgstr "प्रॉक्सी जोडणी यशस्वी"
+#: ../src/subscription_manager/gui/about.py:78
+#, python-format
+msgid "<b>subscription management service version:</b> %s"
+msgstr "<b>सबस्क्रिप्शन मॅनेजमेंट सेवा आवृत्ती:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:190
-msgid "Proxy connection failed"
-msgstr "प्रॉक्सी जोडणी अपयशी"
-
-#: ../src/subscription_manager/gui/networkConfig.py:283
-#: ../src/subscription_manager/gui/networkConfig.py:286
-msgid "Testing Connection"
-msgstr "जोडणीची चाचणी करत आहे"
-
-#: ../src/subscription_manager/gui/networkConfig.py:284
-#: ../src/subscription_manager/gui/networkConfig.py:286
-msgid "Please wait"
-msgstr "कृपया थांबा"
+#: ../src/subscription_manager/gui/about.py:102
+#, python-format
+msgid "<b>Next System Check-in:</b> %s"
+msgstr "<b>पुढचे प्रणाली चेक-इन:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. Add at-spi because we no longer create this widget from glade
-#: ../src/subscription_manager/gui/allsubs.py:55
+#: ../src/subscription_manager/gui/allsubs.py:56
 msgid "All Subscriptions View"
 msgstr "सर्व सबस्क्रिप्शन्स्चे दृष्य"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:80
-#: ../src/subscription_manager/gui/registergui.py:454
-#: ../src/subscription_manager/gui/mysubstab.py:74
+#: ../src/subscription_manager/gui/allsubs.py:81
+#: ../src/subscription_manager/gui/mysubstab.py:76
+#: ../src/subscription_manager/gui/registergui.py:604
 msgid "Subscription"
 msgstr "सबस्क्रिप्शन"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:92
+#: ../src/subscription_manager/gui/allsubs.py:93
 msgid "Available"
 msgstr "उपलब्ध"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. Set up the quantity column.
-#: ../src/subscription_manager/gui/allsubs.py:96
-#: ../src/subscription_manager/gui/registergui.py:460
-#: ../src/subscription_manager/gui/mysubstab.py:105
-#: ../src/subscription_manager/gui/contract_selection.py:126
-#: ../src/rct/printing.py:83 ../src/rct/manifest_commands.py:229
+#: ../src/subscription_manager/gui/allsubs.py:97
+#: ../src/subscription_manager/gui/contract_selection.py:122
+#: ../src/subscription_manager/gui/mysubstab.py:107
+#: ../src/subscription_manager/gui/registergui.py:610
+#: ../src/rct/manifest_commands.py:229 ../src/rct/printing.py:83
 msgid "Quantity"
 msgstr "प्रमाण"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:175
+#: ../src/subscription_manager/gui/allsubs.py:178
 msgid "Press Update to search for subscriptions."
 msgstr "सबस्क्रिप्शन्स् शोधण्याकरिता सुधारित करा दाबा."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:210
+#: ../src/subscription_manager/gui/allsubs.py:213
 #, python-format
 msgid "No subscriptions are available on %s."
 msgstr "%s करिता सबस्क्रिप्शन्स् अनुपलब्ध."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:216
+#: ../src/subscription_manager/gui/allsubs.py:219
 msgid "No subscriptions match current filters."
 msgstr "सध्याच्या फिल्टर्ससह कोणतेहि सबस्क्रिप्शन्स् जुळत नाही."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:231
-#: ../src/subscription_manager/gui/contract_selection.py:143
+#: ../src/subscription_manager/gui/allsubs.py:234
+#: ../src/subscription_manager/gui/contract_selection.py:139
 #: ../src/subscription_manager/managerlib.py:337 ../src/rct/printing.py:82
 msgid "Unlimited"
 msgstr "अमर्यादित"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:344
+#: ../src/subscription_manager/gui/allsubs.py:347
 msgid "All Available Subscriptions"
 msgstr "सर्व उपलब्ध सबस्क्रिप्शन्स्"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:354
+#: ../src/subscription_manager/gui/allsubs.py:357
 msgid "Searching"
 msgstr "शोधत आहे"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:355
+#: ../src/subscription_manager/gui/allsubs.py:358
 msgid "Searching for subscriptions. Please wait."
 msgstr "सबस्क्रिप्शन्स् करिता शोधत आहे. कृपया थांबा."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:369
+#: ../src/subscription_manager/gui/allsubs.py:374
 #, python-format
 msgid "Error fetching subscriptions from server:  %s"
 msgstr "सर्व्हरपासून सबसक्रिप्शन्स् प्राप्त करतेवेळी त्रुटी आढळली:  %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:383
+#: ../src/subscription_manager/gui/allsubs.py:388
 #, python-format
 msgid "Unable to search for subscriptions:  %s"
 msgstr "सबस्क्रिप्शन्स् करिता शोध अशक्य:  %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:394
+#: ../src/subscription_manager/gui/allsubs.py:399
 #, python-format
 msgid "Error getting subscription: %s"
 msgstr "सबस्क्रिप्शन प्राप्त करतेवेळी त्रुटी: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:398
+#: ../src/subscription_manager/gui/allsubs.py:403
 msgid "Quantity must be a positive number."
 msgstr "प्रमाण सकारात्मक क्रमांक असायला हवे."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. Start the progress bar
-#: ../src/subscription_manager/gui/allsubs.py:405
+#: ../src/subscription_manager/gui/allsubs.py:410
 msgid "Attaching"
 msgstr "जोडणी करत आहे"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:406
+#: ../src/subscription_manager/gui/allsubs.py:411
 msgid "Attaching subscription. Please wait."
 msgstr "सबस्क्रिप्शनची जोडणी करत आहे. कृपया थांबा."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:425
+#: ../src/subscription_manager/gui/allsubs.py:433
 #, python-format
 msgid "%s applied"
 msgstr "%s लागू केले"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:40
+#: ../src/subscription_manager/gui/contract_selection.py:81
+#: ../src/rct/manifest_commands.py:237 ../src/rct/printing.py:76
+msgid "Contract"
+msgstr "करार"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/contract_selection.py:98
+msgid "Used / Total"
+msgstr "वापरलेले / एकूण"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/contract_selection.py:104
+#: ../src/subscription_manager/gui/installedtab.py:97
+#: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:127
+msgid "Start Date"
+msgstr "प्रारंभ दिनांक"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/contract_selection.py:113
+#: ../src/subscription_manager/gui/installedtab.py:100
+#: ../src/subscription_manager/gui/mysubstab.py:104
+#: ../src/rct/manifest_commands.py:232 ../src/rct/printing.py:128
+msgid "End Date"
+msgstr "समाप्ति दिनांक"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. Set up columns on the view
+#: ../src/subscription_manager/gui/factsgui.py:60
+msgid "Fact"
+msgstr "वस्तुस्थिती"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/factsgui.py:61
+#: ../src/subscription_manager/gui/widgets.py:339
+msgid "Value"
+msgstr "मूल्य"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. Shouldn't be reachable.
+#. Reason has no id attr
+#. It's possible (though unlikely, and kind of broken) to have more
+#. than one version of python-rhsm/subscription-manager installed.
+#. This will return whatever version we are using.
+#: ../src/subscription_manager/gui/factsgui.py:91
+#: ../src/subscription_manager/gui/factsgui.py:118
+#: ../src/subscription_manager/gui/installedtab.py:202
+#: ../src/subscription_manager/reasons.py:93
+#: ../src/subscription_manager/utils.py:213
+#: ../src/subscription_manager/utils.py:214
+#: ../src/subscription_manager/utils.py:228
+#: ../src/subscription_manager/utils.py:230
+#: ../src/subscription_manager/utils.py:248
+#: ../src/subscription_manager/utils.py:249
+#: ../src/subscription_manager/utils.py:250
+#: ../src/subscription_manager/utils.py:269
+#: ../src/subscription_manager/managercli.py:78
+#: ../src/subscription_manager/managercli.py:343
+#: ../src/subscription_manager/managercli.py:344
+#: ../src/subscription_manager/managercli.py:347
+#: ../src/subscription_manager/managercli.py:348
+#: ../src/subscription_manager/managercli.py:1726
+#: ../src/subscription_manager/managercli.py:2599
+#: ../src/subscription_manager/cert_sorter.py:47
+msgid "Unknown"
+msgstr "अपरिचीत"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/factsgui.py:103
+msgid "No previous update"
+msgstr "मागील सुधारणा नाही"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/factsgui.py:147
+#: ../src/subscription_manager/gui/widgets.py:476
+#: ../src/subscription_manager/printing_utils.py:137
+#: ../src/subscription_manager/managercli.py:666
+msgid "None"
+msgstr "काहिच नाही"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/importsub.py:39
 msgid "Import Certificates"
 msgstr "प्रमाणपत्र आयात करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:43
+#: ../src/subscription_manager/gui/importsub.py:42
 msgid "Import"
 msgstr "आयात करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:52
+#: ../src/subscription_manager/gui/importsub.py:51
 msgid "Certificates"
 msgstr "प्रमाणपत्र"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:57
+#: ../src/subscription_manager/gui/importsub.py:56
 msgid "All files"
 msgstr "सर्व फाइल्स्"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:123
+#: ../src/subscription_manager/gui/importsub.py:122
 msgid "The following certificate files did not exist:"
 msgstr "खालील प्रमाणपत्र फाइल्स् अस्तित्वात नाही:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:126
+#: ../src/subscription_manager/gui/importsub.py:125
 msgid "The following files are not valid certificates and were not imported:"
 msgstr "खालिल फाइल्स् वैध प्रमाणपत्र नाही व त्यामुळे आयात केले गेले नाही:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:131
+#: ../src/subscription_manager/gui/importsub.py:130
 msgid ""
 "An error occurred while importing the following certificates. Please check "
 "the log file for more information."
@@ -718,109 +535,402 @@ msgstr ""
 "खालिल प्रमाणपत्र आयात करतेवेळी त्रुटी आढळली. अधिक माहितीकरिता कृपया लॉग फाइल तपासा."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:135
+#: ../src/subscription_manager/gui/importsub.py:134
 msgid "The following certificates were successfully imported:"
 msgstr "खालिल प्रमाणपत्र यशस्वीरित्या आयात झाले:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. if we get to this point, the import was successful
-#: ../src/subscription_manager/gui/importsub.py:140
+#: ../src/subscription_manager/gui/importsub.py:139
 msgid "Certificate import was successful."
 msgstr "प्रमाणपत्र आयात यशस्वी झाले."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. An empty string entry is used for "un-setting" the system's SLA:
-#. for unsetting
-#: ../src/subscription_manager/gui/preferences.py:116
-#: ../src/subscription_manager/gui/preferences.py:142
-#: ../src/subscription_manager/gui/widgets.py:371
-msgid "Not Set"
-msgstr "ठरवले नाही"
+#: ../src/subscription_manager/gui/installedtab.py:80
+#: ../src/subscription_manager/gui/widgets.py:370 ../src/rct/printing.py:43
+msgid "Product"
+msgstr "उत्पादन"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:92
-msgid "<b>Unable to register the system.</b>"
-msgstr "<b>प्रणालीची नोंदणी करणे अशक्य.</b>"
+#: ../src/subscription_manager/gui/installedtab.py:91
+#: ../src/rct/printing.py:46 ../src/rct/printing.py:125
+msgid "Version"
+msgstr "आवृत्ती"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:94
-#: ../src/subscription_manager/gui/managergui.py:374
+#: ../src/subscription_manager/gui/installedtab.py:94
+msgid "Status"
+msgstr "स्थिती"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:181
+#: ../src/subscription_manager/managercli.py:73
+msgid "Future Subscription"
+msgstr "भविष्यातील सबस्क्रिप्शन"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:182
+msgid "Future Subscribed"
+msgstr "फ्युचरकरिता सबस्क्राइब केले"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:185
+#: ../src/subscription_manager/managercli.py:76
+msgid "Expired"
+msgstr "वेळ समाप्ति"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:195
+#, python-format
+msgid "Subscription %s is expired"
+msgstr "सबस्क्रिप्शन %s ची वेळ समाप्ति आढळली"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:198
+#: ../src/subscription_manager/gui/installedtab.py:199
+#: ../src/subscription_manager/managercli.py:77
+msgid "Partially Subscribed"
+msgstr "अपुरेरित्या सबस्क्राइब केले"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:204
+msgid "System is not registered."
+msgstr "प्रणालीची नोंदणी झाली नाही."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. System must be registered but unable to reach server:
+#: ../src/subscription_manager/gui/installedtab.py:207
+msgid "Entitlement server is unreachable."
+msgstr "एंटाइटलमेंट सर्व्हर पोहचण्याजोगी नाही."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:210
+#: ../src/subscription_manager/managercli.py:74
+msgid "Subscribed"
+msgstr "सबस्क्राइब्ड्"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:212
+#, python-format
+msgid "Covered by contract %s through %s"
+msgid_plural "Covered by contracts %s through %s"
+msgstr[0] "काँट्रॅक्ट %s तर्फे संलग्न %s"
+msgstr[1] "काँट्रॅक्ट %s तर्फे संलग्न %s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:219
+#: ../src/subscription_manager/gui/installedtab.py:220
+#: ../src/subscription_manager/managercli.py:75
+msgid "Not Subscribed"
+msgstr "सबस्क्राइब्ड् नाही"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:273
+msgid "My Installed Products"
+msgstr "माझी इंस्टॉल झालेली उत्पादने"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:307
+msgid "No installed products detected."
+msgstr "इंस्टॉल झालेली उत्पादने आढळले नाही."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:311
+#, python-format
+msgid "System is properly subscribed through %s."
+msgstr "%s तर्फे प्रणाली योग्यरित्या सबस्क्राइब झाले."
+
+#: ../src/subscription_manager/gui/installedtab.py:316
+msgid "System is properly subscribed."
+msgstr "प्रणाली योग्यरित्या सबस्क्राइब झाली."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:321
+msgid "This system does not match subscription limits."
+msgstr "हि प्रणाली सबस्क्रिप्शन मर्यादासह जुळत नाही."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:327
+#, python-format
+msgid "%s installed products do not have valid subscriptions."
+msgstr "%s इंस्टॉल झालेल्या उत्पादनांकरिता वैध सपस्क्रिप्शन्स् नाही."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:332
+msgid "1 installed product does not have a valid subscription."
+msgstr "इंस्टॉल झालेल्या १ उत्पादनाकडे वैध सबस्क्रिप्शन नाही."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:337
+msgid "Keep your system up to date by registering."
+msgstr "नोंदणीकरून प्रणालीला ताजे ठेवा."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:370
+msgid ""
+"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr "पसंती संवादमध्ये त्रुटी.अधिक माहितीकरिता कृपया /var/log/rhsm/rhsm.log पहा."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:378
+msgid ""
+"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
+"information."
+msgstr "रेपोज संवादमध्ये त्रुटी. अधिक माहितीकरिता कृपया /var/log/rhsm/rhsm.log पहा."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:394
+msgid "<b>Errors were encountered during unregister.</b>"
+msgstr "<b>नोंदणी अशक्य करतेवेली त्रुटी आढळली.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:396
+#: ../src/subscription_manager/gui/registergui.py:95
 msgid "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr "अधिक माहितीकरिता कृपया /var/log/rhsm/rhsm.log पहा."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:223
-#: ../src/subscription_manager/gui/data/registration.glade.h:1
+#: ../src/subscription_manager/gui/managergui.py:412
+msgid "<b>Are you sure you want to unregister?</b>"
+msgstr "<b>तुम्हाला नक्की नोंदणी अशक्य करायचे?</b>"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:468
+msgid "System Already Registered"
+msgstr "प्रणालीची आधिपासूनच नोंदणी झाली आहे"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:93
+msgid "Installed Products"
+msgstr "इंस्टॉल झालेली उत्पादने"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:132
+#, python-format
+msgid "There was an error removing %s with serial number %s"
+msgstr "%s काढून टाकतेवेळी त्रुटी, सिरिअल क्रमांक %s सह"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:146
+msgid "Removing"
+msgstr "काढून टाकत आहे"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:147
+msgid "Removing subscription. Please wait."
+msgstr "सबस्क्रिप्शन काढून टाकत आहे. कृपया थांबा."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:168
+#, python-format
+msgid "Are you sure you want to remove %s?"
+msgstr "तुम्हाला नक्की %s काढून टाकायचे?"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:198
+#, python-format
+msgid "Stack of %s and %s others"
+msgstr "%s व %s इतरांचे स्टॅक"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:201
+#, python-format
+msgid "Stack of %s and 1 other"
+msgstr "%s व 1 इतराचे स्टॅक"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:203
+#, python-format
+msgid "Stack of %s"
+msgstr "%s चे स्टॅक"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:233
+msgid "My Subscriptions"
+msgstr "माझे सबस्क्रिप्शन्स्"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:278
+msgid "Subscription is current."
+msgstr "सध्याचे सबस्क्रिप्शन."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:281
+msgid "Subscription is expired."
+msgstr "सबस्क्रिप्शनची वेळ समाप्ति."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:283
+msgid "Subscription has not begun."
+msgstr "सबस्क्रिप्शन सक्रिय झाले नाही."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:285
+#: ../src/subscription_manager/managercli.py:2374
+msgid "Subscription management service doesn't support Status Details."
+msgstr "सबस्क्रिप्शन मॅनेजमेंट सर्व्हिस स्थिती तपशीलकरिता समर्थन पुरवत नाही."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:292
+#: ../src/subscription_manager/gui/widgets.py:837
+#: ../src/subscription_manager/managercli.py:2233
+#: ../src/subscription_manager/managercli.py:2340
+msgid "Virtual"
+msgstr "वर्च्युअल"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:294
+#: ../src/subscription_manager/gui/widgets.py:836
+#: ../src/subscription_manager/managercli.py:2235
+#: ../src/subscription_manager/managercli.py:2342
+msgid "Physical"
+msgstr "फिजिकल"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:297
+#: ../src/subscription_manager/managercli.py:2238
+#: ../src/subscription_manager/managercli.py:2345
+msgid "Yes"
+msgstr "होय"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:299
+#: ../src/subscription_manager/managercli.py:2240
+#: ../src/subscription_manager/managercli.py:2347
+msgid "No"
+msgstr "नाही"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:158
+msgid "There was an error saving your configuration."
+msgstr "तुमची संरचना साठवतेवेळी त्रुटी आढळली."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:159
+#, python-format
+msgid "Make sure that you own %s."
+msgstr "तुमच्याकडे %s ची मालकी आहे याची खात्री करा."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:182
+msgid "Proxy connection succeeded"
+msgstr "प्रॉक्सी जोडणी यशस्वी"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:184
+msgid "Proxy connection failed"
+msgstr "प्रॉक्सी जोडणी अपयशी"
+
+#: ../src/subscription_manager/gui/networkConfig.py:277
+#: ../src/subscription_manager/gui/networkConfig.py:280
+msgid "Testing Connection"
+msgstr "जोडणीची चाचणी करत आहे"
+
+#: ../src/subscription_manager/gui/networkConfig.py:278
+#: ../src/subscription_manager/gui/networkConfig.py:280
+msgid "Please wait"
+msgstr "कृपया थांबा"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. An empty string entry is used for "un-setting" the system's SLA:
+#. for unsetting
+#: ../src/subscription_manager/gui/preferences.py:115
+#: ../src/subscription_manager/gui/preferences.py:141
+#: ../src/subscription_manager/gui/widgets.py:449
+msgid "Not Set"
+msgstr "ठरवले नाही"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/redeem.py:56
+#, python-format
+msgid "Error redeeming subscription: %s"
+msgstr "सबस्क्रिप्शनचा वापर करतेवेळी त्रुटी: %s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:93
+msgid "<b>Unable to register the system.</b>"
+msgstr "<b>प्रणालीची नोंदणी करणे अशक्य.</b>"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:363
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:1
 msgid "System Registration"
 msgstr "प्रणालीची नोंदणी"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:224
-#: ../src/subscription_manager/gui/data/registration.glade.h:6
+#: ../src/subscription_manager/gui/registergui.py:364
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:5
 msgid "<b>Registering</b>"
 msgstr "<b>नोंदणी करत आहे</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:227
+#: ../src/subscription_manager/gui/registergui.py:367
 msgid "Subscription Attachment"
 msgstr "सबस्क्रिप्शन जोडणी"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:228
+#: ../src/subscription_manager/gui/registergui.py:368
 msgid "<b>Attaching</b>"
 msgstr "<b>जोडणी करत आहे</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:332
-#: ../src/subscription_manager/gui/data/installed.glade.h:4
-#: ../src/subscription_manager/gui/data/registration.glade.h:4
+#: ../src/subscription_manager/gui/registergui.py:481
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:2
 msgid "Register"
 msgstr "नोंदणी करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:376
+#: ../src/subscription_manager/gui/registergui.py:525
 msgid "Registering your system"
 msgstr "प्रणालीची नोंदणी करत आहे"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:416
-#: ../src/subscription_manager/gui/registergui.py:906
+#: ../src/subscription_manager/gui/registergui.py:565
+#: ../src/subscription_manager/gui/registergui.py:1059
 msgid "Attaching subscriptions"
 msgstr "सबस्क्रिप्शन्स् जोडत आहे"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:420
-#: ../src/subscription_manager/gui/registergui.py:910
+#: ../src/subscription_manager/gui/registergui.py:569
+#: ../src/subscription_manager/gui/registergui.py:1063
 #, python-format
 msgid "Error subscribing: %s"
 msgstr "सबस्क्राइब होतेवेळी त्रुटी: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:448
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:7
+#: ../src/subscription_manager/gui/registergui.py:598
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:7
 msgid "Attach"
 msgstr "जोडणी करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:506
+#: ../src/subscription_manager/gui/registergui.py:656
 msgid "Finding suitable service levels"
 msgstr "योग्य सेवा स्तर शोधत आहे"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:507
-#: ../src/subscription_manager/gui/registergui.py:937
-#: ../src/subscription_manager/gui/registergui.py:1289
+#: ../src/subscription_manager/gui/registergui.py:657
+#: ../src/subscription_manager/gui/registergui.py:1085
+#: ../src/subscription_manager/gui/registergui.py:1451
 msgid "Next"
 msgstr "पुढे"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:560
+#: ../src/subscription_manager/gui/registergui.py:711
 msgid "Unable to auto-attach, server does not support service levels."
 msgstr "स्वयं-जोडणी अशक्य, सर्व्हर सेवा स्तरकरिता समर्थन पुरवण्यास अशक्य."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:563
+#: ../src/subscription_manager/gui/registergui.py:714
 msgid ""
 "No installed products on system. No need to attach subscriptions at this "
 "time."
@@ -829,7 +939,7 @@ msgstr ""
 "आवश्यकता नाही."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:566
+#: ../src/subscription_manager/gui/registergui.py:717
 msgid ""
 "All installed products are covered by valid entitlements. No need to attach "
 "subscriptions at this time."
@@ -838,12 +948,12 @@ msgstr ""
 "जोडायची आवश्यकता नाही."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:569
+#: ../src/subscription_manager/gui/registergui.py:720
 msgid "Consumer has been deleted."
 msgstr "ग्राहक नष्ट झाले आहे."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:585
+#: ../src/subscription_manager/gui/registergui.py:737
 #, python-format
 msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
@@ -852,7 +962,7 @@ msgstr ""
 "सध्याच्या सेवा स्तरकरिता सबस्क्रिप्शन्स् अनुपलब्ध: %s. स्वहस्ते सबस्क्रिप्शन्स् जोडण्याकरिता "
 "कृपया \"सर्व उपलब्ध सबस्क्रिप्शन्स्\" टॅबचा वापर करा."
 
-#: ../src/subscription_manager/gui/registergui.py:603
+#: ../src/subscription_manager/gui/registergui.py:755
 msgid ""
 "No service level will cover all installed products. Please manually "
 "subscribe using multiple service levels via the \"All Available Subscriptions"
@@ -860,405 +970,202 @@ msgid ""
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:636
+#: ../src/subscription_manager/gui/registergui.py:789
 msgid "Fetching list of possible environments"
 msgstr "संभाव्य वातावरणची सूची प्राप्त करत आहे"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:638
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:7
+#: ../src/subscription_manager/gui/registergui.py:791
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:7
 msgid "Environment"
 msgstr "वातावरण"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:693
+#: ../src/subscription_manager/gui/registergui.py:846
 msgid "Fetching list of possible organizations"
 msgstr "संभाव्य संघटनाची सूची प्राप्त करत आहे"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:696
+#: ../src/subscription_manager/gui/registergui.py:849
 msgid "Organization"
 msgstr "संस्था"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:715
+#: ../src/subscription_manager/gui/registergui.py:868
 #, python-format
 msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>वापरकर्ता %s कोणत्याहि संघटनाशी नोंदणी करण्यास अपयशी.</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:777
-#: ../src/subscription_manager/gui/registergui.py:883
+#: ../src/subscription_manager/gui/registergui.py:930
+#: ../src/subscription_manager/gui/registergui.py:1036
 msgid "You must enter a system name."
 msgstr "तुम्ही प्रणाली नाव देऊ शकता."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:785
+#: ../src/subscription_manager/gui/registergui.py:938
 msgid "You must enter a login."
 msgstr "प्रवेश करणे आवश्यक आहे."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:790
+#: ../src/subscription_manager/gui/registergui.py:943
 msgid "You must enter a password."
 msgstr "पासवर्ड देणे आवश्यक आहे."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:869
+#: ../src/subscription_manager/gui/registergui.py:1022
 msgid "You must enter an organization."
 msgstr "संस्था देणे आवश्यक."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:876
+#: ../src/subscription_manager/gui/registergui.py:1029
 msgid "You must enter an activation key."
 msgstr "ॲक्टिवेशन कि देणे आवश्यक."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:999
+#: ../src/subscription_manager/gui/registergui.py:1148
 #: ../src/subscription_manager/managercli.py:402
 #, python-format
 msgid "Unable to reach the server at %s:%s%s"
 msgstr "%s:%s%s येथील सर्व्हरपर्यंत पहोचणे अशक्य"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:1004
+#: ../src/subscription_manager/gui/registergui.py:1153
 msgid "CA certificate for subscription service has not been installed."
 msgstr "सबस्क्रिप्शन सेवाकरिता CA प्रमाणपत्र इंस्टॉल केले नाही."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:1009
+#: ../src/subscription_manager/gui/registergui.py:1158
 msgid ""
 "Please provide a hostname with optional port and/or prefix: hostname[:port][/"
 "prefix]"
 msgstr "कृपया वैकल्पिक पोर्ट व/किंवा प्रिफिक्स पुरवा: यजमाननाव[:पोर्ट][/प्रिफिक्स्]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:1066
+#: ../src/subscription_manager/gui/registergui.py:1215
 msgid "Server supports environments, but none are available."
 msgstr "सर्व्हर एंवार्यंमेंट करिता समर्थन पुरवतो, परंतु एकहि उपलब्ध नाही."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/redeem.py:55
-#, python-format
-msgid "Error redeeming subscription: %s"
-msgstr "सबस्क्रिप्शनचा वापर करतेवेळी त्रुटी: %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:47
+#: ../src/subscription_manager/gui/reposgui.py:49
 msgid "Attached subscriptions do not provide any repositories."
 msgstr "जुळलेले सबस्क्रिप्शन्स कोणतेही रेपॉजिटरिज पुरवत नाही."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:48
+#: ../src/subscription_manager/gui/reposgui.py:50
 msgid "No repositories are available without an attached subscription."
 msgstr "जुळलेल्या सबस्क्रिप्शन विना रेपॉजिटरिज उपलब्ध नाही."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:49
+#: ../src/subscription_manager/gui/reposgui.py:51
 #: ../src/subscription_manager/managercli.py:1916
 msgid "Repositories disabled by configuration."
 msgstr "संरचनातर्फे रेपॉजिटरिज् बंद केले."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:103 ../src/rct/printing.py:108
+#: ../src/subscription_manager/gui/reposgui.py:105 ../src/rct/printing.py:108
 msgid "Enabled"
 msgstr "सुरू केले"
 
-#: ../src/subscription_manager/gui/reposgui.py:107
+#: ../src/subscription_manager/gui/reposgui.py:109
 msgid "Gpgcheck"
 msgstr "Gpgcheck"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:111
+#: ../src/subscription_manager/gui/reposgui.py:114
 msgid "Repository ID"
 msgstr "रेपॉजिटरि ID"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:116
+#: ../src/subscription_manager/gui/reposgui.py:120
 msgid "Modified"
 msgstr "संपादित"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:252
+#: ../src/subscription_manager/gui/reposgui.py:256
 #, python-format
 msgid "Are you sure you want to remove all overrides for <b>%s</b>?"
 msgstr "तुम्हाला नक्की <b>%s</b> करिता सर्व ओव्हरराइड्स काढून टाकायचे?"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:253
+#: ../src/subscription_manager/gui/reposgui.py:257
 msgid "Confirm Remove All Overrides"
 msgstr "सर्व ओव्हरराइड्स काढून टाकण्याची खात्री करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:271
+#: ../src/subscription_manager/gui/reposgui.py:275
 msgid "Unable to reset repository overrides."
 msgstr "रेपॉजिटरि ओव्हरराइड्स मूळस्थितीत आणण्यास अशक्य."
 
-#: ../src/subscription_manager/gui/reposgui.py:312
+#: ../src/subscription_manager/gui/reposgui.py:316
 #, python-format
 msgid "Unable to update %s override."
 msgstr "%s ओव्हरराइड सुधारित करणे अशक्य."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:91
-msgid "Installed Products"
-msgstr "इंस्टॉल झालेली उत्पादने"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:130
-#, python-format
-msgid "There was an error removing %s with serial number %s"
-msgstr "%s काढून टाकतेवेळी त्रुटी, सिरिअल क्रमांक %s सह"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:144
-msgid "Removing"
-msgstr "काढून टाकत आहे"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:145
-msgid "Removing subscription. Please wait."
-msgstr "सबस्क्रिप्शन काढून टाकत आहे. कृपया थांबा."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:164
-#, python-format
-msgid "Are you sure you want to remove %s?"
-msgstr "तुम्हाला नक्की %s काढून टाकायचे?"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:191
-#, python-format
-msgid "Stack of %s and %s others"
-msgstr "%s व %s इतरांचे स्टॅक"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:194
-#, python-format
-msgid "Stack of %s and 1 other"
-msgstr "%s व 1 इतराचे स्टॅक"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:196
-#, python-format
-msgid "Stack of %s"
-msgstr "%s चे स्टॅक"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:226
-msgid "My Subscriptions"
-msgstr "माझे सबस्क्रिप्शन्स्"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:267
-msgid "Subscription is current."
-msgstr "सध्याचे सबस्क्रिप्शन."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:270
-msgid "Subscription is expired."
-msgstr "सबस्क्रिप्शनची वेळ समाप्ति."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:272
-msgid "Subscription has not begun."
-msgstr "सबस्क्रिप्शन सक्रिय झाले नाही."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:274
-#: ../src/subscription_manager/managercli.py:2374
-msgid "Subscription management service doesn't support Status Details."
-msgstr "सबस्क्रिप्शन मॅनेजमेंट सर्व्हिस स्थिती तपशीलकरिता समर्थन पुरवत नाही."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:281
-#: ../src/subscription_manager/gui/widgets.py:747
-#: ../src/subscription_manager/managercli.py:2233
-#: ../src/subscription_manager/managercli.py:2340
-msgid "Virtual"
-msgstr "वर्च्युअल"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:283
-#: ../src/subscription_manager/gui/widgets.py:746
-#: ../src/subscription_manager/managercli.py:2235
-#: ../src/subscription_manager/managercli.py:2342
-msgid "Physical"
-msgstr "फिजिकल"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:286
-#: ../src/subscription_manager/managercli.py:2238
-#: ../src/subscription_manager/managercli.py:2345
-msgid "Yes"
-msgstr "होय"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:288
-#: ../src/subscription_manager/managercli.py:2240
-#: ../src/subscription_manager/managercli.py:2347
-msgid "No"
-msgstr "नाही"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/about.py:29
-msgid ""
-"\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
-"\n"
-"http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
-"\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
-msgstr ""
-"\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
-"\n"
-"http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
-"\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/about.py:50
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:1
-#: ../etc-conf/subscription-manager-gui.desktop.in.h:2
-msgid "Subscription Manager"
-msgstr "सबस्क्रिप्शन व्यवस्थापक"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/about.py:55
-msgid "Copyright (c) 2012 Red Hat, Inc."
-msgstr "Copyright (c) 2012 Red Hat, Inc."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/about.py:75
-#: ../src/subscription_manager/gui/about.py:77
-#, python-format
-msgid "<b>%s version:</b> %s"
-msgstr "<b>%s आवृत्ती:</b> %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/about.py:79
-#, python-format
-msgid "<b>subscription management service version:</b> %s"
-msgstr "<b>सबस्क्रिप्शन मॅनेजमेंट सेवा आवृत्ती:</b> %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/about.py:103
-#, python-format
-msgid "<b>Next System Check-in:</b> %s"
-msgstr "<b>पुढचे प्रणाली चेक-इन:</b> %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:261 ../src/rct/printing.py:45
-#: ../src/rct/printing.py:73 ../src/rct/printing.py:103
+#: ../src/subscription_manager/gui/widgets.py:339
 #: ../src/rct/manifest_commands.py:204 ../src/rct/manifest_commands.py:228
+#: ../src/rct/printing.py:45 ../src/rct/printing.py:73
+#: ../src/rct/printing.py:103
 msgid "Name"
 msgstr "नाव"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:261
-#: ../src/subscription_manager/gui/factsgui.py:60
-msgid "Value"
-msgstr "मूल्य"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:296
+#: ../src/subscription_manager/gui/widgets.py:374
 msgid "Installed"
 msgstr "इंस्टॉल झालेले"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:599
+#: ../src/subscription_manager/gui/widgets.py:687
 msgid "Invalid date format. Please re-enter a valid date. Example: "
 msgstr "अवैध दिनांक रूपण. कृपया वैध दिनांक पुनः द्या. उदाहरणार्थ: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:636
+#: ../src/subscription_manager/gui/widgets.py:724
 msgid "Date Selection"
 msgstr "दिनांक निवड"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:651
+#: ../src/subscription_manager/gui/widgets.py:739
 msgid "Today"
 msgstr "आज"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:748
+#: ../src/subscription_manager/gui/widgets.py:838
 msgid "Both"
 msgstr "दोंही"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. content-type is required, no need to xstr
-#: ../src/subscription_manager/gui/widgets.py:751 ../src/rct/printing.py:102
-#: ../src/rct/manifest_commands.py:206
+#: ../src/subscription_manager/gui/widgets.py:841
+#: ../src/rct/manifest_commands.py:206 ../src/rct/printing.py:102
 msgid "Type"
 msgstr "प्रकार"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:823
+#: ../src/subscription_manager/gui/widgets.py:914
 msgid "Click to Adjust Quantity"
 msgstr "प्रमाण सुस्थीत करण्यासाठी क्लिक करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:348
-msgid ""
-"Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr "पसंती संवादमध्ये त्रुटी.अधिक माहितीकरिता कृपया /var/log/rhsm/rhsm.log पहा."
+#. note default is lower caps
+#: ../src/subscription_manager/i18n_optparse.py:39
+msgid "%prog [OPTIONS]"
+msgstr "%prog [पर्याय]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:356
-msgid ""
-"Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
-"information."
-msgstr "रेपोज संवादमध्ये त्रुटी. अधिक माहितीकरिता कृपया /var/log/rhsm/rhsm.log पहा."
+#: ../src/subscription_manager/i18n_optparse.py:129
+#: ../../../../..//usr/lib64/python2.7/optparse.py:374
+#, python-format
+msgid "Usage: %s\n"
+msgstr "वापर: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:372
-msgid "<b>Errors were encountered during unregister.</b>"
-msgstr "<b>नोंदणी अशक्य करतेवेली त्रुटी आढळली.</b>"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:390
-msgid "<b>Are you sure you want to unregister?</b>"
-msgstr "<b>तुम्हाला नक्की नोंदणी अशक्य करायचे?</b>"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:446
-msgid "System Already Registered"
-msgstr "प्रणालीची आधिपासूनच नोंदणी झाली आहे"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:96
-#: ../src/rct/printing.py:76 ../src/rct/manifest_commands.py:237
-msgid "Contract"
-msgstr "करार"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:110
-msgid "Used / Total"
-msgstr "वापरलेले / एकूण"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. Set up columns on the view
-#: ../src/subscription_manager/gui/factsgui.py:59
-msgid "Fact"
-msgstr "वस्तुस्थिती"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/factsgui.py:102
-msgid "No previous update"
-msgstr "मागील सुधारणा नाही"
+#. translators: arg 1 is the program name, arg 2 is the error message
+#: ../src/subscription_manager/i18n_optparse.py:145
+#, python-format
+msgid "%s: error: %s"
+msgstr "%s: त्रुटी: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:61
@@ -1468,8 +1375,8 @@ msgstr ""
 "%s करिता यशस्वीरित्या उत्पादन प्रमाणपत्र इंस्टॉल केले."
 
 #: ../src/subscription_manager/migrate/migrate.py:604
-msgid "Could not unentitle system on legacy server.  "
-msgstr "लेगसि सर्व्हरवरील प्रणालीला एंटाइटल अशक्य करू शकले नाही.  "
+msgid "Could not remove system entitlement on legacy server.  "
+msgstr ""
 
 #: ../src/subscription_manager/migrate/migrate.py:620
 #, python-format
@@ -1671,15 +1578,6 @@ msgstr ""
 msgid "The --servicelevel and --no-auto options cannot be used together."
 msgstr "--servicelevel व --no-auto पर्याय एकत्रपणे वापरणे अशक्य."
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/cache.py:152
-msgid ""
-"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"सर्व्हरवर प्रणाली डाटा अपलोड करतेवेळी त्रुटी, अधिक तपशीलकरिता /var/log/rhsm/rhsm."
-"log पहा."
-
 #: ../src/subscription_manager/plugin/ostree/action_invoker.py:147
 msgid "Updates:"
 msgstr "सुधारणा:"
@@ -1696,6 +1594,184 @@ msgstr "नष्ट केले:"
 #: ../src/subscription_manager/plugin/container.py:236
 msgid "Removed:"
 msgstr "काढून टाकले:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. usage format strips any leading 'usage' so
+#. do not iclude it
+#: ../src/subscription_manager/cli.py:61
+#, python-format
+msgid "%%prog %s [OPTIONS]"
+msgstr "%%prog %s [पर्याय]"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/cli.py:92
+#, python-format
+msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+msgstr "वापर: %s मॉड्युल-नाव [मॉड्युल-पर्याय] [--help]"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/cli.py:104
+msgid "Primary Modules:"
+msgstr "प्राथमिक घटके:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/cli.py:105
+msgid "Other Modules:"
+msgstr "इतर घटक:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/dmiinfo.py:56
+#: ../src/subscription_manager/dmiinfo.py:102
+#, python-format
+msgid "Error reading system DMI information: %s"
+msgstr "प्रणलीची DMI माहिती वाचतेवेळी त्रुटी: %s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/dmiinfo.py:77
+#, python-format
+msgid "Error reading system DMI information with %s: %s"
+msgstr "%s सह प्रणाली DMI माहिती वाचतेवेळी त्रुटी: %s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:28
+msgid ""
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
+msgstr ""
+"नेटवर्क त्रुटी, सर्व्हरशी जोडणी करणे अशक्य. कृपया अधिक माहितीकरिता /var/log/rhsm/rhsm."
+"log लॉग पहा."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:29
+msgid ""
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
+msgstr ""
+"नेटवर्क त्रुटी. कृपया जोडणी तपशील तपासा, किंवा अधिक माहितीकरिता /var/log/rhsm/rhsm."
+"log पहा."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:30
+msgid "Unauthorized: Invalid credentials for request."
+msgstr "अनाधिकृत: विनंतीकरिता अवैध श्रेय."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:31
+msgid "Forbidden: Invalid credentials for request."
+msgstr "निषिध्द: विनंतीकरिता अवैध श्रेय."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:32
+msgid ""
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
+msgstr ""
+"रिमोट सर्व्हर त्रुटी. कृपया तपशील अहवाल तपासा, किंवा अधिक माहितीकरिता /var/log/"
+"rhsm/rhsm.log पहा."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:33
+#, python-format
+msgid "Bad CA certificate: %s"
+msgstr "अयोग्य CA प्रमाणपत्र: %s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:34
+#: ../src/daemons/rhsmcertd-worker.py:63
+msgid "Your identity certificate has expired"
+msgstr "ओळख प्रमाणपत्राची वेळसमाप्ति झाली"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:35
+#, python-format
+msgid "Unable to verify server's identity: %s"
+msgstr "सर्व्हरची ओळख तपासण्यास अशक्य: %s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:36
+msgid "Server URL can not be empty"
+msgstr "सर्व्हर URL रिकामे असणे अशक्य"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:37
+msgid ""
+"Server URL is just a schema. Should include hostname, and/or port and path"
+msgstr ""
+"सर्व्हर URL फक्त स्किमा आहे. त्यात यजमाननाव, व/किंवा पोर्ट व मार्ग समाविष्टीत असायला हवे"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:38
+msgid "Server URL can not be None"
+msgstr "सर्व्हर URL चे मूल्य रिकामे असणे अशक्य"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:39
+msgid "Server URL port should be numeric"
+msgstr "सर्व्हर URL पोर्ट संख्यायीक असणे आवश्यक"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/exceptions.py:40
+msgid "Server URL has an invalid scheme. http:// and https:// are supported"
+msgstr "सर्व्हर URL मध्ये अवैध स्किमा आढळले. http:// व https:// समर्थीत आहे"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/reasons.py:85
+msgid "Product "
+msgstr "उत्पादन "
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/reasons.py:87
+msgid "Subscription "
+msgstr "सबस्क्रिप्शन "
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/reasons.py:89
+msgid "Stack "
+msgstr "स्टॅक "
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. TODO: Should this use the standard NOT_REGISTERED message?
+#: ../src/subscription_manager/utils.py:229
+#: ../src/subscription_manager/managercli.py:1229
+msgid "This system is currently not registered."
+msgstr "सध्या प्रणालीची नोंदणी केली नाही."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. FIXME: This is wrong in most non english locales.
+#: ../src/subscription_manager/utils.py:316
+msgid "and"
+msgstr "आणि"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/hwprobe.py:273
+msgid "Error reading system memory information:"
+msgstr "प्रणालीची मेमरी माहिती वाचतेवेळी त्रुटी:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/hwprobe.py:585
+msgid "Error reading system CPU information:"
+msgstr "CPU माहिती वाचतेवेळी त्रुटी:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/hwprobe.py:610
+msgid "Error reading networking information:"
+msgstr "नेटवर्किंग माहिती वाचतेवेळी त्रुटी:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/hwprobe.py:709
+msgid "Error reading network interface information:"
+msgstr "नेटवर्क इंटरफेस माहिती वाचतेवेळी त्रुटी:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/hwprobe.py:802
+msgid "Virtualization platform does not support UUIDs"
+msgstr "वर्च्युअलाइजेशन प्लॅटफॉर्म UUIDs करिता समर्थन पुरवत नाही"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/hwprobe.py:804
+#, python-format
+msgid "Error finding UUID: %s"
+msgstr "UUID शोधतेवेळी त्रुटी: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:68
@@ -2396,13 +2472,6 @@ msgstr "त्रुटी: --servicelevel पर्याय सर्व्ह
 #, python-format
 msgid "No such environment: %s"
 msgstr "या प्रकारचे एंवार्यनमेंट आढळले नाही: %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. TODO: Should this use the standard NOT_REGISTERED message?
-#: ../src/subscription_manager/managercli.py:1229
-#: ../src/subscription_manager/utils.py:229
-msgid "This system is currently not registered."
-msgstr "सध्या प्रणालीची नोंदणी केली नाही."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1255
@@ -3271,6 +3340,32 @@ msgstr "प्रणाली स्थिती तपशील"
 msgid "Overall Status: %s\n"
 msgstr "एकूण स्थिती: %s\n"
 
+#: ../src/subscription_manager/repolib.py:446
+msgid "Repo updates"
+msgstr ""
+
+#: ../src/subscription_manager/repolib.py:447
+#, python-format
+msgid "Total repo updates: %d"
+msgstr "एकूण रेपो सुधारणा: %d"
+
+#: ../src/subscription_manager/repolib.py:448
+msgid "Updated"
+msgstr "सुधारित केले"
+
+#: ../src/subscription_manager/repolib.py:452
+msgid "Deleted"
+msgstr "नष्ट केले"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/cache.py:152
+msgid ""
+"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
+"सर्व्हरवर प्रणाली डाटा अपलोड करतेवेळी त्रुटी, अधिक तपशीलकरिता /var/log/rhsm/rhsm."
+"log पहा."
+
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/cert_sorter.py:44
 msgid "Current"
@@ -3287,99 +3382,268 @@ msgid "Invalid"
 msgstr "अवैध"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/reasons.py:85
-msgid "Product "
-msgstr "उत्पादन "
+#: ../src/rct/cert_commands.py:38
+#, python-format
+msgid "%%prog %s [OPTIONS] CERT_FILE"
+msgstr "%%prog %s [पर्याय] CERT_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/reasons.py:87
-msgid "Subscription "
-msgstr "सबस्क्रिप्शन "
+#: ../src/rct/cert_commands.py:46 ../src/rct/manifest_commands.py:253
+#, python-format
+msgid "Unable to read certificate file '%s': %s"
+msgstr "प्रमाणपत्र फाइल '%s': %s वाचणे अशक्य"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/reasons.py:89
-msgid "Stack "
-msgstr "स्टॅक "
+#: ../src/rct/cert_commands.py:52
+msgid "You must specify a certificate file."
+msgstr "प्रमाणपत्र फाइल निर्देशीत करणे आवश्यक."
 
-#: ../src/subscription_manager/repolib.py:434
-msgid "Repo updates"
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:55
+msgid "The specified certificate file does not exist."
+msgstr "निर्देशीत प्रमाणपत्र फाइल अस्तित्वात नाही."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:62
+msgid "Print certificate information"
+msgstr "प्रमाणपत्र माहितीची छपाई करा"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:66
+msgid "do not show the cert's product information"
+msgstr "प्रमाणपत्राची उत्पादन माहिती दाखवू नका"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:68
+msgid "do not show the cert's content info"
+msgstr "सर्टची अंतर्भुत माहिती दाखवू नका"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:83
+msgid "Print certificate statistics and sizes"
+msgstr "प्रमाणपत्राची आकडेवारी व आकारांची छपाई करा"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:89
+#, python-format
+msgid "Type: %s"
+msgstr "प्रकार: %s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:90
+#, python-format
+msgid "Version: %s"
+msgstr "आवृत्ती: %s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:91
+#, python-format
+msgid "DER size: %db"
+msgstr "DER आकार: %db"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:95
+#, python-format
+msgid "Subject Key ID size: %db"
+msgstr "सबजेक्ट कि ID आकार: %db"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/cert_commands.py:101
+#, python-format
+msgid "Content sets: %s"
+msgstr "कंटेंट संच: %s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:64
+msgid "Manifest zip is invalid."
+msgstr "मॅनिफेस्ट zip अवैध आहे."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:84
+#, python-format
+msgid "Unable to find file \"%s\" in manifest."
+msgstr "मॅनिफेस्टमध्ये फाइल \"%s\" शोधणे अशक्य."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:108
+msgid "Manifest zip attempted to extract outside of the base directory."
+msgstr "मॅनिफेस्ट झिपने बेस डिरेक्ट्रिच्या बाहेर प्राप्य करायचा प्रयत्न करा."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:114
+msgid "Unable to trace symbolic link.  Possibly circular linkage."
+msgstr "सिम्बॉलिक लिंक ट्रेस करणे अशक्य.  संभाव्यतया सर्क्युलर लिंकेज."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:140
+#, python-format
+msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
+msgstr "%%prog %s [पर्याय] MANIFEST_FILE"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:145
+msgid "You must specify a manifest file."
+msgstr "manifest फाइल निर्देशीत करणे आवश्यक."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:148
+msgid "The specified manifest file does not exist."
+msgstr "निर्देशीत manifest फाइल अस्तित्वात नाही."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:172
+msgid "Print manifest information"
+msgstr "manifest माहितीची छपाई करा"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:193
+msgid "Server"
+msgstr "सर्व्हर"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:194
+msgid "Server Version"
+msgstr "सर्व्हर आवृत्ती"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:195
+msgid "Date Created"
+msgstr "निर्माण केल्याचे दिनांक"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:196
+msgid "Creator"
+msgstr "निर्माता"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:197
+msgid "General:"
+msgstr "सर्वसाधारण:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:205
+msgid "UUID"
+msgstr "UUID"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:207
+msgid "Consumer:"
+msgstr "ग्राहक:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:221
+msgid "Subscriptions:"
+msgstr "सबस्क्रिप्शन्स:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:230
+msgid "Created"
+msgstr "निर्मीत"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:78
+msgid "Service Level"
+msgstr "सेवा स्तर"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:79
+msgid "Service Type"
+msgstr "सेवा प्रकार"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:235
+msgid "Architectures"
+msgstr "आर्किटेक्चर्स"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:236 ../src/rct/printing.py:75
+msgid "SKU"
+msgstr "SKU"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:238 ../src/rct/printing.py:72
+msgid "Order"
+msgstr "क्रमवारि"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:77
+msgid "Account"
+msgstr "खाते"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:242
+msgid "Entitlement File"
+msgstr "एंटाइटलमेंट फाइल"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:247
+msgid "Certificate File"
+msgstr "सर्टिफिकेट फाइल"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:255
+msgid "Certificate Version"
+msgstr "सर्टिफिकेट आवृत्ती"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:257
+msgid "Subscription:"
+msgstr "सबस्क्रिप्शन:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:262
+msgid "Provided Products:"
+msgstr "पुरवलेली उत्पादने:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:266
+msgid "Content Sets:"
+msgstr "अंतर्भुत माहिती संच:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:275
+msgid "\tManifest"
+msgstr "\tमॅनिफेस्ट"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:287
+msgid "Dump the contents of a manifest"
+msgstr "manifestची अंतर्भुत माहिती डम्प करा"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:291
+msgid "directory to extract the manifest to"
+msgstr "manifest जेथे खुले करायचे ति डिरेक्ट्रि"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:294
+msgid "overwrite files which may exist"
+msgstr "अस्तित्वातील फाइल्स खोडून पुन्हा लिहा"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. useful error for file already exists
+#: ../src/rct/manifest_commands.py:303
+#, python-format
+msgid "File \"%s\" exists. Use -f to force overwriting the file."
 msgstr ""
+"फाइल \"%s\" अस्तित्वात आहे. फाइलला खोडून पुन्हा लिहण्याकरिता -f याचा वापर करा."
 
-#: ../src/subscription_manager/repolib.py:435
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#. generic error for everything else
+#: ../src/rct/manifest_commands.py:306
+msgid "Manifest could not be written:"
+msgstr "मॅनिफेस्ट लिहणे अशक्य:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/rct/manifest_commands.py:319
 #, python-format
-msgid "Total repo updates: %d"
-msgstr "एकूण रेपो सुधारणा: %d"
-
-#: ../src/subscription_manager/repolib.py:436
-msgid "Updated"
-msgstr "सुधारित केले"
-
-#: ../src/subscription_manager/repolib.py:440
-msgid "Deleted"
-msgstr "नष्ट केले"
+msgid "The manifest has been dumped to the %s directory"
+msgstr "manifestला %s डिरेक्ट्रिमध्ये डम्प केले"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. usage format strips any leading 'usage' so
-#. do not iclude it
-#: ../src/subscription_manager/cli.py:61
-#, python-format
-msgid "%%prog %s [OPTIONS]"
-msgstr "%%prog %s [पर्याय]"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/cli.py:92
-#, python-format
-msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "वापर: %s मॉड्युल-नाव [मॉड्युल-पर्याय] [--help]"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/cli.py:104
-msgid "Primary Modules:"
-msgstr "प्राथमिक घटके:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/cli.py:105
-msgid "Other Modules:"
-msgstr "इतर घटक:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/dmiinfo.py:56
-#: ../src/subscription_manager/dmiinfo.py:102
-#, python-format
-msgid "Error reading system DMI information: %s"
-msgstr "प्रणलीची DMI माहिती वाचतेवेळी त्रुटी: %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/dmiinfo.py:77
-#, python-format
-msgid "Error reading system DMI information with %s: %s"
-msgstr "%s सह प्रणाली DMI माहिती वाचतेवेळी त्रुटी: %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. FIXME: This is wrong in most non english locales.
-#: ../src/subscription_manager/utils.py:316
-msgid "and"
-msgstr "आणि"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. note default is lower caps
-#: ../src/subscription_manager/i18n_optparse.py:39
-msgid "%prog [OPTIONS]"
-msgstr "%prog [पर्याय]"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:129
-#: ../../../../..//usr/lib64/python2.7/optparse.py:374
-#, python-format
-msgid "Usage: %s\n"
-msgstr "वापर: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:145
-#, python-format
-msgid "%s: error: %s"
-msgstr "%s: त्रुटी: %s"
+#: ../src/rct/manifest_commands.py:322
+msgid "The manifest has been dumped to the current directory"
+msgstr "manifestला सध्याच्या डिरेक्ट्रिमध्ये डम्प केले"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/rct/printing.py:44
@@ -3407,34 +3671,9 @@ msgid "Brand Name"
 msgstr "ब्रँड नाव"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/printing.py:72 ../src/rct/manifest_commands.py:238
-msgid "Order"
-msgstr "क्रमवारि"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/rct/printing.py:74
 msgid "Number"
 msgstr "क्रमांक"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/printing.py:75 ../src/rct/manifest_commands.py:236
-msgid "SKU"
-msgstr "SKU"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/printing.py:77 ../src/rct/manifest_commands.py:239
-msgid "Account"
-msgstr "खाते"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/printing.py:78 ../src/rct/manifest_commands.py:233
-msgid "Service Level"
-msgstr "सेवा स्तर"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/printing.py:79 ../src/rct/manifest_commands.py:234
-msgid "Service Type"
-msgstr "सेवा प्रकार"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/rct/printing.py:84
@@ -3573,245 +3812,6 @@ msgid "Unknown Certificate Type"
 msgstr "अपरिचीत सर्टिफिकेट प्रकार"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:64
-msgid "Manifest zip is invalid."
-msgstr "मॅनिफेस्ट zip अवैध आहे."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:84
-#, python-format
-msgid "Unable to find file \"%s\" in manifest."
-msgstr "मॅनिफेस्टमध्ये फाइल \"%s\" शोधणे अशक्य."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:108
-msgid "Manifest zip attempted to extract outside of the base directory."
-msgstr "मॅनिफेस्ट झिपने बेस डिरेक्ट्रिच्या बाहेर प्राप्य करायचा प्रयत्न करा."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:114
-msgid "Unable to trace symbolic link.  Possibly circular linkage."
-msgstr "सिम्बॉलिक लिंक ट्रेस करणे अशक्य.  संभाव्यतया सर्क्युलर लिंकेज."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:140
-#, python-format
-msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
-msgstr "%%prog %s [पर्याय] MANIFEST_FILE"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:145
-msgid "You must specify a manifest file."
-msgstr "manifest फाइल निर्देशीत करणे आवश्यक."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:148
-msgid "The specified manifest file does not exist."
-msgstr "निर्देशीत manifest फाइल अस्तित्वात नाही."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:172
-msgid "Print manifest information"
-msgstr "manifest माहितीची छपाई करा"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:193
-msgid "Server"
-msgstr "सर्व्हर"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:194
-msgid "Server Version"
-msgstr "सर्व्हर आवृत्ती"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:195
-msgid "Date Created"
-msgstr "निर्माण केल्याचे दिनांक"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:196
-msgid "Creator"
-msgstr "निर्माता"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:197
-msgid "General:"
-msgstr "सर्वसाधारण:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:205
-msgid "UUID"
-msgstr "UUID"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:207
-msgid "Consumer:"
-msgstr "ग्राहक:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:221
-msgid "Subscriptions:"
-msgstr "सबस्क्रिप्शन्स:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:230
-msgid "Created"
-msgstr "निर्मीत"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:235
-msgid "Architectures"
-msgstr "आर्किटेक्चर्स"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:242
-msgid "Entitlement File"
-msgstr "एंटाइटलमेंट फाइल"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:247
-msgid "Certificate File"
-msgstr "सर्टिफिकेट फाइल"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:253 ../src/rct/cert_commands.py:46
-#, python-format
-msgid "Unable to read certificate file '%s': %s"
-msgstr "प्रमाणपत्र फाइल '%s': %s वाचणे अशक्य"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:255
-msgid "Certificate Version"
-msgstr "सर्टिफिकेट आवृत्ती"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:257
-msgid "Subscription:"
-msgstr "सबस्क्रिप्शन:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:262
-msgid "Provided Products:"
-msgstr "पुरवलेली उत्पादने:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:266
-msgid "Content Sets:"
-msgstr "अंतर्भुत माहिती संच:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:275
-msgid "\tManifest"
-msgstr "\tमॅनिफेस्ट"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:287
-msgid "Dump the contents of a manifest"
-msgstr "manifestची अंतर्भुत माहिती डम्प करा"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:291
-msgid "directory to extract the manifest to"
-msgstr "manifest जेथे खुले करायचे ति डिरेक्ट्रि"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:294
-msgid "overwrite files which may exist"
-msgstr "अस्तित्वातील फाइल्स खोडून पुन्हा लिहा"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. useful error for file already exists
-#: ../src/rct/manifest_commands.py:303
-#, python-format
-msgid "File \"%s\" exists. Use -f to force overwriting the file."
-msgstr ""
-"फाइल \"%s\" अस्तित्वात आहे. फाइलला खोडून पुन्हा लिहण्याकरिता -f याचा वापर करा."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#. generic error for everything else
-#: ../src/rct/manifest_commands.py:306
-msgid "Manifest could not be written:"
-msgstr "मॅनिफेस्ट लिहणे अशक्य:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:319
-#, python-format
-msgid "The manifest has been dumped to the %s directory"
-msgstr "manifestला %s डिरेक्ट्रिमध्ये डम्प केले"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/manifest_commands.py:322
-msgid "The manifest has been dumped to the current directory"
-msgstr "manifestला सध्याच्या डिरेक्ट्रिमध्ये डम्प केले"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:38
-#, python-format
-msgid "%%prog %s [OPTIONS] CERT_FILE"
-msgstr "%%prog %s [पर्याय] CERT_FILE"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:52
-msgid "You must specify a certificate file."
-msgstr "प्रमाणपत्र फाइल निर्देशीत करणे आवश्यक."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:55
-msgid "The specified certificate file does not exist."
-msgstr "निर्देशीत प्रमाणपत्र फाइल अस्तित्वात नाही."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:62
-msgid "Print certificate information"
-msgstr "प्रमाणपत्र माहितीची छपाई करा"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:66
-msgid "do not show the cert's product information"
-msgstr "प्रमाणपत्राची उत्पादन माहिती दाखवू नका"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:68
-msgid "do not show the cert's content info"
-msgstr "सर्टची अंतर्भुत माहिती दाखवू नका"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:83
-msgid "Print certificate statistics and sizes"
-msgstr "प्रमाणपत्राची आकडेवारी व आकारांची छपाई करा"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:89
-#, python-format
-msgid "Type: %s"
-msgstr "प्रकार: %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:90
-#, python-format
-msgid "Version: %s"
-msgstr "आवृत्ती: %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:91
-#, python-format
-msgid "DER size: %db"
-msgstr "DER आकार: %db"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:95
-#, python-format
-msgid "Subject Key ID size: %db"
-msgstr "सबजेक्ट कि ID आकार: %db"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/rct/cert_commands.py:101
-#, python-format
-msgid "Content sets: %s"
-msgstr "कंटेंट संच: %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/rhsm_debug/debug_commands.py:50
 msgid "Assemble system information as a tar file or directory"
 msgstr "प्रणाली माहितीला टार फाइल किंवा डिरेक्ट्री, असे एकत्रित करा"
@@ -3871,12 +3871,12 @@ msgid "Unable to create zip file of system information: %s"
 msgstr "प्रणाली माहिती: %s ची झिप फाइल निर्माण करणे अशक्य"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/daemons/rhsmcertd-worker.py:44
+#: ../src/daemons/rhsmcertd-worker.py:47
 msgid "Updating entitlement certificates & repositories"
 msgstr "एंटाइटलमेंट प्रमाणपत्रे व रेपॉजिटरीज सुधारित करत आहे"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/daemons/rhsmcertd-worker.py:65
+#: ../src/daemons/rhsmcertd-worker.py:68
 msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
@@ -3884,7 +3884,7 @@ msgstr ""
 "ह्या ग्राहकाचे प्रोफाइल सर्व्हरपासून नष्ट केले आहे. स्थानीय प्रमाणपत्र आत्ता साठवले जाईल"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/daemons/rhsmcertd-worker.py:67
+#: ../src/daemons/rhsmcertd-worker.py:70
 msgid ""
 "Certificates archived to '/etc/pki/consumer.old'. Contact your system "
 "administrator if you need more information."
@@ -3893,12 +3893,94 @@ msgstr ""
 "असल्यास प्रणाली प्रशासकासह संपर्क करा."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/daemons/rhsmcertd-worker.py:93
+#: ../src/daemons/rhsmcertd-worker.py:96
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "एंटाइटलमेंट प्रमाणपत्र व रेपॉजिटरिज सुधारित करणे अशक्य"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:3
+msgid "<b>Please enter the following for this system:</b>"
+msgstr "<b>या प्रणालीकरिता कृपया खालील द्या:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:4
+msgid "Organization:"
+msgstr "संस्था:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:3
+msgid "Activation Key:"
+msgstr "ॲक्टिवेशन कि:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:5
+msgid "System Name:"
+msgstr "प्रणालीचे नाव:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:5
+msgid "This must be the organization key, not the name."
+msgstr "हे ऑर्गनाइजेशन कि असायला पाहिजे, नाव नाही."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:6
+msgid "organization_entry"
+msgstr "organization_entry"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:7
+msgid ""
+"Multiple Activation Keys can be entered by separating them with a comma or a "
+"space."
+msgstr "स्वल्पविराम किंवा स्पेसचा वापर करून एकापेक्षाजास्त ॲक्टिवेशन किज् देणे शक्य आहे."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:8
+msgid "activation_key_entry"
+msgstr "activation_key_entry"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:9
+msgid "consumer_entry"
+msgstr "consumer_entry"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:1
+msgid "<b>Show subscriptions active on:</b>"
+msgstr "<b>सुरू असलेले सबस्क्रिप्शन्स् दाखवा:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:2
+msgid "Update"
+msgstr "सुधारणा"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:3
+msgid "Search"
+msgstr "शोध"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:5
+msgid "label"
+msgstr "लेबल"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:5
+msgid "Filters"
+msgstr "फिल्टर्स्"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:6
+msgid "* Click to Adjust Quantity"
+msgstr "* प्रमाण सुस्थीत करण्यासाठी क्लिक करा"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:1
 msgid ""
 "The subscription management service you register with will provide your "
 "system with updates and allow additional management."
@@ -3907,12 +3989,12 @@ msgstr ""
 "अगाऊ व्यवस्थापन स्वीकारेल."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:2
 msgid "choose_server_label"
 msgstr "choose_server_label"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:3
 msgid ""
 "Registering with Customer Portal, Subscription Asset Manager, Satellite or "
 "Candlepin servers can be used to provide your system with updates and allow "
@@ -3923,151 +4005,270 @@ msgstr ""
 "संवादसह व्यवस्थापनकरिता होऊ शकतो."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:4
 msgid "I will register with:"
 msgstr "नोंदणी यासह करेल:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:5
 msgid "server_label"
 msgstr "server_label"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:6
 msgid "hostname[:port][/prefix]"
 msgstr "hostname[:port][/prefix]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:7
 msgid "server_entry"
 msgstr "server_entry"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:8
 msgid "Default"
 msgstr "पूर्वनिर्धारित"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:9
 msgid "Reset to register with Customer Portal."
 msgstr "Customer Portal सह नोंदणी मूळस्थितीत आणा."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:10
 msgid "default_button"
 msgstr "default_button"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:11
 msgid ""
-"Activation Keys are alphanumeric strings that are pre-configured by your "
+"Activation Keys are alphanumeric strings that are preconfigured by your "
 "system administrators to automatically register your system and attach all "
 "necessary subscriptions."
 msgstr ""
-"ॲक्टिवेशन किज् अल्फान्युमेरिक स्ट्रिंग्स् आहेत जे प्रणाली प्रशासकातर्फे पूर्व-संरचीत केले जातात "
-"जेणेकरून प्रणालीची होईल व आवश्यक सबस्क्रिप्शन्स् जोडले जाईल."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:12
 msgid "I will use an Activation Key"
 msgstr "मी ॲक्टिवेशन किचा वापर करेल"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:13
 msgid "If required, please configure your proxy before moving forward."
 msgstr "आवश्यक असल्यास, पुढे जाण्यापूर्वी कृपया प्रॉक्सी संरचीत करा."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:14
 msgid "Configure Proxy"
 msgstr "प्रॉक्सी संरचीत करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:15
 msgid "proxy_button"
 msgstr "proxy_button"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:1
+msgid "<b>Confirm Subscriptions</b>"
+msgstr "<b>सबस्क्रिप्शन्स्ची खात्री करा</b>"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:2
+msgid "Using service level:"
+msgstr "सेवा स्तरचा वापर करत आहे:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:3
+msgid "SLA"
+msgstr "SLA"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:4
+msgid "The following subscriptions will be attached:"
+msgstr "खालील सबस्क्रिप्शन्स् जोडले जाईल:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:5
+msgid "Selected Subscriptions Table"
+msgstr "निवडलेले सबस्क्रिप्शन्स तक्ता"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:6
+msgid "Core repositories will be enabled for each product."
+msgstr "प्रत्येक उत्पादनकरिता कोर रेपॉजिटरिज् सुरू केले जाईल."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:1
 msgid "Contract Selection"
 msgstr "सौदा नीवड"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:2
 msgid "<b>Choose the specific contract to use:</b>"
 msgstr "<b>वापरण्याजोगी ठराविक सौदा नीवडा:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:3
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:2
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:2
 msgid "<b>Subscription:</b>"
 msgstr "<b>सबस्क्रिप्शन:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:4
 msgid "<b>Total Contracts:</b>"
 msgstr "<b>एकूण सौदे:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:5
 msgid "* Click to Change Quantity"
 msgstr "* प्रमाण बदलण्यासाठी क्लिक करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:6
 msgid "SLA Selection Table"
 msgstr "SLA निवड तक्ता"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/environment.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:1
+msgid "Password:"
+msgstr "पासवर्ड:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:2
+msgid "Login:"
+msgstr "प्रवेश:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:4
+msgid "system_instructions_label"
+msgstr "system_instructions_label"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:6
+msgid "system_name_label"
+msgstr "system_name_label"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:7
+msgid "A unique label for this system"
+msgstr "या प्रणालीसाठी एकमेव लेबल"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:8
+msgid "Manually attach subscriptions after registration"
+msgstr "नोंदणीनंतर स्वतः सबस्क्रिप्शन्स्ची जोडणी करा"
+
+#: ../src/subscription_manager/gui/data/glade/done_box.glade.h:1
+msgid "Done!"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/environment.glade.h:1
 msgid "<b>Environment Selection</b>"
 msgstr "<b>एंवार्यंमेंट नीवड</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/environment.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/environment.glade.h:2
 msgid "env_select_vbox_label"
 msgstr "env_select_vbox_label"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/environment.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/environment.glade.h:3
 msgid "environment_treeview"
 msgstr "environment_treeview"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:1
+msgid "Subscription Manager - Facts"
+msgstr "सबस्क्रिप्शन व्यवस्थापक - वस्तुस्थित्या"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:2
+msgid "System Identity:"
+msgstr "प्रणाली ओळख:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:3
+msgid "System Identity Value"
+msgstr "प्रणाली ओळख मूल्य"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:5
+msgid "Organization Value"
+msgstr "संस्था मूल्य"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:6
+msgid "Environment:"
+msgstr "एंवार्यनमेंट:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:8
+msgid "facts_view"
+msgstr "वस्तुस्तिथी दृष्य (_v)"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:9
+msgid "Last Update:"
+msgstr "शेवटची सुधारणा:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:10
+msgid "Update Time"
+msgstr "सुधारणा वेळ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:11
+msgid "Update Facts"
+msgstr "वस्तुस्थित्या सुधारीत करा"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:4
+msgid "Close"
+msgstr "बंद करा"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:5
+msgid "close_button"
+msgstr "close_button"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:1
 msgid "Filter Options"
 msgstr "फिल्टर पर्याय"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:2
 msgid "Only show subscriptions that:"
 msgstr "फक्त तेच सबस्क्रिप्शन्स् दाखवा जे:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:3
 msgid "match my system"
 msgstr "प्रणालींसह जुळतात"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:4
 msgid ""
 "Only show subscriptions which can be attached to this machine and "
 "architecture"
 msgstr "फक्त ह्या मशीन आणि आर्किटेक्चरसह जुळणीजोगी सबस्क्रिप्शन्स दाखवा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:5
 msgid "Match System"
 msgstr "प्रणाली जुळवा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:6
 msgid "match my installed products"
 msgstr "इंस्टॉल झालेल्या उत्पादनांसह जुळवा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:7
 msgid ""
 "Only show subscriptions which can be applied to products installed on this "
 "machine"
@@ -4075,168 +4276,161 @@ msgstr ""
 "फक्त सबस्क्रिप्शन्स दाखवा ज्यास ह्या मशीनवरील इंस्टॉल केलेल्या उत्पादनांकरिता लागू केले जाईल"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:8
 msgid "Match Installed"
 msgstr "इंस्टॉल झालेले जुळवा"
 
-#: ../src/subscription_manager/gui/data/filters.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:9
 msgid ""
 "Only show subscriptions that: provide products that are not already covered"
 msgstr "फक्त सबस्क्रिप्शन्स दाखवा: आधीपासूनच समाविष्ट असलेले उत्पादन द्या"
 
-#: ../src/subscription_manager/gui/data/filters.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:10
 msgid "Hide subscriptions whose provided products have a Subscribed status"
 msgstr "सबस्क्राइब्ड स्थिती असणाऱ्या पुरवलेल्या उत्पादनांची सबस्क्रिप्शन्स छुपे करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:11
 msgid "Do Not Overlap"
 msgstr "एकमेकांना व्यापू नका"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:12
 msgid "Contain the text"
 msgstr "मजकूर समाविष्टीत"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:13
 msgid "Text in Subscription"
 msgstr "सबस्क्रिप्शनमधील मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:1
 msgid "<b>Status:</b>"
 msgstr "<b>स्थिती:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:2
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:6
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:4
-msgid "label"
-msgstr "लेबल"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:3
 msgid "Overall Status"
 msgstr "सरासरी स्थिती"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:5
 msgid "Register System"
 msgstr "प्रणालीची नोंदणी करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:6
 msgid "Auto-attach"
 msgstr "स्वयं-जोडणी"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:7
 msgid "Installed View"
 msgstr "इंस्टॉल झालेले दृष्य"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:8
 msgid "<b>Product's Subscription Details</b>"
 msgstr "<b>उत्पादनचे सबस्क्रिप्शन तपशील</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:9
 msgid "<b>Product:</b>"
 msgstr "<b>उत्पादन:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:10
 msgid "<b>Subscriptions:</b>"
 msgstr "<b>सबस्क्रिप्शन्स:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:11
 msgid "Product Text"
 msgstr "उत्पादन मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:12
 msgid "Providing Subscriptions Text"
 msgstr "सबस्क्रिप्शन्स मजकूर पुरवत आहे"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:13
 msgid "Certificate Status Text"
 msgstr "प्रमाणपत्र स्थिती मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:14
 msgid "<b>Arch:</b>"
 msgstr "<b>आर्क:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:15
 msgid "Arch Text"
 msgstr "आर्के मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:1
 msgid "_System"
 msgstr "प्रणाली (_S)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:2
 msgid "_Register"
 msgstr "नोंदणी करा (_R)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:3
 msgid "_Unregister"
 msgstr "नोंदणी अशक्य करा (_U)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:4
 msgid "_Import Cert"
 msgstr "सर्ट आयात करा (_I)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:5
 msgid "R_edeem Subscription"
 msgstr "सबस्क्रिप्शन रिडीम करा (_e)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:6
 msgid "View System _Facts"
 msgstr "प्रणाली वस्तुस्थितीचे अवलोकन (_F)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:7
 msgid "Configure Pro_xy"
 msgstr "प्रॉक्सी संरचीत करा (_x)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:8
 msgid "Repo_sitories"
 msgstr "रेपॉजिटरिज (_s)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:9
 msgid "_Preferences"
 msgstr "पसंती (_P)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:10
 msgid "_Help"
 msgstr "मदत (_H)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:11
 msgid "_Getting Started"
 msgstr "सुरू करत आहे (_G)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:12
 msgid "_Online Documentation"
 msgstr "ऑनलाइन दस्तऐवजीकरण (_O)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/manually_subscribe.glade.h:1
 msgid ""
 "You will need to use Red Hat Subscription Manager to manually attach "
 "subscriptions to this system after completing firstboot."
@@ -4245,7 +4439,7 @@ msgstr ""
 "सबस्क्रिप्शन मॅनेजरचा वापर करणे आवश्यक आहे."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/manually_subscribe.glade.h:2
 msgid ""
 "After opening Red Hat Subscription Manager, manually attach subscriptions "
 "via the <b>All Available Subscriptions</b> tab."
@@ -4254,153 +4448,153 @@ msgstr ""
 "सबस्क्रिप्शन्स्ची जोडणी करा."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mysubs.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/mysubs.glade.h:1
 msgid "My Subscriptions View"
 msgstr "माझे सबस्क्रिप्शन्स् दृष्य"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/mysubs.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/mysubs.glade.h:2
 msgid "Remove"
 msgstr "काढून टाका"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:1
 msgid "Proxy Configuration"
 msgstr "प्रॉक्सी संरचना"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:2
 msgid "<b>HTTP Proxy</b>"
 msgstr "<b>HTTP प्रॉक्सी</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:3
 msgid "I would like to connect via an _HTTP proxy."
 msgstr "मला HTTP प्रॉक्सीतर्फे जोडणी करायची आहे (_H)."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:4
 msgid "Proxy Checkbox"
 msgstr "प्रॉक्सी चेकबॉक्स्"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:5
 msgid "<small><b>Example:</b> proxy.example.com:3128</small>"
 msgstr "<small><b>उदाहरण:</b> proxy.example.com:3128</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:6
 msgid "_Proxy Location:"
 msgstr "प्रॉक्सी ठिकाण (_P):"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:7
 msgid "Enter in the format hostname(:port)"
 msgstr "यजमाननाव(:पोर्ट) या स्वरूपात द्या"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:8
 msgid "Proxy Location Text"
 msgstr "प्रॉक्सी ठिकाणचे मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:9
 msgid "Use Au_thentication with HTTP Proxy:"
 msgstr "HTTP प्रॉक्सीसह ओळख पटवाचा वापर करा (_t):"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:10
 msgid "Authentication Checkbox"
 msgstr "ओळख पटवा चेकबॉक्स्"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:11
 msgid "Proxy _Username:"
 msgstr "प्रॉक्सी वापरकर्तानाव (_U):"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:12
 msgid "Proxy P_assword:"
 msgstr "प्रॉक्सी पासवर्ड (_a):"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:13
 msgid "Username Text"
 msgstr "वापरकर्तानाव मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:14
 msgid "Password Text"
 msgstr "पासवर्ड मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:15
 msgid "connectionStatusLabel"
 msgstr "connectionStatusLabel"
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:16
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:16
 msgid "_Cancel"
 msgstr "रद्द करा (_C)"
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:17
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:17
 msgid "Cancel Button"
 msgstr "रद्द करा बटन"
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:18
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:18
 msgid "_Save"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:19
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:19
 msgid "Save Button"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:20
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:20
 msgid "_Test Connection"
 msgstr "जोडणीची चाचणी करा (_T)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:21
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:21
 msgid "Test Connection Button"
 msgstr "जोडणी बटनची चाचणी करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/organization.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/organization.glade.h:1
 msgid "<b>Organization Selection</b>"
 msgstr "<b>संघटना नीवड</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/organization.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/organization.glade.h:2
 msgid "org_selection_label"
 msgstr "org_selection_label"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/organization.glade.h:3
-msgid "org_selection_scrolledwindow"
-msgstr "org_selection_scrolledwindow"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/organization.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/organization.glade.h:3
 msgid "owner_treeview"
 msgstr "owner_treeview"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/organization.glade.h:4
+msgid "org_selection_scrolledwindow"
+msgstr "org_selection_scrolledwindow"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:1
 msgid "System Preferences"
 msgstr "प्रणाली पसंती"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:2
 msgid "autoheal_checkbox"
 msgstr "autoheal_checkbox"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:3
 msgid "Enable auto-attach preference"
 msgstr "auto-attach पसंती सुरू करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
@@ -4409,17 +4603,17 @@ msgstr ""
 "(दररोजकरिता पूर्वनिर्धारित).</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:5
 msgid "Release version:"
 msgstr "प्रकाशन आवृत्ती:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:6
 msgid "release_selection_combobox"
 msgstr "release_selection_combobox"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:7
 msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
@@ -4427,17 +4621,17 @@ msgstr ""
 "<small>संकुल इंस्टॉल व सुधारणा करतेवेळी प्रणालीची प्रकाशन पसंती लागू केली जाते.</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:8
 msgid "Service level preference:"
 msgstr "सर्व्हिस स्तर पसंती:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:9
 msgid "sla_selection_combobox"
 msgstr "sla_selection_combobox"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:10
 msgid ""
 "<small>Your system's service level preference is followed when subscribing "
 "automatically.</small>"
@@ -4446,32 +4640,32 @@ msgstr ""
 "small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/progress.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/progress.glade.h:1
 msgid "Progress Dialog"
 msgstr "प्रगती संवाद"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:1
 msgid "Subscription Redemption"
 msgstr "सबस्क्रिप्शन रिडीमशन"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:2
 msgid "Cancel"
 msgstr "रद्द करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:3
 msgid "Redeem"
 msgstr "रिडीम"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:4
 msgid "Redeeming the subscription may take a few minutes."
 msgstr "सबस्क्रिप्शनला रिडीम करण्यासाठी काही मिनीटे लागतील."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:5
 msgid ""
 "Please provide an email address to receive notification\n"
 "when the redemption is complete."
@@ -4480,52 +4674,52 @@ msgstr ""
 "सूचना प्राप्त करण्यासाठी ईमेल पत्ता द्या."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:7
 msgid "Email Address:"
 msgstr "ईमेल पत्ता:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:8
 msgid "Email Address Text"
 msgstr "ईमेल पत्ता मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:2
-msgid "register_dialog_main_vbox"
-msgstr "register_dialog_main_vbox"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:3
-msgid "registration_dialog_action_area"
-msgstr "registration_dialog_action_area"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:3
 msgid "register_button"
 msgstr "register_button"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:4
+msgid "registration_dialog_action_area"
+msgstr "registration_dialog_action_area"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:6
 msgid "progress_label"
 msgstr "progress_label"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:7
 msgid "register_progressbar"
 msgstr "register_progressbar"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:8
 msgid "register_details_label"
 msgstr "register_details_label"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:9
 msgid "page 2"
 msgstr "पृष्ठ 2"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:10
+msgid "register_dialog_main_vbox"
+msgstr "register_dialog_main_vbox"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:1
 msgid ""
 "This assistant will guide you through the process of registering your system "
 "with Red Hat to receive software updates and other benefits. You will need "
@@ -4534,60 +4728,57 @@ msgstr ""
 "हा सहाय्यक तुम्हाला सॉफ्टवेअर सुधारणा व इतर फायदे प्राप्त करण्याकरिता प्रणालीची नोंदणी "
 "Red Hat सह करण्यास मार्गदर्शन करेल. नोंदणीकरिता तुम्हाला खालील आवश्यक आहे:"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:2
-msgid "• A network connection"
-msgstr "• नेटवर्क जोडणी"
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:2
+msgid "&#x2022; A network connection"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:3
+msgid "&#x2022; Your account login"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:3
-msgid "• Your account login"
-msgstr "• तुमचे खाते प्रवेश"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:4
 msgid "Your account login"
 msgstr "तुमचे खाते प्रवेश"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:5
-msgid "• The address of a subscription management service (optional)"
-msgstr "• सबस्क्रिप्शन मॅनेजमेंट सर्व्हिसचा (वैकल्पिक) पत्ता"
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:5
+msgid "&#x2022; The address of a subscription management service (optional)"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:6
 msgid "_Why Should I Register?"
 msgstr "नोंदणी का करायची (_W)?"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:7
 msgid "Why Should I Register?"
 msgstr "नोंदणी का करायची?"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:8
 msgid ""
 "Would you like to register your system at this time? <b>(Strongly "
 "recommended.)</b>"
 msgstr "ह्यावेळी तुम्हाला प्रणालीची नोंदणी करायला आवडेल? <b>(खूप शिफारसीय.)</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:9
 msgid "_Yes, I'd like to register now."
 msgstr "होय, मला आत्ता नोंदणी करायला आवडेल (_Y)."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:10
 msgid "_No, I prefer to register at a later time."
 msgstr "नाही, मी नंतर नोंदणी करणे पसंत करतो (_N)."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:11
 msgid "Why Register"
 msgstr "नोंदणी का करायची"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:12
 msgid ""
 "Registering your system with Red Hat allows you to take full advantage of "
 "the benefits of a paid subscription, including:"
@@ -4596,24 +4787,17 @@ msgstr ""
 "घेता येतात, ज्यामध्ये खालील समाविष्टीत आहे:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:13
 msgid "_Close"
 msgstr "बंद करा (_C)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:14
-#: ../src/subscription_manager/gui/data/repositories.glade.h:5
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:12
-msgid "Close"
-msgstr "बंद करा"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:15
 msgid "<b>Security &amp; Updates:</b>"
 msgstr "<b>सुरक्षा &amp; सुधारणा:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:16
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:16
 msgid ""
 "Receive the latest software updates, including security updates, keeping "
 "this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
@@ -4622,12 +4806,12 @@ msgstr ""
 "Enterprise Linux प्रणाली <b>सुधारीत</b> व <b>सुरक्षित</b> राहेल."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:17
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:17
 msgid "<b>Downloads &amp; Upgrades:</b>"
 msgstr "<b>डाउनलोड्स &amp; सुधारणा:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:18
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:18
 msgid ""
 "Download installation images for Red Hat Enterprise Linux releases, "
 "including new releases."
@@ -4636,12 +4820,12 @@ msgstr ""
 "करा."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:19
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:19
 msgid "<b>Support:</b>"
 msgstr "<b>सपोर्ट:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:20
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:20
 msgid ""
 "Access to the technical support experts at Red Hat or Red Hat's partners for "
 "help with any issues you might encounter with this system."
@@ -4650,17 +4834,17 @@ msgstr ""
 "भागीदारांशी येथील टेकनीकल सपोर्ट तंज्ञांकरिता प्रवेश प्राप्त होतो."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:21
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:21
 msgid "<b>Management:</b>"
 msgstr "<b>व्यवस्थापन:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:22
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:22
 msgid "Management"
 msgstr "व्यवस्थापन"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:23
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:23
 msgid ""
 "Manage subscriptions and systems registered to Customer Portal via access."
 "redhat.com or through one of our other subscription management services."
@@ -4669,7 +4853,7 @@ msgstr ""
 "Portal सह नोंदणीकृत सबस्क्रिप्शन्स व प्रणाली हाताळा."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author John Sefler
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:24
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:24
 msgid ""
 "<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
 "privacy_statement.html</small>"
@@ -4678,406 +4862,198 @@ msgstr ""
 "privacy_statement.html</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:1
 msgid "Manage Repositories"
 msgstr "रेपॉजिटरिज व्यवस्थापीत करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:2
-msgid "manage_repositories_dialog"
-msgstr "manage_repositories_dialog"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:2
 msgid "Remove All Overrides"
 msgstr "सर्व ओव्हरराइड्स काढून टाका"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:3
 msgid "remove_all_overrides_button"
 msgstr "remove_all_overrides_button"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:6
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:13
-msgid "close_button"
-msgstr "close_button"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:7
-msgid ""
-"Manage the repositories your subscriptions grant you access to by enabling, "
-"disabling and overriding certain fields."
-msgstr ""
-"ठराविक क्षेत्रांना सुरू, बंद आणि ओव्हरराइड करून प्रवेश प्राप्त करण्याजोगी सबस्क्रिप्शन्ससाठी "
-"रेपॉजिटरिज व्यवस्थापीत करा."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:6
 msgid "<b>Repository Details</b>"
 msgstr "<b>रेपॉजिटरि तपशील</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:7
 msgid "<b>Name:</b>"
 msgstr "<b>नाव:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:10
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:3
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:5
 msgid "Subscription Text"
 msgstr "सबस्क्रिप्शन मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:9
 msgid "<b>Base URL:</b>"
 msgstr "<b>बेस URL:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:12
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:11
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:21
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:21
 msgid "SKU Text"
 msgstr "SKU मजकूर"
 
-#: ../src/subscription_manager/gui/data/repositories.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:11
 msgid "<b>Other Overrides:</b>"
 msgstr "<b>इतर ओव्हरराइड्स:</b>"
 
-#: ../src/subscription_manager/gui/data/repositories.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:12
 msgid "Other Overrides Table"
 msgstr "इतर ओव्हरराइड्स तक्ता"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:13
+msgid "manage_repositories_dialog"
+msgstr "manage_repositories_dialog"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:1
 msgid "<b>Select Service Level</b>"
 msgstr "<b>सेवा स्तर पसंत करा</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:2
-msgid ""
-"Your installed products could be covered using one of multiple service "
-"levels."
-msgstr ""
-"एकापेक्षा जास्त सर्व्हिस स्तरचा वापर करून इंस्टॉल झालेली उत्पादने समाविष्टीत असू शकतात."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:2
 msgid "<b>Installed products:</b>"
 msgstr "<b>इंस्टॉल झालेली उत्पादने:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:3
 msgid "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 msgstr "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:4
 msgid "<b>Select a common service level for this system's subscriptions:</b>"
 msgstr "<b>ह्या प्रणालीच्या सबस्क्रिप्शन्सकरिता सर्वसाधारण सर्व्हिस स्तर नीवडा:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:1
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:1
 msgid "<b>Subscription Details</b>"
 msgstr "<b>सबस्क्रिप्शन तपशील</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:4
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:12
 msgid "<b>Products:</b>"
 msgstr "<b>उत्पादने:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:5
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:13
 msgid "Bundled Products Table"
 msgstr "बंडल्ड् प्रोडक्टस् तक्ता"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:22
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:22
 msgid "<b>Service Level, Type:</b>"
 msgstr "<b>सेवा स्तर, प्रकार:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:23
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:23
 msgid "Support Level And Type Text"
 msgstr "सपोर्ट स्तर व प्रकार मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:8
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:6
 msgid "<b>Subscription Type:</b>"
 msgstr "<b>सबस्क्रिप्शन प्रकार:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:9
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:7
 msgid "Subscription Type Text"
 msgstr "सबस्क्रिप्शन मजकूर प्रकार"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:10
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:20
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:20
 msgid "<b>SKU:</b>"
 msgstr "<b>SKU:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:3
 msgid "<b>Start - End Date:</b>"
 msgstr "<b>सुरवात - समाप्त दिनांक:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:4
 msgid "<b>Contract:</b>"
 msgstr "<b>सैदा:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:8
 msgid "Start End Date Text"
 msgstr "सुरवात समाप्त दिनांक मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:9
 msgid "Contract Number Text"
 msgstr "काँट्रॅक्ट क्रमांक मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:10
 msgid "<b>Account:</b>"
 msgstr "<b>खाते:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:11
 msgid "Account Text"
 msgstr "खाते मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:14
 msgid "<b>Status Details:</b>"
 msgstr "<b>स्थिती तपशील:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:15
 msgid "Status Details Text"
 msgstr "स्थिती तपशील मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:16
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:16
 msgid "<b>Provides Management:</b>"
 msgstr "<b>व्यवस्थापन पुरवतो:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:17
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:17
 msgid "Provides Management Text"
 msgstr "व्यवस्थापन मजकूर पुरवते"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:18
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:18
 msgid "<b>Type:</b>"
 msgstr "<b>प्रकार:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:19
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:19
 msgid "Support Type Text"
 msgstr "सपोर्ट प्रकारचे मजकूर"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:1
-#: ../src/subscription_manager/gui/data/credentials.glade.h:3
-msgid "<b>Please enter the following for this system:</b>"
-msgstr "<b>या प्रणालीकरिता कृपया खालील द्या:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:2
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:4
-msgid "Organization:"
-msgstr "संस्था:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:3
-msgid "Activation Key:"
-msgstr "ॲक्टिवेशन कि:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:4
-#: ../src/subscription_manager/gui/data/credentials.glade.h:5
-msgid "System Name:"
-msgstr "प्रणालीचे नाव:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:5
-msgid "This must be the organization key, not the name."
-msgstr "हे ऑर्गनाइजेशन कि असायला पाहिजे, नाव नाही."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:6
-msgid "organization_entry"
-msgstr "organization_entry"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:7
-msgid ""
-"Multiple Activation Keys can be entered by separating them with a comma or a "
-"space."
-msgstr "स्वल्पविराम किंवा स्पेसचा वापर करून एकापेक्षाजास्त ॲक्टिवेशन किज् देणे शक्य आहे."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:8
-msgid "activation_key_entry"
-msgstr "activation_key_entry"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:9
-msgid "consumer_entry"
-msgstr "consumer_entry"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:1
-msgid "<b>Show subscriptions active on:</b>"
-msgstr "<b>सुरू असलेले सबस्क्रिप्शन्स् दाखवा:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:2
-msgid "Update"
-msgstr "सुधारणा"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:3
-msgid "Search"
-msgstr "शोध"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:5
-msgid "Filters"
-msgstr "फिल्टर्स्"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:6
-msgid "* Click to Adjust Quantity"
-msgstr "* प्रमाण सुस्थीत करण्यासाठी क्लिक करा"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
-msgid "<b>Confirm Subscriptions</b>"
-msgstr "<b>सबस्क्रिप्शन्स्ची खात्री करा</b>"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
-msgid "Using service level:"
-msgstr "सेवा स्तरचा वापर करत आहे:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:3
-msgid "SLA"
-msgstr "SLA"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
-msgid "The following subscriptions will be attached:"
-msgstr "खालील सबस्क्रिप्शन्स् जोडले जाईल:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:5
-msgid "Selected Subscriptions Table"
-msgstr "निवडलेले सबस्क्रिप्शन्स तक्ता"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:6
-msgid "Core repositories will be enabled for each product."
-msgstr "प्रत्येक उत्पादनकरिता कोर रेपॉजिटरिज् सुरू केले जाईल."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:1
-msgid "Password:"
-msgstr "पासवर्ड:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:2
-msgid "Login:"
-msgstr "प्रवेश:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:4
-msgid "system_instructions_label"
-msgstr "system_instructions_label"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:6
-msgid "system_name_label"
-msgstr "system_name_label"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:7
-msgid "A unique label for this system"
-msgstr "या प्रणालीसाठी एकमेव लेबल"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:8
-msgid "Manually attach subscriptions after registration"
-msgstr "नोंदणीनंतर स्वतः सबस्क्रिप्शन्स्ची जोडणी करा"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:1
-msgid "Subscription Manager - Facts"
-msgstr "सबस्क्रिप्शन व्यवस्थापक - वस्तुस्थित्या"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:2
-msgid "System Identity:"
-msgstr "प्रणाली ओळख:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:3
-msgid "System Identity Value"
-msgstr "प्रणाली ओळख मूल्य"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:5
-msgid "Organization Value"
-msgstr "संस्था मूल्य"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:6
-msgid "Environment:"
-msgstr "एंवार्यनमेंट:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:8
-msgid "facts_view"
-msgstr "वस्तुस्तिथी दृष्य (_v)"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:9
-msgid "Last Update:"
-msgstr "शेवटची सुधारणा:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:10
-msgid "Update Time"
-msgstr "सुधारणा वेळ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:11
-msgid "Update Facts"
-msgstr "वस्तुस्थित्या सुधारीत करा"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../bin/subscription-manager-gui:57
-msgid "Unable to open a display"
-msgstr "डिस्पले उघडणे अशक्य"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../bin/subscription-manager-gui:158
+#: ../bin/subscription-manager-gui:166
 #, c-format
 msgid "%s is already running"
 msgstr "%s आधीपासूनच आहे"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../bin/subscription-manager-gui:166
+#: ../bin/subscription-manager-gui:174
 msgid "launches the registration dialog on startup"
 msgstr "स्टार्टअपवेळी नोंदणी संवाद सुरू करतो"
 
@@ -5249,11 +5225,6 @@ msgstr "वाचनकरिता पर्याय अपयशी: %s\n"
 #: ../etc-conf/rhsm-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
 msgstr "Red Hat सबस्क्रिप्शन वैधता ॲप्लेट"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: ../etc-conf/rhsm-icon.desktop.in.h:2
-msgid "Subscription Validity Applet"
-msgstr "सबस्क्रिप्शन वैधता ॲप्लेट"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../etc-conf/subscription-manager-gui.desktop.in.h:1

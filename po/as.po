@@ -3,53 +3,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-21 11:15-0400\n"
+"POT-Creation-Date: 2015-07-06 14:33-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2014-10-08 10:23-0400\n"
 "Last-Translator: ngoswami <ngoswami@fedoraproject.org>\n"
 "Language-Team: Assamese\n"
 "Language: as\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Zanata 3.6.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/entcertlib.py:271
-#, python-format
-msgid "%s local certificate has been deleted."
-msgid_plural "%s local certificates have been deleted."
-msgstr[0] "%s স্থানীয় প্ৰমাণপত্ৰ মচি পেলোৱা হৈছে।"
-msgstr[1] "%s স্থানীয় প্ৰমাণপত্ৰসমূহ মচি পেলোৱা হৈছে।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/entcertlib.py:425
-#, python-format
-msgid "Total updates: %d"
-msgstr "সৰ্বমুঠ আপডেইটসমূহ: %d"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/entcertlib.py:426
-#, python-format
-msgid "Found (local) serial# %s"
-msgstr "পোৱা গৈছে (স্থানীয়) ক্ৰমিক# %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/entcertlib.py:427
-#, python-format
-msgid "Expected (UEP) serial# %s"
-msgstr "আকাংক্ষিত (UEP) ক্ৰমিক# %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/entcertlib.py:428
-#: ../src/subscription_manager/repolib.py:438
-msgid "Added (new)"
-msgstr "যোগ কৰা হৈছে (নতুন)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/entcertlib.py:429
-msgid "Deleted (rogue):"
-msgstr "মচি দিয়া হৈছে (ঠগ):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/branding/__init__.py:81
@@ -187,294 +150,42 @@ msgstr ""
 "সহায়: আপোনাৰ লগিন অথবা পাছৱৰ্ড পাহৰিছে? ইয়াক http://redhat.com/"
 "forgot_password ত চাওক"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:28
-msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"নেটৱৰ্কত ত্ৰুটি, চাৰ্ভাৰৰ লগত সংযোগ কৰিবলে অক্ষম। অধিক জানিবলে অনুগ্ৰহ কৰি /var/log/"
-"rhsm/rhsm.log চাওক।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:29
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"নেটৱৰ্কত ত্ৰুটি। অনুগ্ৰহ কৰি সংযোগৰ সবিশেষ নীৰিক্ষণ কৰি চাওক অথবা অধিক জানিবলে "
-"অনুগ্ৰহ কৰি /var/log/rhsm/rhsm.log চাওক।"
-
-#: ../src/subscription_manager/exceptions.py:30
-msgid "Unauthorized: Invalid credentials for request."
-msgstr "অনাধিকাৰ: অনুৰোধৰ বাবে অবৈধ তথ্যসমূহ।"
-
-#: ../src/subscription_manager/exceptions.py:31
-msgid "Forbidden: Invalid credentials for request."
-msgstr "নিষিদ্ধ: অনুৰোধৰ বাবে অবৈধ তথ্যসমূহ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:32
-msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr ""
-"দূৰৱৰ্তী চাৰ্ভাৰত ত্ৰুটি। অনুগ্ৰহ কৰি সংযোগৰ সবিশেষ নীৰিক্ষণ কৰি চাওক অথবা অধিক "
-"জানিবলে অনুগ্ৰহ কৰি /var/log/rhsm/rhsm.log চাওক।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:33
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/entcertlib.py:271
 #, python-format
-msgid "Bad CA certificate: %s"
-msgstr "বেয়া CA প্ৰমাণপত্ৰ: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/exceptions.py:34
-#: ../src/daemons/rhsmcertd-worker.py:60
-msgid "Your identity certificate has expired"
-msgstr "আপোনাৰ পৰিচয় প্ৰমাণপত্ৰৰ অৱসান ঘটিছে"
+msgid "%s local certificate has been deleted."
+msgid_plural "%s local certificates have been deleted."
+msgstr[0] "%s স্থানীয় প্ৰমাণপত্ৰ মচি পেলোৱা হৈছে।"
+msgstr[1] "%s স্থানীয় প্ৰমাণপত্ৰসমূহ মচি পেলোৱা হৈছে।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/exceptions.py:35
+#: ../src/subscription_manager/entcertlib.py:425
 #, python-format
-msgid "Unable to verify server's identity: %s"
-msgstr "চাৰ্ভাৰৰ পৰিচয় সতাসত্য নিৰূপণ কৰিবলে অক্ষম: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/exceptions.py:36
-msgid "Server URL can not be empty"
-msgstr "চাৰ্ভাৰ URL ৰিক্ত থাকিব নোৱাৰিব"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/exceptions.py:37
-msgid ""
-"Server URL is just a schema. Should include hostname, and/or port and path"
-msgstr ""
-"চাৰ্ভাৰ URL কেৱল এটা স্কিমা। হস্টনাম, আৰু/অথবা পৰ্ট আৰু পথ অন্তৰ্ভুক্ত কৰিব লাগিব"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/exceptions.py:38
-msgid "Server URL can not be None"
-msgstr "চাৰ্ভাৰ URL None থাকিব নোৱাৰিব"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/exceptions.py:39
-msgid "Server URL port should be numeric"
-msgstr "চাৰ্ভাৰ URL পৰ্ট সাংখ্যিক হব লাগিব"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/exceptions.py:40
-msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr "চাৰ্ভাৰ URL ৰ এটা অবৈধ আঁচনি আছে। http:// আৰু https:// সমৰ্থিত"
+msgid "Total updates: %d"
+msgstr "সৰ্বমুঠ আপডেইটসমূহ: %d"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:273
-msgid "Error reading system memory information:"
-msgstr "চিস্টেম মেমৰি তথ্য পঢোতে ত্ৰুটি:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/hwprobe.py:583
-msgid "Error reading system CPU information:"
-msgstr "চিস্টেম CPU তথ্য পঢ়োতে ত্ৰুটি:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:608
-msgid "Error reading networking information:"
-msgstr "নেটৱৰ্কিং তথ্য পঢোতে ত্ৰুটি:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/hwprobe.py:707
-msgid "Error reading network interface information:"
-msgstr "নেটৱৰ্ক আন্তঃপৃষ্ঠ তথ্য পঢ়োতে ত্ৰুটি:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/hwprobe.py:800
-msgid "Virtualization platform does not support UUIDs"
-msgstr "ভাৰছুৱেলাইজেষণ প্লেটফৰ্মে UUIDসমূহ সমৰ্থন নকৰে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/hwprobe.py:802
+#: ../src/subscription_manager/entcertlib.py:426
 #, python-format
-msgid "Error finding UUID: %s"
-msgstr "UUID প্ৰাপ্ত কৰোতে ত্ৰুটি: %s"
+msgid "Found (local) serial# %s"
+msgstr "পোৱা গৈছে (স্থানীয়) ক্ৰমিক# %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/printing_utils.py:137
-#: ../src/subscription_manager/gui/widgets.py:398
-#: ../src/subscription_manager/gui/factsgui.py:146
-#: ../src/subscription_manager/managercli.py:666
-msgid "None"
-msgstr "কোনো নহয়"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:78
-#: ../src/subscription_manager/gui/widgets.py:292 ../src/rct/printing.py:43
-msgid "Product"
-msgstr "উৎপাদন"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/installedtab.py:89
-#: ../src/rct/printing.py:46 ../src/rct/printing.py:125
-msgid "Version"
-msgstr "সংস্কৰণ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:92
-msgid "Status"
-msgstr "অৱস্থা"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:95
-#: ../src/subscription_manager/gui/contract_selection.py:115
-#: ../src/rct/printing.py:127 ../src/rct/manifest_commands.py:231
-msgid "Start Date"
-msgstr "আৰম্ভ তাৰিখ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:98
-#: ../src/subscription_manager/gui/mysubstab.py:102
-#: ../src/subscription_manager/gui/contract_selection.py:121
-#: ../src/rct/printing.py:128 ../src/rct/manifest_commands.py:232
-msgid "End Date"
-msgstr "শেষৰ তাৰিখ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:181
-#: ../src/subscription_manager/managercli.py:73
-msgid "Future Subscription"
-msgstr "ভৱিষ্যৎ স্বাক্ষৰণ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:182
-msgid "Future Subscribed"
-msgstr "ভৱিষ্যত স্বাক্ষৰীত"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:185
-#: ../src/subscription_manager/managercli.py:76
-msgid "Expired"
-msgstr "অৱসিত"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:195
+#: ../src/subscription_manager/entcertlib.py:427
 #, python-format
-msgid "Subscription %s is expired"
-msgstr "%s স্বাক্ষৰণ অৱসিত"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/installedtab.py:198
-#: ../src/subscription_manager/gui/installedtab.py:199
-#: ../src/subscription_manager/managercli.py:77
-msgid "Partially Subscribed"
-msgstr "আংশিকভাৱে স্বাক্ষৰীত"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#. Shouldn't be reachable.
-#. Reason has no id attr
-#. It's possible (though unlikely, and kind of broken) to have more
-#. than one version of python-rhsm/subscription-manager installed.
-#. This will return whatever version we are using.
-#: ../src/subscription_manager/gui/installedtab.py:202
-#: ../src/subscription_manager/gui/factsgui.py:90
-#: ../src/subscription_manager/gui/factsgui.py:117
-#: ../src/subscription_manager/managercli.py:78
-#: ../src/subscription_manager/managercli.py:343
-#: ../src/subscription_manager/managercli.py:344
-#: ../src/subscription_manager/managercli.py:347
-#: ../src/subscription_manager/managercli.py:348
-#: ../src/subscription_manager/managercli.py:1726
-#: ../src/subscription_manager/managercli.py:2599
-#: ../src/subscription_manager/cert_sorter.py:47
-#: ../src/subscription_manager/reasons.py:93
-#: ../src/subscription_manager/utils.py:213
-#: ../src/subscription_manager/utils.py:214
-#: ../src/subscription_manager/utils.py:228
-#: ../src/subscription_manager/utils.py:230
-#: ../src/subscription_manager/utils.py:248
-#: ../src/subscription_manager/utils.py:249
-#: ../src/subscription_manager/utils.py:250
-#: ../src/subscription_manager/utils.py:269
-msgid "Unknown"
-msgstr "অজ্ঞাত"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/installedtab.py:204
-msgid "System is not registered."
-msgstr "চিস্টেম ৰেজিস্টাৰ্ড নহয়।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#. System must be registered but unable to reach server:
-#: ../src/subscription_manager/gui/installedtab.py:207
-msgid "Entitlement server is unreachable."
-msgstr "অনুজ্ঞা চাৰ্ভাৰ অপ্ৰাপ্য।"
+msgid "Expected (UEP) serial# %s"
+msgstr "আকাংক্ষিত (UEP) ক্ৰমিক# %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:210
-#: ../src/subscription_manager/managercli.py:74
-msgid "Subscribed"
-msgstr "স্বাক্ষৰীত"
+#: ../src/subscription_manager/entcertlib.py:428
+#: ../src/subscription_manager/repolib.py:450
+msgid "Added (new)"
+msgstr "যোগ কৰা হৈছে (নতুন)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:212
-#, python-format
-msgid "Covered by contract %s through %s"
-msgid_plural "Covered by contracts %s through %s"
-msgstr[0] "%s ৰে চুক্তি %s দ্বাৰা সুৰক্ষিত"
-msgstr[1] "%s ৰে %s চুক্তিসমূহ দ্বাৰা সুৰক্ষিত"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/installedtab.py:219
-#: ../src/subscription_manager/gui/installedtab.py:220
-#: ../src/subscription_manager/managercli.py:75
-msgid "Not Subscribed"
-msgstr "স্বাক্ষৰীত নহয়"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/installedtab.py:271
-msgid "My Installed Products"
-msgstr "মই ইনস্টল কৰা উৎপাদনসমূহ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:305
-msgid "No installed products detected."
-msgstr "কোনো ইনস্টল্ড উৎপাদন চিনাক্ত কৰা হোৱা নাই।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:309
-#, python-format
-msgid "System is properly subscribed through %s."
-msgstr "চিস্টেম %s ৰ সহায়ত সঠিকভাৱে স্বাক্ষৰ কৰা আছে।"
-
-#: ../src/subscription_manager/gui/installedtab.py:314
-msgid "System is properly subscribed."
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:319
-msgid "This system does not match subscription limits."
-msgstr "এই চিস্টেম স্বাক্ষৰণ সীমাসমূহৰ সৈতে মিল নাখায়।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:325
-#, python-format
-msgid "%s installed products do not have valid subscriptions."
-msgstr "%s ইনস্টল্ড উৎপাদনসমূহৰ বৈধ স্বাক্ষৰণ নাই।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:330
-msgid "1 installed product does not have a valid subscription."
-msgstr "১ টা ইনস্টল্ড উৎপাদনৰ এটা বৈধ স্বাক্ষৰণ নাই।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. I18N: Please add newlines if translation is longer:
-#: ../src/subscription_manager/gui/installedtab.py:335
-msgid "Keep your system up to date by registering."
-msgstr "আপোনাৰ চিস্টেমক ৰেজিস্টাৰ কৰি বৰ্তমান তাৰিখলৈ উন্নত ৰাখক।"
+#: ../src/subscription_manager/entcertlib.py:429
+msgid "Deleted (rogue):"
+msgstr "মচি দিয়া হৈছে (ঠগ):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:63
@@ -500,7 +211,7 @@ msgstr "সকলো ইনস্টল্ড উৎপাদন সম্পূ
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:78
-#: ../src/subscription_manager/gui/registergui.py:571
+#: ../src/subscription_manager/gui/registergui.py:723
 msgid "Error subscribing"
 msgstr "স্বাক্ষৰ কৰোতে ত্ৰুটি"
 
@@ -544,552 +255,7 @@ msgid "Subscription Registration"
 msgstr "স্বাক্ষৰণ ৰেজিস্ট্ৰেষণ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:162
-msgid "There was an error saving your configuration."
-msgstr "আপোনাৰ সংৰূপ সংৰক্ষণ কৰোতে এটা ত্ৰুটি হৈছিল।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/networkConfig.py:163
-#, python-format
-msgid "Make sure that you own %s."
-msgstr "সুনিশ্চিত কৰক যে আপোনাৰ %s আছে।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/networkConfig.py:188
-msgid "Proxy connection succeeded"
-msgstr "প্ৰক্সি সংযোগ সফল হল"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/networkConfig.py:190
-msgid "Proxy connection failed"
-msgstr "প্ৰক্সি সংযোগ ব্যৰ্থ হল"
-
-#: ../src/subscription_manager/gui/networkConfig.py:283
-#: ../src/subscription_manager/gui/networkConfig.py:286
-msgid "Testing Connection"
-msgstr "সংযোগ পৰীক্ষা কৰা হৈছে"
-
-#: ../src/subscription_manager/gui/networkConfig.py:284
-#: ../src/subscription_manager/gui/networkConfig.py:286
-msgid "Please wait"
-msgstr "অনুগ্ৰহ কৰি অপেক্ষা কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. Add at-spi because we no longer create this widget from glade
-#: ../src/subscription_manager/gui/allsubs.py:55
-msgid "All Subscriptions View"
-msgstr "সকলো স্বাক্ষৰণসমূহৰ দৰ্শন"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:80
-#: ../src/subscription_manager/gui/registergui.py:454
-#: ../src/subscription_manager/gui/mysubstab.py:74
-msgid "Subscription"
-msgstr "স্বাক্ষৰণ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/allsubs.py:92
-msgid "Available"
-msgstr "উপলব্ধ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. Set up the quantity column.
-#: ../src/subscription_manager/gui/allsubs.py:96
-#: ../src/subscription_manager/gui/registergui.py:460
-#: ../src/subscription_manager/gui/mysubstab.py:105
-#: ../src/subscription_manager/gui/contract_selection.py:126
-#: ../src/rct/printing.py:83 ../src/rct/manifest_commands.py:229
-msgid "Quantity"
-msgstr "পৰিমাণ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/allsubs.py:175
-msgid "Press Update to search for subscriptions."
-msgstr "স্বাক্ষৰণসমূহ সন্ধান কৰিবলে অনুগ্ৰহ কৰি আপডেইট কৰক।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:210
-#, python-format
-msgid "No subscriptions are available on %s."
-msgstr "%s ত কোনো স্বাক্ষৰণ উপলব্ধ নাই।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/allsubs.py:216
-msgid "No subscriptions match current filters."
-msgstr "বৰ্তমান পৰিস্ৰাৱকসমূহৰ সৈতে মিল খোৱা কোনো স্বাক্ষৰণ নাই।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:231
-#: ../src/subscription_manager/gui/contract_selection.py:143
-#: ../src/subscription_manager/managerlib.py:337 ../src/rct/printing.py:82
-msgid "Unlimited"
-msgstr "অসীমিত"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:344
-msgid "All Available Subscriptions"
-msgstr "সকলো উপলব্ধ স্বাক্ষৰণসমূহ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/allsubs.py:354
-msgid "Searching"
-msgstr "সন্ধান কৰা হৈছে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/allsubs.py:355
-msgid "Searching for subscriptions. Please wait."
-msgstr "স্বাক্ষৰণসমূহ বিচৰা হৈছে। অনুগ্ৰহ কৰি অপেক্ষা কৰক।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/allsubs.py:369
-#, python-format
-msgid "Error fetching subscriptions from server:  %s"
-msgstr "স্বাক্ষৰণসমূহ চাৰ্ভাৰৰ পৰা প্ৰাপ্ত কৰোতে ত্ৰুটি: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:383
-#, python-format
-msgid "Unable to search for subscriptions:  %s"
-msgstr "স্বাক্ষৰণসমূহ বিচাৰিবলে অক্ষম: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/allsubs.py:394
-#, python-format
-msgid "Error getting subscription: %s"
-msgstr "স্বাক্ষৰণ প্ৰাপ্ত কৰোতে ত্ৰুটি: %s "
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/allsubs.py:398
-msgid "Quantity must be a positive number."
-msgstr "পৰিমাণ এটা ধণাত্মক সংখ্যা হব লাগিব।"
-
-#. Start the progress bar
-#: ../src/subscription_manager/gui/allsubs.py:405
-msgid "Attaching"
-msgstr "সংলঘ্ন কৰা হৈছে"
-
-#: ../src/subscription_manager/gui/allsubs.py:406
-msgid "Attaching subscription. Please wait."
-msgstr "স্বাক্ষৰণ সংলঘ্ন কৰা হৈছে। অনুগ্ৰহ কৰি অপেক্ষা কৰক।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/allsubs.py:425
-#, python-format
-msgid "%s applied"
-msgstr "%s প্ৰয়োগ কৰা হল"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/importsub.py:40
-msgid "Import Certificates"
-msgstr "প্ৰমাণপত্ৰসমূহ ইমপোৰ্ট কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/importsub.py:43
-msgid "Import"
-msgstr "ইমপোৰ্ট কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/importsub.py:52
-msgid "Certificates"
-msgstr "প্ৰমাণপত্ৰসমূহ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/importsub.py:57
-msgid "All files"
-msgstr "সকলো ফাইল"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/importsub.py:123
-msgid "The following certificate files did not exist:"
-msgstr "নিম্নলিখিত প্ৰমাণপত্ৰ ফাইলসমূহ অস্তিত্ববান নহয়:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/importsub.py:126
-msgid "The following files are not valid certificates and were not imported:"
-msgstr "নিম্নলিখিত ফাইলসমূহ বৈধ ফাইলসমূহ নহয় আৰু ইমপোৰ্ট কৰা হোৱা নাছিল:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/importsub.py:131
-msgid ""
-"An error occurred while importing the following certificates. Please check "
-"the log file for more information."
-msgstr ""
-"নিম্নলিখিত প্ৰমাণপত্ৰসমূহ ইমপোৰ্ট কৰোতে এটা ত্ৰুটি দেখা দিলে। অধিক তথ্যৰ বাবে অনুগ্ৰহ "
-"কৰি লগ ফাইল নীৰিক্ষণ কৰক।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/importsub.py:135
-msgid "The following certificates were successfully imported:"
-msgstr "নিম্নলিখিত প্ৰমাণপত্ৰসমূহ সফলভাৱে ইমপোৰ্ট কৰা হৈছিল:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. if we get to this point, the import was successful
-#: ../src/subscription_manager/gui/importsub.py:140
-msgid "Certificate import was successful."
-msgstr "প্ৰমাণপত্ৰ ইমপোৰ্ট সফল আছিল।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. An empty string entry is used for "un-setting" the system's SLA:
-#. for unsetting
-#: ../src/subscription_manager/gui/preferences.py:116
-#: ../src/subscription_manager/gui/preferences.py:142
-#: ../src/subscription_manager/gui/widgets.py:371
-msgid "Not Set"
-msgstr "সংহিত নহয়"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:92
-msgid "<b>Unable to register the system.</b>"
-msgstr "<b>চিস্টেম ৰেজিস্টাৰ কৰিবলে অক্ষম।</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:94
-#: ../src/subscription_manager/gui/managergui.py:374
-msgid "Please see /var/log/rhsm/rhsm.log for more information."
-msgstr "অধিক তথ্যৰ বাবে /var/log/rhsm/rhsm.log চাওক।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:223
-#: ../src/subscription_manager/gui/data/registration.glade.h:1
-msgid "System Registration"
-msgstr "চিস্টেমৰ ৰেজিস্ট্ৰেষণ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:224
-#: ../src/subscription_manager/gui/data/registration.glade.h:6
-msgid "<b>Registering</b>"
-msgstr "<b>ৰেজিস্টাৰ কৰা হৈ আছে</b>"
-
-#: ../src/subscription_manager/gui/registergui.py:227
-msgid "Subscription Attachment"
-msgstr "স্বাক্ষৰণ সংলঘ্ন"
-
-#: ../src/subscription_manager/gui/registergui.py:228
-msgid "<b>Attaching</b>"
-msgstr "<b>সংলঘ্ন কৰা হৈছে</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:332
-#: ../src/subscription_manager/gui/data/installed.glade.h:4
-#: ../src/subscription_manager/gui/data/registration.glade.h:4
-msgid "Register"
-msgstr "ৰেজিস্টাৰ কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:376
-msgid "Registering your system"
-msgstr "আপোনাৰ চিস্টেম ৰেজিস্টাৰ কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:416
-#: ../src/subscription_manager/gui/registergui.py:906
-msgid "Attaching subscriptions"
-msgstr "স্বাক্ষৰণসমূহ সংলঘ্ন কৰা হৈছে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:420
-#: ../src/subscription_manager/gui/registergui.py:910
-#, python-format
-msgid "Error subscribing: %s"
-msgstr "স্বাক্ষৰ কৰোতে ত্ৰুটি: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:448
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:7
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:7
-msgid "Attach"
-msgstr "সংলগ্ন কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:506
-msgid "Finding suitable service levels"
-msgstr "উপযুক্ত সেৱা স্তৰসমূহ সন্ধান কৰা হৈছে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:507
-#: ../src/subscription_manager/gui/registergui.py:937
-#: ../src/subscription_manager/gui/registergui.py:1289
-msgid "Next"
-msgstr "পৰৱৰ্তী"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:560
-msgid "Unable to auto-attach, server does not support service levels."
-msgstr "স্ব-সংলগ্ন কৰিবলে অক্ষম, চাৰ্ভাৰে সেৱা স্তৰসমূহ সমৰ্থন নকৰে।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:563
-msgid ""
-"No installed products on system. No need to attach subscriptions at this "
-"time."
-msgstr ""
-"চিস্টেমত কোনো উৎপাদন ইনস্টল নাই। এই সময়ত স্বাক্ষৰণসমূহ সংলগ্ন কৰাৰ প্ৰয়োজন নাই।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:566
-msgid ""
-"All installed products are covered by valid entitlements. No need to attach "
-"subscriptions at this time."
-msgstr ""
-"সকলো ইনস্টল উৎপাদন বৈধ অনুজ্ঞাসমূহ দ্বাৰা সুৰক্ষিত। এই সময়ত স্বাক্ষৰণসমূহ সংলগ্ন কৰাৰ "
-"প্ৰয়োজন নাই।"
-
-#: ../src/subscription_manager/gui/registergui.py:569
-msgid "Consumer has been deleted."
-msgstr "উপভোক্তাক মচি পেলোৱা হৈছে।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:585
-#, python-format
-msgid ""
-"No available subscriptions at the current service level: %s. Please use the "
-"\"All Available Subscriptions\" tab to manually attach subscriptions."
-msgstr ""
-"বৰ্তমান সেৱা স্তৰত কোনো উপলব্ধ স্বাক্ষৰণ নাই: %s। স্বাক্ষৰণসমূহক হস্তচালিতভাৱে সংলগ্ন "
-"কৰিবলে অনুগ্ৰহ কৰি \"সকলো উপলব্ধ স্বাক্ষৰণসমূহ\" টেব ব্যৱহাৰ কৰক।"
-
-#: ../src/subscription_manager/gui/registergui.py:603
-msgid ""
-"No service level will cover all installed products. Please manually "
-"subscribe using multiple service levels via the \"All Available Subscriptions"
-"\" tab or purchase additional subscriptions."
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:636
-msgid "Fetching list of possible environments"
-msgstr "সম্ভাব্য পৰিৱেশসমূহৰ তালিকা প্ৰাপ্ত কৰা হৈছে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:638
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:7
-msgid "Environment"
-msgstr "পৰিৱেশ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:693
-msgid "Fetching list of possible organizations"
-msgstr "সম্ভাব্য সংঘঠনসমূহৰ তালিকা প্ৰাপ্ত কৰা হৈ আছে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:696
-msgid "Organization"
-msgstr "সংঘঠন"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:715
-#, python-format
-msgid "<b>User %s is not able to register with any orgs.</b>"
-msgstr "<b>ব্যৱহাৰকাৰী %s কোনো সংঘঠনৰ লগত ৰেজিস্টাৰ কৰিবলে সক্ষম নহয়।</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:777
-#: ../src/subscription_manager/gui/registergui.py:883
-msgid "You must enter a system name."
-msgstr "আপুনি এটা চিস্টেমৰ নাম সুমুৱাব লাগিব।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:785
-msgid "You must enter a login."
-msgstr "আপুনি এটা লগিন সুমুৱাব লাগিব।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:790
-msgid "You must enter a password."
-msgstr "আপুনি এটা পাছৱৰ্ড সুমুৱাব লাগিব।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:869
-msgid "You must enter an organization."
-msgstr "আপুনি এটা সংঘঠন সুমুৱাব লাগিব।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/registergui.py:876
-msgid "You must enter an activation key."
-msgstr "আপুনি এটা সক্ৰিয়কৰণ কি' সুমুৱাব লাগিব।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:999
-#: ../src/subscription_manager/managercli.py:402
-#, python-format
-msgid "Unable to reach the server at %s:%s%s"
-msgstr "%s ত চাৰ্ভাৰ প্ৰাপ্ত কৰিব নোৱাৰি:%s%s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:1004
-msgid "CA certificate for subscription service has not been installed."
-msgstr "স্বাক্ষৰণ সেৱাৰ বাবে CA প্ৰমাণপত্ৰ ইনস্টল কৰা হোৱা নাই।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:1009
-msgid ""
-"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
-"prefix]"
-msgstr ""
-"অনুগ্ৰহ কৰি বৈকল্পিক পৰ্ট আৰু/অথবা উপসৰ্গ: hostname[:port][/prefix] ৰ সৈতে এটা "
-"হস্টনাম প্ৰদান কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/registergui.py:1066
-msgid "Server supports environments, but none are available."
-msgstr "চাৰ্ভাৰে পৰিৱেশসমূহৰ সমৰ্থন কৰে, কিন্তু কোনো উপলব্ধ নহয়।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/redeem.py:55
-#, python-format
-msgid "Error redeeming subscription: %s"
-msgstr "স্বাক্ষৰণ ঘুৰাই নিওতে ত্ৰুটি: %s"
-
-#: ../src/subscription_manager/gui/reposgui.py:47
-msgid "Attached subscriptions do not provide any repositories."
-msgstr "সংলঘ্ন স্বাক্ষৰণসমূহে কোনো ভঁৰাল প্ৰদান নকৰে।"
-
-#: ../src/subscription_manager/gui/reposgui.py:48
-msgid "No repositories are available without an attached subscription."
-msgstr "এটা সংলঘ্ন স্বাক্ষৰণৰ অবিহনে কোনো ভঁৰাল উপলব্ধ নাই।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:49
-#: ../src/subscription_manager/managercli.py:1916
-msgid "Repositories disabled by configuration."
-msgstr "সংৰূপ দ্বাৰা ভঁৰালসমূহ অসামৰ্থবান কৰা হৈছে।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/reposgui.py:103 ../src/rct/printing.py:108
-msgid "Enabled"
-msgstr "সামৰ্থবান"
-
-#: ../src/subscription_manager/gui/reposgui.py:107
-msgid "Gpgcheck"
-msgstr "Gpgcheck"
-
-#: ../src/subscription_manager/gui/reposgui.py:111
-msgid "Repository ID"
-msgstr "ভঁৰাল ID"
-
-#: ../src/subscription_manager/gui/reposgui.py:116
-msgid "Modified"
-msgstr "পৰিবৰ্তিত"
-
-#: ../src/subscription_manager/gui/reposgui.py:252
-#, python-format
-msgid "Are you sure you want to remove all overrides for <b>%s</b>?"
-msgstr "আপুনি <b>%s</b> ৰ বাবে সকলো অভাৰৰাইড আতৰাবলৈ নিশ্চিত নে?"
-
-#: ../src/subscription_manager/gui/reposgui.py:253
-msgid "Confirm Remove All Overrides"
-msgstr "সকলো অভাৰৰাইড আতৰোৱা সুনিশ্চিত কৰক"
-
-#: ../src/subscription_manager/gui/reposgui.py:271
-msgid "Unable to reset repository overrides."
-msgstr "ভঁৰালৰ অভাৰৰাইড পুনৰ সংহতি কৰিবলৈ অক্ষম।"
-
-#: ../src/subscription_manager/gui/reposgui.py:312
-#, python-format
-msgid "Unable to update %s override."
-msgstr "%s অভাৰৰাইড আপডেইট কৰিবলে অক্ষম।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:91
-msgid "Installed Products"
-msgstr "ইনস্টল হৈ থকা উৎপাদনসমূহ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:130
-#, python-format
-msgid "There was an error removing %s with serial number %s"
-msgstr "ক্ৰমিক সংখ্যা %s ৰ সৈতে %s আতৰাওতে এটা ত্ৰুটি হৈছিল"
-
-#: ../src/subscription_manager/gui/mysubstab.py:144
-msgid "Removing"
-msgstr "আতৰোৱা হৈছে"
-
-#: ../src/subscription_manager/gui/mysubstab.py:145
-msgid "Removing subscription. Please wait."
-msgstr "স্বাক্ষৰণ আতৰোৱা হৈছে। অনুগ্ৰহ কৰি অপেক্ষা কৰক।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:164
-#, python-format
-msgid "Are you sure you want to remove %s?"
-msgstr "আপুনি %s ক আতৰাবলে নিশ্চিত নে?"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:191
-#, python-format
-msgid "Stack of %s and %s others"
-msgstr "%s আৰু %s অন্যৰ স্টেক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:194
-#, python-format
-msgid "Stack of %s and 1 other"
-msgstr "%s আৰু ১ টা অন্যৰ স্টেক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:196
-#, python-format
-msgid "Stack of %s"
-msgstr "%s ৰ স্টেক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:226
-msgid "My Subscriptions"
-msgstr "মোৰ স্বাক্ষৰণসমূহ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/mysubstab.py:267
-msgid "Subscription is current."
-msgstr "স্বাক্ষৰণ বৰ্তমান।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/mysubstab.py:270
-msgid "Subscription is expired."
-msgstr "স্বাক্ষৰণৰ অৱসান ঘটিছে।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/mysubstab.py:272
-msgid "Subscription has not begun."
-msgstr "স্বাক্ষৰণ আৰম্ভ হোৱা নাই।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/mysubstab.py:274
-#: ../src/subscription_manager/managercli.py:2374
-msgid "Subscription management service doesn't support Status Details."
-msgstr "স্বাক্ষৰণ ব্যৱস্থাপনা সেৱায় অৱস্থাৰ বিৱৰণসমূহ সমৰ্থন নকৰে।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:281
-#: ../src/subscription_manager/gui/widgets.py:747
-#: ../src/subscription_manager/managercli.py:2233
-#: ../src/subscription_manager/managercli.py:2340
-msgid "Virtual"
-msgstr "ভাৰছুৱেল"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/mysubstab.py:283
-#: ../src/subscription_manager/gui/widgets.py:746
-#: ../src/subscription_manager/managercli.py:2235
-#: ../src/subscription_manager/managercli.py:2342
-msgid "Physical"
-msgstr "ভৌতিক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/mysubstab.py:286
-#: ../src/subscription_manager/managercli.py:2238
-#: ../src/subscription_manager/managercli.py:2345
-msgid "Yes"
-msgstr "হয়"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/mysubstab.py:288
-#: ../src/subscription_manager/managercli.py:2240
-#: ../src/subscription_manager/managercli.py:2347
-msgid "No"
-msgstr "নহয়"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/about.py:29
+#: ../src/subscription_manager/gui/about.py:28
 msgid ""
 "\n"
 "This software is licensed to you under the GNU General Public License, "
@@ -1117,95 +283,403 @@ msgstr ""
 "নাই।\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/about.py:50
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:1
-#: ../etc-conf/subscription-manager-gui.desktop.in.h:2
+#: ../src/subscription_manager/gui/about.py:49
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:13
 msgid "Subscription Manager"
 msgstr "স্বাক্ষৰণ ব্যৱস্থাপক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/about.py:55
+#: ../src/subscription_manager/gui/about.py:54
 msgid "Copyright (c) 2012 Red Hat, Inc."
 msgstr "স্বত্বাধিকাৰ (c) ২০১২ Red Hat, Inc."
 
-#: ../src/subscription_manager/gui/about.py:75
-#: ../src/subscription_manager/gui/about.py:77
+#: ../src/subscription_manager/gui/about.py:74
+#: ../src/subscription_manager/gui/about.py:76
 #, python-format
 msgid "<b>%s version:</b> %s"
 msgstr "<b>%s সংস্কৰণ:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/about.py:79
+#: ../src/subscription_manager/gui/about.py:78
 #, python-format
 msgid "<b>subscription management service version:</b> %s"
 msgstr "<b>স্বাক্ষৰণ ব্যৱস্থাপনা সেৱা সংস্কৰণ:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/about.py:103
+#: ../src/subscription_manager/gui/about.py:102
 #, python-format
 msgid "<b>Next System Check-in:</b> %s"
 msgstr "<b>পৰৱৰ্তী চিস্টেম চেক-ইন:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:261 ../src/rct/printing.py:45
-#: ../src/rct/printing.py:73 ../src/rct/printing.py:103
-#: ../src/rct/manifest_commands.py:204 ../src/rct/manifest_commands.py:228
-msgid "Name"
-msgstr "নাম"
+#. Add at-spi because we no longer create this widget from glade
+#: ../src/subscription_manager/gui/allsubs.py:56
+msgid "All Subscriptions View"
+msgstr "সকলো স্বাক্ষৰণসমূহৰ দৰ্শন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:261
+#: ../src/subscription_manager/gui/allsubs.py:81
+#: ../src/subscription_manager/gui/mysubstab.py:76
+#: ../src/subscription_manager/gui/registergui.py:604
+msgid "Subscription"
+msgstr "স্বাক্ষৰণ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/allsubs.py:93
+msgid "Available"
+msgstr "উপলব্ধ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. Set up the quantity column.
+#: ../src/subscription_manager/gui/allsubs.py:97
+#: ../src/subscription_manager/gui/contract_selection.py:122
+#: ../src/subscription_manager/gui/mysubstab.py:107
+#: ../src/subscription_manager/gui/registergui.py:610
+#: ../src/rct/manifest_commands.py:229 ../src/rct/printing.py:83
+msgid "Quantity"
+msgstr "পৰিমাণ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/allsubs.py:178
+msgid "Press Update to search for subscriptions."
+msgstr "স্বাক্ষৰণসমূহ সন্ধান কৰিবলে অনুগ্ৰহ কৰি আপডেইট কৰক।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:213
+#, python-format
+msgid "No subscriptions are available on %s."
+msgstr "%s ত কোনো স্বাক্ষৰণ উপলব্ধ নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/allsubs.py:219
+msgid "No subscriptions match current filters."
+msgstr "বৰ্তমান পৰিস্ৰাৱকসমূহৰ সৈতে মিল খোৱা কোনো স্বাক্ষৰণ নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:234
+#: ../src/subscription_manager/gui/contract_selection.py:139
+#: ../src/subscription_manager/managerlib.py:337 ../src/rct/printing.py:82
+msgid "Unlimited"
+msgstr "অসীমিত"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:347
+msgid "All Available Subscriptions"
+msgstr "সকলো উপলব্ধ স্বাক্ষৰণসমূহ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/allsubs.py:357
+msgid "Searching"
+msgstr "সন্ধান কৰা হৈছে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/allsubs.py:358
+msgid "Searching for subscriptions. Please wait."
+msgstr "স্বাক্ষৰণসমূহ বিচৰা হৈছে। অনুগ্ৰহ কৰি অপেক্ষা কৰক।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/allsubs.py:374
+#, python-format
+msgid "Error fetching subscriptions from server:  %s"
+msgstr "স্বাক্ষৰণসমূহ চাৰ্ভাৰৰ পৰা প্ৰাপ্ত কৰোতে ত্ৰুটি: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:388
+#, python-format
+msgid "Unable to search for subscriptions:  %s"
+msgstr "স্বাক্ষৰণসমূহ বিচাৰিবলে অক্ষম: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/allsubs.py:399
+#, python-format
+msgid "Error getting subscription: %s"
+msgstr "স্বাক্ষৰণ প্ৰাপ্ত কৰোতে ত্ৰুটি: %s "
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/allsubs.py:403
+msgid "Quantity must be a positive number."
+msgstr "পৰিমাণ এটা ধণাত্মক সংখ্যা হব লাগিব।"
+
+#. Start the progress bar
+#: ../src/subscription_manager/gui/allsubs.py:410
+msgid "Attaching"
+msgstr "সংলঘ্ন কৰা হৈছে"
+
+#: ../src/subscription_manager/gui/allsubs.py:411
+msgid "Attaching subscription. Please wait."
+msgstr "স্বাক্ষৰণ সংলঘ্ন কৰা হৈছে। অনুগ্ৰহ কৰি অপেক্ষা কৰক।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/allsubs.py:433
+#, python-format
+msgid "%s applied"
+msgstr "%s প্ৰয়োগ কৰা হল"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/contract_selection.py:81
+#: ../src/rct/manifest_commands.py:237 ../src/rct/printing.py:76
+msgid "Contract"
+msgstr "চুক্তি"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/contract_selection.py:98
+msgid "Used / Total"
+msgstr "ব্যৱহৃত/সৰ্বমুঠ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/contract_selection.py:104
+#: ../src/subscription_manager/gui/installedtab.py:97
+#: ../src/rct/manifest_commands.py:231 ../src/rct/printing.py:127
+msgid "Start Date"
+msgstr "আৰম্ভ তাৰিখ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/contract_selection.py:113
+#: ../src/subscription_manager/gui/installedtab.py:100
+#: ../src/subscription_manager/gui/mysubstab.py:104
+#: ../src/rct/manifest_commands.py:232 ../src/rct/printing.py:128
+msgid "End Date"
+msgstr "শেষৰ তাৰিখ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:60
+msgid "Fact"
+msgstr "ফেক্ট"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/factsgui.py:61
+#: ../src/subscription_manager/gui/widgets.py:339
 msgid "Value"
 msgstr "মান"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#. Shouldn't be reachable.
+#. Reason has no id attr
+#. It's possible (though unlikely, and kind of broken) to have more
+#. than one version of python-rhsm/subscription-manager installed.
+#. This will return whatever version we are using.
+#: ../src/subscription_manager/gui/factsgui.py:91
+#: ../src/subscription_manager/gui/factsgui.py:118
+#: ../src/subscription_manager/gui/installedtab.py:202
+#: ../src/subscription_manager/reasons.py:93
+#: ../src/subscription_manager/utils.py:213
+#: ../src/subscription_manager/utils.py:214
+#: ../src/subscription_manager/utils.py:228
+#: ../src/subscription_manager/utils.py:230
+#: ../src/subscription_manager/utils.py:248
+#: ../src/subscription_manager/utils.py:249
+#: ../src/subscription_manager/utils.py:250
+#: ../src/subscription_manager/utils.py:269
+#: ../src/subscription_manager/managercli.py:78
+#: ../src/subscription_manager/managercli.py:343
+#: ../src/subscription_manager/managercli.py:344
+#: ../src/subscription_manager/managercli.py:347
+#: ../src/subscription_manager/managercli.py:348
+#: ../src/subscription_manager/managercli.py:1726
+#: ../src/subscription_manager/managercli.py:2599
+#: ../src/subscription_manager/cert_sorter.py:47
+msgid "Unknown"
+msgstr "অজ্ঞাত"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:296
-msgid "Installed"
-msgstr "ইনস্টল্ড"
+#: ../src/subscription_manager/gui/factsgui.py:103
+msgid "No previous update"
+msgstr "পুৰৱৰ্তী কোনো আপডেইট নাই"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/factsgui.py:147
+#: ../src/subscription_manager/gui/widgets.py:476
+#: ../src/subscription_manager/printing_utils.py:137
+#: ../src/subscription_manager/managercli.py:666
+msgid "None"
+msgstr "কোনো নহয়"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/widgets.py:599
-msgid "Invalid date format. Please re-enter a valid date. Example: "
+#: ../src/subscription_manager/gui/importsub.py:39
+msgid "Import Certificates"
+msgstr "প্ৰমাণপত্ৰসমূহ ইমপোৰ্ট কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/importsub.py:42
+msgid "Import"
+msgstr "ইমপোৰ্ট কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/importsub.py:51
+msgid "Certificates"
+msgstr "প্ৰমাণপত্ৰসমূহ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/importsub.py:56
+msgid "All files"
+msgstr "সকলো ফাইল"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/importsub.py:122
+msgid "The following certificate files did not exist:"
+msgstr "নিম্নলিখিত প্ৰমাণপত্ৰ ফাইলসমূহ অস্তিত্ববান নহয়:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/importsub.py:125
+msgid "The following files are not valid certificates and were not imported:"
+msgstr "নিম্নলিখিত ফাইলসমূহ বৈধ ফাইলসমূহ নহয় আৰু ইমপোৰ্ট কৰা হোৱা নাছিল:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/importsub.py:130
+msgid ""
+"An error occurred while importing the following certificates. Please check "
+"the log file for more information."
 msgstr ""
-"তাৰিখৰ বিন্যাস অবৈধ। অনুগ্ৰহ কৰি পুনৰবাৰৰ বাবে এটা বৈধ তাৰিখ সুমুৱাওক। উদাহৰণ:"
+"নিম্নলিখিত প্ৰমাণপত্ৰসমূহ ইমপোৰ্ট কৰোতে এটা ত্ৰুটি দেখা দিলে। অধিক তথ্যৰ বাবে অনুগ্ৰহ "
+"কৰি লগ ফাইল নীৰিক্ষণ কৰক।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/widgets.py:636
-msgid "Date Selection"
-msgstr "তাৰিখ নিৰ্বাচন"
+#: ../src/subscription_manager/gui/importsub.py:134
+msgid "The following certificates were successfully imported:"
+msgstr "নিম্নলিখিত প্ৰমাণপত্ৰসমূহ সফলভাৱে ইমপোৰ্ট কৰা হৈছিল:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:651
-msgid "Today"
-msgstr "আজি"
+#. if we get to this point, the import was successful
+#: ../src/subscription_manager/gui/importsub.py:139
+msgid "Certificate import was successful."
+msgstr "প্ৰমাণপত্ৰ ইমপোৰ্ট সফল আছিল।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:748
-msgid "Both"
-msgstr "দুয়ো"
+#: ../src/subscription_manager/gui/installedtab.py:80
+#: ../src/subscription_manager/gui/widgets.py:370 ../src/rct/printing.py:43
+msgid "Product"
+msgstr "উৎপাদন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#. content-type is required, no need to xstr
-#: ../src/subscription_manager/gui/widgets.py:751 ../src/rct/printing.py:102
-#: ../src/rct/manifest_commands.py:206
-msgid "Type"
-msgstr "ধৰণ"
+#: ../src/subscription_manager/gui/installedtab.py:91
+#: ../src/rct/printing.py:46 ../src/rct/printing.py:125
+msgid "Version"
+msgstr "সংস্কৰণ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/widgets.py:823
-msgid "Click to Adjust Quantity"
-msgstr "পৰিমাণ সংঘঠিত কৰিবলে ক্লিক কৰক"
+#: ../src/subscription_manager/gui/installedtab.py:94
+msgid "Status"
+msgstr "অৱস্থা"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:181
+#: ../src/subscription_manager/managercli.py:73
+msgid "Future Subscription"
+msgstr "ভৱিষ্যৎ স্বাক্ষৰণ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:182
+msgid "Future Subscribed"
+msgstr "ভৱিষ্যত স্বাক্ষৰীত"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:185
+#: ../src/subscription_manager/managercli.py:76
+msgid "Expired"
+msgstr "অৱসিত"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:195
+#, python-format
+msgid "Subscription %s is expired"
+msgstr "%s স্বাক্ষৰণ অৱসিত"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/managergui.py:348
+#: ../src/subscription_manager/gui/installedtab.py:198
+#: ../src/subscription_manager/gui/installedtab.py:199
+#: ../src/subscription_manager/managercli.py:77
+msgid "Partially Subscribed"
+msgstr "আংশিকভাৱে স্বাক্ষৰীত"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/installedtab.py:204
+msgid "System is not registered."
+msgstr "চিস্টেম ৰেজিস্টাৰ্ড নহয়।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#. System must be registered but unable to reach server:
+#: ../src/subscription_manager/gui/installedtab.py:207
+msgid "Entitlement server is unreachable."
+msgstr "অনুজ্ঞা চাৰ্ভাৰ অপ্ৰাপ্য।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:210
+#: ../src/subscription_manager/managercli.py:74
+msgid "Subscribed"
+msgstr "স্বাক্ষৰীত"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:212
+#, python-format
+msgid "Covered by contract %s through %s"
+msgid_plural "Covered by contracts %s through %s"
+msgstr[0] "%s ৰে চুক্তি %s দ্বাৰা সুৰক্ষিত"
+msgstr[1] "%s ৰে %s চুক্তিসমূহ দ্বাৰা সুৰক্ষিত"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/installedtab.py:219
+#: ../src/subscription_manager/gui/installedtab.py:220
+#: ../src/subscription_manager/managercli.py:75
+msgid "Not Subscribed"
+msgstr "স্বাক্ষৰীত নহয়"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/installedtab.py:273
+msgid "My Installed Products"
+msgstr "মই ইনস্টল কৰা উৎপাদনসমূহ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:307
+msgid "No installed products detected."
+msgstr "কোনো ইনস্টল্ড উৎপাদন চিনাক্ত কৰা হোৱা নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:311
+#, python-format
+msgid "System is properly subscribed through %s."
+msgstr "চিস্টেম %s ৰ সহায়ত সঠিকভাৱে স্বাক্ষৰ কৰা আছে।"
+
+#: ../src/subscription_manager/gui/installedtab.py:316
+msgid "System is properly subscribed."
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:321
+msgid "This system does not match subscription limits."
+msgstr "এই চিস্টেম স্বাক্ষৰণ সীমাসমূহৰ সৈতে মিল নাখায়।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:327
+#, python-format
+msgid "%s installed products do not have valid subscriptions."
+msgstr "%s ইনস্টল্ড উৎপাদনসমূহৰ বৈধ স্বাক্ষৰণ নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:332
+msgid "1 installed product does not have a valid subscription."
+msgstr "১ টা ইনস্টল্ড উৎপাদনৰ এটা বৈধ স্বাক্ষৰণ নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. I18N: Please add newlines if translation is longer:
+#: ../src/subscription_manager/gui/installedtab.py:337
+msgid "Keep your system up to date by registering."
+msgstr "আপোনাৰ চিস্টেমক ৰেজিস্টাৰ কৰি বৰ্তমান তাৰিখলৈ উন্নত ৰাখক।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/managergui.py:370
 msgid ""
 "Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
 "information."
 msgstr ""
 "পছন্দসমূহ ডাইলগত ত্ৰুটি। অধিক তথ্যৰ বাবে অনুগ্ৰহ কৰি /var/log/rhsm/rhsm.log চাওক।"
 
-#: ../src/subscription_manager/gui/managergui.py:356
+#: ../src/subscription_manager/gui/managergui.py:378
 msgid ""
 "Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
@@ -1213,41 +687,476 @@ msgstr ""
 "repos  ডাইলগত ত্ৰুটি। অধিক তথ্যৰ বাবে অনুগ্ৰহ কৰি /var/log/rhsm/rhsm.log চাওক।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:372
+#: ../src/subscription_manager/gui/managergui.py:394
 msgid "<b>Errors were encountered during unregister.</b>"
 msgstr "<b>আনৰেজিস্টাৰ কৰাৰ সময়ত ত্ৰুটিসমূহ।</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:390
+#: ../src/subscription_manager/gui/managergui.py:396
+#: ../src/subscription_manager/gui/registergui.py:95
+msgid "Please see /var/log/rhsm/rhsm.log for more information."
+msgstr "অধিক তথ্যৰ বাবে /var/log/rhsm/rhsm.log চাওক।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/managergui.py:412
 msgid "<b>Are you sure you want to unregister?</b>"
 msgstr "<b>আপুনি নিশ্চিত নে আপুনি আনৰেজিস্টাৰ হ'ব বিচাৰে?</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/managergui.py:446
+#: ../src/subscription_manager/gui/managergui.py:468
 msgid "System Already Registered"
 msgstr "চিস্টেম ইতিমধ্যে ৰেজিস্টাৰ কৰা আছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:96
-#: ../src/rct/printing.py:76 ../src/rct/manifest_commands.py:237
-msgid "Contract"
-msgstr "চুক্তি"
+#: ../src/subscription_manager/gui/mysubstab.py:93
+msgid "Installed Products"
+msgstr "ইনস্টল হৈ থকা উৎপাদনসমূহ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/contract_selection.py:110
-msgid "Used / Total"
-msgstr "ব্যৱহৃত/সৰ্বমুঠ"
+#: ../src/subscription_manager/gui/mysubstab.py:132
+#, python-format
+msgid "There was an error removing %s with serial number %s"
+msgstr "ক্ৰমিক সংখ্যা %s ৰ সৈতে %s আতৰাওতে এটা ত্ৰুটি হৈছিল"
+
+#: ../src/subscription_manager/gui/mysubstab.py:146
+msgid "Removing"
+msgstr "আতৰোৱা হৈছে"
+
+#: ../src/subscription_manager/gui/mysubstab.py:147
+msgid "Removing subscription. Please wait."
+msgstr "স্বাক্ষৰণ আতৰোৱা হৈছে। অনুগ্ৰহ কৰি অপেক্ষা কৰক।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. Set up columns on the view
-#: ../src/subscription_manager/gui/factsgui.py:59
-msgid "Fact"
-msgstr "ফেক্ট"
+#: ../src/subscription_manager/gui/mysubstab.py:168
+#, python-format
+msgid "Are you sure you want to remove %s?"
+msgstr "আপুনি %s ক আতৰাবলে নিশ্চিত নে?"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/factsgui.py:102
-msgid "No previous update"
-msgstr "পুৰৱৰ্তী কোনো আপডেইট নাই"
+#: ../src/subscription_manager/gui/mysubstab.py:198
+#, python-format
+msgid "Stack of %s and %s others"
+msgstr "%s আৰু %s অন্যৰ স্টেক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:201
+#, python-format
+msgid "Stack of %s and 1 other"
+msgstr "%s আৰু ১ টা অন্যৰ স্টেক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:203
+#, python-format
+msgid "Stack of %s"
+msgstr "%s ৰ স্টেক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:233
+msgid "My Subscriptions"
+msgstr "মোৰ স্বাক্ষৰণসমূহ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/mysubstab.py:278
+msgid "Subscription is current."
+msgstr "স্বাক্ষৰণ বৰ্তমান।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/mysubstab.py:281
+msgid "Subscription is expired."
+msgstr "স্বাক্ষৰণৰ অৱসান ঘটিছে।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/mysubstab.py:283
+msgid "Subscription has not begun."
+msgstr "স্বাক্ষৰণ আৰম্ভ হোৱা নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/mysubstab.py:285
+#: ../src/subscription_manager/managercli.py:2374
+msgid "Subscription management service doesn't support Status Details."
+msgstr "স্বাক্ষৰণ ব্যৱস্থাপনা সেৱায় অৱস্থাৰ বিৱৰণসমূহ সমৰ্থন নকৰে।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:292
+#: ../src/subscription_manager/gui/widgets.py:837
+#: ../src/subscription_manager/managercli.py:2233
+#: ../src/subscription_manager/managercli.py:2340
+msgid "Virtual"
+msgstr "ভাৰছুৱেল"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/mysubstab.py:294
+#: ../src/subscription_manager/gui/widgets.py:836
+#: ../src/subscription_manager/managercli.py:2235
+#: ../src/subscription_manager/managercli.py:2342
+msgid "Physical"
+msgstr "ভৌতিক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/mysubstab.py:297
+#: ../src/subscription_manager/managercli.py:2238
+#: ../src/subscription_manager/managercli.py:2345
+msgid "Yes"
+msgstr "হয়"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/mysubstab.py:299
+#: ../src/subscription_manager/managercli.py:2240
+#: ../src/subscription_manager/managercli.py:2347
+msgid "No"
+msgstr "নহয়"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:158
+msgid "There was an error saving your configuration."
+msgstr "আপোনাৰ সংৰূপ সংৰক্ষণ কৰোতে এটা ত্ৰুটি হৈছিল।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/networkConfig.py:159
+#, python-format
+msgid "Make sure that you own %s."
+msgstr "সুনিশ্চিত কৰক যে আপোনাৰ %s আছে।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/networkConfig.py:182
+msgid "Proxy connection succeeded"
+msgstr "প্ৰক্সি সংযোগ সফল হল"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/networkConfig.py:184
+msgid "Proxy connection failed"
+msgstr "প্ৰক্সি সংযোগ ব্যৰ্থ হল"
+
+#: ../src/subscription_manager/gui/networkConfig.py:277
+#: ../src/subscription_manager/gui/networkConfig.py:280
+msgid "Testing Connection"
+msgstr "সংযোগ পৰীক্ষা কৰা হৈছে"
+
+#: ../src/subscription_manager/gui/networkConfig.py:278
+#: ../src/subscription_manager/gui/networkConfig.py:280
+msgid "Please wait"
+msgstr "অনুগ্ৰহ কৰি অপেক্ষা কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. An empty string entry is used for "un-setting" the system's SLA:
+#. for unsetting
+#: ../src/subscription_manager/gui/preferences.py:115
+#: ../src/subscription_manager/gui/preferences.py:141
+#: ../src/subscription_manager/gui/widgets.py:449
+msgid "Not Set"
+msgstr "সংহিত নহয়"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/redeem.py:56
+#, python-format
+msgid "Error redeeming subscription: %s"
+msgstr "স্বাক্ষৰণ ঘুৰাই নিওতে ত্ৰুটি: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:93
+msgid "<b>Unable to register the system.</b>"
+msgstr "<b>চিস্টেম ৰেজিস্টাৰ কৰিবলে অক্ষম।</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:363
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:1
+msgid "System Registration"
+msgstr "চিস্টেমৰ ৰেজিস্ট্ৰেষণ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:364
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:5
+msgid "<b>Registering</b>"
+msgstr "<b>ৰেজিস্টাৰ কৰা হৈ আছে</b>"
+
+#: ../src/subscription_manager/gui/registergui.py:367
+msgid "Subscription Attachment"
+msgstr "স্বাক্ষৰণ সংলঘ্ন"
+
+#: ../src/subscription_manager/gui/registergui.py:368
+msgid "<b>Attaching</b>"
+msgstr "<b>সংলঘ্ন কৰা হৈছে</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:481
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:2
+msgid "Register"
+msgstr "ৰেজিস্টাৰ কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:525
+msgid "Registering your system"
+msgstr "আপোনাৰ চিস্টেম ৰেজিস্টাৰ কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:565
+#: ../src/subscription_manager/gui/registergui.py:1059
+msgid "Attaching subscriptions"
+msgstr "স্বাক্ষৰণসমূহ সংলঘ্ন কৰা হৈছে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:569
+#: ../src/subscription_manager/gui/registergui.py:1063
+#, python-format
+msgid "Error subscribing: %s"
+msgstr "স্বাক্ষৰ কৰোতে ত্ৰুটি: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:598
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:7
+msgid "Attach"
+msgstr "সংলগ্ন কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:656
+msgid "Finding suitable service levels"
+msgstr "উপযুক্ত সেৱা স্তৰসমূহ সন্ধান কৰা হৈছে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:657
+#: ../src/subscription_manager/gui/registergui.py:1085
+#: ../src/subscription_manager/gui/registergui.py:1451
+msgid "Next"
+msgstr "পৰৱৰ্তী"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:711
+msgid "Unable to auto-attach, server does not support service levels."
+msgstr "স্ব-সংলগ্ন কৰিবলে অক্ষম, চাৰ্ভাৰে সেৱা স্তৰসমূহ সমৰ্থন নকৰে।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:714
+msgid ""
+"No installed products on system. No need to attach subscriptions at this "
+"time."
+msgstr ""
+"চিস্টেমত কোনো উৎপাদন ইনস্টল নাই। এই সময়ত স্বাক্ষৰণসমূহ সংলগ্ন কৰাৰ প্ৰয়োজন নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:717
+msgid ""
+"All installed products are covered by valid entitlements. No need to attach "
+"subscriptions at this time."
+msgstr ""
+"সকলো ইনস্টল উৎপাদন বৈধ অনুজ্ঞাসমূহ দ্বাৰা সুৰক্ষিত। এই সময়ত স্বাক্ষৰণসমূহ সংলগ্ন কৰাৰ "
+"প্ৰয়োজন নাই।"
+
+#: ../src/subscription_manager/gui/registergui.py:720
+msgid "Consumer has been deleted."
+msgstr "উপভোক্তাক মচি পেলোৱা হৈছে।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:737
+#, python-format
+msgid ""
+"No available subscriptions at the current service level: %s. Please use the "
+"\"All Available Subscriptions\" tab to manually attach subscriptions."
+msgstr ""
+"বৰ্তমান সেৱা স্তৰত কোনো উপলব্ধ স্বাক্ষৰণ নাই: %s। স্বাক্ষৰণসমূহক হস্তচালিতভাৱে সংলগ্ন "
+"কৰিবলে অনুগ্ৰহ কৰি \"সকলো উপলব্ধ স্বাক্ষৰণসমূহ\" টেব ব্যৱহাৰ কৰক।"
+
+#: ../src/subscription_manager/gui/registergui.py:755
+msgid ""
+"No service level will cover all installed products. Please manually "
+"subscribe using multiple service levels via the \"All Available Subscriptions"
+"\" tab or purchase additional subscriptions."
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:789
+msgid "Fetching list of possible environments"
+msgstr "সম্ভাব্য পৰিৱেশসমূহৰ তালিকা প্ৰাপ্ত কৰা হৈছে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:791
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:7
+msgid "Environment"
+msgstr "পৰিৱেশ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:846
+msgid "Fetching list of possible organizations"
+msgstr "সম্ভাব্য সংঘঠনসমূহৰ তালিকা প্ৰাপ্ত কৰা হৈ আছে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:849
+msgid "Organization"
+msgstr "সংঘঠন"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:868
+#, python-format
+msgid "<b>User %s is not able to register with any orgs.</b>"
+msgstr "<b>ব্যৱহাৰকাৰী %s কোনো সংঘঠনৰ লগত ৰেজিস্টাৰ কৰিবলে সক্ষম নহয়।</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:930
+#: ../src/subscription_manager/gui/registergui.py:1036
+msgid "You must enter a system name."
+msgstr "আপুনি এটা চিস্টেমৰ নাম সুমুৱাব লাগিব।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:938
+msgid "You must enter a login."
+msgstr "আপুনি এটা লগিন সুমুৱাব লাগিব।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:943
+msgid "You must enter a password."
+msgstr "আপুনি এটা পাছৱৰ্ড সুমুৱাব লাগিব।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:1022
+msgid "You must enter an organization."
+msgstr "আপুনি এটা সংঘঠন সুমুৱাব লাগিব।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/registergui.py:1029
+msgid "You must enter an activation key."
+msgstr "আপুনি এটা সক্ৰিয়কৰণ কি' সুমুৱাব লাগিব।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:1148
+#: ../src/subscription_manager/managercli.py:402
+#, python-format
+msgid "Unable to reach the server at %s:%s%s"
+msgstr "%s ত চাৰ্ভাৰ প্ৰাপ্ত কৰিব নোৱাৰি:%s%s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:1153
+msgid "CA certificate for subscription service has not been installed."
+msgstr "স্বাক্ষৰণ সেৱাৰ বাবে CA প্ৰমাণপত্ৰ ইনস্টল কৰা হোৱা নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:1158
+msgid ""
+"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
+"prefix]"
+msgstr ""
+"অনুগ্ৰহ কৰি বৈকল্পিক পৰ্ট আৰু/অথবা উপসৰ্গ: hostname[:port][/prefix] ৰ সৈতে এটা "
+"হস্টনাম প্ৰদান কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/registergui.py:1215
+msgid "Server supports environments, but none are available."
+msgstr "চাৰ্ভাৰে পৰিৱেশসমূহৰ সমৰ্থন কৰে, কিন্তু কোনো উপলব্ধ নহয়।"
+
+#: ../src/subscription_manager/gui/reposgui.py:49
+msgid "Attached subscriptions do not provide any repositories."
+msgstr "সংলঘ্ন স্বাক্ষৰণসমূহে কোনো ভঁৰাল প্ৰদান নকৰে।"
+
+#: ../src/subscription_manager/gui/reposgui.py:50
+msgid "No repositories are available without an attached subscription."
+msgstr "এটা সংলঘ্ন স্বাক্ষৰণৰ অবিহনে কোনো ভঁৰাল উপলব্ধ নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/reposgui.py:51
+#: ../src/subscription_manager/managercli.py:1916
+msgid "Repositories disabled by configuration."
+msgstr "সংৰূপ দ্বাৰা ভঁৰালসমূহ অসামৰ্থবান কৰা হৈছে।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/reposgui.py:105 ../src/rct/printing.py:108
+msgid "Enabled"
+msgstr "সামৰ্থবান"
+
+#: ../src/subscription_manager/gui/reposgui.py:109
+msgid "Gpgcheck"
+msgstr "Gpgcheck"
+
+#: ../src/subscription_manager/gui/reposgui.py:114
+msgid "Repository ID"
+msgstr "ভঁৰাল ID"
+
+#: ../src/subscription_manager/gui/reposgui.py:120
+msgid "Modified"
+msgstr "পৰিবৰ্তিত"
+
+#: ../src/subscription_manager/gui/reposgui.py:256
+#, python-format
+msgid "Are you sure you want to remove all overrides for <b>%s</b>?"
+msgstr "আপুনি <b>%s</b> ৰ বাবে সকলো অভাৰৰাইড আতৰাবলৈ নিশ্চিত নে?"
+
+#: ../src/subscription_manager/gui/reposgui.py:257
+msgid "Confirm Remove All Overrides"
+msgstr "সকলো অভাৰৰাইড আতৰোৱা সুনিশ্চিত কৰক"
+
+#: ../src/subscription_manager/gui/reposgui.py:275
+msgid "Unable to reset repository overrides."
+msgstr "ভঁৰালৰ অভাৰৰাইড পুনৰ সংহতি কৰিবলৈ অক্ষম।"
+
+#: ../src/subscription_manager/gui/reposgui.py:316
+#, python-format
+msgid "Unable to update %s override."
+msgstr "%s অভাৰৰাইড আপডেইট কৰিবলে অক্ষম।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:339
+#: ../src/rct/manifest_commands.py:204 ../src/rct/manifest_commands.py:228
+#: ../src/rct/printing.py:45 ../src/rct/printing.py:73
+#: ../src/rct/printing.py:103
+msgid "Name"
+msgstr "নাম"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:374
+msgid "Installed"
+msgstr "ইনস্টল্ড"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/widgets.py:687
+msgid "Invalid date format. Please re-enter a valid date. Example: "
+msgstr ""
+"তাৰিখৰ বিন্যাস অবৈধ। অনুগ্ৰহ কৰি পুনৰবাৰৰ বাবে এটা বৈধ তাৰিখ সুমুৱাওক। উদাহৰণ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/widgets.py:724
+msgid "Date Selection"
+msgstr "তাৰিখ নিৰ্বাচন"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:739
+msgid "Today"
+msgstr "আজি"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:838
+msgid "Both"
+msgstr "দুয়ো"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#. content-type is required, no need to xstr
+#: ../src/subscription_manager/gui/widgets.py:841
+#: ../src/rct/manifest_commands.py:206 ../src/rct/printing.py:102
+msgid "Type"
+msgstr "ধৰণ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/widgets.py:914
+msgid "Click to Adjust Quantity"
+msgstr "পৰিমাণ সংঘঠিত কৰিবলে ক্লিক কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. note default is lower caps
+#: ../src/subscription_manager/i18n_optparse.py:39
+msgid "%prog [OPTIONS]"
+msgstr "%prog [বিকল্পসমূহ]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/i18n_optparse.py:129
+#: ../../../../..//usr/lib64/python2.7/optparse.py:374
+#, python-format
+msgid "Usage: %s\n"
+msgstr "ব্যৱহাৰ: %s\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. translators: arg 1 is the program name, arg 2 is the error message
+#: ../src/subscription_manager/i18n_optparse.py:145
+#, python-format
+msgid "%s: error: %s"
+msgstr "%s: ত্ৰুটি: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
 #: ../src/subscription_manager/migrate/migrate.py:61
@@ -1453,8 +1362,8 @@ msgstr ""
 "উৎপাদন প্ৰমাণপত্ৰসমূহ সফলভাৱে %s লে ইনস্টল কৰা হৈছে।"
 
 #: ../src/subscription_manager/migrate/migrate.py:604
-msgid "Could not unentitle system on legacy server.  "
-msgstr "কিম্বদন্তি চাৰ্ভাৰত চিস্টেমৰ অনুজ্ঞা আতৰাব নোৱাৰি।"
+msgid "Could not remove system entitlement on legacy server.  "
+msgstr ""
 
 #: ../src/subscription_manager/migrate/migrate.py:620
 #, python-format
@@ -1659,15 +1568,6 @@ msgstr ""
 msgid "The --servicelevel and --no-auto options cannot be used together."
 msgstr "--servicelevel আৰু --no-auto বিকল্পসমূহ একেলগে ব্যৱহাৰ কৰিব নোৱাৰি।"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cache.py:152
-msgid ""
-"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"চাৰ্ভাৰত চিস্টেম তথ্য আপডেইট কৰোতে ত্ৰুটি, অধিক বিৱৰণৰ বাবে /var/log/rhsm/rhsm."
-"log চাওক।"
-
 #: ../src/subscription_manager/plugin/ostree/action_invoker.py:147
 msgid "Updates:"
 msgstr "আপডেইটসমূহ:"
@@ -1684,6 +1584,182 @@ msgstr "মচি পেলোৱা হল:"
 #: ../src/subscription_manager/plugin/container.py:236
 msgid "Removed:"
 msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. usage format strips any leading 'usage' so
+#. do not iclude it
+#: ../src/subscription_manager/cli.py:61
+#, python-format
+msgid "%%prog %s [OPTIONS]"
+msgstr "%%prog %s [বিকল্পসমূহ]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cli.py:92
+#, python-format
+msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+msgstr "ব্যৱহাৰ: %s মডিউল-নাম [মডিউল-বিকল্পসমূহ] [--help]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/cli.py:104
+msgid "Primary Modules:"
+msgstr "প্ৰাথমিক মডিউলসমূহ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cli.py:105
+msgid "Other Modules:"
+msgstr "অন্য মডিউলসমূহ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/dmiinfo.py:56
+#: ../src/subscription_manager/dmiinfo.py:102
+#, python-format
+msgid "Error reading system DMI information: %s"
+msgstr "চিস্টেম DMI ৰ তথ্য পঢোতে ত্ৰুটি: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/dmiinfo.py:77
+#, python-format
+msgid "Error reading system DMI information with %s: %s"
+msgstr "%s ৰ সৈতে চিস্টেম DMI তথ্য পঢ়োতে ত্ৰুটি: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:28
+msgid ""
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
+msgstr ""
+"নেটৱৰ্কত ত্ৰুটি, চাৰ্ভাৰৰ লগত সংযোগ কৰিবলে অক্ষম। অধিক জানিবলে অনুগ্ৰহ কৰি /var/log/"
+"rhsm/rhsm.log চাওক।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:29
+msgid ""
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
+msgstr ""
+"নেটৱৰ্কত ত্ৰুটি। অনুগ্ৰহ কৰি সংযোগৰ সবিশেষ নীৰিক্ষণ কৰি চাওক অথবা অধিক জানিবলে "
+"অনুগ্ৰহ কৰি /var/log/rhsm/rhsm.log চাওক।"
+
+#: ../src/subscription_manager/exceptions.py:30
+msgid "Unauthorized: Invalid credentials for request."
+msgstr "অনাধিকাৰ: অনুৰোধৰ বাবে অবৈধ তথ্যসমূহ।"
+
+#: ../src/subscription_manager/exceptions.py:31
+msgid "Forbidden: Invalid credentials for request."
+msgstr "নিষিদ্ধ: অনুৰোধৰ বাবে অবৈধ তথ্যসমূহ।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:32
+msgid ""
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
+msgstr ""
+"দূৰৱৰ্তী চাৰ্ভাৰত ত্ৰুটি। অনুগ্ৰহ কৰি সংযোগৰ সবিশেষ নীৰিক্ষণ কৰি চাওক অথবা অধিক "
+"জানিবলে অনুগ্ৰহ কৰি /var/log/rhsm/rhsm.log চাওক।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:33
+#, python-format
+msgid "Bad CA certificate: %s"
+msgstr "বেয়া CA প্ৰমাণপত্ৰ: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/exceptions.py:34
+#: ../src/daemons/rhsmcertd-worker.py:63
+msgid "Your identity certificate has expired"
+msgstr "আপোনাৰ পৰিচয় প্ৰমাণপত্ৰৰ অৱসান ঘটিছে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/exceptions.py:35
+#, python-format
+msgid "Unable to verify server's identity: %s"
+msgstr "চাৰ্ভাৰৰ পৰিচয় সতাসত্য নিৰূপণ কৰিবলে অক্ষম: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/exceptions.py:36
+msgid "Server URL can not be empty"
+msgstr "চাৰ্ভাৰ URL ৰিক্ত থাকিব নোৱাৰিব"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/exceptions.py:37
+msgid ""
+"Server URL is just a schema. Should include hostname, and/or port and path"
+msgstr ""
+"চাৰ্ভাৰ URL কেৱল এটা স্কিমা। হস্টনাম, আৰু/অথবা পৰ্ট আৰু পথ অন্তৰ্ভুক্ত কৰিব লাগিব"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/exceptions.py:38
+msgid "Server URL can not be None"
+msgstr "চাৰ্ভাৰ URL None থাকিব নোৱাৰিব"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/exceptions.py:39
+msgid "Server URL port should be numeric"
+msgstr "চাৰ্ভাৰ URL পৰ্ট সাংখ্যিক হব লাগিব"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/exceptions.py:40
+msgid "Server URL has an invalid scheme. http:// and https:// are supported"
+msgstr "চাৰ্ভাৰ URL ৰ এটা অবৈধ আঁচনি আছে। http:// আৰু https:// সমৰ্থিত"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/reasons.py:85
+msgid "Product "
+msgstr "উৎপাদন"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/reasons.py:87
+msgid "Subscription "
+msgstr "স্বাক্ষৰণ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/reasons.py:89
+msgid "Stack "
+msgstr "স্টেক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#. TODO: Should this use the standard NOT_REGISTERED message?
+#: ../src/subscription_manager/utils.py:229
+#: ../src/subscription_manager/managercli.py:1229
+msgid "This system is currently not registered."
+msgstr "এই চিস্টেম বৰ্তমানত ৰেজিস্টাৰ নহয়।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#. FIXME: This is wrong in most non english locales.
+#: ../src/subscription_manager/utils.py:316
+msgid "and"
+msgstr "আৰু"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:273
+msgid "Error reading system memory information:"
+msgstr "চিস্টেম মেমৰি তথ্য পঢোতে ত্ৰুটি:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/hwprobe.py:585
+msgid "Error reading system CPU information:"
+msgstr "চিস্টেম CPU তথ্য পঢ়োতে ত্ৰুটি:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:610
+msgid "Error reading networking information:"
+msgstr "নেটৱৰ্কিং তথ্য পঢোতে ত্ৰুটি:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/hwprobe.py:709
+msgid "Error reading network interface information:"
+msgstr "নেটৱৰ্ক আন্তঃপৃষ্ঠ তথ্য পঢ়োতে ত্ৰুটি:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/hwprobe.py:802
+msgid "Virtualization platform does not support UUIDs"
+msgstr "ভাৰছুৱেলাইজেষণ প্লেটফৰ্মে UUIDসমূহ সমৰ্থন নকৰে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/hwprobe.py:804
+#, python-format
+msgid "Error finding UUID: %s"
+msgstr "UUID প্ৰাপ্ত কৰোতে ত্ৰুটি: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/subscription_manager/managercli.py:68
@@ -2381,13 +2457,6 @@ msgstr ""
 #, python-format
 msgid "No such environment: %s"
 msgstr "এনে কোনো পৰিৱেশ নাই: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. TODO: Should this use the standard NOT_REGISTERED message?
-#: ../src/subscription_manager/managercli.py:1229
-#: ../src/subscription_manager/utils.py:229
-msgid "This system is currently not registered."
-msgstr "এই চিস্টেম বৰ্তমানত ৰেজিস্টাৰ নহয়।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
 #: ../src/subscription_manager/managercli.py:1255
@@ -3220,6 +3289,32 @@ msgstr "চিস্টেমৰ অৱস্থাৰ বিৱৰণসমূ�
 msgid "Overall Status: %s\n"
 msgstr "সৰ্বমুঠ অৱস্থা: %s\n"
 
+#: ../src/subscription_manager/repolib.py:446
+msgid "Repo updates"
+msgstr ""
+
+#: ../src/subscription_manager/repolib.py:447
+#, python-format
+msgid "Total repo updates: %d"
+msgstr "সৰ্বমুঠ ভঁৰাল আপডেইটসমূহ: %d"
+
+#: ../src/subscription_manager/repolib.py:448
+msgid "Updated"
+msgstr "আপডেইট কৰা হল"
+
+#: ../src/subscription_manager/repolib.py:452
+msgid "Deleted"
+msgstr "মচি পেলোৱা হল"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/cache.py:152
+msgid ""
+"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
+"চাৰ্ভাৰত চিস্টেম তথ্য আপডেইট কৰোতে ত্ৰুটি, অধিক বিৱৰণৰ বাবে /var/log/rhsm/rhsm."
+"log চাওক।"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
 #: ../src/subscription_manager/cert_sorter.py:44
 msgid "Current"
@@ -3235,100 +3330,268 @@ msgstr "অপৰ্যাপ্ত"
 msgid "Invalid"
 msgstr "অবৈধ"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/reasons.py:85
-msgid "Product "
-msgstr "উৎপাদন"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/reasons.py:87
-msgid "Subscription "
-msgstr "স্বাক্ষৰণ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/reasons.py:89
-msgid "Stack "
-msgstr "স্টেক"
-
-#: ../src/subscription_manager/repolib.py:434
-msgid "Repo updates"
-msgstr ""
-
-#: ../src/subscription_manager/repolib.py:435
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/cert_commands.py:38
 #, python-format
-msgid "Total repo updates: %d"
-msgstr "সৰ্বমুঠ ভঁৰাল আপডেইটসমূহ: %d"
-
-#: ../src/subscription_manager/repolib.py:436
-msgid "Updated"
-msgstr "আপডেইট কৰা হল"
-
-#: ../src/subscription_manager/repolib.py:440
-msgid "Deleted"
-msgstr "মচি পেলোৱা হল"
+msgid "%%prog %s [OPTIONS] CERT_FILE"
+msgstr "%%prog %s [বিকল্পসমূহ] CERT_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. usage format strips any leading 'usage' so
-#. do not iclude it
-#: ../src/subscription_manager/cli.py:61
+#: ../src/rct/cert_commands.py:46 ../src/rct/manifest_commands.py:253
 #, python-format
-msgid "%%prog %s [OPTIONS]"
-msgstr "%%prog %s [বিকল্পসমূহ]"
+msgid "Unable to read certificate file '%s': %s"
+msgstr "প্ৰমাণপত্ৰ ফাইল '%s' পঢ়িবলে অক্ষম: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:92
+#: ../src/rct/cert_commands.py:52
+msgid "You must specify a certificate file."
+msgstr "আপুনি এটা প্ৰমাণপত্ৰ ফাইল ধাৰ্য্য কৰিব লাগিব।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/cert_commands.py:55
+msgid "The specified certificate file does not exist."
+msgstr "ধাৰ্য্যত প্ৰমাণপত্ৰ ফাইল অস্তিত্ববান নহয়।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/cert_commands.py:62
+msgid "Print certificate information"
+msgstr "প্ৰমাণপত্ৰ তথ্য প্ৰিন্ট কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/cert_commands.py:66
+msgid "do not show the cert's product information"
+msgstr "প্ৰমাণপত্ৰৰ উৎপাদন তথ্য নেদেখুৱাব"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/cert_commands.py:68
+msgid "do not show the cert's content info"
+msgstr "প্ৰমাণপত্ৰৰ সমলৰ তথ্য নেদেখুৱাব"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/cert_commands.py:83
+msgid "Print certificate statistics and sizes"
+msgstr "প্ৰমাণপত্ৰ পৰিসংখ্যাসমূহ আৰু আকাৰসমূহ প্ৰিন্ট কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/cert_commands.py:89
 #, python-format
-msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "ব্যৱহাৰ: %s মডিউল-নাম [মডিউল-বিকল্পসমূহ] [--help]"
+msgid "Type: %s"
+msgstr "ধৰণ: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/cert_commands.py:90
+#, python-format
+msgid "Version: %s"
+msgstr "সংস্কৰণ: %s"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/cert_commands.py:91
+#, python-format
+msgid "DER size: %db"
+msgstr "DER আকাৰ: %db"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/cert_commands.py:95
+#, python-format
+msgid "Subject Key ID size: %db"
+msgstr "বিষয় কি' ID আকাৰ: %db"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/cert_commands.py:101
+#, python-format
+msgid "Content sets: %s"
+msgstr "সমল সংহতিসমূহ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/cli.py:104
-msgid "Primary Modules:"
-msgstr "প্ৰাথমিক মডিউলসমূহ:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/cli.py:105
-msgid "Other Modules:"
-msgstr "অন্য মডিউলসমূহ:"
+#: ../src/rct/manifest_commands.py:64
+msgid "Manifest zip is invalid."
+msgstr "মেনিফেস্ট zip অবৈধ।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/dmiinfo.py:56
-#: ../src/subscription_manager/dmiinfo.py:102
+#: ../src/rct/manifest_commands.py:84
 #, python-format
-msgid "Error reading system DMI information: %s"
-msgstr "চিস্টেম DMI ৰ তথ্য পঢোতে ত্ৰুটি: %s"
+msgid "Unable to find file \"%s\" in manifest."
+msgstr "মেনিফেস্টত ফাইল \"%s\" বিচাৰি পাবলে অক্ষম।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/dmiinfo.py:77
-#, python-format
-msgid "Error reading system DMI information with %s: %s"
-msgstr "%s ৰ সৈতে চিস্টেম DMI তথ্য পঢ়োতে ত্ৰুটি: %s"
+#: ../src/rct/manifest_commands.py:108
+msgid "Manifest zip attempted to extract outside of the base directory."
+msgstr "মেনিফেস্ট zip এ ভিত্তি ডাইৰেকটৰিৰ বাহিৰত নিষ্কাষণ কৰাৰ চেষ্টা কৰিছে।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#. FIXME: This is wrong in most non english locales.
-#: ../src/subscription_manager/utils.py:316
-msgid "and"
-msgstr "আৰু"
+#: ../src/rct/manifest_commands.py:114
+msgid "Unable to trace symbolic link.  Possibly circular linkage."
+msgstr "সাংকেতিক লিঙ্ক অনুকৰণ কৰিবলে অক্ষম।  সম্ভবত চক্ৰিয় সংযোগ।"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. note default is lower caps
-#: ../src/subscription_manager/i18n_optparse.py:39
-msgid "%prog [OPTIONS]"
-msgstr "%prog [বিকল্পসমূহ]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/i18n_optparse.py:129
-#: ../../../../..//usr/lib64/python2.7/optparse.py:374
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:140
 #, python-format
-msgid "Usage: %s\n"
-msgstr "ব্যৱহাৰ: %s\n"
+msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
+msgstr "%%prog %s [বিকল্পসমূহ] MANIFEST_FILE"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:145
+msgid "You must specify a manifest file."
+msgstr "আপুনি এটা মেনিফেস্ট ফাইল ধাৰ্য্য কৰিব লাগিব।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:148
+msgid "The specified manifest file does not exist."
+msgstr "ধাৰ্য্যত মেনিফেস্ট ফাইল অস্তিত্ববান নহয়।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:172
+msgid "Print manifest information"
+msgstr "মেনিফেস্ট তথ্য প্ৰিন্ট কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:193
+msgid "Server"
+msgstr "চাৰ্ভাৰ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:194
+msgid "Server Version"
+msgstr "চাৰ্ভাৰৰ সংস্কৰণ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:195
+msgid "Date Created"
+msgstr "তথ্য সৃষ্টি কৰা হল"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:196
+msgid "Creator"
+msgstr "সৃষ্টিকৰ্তা"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:197
+msgid "General:"
+msgstr "সাধাৰণ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:205
+msgid "UUID"
+msgstr "UUID"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:207
+msgid "Consumer:"
+msgstr "উপভোক্তা:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:221
+msgid "Subscriptions:"
+msgstr "স্বাক্ষৰণসমূহ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:230
+msgid "Created"
+msgstr "সৃষ্টি কৰা হৈছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:145
+#: ../src/rct/manifest_commands.py:233 ../src/rct/printing.py:78
+msgid "Service Level"
+msgstr "সেৱা স্তৰ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/manifest_commands.py:234 ../src/rct/printing.py:79
+msgid "Service Type"
+msgstr "সেৱাৰ ধৰণ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:235
+msgid "Architectures"
+msgstr "স্থাপত্যসমূহ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/manifest_commands.py:236 ../src/rct/printing.py:75
+msgid "SKU"
+msgstr "SKU"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/manifest_commands.py:238 ../src/rct/printing.py:72
+msgid "Order"
+msgstr "ক্ৰম"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/rct/manifest_commands.py:239 ../src/rct/printing.py:77
+msgid "Account"
+msgstr "একাওন্ট"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:242
+msgid "Entitlement File"
+msgstr "অনুজ্ঞা ফাইল"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:247
+msgid "Certificate File"
+msgstr "প্ৰমাণপত্ৰ ফাইল"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:255
+msgid "Certificate Version"
+msgstr "প্ৰমাণপত্ৰৰ সংস্কৰণ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:257
+msgid "Subscription:"
+msgstr "স্বাক্ষৰণ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:262
+msgid "Provided Products:"
+msgstr "প্ৰদান কৰা উৎপাদনসমূহ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:266
+msgid "Content Sets:"
+msgstr "সমল সংহতিসমূহ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:275
+msgid "\tManifest"
+msgstr "\tমেনিফেস্ট"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:287
+msgid "Dump the contents of a manifest"
+msgstr "এটা মেনিফেস্টৰ সমলসমূহ ডাম্প কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:291
+msgid "directory to extract the manifest to"
+msgstr "মেনিফেস্ট নিষ্কাষণ কৰিবলে ডাইৰেকটৰি"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:294
+msgid "overwrite files which may exist"
+msgstr "অস্তিত্ববান ফাইলসমূহ পুনৰ লিখক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#. useful error for file already exists
+#: ../src/rct/manifest_commands.py:303
 #, python-format
-msgid "%s: error: %s"
-msgstr "%s: ত্ৰুটি: %s"
+msgid "File \"%s\" exists. Use -f to force overwriting the file."
+msgstr "ফাইল \"%s\" অস্তিত্ববান। ফাইলক বলৱৎভাৱে পুনৰ লিখিবলে -f ব্যৱহাৰ কৰক।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#. generic error for everything else
+#: ../src/rct/manifest_commands.py:306
+msgid "Manifest could not be written:"
+msgstr "মেনিফেস্ট লিখিব পৰা নগল:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:319
+#, python-format
+msgid "The manifest has been dumped to the %s directory"
+msgstr "মেনিফেস্টক %s ডাইৰেকটৰিলে ডাম্প কৰা হৈছে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/rct/manifest_commands.py:322
+msgid "The manifest has been dumped to the current directory"
+msgstr "মেনিফেস্টক বৰ্তমান ডাইৰেকটৰিলে ডাম্প কৰা হৈছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/printing.py:44
@@ -3354,34 +3617,9 @@ msgid "Brand Name"
 msgstr "ব্ৰেণ্ড নাম"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:72 ../src/rct/manifest_commands.py:238
-msgid "Order"
-msgstr "ক্ৰম"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/printing.py:74
 msgid "Number"
 msgstr "সংখ্যা"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:75 ../src/rct/manifest_commands.py:236
-msgid "SKU"
-msgstr "SKU"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:77 ../src/rct/manifest_commands.py:239
-msgid "Account"
-msgstr "একাওন্ট"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:78 ../src/rct/manifest_commands.py:233
-msgid "Service Level"
-msgstr "সেৱা স্তৰ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/printing.py:79 ../src/rct/manifest_commands.py:234
-msgid "Service Type"
-msgstr "সেৱাৰ ধৰণ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../src/rct/printing.py:84
@@ -3519,244 +3757,6 @@ msgstr "পৰিচয় প্ৰমাণপত্ৰ"
 msgid "Unknown Certificate Type"
 msgstr "অজ্ঞাত প্ৰমাণপত্ৰ ধৰণ"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:64
-msgid "Manifest zip is invalid."
-msgstr "মেনিফেস্ট zip অবৈধ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:84
-#, python-format
-msgid "Unable to find file \"%s\" in manifest."
-msgstr "মেনিফেস্টত ফাইল \"%s\" বিচাৰি পাবলে অক্ষম।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:108
-msgid "Manifest zip attempted to extract outside of the base directory."
-msgstr "মেনিফেস্ট zip এ ভিত্তি ডাইৰেকটৰিৰ বাহিৰত নিষ্কাষণ কৰাৰ চেষ্টা কৰিছে।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:114
-msgid "Unable to trace symbolic link.  Possibly circular linkage."
-msgstr "সাংকেতিক লিঙ্ক অনুকৰণ কৰিবলে অক্ষম।  সম্ভবত চক্ৰিয় সংযোগ।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:140
-#, python-format
-msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
-msgstr "%%prog %s [বিকল্পসমূহ] MANIFEST_FILE"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:145
-msgid "You must specify a manifest file."
-msgstr "আপুনি এটা মেনিফেস্ট ফাইল ধাৰ্য্য কৰিব লাগিব।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:148
-msgid "The specified manifest file does not exist."
-msgstr "ধাৰ্য্যত মেনিফেস্ট ফাইল অস্তিত্ববান নহয়।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:172
-msgid "Print manifest information"
-msgstr "মেনিফেস্ট তথ্য প্ৰিন্ট কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:193
-msgid "Server"
-msgstr "চাৰ্ভাৰ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:194
-msgid "Server Version"
-msgstr "চাৰ্ভাৰৰ সংস্কৰণ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:195
-msgid "Date Created"
-msgstr "তথ্য সৃষ্টি কৰা হল"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:196
-msgid "Creator"
-msgstr "সৃষ্টিকৰ্তা"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:197
-msgid "General:"
-msgstr "সাধাৰণ:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:205
-msgid "UUID"
-msgstr "UUID"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:207
-msgid "Consumer:"
-msgstr "উপভোক্তা:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:221
-msgid "Subscriptions:"
-msgstr "স্বাক্ষৰণসমূহ:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:230
-msgid "Created"
-msgstr "সৃষ্টি কৰা হৈছে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:235
-msgid "Architectures"
-msgstr "স্থাপত্যসমূহ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:242
-msgid "Entitlement File"
-msgstr "অনুজ্ঞা ফাইল"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:247
-msgid "Certificate File"
-msgstr "প্ৰমাণপত্ৰ ফাইল"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/manifest_commands.py:253 ../src/rct/cert_commands.py:46
-#, python-format
-msgid "Unable to read certificate file '%s': %s"
-msgstr "প্ৰমাণপত্ৰ ফাইল '%s' পঢ়িবলে অক্ষম: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:255
-msgid "Certificate Version"
-msgstr "প্ৰমাণপত্ৰৰ সংস্কৰণ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:257
-msgid "Subscription:"
-msgstr "স্বাক্ষৰণ:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:262
-msgid "Provided Products:"
-msgstr "প্ৰদান কৰা উৎপাদনসমূহ:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:266
-msgid "Content Sets:"
-msgstr "সমল সংহতিসমূহ:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:275
-msgid "\tManifest"
-msgstr "\tমেনিফেস্ট"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:287
-msgid "Dump the contents of a manifest"
-msgstr "এটা মেনিফেস্টৰ সমলসমূহ ডাম্প কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:291
-msgid "directory to extract the manifest to"
-msgstr "মেনিফেস্ট নিষ্কাষণ কৰিবলে ডাইৰেকটৰি"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:294
-msgid "overwrite files which may exist"
-msgstr "অস্তিত্ববান ফাইলসমূহ পুনৰ লিখক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#. useful error for file already exists
-#: ../src/rct/manifest_commands.py:303
-#, python-format
-msgid "File \"%s\" exists. Use -f to force overwriting the file."
-msgstr "ফাইল \"%s\" অস্তিত্ববান। ফাইলক বলৱৎভাৱে পুনৰ লিখিবলে -f ব্যৱহাৰ কৰক।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#. generic error for everything else
-#: ../src/rct/manifest_commands.py:306
-msgid "Manifest could not be written:"
-msgstr "মেনিফেস্ট লিখিব পৰা নগল:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:319
-#, python-format
-msgid "The manifest has been dumped to the %s directory"
-msgstr "মেনিফেস্টক %s ডাইৰেকটৰিলে ডাম্প কৰা হৈছে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/rct/manifest_commands.py:322
-msgid "The manifest has been dumped to the current directory"
-msgstr "মেনিফেস্টক বৰ্তমান ডাইৰেকটৰিলে ডাম্প কৰা হৈছে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/cert_commands.py:38
-#, python-format
-msgid "%%prog %s [OPTIONS] CERT_FILE"
-msgstr "%%prog %s [বিকল্পসমূহ] CERT_FILE"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/cert_commands.py:52
-msgid "You must specify a certificate file."
-msgstr "আপুনি এটা প্ৰমাণপত্ৰ ফাইল ধাৰ্য্য কৰিব লাগিব।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/cert_commands.py:55
-msgid "The specified certificate file does not exist."
-msgstr "ধাৰ্য্যত প্ৰমাণপত্ৰ ফাইল অস্তিত্ববান নহয়।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/cert_commands.py:62
-msgid "Print certificate information"
-msgstr "প্ৰমাণপত্ৰ তথ্য প্ৰিন্ট কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/cert_commands.py:66
-msgid "do not show the cert's product information"
-msgstr "প্ৰমাণপত্ৰৰ উৎপাদন তথ্য নেদেখুৱাব"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/cert_commands.py:68
-msgid "do not show the cert's content info"
-msgstr "প্ৰমাণপত্ৰৰ সমলৰ তথ্য নেদেখুৱাব"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/cert_commands.py:83
-msgid "Print certificate statistics and sizes"
-msgstr "প্ৰমাণপত্ৰ পৰিসংখ্যাসমূহ আৰু আকাৰসমূহ প্ৰিন্ট কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/cert_commands.py:89
-#, python-format
-msgid "Type: %s"
-msgstr "ধৰণ: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/cert_commands.py:90
-#, python-format
-msgid "Version: %s"
-msgstr "সংস্কৰণ: %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/cert_commands.py:91
-#, python-format
-msgid "DER size: %db"
-msgstr "DER আকাৰ: %db"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/cert_commands.py:95
-#, python-format
-msgid "Subject Key ID size: %db"
-msgstr "বিষয় কি' ID আকাৰ: %db"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/rct/cert_commands.py:101
-#, python-format
-msgid "Content sets: %s"
-msgstr "সমল সংহতিসমূহ: %s"
-
 #: ../src/rhsm_debug/debug_commands.py:50
 msgid "Assemble system information as a tar file or directory"
 msgstr "চিস্টেম তথ্যক এটা tar ফাইল অথবা ডাইৰেকটৰি ৰূপে একত্ৰিত কৰক"
@@ -3809,12 +3809,12 @@ msgid "Unable to create zip file of system information: %s"
 msgstr "চিস্টেম তথ্যৰ জিপ ফাইল সৃষ্টি কৰিবলৈ অক্ষম: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/daemons/rhsmcertd-worker.py:44
+#: ../src/daemons/rhsmcertd-worker.py:47
 msgid "Updating entitlement certificates & repositories"
 msgstr "অনুজ্ঞা প্ৰমাণপত্ৰসমূহ & ভঁৰালসমূহ আপডেইট কৰা হৈছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/daemons/rhsmcertd-worker.py:65
+#: ../src/daemons/rhsmcertd-worker.py:68
 msgid ""
 "This consumer's profile has been deleted from the server. Its local "
 "certificates will now be archived"
@@ -3823,7 +3823,7 @@ msgstr ""
 "আৰ্কাইভ কৰা হব"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/daemons/rhsmcertd-worker.py:67
+#: ../src/daemons/rhsmcertd-worker.py:70
 msgid ""
 "Certificates archived to '/etc/pki/consumer.old'. Contact your system "
 "administrator if you need more information."
@@ -3832,12 +3832,95 @@ msgstr ""
 "প্ৰয়োজন হয় আপোনাৰ চিস্টেম প্ৰশাসকক যোগাযোগ কৰক।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/daemons/rhsmcertd-worker.py:93
+#: ../src/daemons/rhsmcertd-worker.py:96
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "অনুজ্ঞা প্ৰমাণপত্ৰসমূহ আৰু ভঁৰালসমূহ আপডেইট কৰিবলে অক্ষম"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:3
+msgid "<b>Please enter the following for this system:</b>"
+msgstr "<b>এইখন চিস্টেমৰ কাৰণে অনুগ্ৰহ কৰি নিম্নলিখিত সুমুৱাওক:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:4
+msgid "Organization:"
+msgstr "সংঘঠন:"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:3
+msgid "Activation Key:"
+msgstr "সক্ৰিয়কৰণ কি':"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:5
+msgid "System Name:"
+msgstr "চিস্টেমৰ নাম:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:5
+msgid "This must be the organization key, not the name."
+msgstr "ই সংঘঠনৰ কি' হব লাগিব, নাম নহয়।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:6
+msgid "organization_entry"
+msgstr "organization_entry"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:7
+msgid ""
+"Multiple Activation Keys can be entered by separating them with a comma or a "
+"space."
+msgstr ""
+"এটা কমা অথবা এটা স্পেইচৰ সৈতে পৃথক কৰি একাধিক সক্ৰিয়কৰণ কি' সুমুৱাব পৰা যাব।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:8
+msgid "activation_key_entry"
+msgstr "activation_key_entry"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/activation_key.glade.h:9
+msgid "consumer_entry"
+msgstr "consumer_entry"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:1
+msgid "<b>Show subscriptions active on:</b>"
+msgstr "<b>স্বাক্ষৰণসমূহক সক্ৰিয় দেখুৱাওক:</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:2
+msgid "Update"
+msgstr "আপডেইট কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:3
+msgid "Search"
+msgstr "সন্ধান কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:5
+msgid "label"
+msgstr "লেবেল"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:5
+msgid "Filters"
+msgstr "ফিল্টাৰসমূহ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/allsubs.glade.h:6
+msgid "* Click to Adjust Quantity"
+msgstr "* পৰিমাণ সংঘঠিত কৰিবলে ক্লিক কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:1
 msgid ""
 "The subscription management service you register with will provide your "
 "system with updates and allow additional management."
@@ -3846,11 +3929,11 @@ msgstr ""
 "কৰিব আৰু অতিৰিক্ত ব্যৱস্থাপনাৰ অনুমতি দিব।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:2
 msgid "choose_server_label"
 msgstr "choose_server_label"
 
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:3
 msgid ""
 "Registering with Customer Portal, Subscription Asset Manager, Satellite or "
 "Candlepin servers can be used to provide your system with updates and allow "
@@ -3861,316 +3944,424 @@ msgstr ""
 "চাৰ্ভাৰৰ আন্তঃপৃষ্ঠৰ সৈতে ব্যৱস্থাপনাৰ অনুমতি দিবলে ব্যৱহাৰ কৰিব পাৰি।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:4
 msgid "I will register with:"
 msgstr "মই ৰেজিস্টাৰ কৰিম:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:5
 msgid "server_label"
 msgstr "server_label"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:6
 msgid "hostname[:port][/prefix]"
 msgstr "hostname[:port][/prefix]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:7
 msgid "server_entry"
 msgstr "server_entry"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:8
 msgid "Default"
 msgstr "অবিকল্পিত"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:9
 msgid "Reset to register with Customer Portal."
 msgstr "গ্ৰাহক পোৰ্টেলৰ সৈতে ৰেজিস্টাৰ কৰিবলে পুনৰ সংহতি কৰক।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:10
 msgid "default_button"
 msgstr "default_button"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:11
 msgid ""
-"Activation Keys are alphanumeric strings that are pre-configured by your "
+"Activation Keys are alphanumeric strings that are preconfigured by your "
 "system administrators to automatically register your system and attach all "
 "necessary subscriptions."
 msgstr ""
-"স্ক্ৰিয়কৰণ কি'সমূহ আল্ফানিউমাৰিক স্ট্ৰি হয় যি আপোনাৰ চিস্টেম প্ৰশাসকসকল দ্বাৰা পূৰ্ব-"
-"সংৰূপণ কৰা হয় যাতে আপোনাৰ চিস্টেম স্বচালিতভাৱে ৰেজিস্টাৰ হয় আৰু সকলো প্ৰয়োজনীয় "
-"স্বাক্ষৰণ সংলগ্ন হয়।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:12
 msgid "I will use an Activation Key"
 msgstr "মই এটা সক্ৰিয়কৰণ কি' ব্যৱহাৰ কৰিম"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:13
 msgid "If required, please configure your proxy before moving forward."
 msgstr "যদি প্ৰয়োজন হয়, আগবঢ়াৰ আগত অনুগ্ৰহ কৰি আপোনাৰ প্ৰক্সি সংৰূপণ কৰক।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:14
 msgid "Configure Proxy"
 msgstr "প্ৰক্সি সংৰূপণ কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/choose_server.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/choose_server.glade.h:15
 msgid "proxy_button"
 msgstr "proxy_button"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:1
+msgid "<b>Confirm Subscriptions</b>"
+msgstr "<b>স্বাক্ষৰণসমূহ সুনিশ্চিত কৰক</b>"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:2
+msgid "Using service level:"
+msgstr "সেৱা স্তৰ ব্যৱহাৰ কৰা হৈ আছে:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:3
+msgid "SLA"
+msgstr "SLA"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:4
+msgid "The following subscriptions will be attached:"
+msgstr "নিম্নলিখিত স্বাক্ষৰণসমূহ সংলগ্ন কৰা হব:"
+
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:5
+msgid "Selected Subscriptions Table"
+msgstr "নিৰ্বাচিত স্বাক্ষৰণসমূহ টেবুল"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/confirmsubs.glade.h:6
+msgid "Core repositories will be enabled for each product."
+msgstr "প্ৰতিটো উৎপাদনৰ বাবে কেন্দ্ৰীয় ভঁৰালসমূহ সামৰ্থবান কৰা হব।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:1
 msgid "Contract Selection"
 msgstr "চুক্তি বাচনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:2
 msgid "<b>Choose the specific contract to use:</b>"
 msgstr "<b>ব্যৱহাৰ কৰিবলে ধাৰ্য্যত চুক্তি বাছক:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:3
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:2
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:2
 msgid "<b>Subscription:</b>"
 msgstr "<b>স্বাক্ষৰণ:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:4
 msgid "<b>Total Contracts:</b>"
 msgstr "<b>সৰ্বমুঠ চুক্তিসমূহ:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:5
 msgid "* Click to Change Quantity"
 msgstr "* পৰিমাণ সলনি কৰিবলে ক্লিক কৰক"
 
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/contract_selection.glade.h:6
 msgid "SLA Selection Table"
 msgstr "SLA নিৰ্বাচন টেবুল"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/environment.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:1
+msgid "Password:"
+msgstr "পাছৱৰ্ড:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:2
+msgid "Login:"
+msgstr "লগিন কৰক:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:4
+msgid "system_instructions_label"
+msgstr "system_instructions_label"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:6
+msgid "system_name_label"
+msgstr "system_name_label"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:7
+msgid "A unique label for this system"
+msgstr "এইখন চিস্টেমৰ বাবে এটা অদ্বিতীয় লেবেল"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/credentials.glade.h:8
+msgid "Manually attach subscriptions after registration"
+msgstr "ৰেজিস্ট্ৰেষণৰ পিছত স্বাক্ষৰণসমূহক হস্তচালিতভাৱে সংলগ্ন কৰক"
+
+#: ../src/subscription_manager/gui/data/glade/done_box.glade.h:1
+msgid "Done!"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/data/glade/environment.glade.h:1
 msgid "<b>Environment Selection</b>"
 msgstr "<b>পৰিৱেশ নিৰ্বাচন</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/environment.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/environment.glade.h:2
 msgid "env_select_vbox_label"
 msgstr "env_select_vbox_label"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/environment.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/environment.glade.h:3
 msgid "environment_treeview"
 msgstr "environment_treeview"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:1
+msgid "Subscription Manager - Facts"
+msgstr "স্বাক্ষৰণ ব্যৱস্থাপক - ফেক্টসমূহ"
+
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:2
+msgid "System Identity:"
+msgstr "চিস্টেমৰ পৰিচয়:"
+
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:3
+msgid "System Identity Value"
+msgstr "চিস্টেমৰ পৰিচয় মান"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:5
+msgid "Organization Value"
+msgstr "সংঘঠনৰ মান"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:6
+msgid "Environment:"
+msgstr "পৰিৱেশ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:8
+msgid "facts_view"
+msgstr "facts_view"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:9
+msgid "Last Update:"
+msgstr "শেষৰ আপডেইট:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:10
+msgid "Update Time"
+msgstr "আপডেইটৰ সময়"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:11
+msgid "Update Facts"
+msgstr "আপডেইট ফেক্টসমূহ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:4
+msgid "Close"
+msgstr "বন্ধ কৰক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/factsdialog.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:5
+msgid "close_button"
+msgstr "close_button"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:1
 msgid "Filter Options"
 msgstr "ফিল্টাৰ বিকল্পসমূহ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:2
 msgid "Only show subscriptions that:"
 msgstr "কেৱল সেইবোৰ স্বাক্ষৰণ দেখুৱা যিবোৰে:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:3
 msgid "match my system"
 msgstr "মোৰ চিস্টেমৰ লগত মিলোৱা"
 
-#: ../src/subscription_manager/gui/data/filters.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:4
 msgid ""
 "Only show subscriptions which can be attached to this machine and "
 "architecture"
 msgstr "কেৱল এই মেচিন অথবা স্থাপত্যৰ সৈতে সংলঘ্ন কৰিব পৰা স্বাক্ষৰণসমূহ দেখুৱাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:5
 msgid "Match System"
 msgstr "খেল প্ৰনালী"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:6
 msgid "match my installed products"
 msgstr "মই ইনস্টল কৰা উৎপাদনসমূহ মিলাই চোৱা"
 
-#: ../src/subscription_manager/gui/data/filters.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:7
 msgid ""
 "Only show subscriptions which can be applied to products installed on this "
 "machine"
 msgstr "কেৱল এই মেচিনত ইনস্টল্ড উৎপাদনসমূহলৈ প্ৰযোজ্য স্বাক্ষৰণসমূহ দেখুৱাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:8
 msgid "Match Installed"
 msgstr "খেল ইনস্টল কৰা হ'ল"
 
-#: ../src/subscription_manager/gui/data/filters.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:9
 msgid ""
 "Only show subscriptions that: provide products that are not already covered"
 msgstr ""
 "কেৱল সেইবোৰ স্বাক্ষৰণ দেখুৱাওক যি: ইতিমধ্যে অন্তৰ্গত নথকা উৎপাদনসমূহ প্ৰদান কৰে"
 
-#: ../src/subscription_manager/gui/data/filters.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:10
 msgid "Hide subscriptions whose provided products have a Subscribed status"
 msgstr "এটা স্বাক্ষৰিত অৱস্থা থকা প্ৰদান কৰা উৎপাদনসমূহ লুকুৱাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:11
 msgid "Do Not Overlap"
 msgstr "আবৃত নকৰিব"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:12
 msgid "Contain the text"
 msgstr "লিখনি অন্তৰ্ভুক্ত কৰে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/filters.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/filters.glade.h:13
 msgid "Text in Subscription"
 msgstr "স্বাক্ষৰণত লিখনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:1
 msgid "<b>Status:</b>"
 msgstr "<b>অৱস্থা:</b>"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:2
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:6
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:4
-msgid "label"
-msgstr "লেবেল"
-
-#: ../src/subscription_manager/gui/data/installed.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:3
 msgid "Overall Status"
 msgstr "সৰ্বমুঠ অৱস্থা"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:5
 msgid "Register System"
 msgstr "চিস্টেম ৰেজিস্টাৰ কৰা"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:6
 msgid "Auto-attach"
 msgstr "স্ব-সংলগ্ন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:7
 msgid "Installed View"
 msgstr "ইনস্টল হৈ থকা দৰ্শন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:8
 msgid "<b>Product's Subscription Details</b>"
 msgstr "<b>উৎপাদনৰ স্বাক্ষৰণ বিৱৰণ</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:9
 msgid "<b>Product:</b>"
 msgstr "<b>উৎপাদন:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/installed.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:10
 msgid "<b>Subscriptions:</b>"
 msgstr "<b>স্বাক্ষৰণসমূহ:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:11
 msgid "Product Text"
 msgstr "উৎপাদন লিখনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/installed.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:12
 msgid "Providing Subscriptions Text"
 msgstr "স্বাক্ষৰণসমূহ লিখীসমূহ প্ৰদান কৰা"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/installed.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:13
 msgid "Certificate Status Text"
 msgstr "প্ৰমাণপত্ৰ অৱস্থা লিখনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/installed.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:14
 msgid "<b>Arch:</b>"
 msgstr "<b>স্থাপত্য:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/installed.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/installed.glade.h:15
 msgid "Arch Text"
 msgstr "স্থাপত্য লিখনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:1
 msgid "_System"
 msgstr "চিস্টেম (_S)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:2
 msgid "_Register"
 msgstr "ৰেজিস্টাৰ কৰক (_R)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:3
 msgid "_Unregister"
 msgstr "আনৰেজিস্টাৰ কৰক (_U)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:4
 msgid "_Import Cert"
 msgstr "প্ৰমাণপত্ৰ ইমপোৰ্ট কৰক (_I)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:5
 msgid "R_edeem Subscription"
 msgstr "স্বাক্ষৰণ উদ্ধাৰ কৰক (_e)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:6
 msgid "View System _Facts"
 msgstr "চিস্টেমৰ ফেক্টসমূহ দৰ্শন কৰক (_F)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:7
 msgid "Configure Pro_xy"
 msgstr "প্ৰক্সি সংৰূপণ কৰক (_x)"
 
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:8
 msgid "Repo_sitories"
 msgstr "ভঁৰালসমূহ (_s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:9
 msgid "_Preferences"
 msgstr "পছন্দসমূহ (_P)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:10
 msgid "_Help"
 msgstr "সহায় (_H)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:11
 msgid "_Getting Started"
 msgstr "আৰম্ভ কৰা (_G)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/mainwindow.glade.h:12
 msgid "_Online Documentation"
 msgstr "অনলাইন তথ্যচিত্ৰ (_O)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/manually_subscribe.glade.h:1
 msgid ""
 "You will need to use Red Hat Subscription Manager to manually attach "
 "subscriptions to this system after completing firstboot."
@@ -4179,7 +4370,7 @@ msgstr ""
 "কৰিবলে Red Hat স্বাক্ষৰণ ব্যৱস্থাপক ব্যৱহাৰ কৰিব লাগিব।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/manually_subscribe.glade.h:2
 msgid ""
 "After opening Red Hat Subscription Manager, manually attach subscriptions "
 "via the <b>All Available Subscriptions</b> tab."
@@ -4188,153 +4379,153 @@ msgstr ""
 "হস্তচালিতভাৱে স্বাক্ষৰণসমূহ সংলগ্ন কৰক।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mysubs.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/mysubs.glade.h:1
 msgid "My Subscriptions View"
 msgstr "মোৰ স্বাক্ষৰণসমূহৰ দৰ্শন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/mysubs.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/mysubs.glade.h:2
 msgid "Remove"
 msgstr "আতৰাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:1
 msgid "Proxy Configuration"
 msgstr "প্ৰক্সি সংৰূপ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:2
 msgid "<b>HTTP Proxy</b>"
 msgstr "<b>HTTP প্ৰক্সি</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:3
 msgid "I would like to connect via an _HTTP proxy."
 msgstr "মই এটা HTTP প্ৰক্সিৰে সংযোগ কৰিব বিচাৰো (_H)।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:4
 msgid "Proxy Checkbox"
 msgstr "প্ৰক্সি চেকবক্স"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:5
 msgid "<small><b>Example:</b> proxy.example.com:3128</small>"
 msgstr "<small><b>উদাহৰণ:</b> proxy.example.com:3128</small>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:6
 msgid "_Proxy Location:"
 msgstr "প্ৰক্সি অৱস্থান (_P):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:7
 msgid "Enter in the format hostname(:port)"
 msgstr "hostname(:port) বিন্যাসত সুমুৱাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:8
 msgid "Proxy Location Text"
 msgstr "প্ৰক্সি ঠিকনা লিখনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:9
 msgid "Use Au_thentication with HTTP Proxy:"
 msgstr "HTTP প্ৰক্সিৰ সৈতে প্ৰমাণীকৰণ ব্যৱহাৰ কৰক (_t):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:10
 msgid "Authentication Checkbox"
 msgstr "প্ৰমাণীকৰণ চেকবক্স"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:11
 msgid "Proxy _Username:"
 msgstr "প্ৰক্সি ব্যৱহাৰকাৰী নাম (_U):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:12
 msgid "Proxy P_assword:"
 msgstr "প্ৰক্সি পাছৱৰ্ড (_a):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:13
 msgid "Username Text"
 msgstr "ব্যৱহাৰকাৰীৰ নামৰ লিখনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:14
 msgid "Password Text"
 msgstr "পাছৱৰ্ড লিখনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:15
 msgid "connectionStatusLabel"
 msgstr "connectionStatusLabel"
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:16
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:16
 msgid "_Cancel"
 msgstr "বাতিল কৰক (_C)"
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:17
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:17
 msgid "Cancel Button"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:18
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:18
 msgid "_Save"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:19
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:19
 msgid "Save Button"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:20
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:20
 msgid "_Test Connection"
 msgstr "সংযোগ পৰীক্ষা কৰক (_T)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:21
+#: ../src/subscription_manager/gui/data/glade/networkConfig.glade.h:21
 msgid "Test Connection Button"
 msgstr "সংযোগ পৰীক্ষা কৰক বুটাম"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/organization.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/organization.glade.h:1
 msgid "<b>Organization Selection</b>"
 msgstr "<b>সংঘঠন নিৰ্বাচন</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/organization.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/organization.glade.h:2
 msgid "org_selection_label"
 msgstr "org_selection_label"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/organization.glade.h:3
-msgid "org_selection_scrolledwindow"
-msgstr "org_selection_scrolledwindow"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/organization.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/organization.glade.h:3
 msgid "owner_treeview"
 msgstr "owner_treeview"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
+#: ../src/subscription_manager/gui/data/glade/organization.glade.h:4
+msgid "org_selection_scrolledwindow"
+msgstr "org_selection_scrolledwindow"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:1
 msgid "System Preferences"
 msgstr "চিস্টেম পছন্দসমূহ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/preferences.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:2
 msgid "autoheal_checkbox"
 msgstr "autoheal_checkbox"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/preferences.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:3
 msgid "Enable auto-attach preference"
 msgstr "auto-attach প্ৰসংগ সামৰ্থবান কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/preferences.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:4
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
@@ -4343,17 +4534,17 @@ msgstr ""
 "সংলগ্ন কৰা হয় (সদায় অবিকল্পিত)।</small>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/preferences.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:5
 msgid "Release version:"
 msgstr "উন্মোচন সংস্কৰণ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/preferences.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:6
 msgid "release_selection_combobox"
 msgstr "release_selection_combobox"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/preferences.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:7
 msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
@@ -4362,17 +4553,17 @@ msgstr ""
 "হয়। </small>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/preferences.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:8
 msgid "Service level preference:"
 msgstr "সেৱা স্তৰ প্ৰসংগ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/preferences.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:9
 msgid "sla_selection_combobox"
 msgstr "sla_selection_combobox"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/preferences.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/preferences.glade.h:10
 msgid ""
 "<small>Your system's service level preference is followed when subscribing "
 "automatically.</small>"
@@ -4381,32 +4572,32 @@ msgstr ""
 "small>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/progress.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/progress.glade.h:1
 msgid "Progress Dialog"
 msgstr "প্ৰগ্ৰেচ ডাইলগ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/redeem.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:1
 msgid "Subscription Redemption"
 msgstr "স্বাক্ষৰণ ঘুৰাই নিয়ক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:2
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:2
 msgid "Cancel"
 msgstr "বাতিল কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/redeem.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:3
 msgid "Redeem"
 msgstr "ঘুৰাই নিয়ক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/redeem.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:4
 msgid "Redeeming the subscription may take a few minutes."
 msgstr "স্বাক্ষৰণ পুনৰ ক্ৰয় কৰোতে কিছু সময় লাগিব পাৰে।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/redeem.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:5
 msgid ""
 "Please provide an email address to receive notification\n"
 "when the redemption is complete."
@@ -4415,51 +4606,51 @@ msgstr ""
 "যেতিয়া পুনৰ ক্ৰয় সম্পূৰ্ণ হয়।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:7
 msgid "Email Address:"
 msgstr "ই-মেইল ঠিকনা:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/redeem.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/redeem.glade.h:8
 msgid "Email Address Text"
 msgstr "ইমেইল ঠিকনা লিখনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:2
-msgid "register_dialog_main_vbox"
-msgstr "register_dialog_main_vbox"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:3
-msgid "registration_dialog_action_area"
-msgstr "registration_dialog_action_area"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:3
 msgid "register_button"
 msgstr "register_button"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:4
+msgid "registration_dialog_action_area"
+msgstr "registration_dialog_action_area"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/registration.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:6
 msgid "progress_label"
 msgstr "progress_label"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/registration.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:7
 msgid "register_progressbar"
 msgstr "register_progressbar"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/registration.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:8
 msgid "register_details_label"
 msgstr "register_details_label"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/registration.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:9
 msgid "page 2"
 msgstr "পৃষ্ঠা ২"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:1
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: ../src/subscription_manager/gui/data/glade/registration.glade.h:10
+msgid "register_dialog_main_vbox"
+msgstr "register_dialog_main_vbox"
+
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:1
 msgid ""
 "This assistant will guide you through the process of registering your system "
 "with Red Hat to receive software updates and other benefits. You will need "
@@ -4469,50 +4660,50 @@ msgstr ""
 "সুবিধাসমূহ প্ৰাপ্ত কৰিবলৈ সহায় কৰিব। ৰেজিস্টাৰ কৰিবলৈ আপোনাক নিম্নলিখিতৰ প্ৰয়োজন "
 "হ'ব:"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:2
-msgid "• A network connection"
-msgstr "• এটা নেটৱৰ্ক সংযোগ"
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:2
+msgid "&#x2022; A network connection"
+msgstr ""
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:3
-msgid "• Your account login"
-msgstr "• আপোনাৰ একাওন্ট লগিন"
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:3
+msgid "&#x2022; Your account login"
+msgstr ""
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:4
 msgid "Your account login"
 msgstr "আপোনাৰ একাওন্ট লগিন"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:5
-msgid "• The address of a subscription management service (optional)"
-msgstr "• এটা স্বাক্ষৰণ ব্যৱস্থাপনা সেৱাৰ ঠিকনা (বৈকল্পিক)"
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:5
+msgid "&#x2022; The address of a subscription management service (optional)"
+msgstr ""
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:6
 msgid "_Why Should I Register?"
 msgstr "মই কিয় ৰেজিস্টাৰ কৰিব লাগে (_W)?"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:7
 msgid "Why Should I Register?"
 msgstr "মই কিয় ৰেজিস্টাৰ কৰিব লাগে?"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:8
 msgid ""
 "Would you like to register your system at this time? <b>(Strongly "
 "recommended.)</b>"
 msgstr ""
 "আপুনি আপোনাৰ চিস্টেমক এতিয়া ৰেজিস্টাৰ কৰিব খোজে নে? <b>(বিশেষভাৱে উপদেশিত।)</b>"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:9
 msgid "_Yes, I'd like to register now."
 msgstr "হয়, মই এতিয়া ৰেজিস্টাৰ কৰিব বিচাৰো (_Y)।"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:10
 msgid "_No, I prefer to register at a later time."
 msgstr "নহয়, মই পিছত ৰেজিস্টাৰ কৰিব'লৈ পছন্দ কৰিম (_N)।"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:11
 msgid "Why Register"
 msgstr "কিয় ৰেজিস্টাৰ কৰিব লাগে"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:12
 msgid ""
 "Registering your system with Red Hat allows you to take full advantage of "
 "the benefits of a paid subscription, including:"
@@ -4521,22 +4712,15 @@ msgstr ""
 "সুবিধা ল'ব পাৰিব, য'ত অন্তৰ্ভুক্ত হয়:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:13
 msgid "_Close"
 msgstr "বন্ধ কৰক (_C)"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:14
-#: ../src/subscription_manager/gui/data/repositories.glade.h:5
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:12
-msgid "Close"
-msgstr "বন্ধ কৰক"
-
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:15
 msgid "<b>Security &amp; Updates:</b>"
 msgstr "<b>সুৰক্ষা &amp; আপডেইটসমূহ:</b>"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:16
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:16
 msgid ""
 "Receive the latest software updates, including security updates, keeping "
 "this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
@@ -4544,11 +4728,11 @@ msgstr ""
 "সুৰক্ষাৰ আপডেইটসমূহ অন্তৰ্ভুক্ত থকা শেহতীয়া চফ্টওৱেৰ আপডেইট পাওক, যাতে এই Red Hat "
 "Enterprise Linux চিস্টেম <b>আপডেইটেড</b> আৰু <b>সুৰক্ষিত</b> থাকে।"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:17
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:17
 msgid "<b>Downloads &amp; Upgrades:</b>"
 msgstr "<b>ডাউনল'ডসমূহ &amp; আপগ্ৰেইডসমূহ:</b>"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:18
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:18
 msgid ""
 "Download installation images for Red Hat Enterprise Linux releases, "
 "including new releases."
@@ -4556,11 +4740,11 @@ msgstr ""
 "Red Hat Enterprise Linux মুক্তি সমূহ আৰু নতুন মুক্তি সমূহৰ বাবে ইনস্টল প্ৰতিমুৰ্তি "
 "ডাউনল'ড কৰক।"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:19
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:19
 msgid "<b>Support:</b>"
 msgstr "<b>সমৰ্থন:</b>"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:20
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:20
 msgid ""
 "Access to the technical support experts at Red Hat or Red Hat's partners for "
 "help with any issues you might encounter with this system."
@@ -4568,15 +4752,15 @@ msgstr ""
 "আপোনাৰ চিস্টেমৰ লগত থকা যিকোনো বিতৰ্কৰ বাবে  Red Hat অথবা Red Hat ৰ সহভোগিৰ "
 "সৈতে থকা প্ৰায়োগিক সমৰ্থনৰ বিশেষজ্ঞ সকলৰ পৰা সহজলভ্য সহায় পাওক।"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:21
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:21
 msgid "<b>Management:</b>"
 msgstr "<b>ব্যৱস্থাপনা:</b>"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:22
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:22
 msgid "Management"
 msgstr "ব্যৱস্থাপনা"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:23
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:23
 msgid ""
 "Manage subscriptions and systems registered to Customer Portal via access."
 "redhat.com or through one of our other subscription management services."
@@ -4584,7 +4768,7 @@ msgstr ""
 "access.redhat.com অথবা আমাৰ অন্য স্বাক্ষৰণ ব্যৱস্থাপনা সেৱাসমূহৰ সৈতে গ্ৰাহক "
 "পোৰ্টেললৈ ৰেজিস্টাৰ্ড স্বাক্ষৰণ আৰু চিস্টেমসমূহ ব্যৱস্থাপনা কৰক।"
 
-#: ../src/subscription_manager/gui/data/registration_info.glade.h:24
+#: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:24
 msgid ""
 "<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
 "privacy_statement.html</small>"
@@ -4592,396 +4776,190 @@ msgstr ""
 "<small><b>সহায়:</b> Red Hat এ আপোনাৰ গোপনীয়তাক মান দিয়ে: http://www.redhat."
 "com/legal/privacy_statement.html</small>"
 
-#: ../src/subscription_manager/gui/data/repositories.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:1
 msgid "Manage Repositories"
 msgstr "ভঁৰালসমূহ ব্যৱস্থাপনা কৰক"
 
-#: ../src/subscription_manager/gui/data/repositories.glade.h:2
-msgid "manage_repositories_dialog"
-msgstr "manage_repositories_dialog"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:2
 msgid "Remove All Overrides"
 msgstr "সকলো অভাৰৰাইড আতৰাওক"
 
-#: ../src/subscription_manager/gui/data/repositories.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:3
 msgid "remove_all_overrides_button"
 msgstr "remove_all_overrides_button"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:6
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:13
-msgid "close_button"
-msgstr "close_button"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:7
-msgid ""
-"Manage the repositories your subscriptions grant you access to by enabling, "
-"disabling and overriding certain fields."
-msgstr ""
-"কিছুমান ক্ষেত্ৰ সামৰ্থবান, অসামৰ্থবান আৰু অভাৰৰাইড কৰি আপোনাৰ স্বাক্ষৰণসমূহে আপোনাক "
-"অভিগম প্ৰদান কৰা ভঁৰালসমূহক ব্যৱস্থাপনা কৰক।"
-
-#: ../src/subscription_manager/gui/data/repositories.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:6
 msgid "<b>Repository Details</b>"
 msgstr "<b>ভঁৰালৰ বিৱৰণ</b>"
 
-#: ../src/subscription_manager/gui/data/repositories.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:7
 msgid "<b>Name:</b>"
 msgstr "<b>নাম:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/repositories.glade.h:10
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:3
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:5
 msgid "Subscription Text"
 msgstr "স্বাক্ষৰণ লিখনি"
 
-#: ../src/subscription_manager/gui/data/repositories.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:9
 msgid "<b>Base URL:</b>"
 msgstr "<b>ভিত্তি URL:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/repositories.glade.h:12
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:11
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:21
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:21
 msgid "SKU Text"
 msgstr "SKU লিখনি"
 
-#: ../src/subscription_manager/gui/data/repositories.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:11
 msgid "<b>Other Overrides:</b>"
 msgstr "<b>অন্য অভাৰৰাইডসমূহ:</b>"
 
-#: ../src/subscription_manager/gui/data/repositories.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:12
 msgid "Other Overrides Table"
 msgstr "অন্য অভাৰৰাইডসমূহ টেবুল"
 
+#: ../src/subscription_manager/gui/data/glade/repositories.glade.h:13
+msgid "manage_repositories_dialog"
+msgstr "manage_repositories_dialog"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:1
 msgid "<b>Select Service Level</b>"
 msgstr "<b>সেৱা স্তৰ বাছক</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:2
-msgid ""
-"Your installed products could be covered using one of multiple service "
-"levels."
-msgstr ""
-"আপুনি ইনস্টল কৰা উৎপাদনসমূহ একাধিক সেৱা স্তৰসমূহৰ এটাক ব্যৱহাৰ কৰি অন্তৰ্ভুক্ত কৰিব "
-"পাৰি।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:2
 msgid "<b>Installed products:</b>"
 msgstr "<b>ইনস্টল্ড উৎপাদনসমূহ:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:3
 msgid "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 msgstr ""
 "উৎপাদন 1, উৎপাদন2, উৎপাদন 3, উৎপাদন 4, উৎপাদন 5, উৎপাদন 6, উৎপাদন 7, উৎপাদন 8"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/selectsla.glade.h:4
 msgid "<b>Select a common service level for this system's subscriptions:</b>"
 msgstr "<b>এই চিস্টেমৰ স্বাক্ষৰণসমূহৰ বাবে এটা সাধাৰণ সেৱা স্তৰ বাছক:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:1
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:1
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:1
 msgid "<b>Subscription Details</b>"
 msgstr "<b>স্বাক্ষৰণৰ বিৱৰণ</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:4
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:12
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:12
 msgid "<b>Products:</b>"
 msgstr "<b>উৎপাদনসমূহ:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:5
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:13
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:5
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:13
 msgid "Bundled Products Table"
 msgstr "থূপ খোৱা উৎপাদন টেবুল"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:22
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:22
 msgid "<b>Service Level, Type:</b>"
 msgstr "<b>সেৱা স্তৰ, ধৰণ:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:23
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:23
 msgid "Support Level And Type Text"
 msgstr "সমৰ্থন স্তৰ আৰু ধৰণ লিখনি"
 
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:8
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:6
 msgid "<b>Subscription Type:</b>"
 msgstr "<b>স্বাক্ষৰণৰ ধৰণ:</b>"
 
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:9
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:7
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:7
 msgid "Subscription Type Text"
 msgstr "স্বাক্ষৰণ ধৰণৰ লিখনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:10
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:20
+#: ../src/subscription_manager/gui/data/glade/subdetails.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:20
 msgid "<b>SKU:</b>"
 msgstr "<b>SKU:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:3
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:3
 msgid "<b>Start - End Date:</b>"
 msgstr "<b>আৰম্ভ - অন্ত তাৰিখ:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:4
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:4
 msgid "<b>Contract:</b>"
 msgstr "<b>চুক্তি:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:8
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:8
 msgid "Start End Date Text"
 msgstr "আৰম্ভ অন্ত তাৰিখ লিখনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:9
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:9
 msgid "Contract Number Text"
 msgstr "চুক্তি সংখ্যা লিখনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:10
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:10
 msgid "<b>Account:</b>"
 msgstr "<b>একাওন্ট:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:11
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:11
 msgid "Account Text"
 msgstr "একাওন্ট লিখনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:14
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:14
 msgid "<b>Status Details:</b>"
 msgstr "<b>অৱস্থাৰ বিৱৰণসমূহ:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:15
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:15
 msgid "Status Details Text"
 msgstr "অৱস্থা বিৱৰণসমূহৰ লিখনি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:16
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:16
 msgid "<b>Provides Management:</b>"
 msgstr "<b>ব্যৱস্থাপনাৰ যোগান দিয়ে:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:17
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:17
 msgid "Provides Management Text"
 msgstr "ব্যৱস্থাপনা লিখনি প্ৰদান কৰে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:18
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:18
 msgid "<b>Type:</b>"
 msgstr "<b>ধৰণ:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:19
+#: ../src/subscription_manager/gui/data/glade/subdetailscontract.glade.h:19
 msgid "Support Type Text"
 msgstr "সমৰ্থন ধৰণ লিখনি"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:1
-#: ../src/subscription_manager/gui/data/credentials.glade.h:3
-msgid "<b>Please enter the following for this system:</b>"
-msgstr "<b>এইখন চিস্টেমৰ কাৰণে অনুগ্ৰহ কৰি নিম্নলিখিত সুমুৱাওক:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:2
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:4
-msgid "Organization:"
-msgstr "সংঘঠন:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:3
-msgid "Activation Key:"
-msgstr "সক্ৰিয়কৰণ কি':"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:4
-#: ../src/subscription_manager/gui/data/credentials.glade.h:5
-msgid "System Name:"
-msgstr "চিস্টেমৰ নাম:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:5
-msgid "This must be the organization key, not the name."
-msgstr "ই সংঘঠনৰ কি' হব লাগিব, নাম নহয়।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:6
-msgid "organization_entry"
-msgstr "organization_entry"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:7
-msgid ""
-"Multiple Activation Keys can be entered by separating them with a comma or a "
-"space."
-msgstr ""
-"এটা কমা অথবা এটা স্পেইচৰ সৈতে পৃথক কৰি একাধিক সক্ৰিয়কৰণ কি' সুমুৱাব পৰা যাব।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:8
-msgid "activation_key_entry"
-msgstr "activation_key_entry"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/activation_key.glade.h:9
-msgid "consumer_entry"
-msgstr "consumer_entry"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:1
-msgid "<b>Show subscriptions active on:</b>"
-msgstr "<b>স্বাক্ষৰণসমূহক সক্ৰিয় দেখুৱাওক:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:2
-msgid "Update"
-msgstr "আপডেইট কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:3
-msgid "Search"
-msgstr "সন্ধান কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:5
-msgid "Filters"
-msgstr "ফিল্টাৰসমূহ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:6
-msgid "* Click to Adjust Quantity"
-msgstr "* পৰিমাণ সংঘঠিত কৰিবলে ক্লিক কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
-msgid "<b>Confirm Subscriptions</b>"
-msgstr "<b>স্বাক্ষৰণসমূহ সুনিশ্চিত কৰক</b>"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
-msgid "Using service level:"
-msgstr "সেৱা স্তৰ ব্যৱহাৰ কৰা হৈ আছে:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:3
-msgid "SLA"
-msgstr "SLA"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
-msgid "The following subscriptions will be attached:"
-msgstr "নিম্নলিখিত স্বাক্ষৰণসমূহ সংলগ্ন কৰা হব:"
-
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:5
-msgid "Selected Subscriptions Table"
-msgstr "নিৰ্বাচিত স্বাক্ষৰণসমূহ টেবুল"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:6
-msgid "Core repositories will be enabled for each product."
-msgstr "প্ৰতিটো উৎপাদনৰ বাবে কেন্দ্ৰীয় ভঁৰালসমূহ সামৰ্থবান কৰা হব।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/credentials.glade.h:1
-msgid "Password:"
-msgstr "পাছৱৰ্ড:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/credentials.glade.h:2
-msgid "Login:"
-msgstr "লগিন কৰক:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/credentials.glade.h:4
-msgid "system_instructions_label"
-msgstr "system_instructions_label"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/credentials.glade.h:6
-msgid "system_name_label"
-msgstr "system_name_label"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:7
-msgid "A unique label for this system"
-msgstr "এইখন চিস্টেমৰ বাবে এটা অদ্বিতীয় লেবেল"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/credentials.glade.h:8
-msgid "Manually attach subscriptions after registration"
-msgstr "ৰেজিস্ট্ৰেষণৰ পিছত স্বাক্ষৰণসমূহক হস্তচালিতভাৱে সংলগ্ন কৰক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:1
-msgid "Subscription Manager - Facts"
-msgstr "স্বাক্ষৰণ ব্যৱস্থাপক - ফেক্টসমূহ"
-
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:2
-msgid "System Identity:"
-msgstr "চিস্টেমৰ পৰিচয়:"
-
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:3
-msgid "System Identity Value"
-msgstr "চিস্টেমৰ পৰিচয় মান"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:5
-msgid "Organization Value"
-msgstr "সংঘঠনৰ মান"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:6
-msgid "Environment:"
-msgstr "পৰিৱেশ:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:8
-msgid "facts_view"
-msgstr "facts_view"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:9
-msgid "Last Update:"
-msgstr "শেষৰ আপডেইট:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:10
-msgid "Update Time"
-msgstr "আপডেইটৰ সময়"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:11
-msgid "Update Facts"
-msgstr "আপডেইট ফেক্টসমূহ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../bin/subscription-manager-gui:57
-msgid "Unable to open a display"
-msgstr "এটা প্ৰদৰ্শন খোলিবলে অক্ষম"
-
-#: ../bin/subscription-manager-gui:158
+#: ../bin/subscription-manager-gui:166
 #, c-format
 msgid "%s is already running"
 msgstr "%s ইতিমধ্যে চলি আছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author ngoswami
-#: ../bin/subscription-manager-gui:166
+#: ../bin/subscription-manager-gui:174
 msgid "launches the registration dialog on startup"
 msgstr "আৰম্ভণিত ৰেজিস্ট্ৰেষণ ডাইলগ আৰম্ভ কৰে"
 
@@ -5154,11 +5132,6 @@ msgstr "বিকল্প বিশ্লেষণত ব্যৰ্থ: %s\n"
 #: ../etc-conf/rhsm-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
 msgstr "Red Hat স্বাক্ষৰণ বৈধতা এপ্লেট"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: ../etc-conf/rhsm-icon.desktop.in.h:2
-msgid "Subscription Validity Applet"
-msgstr "স্বাক্ষৰণ বৈধতা এপ্লেট"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: ../etc-conf/subscription-manager-gui.desktop.in.h:1
