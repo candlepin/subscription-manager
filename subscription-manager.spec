@@ -36,7 +36,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.15.4
+Version: 1.15.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -527,6 +527,9 @@ fi
 %endif
 
 %changelog
+* Tue Jul 07 2015 Adrian Likins <alikins@redhat.com> 1.15.5-1
+- 1240801: Use latest initial-setup API (alikins@redhat.com)
+
 * Tue Jul 07 2015 Adrian Likins <alikins@redhat.com> 1.15.4-1
 - Make initial-setup rpm Obsolete firstboot rpm. (alikins@redhat.com)
 
