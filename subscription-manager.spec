@@ -459,13 +459,13 @@ rm -rf %{buildroot}
 %dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/
 %dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/
 %dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/
-%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/categories/
+%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/categories/
 %dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/*.py*
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/*.py*
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.ui
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.py*
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/categories/*.py*
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/categories/*.py*
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/*.py*
 %else
 

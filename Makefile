@@ -247,11 +247,11 @@ install-initial-setup-real:
 	install -d $(INITIAL_SETUP_INST_DIR)
 	install -d $(INITIAL_SETUP_INST_DIR)/gui
 	install -d $(INITIAL_SETUP_INST_DIR)/gui/spokes
-	install -d $(INITIAL_SETUP_INST_DIR)/gui/categories
+	install -d $(INITIAL_SETUP_INST_DIR)/categories
 	install -d $(INITIAL_SETUP_INST_DIR)/ks
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/*.py $(INITIAL_SETUP_INST_DIR)/
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/*.py $(INITIAL_SETUP_INST_DIR)/gui/
-	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/categories/*.py $(INITIAL_SETUP_INST_DIR)/gui/categories/
+	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/categories/*.py $(INITIAL_SETUP_INST_DIR)/categories/
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/spokes/*.py $(INITIAL_SETUP_INST_DIR)/gui/spokes/
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/spokes/*.ui $(INITIAL_SETUP_INST_DIR)/gui/spokes/
 	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/ks/*.py $(INITIAL_SETUP_INST_DIR)/ks/

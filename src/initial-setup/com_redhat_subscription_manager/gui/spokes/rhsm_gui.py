@@ -21,7 +21,7 @@ import sys
 
 from pyanaconda.ui.gui.spokes import NormalSpoke
 from pyanaconda.ui.common import FirstbootOnlySpokeMixIn
-from pyanaconda.ui.gui.categories.system import SystemCategory
+from pyanaconda.ui.categories.system import SystemCategory
 from pyanaconda.ui.gui import GUIObject
 
 log = logging.getLogger(__name__)
