@@ -198,6 +198,7 @@ Summary: initial-setup screens for subscription-manager
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 Requires: initial-setup
+Obsoletes: subscription-manager-firstboot < 1.15.3-1
 
 %description -n subscription-manager-initial-setup-addon
 This package contains the initial-setup screens for subscription-manager.
