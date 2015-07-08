@@ -17,6 +17,7 @@ import gettext
 import os
 import re
 from urlparse import urlparse
+
 from rhsm.config import DEFAULT_PROXY_PORT
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
@@ -232,3 +233,24 @@ def get_env_proxy_info():
         else:
             the_proxy['proxy_port'] = int(info[3])
     return the_proxy
+
+
+def cmd_name(argv):
+    """Attempt to get a meaningful command name from argv.
+
+    This handles cases where argv[0] isn't helpful (for
+    example, '/usr/bin/python' or '__main__.py'.
+    """
+    argv0 = os.path.basename(argv[0])
+    argvdir = os.path.dirname(argv[0])
+    head, tail = os.path.split(argvdir)
+
+    cmd_name_string = argv0
+    # initial-setup is launched as 'python -m initial_setup', so
+    # sys.argv looks like
+    # ['/usr/lib/python2.7/site-packages/initial_setup/__main__.py'],
+    # so we look for initial_setup in the exe path.
+    if tail == "initial_setup":
+        cmd_name_string = "initial-setup"
+
+    return cmd_name_string
