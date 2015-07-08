@@ -34,7 +34,7 @@ CONTENT_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/content_plugins/
 ANACONDA_ADDON_SRC_DIR := $(BASE_SRC_DIR)/initial-setup
 ANACONDA_ADDON_MODULE_SRC_DIR := $(ANACONDA_ADDON_SRC_DIR)/$(ANACONDA_ADDON_NAME)
 
-# dirs we install to 
+# dirs we install to
 SUBMAN_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
 SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
 RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
@@ -284,9 +284,8 @@ install-post-boot: install-firstboot install-initial-setup
 install: install-files install-po install-conf install-help-files install-plugins-conf
 
 set-versions:
-	sed -e 's/RPM_VERSION/$(VERSION)/g' $(SRC_DIR)/version.py.in > $(SRC_DIR)/version.py
+	sed -e 's/RPM_VERSION/$(VERSION)/g' -e 's/GTK_VERSION/$(GTK_VERSION)/g' $(SRC_DIR)/version.py.in > $(SRC_DIR)/version.py
 	sed -e 's/RPM_VERSION/$(VERSION)/g' $(RCT_SRC_DIR)/version.py.in > $(RCT_SRC_DIR)/version.py
-	sed -e 's/GTK_VERSION/$(GTK_VERSION)/g' $(SRC_DIR)/version.py.in > $(SRC_DIR)/version.py
 
 install-po: compile-po
 	install -d $(RHSM_LOCALE_DIR)
