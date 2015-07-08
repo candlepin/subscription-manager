@@ -36,7 +36,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.15.5
+Version: 1.15.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -527,6 +527,10 @@ fi
 %endif
 
 %changelog
+* Wed Jul 08 2015 Chris Rog <crog@redhat.com> 1.15.6-1
+- 1241184: Updated Makefile to prevent version string clobbering
+  (crog@redhat.com)
+
 * Tue Jul 07 2015 Adrian Likins <alikins@redhat.com> 1.15.5-1
 - 1240801: Use latest initial-setup API (alikins@redhat.com)
 
