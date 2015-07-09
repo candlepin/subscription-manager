@@ -44,7 +44,7 @@ import traceback
 sys.path.append("/usr/share/rhsm")
 
 from subscription_manager import ga_loader
-sys.meta_path.append(ga_loader.GaImporter())
+ga_loader.init_ga()
 
 #from gi.repository import GObject
 log = logging.getLogger("rhsm-app.rhsmd")

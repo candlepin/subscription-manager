@@ -11,7 +11,8 @@ WRAPPER=""
 #SM="SUBMAN_DEBUG=1 bin/subscription-manager"
 #SM="subscription-manager"
 SM="PYTHONPATH=../python-rhsm/src/:src/ bin/subscription-manager"
-
+WORKER="PYTHONPATH=../python-rhsm/src/:src/ python src/daemons/rhsmcertd-worker.py"
+RHSMD="PYTHONPATH=../python-rhsm/src/:src/ src/daemons/rhsm_d.py"
 
 # where to store backup copies of rhsm related files
 # NOTE: we currently dont restore them
@@ -60,6 +61,28 @@ run_sm () {
     echo "===================="
 }
 
+run_rhsmcertd_worker () {
+    echo "===================="
+    echo "running: ${WORKER} ${GLOBAL_ARGS} $*"
+    echo
+    sudo ${WRAPPER} ${WORKER} ${GLOBAL_ARGS} $*
+    RETURN_CODE=$?
+    echo "return code: ${RETURN_CODE}"
+    echo "===================="
+}
+
+run_rhsmd () {
+    echo "===================="
+    echo "running: ${RHSMD} ${GLOBAL_ARGS} $*"
+    echo
+    sudo ${WRAPPER} ${RHSMD} ${GLOBAL_ARGS} $*
+    RETURN_CODE=$?
+    echo "return code: ${RETURN_CODE}"
+    echo "===================="
+}
+
+
+
 # basics
 run_sm unregister
 run_sm register --username "${USERNAME}" --password "${PASSWORD}" --org "${ORG}" --force
@@ -81,6 +104,12 @@ run_sm orgs --username "${USERNAME}" --password "${PASSWORD}"
 run_sm release --list
 run_sm remove --all
 run_sm plugins --list
+
+run_rhsmcertd_worker
+run_rhsmcertd_worker --autoheal
+
+run_rhsmd -s
+
 run_sm unregister
 
 # activation keys
