@@ -12,7 +12,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.15.3
+Version: 1.15.4
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -74,6 +74,9 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Jul 10 2015 Chris Rog <crog@redhat.com> 1.15.4-1
+- 
+
 * Tue Jul 07 2015 Adrian Likins <alikins@redhat.com> 1.15.3-1
 - Define global_ld_flags when not already defined. (awood@redhat.com)
 - Adding tests for 202s from alikins/AsyncBind (csnyder@redhat.com)
