@@ -36,7 +36,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.15.6
+Version: 1.15.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -527,6 +527,20 @@ fi
 %endif
 
 %changelog
+* Fri Jul 10 2015 Chris Rog <crog@redhat.com> 1.15.7-1
+- Merge pull request #1219 from candlepin/alikins/1241247_ga_ImportError
+  (ceiu@cericlabs.com)
+- Merge pull request #1211 from candlepin/awood/1232232-enable-repos
+  (alikins@redhat.com)
+- 1241247: Fix ga ImportError in rhsmcertd (alikins@redhat.com)
+- Merge pull request #1214 from
+  candlepin/alikins/prevent_nose_loading_ga_impls_directly (awood@redhat.com)
+- Add comment about the request_injection decorator. (awood@redhat.com)
+- Prevent nose looking for tests in sub_manager/ (alikins@redhat.com)
+- Remove assertIn as that test is not in Python 2.6. (awood@redhat.com)
+- Move API dependency injection out of module scope. (awood@redhat.com)
+- 1232232: Add supported API to enable content repositories. (awood@redhat.com)
+
 * Wed Jul 08 2015 Chris Rog <crog@redhat.com> 1.15.6-1
 - 1241184: Updated Makefile to prevent version string clobbering
   (crog@redhat.com)
