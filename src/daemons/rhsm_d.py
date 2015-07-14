@@ -274,7 +274,7 @@ def main():
                        "This system's subscriptions are about to expire. " +
                        "Please run subscription-manager for more information.")
         elif status == RHN_CLASSIC:
-            log_syslog(syslog.LOG_NOTICE,
+            log_syslog(syslog.LOG_INFO,
                        get_branding().RHSMD_REGISTERED_TO_OTHER)
         elif status == RHSM_REGISTRATION_REQUIRED:
             log_syslog(syslog.LOG_NOTICE,
