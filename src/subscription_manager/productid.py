@@ -519,7 +519,7 @@ class ProductManager:
                              p.name, p.version))
                     products_to_update.append((p, cert))
                 else:
-                    log.debug("Latest version of product cert for %s %s is already install, not updating" %
+                    log.debug("Latest version of product cert for %s %s is already installed, not updating" %
                             (p.name, p.version))
 
             # look up what repo's we know about for that prod id
