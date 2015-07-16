@@ -14,6 +14,7 @@
 
 from mock import Mock
 from fixture import SubManFixture
+from subscription_manager.async import AsyncRepoOverridesUpdate
 from subscription_manager.gui.reposgui import RepositoriesDialog
 from subscription_manager.repolib import Repo
 from subscription_manager.overrides import Override
@@ -37,6 +38,7 @@ class TestReposGui(SubManFixture):
 
         self.dialog = RepositoriesDialog(backend, None)
         self.dialog.overrides_mock = self.overrides_mock
+        self.dialog.async_update = TestingOverridesAsync(self.overrides_mock)
 
     def test_show_dialog_with_no_overrides(self):
         repo = self._create_repo("my_repo", [('enabled', '0'), ('gpgcheck', '0')])
@@ -68,10 +70,10 @@ class TestReposGui(SubManFixture):
         self.assertEquals(repo, store.get_value(tree_iter, store['repo_data']))
 
         # Check that the details view is populated correctly
-        name = self._get_text(self.dialog.name_text)
+        name = self.dialog.name_text.get_text()
         self.assertEquals("MY_REPO", name)
 
-        baseurl = self._get_text(self.dialog.baseurl_text)
+        baseurl = self.dialog.baseurl_text.get_text()
         self.assertEquals("http://foo.bar", baseurl)
 
     def test_show_dialog_with_overrides(self):
@@ -114,10 +116,10 @@ class TestReposGui(SubManFixture):
         self.assertEquals(repo, store.get_value(tree_iter, store['repo_data']))
 
         # Check that the details view is populated correctly
-        name = self._get_text(self.dialog.name_text)
+        name = self.dialog.name_text.get_text()
         self.assertEquals("MY_REPO", name)
 
-        baseurl = self._get_text(self.dialog.baseurl_text)
+        baseurl = self.dialog.baseurl_text.get_text()
         self.assertEquals("http://foo.bar", baseurl)
 
     def test_remove_all_button_disabled_when_repo_has_no_modifications(self):
@@ -157,11 +159,21 @@ class TestReposGui(SubManFixture):
         attrs.extend(attribute_tuple_list)
         return Repo(repo_id, attrs)
 
-    def _get_text(self, text_view):
-        start, end = text_view.get_buffer().get_bounds()
-        return text_view.get_buffer().get_text(start, end,
-                                               include_hidden_chars=False)
-
     def _get_combo_box_value(self, combo_box):
         column = combo_box.get_active()
         return combo_box.get_model()[column][1]
+
+
+class TestingOverridesAsync(AsyncRepoOverridesUpdate):
+
+    def _process_callback(self, callback, *args):
+        callback(*args)
+
+    def load_data(self, success_callback, except_callback):
+        self._load_data(success_callback, except_callback)
+
+    def update_overrides(self, to_add, to_remove, success_callback, except_callback):
+        self._update(to_add, to_remove, success_callback, except_callback)
+
+    def remove_all_overrides(self, repo_ids, success_callback, except_callback):
+        self._remove_all(repo_ids, success_callback, except_callback)
