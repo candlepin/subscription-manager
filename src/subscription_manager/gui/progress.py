@@ -24,7 +24,7 @@ class Progress(widgets.SubmanBaseWidget):
     widget_names = ['progressWindow', 'progressLabel', 'progressBar', 'statusLabel']
     gui_file = "progress"
 
-    def __init__(self, title, label):
+    def __init__(self, title, label, support_markup=False):
         super(Progress, self).__init__()
 
         self.progressWindow.connect("delete-event", self._on_delete_event)
@@ -34,7 +34,7 @@ class Progress(widgets.SubmanBaseWidget):
         self.lastProgress = 0.0
 
         self.set_title(title)
-        self.set_label(label)
+        self.set_label(label, support_markup)
 
     def hide(self):
         self.progressWindow.hide()
@@ -43,8 +43,11 @@ class Progress(widgets.SubmanBaseWidget):
     def set_title(self, text):
         self.progressWindow.set_title(text)
 
-    def set_label(self, text):
-        self.progressLabel.set_text(text)
+    def set_label(self, text, markup=False):
+        if markup:
+            self.progressLabel.set_markup(text)
+        else:
+            self.progressLabel.set_text(text)
 
     def pulse(self):
         """

@@ -80,6 +80,10 @@ class MappedListStore(MappedStore, ga_Gtk.ListStore):
         """
         self.append(self._create_initial_entry(item_map))
 
+    def update_map(self, iter, item_map):
+        for key, value in item_map.iteritems():
+            self.set_value(iter, self[key], value)
+
 
 class MappedTreeStore(MappedStore, ga_Gtk.TreeStore):
     def __init__(self, type_map):
