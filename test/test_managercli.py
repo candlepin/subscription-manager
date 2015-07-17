@@ -828,7 +828,7 @@ class TestReposCommand(TestCliCommand):
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
                 match_dict_list)
-        repolib_instance.update.assert_called()
+        self.assertTrue(repolib_instance.update.called)
 
     @mock.patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status_with_wildcards(self, mock_repolib):
@@ -845,7 +845,7 @@ class TestReposCommand(TestCliCommand):
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
                 match_dict_list)
-        repolib_instance.update.assert_called()
+        self.assertTrue(repolib_instance.update.called)
 
     @mock.patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status_disable_all_enable_some(self, mock_repolib):
@@ -866,7 +866,7 @@ class TestReposCommand(TestCliCommand):
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
                 match_dict_list)
-        repolib_instance.update.assert_called()
+        self.assertTrue(repolib_instance.update.called)
 
     @mock.patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status_enable_all_disable_some(self, mock_repolib):
@@ -887,7 +887,7 @@ class TestReposCommand(TestCliCommand):
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
                 match_dict_list)
-        repolib_instance.update.assert_called()
+        self.assertTrue(repolib_instance.update.called)
 
     @mock.patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status_enable_all_disable_all(self, mock_repolib):
@@ -907,7 +907,7 @@ class TestReposCommand(TestCliCommand):
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
                 match_dict_list)
-        repolib_instance.update.assert_called()
+        self.assertTrue(repolib_instance.update.called)
 
     @mock.patch("subscription_manager.managercli.RepoFile")
     def test_set_repo_status_when_disconnected(self, mock_repofile):
