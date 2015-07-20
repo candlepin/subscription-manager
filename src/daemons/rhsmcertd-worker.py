@@ -1,4 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/python -Es
+# ^ is to prevent selinux denials trying to load modules from unintended
+#   paths. See https://bugzilla.redhat.com/show_bug.cgi?id=1136163
 #
 # Copyright (c) 2012 Red Hat, Inc.
 #
