@@ -74,6 +74,9 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Jul 23 2015 Alex Wood <awood@redhat.com> 1.16.0-1
+- Bump to version 1.16 (crog@redhat.com)
+
 * Fri Jul 10 2015 Chris Rog <crog@redhat.com> 1.15.4-1
 - 
 
