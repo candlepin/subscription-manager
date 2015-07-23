@@ -36,7 +36,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.15.7
+Version: 1.15.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -527,6 +527,11 @@ fi
 %endif
 
 %changelog
+* Thu Jul 23 2015 Chris Rog <crog@redhat.com> 1.15.8-1
+- Fedora 20 has been retired. (awood@redhat.com)
+- 1136163: Ignore pythonpath to avoid selinux AVCs (alikins@redhat.com)
+- 1234413: lower log level of rhsmd RHN messages (alikins@redhat.com)
+
 * Fri Jul 10 2015 Chris Rog <crog@redhat.com> 1.15.7-1
 - Merge pull request #1219 from candlepin/alikins/1241247_ga_ImportError
   (ceiu@cericlabs.com)
