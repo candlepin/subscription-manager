@@ -36,7 +36,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.15.8
+Version: 1.15.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -527,6 +527,10 @@ fi
 %endif
 
 %changelog
+* Thu Jul 23 2015 Chris Rog <crog@redhat.com> 1.15.9-1
+- 1246146: Changed initial-setup-addon package requirement from subman to
+  subman-gui (crog@redhat.com)
+
 * Thu Jul 23 2015 Chris Rog <crog@redhat.com> 1.15.8-1
 - Fedora 20 has been retired. (awood@redhat.com)
 - 1136163: Ignore pythonpath to avoid selinux AVCs (alikins@redhat.com)
