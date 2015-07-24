@@ -178,10 +178,17 @@ class ProductCertificatePrinter(CertificatePrinter):
         product_printer = ProductPrinter()
         s = []
         if not self.skip_products:
-            for product in sorted(cert.products, key=lambda product: product.id):
+            for product in sorted(cert.products, key=self.product_id_int):
                 s.append(product_printer.as_str(product))
 
         return "%s\n%s" % (CertificatePrinter.cert_to_str(self, cert), "\n".join(s))
+
+    @staticmethod
+    def product_id_int(product):
+        try:
+            return int(product.id)
+        except ValueError:
+            return product.id
 
 
 class EntitlementCertificatePrinter(ProductCertificatePrinter):
