@@ -527,6 +527,15 @@ fi
 %endif
 
 %changelog
+* Fri Jul 24 2015 Alex Wood <awood@redhat.com> 1.16.0-1
+- Bump version to 1.16 (crog@redhat.com)
+- Changed initial-setup-addon package requirement from subman to subman-gui
+  (crog@redhat.com)
+- Cast product.id to int for sort in cat-cert (alikins@redhat.com)
+- 1136163: Ignore pythonpath to avoid selinux AVCs (alikins@redhat.com)
+- 985157: Display the URL that is the registration target (wpoteat@redhat.com)
+- 1234413: lower log level of rhsmd RHN messages (alikins@redhat.com)
+
 * Fri Jul 10 2015 Chris Rog <crog@redhat.com> 1.15.7-1
 - Merge pull request #1219 from candlepin/alikins/1241247_ga_ImportError
   (ceiu@cericlabs.com)
