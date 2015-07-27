@@ -9,7 +9,7 @@ from gtk import CellRendererProgress, CellRendererSpin, CellRendererText
 from gtk import CellRendererToggle, Entry
 from gtk import FileChooserDialog, FileFilter, Frame, HBox, HButtonBox, Image
 from gtk import Label, ListStore, MessageDialog, RadioButton, SpinButton
-from gtk import TextBuffer, TreeRowReference
+from gtk import TextBuffer
 from gtk import TreeStore, TreeView, TreeViewColumn, VBox, Viewport
 
 # enums
@@ -111,13 +111,6 @@ class GaImage(Image):
 #       the Gtk.Image is not provided here.
 Image = GaImage
 
-
-# Gtk2's TreeRowReference is a class, while Gtk3's TreeRowReference is
-# non-callable class that has to be constructed with it's .new() method.
-# Provide a helper method that provides a compatible interface. snake_case
-# naming used to distinquish it from the "real" TreeRowReference.
-def tree_row_reference(model, path):
-    return TreeRowReference(model, path)
 
 # Attempt to keep the list of faux Gtk 3 names we are
 # providing to a min.

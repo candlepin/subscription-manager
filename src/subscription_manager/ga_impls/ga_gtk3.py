@@ -1,6 +1,7 @@
 
 import os
 from gi.repository import Gtk
+from gi.repository import GObject
 
 # ../../gui/data/glade/
 ourfile = __file__
@@ -13,3 +14,5 @@ GTK_BUILDER_FILES_SUFFIX = "ui"
 # gtk2 does not have a .new()
 def tree_row_reference(model, path):
     return Gtk.TreeRowReference.new(model, path)
+
+threads_init = GObject.threads_init

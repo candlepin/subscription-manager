@@ -179,8 +179,8 @@ class GaImporterGtk3(GaImporter):
 
 class GaImporterGtk2(GaImporter):
     virtual_modules = {'subscription_manager.ga': None,
-                       'subscription_manager.ga.gtk_compat': ['subscription_manager.ga_impls',
-                                                              'ga_gtk2'],
+                       'subscription_manager.ga.gtk_compat': ['subscription_manager.ga_impls.ga_gtk2',
+                                                              'gtk_compat'],
                        'subscription_manager.ga.GObject': ['subscription_manager.ga_impls.ga_gtk2',
                                                            'GObject'],
                        'subscription_manager.ga.Gdk': ['subscription_manager.ga_impls.ga_gtk2',
