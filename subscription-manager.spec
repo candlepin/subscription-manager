@@ -197,7 +197,7 @@ This package contains the firstboot screens for subscription-manager.
 Summary: initial-setup screens for subscription-manager
 Group: System Environment/Base
 Requires: %{name}-gui = %{version}-%{release}
-Requires: initial-setup
+Requires: initial-setup-gui
 Obsoletes: subscription-manager-firstboot < 1.15.3-1
 
 %description -n subscription-manager-initial-setup-addon
