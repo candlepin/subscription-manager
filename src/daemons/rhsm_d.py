@@ -66,7 +66,6 @@ def excepthook_logging(exc_type, exc_value, exc_traceback):
 sys.excepthook = excepthook_logging
 
 from subscription_manager.ga import GObject as ga_GObject
-from subscription_manager.ga import GLib as ga_GLib
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
@@ -157,7 +156,7 @@ class StatusChecker(dbus.service.Object):
     #certain parts of that are async
     def watchdog(self):
         if not self.keep_alive:
-            ga_GLib.idle_add(check_if_ran_once, self, self.loop)
+            ga_GObject.idle_add(check_if_ran_once, self, self.loop)
 
     @dbus.service.method(
         dbus_interface="com.redhat.SubscriptionManager.EntitlementStatus",
