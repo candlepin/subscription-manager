@@ -37,7 +37,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -527,6 +527,12 @@ fi
 %endif
 
 %changelog
+* Mon Jul 27 2015 Chris Rog <crog@redhat.com> 1.15.9-2
+- Updated initial-setup-addon package requirement to initial-setup-gui
+  (crog@redhat.com)
+- 985157: Display the URL that is the registration target (wpoteat@redhat.com)
+- Cast product.id to int for sort in cat-cert (alikins@redhat.com)
+
 * Thu Jul 23 2015 Chris Rog <crog@redhat.com> 1.15.9-1
 - 1246146: Changed initial-setup-addon package requirement from subman to
   subman-gui (crog@redhat.com)
