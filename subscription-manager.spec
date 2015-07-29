@@ -111,6 +111,8 @@ platform.
 Summary: A plugin for handling OSTree content.
 Group: System Environment/Base
 
+# ostree package also includes the gobject info for pygobject
+Requires: ostree
 Requires: pygobject3-base
 # plugin needs a slightly newer version of python-iniparse for 'tidy'
 Requires:  python-iniparse >= 0.4
