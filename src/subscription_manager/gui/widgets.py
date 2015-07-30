@@ -727,8 +727,6 @@ class DatePicker(ga_Gtk.HBox):
         self._calendar_window.set_type_hint(ga_Gdk.WindowTypeHint.DIALOG)
         self._calendar_window.set_modal(True)
         self._calendar_window.set_title(_("Date Selection"))
-        self._calendar_window.set_transient_for(
-                self.get_parent())
 
         self._calendar.select_month(self._date.month - 1, self._date.year)
         self._calendar.select_day(self._date.day)
