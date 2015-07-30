@@ -79,7 +79,6 @@ class FileBasedGui(object):
                                           "%s.%s" % (self.gui_file,
                                                      self.gui_file_suffix))
 
-        log.debug("loading gui file %s", gui_file_full_path)
         return gui_file_full_path
 
 
@@ -150,7 +149,13 @@ class SubmanBaseWidget(object):
         """
 
         for name in widget_names:
-            setattr(self, name, file_based_gui.get_object(name))
+            obj = file_based_gui.get_object(name)
+            # Builder doesn't set the name of the widget to the id in
+            # xml ui file as libglade did, so set it here so widget.get_name()
+            # returns that id ('proxyButton' vs 'Gtk.CheckButton', for ex)
+            if obj:
+                obj.set_name(name)
+            setattr(self, name, obj)
 
     def connect_signals(self, signals):
         return self.gui.connect_signals(signals)
