@@ -9,6 +9,8 @@ GTK_BUILDER_FILES_DIR = os.path.normpath(os.path.join(os.path.dirname(__file__),
                                                       "../gui/data/ui/"))
 GTK_BUILDER_FILES_SUFFIX = "ui"
 
+GTK_COMPAT_VERSION = "3"
+
 
 # gtk3 requires constructing with .new(), where
 # gtk2 does not have a .new()

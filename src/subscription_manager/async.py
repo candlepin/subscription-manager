@@ -111,3 +111,76 @@ class AsyncBind(object):
     def unbind(self, serial, selection, callback, except_callback):
         threading.Thread(target=self._run_unbind,
                 args=(serial, selection, callback, except_callback)).start()
+
+
+class AsyncRepoOverridesUpdate(object):
+
+    def __init__(self, overrides_api):
+        self.overrides_api = overrides_api
+        self.identity = require(IDENTITY)
+
+    def _load_data(self, success_callback, except_callback):
+        try:
+            # pull the latest overrides from the cache which will be the ones from the server.
+            current_overrides = self.overrides_api.get_overrides(self.identity.uuid) or []
+
+            # Fetch the repositories from repolib without any overrides applied.
+            # We do this so that we can tell if anything has been modified by
+            # overrides.
+            current_repos = self.overrides_api.repo_lib.get_repos(apply_overrides=False)
+
+            self._process_callback(success_callback, current_overrides, current_repos)
+        except Exception, e:
+            self._process_callback(except_callback, e)
+
+    def _update(self, to_add, to_remove, success_callback, except_callback):
+        '''
+        Processes the override mapping and sends the overrides to the server for addition/removal.
+        '''
+        try:
+            # TODO: At some point we should look into providing a single API call that can handle
+            #       additions and removals in the same call (currently not supported by server).
+            current_overrides = None
+            if len(to_add) > 0:
+                current_overrides = self.overrides_api.add_overrides(self.identity.uuid, to_add)
+
+            if len(to_remove) > 0:
+                current_overrides = self.overrides_api.remove_overrides(self.identity.uuid, to_remove)
+
+            if current_overrides:
+                self.overrides_api.update(current_overrides)
+
+            # Fetch the repositories from repolib without any overrides applied.
+            # We do this so that we can tell if anything has been modified by
+            # overrides.
+            current_repos = self.overrides_api.repo_lib.get_repos(apply_overrides=False)
+
+            self._process_callback(success_callback, current_overrides, current_repos)
+        except Exception, e:
+            self._process_callback(except_callback, e)
+
+    def _remove_all(self, repo_ids, success_callback, except_callback):
+        try:
+            current_overrides = self.overrides_api.remove_all_overrides(self.identity.uuid, repo_ids)
+            self.overrides_api.update(current_overrides)
+
+            # Fetch the repositories from repolib without any overrides applied.
+            # We do this so that we can tell if anything has been modified by
+            # overrides.
+            current_repos = self.overrides_api.repo_lib.get_repos(apply_overrides=False)
+
+            self._process_callback(success_callback, current_overrides, current_repos)
+        except Exception, e:
+            self._process_callback(except_callback, e)
+
+    def _process_callback(self, callback, *args):
+        ga_GObject.idle_add(callback, *args)
+
+    def load_data(self, success_callback, failure_callback):
+        threading.Thread(target=self._load_data, args=(success_callback, failure_callback)).start()
+
+    def update_overrides(self, to_add, to_remove, success_callback, except_callback):
+        threading.Thread(target=self._update, args=(to_add, to_remove, success_callback, except_callback)).start()
+
+    def remove_all_overrides(self, repo_ids, success_callback, except_callback):
+        threading.Thread(target=self._remove_all, args=(repo_ids, success_callback, except_callback)).start()
