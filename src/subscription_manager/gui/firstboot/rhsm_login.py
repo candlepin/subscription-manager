@@ -255,6 +255,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         else:
             return registergui.CHOOSE_SERVER_PAGE
 
+    @property
     def error_screen(self):
         return self._get_initial_screen()
 
