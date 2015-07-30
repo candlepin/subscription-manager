@@ -2,6 +2,23 @@
 <interface>
   <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
+
+  <object class="GtkAdjustment" id="scrolled_window_3_h_adjustment">
+    <property name="upper">0</property>
+    <property name="lower">0</property>
+    <property name="value">0</property>
+    <property name="step_increment">0</property>
+    <property name="page_increment">0</property>
+    <property name="page_size">0</property>
+  </object>
+  <object class="GtkAdjustment" id="scrolled_window_3_v_adjustment">
+    <property name="upper">0</property>
+    <property name="lower">0</property>
+    <property name="value">0</property>
+    <property name="step_increment">0</property>
+    <property name="page_increment">0</property>
+    <property name="page_size">0</property>
+  </object>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
     <property name="icon_name">subscription-manager</property>
@@ -191,8 +208,8 @@
                               <object class="GtkScrolledWindow" id="scrolledwindow3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="hadjustment">0 0 396 39.600000000000001 356.40000000000003 396</property>
-                                <property name="vadjustment">37 0 116 7.9000000000000004 71.100000000000009 79</property>
+                                <property name="hadjustment">scrolled_window_3_h_adjustment</property>
+                                <property name="vadjustment">scrolled_window_3_v_adjustment</property>
                                 <property name="hscrollbar_policy">automatic</property>
                                 <property name="vscrollbar_policy">automatic</property>
                                 <property name="shadow_type">in</property>
