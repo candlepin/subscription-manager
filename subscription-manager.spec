@@ -114,6 +114,7 @@ Group: System Environment/Base
 Requires: pygobject3-base
 # plugin needs a slightly newer version of python-iniparse for 'tidy'
 Requires:  python-iniparse >= 0.4
+Requires: %{name} = %{version}-%{release}
 
 %description -n subscription-manager-plugin-ostree
 Enables handling of content of type 'ostree' in any certificates
@@ -130,6 +131,7 @@ the remote in the currently deployed .origin file.
 %package -n subscription-manager-plugin-container
 Summary: A plugin for handling container content.
 Group: System Environment/Base
+Requires: %{name} = %{version}-%{release}
 
 %description -n subscription-manager-plugin-container
 Enables handling of content of type 'containerImage' in any certificates
