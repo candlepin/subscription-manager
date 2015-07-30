@@ -294,6 +294,7 @@ class RegisterScreen(widgets.SubmanBaseWidget):
                         screen.container, tab_label=None)
 
         self._current_screen = CHOOSE_SERVER_PAGE
+        self._error_screen = DONT_CHANGE
 
         # values that will be set by the screens
         self.username = None
@@ -337,15 +338,24 @@ class RegisterScreen(widgets.SubmanBaseWidget):
     # for subman gui, we don't need to switch screens on error
     # but for firstboot, we will go back to the info screen if
     # we have it.
+    @property
     def error_screen(self):
-        return DONT_CHANGE
+        return self._error_screen
+
+    def goto_error_screen(self):
+        self._set_navigation_sensitive(True)
+        self._set_screen(self.error_screen)
 
     # FIXME: This exists because standalone gui needs to update the nav
     #        buttons in it's own top level window, while firstboot needs to
     #        update the buttons in the main firstboot window. Firstboot version
     #        has additional logic for rhel5/rhel6 differences.
+    # FIXME: just split this into a registerWidget and a registerDialog
     def _set_navigation_sensitive(self, sensitive):
-        self.cancel_button.set_sensitive(sensitive)
+        # We could unsens the cancel button here, but since we use it as
+        # a 'do over' button that sends the dialog back to the start, just
+        # leave it enabled, to avoid leaving un unsens after an async error
+        # handler.
         self.register_button.set_sensitive(sensitive)
 
     def _set_screen(self, screen):
@@ -420,6 +430,10 @@ class RegisterScreen(widgets.SubmanBaseWidget):
         # advance the screen or not.
         # XXX it would be cool here to do some async spinning while the
         # main window gui refreshes itself
+
+        if failed:
+            self.goto_error_screen()
+            return
 
         # FIXME: subman-gui needs this but initial-setup doesnt
         self.close_window_callback()
@@ -1151,16 +1165,16 @@ class ChooseServerScreen(Screen):
                     show_error_window(_("Unable to reach the server at %s:%s%s") %
                                       (hostname, port, prefix),
                                       self._parent.window)
-                    return self._parent.error_screen()
+                    return self._parent.error_screen
             except MissingCaCertException:
                 show_error_window(_("CA certificate for subscription service has not been installed."),
                                   self._parent.window)
-                return self._parent.error_screen()
+                return self._parent.error_screen
 
         except ServerUrlParseError:
             show_error_window(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"),
                               self._parent.window)
-            return self._parent.error_screen()
+            return self._parent.error_screen
 
         log.debug("Writing server data to rhsm.conf")
         CFG.save()
