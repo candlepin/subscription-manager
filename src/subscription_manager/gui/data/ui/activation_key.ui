@@ -10,10 +10,11 @@
       <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
-        <property name="yalign">0.10000000149011612</property>
+        <property name="margin_bottom">8</property>
         <property name="label" translatable="yes">&lt;b&gt;Please enter the following for this system:&lt;/b&gt;</property>
         <property name="use_markup">True</property>
+        <property name="xalign">0</property>
+        <property name="yalign">0.10000000149011612</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -22,22 +23,21 @@
       </packing>
     </child>
     <child>
-      <object class="GtkTable" id="table1">
+      <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="n_rows">3</property>
-        <property name="n_columns">2</property>
+        <property name="row_spacing">4</property>
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Organization:</property>
+            <property name="ellipsize">end</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options">GTK_FILL</property>
-            <property name="x_padding">15</property>
-            <property name="y_padding">15</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
@@ -45,14 +45,11 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Activation Key:</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
+            <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="bottom_attach">2</property>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options">GTK_FILL</property>
-            <property name="x_padding">15</property>
-            <property name="y_padding">15</property>
           </packing>
         </child>
         <child>
@@ -60,14 +57,11 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">System Name:</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
+            <property name="left_attach">0</property>
             <property name="top_attach">2</property>
-            <property name="bottom_attach">3</property>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options">GTK_FILL</property>
-            <property name="x_padding">15</property>
-            <property name="y_padding">15</property>
           </packing>
         </child>
         <child>
@@ -75,6 +69,8 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="tooltip_text" translatable="yes">This must be the organization key, not the name.</property>
+            <property name="margin_left">8</property>
+            <property name="hexpand">True</property>
             <property name="invisible_char">●</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="organization_entry-atkobject">
@@ -84,7 +80,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="right_attach">2</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
@@ -92,6 +88,8 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="tooltip_text" translatable="yes">Multiple Activation Keys can be entered by separating them with a comma or a space.</property>
+            <property name="margin_left">8</property>
+            <property name="hexpand">True</property>
             <property name="invisible_char">●</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="activation_key_entry-atkobject">
@@ -101,15 +99,15 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="right_attach">2</property>
             <property name="top_attach">1</property>
-            <property name="bottom_attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkEntry" id="consumer_entry">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="margin_left">8</property>
+            <property name="hexpand">True</property>
             <property name="invisible_char">●</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="consumer_entry-atkobject">
@@ -119,16 +117,13 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="right_attach">2</property>
             <property name="top_attach">2</property>
-            <property name="bottom_attach">3</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="expand">False</property>
-        <property name="fill">False</property>
-        <property name="padding">5</property>
+        <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
     </child>
