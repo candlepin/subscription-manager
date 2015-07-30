@@ -63,6 +63,13 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
         self.release_combobox.set_model(self.release_model)
         self.sla_combobox.set_model(self.sla_model)
 
+        cell_renderer = ga_Gtk.CellRendererText()
+        self.release_combobox.pack_start(cell_renderer, True)
+        self.release_combobox.add_attribute(cell_renderer, "text", 0)
+
+        self.sla_combobox.pack_start(cell_renderer, True)
+        self.sla_combobox.add_attribute(cell_renderer, "text", 0)
+
         self.close_button.connect("clicked", self._close_button_clicked)
         self.sla_combobox.connect("changed", self._sla_changed)
         self.release_combobox.connect("changed", self._release_changed)
