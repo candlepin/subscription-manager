@@ -469,6 +469,9 @@ class AutobindWizard(RegisterScreen):
         super(AutobindWizard, self).show()
         self._run_pre(SELECT_SLA_PAGE)
 
+    def _get_initial_screen(self):
+        return SELECT_SLA_PAGE
+
 
 class Screen(widgets.SubmanBaseWidget):
     widget_names = ['container']
