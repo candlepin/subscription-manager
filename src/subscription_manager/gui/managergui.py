@@ -429,6 +429,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         autobind_wizard = registergui.AutobindWizard(self.backend,
                                                      self.facts,
                                                      self._get_window())
+        autobind_wizard.initialize()
         autobind_wizard.show()
 
     def _redeem_item_clicked(self, widget):
