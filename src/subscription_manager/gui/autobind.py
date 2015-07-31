@@ -47,7 +47,6 @@ class DryRunResult(object):
         # The products that would be covered if we did this autobind:
         autobind_products = set()
 
-        log.debug("Unentitled products: %s" % required_products)
         for pool_quantity in self.json:
             pool = pool_quantity['pool']
             # This is usually the MKT product and has no content, but it

@@ -158,6 +158,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         log.debug("Server Versions: %s " % get_server_versions(self.backend.cp_provider.get_consumer_auth_cp()))
 
         settings = self.main_window.get_settings()
+
         # prevent gtk from trying to save a list of recently used files, which
         # as root, causes gtk warning:
         #  "Attempting to set the permissions of `/root/.local/share/recently-used.xbel'
@@ -171,8 +172,7 @@ class MainWindow(widgets.SubmanBaseWidget):
 
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.facts)
 
-        self.registration_dialog = registergui.RegisterScreen(self.backend, self.facts,
-                                                              self._get_window())
+        self.registration_dialog = registergui.RegisterDialog(self.backend, self.facts)
 
         self.preferences_dialog = PreferencesDialog(self.backend,
                                                     self._get_window())
@@ -360,7 +360,6 @@ class MainWindow(widgets.SubmanBaseWidget):
             self.redeem_menu_item.set_sensitive(False)
 
     def _register_item_clicked(self, widget):
-        self.log.debug("_register_item_clicked widget=%s", widget)
         self.registration_dialog.initialize()
         self.registration_dialog.show()
 
@@ -427,9 +426,8 @@ class MainWindow(widgets.SubmanBaseWidget):
         self.import_sub_dialog.show()
 
     def _update_certificates_button_clicked(self, widget):
-        autobind_wizard = registergui.AutobindWizard(self.backend,
-                                                     self.facts,
-                                                     self._get_window())
+        autobind_wizard = registergui.AutobindWizardDialog(self.backend,
+                                                           self.facts)
         autobind_wizard.initialize()
         autobind_wizard.show()
 

@@ -103,6 +103,52 @@ def handle_gui_exception(e, msg, parent, format_msg=True, log_msg=None):
             show_error_window(msg, parent=parent)
 
 
+def format_mapped_message(e, msg, mapped_message, format_msg=True):
+    message = None
+    if isinstance(e, connection.RestlibException):
+        # If this exception's code is in the 200 range (such as 202 ACCEPTED)
+        # we're going to ignore the message we were given and just display
+        # the message from the server as an info dialog. (not an error)
+        if 200 < int(e.code) < 300:
+            message = linkify(mapped_message)
+        else:
+            try:
+                if format_msg:
+                    message = msg % linkify(mapped_message)
+                else:
+                    message = linkify(mapped_message)
+            except Exception:
+                message = msg
+    return message
+
+
+def format_interpolated_message(e, msg, mapped_message, format_msg=True):
+    message = None
+    #catch-all, try to interpolate and if it doesn't work out, just display the message
+    try:
+        interpolated_str = msg % e
+        message = interpolated_str
+    except Exception:
+        message = msg
+    return message
+
+
+def format_exception(e, msg, format_msg=True, log_msg=None):
+    if isinstance(e, tuple):
+        log.error(log_msg, exc_info=e)
+        # Get the class instance of the exception
+        e = e[1]
+    message = None
+    exception_mapper = ExceptionMapper()
+    mapped_message = exception_mapper.get_message(e)
+    if mapped_message:
+        message = format_mapped_message(e, msg, mapped_message, format_msg=format_msg)
+    else:
+        message = format_interpolated_message(e, msg, mapped_message, format_msg=format_msg)
+
+    return message
+
+
 def show_error_window(message, parent=None):
     messageWindow.ErrorDialog(messageWindow.wrap_text(message),
             parent)

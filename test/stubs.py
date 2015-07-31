@@ -468,14 +468,8 @@ class StubBackend(object):
         self.overrides = None
         self.certlib = None
 
-    def monitor_certs(self, callback):
+    def on_cert_check_timer(self):
         pass
-
-    def monitor_identity(self, callback):
-        pass
-
-    def create_admin_uep(self, username, password):
-        return StubUEP(username, password)
 
     def update(self):
         pass
