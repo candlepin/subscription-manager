@@ -37,7 +37,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -529,6 +529,29 @@ fi
 %endif
 
 %changelog
+* Fri Jul 31 2015 Chris Rog <crog@redhat.com> 1.15.9-3
+- 1248746: Fix layout of contract dialog (GTK3) (mstead@redhat.com)
+- 1248821: Add Gtk.Window to ga_gtk2.Gtk (alikins@redhat.com)
+- 1248821: All subs date picker was failing. (alikins@redhat.com)
+- 1249053: Fixed layout/blank button issues on owner selection dialog
+  (mstead@redhat.com)
+- 1248729: All subs filter dialog was not focused. (alikins@redhat.com)
+- 1248664: Fix GtkAdjustment related warnings (alikins@redhat.com)
+- 1248546: Slightly better looking done screen. (alikins@redhat.com)
+- 1245557: Fix release and service level preferences (alikins@redhat.com)
+- Add GTK_COMPAT_VERSION to ga_gtk2/gtk_compat (alikins@redhat.com)
+- 1248773: Fixed proxy dialog layout (GTK3) (mstead@redhat.com)
+- 1248771: Fixing activation key dialog layout (GTK3) (mstead@redhat.com)
+- 1247723: Fixed layout issues in Facts dialog (GTK3) (mstead@redhat.com)
+- 1245283: Properly initialize AutobindWizard when auto-attach is clicked
+  (mstead@redhat.com)
+- 1248546: Refine the aesthics of register dialog. (alikins@redhat.com)
+- 1243260: Make proxy config dialog work. (alikins@redhat.com)
+- 1161157,1155954: Improve performance of Repository Dialog (mstead@redhat.com)
+- 1165771: make content plugins require subman (alikins@redhat.com)
+- Move gtk_compat features to sub ga module. (alikins@redhat.com)
+- Use idle_add from ga_Object for 6.x (alikins@redhat.com)
+
 * Mon Jul 27 2015 Chris Rog <crog@redhat.com> 1.15.9-2
 - Updated initial-setup-addon package requirement to initial-setup-gui
   (crog@redhat.com)
