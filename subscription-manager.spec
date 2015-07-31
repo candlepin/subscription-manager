@@ -354,6 +354,7 @@ rm -rf %{buildroot}
 # python package dirs
 %dir %{_datadir}/rhsm
 %dir %{_datadir}/rhsm/subscription_manager
+%dir %{_datadir}/rhsm/subscription_manager/api
 %dir %{_datadir}/rhsm/subscription_manager/branding
 %dir %{_datadir}/rhsm/subscription_manager/model
 %dir %{_datadir}/rhsm/subscription_manager/plugin
@@ -361,6 +362,7 @@ rm -rf %{buildroot}
 # code, python modules and packages
 %{_datadir}/rhsm/subscription_manager/*.py*
 
+%{_datadir}/rhsm/subscription_manager/api/*.py*
 %{_datadir}/rhsm/subscription_manager/branding/*.py*
 
 # our gtk2/gtk3 compat modules
