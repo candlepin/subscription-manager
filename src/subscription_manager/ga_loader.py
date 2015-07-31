@@ -94,9 +94,6 @@ class GaImporter(object):
         return None
 
     def load_module(self, fullname):
-        log.debug("ga_loader class %s loading virtual module %s from %s",
-                  self.__class__.__name__,
-                  fullname, self.virtual_modules[fullname])
         if fullname in sys.modules:
             return sys.modules[fullname]
 
@@ -149,14 +146,6 @@ class GaImporter(object):
         they do, the module instance is the one we create here.
         """
         return self._new_module(self.namespace)
-
-    def _dirprint(self, module):
-        return
-        print "module ", module, type(module)
-        for i in dir(module):
-            if i == "__builtins__":
-                continue
-            print "\t%s = %s" % (i, getattr(module, i))
 
 
 class GaImporterGtk3(GaImporter):
