@@ -264,5 +264,6 @@ class AsyncWidgetUpdater(object):
             ga_GObject.idle_add(widget_update.finished)
 
     def update(self, widget_update, backend_method, args=None, kwargs=None, exception_msg=None, callback=None):
-        threading.Thread(target=self.worker, args=(widget_update,
-            backend_method, args, kwargs, exception_msg, callback)).start()
+        threading.Thread(target=self.worker, name="AsyncWidgetUpdaterThread",
+                         args=(widget_update, backend_method, args,
+                               kwargs, exception_msg, callback)).start()

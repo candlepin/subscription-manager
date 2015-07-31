@@ -264,7 +264,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
         self._display_progress_bar()
         threading.Thread(target=self.test_connection_wrapper,
                          args=(proxy_host, proxy_port, proxy_user, proxy_password),
-                         name='test_connection_thread').start()
+                         name='TestNetworkConnectionThread').start()
 
     def deleted(self, event, data):
         self.write_values()
