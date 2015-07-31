@@ -61,7 +61,7 @@ class AsyncPool(object):
         Run pool stash refresh asynchronously.
         """
         ga_GObject.idle_add(self._watch_thread)
-        threading.Thread(target=self._run_refresh,
+        threading.Thread(target=self._run_refresh, name="AsyncPoolRefreshThread",
                 args=(active_on, callback, data)).start()
 
 
@@ -105,11 +105,11 @@ class AsyncBind(object):
             ga_GObject.idle_add(except_callback, e, selection)
 
     def bind(self, pool, quantity, except_callback, bind_callback=None, cert_callback=None):
-        threading.Thread(target=self._run_bind,
+        threading.Thread(target=self._run_bind, name="AsyncBindBindThread",
                 args=(pool, quantity, bind_callback, cert_callback, except_callback)).start()
 
     def unbind(self, serial, selection, callback, except_callback):
-        threading.Thread(target=self._run_unbind,
+        threading.Thread(target=self._run_unbind, name="AsyncBindUnbindThread",
                 args=(serial, selection, callback, except_callback)).start()
 
 
@@ -177,10 +177,13 @@ class AsyncRepoOverridesUpdate(object):
         ga_GObject.idle_add(callback, *args)
 
     def load_data(self, success_callback, failure_callback):
-        threading.Thread(target=self._load_data, args=(success_callback, failure_callback)).start()
+        threading.Thread(target=self._load_data, name="AsyncRepoOverridesUpdateLoadDataThread",
+                         args=(success_callback, failure_callback)).start()
 
     def update_overrides(self, to_add, to_remove, success_callback, except_callback):
-        threading.Thread(target=self._update, args=(to_add, to_remove, success_callback, except_callback)).start()
+        threading.Thread(target=self._update, name="AsyncRepoOverridesUpdateUpdateOverridesThread",
+                         args=(to_add, to_remove, success_callback, except_callback)).start()
 
     def remove_all_overrides(self, repo_ids, success_callback, except_callback):
-        threading.Thread(target=self._remove_all, args=(repo_ids, success_callback, except_callback)).start()
+        threading.Thread(target=self._remove_all, name="AsyncRepoOverridesUpdateRemoveAllOverridesThread",
+                         args=(repo_ids, success_callback, except_callback)).start()
