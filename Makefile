@@ -307,6 +307,7 @@ install-ui:
 install-gui: install-glade install-ui
 
 install-files: set-versions dbus-service-install desktop-files install-plugins install-post-boot install-ga install-gui
+	install -d $(PYTHON_INST_DIR)/api
 	install -d $(PYTHON_INST_DIR)/gui
 	install -d $(PYTHON_INST_DIR)/gui/data/icons
 	install -d $(PYTHON_INST_DIR)/branding
@@ -356,6 +357,7 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 
 
 	install -m 644 -p $(SRC_DIR)/*.py $(PYTHON_INST_DIR)/
+	install -m 644 -p $(SRC_DIR)/api/*.py $(PYTHON_INST_DIR)/api
 	install -m 644 -p $(SRC_DIR)/gui/*.py $(PYTHON_INST_DIR)/gui
 	install -m 644 -p $(SRC_DIR)/migrate/*.py $(PYTHON_INST_DIR)/migrate
 	install -m 644 -p $(SRC_DIR)/branding/*.py $(PYTHON_INST_DIR)/branding
