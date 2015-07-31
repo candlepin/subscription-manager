@@ -114,7 +114,6 @@
                 <property name="primary_icon_sensitive">True</property>
                 <property name="secondary_icon_sensitive">True</property>
                 <accessibility/>
-                <signal handler="on_server_entry_changed" name="changed"/>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="a11y-server_entry1">
                     <property name="AtkObject::accessible-name" translatable="yes">server_entry</property>

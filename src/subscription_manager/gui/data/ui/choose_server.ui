@@ -114,7 +114,6 @@
                 <property name="width_chars">30</property>
                 <property name="primary_icon_activatable">False</property>
                 <property name="secondary_icon_activatable">False</property>
-                <signal name="changed" handler="on_server_entry_changed" swapped="no"/>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="server_entry-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">server_entry</property>

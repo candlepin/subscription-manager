@@ -1,14 +1,18 @@
 
 import gettext
-import socket
 import sys
 import logging
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
-import gtk
 
-gtk.gdk.threads_init()
+from subscription_manager import ga_loader
+ga_loader.init_ga()
+
+from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.ga import gtk_compat
+
+gtk_compat.threads_init()
 
 import rhsm
 
@@ -26,20 +30,21 @@ running_as_firstboot()
 
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
-from subscription_manager.injection import PLUGIN_MANAGER, IDENTITY, require
+
+from subscription_manager import injection as inj
 
 from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import Hardware
-from subscription_manager.gui.firstboot_base import RhsmFirstbootModule
 from subscription_manager.gui import managergui
 from subscription_manager.gui import registergui
-from subscription_manager.gui.utils import handle_gui_exception
-from subscription_manager.gui.autobind import \
-        ServiceLevelNotSupportedException, NoProductsException, \
-        AllProductsCoveredException
-from subscription_manager import managerlib
+from subscription_manager.gui.utils import format_exception
+from subscription_manager.i18n import configure_i18n
 
-from rhsm.connection import RestlibException
+from firstboot import module
+from firstboot import constants
+
+configure_i18n(with_glade=True)
+
 from rhsm.utils import remove_scheme
 
 sys.path.append("/usr/share/rhn")
@@ -50,179 +55,36 @@ try:
 except ImportError:
     log.debug("no rhn-client-tools modules could be imported")
 
-MANUALLY_SUBSCRIBE_PAGE = 11
 
-
-class SelectSLAScreen(registergui.SelectSLAScreen):
-    """
-    override the default SelectSLAScreen to jump to the manual subscribe page.
-    """
-    def _on_get_service_levels_cb(self, result, error=None):
-        if error is not None:
-            if isinstance(error[1], ServiceLevelNotSupportedException):
-                message = _("Unable to auto-attach, server does not support "
-                            "service levels. Please run 'Subscription Manager' "
-                            "to manually attach a subscription.")
-                self._parent.manual_message = message
-                self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
-            elif isinstance(error[1], NoProductsException):
-                message = _("No installed products on system. No need to "
-                            "update subscriptions at this time.")
-                self._parent.manual_message = message
-                self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
-            elif isinstance(error[1], AllProductsCoveredException):
-                message = _("All installed products are fully subscribed.")
-                self._parent.manual_message = message
-                self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
-            else:
-                handle_gui_exception(error, _("Error subscribing"),
-                                     self._parent.window)
-                self._parent.finish_registration(failed=True)
-            return
-
-        (current_sla, unentitled_products, sla_data_map) = result
-
-        self._parent.current_sla = current_sla
-        if len(sla_data_map) == 1:
-            # If system already had a service level, we can hit this point
-            # when we cannot fix any unentitled products:
-            if current_sla is not None and \
-                    not self._can_add_more_subs(current_sla, sla_data_map):
-                message = _("Unable to attach any additional subscriptions at "
-                            "current service level: %s") % current_sla
-                self._parent.manual_message = message
-                self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
-                return
-
-            self._dry_run_result = sla_data_map.values()[0]
-            self._parent.pre_done(registergui.CONFIRM_SUBS_PAGE)
-        elif len(sla_data_map) > 1:
-            self._sla_data_map = sla_data_map
-            self.set_model(unentitled_products, sla_data_map)
-            self._parent.pre_done(registergui.DONT_CHANGE)
-        else:
-            message = _("No service levels will cover all installed products. "
-                "Please run 'Subscription Manager' to manually "
-                "attach subscriptions.")
-            self._parent.manual_message = message
-            self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
-
-
-class PerformRegisterScreen(registergui.PerformRegisterScreen):
-
-    def _on_registration_finished_cb(self, new_account, error=None):
-        if error is not None:
-            handle_gui_exception(error, registergui.REGISTER_ERROR,
-                    self._parent.window)
-            self._parent.finish_registration(failed=True)
-            return
-
-        try:
-            managerlib.persist_consumer_cert(new_account)
-            self._parent.backend.cs.force_cert_check()  # Ensure there isn't much wait time
-
-            if self._parent.activation_keys:
-                self._parent.pre_done(registergui.REFRESH_SUBSCRIPTIONS_PAGE)
-            elif self._parent.skip_auto_bind:
-                message = _("You have opted to skip auto-attach.")
-                self._parent.manual_message = message
-                self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
-            else:
-                self._parent.pre_done(registergui.SELECT_SLA_PAGE)
-
-        # If we get errors related to consumer name on register,
-        # go back to the credentials screen where we set the
-        # consumer name. See bz#865954
-        except RestlibException, e:
-            handle_gui_exception(e, registergui.REGISTER_ERROR,
-                self._parent.window)
-            if e.code == 404 and self._parent.activation_keys:
-                self._parent.pre_done(registergui.ACTIVATION_KEY_PAGE)
-            if e.code == 400:
-                self._parent.pre_done(registergui.CREDENTIALS_PAGE)
-
-        except Exception, e:
-            handle_gui_exception(e, registergui.REGISTER_ERROR,
-                    self._parent.window)
-            self._parent.finish_registration(failed=True)
-
-    def pre(self):
-        # TODO: this looks like it needs updating now that we run
-        # firstboot without rhn client tools.
-
-        # Because the RHN client tools check if certs exist and bypass our
-        # firstboot module if so, we know that if we reach this point and
-        # identity certs exist, someone must have hit the back button.
-        # TODO: i'd like this call to be inside the async progress stuff,
-        # since it does take some time
-        identity = require(IDENTITY)
-        if identity.is_valid():
-            try:
-                managerlib.unregister(self._parent.backend.cp_provider.get_consumer_auth_cp(),
-                        self._parent.identity.uuid)
-            except socket.error, e:
-                handle_gui_exception(e, e, self._parent.window)
-            self._parent._registration_finished = False
-
-        return registergui.PerformRegisterScreen.pre(self)
-
-
-class ManuallySubscribeScreen(registergui.Screen):
-    widget_names = registergui.Screen.widget_names + ['title']
-    gui_file = "manually_subscribe"
-
-    def __init__(self, parent, backend):
-        super(ManuallySubscribeScreen, self).__init__(parent, backend)
-
-        self.button_label = _("Finish")
-
-    def apply(self):
-        return registergui.FINISH
-
-    def pre(self):
-        if self._parent.manual_message:
-            self.title.set_label(self._parent.manual_message)
-        # XXX set message here.
-        return False
-
-
-class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
+class moduleClass(module.Module, object):
 
     def __init__(self):
         """
         Create a new firstboot Module for the 'register' screen.
         """
-        RhsmFirstbootModule.__init__(self,        # Firstboot module title
-        # Note: translated title needs to be unique across all
-        # firstboot modules, not just the rhsm ones. See bz #828042
-                _("Subscription Management Registration"),
-                _("Subscription Registration"),
-                200.1, 109.10)
+        super(moduleClass, self).__init__()
 
+        self.mode = constants.MODE_REGULAR
+        self.title = _("Subscription Management Registration")
+        self.sidebarTitle = _("Subscription Registration")
+        self.priority = 200.1
+
+        # NOTE: all of this is copied form former firstboot_base module
+        # and may no longer be needed
+        # set this so subclasses can override behaviour if needed
+        self._is_compat = False
+
+        reg_info = registergui.RegisterInfo()
         backend = managergui.Backend()
-        self.plugin_manager = require(PLUGIN_MANAGER)
-        registergui.RegisterScreen.__init__(self, backend, Facts())
-
-        #insert our new screens
-        screen = SelectSLAScreen(self, backend)
-        screen.index = self._screens[registergui.SELECT_SLA_PAGE].index
-        self._screens[registergui.SELECT_SLA_PAGE] = screen
-        self.register_notebook.remove_page(screen.index)
-        self.register_notebook.insert_page(screen.container,
-                                           position=screen.index)
-
-        screen = PerformRegisterScreen(self, backend)
-        self._screens[registergui.PERFORM_REGISTER_PAGE] = screen
-
-        screen = ManuallySubscribeScreen(self, backend)
-        self._screens.append(screen)
-        screen.index = self.register_notebook.append_page(screen.container)
+        self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
+        self.register_widget = registergui.RegisterWidget(backend, Facts(), reg_info)
 
         # Will be False if we are on an older RHEL version where
         # rhn-client-tools already does some things so we don't have to.
         self.standalone = True
         distribution = Hardware().get_distribution()
         log.debug("Distribution: %s" % str(distribution))
+
         try:
             dist_version = float(distribution[1])
             # We run this for Fedora as well, but all we really care about here
@@ -243,7 +105,141 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         self.interface = None
 
         self.proxies_were_enabled_from_gui = None
-        self._apply_result = self._RESULT_FAILURE
+        self._apply_result = constants.RESULT_FAILURE
+
+        self.page_status = constants.RESULT_FAILURE
+
+    def apply(self, interface, testing=False):
+        """
+        'Next' button has been clicked - try to register with the
+        provided user credentials and return the appropriate result
+        value.
+        """
+        self.interface = interface
+
+        self.register_widget.emit('proceed')
+
+        # This is always "fail" until we get to the done screen
+        return self.page_status
+
+    def createScreen(self):
+        """
+        Create a new instance of gtk.VBox, pulling in child widgets from the
+        glade file.
+        """
+        self.vbox = ga_Gtk.VBox()
+        # self.vbox.pack_start(self.get_widget("register_widget"), False, False, 0)
+        self.vbox.pack_start(self.register_widget.register_widget, False, False, 0)
+
+        self.register_widget.connect('finished', self.on_finished)
+        self.register_widget.connect('register-error', self.on_register_error)
+
+        # In firstboot, we leverage the RHN setup proxy settings already
+        # presented to the user, so hide the choose server screen's proxy
+        # text and button. But, if we are standalone, show our versions.
+        if not self.standalone and False:
+            screen = self._screens[registergui.CHOOSE_SERVER_PAGE]
+            screen.proxy_frame.destroy()
+
+    def focus(self):
+        """
+        Focus the initial UI element on the page, in this case the
+        login name field.
+        """
+        # FIXME:  This is currently broken
+        # login_text = self.glade.get_widget("account_login")
+        # login_text.grab_focus()
+
+    def initializeUI(self):
+        log.debug("initializeUi %s", self)
+        # Need to make sure that each time the UI is initialized we reset back
+        # to the main register screen.
+
+        # Note, even if we are standalone firstboot mode (no rhn modules),
+        # we may still have RHN installed, and possibly configured.
+        self._read_rhn_proxy_settings()
+
+        self.register_widget.initialize()
+
+    def needsNetwork(self):
+        """
+        This lets firstboot know that networking is required, in order to
+        talk to hosted UEP.
+        """
+        return True
+
+    def needsReboot(self):
+        return False
+
+    # TODO: verify this doesnt break anything
+    def not_renderModule(self, interface):
+        #ParentClass.renderModule(self, interface)
+
+        # firstboot module class docs state to not override renderModule,
+        # so this is breaking the law.
+        #
+        # This is to set line wrapping on the title label to resize
+        # correctly with our long titles and their even longer translations
+        super(moduleClass, self).renderModule(interface)
+
+        # FIXME: likely all of this should be behind a try/except, since it's
+        #        likely to break, and it is just to fix cosmetic issues.
+        # Walk down widget tree to find the title label
+        label_container = self.vbox.get_children()[0]
+        title_label = label_container.get_children()[0]
+
+        # Set the title to wrap and connect to size-allocate to
+        # properly resize the label so that it takes up the most
+        # space it can.
+        title_label.set_line_wrap(True)
+        title_label.connect('size-allocate',
+                             lambda label, size: label.set_size_request(size.width - 1, -1))
+
+    def shouldAppear(self):
+        """
+        Indicates to firstboot whether to show this screen.  In this case
+        we want to skip over this screen if there is already an identity
+        certificate on the machine (most likely laid down in a kickstart).
+        """
+        identity = inj.require(inj.IDENTITY)
+        return not identity.is_valid()
+
+    def on_register_error(self, obj, msg, exc_list):
+        self.page_status = constants.RESULT_FAILURE
+
+        # TODO: we can add the register state, error type (error or exc)
+        if exc_list:
+            self.handle_register_exception(obj, msg, exc_list)
+        else:
+            self.handle_register_error(obj, msg)
+            return True
+
+    def on_finished(self, obj):
+        self.finished = True
+        self.page_status = constants.RESULT_SUCCESS
+        return False
+
+    def handle_register_error(self, obj, msg):
+        self.error_dialog(msg)
+
+    def handle_register_exception(self, obj, msg, exc_info):
+        message = format_exception(exc_info, msg)
+        self.error_dialog(message)
+
+    def error_dialog(self, text):
+        dlg = ga_Gtk.MessageDialog(None, 0, ga_Gtk.MessageType.ERROR,
+                                   ga_Gtk.ButtonsType.OK, text)
+        dlg.set_markup(text)
+        dlg.set_skip_taskbar_hint(True)
+        dlg.set_skip_pager_hint(True)
+        dlg.set_position(ga_Gtk.WindowPosition.CENTER)
+
+        def response_handler(obj, response_id):
+            obj.destroy()
+
+        dlg.connect('response', response_handler)
+        dlg.set_modal(True)
+        dlg.show()
 
     def _get_initial_screen(self):
         """
@@ -310,47 +306,6 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         self.backend.cp_provider.set_connection_info()
 
-    def apply(self, interface, testing=False):
-        """
-        'Next' button has been clicked - try to register with the
-        provided user credentials and return the appropriate result
-        value.
-        """
-
-        # on el5 we can't just move to another page, we have to set the next
-        # page then do an apply. since we've already done our work async, skip
-        # this time through
-        if self._skip_apply_for_page_jump:
-            self._skip_apply_for_page_jump = False
-            # Reset back to first screen in our module in case the user hits back.
-            # The firstboot register screen subclass will handle unregistering
-            # if necessary when it runs again.
-            self.show()
-            return self._RESULT_SUCCESS
-
-        self.interface = interface
-
-        # bad proxy settings can cause socket.error or friends here
-        # see bz #810363
-        try:
-            valid_registration = self.register()
-
-        except socket.error, e:
-            handle_gui_exception(e, e, self.window)
-            return self._RESULT_FAILURE
-
-        # run main_iteration till we have no events, like idle
-        # loop sources, aka, the thread watchers are finished.
-        while gtk.events_pending():
-            gtk.main_iteration()
-
-        if valid_registration:
-            self._cached_credentials = self._get_credentials_hash()
-
-        # finish_registration/skip_remaining_screens should set
-        # __apply_result to RESULT_JUMP
-        return self._apply_result
-
     def close_window(self):
         """
         Overridden from RegisterScreen - we want to bypass the default behavior
@@ -364,49 +319,6 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         signals.
         """
         pass
-
-    def createScreen(self):
-        """
-        Create a new instance of gtk.VBox, pulling in child widgets from the
-        glade file.
-        """
-        self.vbox = gtk.VBox(spacing=10)
-        self.register_dialog = self.get_widget("dialog-vbox6")
-        self.register_dialog.reparent(self.vbox)
-
-        # Get rid of the 'register' and 'cancel' buttons, as we are going to
-        # use the 'forward' and 'back' buttons provided by the firsboot module
-        # to drive the same functionality
-        self._destroy_widget('register_button')
-        self._destroy_widget('cancel_button')
-
-        # In firstboot, we leverage the RHN setup proxy settings already
-        # presented to the user, so hide the choose server screen's proxy
-        # text and button. But, if we are standalone, show our versions.
-        if not self.standalone:
-            screen = self._screens[registergui.CHOOSE_SERVER_PAGE]
-            screen.proxy_frame.destroy()
-
-    def initializeUI(self):
-        # Need to make sure that each time the UI is initialized we reset back
-        # to the main register screen.
-
-        # Note, even if we are standalone firstboot mode (no rhn modules),
-        # we may still have RHN installed, and possibly configured.
-        self._read_rhn_proxy_settings()
-
-        # NOTE: On EL5 this does not appear to be called when the user
-        # presses Back, only when they go through the first time.
-        self.show()
-
-    def focus(self):
-        """
-        Focus the initial UI element on the page, in this case the
-        login name field.
-        """
-        # FIXME:  This is currently broken
-        # login_text = self.glade.get_widget("account_login")
-        # login_text.grab_focus()
 
     def _destroy_widget(self, widget_name):
         """
@@ -489,6 +401,3 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         else:
             self._apply_result = self._RESULT_SUCCESS
             return
-
-# for el5
-childWindow = moduleClass

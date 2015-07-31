@@ -26,11 +26,13 @@ from gtk import SORT_ASCENDING
 from gtk import SELECTION_NONE
 from gtk import STATE_NORMAL
 from gtk import WINDOW_TOPLEVEL
-from gtk import WIN_POS_MOUSE, WIN_POS_CENTER_ON_PARENT
+from gtk import WIN_POS_MOUSE, WIN_POS_CENTER, WIN_POS_CENTER_ON_PARENT
 
 # methods
 from gtk import image_new_from_icon_name
+from gtk import events_pending
 from gtk import main
+from gtk import main_iteration
 from gtk import main_quit
 from gtk import check_version
 
@@ -98,6 +100,7 @@ class WindowType(object):
 
 class WindowPosition(object):
     MOUSE = WIN_POS_MOUSE
+    CENTER = WIN_POS_CENTER
     CENTER_ON_PARENT = WIN_POS_CENTER_ON_PARENT
 
 
@@ -129,6 +132,6 @@ widgets = [AboutDialog, Adjustment, Builder, Button, Calendar, CellRendererPixbu
            RadioButton, SpinButton, TextBuffer, TreeStore, TreeView, TreeViewColumn,
            VBox, Viewport, Window]
 
-methods = [check_version, main, main_quit]
+methods = [check_version, events_pending, main, main_iteration, main_quit]
 
 __all__ = widgets + constants + methods + enums
