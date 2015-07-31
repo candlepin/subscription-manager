@@ -11,6 +11,7 @@ from gtk import FileChooserDialog, FileFilter, Frame, HBox, HButtonBox, Image
 from gtk import Label, ListStore, MessageDialog, RadioButton, SpinButton
 from gtk import TextBuffer
 from gtk import TreeStore, TreeView, TreeViewColumn, VBox, Viewport
+from gtk import Window
 
 # enums
 from gtk import BUTTONBOX_END
@@ -126,7 +127,7 @@ widgets = [AboutDialog, Adjustment, Builder, Button, Calendar, CellRendererPixbu
            Entry, FileChooserDialog, FileFilter, Frame, HBox,
            HButtonBox, Image, Label, ListStore, MessageDialog,
            RadioButton, SpinButton, TextBuffer, TreeStore, TreeView, TreeViewColumn,
-           VBox, Viewport]
+           VBox, Viewport, Window]
 
 methods = [check_version, main, main_quit]
 
