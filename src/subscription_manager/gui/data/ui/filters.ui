@@ -5,7 +5,7 @@
   <object class="GtkWindow" id="filter_product_window">
     <property name="title" translatable="yes">Filter Options</property>
     <property name="icon-name">subscription-manager</property>
-    <property name="type_hint">menu</property>
+    <property name="type_hint">dialog</property>
     <signal handler="on_filter_product_window_delete_event" name="delete_event"/>
     <child>
       <object class="GtkAlignment" id="alignment1">
