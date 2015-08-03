@@ -775,9 +775,12 @@ class UEPConnection:
         """
         self.capabilities = {}
         self.capabilities = self.conn.request_get("/status/")
-        self.capabilities = self.capabilities['managerCapabilities']
-        log.debug("Server has the following capabilities: %s",
-                  self.capabilities)
+        try:
+            self.capabilities = self.capabilities['managerCapabilities']
+            log.debug("Server has the following capabilities: %s",
+                    self.capabilities)
+        except KeyError as e:
+            log.debug("Unable to retrieve managerCapabilities: %s" % str(e))
 
     def has_capability(self, capability):
         """
