@@ -37,6 +37,26 @@ class ConnectionTests(unittest.TestCase):
         self.cp = UEPConnection(username="dummy", password="dummy",
                 handler="/Test/", insecure=True)
 
+    def test_load_manager_capabilities(self):
+        expected_capabilities = ['hypervisors_async', 'cores']
+        proper_status = {'version':'1',
+                         'result':True,
+                         'managerCapabilities':expected_capabilities}
+        improper_status = dict.copy(proper_status)
+        # Remove the managerCapabilities key from the dict
+        del improper_status['managerCapabilities']
+        self.cp.conn = Mock()
+        # The first call will return the proper_status, the second, the improper
+        # status
+        original_getStatus = self.cp.getStatus
+        self.cp.getStatus = Mock(side_effect=[proper_status,
+                                                     improper_status])
+        actual_capabilities = self.cp._load_manager_capabilities()
+        self.assertEquals(sorted(actual_capabilities),
+                          sorted(expected_capabilities))
+        self.assertEquals(None, self.cp._load_manager_capabilities())
+        self.cp.getStatus = original_getStatus
+
     def test_get_environment_by_name_requires_owner(self):
         self.assertRaises(Exception, self.cp.getEnvironment, None, {"name": "env name"})
 
