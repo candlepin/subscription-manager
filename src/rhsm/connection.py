@@ -771,25 +771,23 @@ class UEPConnection:
     def _load_manager_capabilities(self):
         """
         Loads manager capabilities by doing a GET on the status
-        resource located at '/status/'
+        resource located at '/status'
         """
-        self.capabilities = {}
-        self.capabilities = self.conn.request_get("/status/")
-        try:
-            self.capabilities = self.capabilities['managerCapabilities']
-            log.debug("Server has the following capabilities: %s",
-                    self.capabilities)
-        except KeyError as e:
-            log.debug("Unable to retrieve managerCapabilities: %s" % str(e))
+        capabilities = self.getStatus().get('managerCapabilities')
+        if capabilities:
+            log.debug("Server has the following capabilities: %s", capabilities)
+        else:
+            log.debug("Unable to retrieve managerCapabilities")
+        return capabilities
 
     def has_capability(self, capability):
         """
         Check if the server we're connected to has a particular capability.
         """
-        if self.capabilities is None:
-            self._load_manager_capabilities()
+        if not self.capabilities:
+            self.capabilities = self._load_manager_capabilities()
 
-        return capability in self.capabilities
+        return capability in self.capabilities if self.capabilities else False
 
     def shutDown(self):
         self.conn.close()
@@ -861,6 +859,7 @@ class UEPConnection:
             query_params = urlencode({"owner": owner, "env": env})
             url = "/hypervisors?%s" % (query_params)
             res = self.conn.request_post(url, host_guest_mapping)
+        log.debug('lolol')
         return res
 
     def updateConsumerFacts(self, consumer_uuid, facts={}):
