@@ -54,7 +54,7 @@ class ConnectionTests(unittest.TestCase):
         actual_capabilities = self.cp._load_manager_capabilities()
         self.assertEquals(sorted(actual_capabilities),
                           sorted(expected_capabilities))
-        self.assertEquals(None, self.cp._load_manager_capabilities())
+        self.assertEquals([], self.cp._load_manager_capabilities())
         self.cp.getStatus = original_getStatus
 
     def test_get_environment_by_name_requires_owner(self):
