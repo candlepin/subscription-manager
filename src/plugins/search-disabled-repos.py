@@ -19,6 +19,10 @@
 import logging
 import os
 import fnmatch
+import sys
+
+sys.path.append('/usr/share/rhsm')
+from subscription_manager import api
 
 from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 from yum.constants import TS_INSTALL_STATES
@@ -71,9 +75,15 @@ def postverifytrans_hook(conduit):
 
     if prompt_permanently_enable_repos(conduit, helpful_new_repos):
         for repo in helpful_new_repos:
-            # FIXME: replace with API calls
-            os.system('subscription-manager repos --enable=%s' % repo)
-            conduit.info(logging.DEBUG, 'Repo permanently enabled: %s' % repo)
+            try:
+                enabled = api.enable_yum_repositories(repo)
+            except Exception:
+                enabled = 0
+
+            if enabled:
+                conduit.info(logging.DEBUG, 'Repo permanently enabled: %s' % repo)
+            else:
+                conduit.info(logging.DEBUG, 'Failed to permanently enable repo: %s' % repo)
 
 
 def is_repo_important(repo, ignored_repos):
