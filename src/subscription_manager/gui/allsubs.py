@@ -363,9 +363,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 # show pulsating progress bar while we wait for results
                 self.pb = progress.Progress(pb_title, pb_label)
                 self.timer = ga_GObject.timeout_add(100, self.pb.pulse)
-                tl = self.content.get_toplevel()
-                if tl.is_toplevel():
-                    self.pb.set_parent_window(tl)
+                self.pb.set_transient_for(self.parent_win)
 
             # fire off async refresh
             async_stash = async.AsyncPool(self.pool_stash)
@@ -410,11 +408,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.pb = progress.Progress(_("Attaching"),
                 _("Attaching subscription. Please wait."))
         self.timer = ga_GObject.timeout_add(100, self.pb.pulse)
-        content_toplevel = self.content.get_toplevel()
-        # get_toplevel() can return a GtkWindow that is within another
-        # GtkWindow. See the get_toplevel() gtk docs
-        if content_toplevel.is_toplevel():
-            self.pb.set_parent_window(content_toplevel)
+        self.pb.set_transient_for(self.parent_win)
         # Spin off a thread to handle binding the selected pool.
         # After it has completed the actual bind call, available
         # subs will be refreshed, but we won't re-run compliance
@@ -451,10 +445,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.contract_selection = ContractSelectionWindow(
                 self._contract_selected, self._contract_selection_cancelled)
 
-        content_toplevel = self.content.get_toplevel()
-        self.log.debug("content_toplevel %s", content_toplevel)
-        if content_toplevel.is_toplevel():
-            self.contract_selection.set_parent_window(content_toplevel)
+        self.contract_selection.set_parent_window(self.parent_win)
         #self.log.debug("user_data %s", pw.get_user_data())
         merged_pools.sort_virt_to_top()
 
