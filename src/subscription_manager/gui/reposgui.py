@@ -250,7 +250,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
     def _show_progress_bar(self, title, label, progress_parent=None):
         self.pb = progress.Progress(title, label, True)
         self.timer = ga_GObject.timeout_add(100, self.pb.pulse)
-        self.pb.set_parent_window(progress_parent or self._get_dialog_widget())
+        self.pb.set_transient_for(progress_parent or self._get_dialog_widget())
 
     def _clear_progress_bar(self):
         if self.pb:

@@ -168,14 +168,6 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
             'quantity_increment': quantity_increment,
             })
 
-    def toplevel(self):
-        tl = self.get_toplevel()
-        if tl.is_toplevel():
-            return tl
-        else:
-            self.log.debug("no toplevel window?")
-            return None
-
     def set_parent_window(self, window):
         self.log.debug('window %s', window)
         self.contract_selection_window.set_transient_for(window)
