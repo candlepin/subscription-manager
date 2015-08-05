@@ -26,6 +26,7 @@ from subscription_manager import api
 
 from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 from yum.constants import TS_INSTALL_STATES
+from yum import Errors
 
 requires_api_version = '2.7'
 plugin_type = (TYPE_CORE, TYPE_INTERACTIVE)
@@ -61,8 +62,12 @@ def postresolve_hook(conduit):
         old_enabled_repos = set((repo.id for repo in repo_storage.listEnabled()))
         for repo in disabled_repos:
             repo.enable()
-            conduit.info(logging.DEBUG, 'Repo temporarily enabled: %s' % repo.id)
-        repo_storage.populateSack()
+            try:
+                repo_storage.populateSack(which=repo.id)
+                conduit.info(logging.DEBUG, 'Repo temporarily enabled: %s' % repo.id)
+            except Errors.RepoError:
+                repo.disable()
+                conduit.info(logging.DEBUG, 'Failed to temporarily enable repo: %s' % repo.id)
         conduit.getTsInfo().changed = True
 
 
