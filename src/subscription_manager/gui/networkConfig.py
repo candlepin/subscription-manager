@@ -279,7 +279,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
         else:
             self.progress_bar = progress.Progress(_("Testing Connection"), _("Please wait"))
             self.timer = ga_GObject.timeout_add(100, self.progress_bar.pulse)
-            self.progress_bar.set_parent_window(self.networkConfigDialog)
+            self.progress_bar.set_transient_for(self.networkConfigDialog)
 
     def _clear_progress_bar(self):
         if not self.progress_bar:  # progress bar could be none iff self.test_connection is called directly

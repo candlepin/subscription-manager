@@ -75,7 +75,7 @@ class Progress(widgets.SubmanBaseWidget):
     def set_status_label(self, text):
         self.statusLabel.set_text(text)
 
-    def set_parent_window(self, window):
+    def set_transient_for(self, window):
         self.progressWindow.set_transient_for(window)
 
     def _on_delete_event(self, widget, event):
