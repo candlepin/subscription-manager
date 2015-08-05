@@ -9,19 +9,13 @@
 %global use_gtk3 %use_systemd
 %global rhel7_minor %(%{__grep} -o "7.[0-9]*" /etc/redhat-release |%{__sed} -s 's/7.//')
 
-%if 0%{rhel} == 7
-%if (0%{?rhel_7_minor} >= 2)
-# 7.2+
+%if 0%{?rhel} == 7
 %global use_initial_setup 1
 %global use_firstboot 0
 %endif
-# 7+
-%global use_firstboot 1
-%global use_initial_setup 0
-%endif
 
 # 6 < rhel < 7
-%if 0%{rhel} == 6
+%if 0%{?rhel} == 6
 %global use_initial_setup 0
 %global use_firstboot 1
 %endif
