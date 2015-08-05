@@ -3,9 +3,8 @@
 # For optional building of ostree-plugin sub package. Unrelated to systemd
 # but the same versions apply at the moment.
 %global has_ostree %use_systemd
-%global use_old_firstboot 0
-%global use_firstboot 1
-%global use_initial_setup 0
+%global use_firstboot 0
+%global use_initial_setup 1
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
 %global use_gtk3 %use_systemd
 %global rhel7_minor %(%{__grep} -o "7.[0-9]*" /etc/redhat-release |%{__sed} -s 's/7.//')
@@ -19,7 +18,6 @@
 %if 0%{?rhel} == 6
 %global use_initial_setup 0
 %global use_firstboot 1
-%global use_old_firstboot 1
 %endif
 
 %global _hardened_build 1
@@ -197,11 +195,7 @@ subscriptions.
 Summary: Firstboot screens for subscription manager
 Group: System Environment/Base
 Requires: %{name}-gui = %{version}-%{release}
-
-# Required for firstboot before RHEL 7:
-%if %use_old_firstboot
 Requires: rhn-setup-gnome
-%endif
 
 # Fedora can figure this out automatically, but RHEL cannot:
 Requires: librsvg2
@@ -215,7 +209,7 @@ This package contains the firstboot screens for subscription-manager.
 Summary: initial-setup screens for subscription-manager
 Group: System Environment/Base
 Requires: %{name}-gui = %{version}-%{release}
-Requires: initial-setup-gui
+Requires: initial-setup-gui >= 0.3.9.24-1
 Obsoletes: subscription-manager-firstboot < 1.15.3-1
 
 %description -n subscription-manager-initial-setup-addon
@@ -492,11 +486,7 @@ rm -rf %{buildroot}
 %if %use_firstboot
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
-%if %use_old_firstboot
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
-%else
-%{_datadir}/firstboot/modules/rhsm_login.py*
-%endif
 %endif
 
 %files -n subscription-manager-migration
