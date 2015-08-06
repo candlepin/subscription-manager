@@ -49,7 +49,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -542,6 +542,16 @@ fi
 %endif
 
 %changelog
+* Thu Aug 06 2015 Chris Rog <crog@redhat.com> 1.15.9-4
+- Fix spec file build errors (alikins@redhat.com)
+- Require initial-setup >= 0.3.9.24, no fb on el7 (alikins@redhat.com)
+- Remove use of Widget.is_toplevel() (alikins@redhat.com)
+- Only build initial-setup rpm on rhel > 7.1 (alikins@redhat.com)
+- 1243704: Goto error screen on 'cancel' (alikins@redhat.com)
+- Add new api package to RPM. (awood@redhat.com)
+- Turn off ga loading debug messages. (alikins@redhat.com)
+- Specify a thread name for any threads we start. (alikins@redhat.com)
+
 * Fri Jul 31 2015 Chris Rog <crog@redhat.com> 1.15.9-3
 - 1248746: Fix layout of contract dialog (GTK3) (mstead@redhat.com)
 - 1248821: Add Gtk.Window to ga_gtk2.Gtk (alikins@redhat.com)
