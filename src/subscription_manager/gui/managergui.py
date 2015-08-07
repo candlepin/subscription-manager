@@ -268,6 +268,7 @@ class MainWindow(widgets.SubmanBaseWidget):
 
     def _on_cert_check_timer(self):
         self.backend.on_cert_check_timer()
+        return True
 
     def _on_sla_back_button_press(self):
         self._perform_unregister()
