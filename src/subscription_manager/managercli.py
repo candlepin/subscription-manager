@@ -1118,8 +1118,11 @@ class RegisterCommand(UserPassCommand):
             if 'serviceLevel' not in consumer and self.options.service_level:
                 system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not supported "
                                  "by the server. Did not complete your request."))
-            autosubscribe(self.cp, consumer['uuid'],
-                    service_level=self.options.service_level)
+            try:
+                autosubscribe(self.cp, consumer['uuid'],
+                        service_level=self.options.service_level)
+            except connection.RestlibException, re:
+                print(re.msg)
 
         if (self.options.consumerid or self.options.activation_keys or self.autoattach):
             log.info("System registered, updating entitlements if needed")
