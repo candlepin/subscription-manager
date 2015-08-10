@@ -43,7 +43,7 @@ except ImportError:
     subman_version = "unknown"
 
 from rhsm import ourjson as json
-from rhsm.utils import get_env_proxy_info
+from rhsm import utils
 
 global_socket_timeout = 60
 timeout_altered = None
@@ -113,6 +113,7 @@ def drift_check(utc_time_string, hours=1):
             log.error(e)
 
     return drift
+
 
 
 class ConnectionException(Exception):
@@ -264,7 +265,6 @@ class ContentConnection(object):
         self.username = username
         self.password = password
         self.ssl_verify_depth = ssl_verify_depth
-
         self.timeout_altered = False
 
         # get the proxy information from the environment variable
@@ -275,12 +275,16 @@ class ContentConnection(object):
                    'proxy_port': '',
                    'proxy_password': ''}
         else:
-            info = get_env_proxy_info()
+            info = utils.get_env_proxy_info()
 
         self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname') or info['proxy_hostname']
         self.proxy_port = proxy_port or config.get('server', 'proxy_port') or info['proxy_port']
         self.proxy_user = proxy_user or config.get('server', 'proxy_user') or info['proxy_username']
         self.proxy_password = proxy_password or config.get('server', 'proxy_password') or info['proxy_password']
+
+    @property
+    def user_agent(self):
+        return "RHSM-content/1.0 (cmd=%s)" % utils.cmd_name(sys.argv)
 
     def _request(self, request_type, handler, body=None):
         # See note in Restlib._request
@@ -304,7 +308,11 @@ class ContentConnection(object):
 
         set_default_socket_timeout_if_python_2_3()
 
-        conn.request("GET", handler, body="", headers={"Host": "%s:%s" % (self.host, self.ssl_port), "Content-Length": "0"})
+        conn.request("GET", handler,
+                     body="",
+                     headers={"Host": "%s:%s" % (self.host, self.ssl_port),
+                              "Content-Length": "0",
+                              "User-Agent": self.user_agent})
         response = conn.getresponse()
         result = {
             "content": response.read(),
@@ -382,6 +390,9 @@ class Restlib(object):
         self.ssl_port = ssl_port
         self.apihandler = apihandler
         lc = _get_locale()
+
+        # Default, updated by UepConnection
+        self.user_agent = "python-rhsm-user-agent"
 
         self.headers = {"Content-type": "application/json",
                         "Accept": "application/json",
@@ -492,12 +503,16 @@ class Restlib(object):
         else:
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
 
+
         if info is not None:
             body = json.dumps(info, default=json.encode)
         else:
             body = None
 
         log.debug("Making request: %s %s" % (request_type, handler))
+
+        if self.user_agent:
+            self.headers['User-Agent'] = self.user_agent
 
         headers = self.headers
         if body is None:
@@ -665,7 +680,7 @@ class UEPConnection:
                    'proxy_port': '',
                    'proxy_password': ''}
         else:
-            info = get_env_proxy_info()
+            info = utils.get_env_proxy_info()
 
         self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname') or info['proxy_hostname']
         self.proxy_port = proxy_port or config.get('server', 'proxy_port') or info['proxy_port']
@@ -730,6 +745,8 @@ class UEPConnection:
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
                     ssl_verify_depth=self.ssl_verify_depth)
             auth_description = "auth=none"
+
+        self.conn.user_agent = "RHSM/1.0 (cmd=%s)" % utils.cmd_name(sys.argv)
 
         self.resources = None
         self.capabilities = None
