@@ -771,21 +771,27 @@ class UEPConnection:
     def _load_manager_capabilities(self):
         """
         Loads manager capabilities by doing a GET on the status
-        resource located at '/status/'
+        resource located at '/status'
         """
-        self.capabilities = {}
-        self.capabilities = self.conn.request_get("/status/")
-        self.capabilities = self.capabilities['managerCapabilities']
-        log.debug("Server has the following capabilities: %s",
-                  self.capabilities)
+        status = self.getStatus()
+        capabilities = status.get('managerCapabilities')
+        if capabilities is None:
+            log.debug("The status retrieved did not \
+                      include key 'managerCapabilities'.\nStatus:'%s'" % status)
+            capabilities = []
+        elif isinstance(capabilities, list) and not capabilities:
+            log.debug("The managerCapabilities list \
+                      was empty\nStatus:'%s'" % status)
+        else:
+            log.debug("Server has the following capabilities: %s", capabilities)
+        return capabilities
 
     def has_capability(self, capability):
         """
         Check if the server we're connected to has a particular capability.
         """
         if self.capabilities is None:
-            self._load_manager_capabilities()
-
+            self.capabilities = self._load_manager_capabilities()
         return capability in self.capabilities
 
     def shutDown(self):
