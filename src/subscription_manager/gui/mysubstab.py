@@ -150,7 +150,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             self.async_bind.unbind(serial, selection, self._unsubscribe_callback, self._handle_unbind_exception)
         else:
             # unregistered, just delete the certs directly
-            self.backend.entcertlib.delete([serial])
+            self.backend.entcertlib.delete_by_serial(serial)
             self.backend.cs.force_cert_check()
 
     def unsubscribe_button_clicked(self, widget):
