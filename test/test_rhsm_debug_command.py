@@ -74,7 +74,7 @@ class TestCompileCommand(TestCliCommand):
         self.cc.assemble_path = self.assemble_path
 
         self.expected_paths = ["consumer.json", "compliance.json", "entitlements.json",
-                               "pools.json", "version.json", "subscriptions.json",
+                               "pools.json", "version.json",
                                "/etc/rhsm", "/var/log/rhsm", "/var/lib/rhsm",
                                # we use a test specific config, with default values
                                "/etc/pki/product",
@@ -138,7 +138,7 @@ class TestCompileCommand(TestCliCommand):
     # permissions. It will make those dirs in tar.
     def test_command_tar(self):
         try:
-            self.cc.main(["--subscriptions", "--destination", self.path])
+            self.cc.main(["--destination", self.path])
         except SystemExit:
             self.fail("Exception Raised")
 
@@ -158,7 +158,7 @@ class TestCompileCommand(TestCliCommand):
     # permissions. It will make those dirs in tree.
     def test_command_tree(self):
         try:
-            self.cc.main(["--subscriptions", "--destination", self.path, "--no-archive"])
+            self.cc.main(["--destination", self.path, "--no-archive"])
         except SystemExit:
             self.fail("Exception Raised")
 
@@ -168,7 +168,7 @@ class TestCompileCommand(TestCliCommand):
     # sos flag limits included data
     def test_command_sos(self):
         try:
-            self.cc.main(["--subscriptions", "--destination", self.path, "--no-archive", "--sos"])
+            self.cc.main(["--destination", self.path, "--no-archive", "--sos"])
         except SystemExit:
             self.fail("Exception Raised")
 
@@ -183,32 +183,6 @@ class TestCompileCommand(TestCliCommand):
         self._assert_expected_paths_exists()
 
         self._assert_unexpected_paths_do_not_exist(non_sos_paths)
-
-    # Runs the non-tar tree creation.
-    # no-subscriptions flag limits included data
-    def test_command_no_subs(self):
-        try:
-            self.cc.main(["--destination", self.path, "--no-archive", "--no-subscriptions"])
-        except SystemExit:
-            self.fail("Exception Raised")
-
-        self.expected_paths.remove("subscriptions.json")
-        unexpected_paths = ["subscriptions.json"]
-
-        self._assert_expected_paths_exists()
-        self._assert_unexpected_paths_do_not_exist(unexpected_paths)
-
-    def test_command_no_subs_default(self):
-        try:
-            self.cc.main(["--destination", self.path, "--no-archive"])
-        except SystemExit:
-            self.fail("Exception Raised")
-
-        self._assert_no_subs()
-
-    def _assert_no_subs(self):
-        self.expected_paths.remove("subscriptions.json")
-        self._assert_expected_paths_exists()
 
     # Test to see that the filter on copy directory properly skips any -key.pem files
     def test_copy_private_key_filter(self):
