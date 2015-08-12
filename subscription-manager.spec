@@ -49,7 +49,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -544,6 +544,15 @@ fi
 %endif
 
 %changelog
+* Wed Aug 12 2015 Chris Rog <crog@redhat.com> 1.15.9-5
+- 1141128: Imported certificate in detatched scenario not getting deleted
+  (wpoteat@redhat.com)
+- 1221273: Auto-attach failure should not short-circuit other parts of
+  registration (wpoteat@redhat.com)
+- 1185958: Make ostree plugin depend on ostree. (alikins@redhat.com)
+- 1240553: Fix detection of cert dir changes (alikins@redhat.com)
+- Fixing All Subscriptions layout issues (mstead@redhat.com)
+
 * Thu Aug 06 2015 Chris Rog <crog@redhat.com> 1.15.9-4
 - Fix spec file build errors (alikins@redhat.com)
 - Require initial-setup >= 0.3.9.24, no fb on el7 (alikins@redhat.com)
