@@ -534,8 +534,8 @@ class UserPassCommand(CliCommand):
     @property
     def username(self):
         if not self._username:
-            print _("Registering to: %s%s:%s") % \
-                (cfg.get("server", "hostname"), cfg.get("server", "prefix"), cfg.get("server", "port"))
+            print _("Registering to: %s:%s%s") % \
+                (cfg.get("server", "hostname"), cfg.get("server", "port"), cfg.get("server", "prefix"))
             (self._username, self._password) = self._get_username_and_password(
                     self.options.username, self.options.password)
         return self._username
