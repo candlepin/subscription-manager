@@ -19,9 +19,14 @@
 import logging
 import os
 import fnmatch
+import sys
+
+sys.path.append('/usr/share/rhsm')
+from subscription_manager import api
 
 from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 from yum.constants import TS_INSTALL_STATES
+from yum import Errors
 
 requires_api_version = '2.7'
 plugin_type = (TYPE_CORE, TYPE_INTERACTIVE)
@@ -57,8 +62,12 @@ def postresolve_hook(conduit):
         old_enabled_repos = set((repo.id for repo in repo_storage.listEnabled()))
         for repo in disabled_repos:
             repo.enable()
-            conduit.info(logging.DEBUG, 'Repo temporarily enabled: %s' % repo.id)
-        repo_storage.populateSack()
+            try:
+                repo_storage.populateSack(which=repo.id)
+                conduit.info(logging.DEBUG, 'Repo temporarily enabled: %s' % repo.id)
+            except Errors.RepoError:
+                repo.disable()
+                conduit.info(logging.DEBUG, 'Failed to temporarily enable repo: %s' % repo.id)
         conduit.getTsInfo().changed = True
 
 
@@ -71,9 +80,15 @@ def postverifytrans_hook(conduit):
 
     if prompt_permanently_enable_repos(conduit, helpful_new_repos):
         for repo in helpful_new_repos:
-            # FIXME: replace with API calls
-            os.system('subscription-manager repos --enable=%s' % repo)
-            conduit.info(logging.DEBUG, 'Repo permanently enabled: %s' % repo)
+            try:
+                enabled = api.enable_yum_repositories(repo)
+            except Exception:
+                enabled = 0
+
+            if enabled:
+                conduit.info(logging.DEBUG, 'Repo permanently enabled: %s' % repo)
+            else:
+                conduit.info(logging.DEBUG, 'Failed to permanently enable repo: %s' % repo)
 
 
 def is_repo_important(repo, ignored_repos):
