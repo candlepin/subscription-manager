@@ -34,9 +34,11 @@ __all__ = ["RHSMAddonData"]
 class RHSMAddonData(AddonData):
     log = logging.getLogger(__name__)
 
-    def setup(self, storage, ksdata, instclass):
-        super(RHSMAddonData, self).__init__(storage, ksdata, instclass)
+    def setup(self, storage, ksdata, instClass):
+        super(RHSMAddonData, self).setup(storage, ksdata, instClass)
 
         self.log.debug("storage %s", storage)
         self.log.debug("ksdata %s", ksdata)
-        self.log.debug("instclass %s", instclass)
+        self.log.debug("instClass %s", instClass)
+
+    # NOTE: no execute() or handle_line() yet
