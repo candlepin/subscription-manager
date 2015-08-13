@@ -275,8 +275,9 @@ class EntCertUpdateAction(object):
 
     def delete_by_serial(self, serial):
         for ent in self.entitlement_dir.list():
-            if str(ent.serial == selection['serial']):
+            if str(ent.serial) == serial:
                 ent.delete()
+
 
 class EntitlementCertBundlesInstaller(object):
     """Install a list of entitlement cert bundles.
