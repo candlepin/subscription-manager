@@ -72,18 +72,13 @@ class OstreeContentUpdateActionCommand(object):
         # populate config, handle exceptions
         self.load_config(ostree_repo_config)
 
-        report = OstreeContentUpdateActionReport()
-
         # return the composed set of EntitledContents
         entitled_contents = find_content(self.ent_source,
                                          content_type=OSTREE_CONTENT_TYPE)
 
         # update repo configs
-        updates = self.update_config(ostree_repo_config,
+        report = self.update_config(ostree_repo_config,
                                      contents=entitled_contents)
-
-        report.orig_remotes = list(updates.orig.remotes)
-        report.remote_updates = list(updates.new.remotes)
 
         # reload the new config, so we have fresh remotes, etc
         self.load_config(ostree_repo_config)
@@ -98,15 +93,27 @@ class OstreeContentUpdateActionCommand(object):
     def update_config(self, ostree_config, contents):
         """Update the remotes configured in a OstreeConfig."""
 
+        report = OstreeContentUpdateActionReport()
+
         updates_builder = \
             model.OstreeConfigUpdatesBuilder(ostree_config,
                                              contents=contents)
         updates = updates_builder.build()
 
+        for remote in updates.orig.remotes:
+            if remote in updates.new.remotes:
+                report.remote_updates.append(remote)
+            else:
+                report.remote_deleted.append(remote)
+
+        for remote in updates.new.remotes:
+            if remote not in updates.orig.remotes:
+                report.remote_added.append(remote)
+
         updates.apply()
         updates.save()
 
-        return updates
+        return report
 
     def load_config(self, ostree_config):
         try:
@@ -147,7 +154,7 @@ class OstreeContentUpdateActionReport(certlib.ActionReport):
         s.append(_("Updates:"))
         s.append(self._format_remotes(self.remote_updates))
         s.append(_("Added:"))
-        s.append(self._format_remotes(self.remote_updates))
+        s.append(self._format_remotes(self.remote_added))
         s.append(_("Deleted:"))
-        s.append(self._format_remotes(self.orig_remotes))
+        s.append(self._format_remotes(self.remote_deleted))
         return '\n'.join(s)
