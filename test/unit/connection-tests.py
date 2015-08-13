@@ -20,7 +20,8 @@ import unittest
 from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
         BadCertificateException, RestlibException, GoneException, NetworkException, \
         RemoteServerException, drift_check, ExpiredIdentityCertException, UnauthorizedException, \
-        ForbiddenException, AuthenticationException, set_default_socket_timeout_if_python_2_3
+        ForbiddenException, AuthenticationException, set_default_socket_timeout_if_python_2_3, \
+        RateLimitExceededException
 
 from mock import Mock, patch
 from datetime import date
@@ -157,9 +158,11 @@ class RestlibValidateResponseTests(unittest.TestCase):
         self.request_type = "GET"
         self.handler = "https://server/path"
 
-    def vr(self, status, content):
+    def vr(self, status, content, headers=None):
         response = {'status': status,
                     'content': content}
+        if headers:
+            response['headers'] = headers
         #print "response", response
         self.restlib.validateResponse(response, self.request_type, self.handler)
 
@@ -346,6 +349,26 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.assertEquals("410", e.code)
         else:
             self.fail("Should have raised a GoneException")
+
+    def test_429_empty(self):
+        try:
+            self.vr("429", "")
+        except RateLimitExceededException, e:
+            self.assertEquals("429", e.code)
+        else:
+            self.fail("Should have raised a RateLimitExceededException")
+
+    def test_429_body(self):
+        content = u'{"errors": ["TooFast"]}'
+        headers = {'Retry-After': 20}
+        try:
+            self.vr("429", content, headers)
+        except RateLimitExceededException, e:
+            self.assertEquals(20, e.retry_after)
+            self.assertEquals("TooFast", e.msg)
+            self.assertEquals("429", e.code)
+        else:
+            self.fail("Should have raised a RateLimitExceededException")
 
     def test_500_empty(self):
         try:
