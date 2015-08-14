@@ -369,6 +369,9 @@ class TestRegisterCommand(TestCliProxyCommand):
     def test_keys_and_consumerid(self):
         self._test_exception(["--consumerid", "22", "--activationkey", "key"])
 
+    def test_force_and_consumerid(self):
+        self._test_exception(["--consumerid", "22", "--force"])
+
     def test_key_and_org(self):
         self._test_no_exception(["--activationkey", "key", "--org", "org"])
 

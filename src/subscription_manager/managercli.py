@@ -992,6 +992,8 @@ class RegisterCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("Error: Must use --auto-attach with --servicelevel."))
         elif (self.options.activation_keys and not self.options.org):
             system_exit(os.EX_USAGE, _("Error: Must provide --org with activation keys."))
+        elif (self.options.force and self.options.consumerid):
+            system_exit(os.EX_USAGE, _("Error: Can not force registration while attempting to recover registration with consumerid. Please use --force without --consumerid to re-register or --refresh"))
 
     def persist_server_options(self):
         """
