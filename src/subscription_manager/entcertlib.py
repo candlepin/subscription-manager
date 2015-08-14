@@ -273,11 +273,6 @@ class EntCertUpdateAction(object):
                                    rogue_count) % rogue_count
             self.ent_dir.refresh()
 
-    def delete_by_serial(self, serial):
-        for ent in self.entitlement_dir.list():
-            if str(ent.serial) == serial:
-                ent.delete()
-
 
 class EntitlementCertBundlesInstaller(object):
     """Install a list of entitlement cert bundles.

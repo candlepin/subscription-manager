@@ -25,6 +25,7 @@ from subscription_manager.ga import GdkPixbuf as ga_GdkPixbuf
 
 from subscription_manager.async import AsyncBind
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
+from subscription_manager.entcertlib import EntCertDeleteAction
 from subscription_manager import injection as inj
 
 from subscription_manager.gui import messageWindow, progress
@@ -150,8 +151,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             self.async_bind.unbind(serial, selection, self._unsubscribe_callback, self._handle_unbind_exception)
         else:
             # unregistered, just delete the certs directly
-            self.backend.entcertlib.delete_by_serial(serial)
-            self.backend.cs.force_cert_check()
+            action = EntCertDeleteAction(self.entitlement_dir)
+            action.perform([serial])
+            self.update_subscriptions()
 
     def unsubscribe_button_clicked(self, widget):
         selection = widgets.SelectionWrapper(self.top_view.get_selection(), self.store)
