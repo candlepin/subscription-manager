@@ -49,7 +49,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -542,6 +542,16 @@ fi
 %endif
 
 %changelog
+* Fri Aug 14 2015 Chris Rog <crog@redhat.com> 1.15.9-6
+- 1141128: Subscriptions need refresh after imported cert removed
+  (wpoteat@redhat.com)
+- 1185958: Remove ostree plugins req on ostree (alikins@redhat.com)
+- 1150150: Ostree update report should log updates in proper section
+  (wpoteat@redhat.com)
+- 1251610: Port and prefix were reversed in connection URL statement
+  (wpoteat@redhat.com)
+- 1141128: Clean up and correct for style (wpoteat@redhat.com)
+
 * Wed Aug 12 2015 Chris Rog <crog@redhat.com> 1.15.9-5
 - 1141128: Imported certificate in detatched scenario not getting deleted
   (wpoteat@redhat.com)
