@@ -876,6 +876,9 @@ class QuantitySelectionColumn(ga_Gtk.TreeViewColumn):
                                                       text=self.quantity_store_idx)
         self.set_cell_data_func(self.quantity_renderer, self._update_cell_based_on_data)
 
+        self.set_max_width(100)
+        self.set_min_width(100)
+
     def _setup_editor(self, cellrenderer, editable, path):
         # Only allow numeric characters.
         editable.set_property("numeric", True)
