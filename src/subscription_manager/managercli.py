@@ -305,7 +305,7 @@ class CliCommand(AbstractCLICommand):
         self.parser.add_option("--serverurl", dest="server_url",
                                default=None, help=_("server URL in the form of https://hostname:port/prefix"))
         self.parser.add_option("--insecure", action="store_true",
-                                default=False, help=_("do not check the server SSL certificate against available certificate authorities"))
+                                default=False, help=_("do not check the entitlement server SSL certificate against available certificate authorities"))
 
     def _add_proxy_options(self):
         """ Add proxy options that apply to sub-commands that require network connections. """
