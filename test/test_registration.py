@@ -101,7 +101,7 @@ class CliRegistrationTests(SubManFixture):
 
         mock_entcertlib_instance = mock_entcertlib.return_value
 
-        connection.UEPConnection.getConsumer = Mock(return_value={'uuid': '123123','type': {'manifest': False}})
+        connection.UEPConnection.getConsumer = Mock(return_value={'uuid': '123123', 'type': {'manifest': False}})
 
         self._inject_ipm()
         cmd.main(['register', '--consumerid=123456', '--username=testuser1', '--password=password', '--org=test_org'])
@@ -119,7 +119,7 @@ class CliRegistrationTests(SubManFixture):
         connection.UEPConnection = StubUEP
         self._inject_mock_invalid_consumer()
         cmd = RegisterCommand()
-        connection.UEPConnection.getConsumer = Mock(return_value={'uuid': '123123','type': {'manifest': True}})
+        connection.UEPConnection.getConsumer = Mock(return_value={'uuid': '123123', 'type': {'manifest': True}})
         self._inject_ipm()
         sys.stderr = MockStderr()
 
