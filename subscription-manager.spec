@@ -49,7 +49,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -542,6 +542,14 @@ fi
 %endif
 
 %changelog
+* Wed Aug 19 2015 Chris Rog <crog@redhat.com> 1.15.9-7
+- search-disabled-repos: ignore failed temporarily enabled repos
+  (vmukhame@redhat.com)
+- search-disabled-repos: replace CLI with API calls for enabling repos
+  permanently (vmukhame@redhat.com)
+- 1253275: Fix initial-setup ks mode (alikins@redhat.com)
+- 1246429: Stop spinbutton from blocking quantity (alikins@redhat.com)
+
 * Fri Aug 14 2015 Chris Rog <crog@redhat.com> 1.15.9-6
 - 1141128: Subscriptions need refresh after imported cert removed
   (wpoteat@redhat.com)
