@@ -12,9 +12,11 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import os
+import sys
 from mock import Mock, NonCallableMock, patch
 
-from stubs import StubUEP
+from stubs import StubUEP, MockStderr
 
 import rhsm.connection as connection
 
@@ -99,7 +101,7 @@ class CliRegistrationTests(SubManFixture):
 
         mock_entcertlib_instance = mock_entcertlib.return_value
 
-        connection.UEPConnection.getConsumer = Mock(return_value={'uuid': '123123'})
+        connection.UEPConnection.getConsumer = Mock(return_value={'uuid': '123123', 'type': {'manifest': False}})
 
         self._inject_ipm()
         cmd.main(['register', '--consumerid=123456', '--username=testuser1', '--password=password', '--org=test_org'])
@@ -107,6 +109,26 @@ class CliRegistrationTests(SubManFixture):
         #self.assertTrue(mock_ipm.write_cache.call_count > 0)
 
         self.assertTrue(mock_entcertlib_instance.update.called)
+
+    def test_consumerid_with_distributor_id(self):
+
+        def get_consumer(self, *args, **kwargs):
+            pass
+
+        StubUEP.getConsumer = get_consumer
+        connection.UEPConnection = StubUEP
+        self._inject_mock_invalid_consumer()
+        cmd = RegisterCommand()
+        connection.UEPConnection.getConsumer = Mock(return_value={'uuid': '123123', 'type': {'manifest': True}})
+        self._inject_ipm()
+        sys.stderr = MockStderr()
+
+        try:
+            cmd.main(['register', '--consumerid=TaylorSwift', '--username=testuser1', '--password=password', '--org=test_org'])
+            self.fail("No Exception Raised")
+        except SystemExit, e:
+            self.assertEquals(e.code, os.EX_USAGE)
+        sys.stderr = sys.__stderr__
 
     def test_strip_username_and_password(self):
 
