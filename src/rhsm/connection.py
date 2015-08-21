@@ -115,7 +115,6 @@ def drift_check(utc_time_string, hours=1):
     return drift
 
 
-
 class ConnectionException(Exception):
     pass
 
@@ -137,9 +136,10 @@ class BadCertificateException(ConnectionException):
 
 class RestlibException(ConnectionException):
 
-    def __init__(self, code, msg=None):
+    def __init__(self, code, msg=None, headers=None):
         self.code = code
         self.msg = msg or ""
+        self.headers = headers or {}
 
     def __str__(self):
         return self.msg
@@ -190,6 +190,17 @@ class AuthenticationException(RemoteServerException):
         buf += "\n"
         buf += "%s: Invalid credentials for request." % self.prefix
         return buf
+
+
+class RateLimitExceededException(RestlibException):
+    def __init__(self, code,
+                 msg=None,
+                 headers=None):
+        super(RateLimitExceededException, self).__init__(code,
+                                                         msg)
+        self.headers = headers or {}
+        self.msg = msg or ""
+        self.retry_after = safe_int(self.headers.get('Retry-After'))
 
 
 class UnauthorizedException(AuthenticationException):
@@ -316,7 +327,8 @@ class ContentConnection(object):
         response = conn.getresponse()
         result = {
             "content": response.read(),
-            "status": response.status}
+            "status": response.status,
+            "headers": dict(response.getheaders())}
 
         return result
 
@@ -503,7 +515,6 @@ class Restlib(object):
         else:
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
 
-
         if info is not None:
             body = json.dumps(info, default=json.encode)
         else:
@@ -534,6 +545,7 @@ class Restlib(object):
         result = {
             "content": response.read(),
             "status": response.status,
+            "headers": dict(response.getheaders())
         }
 
         response_log = 'Response: status=' + str(result['status'])
@@ -588,10 +600,15 @@ class Restlib(object):
                 # had more meaningful exceptions. We've gotten a response from
                 # the server that means something.
 
+                error_msg = self._parse_msg_from_error_response_body(parsed)
+                if str(response['status']) in ['429']:
+                    raise RateLimitExceededException(response['status'],
+                                                     error_msg,
+                                                     headers=response.get('headers'))
+
                 # FIXME: we can get here with a valid json response that
                 # could be anything, we don't verify it anymore
-                error_msg = self._parse_msg_from_error_response_body(parsed)
-                raise RestlibException(response['status'], error_msg)
+                raise RestlibException(response['status'], error_msg, response.get('headers'))
             else:
                 # This really needs an exception mapper too...
                 if str(response['status']) in ["404", "410", "500", "502", "503", "504"]:
@@ -606,6 +623,9 @@ class Restlib(object):
                     raise ForbiddenException(response['status'],
                                              request_type=request_type,
                                              handler=handler)
+                elif str(response['status']) in ['429']:
+                    raise RateLimitExceededException(response['status'])
+
                 else:
                     # unexpected with no valid content
                     raise NetworkException(response['status'])
