@@ -52,6 +52,8 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
     mainWidgetName = "RHSMSpokeWindow"
 
     uiFile = "rhsm_gui.ui"
+    
+    helpFile = "SubscriptionManagerSpoke.xml"
 
     category = SystemCategory
 
