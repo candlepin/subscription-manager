@@ -19,7 +19,7 @@
         <property name="AtkObject::accessible-name" translatable="yes">manage_repositories_dialog</property>
       </object>
     </child>
-    <signal name="delete-event" handler="on_dialog_delete_event" swapped="no"/>
+    <signal name="delete-event" handler="on_dialog_delete_event" />
     <child internal-child="vbox">
       <object class="GtkVBox" id="main_container">
         <property name="visible">True</property>
@@ -240,7 +240,7 @@
                     <property name="AtkObject::accessible-name" translatable="yes">remove_all_overrides_button</property>
                   </object>
                 </child>
-                <signal name="clicked" handler="on_reset_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_reset_button_clicked" />
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -255,7 +255,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_apply_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_apply_button_clicked" />
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -275,7 +275,7 @@
                     <property name="AtkObject::accessible-name" translatable="yes">close_button</property>
                   </object>
                 </child>
-                <signal name="clicked" handler="on_close_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_close_button_clicked" />
               </object>
               <packing>
                 <property name="expand">False</property>
