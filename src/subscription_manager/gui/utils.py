@@ -149,9 +149,15 @@ def format_exception(e, msg, format_msg=True, log_msg=None):
     return message
 
 
+# FIXME: This should be in messageWindow.py (or better, removed)
 def show_error_window(message, parent=None):
     messageWindow.ErrorDialog(messageWindow.wrap_text(message),
-            parent)
+                              parent)
+
+
+def show_info_window(message, parent=None):
+    messageWindow.InfoDialog(messageWindow.wrap_text(message),
+                             parent)
 
 
 def linkify(msg):
