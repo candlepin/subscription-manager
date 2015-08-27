@@ -96,7 +96,7 @@ class BuilderFileBasedWidget(FileBasedGui):
         builder_based_widget = cls()
         builder_based_widget.gui_file = builder_file
 
-        #print "ga", ga.GTK_BUILDER_FILES_DIR
+        builder_based_widget.builder.set_translation_domain('rhsm')
         builder_based_widget.gui_file_suffix = ga_gtk_compat.GTK_BUILDER_FILES_SUFFIX
         builder_based_widget.file_dir = ga_gtk_compat.GTK_BUILDER_FILES_DIR
 
