@@ -534,8 +534,6 @@ class UserPassCommand(CliCommand):
     @property
     def username(self):
         if not self._username:
-            print _("Registering to: %s:%s%s") % \
-                (cfg.get("server", "hostname"), cfg.get("server", "port"), cfg.get("server", "prefix"))
             (self._username, self._password) = self._get_username_and_password(
                     self.options.username, self.options.password)
         return self._username
@@ -1043,6 +1041,8 @@ class RegisterCommand(UserPassCommand):
         # Proceed with new registration:
         try:
             if not self.options.activation_keys:
+                print _("Registering to: %s:%s%s") % \
+                    (cfg.get("server", "hostname"), cfg.get("server", "port"), cfg.get("server", "prefix"))
                 self.cp_provider.set_user_pass(self.username, self.password)
                 admin_cp = self.cp_provider.get_basic_auth_cp()
             else:
