@@ -487,12 +487,19 @@ coverage-jenkins:
 #
 # gettext, po files, etc
 #
-
 po/POTFILES.in:
 	# generate the POTFILES.in file expected by intltool. it wants one
 	# file per line, but we're lazy.
 	find $(SRC_DIR)/ $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) -name "*.py" > po/POTFILES.in
-	find $(SRC_DIR)/gui/data/ -name "*.glade" >> po/POTFILES.in
+	find $(SRC_DIR)/gui/data/glade/ -name "*.glade" >> po/POTFILES.in
+	# intltool-update doesn't recognize .ui as glade files, so
+	# build a dir of .glade symlinks to the .ui files and add to POTFILES.in
+	mkdir -p po/tmp_ui_links
+	for ui_file in ./$(SRC_DIR)/gui/data/ui/*.ui ; do \
+		ui_base=$$(basename "$$ui_file") ; \
+		ln -f -s "../../$$ui_file" "po/tmp_ui_links/$$ui_base.glade" ; \
+	done ;
+	find po/tmp_ui_links/ -name "*.glade"  >> po/POTFILES.in
 	find $(BIN_DIR) -name "*-to-rhsm" >> po/POTFILES.in
 	find $(BIN_DIR) -name "subscription-manager*" >> po/POTFILES.in
 	find $(BIN_DIR) -name "rct" >> po/POTFILES.in
