@@ -5,7 +5,8 @@
 #
 
 # options common to all subcommands (+ 3rd level opts for simplicity)
-_subscription_manager_common_opts="-h --help --proxy --proxyuser --proxypassword"
+_subscription_manager_help_opts="-h --help"
+_subscription_manager_common_opts="--proxy --proxyuser --proxypassword ${_subscription_manager_help_opts}"
 _subscription_manager_common_url_opts="--insecure --serverurl"
 # complete functions for subcommands ($1 - current opt, $2 - previous opt)
 
@@ -204,7 +205,7 @@ _subscription_manager()
   # top-level commands and options
   opts="attach auto-attach clean config environments facts identity import list orgs
         repo-override plugins redeem refresh register release remove repos service-level status
-        subscribe unregister unsubscribe version"
+        subscribe unregister unsubscribe version ${_subscription_manager_help_opts}"
 
   case "${first}" in
       clean|\
