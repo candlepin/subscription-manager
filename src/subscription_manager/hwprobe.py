@@ -28,6 +28,8 @@ import socket
 from subprocess import PIPE, Popen
 import sys
 
+from subscription_manager import cpuinfo
+
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -388,8 +390,29 @@ class Hardware:
     def check_for_cpu_topo(self, cpu_topo_dir):
         return os.access(cpu_topo_dir, os.R_OK)
 
+    def get_proc_cpuinfo(self):
+        proc_cpuinfo = {}
+        fact_namespace = 'proc_cpuinfo'
+
+        # FIXME: This is still pretty ugly for what seems so simple.
+        uname_machine = self.unameinfo['uname.machine']
+        proc_cpuinfo_source = cpuinfo.SystemCpuInfoFactory.from_uname_machine(uname_machine)
+
+        for key, value in proc_cpuinfo_source.cpu_info.common.items():
+            proc_cpuinfo['%s.common.%s' % (fact_namespace, key)] = value
+
+        # NOTE: cpu_info.other is a potentially ordered non-uniq list, so may
+        # not make sense for shoving into a list.
+        for key, value in proc_cpuinfo_source.cpu_info.other:
+            proc_cpuinfo['%s.system.%s' % (fact_namespace, key)] = value
+
+        # we could enumerate each processor here as proc_cpuinfo.cpu.3.key =
+        # value, but that is a lot of fact table entries
+        self.allhw.update(proc_cpuinfo)
+        return proc_cpuinfo
+
     def get_cpu_info(self):
-        self.cpuinfo = {}
+        cpu_info = {}
         # we also have cpufreq, etc in this dir, so match just the numbs
         cpu_re = r'cpu([0-9]+$)'
 
@@ -417,7 +440,7 @@ class Hardware:
 
         # for systems with no cpus
         if not cpu_files:
-            return self.cpuinfo
+            return cpu_info
 
         cpu_count = len(cpu_files)
 
@@ -446,7 +469,7 @@ class Hardware:
         # sometimes it's not there, particularly on rhel5
         if threads_per_core and cores_per_cpu:
             cores_per_socket = cores_per_cpu / threads_per_core
-            self.cpuinfo["cpu.topology_source"] = "kernel /sys cpu sibling lists"
+            cpu_info["cpu.topology_source"] = "kernel /sys cpu sibling lists"
 
             # rhel6 s390x can have /sys cpu topo, but we can't make assumption
             # about it being evenly distributed, so if we also have topo info
@@ -461,7 +484,7 @@ class Hardware:
 
                     # verify the sysinfo has system level virt info
                     if sysinfo:
-                        self.cpuinfo["cpu.topology_source"] = "s390x sysinfo"
+                        cpu_info["cpu.topology_source"] = "s390x sysinfo"
                         socket_count = sysinfo['socket_count']
                         book_count = sysinfo['book_count']
                         sockets_per_book = sysinfo['sockets_per_book']
@@ -494,13 +517,13 @@ class Hardware:
 
                 if socket_count:
                     log.debug("Using ppc64 cpu physical id for cpu topology info")
-                    self.cpuinfo["cpu.topology_source"] = "ppc64 physical_package_id"
+                    cpu_info["cpu.topology_source"] = "ppc64 physical_package_id"
 
             else:
                 # all of our usual methods failed us...
                 log.debug("No cpu socket info found for real or virtual hardware")
                 # so we can track if we get this far
-                self.cpuinfo["cpu.topology_source"] = "fallback one socket"
+                cpu_info["cpu.topology_source"] = "fallback one socket"
                 socket_count = cpu_count
 
             # for some odd cases where there are offline ppc64 cpu's,
@@ -511,7 +534,7 @@ class Hardware:
             # for s390x with sysinfo topo, we use the sysinfo numbers except
             # for cpu_count, which takes offline cpus into account. This is
             # mostly just to match lscpu behaviour here
-            if self.cpuinfo["cpu.topology_source"] != "s390x sysinfo":
+            if cpu_info["cpu.topology_source"] != "s390x sysinfo":
                 socket_count = cpu_count / cores_per_socket / threads_per_core
 
         # s390 etc
@@ -530,30 +553,30 @@ class Hardware:
             if book_siblings_per_cpu:
                 book_count = cpu_count / book_siblings_per_cpu
                 sockets_per_book = book_count / socket_count
-                self.cpuinfo["cpu.topology_source"] = "s390 book_siblings_list"
+                cpu_info["cpu.topology_source"] = "s390 book_siblings_list"
                 books = True
 
         # we should always know this...
-        self.cpuinfo["cpu.cpu(s)"] = cpu_count
+        cpu_info["cpu.cpu(s)"] = cpu_count
 
         # these may be unknown...
         if socket_count:
-            self.cpuinfo['cpu.cpu_socket(s)'] = socket_count
+            cpu_info['cpu.cpu_socket(s)'] = socket_count
         if cores_per_socket:
-            self.cpuinfo['cpu.core(s)_per_socket'] = cores_per_socket
+            cpu_info['cpu.core(s)_per_socket'] = cores_per_socket
         if threads_per_core:
-            self.cpuinfo["cpu.thread(s)_per_core"] = threads_per_core
+            cpu_info["cpu.thread(s)_per_core"] = threads_per_core
 
         if book_siblings_per_cpu:
-            self.cpuinfo["cpu.book(s)_per_cpu"] = book_siblings_per_cpu
+            cpu_info["cpu.book(s)_per_cpu"] = book_siblings_per_cpu
 
         if books:
-            self.cpuinfo["cpu.socket(s)_per_book"] = sockets_per_book
-            self.cpuinfo["cpu.book(s)"] = book_count
+            cpu_info["cpu.socket(s)_per_book"] = sockets_per_book
+            cpu_info["cpu.book(s)"] = book_count
 
-        log.debug("cpu info: %s" % self.cpuinfo)
-        self.allhw.update(self.cpuinfo)
-        return self.cpuinfo
+        log.debug("cpu info: %s" % cpu_info)
+        self.allhw.update(cpu_info)
+        return cpu_info
 
     def get_ls_cpu_info(self):
         # if we have `lscpu`, let's use it for facts as well, under
@@ -826,6 +849,7 @@ class Hardware:
         hardware_methods = [self.get_uname_info,
                             self.get_release_info,
                             self.get_mem_info,
+                            self.get_proc_cpuinfo,
                             self.get_cpu_info,
                             self.get_ls_cpu_info,
                             self.get_network_info,
