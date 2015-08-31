@@ -15,6 +15,7 @@
 
 import errno
 import gettext
+import optparse
 import os
 import sys
 import shutil
@@ -61,16 +62,18 @@ class SystemCommand(CliCommand):
         self.parser.add_option("--sos", action='store_true',
                                default=False, dest="sos",
                                help=_("only data not already included in sos report will be collected"))
-        # The default is to not collect org level subscriptions info. The
-        # --subscriptions option can be used to include that.
-        # "--no-subscriptions" is now the default, but keep it for
-        # cli backwards compatibility.
-        self.parser.add_option("--no-subscriptions", action='store_false',
-                               dest="include_subs",
-                               help=_("exclude subscription data (default)"))
+        # These options don't do anything anymore, since current versions of
+        # RHSM api doesn't support it, and previously they failed silently.
+        # So now they are hidden, and they are not hooked up to anything. This
+        # avoids breaking existing scripts, since it also didn't do anything
+        # before. See rhbz #1246680
+        self.parser.add_option("--no-subscriptions", action='store_true',
+                               dest="placeholder_for_subscriptions_option",
+                               default=False, help=optparse.SUPPRESS_HELP)
         self.parser.add_option("--subscriptions", action='store_true',
-                               default=False, dest="include_subs",
-                               help=_("include subscription data"))
+                               dest="placeholder_for_subscriptions_option",
+                               default=False, help=optparse.SUPPRESS_HELP)
+
         self.assemble_path = ASSEMBLE_DIR
 
         # so we can track the path of the archive for tests.
@@ -90,6 +93,9 @@ class SystemCommand(CliCommand):
                         "must exist on the same file system as the "
                         "data assembly directory '%s'." % (self.options.destination, self.assemble_path))
                 raise InvalidCLIOptionError(msg)
+        # In case folks are using this in a script
+        if self.options.placeholder_for_subscriptions_option:
+            log.info("The rhsm-debug options '--subscriptions' and '--no-subscriptions' have no effect now.")
 
     def _dirs_on_same_device(self, dir1, dir2):
         return os.stat(dir1).st_dev == os.stat(dir2).st_dev
@@ -113,12 +119,6 @@ class SystemCommand(CliCommand):
             self._makedir(content_path)
 
             owner = self.cp.getOwner(consumer.uuid)
-            if self.options.include_subs:
-                try:
-                    self._write_flat_file(content_path, "subscriptions.json",
-                                      self.cp.getSubscriptionList(owner['key']))
-                except Exception, e:
-                    log.warning("Server does not allow retrieval of subscriptions by owner.")
 
             self._write_flat_file(content_path, "consumer.json",
                                   self.cp.getConsumer(consumer.uuid))
