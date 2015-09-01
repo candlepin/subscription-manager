@@ -26,8 +26,14 @@ from fixture import Capture, SubManFixture, temp_file
 from optparse import OptionParser
 from textwrap import dedent
 
+from nose import SkipTest
+
 from subscription_manager import injection as inj
-from subscription_manager.migrate import migrate
+try:
+    from subscription_manager.migrate import migrate
+except ImportError:
+    raise SkipTest("Couldn't import rhn modules for migration tests")
+
 from subscription_manager.certdirectory import ProductDirectory
 
 
