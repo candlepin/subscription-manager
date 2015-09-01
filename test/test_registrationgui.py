@@ -11,10 +11,14 @@ from subscription_manager.gui.registergui import RegisterWidget, \
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.ga import Gtk as ga_Gtk
 
+import sys
+
 
 class RegisterWidgetTests(SubManFixture):
     def setUp(self):
         super(RegisterWidgetTests, self).setUp()
+        self.exc_infos = []
+        self.excs = []
         self.backend = StubBackend()
         expected_facts = {'fact1': 'one',
                           'fact2': 'two',
@@ -33,43 +37,79 @@ class RegisterWidgetTests(SubManFixture):
     def test_show(self):
         self.rs.initialize()
 
+    def page_notify_handler(self, obj, param):
+        page_after = obj.get_current_page()
+        # NOTE: these exceptions are not in the nost test context,
+        #       so they don't actually fail nose
+        try:
+            self.assertEquals(page_after, 0)
+        except Exception:
+            self.exc_infos.append(sys.exc_info())
+            return
+
+        self.correct_page = True
+        self.gtk_quit()
+        return False
+
+    def error_handler(self, obj, msg, exc_info):
+        page_after = self.rs.register_notebook.get_current_page()
+
+        # NOTE: these exceptions are not in the nost test context,
+        #       so they don't actually fail nose
+        try:
+            self.assertEquals(page_after, 0)
+        except Exception:
+            self.exc_infos.append(sys.exc_info())
+            return
+
+        self.correct_page = True
+        self.gtk_quit()
+        return False
+
+    def emit_proceed(self):
+        self.rs.emit('proceed')
+        return False
+
+    def emit_error(self):
+        self.rs.emit('register-error', 'Some register error', None)
+        return False
+
     # FIXME: unit tests for gtk is a weird universe
     def test_registration_error_returns_to_page(self):
         self.rs.initialize()
 
         self.correct_page = None
 
-        def error_handler(obj, msg, exc_info):
-            page_after = self.rs.register_notebook.get_current_page()
+        self.rs.register_notebook.connect('notify::page', self.page_notify_handler)
 
-            # NOTE: these exceptions are not in the nost test context,
-            #       so they don't actually fail nose
-            self.assertEquals(page_after, 0)
-            self.correct_page = True
-            self.quit()
+        self.rs.connect('register-error', self.error_handler)
 
-        def emit_proceed():
-            self.rs.emit('proceed')
-            return False
-
-        def emit_error():
-            self.rs.emit('register-error', 'Some register error', None)
-            return False
-
-        self.rs.connect('register-error', error_handler)
-
-        ga_GObject.timeout_add(250, self.quit)
-        ga_GObject.idle_add(emit_proceed)
-        ga_GObject.idle_add(emit_error)
+        ga_GObject.timeout_add(3000, self.gtk_quit_on_fail)
+        ga_GObject.idle_add(self.emit_proceed)
+        ga_GObject.idle_add(self.emit_error)
 
         # run till quit or timeout
         # if we get to the state we want we can call quit
         ga_Gtk.main()
 
-        # verify class scope self.correct_page got set correct in error handler
+        # If we saw any exceptions, raise them now so we fail nosetests
+        for exc_info in self.exc_infos:
+            raise exc_info[1], None, exc_info[2]
+
         self.assertTrue(self.correct_page)
 
-    def quit(self):
+    # if we got the right answer, go ahead and end gtk.main()
+    def gtk_quit(self):
+        ga_Gtk.main_quit()
+
+    # End the main loop, but first add an exception to sys.exc_info so
+    # the end of the tests can fail on it.
+    def gtk_quit_on_fail(self):
+        try:
+            self.fail("registergui didn't get a signal before the timeout.")
+        except Exception:
+            self.exc_infos.append(sys.exc_info())
+
         ga_Gtk.main_quit()
 
 

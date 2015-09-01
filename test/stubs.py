@@ -442,7 +442,7 @@ class StubUEP(object):
     def getCertificateSerials(self, consumer):
         return []
 
-    def getCompliance(self, uuid):
+    def getCompliance(self, uuid, on_data=None):
         return {}
 
     def getEntitlementList(self, uuid):
