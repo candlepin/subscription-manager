@@ -1917,7 +1917,7 @@ class ReposCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
         rc = 0
-        if cfg.has_option('rhsm', 'manage_repos') and not int(cfg.get('rhsm', 'manage_repos')):
+        if cfg.has_option('rhsm', 'manage_repos') and not cfg.get_int('rhsm', 'manage_repos'):
             print _("Repositories disabled by configuration.")
             return rc
 
