@@ -49,7 +49,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -542,6 +542,13 @@ fi
 %endif
 
 %changelog
+* Wed Sep 02 2015 Chris Rog <crog@redhat.com> 1.15.9-8
+- 884288: Better registergui for initial-setup (alikins@redhat.com)
+- Fix 'make gladelint' errors in repositories.glade (alikins@redhat.com)
+- 1254349: Move registering to message (vrjain@redhat.com)
+- 1257460: Set text domain on Gtk.Builder widgets (alikins@redhat.com)
+- 1207247: Insecure parameter needs more explanation (wpoteat@redhat.com)
+
 * Wed Aug 19 2015 Chris Rog <crog@redhat.com> 1.15.9-7
 - search-disabled-repos: ignore failed temporarily enabled repos
   (vmukhame@redhat.com)
