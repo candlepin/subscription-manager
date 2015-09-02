@@ -12,7 +12,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.16.1
+Version: 1.16.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -74,6 +74,11 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Sep 02 2015 Alex Wood <awood@redhat.com> 1.16.2-1
+- Adds RateLimitExceededException which is raised in response to 429 from the
+  remote host (csnyder@redhat.com)
+- 1242057: This cert is no longer used and can be removed (wpoteat@redhat.com)
+
 * Thu Aug 13 2015 Alex Wood <awood@redhat.com> 1.16.1-1
 - 1247890: KeyErrors are now caught when checking manager capabilities
   (csnyder@redhat.com)
