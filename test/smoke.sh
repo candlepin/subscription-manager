@@ -1,5 +1,15 @@
 #!/bin/bash
 
+sudo grep '^hostname.*=.*subscription.*.redhat.com' /etc/rhsm/rhsm.conf
+USING_HOSTED=$?
+
+if [[ ${USING_HOSTED} == "0" ]] ; then
+    echo '* You do not want to run smoke.sh against prod or stage. *'
+    echo
+    echo 'smoke.sh wants rhsm.conf pointed at a standalone candlepin '
+    echo 'with test_data loaded.'
+    exit 1
+fi
 # if we should run subman under any tool
 # like 'time' or 'strace' or profilers, etc
 #wrapper="/usr/bin/time"
