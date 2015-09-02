@@ -48,7 +48,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.16.1
+Version: 1.16.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -542,6 +542,25 @@ fi
 %endif
 
 %changelog
+* Wed Sep 02 2015 Alex Wood <awood@redhat.com> 1.16.2-1
+- 884288: Better registergui for initial-setup (alikins@redhat.com)
+- 1254349: move Resgistering to message (vrjain@redhat.com)
+- 1257460: Set text domain on Gtk.Builder widgets (alikins@redhat.com)
+- 1246680: Hide rhsm-debug --subscriptions options (alikins@redhat.com)
+- Set help file name for the Subscription Manager spoke
+  (martin.kolman@gmail.com)
+- 1246680: Remove subscriptions from rhsm-debug (wpoteat@redhat.com)
+- Enabled help options on first tab (seanokeeffe797@gmail.com)
+- 1207247: Insecure parameter needs more explanation (wpoteat@redhat.com)
+- 1253275: Fix initial-setup ks mode (alikins@redhat.com)
+- Stopped --consumerid = distributor id (vrjain@redhat.com)
+- 1246429: Stop spinbutton from blocking quantity (alikins@redhat.com)
+- 1185958: Remove ostree plugins req on ostree (alikins@redhat.com)
+- Do not allow using --force with --consumerid (vrjain@redhat.com)
+- 1141128: Subscriptions need refresh after imported cert removed
+  (wpoteat@redhat.com)
+- x86_64 and aarch /proc/cpuinfo module (alikins@redhat.com)
+
 * Thu Aug 13 2015 Alex Wood <awood@redhat.com> 1.16.1-1
 - 1150150: Ostree update report should log updates in proper section
   (wpoteat@redhat.com)
