@@ -257,7 +257,9 @@ def get_installed_product_status(product_directory, entitlement_directory, uep, 
 
     return product_status
 
-
+def managed_repos_disabled():
+    return cfg.has_option('rhsm', 'manage_repos') and not int(cfg.get('rhsm', 'manage_repos'))
+    
 class CliCommand(AbstractCLICommand):
     """ Base class for all sub-commands. """
 
@@ -1923,7 +1925,7 @@ class ReposCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
         rc = 0
-        if cfg.has_option('rhsm', 'manage_repos') and not int(cfg.get('rhsm', 'manage_repos')):
+        if managed_repos_disabled():
             print _("Repositories disabled by configuration.")
             return rc
 
@@ -2482,13 +2484,18 @@ class OverrideCommand(CliCommand):
         self._request_validity_check()
 
         overrides = Overrides()
-
+        
+        if managed_repos_disabled():
+                print _("Repositories disabled by configuration.")
+              
         if self.options.list:
             results = overrides.get_overrides(self.identity.uuid)
             if results:
                 self._list(results, self.options.repos)
             else:
                 print _("This system does not have any content overrides applied to it.")
+                    
+             
             return
 
         if self.options.additions:
