@@ -191,7 +191,7 @@ class RepoUpdateActionCommand(object):
         self.manage_repos = 1
         self.apply_overrides = apply_overrides
         if CFG.has_option('rhsm', 'manage_repos'):
-            self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
+            self.manage_repos = CFG.get_int('rhsm', 'manage_repos')
 
         self.release = None
         self.overrides = {}
@@ -684,7 +684,7 @@ class RepoFile(ConfigParser):
         self.repos_dir = Path.abs(self.PATH)
         self.manage_repos = 1
         if CFG.has_option('rhsm', 'manage_repos'):
-            self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
+            self.manage_repos = CFG.get_int('rhsm', 'manage_repos')
         # Simulate manage repos turned off if no yum.repos.d directory exists.
         # This indicates yum is not installed so clearly no need for us to
         # manage repos.
