@@ -70,6 +70,10 @@ endif
 YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
 ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR)
 
+find_py_files = $(wildcard $(dir)/*.py)
+PYFILES := $(foreach dir,$(ALL_SRC_DIRS),$(find_py_files))
+PYCFILES := $(addsuffix c,$(PYFILES))
+
 # sets a version that is more or less latest tag plus commit sha
 VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
 
@@ -88,6 +92,7 @@ build: set-versions rhsmcertd rhsm-icon
 Makefile: ;
 
 clean: clean-versions
+	rm -rf $(PYCFILES)
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
 	rm -f bin/rhsmcertd
 	rm -f bin/rhsm-icon
@@ -100,7 +105,6 @@ RHSMCERTD_FLAGS = `pkg-config --cflags --libs glib-2.0`
 
 ICON_FLAGS=`pkg-config --cflags --libs "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
 
-PYFILES := `find $(ALL_SRC_DIRS) -name "*.py"`
 EXAMPLE_PLUGINS_PYFILES := `find "$(EXAMPLE_PLUGINS_SRC_DIR)/*.py"`
 # Ignore certdata.py from style checks as tabs and trailing
 # whitespace are required for testing.
@@ -470,11 +474,25 @@ desktop-files: etc-conf/rhsm-icon.desktop \
 %.desktop: %.desktop.in po
 	intltool-merge -d po $< $@
 
-check:
+check: clean build stylish nose tito smoke
+
+.PHONY: nose
+nose:
+	python setup.py -q nosetests
+
+.PHONY: nose-dev
+nose-dev:
 	python setup.py -q nosetests -c playpen/noserc.dev
 
+.PHONY: smoke
 smoke:
 	test/smoke.sh
+
+# This could check for uncommited changes since tito
+# will ignore those.
+.PHONY: tito
+tito:
+	tito build --test --rpm
 
 coverage: coverage-jenkins
 
