@@ -365,6 +365,8 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 	install -m 644 -p $(SRC_DIR)/plugin/*.py $(PYTHON_INST_DIR)/plugin
 	install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/
 
+	install -m 644 -p $(SRC_DIR)/gui/authors.txt $(PYTHON_INST_DIR)/gui/
+
 	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager-gui
 
 

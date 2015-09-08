@@ -35,9 +35,11 @@ LICENSE = _("\nThis software is licensed to you under the GNU General Public Lic
             "granted to use or replicate Red Hat trademarks that are incorporated "
             "in this software or its documentation.\n")
 
-UPDATE_FILE = '/var/run/rhsm/update'
-
 prefix = os.path.dirname(__file__)
+
+authors = [line.strip() for line in open("%s/authors.txt" % prefix, 'r')]
+
+UPDATE_FILE = '/var/run/rhsm/update'
 
 
 class AboutDialog(object):
@@ -48,6 +50,7 @@ class AboutDialog(object):
         self.dialog.set_modal(True)
         self.dialog.set_name(_("Subscription Manager"))
         self.dialog.set_license(LICENSE)
+        self.dialog.set_authors(authors)
         self.dialog.set_wrap_license(True)
         if not get_running_as_firstboot():
             self.dialog.set_website("https://fedorahosted.org/subscription-manager/")
