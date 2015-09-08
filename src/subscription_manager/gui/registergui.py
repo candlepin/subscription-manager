@@ -863,7 +863,7 @@ class SelectSLAScreen(Screen):
     """
     screen_enum = SELECT_SLA_PAGE
     widget_names = Screen.widget_names + ['product_list_label',
-                                          'sla_radio_container',
+                                          'sla_combobox',
                                           'owner_treeview']
     gui_file = "selectsla"
 
@@ -872,34 +872,51 @@ class SelectSLAScreen(Screen):
 
         self.pre_message = _("Finding suitable service levels")
         self.button_label = _("Next")
+        self.list_store = ga_Gtk.ListStore(str, ga_GObject.TYPE_PYOBJECT)
+
+        self.sla_combobox.set_model(self.list_store)
+        self.sla_combobox.connect('changed', self._on_sla_combobox_changed)
+        renderer_text = ga_Gtk.CellRendererText()
+        self.sla_combobox.pack_start(renderer_text, True)
+        self.sla_combobox.add_attribute(renderer_text, 'text', 0)
+
+    def _on_sla_combobox_changed(self, combobox):
+        tree_iter = combobox.get_active_iter()
+        if tree_iter is not None:
+            model = combobox.get_model()
+            sla, sla_data_map = model[tree_iter][:2]
+            self.info.set_property('dry-run-result',
+                                           sla_data_map[sla])
 
     def set_model(self, unentitled_prod_certs, sla_data_map):
         self.product_list_label.set_text(
                 self._format_prods(unentitled_prod_certs))
-        group = None
+
+        self.list_store.clear()
         # reverse iterate the list as that will most likely put 'None' last.
         # then pack_start so we don't end up with radio buttons at the bottom
         # of the screen.
         for sla in reversed(sla_data_map.keys()):
-            radio = ga_Gtk.RadioButton(group=group, label=sla)
-            radio.connect("toggled",
-                          self._radio_clicked,
-                          (sla, sla_data_map))
-            self.sla_radio_container.pack_start(radio, expand=False,
-                                                fill=False, padding=0)
-            radio.show()
-            group = radio
-
+            self.list_store.append([sla, sla_data_map])
+            # radio = ga_Gtk.RadioButton(group=group, label=sla)
+            # radio.connect("toggled",
+            #              self._radio_clicked,
+            #              (sla, sla_data_map))
+            # self.sla_radio_container.pack_start(radio, expand=False,
+            #                                    fill=False, padding=0)
+            # radio.show()
+            # group = radio
         # set the initial radio button as default selection.
-        group.set_active(True)
+#        group.set_active(True)
+        self.sla_combobox.set_model(self.list_store)
+        self.sla_combobox.set_active(0)
 
     def apply(self):
         self.emit('move-to-screen', CONFIRM_SUBS_PAGE)
 
     def clear(self):
-        child_widgets = self.sla_radio_container.get_children()
-        for child in child_widgets:
-            self.sla_radio_container.remove(child)
+        self.list_store.clear()
+        self.sla_combobox.set_model(self.list_store)
 
     def _radio_clicked(self, button, data):
         sla, sla_data_map = data
@@ -1641,8 +1658,12 @@ class AsyncBackend(object):
             if current_sla or dry_run.covers_required_products():
                 suitable_slas[sla] = dry_run
 
+        import pprint
+        log.debug("suitable_slas=%s", pprint.pformat(suitable_slas))
         # why do we call cert_sorter stuff in the return?
-        return (current_sla, self.backend.cs.unentitled_products.values(), suitable_slas)
+        return (current_sla,
+                self.backend.cs.unentitled_products.values(),
+                suitable_slas)
 
     def _find_service_levels(self, consumer_uuid, facts, callback):
         """
