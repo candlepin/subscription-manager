@@ -1,35 +1,42 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 2.16 -->
-  <!-- interface-naming-policy project-wide -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="container">
-    <property name="orientation">vertical</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="valign">start</property>
+    <property name="vexpand">True</property>
+    <property name="orientation">vertical</property>
     <child>
       <object class="GtkBox" id="main_vbox">
-        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="border_width">15</property>
-        <property name="spacing">15</property>
+        <property name="valign">start</property>
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="label98">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="vexpand">True</property>
+            <property name="xpad">4</property>
+            <property name="ypad">4</property>
+            <property name="label" translatable="yes">This assistant will guide you through the process of registering your system with Red Hat to receive software updates and other benefits. </property>
+            <property name="wrap">True</property>
+            <property name="width_chars">48</property>
+            <property name="max_width_chars">64</property>
+            <property name="lines">5</property>
             <property name="xalign">0</property>
             <property name="yalign">0</property>
-            <property name="label" translatable="yes">This assistant will guide you through the process of registering your system with Red Hat to receive software updates and other benefits. You will need the following to register:</property>
-            <property name="wrap">True</property>
             <child internal-child="accessible">
-              <object class="AtkObject" id="a11y-label981">
+              <object class="AtkObject" id="label98-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes">This assistant will guide you through the process of registering your system with Red Hat to receive software updates and other benefits. You will need the following to register:</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -37,21 +44,35 @@
           <object class="GtkAlignment" id="alignment4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="valign">start</property>
             <property name="xalign">0</property>
             <property name="yalign">0</property>
-            <property name="left_padding">9</property>
+            <property name="left_padding">4</property>
             <child>
               <object class="GtkBox" id="vbox15">
-                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">5</property>
+                <property name="valign">start</property>
+                <property name="margin_top">4</property>
+                <property name="margin_bottom">4</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel" id="label35">
+                  <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="label" translatable="yes"> You will need the following to register:</property>
+                    <property name="wrap">True</property>
+                    <property name="width_chars">48</property>
+                    <property name="max_width_chars">64</property>
+                    <property name="lines">5</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">&#x2022; A network connection</property>
+                    <property name="yalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="label1-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">This assistant will guide you through the process of registering your system with Red Hat to receive software updates and other benefits. You will need the following to register:</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -60,16 +81,17 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label36">
+                  <object class="GtkLabel" id="label35">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="label" translatable="yes">• A network connection</property>
+                    <property name="wrap">True</property>
+                    <property name="ellipsize">end</property>
+                    <property name="max_width_chars">64</property>
+                    <property name="lines">2</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">&#x2022; Your account login</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="a11y-label361">
-                        <property name="AtkObject::accessible-name" translatable="yes">Your account login</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -78,11 +100,22 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label152">
+                  <object class="GtkLabel" id="label36">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="label" translatable="yes">• Your account login</property>
+                    <property name="wrap">True</property>
+                    <property name="ellipsize">end</property>
+                    <property name="max_width_chars">64</property>
+                    <property name="lines">2</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">&#x2022; The address of a subscription management service (optional)</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="label36-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Your account login</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -90,42 +123,64 @@
                     <property name="position">2</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkLabel" id="label152">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="label" translatable="yes">• The address of a subscription management service (optional)</property>
+                    <property name="wrap">True</property>
+                    <property name="ellipsize">end</property>
+                    <property name="max_width_chars">64</property>
+                    <property name="lines">2</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
               </object>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="hbox9">
-            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="valign">start</property>
+            <property name="margin_top">4</property>
+            <property name="margin_bottom">4</property>
+            <property name="orientation">vertical</property>
             <child>
               <object class="GtkButton" id="why_register_button">
                 <property name="label" translatable="yes">_Why Should I Register?</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="valign">start</property>
+                <property name="margin_left">16</property>
+                <property name="margin_right">16</property>
                 <property name="use_underline">True</property>
-                <signal handler="on_why_register_button_clicked" name="clicked"/>
+                <signal name="clicked" handler="on_why_register_button_clicked" swapped="no"/>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="a11y-why_register_button1">
+                  <object class="AtkObject" id="why_register_button-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">Why Should I Register?</property>
                   </object>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">False</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
@@ -136,19 +191,24 @@
         </child>
         <child>
           <object class="GtkBox" id="skip_vbox">
-            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="border_width">5</property>
-            <property name="spacing">5</property>
+            <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel" id="label57">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
+                <property name="halign">start</property>
+                <property name="margin_left">4</property>
+                <property name="margin_top">4</property>
                 <property name="label" translatable="yes">Would you like to register your system at this time? &lt;b&gt;(Strongly recommended.)&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
                 <property name="wrap">True</property>
+                <property name="ellipsize">end</property>
+                <property name="width_chars">48</property>
+                <property name="max_width_chars">64</property>
+                <property name="lines">4</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -157,35 +217,57 @@
               </packing>
             </child>
             <child>
-              <object class="GtkRadioButton" id="register_radio">
-                <property name="label" translatable="yes">_Yes, I'd like to register now.</property>
+              <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">start</property>
+                <property name="margin_left">8</property>
+                <property name="margin_right">8</property>
+                <property name="margin_top">4</property>
+                <property name="vexpand">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkRadioButton" id="register_radio">
+                    <property name="label" translatable="yes">_Yes, I'd like to register now.</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0.5</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="skip_radio">
+                    <property name="label" translatable="yes">_No, I prefer to register at a later time.</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
                 <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="skip_radio">
-                <property name="label" translatable="yes">_No, I prefer to register at a later time.</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
-                <property name="group">register_radio</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -215,22 +297,22 @@
     <property name="deletable">False</property>
     <child>
       <object class="GtkBox" id="vbox21">
-        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">20</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">10</property>
         <child>
           <object class="GtkLabel" id="label119">
             <property name="width_request">600</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
-            <property name="yalign">0</property>
             <property name="label" translatable="yes">Registering your system with Red Hat allows you to take full advantage of the benefits of a paid subscription, including:</property>
             <property name="wrap">True</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0</property>
             <child internal-child="accessible">
-              <object class="AtkObject" id="a11y-label1191">
+              <object class="AtkObject" id="label119-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes">Registering your system with Red Hat allows you to take full advantage of the benefits of a paid subscription, including:</property>
               </object>
             </child>
@@ -243,11 +325,23 @@
         </child>
         <child>
           <object class="GtkBox" id="hbox16">
-            <property name="orientation">horizontal</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <placeholder/>
+              <object class="GtkAspectFrame" id="aspectframe1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">none</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <object class="GtkButton" id="back_to_reg_button">
@@ -256,9 +350,9 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <signal handler="on_back_to_reg_button_clicked" name="clicked"/>
+                <signal name="clicked" handler="on_back_to_reg_button_clicked" swapped="no"/>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="a11y-back_to_reg_button1">
+                  <object class="AtkObject" id="back_to_reg_button-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">Close</property>
                   </object>
                 </child>
@@ -285,17 +379,17 @@
             <property name="left_padding">15</property>
             <child>
               <object class="GtkBox" id="vbox14">
-                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">5</property>
                 <child>
                   <object class="GtkLabel" id="label61">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Security &amp;amp; Updates:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -310,7 +404,6 @@
                     <property name="left_padding">15</property>
                     <child>
                       <object class="GtkBox" id="hbox24">
-                        <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">8</property>
@@ -319,7 +412,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="icon_name">up2date</property>
-                            <property name="icon-size">5</property>
+                            <property name="icon_size">5</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -332,10 +425,10 @@
                             <property name="width_request">460</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Receive the latest software updates, including security updates, keeping this Red Hat Enterprise Linux system &lt;b&gt;updated&lt;/b&gt; and &lt;b&gt;secure&lt;/b&gt;.</property>
                             <property name="use_markup">True</property>
                             <property name="wrap">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -356,9 +449,9 @@
                   <object class="GtkLabel" id="label63">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Downloads &amp;amp; Upgrades:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -373,7 +466,6 @@
                     <property name="left_padding">15</property>
                     <child>
                       <object class="GtkBox" id="hbox25">
-                        <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">8</property>
@@ -382,7 +474,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="stock">gtk-cdrom</property>
-                            <property name="icon-size">5</property>
+                            <property name="icon_size">5</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -395,10 +487,10 @@
                             <property name="width_request">460</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Download installation images for Red Hat Enterprise Linux releases, including new releases.</property>
                             <property name="use_markup">True</property>
                             <property name="wrap">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -419,9 +511,9 @@
                   <object class="GtkLabel" id="label65">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Support:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -436,7 +528,6 @@
                     <property name="left_padding">15</property>
                     <child>
                       <object class="GtkBox" id="hbox26">
-                        <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">8</property>
@@ -445,7 +536,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="stock">gtk-help</property>
-                            <property name="icon-size">5</property>
+                            <property name="icon_size">5</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -458,10 +549,10 @@
                             <property name="width_request">460</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Access to the technical support experts at Red Hat or Red Hat's partners for help with any issues you might encounter with this system.</property>
                             <property name="use_markup">True</property>
                             <property name="wrap">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -482,11 +573,11 @@
                   <object class="GtkLabel" id="label67">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Management:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">0</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="a11y-label671">
+                      <object class="AtkObject" id="label67-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes">Management</property>
                       </object>
                     </child>
@@ -504,7 +595,6 @@
                     <property name="left_padding">15</property>
                     <child>
                       <object class="GtkBox" id="hbox27">
-                        <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">8</property>
@@ -513,7 +603,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="stock">gtk-paste</property>
-                            <property name="icon-size">5</property>
+                            <property name="icon_size">5</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -526,12 +616,12 @@
                             <property name="width_request">460</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Manage subscriptions and systems registered to Customer Portal via access.redhat.com or through one of our other subscription management services.</property>
                             <property name="use_markup">True</property>
                             <property name="wrap">True</property>
+                            <property name="xalign">0</property>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="a11y-label681">
+                              <object class="AtkObject" id="label68-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes">Manage subscriptions and systems registered to Customer Portal via access.redhat.com or through one of our other subscription management services.</property>
                               </object>
                             </child>
@@ -562,7 +652,6 @@
         </child>
         <child>
           <object class="GtkBox" id="hbox15">
-            <property name="orientation">horizontal</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">5</property>
