@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <requires lib="gtk+" version="2.24"/>
-  <!-- interface-naming-policy project-wide -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
   <object class="GtkImage" id="facts_image">
     <property name="visible">True</property>
@@ -24,9 +24,40 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-add</property>
   </object>
+  <object class="GtkImage" id="proxy_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-network</property>
+  </object>
+  <object class="GtkImage" id="redeem_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-goto-first</property>
+  </object>
+  <object class="GtkImage" id="register_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-connect</property>
+  </object>
+  <object class="GtkImage" id="settings_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-preferences</property>
+  </object>
+  <object class="GtkImage" id="settings_image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-preferences</property>
+  </object>
+  <object class="GtkImage" id="unregister_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-disconnect</property>
+  </object>
   <object class="GtkWindow" id="main_window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Subscription Manager</property>
+    <property name="window_position">center</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
     <property name="icon_name">subscription-manager</property>
@@ -35,9 +66,9 @@
     </accel-groups>
     <child>
       <object class="GtkBox" id="vbox1">
-        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkMenuBar" id="menubar1">
             <property name="visible">True</property>
@@ -60,8 +91,8 @@
                         <property name="use_underline">True</property>
                         <property name="image">register_image</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="r" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_register_menu_item_activate" swapped="no"/>
+                        <accelerator key="r" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -72,8 +103,8 @@
                         <property name="use_underline">True</property>
                         <property name="image">unregister_image</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="u" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_unregister_menu_item_activate" swapped="no"/>
+                        <accelerator key="u" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -90,8 +121,8 @@
                         <property name="use_underline">True</property>
                         <property name="image">import_cert_img</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="i" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_import_cert_menu_item_activate" swapped="no"/>
+                        <accelerator key="i" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -102,8 +133,8 @@
                         <property name="use_underline">True</property>
                         <property name="image">redeem_image</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="e" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_redeem_menu_item_activate" swapped="no"/>
+                        <accelerator key="e" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -114,8 +145,8 @@
                         <property name="use_underline">True</property>
                         <property name="image">facts_image</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="f" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_view_facts_menu_item_activate" swapped="no"/>
+                        <accelerator key="f" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -126,8 +157,8 @@
                         <property name="use_underline">True</property>
                         <property name="image">proxy_image</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_proxy_config_menu_item_activate" swapped="no"/>
+                        <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -138,8 +169,8 @@
                         <property name="use_underline">True</property>
                         <property name="image">settings_image1</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_repos_menu_item_activate" swapped="no"/>
+                        <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -150,8 +181,8 @@
                         <property name="use_underline">True</property>
                         <property name="image">settings_image</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="p" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_preferences_menu_item_activate" swapped="no"/>
+                        <accelerator key="p" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -193,8 +224,8 @@
                         <property name="use_underline">True</property>
                         <property name="image">getting_started_image</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="h" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_getting_started_menu_item_activate" swapped="no"/>
+                        <accelerator key="h" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -205,8 +236,8 @@
                         <property name="use_underline">True</property>
                         <property name="image">image1</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="o" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_online_docs_menu_item_activate" swapped="no"/>
+                        <accelerator key="o" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -223,8 +254,8 @@
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <property name="accel_group">accelgroup1</property>
-                        <accelerator key="a" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_about_menu_item_activate" swapped="no"/>
+                        <accelerator key="a" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                   </object>
@@ -279,35 +310,5 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkImage" id="proxy_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-network</property>
-  </object>
-  <object class="GtkImage" id="redeem_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-goto-first</property>
-  </object>
-  <object class="GtkImage" id="register_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-connect</property>
-  </object>
-  <object class="GtkImage" id="settings_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-preferences</property>
-  </object>
-  <object class="GtkImage" id="settings_image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-preferences</property>
-  </object>
-  <object class="GtkImage" id="unregister_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-disconnect</property>
   </object>
 </interface>
