@@ -316,8 +316,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
         # Unset backend from attempting to use basic auth
         if activation_keys:
-            self.async.cp_provider.set_user_pass()
-            self.async.update()
+            self.async.set_user_pass()
 
     def _on_details_label_txt_change(self, obj, value):
         """Update the label under the progress bar on progress page."""
@@ -1436,7 +1435,7 @@ class AsyncBackend(object):
     def update(self):
         self.backend.update()
 
-    def set_user_pass(self, username, password):
+    def set_user_pass(self, username=None, password=None):
         self.backend.cp_provider.set_user_pass(username, password)
         self.backend.update()
 
