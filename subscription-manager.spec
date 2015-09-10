@@ -49,7 +49,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 8%{?dist}
+Release: 9%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -542,6 +542,14 @@ fi
 %endif
 
 %changelog
+* Thu Sep 10 2015 Chris Rog <crog@redhat.com> 1.15.9-9
+- 1261572: Re-initialize() RegisterWidget on RegDialog show
+  (alikins@redhat.com)
+- 1254550: Fix activation key usage in gui. (alikins@redhat.com)
+- 1251853: Manage repos config entry needs to allow blank value
+  (wpoteat@redhat.com)
+- Use Notebook 'page' prop notify signal for tests (alikins@redhat.com)
+
 * Wed Sep 02 2015 Chris Rog <crog@redhat.com> 1.15.9-8
 - 884288: Better registergui for initial-setup (alikins@redhat.com)
 - Fix 'make gladelint' errors in repositories.glade (alikins@redhat.com)
