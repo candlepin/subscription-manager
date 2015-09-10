@@ -1301,7 +1301,10 @@ class RedeemCommand(CliCommand):
             profile_mgr = inj.require(inj.PROFILE_MANAGER)
             profile_mgr.update_check(self.cp, self.identity.uuid)
 
-            self.cp.activateMachine(self.identity.uuid, self.options.email, self.options.locale)
+            # BZ 1248833 Ensure we print out the display message if we get any back
+            response = self.cp.activateMachine(self.identity.uuid, self.options.email, self.options.locale)
+            if response and response.get('displayMessage'):
+                system_exit(0, response.get('displayMessage'))
 
         except connection.RestlibException, e:
             #candlepin throws an exception during activateMachine, even for
