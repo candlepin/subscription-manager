@@ -508,42 +508,55 @@ class RegisterDialog(widgets.SubmanBaseWidget):
         self.connect_signals(callbacks)
 
         self.reg_info = RegisterInfo()
-        # FIXME: Need better error handling in general, but it's kind of
-        # annoying to have to pass the top level widget all over the place
-        self.register_widget = RegisterWidget(backend, facts,
-                                              reg_info=self.reg_info,
-                                              parent_window=self.register_dialog)
 
-        # Ensure that we start on the first page and that
-        # all widgets are cleared.
-        self.register_widget.initialize()
-
+        # RegisterWidget is a oect, but not a Gtk.Widget
+        self.register_widget = self.create_register_widget(backend, facts, self.reg_info,
+                                                           self.register_dialog)
+        # But RegisterWidget.register_widget is a Gtk.Widget, so add it to
+        # out container
         self.register_dialog_main_vbox.pack_start(self.register_widget.register_widget,
                                                   True, True, 0)
 
+        # reset/clear/setup
+        self.register_widget.initialize()
+
         self.register_button.connect('clicked', self._on_register_button_clicked)
         self.cancel_button.connect('clicked', self.cancel)
-
-        # initial-setup will likely handle these itself
-        self.register_widget.connect('finished', self.cancel)
-        self.register_widget.connect('register-error', self.on_register_error)
-
-        # update window title on register state changes
-        self.register_widget.info.connect('notify::register-state',
-                                           self._on_register_state_change)
-
-        # update the 'next/register button on page change'
-        self.register_widget.connect('notify::register-button-label',
-                                     self._on_register_button_label_change)
 
         self.window = self.register_dialog
 
         # FIXME: needed by firstboot
         self.password = None
 
+    def create_register_widget(self, backend, facts, reg_info, parent_window):
+
+        # FIXME: Need better error handling in general, but it's kind of
+        # annoying to have to pass the top level widget all over the place
+        register_widget = RegisterWidget(backend=backend,
+                                         facts=facts,
+                                         reg_info=reg_info,
+                                         parent_window=parent_window)
+
+        # Ensure that we start on the first page and that
+        # all widgets are cleared.
+        register_widget.initialize()
+
+        # initial-setup will likely handle these itself
+        register_widget.connect('finished', self.cancel)
+        register_widget.connect('register-error', self.on_register_error)
+
+        # update window title on register state changes
+        register_widget.info.connect('notify::register-state',
+                                      self._on_register_state_change)
+
+        # update the 'next/register button on page change'
+        register_widget.connect('notify::register-button-label',
+                                self._on_register_button_label_change)
+
+        return register_widget
+
     def initialize(self):
-        self.register_widget.clear_screens()
-        # self.register_widget.initialize()
+        self.register_widget.initialize()
 
     def show(self):
         # initial-setup module skips this, since it results in a
