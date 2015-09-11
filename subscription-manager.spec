@@ -49,7 +49,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 9%{?dist}
+Release: 10%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -542,6 +542,10 @@ fi
 %endif
 
 %changelog
+* Fri Sep 11 2015 Chris Rog <crog@redhat.com> 1.15.9-10
+- 1248833: Ensure the displayMessage is displayed regardless of success or
+  failure (csnyder@redhat.com)
+
 * Thu Sep 10 2015 Chris Rog <crog@redhat.com> 1.15.9-9
 - 1261572: Re-initialize() RegisterWidget on RegDialog show
   (alikins@redhat.com)
