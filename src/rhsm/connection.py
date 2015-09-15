@@ -147,8 +147,15 @@ class RestlibException(ConnectionException):
 
 class GoneException(RestlibException):
     """
-    GoneException - used to detect when a consumer has been deleted on the
-    candlepin side.
+    GoneException is used to detect when a consumer has been deleted on the candlepin side.
+
+    A client handling a GoneException should verify that GoneException.deleted_id
+    matches the consumer uuid before taking any action (like deleting the consumer
+    cert from disk).
+
+    This is to prevent an errant 410 response from candlepin (or a reverse_proxy in
+    front of it, or it's app server, or an injected response) from causing
+    accidental consumer cert deletion.
     """
     def __init__(self, code, msg, deleted_id):
         # Exception doesn't inherit from object on el5 python version
@@ -503,7 +510,6 @@ class Restlib(object):
         else:
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
 
-
         if info is not None:
             body = json.dumps(info, default=json.encode)
         else:
@@ -576,13 +582,16 @@ class Restlib(object):
                     log.exception(e)
 
             if parsed:
-                # find and raise a GoneException on '410' with 'deleteId' in the
-                # content, implying that the resource has been deleted
+                # Find and raise a GoneException on '410' with 'deleteId' in the
+                # content, implying that the resource has been deleted.
+
                 # NOTE: a 410 with a unparseable content will raise
-                # RemoteServerException
+                # RemoteServerException and will not cause the client
+                # to delete the consumer cert.
                 if str(response['status']) == "410":
                     raise GoneException(response['status'],
-                        parsed['displayMessage'], parsed['deletedId'])
+                                        parsed['displayMessage'],
+                                        parsed['deletedId'])
 
                 # I guess this is where we would have an exception mapper if we
                 # had more meaningful exceptions. We've gotten a response from
