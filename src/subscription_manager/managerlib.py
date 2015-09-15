@@ -33,7 +33,7 @@ from subscription_manager.facts import Facts
 from subscription_manager.injection import require, CERT_SORTER, \
         IDENTITY, ENTITLEMENT_STATUS_CACHE, \
         PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE, \
-        POOLTYPE_CACHE
+        POOLTYPE_CACHE, RELEASE_STATUS_CACHE
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoActionInvoker
@@ -849,14 +849,23 @@ def clean_all_data(backup=True):
     else:
         log.warn("Entitlement cert directory does not exist: %s" % ent_cert_dir)
 
+    # Subclasses of cache.CacheManager have a @classmethod delete_cache
+    # for deleting persistent caches
     cache.ProfileManager.delete_cache()
     cache.InstalledProductsManager.delete_cache()
     Facts.delete_cache()
 
-    # Must also delete in-memory cache
+    # WrittenOverridesCache is also a subclass of cache.CacheManager, but
+    # it is deleted in RepoActionInvoker.delete_repo_file() below.
+
+    # StatusCache subclasses have a a per instance cache varable
+    # and delete_cache is an instance method, so we need to call
+    # the delete_cache on the instances created in injectioninit.
     require(ENTITLEMENT_STATUS_CACHE).delete_cache()
     require(PROD_STATUS_CACHE).delete_cache()
     require(OVERRIDE_STATUS_CACHE).delete_cache()
+    require(RELEASE_STATUS_CACHE).delete_cache()
+
     RepoActionInvoker.delete_repo_file()
     log.info("Cleaned local data")
 
