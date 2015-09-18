@@ -49,7 +49,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 10%{?dist}
+Release: 11%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -542,6 +542,9 @@ fi
 %endif
 
 %changelog
+* Fri Sep 18 2015 Chris Rog <crog@redhat.com> 1.15.9-11
+- Updated translations (crog@redhat.com)
+
 * Fri Sep 11 2015 Chris Rog <crog@redhat.com> 1.15.9-10
 - 1248833: Ensure the displayMessage is displayed regardless of success or
   failure (csnyder@redhat.com)
