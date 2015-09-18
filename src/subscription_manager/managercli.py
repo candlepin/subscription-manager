@@ -53,7 +53,7 @@ from subscription_manager.repolib import RepoActionInvoker, RepoFile
 from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
-        restart_virt_who, get_terminal_width, \
+        restart_virt_who, get_terminal_width, print_error, \
         ProductCertificateFilter, EntitlementCertificateFilter
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
@@ -1129,10 +1129,9 @@ class RegisterCommand(UserPassCommand):
                 system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not supported "
                                  "by the server. Did not complete your request."))
             try:
-                autosubscribe(self.cp, consumer['uuid'],
-                        service_level=self.options.service_level)
+                autosubscribe(self.cp, consumer['uuid'], service_level=self.options.service_level)
             except connection.RestlibException, re:
-                print(re.msg)
+                print_error(re.msg)
 
         if (self.options.consumerid or self.options.activation_keys or self.autoattach):
             log.info("System registered, updating entitlements if needed")

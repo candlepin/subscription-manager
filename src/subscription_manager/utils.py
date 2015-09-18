@@ -485,3 +485,10 @@ class EntitlementCertificateFilter(ProductCertificateFilter):
         )
 
         return sl_check and fs_check and (self._sl_filter is not None or self._fs_regex is not None)
+
+
+def print_error(message):
+    " Prints the specified message to stderr "
+
+    sys.stderr.write(message)
+    sys.stderr.write("\n")

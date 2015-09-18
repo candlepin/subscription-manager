@@ -77,6 +77,7 @@ from subscription_manager.i18n_optparse import OptionParser, \
 from subscription_manager.cert_sorter import RHSM_VALID, \
         RHSM_EXPIRED, RHSM_WARNING, RHSM_PARTIALLY_VALID, \
         RHN_CLASSIC, RHSM_REGISTRATION_REQUIRED
+from subscription_manager.utils import print_error
 
 import rhsm.config
 CFG = rhsm.config.initConfig()
@@ -212,7 +213,7 @@ def parse_force_signal(cli_arg):
     elif cli_arg == "registration_required":
         return RHSM_REGISTRATION_REQUIRED
     else:
-        sys.stderr.write("Invalid force option: %s\n" % cli_arg)
+        print_error("Invalid force option: %s" % cli_arg)
         sys.exit(-1)
 
 
@@ -249,7 +250,7 @@ def main():
     force_signal = parse_force_signal(options.force_signal)
 
     if options.immediate and force_signal is None:
-        sys.stderr.write("--immediate must be used with --force-signal\n")
+        print_error("--immediate must be used with --force-signal")
         sys.exit(-2)
 
     global enable_debug

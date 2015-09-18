@@ -19,6 +19,7 @@ import sys
 
 from subscription_manager.printing_utils import columnize, _echo
 from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter
+from subscription_manager.utils import print_error
 
 _ = gettext.gettext
 
@@ -181,8 +182,8 @@ def system_exit(code, msgs=None):
                 msg = "%s" % msg
 
             if isinstance(msg, unicode):
-                sys.stderr.write("%s\n" % msg.encode("utf8"))
+                print_error(msg.encode("utf8"))
             else:
-                sys.stderr.write("%s\n" % msg)
+                print_error(msg)
 
     sys.exit(code)
