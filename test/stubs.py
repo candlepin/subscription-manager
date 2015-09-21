@@ -49,10 +49,10 @@ port = 8443
 insecure = 1
 ssl_verify_depth = 3
 ca_cert_dir = /etc/rhsm/ca/
-proxy_hostname =
-proxy_port =
-proxy_user =
-proxy_password =
+proxy_hostname = notaproxy.grimlock.usersys.redhat.com
+proxy_port = 3128
+proxy_user = proxy_user
+proxy_password = proxy_password
 
 [rhsm]
 baseurl= https://content.example.com
