@@ -14,7 +14,7 @@
 import ConfigParser
 
 import mock
-
+from nose.plugins.skip import SkipTest
 import fixture
 import subprocess
 
@@ -30,6 +30,32 @@ from rhsm import certificate2
 
 class StubPluginManager(object):
         pass
+
+
+class TestOstreeGIWrapperError(fixture.SubManFixture):
+    def test(self):
+        returncode = 1
+        cmd = ['python', '/usr/bin/gi_wrapper.py', '--deployed-origin']
+        err = model.OstreeGIWrapperError(returncode=returncode,
+                                         cmd=cmd)
+        self.assertTrue(isinstance(err, model.OstreeGIWrapperError))
+        self.assertEquals(err.returncode, returncode)
+        self.assertEquals(err.cmd, cmd)
+        cmd_string = ' '.join(cmd)
+        self.assertEquals(err.cmd_string, cmd_string)
+        self.assertTrue(cmd_string in err.msg)
+        self.assertTrue(err.base_msg in err.msg)
+        self.assertTrue(err.__class__.__name__ in str(err))
+        self.assertTrue(cmd_string in str(err))
+
+    def test_form_called_process_error(self):
+        returncode = 1
+        cmd = "/bin/example-command --foo /tmp/nothing"
+        called_process_error = subprocess.CalledProcessError(returncode, cmd)
+        err = model.OstreeGIWrapperError.from_called_process_error(called_process_error)
+        self.assertTrue(isinstance(err, model.OstreeGIWrapperError))
+        self.assertEquals(err.cmd, cmd)
+        self.assertTrue(err.base_msg in err.msg)
 
 
 class TestOstreeRemoteNameFromSection(fixture.SubManFixture):
@@ -438,6 +464,7 @@ gpg-verify=true
         self.updater = model.OstreeOriginUpdater(self.repo_config)
 
         self.origin_cfg_path = self.write_tempfile(origin_cfg)
+        self.original_get_deployed_origin = self.updater._get_deployed_origin
         self.updater._get_deployed_origin = mock.Mock(
             return_value=self.origin_cfg_path.name)
 
@@ -621,11 +648,55 @@ gpg-verify=false
 refspec=origremote:awesome-ostree/awesomeos8/x86_64/controller/docker
 """
 
-        self._setup_config(repo_cfg, origin_cfg)
-        self.updater._get_deployed_origin = mock.Mock(
-            side_effect=subprocess.CalledProcessError(1, ''))
-        # For now, just assert the error bubbles up:
-        self.assertRaises(subprocess.CalledProcessError, self.updater.run)
+        self.repo_cfg_path = self.write_tempfile(repo_cfg)
+        self.repo_config = model.OstreeRepoConfig(
+            repo_file_path=self.repo_cfg_path.name)
+        self.repo_config.load()
+
+        self.updater = model.OstreeOriginUpdater(self.repo_config)
+
+        self.origin_cfg_path = self.write_tempfile(origin_cfg)
+
+        spe = subprocess.CalledProcessError(returncode=1,
+                                            cmd=['gi_wrapper.py', '--some-options'])
+        self.updater._get_deployed_origin = \
+            mock.Mock(side_effect=model.OstreeGIWrapperError.from_called_process_error(spe))
+
+        res = self.updater.run()
+        self.assertTrue(res is None)
+
+    def test_get_deployed_origin(self):
+        if not hasattr(subprocess, 'check_output'):
+            # We wouldn't need gi_wrapper on rhel6
+            #  a) There is no ostree on rhel6
+            #  b) rhel6 is pygtk not pygobject
+            raise SkipTest('This version of python does not have subprocess.check_output, so ostree gi_wrapper wont work.')
+
+        repo_cfg = """
+[remote "awesome-ostree"]
+url=http://awesome.example.com.not.real/
+branches=awesome-ostree/awesome7/x86_64/controller/docker;
+gpg-verify=false
+
+"""
+
+        origin_cfg = """
+[origin]
+refspec=origremote:awesome-ostree/awesomeos8/x86_64/controller/docker
+"""
+
+        self.repo_cfg_path = self.write_tempfile(repo_cfg)
+        self.repo_config = model.OstreeRepoConfig(
+            repo_file_path=self.repo_cfg_path.name)
+        self.repo_config.load()
+
+        self.updater = model.OstreeOriginUpdater(self.repo_config)
+
+        self.origin_cfg_path = self.write_tempfile(origin_cfg)
+
+        sub_mock = mock.Mock(side_effect=subprocess.CalledProcessError(1, 'gi_wrapper.py'))
+        with mock.patch('subscription_manager.plugin.ostree.model.subprocess.check_output', sub_mock):
+            self.assertRaises(model.OstreeGIWrapperError, self.updater._get_deployed_origin)
 
 
 class BaseOstreeOriginFileTest(BaseOstreeKeyFileTest):
