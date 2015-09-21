@@ -820,6 +820,24 @@ tls-client-key-path = /etc/pki/entitlement/12345-key.pem
 
         rf.set_remote(remote)
 
+        expected_proxy = "http://proxy_user:proxy_password@notaproxy.grimlock.usersys.redhat.com:3128"
+        repo_proxy_uri = rf.config_parser.get('remote "awesomeos-remote"', 'proxy')
+        self.assertEquals(expected_proxy, repo_proxy_uri)
+
+    @mock.patch('subscription_manager.plugin.ostree.config.RepoFile._get_config_parser')
+    def section_set_remote(self, mock_get_config_parser):
+        mock_get_config_parser.return_value = self._rf_cfg()
+        rf = config.RepoFile('')
+
+        remote = model.OstreeRemote()
+        remote.url = "/some/path"
+        remote.name = "awesomeos-remote"
+        remote.gpg_verify = 'true'
+        remote.tls_client_cert_path = "/etc/pki/entitlement/54321.pem"
+        remote.tls_client_key_path = "/etc/pki/entitlement/54321-key.pem"
+
+        rf.set_remote(remote)
+
 
 class TestOstreeRepoFileNoRemote(BaseOstreeRepoFileTest):
     repo_cfg = """
