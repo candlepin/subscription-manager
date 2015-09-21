@@ -184,6 +184,31 @@ class RepoFile(BaseOstreeConfigFile):
     def set(self, section, key, value):
         return self.config_parser.set(section, key, value)
 
+    def get_proxy(self):
+        proxy_host = CFG.get('server', 'proxy_hostname')
+        # proxy_port as string is fine here
+        proxy_port = CFG.get('server', 'proxy_port')
+        proxy_user = CFG.get('server', 'proxy_user')
+        proxy_password = CFG.get('server', 'proxy_password')
+
+        proxy_uri = None
+        if proxy_host == "":
+            return proxy_uri
+
+        proxy_auth = ""
+        if proxy_user != "" and proxy_password != "":
+            proxy_auth = "%s:%s@" % (proxy_user, proxy_password)
+
+        # TODO: does libsoup want all proxies to be 'http'
+        proxy_uri = "http://%s%s" % (proxy_auth, proxy_host)
+
+        if proxy_port != "":
+            proxy_uri = "%s:%s" % (proxy_uri, proxy_port)
+
+        return proxy_uri
+        # These could be empty string, in which case they will not be
+        # set in the yum repo file:
+
     def set_remote(self, ostree_remote):
         """Add a remote section to config file based on a OstreeRemote."""
         # format section name
@@ -196,7 +221,6 @@ class RepoFile(BaseOstreeConfigFile):
         ca_cert = CFG.get('rhsm', 'repo_ca_cert')
 
         full_url = utils.url_base_join(baseurl, ostree_remote.url)
-        log.debug("full_url: %s" % full_url)
 
         self.set(section_name, 'url', full_url)
 
@@ -215,6 +239,10 @@ class RepoFile(BaseOstreeConfigFile):
         # from. Need a way to map a Content to a particular CDNInfo, and to
         # support multiple CDNInfos setup.
         self.set(section_name, 'tls-ca-path', ca_cert)
+
+        proxy_uri = self.get_proxy()
+        if proxy_uri:
+            self.set(section_name, 'proxy', proxy_uri)
 
     def set_core(self, ostree_core):
         # Assuming we don't need to check validy of any [core] values
