@@ -157,6 +157,10 @@ def handle_exception(msg, ex):
     if isinstance(ex, SystemExit):
         raise ex
 
+    # GoneException will be handled uniformly for every command except unregister.
+    if isinstance(ex, connection.GoneException):
+        raise ex
+
     log.error(msg)
     log.exception(ex)
 
@@ -501,6 +505,12 @@ class CliCommand(AbstractCLICommand):
         except X509.X509Error, e:
             log.error(e)
             print _('System certificates corrupted. Please reregister.')
+        except connection.GoneException, ge:
+            if ge.deleted_id == self.identity.uuid:
+                log.critical(_("This consumer's profile has been deleted from the server. "))
+                print (_("This consumer's profile has been deleted from the server. You can use command clean or unregister to remove local profile."))
+            else:
+                raise ge
 
 
 class UserPassCommand(CliCommand):

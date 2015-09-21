@@ -36,3 +36,15 @@ class CliUnRegistrationTests(SubManFixture):
 
         cmd.main(['unregister'])
         self.assertEquals(mock_injected_identity.uuid, cmd.cp.called_unregister_uuid)
+
+    @patch('subscription_manager.managerlib.clean_all_data')
+    @patch('rhsm.connection.UEPConnection.unregisterConsumer')
+    def test_unregister_removes_consumer_cert_with_gone_correct_id(self, unregister_consumer_mock, clean_data_mock):
+        unregister_consumer_mock.side_effect = connection.GoneException("", "", 112233)
+        self._inject_mock_valid_consumer(uuid=112233)
+        CacheManager.delete_cache = classmethod(lambda cls: None)
+
+        cmd = managercli.UnRegisterCommand()
+        cmd.main(['unregister'])
+
+        clean_data_mock.assert_called_once_with(backup=False)
