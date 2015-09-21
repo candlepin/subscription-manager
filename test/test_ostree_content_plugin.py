@@ -820,6 +820,24 @@ tls-client-key-path = /etc/pki/entitlement/12345-key.pem
 
         rf.set_remote(remote)
 
+        expected_proxy = "http://proxy_user:proxy_password@notaproxy.grimlock.usersys.redhat.com:3128"
+        repo_proxy_uri = rf.config_parser.get('remote "awesomeos-remote"', 'proxy')
+        self.assertEquals(expected_proxy, repo_proxy_uri)
+
+    @mock.patch('subscription_manager.plugin.ostree.config.RepoFile._get_config_parser')
+    def section_set_remote(self, mock_get_config_parser):
+        mock_get_config_parser.return_value = self._rf_cfg()
+        rf = config.RepoFile('')
+
+        remote = model.OstreeRemote()
+        remote.url = "/some/path"
+        remote.name = "awesomeos-remote"
+        remote.gpg_verify = 'true'
+        remote.tls_client_cert_path = "/etc/pki/entitlement/54321.pem"
+        remote.tls_client_key_path = "/etc/pki/entitlement/54321-key.pem"
+
+        rf.set_remote(remote)
+
 
 class TestOstreeRepoFileNoRemote(BaseOstreeRepoFileTest):
     repo_cfg = """
@@ -907,43 +925,6 @@ tls-client-key-path = /etc/pki/entitlement/12345-key.pem
 
         for remote in remotes:
             self._verify_remote(self._rf_cfg_instance, remote)
-
-
-class TestOstreeRepofileAddSectionWrite(BaseOstreeRepoFileTest):
-    repo_cfg = ""
-
-    def test_add_remote(self):
-        fid = self.write_tempfile(self.repo_cfg)
-        rf_cfg = config.KeyFileConfigParser(fid.name)
-
-        remote_name = 'remote "awesomeos-8-container"'
-        url = "https://example.com.not.real/repo"
-        gpg_verify = "true"
-
-        rf_cfg.add_section(remote_name)
-        self.assertTrue(rf_cfg.has_section(remote_name))
-        rf_cfg.save()
-
-        new_contents = open(fid.name, 'r').read()
-        self.assertTrue('awesomeos-8' in new_contents)
-
-        rf_cfg.set(remote_name, 'url', url)
-        rf_cfg.save()
-
-        new_contents = open(fid.name, 'r').read()
-        self.assertTrue(url in new_contents)
-
-        rf_cfg.set(remote_name, 'gpg-verify', gpg_verify)
-        rf_cfg.save()
-
-        new_contents = open(fid.name, 'r').read()
-        self.assertTrue('gpg-verify' in new_contents)
-        self.assertTrue(gpg_verify in new_contents)
-        self.assertTrue('gpg-verify = true' in new_contents)
-
-        new_rf_cfg = config.KeyFileConfigParser(fid.name)
-        self.assertTrue(new_rf_cfg.has_section(remote_name))
-        self.assertEquals(new_rf_cfg.get(remote_name, 'url'), url)
 
 
 class TestOstreeRepoFileRemoveSectionSave(BaseOstreeRepoFileTest):
