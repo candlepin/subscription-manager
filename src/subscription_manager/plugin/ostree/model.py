@@ -45,6 +45,30 @@ class RemoteSectionNameParseError(OstreeContentError):
         self.section = section
 
 
+class OstreeGIWrapperError(OstreeContentError):
+    base_msg = "Error looking up OSTree origin file."
+
+    def __init__(self, returncode=None, cmd=None, wrapper_path=None):
+        self.returncode = returncode
+        self.cmd = cmd
+        self.wrapper_path = wrapper_path
+
+        self.cmd_string = ' '.join(self.cmd)
+        self.msg = "%(base_msg)s \'%(cmd_string)s\' returned exist status: %(returncode)s" % \
+            {'base_msg': self.base_msg,
+             'cmd_string': self.cmd_string,
+             'returncode': self.returncode}
+
+    @classmethod
+    def from_called_process_error(cls, called_process_error):
+        err = cls(returncode=called_process_error.returncode,
+                  cmd=called_process_error.cmd)
+        return err
+
+    def __str__(self):
+        return "%s: %s" % (self.__class__.__name__, self.msg)
+
+
 class OstreeRemote(object):
     """Represent a ostree repo remote.
 
@@ -332,16 +356,17 @@ class OstreeOriginUpdater(object):
         # Can't load gobject3 introspection code as we use gobject2 in a couple
         # places. Shell out to a separate script, assumed to be in same location
         # as this module. Let the CalledProcessError bubble up.
+        gi_wrapper_path = os.path.join(os.path.dirname(__file__), "gi_wrapper.py")
+        gi_wrapper_arg = '--deployed-origin'
+        cmd_args = ['python', gi_wrapper_path, gi_wrapper_arg]
+
         try:
-            output = subprocess.check_output(["python",
-                os.path.join(os.path.dirname(__file__), "gi_wrapper.py"),
-                '--deployed-origin'], stderr=subprocess.STDOUT)
+            output = subprocess.check_output(cmd_args,
+                                             stderr=subprocess.STDOUT)
             return output.strip()
         except subprocess.CalledProcessError, e:
             # Is this an OSTree system? Does it have pygobject3?
-            log.error("Error looking up OSTree origin file.")
-            log.error(e.output)
-            raise e
+            raise OstreeGIWrapperError.from_called_process_error(called_process_error=e)
 
     def _get_new_refspec(self, old_refspec):
         """
@@ -381,7 +406,11 @@ class OstreeOriginUpdater(object):
         """
         Locate and update the currently deployed origin file.
         """
-        self.originfile = self._get_deployed_origin()
+        try:
+            self.originfile = self._get_deployed_origin()
+        except OstreeGIWrapperError, e:
+            log.warning(e)
+            return
 
         # No results
         if not self.originfile:
