@@ -138,6 +138,14 @@ class OstreeRemote(object):
     def tls_ca_path(self, value):
         self.data['tls_ca_path'] = value
 
+    @property
+    def proxy(self):
+        return self.data.get('proxy')
+
+    @proxy.setter
+    def proxy(self, value):
+        self.data['proxy'] = value
+
     @classmethod
     def from_config_section(cls, section, items):
         """Create a OstreeRemote object from a repo config section name and map of items.
@@ -235,9 +243,9 @@ class OstreeRemote(object):
 
     def __repr__(self):
         r = super(OstreeRemote, self).__repr__()
-        template = "%s\n (name=%s\n url=%s\n gpg_verify=%s\n tls_client_cert_path=%s\n tls_client_key_path=%s)"
+        template = "%s\n (name=%s\n url=%s\n gpg_verify=%s\n tls_client_cert_path=%s\n tls_client_key_path=%s\n proxy=%s)"
         return template % (r, self.name, self.url, self.gpg_verify,
-               self.tls_client_cert_path, self.tls_client_key_path)
+               self.tls_client_cert_path, self.tls_client_key_path, self.proxy)
 
     def report(self):
         return self.report_template.format(self=self)
