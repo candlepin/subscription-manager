@@ -2,13 +2,27 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
+  <object class="GtkAdjustment" id="subs_vpane_hadj">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="subs_vpane_vadj">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
+    <property name="halign">start</property>
+    <property name="valign">start</property>
     <property name="icon_name">subscription-manager</property>
     <child>
       <object class="GtkBox" id="content">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="valign">start</property>
         <property name="border_width">12</property>
         <property name="orientation">vertical</property>
         <property name="spacing">4</property>
@@ -16,12 +30,16 @@
           <object class="GtkBox" id="vbox3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="valign">start</property>
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkBox" id="hbox3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label1">
@@ -116,10 +134,14 @@
               <object class="GtkBox" id="hbox2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="valign">start</property>
                 <child>
                   <object class="GtkLabel" id="edit_quantity_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
                     <property name="label" translatable="yes">* Click to Adjust Quantity</property>
                     <property name="use_markup">True</property>
                     <property name="xalign">0.99000000953674316</property>
@@ -151,15 +173,18 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="orientation">vertical</property>
-            <property name="position">2</property>
             <property name="position_set">True</property>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow">
-                <property name="height_request">125</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="valign">start</property>
                 <property name="border_width">1</property>
-                <property name="shadow_type">etched-in</property>
+                <property name="hadjustment">subs_vpane_hadj</property>
+                <property name="vadjustment">subs_vpane_vadj</property>
+                <property name="shadow_type">etched-out</property>
+                <property name="min_content_width">240</property>
+                <property name="min_content_height">120</property>
               </object>
               <packing>
                 <property name="resize">True</property>
@@ -170,7 +195,7 @@
               <object class="GtkBox" id="details_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
+                <property name="valign">end</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -191,10 +216,13 @@
           <object class="GtkBox" id="hbox1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">end</property>
+            <property name="valign">start</property>
             <child>
               <object class="GtkButtonBox" id="subscribe_button_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="valign">start</property>
                 <property name="layout_style">end</property>
                 <child>
                   <object class="GtkButton" id="subscribe_button">
