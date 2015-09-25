@@ -100,6 +100,9 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         self.register_widget.connect('notify::register-button-label',
                                        self._on_register_button_label_change)
 
+        self.register_widget.connect('notify::screen-ready',
+                                     self._on_register_screen_ready_change)
+
         self.info.connect('notify::register-status', self._on_register_status_change)
 
         self.register_box.show_all()
@@ -276,6 +279,10 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
             self.set_info(msg)
         elif msg_type == ga_Gtk.MessageType.WARNING:
             self.set_warning(msg)
+
+    def _on_register_screen_ready_change(self, obj, value):
+        ready = self.register_widget.current_screen.get_property('ready')
+        self.proceed_button.set_sensitive(ready)
 
     def _on_register_status_change(self, obj, value):
         """Handler for registergui.RegisterInfo's 'register-status' property notifications."""
