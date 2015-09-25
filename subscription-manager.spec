@@ -48,7 +48,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.16.2
+Version: 1.16.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -542,6 +542,29 @@ fi
 %endif
 
 %changelog
+* Fri Sep 25 2015 Alex Wood <awood@redhat.com> 1.16.3-1
+- 1249012: fix start-end date original color (vrjain@redhat.com)
+- 884288: Make register widgets handle resizing. (alikins@redhat.com)
+- 1185958: Quieter ostree plugin sans ostree (alikins@redhat.com)
+- 1168268: Add rhsm.conf proxy info to ostree repo (alikins@redhat.com)
+- 1249012: Start-End Date of expired subscription is now in red status
+  (vrjain@redhat.com)
+- 1262989: Fix unregister action when consumer is already 'Gone' on server
+  (fnguyen@redhat.com)
+- 1262919: Added convenience function for printing to stderr (crog@redhat.com)
+- Add a note about GoneException handling. (alikins@redhat.com)
+- Fixed error message, removed mention of ghost --refresh (vrjain@redhat.com)
+- Delete the 'release' status cache on clean all. (alikins@redhat.com)
+- Fixed error message, removed mention of ghost --refresh (vrjain@redhat.com)
+- 1248833: Ensure the displayMessage is displayed regardless of success or
+  failure (csnyder@redhat.com)
+- 1254550: Fix activation key usage in gui. (alikins@redhat.com)
+- Re-initialize() RegisterWidget on RegDialog show (alikins@redhat.com)
+- 1257943:Adding a warning to repo-override command when manage_repos = 0
+  (fnguyen@redhat.com)
+- 1251853: Manage repos config entry needs to allow blank value
+  (wpoteat@redhat.com)
+
 * Wed Sep 02 2015 Alex Wood <awood@redhat.com> 1.16.2-1
 - 884288: Better registergui for initial-setup (alikins@redhat.com)
 - 1254349: move Resgistering to message (vrjain@redhat.com)
