@@ -28,7 +28,7 @@ from subscription_manager.ga import GObject as ga_GObject
 
 import rhsm.config as config
 from rhsm.utils import ServerUrlParseError
-from rhsm.connection import GoneException
+from rhsm.connection import GoneException, RestlibException
 
 from subscription_manager.branding import get_branding
 from subscription_manager.action_client import ActionClient
@@ -1138,10 +1138,22 @@ class SelectSLAScreen(Screen):
                 self.emit('register-error', msg, None)
                 self.pre_done()
                 return
-                # TODO: where we should go from here?
+            elif isinstance(error[1], RestlibException) and error[1].code == "401":
+                # If we get here with a 401, we are using consumer cert auth
+                # so that means we are likely connecting to the wrong server
+                # url, since unregistered consumers talking to the correct
+                # serverurl would 410. Short of changing serverurl or re-registering
+                # there isn't much we can do to fix that.
+                msg = error[1].error_msg
+                # TODO: Provide a better error message reflecting above comment
+                self.emit('register-error', msg, None)
+                self.emit('attach-finished')
+                self.pre_done()
+                return
             else:
                 log.exception(error)
                 self.emit('register-error', _("Error subscribing"), error)
+                self.emit('attach-finished')
                 self.pre_done()
                 return
 
