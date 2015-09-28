@@ -49,7 +49,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 11%{?dist}
+Release: 12%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -542,6 +542,24 @@ fi
 %endif
 
 %changelog
+* Mon Sep 28 2015 Chris Rog <crog@redhat.com> 1.15.9-12
+- 1261006: Handle multiple nav button clicks (alikins@redhat.com)
+- 1242998, 1254550: Fix "already reg'ed" in initial-setup (alikins@redhat.com)
+- 1249012: fix start-end date original color FIXME (vrjain@redhat.com)
+- 1249012: Start-End Date of expired subscription is now in red status
+  (vrjain@redhat.com)
+- 884288: Make register widgets handle resizing. (alikins@redhat.com)
+- 1265347, 1265371: Updated translations with whitespace corrections
+  (crog@redhat.com)
+- 1257943:Adding a warning to repo-override command when manage_repos = 0
+  (fnguyen@redhat.com)
+- Set help file name for the Subscription Manager spoke
+  (martin.kolman@gmail.com)
+- 1246680: Hide rhsm-debug --subscriptions options (alikins@redhat.com)
+- 1246680: Remove subscriptions from rhsm-debug (wpoteat@redhat.com)
+- 1185958: Quieter ostree plugin sans ostree (alikins@redhat.com)
+- 1168268: Add rhsm.conf proxy info to ostree repo (alikins@redhat.com)
+
 * Fri Sep 18 2015 Chris Rog <crog@redhat.com> 1.15.9-11
 - Updated translations (crog@redhat.com)
 
