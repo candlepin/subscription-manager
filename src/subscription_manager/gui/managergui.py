@@ -172,8 +172,6 @@ class MainWindow(widgets.SubmanBaseWidget):
 
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.facts)
 
-        self.registration_dialog = registergui.RegisterDialog(self.backend, self.facts)
-
         self.preferences_dialog = PreferencesDialog(self.backend,
                                                     self._get_window())
 
@@ -360,8 +358,9 @@ class MainWindow(widgets.SubmanBaseWidget):
             self.redeem_menu_item.set_sensitive(False)
 
     def _register_item_clicked(self, widget):
-        self.registration_dialog.initialize()
-        self.registration_dialog.show()
+        registration_dialog = registergui.RegisterDialog(self.backend, self.facts)
+        registration_dialog.initialize()
+        registration_dialog.show()
 
     def _preferences_item_clicked(self, widget):
         try:

@@ -4,7 +4,7 @@ from mock import Mock
 from fixture import SubManFixture
 
 from stubs import StubBackend, StubFacts
-from subscription_manager.gui.registergui import RegisterWidget, \
+from subscription_manager.gui.registergui import RegisterWidget, RegisterInfo,  \
     CredentialsScreen, ActivationKeyScreen, ChooseServerScreen, \
     CREDENTIALS_PAGE, CHOOSE_SERVER_PAGE
 
@@ -26,7 +26,10 @@ class RegisterWidgetTests(SubManFixture):
                           'system.uuid': 'MOCKUUID'}
         self.facts = StubFacts(fact_dict=expected_facts)
 
-        self.rs = RegisterWidget(self.backend, self.facts)
+        self.reg_info = RegisterInfo()
+        self.rs = RegisterWidget(backend=self.backend,
+                                 facts=self.facts,
+                                 reg_info=self.reg_info)
 
         self.rs._screens[CHOOSE_SERVER_PAGE] = Mock()
         self.rs._screens[CHOOSE_SERVER_PAGE].index = 0
