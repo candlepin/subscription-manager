@@ -109,6 +109,35 @@ def reset_resolver():
         pass
 
 
+# FIXME: TODO: subclass collections.MutableSequence
+class UniqueList(object):
+    def __init__(self):
+        self._list = []
+
+    def append(self, item):
+        if item in self._list:
+            self._list.remove(item)
+        return self._list.append(item)
+
+    def __repr__(self):
+        list_buf = ','.join([repr(a) for a in self._list])
+        buf = "<UniqueList [%s] >" % list_buf
+        return buf
+
+    def remove(self, value):
+        return self._list.remove(value)
+
+    def last(self):
+        return self._list[-1]
+
+    def pop(self, index=None):
+        # list.pop() has a odd not quite a keyword optional arg
+        if index:
+            p = self._list.pop(index)
+        p = self._list.pop()
+        return p
+
+
 class RegisterInfo(ga_GObject.GObject):
     """GObject holding registration info and state.
 
@@ -170,6 +199,8 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
     __gsignals__ = {'proceed': (ga_GObject.SignalFlags.RUN_FIRST,
                                 None, []),
+                    'back': (ga_GObject.SignalFlags.RUN_FIRST,
+                             None, []),
                     'register-message': (ga_GObject.SignalFlags.RUN_FIRST,
                                          None, (ga_GObject.TYPE_PYOBJECT,
                                                 ga_GObject.TYPE_PYOBJECT)),
@@ -230,6 +261,8 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         # expect this to be driving from the parent dialog
         self.proceed_handler = self.connect('proceed',
                                             self._on_proceed)
+        self.back_handler = self.connect('back',
+                                         self._on_back)
 
         # FIXME: change glade name
         self.details_label = self.register_details_label
@@ -255,6 +288,8 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         # Track screens we "show" so we can choose a reasonable error screen
         self.screen_history = []
 
+        self.uniq_screen_history = UniqueList()
+        self.applied_screen_history = UniqueList()
         # FIXME: modify property instead
         self.callbacks = []
 
@@ -311,8 +346,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         any parent dialogs for example)."""
 
         # return to the last gui screen we showed.
-        self._go_back_to_last_screen()
-
+        self._pop_last_screen()
         # FIXME: we have more info here, but we need a good 'blurb'
         #        for the status message.
         msg = _("Error during registration.")
@@ -320,7 +354,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
     def do_register_message(self, msg, msg_type=None):
         # NOTE: we ignore msg_type here
-        self._go_back_to_last_screen()
+        self._pop_last_screen()
         self.info.set_property('register-status', msg)
 
     def do_register_finished(self):
@@ -339,9 +373,16 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         # close the window have something to display.
         self.done()
 
-    def _go_back_to_last_screen(self):
+    def _pop_last_screen(self):
         try:
-            self._set_screen(self.screen_history[-1])
+            last = self.applied_screen_history.pop()
+            self._set_screen(last)
+        except IndexError:
+            pass
+
+    def _last_screen(self):
+        try:
+            self._set_screen(self.applied_screen_history.last())
         except IndexError:
             pass
 
@@ -391,7 +432,6 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         This also represents screens that allow the user to potentially correct
         an error, so we track the history of these screens so errors can go to
         a useful screen."""
-        self.screen_history.append(current_screen.screens_index)
         self._set_screen(self._current_screen)
 
     # TODO: replace most of the gui flow logic in the Screen subclasses with
@@ -444,6 +484,13 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
     def apply_current_screen(self):
         """Extract any info from the widgets and call the screens apply()."""
+        #self._screen_history_append(self.current_screen.screens_index)
+
+        # The apply can emit a move to page signal, changing current_page
+        # So save current screen index first.
+        current_screen_index = self.current_screen.screens_index
+        self.applied_screen_history.append(current_screen_index)
+
         self.current_screen.apply()
 
     # FIXME: figure out to determine we are on first screen, then this
@@ -451,6 +498,9 @@ class RegisterWidget(widgets.SubmanBaseWidget):
     # Go to the next screen/state
     def _on_proceed(self, obj):
         self.apply_current_screen()
+
+    def _on_back(self, obj):
+        self._last_screen()
 
     # switch-page should be after the current screen is reset
     def _on_switch_page(self, notebook, page, page_num):
@@ -536,8 +586,10 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
         if ready:
             self.handler_unblock(self.proceed_handler)
+            self.handler_unblock(self.back_handler)
         else:
             self.handler_block(self.proceed_handler)
+            self.handler_block(self.back_handler)
 
     # HMMM: If the connect/backend/async, and the auth info is composited into
     #       the same GObject, these could be class closure handlers
@@ -597,7 +649,7 @@ class RegisterDialog(widgets.SubmanBaseWidget):
 
     widget_names = ['register_dialog', 'register_dialog_main_vbox',
                     'register_details_label',
-                    'cancel_button', 'register_button', 'progress_label',
+                    'back_button', 'register_button', 'progress_label',
                     'dialog_vbox6']
 
     gui_file = "register_dialog"
@@ -642,7 +694,7 @@ class RegisterDialog(widgets.SubmanBaseWidget):
         #self.register_widget.initialize()
 
         self.register_button.connect('clicked', self._on_register_button_clicked)
-        self.cancel_button.connect('clicked', self.cancel)
+        self.back_button.connect('clicked', self._on_back_button_clicked)
 
         # update window title on register state changes
         self.reg_info.connect('notify::register-state',
@@ -701,9 +753,13 @@ class RegisterDialog(widgets.SubmanBaseWidget):
     def error_dialog(self, obj, msg):
         gui_utils.show_error_window(msg)
 
+    def _on_back_button_clicked(self, obj):
+        self.register_widget.emit('back')
+
     def _on_register_screen_ready_change(self, obj, value):
         ready = self.register_widget.current_screen.get_property('ready')
         self.register_button.set_sensitive(ready)
+        self.back_button.set_sensitive(ready)
 
     def _on_register_button_clicked(self, button):
         self.register_widget.emit('proceed')
@@ -812,7 +868,7 @@ class Screen(widgets.SubmanBaseWidget):
     # do whatever the screen indicates, and emit any signals indicating where
     # to move to next. apply() should not return anything.
     def apply(self):
-        pass
+        return True
 
     def post(self):
         pass
@@ -872,6 +928,7 @@ class NoGuiScreen(ga_GObject.GObject):
 
     def apply(self):
         self.emit('move-to-screen')
+        return True
 
     def post(self):
         pass
@@ -897,6 +954,7 @@ class PerformRegisterScreen(NoGuiScreen):
         if error is not None:
             self.emit('register-error', REGISTER_ERROR, error)
             # TODO: register state
+            self.pre_done()
             return
 
         try:
@@ -904,6 +962,7 @@ class PerformRegisterScreen(NoGuiScreen):
         except Exception, e:
             # hint: register error, back to creds?
             self.emit('register-error', REGISTER_ERROR, e)
+            self.pre_done()
             return
 
         # trigger a id cert reload
@@ -1006,6 +1065,7 @@ class ConfirmSubscriptionsScreen(Screen):
 
     def apply(self):
         self.emit('move-to-screen', PERFORM_SUBSCRIBE_PAGE)
+        return True
 
     def set_model(self):
         dry_run_result = self.info.get_property('dry-run-result')
@@ -1082,6 +1142,7 @@ class SelectSLAScreen(Screen):
 
     def apply(self):
         self.emit('move-to-screen', CONFIRM_SUBS_PAGE)
+        return True
 
     def clear(self):
         child_widgets = self.sla_radio_container.get_children()
@@ -1264,6 +1325,7 @@ class EnvironmentScreen(Screen):
         model, tree_iter = self.environment_treeview.get_selection().get_selected()
         self.set_environment(model.get_value(tree_iter, 0))
         self.emit('move-to-screen', PERFORM_REGISTER_PAGE)
+        return True
 
     def set_environment(self, environment):
         self.info.set_property('environment', environment)
@@ -1336,6 +1398,7 @@ class OrganizationScreen(Screen):
         owner_key = model.get_value(tree_iter, 0)
         self.info.set_property('owner-key', owner_key)
         self.emit('move-to-screen', ENVIRONMENT_SELECT_PAGE)
+        return True
 
     def set_model(self, owners):
         owner_model = ga_Gtk.ListStore(str, str)
@@ -1428,10 +1491,10 @@ class CredentialsScreen(Screen):
         skip_auto_bind = self.skip_auto_bind.get_active()
 
         if not self._validate_consumername(consumername):
-            return
+            return False
 
         if not self._validate_account():
-            return
+            return False
 
         self.info.set_property('username', username)
         self.info.set_property('password', password)
@@ -1439,6 +1502,7 @@ class CredentialsScreen(Screen):
         self.info.set_property('consumername', consumername)
 
         self.emit('move-to-screen', OWNER_SELECT_PAGE)
+        return True
 
     def clear(self):
         self.account_login.set_text("")
@@ -1472,19 +1536,20 @@ class ActivationKeyScreen(Screen):
         consumername = self.consumer_entry.get_text().strip()
 
         if not self._validate_owner_key(owner_key):
-            return
+            return False
 
         if not self._validate_activation_keys(activation_keys):
-            return
+            return False
 
         if not self._validate_consumername(consumername):
-            return
+            return False
 
         self.info.set_property('consumername', consumername)
         self.info.set_property('owner-key', owner_key)
         self.info.set_property('activation-keys', activation_keys)
 
         self.emit('move-to-screen', PERFORM_REGISTER_PAGE)
+        return True
 
     def _split_activation_keys(self, entry):
         keys = re.split(',\s*|\s+', entry)
@@ -1626,19 +1691,19 @@ class ChooseServerScreen(Screen):
                               _("Unable to reach the server at %s:%s%s") %
                                 (hostname, port, prefix),
                               None)
-                    return
+                    return False
             except MissingCaCertException:
                 self.emit('register-error',
                           _("CA certificate for subscription service has not been installed."),
                           None)
-                return
+                return False
 
         except ServerUrlParseError:
             self.emit('register-error',
                       _("Please provide a hostname with optional port and/or prefix: "
                         "hostname[:port][/prefix]"),
                       None)
-            return
+            return False
 
         CFG.save()
 
@@ -1648,11 +1713,11 @@ class ChooseServerScreen(Screen):
 
         if self.activation_key_checkbox.get_active():
             self.emit('move-to-screen', ACTIVATION_KEY_PAGE)
-            return
+            return True
 
         else:
             self.emit('move-to-screen', CREDENTIALS_PAGE)
-            return
+            return True
 
     def set_server_entry(self, hostname, port, prefix):
         # No need to show port and prefix for hosted:
@@ -1995,10 +2060,11 @@ class InfoScreen(Screen):
         self.stay()
         if self.register_radio.get_active():
             self.emit('move-to-screen', CHOOSE_SERVER_PAGE)
-            return
+            return True
 
         else:
             self.emit('move-to-screen', FINISH)
+            return True
 
     def _on_why_register_button_clicked(self, button):
         self.why_register_dialog.show()
