@@ -54,7 +54,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
     uiFile = "rhsm_gui.ui"
     helpFile = "SubscriptionManagerSpoke.xml"
     category = SystemCategory
-    icon = "face-cool-symbolic"
+    icon = "subscription-manager"
     title = "Subscription Manager"
 
     def __init__(self, data, storage, payload, instclass):
