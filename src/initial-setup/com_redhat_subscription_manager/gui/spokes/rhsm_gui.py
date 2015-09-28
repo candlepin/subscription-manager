@@ -80,7 +80,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         self.register_box = self.builder.get_object("register_box")
         self.button_box = self.builder.get_object('navigation_button_box')
         self.proceed_button = self.builder.get_object('proceed_button')
-        self.cancel_button = self.builder.get_object('cancel_button')
+        self.back_button = self.builder.get_object('cancel_button')
 
         self.register_box.pack_start(self.register_widget.register_widget,
                                      True, True, 0)
@@ -88,7 +88,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         # Hook up the nav buttons in the gui
         # TODO: add a 'start over'?
         self.proceed_button.connect('clicked', self._on_register_button_clicked)
-        self.cancel_button.connect('clicked', self._on_cancel_button_clicked)
+        self.back_button.connect('clicked', self._on_back_button_clicked)
 
         # initial-setup will likely
         self.register_widget.connect('finished', self._on_finished)
@@ -204,15 +204,16 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
 
         pass
 
-    def _on_cancel_button_clicked(self, button):
-        """Handler for self.cancel_buttons 'clicked' signal.
+    def _on_back_button_clicked(self, button):
+        """Handler for self.back_buttons 'clicked' signal.
 
         Clear out any user set values and return to the start screen."""
 
+        self.register_widget.emit('back')
         # TODO: clear out settings and restart?
         # TODO: attempt to undo the REST api calls we've made?
-        self.register_widget.set_initial_screen()
-        self.register_widget.clear_screens()
+        #self.register_widget.set_initial_screen()
+        #self.register_widget.clear_screens()
 
     def _on_register_button_clicked(self, button):
         """Handler for self.proceed_buttons 'clicked' signal.
@@ -283,6 +284,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
     def _on_register_screen_ready_change(self, obj, value):
         ready = self.register_widget.current_screen.get_property('ready')
         self.proceed_button.set_sensitive(ready)
+        self.back_button.set_sensitive(ready)
 
     def _on_register_status_change(self, obj, value):
         """Handler for registergui.RegisterInfo's 'register-status' property notifications."""

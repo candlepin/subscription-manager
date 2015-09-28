@@ -32,15 +32,15 @@
             <property name="margin_bottom">4</property>
             <property name="hexpand">True</property>
             <child>
-              <object class="GtkButton" id="cancel_button">
-                <property name="label">gtk-cancel</property>
+              <object class="GtkButton" id="back_button">
+                <property name="label">gtk-go-back</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="cancel_button-atkobject">
-                    <property name="AtkObject::accessible-name">cancel_button</property>
+                  <object class="AtkObject" id="back_button-atkobject">
+                    <property name="AtkObject::accessible-name">back_button</property>
                   </object>
                 </child>
               </object>
