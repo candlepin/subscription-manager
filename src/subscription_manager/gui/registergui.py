@@ -1917,21 +1917,15 @@ class AsyncBackend(object):
             facts.write_cache()
             installed_mgr.write_cache()
 
-            cp = self.backend.cp_provider.get_basic_auth_cp()
-
-            # In practice, the only time this condition should be true is
-            # when we are working with activation keys.  See BZ #888790.
-            if not self.backend.cp_provider.get_basic_auth_cp().username and \
-                not self.backend.cp_provider.get_basic_auth_cp().password:
-                # Write the identity cert to disk
-                managerlib.persist_consumer_cert(retval)
-                self.backend.update()
-                cp = self.backend.cp_provider.get_consumer_auth_cp()
+            # Write the identity cert to disk
+            managerlib.persist_consumer_cert(retval)
+            self.backend.update()
+            cert_cp = self.backend.cp_provider.get_consumer_auth_cp()
 
             # FIXME: this looks like we are updating package profile as
             #        basic auth
             profile_mgr = require(PROFILE_MANAGER)
-            profile_mgr.update_check(cp, retval['uuid'])
+            profile_mgr.update_check(cert_cp, retval['uuid'])
 
             # We have new credentials, restart virt-who
             restart_virt_who()
