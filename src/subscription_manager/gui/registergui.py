@@ -70,12 +70,13 @@ PERFORM_UNREGISTER_PAGE = 3
 OWNER_SELECT_PAGE = 4
 ENVIRONMENT_SELECT_PAGE = 5
 PERFORM_REGISTER_PAGE = 6
-SELECT_SLA_PAGE = 7
-CONFIRM_SUBS_PAGE = 8
-PERFORM_SUBSCRIBE_PAGE = 9
-REFRESH_SUBSCRIPTIONS_PAGE = 10
-INFO_PAGE = 11
-DONE_PAGE = 12
+UPLOAD_PACKAGE_PROFILE_PAGE = 7
+SELECT_SLA_PAGE = 8
+CONFIRM_SUBS_PAGE = 9
+PERFORM_SUBSCRIBE_PAGE = 10
+REFRESH_SUBSCRIPTIONS_PAGE = 11
+INFO_PAGE = 12
+DONE_PAGE = 13
 FINISH = 100
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
@@ -306,10 +307,12 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         screen_classes = [ChooseServerScreen, ActivationKeyScreen,
                           CredentialsScreen, PerformUnregisterScreen,
                           OrganizationScreen, EnvironmentScreen,
-                          PerformRegisterScreen, SelectSLAScreen,
+                          PerformRegisterScreen,
+                          PerformPackageProfileSyncScreen, SelectSLAScreen,
                           ConfirmSubscriptionsScreen, PerformSubscribeScreen,
                           RefreshSubscriptionsScreen, InfoScreen,
                           DoneScreen]
+
         self._screens = []
 
         # TODO: current_screen as a gobject property
@@ -1025,25 +1028,18 @@ class PerformRegisterScreen(NoGuiScreen):
 
         # Done with the registration stuff, now on to attach
         self.emit('register-finished')
+        # TODO: After register-finished, there is still a whole
+        # series of steps before we start attaching, most of which
+        # would be useful to have async...
+        #  - persisting consumer certs
+        #  - reloading the new identity
+        #  - uploading package profile
+        #  - potentially getting/setting SLA
+        #  - reset'ing cert sorter and friends
 
-        # Having activation-keys means the 'skip-auto-bind' wasn't an
-        # option. So 'skip-auto-bind' and 'activation-keys' are
-        # exclusive in practice.
-        if self.info.get_property('activation-keys'):
-            self.emit('move-to-screen', REFRESH_SUBSCRIPTIONS_PAGE)
-            self.pre_done()
-            return
-
-        if self.info.get_property('skip-auto-bind'):
-            # We are done at this point basically. The handler for 'register-finished'
-            # will take care of going to the done screen. This is just to avoid starting
-            # select sla page's pre(). In the future it may make sense to have a 'screen'
-            # after this that just does the logic in these if statements in a non-async pre()
-            # so we could potentially block on it.
-            self.pre_done()
-            return
-
-        self.emit('move-to-screen', SELECT_SLA_PAGE)
+        # NOTE: Assume we want to try to upload package profile even with
+        # activation keys
+        self.emit('move-to-screen', UPLOAD_PACKAGE_PROFILE_PAGE)
         self.pre_done()
         return
 
@@ -1072,9 +1068,12 @@ class PerformUnregisterScreen(NoGuiScreen):
             self.emit('register-error',
                       _('Unable to unregister'),
                       error)
+
         # clean all local data regardless of the success of the network unregister
         managerlib.clean_all_data(backup=False)
+
         self.emit('move-to-screen', OWNER_SELECT_PAGE)
+
         self.pre_done()
         return
 
@@ -1083,15 +1082,63 @@ class PerformUnregisterScreen(NoGuiScreen):
         self.info.set_property('register-status', msg)
         self.info.set_property('details-label-txt', msg)
         self.info.set_property('register-state', RegisterState.REGISTERING)
+
         # Unregister if we have gotten here with a valid identity and have old server info
         if self.info.identity.is_valid() and self.info.get_property('server-info') and self.info.get_property('enable-unregister'):
             self.async.unregister_consumer(self.info.identity.uuid,
                                            self.info.get_property('server-info'),
                                            self._on_unregistration_finished_cb)
             return True
+
         self.emit('move-to-screen', OWNER_SELECT_PAGE)
         self.pre_done()
         return False
+
+
+# After registering, we can upload package profiles.
+# But... we don't have to do it immed after registering, it could
+# be in a later screen or a back ground task (user flow isn't
+# altered by results of package profile, and it's kind of slow, it
+# could happen in it's own thread while we go through other screens
+class PerformPackageProfileSyncScreen(NoGuiScreen):
+    screen_enum = UPLOAD_PACKAGE_PROFILE_PAGE
+
+    def __init__(self, reg_info, async_backend, facts, parent_window):
+        super(PerformPackageProfileSyncScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+        self.pre_message = _("Uploading package profile")
+
+    def _on_update_package_profile_finished_cb(self, result, error=None):
+        if error is not None:
+            self.emit('register-error',
+                      REGISTER_ERROR,
+                      error)
+
+            # Allow failure on package profile uploads
+            self.emit('move-to-screen', SELECT_SLA_PAGE)
+            self.pre_done()
+            return
+
+        try:
+            if self.info.get_property('activation-keys'):
+                self.emit('move-to-screen', REFRESH_SUBSCRIPTIONS_PAGE)
+            # could/should we rely on RegisterWidgets register-finished to handle this?
+            # ie, detecting when we are 'done' registering
+            elif self.info.get_property('skip-auto-bind'):
+                pass
+            # Or more likely, the server doesn't support package profile updates
+            # so we got a result of 0 and no error
+            else:
+                self.emit('move-to-screen', SELECT_SLA_PAGE)
+        except Exception, e:
+            self.emit('register-error', REGISTER_ERROR, e)
+
+        self.pre_done()
+        return
+
+    def pre(self):
+        self.async.update_package_profile(self.info.identity.uuid,
+                                          self._on_update_package_profile_finished_cb)
+        return True
 
 
 class PerformSubscribeScreen(NoGuiScreen):
@@ -1899,6 +1946,9 @@ class AsyncBackend(object):
             # TODO: not sure why we pass in a facts.Facts, and call it's
             #       get_facts() three times. The two bracketing plugin calls
             #       are meant to be able to enhance/tweak facts
+            #
+            # TODO: plugin hooks could run in the main thread
+            #       Really anything that doesn't use retval.
             self.plugin_manager.run("pre_register_consumer", name=name,
                                     facts=facts.get_facts())
 
@@ -1906,11 +1956,12 @@ class AsyncBackend(object):
             retval = cp.registerConsumer(name=name, facts=facts.get_facts(),
                                          owner=owner, environment=env,
                                          keys=activation_keys,
-                                          installed_products=installed_mgr.format_for_server())
+                                         installed_products=installed_mgr.format_for_server())
 
             self.plugin_manager.run("post_register_consumer", consumer=retval,
                                     facts=facts.get_facts())
 
+            # TODO: split persisting info into it's own thread
             require(IDENTITY).reload()
             # Facts and installed products went out with the registration
             # request, manually write caches to disk:
@@ -1920,15 +1971,23 @@ class AsyncBackend(object):
             # Write the identity cert to disk
             managerlib.persist_consumer_cert(retval)
             self.backend.update()
-            cert_cp = self.backend.cp_provider.get_consumer_auth_cp()
 
-            # FIXME: this looks like we are updating package profile as
-            #        basic auth
-            profile_mgr = require(PROFILE_MANAGER)
-            profile_mgr.update_check(cert_cp, retval['uuid'])
-
+            # FIXME: I don't think we need this at all
             # We have new credentials, restart virt-who
             restart_virt_who()
+
+            self.queue.put((callback, retval, None))
+        except Exception:
+            self.queue.put((callback, None, sys.exc_info()))
+
+    def _update_package_profile(self, uuid, callback):
+        try:
+            cp = self.backend.cp_provider.get_consumer_auth_cp()
+
+            # NOTE: profile update is using consumer auth with the
+            # new_consumer identity cert, not basic auth as before.
+            profile_mgr = require(PROFILE_MANAGER)
+            retval = profile_mgr.update_check(cp, uuid)
 
             self.queue.put((callback, retval, None))
         except Exception:
@@ -2105,6 +2164,12 @@ class AsyncBackend(object):
                          name="RegisterConsumerThread",
                          args=(name, facts, owner,
                                env, activation_keys, callback)).start()
+
+    def update_package_profile(self, uuid, callback):
+        ga_GObject.idle_add(self._watch_thread)
+        threading.Thread(target=self._update_package_profile,
+                         name="UpdatePackageProfileThread",
+                         args=(uuid, callback)).start()
 
     def subscribe(self, uuid, current_sla, dry_run_result, callback):
         ga_GObject.idle_add(self._watch_thread)
