@@ -19,6 +19,26 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
+              <object class="GtkButton" id="cancel_button">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="cancel_button-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes">cancel_button</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="back_button">
                 <property name="label">gtk-go-back</property>
                 <property name="visible">True</property>
@@ -35,7 +55,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -57,7 +77,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -74,6 +94,7 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="0">cancel_button</action-widget>
       <action-widget response="0">back_button</action-widget>
       <action-widget response="0">register_button</action-widget>
     </action-widgets>

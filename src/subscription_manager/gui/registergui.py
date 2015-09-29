@@ -643,7 +643,8 @@ class RegisterDialog(widgets.SubmanBaseWidget):
 
     widget_names = ['register_dialog', 'register_dialog_main_vbox',
                     'register_details_label',
-                    'back_button', 'register_button', 'progress_label',
+                    'back_button', 'register_button',
+                    'cancel_button', 'progress_label',
                     'dialog_vbox6']
 
     gui_file = "register_dialog"
@@ -689,6 +690,9 @@ class RegisterDialog(widgets.SubmanBaseWidget):
 
         self.register_button.connect('clicked', self._on_register_button_clicked)
         self.back_button.connect('clicked', self._on_back_button_clicked)
+
+        # TODO: Hook this up to a RegisterWidget 'cancel' handler, when there is one
+        self.cancel_button.connect('clicked', self.cancel)
 
         # update window title on register state changes
         self.reg_info.connect('notify::register-state',

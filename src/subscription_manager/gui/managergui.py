@@ -359,6 +359,7 @@ class MainWindow(widgets.SubmanBaseWidget):
 
     def _register_item_clicked(self, widget):
         registration_dialog = registergui.RegisterDialog(self.backend, self.facts)
+        #registration_dialog.register_dialog.set_transient_for(self._get_window())
         registration_dialog.initialize()
         registration_dialog.show()
 
