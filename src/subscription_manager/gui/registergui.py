@@ -380,12 +380,6 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         except IndexError:
             pass
 
-    def _last_screen(self):
-        try:
-            self._set_screen(self.applied_screen_history.last())
-        except IndexError:
-            pass
-
     # methods for moving around between screens and tracking the state
 
     # On showing the widget, it could start at initial_screen, but with something
@@ -500,7 +494,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         self.apply_current_screen()
 
     def _on_back(self, obj):
-        self._last_screen()
+        self._pop_last_screen()
 
     # switch-page should be after the current screen is reset
     def _on_switch_page(self, notebook, page, page_num):
