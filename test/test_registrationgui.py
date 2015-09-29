@@ -33,6 +33,7 @@ class RegisterWidgetTests(SubManFixture):
 
         self.rs._screens[CHOOSE_SERVER_PAGE] = Mock()
         self.rs._screens[CHOOSE_SERVER_PAGE].index = 0
+        self.rs._screens[CHOOSE_SERVER_PAGE].screens_index = 0
         self.rs._screens[CHOOSE_SERVER_PAGE].button_label = "Dummy"
         self.rs._screens[CHOOSE_SERVER_PAGE].apply.return_value = \
                 CREDENTIALS_PAGE

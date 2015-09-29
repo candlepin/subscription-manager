@@ -69,11 +69,11 @@
                             <property name="margin_bottom">4</property>
                             <child>
                               <object class="GtkButton" id="cancel_button">
-                                <property name="label" translatable="yes">Cancel</property>
+                                <property name="label">gtk-go-back</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="yalign">0.43999999761581421</property>
+                                <property name="use_stock">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
