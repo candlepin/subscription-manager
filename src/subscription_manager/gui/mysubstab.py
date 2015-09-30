@@ -153,7 +153,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             # unregistered, just delete the certs directly
             action = EntCertDeleteAction(self.entitlement_dir)
             action.perform([serial])
-            self.update_subscriptions()
+        self.update_subscriptions()
 
     def unsubscribe_button_clicked(self, widget):
         selection = widgets.SelectionWrapper(self.top_view.get_selection(), self.store)
