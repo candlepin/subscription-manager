@@ -49,7 +49,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 12%{?dist}
+Release: 13%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -542,6 +542,16 @@ fi
 %endif
 
 %changelog
+* Wed Sep 30 2015 Chris Rog <crog@redhat.com> 1.15.9-13
+- 1266480: Refresh TreeView selection after subscriptions are removed.
+  (awood@redhat.com)
+- 1267034: Handle 401 with cert based auth (alikins@redhat.com)
+- Allow 'back' to go back multiple times. (alikins@redhat.com)
+- 1262075,1267179,1243707: Fix back/cancel nav (alikins@redhat.com)
+- 1267287: Fix allsubs tab ui regression (alikins@redhat.com)
+- 1266994: Use our icon for initial-setup spoke icon (alikins@redhat.com)
+- 1265347, 1265371: More translations whitespace corrections (crog@redhat.com)
+
 * Mon Sep 28 2015 Chris Rog <crog@redhat.com> 1.15.9-12
 - 1261006: Handle multiple nav button clicks (alikins@redhat.com)
 - 1242998, 1254550: Fix "already reg'ed" in initial-setup (alikins@redhat.com)
