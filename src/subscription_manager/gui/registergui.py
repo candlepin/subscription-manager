@@ -976,11 +976,24 @@ class PerformRegisterScreen(NoGuiScreen):
         # Done with the registration stuff, now on to attach
         self.emit('register-finished')
 
+        # Having activation-keys means the 'skip-auto-bind' wasn't an
+        # option. So 'skip-auto-bind' and 'activation-keys' are
+        # exclusive in practice.
         if self.info.get_property('activation-keys'):
             self.emit('move-to-screen', REFRESH_SUBSCRIPTIONS_PAGE)
-        else:
-            self.emit('move-to-screen', SELECT_SLA_PAGE)
+            self.pre_done()
+            return
 
+        if self.info.get_property('skip-auto-bind'):
+            # We are done at this point basically. The handler for 'register-finished'
+            # will take care of going to the done screen. This is just to avoid starting
+            # select sla page's pre(). In the future it may make sense to have a 'screen'
+            # after this that just does the logic in these if statements in a non-async pre()
+            # so we could potentially block on it.
+            self.pre_done()
+            return
+
+        self.emit('move-to-screen', SELECT_SLA_PAGE)
         self.pre_done()
         return
 
@@ -2034,6 +2047,11 @@ class DoneScreen(Screen):
     def __init__(self, reg_info, async_backend, facts, parent_window):
         super(DoneScreen, self).__init__(reg_info, async_backend, facts, parent_window)
         self.pre_message = "We are done."
+
+    def pre(self):
+        # TODO: We could start cleanup tasks here.
+        self.pre_done()
+        return False
 
 
 class InfoScreen(Screen):
