@@ -111,14 +111,14 @@ def format_mapped_message(e, msg, mapped_message, format_msg=True):
         # the message from the server as an info dialog. (not an error)
         if 200 < int(e.code) < 300:
             message = linkify(mapped_message)
+            return message
+    try:
+        if format_msg:
+            message = msg % linkify(mapped_message)
         else:
-            try:
-                if format_msg:
-                    message = msg % linkify(mapped_message)
-                else:
-                    message = linkify(mapped_message)
-            except Exception:
-                message = msg
+            message = linkify(mapped_message)
+    except Exception:
+        message = msg
     return message
 
 
