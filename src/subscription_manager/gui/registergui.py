@@ -358,7 +358,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         self.info.set_property('register-status', msg)
 
     def do_register_finished(self):
-        msg = _("The system has been registered with ID: %s ") % self.info.identity.uuid
+        msg = _("System '%s' successfully registered.\n") % self.info.identity.name
         self.info.set_property('register-status', msg)
 
     def do_finished(self):
