@@ -359,7 +359,17 @@ class MainWindow(widgets.SubmanBaseWidget):
 
     def _register_item_clicked(self, widget):
         registration_dialog = registergui.RegisterDialog(self.backend, self.facts)
-        #registration_dialog.register_dialog.set_transient_for(self._get_window())
+
+        if widget:
+            def disable(x):
+                widget.set_sensitive(False)
+
+            def enable(x):
+                widget.set_sensitive(True)
+
+            registration_dialog.register_dialog.connect('show', disable)
+            registration_dialog.register_dialog.connect('destroy', enable)
+
         registration_dialog.initialize()
         registration_dialog.show()
 
@@ -428,6 +438,17 @@ class MainWindow(widgets.SubmanBaseWidget):
     def _update_certificates_button_clicked(self, widget):
         autobind_wizard = registergui.AutobindWizardDialog(self.backend,
                                                            self.facts)
+        if widget:
+            def disable(x):
+                widget.set_sensitive(False)
+
+            def enable(x):
+                widget.set_sensitive(True)
+
+            autobind_wizard.register_dialog.connect('show', disable)
+            autobind_wizard.register_dialog.connect('destroy', enable)
+            autobind_wizard.register_dialog.connect('hide', enable)
+
         autobind_wizard.initialize()
         autobind_wizard.show()
 
