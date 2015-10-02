@@ -73,6 +73,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
 
         backend = managergui.Backend()
         self.info = registergui.RegisterInfo()
+        self.info.set_initial_status()
         self.register_widget = registergui.RegisterWidget(backend, facts,
                                                           reg_info=self.info,
                                                           parent_window=self.main_window)
