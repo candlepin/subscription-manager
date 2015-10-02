@@ -265,7 +265,13 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.unsubscribe_button.set_property('sensitive', True)
         # Load the entitlement certificate for the selected row:
         serial = selection['serial']
+        if not serial:
+            return
+
         cert = self.entitlement_dir.find(long(serial))
+        if not cert:
+            return
+
         order = cert.order
         products = [(product.name, product.id)
                         for product in cert.products]
