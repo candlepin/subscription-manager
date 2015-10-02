@@ -73,6 +73,8 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
 
         backend = managergui.Backend()
         self.info = registergui.RegisterInfo()
+        # BZ 1267322 Set the registration status message
+        self._status_message = self.info.get_registration_status()
         self.register_widget = registergui.RegisterWidget(backend, facts,
                                                           reg_info=self.info,
                                                           parent_window=self.main_window)
