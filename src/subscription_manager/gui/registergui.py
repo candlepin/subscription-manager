@@ -196,6 +196,7 @@ class RegisterInfo(ga_GObject.GObject):
             msg = _("System '%s' successfully registered.\n") \
                 % self.identity.name
         self.set_property('register-status', msg)
+        return msg
 
 
 class RegisterWidget(widgets.SubmanBaseWidget):
