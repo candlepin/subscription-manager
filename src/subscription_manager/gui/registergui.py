@@ -190,12 +190,11 @@ class RegisterInfo(ga_GObject.GObject):
         self.set_property('port', CFG.get('server', 'port'))
         self.set_property('prefix', CFG.get('server', 'prefix'))
 
-    def set_initial_status(self):
+    def get_registration_status(self):
         msg = _("This system is not currently registered.")
         if self.identity and self.identity.is_valid():
             msg = _("System '%s' successfully registered.\n") \
                 % self.identity.name
-        self.set_property('register-status', msg)
         return msg
 
 
