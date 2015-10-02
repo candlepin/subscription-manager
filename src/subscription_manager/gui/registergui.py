@@ -731,8 +731,8 @@ class RegisterDialog(widgets.SubmanBaseWidget):
         self.register_dialog.show()
 
     def cancel(self, button):
-        self.register_dialog.hide()
-        return True
+        self.register_dialog.destroy()
+        return False
 
     def on_register_message(self, obj, msg, msg_type=None):
         # NOTE: We ignore the message type here, but initial-setup wont.
