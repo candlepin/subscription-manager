@@ -17,7 +17,7 @@
 import re
 import unittest
 
-from iniparse import RawConfigParser
+from iniparse import RawConfigParser, SafeConfigParser
 from mock import Mock, patch
 from StringIO import StringIO
 
@@ -28,6 +28,7 @@ from stubs import StubCertificateDirectory, StubProductCertificate, \
 from subscription_manager.repolib import Repo, RepoActionInvoker, \
         RepoUpdateActionCommand, TidyWriter, RepoFile, YumReleaseverSource
 from subscription_manager import injection as inj
+from rhsm import config
 
 from subscription_manager import repolib
 
@@ -738,3 +739,86 @@ class RepoFileTest(unittest.TestCase):
         rf.set('test', 'k', 1)
         other.set('test', 'k', '1')
         self.assertTrue(rf._configparsers_equal(other))
+
+
+# config file is root only, so just fill in a stringbuffer
+unset_manage_repos_cfg_buf = """
+[server]
+hostname = server.example.conf
+prefix = /candlepin
+[rhsm]
+manage_repos =
+
+[rhsmcertd]
+certCheckInterval = 240
+"""
+
+
+class RhsmConfigParserFromString(config.RhsmConfigParser):
+    def __init__(self, config_string):
+        SafeConfigParser.__init__(self)
+        self.stringio = StringIO(config_string)
+        self.readfp(self.stringio)
+
+
+unset_config = """[server]
+hostname = server.example.conf
+"""
+
+manage_repos_zero_config = """[rhsm]
+manage_repos = 0
+"""
+
+manage_repos_bool_config = """[rhsm]
+manage_repos = false
+"""
+
+manage_repos_not_an_int = """[rhsm]
+manage_repos = thisisanint
+"""
+
+manage_repos_int_37 = """[rhsm]
+manage_repos = 37
+"""
+
+
+class TestManageReposEnabled(fixture.SubManFixture):
+    @patch.object(repolib, 'CFG',
+                  RhsmConfigParserFromString(config_string=unset_config))
+    def test(self):
+        # default stub config, no manage_repo defined, uses default
+        manage_repos_enabled = repolib.manage_repos_enabled()
+        self.assertEquals(manage_repos_enabled, True)
+
+    @patch.object(repolib, 'CFG',
+                  RhsmConfigParserFromString(config_string=unset_manage_repos_cfg_buf))
+    def test_empty_manage_repos(self):
+        manage_repos_enabled = repolib.manage_repos_enabled()
+        self.assertEquals(manage_repos_enabled, True)
+
+    @patch.object(repolib, 'CFG',
+                  RhsmConfigParserFromString(config_string=manage_repos_zero_config))
+    def test_empty_manage_repos_zero(self):
+        manage_repos_enabled = repolib.manage_repos_enabled()
+        self.assertEquals(manage_repos_enabled, False)
+
+    @patch.object(repolib, 'CFG',
+                  RhsmConfigParserFromString(config_string=manage_repos_bool_config))
+    def test_empty_manage_repos_bool(self):
+        manage_repos_enabled = repolib.manage_repos_enabled()
+        # Should fail, and return default of 1
+        self.assertEquals(manage_repos_enabled, True)
+
+    @patch.object(repolib, 'CFG',
+                  RhsmConfigParserFromString(config_string=manage_repos_not_an_int))
+    def test_empty_manage_repos_not_an_int(self):
+        manage_repos_enabled = repolib.manage_repos_enabled()
+        # Should fail, and return default of 1
+        self.assertEquals(manage_repos_enabled, True)
+
+    @patch.object(repolib, 'CFG',
+                  RhsmConfigParserFromString(config_string=manage_repos_int_37))
+    def test_empty_manage_repos_int_37(self):
+        manage_repos_enabled = repolib.manage_repos_enabled()
+        # Should fail, and return default of 1
+        self.assertEquals(manage_repos_enabled, True)
