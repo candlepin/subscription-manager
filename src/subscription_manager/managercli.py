@@ -49,7 +49,7 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import valid_quantity, format_date
 from subscription_manager.release import ReleaseBackend
-from subscription_manager.repolib import RepoActionInvoker, RepoFile
+from subscription_manager.repolib import RepoActionInvoker, RepoFile, manage_repos_enabled
 from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
@@ -256,10 +256,6 @@ def get_installed_product_status(product_directory, entitlement_directory, uep, 
                 ))
 
     return product_status
-
-
-def managed_repos_disabled():
-    return cfg.has_option('rhsm', 'manage_repos') and not int(cfg.get('rhsm', 'manage_repos'))
 
 
 class CliCommand(AbstractCLICommand):
@@ -1924,7 +1920,7 @@ class ReposCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
         rc = 0
-        if managed_repos_disabled():
+        if not manage_repos_enabled():
             print _("Repositories disabled by configuration.")
             return rc
 
@@ -2484,7 +2480,7 @@ class OverrideCommand(CliCommand):
 
         overrides = Overrides()
 
-        if managed_repos_disabled():
+        if not manage_repos_enabled():
             print _("Repositories disabled by configuration.")
 
         if self.options.list:

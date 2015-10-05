@@ -16,6 +16,8 @@
 # in this software or its documentation.
 #
 
+# TODO: cleanup config parser imports
+from ConfigParser import Error as ConfigParserError
 import gettext
 from iniparse import RawConfigParser as ConfigParser
 import logging
@@ -41,6 +43,23 @@ CFG = initConfig()
 ALLOWED_CONTENT_TYPES = ["yum"]
 
 _ = gettext.gettext
+
+
+def manage_repos_enabled():
+    manage_repos = True
+    try:
+        manage_repos = CFG.get_int('rhsm', 'manage_repos')
+    except ValueError, e:
+        log.exception(e)
+        return True
+    except ConfigParserError, e:
+        log.exception(e)
+        return True
+
+    if manage_repos is None:
+        return True
+
+    return bool(manage_repos)
 
 
 class RepoActionInvoker(BaseActionInvoker):
@@ -190,8 +209,7 @@ class RepoUpdateActionCommand(object):
 
         self.manage_repos = 1
         self.apply_overrides = apply_overrides
-        if CFG.has_option('rhsm', 'manage_repos'):
-            self.manage_repos = CFG.get_int('rhsm', 'manage_repos')
+        self.manage_repos = manage_repos_enabled()
 
         self.release = None
         self.overrides = {}
@@ -682,16 +700,14 @@ class RepoFile(ConfigParser):
         # note PATH get's expanded with chroot info, etc
         self.path = Path.join(self.PATH, name)
         self.repos_dir = Path.abs(self.PATH)
-        self.manage_repos = 1
-        if CFG.has_option('rhsm', 'manage_repos'):
-            self.manage_repos = CFG.get_int('rhsm', 'manage_repos')
+        self.manage_repos = manage_repos_enabled()
         # Simulate manage repos turned off if no yum.repos.d directory exists.
         # This indicates yum is not installed so clearly no need for us to
         # manage repos.
         if not self.path_exists(self.repos_dir):
             log.warn("%s does not exist, turning manage_repos off." %
                     self.repos_dir)
-            self.manage_repos = 0
+            self.manage_repos = False
         self.create()
 
     # Easier than trying to mock/patch os.path.exists
