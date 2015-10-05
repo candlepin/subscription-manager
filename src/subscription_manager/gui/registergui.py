@@ -2049,10 +2049,18 @@ class AsyncBackend(object):
 # TODO: make this a more informative 'summary' page.
 class DoneScreen(Screen):
     gui_file = "done_box"
+    widget_names = Screen.widget_names + ['consumer_id_label']
+
 
     def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(DoneScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+        super(DoneScreen, self).__init__(reg_info,
+                                         async_backend,
+                                         facts,
+                                         parent_window)
         self.pre_message = "We are done."
+        self.consumer_id_label.set_text(
+            _('The system has been registered with ID: %s ') \
+                                        % self.reg_info.identity.uuid)
 
     def pre(self):
         # TODO: We could start cleanup tasks here.
