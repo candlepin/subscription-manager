@@ -190,6 +190,13 @@ class RegisterInfo(ga_GObject.GObject):
         self.set_property('port', CFG.get('server', 'port'))
         self.set_property('prefix', CFG.get('server', 'prefix'))
 
+    def get_registration_status(self):
+        msg = _("This system is not currently registered.")
+        if self.identity and self.identity.is_valid():
+            msg = _("System '%s' successfully registered.\n") \
+                % self.identity.name
+        return msg
+
 
 class RegisterWidget(widgets.SubmanBaseWidget):
     gui_file = "registration"
@@ -358,7 +365,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         self.info.set_property('register-status', msg)
 
     def do_register_finished(self):
-        msg = _("The system has been registered with ID: %s ") % self.info.identity.uuid
+        msg = _("System '%s' successfully registered.\n") % self.info.identity.name
         self.info.set_property('register-status', msg)
 
     def do_finished(self):
@@ -402,6 +409,8 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
         if self.info.identity.is_valid():
             self.emit('register-finished')
+            msg = _("System '%s' successfully registered.\n") % self.info.identity.name
+            self.info.set_property('register-status', msg.rstrip())
             # We are done if auto bind is being skipped ("Manually attach
             # to subscriptions" is clicked in the gui)
             if self.info.get_property('skip-auto-bind'):
@@ -409,7 +418,8 @@ class RegisterWidget(widgets.SubmanBaseWidget):
             self.current_screen.emit('move-to-screen', SELECT_SLA_PAGE)
             self.register_widget.show_all()
             return False
-
+        msg = _("This system is currently not registered.")
+        self.info.set_property('register-status', msg)
         self.current_screen.stay()
         self.register_widget.show_all()
         return False
@@ -2039,10 +2049,20 @@ class AsyncBackend(object):
 # TODO: make this a more informative 'summary' page.
 class DoneScreen(Screen):
     gui_file = "done_box"
+    widget_names = Screen.widget_names + ['consumer_id_label']
+
 
     def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(DoneScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+        super(DoneScreen, self).__init__(reg_info,
+                                         async_backend,
+                                         facts,
+                                         parent_window)
         self.pre_message = "We are done."
+        msg = _('System is not registered.')
+        if self.info.identity and self.info.identity.uuid:
+            msg = _('The system has been registered with ID: %s ') \
+                                            % self.info.identity.uuid
+        self.consumer_id_label.set_text(msg)
 
     def pre(self):
         # TODO: We could start cleanup tasks here.
