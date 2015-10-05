@@ -2061,7 +2061,7 @@ class DoneScreen(Screen):
         msg = _('System is not registered.')
         if self.info.identity and self.info.identity.uuid:
             msg = _('The system has been registered with ID: %s ') \
-                                            % self.info.identity.uuid)
+                                            % self.info.identity.uuid
         self.consumer_id_label.set_text(msg)
 
     def pre(self):
