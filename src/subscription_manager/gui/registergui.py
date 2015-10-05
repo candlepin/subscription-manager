@@ -2058,9 +2058,11 @@ class DoneScreen(Screen):
                                          facts,
                                          parent_window)
         self.pre_message = "We are done."
-        self.consumer_id_label.set_text(
-            _('The system has been registered with ID: %s ') \
-                                        % self.info.identity.uuid)
+        msg = _('System is not registered.')
+        if self.info.identity and self.info.identity.uuid:
+            msg = _('The system has been registered with ID: %s ') \
+                                            % self.info.identity.uuid)
+        self.consumer_id_label.set_text(msg)
 
     def pre(self):
         # TODO: We could start cleanup tasks here.
