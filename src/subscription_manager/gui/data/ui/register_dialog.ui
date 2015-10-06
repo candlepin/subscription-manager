@@ -34,14 +34,13 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="cancel_button">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">Close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="cancel_button-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">cancel_button</property>
+                  <object class="AtkObject" id="close_button-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes">close_button</property>
                   </object>
                 </child>
               </object>
