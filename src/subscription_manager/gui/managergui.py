@@ -359,8 +359,19 @@ class MainWindow(widgets.SubmanBaseWidget):
 
     def _register_item_clicked(self, widget):
         registration_dialog = registergui.RegisterDialog(self.backend, self.facts)
+        registration_dialog.register_dialog.connect('destroy',
+                                                    self._on_dialog_destroy,
+                                                    widget)
+
+        if registration_dialog and widget:
+            widget.set_sensitive(False)
+
         registration_dialog.initialize()
         registration_dialog.show()
+
+    def _on_dialog_destroy(self, obj, widget):
+        widget.set_sensitive(True)
+        return False
 
     def _preferences_item_clicked(self, widget):
         try:
@@ -425,8 +436,14 @@ class MainWindow(widgets.SubmanBaseWidget):
         self.import_sub_dialog.show()
 
     def _update_certificates_button_clicked(self, widget):
-        autobind_wizard = registergui.AutobindWizardDialog(self.backend,
-                                                           self.facts)
+        autobind_wizard = registergui.AutobindWizardDialog(self.backend, self.facts)
+        autobind_wizard.register_dialog.connect('destroy',
+                                                self._on_dialog_destroy,
+                                                widget)
+
+        if autobind_wizard and widget:
+            widget.set_sensitive(False)
+
         autobind_wizard.initialize()
         autobind_wizard.show()
 
