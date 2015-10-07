@@ -49,7 +49,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 13%{?dist}
+Release: 14%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -542,6 +542,14 @@ fi
 %endif
 
 %changelog
+* Wed Oct 07 2015 Chris Rog <crog@redhat.com> 1.15.9-14
+- 1268102: Stop main window from opening duplicate dialogs. (awood@redhat.com)
+- 1268088: Changes the rhsm spoke display message to end with "registered"
+  (csnyder@redhat.com)
+- 1268095: Replace SLA radio buttons w/ combobox (alikins@redhat.com)
+- 1268028: Fix skipped auto attach in registergui (alikins@redhat.com)
+- 1268060: Add 'cancel' back to s-m-gui register. (alikins@redhat.com)
+
 * Wed Sep 30 2015 Chris Rog <crog@redhat.com> 1.15.9-13
 - 1266480: Refresh TreeView selection after subscriptions are removed.
   (awood@redhat.com)
