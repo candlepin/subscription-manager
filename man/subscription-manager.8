@@ -802,7 +802,7 @@ to a subscription management service -- which makes all of the subscriptions ava
 The default subscription management service in the Subscription Manager configuration is the Customer Portal Subscription Management service. The configuration file can be edited before the system is registered to point to an on-premise subscription management service like Subscription Asset Manager.
 
 .PP
-Systems are usually registered to a subscription management service as part of their initial configuration, such as the firstboot or kickstart process. However, systems can be registered manually after they are configured, can be removed from a content service, or reregistered.
+Systems are usually registered to a subscription management service as part of their initial configuration, such as the firstboot or kickstart process. However, systems can be registered manually after they are configured, can be removed from a content service, or re-registered.
 
 .PP
 If a system has never been registered (not even during firstboot), then the
@@ -856,7 +856,7 @@ subscription-manager register --username=admin
 .RE
 
 .PP
-If a system is registered and then somehow its subscription information is lost -- a drive crashes or the certificates are deleted or corrupted -- the system can be reregistered, with all of its subscriptions restored, by registering with the existing ID.
+If a system is registered and then somehow its subscription information is lost -- a drive crashes or the certificates are deleted or corrupted -- the system can be re-registered, with all of its subscriptions restored, by registering with the existing ID.
 
 .RS
 .nf
