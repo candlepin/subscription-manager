@@ -370,7 +370,8 @@ class MainWindow(widgets.SubmanBaseWidget):
         registration_dialog.show()
 
     def _on_dialog_destroy(self, obj, widget):
-        widget.set_sensitive(True)
+        if widget:
+            widget.set_sensitive(True)
         return False
 
     def _preferences_item_clicked(self, widget):
