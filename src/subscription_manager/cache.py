@@ -135,6 +135,22 @@ class CacheManager(object):
         """
         Check if data has changed, and push an update if so.
         """
+
+        # The package_upload.py yum plugin from katello-agent will
+        # end up calling this with consumer_uuid=None if the system
+        # is unregistered.
+        if not consumer_uuid:
+            msg = _("consumer_uuid=%s is not a valid consumer_uuid. "
+                    "Not attempting to sync %s cache with server.") % \
+                (consumer_uuid, self.__class__.__name__)
+            log.debug(msg)
+
+            # Raising an exception here would be better, but that is just
+            # going to cause the package_upload plugin to spam yum
+            # output for unregistered systems, and can only be resolved by
+            # registering to rhsm.
+            return 0
+
         log.debug("Checking current system info against cache: %s" % self.CACHE_FILE)
         if self.has_changed() or force:
             log.debug("System data has changed, updating server.")

@@ -152,6 +152,16 @@ class TestProfileManager(unittest.TestCase):
         self.assertTrue(self.profile_mgr.has_changed())
         self.profile_mgr._read_cache.assert_called_with()
 
+    def test_update_check_consumer_uuid_none(self):
+        uuid = None
+        uep = Mock()
+
+        self.profile_mgr.has_changed = Mock(return_value=True)
+        self.profile_mgr.write_cache = Mock()
+
+        res = self.profile_mgr.update_check(uep, uuid)
+        self.assertEquals(0, res)
+
     @staticmethod
     def _mock_pkg_profile(packages):
         """
