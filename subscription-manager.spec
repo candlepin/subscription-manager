@@ -49,7 +49,7 @@
 
 Name: subscription-manager
 Version: 1.15.9
-Release: 14%{?dist}
+Release: 15%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -542,6 +542,12 @@ fi
 %endif
 
 %changelog
+* Tue Oct 13 2015 Chris Rog <crog@redhat.com> 1.15.9-15
+- 1254460: Fixed the credits button in the about dialog in subman GUI
+  (crog@redhat.com)
+- 1251853: Fix errors if "manage_repos = " in cfg (alikins@redhat.com)
+- 1270204: Crash report no longer sent when widget is none (csnyder@redhat.com)
+
 * Wed Oct 07 2015 Chris Rog <crog@redhat.com> 1.15.9-14
 - 1268102: Stop main window from opening duplicate dialogs. (awood@redhat.com)
 - 1268088: Changes the rhsm spoke display message to end with "registered"
