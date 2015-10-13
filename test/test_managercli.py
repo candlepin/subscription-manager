@@ -15,9 +15,9 @@ import stubs
 from subscription_manager import managercli, managerlib
 from subscription_manager.injection import provide, \
         CERT_SORTER, PROD_DIR
-from subscription_manager.managercli import get_installed_product_status
+from subscription_manager.managercli import get_installed_product_status, AVAILABLE_SUBS_MATCH_COLUMNS
 from subscription_manager.printing_utils import format_name, columnize, \
-        _echo, _none_wrap
+        echo_columnize_callback, none_wrap_columnize_callback, highlight_by_filter_string_columnize_callback, FONT_BOLD, FONT_RED, FONT_NORMAL
 from subscription_manager.repolib import Repo
 from stubs import MockStderr, StubProductCertificate, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, StubCertSorter, StubPool
@@ -1567,9 +1567,56 @@ class TestFormatName(unittest.TestCase):
         self.assertEquals("\t" * 4, new_name[0:4])
 
 
+class TestHighlightByFilter(unittest.TestCase):
+    @mock.patch('sys.stdout.isatty', return_value='True')
+    def test_highlight_by_filter_string(self, isatty):
+        args = ['Super Test Subscription']
+        kwargs = {"filter_string": "Super*",
+                  "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
+                  "caption": "Subscription Name:"}
+        result = highlight_by_filter_string_columnize_callback("Subscription Name:    %s", *args, **kwargs)
+        self.assertEquals(result, 'Subscription Name:    ' + FONT_BOLD + FONT_RED + 'Super Test Subscription' + FONT_NORMAL)
+
+    @mock.patch('sys.stdout.isatty', return_value='True')
+    def test_highlight_by_filter_string_single(self, isatty):
+        args = ['Super Test Subscription']
+        kwargs = {"filter_string": "*Subscriptio?",
+                  "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
+                  "caption": "Subscription Name:"}
+        result = highlight_by_filter_string_columnize_callback("Subscription Name:    %s", *args, **kwargs)
+        self.assertEquals(result, 'Subscription Name:    ' + FONT_BOLD + FONT_RED + 'Super Test Subscription' + FONT_NORMAL)
+
+    @mock.patch('sys.stdout.isatty', return_value='True')
+    def test_highlight_by_filter_string_all(self, isatty):
+        args = ['Super Test Subscription']
+        kwargs = {"filter_string": "*",
+                  "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
+                  "caption": "Subscription Name:"}
+        result = highlight_by_filter_string_columnize_callback("Subscription Name:    %s", *args, **kwargs)
+        self.assertEquals(result, 'Subscription Name:    Super Test Subscription')
+
+    @mock.patch('sys.stdout.isatty', return_value='True')
+    def test_highlight_by_filter_string_exact(self, isatty):
+        args = ['Premium']
+        kwargs = {"filter_string": "Premium",
+                  "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
+                  "caption": "Service Level:"}
+        result = highlight_by_filter_string_columnize_callback("Service Level:    %s", *args, **kwargs)
+        self.assertEquals(result, 'Service Level:    ' + FONT_BOLD + FONT_RED + 'Premium' + FONT_NORMAL)
+
+    @mock.patch('sys.stdout.isatty', return_value='True')
+    def test_highlight_by_filter_string_list_row(self, isatty):
+        args = ['Awesome-os-stacked']
+        kwargs = {"filter_string": "Awesome*",
+                  "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
+                  "caption": "Subscription Name:"}
+        result = highlight_by_filter_string_columnize_callback("    %s", *args, **kwargs)
+        self.assertEquals(result, '    ' + FONT_BOLD + FONT_RED + 'Awesome-os-stacked' + FONT_NORMAL)
+
+
 class TestNoneWrap(unittest.TestCase):
     def test_none_wrap(self):
-        result = _none_wrap('foo %s %s', 'doberman pinscher', None)
+        result = none_wrap_columnize_callback('foo %s %s', 'doberman pinscher', None)
         self.assertEquals(result, 'foo doberman pinscher None')
 
 
@@ -1582,28 +1629,28 @@ class TestColumnize(unittest.TestCase):
         managercli.get_terminal_width = self.old_method
 
     def test_columnize(self):
-        result = columnize(["Hello:", "Foo:"], _echo, "world", "bar")
+        result = columnize(["Hello:", "Foo:"], echo_columnize_callback, "world", "bar")
         self.assertEquals(result, "Hello: world\nFoo:   bar")
 
     def test_columnize_with_list(self):
-        result = columnize(["Hello:", "Foo:"], _echo, ["world", "space"], "bar")
+        result = columnize(["Hello:", "Foo:"], echo_columnize_callback, ["world", "space"], "bar")
         self.assertEquals(result, "Hello: world\n       space\nFoo:   bar")
 
     def test_columnize_with_empty_list(self):
-        result = columnize(["Hello:", "Foo:"], _echo, [], "bar")
+        result = columnize(["Hello:", "Foo:"], echo_columnize_callback, [], "bar")
         self.assertEquals(result, "Hello: \nFoo:   bar")
 
     @patch('subscription_manager.printing_utils.get_terminal_width')
     def test_columnize_with_small_term(self, term_width_mock):
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
-                _echo, "This is a testing string", "This_is_another_testing_string")
+                echo_columnize_callback, "This is a testing string", "This_is_another_testing_string")
         expected = 'Hello\nHello\nHello\nHello\n:     This\n      is a\n      ' \
                 'testin\n      g\n      string\nFoo\nFoo\nFoo\nFoo:  ' \
                 'This_i\n      s_anot\n      her_te\n      sting_\n      string'
         self.assertNotEquals(result, expected)
         term_width_mock.return_value = 12
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
-                _echo, "This is a testing string", "This_is_another_testing_string")
+                echo_columnize_callback, "This is a testing string", "This_is_another_testing_string")
         self.assertEquals(result, expected)
 
     def test_format_name_no_break_no_indent(self):
@@ -1639,10 +1686,10 @@ class TestColumnize(unittest.TestCase):
     def test_columnize_multibyte(self, term_width_mock):
         multibyte_str = u"このシステム用に"
         term_width_mock.return_value = 40
-        result = columnize([multibyte_str], _echo, multibyte_str)
+        result = columnize([multibyte_str], echo_columnize_callback, multibyte_str)
         expected = u"このシステム用に このシステム用に"
         self.assertEquals(result, expected)
         term_width_mock.return_value = 14
-        result = columnize([multibyte_str], _echo, multibyte_str)
+        result = columnize([multibyte_str], echo_columnize_callback, multibyte_str)
         expected = u"このシ\nステム\n用に   このシ\n       ステム\n       用に"
         self.assertEquals(result, expected)

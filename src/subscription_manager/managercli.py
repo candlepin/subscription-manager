@@ -57,7 +57,8 @@ from subscription_manager.utils import parse_server_info, \
         ProductCertificateFilter, EntitlementCertificateFilter
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
-from subscription_manager.printing_utils import columnize, format_name, _none_wrap, _echo
+from subscription_manager.printing_utils import columnize, format_name, \
+        none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_callback
 
 _ = gettext.gettext
 
@@ -103,6 +104,14 @@ AVAILABLE_SUBS_LIST = [
     _("Subscription Type:"),
     _("Ends:"),
     _("System Type:")
+]
+
+AVAILABLE_SUBS_MATCH_COLUMNS = [
+    _("Subscription Name:"),
+    _("Provides:"),
+    _("SKU:"),
+    _("Contract:"),
+    _("Service Level:")
 ]
 
 REPOS_LIST = [
@@ -212,7 +221,7 @@ def show_autosubscribe_output(uep):
         status = STATUS_MAP[prod_status[4]]
         if prod_status[4] == NOT_SUBSCRIBED:
             all_subscribed = False
-        print columnize(PRODUCT_STATUS, _echo, prod_status[0], status) + "\n"
+        print columnize(PRODUCT_STATUS, echo_columnize_callback, prod_status[0], status) + "\n"
     if not all_subscribed:
         print _("Unable to find available subscriptions for all your installed products.")
     return subscribed
@@ -721,7 +730,7 @@ class OwnersCommand(UserPassCommand):
                 print("+-------------------------------------------+")
                 print("")
                 for owner in owners:
-                    print columnize(ORG_LIST, _echo,
+                    print columnize(ORG_LIST, echo_columnize_callback,
                             owner['displayName'], owner['key']) + "\n"
             else:
                 print(_("%s cannot register with any organizations.") % self.username)
@@ -760,7 +769,7 @@ class EnvironmentsCommand(OrgCommand):
                     print("          %s" % (_("Environments")))
                     print("+-------------------------------------------+")
                     for env in environments:
-                        print columnize(ENVIRONMENT_LIST, _echo, env['name'],
+                        print columnize(ENVIRONMENT_LIST, echo_columnize_callback, env['name'],
                                 env['description'] or "") + "\n"
                 else:
                     print _("This org does not have any environments.")
@@ -1971,7 +1980,7 @@ class ReposCommand(CliCommand):
                     print("+----------------------------------------------------------+")
 
                     for repo in repos:
-                        print columnize(REPOS_LIST, _echo,
+                        print columnize(REPOS_LIST, echo_columnize_callback,
                             repo.id,
                             repo["name"],
                             repo["baseurl"],
@@ -2205,7 +2214,7 @@ class ListCommand(CliCommand):
 
                 for product in iproducts:
                     status = STATUS_MAP[product[4]]
-                    print columnize(INSTALLED_PRODUCT_STATUS, _none_wrap,
+                    print columnize(INSTALLED_PRODUCT_STATUS, none_wrap_columnize_callback,
                                 product[0], product[1], product[2], product[3],
                                 status, product[5], product[6], product[7]) + "\n"
             else:
@@ -2262,7 +2271,9 @@ class ListCommand(CliCommand):
                         else:
                             data['management_enabled'] = _("No")
 
-                        print columnize(AVAILABLE_SUBS_LIST, _none_wrap,
+                        kwargs = {"filter_string": self.options.filter_string,
+                                  "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS}
+                        print columnize(AVAILABLE_SUBS_LIST, highlight_by_filter_string_columnize_callback,
                                 data['productName'],
                                 data['providedProducts'],
                                 data['productId'],
@@ -2275,7 +2286,7 @@ class ListCommand(CliCommand):
                                 data['service_type'] or "",
                                 data['pool_type'],
                                 data['endDate'],
-                                machine_type) + "\n"
+                                machine_type, **kwargs) + "\n"
             elif not self.options.pid_only:
                 if self.options.filter_string and self.options.service_level:
                     print(
@@ -2396,7 +2407,9 @@ class ListCommand(CliCommand):
                         else:
                             reasons.append(_("Subscription management service doesn't support Status Details."))
 
-                        print columnize(CONSUMED_LIST, _none_wrap,
+                        kwargs = {"filter_string": filter_string,
+                                  "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS}
+                        print columnize(CONSUMED_LIST, highlight_by_filter_string_columnize_callback,
                             name,
                             product_names,
                             sku,
@@ -2413,7 +2426,7 @@ class ListCommand(CliCommand):
                             pool_type,
                             managerlib.format_date(cert.valid_range.begin()),
                             managerlib.format_date(cert.valid_range.end()),
-                            system_type
+                            system_type, **kwargs
                         ) + "\n"
             elif not pid_only:
                 if filter_string and service_level:
@@ -2556,7 +2569,7 @@ class OverrideCommand(CliCommand):
             # Split the list of 2-tuples into a list of names and a list of keys
             names, values = zip(*repo_data)
             names = ["%s:" % x for x in names]
-            print columnize(names, _echo, *values, indent=2) + "\n"
+            print columnize(names, echo_columnize_callback, *values, indent=2) + "\n"
 
 
 class VersionCommand(CliCommand):
