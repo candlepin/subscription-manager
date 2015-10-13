@@ -1141,7 +1141,8 @@ class SelectSLAScreen(Screen):
         tree_iter = combobox.get_active_iter()
         if tree_iter is not None:
             model = combobox.get_model()
-            sla, sla_data_map = model[tree_iter][:2]
+            sla, sla_data_map = (model[tree_iter][0],
+                                 model[tree_iter][1])
             self.info.set_property('dry-run-result',
                                    sla_data_map[sla])
 
