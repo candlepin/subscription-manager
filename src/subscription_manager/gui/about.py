@@ -54,6 +54,7 @@ class AboutDialog(object):
         self.dialog.set_copyright(_("Copyright (c) 2012 Red Hat, Inc."))
         self.dialog.set_logo_icon_name("subscription-manager")
         self.dialog.set_icon_name("subscription-manager")
+        self.dialog.set_authors(["The Subscription Manager Team"])
 
         next_update_label = ga_Gtk.Label()
         python_rhsm_version_label = ga_Gtk.Label()
