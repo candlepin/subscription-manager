@@ -183,6 +183,7 @@ class RegisterInfo(ga_GObject.GObject):
     def __init__(self):
         ga_GObject.GObject.__init__(self)
         self._defaults_from_config()
+        self._initial_registration_status()
 
     def _defaults_from_config(self):
         """Load the current server values from configuration (rhsm.conf)."""
@@ -190,11 +191,11 @@ class RegisterInfo(ga_GObject.GObject):
         self.set_property('port', CFG.get('server', 'port'))
         self.set_property('prefix', CFG.get('server', 'prefix'))
 
-    def get_registration_status(self):
+    def _initial_registration_status(self):
         msg = _("This system is currently not registered.")
         if self.identity and self.identity.is_valid():
             msg = _("System Already Registered")
-        return msg
+        self.set_property('register-status', msg)
 
 
 class RegisterWidget(widgets.SubmanBaseWidget):

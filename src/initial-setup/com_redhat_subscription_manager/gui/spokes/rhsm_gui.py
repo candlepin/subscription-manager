@@ -60,7 +60,6 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
     def __init__(self, data, storage, payload, instclass):
         NormalSpoke.__init__(self, data, storage, payload, instclass)
         self._done = False
-        self._status_message = ""
         self._addon_data = self.data.addons.com_redhat_subscription_manager
 
     def initialize(self):
@@ -73,8 +72,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
 
         backend = managergui.Backend()
         self.info = registergui.RegisterInfo()
-        # BZ 1267322 Set the registration status message
-        self._status_message = self.info.get_registration_status()
+
         self.register_widget = registergui.RegisterWidget(backend, facts,
                                                           reg_info=self.info,
                                                           parent_window=self.main_window)
@@ -105,8 +103,6 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         self.register_widget.connect('notify::screen-ready',
                                      self._on_register_screen_ready_change)
 
-        self.info.connect('notify::register-status', self._on_register_status_change)
-
         self.register_box.show_all()
         self.register_widget.initialize()
 
@@ -136,7 +132,8 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         """A string property indicating a user facing summary of the spokes status.
         This is displayed under the spokes name on it's hub."""
 
-        return self._status_message
+        # The status property is only used read/only, so no setter required.
+        return self.info.get_property('register-status')
 
     def refresh(self):
         """Update gui widgets to reflect state of self.data.
@@ -287,11 +284,6 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         ready = self.register_widget.current_screen.get_property('ready')
         self.proceed_button.set_sensitive(ready)
         self.back_button.set_sensitive(ready)
-
-    def _on_register_status_change(self, obj, value):
-        """Handler for registergui.RegisterInfo's 'register-status' property notifications."""
-
-        self._status_message = obj.get_property('register-status')
 
     def _on_register_button_label_change(self, obj, value):
         """Handler for registergui.RegisterWidgets's 'register-button-label' property notifications.
