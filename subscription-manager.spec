@@ -48,7 +48,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.16.3
+Version: 1.16.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -542,6 +542,38 @@ fi
 %endif
 
 %changelog
+* Thu Oct 15 2015 Alex Wood <awood@redhat.com> 1.16.4-1
+- 1264964: Ignore uuid=None on package sync (alikins@redhat.com)
+- Set register-status in RegisterInfo init. (alikins@redhat.com)
+- Add glade for selectsla combobox for rhel6 (alikins@redhat.com)
+- 1254460: Fixed the credits button in the about dialog in subman GUI
+  (crog@redhat.com)
+- 1192120: Fixed remaining instances of "reregister" in the man pages
+  (crog@redhat.com)
+- 1270204: Crash report no longer sent when widget is none (csnyder@redhat.com)
+- Cancel button is now labelled "Close" (csnyder@redhat.com)
+- 1268088: Changes the rhsm spoke display message to end with "registered"
+  (csnyder@redhat.com)
+- Use class methods instead of redundant ad-hoc methods. (alikins@redhat.com)
+- 1251853: Fix errors if "manage_repos = " in cfg (alikins@redhat.com)
+- 1268102: Stop main window from opening duplicate dialogs. (awood@redhat.com)
+- 1268095: Replace SLA radio buttons w/ combobox (alikins@redhat.com)
+- 1268060: Add 'cancel' back to s-m-gui register. (alikins@redhat.com)
+- 1268028: Fix skipped auto attach in registergui (alikins@redhat.com)
+- 1266929: Fix bug with exception reporting in register dialog.
+  (awood@redhat.com)
+- 1266480: Refresh TreeView selection after subscriptions are removed.
+  (awood@redhat.com)
+- Allow 'back' to go back multiple times. (alikins@redhat.com)
+- 1267034: Handle 401 with cert based auth (alikins@redhat.com)
+- 1262075,1267179: Fix back/cancel nav (alikins@redhat.com)
+- 1267287: Fix allsubs tab ui regression (alikins@redhat.com)
+- 1266994: Use our icon for initial-setup spoke icon (alikins@redhat.com)
+- 1261006: Handle multiple nav button clicks (alikins@redhat.com)
+- 1242998, 1254550: Fix "already reg'ed" in initial-setup (alikins@redhat.com)
+- 1265347, 1265371: Added translation updates and corrections from 1.15.X
+  (crog@redhat.com)
+
 * Fri Sep 25 2015 Alex Wood <awood@redhat.com> 1.16.3-1
 - 1249012: fix start-end date original color (vrjain@redhat.com)
 - 884288: Make register widgets handle resizing. (alikins@redhat.com)
