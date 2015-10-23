@@ -13,6 +13,7 @@
 # in this software or its documentation.
 #
 
+import logging
 import sys
 
 sys.path.append('/usr/share/rhsm')
@@ -24,7 +25,8 @@ from subscription_manager.injectioninit import init_dep_injection
 
 from dnfpluginscore import _, logger
 import dnf
-import logging
+import librepo
+
 
 class ProductId(dnf.Plugin):
     name = 'product-id'
@@ -58,6 +60,7 @@ class ProductId(dnf.Plugin):
             logger.error(str(e))
 
 log = logging.getLogger('rhsm-app.' + __name__)
+
 
 class DnfProductManager(ProductManager):
     def __init__(self, base):
@@ -109,11 +112,14 @@ class DnfProductManager(ProductManager):
     # are actually installed.
     def get_active(self):
         """find yum repos that have packages installed"""
+
         # installed packages
         installed_na = self.base.sack.query().installed().na_dict()
+
         # available version of installed
-        avail_pkgs = self.base.sack.query().available().filter(name=
-                                          [k[0] for k in installed_na.keys()])
+        avail_pkgs = self.base.sack.query().available().filter(name=[
+            k[0] for k in installed_na.keys()])
+
         active = set()
         for p in avail_pkgs:
             if (p.name, p.arch) in installed_na:

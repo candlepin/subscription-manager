@@ -364,102 +364,6 @@ class TestProductManager(SubManFixture):
         self.prod_mgr = productid.ProductManager(product_dir=self.prod_dir,
                 product_db=self.prod_db_mock)
 
-    def test_removed(self):
-        # non rhel cert, not in active, with enabled repo
-        self.prod_db_mock.find_repos.return_value = ["repo1"]
-        cert = self._create_non_rhel_cert()
-        self.prod_dir.certs.append(cert)
-        self.prod_mgr.update_removed([])
-        self.assertTrue(cert.delete.called)
-
-    def test_get_enabled_no_packages(self):
-        cert = self._create_server_cert()
-        self.prod_dir.certs.append(cert)
-        mock_yb = Mock(spec=yum.YumBase)
-        mock_yb.repos.listEnabled.return_value = []
-        self.prod_mgr.get_enabled(mock_yb)
-
-    def test_get_enabled_with_repos(self):
-        cert = self._create_server_cert()
-        self.prod_dir.certs.append(cert)
-
-        # mock the repo metadata read of the product cert
-        mock_repo = Mock(spec=yum.repos.Repository)
-        mock_repo.retrieveMD = Mock(return_value='somefilename')
-        mock_repo.id = Mock(return_value='rhel-6-server')
-        self.prod_mgr._get_cert = Mock(return_value=cert)
-
-        mock_yb = Mock(spec=yum.YumBase)
-        mock_yb.repos.listEnabled.return_value = [mock_repo]
-        self.prod_mgr.get_enabled(mock_yb)
-
-    @patch('subscription_manager.productid.log')
-    def test_get_enabled_exception(self, mock_log):
-        mock_repo = Mock(spec=yum.repos.Repository)
-        mock_repo.retrieveMD = Mock(return_value='somefilename')
-        mock_repo.id = Mock(return_value='rhel-6-server')
-        self.prod_mgr._get_cert = Mock(side_effect=IOError)
-
-        mock_yb = Mock(spec=yum.YumBase)
-        mock_yb.repos.listEnabled.return_value = [mock_repo]
-        enabled = self.prod_mgr.get_enabled(mock_yb)
-
-        self.assertTrue(mock_log.exception.called)
-        self.assertEquals([], enabled)
-
-    @patch('subscription_manager.productid.log')
-    def test_get_enabled_metadata_error(self, mock_log):
-        mock_repo = Mock(spec=yum.repos.Repository)
-        mock_repo.retrieveMD = Mock(side_effect=yum.Errors.RepoMDError)
-        mock_repo.id = Mock(return_value='rhel-6-server')
-
-        mock_yb = Mock(spec=yum.YumBase)
-        mock_yb.repos.listEnabled.return_value = [mock_repo]
-        self.prod_mgr.get_enabled(mock_yb)
-        self.assertTrue(mock_repo.id in self.prod_mgr.meta_data_errors)
-        self.assertFalse(mock_log.exception.called)
-
-    def test_get_active_no_packages(self):
-        cert = self._create_server_cert()
-        self.prod_dir.certs.append(cert)
-        mock_yb = Mock(spec=yum.YumBase)
-        mock_yb.pkgSack.returnPackages.return_value = []
-        active = self.prod_mgr.get_active(mock_yb)
-        self.assertEquals(set([]), active)
-
-    def test_get_active_with_active_packages(self):
-        mock_yb = Mock(spec=yum.YumBase)
-        mock_package = Mock(spec=yum.rpmsack.RPMInstalledPackage)
-        mock_package.repoid = 'this-is-not-a-rh-repo'
-        mock_package.name = 'some-cool-package'
-        mock_package.arch = 'noarch'
-        mock_yb.pkgSack.returnPackages.return_value = [mock_package]
-        active = self.prod_mgr.get_active(mock_yb)
-        self.assertEquals(set([mock_package.repoid]), active)
-
-    def test_get_active_without_active_packages(self):
-        mock_yb = Mock(spec=yum.YumBase)
-        mock_package = Mock(spec=yum.rpmsack.RPMInstalledPackage)
-        mock_package.repoid = 'this-is-not-a-rh-repo'
-        mock_package.name = 'some-cool-package'
-        mock_package.arch = 'noarch'
-        mock_yb.pkgSack.returnPackages.return_value = [mock_package]
-        # No packages in the enabled repo 'this-is-not-a-rh-repo' are installed.
-        mock_yb.rpmdb.searchNevra.return_value = False
-        active = self.prod_mgr.get_active(mock_yb)
-        self.assertEquals(set([]), active)
-
-    def test_get_active_with_active_packages_rhel57_installed_repo(self):
-        """rhel5.7 says every package is in 'installed' repo"""
-        mock_yb = Mock(spec=yum.YumBase)
-        mock_package = Mock(spec=yum.rpmsack.RPMInstalledPackage)
-        mock_package.repoid = 'installed'
-        mock_package.name = 'some-cool-package'
-        mock_package.arch = 'noarch'
-        mock_yb.pkgSack.returnPackages.return_value = [mock_package]
-        active = self.prod_mgr.get_active(mock_yb)
-        self.assertEquals(set([]), active)
-
     def assert_nothing_happened(self):
         self.assertFalse(self.prod_db_mock.delete.called)
         self.assertFalse(self.prod_db_mock.add.called)
@@ -583,25 +487,16 @@ class TestProductManager(SubManFixture):
         # we dont actually use the return value anywhere...
         self.prod_mgr.update_installed(enabled, active)
 
-    @patch("subscription_manager.productid.yum.YumBase", spec=yum.YumBase)
-    def test_update_no_yum_base(self, mock_yb):
-        cert = self._create_server_cert()
-        self.prod_dir.certs.append(cert)
-        mock_yb.pkgSack.returnPackages.return_value = []
-        mock_yb.repos.listEnabled.return_value = []
-        self.prod_mgr.update(yb=None)
-
-        self.assert_nothing_happened()
-
     def test_update_no_packages_no_repos(self):
         cert = self._create_server_cert()
         self.prod_dir.certs.append(cert)
 
         mock_yb = Mock(spec=yum.YumBase)
         mock_yb.pkgSack.returnPackages.return_value = []
-        mock_yb.repos.listEnabled.return_value = []
+        enabled = []
+        active = []
 
-        self.prod_mgr.update(mock_yb)
+        self.prod_mgr.update(enabled, active, False)
         # not a lot to test with no repos and no dbs
         # should be no product id db writing in this case
         self.assert_nothing_happened()
@@ -676,11 +571,11 @@ class TestProductManager(SubManFixture):
         self.prod_repo_map = {'69': [anaconda_repo, "rhel-6-server-rpms"]}
         self.prod_db_mock.find_repos = Mock(side_effect=self.find_repos_side_effect)
 
-        mock_yb.repos.listEnabled.return_value = self._create_mock_repos(['rhel-6-server-rpms',
-                                                                          'some-other-repo'])
-
+        enabled = [(cert, 'rhel-6-server-rpms'),
+                   (cert, 'some-other-repo')]
+        active = ['anaconda']
         cert.delete = Mock()
-        self.prod_mgr.update(mock_yb)
+        self.prod_mgr.update(enabled, active, False)
 
         self.assertFalse(cert.delete.called)
         self.assertFalse(self.prod_db_mock.delete.called)
@@ -727,11 +622,11 @@ class TestProductManager(SubManFixture):
         self.prod_repo_map = {}
         self.prod_db_mock.find_repos = Mock(side_effect=self.find_repos_side_effect)
 
-        mock_yb.repos.listEnabled.return_value = self._create_mock_repos(['rhel-6-server-rpms',
-                                                                          random_repo])
+        enabled = [(cert, 'rhel-6-server-rpms')]
+        active = [random_repo]
 
         cert.delete = Mock()
-        self.prod_mgr.update(mock_yb)
+        self.prod_mgr.update(enabled, active, tracks_repos=True)
 
         self.assertFalse(cert.delete.called)
         self.assertFalse(self.prod_db_mock.delete.called)
@@ -768,12 +663,13 @@ class TestProductManager(SubManFixture):
                                                      'rhel-6-server-rpms')])
         mock_yb.pkgSack.returnPackages.return_value = mock_packages
 
-        mock_yb.repos.listEnabled.return_value = self._create_mock_repos(['rhel-6-server-rpms'])
+        enabled = [(cert, 'rhel-6-server-rpms')]
+        active = ['rhel-6-server-rpms']
         # only one product cert, so find_repos is simple to mock
         self.prod_db_mock.find_repos.return_value = [anaconda_repo, "rhel-6-server-rpms"]
 
         cert.delete = Mock()
-        self.prod_mgr.update(mock_yb)
+        self.prod_mgr.update(enabled, active, tracks_repos=True)
 
         self.assertFalse(cert.delete.called)
         self.assertFalse(self.prod_db_mock.delete.called)
@@ -804,11 +700,16 @@ class TestProductManager(SubManFixture):
 
         # note that since _get_cert is patched, these all return the same
         # product cert
-        mock_yb.repos.listEnabled.return_value = self._create_mock_repos(mock_repo_ids)
+        enabled = [(cert, 'rhel-6-server-rpms'),
+                   (cert, 'rhel-6-mock-repo-2'),
+                   (cert, 'rhel-6-mock-repo-3')]
+        active = ['rhel-6-server-rpms',
+                  'rhel-6-mock-repo-2',
+                  'rhel-6-mock-repo-3']
         self.prod_db_mock.find_repos.return_value = mock_repo_ids + [anaconda_repo]
 
         cert.delete = Mock()
-        self.prod_mgr.update(mock_yb)
+        self.prod_mgr.update(enabled, active, tracks_repos=True)
 
         # we should not delete, because we have a package from 'rhel-6-server-rpms' installed
         self.assertFalse(cert.delete.called)
@@ -834,14 +735,15 @@ class TestProductManager(SubManFixture):
                                                  'rhel-6-server-rpms')
         mock_yb.pkgSack.returnPackages.return_value = [mock_package]
 
-        mock_yb.repos.listEnabled.return_value = self._create_mock_repos(['rhel-6-server-rpms'])
+        enabled = [(new_cert, 'rhel-6-server-rpms')]
+        active = ['rhel-6-server-rpms']
 
         self.prod_db_mock.find_repos.return_value = ['rhel-6-server-rpms']
 
         # disarm cert delete
         old_cert.delete = Mock()
 
-        self.prod_mgr.update(mock_yb)
+        self.prod_mgr.update(enabled, active, tracks_repos=True)
 
         # not removing the product, should delete the cert...yet
         self.assertFalse(new_cert.delete.called)
@@ -869,14 +771,15 @@ class TestProductManager(SubManFixture):
                                                  'rhel-6-server-rpms')
         mock_yb.pkgSack.returnPackages.return_value = [mock_package]
 
-        mock_yb.repos.listEnabled.return_value = self._create_mock_repos(['rhel-6-server-rpms'])
+        enabled = [(old_cert, 'rhel-6-server-rpms')]
+        active = ['rhel-6-server-rpms']
 
         self.prod_db_mock.find_repos.return_value = ['rhel-6-server-rpms']
 
         # disarm cert delete
         old_cert.delete = Mock()
 
-        self.prod_mgr.update(mock_yb)
+        self.prod_mgr.update(enabled, active, tracks_repos=True)
 
         # not removing the product, should delete the cert...yet
         self.assertFalse(same_cert.delete.called)
@@ -905,13 +808,15 @@ class TestProductManager(SubManFixture):
         mock_yb.pkgSack.returnPackages.return_value = [mock_package]
 
         mock_yb.repos.listEnabled.return_value = self._create_mock_repos(['rhel-6-server-rpms'])
+        enabled = [(installed_cert, 'rhel-6-server-rpms')]
+        active = ['rhel-6-server-rpms']
 
         self.prod_db_mock.find_repos.return_value = ['rhel-6-server-rpms']
 
         # disarm cert delete
         installed_cert.delete = Mock()
 
-        self.prod_mgr.update(mock_yb)
+        self.prod_mgr.update(enabled, active, tracks_repos=True)
 
         # not removing the product, should delete the cert...yet
         self.assertFalse(older_cert.delete.called)
@@ -1073,7 +978,6 @@ class TestProductManager(SubManFixture):
         self.prod_mgr.pdir.refresh = Mock()
 
         self.prod_repo_map = {'1234568': 'medios-6-server-rpms'}
-        #self.prod_db_mock.find_repos = Mock(side_effect=self.find_repos_side_effect)
         self.prod_db_mock.find_repos.return_value = None
 
         # How would we have a repo be disabled but in active? If it includes
@@ -1292,20 +1196,3 @@ class TestProductManager(SubManFixture):
 
         self.assertTrue(workstation_cert in products_installed)
         self.assertFalse(desktop_cert in products_installed)
-
-    @patch("subscription_manager.productid.yum")
-    def test_yum_version_tracks_repos(self, yum_mock):
-        yum_mock.__version_info__ = (1, 2, 2)
-        self.assertFalse(self.prod_mgr._check_yum_version_tracks_repos())
-
-        yum_mock.__version_info__ = (3, 2, 35)
-        self.assertTrue(self.prod_mgr._check_yum_version_tracks_repos())
-
-        yum_mock.__version_info__ = (3, 2, 28)
-        self.assertTrue(self.prod_mgr._check_yum_version_tracks_repos())
-
-        yum_mock.__version_info__ = (3, 4, 3)
-        self.assertTrue(self.prod_mgr._check_yum_version_tracks_repos())
-
-        yum_mock.__version_info__ = (4, 100, 0)
-        self.assertTrue(self.prod_mgr._check_yum_version_tracks_repos())

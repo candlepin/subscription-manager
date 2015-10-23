@@ -31,6 +31,7 @@ from subscription_manager.injectioninit import init_dep_injection
 requires_api_version = '2.6'
 plugin_type = (TYPE_CORE,)
 
+log = logging.getLogger('rhsm-app.' + __name__)
 
 def posttrans_hook(conduit):
     """
@@ -58,7 +59,6 @@ def posttrans_hook(conduit):
     except Exception, e:
         conduit.error(3, str(e))
 
-log = logging.getLogger('rhsm-app.' + __name__)
 
 class YumProductManager(ProductManager):
     def __init__(self, base):
