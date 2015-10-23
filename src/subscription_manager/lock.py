@@ -25,7 +25,7 @@ import time
 LOCK_WAIT_DURATION = 0.5
 
 import logging
-log = logging.getLogger("rhsm-app." + __file__)
+log = logging.getLogger("rhsm-app." + __name__)
 
 
 class LockFile(object):
