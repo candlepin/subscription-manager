@@ -250,7 +250,7 @@ subscriptions
 Summary: Subscription Manager plugins for DNF
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
-Requires: dnf > 1.0.0
+Requires: dnf >= 1.0.0
 
 %description -n dnf-plugin-subscription-manager
 Subscription Manager plugins for DNF, contains subscription-manager and product-id plugins.
