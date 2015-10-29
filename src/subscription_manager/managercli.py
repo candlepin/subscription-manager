@@ -1046,6 +1046,8 @@ class RegisterCommand(UserPassCommand):
                 log.error("Unable to unregister consumer: %s" % old_uuid)
                 log.exception(e)
 
+        self.cp_provider.clean()
+
         facts = inj.require(inj.FACTS)
 
         # Proceed with new registration:
