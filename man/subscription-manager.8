@@ -356,18 +356,25 @@ command displays the current configured service level
 .I preference
 for products installed on the system. For example, if the service-level preference is standard, then a subscription with a standard service level is selected when auto-attaching subscriptions to the system.
 
-.IP
-The
-.B service-level
-command does not set the service level for the system; it only shows its current setting or available settings. The service-level preference must be set in the Subscription Manager GUI.
+.TP
+.B --serverurl=SERVER_URL
+Server URL in the form of https://hostname:port/prefix
+
+.TP
+.B --insecure
+Do not check the server SSL certificate against available certificate authorities
+
+.TP
+.B --show
+Shows the system's current service-level preference. If a service level is not set, then there is a message saying it is not set.
 
 .TP
 .B --list
 Lists the available service levels.
 
 .TP
-.B --show
-Shows the system's current service-level preference. If a service level is not set, then there is a message saying it is not set.
+.B --set=SERVICE_LEVEL
+Service level to apply to this system
 
 .TP
 .B --unset
