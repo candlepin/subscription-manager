@@ -6,6 +6,8 @@ import threading
 import time
 import unittest
 
+from nose import SkipTest
+
 from subscription_manager import lock
 
 
@@ -45,8 +47,6 @@ class TestLock(unittest.TestCase):
                                               stdin=subprocess.PIPE,
                                                env={'PYTHONPATH': sys_path})
 
-        #lock_path = os.path.join(self.tmp_dir, 'lock.file')
-
         # make sure other process has had time to create the lock file
         while True:
             lock_exists = os.path.exists(lockfile_path)
@@ -80,6 +80,14 @@ class TestLock(unittest.TestCase):
         self.fail("timeoutsdfsdf")
 
     def test_two_pids_blocking_none_blocks(self):
+        # This test will either fail occasionally, or have to wait an
+        # unreasonable time period, which just slows down the test suite.
+        # Left in code since it is a useful test if changing lock behavior,
+        # but too troublesome in general.
+        skip_test = True
+        if skip_test:
+            raise SkipTest('Skipping lock.test_two_pids_blocking_none_blocks')
+
         lock_path = self._lock_path()
         # start a different proc that holds the lock, that times out after 3
         self._grab_lock_from_other_pid(lock_path, 1.0, 0.2)
