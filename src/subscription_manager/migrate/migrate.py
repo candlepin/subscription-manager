@@ -138,13 +138,13 @@ class MigrationEngine(object):
         self.rhncfg = initUp2dateConfig()
         self.rhsmcfg = rhsm.config.initConfig()
 
-        # Sometimes we need to send up the entire contents of the systemid file
+        # Sometimes we need to send up the entire contents of the system id file
         # which is referred to in Satellite 5 nomenclature as a "certificate"
         # although it is not an X509 certificate.
         try:
             self.system_id_contents = open(self.rhncfg["systemIdPath"], 'r').read()
         except IOError:
-            system_exit(os.EX_IOERR, _("Could not read legacy systemid at %s") % self.rhncfg["systemIdPath"])
+            system_exit(os.EX_IOERR, _("Could not read legacy system id at %s") % self.rhncfg["systemIdPath"])
 
         self.system_id = self.get_system_id(self.system_id_contents)
 
@@ -624,7 +624,7 @@ class MigrationEngine(object):
             return
 
         if result:
-            log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", self.system_id)
+            log.info("System %s deleted.  Removing system id file and disabling rhnplugin.conf", self.system_id)
             os.remove(system_id_path)
             try:
                 self.disable_yum_rhn_plugin()
