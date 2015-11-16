@@ -27,6 +27,7 @@ import os
 import re
 import socket
 import sys
+import threading
 from time import localtime, strftime, strptime
 
 from M2Crypto import X509
@@ -471,6 +472,7 @@ class CliCommand(AbstractCLICommand):
 
         self.log_client_version()
 
+        version_thread = None
         if self.require_connection():
             # make sure we pass in the new server info, otherwise we
             # we use the defaults from connection module init
@@ -481,8 +483,13 @@ class CliCommand(AbstractCLICommand):
             # no auth cp for get / (resources) and
             # get /status (status and versions)
             self.no_auth_cp = self.cp_provider.get_no_auth_cp()
-            self.log_server_version()
 
+            # Checking the version can be slow and there is no need to
+            # block while performing the check.
+            version_thread = threading.Thread(name="version", target=self.log_server_version)
+            # It's okay to exit if the version check doesn't finish
+            version_thread.setDaemon(True)
+            version_thread.start()
             self.entcertlib = EntCertActionInvoker()
 
         else:
@@ -507,6 +514,11 @@ class CliCommand(AbstractCLICommand):
                 print (_("This consumer's profile has been deleted from the server. You can use command clean or unregister to remove local profile."))
             else:
                 raise ge
+        finally:
+            if version_thread:
+                # Give the version thread one additional second to finish
+                # before ending execution
+                version_thread.join(1)
 
 
 class UserPassCommand(CliCommand):

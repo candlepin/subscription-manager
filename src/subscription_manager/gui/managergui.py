@@ -138,6 +138,12 @@ class MainWindow(widgets.SubmanBaseWidget):
                     'redeem_menu_item', 'settings_menu_item', 'repos_menu_item']
     gui_file = "mainwindow"
 
+    def log_server_version(self, uep):
+        server_versions = get_server_versions(uep)
+        log.debug("Server Versions: %s" % server_versions)
+        # Remove this from the GTK main loop
+        return False
+
     def __init__(self, backend=None, facts=None,
                  ent_dir=None, prod_dir=None,
                  auto_launch_registration=False):
@@ -155,7 +161,8 @@ class MainWindow(widgets.SubmanBaseWidget):
         self.facts.get_facts()
 
         log.debug("Client Versions: %s " % get_client_versions())
-        log.debug("Server Versions: %s " % get_server_versions(self.backend.cp_provider.get_consumer_auth_cp()))
+        # Log the server version asynchronously
+        ga_GLib.idle_add(self.log_server_version, self.backend.cp_provider.get_consumer_auth_cp())
 
         settings = self.main_window.get_settings()
 
