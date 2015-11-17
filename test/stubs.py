@@ -383,6 +383,7 @@ class StubUEP(object):
         self.called_unregister_uuid = None
         self.called_unbind_uuid = None
         self.called_unbind_serial = []
+        self.called_unbind_pool_id = []
         self.username = username
         self.password = password
 
@@ -438,6 +439,9 @@ class StubUEP(object):
 
     def unbindBySerial(self, consumer, serial):
         self.called_unbind_serial.append(serial)
+
+    def unbindByPoolId(self, consumer_uuid, pool_id):
+        self.called_unbind_pool_id.append(pool_id)
 
     def getCertificateSerials(self, consumer):
         return []

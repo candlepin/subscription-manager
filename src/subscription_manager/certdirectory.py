@@ -314,6 +314,23 @@ class EntitlementDirectory(CertificateDirectory):
                     entitlements.append(cert)
         return entitlements
 
+    def list_for_pool_id(self, pool_id):
+        """
+        Returns all entitlement certificates provided by the given
+        pool ID.
+        """
+        entitlements = [entitlement for entitlement in self.list() if str(entitlement.pool.id) == str(pool_id)]
+        return entitlements
+
+    def list_serials_for_pool_ids(self, pool_ids):
+        """
+        Returns a dict of all entitlement certificate serials for each pool_id in the list provided
+        """
+        pool_id_to_serials = {}
+        for pool_id in pool_ids:
+            pool_id_to_serials[pool_id] = [str(cert.serial) for cert in self.list_for_pool_id(pool_id)]
+        return pool_id_to_serials
+
 
 class Path:
 

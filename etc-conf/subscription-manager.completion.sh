@@ -47,8 +47,14 @@ _subscription_manager_remove()
           SERIALS=$(LANG=C /usr/sbin/subscription-manager list --consumed 2>/dev/null | sed -ne "s|Serial:\s*\(\S*\)|\1|p" )
           COMPREPLY=($(compgen -W "${SERIALS}" -- ${1}))
           return 0
+          ;;
+      --pool)
+          POOLS=$(LANG=C /usr/sbin/subscription-manager list --consumed 2>/dev/null | sed -ne "s|Pool ID:\s*(\S*\)|\1|p" )
+          COMPREPLY=($(compgen -W "${POOLS}" -- ${1}))
+          return 0
+          ;;
   esac
-  local opts="--serial --all
+  local opts="--serial --pool --all
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
