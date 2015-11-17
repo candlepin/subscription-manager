@@ -1602,6 +1602,8 @@ class RemoveCommand(CliCommand):
 
         self.parser.add_option("--serial", action='append', dest="serials", metavar="SERIAL",
                        help=_("certificate serial number to remove (can be specified more than once)"))
+        self.parser.add_option("--pool", action='append', dest="pool_ids", metavar="POOL_ID",
+                       help=_("the ID of the pool to remove (can be specified more than once)"))
         self.parser.add_option("--all", dest="all", action="store_true",
                                help=_("remove all subscriptions from this system"))
 
@@ -1623,9 +1625,33 @@ class RemoveCommand(CliCommand):
                     bad = True
             if bad:
                 system_exit(os.EX_USAGE)
-        elif not self.options.all:
-            print _("Error: This command requires that you specify one of --serial or --all.")
+        elif not self.options.all and not self.options.pool_ids:
+            print _("Error: This command requires that you specify one of --serial, --pool or --all.")
             system_exit(os.EX_USAGE)
+
+    def _unbind_ids(self, unbind_method, consumer_uuid, ids):
+        success = []
+        failure = []
+        for id_ in ids:
+            try:
+                unbind_method(consumer_uuid, id_)
+                success.append(id_)
+            except connection.RestlibException, re:
+                if re.code == 410:
+                    print re.msg
+                    system_exit(os.EX_SOFTWARE)
+                failure.append(re.msg)
+        return (success, failure)
+
+    def _print_unbind_ids_result(self, success, failure, id_name):
+        if success:
+            print _("%s successfully removed at the server:" % id_name)
+            for id_ in success:
+                print "   %s" % id_
+        if failure:
+            print _("%s unsuccessfully removed at the server:" % id_name)
+            for id_ in failure:
+                print "   %s" % id_
 
     def _do_command(self):
         """
@@ -1648,27 +1674,23 @@ class RemoveCommand(CliCommand):
                                                "%s subscriptions removed at the server.",
                                                 count) % count
                 else:
-                    success = []
-                    failure = []
-                    for serial in self.options.serials:
-                        try:
-                            self.cp.unbindBySerial(identity.uuid, serial)
-                            success.append(serial)
-                        except connection.RestlibException, re:
-                            if re.code == 410:
-                                print re.msg
-                                system_exit(os.EX_SOFTWARE)
-                            failure.append(re.msg)
-                    if success:
-                        print _("Serial numbers successfully removed at the server:")
-                        for ser in success:
-                            print "   %s" % ser
-                    if failure:
-                        print _("Serial numbers unsuccessfully removed at the server:")
-                        for fail in failure:
-                            print "   %s" % fail
-                    if not success:
-                        return_code = 1
+                    removed_serials = []
+                    if self.options.pool_ids:
+                        pool_id_to_serials = self.entitlement_dir.list_serials_for_pool_ids(self.options.pool_ids)
+                        success, failure = self._unbind_ids(self.cp.unbindByPoolId, identity.uuid, self.options.pool_ids)
+                        if not success:
+                            return_code = 1
+                        else:
+                            self._print_unbind_ids_result(success, failure, "Pools")
+                            for pool_id in success:
+                                removed_serials.extend(pool_id_to_serials[pool_id])
+                    if self.options.serials:
+                        serials_to_remove = [serial for serial in self.options.serials if serial not in removed_serials]  # Don't remove serials already removed by a pool
+                        success, failure = self._unbind_ids(self.cp.unbindBySerial, identity.uuid, serials_to_remove)
+                        removed_serials.extend(success)
+                        if not success:
+                            return_code = 1
+                    self._print_unbind_ids_result(removed_serials, failure, "Serial numbers")
                 self.entcertlib.update()
             except connection.RestlibException, re:
                 log.error(re)
@@ -1685,14 +1707,18 @@ class RemoveCommand(CliCommand):
                         total = total + 1
                     print (_("%s subscriptions removed from this system.") % total)
                 else:
-                    count = 0
-                    for ent in self.entitlement_dir.list():
-                        if str(ent.serial) in self.options.serials:
-                            ent.delete()
-                            print _("Subscription with serial number %s removed from this system") % str(ent.serial)
-                            count = count + 1
-                    if count == 0:
-                        return_code = 1
+                    if self.options.serials or self.options.pool_ids:
+                        serials = self.options.serials or []
+                        pool_ids = self.options.pool_ids or []
+                        count = 0
+                        for ent in self.entitlement_dir.list():
+                            ent_pool_id = str(getattr(ent.pool, 'id', None) or "")
+                            if str(ent.serial) in serials or ent_pool_id in pool_ids:
+                                ent.delete()
+                                print _("Subscription with serial number %s removed from this system") % str(ent.serial)
+                                count = count + 1
+                        if count == 0:
+                            return_code = 1
             except Exception, e:
                 handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
 
