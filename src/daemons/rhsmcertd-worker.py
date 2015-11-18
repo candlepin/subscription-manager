@@ -88,9 +88,9 @@ def main(options, log):
         # cert, but making a request for a different consumer uuid, so unlikely. Could register
         # with --consumerid get there?
         if ge.deleted_id == uuid:
-            log.critical(_("This consumer's profile has been deleted from the server. Its local certificates will now be archived"))
+            log.critical("Consumer profile \"%s\" has been deleted from the server. Its local certificates will now be archived", uuid)
             managerlib.clean_all_data()
-            log.critical(_("Certificates archived to '/etc/pki/consumer.old'. Contact your system administrator if you need more information."))
+            log.critical("Certificates archived to '/etc/pki/consumer.old'. Contact your system administrator if you need more information.")
 
         raise ge
 
