@@ -510,8 +510,8 @@ class CliCommand(AbstractCLICommand):
             system_exit(os.EX_SOFTWARE, _('System certificates corrupted. Please reregister.'))
         except connection.GoneException, ge:
             if ge.deleted_id == self.identity.uuid:
-                log.critical(_("This consumer's profile has been deleted from the server. "))
-                system_exit(os.EX_UNAVAILABLE, _("This consumer's profile has been deleted from the server. You can use command clean or unregister to remove local profile."))
+                log.critical("Consumer profile \"%s\" has been deleted from the server.", self.identity.uuid)
+                system_exit(os.EX_UNAVAILABLE, _("Consumer profile \"%s\" has been deleted from the server. You can use command clean or unregister to remove local profile.") % self.identity.uuid)
             else:
                 raise ge
         finally:
