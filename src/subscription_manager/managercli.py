@@ -66,6 +66,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 cfg = rhsm.config.initConfig()
 
+SM = "subscription-manager"
 ERR_NOT_REGISTERED_MSG = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
 ERR_NOT_REGISTERED_CODE = 1
 
@@ -1864,10 +1865,9 @@ class ImportCertCommand(CliCommand):
 
 class PluginsCommand(CliCommand):
     def __init__(self):
-        shortdesc = _("View and configure subscription-manager plugins")
+        shortdesc = _("View and configure with 'subscription-manager plugins'")
         super(PluginsCommand, self).__init__("plugins", shortdesc, False)
 
-        SM = "subscription-manager"
         self.parser.add_option("--list", action="store_true",
                                 help=_("list %s plugins") % SM)
         self.parser.add_option("--listslots", action="store_true",
