@@ -1159,6 +1159,10 @@ class UEPConnection:
         method = "/consumers/%s/certificates/%s" % (self.sanitize(consumerId), self.sanitize(str(serial)))
         return self.conn.request_delete(method)
 
+    def unbindByPoolId(self, consumer_uuid, pool_id):
+        method = "/consumers/%s/entitlements/pool/%s" % (self.sanitize(consumer_uuid), self.sanitize(pool_id))
+        return self.conn.request_delete(method)
+
     def unbindAll(self, consumerId):
         method = "/consumers/%s/entitlements" % self.sanitize(consumerId)
         return self.conn.request_delete(method)
