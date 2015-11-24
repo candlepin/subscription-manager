@@ -1410,7 +1410,7 @@ class AttachCommand(CliCommand):
         self.parser.add_option("--auto", action='store_true',
             help=_("Automatically attach compatible subscriptions to this system. This is the default action."))
         self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("service level to apply to this system"))
+                               help=_("Automatically attach only subscriptions matching the specified service level; only used with --auto"))
         self.parser.add_option("--file", dest="file",
                                 help=_("A file from which to read pool IDs. If a hyphen is provided, pool IDs will be read from stdin."))
 
@@ -1436,7 +1436,7 @@ class AttachCommand(CliCommand):
         return True
 
     def _validate_options(self):
-        if self.options.pool:
+        if self.options.pool or self.options.file:
             if self.options.auto:
                 system_exit(os.EX_USAGE, _("Error: --auto may not be used when specifying pools."))
             if self.options.service_level:
