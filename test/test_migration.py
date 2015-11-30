@@ -240,6 +240,8 @@ class TestMigration(SubManFixture):
 
     @patch.object(rhsm.config.RhsmConfigParser, "get", autospec=True)
     def test_is_hosted(self, mock_get):
+        mock_get.return_value = "subscription.rhsm.redhat.com"
+        self.assertTrue(migrate.is_hosted())
         mock_get.return_value = "subscription.rhn.redhat.com"
         self.assertTrue(migrate.is_hosted())
 

@@ -314,7 +314,7 @@ class TestOwnersCommand(TestCliProxyCommand):
     command_class = managercli.OwnersCommand
 
     def test_main_server_url(self):
-        server_url = "https://subscription.rhn.redhat.com/subscription"
+        server_url = "https://subscription.rhsm.redhat.com/subscription"
         self.cc.main(["--serverurl", server_url])
 
     def test_insecure(self):
@@ -325,7 +325,7 @@ class TestEnvironmentsCommand(TestCliProxyCommand):
     command_class = managercli.EnvironmentsCommand
 
     def test_main_server_url(self):
-        server_url = "https://subscription.rhn.redhat.com/subscription"
+        server_url = "https://subscription.rhsm.redhat.com/subscription"
         self.cc.main(["--serverurl", server_url])
 
     def test_insecure(self):
@@ -396,7 +396,7 @@ class TestRegisterCommand(TestCliProxyCommand):
 
     @patch.object(managercli.cfg, "save")
     def test_main_server_url(self, mock_save):
-        server_url = "https://subscription.rhn.redhat.com/subscription"
+        server_url = "https://subscription.rhsm.redhat.com/subscription"
         self._test_no_exception(["--serverurl", server_url])
         mock_save.assert_called_with()
 
@@ -1193,7 +1193,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         self.cc.cp = StubUEP()
 
     def test_main_server_url(self):
-        server_url = "https://subscription.rhn.redhat.com/subscription"
+        server_url = "https://subscription.rhsm.redhat.com/subscription"
         self.cc.main(["--serverurl", server_url])
 
     def test_insecure(self):

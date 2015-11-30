@@ -165,7 +165,7 @@ Gives the user account password.
 .TP
 .B --serverurl=SERVER_HOSTNAME
 Passes the name of the subscription service with which to register the system. The default value, if this is not given, is the Customer Portal Subscription Management service,
-.B subscription.rhn.redhat.com.
+.B subscription.rhsm.redhat.com.
 If there is an on-premise subscription service such as Subscription Asset Manager, this parameter can be used to submit the hostname of the subscription service. For Subscription Asset Manager, if the Subscription Manager tool is configured with the Subscription Asset Manager RPM, then the default value for the
 .B --serverurl
 parameter is for the on-premise Subscription Asset Manager server.
@@ -538,7 +538,7 @@ Gives the user account password.
 .TP
 .B --serverurl=SERVER_HOSTNAME
 Passes the name of the subscription service to use to list all available organizations. The \fBorgs\fP command will list all organizations for the specified service for which the user account is granted access. The default value, if this is not given, is the Customer Portal Subscription Management service,
-.B https://subscription.rhn.redhat.com:443.
+.B https://subscription.rhsm.redhat.com:443.
 If there is an on-premise subscription service such as Subscription Asset Manager, this parameter can be used to submit the hostname of the subscription service, in the form \fI[protocol://]servername[:port][/prefix]\fP. For Subscription Asset Manager, if the Subscription Manager tool is configured with the Subscription Asset Manager RPM, then the default value for the
 .B --serverurl
 parameter is for the on-premise Subscription Asset Manager server.
@@ -1198,7 +1198,7 @@ tool can be run as a post-install script as part of the kickstart installation p
 The
 .B subscription-manager
 tool uses outgoing HTTPS requests. In the default configuration it will use HTTPS on port 443 to the subscription servers
-.B subscription.rhn.redhat.com
+.B subscription.rhsm.redhat.com
 and to the content delivery service
 .B cdn.redhat.com.
 
