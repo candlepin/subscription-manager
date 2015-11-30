@@ -1056,7 +1056,7 @@ class TestAttachCommand(TestCliProxyCommand):
     def test_servicelevel_option_but_no_auto_option(self):
         with self.mock_stdin(open(self.tempfiles[1][1])):
             self.cc.main(["--servicelevel", "Super", "--file", "-"])
-            self.cc._validate_options()
+            self.assertRaises(SystemExit, self.cc._validate_options)
 
     def test_servicelevel_option_with_pool_option(self):
         self.cc.main(["--servicelevel", "Super", "--pool", "1232342342313"])
