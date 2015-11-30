@@ -1016,7 +1016,25 @@ class TestAttachCommand(TestCliProxyCommand):
 
     def _test_quantity_exception(self, arg):
         try:
-            self.cc.main(["--auto", "--quantity", arg])
+            self.cc.main(["--pool", "test-pool-id", "--quantity", arg])
+            self.cc._validate_options()
+        except SystemExit, e:
+            self.assertEquals(e.code, os.EX_USAGE)
+        else:
+            self.fail("No Exception Raised")
+
+    def _test_auto_and_quantity_exception(self):
+        try:
+            self.cc.main(["--auto", "--quantity", "6"])
+            self.cc._validate_options()
+        except SystemExit, e:
+            self.assertEquals(e.code, os.EX_USAGE)
+        else:
+            self.fail("No Exception Raised")
+
+    def _test_auto_default_and_quantity_exception(self):
+        try:
+            self.cc.main(["--quantity", "3"])
             self.cc._validate_options()
         except SystemExit, e:
             self.assertEquals(e.code, os.EX_USAGE)
@@ -1033,11 +1051,11 @@ class TestAttachCommand(TestCliProxyCommand):
         self._test_quantity_exception("JarJarBinks")
 
     def test_positive_quantity(self):
-        self.cc.main(["--auto", "--quantity", "1"])
+        self.cc.main(["--pool", "test-pool-id", "--quantity", "1"])
         self.cc._validate_options()
 
     def test_positive_quantity_with_plus(self):
-        self.cc.main(["--auto", "--quantity", "+1"])
+        self.cc.main(["--pool", "test-pool-id", "--quantity", "+1"])
         self.cc._validate_options()
 
     def test_positive_quantity_as_float(self):
