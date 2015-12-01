@@ -293,6 +293,11 @@ class CliCommand(AbstractCLICommand):
         self.client_versions = self._default_client_version()
         self.server_versions = self._default_server_version()
 
+        self.server_version_event = threading.Event()
+        # if a cli command needs to wait for the version check, it should
+        # clear self.server_version_event
+        self.server_version_event.set()
+
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
 
         self.identity = inj.require(inj.IDENTITY)
@@ -350,6 +355,7 @@ class CliCommand(AbstractCLICommand):
 
     def _default_server_version(self):
         return {"candlepin": _("Unknown"),
+                "rules-version": _("Unknown"),
                 "server-type": _("Unknown")}
 
     def log_client_version(self):
@@ -366,6 +372,20 @@ class CliCommand(AbstractCLICommand):
         # and return the server dict
         self.server_versions = get_server_versions(self.no_auth_cp, exception_on_timeout=True)
         log.info("Server Versions: %s" % self.server_versions)
+
+    def log_server_version_event(self, event):
+        self.log_server_version()
+        event.set()
+
+    def start_server_version_thread(self, event):
+        # Checking the version can be slow and there is no need to
+        # block while performing the check.
+        version_thread = threading.Thread(name="ServerVersionThread",
+                                          target=self.log_server_version_event,
+                                          args=(event,))
+        # It's okay to exit if the version check doesn't finish
+        version_thread.setDaemon(True)
+        version_thread.start()
 
     def main(self, args=None):
 
@@ -472,7 +492,6 @@ class CliCommand(AbstractCLICommand):
 
         self.log_client_version()
 
-        version_thread = None
         if self.require_connection():
             # make sure we pass in the new server info, otherwise we
             # we use the defaults from connection module init
@@ -484,16 +503,16 @@ class CliCommand(AbstractCLICommand):
             # get /status (status and versions)
             self.no_auth_cp = self.cp_provider.get_no_auth_cp()
 
-            # Checking the version can be slow and there is no need to
-            # block while performing the check.
-            version_thread = threading.Thread(name="version", target=self.log_server_version)
-            # It's okay to exit if the version check doesn't finish
-            version_thread.setDaemon(True)
-            version_thread.start()
+            self.start_server_version_thread(self.server_version_event)
+
             self.entcertlib = EntCertActionInvoker()
 
         else:
             self.cp = None
+
+        # Wait for the server version if we need to (ie, VersionCommand) otherwise
+        # server_version_event has already been set() and won't block.
+        self.server_version_event.wait()
 
         # do the work, catch most common errors here:
         try:
@@ -514,11 +533,6 @@ class CliCommand(AbstractCLICommand):
                 system_exit(os.EX_UNAVAILABLE, _("Consumer profile \"%s\" has been deleted from the server. You can use command clean or unregister to remove local profile.") % self.identity.uuid)
             else:
                 raise ge
-        finally:
-            if version_thread:
-                # Give the version thread one additional second to finish
-                # before ending execution
-                version_thread.join(1)
 
 
 class UserPassCommand(CliCommand):
@@ -2605,6 +2619,10 @@ class VersionCommand(CliCommand):
         shortdesc = _("Print version information")
 
         super(VersionCommand, self).__init__("version", shortdesc, False)
+
+        # We set() server_version_event by default, so this means CLI.main()
+        # will block and self.server_version_event.wait()
+        self.server_version_event.clear()
 
     def _do_command(self):
         # FIXME: slightly odd in that we log that we can't get the version,
