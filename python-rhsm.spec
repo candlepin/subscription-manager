@@ -12,7 +12,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.16.2
+Version: 1.16.3
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -74,6 +74,13 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Tue Dec 01 2015 Christopher Snyder <csnyder@redhat.com> 1.16.3-1
+- Added release target for RHEL 6.8 (crog@redhat.com)
+- 1198178: Adds wrapper method to allow removal of entitlements by pool id
+  (csnyder@redhat.com)
+- Expand the docs and comments about GoneException. (alikins@redhat.com)
+- Adieu dgoodwin. (awood@redhat.com)
+
 * Wed Sep 02 2015 Alex Wood <awood@redhat.com> 1.16.2-1
 - Adds RateLimitExceededException which is raised in response to 429 from the
   remote host (csnyder@redhat.com)
