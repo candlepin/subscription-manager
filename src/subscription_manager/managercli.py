@@ -1645,15 +1645,10 @@ class RemoveCommand(CliCommand):
                 failure.append(re.msg)
         return (success, failure)
 
-    def _print_unbind_ids_result(self, success, failure, id_name):
-        if success:
-            print _("%s successfully removed at the server:" % id_name)
-            for id_ in success:
-                print "   %s" % id_
-        if failure:
-            print _("%s unsuccessfully removed at the server:" % id_name)
-            for id_ in failure:
-                print "   %s" % id_
+    def _print_ids(self, display_message, ids):
+        print display_message
+        for id_ in ids:
+            print "   %s" % id_
 
     def _do_command(self):
         """
@@ -1679,20 +1674,29 @@ class RemoveCommand(CliCommand):
                     removed_serials = []
                     if self.options.pool_ids:
                         pool_id_to_serials = self.entitlement_dir.list_serials_for_pool_ids(self.options.pool_ids)
-                        success, failure = self._unbind_ids(self.cp.unbindByPoolId, identity.uuid, self.options.pool_ids)
-                        if not success:
-                            return_code = 1
-                        else:
-                            self._print_unbind_ids_result(success, failure, "Pools")
-                            for pool_id in success:
-                                removed_serials.extend(pool_id_to_serials[pool_id])
+                        for pool_id, serials in pool_id_to_serials.iteritems():
+                            success, failure = self._unbind_ids(self.cp.unbindBySerial, identity.uuid, serials)
+                            if success:
+                                self._print_ids(_("Serial numbers successfully"
+                                                  " removed at the server for pool '%s':" % pool_id),
+                                                success)
+                                removed_serials.extend(success)
+                            else:
+                                return_code = 1
+                            if failure:
+                                self._print_ids(_("Serial numbers unsuccessfully"
+                                                  " removed at the server for pool '%s':" % pool_id),
+                                                failure)
                     if self.options.serials:
                         serials_to_remove = [serial for serial in self.options.serials if serial not in removed_serials]  # Don't remove serials already removed by a pool
                         success, failure = self._unbind_ids(self.cp.unbindBySerial, identity.uuid, serials_to_remove)
                         removed_serials.extend(success)
                         if not success:
                             return_code = 1
-                    self._print_unbind_ids_result(removed_serials, failure, "Serial numbers")
+                        else:
+                            self._print_ids(_("Serial numbers successfully removed at the server:"), success)
+                        if failure:
+                            self._print_ids(_("Serial numbers unsuccessfully removed at the server:"), failure)
                 self.entcertlib.update()
             except connection.RestlibException, re:
                 log.error(re)
