@@ -53,7 +53,7 @@ class SubmanDebugLoggingFilter(object):
 # NOTE: python 2.6 and earlier versions of the logging module
 #       defined the log handlers as old style classes. In order
 #       to use super(), we also inherit from 'object'
-class RHSMLogHandler(logging.handlers.FileHandler, object):
+class RHSMLogHandler(logging.handlers.RotatingFileHandler, object):
     """Logging Handler for /var/log/rhsm/rhsm.log"""
     def __init__(self, *args, **kwargs):
         try:
