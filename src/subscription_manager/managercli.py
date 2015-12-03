@@ -1637,6 +1637,11 @@ class RemoveCommand(CliCommand):
                     bad = True
             if bad:
                 system_exit(os.EX_USAGE)
+        elif self.options.pool_ids:
+            if not self.cp.has_capability("remove_by_pool_id"):
+                print _("Error: The registered entitlement server does not support remove --pool."
+                        "\nInstead, use the remove --serial option.")
+                system_exit(os.EX_UNAVAILABLE)
         elif not self.options.all and not self.options.pool_ids:
             print _("Error: This command requires that you specify one of --serial, --pool or --all.")
             system_exit(os.EX_USAGE)
@@ -1652,7 +1657,8 @@ class RemoveCommand(CliCommand):
                 if re.code == 410:
                     print re.msg
                     system_exit(os.EX_SOFTWARE)
-                failure.append(re.msg)
+                failure.append(id_)
+                log.error(re)
         return (success, failure)
 
     def _print_unbind_ids_result(self, success, failure, id_name):

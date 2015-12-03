@@ -1148,6 +1148,18 @@ class TestRemoveCommand(TestCliProxyCommand):
         except SystemExit, e:
             self.assertEquals(e.code, 2)
 
+    def test_validate_access_to_remove_by_pool(self):
+        self.cc.main(["--pool", "a2ee88488bbd32ed8edfa2"])
+        self.cc.cp._capabilities = ["remove_by_pool_id"]
+        self.cc._validate_options()
+
+    def test_validate_no_access_to_remove_by_pool(self):
+        self.cc.main(["--pool", "a2ee88488bbd32ed8edfa2"])
+        try:
+            self.cc._validate_options()
+        except SystemExit, e:
+            self.assertEquals(e.code, 69)
+
 
 class TestUnSubscribeCommand(TestRemoveCommand):
     command_class = managercli.UnSubscribeCommand

@@ -386,6 +386,10 @@ class StubUEP(object):
         self.called_unbind_pool_id = []
         self.username = username
         self.password = password
+        self._capabilities = []
+
+    def has_capability(self, capability):
+        return capability in self._capabilities
 
     def supports_resource(self, resource):
         return False
