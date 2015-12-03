@@ -884,7 +884,8 @@ def validate_options(options):
 def is_hosted():
     rhsmcfg = rhsm.config.initConfig()
     hostname = rhsmcfg.get('server', 'hostname')
-    return bool(re.search('subscription\.rhn\.(.*\.)*redhat\.com', hostname))
+    return bool(re.search('subscription\.rhn\.(.*\.)*redhat\.com', hostname) or
+                re.search('subscription\.rhsm\.(.*\.)*redhat\.com', hostname))
 
 
 def set_defaults(options, five_to_six_script):

@@ -20,7 +20,9 @@ manager tooling. This includes *subscription-manager*,
 ----------------
 hostname::
   The hostname of the subscription service being used. The default is the
-  Red Hat Customer Portal which is subscription.rhn.redhat.com.
+  Red Hat Customer Portal which is subscription.rhsm.redhat.com.
+  This default should not be retrofitted to previously installed versions.
+  It should be incorporated as the default going forward.
 
 prefix::
   Server prefix where the subscription service is registered.
