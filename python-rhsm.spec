@@ -12,7 +12,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.16.3
+Version: 1.16.4
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -74,6 +74,10 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Dec 04 2015 Alex Wood <awood@redhat.com> 1.16.4-1
+- HypervisorCheckIn now accepts options as a keyword argument,
+  options.reporter_id is now sent if provided (csnyder@redhat.com)
+
 * Tue Dec 01 2015 Christopher Snyder <csnyder@redhat.com> 1.16.3-1
 - Added release target for RHEL 6.8 (crog@redhat.com)
 - 1198178: Adds wrapper method to allow removal of entitlements by pool id
