@@ -654,7 +654,7 @@ class RegisterDialog(widgets.SubmanBaseWidget):
     widget_names = ['register_dialog', 'register_dialog_main_vbox',
                     'register_details_label',
                     'back_button', 'register_button',
-                    'cancel_button', 'progress_label',
+                    'close_button', 'progress_label',
                     'dialog_vbox6']
 
     gui_file = "register_dialog"
@@ -666,12 +666,7 @@ class RegisterDialog(widgets.SubmanBaseWidget):
         """
         super(RegisterDialog, self).__init__()
 
-        # dialog
-        callbacks = {"on_register_cancel_button_clicked": self.cancel,
-                     "on_register_button_clicked": self._on_register_button_clicked,
-                     "hide": self.cancel,
-                     "on_register_dialog_delete_event": self.cancel}
-        self.connect_signals(callbacks)
+        self.register_dialog.connect('hide', self.close)
 
         self.reg_info = RegisterInfo()
 
@@ -685,7 +680,7 @@ class RegisterDialog(widgets.SubmanBaseWidget):
                                                   True, True, 0)
 
         # initial-setup will likely handle these itself
-        self.register_widget.connect('finished', self.cancel)
+        self.register_widget.connect('finished', self.close)
         self.register_widget.connect('register-error', self.on_register_error)
         self.register_widget.connect('register-message', self.on_register_message)
 
@@ -702,7 +697,7 @@ class RegisterDialog(widgets.SubmanBaseWidget):
         self.back_button.connect('clicked', self._on_back_button_clicked)
 
         # TODO: Hook this up to a RegisterWidget 'cancel' handler, when there is one
-        self.cancel_button.connect('clicked', self.cancel)
+        self.close_button.connect('clicked', self.close)
 
         # update window title on register state changes
         self.reg_info.connect('notify::register-state',
@@ -731,7 +726,7 @@ class RegisterDialog(widgets.SubmanBaseWidget):
         # screen.
         self.register_dialog.show()
 
-    def cancel(self, button):
+    def close(self, button):
         self.register_dialog.destroy()
         return False
 
