@@ -61,7 +61,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.16.5
+Version: 1.16.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -577,6 +577,17 @@ fi
 %endif
 
 %changelog
+* Fri Dec 04 2015 Alex Wood <awood@redhat.com> 1.16.6-1
+- 1285004: Adds check for access to the required manager capabilty
+  (csnyder@redhat.com)
+- 1278472: Change default registration url to subscription.rhsm.redhat.com
+  (wpoteat@redhat.com)
+- 1275179: Do not allow quantity with auto attach (wpoteat@redhat.com)
+- 976859: Only check server version if asked. (alikins@redhat.com)
+- 1195003: Subscription manager man page mention of wild cards for repo enable
+  (wpoteat@redhat.com)
+- Use the stock 'close' button for close button. (alikins@redhat.com)
+
 * Thu Oct 15 2015 Alex Wood <awood@redhat.com> 1.16.4-1
 - 1264964: Ignore uuid=None on package sync (alikins@redhat.com)
 - Set register-status in RegisterInfo init. (alikins@redhat.com)
