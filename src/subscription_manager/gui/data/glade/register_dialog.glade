@@ -18,11 +18,12 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="cancel_button">
-                <property name="label" translatable="yes">Close</property>
+              <object class="GtkButton" id="close_button">
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="close_button-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">close_button</property>
@@ -92,7 +93,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">cancel_button</action-widget>
+      <action-widget response="0">close_button</action-widget>
       <action-widget response="0">back_button</action-widget>
       <action-widget response="0">register_button</action-widget>
     </action-widgets>

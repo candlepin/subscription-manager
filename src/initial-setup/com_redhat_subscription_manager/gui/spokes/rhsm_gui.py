@@ -80,7 +80,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         self.register_box = self.builder.get_object("register_box")
         self.button_box = self.builder.get_object('navigation_button_box')
         self.proceed_button = self.builder.get_object('proceed_button')
-        self.back_button = self.builder.get_object('cancel_button')
+        self.back_button = self.builder.get_object('back_button')
 
         self.register_box.pack_start(self.register_widget.register_widget,
                                      True, True, 0)

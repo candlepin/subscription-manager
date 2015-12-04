@@ -314,7 +314,7 @@ class TestOwnersCommand(TestCliProxyCommand):
     command_class = managercli.OwnersCommand
 
     def test_main_server_url(self):
-        server_url = "https://subscription.rhn.redhat.com/subscription"
+        server_url = "https://subscription.rhsm.redhat.com/subscription"
         self.cc.main(["--serverurl", server_url])
 
     def test_insecure(self):
@@ -325,7 +325,7 @@ class TestEnvironmentsCommand(TestCliProxyCommand):
     command_class = managercli.EnvironmentsCommand
 
     def test_main_server_url(self):
-        server_url = "https://subscription.rhn.redhat.com/subscription"
+        server_url = "https://subscription.rhsm.redhat.com/subscription"
         self.cc.main(["--serverurl", server_url])
 
     def test_insecure(self):
@@ -396,7 +396,7 @@ class TestRegisterCommand(TestCliProxyCommand):
 
     @patch.object(managercli.cfg, "save")
     def test_main_server_url(self, mock_save):
-        server_url = "https://subscription.rhn.redhat.com/subscription"
+        server_url = "https://subscription.rhsm.redhat.com/subscription"
         self._test_no_exception(["--serverurl", server_url])
         mock_save.assert_called_with()
 
@@ -1016,7 +1016,25 @@ class TestAttachCommand(TestCliProxyCommand):
 
     def _test_quantity_exception(self, arg):
         try:
-            self.cc.main(["--auto", "--quantity", arg])
+            self.cc.main(["--pool", "test-pool-id", "--quantity", arg])
+            self.cc._validate_options()
+        except SystemExit, e:
+            self.assertEquals(e.code, os.EX_USAGE)
+        else:
+            self.fail("No Exception Raised")
+
+    def _test_auto_and_quantity_exception(self):
+        try:
+            self.cc.main(["--auto", "--quantity", "6"])
+            self.cc._validate_options()
+        except SystemExit, e:
+            self.assertEquals(e.code, os.EX_USAGE)
+        else:
+            self.fail("No Exception Raised")
+
+    def _test_auto_default_and_quantity_exception(self):
+        try:
+            self.cc.main(["--quantity", "3"])
             self.cc._validate_options()
         except SystemExit, e:
             self.assertEquals(e.code, os.EX_USAGE)
@@ -1033,11 +1051,11 @@ class TestAttachCommand(TestCliProxyCommand):
         self._test_quantity_exception("JarJarBinks")
 
     def test_positive_quantity(self):
-        self.cc.main(["--auto", "--quantity", "1"])
+        self.cc.main(["--pool", "test-pool-id", "--quantity", "1"])
         self.cc._validate_options()
 
     def test_positive_quantity_with_plus(self):
-        self.cc.main(["--auto", "--quantity", "+1"])
+        self.cc.main(["--pool", "test-pool-id", "--quantity", "+1"])
         self.cc._validate_options()
 
     def test_positive_quantity_as_float(self):
@@ -1148,6 +1166,18 @@ class TestRemoveCommand(TestCliProxyCommand):
         except SystemExit, e:
             self.assertEquals(e.code, 2)
 
+    def test_validate_access_to_remove_by_pool(self):
+        self.cc.main(["--pool", "a2ee88488bbd32ed8edfa2"])
+        self.cc.cp._capabilities = ["remove_by_pool_id"]
+        self.cc._validate_options()
+
+    def test_validate_no_access_to_remove_by_pool(self):
+        self.cc.main(["--pool", "a2ee88488bbd32ed8edfa2"])
+        try:
+            self.cc._validate_options()
+        except SystemExit, e:
+            self.assertEquals(e.code, 69)
+
 
 class TestUnSubscribeCommand(TestRemoveCommand):
     command_class = managercli.UnSubscribeCommand
@@ -1193,7 +1223,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         self.cc.cp = StubUEP()
 
     def test_main_server_url(self):
-        server_url = "https://subscription.rhn.redhat.com/subscription"
+        server_url = "https://subscription.rhsm.redhat.com/subscription"
         self.cc.main(["--serverurl", server_url])
 
     def test_insecure(self):

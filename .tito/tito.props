@@ -2,3 +2,6 @@
 default_builder = tito.distributionbuilder.DistributionBuilder
 default_tagger = tito.tagger.ReleaseTagger
 
+[buildconfig]
+builder = tito.builder.Builder
+tagger = tito.tagger.VersionTagger

@@ -27,7 +27,6 @@ import os
 import re
 import socket
 import sys
-import threading
 from time import localtime, strftime, strptime
 
 from M2Crypto import X509
@@ -350,6 +349,7 @@ class CliCommand(AbstractCLICommand):
 
     def _default_server_version(self):
         return {"candlepin": _("Unknown"),
+                "rules-type": _("Unknown"),
                 "server-type": _("Unknown")}
 
     def log_client_version(self):
@@ -472,7 +472,6 @@ class CliCommand(AbstractCLICommand):
 
         self.log_client_version()
 
-        version_thread = None
         if self.require_connection():
             # make sure we pass in the new server info, otherwise we
             # we use the defaults from connection module init
@@ -484,12 +483,6 @@ class CliCommand(AbstractCLICommand):
             # get /status (status and versions)
             self.no_auth_cp = self.cp_provider.get_no_auth_cp()
 
-            # Checking the version can be slow and there is no need to
-            # block while performing the check.
-            version_thread = threading.Thread(name="version", target=self.log_server_version)
-            # It's okay to exit if the version check doesn't finish
-            version_thread.setDaemon(True)
-            version_thread.start()
             self.entcertlib = EntCertActionInvoker()
 
         else:
@@ -514,11 +507,6 @@ class CliCommand(AbstractCLICommand):
                 system_exit(os.EX_UNAVAILABLE, _("Consumer profile \"%s\" has been deleted from the server. You can use command clean or unregister to remove local profile.") % self.identity.uuid)
             else:
                 raise ge
-        finally:
-            if version_thread:
-                # Give the version thread one additional second to finish
-                # before ending execution
-                version_thread.join(1)
 
 
 class UserPassCommand(CliCommand):
@@ -1430,9 +1418,9 @@ class AttachCommand(CliCommand):
         self.substoken = None
         self.auto_attach = True
         self.parser.add_option("--pool", dest="pool", action='append',
-                               help=_("the ID of the pool to attach (can be specified more than once)"))
+                               help=_("The ID of the pool to attach (can be specified more than once)"))
         self.parser.add_option("--quantity", dest="quantity",
-            help=_("number of subscriptions to attach"))
+            help=_("Number of subscriptions to attach. May not be used with an auto-attach."))
         self.parser.add_option("--auto", action='store_true',
             help=_("Automatically attach compatible subscriptions to this system. This is the default action."))
         self.parser.add_option("--servicelevel", dest="service_level",
@@ -1474,6 +1462,8 @@ class AttachCommand(CliCommand):
         if self.options.quantity:
             if not valid_quantity(quantity):
                 system_exit(os.EX_USAGE, _("Error: Quantity must be a positive integer."))
+            elif self.options.auto or not (self.options.pool or self.options.file):
+                system_exit(os.EX_USAGE, _("Error: --quantity may not be used with an auto-attach"))
             else:
                 self.options.quantity = int(self.options.quantity)
 
@@ -1637,6 +1627,11 @@ class RemoveCommand(CliCommand):
                     bad = True
             if bad:
                 system_exit(os.EX_USAGE)
+        elif self.options.pool_ids:
+            if not self.cp.has_capability("remove_by_pool_id"):
+                print _("Error: The registered entitlement server does not support remove --pool."
+                        "\nInstead, use the remove --serial option.")
+                system_exit(os.EX_UNAVAILABLE)
         elif not self.options.all and not self.options.pool_ids:
             print _("Error: This command requires that you specify one of --serial, --pool or --all.")
             system_exit(os.EX_USAGE)
@@ -1652,7 +1647,8 @@ class RemoveCommand(CliCommand):
                 if re.code == 410:
                     print re.msg
                     system_exit(os.EX_SOFTWARE)
-                failure.append(re.msg)
+                failure.append(id_)
+                log.error(re)
         return (success, failure)
 
     def _print_unbind_ids_result(self, success, failure, id_name):
@@ -2607,8 +2603,7 @@ class VersionCommand(CliCommand):
         super(VersionCommand, self).__init__("version", shortdesc, False)
 
     def _do_command(self):
-        # FIXME: slightly odd in that we log that we can't get the version,
-        # but then show "unknown" here.
+        self.log_server_version()
         print (_("server type: %s") % self.server_versions["server-type"])
         print (_("subscription management server: %s") % self.server_versions["candlepin"])
         print (_("subscription management rules: %s") % self.server_versions["rules-version"])
