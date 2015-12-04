@@ -1629,12 +1629,10 @@ class RemoveCommand(CliCommand):
                 system_exit(os.EX_USAGE)
         elif self.options.pool_ids:
             if not self.cp.has_capability("remove_by_pool_id"):
-                print _("Error: The registered entitlement server does not support remove --pool."
-                        "\nInstead, use the remove --serial option.")
-                system_exit(os.EX_UNAVAILABLE)
+                system_exit(os.EX_UNAVAILABLE, _("Error: The registered entitlement server does not support remove --pool."
+                        "\nInstead, use the remove --serial option."))
         elif not self.options.all and not self.options.pool_ids:
-            print _("Error: This command requires that you specify one of --serial, --pool or --all.")
-            system_exit(os.EX_USAGE)
+            system_exit(os.EX_USAGE, _("Error: This command requires that you specify one of --serial, --pool or --all."))
 
     def _unbind_ids(self, unbind_method, consumer_uuid, ids):
         success = []
@@ -1645,8 +1643,7 @@ class RemoveCommand(CliCommand):
                 success.append(id_)
             except connection.RestlibException, re:
                 if re.code == 410:
-                    print re.msg
-                    system_exit(os.EX_SOFTWARE)
+                    system_exit(os.EX_SOFTWARE, re.msg)
                 failure.append(id_)
                 log.error(re)
         return (success, failure)
