@@ -1568,48 +1568,48 @@ class TestFormatName(unittest.TestCase):
 
 
 class TestHighlightByFilter(unittest.TestCase):
-    @mock.patch('sys.stdout.isatty', return_value='True')
-    def test_highlight_by_filter_string(self, isatty):
+    def test_highlight_by_filter_string(self):
         args = ['Super Test Subscription']
         kwargs = {"filter_string": "Super*",
                   "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
-                  "caption": "Subscription Name:"}
+                  "caption": "Subscription Name:",
+                  "is_atty": True}
         result = highlight_by_filter_string_columnize_callback("Subscription Name:    %s", *args, **kwargs)
         self.assertEquals(result, 'Subscription Name:    ' + FONT_BOLD + FONT_RED + 'Super Test Subscription' + FONT_NORMAL)
 
-    @mock.patch('sys.stdout.isatty', return_value='True')
-    def test_highlight_by_filter_string_single(self, isatty):
+    def test_highlight_by_filter_string_single(self):
         args = ['Super Test Subscription']
         kwargs = {"filter_string": "*Subscriptio?",
                   "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
-                  "caption": "Subscription Name:"}
+                  "caption": "Subscription Name:",
+                  "is_atty": True}
         result = highlight_by_filter_string_columnize_callback("Subscription Name:    %s", *args, **kwargs)
         self.assertEquals(result, 'Subscription Name:    ' + FONT_BOLD + FONT_RED + 'Super Test Subscription' + FONT_NORMAL)
 
-    @mock.patch('sys.stdout.isatty', return_value='True')
-    def test_highlight_by_filter_string_all(self, isatty):
+    def test_highlight_by_filter_string_all(self):
         args = ['Super Test Subscription']
         kwargs = {"filter_string": "*",
                   "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
-                  "caption": "Subscription Name:"}
+                  "caption": "Subscription Name:",
+                  "is_atty": True}
         result = highlight_by_filter_string_columnize_callback("Subscription Name:    %s", *args, **kwargs)
         self.assertEquals(result, 'Subscription Name:    Super Test Subscription')
 
-    @mock.patch('sys.stdout.isatty', return_value='True')
-    def test_highlight_by_filter_string_exact(self, isatty):
+    def test_highlight_by_filter_string_exact(self):
         args = ['Premium']
         kwargs = {"filter_string": "Premium",
                   "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
-                  "caption": "Service Level:"}
+                  "caption": "Service Level:",
+                  "is_atty": True}
         result = highlight_by_filter_string_columnize_callback("Service Level:    %s", *args, **kwargs)
         self.assertEquals(result, 'Service Level:    ' + FONT_BOLD + FONT_RED + 'Premium' + FONT_NORMAL)
 
-    @mock.patch('sys.stdout.isatty', return_value='True')
-    def test_highlight_by_filter_string_list_row(self, isatty):
+    def test_highlight_by_filter_string_list_row(self):
         args = ['Awesome-os-stacked']
         kwargs = {"filter_string": "Awesome*",
                   "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
-                  "caption": "Subscription Name:"}
+                  "caption": "Subscription Name:",
+                  "is_atty": True}
         result = highlight_by_filter_string_columnize_callback("    %s", *args, **kwargs)
         self.assertEquals(result, '    ' + FONT_BOLD + FONT_RED + 'Awesome-os-stacked' + FONT_NORMAL)
 

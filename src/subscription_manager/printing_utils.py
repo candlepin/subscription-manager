@@ -145,13 +145,14 @@ def highlight_by_filter_string_columnize_callback(template_str, *args, **kwargs)
     """
     filter_string = kwargs.get('filter_string')
     match_columns = kwargs.get('match_columns')
+    is_atty= kwargs.get('is_atty')
     caption = kwargs.get('caption').split(':')[0] + ':'
     p = None
     # wildcard only disrupts the markup
     if filter_string and filter_string.replace('*', ' ').replace('?', ' ').strip() == '':
         filter_string = None
 
-    if sys.stdout.isatty() and filter_string and caption in match_columns:
+    if is_atty and filter_string and caption in match_columns:
         try:
             p = re.compile(fnmatch.translate(filter_string), re.IGNORECASE)
         except Exception, e:

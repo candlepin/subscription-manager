@@ -2272,7 +2272,8 @@ class ListCommand(CliCommand):
                             data['management_enabled'] = _("No")
 
                         kwargs = {"filter_string": self.options.filter_string,
-                                  "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS}
+                                  "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
+                                  "is_atty": sys.stdout.isatty()}
                         print columnize(AVAILABLE_SUBS_LIST, highlight_by_filter_string_columnize_callback,
                                 data['productName'],
                                 data['providedProducts'],
@@ -2408,7 +2409,8 @@ class ListCommand(CliCommand):
                             reasons.append(_("Subscription management service doesn't support Status Details."))
 
                         kwargs = {"filter_string": filter_string,
-                                  "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS}
+                                  "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
+                                  "is_atty": sys.stdout.isatty()}
                         print columnize(CONSUMED_LIST, highlight_by_filter_string_columnize_callback,
                             name,
                             product_names,
