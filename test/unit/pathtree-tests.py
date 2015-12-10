@@ -91,6 +91,17 @@ class TestPathTree(unittest.TestCase):
         self.assertFalse(pt.match_path('/foo'))
         self.assertFalse(pt.match_path('/bar'))
 
+    def test_match_path_listing(self):
+        tree = {'foo': [{'path': [{'bar':[{PATH_END: None}]}]}]}
+        data = open(DATA).read()
+        pt = PathTree(data)
+        pt.path_tree = tree
+        self.assertTrue(pt.match_path('/foo/path/bar/listing'))
+        self.assertTrue(pt.match_path('/foo/path/listing'))
+        self.assertTrue(pt.match_path('/foo/listing'))
+        self.assertFalse(pt.match_path('/foo/path/alfred'))
+        self.assertFalse(pt.match_path('/foo/path/listing/for/alfred'))
+
     def test_match_variable(self):
         tree = {'foo': [{'$releasever': [{'bar':[{PATH_END: None}]}]}]}
         data = open(DATA).read()
