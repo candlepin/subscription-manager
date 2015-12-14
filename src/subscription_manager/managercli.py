@@ -53,7 +53,7 @@ from subscription_manager.repolib import RepoActionInvoker, RepoFile, manage_rep
 from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
-        restart_virt_who, get_terminal_width, print_error, \
+        restart_virt_who, get_terminal_width, print_error, unique_list_items, \
         ProductCertificateFilter, EntitlementCertificateFilter
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
@@ -1691,16 +1691,20 @@ class RemoveCommand(CliCommand):
                 else:
                     removed_serials = []
                     if self.options.pool_ids:
-                        pool_id_to_serials = self.entitlement_dir.list_serials_for_pool_ids(self.options.pool_ids)
-                        success, failure = self._unbind_ids(self.cp.unbindByPoolId, identity.uuid, self.options.pool_ids)
+                        pool_ids = unique_list_items(self.options.pool_ids)  # Don't allow duplicates
+                        pool_id_to_serials = self.entitlement_dir.list_serials_for_pool_ids(pool_ids)
+                        success, failure = self._unbind_ids(self.cp.unbindByPoolId, identity.uuid, pool_ids)
                         if not success:
                             return_code = 1
                         else:
                             self._print_unbind_ids_result(success, failure, "Pools")
                             for pool_id in success:
                                 removed_serials.extend(pool_id_to_serials[pool_id])
+                    success = []
+                    failure = []  # Clear this list to make sure we don't display the pool ids as serial
                     if self.options.serials:
-                        serials_to_remove = [serial for serial in self.options.serials if serial not in removed_serials]  # Don't remove serials already removed by a pool
+                        serials = unique_list_items(self.options.serials)
+                        serials_to_remove = [serial for serial in serials if serial not in removed_serials]  # Don't remove serials already removed by a pool
                         success, failure = self._unbind_ids(self.cp.unbindBySerial, identity.uuid, serials_to_remove)
                         removed_serials.extend(success)
                         if not success:
