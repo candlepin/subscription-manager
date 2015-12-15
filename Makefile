@@ -157,13 +157,13 @@ install-help-files:
 	install -d \
 		$(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C/figures
 	install -d $(PREFIX)/$(INSTALL_DIR)/omf/subscription-manager
-	install docs/subscription-manager.xml \
+	install -m 644 docs/subscription-manager.xml \
 		$(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C
-	install docs/legal.xml \
+	install -m 644 docs/legal.xml \
 		$(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C
 	install docs/figures/*.png \
 		$(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C/figures
-	install docs/subscription-manager-C.omf \
+	install -m 644 docs/subscription-manager-C.omf \
 		$(PREFIX)/$(INSTALL_DIR)/omf/subscription-manager
 
 install-content-plugin-ostree:
