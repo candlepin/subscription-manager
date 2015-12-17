@@ -211,7 +211,8 @@ class RhsmConfigParser(SafeConfigParser):
         if self.has_section(section):
             super_result = super(RhsmConfigParser, self).options(section)
             for key in super_result:
-                result[key] = self.get(section, key)
+                if self.get(section,key) and len(self.get(section, key).strip()) > 0:
+                    result[key] = self.get(section, key)
         return result.items()
 
     def is_default(self, section, prop, value):
