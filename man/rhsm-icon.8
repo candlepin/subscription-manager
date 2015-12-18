@@ -22,7 +22,7 @@ daemon.
 .SH OPTIONS
 .TP
 .B -c, --check-period
-Sets the interval to use between checks for the product subscription status. The value is in seconds.
+Sets the interval to use between checks for the product subscription status. The value is in seconds and the default is one day.
 
 .TP
 .B -f, --force-icon=TYPE
@@ -30,7 +30,7 @@ Manually displays the given type of icon in the start menu. The \fPTYPE\fP can b
 
 .TP
 .B --i, --check-immediately
-Runs the status check process immediately when the command is invoked. Otherwise, there is a four (4) minute delay before running the check.
+Runs the status check process immediately when the command is invoked. Otherwise, there is a four (4) minute delay before running the initial check.
 
 .TP
 .B -d, --debug
