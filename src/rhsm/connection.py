@@ -135,6 +135,11 @@ class BadCertificateException(ConnectionException):
 
 
 class RestlibException(ConnectionException):
+    """
+    Raised when a response with a valid json body is received along with a status code
+    that is not in [200, 202, 204, 410, 429]
+    See RestLib.validateResponse to see when this and other exceptions are raised.
+    """
 
     def __init__(self, code, msg=None, headers=None):
         self.code = code
@@ -164,6 +169,11 @@ class GoneException(RestlibException):
 
 
 class NetworkException(ConnectionException):
+    """
+    Thrown when the response of a request has no valid json content
+    and the http status code is anything other than the following:
+    [200, 202, 204, 401, 403, 410, 429, 500, 502, 503, 504]
+    """
 
     def __init__(self, code):
         self.code = code
@@ -173,7 +183,10 @@ class NetworkException(ConnectionException):
 
 
 class RemoteServerException(ConnectionException):
-
+    """
+    Thrown when the response to a request has no valid json content and
+    one of these http status codes: [404, 410, 500, 502, 503, 504]
+    """
     def __init__(self, code,
                  request_type=None,
                  handler=None):
@@ -200,6 +213,12 @@ class AuthenticationException(RemoteServerException):
 
 
 class RateLimitExceededException(RestlibException):
+    """
+    Thrown in response to a http code 429.
+    This means that too many requests have been made in a given time period.
+    The retry_after attribute is an int of seconds to retry the request after.
+    The retry_after attribute may not be included in the response.
+    """
     def __init__(self, code,
                  msg=None,
                  headers=None):
@@ -211,10 +230,16 @@ class RateLimitExceededException(RestlibException):
 
 
 class UnauthorizedException(AuthenticationException):
+    """
+    Thrown in response to http status code 401 with no valid json content
+    """
     prefix = "Unauthorized"
 
 
 class ForbiddenException(AuthenticationException):
+    """
+    Thrown in response to http status code 403 with no valid json content
+    """
     prefix = "Forbidden"
 
 
@@ -398,6 +423,8 @@ def _get_locale():
 class Restlib(object):
     """
      A wrapper around httplib to make rest calls easier
+     See validateResponse() to learn when exceptions are raised as a result
+     of communication with the server.
     """
     def __init__(self, host, ssl_port, apihandler,
             username=None, password=None,
@@ -595,7 +622,7 @@ class Restlib(object):
                     log.exception(e)
 
             if parsed:
-                # Find and raise a GoneException on '410' with 'deleteId' in the
+                # Find and raise a GoneException on '410' with 'deletedId' in the
                 # content, implying that the resource has been deleted.
 
                 # NOTE: a 410 with a unparseable content will raise
@@ -889,13 +916,14 @@ class UEPConnection:
         """
         Sends a mapping of hostIds to list of guestIds to candlepin
         to be registered/updated.
+        This method can raise the following exceptions:
+            - RestLibException with http code 400: this means no mapping
+            (or a bad one) was provided.
+            - RestLibException with other http codes: Please see the
+            definition of RestLibException above for info about this.
+            - RateLimitExceededException: This means that too many requests
+            have been made in the given time period.
 
-        host_guest_mapping is as follows:
-
-        {
-            'host-id-1': ['guest-id-1', 'guest-id-2'],
-            'host-id-2': ['guest-id-3', 'guest-id-4']
-        }
         """
         if (self.has_capability("hypervisors_async")):
             priorContentType = self.conn.headers['Content-type']
@@ -935,6 +963,11 @@ class UEPConnection:
 
         Note that installed_products and guest_uuids expects a certain format,
         example parsing is in subscription-manager's format_for_server() method.
+
+        This can raise the following exceptions:
+            - RestlibException - This will include an http error code and a
+            translated message that provides some detail as to what happend.
+            - GoneException - This indicates that the consumer has been deleted
         """
         params = {}
         if installed_products is not None:
