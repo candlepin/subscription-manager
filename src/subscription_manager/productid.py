@@ -364,7 +364,10 @@ class ProductManager:
             # and that we have some enabled repo's. Not just
             # that we have packages from repo's that are
             # not active. See #806457
-            if enabled and active:
+            if enabled and (active or temp_disabled_repos):
+                # Check that we have either active repos
+                # or that we have temp_disabled_repos
+                # See bz 1222627
                 self.update_removed(active, temp_disabled_repos)
 
         # TODO: it would probably be useful to keep track of
