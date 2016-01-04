@@ -15,7 +15,6 @@
 
 import gettext
 import fnmatch
-import sys
 import re
 import logging
 
@@ -145,7 +144,7 @@ def highlight_by_filter_string_columnize_callback(template_str, *args, **kwargs)
     """
     filter_string = kwargs.get('filter_string')
     match_columns = kwargs.get('match_columns')
-    is_atty= kwargs.get('is_atty')
+    is_atty = kwargs.get('is_atty')
     caption = kwargs.get('caption').split(':')[0] + ':'
     p = None
     # wildcard only disrupts the markup
