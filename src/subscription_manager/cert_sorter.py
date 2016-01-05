@@ -389,6 +389,11 @@ class CertSorter(ComplianceManager):
         self.identity.reload()
         self.cp_provider.clean()
 
+    # check to see if there are certs in the directory
+    def has_entitlements(self):
+        return len(self.entitlement_dir.list()) > 0
+
+
 
 class StackingGroupSorter(object):
     def __init__(self, entitlements):
