@@ -12,7 +12,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.16.4
+Version: 1.16.5
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -74,6 +74,14 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Jan 06 2016 Christopher Snyder <csnyder@redhat.com> 1.16.5-1
+- 1271158: Updates documentation to better explain when exceptions are thrown
+  (csnyder@redhat.com)
+- 1272203: Default used in place of empty config entry (wpoteat@redhat.com)
+- 1284683: Entitlement certificate path checking allows for listing files
+  (wpoteat@redhat.com)
+- Fedora 21 is end of life. (awood@redhat.com)
+
 * Fri Dec 04 2015 Alex Wood <awood@redhat.com> 1.16.4-1
 - HypervisorCheckIn now accepts options as a keyword argument,
   options.reporter_id is now sent if provided (csnyder@redhat.com)
