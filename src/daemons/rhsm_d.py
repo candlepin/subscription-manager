@@ -109,8 +109,9 @@ def pre_check_status(force_signal):
         return RHN_CLASSIC
 
     identity = require(IDENTITY)
+    sorter = require(CERT_SORTER)
 
-    if not identity.is_valid():
+    if not identity.is_valid() and not sorter.has_entitlements():
         debug("The system is not currently registered.")
         return RHSM_REGISTRATION_REQUIRED
     return None
