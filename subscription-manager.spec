@@ -61,7 +61,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.16.6
+Version: 1.16.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -577,6 +577,24 @@ fi
 %endif
 
 %changelog
+* Fri Jan 08 2016 Alex Wood <awood@redhat.com> 1.16.7-1
+- 1263037: Change RHSM Icon reporting of unregistered system
+  (wpoteat@redhat.com)
+- 1283749: Upgrade the dialogs to error when required fields are blank.
+  (wpoteat@redhat.com)
+- 1222627: Allows removal of product certs with no active repos, given
+  temp_disabled_repos (csnyder@redhat.com)
+- 1163398: Modify icon-rhsm man page to reflect the help text
+  (wpoteat@redhat.com)
+- Install docs with mode 644 (csnyder@redhat.com)
+- 1288626: Does not report pool ids as serial numbers, ignore duplicates
+  (csnyder@redhat.com)
+- 1061407: Avoid unwanted translations for subscription-manager by string
+  substitutions (wpoteat@redhat.com)
+- Output of errors now goes to stderr (csnyder@redhat.com)
+- Use matches string to highlight the field(s) containing the match
+  (wpoteat@redhat.com)
+
 * Fri Dec 04 2015 Alex Wood <awood@redhat.com> 1.16.6-1
 - 1285004: Adds check for access to the required manager capabilty
   (csnyder@redhat.com)
