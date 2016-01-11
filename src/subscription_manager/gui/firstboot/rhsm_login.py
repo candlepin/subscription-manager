@@ -75,9 +75,9 @@ class moduleClass(module.Module, object):
         self._is_compat = False
 
         reg_info = registergui.RegisterInfo()
-        backend = managergui.Backend()
+        self.backend = managergui.Backend()
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
-        self.register_widget = registergui.RegisterWidget(backend, Facts(), reg_info)
+        self.register_widget = registergui.RegisterWidget(self.backend, Facts(), reg_info)
 
         # Will be False if we are on an older RHEL version where
         # rhn-client-tools already does some things so we don't have to.
