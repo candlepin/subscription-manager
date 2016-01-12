@@ -394,7 +394,6 @@ class CertSorter(ComplianceManager):
         return len(self.entitlement_dir.list()) > 0
 
 
-
 class StackingGroupSorter(object):
     def __init__(self, entitlements):
         self.groups = []
