@@ -276,7 +276,7 @@ class ConfigTests(BaseConfigTests):
         self.assertFalse(value)
 
     def test_is_default_true(self):
-        value = self.cfgParser.is_default('server', 'hostname', 'subscription.rhn.redhat.com')
+        value = self.cfgParser.is_default('server', 'hostname', 'subscription.rhsm.redhat.com')
         self.assertTrue(value)
 
     def test_is_default_false(self):
