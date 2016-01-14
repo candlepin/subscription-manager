@@ -23,6 +23,7 @@ from iniparse import RawConfigParser as ConfigParser
 import logging
 import os
 import string
+import socket
 import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import utils
@@ -213,7 +214,13 @@ class RepoUpdateActionCommand(object):
 
         self.release = None
         self.overrides = {}
-        self.override_supported = bool(self.identity.is_valid() and self.uep and self.uep.supports_resource('content_overrides'))
+        self.override_supported = False
+        try:
+            self.override_supported = bool(self.identity.is_valid() and self.uep and self.uep.supports_resource('content_overrides'))
+        except socket.error as e:
+            # swallow the error to fix bz 1298327
+            log.exception(e)
+            pass
         self.written_overrides = WrittenOverrideCache()
 
         # FIXME: empty report at the moment, should be changed to include
