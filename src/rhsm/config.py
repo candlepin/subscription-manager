@@ -29,9 +29,9 @@ HOST_CONFIG_DIR = "/etc/rhsm-host/"  # symlink inside docker containers
 DEFAULT_CONFIG_PATH = "%srhsm.conf" % DEFAULT_CONFIG_DIR
 DEFAULT_PROXY_PORT = "3128"
 
-# Defaults for connecting to RHN, used to "reset" the configuration file
+# Defaults for connecting to RHSM, used to "reset" the configuration file
 # if requested by the user:
-DEFAULT_HOSTNAME = "subscription.rhn.redhat.com"
+DEFAULT_HOSTNAME = "subscription.rhsm.redhat.com"
 DEFAULT_PORT = "443"
 DEFAULT_PREFIX = "/subscription"
 

@@ -85,9 +85,9 @@ class TestParseServerInfo(unittest.TestCase):
 
     def test_hostname_with_scheme(self):
         # this is the default, so test it here
-        local_url = "https://subscription.rhn.redhat.com/subscription"
+        local_url = "https://subscription.rhsm.redhat.com/subscription"
         (username, password, hostname, port, prefix) = parse_url(local_url)
-        self.assertEquals("subscription.rhn.redhat.com", hostname)
+        self.assertEquals("subscription.rhsm.redhat.com", hostname)
         self.assertEquals(None, port)
         self.assertEquals("/subscription", prefix)
 
