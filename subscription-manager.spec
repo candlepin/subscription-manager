@@ -81,7 +81,7 @@ Requires:  python-iniparse
 Requires:  virt-what
 Requires:  python-rhsm >= 1.16.0
 Requires:  dbus-python
-Requires:  yum >= 3.2.19-15
+Requires:  yum >= 3.2.29-73
 Requires:  usermode
 Requires:  python-dateutil
 %if %use_gtk3
