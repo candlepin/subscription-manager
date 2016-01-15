@@ -170,17 +170,15 @@ class StatusChecker(dbus.service.Object):
                  2 if close to expiry
         """
         log.debug("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.check_status called")
-        # If check status is called, fire signal whether the status changed or not.
-        # This is to ensure we get an icon at boot time. If we are going to fetch the status,
-        # might as well update the cache.
-        ret = check_status(self.force_signal)
-        debug("Fire status signal")
-        self.entitlement_status_changed(ret)
-        self.rhsm_icon_cache.data = ret
+        status = check_status(self.force_signal)
+        if (status != self.rhsm_icon_cache._read_cache()):
+            debug("Validity status changed, fire signal in check_status")
+            self.entitlement_status_changed(status)
+        self.rhsm_icon_cache.data = status
         self.rhsm_icon_cache.write_cache()
         self.has_run = True
         self.watchdog()
-        return ret
+        return status
 
     @dbus.service.method(
             dbus_interface="com.redhat.SubscriptionManager.EntitlementStatus",
