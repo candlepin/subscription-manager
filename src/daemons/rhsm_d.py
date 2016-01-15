@@ -70,7 +70,8 @@ from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
 from subscription_manager.branding import get_branding
-from subscription_manager.injection import require, IDENTITY, CERT_SORTER
+from subscription_manager.injection import require, IDENTITY, CERT_SORTER, RHSM_ICON_CACHE
+from subscription_manager.cache import RhsmIconCache
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
@@ -142,7 +143,7 @@ class StatusChecker(dbus.service.Object):
         dbus.service.Object.__init__(self, name, "/EntitlementStatus")
         self.has_run = False
         #this will get set after first invocation
-        self.last_status = None
+        self.rhsm_icon_cache = require(RHSM_ICON_CACHE)
         self.keep_alive = keep_alive
         self.force_signal = force_signal
         self.loop = loop
@@ -169,12 +170,14 @@ class StatusChecker(dbus.service.Object):
                  2 if close to expiry
         """
         log.debug("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.check_status called")
+        # If check status is called, fire signal whether the status changed or not.
+        # This is to ensure we get an icon at boot time. If we are going to fetch the status,
+        # might as well update the cache.
         ret = check_status(self.force_signal)
-        if (ret != self.last_status):
-            debug("Validity status changed, fire signal")
-            #we send the code out, but no one uses it at this time
-            self.entitlement_status_changed(ret)
-        self.last_status = ret
+        debug("Fire status signal")
+        self.entitlement_status_changed(ret)
+        self.rhsm_icon_cache.data = ret
+        self.rhsm_icon_cache.write_cache()
         self.has_run = True
         self.watchdog()
         return ret
@@ -187,10 +190,13 @@ class StatusChecker(dbus.service.Object):
         pre_result = pre_check_status(self.force_signal)
         if pre_result is not None:
             status = pre_result
-        if status != self.last_status:
+        # At comment time, update status is called every time we start the GUI. So we use
+        # a persistant cache to ensure we fire a signal only when the status changes.
+        if (status != self.rhsm_icon_cache._read_cache()):
             debug("Validity status changed, fire signal")
             self.entitlement_status_changed(status)
-        self.last_status = status
+        self.rhsm_icon_cache.data = status
+        self.rhsm_icon_cache.write_cache()
         self.has_run = True
         self.watchdog()
 
