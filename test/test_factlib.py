@@ -29,31 +29,31 @@ class TestFactlib(fixture.SubManFixture):
         inj.provide(inj.FACTS, stubs.StubFacts(self.expected_facts))
         self.fl = factlib.FactsActionInvoker()
 
-    def test_factlib_updates_when_identity_does_not_exist(self):
-        self._inject_mock_invalid_consumer()
-        update_report = self.fl.update()
-        count = update_report.updates()
-        self.assertEquals(len(self.expected_facts), count)
+    # def test_factlib_updates_when_identity_does_not_exist(self):
+        # self._inject_mock_invalid_consumer()
+        # update_report = self.fl.update()
+        # count = update_report.updates()
+        # self.assertEquals(len(self.expected_facts), count)
 
-    def test_factlib_updates_when_identity_exists(self):
+    # def test_factlib_updates_when_identity_exists(self):
 
-        invalid_consumer = self._inject_mock_valid_consumer()
-        self.facts_passed_to_server = None
-        self.consumer_uuid_passed_to_server = None
+        # invalid_consumer = self._inject_mock_valid_consumer()
+        # self.facts_passed_to_server = None
+        # self.consumer_uuid_passed_to_server = None
 
-        def track_facts_update(consumer_uuid, facts):
-            self.facts_passed_to_server = facts
-            self.consumer_uuid_passed_to_server = consumer_uuid
+        # def track_facts_update(consumer_uuid, facts):
+        #    self.facts_passed_to_server = facts
+        #    self.consumer_uuid_passed_to_server = consumer_uuid
 
-        stub_uep = stubs.StubUEP()
-        stub_uep.updateConsumer = track_facts_update
-        self.set_consumer_auth_cp(stub_uep)
+        # stub_uep = stubs.StubUEP()
+        # stub_uep.updateConsumer = track_facts_update
+        # self.set_consumer_auth_cp(stub_uep)
 
-        update_report = self.fl.update()
-        count = update_report.updates()
-        self.assertEquals(len(self.expected_facts), count)
-        self.assertEquals(self.expected_facts, self.facts_passed_to_server)
-        self.assertEquals(invalid_consumer.uuid, self.consumer_uuid_passed_to_server)
+        # update_report = self.fl.update()
+        # count = update_report.updates()
+        # self.assertEquals(len(self.expected_facts), count)
+        # self.assertEquals(self.expected_facts, self.facts_passed_to_server)
+        # self.assertEquals(invalid_consumer.uuid, self.consumer_uuid_passed_to_server)
 
 
 class ConsumerIdentityExistsStub(stubs.StubConsumerIdentity):

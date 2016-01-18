@@ -1,0 +1,11 @@
+[Unit]
+Description=RHSM system subscriptions dbus service
+After=syslog.target network.target
+
+[Service]
+Type=dbus
+BusName=com.redhat.Subscriptions1.Subscriptions
+ExecStart=/usr/libexec/rhsm-subscriptions-service
+
+[Install]
+WantedBy=basic.target

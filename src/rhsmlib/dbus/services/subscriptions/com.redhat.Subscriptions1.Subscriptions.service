@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=com.redhat.Subscriptions1.Subscriptions
+Exec=/usr/libexec/rhsm-subscriptions-service
+User=root
+SystemdService=rhsm-subscriptions.service
