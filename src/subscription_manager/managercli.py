@@ -1694,10 +1694,10 @@ class RemoveCommand(CliCommand):
                         pool_ids = unique_list_items(self.options.pool_ids)  # Don't allow duplicates
                         pool_id_to_serials = self.entitlement_dir.list_serials_for_pool_ids(pool_ids)
                         success, failure = self._unbind_ids(self.cp.unbindByPoolId, identity.uuid, pool_ids)
+                        self._print_unbind_ids_result(success, failure, "Pools")
                         if not success:
                             return_code = 1
                         else:
-                            self._print_unbind_ids_result(success, failure, "Pools")
                             for pool_id in success:
                                 removed_serials.extend(pool_id_to_serials[pool_id])
                     success = []
