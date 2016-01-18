@@ -10,15 +10,18 @@ WRAPPER=""
 # or "SUBMAN_DEBUG=1 bin/subscription-manager"
 #SM="SUBMAN_DEBUG=1 bin/subscription-manager"
 #SM="subscription-manager"
-SM="PYTHONPATH=../python-rhsm/src/:src/ bin/subscription-manager"
-WORKER="PYTHONPATH=../python-rhsm/src/:src/ python src/daemons/rhsmcertd-worker.py"
-RHSMD="PYTHONPATH=../python-rhsm/src/:src/ src/daemons/rhsm_d.py"
+# To unset the default path and use the installed version (or system paths, etc)
+# pass in PYPATH=, aka 'PYPATH= test/smoke.sh'
+PYPATH=${PYPATH-PYTHONPATH=../python-rhsm/src:src/}
+SM="${PYPATH} bin/subscription-manager"
+WORKER="${PYPATH} python src/daemons/rhsmcertd-worker.py"
+RHSMD="${PYPATH} src/daemons/rhsm_d.py"
 RHSMCERTD="bin/rhsmcertd"
-RCT="PYTHONPATH=../python-rhsm/src/:src/ bin/rct"
-RHSM_DEBUG="PYTHONPATH=../python-rhsm/src/:src/ bin/rhsm-debug"
+RCT="${PYPATH} bin/rct"
+RHSM_DEBUG="${PYPATH} bin/rhsm-debug"
 
 # assume we are testing installed version
-VIRT_WHO="PYTHONPATH=../python-rhsm/src/:src/ /usr/bin/virt-who"
+VIRT_WHO="${PYPATH} /usr/bin/virt-who"
 
 # where to store backup copies of rhsm related files
 # NOTE: we currently dont restore them
@@ -29,7 +32,7 @@ CONF_BACKUP="${BACKUP_DIR}/${TIMESTAMP}/"
 
 # running yum requires installing the pluings
 # Note: have to set CONF_BACKUP first
-YUM="PYTHONPATH=../python-rhsm/src/:src/ yum -c ${CONF_BACKUP}/yum-smoke.conf"
+YUM="${PYPATH} yum -c ${CONF_BACKUP}/yum-smoke.conf"
 
 
 # this script assumes it's running from top level of src checkout
@@ -269,6 +272,9 @@ run_sm "0" refresh
 run_sm "0" redeem --email "${REDEEM_EMAIL}"
 
 run_sm "0" facts
+run_sm "0" facts --list
+run_sm "0" facts --update
+
 run_sm "0" identity
 run_sm "0" orgs --username "${USERNAME}" --password "${PASSWORD}"
 

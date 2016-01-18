@@ -13,15 +13,11 @@
 
 from datetime import datetime
 import gettext
-import glob
 import logging
 import os
 
-import rhsm.config
-
 from subscription_manager.injection import PLUGIN_MANAGER, require
 from subscription_manager.cache import CacheManager
-import subscription_manager.injection as inj
 from rhsm import ourjson as json
 
 _ = gettext.gettext
@@ -31,6 +27,15 @@ log = logging.getLogger('rhsm-app.' + __name__)
 # Hardcoded value for the version of certificates this version of the client
 # prefers:
 CERT_VERSION = "3.2"
+
+
+# FIXME: likely need to split this into a 'client' object that mostly wraps
+#        the dbus facts proxy (with the service handling read caching).
+#        And a... syncer? Consumer model proxy? cache manager? Something that
+#        will be resposible for updating candlepin with the latest collected facts.
+
+class NewFacts(object):
+    pass
 
 
 class Facts(CacheManager):
@@ -43,11 +48,9 @@ class Facts(CacheManager):
     """
     CACHE_FILE = "/var/lib/rhsm/facts/facts.json"
 
-    def __init__(self, ent_dir=None, prod_dir=None):
+    def __init__(self):
         self.facts = {}
 
-        self.entitlement_dir = ent_dir or inj.require(inj.ENT_DIR)
-        self.product_dir = prod_dir or inj.require(inj.PROD_DIR)
         # see bz #627962
         # we would like to have this info, but for now, since it
         # can change constantly on laptops, it makes for a lot of
@@ -90,7 +93,6 @@ class Facts(CacheManager):
             # Set the preferred entitlement certificate version:
             facts.update({"system.certificate_version": CERT_VERSION})
 
-            facts.update(self._load_custom_facts())
             self.plugin_manager.run('post_facts_collection', facts=facts)
             self.facts = facts
         return self.facts
@@ -101,53 +103,6 @@ class Facts(CacheManager):
     def _load_hw_facts(self):
         import hwprobe
         return hwprobe.Hardware().get_all()
-
-    def _parse_facts_json(self, json_buffer, file_path):
-        custom_facts = None
-
-        try:
-            custom_facts = json.loads(json_buffer)
-        except ValueError:
-            log.warn("Unable to load custom facts file: %s" % file_path)
-
-        return custom_facts
-
-    def _open_custom_facts(self, file_path):
-        if not os.access(file_path, os.R_OK):
-            log.warn("Unable to access custom facts file: %s" % file_path)
-            return None
-
-        try:
-            f = open(file_path)
-        except IOError:
-            log.warn("Unable to open custom facts file: %s" % file_path)
-            return None
-
-        json_buffer = f.read()
-        f.close()
-
-        return json_buffer
-
-    def _load_custom_facts(self):
-        """
-        Load custom facts from .facts files in /etc/rhsm/facts.
-        """
-        # BZ 1112326 don't double the '/'
-        facts_file_glob = "%s/facts/*.facts" % rhsm.config.DEFAULT_CONFIG_DIR.rstrip('/')
-        file_facts = {}
-        for file_path in glob.glob(facts_file_glob):
-            log.info("Loading custom facts from: %s" % file_path)
-            json_buffer = self._open_custom_facts(file_path)
-
-            if json_buffer is None:
-                continue
-
-            custom_facts = self._parse_facts_json(json_buffer, file_path)
-
-            if custom_facts:
-                file_facts.update(custom_facts)
-
-        return file_facts
 
     def _sync_with_server(self, uep, consumer_uuid):
         log.debug("Updating facts on server")
