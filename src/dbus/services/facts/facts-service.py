@@ -7,7 +7,7 @@ import sys
 RHSM_PYTHON_PATH = "/usr/share/rhsm"
 sys.path.append(RHSM_PYTHON_PATH)
 
-log = logging.getLogger("rhsm-app.rhsmd")
+log = logging.getLogger("rhsm_dbus.facts_service")
 
 from subscription_manager import logutil
 logutil.init_logger()
@@ -72,13 +72,17 @@ def run():
         log.exception(e)
     except Exception, e:
         log.exception(e)
-    finally:
-        if service:
-            service.stop()
+    except SystemExit, e:
+        log.exception(e)
+        log.debug("system exit")
+
+    if service:
+        service.stop()
 
 
 def main(args):
     run()
+    return 0
 
 if __name__ == "__main__":
-    main(sys.argv)
+    sys.exit(main(sys.argv))
