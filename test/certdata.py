@@ -296,6 +296,7 @@ Order:
 \tSKU: awesomeos-server
 \tContract: 359
 \tAccount: 12331131231
+\tSubscription: 
 \tService Level: Premium
 \tService Type: Level 3
 \tQuantity: 10
@@ -417,6 +418,7 @@ Order:
 \tSKU: awesomeos-x86_64
 \tContract: 67
 \tAccount: 12331131231
+\tSubscription: 
 \tService Level:%(space)s
 \tService Type:%(space)s
 \tQuantity: 10

@@ -439,6 +439,7 @@ class TestListCommand(TestCliProxyCommand):
                      'service_level': '',
                      'service_type': '',
                      'contractNumber': '5',
+                     'subscriptionNumber': '6',
                      'multi-entitlement': 'false',
                      'endDate': '',
                      'suggested': '2'}]

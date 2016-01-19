@@ -20,6 +20,7 @@ class ContractSelection(unittest.TestCase):
             'startDate': datetime.datetime.now(tz=tzutc()).isoformat(),
             'endDate': datetime.datetime.now(tz=tzutc()).isoformat(),
             'contractNumber': 'contractNumber',
+            'subscriptionNumber': 'subscriptionNumber',
             'attributes': [],
             'productAttributes': []}
 
