@@ -61,7 +61,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.16.7
+Version: 1.16.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -577,6 +577,19 @@ fi
 %endif
 
 %changelog
+* Tue Jan 19 2016 Christopher Snyder <csnyder@redhat.com> 1.16.8-1
+- 1298586: Message needed for remove only invalid pool (wpoteat@redhat.com)
+- 1046132: rhsm_icon uses status from check_status (alikins@redhat.com)
+- 1282961: Update yum version to current RHEL 6.8 one (wpoteat@redhat.com)
+- 1046132: rhsm-icon pops up at annoying times - a second attempt
+  (vrjain@redhat.com)
+- 1298327: Handles exception in repolib (csnyder@redhat.com)
+- 1297313: Fixed layout issues with the repository management dialog on GTK2
+  (ceiu@cericlabs.com)
+- 1292038: Changed adjustments to GtkAdjustment objects
+- 1292013: Retain reference to backend for use in proxy config
+  (csnyder@redhat.com)
+
 * Fri Jan 08 2016 Alex Wood <awood@redhat.com> 1.16.7-1
 - 1263037: Change RHSM Icon reporting of unregistered system
   (wpoteat@redhat.com)
