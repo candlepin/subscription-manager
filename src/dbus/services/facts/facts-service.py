@@ -38,7 +38,7 @@ import slip.dbus.service
 
 
 FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
-FACTS_DBUS_PATH = "/com/redhat/Subscriptions1"
+FACTS_DBUS_PATH = "/com/redhat/Subscriptions1/Facts"
 
 
 class Facts(slip.dbus.service.Object):
@@ -58,10 +58,11 @@ class Facts(slip.dbus.service.Object):
 
 def run():
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-    bus = dbus.SystemBus()
+    #bus = dbus.SystemBus()
+    bus = dbus.SessionBus()
 
-    bus_name = dbus.service.BusName(FACTS_DBUS_INTERFACE, bus=bus)
-    service = Facts(bus_name, FACTS_DBUS_PATH)
+    name = dbus.service.BusName(FACTS_DBUS_INTERFACE, bus)
+    service = Facts(name, "/com/redhat/Subscriptions1/SystemFacts")
 
     mainloop = ga_GObject.MainLoop()
     slip.dbus.service.set_mainloop(mainloop)
