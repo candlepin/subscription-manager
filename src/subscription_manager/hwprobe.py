@@ -114,6 +114,10 @@ class Hardware:
         self.testing = testing or False
 
         self.no_dmi_arches = ['s390x', 'ppc64', 'ppc64le', 'ppc']
+
+        # ppc64 LPAR has it's virt.uuid in /proc/devicetree
+        self.devicetree_vm_uuid_arches = ['ppc64', 'ppc64le']
+
         # we need this so we can decide which of the
         # arch specific code bases to follow
         self.arch = self.get_arch()
@@ -827,12 +831,20 @@ class Hardware:
             log.warn(_("Error finding UUID: %s"), e)
             return  # nothing more to do
 
-        #most virt platforms record UUID via DMI/SMBIOS info.
-        if 'dmi.system.uuid' in self.allhw:
+        # most virt platforms record UUID via DMI/SMBIOS info.
+        # But only for guests, otherwise it's physical system uuid.
+        if self.allhw.get('virt.is_guest') and 'dmi.system.uuid' in self.allhw:
             self.allhw['virt.uuid'] = self.allhw['dmi.system.uuid']
 
-        #potentially override DMI-determined UUID with
-        #what is on the file system (xen para-virt)
+        # For ppc64, virt uuid is in /proc/device-tree/vm,uuid
+        # just the uuid in txt, one line
+
+        # ie, ppc64/ppc64le
+        if self.arch in self.devicetree_vm_uuid_arches:
+            self.allhw.update(self._get_devicetree_vm_uuid())
+
+        # potentially override DMI-determined UUID with
+        # what is on the file system (xen para-virt)
         try:
             uuid_file = open('/sys/hypervisor/uuid', 'r')
             uuid = uuid_file.read()
@@ -840,6 +852,28 @@ class Hardware:
             self.allhw['virt.uuid'] = uuid.rstrip("\r\n")
         except IOError:
             pass
+
+    def _get_devicetree_vm_uuid(self):
+        """Collect the virt.uuid fact from device-tree/vm,uuid
+
+        For ppc64/ppc64le systems running KVM or PowerKVM, the
+        virt uuid is found in /proc/device-tree/vm,uuid.
+
+        (In contrast to use of DMI on x86_64)."""
+
+        virt_dict = {}
+
+        vm_uuid_path = "%s/proc/device-tree/vm,uuid" % self.prefix
+
+        try:
+            with open(vm_uuid_path) as fo:
+                contents = fo.read()
+                vm_uuid = contents.strip()
+                virt_dict['virt.uuid'] = vm_uuid
+        except IOError, e:
+            log.warn("Tried to read %s but there was an error: %s", vm_uuid_path, e)
+
+        return virt_dict
 
     def log_platform_firmware_warnings(self):
         "Log any warnings from firmware info gather,and/or clear them."
@@ -867,10 +901,9 @@ class Hardware:
                 log.warn("%s" % hardware_method)
                 log.warn("Hardware detection failed: %s" % e)
 
-        #we need to know the DMI info and VirtInfo before determining UUID.
-        #Thus, we can't figure it out within the main data collection loop.
-        if self.allhw.get('virt.is_guest'):
-            self.get_virt_uuid()
+        # we need to know the DMI info and VirtInfo before determining UUID.
+        # Thus, we can't figure it out within the main data collection loop.
+        self.get_virt_uuid()
 
         log.info("collected virt facts: virt.is_guest=%s, virt.host_type=%s, virt.uuid=%s",
                  self.allhw.get('virt.is_guest', 'Not Set'),

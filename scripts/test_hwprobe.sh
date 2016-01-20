@@ -14,13 +14,12 @@
 #
 #    ./test_hwprobe.sh /path/to/socket-count-test-data/dumps/
 #
-
-SYS_DUMPS_PATH="$1"
+SYS_DUMPS_PATH="${1:-$HOME/src/socket-count-test-data/dumps}"
 SYS_DUMPS=$(find "${SYS_DUMPS_PATH}" -mindepth 1 -maxdepth 1 -type d)
 
 for sys_dump in ${SYS_DUMPS}
 do
     echo "sys_dump: ${sys_dump}"
-    python src/subscription_manager/hwprobe.py "${sys_dump}"
+    sudo PYTHONPATH=src/ python src/subscription_manager/hwprobe.py "${sys_dump}"
     echo
 done
