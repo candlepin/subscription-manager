@@ -46,7 +46,7 @@ class CliRemoveTests(fixture.SubManFixture):
         self.assertEquals(cmd.cp.called_unbind_serial, [serial1, serial2])
 
         pool_id1 = '39993922b'
-        cmd.main(['remove', '--serial=%s' % serial1, '--serial=%s' % serial2, '--pool=%s' % pool_id1])
+        cmd.main(['remove', '--serial=%s' % serial1, '--serial=%s' % serial2, '--pool=%s' % pool_id1, '--pool=%s' % pool_id1])
         self.assertEquals(cmd.cp.called_unbind_serial, [serial1, serial2])
         self.assertEquals(cmd.cp.called_unbind_pool_id, [pool_id1])
 

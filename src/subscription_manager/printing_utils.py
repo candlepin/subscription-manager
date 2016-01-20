@@ -14,11 +14,20 @@
 #
 
 import gettext
+import fnmatch
+import re
+import logging
 
 from yum.i18n import utf8_width
 from subscription_manager.utils import get_terminal_width
 
+log = logging.getLogger('rhsm-app.' + __name__)
+
 _ = gettext.gettext
+
+FONT_BOLD = '\033[1m'
+FONT_RED = '\033[31m'
+FONT_NORMAL = '\033[0m'
 
 
 def ljust_wide(in_str, padding):
@@ -35,7 +44,7 @@ def columnize(caption_list, callback, *args, **kwargs):
 
     This function also takes a callback which is used to render the final line.
     The callback gives us the ability to do things like replacing None values
-    with the string "None" (see _none_wrap()).
+    with the string "None" (see none_wrap_columnize_callback()).
     """
     indent = kwargs.get('indent', 0)
     caption_list = [" " * indent + caption for caption in caption_list]
@@ -53,21 +62,22 @@ def columnize(caption_list, callback, *args, **kwargs):
     lines = zip(padded_list, args)
     output = []
     for (caption, value) in lines:
+        kwargs['caption'] = caption
         if isinstance(value, list):
             if value:
                 # Put the first value on the same line as the caption
                 formatted_arg = format_name(value[0], padding, columns)
-                output.append(callback(caption, formatted_arg))
+                output.append(callback(caption, formatted_arg, **kwargs))
 
                 for val in value[1:]:
                     formatted_arg = format_name(val, padding, columns)
-                    output.append(callback((" " * padding) + "%s", formatted_arg))
+                    output.append(callback((" " * padding) + "%s", formatted_arg, **kwargs))
             else:
                 # Degenerate case of an empty list
-                output.append(callback(caption, ""))
+                output.append(callback(caption, "", **kwargs))
         else:
             formatted_arg = format_name(value, padding, columns)
-            output.append(callback(caption, formatted_arg))
+            output.append(callback(caption, formatted_arg, **kwargs))
     return '\n'.join(output)
 
 
@@ -125,7 +135,43 @@ def format_name(name, indent, max_length):
     return '\n'.join(lines)
 
 
-def _none_wrap(template_str, *args):
+def highlight_by_filter_string_columnize_callback(template_str, *args, **kwargs):
+    """
+    Takes a template string and arguments and highlights word matches
+    when the value contains a match to the filter_string.This occurs
+    only when the row caption exists in the match columns.  Mainly this
+    is a callback meant to be used by columnize().
+    """
+    filter_string = kwargs.get('filter_string')
+    match_columns = kwargs.get('match_columns')
+    is_atty = kwargs.get('is_atty')
+    caption = kwargs.get('caption').split(':')[0] + ':'
+    p = None
+    # wildcard only disrupts the markup
+    if filter_string and filter_string.replace('*', ' ').replace('?', ' ').strip() == '':
+        filter_string = None
+
+    if is_atty and filter_string and caption in match_columns:
+        try:
+            p = re.compile(fnmatch.translate(filter_string), re.IGNORECASE)
+        except Exception, e:
+            log.error("Cannot compile search regex '%s'. %s", filter_string, e)
+
+    arglist = []
+    if args:
+        for arg in args:
+            if arg is None:
+                arg = _("None")
+            elif p:
+                for match in p.findall(arg.strip()):
+                    replacer = FONT_BOLD + FONT_RED + match + FONT_NORMAL
+                    arg = arg.replace(match, replacer)
+            arglist.append(arg)
+
+    return template_str % tuple(arglist)
+
+
+def none_wrap_columnize_callback(template_str, *args, **kwargs):
     """
     Takes a template string and arguments and replaces any None arguments
     with the word "None" before rendering the template.  Mainly this is
@@ -139,7 +185,7 @@ def _none_wrap(template_str, *args):
     return template_str % tuple(arglist)
 
 
-def _echo(template_str, *args):
+def echo_columnize_callback(template_str, *args, **kwargs):
     """
     Just takes a template string and arguments and renders it.  Mainly
     this is a callback meant to be used by columnize().

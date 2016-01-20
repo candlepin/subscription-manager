@@ -1453,9 +1453,9 @@ class CredentialsScreen(Screen):
     def _validate_consumername(self, consumername):
         if not consumername:
             # TODO: register state to signal
-            self.emit('register-message',
+            self.emit('register-error',
                       _("You must enter a system name."),
-                      ga_Gtk.MessageType.WARNING)
+                      ga_Gtk.MessageType.ERROR)
 
             self.consumer_name.grab_focus()
             return False
@@ -1464,17 +1464,17 @@ class CredentialsScreen(Screen):
     def _validate_account(self):
         # validate / check user name
         if self.account_login.get_text().strip() == "":
-            self.emit('register-message',
+            self.emit('register-error',
                       _("You must enter a login."),
-                      ga_Gtk.MessageType.WARNING)
+                      ga_Gtk.MessageType.ERROR)
 
             self.account_login.grab_focus()
             return False
 
         if self.account_password.get_text().strip() == "":
-            self.emit('register-message',
+            self.emit('register-error',
                       _("You must enter a password."),
-                      ga_Gtk.MessageType.WARNING)
+                      ga_Gtk.MessageType.ERROR)
 
             self.account_password.grab_focus()
             return False
@@ -1574,9 +1574,9 @@ class ActivationKeyScreen(Screen):
 
     def _validate_owner_key(self, owner_key):
         if not owner_key:
-            self.emit('register-message',
+            self.emit('register-error',
                       _("You must enter an organization."),
-                      ga_Gtk.MessageType.WARNING)
+                      ga_Gtk.MessageType.ERROR)
 
             self.organization_entry.grab_focus()
             return False
@@ -1584,9 +1584,9 @@ class ActivationKeyScreen(Screen):
 
     def _validate_activation_keys(self, activation_keys):
         if not activation_keys:
-            self.emit('register-message',
+            self.emit('register-error',
                       _("You must enter an activation key."),
-                      ga_Gtk.MessageType.WARNING)
+                      ga_Gtk.MessageType.ERROR)
 
             self.activation_key_entry.grab_focus()
             return False
@@ -1594,9 +1594,9 @@ class ActivationKeyScreen(Screen):
 
     def _validate_consumername(self, consumername):
         if not consumername:
-            self.emit('register-message',
+            self.emit('register-error',
                       _("You must enter a system name."),
-                      ga_Gtk.MessageType.WARNING)
+                      ga_Gtk.MessageType.ERROR)
 
             self.consumer_entry.grab_focus()
             return False

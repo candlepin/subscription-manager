@@ -3,6 +3,12 @@
   <!-- interface-requires gtk+ 2.10 -->
   <!--
  interface-naming-policy project-wide -->
+  <object class="GtkAdjustment" id="scrolledwindow2_vadjustment">
+    <property name="upper">200</property>
+    <property name="step_increment">25</property>
+    <property name="page_increment">100</property>
+    <property name="page_size">200</property>
+  </object>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
     <property name="icon_name">subscription-manager</property>
@@ -47,7 +53,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="resize_mode">queue</property>
-                        <property name="vadjustment">0 0 206 20.600000000000001 185.40000000000001 206</property>
+                        <property name="vadjustment">scrolledwindow2_vadjustment</property>
                         <property name="shadow_type">none</property>
                         <child>
                           <object class="GtkTable" id="table2">

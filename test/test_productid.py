@@ -825,6 +825,50 @@ class TestProductManager(SubManFixture):
         # new cert is not written or updated
         self.assertFalse(older_cert.write.called)
 
+    @patch('yum.YumBase', spec=yum.YumBase)
+    def test_update_no_active_with_product_cert_anaconda_and_rhel(self,
+                                                                  mock_yb):
+        """
+        Test the case where we have one arbitrary repo with nothing installed
+        and another repo that is temporarily disabled.
+
+        Expected:
+            The product id for the no longer active repo is deleted.
+        Actual:
+            BZ 1222627.
+            The product id for the no longer active repo remains.
+        """
+        jboss_cert = self._create_cert("183", "jboss", "1.0", "jboss")
+        server_cert = self._create_server_cert()
+        self.prod_dir.certs.append(jboss_cert)
+        self.prod_dir.certs.append(server_cert)
+
+        self.prod_repo_map = {"183": ['some-other-repo'], "69": [
+            'rhel-6-server-rpms']}
+        self.prod_db_mock.find_repos = Mock(
+                side_effect=self.find_repos_side_effect)
+        # make rhel-6-server-rpms active
+        mock_package = self._create_mock_package('some-cool-package',
+                                                 'noarch',
+                                                 'rhel-6-server-rpms')
+        mock_yb.pkgSack.returnPackages.return_value = [mock_package]
+        mock_yb.repos.listEnabled.return_value = self._create_mock_repos([
+            'rhel-6-server-rpms', 'some-other-repo'])
+        enabled = [(jboss_cert, 'some-other-repo'),
+                   (server_cert, 'rhel-6-server-rpms')]
+        # There should be no active repos because in this case we are
+        # temporarily disabling the 'rhel-6-server-rpms' repo
+        active = set([])
+        temp_disabled_repos = ['rhel-6-server-rpms']
+        self.prod_mgr.find_temp_disabled_repos = Mock(
+                return_value=temp_disabled_repos)
+
+        self.prod_mgr.update(enabled, active, tracks_repos=True)
+
+        self.assertTrue(jboss_cert.delete.called)
+        self.assertTrue(self.prod_db_mock.delete.called)
+        self.assertFalse(server_cert.delete.called)
+
     def test_update_removed_no_active_with_product_cert_anaconda_and_rhel(self):
         #"""simulate packages are installed with anaconda repo, and none
         #installed from the enabled repo. This currently causes a product

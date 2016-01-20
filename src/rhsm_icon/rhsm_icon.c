@@ -285,6 +285,7 @@ display_icon (Context * context, StatusType status_type)
 static void
 alter_icon (Context * context, StatusType status_type)
 {
+	g_debug ("alter_icon status_type: %i\n", status_type);
 	context->show_registration = status_type == RHSM_REGISTRATION_REQUIRED;
 	if ((status_type != RHN_CLASSIC) && (status_type != RHSM_VALID)) {
 		display_icon (context, status_type);
@@ -341,10 +342,10 @@ check_status (Context * context)
 				 force_icon);
 			exit (1);
 		}
-		alter_icon (context, status_type);
 	} else {
 		status_type = check_status_over_dbus (context);
 	}
+	alter_icon (context, status_type);
 	return true;
 }
 

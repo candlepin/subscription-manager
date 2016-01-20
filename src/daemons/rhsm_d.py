@@ -70,7 +70,8 @@ from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
 from subscription_manager.branding import get_branding
-from subscription_manager.injection import require, IDENTITY, CERT_SORTER
+from subscription_manager.injection import require, IDENTITY, CERT_SORTER, RHSM_ICON_CACHE
+from subscription_manager.cache import RhsmIconCache
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
@@ -109,8 +110,9 @@ def pre_check_status(force_signal):
         return RHN_CLASSIC
 
     identity = require(IDENTITY)
+    sorter = require(CERT_SORTER)
 
-    if not identity.is_valid():
+    if not identity.is_valid() and not sorter.has_entitlements():
         debug("The system is not currently registered.")
         return RHSM_REGISTRATION_REQUIRED
     return None
@@ -141,7 +143,7 @@ class StatusChecker(dbus.service.Object):
         dbus.service.Object.__init__(self, name, "/EntitlementStatus")
         self.has_run = False
         #this will get set after first invocation
-        self.last_status = None
+        self.rhsm_icon_cache = require(RHSM_ICON_CACHE)
         self.keep_alive = keep_alive
         self.force_signal = force_signal
         self.loop = loop
@@ -168,15 +170,15 @@ class StatusChecker(dbus.service.Object):
                  2 if close to expiry
         """
         log.debug("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.check_status called")
-        ret = check_status(self.force_signal)
-        if (ret != self.last_status):
-            debug("Validity status changed, fire signal")
-            #we send the code out, but no one uses it at this time
-            self.entitlement_status_changed(ret)
-        self.last_status = ret
+        status = check_status(self.force_signal)
+        if (status != self.rhsm_icon_cache._read_cache()):
+            debug("Validity status changed, fire signal in check_status")
+            self.entitlement_status_changed(status)
+        self.rhsm_icon_cache.data = status
+        self.rhsm_icon_cache.write_cache()
         self.has_run = True
         self.watchdog()
-        return ret
+        return status
 
     @dbus.service.method(
             dbus_interface="com.redhat.SubscriptionManager.EntitlementStatus",
@@ -186,10 +188,13 @@ class StatusChecker(dbus.service.Object):
         pre_result = pre_check_status(self.force_signal)
         if pre_result is not None:
             status = pre_result
-        if status != self.last_status:
+        # At comment time, update status is called every time we start the GUI. So we use
+        # a persistant cache to ensure we fire a signal only when the status changes.
+        if (status != self.rhsm_icon_cache._read_cache()):
             debug("Validity status changed, fire signal")
             self.entitlement_status_changed(status)
-        self.last_status = status
+        self.rhsm_icon_cache.data = status
+        self.rhsm_icon_cache.write_cache()
         self.has_run = True
         self.watchdog()
 
