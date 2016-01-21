@@ -77,6 +77,9 @@
 # factory to init proper one based... uname.machine? 'arch' file?
 
 import collections
+import itertools
+import logging
+import os
 
 # mostly populated from the arm CPUID instruction
 # http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0432c/Bhccjgga.html
@@ -101,57 +104,10 @@ import collections
 # stepping    : 7
 # microcode   : 0x710
 
-
-# represent the data in /proc/cpuinfo, which may include multiple processors
-class CpuinfoModel(object):
-    def __init__(self, cpuinfo_data=None):
-        # The contents of /proc/cpuinfo
-        self.cpuinfo_data = cpuinfo_data
-
-        # A iterable of CpuInfoModels, one for each processor in cpuinfo
-        self.processors = []
-
-        # prologues or footnotes not associated with a particular processor
-        self.other = []
-
-        # If were going to pretend all the cpus are the same,
-        # what do they all have in common.
-        self.common = None
-
-        # model name    : Intel(R) Core(TM) i5 CPU       M 560  @ 2.67GHz
-        self._model_name = None
-
-        # a model number
-        # "45" for intel processor example above
-        self._model = None
-
-    @property
-    def count(self):
-        return len(self.processors)
-
-    @property
-    def model_name(self):
-        return self._model_name
-
-    @property
-    def model(self):
-        return self._model
-
-    def __str__(self):
-        lines = []
-        lines.append("Processor count: %s" % self.count)
-        lines.append('model_name: %s' % self.model_name)
-        lines.append("")
-        for k in sorted(self.common.keys()):
-            lines.append("%s: %s" % (k, self.common[k]))
-        lines.append("")
-        for k, v in self.other:
-            lines.append("%s: %s" % (k, v))
-        lines.append("")
-        return "\n".join(lines)
+log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class AbstractCpuFields(object):
+class DefaultCpuFields(object):
     """Maps generic cpuinfo fields to the corresponding field from ProcessorModel.
 
     For, a cpu MODEL (a number or string that the cpu vendor assigns to that model of
@@ -174,6 +130,74 @@ class Aarch64Fields(object):
     MODEL_NAME = 'model_name'
 
 
+class Ppc64Fields(object):
+    MODEL = 'model'
+    MODEL_NAME = 'machine'
+
+
+# represent the data in /proc/cpuinfo, which may include multiple processors
+class CpuinfoModel(object):
+    fields_class = DefaultCpuFields
+
+    def __init__(self, cpuinfo_data=None):
+        # The contents of /proc/cpuinfo
+        self.cpuinfo_data = cpuinfo_data
+
+        # A iterable of CpuInfoModels, one for each processor in cpuinfo
+        self.processors = []
+
+        # prologues or footnotes not associated with a particular processor
+        self.other = []
+
+        # If were going to pretend all the cpus are the same,
+        # what do they all have in common.
+        self.common = {}
+
+        # model name    : Intel(R) Core(TM) i5 CPU       M 560  @ 2.67GHz
+        self._model_name = None
+
+        # a model number
+        # "45" for intel processor example above
+        self._model = None
+
+    @property
+    def count(self):
+        return len(self.processors)
+
+    @property
+    def model_name(self):
+        if self._model_name:
+            return self._model_name
+
+        if not self.common:
+            return None
+
+        return self.common.get(self.fields_class.MODEL_NAME, None)
+
+    @property
+    def model(self):
+        if self._model:
+            return self._model
+
+        if not self.common:
+            return None
+
+        return self.common.get(self.fields_class.MODEL, None)
+
+    def __str__(self):
+        lines = []
+        lines.append("Processor count: %s" % self.count)
+        lines.append('model_name: %s' % self.model_name)
+        lines.append("")
+        for k in sorted(self.common.keys()):
+            lines.append("%s: %s" % (k, self.common[k]))
+        lines.append("")
+        for k, v in self.other:
+            lines.append("%s: %s" % (k, v))
+        lines.append("")
+        return "\n".join(lines)
+
+
 class Aarch64ProcessorModel(dict):
     "The info corresponding to the info about each aarch64 processor entry in cpuinfo"
     pass
@@ -184,30 +208,29 @@ class X86_64ProcessorModel(dict):
     pass
 
 
+class Ppc64ProcessorModel(dict):
+    "The info corresponding to the info about each ppc64 processor entry in cpuinfo"
+    @classmethod
+    def from_stanza(cls, stanza):
+        cpu_data = cls()
+        cpu_data.update(dict([fact_sluggify_item(item) for item in stanza]))
+        return cpu_data
+
+
 class X86_64CpuinfoModel(CpuinfoModel):
-    pass
+    """The model for all the cpuinfo data for all processors on the machine.
+
+    ie, all the data in /proc/cpuinfo field as opposed to X86_64ProcessModel which
+    is the info for 1 processor."""
+    fields_class = X86_64Fields
+
+
+class Ppc64CpuinfoModel(CpuinfoModel):
+    fields_class = Ppc64Fields
 
 
 class Aarch64CpuinfoModel(CpuinfoModel):
-    @property
-    def model_name(self):
-        if self._model_name:
-            return self._model_name
-
-        if not self.common:
-            return None
-
-        return self.common.get(Aarch64Fields.MODEL, None)
-
-    @property
-    def model(self):
-        if self._model:
-            return self._model
-
-        if not self.common:
-            return None
-
-        return self.common.get(Aarch64Fields.MODEL_NAME, None)
+    fields_class = Aarch64Fields
 
 
 def fact_sluggify(key):
@@ -247,6 +270,54 @@ def line_splitter(line):
     return None
 
 
+def accumulate_fields(fields_accum, fields):
+    for field in fields:
+        fields_accum.add(field)
+    return fields_accum
+
+
+def find_shared_key_value_pairs(all_fields, processors):
+    # smashem, last one wins
+    smashed = collections.defaultdict(set)
+
+    # build a dict of fieldname -> list of all the different values
+    # so we can dump the variant ones.
+    for field in all_fields:
+        for k, v in [(field, processor.get(field)) for processor in processors]:
+            if v is None:
+                continue
+            smashed[k].add(v)
+
+    # remove fields that can't be smashed to one value
+    common_cpu_info = dict([(x, smashed[x].pop()) for x in smashed if len(smashed[x]) == 1])
+    return common_cpu_info
+
+
+def split_kv_list_by_field(kv_list, field):
+    """Split the iterable kv_list into chunks by field.
+
+    For a list with repeating stanzas in it, this will
+    return a generate that will return each chunk.
+
+    For something like /proc/cpuinfo, called with
+    field 'processor', each stanza is a different cpu.
+    """
+    current_stanza = None
+    for key, value in kv_list:
+        if key == field:
+            if current_stanza:
+                yield current_stanza
+            current_stanza = [(key, value)]
+            continue
+
+        # if we have garbage in and no start to processor info
+        if current_stanza:
+            current_stanza.append((key, value))
+
+    # end of kv_list
+    if current_stanza:
+        yield current_stanza
+
 """
 Processor   : AArch64 Processor rev 0 (aarch64)
 processor   : 0
@@ -267,30 +338,34 @@ CPU revision    : 0
 Hardware    : APM X-Gene Mustang board
 """
 
-# TODO: This class is kind of a working sketch, it doesn't make a lot of sense
-#       atm.
-#
-# FIXME: Intention was to try to make these classes somewhat functional
+
+class BaseCpuInfo(object):
+    @classmethod
+    def from_proc_cpuinfo_string(cls, proc_cpuinfo_string):
+        """Return a BaseCpuInfo subclass based on proc_cpuinfo_string.
+
+        proc_cpuinfo_string is the string resulting from reading
+        the entire contents of /proc/cpuinfo."""
+        cpu_info = cls()
+        cpu_info._parse(proc_cpuinfo_string)
+
+        return cpu_info
 
 
-class Aarch64CpuInfo(object):
+class Aarch64CpuInfo(BaseCpuInfo):
     def __init__(self):
         self.cpu_info = Aarch64CpuinfoModel()
 
-    @classmethod
-    def from_proc_cpuinfo_string(cls, proc_cpuinfo_string):
-        aarch64_cpu_info = cls()
-        aarch64_cpu_info._parse(proc_cpuinfo_string)
-
-        return aarch64_cpu_info
-
     def _parse(self, cpuinfo_data):
-        kv_iter = split_key_value_generator(cpuinfo_data, line_splitter)
-        kv_list = [x for x in kv_iter]
-        # Yes, there is a 'Processor' field and a 'processor' field, so
-        # if 'Processor' exists, we use it as the model name
-        kv_list = self._cap_processor_to_model_name_filter(kv_list)
-        slugged_kv_list = self._fact_sluggify_item_filter(kv_list)
+        raw_kv_iter = split_key_value_generator(cpuinfo_data, line_splitter)
+
+        # Yes, there is a 'Processor' field and multiple lower case 'processor'
+        # fields.
+        kv_iter = (self._capital_processor_to_model_name(item)
+                   for item in raw_kv_iter)
+
+        slugged_kv_list = [fact_sluggify_item(item) for item in kv_iter]
+
         # kind of duplicated
         self.cpu_info.common = self.gather_cpu_info_model(slugged_kv_list)
         self.cpu_info.processors = self.gather_processor_list(slugged_kv_list)
@@ -298,18 +373,14 @@ class Aarch64CpuInfo(object):
         # For now, 'hardware' is per
         self.cpu_info.other = self.gather_cpu_info_other(slugged_kv_list)
 
-    def _fact_sluggify_item_filter(self, kv_list):
-        return [fact_sluggify_item(item)
-                for item in kv_list]
+    def _capital_processor_to_model_name(self, item):
+        """Use the uppercase Processor field value as the model name.
 
-    def _cap_processor_to_model_name(self, item):
+        For aarch64, the 'Processor' field is the closest to model name,
+        so we sub it in now."""
         if item[0] == 'Processor':
             item[0] = "model_name"
         return item
-
-    def _cap_processor_to_model_name_filter(self, kv_list):
-        return [self._cap_processor_to_model_name(item)
-                for item in kv_list]
 
     def gather_processor_list(self, kv_list):
         processor_list = []
@@ -341,56 +412,25 @@ class Aarch64CpuInfo(object):
         return cpu_data
 
 
-class X86_64CpuInfo(object):
+class X86_64CpuInfo(BaseCpuInfo):
     def __init__(self):
         self.cpu_info = X86_64CpuinfoModel()
 
-    @classmethod
-    def from_proc_cpuinfo_string(cls, proc_cpuinfo_string):
-        x86_64_cpu_info = cls()
-        x86_64_cpu_info._parse(proc_cpuinfo_string)
-
-        return x86_64_cpu_info
-
     def _parse(self, cpuinfo_data):
         # ordered list
-        #kv_list = self._key_value_list(cpuinfo_data)
         kv_iter = split_key_value_generator(cpuinfo_data, line_splitter)
 
         processors = []
         all_fields = set()
-        for processor_stanza in self._split_by_processor(kv_iter):
+        for processor_stanza in split_kv_list_by_field(kv_iter, 'processor'):
             proc_dict = self.processor_stanza_to_processor_data(processor_stanza)
-            #pp(proc_dict)
             processors.append(proc_dict)
-
             # keep track of fields as we see them
-            all_fields = self._track_fields(all_fields, proc_dict.keys())
+            all_fields = accumulate_fields(all_fields, proc_dict.keys())
 
-        self.cpu_info.common = self.find_shared_key_value_pairs(all_fields, processors)
+        self.cpu_info.common = find_shared_key_value_pairs(all_fields, processors)
         self.cpu_info.processors = processors
         self.cpu_info.cpuinfo_data = cpuinfo_data
-
-    def _track_fields(self, fields_accum, fields):
-        for field in fields:
-            fields_accum.add(field)
-        return fields_accum
-
-    def find_shared_key_value_pairs(self, all_fields, processors):
-        # smashem, last one wins
-        smashed = collections.defaultdict(set)
-
-        # build a dict of fieldname -> list of all the different values
-        # so we can dump the variant ones.
-        for field in all_fields:
-            for k, v in [(field, processor.get(field)) for processor in processors]:
-                if v is None:
-                    continue
-                smashed[k].add(v)
-
-        # remove fields that can't be smashed to one value
-        common_cpu_info = dict([(x, smashed[x].pop()) for x in smashed if len(smashed[x]) == 1])
-        return common_cpu_info
 
     def processor_stanza_to_processor_data(self, stanza):
         "Take a list of k,v tuples, sluggify name, and add to a dict."
@@ -398,43 +438,54 @@ class X86_64CpuInfo(object):
         cpu_data.update(dict([fact_sluggify_item(item) for item in stanza]))
         return cpu_data
 
-    def _split_by_processor(self, kv_list):
-        current_cpu = None
-        for key, value in kv_list:
-            if key == 'processor':
-                if current_cpu:
-                    yield current_cpu
-                current_cpu = [(key, value)]
-                continue
 
-            # if we have garbage in and no start to processor info
-            if current_cpu:
-                current_cpu.append((key, value))
+class Ppc64CpuInfo(BaseCpuInfo):
+    def __init__(self):
+        self.cpu_info = Ppc64CpuinfoModel()
 
-        # end of kv_list
-        if current_cpu:
-            yield current_cpu
+    def _parse(self, cpuinfo_data):
+        kv_iter = split_key_value_generator(cpuinfo_data, line_splitter)
+
+        processor_iter = itertools.takewhile(self._not_timebase_key, kv_iter)
+        for processor_stanza in split_kv_list_by_field(processor_iter, 'processor'):
+            proc_dict = Ppc64ProcessorModel.from_stanza(processor_stanza)
+            self.cpu_info.processors.append(proc_dict)
+
+        # Treat the rest of the info as shared between all of the processor entries
+        # kv_iter is the rest of cpuinfo that isn't processor stanzas
+        self.cpu_info.common = dict([fact_sluggify_item(item) for item in kv_iter])
+        self.cpu_info.cpuinfo_data = cpuinfo_data
+
+    def _not_timebase_key(self, item):
+        return item[0] != 'timebase'
 
 
 class SystemCpuInfoFactory(object):
     uname_to_cpuinfo = {'x86_64': X86_64CpuInfo,
-                        'aarch64': Aarch64CpuInfo}
+                        'aarch64': Aarch64CpuInfo,
+                        'ppc64': Ppc64CpuInfo,
+                        'ppc64le': Ppc64CpuInfo}
     proc_cpuinfo_path = '/proc/cpuinfo'
 
     @classmethod
-    def from_uname_machine(cls, uname_machine):
+    def from_uname_machine(cls, uname_machine, prefix=None):
+        print 'fum', prefix
+        print 'uname_machine', uname_machine
         if uname_machine not in SystemCpuInfoFactory.uname_to_cpuinfo:
             # er?
             raise NotImplementedError
 
-        proc_cpuinfo_string = cls.open_proc_cpuinfo()
+        proc_cpuinfo_string = cls.open_proc_cpuinfo(prefix)
 
         arch_class = cls.uname_to_cpuinfo[uname_machine]
         return arch_class.from_proc_cpuinfo_string(proc_cpuinfo_string)
 
     @classmethod
-    def open_proc_cpuinfo(cls):
+    def open_proc_cpuinfo(cls, prefix=None):
+        proc_cpuinfo_path = cls.proc_cpuinfo_path
+        if prefix:
+            proc_cpuinfo_path = os.path.join(prefix, cls.proc_cpuinfo_path[1:])
         proc_cpuinfo_buf = ''
-        with open(cls.proc_cpuinfo_path, 'r') as proc_cpuinfo_f:
+        with open(proc_cpuinfo_path, 'r') as proc_cpuinfo_f:
             proc_cpuinfo_buf = proc_cpuinfo_f.read()
         return proc_cpuinfo_buf
