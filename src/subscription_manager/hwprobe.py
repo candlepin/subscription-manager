@@ -398,9 +398,8 @@ class Hardware:
         proc_cpuinfo = {}
         fact_namespace = 'proc_cpuinfo'
 
-        # FIXME: This is still pretty ugly for what seems so simple.
-        uname_machine = self.unameinfo['uname.machine']
-        proc_cpuinfo_source = cpuinfo.SystemCpuInfoFactory.from_uname_machine(uname_machine)
+        proc_cpuinfo_source = cpuinfo.SystemCpuInfoFactory.from_uname_machine(self.arch,
+                                                                              prefix=self.prefix)
 
         for key, value in proc_cpuinfo_source.cpu_info.common.items():
             proc_cpuinfo['%s.common.%s' % (fact_namespace, key)] = value
