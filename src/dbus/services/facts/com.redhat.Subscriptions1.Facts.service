@@ -2,4 +2,5 @@
 Name=com.redhat.Subscriptions1.Facts
 Exec=/usr/libexec/facts-service.py
 User=root
+SystemdService=rhsm-facts.service
 
