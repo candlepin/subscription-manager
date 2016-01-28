@@ -52,20 +52,32 @@ class Facts(slip.dbus.service.Object):
         total = int_a + int_b
         return total
 
+    @dbus.service.signal(dbus_interface=FACTS_DBUS_INTERFACE)
+    def serviceStarted(self):
+        log.debug("serviceStarted emit")
+        return
+
     def stop(self):
         log.debug("shutting down")
 
 
+def start_signal(service):
+    service.serviceStarted()
+    return True
+
+
 def run():
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-    #bus = dbus.SystemBus()
-    bus = dbus.SessionBus()
+    bus = dbus.SystemBus()
+    #bus = dbus.SessionBus()
 
     name = dbus.service.BusName(FACTS_DBUS_INTERFACE, bus)
-    service = Facts(name, "/com/redhat/Subscriptions1/SystemFacts")
+    service = Facts(name, "/com/redhat/Subscriptions1/Facts")
 
     mainloop = ga_GObject.MainLoop()
     slip.dbus.service.set_mainloop(mainloop)
+
+    ga_GObject.idle_add(start_signal)
 
     try:
         mainloop.run()
