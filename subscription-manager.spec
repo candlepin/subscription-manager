@@ -61,7 +61,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.0
+Version: 1.17.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -577,6 +577,15 @@ fi
 %endif
 
 %changelog
+* Mon Feb 01 2016 Christopher Snyder <csnyder@redhat.com> 1.17.1-1
+- 1300259: Select service level label no longer overlaps dropdown box
+  (csnyder@redhat.com)
+- 1220283: Choose server text no longer overlapped by icon.
+  (csnyder@redhat.com)
+- 1300816: Add proc_cpuinfo facts for ppc64/le (alikins@redhat.com)
+- 1300791: Update man page footers (wpoteat@redhat.com)
+- 1300805: Add support for ppc64 virt.uuid (alikins@redhat.com)
+
 * Tue Jan 19 2016 Christopher Snyder <csnyder@redhat.com> 1.16.8-1
 - 1298586: Message needed for remove only invalid pool (wpoteat@redhat.com)
 - 1046132: rhsm_icon uses status from check_status (alikins@redhat.com)
