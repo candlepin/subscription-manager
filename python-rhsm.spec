@@ -12,7 +12,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.17.0
+Version: 1.17.1
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -74,6 +74,9 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Mon Feb 01 2016 Christopher Snyder <csnyder@redhat.com> 1.17.1-1
+- Bump version to 1.17.0 (csnyder@redhat.com)
+
 * Tue Jan 19 2016 Christopher Snyder <csnyder@redhat.com> 1.16.6-1
 - 1297337: change server strings to new default (wpoteat@redhat.com)
 
