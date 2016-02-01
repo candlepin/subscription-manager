@@ -26,6 +26,8 @@ BIN_FILES := $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui
 # Where various bits of code live in the git repo
 BASE_SRC_DIR := src
 SRC_DIR := $(BASE_SRC_DIR)/subscription_manager
+DBUS_SRC_DIR := $(BASE_SRC_DIR)/dbus
+DBUS_SERVICES_SRC_DIR = $(DBUS_SRC_DIR)/services
 RCT_SRC_DIR := $(BASE_SRC_DIR)/rct
 RD_SRC_DIR := $(BASE_SRC_DIR)/rhsm_debug
 RHSM_ICON_SRC_DIR := $(BASE_SRC_DIR)/rhsm_icon
@@ -45,6 +47,7 @@ INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
 RCT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
 RD_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
 RHSM_LOCALE_DIR := $(PREFIX)/$(INSTALL_DIR)/locale
+DBUS_SERVICES_INSTALL_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/dbus
 
 # ui builder data files
 GLADE_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/glade
@@ -137,6 +140,16 @@ dbus-service-install:
 		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 	install -m 744 $(DAEMONS_SRC_DIR)/rhsm_d.py \
 		$(PREFIX)/usr/libexec/rhsmd
+
+dbus-facts-service-install:
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service \
+		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.conf \
+		$(PREFIX)/etc/dbus-1/system.d
+	install -m 744 $(DBUS_SERVICES_SRC_DIR)/facts/facts-service.py \
+		$(PREFIX)/usr/libexec/facts-service.py
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/decorator.py $(DBUS_SERVICES_INSTALL_DIR)/facts
 
 install-conf:
 	install etc-conf/rhsm.conf $(PREFIX)/etc/rhsm/
