@@ -32,6 +32,8 @@ slip._wrappers._gobject = ga_GObject
 import slip.dbus
 import slip.dbus.service
 
+from rhsm.dbus.services.facts import decorators
+import decorators
 #from subscription_manager.ga import gtk_compat
 
 #gtk_compat.threads_init()
@@ -48,11 +50,13 @@ class Facts(slip.dbus.service.Object):
     @dbus.service.method(dbus_interface=FACTS_DBUS_INTERFACE,
                         in_signature='ii',
                         out_signature='i')
+    @decorators.dbus_handle_exceptions
     def AddInts(self, int_a, int_b):
         total = int_a + int_b
         return total
 
     @dbus.service.signal(dbus_interface=FACTS_DBUS_INTERFACE)
+    @decorators.dbus_handle_exceptions
     def serviceStarted(self):
         log.debug("serviceStarted emit")
         return
