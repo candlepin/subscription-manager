@@ -3,6 +3,7 @@ PREFIX ?=
 SYSCONF ?= etc
 PYTHON ?= python
 PYTHON_SITELIB ?= usr/lib/python2.7/site-packages
+PYTHON_SITELIB64 ?= usr/lib64/python2.7/site-packages
 
 INSTALL_DIR = usr/share
 INSTALL_MODULE = rhsm
@@ -47,7 +48,9 @@ INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
 RCT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
 RD_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
 RHSM_LOCALE_DIR := $(PREFIX)/$(INSTALL_DIR)/locale
-DBUS_SERVICES_INSTALL_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/dbus
+# rhsm modules go to lib64/ and we want to be a subpackage...
+DBUS_INSTALL_DIR := $(PREFIX)/$(PYTHON_SITELIB64)/$(INSTALL_MODULE)/dbus
+DBUS_SERVICES_INSTALL_DIR := $(DBUS_INSTALL_DIR)/services
 
 # ui builder data files
 GLADE_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/glade
@@ -129,11 +132,18 @@ check-syntax:
 rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c bin
 	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o bin/rhsm-icon $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
 
-dbus-service-install:
+dbus-common-install:
 	install -d $(PREFIX)/etc/dbus-1/system.d
 	install -d $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 	install -d $(PREFIX)/usr/libexec
 	install -d $(PREFIX)/etc/bash_completion.d
+	install -d $(DBUS_INSTALL_DIR)
+	install -d $(DBUS_SERVICES_INSTALL_DIR)
+	install -m 644 -p $(DBUS_SRC_DIR)/__init__.py $(DBUS_INSTALL_DIR)
+	install -m 644 -p $(DBUS_SRC_DIR)/services/__init__.py $(DBUS_SERVICES_INSTALL_DIR)
+
+
+dbus-rhsmd-service-install: dbus-common-install
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.conf \
 		$(PREFIX)/etc/dbus-1/system.d
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.service \
@@ -141,15 +151,21 @@ dbus-service-install:
 	install -m 744 $(DAEMONS_SRC_DIR)/rhsm_d.py \
 		$(PREFIX)/usr/libexec/rhsmd
 
-dbus-facts-service-install:
+dbus-facts-service-install: dbus-common-install
+	install -d $(DBUS_SERVICES_INSTALL_DIR)/facts
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service \
 		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.conf \
 		$(PREFIX)/etc/dbus-1/system.d
-	install -m 744 $(DBUS_SERVICES_SRC_DIR)/facts/facts-service.py \
-		$(PREFIX)/usr/libexec/facts-service.py
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/decorator.py $(DBUS_SERVICES_INSTALL_DIR)/facts
+	install -m 744 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts-service \
+		$(PREFIX)/usr/libexec/rhsm-facts-service
+
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/*.py $(DBUS_SERVICES_INSTALL_DIR)/facts
+
+dbus-reload:
+	 dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig
+
+dbus-install-and-reload: dbus-rhsmd-service-install dbus-facts-service-install dbus-reload
 
 install-conf:
 	install etc-conf/rhsm.conf $(PREFIX)/etc/rhsm/

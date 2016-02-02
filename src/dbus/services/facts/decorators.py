@@ -16,7 +16,7 @@ class SubscriptionFactsDBusException(dbus.DBusException):
     _dbus_error_name = "%s.Exception" % FACTS_DBUS_INTERFACE
 
 
-@decorator
+@decorator.decorator
 def dbus_handle_exceptions(func, *args, **kwargs):
     """Decorator to handle exceptions, log and report them into D-Bus
 
@@ -29,7 +29,12 @@ def dbus_handle_exceptions(func, *args, **kwargs):
 #        raise FirewallDBusException(str(error))
     except dbus.DBusException as e:
         # only log DBusExceptions once
-        raise e
+        raise
     except Exception as e:
         log.exception()
         raise SubscriptionFactsDBusException(str(e))
+
+
+def dbus_service_method(*args, **kwargs):
+    kwargs.setdefault("sender_keyword", "sender")
+    return dbus.service.method(*args, **kwargs)
