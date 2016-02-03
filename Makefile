@@ -153,8 +153,8 @@ dbus-rhsmd-service-install: dbus-common-install
 
 dbus-facts-service-install: dbus-common-install
 	install -d $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service \
-		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
+#	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service \
+#		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.conf \
 		$(PREFIX)/etc/dbus-1/system.d
 	install -m 744 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts-service \
@@ -165,7 +165,9 @@ dbus-facts-service-install: dbus-common-install
 dbus-reload:
 	 dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig
 
-dbus-install-and-reload: dbus-rhsmd-service-install dbus-facts-service-install dbus-reload
+dbus-install: dbus-rhsmd-service-install dbus-facts-service-install
+
+dbus-install-and-reload: dbus-install dbus-reload
 
 install-conf:
 	install etc-conf/rhsm.conf $(PREFIX)/etc/rhsm/
@@ -343,7 +345,7 @@ install-ui:
 # We could choose here, but it doesn't matter.
 install-gui: install-glade install-ui
 
-install-files: set-versions dbus-service-install desktop-files install-plugins install-post-boot install-ga install-gui
+install-files: set-versions dbus-install desktop-files install-plugins install-post-boot install-ga install-gui
 	install -d $(PYTHON_INST_DIR)/api
 	install -d $(PYTHON_INST_DIR)/gui
 	install -d $(PYTHON_INST_DIR)/gui/data/icons

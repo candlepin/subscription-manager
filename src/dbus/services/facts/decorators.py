@@ -29,12 +29,12 @@ def dbus_handle_exceptions(func, *args, **kwargs):
 #        raise FirewallDBusException(str(error))
     except dbus.DBusException as e:
         # only log DBusExceptions once
-        raise
+        raise e
     except Exception as e:
         log.exception()
         raise SubscriptionFactsDBusException(str(e))
 
 
 def dbus_service_method(*args, **kwargs):
-    kwargs.setdefault("sender_keyword", "sender")
+    #kwargs.setdefault("sender_keyword", "sender")
     return dbus.service.method(*args, **kwargs)
