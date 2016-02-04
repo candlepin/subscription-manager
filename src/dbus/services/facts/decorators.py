@@ -36,5 +36,5 @@ def dbus_handle_exceptions(func, *args, **kwargs):
 
 
 def dbus_service_method(*args, **kwargs):
-    #kwargs.setdefault("sender_keyword", "sender")
+    kwargs.setdefault("sender_keyword", "sender")
     return dbus.service.method(*args, **kwargs)

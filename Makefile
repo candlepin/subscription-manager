@@ -153,10 +153,12 @@ dbus-rhsmd-service-install: dbus-common-install
 
 dbus-facts-service-install: dbus-common-install
 	install -d $(DBUS_SERVICES_INSTALL_DIR)/facts
-#	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service \
-#		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service \
+		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.conf \
 		$(PREFIX)/etc/dbus-1/system.d
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts.service \
+		$(SYSTEMD_INST_DIR)
 	install -m 744 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts-service \
 		$(PREFIX)/usr/libexec/rhsm-facts-service
 
