@@ -172,12 +172,19 @@ systemd-reload:
 	systemctl daemon-reload
 	systemctl stop rhsm-facts.service
 	systemctl start rhsm-facts.service
-	systemctl status rhsm-facts.service
+	systemctl status -l rhsm-facts.service
 
 dbus-install: dbus-rhsmd-service-install dbus-facts-service-install
 
+selinux-restorecon:
+	restorecon -v -R /usr/libexec /usr/share/dbus-1/system-services /etc/dbus-1/system.d /usr/share/polkit-1/actions
+
+
 # Not entirely sure if daemon-reload should before or after dbus reloadConfig
-dbus-install-and-reload: systemd-reload dbus-install dbus-reload
+dbus-install-and-reload: dbus-install polkit-install selinux-restorecon systemd-reload dbus-reload
+
+polkit-install:
+	install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.policy /usr/share/polkit-1/actions/
 
 install-conf:
 	install etc-conf/rhsm.conf $(PREFIX)/etc/rhsm/
