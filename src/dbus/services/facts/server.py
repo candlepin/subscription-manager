@@ -53,7 +53,7 @@ from rhsm.dbus.services.facts import decorators
 
 # TODO: move these to a config/constants module
 FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
-FACTS_DBUS_PATH = "/com/redhat/Subscriptions1/Facts"
+FACTS_DBUS_PATH =     "/com/redhat/Subscriptions1/Facts"
 
 
 def debug(sig, frame):
@@ -170,8 +170,10 @@ class Facts(slip.dbus.service.Object):
 
     @decorators.dbus_service_method(dbus.PROPERTIES_IFACE, in_signature='s',
                                    out_signature='a{sv}')
-    #@decorators.dbus_handle_exceptions
+    @decorators.dbus_handle_exceptions
     def GetAll(self, interface_name, sender=None):
+        log.debug("GetAll interface_name=%s", interface_name)
+        log.debug("GetAll sender=%s", sender)
         log.debug("GetAll")
         return {}
         #log.debug("GetAll interface_name=%s", interface_name)
@@ -204,8 +206,7 @@ def run():
     #bus = dbus.SessionBus()
 
     name = dbus.service.BusName(FACTS_DBUS_INTERFACE, bus)
-    service = Facts(name,
-                    "/Subscriptions1/Facts")
+    service = Facts(name, FACTS_DBUS_PATH)
 
     mainloop = GLib.MainLoop()
     #mainloop = ga_GObject.MainLoop()
