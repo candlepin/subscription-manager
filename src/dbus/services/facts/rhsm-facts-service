@@ -7,20 +7,21 @@ sys.path.append("/usr/share/rhsm")
 from subscription_manager import logutil
 logutil.init_logger()
 
-from subscription_manager import ga_loader
-ga_loader.init_ga()
+#from subscription_manager import ga_loader
+#ga_loader.init_ga()
 
-from subscription_manager.ga import GObject as ga_GObject
+#from subscription_manager.ga import GObject as ga_GObject
 
-import slip
+#import slip
 # FIXME: hack, monkey patch slip._wrappers._gobject so it doesn't try to outsmart gobject import
-import slip._wrappers
-slip._wrappers._gobject = ga_GObject
+#import slip._wrappers
+#slip._wrappers._gobject = ga_GObject
 
 
 from rhsm.dbus.services.facts import server
 
 import pprint
+
 
 def main(args):
     pprint.pprint(sys.path)
