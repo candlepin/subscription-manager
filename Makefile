@@ -132,6 +132,7 @@ check-syntax:
 rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c bin
 	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o bin/rhsm-icon $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
 
+
 dbus-common-install:
 	install -d $(PREFIX)/etc/dbus-1/system.d
 	install -d $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
@@ -167,9 +168,16 @@ dbus-facts-service-install: dbus-common-install
 dbus-reload:
 	 dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig
 
+systemd-reload:
+	systemctl daemon-reload
+	systemctl stop rhsm-facts.service
+	systemctl start rhsm-facts.service
+	systemctl status rhsm-facts.service
+
 dbus-install: dbus-rhsmd-service-install dbus-facts-service-install
 
-dbus-install-and-reload: dbus-install dbus-reload
+# Not entirely sure if daemon-reload should before or after dbus reloadConfig
+dbus-install-and-reload: systemd-reload dbus-install dbus-reload
 
 install-conf:
 	install etc-conf/rhsm.conf $(PREFIX)/etc/rhsm/
