@@ -5,7 +5,10 @@ import logging
 import dbus
 import dbus.exceptions
 
-log = logging.getLogger("rhsm_dbus.facts_service." + __name__)
+#log = logging.getLogger("rhsm_dbus.facts_service." + __name__)
+log = logging.getLogger("rhsm-app." + __name__)
+
+log.debug("decorators import time")
 
 # TODO: mv to shared config/constants module
 FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
@@ -23,18 +26,25 @@ def dbus_handle_exceptions(func, *args, **kwargs):
     :Raises DBusException: on a firewall error code problems.
     """
     try:
-        return func(*args, **kwargs)
+        log.debug("about to call %s %s", args, kwargs)
+        ret = func(*args, **kwargs)
+        log.debug("about to return ret=%s", ret)
+        return ret
 #    except FirewallError as error:
 #        log.error(str(error))
 #        raise FirewallDBusException(str(error))
     except dbus.DBusException as e:
         # only log DBusExceptions once
+        log.debug("DbusException caught")
+        log.exception(e)
         raise e
     except Exception as e:
-        log.exception()
+        log.debug("Exception caught")
+        log.exception(e)
         raise SubscriptionFactsDBusException(str(e))
 
 
 def dbus_service_method(*args, **kwargs):
     kwargs.setdefault("sender_keyword", "sender")
+    log.debug("adding sender_keyword to args=%s and kwargs=%s", args, kwargs)
     return dbus.service.method(*args, **kwargs)
