@@ -34,6 +34,7 @@ PK_DEFAULT_ACTION = "com.redhat.Subscriptions1.default"
 class BaseService(slip.dbus.service.Object):
 
     persistent = True
+    _interface_name = DBUS_INTERFACE
 
     def __init__(self, *args, **kwargs):
         super(BaseService, self).__init__(*args, **kwargs)
@@ -47,7 +48,7 @@ class BaseService(slip.dbus.service.Object):
 
     @slip.dbus.polkit.require_auth(PK_DEFAULT_ACTION)
     @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
-                                    out_signature='i')
+                                    out_signature='s')
     @decorators.dbus_handle_exceptions
     def Foos(self, sender=None):
         """Just an example method that is easy to test."""
@@ -91,8 +92,9 @@ class BaseService(slip.dbus.service.Object):
     @decorators.dbus_handle_exceptions
     def GetAll(self, interface_name, sender=None):
         # TODO: use better test type conversion ala dbus_utils.py
-        if interface_name != DBUS_INTERFACE:
-            raise dbus.exceptions.DBusException("Cant getAll properties for %s" % interface_name)
+        if interface_name != self._interface_name:
+            raise dbus.exceptions.DBusException("%s can not getAll() properties for %s" % (self._interface_name,
+                                                                                           interface_name))
 
         log.debug("GetAll interface_name=%s, sender=%s", interface_name, sender)
 
@@ -111,14 +113,14 @@ def start_signal(service):
 
 
 # factory?
-def run_service(bus, dbus_interface, dbus_path, service_class):
+def run_service(bus_class, dbus_interface, dbus_path, service_class):
     """bus == dbus.SystemBus() etc.
     service_class is the the class implementing a DBus Object/service."""
 
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     dbus.mainloop.glib.threads_init()
 
-    #bus = dbus.SystemBus()
+    bus = bus_class()
 
     name = dbus.service.BusName(dbus_interface, bus)
     service = service_class(name, dbus_path)

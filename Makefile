@@ -142,6 +142,10 @@ dbus-common-install:
 	install -d $(DBUS_SERVICES_INSTALL_DIR)
 	install -m 644 -p $(DBUS_SRC_DIR)/__init__.py $(DBUS_INSTALL_DIR)
 	install -m 644 -p $(DBUS_SRC_DIR)/services/__init__.py $(DBUS_SERVICES_INSTALL_DIR)
+	install -m 644 -p $(DBUS_SRC_DIR)/services/*.py $(DBUS_SERVICES_INSTALL_DIR)
+	
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.conf \
+		$(PREFIX)/etc/dbus-1/system.d
 
 
 dbus-rhsmd-service-install: dbus-common-install
@@ -163,7 +167,7 @@ dbus-facts-service-install: dbus-common-install
 	install -m 744 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts-service \
 		$(PREFIX)/usr/libexec/rhsm-facts-service
 
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/*.py $(DBUS_SERVICES_INSTALL_DIR)/facts
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/server.py $(DBUS_SERVICES_INSTALL_DIR)/facts
 
 dbus-reload:
 	 # magic from python-slip examples make file. Likely unneeded.
@@ -187,6 +191,7 @@ dbus-install-and-reload: dbus-install polkit-install selinux-restorecon systemd-
 
 polkit-install:
 	install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.policy /usr/share/polkit-1/actions/
+	install -m0644 $(DBUS_SERVICES_SRC_DIR)/com.redhat.Subscriptions1.policy /usr/share/polkit-1/actions/
 
 install-conf:
 	install etc-conf/rhsm.conf $(PREFIX)/etc/rhsm/
