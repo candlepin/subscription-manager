@@ -3,7 +3,7 @@
 import logging
 import os
 import sys
-print sys.path
+#print sys.path
 # Entry point needs to setup sys.path so subscription_manager
 # is found. Ie, add /usr/share/rhsm/ to sys.path
 
@@ -13,18 +13,18 @@ log = logging.getLogger('rhsm-app.' + __name__)
 #from subscription_manager.ga import GObject as ga_GObject
 #from subscription_manager.ga import GLib as ga_GLib
 
+#import pprint
+#pprint.pprint(sys.modules)
 
-print "sys.modules['gobject']: %s" % sys.modules.get('gobject', 'No gobject found')
+#print "sys.modules['gobject']: %s" % sys.modules.get('gobject', 'No gobject found')
 gmodules = [x for x in sys.modules.keys() if x.startswith('gobject')]
 for gmodule in gmodules:
-    print "del %s" % gmodule
     del sys.modules[gmodule]
 
 gmodules = [x for x in sys.modules.keys() if x.startswith('gobject')]
-import pprint
-pprint.pprint(gmodules)
+#pprint.pprint(gmodules)
 
-print "sys.modules['gobject']: %s" % sys.modules.get('gobject', 'No gobject found')
+#print "sys.modules['gobject']: %s" % sys.modules.get('gobject', 'No gobject found')
 
 import slip._wrappers
 slip._wrappers._gobject = None
@@ -39,7 +39,7 @@ import dbus
 import dbus.service
 import dbus.mainloop.glib
 
-import slip
+#import slip
 
 # FIXME: hack, monkey patch slip._wrappers._gobject so it doesn't try to outsmart gobject import
 #import slip._wrappers
@@ -53,25 +53,12 @@ from rhsm.dbus.services.facts import decorators
 
 # TODO: move these to a config/constants module
 FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
-FACTS_DBUS_PATH =     "/com/redhat/Subscriptions1/Facts"
+FACTS_DBUS_PATH = "/com/redhat/Subscriptions1/Facts"
+PK_FACTS_COLLECT = "com.redhat.Subscriptions1.Facts.collect"
 
 
-def debug(sig, frame):
-    import pdb
-    pdb.set_trace()
-
-
-import signal
-log.debug("signal.DFL %s", signal.SIG_DFL)
-log.debug("signal sigint %s", signal.getsignal(signal.SIGINT))
-signal.signal(signal.SIGUSR1, debug)
-signal.signal(signal.SIGINT, debug)
-
-def dprint(*args, **kwargs):
-    print args, kwargs
-    log.debug(*args, **kwargs)
-
-dprint(os.getpid())
+class OrgFreedesktopDBusInterfaceMixin(object):
+    pass
 
 
 class Facts(slip.dbus.service.Object):
@@ -80,32 +67,15 @@ class Facts(slip.dbus.service.Object):
 
     def __init__(self, *args, **kwargs):
         super(Facts, self).__init__(*args, **kwargs)
-        self._props = {}
-        self._props['some_facts_property'] = 'some value'
+        self._props = {'some_default_prop': 'the_default_props_value'}
+        self.persistent = True
 
-    def _not_name_owner_changed(self, name, old_owner, new_owner):
-        log.debug("_name_owner_changed name=%s old_owner=%s, new_owner=%s",
-                  name, old_owner, new_owner)
-        return super(Facts, self)._name_owner_changed(name, old_owner, new_owner)
+    @property
+    def props(self):
+        log.debug("accessing props @property")
+        return self._props
 
-    # use the newer version of this
-    def not_sender_seen(self, sender):
-        log.debug("sender_seen sender=%s", sender)
-        log.debug("Facts.senders=%s", Facts.senders)
-        log.debug("Facts.connections_senders=%s", Facts.connections_senders)
-        log.debug("Facts.connections_smobjs=%s", Facts.connections_smobjs)
-        if (sender, self.connection) not in Facts.senders:
-            Facts.senders.add((sender, self.connection))
-            if self.connection not in Facts.connections_senders:
-                Facts.connections_senders[self.connection] = set()
-                Facts.connections_smobjs[self.connection] = \
-                    self.connection.add_signal_receiver(
-                        handler_function=self._name_owner_changed,
-                        signal_name='NameOwnerChanged',
-                        dbus_interface='org.freedesktop.DBus',
-                        arg1=sender)
-            Facts.connections_senders[self.connection].add(sender)
-
+    @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
     @decorators.dbus_service_method(dbus_interface=FACTS_DBUS_INTERFACE,
                                     in_signature='ii',
                                     out_signature='i')
@@ -115,6 +85,7 @@ class Facts(slip.dbus.service.Object):
         total = int_a + int_b
         return total
 
+    @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
     @decorators.dbus_service_method(dbus_interface=FACTS_DBUS_INTERFACE,
                                    out_signature='s')
     @decorators.dbus_handle_exceptions
@@ -122,21 +93,12 @@ class Facts(slip.dbus.service.Object):
         log.debug("Return42")
         return '42'
 
+    @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
     @decorators.dbus_service_method(dbus_interface=FACTS_DBUS_INTERFACE,
                                     out_signature='i')
     def getPid(self, sender=None):
         pid = os.getpid()
         return pid
-
-    @decorators.dbus_service_method(dbus_interface=FACTS_DBUS_INTERFACE,
-                                   out_signature='b')
-    @decorators.dbus_handle_exceptions
-    def ProvokePropertyChange(self, sender=None):
-        log.debug("ProvokePropertyChange")
-        #log.debug("ProvokePropertyChange sender=%s", sender)
-        timestamp = 'some value %s' % datetime.datetime.now().isoformat()
-        #self._props['some_facts_property'] = timestamp
-        log.debug("changed some_facts_property = %s", timestamp)
 
     @dbus.service.signal(dbus_interface=FACTS_DBUS_INTERFACE,
                          signature='')
@@ -149,11 +111,11 @@ class Facts(slip.dbus.service.Object):
 
     # TODO: figure out why the few codebases that use slip/python-dbus and implement
     #       Dbus.Properties do it with a staticmethod like this.
-    @staticmethod
-    def get_dbus_property(x, prop):
-        log.debug("get_dbus_property, x=%s, prop=%s", x, prop)
-        if prop in x._props:
-            return x._props[prop]
+    #@staticmethod
+    def get_dbus_property(self, prop):
+        log.debug("get_dbus_property, self=%s, prop=%s", self, prop)
+        if prop in self._props:
+            return self._props[prop]
         else:
             raise dbus.exceptions.DBusException("org.freedesktop.DBus.Error.AccessDenied: "
                                                 "Property '%s' isn't exported (or may not exist)"
@@ -163,24 +125,22 @@ class Facts(slip.dbus.service.Object):
     @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
                                     in_signature='ss',
                                     out_signature='v')
-    #@decorators.dbus_handle_exceptions
+    @decorators.dbus_handle_exceptions
     def Get(self, interface_name, property_name, sender=None):
         log.debug("Get Property ifact=%s property_name=%s", interface_name, property_name)
-        return self.get_dbus_property(self, property_name)
+        return self.get_dbus_property(property_name)
 
     @decorators.dbus_service_method(dbus.PROPERTIES_IFACE, in_signature='s',
                                    out_signature='a{sv}')
     @decorators.dbus_handle_exceptions
     def GetAll(self, interface_name, sender=None):
-        log.debug("GetAll interface_name=%s", interface_name)
-        log.debug("GetAll sender=%s", sender)
-        log.debug("GetAll")
-        return {}
-        #log.debug("GetAll interface_name=%s", interface_name)
-        #log.debug("GetAll sender=%s", sender)
+        if interface_name != 'com.redhat.Subscriptions1.Facts':
+            raise dbus.exceptions.DBusException("Cant getAll properties for %s" % interface_name)
+
+        log.debug("GetAll interface_name=%s, sender=%s", interface_name, sender)
         # TODO/FIXME: error handling, etc
-        #log.debug("GetAll returning %s", self._props)
-        #return self._props
+        log.debug("GetAll returning %s", self.props)
+        return self.props
 
     @dbus.service.signal(dbus.PROPERTIES_IFACE, signature='sa{sv}as')
     def PropertiesChanged(self, interface_name, changed_properties,
@@ -193,13 +153,13 @@ def start_signal(service):
     return False
 
 
-def provoke_prop(service):
-    service.ProvokePropertyChange()
-    return False
+def start_signal_timer(service):
+    start_signal(service)
+    return True
 
 
 def run():
-    l = dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     dbus.mainloop.glib.threads_init()
 
     bus = dbus.SystemBus()
@@ -212,13 +172,9 @@ def run():
     #mainloop = ga_GObject.MainLoop()
     slip.dbus.service.set_mainloop(mainloop)
 
-    print l
-    print GLib.MainLoop
-    print mainloop
+    GLib.idle_add(start_signal, service)
 
-    #ga_GObject.idle_add(start_signal, service)
-
-    #ga_GObject.idle_add(provoke_prop, service)
+    GLib.timeout_add_seconds(7, start_signal_timer, service)
 
     try:
         mainloop.run()
