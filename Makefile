@@ -166,6 +166,8 @@ dbus-facts-service-install: dbus-common-install
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/*.py $(DBUS_SERVICES_INSTALL_DIR)/facts
 
 dbus-reload:
+	 # magic from python-slip examples make file. Likely unneeded.
+	 touch $(PREFIX)/etc/dbus-1/system.d/com.redhat.Subscriptions1.Facts.conf
 	 dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig
 
 systemd-reload:
