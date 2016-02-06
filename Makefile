@@ -27,8 +27,6 @@ BIN_FILES := $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui
 # Where various bits of code live in the git repo
 BASE_SRC_DIR := src
 SRC_DIR := $(BASE_SRC_DIR)/subscription_manager
-DBUS_SRC_DIR := $(BASE_SRC_DIR)/dbus
-DBUS_SERVICES_SRC_DIR = $(DBUS_SRC_DIR)/services
 RCT_SRC_DIR := $(BASE_SRC_DIR)/rct
 RD_SRC_DIR := $(BASE_SRC_DIR)/rhsm_debug
 RHSM_ICON_SRC_DIR := $(BASE_SRC_DIR)/rhsm_icon
@@ -37,6 +35,9 @@ EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
 CONTENT_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/content_plugins/
 ANACONDA_ADDON_SRC_DIR := $(BASE_SRC_DIR)/initial-setup
 ANACONDA_ADDON_MODULE_SRC_DIR := $(ANACONDA_ADDON_SRC_DIR)/$(ANACONDA_ADDON_NAME)
+DBUS_SRC_DIR := $(BASE_SRC_DIR)/dbus
+DBUS_SERVICES_SRC_DIR = $(DBUS_SRC_DIR)/services
+FACTS_SRC_DIR := $(BASE_SRC_DIR)/facts
 
 # dirs we install to
 SUBMAN_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
@@ -51,6 +52,8 @@ RHSM_LOCALE_DIR := $(PREFIX)/$(INSTALL_DIR)/locale
 # rhsm modules go to lib64/ and we want to be a subpackage...
 DBUS_INSTALL_DIR := $(PREFIX)/$(PYTHON_SITELIB64)/$(INSTALL_MODULE)/dbus
 DBUS_SERVICES_INSTALL_DIR := $(DBUS_INSTALL_DIR)/services
+# facts package
+FACTS_INSTALL_DIR := $(PREFIX)/$(PYTHON_SITELIB64)/$(INSTALL_MODULE)/facts
 
 # ui builder data files
 GLADE_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/glade
@@ -82,8 +85,7 @@ YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
 INSTALL_DNF_PLUGINS ?= false
 DNF_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
 
-ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) $(DNF_PLUGINS_SRC_DIR)
-
+ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) $(DNF_PLUGINS_SRC_DIR) $(DBUS_SRC_DIR) $(DBUS_SERVICES_SRC_DIR) $(FACTS_SRC_DIR)
 # sets a version that is more or less latest tag plus commit sha
 VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
 
@@ -132,6 +134,10 @@ check-syntax:
 rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c bin
 	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o bin/rhsm-icon $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
 
+# TODO: replace with setup.py. Maybe in each src/*/ sub dir? different repo? differ srpm?
+facts-install:
+	install -d $(FACTS_INSTALL_DIR)
+	install -m 644 -p $(FACTS_SRC_DIR)/*.py $(FACTS_INSTALL_DIR)
 
 dbus-common-install:
 	install -d $(PREFIX)/etc/dbus-1/system.d
@@ -141,8 +147,8 @@ dbus-common-install:
 	install -d $(DBUS_INSTALL_DIR)
 	install -d $(DBUS_SERVICES_INSTALL_DIR)
 	install -m 644 -p $(DBUS_SRC_DIR)/__init__.py $(DBUS_INSTALL_DIR)
-	install -m 644 -p $(DBUS_SRC_DIR)/services/__init__.py $(DBUS_SERVICES_INSTALL_DIR)
-	install -m 644 -p $(DBUS_SRC_DIR)/services/*.py $(DBUS_SERVICES_INSTALL_DIR)
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/__init__.py $(DBUS_SERVICES_INSTALL_DIR)
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/*.py $(DBUS_SERVICES_INSTALL_DIR)
 	
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.conf \
 		$(PREFIX)/etc/dbus-1/system.d
@@ -156,7 +162,7 @@ dbus-rhsmd-service-install: dbus-common-install
 	install -m 744 $(DAEMONS_SRC_DIR)/rhsm_d.py \
 		$(PREFIX)/usr/libexec/rhsmd
 
-dbus-facts-service-install: dbus-common-install
+dbus-facts-service-install: dbus-common-install facts-install
 	install -d $(DBUS_SERVICES_INSTALL_DIR)/facts
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service \
 		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
