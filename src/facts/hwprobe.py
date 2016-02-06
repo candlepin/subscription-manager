@@ -25,31 +25,13 @@ import os
 import platform
 import re
 import socket
-from subprocess import PIPE, Popen
 import sys
 
-from subscription_manager import cpuinfo
+from rhsm.facts import cpuinfo
 
 _ = gettext.gettext
 
-log = logging.getLogger('rhsm-app.' + __name__)
-
-
-# Exception classes used by this module.
-# from later versions of subprocess, but not there on 2.4, so include our version
-class CalledProcessError(Exception):
-    """This exception is raised when a process run by check_call() or
-    check_output() returns a non-zero exit status.
-    The exit status will be stored in the returncode attribute;
-    check_output() will also store the output in the output attribute.
-    """
-    def __init__(self, returncode, cmd, output=None):
-        self.returncode = returncode
-        self.cmd = cmd
-        self.output = output
-
-    def __str__(self):
-        return "Command '%s' returned non-zero exit status %d" % (self.cmd, self.returncode)
+log = logging.getLogger(__name__)
 
 
 class ClassicCheck:
@@ -105,6 +87,40 @@ class GenericPlatformSpecificInfoProvider(object):
         pass
 
 
+def get_arch(prefix=None):
+    """Get the systems architecture.
+
+    This relies on portable means, like uname to determine
+    a high level system arch (ie, x86_64, ppx64,etc).
+
+    We need that so we can decide how to collect the
+    arch specific hardware infomation.
+
+    Also support a 'prefix' arg that allows us to override
+    the results. The contents of the '/prefix/arch' will
+    override the arch. The 'prefix' arg defaults to None,
+    equiv to '/'. This is intended only for test purposes.
+
+    Returns a string containing the arch."""
+
+    DEFAULT_PREFIX = '/'
+    ARCH_FILE_NAME = 'arch'
+    prefix = prefix or DEFAULT_PREFIX
+
+    if prefix == DEFAULT_PREFIX:
+        return platform.machine()
+
+    arch_file = os.path.join(prefix, ARCH_FILE_NAME)
+    try:
+        with open(arch_file, 'r') as arch_fd:
+            return arch_fd.read().strip()
+    except IOError, e:
+        # If we specify a prefix, and there is no 'arch' file,
+        # consider that fatal.
+        log.exception(e)
+        raise
+
+
 class Hardware(object):
 
     def __init__(self, prefix=None, testing=None):
@@ -113,16 +129,10 @@ class Hardware(object):
         self.prefix = prefix or ''
         self.testing = testing or False
 
-        self.no_dmi_arches = ['s390x', 'ppc64', 'ppc64le', 'ppc']
-
-        # ppc64 LPAR has it's virt.uuid in /proc/devicetree
-        self.devicetree_vm_uuid_arches = ['ppc64', 'ppc64le']
-
         # we need this so we can decide which of the
         # arch specific code bases to follow
-        self.arch = self.get_arch()
-
-        self.platform_specific_info_provider = self.get_platform_specific_info_provider()
+        self.arch = get_arch(prefix=prefix,
+                             testing=testing)
 
     def get_uname_info(self):
 
@@ -143,59 +153,6 @@ class Hardware(object):
 
     def _open_release(self, filename):
         return open(filename, 'r')
-
-    # Determine which rough arch we are, so we know where to
-    # look for hardware info. Also support a test mode that
-    # specifies the arch
-    def get_arch(self, prefix=None, testing=None):
-        if self.testing and self.prefix:
-            arch_file = "%s/arch" % self.prefix
-            if os.access(arch_file, os.R_OK):
-                try:
-                    f = open(arch_file, 'r')
-                except IOError:
-                    return platform.machine()
-                buf = f.read().strip()
-                f.close()
-                return buf
-            return platform.machine()
-        return platform.machine()
-
-    def get_platform_specific_info_provider(self):
-        """
-        Return a class that can be used to get firmware info specific to
-        this systems platform.
-
-        ie, DmiFirmwareInfoProvider on intel platforms, and a EmptyInfo otherwise.
-        """
-        # we could potential consider /proc/sysinfo as a FirmwareInfoProvider
-        # but at the moment, it is just firmware/dmi stuff.
-        if self.arch in self.no_dmi_arches:
-            log.debug("Not looking for DMI info since it is not available on '%s'" % self.arch)
-            platform_specific_info_provider = GenericPlatformSpecificInfoProvider
-        else:
-            try:
-                from subscription_manager import dmiinfo
-                platform_specific_info_provider = dmiinfo.DmiFirmwareInfoProvider
-            except ImportError:
-                log.warn("Unable to load dmidecode module. No DMI info will be collected")
-                platform_specific_info_provider = GenericPlatformSpecificInfoProvider
-
-        return platform_specific_info_provider
-
-    def get_platform_specific_info(self):
-        """Read and parse data that comes from platform specific interfaces.
-
-        This is only dmi/smbios data for now (which isn't on ppc/s390).
-        """
-
-        if self.testing and self.prefix:
-            dump_file = "%s/dmi.dump" % self.prefix
-            platform_info = self.platform_specific_info_provider(self.allhw, dump_file=dump_file).info
-        else:
-            platform_info = self.platform_specific_info_provider(self.allhw).info
-
-        self.allhw.update(platform_info)
 
     # this version os very RHEL/Fedora specific...
     def get_distribution(self):
@@ -608,7 +565,8 @@ class Hardware(object):
                     #
                     pass
         except Exception, e:
-            print _("Error reading system CPU information:"), e
+            log.warn('Error reading system CPU information: %s', e)
+
         self.allhw.update(self.lscpuinfo)
         return self.lscpuinfo
 
@@ -633,7 +591,8 @@ class Hardware(object):
                 self.netinfo['network.ipv6_address'] = "::1"
 
         except Exception, e:
-            print _("Error reading networking information:"), e
+            log.warn('Error reading networking information: %s', e)
+
         self.allhw.update(self.netinfo)
         return self.netinfo
 
@@ -759,125 +718,6 @@ class Hardware(object):
         bonding.close()
         return hwaddr
 
-    def get_virt_info(self):
-        virt_dict = {}
-
-        try:
-            host_type = self._get_output('virt-what')
-            # BZ1018807 xen can report xen and xen-hvm.
-            # Force a single line
-            host_type = ", ".join(host_type.splitlines())
-
-            # If this is blank, then not a guest
-            virt_dict['virt.is_guest'] = bool(host_type)
-            if bool(host_type):
-                virt_dict['virt.is_guest'] = True
-                virt_dict['virt.host_type'] = host_type
-            else:
-                virt_dict['virt.is_guest'] = False
-                virt_dict['virt.host_type'] = "Not Applicable"
-        # TODO:  Should this only catch OSErrors?
-        except Exception, e:
-            # Otherwise there was an error running virt-what - who knows
-            log.exception(e)
-            virt_dict['virt.is_guest'] = 'Unknown'
-
-        # xen dom0 is a guest for virt-what's purposes, but is a host for
-        # our purposes. Adjust is_guest accordingly. (#757697)
-        try:
-            if virt_dict['virt.host_type'].find('dom0') > -1:
-                virt_dict['virt.is_guest'] = False
-        except KeyError:
-            # if host_type is not defined, do nothing (#768397)
-            pass
-
-        self.allhw.update(virt_dict)
-        return virt_dict
-
-    def _get_output(self, cmd):
-        log.debug("Running '%s'" % cmd)
-        process = Popen([cmd], stdout=PIPE, stderr=PIPE)
-        (std_output, std_error) = process.communicate()
-
-        log.debug("%s stdout: %s" % (cmd, std_output))
-        log.debug("%s stderr: %s" % (cmd, std_error))
-
-        output = std_output.strip()
-
-        returncode = process.poll()
-        if returncode:
-            raise CalledProcessError(returncode,
-                                     cmd,
-                                     output=output)
-
-        return output
-
-    def get_virt_uuid(self):
-        """
-        Given a populated fact list, add on a virt.uuid fact if appropriate.
-        Partially adapted from Spacewalk's rhnreg.py, example hardware reporting
-        found in virt-what tests
-        """
-        no_uuid_platforms = ['powervm_lx86', 'xen-dom0', 'ibm_systemz']
-
-        self.allhw['virt.uuid'] = 'Unknown'
-
-        try:
-            for v in no_uuid_platforms:
-                if self.allhw['virt.host_type'].find(v) > -1:
-                    raise Exception(_("Virtualization platform does not support UUIDs"))
-        except Exception, e:
-            log.warn(_("Error finding UUID: %s"), e)
-            return  # nothing more to do
-
-        # most virt platforms record UUID via DMI/SMBIOS info.
-        # But only for guests, otherwise it's physical system uuid.
-        if self.allhw.get('virt.is_guest') and 'dmi.system.uuid' in self.allhw:
-            self.allhw['virt.uuid'] = self.allhw['dmi.system.uuid']
-
-        # For ppc64, virt uuid is in /proc/device-tree/vm,uuid
-        # just the uuid in txt, one line
-
-        # ie, ppc64/ppc64le
-        if self.arch in self.devicetree_vm_uuid_arches:
-            self.allhw.update(self._get_devicetree_vm_uuid())
-
-        # potentially override DMI-determined UUID with
-        # what is on the file system (xen para-virt)
-        try:
-            uuid_file = open('/sys/hypervisor/uuid', 'r')
-            uuid = uuid_file.read()
-            uuid_file.close()
-            self.allhw['virt.uuid'] = uuid.rstrip("\r\n")
-        except IOError:
-            pass
-
-    def _get_devicetree_vm_uuid(self):
-        """Collect the virt.uuid fact from device-tree/vm,uuid
-
-        For ppc64/ppc64le systems running KVM or PowerKVM, the
-        virt uuid is found in /proc/device-tree/vm,uuid.
-
-        (In contrast to use of DMI on x86_64)."""
-
-        virt_dict = {}
-
-        vm_uuid_path = "%s/proc/device-tree/vm,uuid" % self.prefix
-
-        try:
-            with open(vm_uuid_path) as fo:
-                contents = fo.read()
-                vm_uuid = contents.strip()
-                virt_dict['virt.uuid'] = vm_uuid
-        except IOError, e:
-            log.warn("Tried to read %s but there was an error: %s", vm_uuid_path, e)
-
-        return virt_dict
-
-    def log_platform_firmware_warnings(self):
-        "Log any warnings from firmware info gather,and/or clear them."
-        self.get_platform_specific_info_provider().log_warnings()
-
     def get_all(self):
         hardware_methods = [self.get_uname_info,
                             self.get_release_info,
@@ -886,11 +726,8 @@ class Hardware(object):
                             self.get_cpu_info,
                             self.get_ls_cpu_info,
                             self.get_network_info,
-                            self.get_network_interfaces,
-                            self.get_virt_info,
-                            # this has to happen after everything else, since
-                            # it expects to check virt and processor info
-                            self.get_platform_specific_info]
+                            self.get_network_interfaces]
+
         # try each hardware method, and try/except around, since
         # these tend to be fragile
         for hardware_method in hardware_methods:
@@ -899,15 +736,6 @@ class Hardware(object):
             except Exception, e:
                 log.warn("%s" % hardware_method)
                 log.warn("Hardware detection failed: %s" % e)
-
-        # we need to know the DMI info and VirtInfo before determining UUID.
-        # Thus, we can't figure it out within the main data collection loop.
-        self.get_virt_uuid()
-
-        log.info("collected virt facts: virt.is_guest=%s, virt.host_type=%s, virt.uuid=%s",
-                 self.allhw.get('virt.is_guest', 'Not Set'),
-                 self.allhw.get('virt.host_type', 'Not Set'),
-                 self.allhw.get('virt.uuid', 'Not Set'))
 
         return self.allhw
 

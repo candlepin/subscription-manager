@@ -20,6 +20,7 @@ import logging
 import subprocess
 
 from rhsm.facts import hwprobe
+from rhsm.facts import firmware_info
 
 log = logging.getLogger(__name__)
 
@@ -66,20 +67,6 @@ class CalledProcessError(Exception):
         return "Command '%s' returned non-zero exit status %d" % (self.cmd, self.returncode)
 
 
-# This doesn't really do anything other than provide a null/noop provider for
-# non-DMI platforms.
-class GenericPlatformSpecificInfoProvider(object):
-    """Default provider for platform without a specific platform info provider.
-
-    ie, all platforms except those with DMI (ie, intel platforms)"""
-    def __init__(self, hardware_info, dump_file=None):
-        self.info = {}
-
-    @staticmethod
-    def log_warnings():
-        pass
-
-
 class AdminHardware(object):
     """Collect hardware facts that require elevated privs (ie, root).
 
@@ -91,15 +78,12 @@ class AdminHardware(object):
     def __init__(self, prefix=None, testing=None):
         self.allhw = {}
         self.arch = hwprobe.get_arch()
-        self.no_dmi_arches = ['s390x', 'ppc64', 'ppc64le', 'ppc']
 
         # Note: unlike system uuid in DMI info, the virt.uuid is
         # available to non-root users on ppc64*
         # ppc64 LPAR has it's virt.uuid in /proc/devicetree
         # so parts of this don't need to be in AdminHardware
         self.devicetree_vm_uuid_arches = ['ppc64', 'ppc64le']
-
-        self.platform_specific_info_provider = self.get_platform_specific_info_provider()
 
     def get_all(self):
         # get_platform_specific_info
@@ -116,51 +100,21 @@ class AdminHardware(object):
 
         return self.allhw
 
-    # TODO/FIXME: As a first pass, move dmi and the generic firmware code here,
-    #             even though with kernels with sysfs dmi support, and a recent
-    #             version of dmidecode (> 3.0), most of the dmi info is readable
-    #             by a user. However, the system-uuid is not readable by a user,
-    #             and that is pretty much the only thing from DMI we care about,
-    def get_platform_specific_info_provider(self):
-        """
-        Return a class that can be used to get firmware info specific to
-        this systems platform.
-
-        ie, DmiFirmwareInfoProvider on intel platforms, and a EmptyInfo otherwise.
-        """
-        # we could potential consider /proc/sysinfo as a FirmwareInfoProvider
-        # but at the moment, it is just firmware/dmi stuff.
-        if self.arch in self.no_dmi_arches:
-            log.debug("Not looking for DMI info since it is not available on '%s'" % self.arch)
-            platform_specific_info_provider = GenericPlatformSpecificInfoProvider
-        else:
-            try:
-                from subscription_manager import dmiinfo
-                platform_specific_info_provider = dmiinfo.DmiFirmwareInfoProvider
-            except ImportError:
-                log.warn("Unable to load dmidecode module. No DMI info will be collected")
-                platform_specific_info_provider = GenericPlatformSpecificInfoProvider
-
-        return platform_specific_info_provider
-
-    def get_platform_specific_info(self):
+    def get_firmware_info(self):
         """Read and parse data that comes from platform specific interfaces.
 
         This is only dmi/smbios data for now (which isn't on ppc/s390).
         """
+        firmware_info_provider = firmware_info.get_firmware_provider(arch=self.arch,
+                                                                     prefix=self.prefix,
+                                                                     testing=self.testing)
 
-        if self.testing and self.prefix:
-            dump_file = "%s/dmi.dump" % self.prefix
-            platform_info = self.platform_specific_info_provider(self.allhw, dump_file=dump_file).info
-        else:
-            platform_info = self.platform_specific_info_provider(self.allhw).info
+        # Pass in collected hardware so DMI etc can potentially override it
+        firmware_info_dict = firmware_info_provider.get_info(all_hwinfo=self.allhw)
 
-        self.allhw.update(platform_info)
-
-    # FIXME: no longer used?
-    def log_platform_firmware_warnings(self):
-        "Log any warnings from firmware info gather,and/or clear them."
-        self.get_platform_specific_info_provider().log_warnings()
+        # This can potentially overrite facts that already existed in self.allhw
+        # (and is supposed to).
+        self.allhw.update(firmware_info_dict)
 
     # NOTE/TODO/FIXME: Not all platforms require admin privs to determine virt type or uuid
     def get_virt_info(self):
