@@ -3,7 +3,7 @@
 import logging
 import sys
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 # gobject and gi and python module loading tricks are fun.
 gmodules = [x for x in sys.modules.keys() if x.startswith('gobject')]
@@ -24,10 +24,17 @@ import slip.dbus
 import slip.dbus.service
 
 from rhsm.dbus.services import decorators
+from rhsm.dbus.services import base_properties
 
 # TODO: move these to a config/constants module
+# Name of the dbus service
+DBUS_BUS_NAME = "com.redhat.Subscriptions1"
+# Name of the DBus interface provided by this object
+# Note: This could become multiple interfaces
 DBUS_INTERFACE = "com.redhat.Subscriptions1"
+# Where in the DBus object namespace does this object live
 DBUS_PATH = "/com/redhat/Subscriptions1/"
+# The polkit action-id to use by default if none are specified
 PK_DEFAULT_ACTION = "com.redhat.Subscriptions1.default"
 
 
@@ -35,10 +42,14 @@ class BaseService(slip.dbus.service.Object):
 
     persistent = True
     _interface_name = DBUS_INTERFACE
+    default_polkit_auth_required = PK_DEFAULT_ACTION
 
     def __init__(self, *args, **kwargs):
         super(BaseService, self).__init__(*args, **kwargs)
-        self._props = {}
+        self._props = base_properties.BaseProperties(self._interface_name,
+                                                    {'default_sample_prop':
+                                                     'default_sample_value'},
+                                                    self.PropertiesChanged)
         self.persistent = True
 
     @property
@@ -65,17 +76,6 @@ class BaseService(slip.dbus.service.Object):
         """If there were shutdown tasks to do, do it here."""
         log.debug("shutting down")
 
-    # TODO: figure out why the few codebases that use slip/python-dbus and implement
-    #       Dbus.Properties do it with a staticmethod
-    def _get_dbus_property(self, prop):
-        log.debug("get_dbus_property, self=%s, prop=%s", self, prop)
-        if prop in self._props:
-            return self._props[prop]
-        else:
-            raise dbus.exceptions.DBusException("org.freedesktop.DBus.Error.AccessDenied: "
-                                                "Property '%s' isn't exported (or may not exist)"
-                                                 % prop)
-
     #
     # org.freedesktop.DBus.Properties interface
     #
@@ -85,21 +85,26 @@ class BaseService(slip.dbus.service.Object):
     @decorators.dbus_handle_exceptions
     def Get(self, interface_name, property_name, sender=None):
         log.debug("Get Property ifact=%s property_name=%s", interface_name, property_name)
-        return self._get_dbus_property(property_name)
+        return self.props.get(interface=interface_name,
+                              prop=property_name)
 
     @decorators.dbus_service_method(dbus.PROPERTIES_IFACE, in_signature='s',
                                    out_signature='a{sv}')
     @decorators.dbus_handle_exceptions
     def GetAll(self, interface_name, sender=None):
         # TODO: use better test type conversion ala dbus_utils.py
-        if interface_name != self._interface_name:
-            raise dbus.exceptions.DBusException("%s can not getAll() properties for %s" % (self._interface_name,
-                                                                                           interface_name))
-
         log.debug("GetAll interface_name=%s, sender=%s", interface_name, sender)
 
-        # TODO/FIXME: error handling, etc
-        return self.props
+        return self.props.get_all(interface=interface_name)
+
+    # TODO: pk action for changing properties
+    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
+                                    in_signature='ssv')
+    @decorators.dbus_handle_exceptions
+    def Set(self, interface_name, property_name, new_value, sender=None):
+        self.props.set(interface=interface_name,
+                       prop=property_name,
+                       value=new_value)
 
     @dbus.service.signal(dbus.PROPERTIES_IFACE, signature='sa{sv}as')
     def PropertiesChanged(self, interface_name, changed_properties,
@@ -113,7 +118,7 @@ def start_signal(service):
 
 
 # factory?
-def run_service(bus_class, dbus_interface, dbus_path, service_class):
+def run_service(bus_class, bus_name, dbus_interface, dbus_path, service_class):
     """bus == dbus.SystemBus() etc.
     service_class is the the class implementing a DBus Object/service."""
 
@@ -122,7 +127,7 @@ def run_service(bus_class, dbus_interface, dbus_path, service_class):
 
     bus = bus_class()
 
-    name = dbus.service.BusName(dbus_interface, bus)
+    name = dbus.service.BusName(bus_name, bus)
     service = service_class(name, dbus_path)
 
     mainloop = GLib.MainLoop()
@@ -145,4 +150,4 @@ def run_service(bus_class, dbus_interface, dbus_path, service_class):
 
 
 def run():
-    run_service(dbus.SystemBus(), DBUS_INTERFACE, DBUS_PATH, BaseService)
+    run_service(dbus.SystemBus(), DBUS_BUS_NAME, DBUS_INTERFACE, DBUS_PATH, BaseService)

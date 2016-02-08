@@ -150,9 +150,6 @@ dbus-common-install:
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/__init__.py $(DBUS_SERVICES_INSTALL_DIR)
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/*.py $(DBUS_SERVICES_INSTALL_DIR)
 	
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.conf \
-		$(PREFIX)/etc/dbus-1/system.d
-
 
 dbus-rhsmd-service-install: dbus-common-install
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.conf \
@@ -162,17 +159,33 @@ dbus-rhsmd-service-install: dbus-common-install
 	install -m 744 $(DAEMONS_SRC_DIR)/rhsm_d.py \
 		$(PREFIX)/usr/libexec/rhsmd
 
+# TODO: move src/dbus to setup.py? it's own makefile? autoconf?
+dbus-facts-root-service-install: dbus-common-install facts-install
+	install -d $(DBUS_SERVICES_INSTALL_DIR)/facts_root/
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_root/com.redhat.Subscriptions1.Facts.Root.service \
+		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_root/com.redhat.Subscriptions1.Facts.Root.conf \
+		$(PREFIX)/etc/dbus-1/system.d
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_root/rhsm-facts-root.service \
+		$(SYSTEMD_INST_DIR)
+	install -m 744 $(DBUS_SERVICES_SRC_DIR)/facts_root/rhsm-facts-root-service \
+		$(PREFIX)/usr/libexec/rhsm-facts-root-service
+
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_root/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts_root
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_root/server.py $(DBUS_SERVICES_INSTALL_DIR)/facts_root
+
 dbus-facts-service-install: dbus-common-install facts-install
 	install -d $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service \
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.User.service \
 		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.conf \
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.User.conf \
 		$(PREFIX)/etc/dbus-1/system.d
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts.service \
 		$(SYSTEMD_INST_DIR)
 	install -m 744 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts-service \
 		$(PREFIX)/usr/libexec/rhsm-facts-service
 
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/server.py $(DBUS_SERVICES_INSTALL_DIR)/facts
 
 dbus-reload:
@@ -184,9 +197,12 @@ systemd-reload:
 	systemctl daemon-reload
 	systemctl stop rhsm-facts.service
 	systemctl start rhsm-facts.service
+	systemctl stop rhsm-facts-root.service
+	systemctl start rhsm-facts-root.service
 	systemctl status -l rhsm-facts.service
+	systemctl status -l rhsm-facts-root.service
 
-dbus-install: dbus-rhsmd-service-install dbus-facts-service-install
+dbus-install: dbus-rhsmd-service-install dbus-facts-service-install dbus-facts-root-service-install
 
 selinux-restorecon:
 	restorecon -v -R /usr/libexec /usr/share/dbus-1/system-services /etc/dbus-1/system.d /usr/share/polkit-1/actions
@@ -196,6 +212,7 @@ selinux-restorecon:
 dbus-install-and-reload: dbus-install polkit-install selinux-restorecon systemd-reload dbus-reload
 
 polkit-install:
+	# TODO: verify we can share the polkit policy if we are using the same action ids
 	install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.policy /usr/share/polkit-1/actions/
 	install -m0644 $(DBUS_SERVICES_SRC_DIR)/com.redhat.Subscriptions1.policy /usr/share/polkit-1/actions/
 
